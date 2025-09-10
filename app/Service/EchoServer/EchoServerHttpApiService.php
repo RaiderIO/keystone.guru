@@ -23,7 +23,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
                 // Base URI is used with relative requests
                 'base_uri' => sprintf('%s:%s', $appUrl, config('keystoneguru.echo.port')),
                 // You can set any number of default request options.
-                'timeout'  => 2.0,
+                'timeout' => 2.0,
             ]);
         } catch (InvalidArgumentException $invalidArgumentException) {
             report($invalidArgumentException);
@@ -45,7 +45,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
             // Perform the API request with the correct auth key
             $response = $this->_client->get(
                 sprintf('apps/%s/%s', config('keystoneguru.echo.client.app_id'), $uri),
-                ['query' => ['auth_key' => config('keystoneguru.echo.client.key')]]
+                ['query' => ['auth_key' => config('keystoneguru.echo.client.key')]],
             );
             if ($response->getStatusCode() === StatusCode::OK) {
                 $result = json_decode((string)$response->getBody(), true);

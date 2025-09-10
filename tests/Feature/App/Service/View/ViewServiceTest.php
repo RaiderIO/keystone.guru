@@ -2,18 +2,11 @@
 
 namespace App\Service\View;
 
-use App\Models\AffixGroup\AffixGroup;
-use App\Models\AffixGroup\AffixGroupEaseTierPull;
-use App\Models\Season;
-use App\Service\Season\SeasonServiceInterface;
-use DB;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use Tests\Feature\Traits\LoadsJsonFiles;
-use Tests\Fixtures\LoggingFixtures;
 use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
 use Throwable;
@@ -30,11 +23,11 @@ final class ViewServiceTest extends PublicTestCase
     #[Group('ViewService')]
     #[DataProvider('shouldLoadViewVariables_GivenWhitelistedUrls_ShouldReturnTrue_dataProvider')]
     public function shouldLoadViewVariables_GivenWhitelistedUrls_ShouldReturnTrue(
-        string $uri
+        string $uri,
     ): void {
         // Arrange
         $viewService = ServiceFixtures::getViewServiceMock(
-            testCase: $this
+            testCase: $this,
         );
 
         // Act
@@ -50,7 +43,6 @@ final class ViewServiceTest extends PublicTestCase
         yield ['/ajax/search'];
     }
 
-
     /**
      * @throws Exception
      * @throws Throwable
@@ -59,11 +51,11 @@ final class ViewServiceTest extends PublicTestCase
     #[Group('ViewService')]
     #[DataProvider('shouldLoadViewVariables_GivenBlacklistedUrls_ShouldReturnFalse_dataProvider')]
     public function shouldLoadViewVariables_GivenBlacklistedUrls_ShouldReturnFalse(
-        string $uri
+        string $uri,
     ): void {
         // Arrange
         $viewService = ServiceFixtures::getViewServiceMock(
-            testCase: $this
+            testCase: $this,
         );
 
         // Act
@@ -84,7 +76,6 @@ final class ViewServiceTest extends PublicTestCase
         yield ['/benchmark'];
     }
 
-
     /**
      * @throws Exception
      * @throws Throwable
@@ -93,11 +84,11 @@ final class ViewServiceTest extends PublicTestCase
     #[Group('ViewService')]
     #[DataProvider('shouldLoadViewVariables_GivenValidViewUrls_ShouldReturnTrue_dataProvider')]
     public function shouldLoadViewVariables_GivenValidViewUrls_ShouldReturnTrue(
-        string $uri
+        string $uri,
     ): void {
         // Arrange
         $viewService = ServiceFixtures::getViewServiceMock(
-            testCase: $this
+            testCase: $this,
         );
 
         // Act

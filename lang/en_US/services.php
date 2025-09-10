@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => 'Pull %d',
                     'title'    => 'Title',
                     'map_icon' => 'Map icon',
@@ -15,12 +15,12 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'This pull has been removed since all selected enemies could not be found in MDT, resulting in an otherwise empty pull.',
                 'route_title_contains_non_ascii_char_bug'           => 'Your route title contains non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru.
                                 Your route title has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.',
-                'route_title_contains_non_ascii_char_bug_details'   => 'Old title: %s, new title: %s',
-                'map_icon_contains_non_ascii_char_bug'              => 'One of your comments on a map icon has non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. Your map comment has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.',
-                'map_icon_contains_non_ascii_char_bug_details'      => 'Old comment: "%s", new comment: "%s"',
+                'route_title_contains_non_ascii_char_bug_details' => 'Old title: %s, new title: %s',
+                'map_icon_contains_non_ascii_char_bug'            => 'One of your comments on a map icon has non-ascii characters that are known to trigger a yet unresolved encoding bug in Keystone.guru. Your map comment has been stripped of all offending characters, we apologise for the inconvenience and hope to resolve this issue soon.',
+                'map_icon_contains_non_ascii_char_bug_details'    => 'Old comment: "%s", new comment: "%s"',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => 'Awakened Obelisks',
                     'pulls'             => 'Pulls',
                     'notes'             => 'Notes',
@@ -49,7 +49,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => 'All dungeons',
     ],
     'combatlogservice' => [

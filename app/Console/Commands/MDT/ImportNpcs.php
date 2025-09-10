@@ -36,7 +36,7 @@ class ImportNpcs extends Command
     public function handle(
         CacheServiceInterface            $cacheService,
         CoordinatesServiceInterface      $coordinatesService,
-        MDTMappingImportServiceInterface $mappingImportService
+        MDTMappingImportServiceInterface $mappingImportService,
     ): void {
         $dungeonKey = $this->option('dungeon');
 

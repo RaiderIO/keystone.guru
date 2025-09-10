@@ -19,7 +19,6 @@ class CacheService implements CacheServiceInterface
 
     public function __construct(private readonly CacheServiceLoggingInterface $log)
     {
-
     }
 
     private function getTtl(string $key): ?DateInterval
@@ -44,7 +43,7 @@ class CacheService implements CacheServiceInterface
     /**
      * Remembers a value with a specific key if a condition is met
      *
-     * @param Closure|mixed $value
+     * @param  Closure|mixed      $value
      * @return Closure|mixed|null
      *
      */
@@ -52,7 +51,7 @@ class CacheService implements CacheServiceInterface
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
-        } else if ($value instanceof Closure) {
+        } elseif ($value instanceof Closure) {
             $value = $value();
         }
 
@@ -60,7 +59,7 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param Closure|mixed $value
+     * @param  Closure|mixed $value
      * @return mixed
      */
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed
@@ -78,7 +77,6 @@ class CacheService implements CacheServiceInterface
 
                 // If we should ignore the cache, or if it's not found
                 if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
-
                     // Get the result by calling the closure
                     if ($value instanceof Closure) {
                         $value = $value();
@@ -176,8 +174,8 @@ class CacheService implements CacheServiceInterface
         $prefix = config('database.redis.options.prefix');
 
         return $this->deleteKeysByPattern([
-                sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
-            ], $seconds) +
+            sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
+        ], $seconds) +
             $this->deleteKeysByPattern([
                 // publicKeys are 7 characters long
                 sprintf('/%spresence-%s-route-edit\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
@@ -214,7 +212,7 @@ class CacheService implements CacheServiceInterface
 
         foreach ($connections as $connection) {
             // Get the Redis connection once.
-            $redis             = Redis::connection($connection);
+            $redis                         = Redis::connection($connection);
             $deletedCountForThisConnection = $this->deleteKeysByPatternOnConnection($redis, $regexes, $idleTimeSeconds, $prefix);
             $totalDeletedCount += $deletedCountForThisConnection;
         }
@@ -226,12 +224,12 @@ class CacheService implements CacheServiceInterface
         Connection $redis,
         array      $regexes,
         ?int       $idleTimeSeconds,
-        string     $prefix
+        string     $prefix,
     ): int {
         $deletedKeysCountTotal = 0;
-        $deletedKeysCount = 0;
-        $i = 0;
-        $nextKey = 0;
+        $deletedKeysCount      = 0;
+        $i                     = 0;
+        $nextKey               = 0;
 
         try {
             $this->log->deleteKeysByPatternStart($redis->getName(), $idleTimeSeconds);
@@ -297,5 +295,4 @@ class CacheService implements CacheServiceInterface
 
         return $deletedKeysCountTotal;
     }
-
 }

@@ -30,6 +30,6 @@ interface CombatLogEventServiceInterface
         CombatLogEventEventType $type,
         int                     $runCount = 1,
         int                     $eventsPerRun = 5,
-        ?Dungeon                $dungeon = null
+        ?Dungeon                $dungeon = null,
     ): Collection;
 }

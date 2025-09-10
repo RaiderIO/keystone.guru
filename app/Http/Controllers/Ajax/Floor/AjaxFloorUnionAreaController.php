@@ -27,10 +27,10 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        FloorUnionAreaFormRequest $request,
+        FloorUnionAreaFormRequest   $request,
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion            $mappingVersion,
-        ?FloorUnionArea           $floorUnionArea = null
+        MappingVersion              $mappingVersion,
+        ?FloorUnionArea             $floorUnionArea = null,
     ): FloorUnionArea|Model {
         $validated = $request->validated();
 
@@ -73,10 +73,8 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new FloorUnionAreaChangedEvent($context, $user, $model);
     }
-
-
 }

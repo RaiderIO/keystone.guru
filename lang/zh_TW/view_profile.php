@@ -2,7 +2,7 @@
 
 return [
 
-    'edit'      => [
+    'edit' => [
         'title'                                            => '',
         'profile'                                          => '',
         'account'                                          => '',
@@ -44,23 +44,23 @@ return [
             'header_active'  => '',
             'header_benefit' => '',
         ],
-        'current_password'                                 => '',
-        'new_password'                                     => '',
-        'new_password_confirm'                             => '',
-        'submit'                                           => '',
-        'ga_cookies_opt_out'                               => '',
-        'reports_description'                              => '',
-        'reports_table_header_id'                          => '',
-        'reports_table_header_category'                    => '',
-        'reports_table_header_message'                     => '',
-        'reports_table_header_created_at'                  => '',
-        'reports_table_header_status'                      => '',
-        'reports_table_action_handled'                     => '',
+        'current_password'                => '',
+        'new_password'                    => '',
+        'new_password_confirm'            => '',
+        'submit'                          => '',
+        'ga_cookies_opt_out'              => '',
+        'reports_description'             => '',
+        'reports_table_header_id'         => '',
+        'reports_table_header_category'   => '',
+        'reports_table_header_message'    => '',
+        'reports_table_header_created_at' => '',
+        'reports_table_header_status'     => '',
+        'reports_table_action_handled'    => '',
     ],
     'favorites' => [
         'title' => '',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => '',
         'favorites'                => '',
         'tags'                     => '',
@@ -74,16 +74,16 @@ return [
         'create_team'              => '',
         'create_team_description'  => '',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => '',
     ],
-    'tags'      => [
+    'tags' => [
         'title'                             => '',
         'header'                            => '',
         'description'                       => '',
         'link_your_personal_route_overview' => '',
     ],
-    'view'      => [
+    'view' => [
         'title'  => '',
         'header' => '',
     ],

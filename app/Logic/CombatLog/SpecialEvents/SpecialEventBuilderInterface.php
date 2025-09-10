@@ -11,6 +11,6 @@ interface SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent;
 }

@@ -28,8 +28,8 @@ class UserResource extends JsonResource
     {
         return [
             'publicKey' => $this->public_key,
-            'name'  => $this->name,
-            'links' => new UserLinksResource($this),
+            'name'      => $this->name,
+            'links'     => new UserLinksResource($this),
         ];
     }
 }

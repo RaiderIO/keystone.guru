@@ -29,14 +29,14 @@ class MDTImportController extends Controller
      */
     public function details(
         ImportStringFormRequest         $request,
-        MDTImportStringServiceInterface $mdtImportStringService
+        MDTImportStringServiceInterface $mdtImportStringService,
     ) {
         $validated = $request->validated();
-        $string = $validated['import_string'];
+        $string    = $validated['import_string'];
 
         try {
             $warnings = collect();
-            $errors = collect();
+            $errors   = collect();
 
             return $mdtImportStringService->setEncodedString($string)
                 ->getDetails($warnings, $errors);
@@ -73,7 +73,7 @@ class MDTImportController extends Controller
      */
     public function import(
         ImportStringFormRequest         $request,
-        MDTImportStringServiceInterface $mdtImportStringService
+        MDTImportStringServiceInterface $mdtImportStringService,
     ) {
         $user = Auth::user();
 
@@ -126,7 +126,7 @@ class MDTImportController extends Controller
                 'dungeonroute' => $dungeonRoute,
                 'title'        => $dungeonRoute->getTitleSlug(),
             ]);
-        } else if ($user === null) {
+        } elseif ($user === null) {
             return abort(StatusCode::UNAUTHORIZED, __('controller.mdtimport.error.cannot_create_route_must_be_logged_in'));
         } else {
             $result = view('dungeonroute.limitreached');

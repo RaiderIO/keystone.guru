@@ -33,7 +33,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         EnemyPatrolFormRequest      $request,
         MappingVersion              $mappingVersion,
-        ?EnemyPatrol                $enemyPatrol = null
+        ?EnemyPatrol                $enemyPatrol = null,
     ): EnemyPatrol {
         $validated = $request->validated();
 
@@ -61,11 +61,11 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                     Polyline::findOrNew($enemyPatrol->polyline_id),
                     $beforeModel,
                     $enemyPatrol,
-                    $validated['polyline']
+                    $validated['polyline'],
                 );
 
                 return true;
-            }
+            },
         );
     }
 
@@ -98,10 +98,8 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new EnemyPatrolChangedEvent($context, $user, $model);
     }
-
-
 }

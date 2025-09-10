@@ -3,9 +3,9 @@
 use App\Models\Laratrust\Role;
 
 return [
-    'create_users'         => true,
-    'roles_structure'      => [
-        Role::ROLE_ADMIN         => [
+    'create_users'    => true,
+    'roles_structure' => [
+        Role::ROLE_ADMIN => [
             'dungeons'     => 'c,r,u,d',
             'expansions'   => 'c,r,u,d',
             'npcs'         => 'c,r,u,d',
@@ -16,7 +16,7 @@ return [
             'profile'      => 'r,u',
             'dungeonroute' => 'c,r,u,d',
         ],
-        Role::ROLE_USER          => [
+        Role::ROLE_USER => [
             'profile'      => 'r,u',
             'dungeonroute' => 'c,r,u,d',
         ],
@@ -26,7 +26,7 @@ return [
             'profile' => 'c,r,u',
         ],
     ],
-    'permissions_map'      => [
+    'permissions_map' => [
         'c' => 'create',
         'r' => 'read',
         'u' => 'update',

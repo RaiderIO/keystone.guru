@@ -9,7 +9,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 {
     public function importMappingVersionFromMDTMappingChanged(
         ?string $mdtMappingHash,
-        string  $latestMdtMappingHash
+        string  $latestMdtMappingHash,
     ): void {
         $this->info(__METHOD__, get_defined_vars());
     }
@@ -87,7 +87,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         int $npcSpellsDeleted,
         int $npcSpellsInserted,
         int $npcDungeonsDeleted,
-        int $npcDungeonsInserted
+        int $npcDungeonsInserted,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -106,7 +106,6 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     {
         $this->debug(__METHOD__);
     }
-
 
     public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void
     {
@@ -175,7 +174,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 
     public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(
         string $mdtUniqueKey,
-        float  $distance
+        float  $distance,
     ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
@@ -244,7 +243,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         int   $mdtCloneIndex,
         array $mdtNpcClone,
         int   $npcId,
-        int   $mdtId
+        int   $mdtId,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -327,7 +326,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     public function importMapPOIsNewDungeonFloorSwitchMarkerOK(
         int $dungeonFloorSwitchMarkerId,
         int $floorId,
-        int $targetFloorId
+        int $targetFloorId,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

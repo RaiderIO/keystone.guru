@@ -57,8 +57,8 @@ class CombatLogEventFactory extends Factory
         $now = Carbon::now();
 
         return [
-            '@timestamp'        => $now->unix(),
-            'run_id'            => sprintf(
+            '@timestamp' => $now->unix(),
+            'run_id'     => sprintf(
                 'season-df-2 - logged: #%d - run: #%d',
                 $this->faker->numberBetween(100000, 1000000),
                 $this->faker->numberBetween(1000000, 10000000),
@@ -68,17 +68,17 @@ class CombatLogEventFactory extends Factory
                 config('keystoneguru.keystone.levels.default_min'),
                 config('keystoneguru.keystone.levels.default_max'),
             ),
-            'affix_id'          => $affixGroup->affixes->pluck('affix_id')->toArray(),
-            'success'           => $dungeon->getCurrentMappingVersion()->timer_max_seconds > $runDurationMin * 60,
-            'start'             => $now->subMinutes($runDurationMin + $runAgeMin)->unix(),
-            'end'               => $now->subMinutes($runAgeMin)->unix(),
-            'duration_ms'       => $runDurationMin * 60 * 1000,
-            'ui_map_id'         => $floor->ui_map_id,
-            'pos_x'             => $this->faker->numberBetween($floor->ingame_min_x, $floor->ingame_max_x),
-            'pos_y'             => $this->faker->numberBetween($floor->ingame_min_y, $floor->ingame_max_y),
-            'event_type'        => CombatLogEventEventType::cases()[$this->faker->numberBetween(0, count(CombatLogEventEventType::cases()))],
-            'characters'        => [],
-            'context'           => [],
+            'affix_id'    => $affixGroup->affixes->pluck('affix_id')->toArray(),
+            'success'     => $dungeon->getCurrentMappingVersion()->timer_max_seconds > $runDurationMin * 60,
+            'start'       => $now->subMinutes($runDurationMin + $runAgeMin)->unix(),
+            'end'         => $now->subMinutes($runAgeMin)->unix(),
+            'duration_ms' => $runDurationMin * 60 * 1000,
+            'ui_map_id'   => $floor->ui_map_id,
+            'pos_x'       => $this->faker->numberBetween($floor->ingame_min_x, $floor->ingame_max_x),
+            'pos_y'       => $this->faker->numberBetween($floor->ingame_min_y, $floor->ingame_max_y),
+            'event_type'  => CombatLogEventEventType::cases()[$this->faker->numberBetween(0, count(CombatLogEventEventType::cases()))],
+            'characters'  => [],
+            'context'     => [],
         ];
     }
 

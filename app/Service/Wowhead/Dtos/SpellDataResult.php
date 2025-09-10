@@ -18,7 +18,6 @@ class SpellDataResult implements Arrayable
         private readonly ?int    $castTime,
         private readonly ?int    $duration,
     ) {
-
     }
 
     public function getSpellId(): int

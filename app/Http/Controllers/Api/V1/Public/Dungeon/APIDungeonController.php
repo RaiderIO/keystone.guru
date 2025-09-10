@@ -27,7 +27,7 @@ class APIDungeonController extends Controller
     public function get(Request $request): DungeonEnvelopeResource
     {
         return new DungeonEnvelopeResource(
-            Dungeon::active()->get()
+            Dungeon::active()->get(),
         );
     }
 
@@ -58,7 +58,7 @@ class APIDungeonController extends Controller
     public function getDungeon(Dungeon $dungeon): DungeonResource
     {
         return new DungeonResource(
-            $dungeon
+            $dungeon,
         );
     }
 }

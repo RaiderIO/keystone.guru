@@ -45,7 +45,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         private readonly SeasonServiceInterface                         $seasonService,
         private readonly WowheadServiceInterface                        $wowheadService,
         private readonly FloorRepositoryInterface                       $floorRepository,
-        private readonly CombatLogDataExtractionServiceLoggingInterface $log
+        private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
         $this->dataExtractors = collect([
             new CreateMissingNpcDataExtractor(),
@@ -71,9 +71,8 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
             string $rawEvent,
-            int    $lineNr
-        )
-        use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
+            int    $lineNr,
+        ) use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
             // We don't care if there's no advanced logging enabled!
             if (!$advancedLoggingEnabled) {
                 return null;
@@ -128,7 +127,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
     private function extractDungeon(
         ?DataExtractionCurrentDungeon $currentDungeon,
-        BaseEvent                     $parsedEvent
+        BaseEvent                     $parsedEvent,
     ): ?DataExtractionCurrentDungeon {
         $result = null;
 
@@ -144,7 +143,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             if ($currentSeasonForDungeon !== null) {
                 $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
                     $currentSeasonForDungeon,
-                    collect($parsedEvent->getAffixIDs())
+                    collect($parsedEvent->getAffixIDs()),
                 );
 
                 /** @var AffixGroup|null $currentKeyAffixGroup */
@@ -156,9 +155,9 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $this->log->extractDataSetChallengeMode(
                 __($dungeon->name, [], 'en_US'),
                 $currentKeyLevel,
-                optional($currentKeyAffixGroup)->getTextAttribute()
+                optional($currentKeyAffixGroup)->getTextAttribute(),
             );
-        } else if ($parsedEvent instanceof ZoneChange) {
+        } elseif ($parsedEvent instanceof ZoneChange) {
             if ($currentDungeon?->keyLevel !== null) {
                 $this->log->extractDataSetZoneFailedChallengeModeActive();
             } else {
@@ -180,6 +179,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function extractDataAsync(string $filePath, CombatLogAnalyze $combatLogAnalyze): ?ExtractedDataResult
     {
         $result = null;
+
         try {
             $this->log->extractDataAsyncStart($filePath, $combatLogAnalyze->id);
 
@@ -189,11 +189,12 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             ]);
 
             $totalLines = 0;
+
             try {
                 $this->combatLogService->parseCombatLog($filePath, function (
                     int    $combatLogVersion,
                     bool   $advancedLoggingEnabled,
-                    string $rawEvent
+                    string $rawEvent,
                 ) use (&$totalLines) {
                     $totalLines++;
 
@@ -250,8 +251,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     'status' => CombatLogAnalyzeStatus::Completed,
                 ]);
             }
-
-
         } finally {
             $this->log->extractDataAsyncEnd();
         }

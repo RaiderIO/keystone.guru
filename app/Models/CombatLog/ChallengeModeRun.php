@@ -14,15 +14,15 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                       $id
- * @property int                       $dungeon_id
- * @property int                       $dungeon_route_id
- * @property int                       $level
- * @property bool                      $success
- * @property int                       $total_time_ms
- * @property bool                      $duplicate
+ * @property int  $id
+ * @property int  $dungeon_id
+ * @property int  $dungeon_route_id
+ * @property int  $level
+ * @property bool $success
+ * @property int  $total_time_ms
+ * @property bool $duplicate
  *
- * @property Carbon                    $created_at
+ * @property Carbon $created_at
  *
  * @property Dungeon                   $dungeon
  * @property DungeonRoute              $dungeonRoute
@@ -84,10 +84,10 @@ class ChallengeModeRun extends Model
         $hours        = floor($milliseconds / 3600000);
         $milliseconds -= ($hours * 3600000);
 
-        $minutes      = floor($milliseconds / 60000);
+        $minutes = floor($milliseconds / 60000);
         $milliseconds -= ($minutes * 60000);
 
-        $seconds      = floor($milliseconds / 1000);
+        $seconds = floor($milliseconds / 1000);
         $milliseconds -= ($seconds * 1000);
 
         $interval = CarbonInterval::create(
@@ -98,7 +98,7 @@ class ChallengeModeRun extends Model
             $hours,
             $minutes,
             $seconds,
-            $milliseconds
+            $milliseconds,
         );
 
         if ($hours > 0) {

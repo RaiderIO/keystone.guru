@@ -85,7 +85,7 @@ class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, Ma
 
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,
-        ?MappingModelInterface $newParent = null
+        ?MappingModelInterface $newParent = null,
     ): Model {
         $clone                     = clone $this;
         $clone->exists             = false;

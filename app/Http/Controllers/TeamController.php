@@ -43,7 +43,7 @@ class TeamController extends Controller
     public function store(TeamFormRequest $request, ?Team $team = null)
     {
         $validated = $request->validated();
-        $new = $team === null;
+        $new       = $team === null;
 
         if ($new) {
             $team             = new Team();
@@ -228,7 +228,6 @@ class TeamController extends Controller
             ->where('user_id', Auth::id())
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {
-
             Tag::saveFromRequest($request, $tagCategoryId);
 
             Session::flash('status', __('controller.team.flash.tag_created_successfully'));

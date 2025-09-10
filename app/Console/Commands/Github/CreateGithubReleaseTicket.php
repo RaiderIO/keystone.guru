@@ -67,9 +67,9 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
             $issueTitle .= !empty($release->title) ? sprintf(' - %s', $release->title) : '';
 
             $params = [
-                'title'     => $issueTitle,
-                'body'      => $release->github_body,
-                'labels'    => [
+                'title'  => $issueTitle,
+                'body'   => $release->github_body,
+                'labels' => [
                     'release',
                 ],
                 'type'      => 'task',
@@ -87,7 +87,6 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
                 $this->info(sprintf('Successfully updated GitHub issue %s', $version));
                 $result = 2;
             }
-
         } else {
             $this->error(sprintf('Unable to find release %s', $version));
         }

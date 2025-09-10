@@ -17,7 +17,7 @@ class CloudflareService implements CloudflareServiceInterface
 
     public function __construct(
         private readonly CacheServiceInterface             $cacheService,
-        private readonly CloudflareServiceLoggingInterface $log
+        private readonly CloudflareServiceLoggingInterface $log,
     ) {
     }
 
@@ -63,13 +63,12 @@ class CloudflareService implements CloudflareServiceInterface
     }
 
     /**
-     * @param string $cidr
+     * @param  string $cidr
      * @return bool
-     * https://gist.github.com/pavinjosdev/cb1d636ea9dc2bd201d54107d10650c5
+     *                https://gist.github.com/pavinjosdev/cb1d636ea9dc2bd201d54107d10650c5
      */
     private function validateCidr(string $cidr): bool
     {
-
         $parts = explode('/', $cidr);
         if (count($parts) != 2) {
             return false;

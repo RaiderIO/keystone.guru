@@ -11,15 +11,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int         $id
- * @property int         $dungeon_route_id
- * @property int|null    $user_id
- * @property int|null    $team_id
- * @property int|null    $team_role
- * @property int         $model_id
- * @property string      $model_class
- * @property array|null  $before
- * @property array|null  $after
+ * @property int        $id
+ * @property int        $dungeon_route_id
+ * @property int|null   $user_id
+ * @property int|null   $team_id
+ * @property int|null   $team_role
+ * @property int        $model_id
+ * @property string     $model_class
+ * @property array|null $before
+ * @property array|null $after
  *
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

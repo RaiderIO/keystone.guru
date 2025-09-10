@@ -23,9 +23,9 @@ final class MapTilesExistenceTest extends PublicTestCase
         // Act & Assert
         foreach ($dungeons as $dungeon) {
             if (in_array($dungeon->key, ['prioryofthesacredflame', 'therookery', // Missing MDT floor (but it's already created since I expect it to come)
-                                         'auchindoun', 'bloodmaul_slag_mines', 'onyxias_lair', 'onyxias_lair_classic',
-                                         'ruins_of_ahnqiraj_classic', 'temple_of_ahnqiraj_classic', 'naxxramas_classic',
-                                         // Prematurely created - no tiles exist for these yet
+                'auchindoun', 'bloodmaul_slag_mines', 'onyxias_lair', 'onyxias_lair_classic',
+                'ruins_of_ahnqiraj_classic', 'temple_of_ahnqiraj_classic', 'naxxramas_classic',
+                // Prematurely created - no tiles exist for these yet
             ])) {
                 continue;
             }
@@ -33,8 +33,8 @@ final class MapTilesExistenceTest extends PublicTestCase
             foreach ($dungeon->floors as $floor) {
                 $floorDirectory = realpath(
                     base_path(
-                        sprintf('../keystone.guru.assets/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index)
-                    )
+                        sprintf('../keystone.guru.assets/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index),
+                    ),
                 );
                 Assert::assertDirectoryExists($floorDirectory);
 

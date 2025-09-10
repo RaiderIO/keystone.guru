@@ -18,7 +18,6 @@ trait SavesStringToTempDisk
 
         // Make sure the dir exists
         if (file_exists($targetDir) || mkdir($targetDir, 0777, true)) {
-
             do {
                 // Generate a file name
                 $fileName = sprintf('%s/%d', $targetDir, random_int(0, mt_getrandmax()));

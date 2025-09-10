@@ -21,7 +21,7 @@ final class MetricServiceTest extends PublicTestCase
     public function groupMetrics_GivenGroupableMetrics_ShouldReturnGroupedMetrics(
         array $pendingMetrics,
         int   $seconds,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         // Arrange
         $metricService = ServiceFixtures::getMetricServiceMock($this);
@@ -94,7 +94,7 @@ final class MetricServiceTest extends PublicTestCase
         int    $modelId = 1,
         string $modelClass = User::class,
         string $category = Metric::CATEGORY_API_CALL,
-        string $tag = 'GET /api/user'
+        string $tag = 'GET /api/user',
     ): array {
         return [
             'model_id'    => $modelId,
@@ -104,7 +104,7 @@ final class MetricServiceTest extends PublicTestCase
             'value'       => $value,
             'created_at'  => $createdAt,
             // We don't care for a separate updatedAt, so just copy the createdAt
-            'updated_at'  => $createdAt,
+            'updated_at' => $createdAt,
         ];
     }
 }

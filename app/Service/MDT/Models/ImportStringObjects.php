@@ -20,10 +20,10 @@ class ImportStringObjects
         private readonly Collection $errors,
         private readonly Dungeon    $dungeon,
         private readonly Collection $killZoneAttributes,
-        private readonly array      $mdtObjects
+        private readonly array      $mdtObjects,
     ) {
-        $this->lines = collect();
-        $this->paths = collect();
+        $this->lines    = collect();
+        $this->paths    = collect();
         $this->mapIcons = collect();
     }
 

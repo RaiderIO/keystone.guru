@@ -14,9 +14,10 @@ return new class extends Migration {
             $table->integer('team_id')->default(null)->change();
         });
 
-        DB::update('
-            UPDATE `dungeon_routes` SET team_id = null WHERE team_id = -1
+        DB::update(
             '
+            UPDATE `dungeon_routes` SET team_id = null WHERE team_id = -1
+            ',
         );
     }
 

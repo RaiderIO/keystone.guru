@@ -238,12 +238,12 @@ function pickHexFromHandlers(array $handlers, float $weight): string
     // If color is before the start or after the end of any gradients, return last known color
     if ($handlers[0][0] >= $weight) {
         return strtolower($handlers[0][1]);
-    } else if ($handlers[count($handlers) - 1][0] <= $weight) {
+    } elseif ($handlers[count($handlers) - 1][0] <= $weight) {
         return strtolower($handlers[count($handlers) - 1][1]);
     } else {
         // Color is in between gradients, determine which gradient it is
-        $color1 = null;
-        $color2 = null;
+        $color1       = null;
+        $color2       = null;
         $scaledWeight = 0.0;
 
         for ($i = 0; $i < count($handlers) - 1; $i++) {
@@ -254,9 +254,9 @@ function pickHexFromHandlers(array $handlers, float $weight): string
                 $color1 = hex2rgb($a[1]);
                 $color2 = hex2rgb($b[1]);
 
-                $gradientRange = $b[0] - $a[0];
+                $gradientRange         = $b[0] - $a[0];
                 $weightOnGradientRange = $weight - $a[0];
-                $scaledWeight  = $weightOnGradientRange / $gradientRange;
+                $scaledWeight          = $weightOnGradientRange / $gradientRange;
 
                 break;
             }
@@ -271,8 +271,8 @@ function pickHexFromHandlers(array $handlers, float $weight): string
             rgb2hex(
                 round($color2[0] * $scaledWeight + $color1[0] * $invertedScaledWeight),
                 round($color2[1] * $scaledWeight + $color1[1] * $invertedScaledWeight),
-                round($color2[2] * $scaledWeight + $color1[2] * $invertedScaledWeight)
-            )
+                round($color2[2] * $scaledWeight + $color1[2] * $invertedScaledWeight),
+            ),
         );
     }
 }

@@ -29,7 +29,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
     private const DEFEATED_PERCENTAGE = [
         // Grim Batol: Valiona is defeated at 50%
-        40320  => 0.51,
+        40320 => 0.51,
 
         // Siege of Boralus: Viq'Goth flails around, disappears in the deep at 1 hp and leaves a chest
         128652 => 0.01,
@@ -61,24 +61,24 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         208747 => 0.46,
 
         // Mogu'shan Palace: Trial of the King
-        61442  => 0.01,
-        61444  => 0.01,
-        61445  => 0.01,
+        61442 => 0.01,
+        61444 => 0.01,
+        61445 => 0.01,
 
         // Shado-Pan Monastery:
-        58198  => 0.01,
+        58198 => 0.01,
         // Shado-pan Desciples become friendly at 1hp
-        56473  => 0.01,
+        56473 => 0.01,
         // Flying Snow becomes friendly at 1hp
-        56472  => 0.01,
+        56472 => 0.01,
         // Fragrant Lotus becomes friendly at 1hp
-        56541  => 0.01,
+        56541 => 0.01,
         // Master Snowdrift becomes friendly at 1hp
-        56884  => 0.01,
+        56884 => 0.01,
         // Corrupted Taran Zhu despawns and becomes friendly Taran Zhu at 1hp
 
         // Scholomance
-        58722  => 0.01,
+        58722 => 0.01,
         // Lilian Voss
 
         // Tazavesh: Streets of Wonder
@@ -143,8 +143,8 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
                     new PlayerDied(
                         $combatLogEvent,
                         $playerGuid,
-                        $this->lastKnownPlayerPositions->get($playerGuid->getGuid())
-                    )
+                        $this->lastKnownPlayerPositions->get($playerGuid->getGuid()),
+                    ),
                 );
                 $this->log->parsePlayerDeath($lineNr, $playerGuid);
 
@@ -178,7 +178,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-
             } else {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());

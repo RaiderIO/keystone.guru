@@ -7,7 +7,7 @@ use InvalidArgumentException;
 class CombatLogStringParser
 {
     /**
-     * @param string $line
+     * @param  string $line
      * @return array
      */
     public static function parseCombatLogLine(string $line): array
@@ -26,16 +26,16 @@ class CombatLogStringParser
             if ($char === '"' && ($i === 0 || $line[$i - 1] !== '\\')) {
                 // Toggle quote state
                 $inQuotes = !$inQuotes;
-                $current  .= $char;
-            } else if ($char === '[' && !$inQuotes) {
+                $current .= $char;
+            } elseif ($char === '[' && !$inQuotes) {
                 // Enter a bracket level
                 $bracketLevel++;
                 $current .= $char;
-            } else if ($char === ']' && !$inQuotes) {
+            } elseif ($char === ']' && !$inQuotes) {
                 // Exit a bracket level
                 $bracketLevel--;
                 $current .= $char;
-            } else if ($char === ',' && !$inQuotes && $bracketLevel === 0) {
+            } elseif ($char === ',' && !$inQuotes && $bracketLevel === 0) {
                 // Split on commas outside brackets and quotes
                 $result[] = trim(trim($current), '"');
                 $current  = '';
@@ -48,7 +48,7 @@ class CombatLogStringParser
                         $bracketLevel++;
                         $addedPretendBracket = true;
                     }
-                } else if ($char === ')' && !$inQuotes) {
+                } elseif ($char === ')' && !$inQuotes) {
                     $parenthesisLevel--;
                     // And again remove the pretend bracket
                     if ($parenthesisLevel === 0 && $bracketLevel === 1 && $addedPretendBracket) {
@@ -169,7 +169,7 @@ class CombatLogStringParser
         while ($depth > 0 && $i < $length) {
             if ($content[$i] === '[') {
                 $depth++;
-            } else if ($content[$i] === ']') {
+            } elseif ($content[$i] === ']') {
                 $depth--;
             }
             $i++;
@@ -188,7 +188,7 @@ class CombatLogStringParser
         while ($depth > 0 && $i < $length) {
             if ($content[$i] === '(') {
                 $depth++;
-            } else if ($content[$i] === ')') {
+            } elseif ($content[$i] === ')') {
                 $depth--;
             }
             $i++;
@@ -222,5 +222,4 @@ class CombatLogStringParser
 
         return (int)substr($content, $start, $i - $start);
     }
-
 }

@@ -7,7 +7,7 @@ return [
         'staging_banner_take_me_away'       => 'Переведите меня на главную страницу!',
         'readonly_mode_enabled_description' => '',
     ],
-    'app'      => [
+    'app' => [
         'linkpreview_title'       => '',
         'linkpreview_description' => '',
     ],

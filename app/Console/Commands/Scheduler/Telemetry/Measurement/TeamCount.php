@@ -20,7 +20,7 @@ class TeamCount extends Measurement
                 [
                     'all' => Team::count(),
                 ],
-                time()
+                time(),
             ),
         ];
     }

@@ -21,7 +21,7 @@ class DungeonRouteEnvelopeResource extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(
-                static fn(DungeonRoute $dungeonRoute) => new DungeonRouteResource($dungeonRoute)
+                static fn(DungeonRoute $dungeonRoute) => new DungeonRouteResource($dungeonRoute),
             )->toArray(),
         ];
     }

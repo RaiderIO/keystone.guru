@@ -26,7 +26,7 @@ class MapContextLiveSession extends MapContext
         CoordinatesServiceInterface             $coordinatesService,
         private OverpulledEnemyServiceInterface $overpulledEnemyService,
         LiveSession                             $liveSession,
-        Floor $floor
+        Floor                                   $floor,
     ) {
         parent::__construct($cacheService, $coordinatesService, $liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
     }
@@ -62,7 +62,7 @@ class MapContextLiveSession extends MapContext
 
         return array_merge(parent::getProperties(), $this->getDungeonRouteProperties(
             $this->coordinatesService,
-            $this->context->dungeonroute
+            $this->context->dungeonroute,
         ), [
             'liveSessionPublicKey' => $this->context->public_key,
             'expiresInSeconds'     => $this->context->getExpiresInSeconds(),

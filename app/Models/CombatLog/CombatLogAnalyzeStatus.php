@@ -10,5 +10,3 @@ enum CombatLogAnalyzeStatus
     public const Completed  = 30;
     public const Error      = 40;
 }
-
-

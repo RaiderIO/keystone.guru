@@ -11,15 +11,15 @@ use Illuminate\Support\Collection;
 use Str;
 
 /**
- * @property int                    $id The ID of this Affix.
- * @property int                    $icon_file_id The file ID of the icon associated with this Affix.
- * @property int                    $affix_id The ID of the affix in-game.
- * @property string                 $key The identifying key of the Affix.
- * @property string                 $name The name of the Affix.
- * @property string                 $description The description of this Affix.
+ * @property int    $id           The ID of this Affix.
+ * @property int    $icon_file_id The file ID of the icon associated with this Affix.
+ * @property int    $affix_id     The ID of the affix in-game.
+ * @property string $key          The identifying key of the Affix.
+ * @property string $name         The name of the Affix.
+ * @property string $description  The description of this Affix.
  *
- * @property string                 $image_name The name of the image of this Affix (appended).
- * @property string                 $image_url The URL to the image of this Affix (appended).
+ * @property string $image_name The name of the image of this Affix (appended).
+ * @property string $image_url  The URL to the image of this Affix (appended).
  *
  * @property Collection<AffixGroup> $affixGroups
  *
@@ -90,7 +90,6 @@ class Affix extends CacheModel
     public const AFFIX_XALATATHS_GUILE             = 'Xal\'atath\'s Guile';
     public const AFFIX_CHALLENGERS_PERIL           = 'Challenger\'s Peril';
     public const AFFIX_XALATATHS_BARGAIN_PULSAR    = 'Xal\'atath\'s Bargain: Pulsar';
-
 
     public const ALL = [
         self::AFFIX_BOLSTERING                  => 1,

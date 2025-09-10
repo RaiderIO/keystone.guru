@@ -2,7 +2,7 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'    => 'The MDT string format was not recognized.',
@@ -31,29 +31,29 @@ return [
             'read_only_mode_enabled'          => 'Read-only mode enabled',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => 'Unable to update user report',
             'unable_to_save_report'        => 'Unable to save report',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => 'Unable to save line',
             'unable_to_delete_brushline' => 'Unable to delete line',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
             'dungeon_updated' => 'Dungeon updated',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => 'Unable to save route',
         'flash'          => [
             'route_cloned_successfully' => 'Route cloned successfully',
@@ -61,7 +61,7 @@ return [
             'route_created'             => 'Route created',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => 'Popular routes',
         'this_week_affixes' => 'This week\'s affixes',
         'next_week_affixes' => 'Next week\'s affixes',
@@ -72,7 +72,7 @@ return [
             'next_week_affixes' => '%s next week',
             'new'               => '%s new routes',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '%s popular routes',
             'this_week_affixes' => '%s this week',
             'next_week_affixes' => '%s next week',
@@ -86,20 +86,20 @@ return [
             'npc_deleted_successfully' => 'Successfully removed NPC',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => 'Unable to save expansion',
             'expansion_updated'        => 'Expansion updated',
             'expansion_created'        => 'Expansion created',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
             'not_found'                  => 'Not found',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
             'user_exists'             => 'There is already a user with username %s. Did you already register before?',
@@ -108,14 +108,14 @@ return [
             'read_only_mode_enabled'  => 'Read-only mode is enabled. You cannot register at this time.',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
         ],
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => 'Unable to save release',
         ],
@@ -125,12 +125,12 @@ return [
             'github_exception' => 'An error occurred communicating with Github: :message',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => 'Added new mapping version!',
         'created_bare_successfully' => 'Added new bare mapping version!',
         'deleted_successfully'      => 'Deleted mapping version successfully',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
             'mdt_string_parsing_failed'             => 'MDT string parsing failed. Did you really paste an MDT string?',
@@ -142,13 +142,13 @@ return [
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => 'Unable to save path',
             'unable_to_delete_path' => 'Unable to delete path',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => 'Your Patreon account has successfully been unlinked.',
             'link_successful'         => 'Your Patreon has been linked successfully. Thank you!',
@@ -158,7 +158,7 @@ return [
             'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',
             'username_already_in_use'          => 'That username is already in use.',
@@ -176,7 +176,7 @@ return [
             'error_deleting_account'           => 'An error occurred. Please try again.',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => 'Unable to save spell',
         ],
@@ -185,7 +185,7 @@ return [
             'spell_created' => 'Spell created',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => 'Team updated',
             'team_created'                        => 'Team created',
@@ -195,7 +195,7 @@ return [
             'tag_already_exists'                  => 'This tag already exists',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => 'User :user is now an admin',
             'user_is_no_longer_an_admin'        => 'User :user is no longer an admin',

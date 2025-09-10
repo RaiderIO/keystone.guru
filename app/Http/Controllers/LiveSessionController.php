@@ -32,7 +32,7 @@ class LiveSessionController extends Controller
         Dungeon                           $dungeon,
         DungeonRoute                      $dungeonroute,
         ?string                           $title,
-        EchoServerHttpApiServiceInterface $echoServerHttpApiService
+        EchoServerHttpApiServiceInterface $echoServerHttpApiService,
     ): RedirectResponse {
         $this->authorize('view', $dungeonroute);
 
@@ -57,7 +57,7 @@ class LiveSessionController extends Controller
                     // Ignore the current user!
                     if (!isset($publicKey)) {
                         logger()->notice('Echo user public_key not set', $channelUser);
-                    } else if ($publicKey !== $user->public_key &&
+                    } elseif ($publicKey !== $user->public_key &&
                         $dungeonroute->team->isUserMember(new User($channelUser))) {
                         $invitees->push($publicKey);
                     }
@@ -93,7 +93,7 @@ class LiveSessionController extends Controller
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
-        LiveSession $livesession
+        LiveSession                $livesession,
     ) {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
 
@@ -104,7 +104,7 @@ class LiveSessionController extends Controller
             $dungeonroute,
             $title,
             $livesession,
-            $defaultFloor?->index ?? '1'
+            $defaultFloor?->index ?? '1',
         );
     }
 
@@ -120,9 +120,10 @@ class LiveSessionController extends Controller
         DungeonRoute               $dungeonroute,
         ?string                    $title,
         LiveSession                $livesession,
-        string $floorIndex
+        string                     $floorIndex,
     ) {
         $this->authorize('view', $dungeonroute);
+
         try {
             $this->authorize('view', $livesession);
         } catch (AuthorizationException) {

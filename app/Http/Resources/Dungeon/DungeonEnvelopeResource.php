@@ -23,7 +23,7 @@ class DungeonEnvelopeResource extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(
-                static fn(Dungeon $dungeon) => new DungeonResource($dungeon)
+                static fn(Dungeon $dungeon) => new DungeonResource($dungeon),
             )->toArray(),
         ];
     }

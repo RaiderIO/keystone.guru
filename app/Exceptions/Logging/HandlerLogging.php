@@ -12,7 +12,7 @@ class HandlerLogging extends RollbarStructuredLogging implements HandlerLoggingI
         string    $url,
         ?int      $userId,
         ?string   $username,
-        Throwable $throwable
+        Throwable $throwable,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -24,7 +24,7 @@ class HandlerLogging extends RollbarStructuredLogging implements HandlerLoggingI
         ?string $username,
         ?array  $body,
         string  $exceptionClass,
-        string  $message
+        string  $message,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
     }

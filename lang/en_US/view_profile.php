@@ -2,24 +2,24 @@
 
 return [
 
-    'edit'      => [
-        'title'                                            => 'Profile',
-        'profile'                                          => 'Profile',
-        'account'                                          => 'Account',
-        'patreon'                                          => 'Patreon',
-        'change_password'                                  => 'Change password',
-        'privacy'                                          => 'Privacy',
-        'reports'                                          => 'Reports',
-        'menu_title'                                       => '%s\'s profile',
-        'avatar'                                           => 'Avatar',
-        'avatar_alt'                                       => 'User avatar',
-        'username'                                         => 'Username',
-        'username_title'                                   => 'Since you logged in using an external Authentication service, you may change your username once.',
-        'email'                                            => 'Email',
-        'region'                                           => 'Region',
-        'select_region'                                    => 'Select region',
-        'show_as_anonymous'                                => 'Show as Anonymous',
-        'show_as_anonymous_title'                          => 'Enabling this option will show you as \'Anonymous\' when viewing routes that are not part of any teams you are a part of.
+    'edit' => [
+        'title'                   => 'Profile',
+        'profile'                 => 'Profile',
+        'account'                 => 'Account',
+        'patreon'                 => 'Patreon',
+        'change_password'         => 'Change password',
+        'privacy'                 => 'Privacy',
+        'reports'                 => 'Reports',
+        'menu_title'              => '%s\'s profile',
+        'avatar'                  => 'Avatar',
+        'avatar_alt'              => 'User avatar',
+        'username'                => 'Username',
+        'username_title'          => 'Since you logged in using an external Authentication service, you may change your username once.',
+        'email'                   => 'Email',
+        'region'                  => 'Region',
+        'select_region'           => 'Select region',
+        'show_as_anonymous'       => 'Show as Anonymous',
+        'show_as_anonymous_title' => 'Enabling this option will show you as \'Anonymous\' when viewing routes that are not part of any teams you are a part of.
                             For your own routes and for routes part of your teams, your name will always be visible.',
         'echo_color'                                       => 'Synchronized route edit color',
         'echo_color_title'                                 => 'When editing a route cooperatively with a team member, this color will uniquely identify you.',
@@ -45,23 +45,23 @@ return [
             'header_active'  => 'Active',
             'header_benefit' => 'Benefit',
         ],
-        'current_password'                                 => 'Current password',
-        'new_password'                                     => 'New password',
-        'new_password_confirm'                             => 'New password (confirm)',
-        'submit'                                           => 'Submit',
-        'ga_cookies_opt_out'                               => 'Google Analytics cookies opt-out',
-        'reports_description'                              => 'All routes, enemies and other reports you have made on the site will be listed here.',
-        'reports_table_header_id'                          => 'Id',
-        'reports_table_header_category'                    => 'Category',
-        'reports_table_header_message'                     => 'Message',
-        'reports_table_header_created_at'                  => 'Created at',
-        'reports_table_header_status'                      => 'Status',
-        'reports_table_action_handled'                     => 'Handled',
+        'current_password'                => 'Current password',
+        'new_password'                    => 'New password',
+        'new_password_confirm'            => 'New password (confirm)',
+        'submit'                          => 'Submit',
+        'ga_cookies_opt_out'              => 'Google Analytics cookies opt-out',
+        'reports_description'             => 'All routes, enemies and other reports you have made on the site will be listed here.',
+        'reports_table_header_id'         => 'Id',
+        'reports_table_header_category'   => 'Category',
+        'reports_table_header_message'    => 'Message',
+        'reports_table_header_created_at' => 'Created at',
+        'reports_table_header_status'     => 'Status',
+        'reports_table_action_handled'    => 'Handled',
     ],
     'favorites' => [
         'title' => 'My favorites',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => 'Overview',
         'favorites'                => 'Favorites',
         'tags'                     => 'Tags',
@@ -73,22 +73,22 @@ return [
         'create_route'             => 'Create route',
         'create_route_description' => 'A route is a path through a dungeon to reach the end goal of 100% enemy forces while killing all bosses.
                                 Various tools help you organize your intended path for your party members. You can share them with the world - or keep them private and organize them as you wish.',
-        'create_team'              => 'Create team',
-        'create_team_description'  => 'A team is used to share your routes with friends and help everyone stay in-sync with the latest changes to the routes you do more often.
+        'create_team'             => 'Create team',
+        'create_team_description' => 'A team is used to share your routes with friends and help everyone stay in-sync with the latest changes to the routes you do more often.
                                 Collaborative editing make adjusting an existing route much easier while you spar for the best route for your team.',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'My routes',
     ],
-    'tags'      => [
-        'title'                             => 'My tags',
-        'header'                            => 'My tags',
-        'description'                       => 'The tagging feature allows you to organize your routes the way you see fit. You can add tags to routes by viewing the Actions for each route in %s.
+    'tags' => [
+        'title'       => 'My tags',
+        'header'      => 'My tags',
+        'description' => 'The tagging feature allows you to organize your routes the way you see fit. You can add tags to routes by viewing the Actions for each route in %s.
                 You can manage tags for your own routes here. Nobody else will be able to view your tags - for routes attached to a team
                 you can manage a separate set of tags for just that team by visiting the Tags section when viewing your team.',
         'link_your_personal_route_overview' => 'your personal route overview',
     ],
-    'view'      => [
+    'view' => [
         'title'  => '%s\'s routes',
         'header' => '%s\'s routes',
     ],

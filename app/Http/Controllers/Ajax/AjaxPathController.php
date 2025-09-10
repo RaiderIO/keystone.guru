@@ -37,7 +37,7 @@ class AjaxPathController extends Controller
         APIPathFormRequest          $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        ?Path $path = null
+        ?Path                       $path = null,
     ) {
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
 
@@ -55,7 +55,7 @@ class AjaxPathController extends Controller
             $beforeModel = $path === null ? null : clone $path;
 
             if ($path === null) {
-                $path    = Path::create([
+                $path = Path::create([
                     'dungeon_route_id' => $dungeonRoute->id,
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
@@ -78,7 +78,7 @@ class AjaxPathController extends Controller
                         Polyline::findOrNew($path->polyline_id),
                         $beforeModel,
                         $path,
-                        $validated['polyline']
+                        $validated['polyline'],
                     );
 
                     // Set or unset the linked awakened obelisks now that we have an ID

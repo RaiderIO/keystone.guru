@@ -66,7 +66,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'authentication'            => ApiAuthentication::class,
+            'authentication' => ApiAuthentication::class,
             'bindings',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,

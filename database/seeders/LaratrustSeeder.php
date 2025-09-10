@@ -39,9 +39,8 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
         $mapPermission = collect(config('laratrust_seeder.permissions_map'));
 
         foreach ($config as $key => $modules) {
-
             // Create a new role
-            $role        = Role::firstOrCreate([
+            $role = Role::firstOrCreate([
                 'name'         => $key,
                 'display_name' => ucwords(str_replace('_', ' ', $key)),
                 'description'  => ucwords(str_replace('_', ' ', $key)),
@@ -52,9 +51,7 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
 
             // Reading role permission modules
             foreach ($modules as $module => $value) {
-
                 foreach (explode(',', $value) as $p => $perm) {
-
                     $permissionValue = $mapPermission->get($perm);
 
                     $permissions[] = Permission::firstOrCreate([
@@ -84,7 +81,6 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
                 ]);
                 $user->addRole($role);
             }
-
         }
     }
 

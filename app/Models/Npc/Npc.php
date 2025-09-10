@@ -20,27 +20,27 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                $id
- * @property int                                $classification_id
- * @property int                                $npc_type_id
- * @property int                                $npc_class_id
- * @property int|null                           $display_id
- * @property int|null                           $encounter_id
- * @property string                             $name
- * @property int|null                           $level
- * @property float|null                         $mdt_scale
- * @property string                             $aggressiveness
- * @property bool                               $dangerous
- * @property bool                               $truesight
- * @property bool                               $bursting
- * @property bool                               $bolstering
- * @property bool                               $sanguine
- * @property bool                               $runs_away_in_fear
- * @property bool                               $hyper_respawn
+ * @property int        $id
+ * @property int        $classification_id
+ * @property int        $npc_type_id
+ * @property int        $npc_class_id
+ * @property int|null   $display_id
+ * @property int|null   $encounter_id
+ * @property string     $name
+ * @property int|null   $level
+ * @property float|null $mdt_scale
+ * @property string     $aggressiveness
+ * @property bool       $dangerous
+ * @property bool       $truesight
+ * @property bool       $bursting
+ * @property bool       $bolstering
+ * @property bool       $sanguine
+ * @property bool       $runs_away_in_fear
+ * @property bool       $hyper_respawn
  *
- * @property NpcClassification                  $classification
- * @property NpcType                            $type
- * @property NpcClass                           $class
+ * @property NpcClassification $classification
+ * @property NpcType           $type
+ * @property NpcClass          $class
  *
  * @property NpcEnemyForces|null                $enemyForces
  * @property Collection<NpcEnemyForces>         $npcEnemyForces
@@ -52,7 +52,7 @@ use Illuminate\Support\Collection;
  * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
  * @property Collection<Dungeon>                $dungeons
  * @property Collection<NpcDungeon>             $npcDungeons
- * @property Collection<NpcHealth> $npcHealths
+ * @property Collection<NpcHealth>              $npcHealths
  *
  * @mixin Eloquent
  */
@@ -327,8 +327,8 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param int   $keyLevel
-     * @param array $affixes A list of Affix:: constants
+     * @param  int   $keyLevel
+     * @param  array $affixes  A list of Affix:: constants
      * @return float
      */
     public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = []): float
@@ -360,11 +360,11 @@ class Npc extends CacheModel implements MappingModelInterface
             foreach ($this->dungeons as $dungeon) {
                 foreach ($dungeon->mappingVersions as $mappingVersion) {
                     $result = $result && NpcEnemyForces::create([
-                            'npc_id'               => $this->id,
-                            'mapping_version_id'   => $mappingVersion->id,
-                            'enemy_forces'         => $existingEnemyForces,
-                            'enemy_forces_teeming' => null,
-                        ]);
+                        'npc_id'               => $this->id,
+                        'mapping_version_id'   => $mappingVersion->id,
+                        'enemy_forces'         => $existingEnemyForces,
+                        'enemy_forces_teeming' => null,
+                    ]);
                 }
             }
         }

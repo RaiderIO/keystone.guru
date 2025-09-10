@@ -16,7 +16,7 @@ function correlationId(): string
 /**
  * Checks if a specific alert is already dismissed and thus should not be rendered anymore.
  *
- * @param  $id  string The ID of the alert
+ * @param       $id string The ID of the alert
  * @return bool True if the user dismissed it, false if they did not yet.
  */
 function isAlertDismissed(string $id): bool
@@ -27,7 +27,7 @@ function isAlertDismissed(string $id): bool
 /**
  * Get the initials from a name
  *
- * @param  $name  string
+ * @param $name string
  */
 function initials(string $name): string
 {
@@ -58,13 +58,13 @@ function str_getcsv_assoc(
     string $csv_string,
     string $delimiter = ',',
     bool   $skip_empty_lines = true,
-    bool   $trim_fields = true
+    bool   $trim_fields = true,
 ) {
     $enc = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
     $enc = preg_replace_callback(
         '/"(.*?)"/s',
         static fn($field) => urlencode(utf8_encode($field[1])),
-        (string)$enc
+        (string)$enc,
     );
     $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', (string)$enc);
 
@@ -74,10 +74,10 @@ function str_getcsv_assoc(
 
             return array_map(
                 static fn($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
-                $fields
+                $fields,
             );
         },
-        $lines
+        $lines,
     );
 }
 

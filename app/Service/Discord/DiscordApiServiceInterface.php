@@ -8,7 +8,7 @@ interface DiscordApiServiceInterface
         string  $webhookUrl,
         string  $message,
         ?string $username = null,
-        array   $embeds = []
+        array   $embeds = [],
     ): bool;
 
     public function sendEmbeds(string $webhookUrl, array $embeds): bool;

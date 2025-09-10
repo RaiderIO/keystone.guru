@@ -2,17 +2,17 @@
 
 return [
 
-    'dungeon'        => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popular',
             'this_week' => 'This week',
             'next_week' => 'Next week',
             'new'       => 'New',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => 'Raid',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => 'Dungeon',
             'all'                      => 'All',
             'all_dungeons'             => 'All dungeons',
@@ -22,8 +22,8 @@ return [
             'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.',
         ],
     ],
-    'dungeonroute'   => [
-        'search'     => [
+    'dungeonroute' => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Loading...',
             ],
@@ -35,7 +35,7 @@ return [
             'select_attributes'       => 'Select attributes',
             'attributes_selected'     => '{0} attributes',
         ],
-        'card'       => [
+        'card' => [
             'thumbnail_alt'            => 'Thumbnail',
             'thumbnail_dungeon_alt'    => 'Thumbnail',
             'no_description'           => 'No description',
@@ -47,13 +47,13 @@ return [
             'dominant_affix'           => 'Dominant affix',
             'seasonal_affix'           => 'Seasonal affix',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => 'No routes found',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '%s vote(s)',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => 'Team',
             'affixes'               => 'Affixes',
             'select_affixes'        => 'Select affixes',
@@ -69,12 +69,12 @@ return [
             'tags_selected'         => '{0} tags selected',
             'filter'                => 'Filter',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',
         ],
     ],
-    'forms'          => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => 'Title',
             'title_title'                                    => 'Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Raid size',
@@ -99,7 +99,7 @@ return [
             'registered_user_message'   => 'A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
             'create_route'              => 'Create route',
         ],
-        'login'                => [
+        'login' => [
             'login'                => 'Login',
             'email_address'        => 'E-mail address',
             'password'             => 'Password',
@@ -107,7 +107,7 @@ return [
             'forgot_your_password' => 'Forgot your password?',
             'login_through_oauth2' => 'Login through OAuth2',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => 'General',
             'map_facade_style'                              => 'Use combined floors',
             'map_facade_style_title'                        => 'With the introduction of Dragonflight Season 3, various dungeons have had their floors combined into a single map. Using this new map is optional and you can toggle between the combined map or the traditional split-floor style here.',
@@ -138,7 +138,7 @@ return [
             'default_line_color'                            => 'Default line color',
             'default_line_color_title'                      => 'This controls the default color of any lines you create on the map, such as paths and free drawn lines.',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => 'Paste your Mythic Dungeon Tools export string',
             'reset_title'                            => 'Reset',
             'unregistered_user_all_routes_temporary' => 'As an unregistered user, all imported routes will be temporary routes which expire after %s hours.',
@@ -149,10 +149,10 @@ return [
             'import_as_this_week'                    => 'Import with this week\'s affixes instead',
             'import_route'                           => 'Import route',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => 'If you publish routes, your battletag/discord username will be visible until you change your username in your profile.',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => 'Pull number style',
             'pull_number_style_title'           => 'This controls how the pulls sidebar displays numbers.',
             'pull_number_style_percentage'      => 'Percentage',
@@ -166,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => 'Always apply when I change pulls',
             'always_apply_on_pull_change_title' => 'Enabling this setting will update your pull\'s colors as you edit your pulls based on the pull gradient configured above. This setting is unique per route.',
         ],
-        'register'             => [
+        'register' => [
             'register'                => 'Register',
             'username'                => 'Username',
             'username_title'          => 'Your username may be visible if you choose to publish any routes you make.',
@@ -183,7 +183,7 @@ return [
             'privacy_policy'          => 'privacy policy',
             'cookie_policy'           => 'cookie policy',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => 'Africa',
             'america'    => 'America',
             'antarctica' => 'Antarctica',
@@ -195,7 +195,7 @@ return [
             'timezone'   => 'Timezone',
         ],
     ],
-    'general'        => [
+    'general' => [
         'linkpreview' => [
             'title'               => ':title | Keystone.guru',
             'description'         => ':description Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
@@ -203,8 +203,8 @@ return [
             'twitter_description' => ':description Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
     ],
-    'group'          => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => 'Preset :count',
             'awakened_enemy_set'       => 'Awakened enemy set',
             'awakened_enemy_set_title' => 'Awakened enemies (pillar bosses) for M+ levels 10 and higher come in two sets. Each set of affixes is marked either A or B. You may attach multiple affixes to your route whom can have both A and B sets. Choose here which set will be displayed on the map. You can always adjust your selection from the Route Settings menu later.',
@@ -217,7 +217,7 @@ return [
             'party_member_nr' => 'Party member #%d',
         ],
     ],
-    'layout'         => [
+    'layout' => [
         'footer' => [
             'developer'                       => 'Developer',
             'api_documentation'               => 'API documentation',
@@ -252,8 +252,8 @@ return [
             'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => 'Login',
                 'register'          => 'Register',
                 'telescope'         => 'Telescope',
@@ -278,21 +278,21 @@ return [
             ],
         ],
     ],
-    'maps'           => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => 'Admin',
                 'view_this_route' => 'View',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => 'Timer',
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Group setup',
                     'affixes'          => 'Affixes',
                     'route_info_title' => 'Info',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => 'Portrait',
                     'npc_class'               => 'Class',
                     'npc_type'                => 'Type',
@@ -302,31 +302,31 @@ return [
                     'enemy_skippable'         => 'Skippable',
                     'enemy_group'             => 'Group',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => 'Floors',
                     'floors'        => 'Floors',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => 'Elements',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => 'Hide',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'Show MDT',
                     'auto_solve' => 'Auto solve',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => 'Rate',
                     'unable_to_rate_own_route' => 'You cannot rate your own route',
                     'your_rating'              => 'Your rating',
                 ],
             ],
-            'enemyinfo'      => [
+            'enemyinfo' => [
                 'enemy_info'      => 'Enemy info',
                 'report_an_issue' => 'Report an issue',
             ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => 'Map settings',
                 'enabled'                => 'Enabled',
                 'disabled'               => 'Disabled',
@@ -359,13 +359,13 @@ return [
                     'classes_player_deaths'               => 'Classes (death)',
                     'classes_player_deaths_title'         => 'Only show deaths of these classes.',
                 ],
-                'advanced_options'       => 'Advanced options',
-                'advanced_option'        => [
+                'advanced_options' => 'Advanced options',
+                'advanced_option'  => [
                     'min_samples_required'       => 'Min. samples required',
                     'min_samples_required_title' => 'Decreases the threshold required for data to show up in the heatmap. Decreasing this value will lead to more data points being rendered.',
                 ],
-                'heat_options'           => 'Leaflet.heat options',
-                'heat_option'            => [
+                'heat_options' => 'Leaflet.heat options',
+                'heat_option'  => [
                     'min_opacity' => 'Min opacity',
                     'max_zoom'    => 'Max zoom',
                     'max'         => 'Max',
@@ -375,7 +375,7 @@ return [
                     'pane'        => 'Pane',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',
                 'start'                          => 'Start',
@@ -404,7 +404,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'You cannot rate your own route - thank you for using live sessions!',
                 'review_live_session'            => 'Review live session',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => 'Map/pull settings',
                 'new_pull'                    => 'New pull',
                 'delete_all_pulls_title'      => 'Delete all pulls',
@@ -414,8 +414,8 @@ return [
                 'no_pulls_created_view'       => 'No pulls created.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => 'Description',
                         'supported_html_tags' => 'Supported HTML tags: ',
                         'save'                => 'Save',
@@ -433,14 +433,14 @@ return [
                 'remove_kill_area' => 'Remove kill area',
                 'delete_killzone'  => 'Delete pull',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => 'Edit',
                 'clone_this_route_title'         => 'Clone',
                 'report_for_moderation'          => 'Report',
                 'report_for_moderation_finished' => 'Reported',
             ],
         ],
-        'map'      => [
+        'map' => [
             'no_teeming'                             => 'Always visible',
             'visible_teeming'                        => 'Visible when Teeming only',
             'hidden_teeming'                         => 'Hidden when Teeming only',
@@ -452,7 +452,7 @@ return [
                 Every time Blizzard makes a change to the mapping or an error is corrected, a new mapping version is created.
                 Routes that are created with previous mapping versions are not automatically updated to the latest version.
                 This warning indicates the mapping version used by this route is out of date and may not represent the in-game mapping',
-            'route'                                  => 'Route',
+            'route' => 'Route',
         ],
     ],
     'mappingversion' => [
@@ -461,15 +461,15 @@ return [
             'mapping_version'          => ':gameVersion version :version',
         ],
     ],
-    'modal'          => [
-        'dungeonroute'       => [
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => 'Route removed',
                 'description'  => 'Your route has been removed and can no longer be viewed/edited. This can happen if your route was a temporary route and it has been automatically cleaned up or you deleted the route in a different browser tab.',
                 'back_to_home' => 'Back to home',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
                 'your_name'              => 'Your name',
@@ -478,7 +478,7 @@ return [
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
                 'submit'                 => 'Submit',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => 'Report enemy bug',
                 'your_name'              => 'Your name',
                 'contact_by_email'       => 'Contact me by e-mail if required for further investigation',
@@ -486,19 +486,19 @@ return [
                 'submit'                 => 'Submit',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Create route',
             'create_temporary_route' => 'Create temporary route',
             'import_from_mdt'        => 'Import from MDT',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',
             'terms_of_service'   => 'terms of service',
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => 'Facade enabled',
             'enemy_forces_required'           => 'Enemy forces required',
             'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
@@ -507,7 +507,7 @@ return [
             'timer_max_seconds'               => 'Timer (seconds)',
             'save'                            => 'Save',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => 'Map settings',
             'pull_settings' => 'Pull settings',
         ],
@@ -522,10 +522,10 @@ return [
             'route_not_created_from_combat_log' => 'Route was not generated from a combat log',
             'route_not_created_through_api'     => 'Route was not generated through API',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => 'Route settings',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',
@@ -540,8 +540,8 @@ return [
             'loading'                          => 'Loading...',
             'copy_to_clipboard'                => 'Copy to clipboard',
         ],
-        'simulate'           => [
-            'intro'                      => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
+        'simulate' => [
+            'intro' => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
                 generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character\'s SimC string through either the addon or the site, select Advanced and paste Keystone.guru\'s output below your character\'s SimC string.',
             'title'                      => 'Simulate route',
             'get_simulationcraft_string' => 'Get SimulationCraft string',
@@ -549,22 +549,22 @@ return [
             'loading'                    => 'Loading...',
             'copy_to_clipboard'          => 'Copy to clipboard',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-                'key_level'                               => 'Key level',
-                'key_level_title'                         => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
-                'shrouded_bounty_type'                    => 'Shrouded bounty',
-                'shrouded_bounty_type_title'              => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => 'Key level',
+                'key_level_title'            => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
+                'shrouded_bounty_type'       => 'Shrouded bounty',
+                'shrouded_bounty_type_title' => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
+                'shrouded_bounty_types'      => [
                     'none'    => 'No bounty',
                     'crit'    => 'Crit',
                     'haste'   => 'Haste',
                     'mastery' => 'Mastery',
                     'vers'    => 'Versatility',
                 ],
-                'affixes'                                 => 'Affixes',
-                'affixes_title'                           => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
-                'affixes_map'                             => [
+                'affixes'       => 'Affixes',
+                'affixes_title' => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
+                'affixes_map'   => [
                     'fortified'  => 'Fortified',
                     'tyrannical' => 'Tyrannical',
                 ],
@@ -585,10 +585,10 @@ return [
                     'power_infusion'       => 'Power Infusion',
                     'bleeding'             => 'Bleeding',
                 ],
-                'hp_percent'                              => 'HP percentage',
-                'hp_percent_title'                        => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-                'bloodlust_per_pull'                      => 'Bloodlust/Heroism/etc. per pull',
-                'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism/etc. Assigning these spells to a pull automatically populates this dropdown.',
+                'hp_percent'               => 'HP percentage',
+                'hp_percent_title'         => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
+                'bloodlust_per_pull'       => 'Bloodlust/Heroism/etc. per pull',
+                'bloodlust_per_pull_title' => 'Allows you to select which pulls have Bloodlust/Heroism/etc. Assigning these spells to a pull automatically populates this dropdown.',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
@@ -597,24 +597,24 @@ return [
                 and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
                 max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
                 unless you\'re literally chain pulling with no down time in between.',
-                'use_mounts'                           => 'Use mounts',
-                'use_mounts_title'                     => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
-                'patreon_link_text'                    => 'Patreon',
-                'patreon_only'                         => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
-                'advanced_options'                     => 'Advanced options',
-                'description'                          => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
+                'use_mounts'        => 'Use mounts',
+                'use_mounts_title'  => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
+                'patreon_link_text' => 'Patreon',
+                'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
+                'advanced_options'  => 'Advanced options',
+                'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => 'Upload logs',
         ],
     ],
-    'release'        => [
+    'release' => [
         'release' => [
             'new' => 'NEW',
         ],
     ],
-    'tag'            => [
+    'tag' => [
         'manager' => [
             'route_personal' => 'Route',
             'route_team'     => 'Route',
@@ -628,7 +628,7 @@ return [
             'create_new_tag' => 'Create new tag',
         ],
     ],
-    'team'           => [
+    'team' => [
         'details' => [
             'name'            => 'Name',
             'description'     => 'Description',
@@ -639,19 +639,19 @@ return [
             'submit'          => 'Submit',
             'disband_team'    => 'Disband team',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => 'Select team...',
             'team'        => 'Team',
             'create_team' => 'Create team',
         ],
     ],
-    'thirdparty'     => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => 'Remove ads',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => 'Patreon',
             ],
@@ -660,7 +660,7 @@ return [
             'learn_more' => 'Learn more',
         ],
     ],
-    'user'           => [
+    'user' => [
         'name' => [
             'avatar_alt' => 'Avatar',
             'raider_io'  => 'Raider.IO',

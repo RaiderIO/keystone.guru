@@ -24,10 +24,9 @@ return new class extends Migration {
             $table->index([
                 'dungeon_id',
                 'published_state_id',
-                'expires_at'
+                'expires_at',
             ], 'dungeon_routes_dungeon_pub_exp');
         });
-
     }
 
     /**

@@ -15,7 +15,6 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICom
 #[Group('TheNokhudOffensive')]
 class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APICombatLogControllerCombatLogRouteTestBase
 {
-
     protected function getDungeonKey(): string
     {
         return Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE;

@@ -16,20 +16,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Random\RandomException;
 
 /**
- * @property int          $id
- * @property string       $public_key
- * @property int          $dungeon_route_id
- * @property int          $user_id
- * @property int          $key_level
- * @property string       $shrouded_bounty_type
- * @property string       $affix Comma separated list of affixes
- * @property int|null     $thundering_clear_seconds
- * @property int          $raid_buffs_mask
- * @property float        $hp_percent
- * @property float        $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
- *                                                 don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
- * @property bool         $use_mounts Premium: yes to enable mount usage to further reduce delay between pulls
- * @property string       $simulate_bloodlust_per_pull The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
+ * @property int      $id
+ * @property string   $public_key
+ * @property int      $dungeon_route_id
+ * @property int      $user_id
+ * @property int      $key_level
+ * @property string   $shrouded_bounty_type
+ * @property string   $affix                          Comma separated list of affixes
+ * @property int|null $thundering_clear_seconds
+ * @property int      $raid_buffs_mask
+ * @property float    $hp_percent
+ * @property float    $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
+ *                                                    don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
+ * @property bool     $use_mounts                     Premium: yes to enable mount usage to further reduce delay between pulls
+ * @property string   $simulate_bloodlust_per_pull    The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
  *
  * @property DungeonRoute $dungeonRoute
  *
@@ -153,7 +153,7 @@ class SimulationCraftRaidEventsOptions extends Model
      */
     public static function fromRequest(
         AjaxDungeonRouteSimulateFormRequest $request,
-        DungeonRoute                        $dungeonRoute
+        DungeonRoute                        $dungeonRoute,
     ): SimulationCraftRaidEventsOptions {
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
 
@@ -165,13 +165,13 @@ class SimulationCraftRaidEventsOptions extends Model
         $affixesCsv = implode(',', $validated['affix'] ?? []);
         unset($validated['affix']);
 
-        $result               = SimulationCraftRaidEventsOptions::create(array_merge($validated, [
-            'public_key'                     => self::generateRandomPublicKey(),
-            'user_id'                        => Auth::id(),
-            'dungeon_route_id'               => $dungeonRoute->id,
-            'thundering_clear_seconds'       => empty($validated['thundering_clear_seconds']) ? null : $validated['thundering_clear_seconds'],
-            'affix'                          => $affixesCsv,
-            'simulate_bloodlust_per_pull'    => $bloodLustPerPull,
+        $result = SimulationCraftRaidEventsOptions::create(array_merge($validated, [
+            'public_key'                  => self::generateRandomPublicKey(),
+            'user_id'                     => Auth::id(),
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'thundering_clear_seconds'    => empty($validated['thundering_clear_seconds']) ? null : $validated['thundering_clear_seconds'],
+            'affix'                       => $affixesCsv,
+            'simulate_bloodlust_per_pull' => $bloodLustPerPull,
             // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0
             'ranged_pull_compensation_yards' => $hasAdvancedSimulation ? (int)$request->get('ranged_pull_compensation_yards') : 0,
             'use_mounts'                     => $hasAdvancedSimulation ? (int)$request->get('use_mounts') : 0,

@@ -46,14 +46,15 @@ class DungeonRouteResource extends JsonResource
             'enemyForcesRequired' => $this->mappingVersion->enemy_forces_required,
             'expiresAt'           => $this->expires_at,
             'pulls'               => $this->killZones()->with('killZoneEnemies')->get()->map(
-                fn(KillZone $killZone) => new KillZoneResource($killZone)
+                fn(KillZone $killZone) => new KillZoneResource($killZone),
             )->toArray(),
-            'author'              => new UserResource($this->author),
-            'affixGroups'         => $this->affixes->map(
-                fn(AffixGroup $affixGroup
-                ) => new AffixGroupResource($affixGroup->setRelation('expansion', $this->dungeon->expansion))
+            'author'      => new UserResource($this->author),
+            'affixGroups' => $this->affixes->map(
+                fn(
+                    AffixGroup $affixGroup,
+                ) => new AffixGroupResource($affixGroup->setRelation('expansion', $this->dungeon->expansion)),
             )->toArray(),
-            'links'               => new DungeonRouteLinksResource($this),
+            'links' => new DungeonRouteLinksResource($this),
         ];
     }
 }

@@ -11,7 +11,7 @@ class GameVersionService implements GameVersionServiceInterface
     private const GAME_VERSION_COOKIE = 'game_version';
 
     public function __construct(
-        private readonly CookieServiceInterface $cookieService
+        private readonly CookieServiceInterface $cookieService,
     ) {
     }
 

@@ -4,7 +4,6 @@ namespace App\Service\CombatLog\Splitters\Logging;
 
 interface ZoneChangeSplitterLoggingInterface extends CombatLogSplitterLoggingInterface
 {
-
     public function parseCombatLogEventTimestampNotSet(): void;
 
     public function parseCombatLogEventZoneChangeEvent(): void;

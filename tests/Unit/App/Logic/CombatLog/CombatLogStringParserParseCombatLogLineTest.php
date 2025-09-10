@@ -23,7 +23,7 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
     public static function parseCombatLogLine_GivenLine_ShouldParseCorrectly_DataProvider(): array
     {
         return [
-            'Basic Parsing'                 => [
+            'Basic Parsing' => [
                 'line'     => '10/18/2024 21:34:24.8572,COMBATANT_INFO,Player-1084-0AE6DF11,0,14644',
                 'expected' => [
                     '10/18/2024 21:34:24.8572',
@@ -33,7 +33,7 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     '14644',
                 ],
             ],
-            'Quoted Values'                 => [
+            'Quoted Values' => [
                 'line'     => '10/18/2024 21:34:24.8572,"COMBATANT_INFO","Player,1084-0AE6DF11",0,14644',
                 'expected' => [
                     '10/18/2024 21:34:24.8572',
@@ -43,14 +43,14 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     '14644',
                 ],
             ],
-            'Nested Brackets'               => [
+            'Nested Brackets' => [
                 'line'     => '[(123,456),(789,101)],[(112,223)]',
                 'expected' => [
                     '[(123,456),(789,101)]',
                     '[(112,223)]',
                 ],
             ],
-            'Combined Quotes and Brackets'  => [
+            'Combined Quotes and Brackets' => [
                 'line'     => '"Data,1",[(123,"456,789"),(101,202)],"End"',
                 'expected' => [
                     'Data,1',
@@ -58,25 +58,25 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     'End',
                 ],
             ],
-            'Escaped Quotes'                => [
+            'Escaped Quotes' => [
                 'line'     => '"Data with \\"escaped\\" quotes",123',
                 'expected' => [
                     'Data with \\"escaped\\" quotes',
                     '123',
                 ],
             ],
-            'Deeply Nested Brackets'        => [
+            'Deeply Nested Brackets' => [
                 'line'     => '[[(1,2),(3,4)],[(5,[6,7])]],123',
                 'expected' => [
                     '[[(1,2),(3,4)],[(5,[6,7])]]',
                     '123',
                 ],
             ],
-            'Empty Line'                    => [
+            'Empty Line' => [
                 'line'     => '',
                 'expected' => [],
             ],
-            'No Brackets or Quotes'         => [
+            'No Brackets or Quotes' => [
                 'line'     => '10/18/2024,COMBATANT_INFO,Player-1084-0AE6DF11',
                 'expected' => [
                     '10/18/2024',
@@ -97,14 +97,14 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                 ],
             ],
             'Failing Test' => [
-                'line' => '10/18/2024 21:34:24.8572,COMBATANT_INFO,[(102380,126443,1)],(0,0,0,0),[(211024,606,())]',
+                'line'     => '10/18/2024 21:34:24.8572,COMBATANT_INFO,[(102380,126443,1)],(0,0,0,0),[(211024,606,())]',
                 'expected' => [
                     '10/18/2024 21:34:24.8572',
                     'COMBATANT_INFO',
                     '[(102380,126443,1)]',
                     '(0,0,0,0)',
                     '[(211024,606,())]',
-                ]
+                ],
             ],
         ];
     }
@@ -125,13 +125,13 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
     {
         return [
             'Malformed Input (Unbalanced Brackets)' => [
-                'line'     => '[(123,456),(789,101)',
+                'line' => '[(123,456),(789,101)',
             ],
             'Malformed Input (Unbalanced Parenthesis)' => [
-                'line'     => '[(123,456),(789,101]',
+                'line' => '[(123,456),(789,101]',
             ],
-            'Malformed Input (Unbalanced Quotes)'   => [
-                'line'     => '"Data,123',
+            'Malformed Input (Unbalanced Quotes)' => [
+                'line' => '"Data,123',
             ],
         ];
     }

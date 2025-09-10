@@ -23,7 +23,7 @@ class EnemyChangedEvent extends ModelChangedEvent
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected Enemy|Model                        $model
+        protected Enemy|Model                        $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -36,9 +36,10 @@ class EnemyChangedEvent extends ModelChangedEvent
     public function broadcastWith(): array
     {
         return array_merge(
-            parent::broadcastWith(), [
+            parent::broadcastWith(),
+            [
                 'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
-            ]
+            ],
         );
     }
 }

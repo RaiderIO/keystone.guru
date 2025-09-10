@@ -51,10 +51,10 @@ class GetBody extends Command
         $release = Release::where('version', $version)->first();
 
         match ($platform) {
-            'github' => $this->line($release->github_body),
-            'reddit' => $this->line($release->reddit_body),
+            'github'  => $this->line($release->github_body),
+            'reddit'  => $this->line($release->reddit_body),
             'discord' => $this->line($release->discord_body),
-            default => throw new Exception(sprintf('Unsupport platform %s', $platform)),
+            default   => throw new Exception(sprintf('Unsupport platform %s', $platform)),
         };
     }
 }

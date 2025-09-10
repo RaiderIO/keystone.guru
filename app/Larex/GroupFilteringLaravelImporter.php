@@ -47,7 +47,7 @@ class GroupFilteringLaravelImporter implements Importer
 
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveArrayIterator($items),
-                RecursiveIteratorIterator::SELF_FIRST
+                RecursiveIteratorIterator::SELF_FIRST,
             );
 
             $path = [];
@@ -67,8 +67,10 @@ class GroupFilteringLaravelImporter implements Importer
         $data = collect([]);
 
         foreach ($rawValues as $rawValue) {
-            $index = $data->search(fn($item
-            ) => $item['group'] === $rawValue['group'] && $item['key'] === $rawValue['key']
+            $index = $data->search(
+                fn(
+                    $item,
+            ) => $item['group'] === $rawValue['group'] && $item['key'] === $rawValue['key'],
             );
 
             if ($index === false) {

@@ -25,7 +25,6 @@ trait ExportsTranslations
         }
     }
 
-
     /**
      * CHATGPT GENERATED CODE BELOW
      */
@@ -85,7 +84,7 @@ trait ExportsTranslations
                     $nextIndent,
                     $keyStr,
                     str_repeat(' ', $pad),
-                    $arrow . $valueStr
+                    $arrow . $valueStr,
                 );
             } else {
                 $lines[] = sprintf(
@@ -94,7 +93,7 @@ trait ExportsTranslations
                     $keyStr,
                     str_repeat(' ', $pad),
                     $arrow,
-                    $valueStr
+                    $valueStr,
                 );
             }
         }
@@ -149,7 +148,7 @@ trait ExportsTranslations
                 "\\\\",
                 "\\'",
             ],
-            $s
+            $s,
         );
     }
 }

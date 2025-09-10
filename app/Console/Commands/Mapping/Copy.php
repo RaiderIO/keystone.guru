@@ -100,7 +100,7 @@ class Copy extends Command
                     if ($entity instanceof DungeonFloorSwitchMarker) {
                         $attributes['source_floor_id'] = $floorIdMapping->get($entity->source_floor_id);
                         $attributes['target_floor_id'] = $floorIdMapping->get($entity->target_floor_id);
-                    } else if ($entity instanceof FloorUnion) {
+                    } elseif ($entity instanceof FloorUnion) {
                         $attributes['target_floor_id'] = $floorIdMapping->get($entity->target_floor_id);
                     }
 

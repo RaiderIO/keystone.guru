@@ -7,7 +7,6 @@ use Throwable;
 
 interface ThumbnailServiceLoggingInterface
 {
-
     public function createThumbnailStart(string $publicKey, int $floorIndex, int $attempts): void;
 
     public function createThumbnailEnd(): void;
@@ -21,7 +20,7 @@ interface ThumbnailServiceLoggingInterface
         ?int   $imageWidth,
         ?int   $imageHeight,
         ?int   $zoomLevel,
-        ?int   $quality
+        ?int   $quality,
     ): void;
 
     public function createThumbnailCustomEnd(): void;
@@ -35,7 +34,7 @@ interface ThumbnailServiceLoggingInterface
         ?int   $imageWidth,
         ?int   $imageHeight,
         ?int   $zoomLevel,
-        ?int   $quality
+        ?int   $quality,
     ): void;
 
     public function doCreateThumbnailMaintenanceMode(): void;
@@ -66,7 +65,7 @@ interface ThumbnailServiceLoggingInterface
         string    $sourcePublicKey,
         string    $targetPublicKey,
         int       $id,
-        Exception $exception
+        Exception $exception,
     ): void;
 
     public function attachThumbnailToDungeonRouteDeleteExistingThumbnail(
@@ -74,7 +73,7 @@ interface ThumbnailServiceLoggingInterface
         ?int    $fileId,
         ?string $fileDisk,
         ?string $filePath,
-        bool    $deleteResult
+        bool    $deleteResult,
     ): void;
 
     public function attachThumbnailToDungeonRouteSuccess(string $target, bool $fileExists): void;

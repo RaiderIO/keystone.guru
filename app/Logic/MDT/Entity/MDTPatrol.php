@@ -7,5 +7,4 @@ namespace App\Logic\MDT\Entity;
  */
 class MDTPatrol
 {
-
 }

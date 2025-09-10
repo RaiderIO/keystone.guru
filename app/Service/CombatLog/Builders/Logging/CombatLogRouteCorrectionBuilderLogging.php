@@ -6,7 +6,6 @@ use App\Logging\StructuredLogging;
 
 class CombatLogRouteCorrectionBuilderLogging extends StructuredLogging implements CombatLogRouteCorrectionBuilderLoggingInterface
 {
-
     public function getCombatLogRouteStart(): void
     {
         $this->start(__METHOD__);

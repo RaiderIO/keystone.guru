@@ -2,17 +2,17 @@
 
 return [
 
-    'dungeon'        => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Популярные',
             'this_week' => 'Текущая неделя',
             'next_week' => 'Следующая неделя',
             'new'       => 'Новые',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => '',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => 'Подземелье',
             'all'                      => 'Все',
             'all_dungeons'             => 'Все подземелья',
@@ -22,8 +22,8 @@ return [
             'siege_of_boralus_warning' => 'Так как подземелье Осада Боралуса отличаются для Орды и Альянса вам необходимо выбрать фракцию.',
         ],
     ],
-    'dungeonroute'   => [
-        'search'     => [
+    'dungeonroute' => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Загрузка...',
             ],
@@ -35,7 +35,7 @@ return [
             'select_attributes'       => '',
             'attributes_selected'     => '{0} Атрибутов',
         ],
-        'card'       => [
+        'card' => [
             'thumbnail_alt'            => '',
             'thumbnail_dungeon_alt'    => '',
             'no_description'           => 'Нет описания',
@@ -47,13 +47,13 @@ return [
             'dominant_affix'           => '',
             'seasonal_affix'           => '',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => 'Маршруты не найдены',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '%s голосов',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => 'Команда',
             'affixes'               => 'Аффиксы',
             'select_affixes'        => '',
@@ -69,12 +69,12 @@ return [
             'tags_selected'         => '{0} тегов выбрано',
             'filter'                => 'Фильтр',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '%s -  данные https://mplus.subcreation.net',
         ],
     ],
-    'forms'          => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => 'Название',
             'title_title'                                    => 'Выберите заголовок, который будет отличать ваши маршрут от других аналогичных маршрутов, которые вы можете создать. Заголовок будет виден другим пользователям, как только вы опубликуете свой маршрут.',
             'dungeon_speedrun_required_npc_difficulty'       => '',
@@ -99,7 +99,7 @@ return [
             'registered_user_message'   => 'Временный маршрут не будет отображаться в вашем профиле и будет автоматически удален через %d часов.',
             'create_route'              => 'Создать маршрут',
         ],
-        'login'                => [
+        'login' => [
             'login'                => 'Войти',
             'email_address'        => 'Электронный адрес',
             'password'             => 'Пароль',
@@ -107,7 +107,7 @@ return [
             'forgot_your_password' => 'Забыли пароль?',
             'login_through_oauth2' => 'Авторизация с помощью OAuth2',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => '',
             'map_facade_style'                              => '',
             'map_facade_style_title'                        => '',
@@ -138,7 +138,7 @@ return [
             'default_line_color'                            => 'Цвет линии по умолчанию',
             'default_line_color_title'                      => 'Эта настройка отвечает за цвет по умолчанию для любых линий, которые вы рисуете на карте, например, контуры.',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => 'Вставьте строку экспорта Mythic Dungeon Tools',
             'reset_title'                            => 'Сброс настроек',
             'unregistered_user_all_routes_temporary' => 'Так как вы незарегистрированный пользователь, все импортированные маршруты будут временными маршрутами, срок действия которых истечет через %s часа.',
@@ -149,10 +149,10 @@ return [
             'import_as_this_week'                    => '',
             'import_route'                           => 'Импорт маршрута',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => 'Если вы публикуете маршруты, ваше имя пользователя battletag/discord будет видно до тех пор, пока вы не измените имя пользователя в своем профиле.',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => 'Стиль номера пула',
             'pull_number_style_title'           => 'Это управляет номерами ваших пулов на боковой панели',
             'pull_number_style_percentage'      => 'Проценты',
@@ -166,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => 'Всегда применять, когда я меняю пулл',
             'always_apply_on_pull_change_title' => 'Включение этого параметра будет обновлять цвета ваших пулов, когда вы редактируете их на основе градиента пулов, настроенного выше. Эта настройка уникальна для каждого маршрута.',
         ],
-        'register'             => [
+        'register' => [
             'register'                => 'Регистрация',
             'username'                => 'Имя пользователя',
             'username_title'          => 'Ваше имя пользователя будет видно, если вы решите опубликовать маршруты, которые вы создаете.',
@@ -183,7 +183,7 @@ return [
             'privacy_policy'          => 'Политикой конфиденциальности',
             'cookie_policy'           => 'Политикой в отношении файлов cookie',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => 'Африка',
             'america'    => 'Америка',
             'antarctica' => 'Антарктида',
@@ -195,7 +195,7 @@ return [
             'timezone'   => 'Временная зона',
         ],
     ],
-    'general'        => [
+    'general' => [
         'linkpreview' => [
             'title'               => '',
             'description'         => '',
@@ -203,8 +203,8 @@ return [
             'twitter_description' => '',
         ],
     ],
-    'group'          => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => 'Задано :count',
             'awakened_enemy_set'       => 'Набор Пробудившихся врагов',
             'awakened_enemy_set_title' => 'Пробужденных врагов (Пилары) для M+ уровней 10 и выше бывает два набора. Каждый набор аффиксов помечен буквой A или B. Вы можете прикрепить к своему маршруту несколько аффиксов, которые могут иметь наборы как A, так и B. Здесь выберите, какой набор будет отображаться на карте. Вы всегда можете изменить свой выбор в меню Настройки маршрута позже.',
@@ -217,7 +217,7 @@ return [
             'party_member_nr' => 'Член группы  #%d',
         ],
     ],
-    'layout'         => [
+    'layout' => [
         'footer' => [
             'developer'                       => '',
             'api_documentation'               => '',
@@ -252,8 +252,8 @@ return [
             'explore'                 => '',
             'new'                     => 'Новые',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => '',
                 'register'          => '',
                 'telescope'         => '',
@@ -278,21 +278,21 @@ return [
             ],
         ],
     ],
-    'maps'           => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => '',
                 'view_this_route' => '',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => 'Таймер',
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Настройка группы',
                     'affixes'          => 'Аффиксы',
                     'route_info_title' => 'Информация',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => 'Портрет',
                     'npc_class'               => 'Класс',
                     'npc_type'                => 'Тип',
@@ -301,31 +301,31 @@ return [
                     'enemy_visual_type_title' => 'Визуализация',
                     'enemy_skippable'         => '',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => 'Уровни',
                     'floors'        => 'Уровни',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => 'Элементы',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => 'Скрыть',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'MDT',
                     'auto_solve' => '',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => 'Оцените этот маршрут',
                     'unable_to_rate_own_route' => 'Вы не можете оценить собственный маршрут',
                     'your_rating'              => 'Ваш рейтинг',
                 ],
             ],
-            'enemyinfo'      => [
+            'enemyinfo' => [
                 'enemy_info'      => 'Информация о враге',
                 'report_an_issue' => 'Сообщить о проблеме',
             ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => '',
                 'enabled'                => '',
                 'disabled'               => '',
@@ -358,13 +358,13 @@ return [
                     'classes_player_deaths'               => '',
                     'classes_player_deaths_title'         => '',
                 ],
-                'advanced_options'       => '',
-                'advanced_option'        => [
+                'advanced_options' => '',
+                'advanced_option'  => [
                     'min_samples_required'       => '',
                     'min_samples_required_title' => '',
                 ],
-                'heat_options'           => '',
-                'heat_option'            => [
+                'heat_options' => '',
+                'heat_option'  => [
                     'min_opacity' => '',
                     'max_zoom'    => '',
                     'max'         => '',
@@ -374,7 +374,7 @@ return [
                     'pane'        => '',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => 'Включить навигацию',
                 'stop'                           => 'Стоп',
                 'start'                          => 'Старт',
@@ -403,7 +403,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'Вы не можете оценить свой собственный маршрут',
                 'review_live_session'            => 'Просмотреть сеанс в прямом эфире',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => 'Настройки карты/пула',
                 'new_pull'                    => 'Новый пул',
                 'delete_all_pulls_title'      => 'Удалить все пулы',
@@ -413,8 +413,8 @@ return [
                 'no_pulls_created_view'       => 'Никаких пулов еще не создано.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => '',
                         'supported_html_tags' => '',
                         'save'                => '',
@@ -432,14 +432,14 @@ return [
                 'remove_kill_area' => '',
                 'delete_killzone'  => '',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => 'Редактировать это маршрут',
                 'clone_this_route_title'         => 'Клонировать',
                 'report_for_moderation'          => 'Сообщить',
                 'report_for_moderation_finished' => 'Отправлено',
             ],
         ],
-        'map'      => [
+        'map' => [
             'no_teeming'                             => 'Всегда видимые',
             'visible_teeming'                        => 'Показывать только на Кишащем',
             'hidden_teeming'                         => 'Спрятать только на Кишащем',
@@ -457,15 +457,15 @@ return [
             'mapping_version'          => '',
         ],
     ],
-    'modal'          => [
-        'dungeonroute'       => [
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => '',
                 'description'  => '',
                 'back_to_home' => '',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => 'Отправить жалобу',
                 'your_name'              => 'Ваше имя',
@@ -474,7 +474,7 @@ return [
                 'contact_by_email_guest' => 'Свяжитесь со мной по электронной почте, для дальнейшего разбирательства (добавьте свой адрес электронной почты в форму жалобы)',
                 'submit'                 => 'Отправить',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => 'Сообщить об ошибке врага',
                 'your_name'              => 'Ваше имя',
                 'contact_by_email'       => 'Свяжитесь со мной по электронной почте,если потребуется дальнейшее разбирательство',
@@ -482,19 +482,19 @@ return [
                 'submit'                 => 'Отправить',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Создать маршрут',
             'create_temporary_route' => 'Создать временный маршрут',
             'import_from_mdt'        => 'Импорт из MDT',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => 'С возвращением! Чтобы продолжить, вы должны согласиться с нашими %s, %s и %s.',
             'terms_of_service'   => 'Условиями использования',
             'privacy_policy'     => 'Политикой конфиденциальности',
             'cookie_policy'      => 'Политикой в отношении файлов cookie',
             'i_agree'            => 'Согласен',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => '',
             'enemy_forces_required'           => '',
             'enemy_forces_required_teeming'   => '',
@@ -503,7 +503,7 @@ return [
             'timer_max_seconds'               => '',
             'save'                            => '',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => '',
             'pull_settings' => '',
         ],
@@ -518,10 +518,10 @@ return [
             'route_not_created_from_combat_log' => '',
             'route_not_created_through_api'     => '',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => '',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => 'Поделиться',
             'publish'                          => 'Опубликовать',
             'review_route_settings'            => 'Предпросмотр %s перед публикацией маршрута',
@@ -536,7 +536,7 @@ return [
             'loading'                          => 'Загрузка...',
             'copy_to_clipboard'                => 'Скопировать в буфер обмена',
         ],
-        'simulate'           => [
+        'simulate' => [
             'intro'                      => '',
             'title'                      => '',
             'get_simulationcraft_string' => '',
@@ -544,22 +544,22 @@ return [
             'loading'                    => '',
             'copy_to_clipboard'          => '',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-                'key_level'                               => '',
-                'key_level_title'                         => '',
-                'shrouded_bounty_type'                    => '',
-                'shrouded_bounty_type_title'              => '',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => '',
+                'key_level_title'            => '',
+                'shrouded_bounty_type'       => '',
+                'shrouded_bounty_type_title' => '',
+                'shrouded_bounty_types'      => [
                     'none'    => '',
                     'crit'    => '',
                     'haste'   => '',
                     'mastery' => '',
                     'vers'    => '',
                 ],
-                'affixes'                                 => '',
-                'affixes_title'                           => '',
-                'affixes_map'                             => [
+                'affixes'       => '',
+                'affixes_title' => '',
+                'affixes_map'   => [
                     'fortified'  => '',
                     'tyrannical' => '',
                 ],
@@ -580,10 +580,10 @@ return [
                     'power_infusion'       => '',
                     'bleeding'             => '',
                 ],
-                'hp_percent'                              => '',
-                'hp_percent_title'                        => '',
-                'bloodlust_per_pull'                      => '',
-                'bloodlust_per_pull_title'                => '',
+                'hp_percent'               => '',
+                'hp_percent_title'         => '',
+                'bloodlust_per_pull'       => '',
+                'bloodlust_per_pull_title' => '',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '',
@@ -596,16 +596,16 @@ return [
                 'description'                          => '',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => '',
         ],
     ],
-    'release'        => [
+    'release' => [
         'release' => [
             'new' => 'Новые',
         ],
     ],
-    'tag'            => [
+    'tag' => [
         'manager' => [
             'route_personal' => 'Маршрут',
             'route_team'     => 'Маршрут',
@@ -619,7 +619,7 @@ return [
             'create_new_tag' => 'Создать новый тег',
         ],
     ],
-    'team'           => [
+    'team' => [
         'details' => [
             'name'            => 'Название',
             'description'     => 'Описание',
@@ -630,19 +630,19 @@ return [
             'submit'          => 'Подтвердить',
             'disband_team'    => 'Распустить команду',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => 'Выбрать команду...',
             'team'        => 'Команда',
             'create_team' => 'Создать команду',
         ],
     ],
-    'thirdparty'     => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => 'Убрать рекламу',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => '',
             ],
@@ -651,7 +651,7 @@ return [
             'learn_more' => 'Дополнительная информация',
         ],
     ],
-    'user'           => [
+    'user' => [
         'name' => [
             'avatar_alt' => 'Аватар',
             'raider_io'  => '',

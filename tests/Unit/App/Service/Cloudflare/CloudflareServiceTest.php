@@ -46,7 +46,7 @@ final class CloudflareServiceTest extends PublicTestCase
             testCase: $this,
             methodsToMock: ['curlGet'],
             cacheService: $this->cacheService,
-            log: $log
+            log: $log,
         );
 
         $cloudflareService->method('curlGet')
@@ -77,7 +77,7 @@ final class CloudflareServiceTest extends PublicTestCase
             testCase: $this,
             methodsToMock: ['curlGet'],
             cacheService: $this->cacheService,
-            log: $log
+            log: $log,
         );
 
         $cloudflareService->method('curlGet')
@@ -141,7 +141,7 @@ final class CloudflareServiceTest extends PublicTestCase
             testCase: $this,
             methodsToMock: ['curlGet'],
             cacheService: $this->cacheService,
-            log: $log
+            log: $log,
         );
 
         $cloudflareService->method('curlGet')

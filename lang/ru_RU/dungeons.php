@@ -7,8 +7,8 @@ return [
         3 => '',
         4 => '',
     ],
-    'classic'    => [
-        'blackfathom_deeps'           => [
+    'classic' => [
+        'blackfathom_deeps' => [
             'name'   => 'Непроглядная Пучина',
             'floors' => [
                 'the_pool_of_ask_ar' => 'Пруд Аск\'ара',
@@ -16,14 +16,14 @@ return [
                 'the_forgotten_pool' => 'Забытый пруд',
             ],
         ],
-        'blackrock_depths'            => [
+        'blackrock_depths' => [
             'name'   => 'Глубины Черной горы',
             'floors' => [
                 'detention_block'  => 'Тюремный блок',
                 'shadowforge_city' => 'Тенегорн',
             ],
         ],
-        'blackwinglair'               => [
+        'blackwinglair' => [
             'name'   => 'Логово Крыла Тьмы',
             'floors' => [
                 'dragonmaw_garrison'   => 'Гарнизон Драконьей Пасти',
@@ -32,27 +32,27 @@ return [
                 'nefarians_lair'       => 'Логово Нефариана',
             ],
         ],
-        'deadmines'                   => [
+        'deadmines' => [
             'name'   => 'Мертвые копи',
             'floors' => [
                 'the_deadmines' => 'Мертвые копи',
                 'ironclad_cove' => 'Потайная бухта',
             ],
         ],
-        'dire_maul_east'              => [
+        'dire_maul_east' => [
             'name'   => '',
             'floors' => [
                 'warpwood_quarter'         => '',
                 'the_shrine_of_eldretharr' => '',
             ],
         ],
-        'dire_maul_north'             => [
+        'dire_maul_north' => [
             'name'   => '',
             'floors' => [
                 'gordok_commons' => '',
             ],
         ],
-        'dire_maul_west'              => [
+        'dire_maul_west' => [
             'name'   => '',
             'floors' => [
                 'capital_gardens'        => '',
@@ -60,7 +60,7 @@ return [
                 'prison_of_immol_thar'   => '',
             ],
         ],
-        'gnomeregan'                  => [
+        'gnomeregan' => [
             'name'   => '',
             'floors' => [
                 'the_hall_of_gears' => '',
@@ -69,7 +69,7 @@ return [
                 'tinkers_court'     => '',
             ],
         ],
-        'gnomeregan_sod'              => [
+        'gnomeregan_sod' => [
             'name'   => 'Гномреган',
             'floors' => [
                 'the_hall_of_gears' => 'Машинный зал',
@@ -78,7 +78,7 @@ return [
                 'tinkers_court'     => 'Двор Механиков',
             ],
         ],
-        'karazhan_crypts'             => [
+        'karazhan_crypts' => [
             'name'   => '',
             'floors' => [
                 'karazhan_crypts'         => '',
@@ -87,7 +87,7 @@ return [
                 'the_pit_of_criminals'    => '',
             ],
         ],
-        'lower_blackrock_spire'       => [
+        'lower_blackrock_spire' => [
             'name'   => '',
             'floors' => [
                 'tazz_alor'          => '',
@@ -98,20 +98,20 @@ return [
                 'chamber_of_battle'  => '',
             ],
         ],
-        'maraudon'                    => [
+        'maraudon' => [
             'name'   => 'Мародон',
             'floors' => [
                 'caverns_of_maraudon' => 'Пещеры Мародона',
                 'zaetars_grave'       => 'Могила Зейтара',
             ],
         ],
-        'moltencore'                  => [
+        'moltencore' => [
             'name'   => 'Огненные Недра',
             'floors' => [
                 'molten_core' => '',
             ],
         ],
-        'naxxramas_classic'           => [
+        'naxxramas_classic' => [
             'name'   => 'Наксрамас',
             'floors' => [
                 'the_construct_quarter' => 'Квартал Мерзости',
@@ -122,43 +122,43 @@ return [
                 'the_upper_necropolis'  => 'Верхний некрополь',
             ],
         ],
-        'onyxias_lair_classic'        => [
+        'onyxias_lair_classic' => [
             'name'   => 'Логово Ониксии',
             'floors' => [
                 'onyxias_lair' => 'Логово Ониксии',
             ],
         ],
-        'ragefire_chasm'              => [
+        'ragefire_chasm' => [
             'name'   => 'Огненная Пропасть',
             'floors' => [
                 'ragefire_chasm' => 'Огненная Пропасть',
             ],
         ],
-        'razorfen_downs'              => [
+        'razorfen_downs' => [
             'name'   => 'Курганы Иглошкурых',
             'floors' => [
                 'razorfen_downs' => 'Курганы Иглошкурых',
             ],
         ],
-        'razorfen_kraul'              => [
+        'razorfen_kraul' => [
             'name'   => 'Лабиринты Иглошкурых',
             'floors' => [
                 'razorfen_kraul' => 'Лабиринты Иглошкурых',
             ],
         ],
-        'ruins_of_ahnqiraj_classic'   => [
+        'ruins_of_ahnqiraj_classic' => [
             'name'   => '',
             'floors' => [
                 'ruins_of_ahnqiraj' => '',
             ],
         ],
-        'ruins_of_ahnqiraj_sod'       => [
+        'ruins_of_ahnqiraj_sod' => [
             'name'   => 'Руины Ан\'Киража',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Руины Ан\'Киража',
             ],
         ],
-        'scarlet_enclave'             => [
+        'scarlet_enclave' => [
             'name'   => '',
             'floors' => [
                 'tyrs_hand'              => '',
@@ -168,7 +168,7 @@ return [
                 'ashbringer_chapel'      => '',
             ],
         ],
-        'scarlet_monastery_armory'    => [
+        'scarlet_monastery_armory' => [
             'name'   => '',
             'floors' => [
                 'armory' => '',
@@ -186,13 +186,13 @@ return [
                 'graveyard' => '',
             ],
         ],
-        'scarlet_monastery_library'   => [
+        'scarlet_monastery_library' => [
             'name'   => '',
             'floors' => [
                 'library' => '',
             ],
         ],
-        'scholomance'                 => [
+        'scholomance' => [
             'name'   => 'Некроситет',
             'floors' => [
                 'the_reliquary'        => 'Хранилище реликвий',
@@ -201,7 +201,7 @@ return [
                 'headmasters_story'    => 'Кабинет ректора',
             ],
         ],
-        'shadowfang_keep'             => [
+        'shadowfang_keep' => [
             'name'   => 'Крепость Темного Клыка',
             'floors' => [
                 'the_courtyard'         => 'Внутренний двор',
@@ -213,14 +213,14 @@ return [
                 'the_wall_walk'         => 'Крепостной вал',
             ],
         ],
-        'stratholme'                  => [
+        'stratholme' => [
             'name'   => 'Стратхольм',
             'floors' => [
                 'crusaders_square' => 'Площадь рыцарей',
                 'the_gauntlet'     => 'Улица Испытаний',
             ],
         ],
-        'temple_of_ahnqiraj_classic'  => [
+        'temple_of_ahnqiraj_classic' => [
             'name'   => '',
             'floors' => [
                 'the_hive_undergrounds' => '',
@@ -228,7 +228,7 @@ return [
                 'vault_of_cthun'        => '',
             ],
         ],
-        'temple_of_ahnqiraj_sod'      => [
+        'temple_of_ahnqiraj_sod' => [
             'name'   => 'Ан\'Кираж',
             'floors' => [
                 'the_hive_undergrounds' => 'Подземелье улья',
@@ -236,13 +236,13 @@ return [
                 'vault_of_cthun'        => 'Обитель К\'Туна',
             ],
         ],
-        'the_stockade'                => [
+        'the_stockade' => [
             'name'   => 'Тюрьма',
             'floors' => [
                 'the_stockade' => 'Тюрьма',
             ],
         ],
-        'the_temple_of_atal_hakkar'   => [
+        'the_temple_of_atal_hakkar' => [
             'name'   => 'Затонувший храм',
             'floors' => [
                 'the_pit_of_refuse'         => 'Затонувший храм',
@@ -252,14 +252,14 @@ return [
                 'hall_of_the_cursed'        => '',
             ],
         ],
-        'uldaman'                     => [
+        'uldaman' => [
             'name'   => 'Ульдаман',
             'floors' => [
                 'hall_of_the_keepers' => 'Зал Хранителей',
                 'khaz_goroths_seat'   => 'Трон Каз\'горота',
             ],
         ],
-        'upper_blackrock_spire'       => [
+        'upper_blackrock_spire' => [
             'name'   => 'Пик Черной горы',
             'floors' => [
                 'dragonspire_hall'  => '',
@@ -267,33 +267,33 @@ return [
                 'hall_of_blackhand' => 'Зал Чернорука',
             ],
         ],
-        'wailing_caverns'             => [
+        'wailing_caverns' => [
             'name'   => 'Пещеры Стенаний',
             'floors' => [
                 'wailing_caverns' => 'Пещеры Стенаний',
             ],
         ],
-        'zul_farrak'                  => [
+        'zul_farrak' => [
             'name'   => 'Зул\'Фаррак',
             'floors' => [
                 'zul_farrak' => 'Зул\'Фаррак',
             ],
         ],
-        'zulgurub'                    => [
+        'zulgurub' => [
             'name'   => 'Зул\'Гуруб',
             'floors' => [
                 'zulgurub' => 'Зул\'Гуруб',
             ],
         ],
     ],
-    'wotlk'      => [
-        'ahn_kahet_the_old_kingdom'                => [
+    'wotlk' => [
+        'ahn_kahet_the_old_kingdom' => [
             'name'   => 'Ан\'кахет: Старое Королевство',
             'floors' => [
                 'ahn_kahet_the_old_kingdom' => 'Ан\'кахет: Старое Королевство',
             ],
         ],
-        'azjol_nerub'                              => [
+        'azjol_nerub' => [
             'name'   => 'Азжол-Неруб',
             'floors' => [
                 'the_brood_pit'   => 'Родовая яма',
@@ -308,39 +308,39 @@ return [
                 'the_icy_depths'      => 'Ледяные глубины',
             ],
         ],
-        'drak_tharon_keep'                         => [
+        'drak_tharon_keep' => [
             'name'   => 'Крепость Драк\'Тарон',
             'floors' => [
                 'the_vestibules_of_drak_tharon' => 'Залы крепости Драк\'Тарон',
                 'drak_tharon_overlook'          => 'Дозорное укрепление Драк\'Тарона',
             ],
         ],
-        'gundrak'                                  => [
+        'gundrak' => [
             'name'   => 'Гундрак',
             'floors' => [
                 'gundrak' => 'Гундрак',
             ],
         ],
-        'halls_of_lightning'                       => [
+        'halls_of_lightning' => [
             'name'   => 'Чертоги Молний',
             'floors' => [
                 'unyielding_garrison' => 'Стойкий гарнизон',
                 'walk_of_the_makers'  => 'Галерея Творцов',
             ],
         ],
-        'halls_of_reflection'                      => [
+        'halls_of_reflection' => [
             'name'   => 'Залы Отражений',
             'floors' => [
                 'halls_of_reflection' => 'Залы Отражений',
             ],
         ],
-        'halls_of_stone'                           => [
+        'halls_of_stone' => [
             'name'   => 'Чертоги Камня',
             'floors' => [
                 'halls_of_stone' => 'Чертоги Камня',
             ],
         ],
-        'icecrown_citadel'                         => [
+        'icecrown_citadel' => [
             'name'   => 'Цитадель Ледяной Короны',
             'floors' => [
                 'the_lower_citadel'     => 'Нижний ярус',
@@ -353,7 +353,7 @@ return [
                 'frostmourne'           => 'Ледяная Скорбь',
             ],
         ],
-        'naxxramas'                                => [
+        'naxxramas' => [
             'name'   => '',
             'floors' => [
                 'the_construct_quarter' => '',
@@ -364,50 +364,50 @@ return [
                 'the_upper_necropolis'  => '',
             ],
         ],
-        'onyxias_lair'                             => [
+        'onyxias_lair' => [
             'name'   => '',
             'floors' => [
                 'onyxias_lair' => '',
             ],
         ],
-        'pit_of_saron'                             => [
+        'pit_of_saron' => [
             'name'   => 'Яма Сарона',
             'floors' => [
                 'pit_of_saron' => 'Яма Сарона',
             ],
         ],
-        'the_culling_of_stratholme'                => [
+        'the_culling_of_stratholme' => [
             'name'   => 'Очищение Стратхольма',
             'floors' => [
                 'the_culling_of_stratholme' => 'Очищение Стратхольма',
                 'stratholme_city'           => 'Стратхольм',
             ],
         ],
-        'the_eye_of_eternity'                      => [
+        'the_eye_of_eternity' => [
             'name'   => 'Око Вечности',
             'floors' => [
                 'the_eye_of_eternity' => 'Око Вечности',
             ],
         ],
-        'the_forge_of_souls'                       => [
+        'the_forge_of_souls' => [
             'name'   => 'Кузня Душ',
             'floors' => [
                 'the_forge_of_souls' => 'Кузня Душ',
             ],
         ],
-        'the_nexus'                                => [
+        'the_nexus' => [
             'name'   => 'Нексус',
             'floors' => [
                 'the_nexus' => 'Нексус',
             ],
         ],
-        'the_obsidian_sanctum'                     => [
+        'the_obsidian_sanctum' => [
             'name'   => 'Обсидиановое святилище',
             'floors' => [
                 'the_obsidian_sanctum' => 'Обсидиановое святилище',
             ],
         ],
-        'the_oculus'                               => [
+        'the_oculus' => [
             'name'   => 'Окулус',
             'floors' => [
                 'the_oculus'            => '',
@@ -417,25 +417,25 @@ return [
                 'band_of_alignment'     => 'Кольцо управления',
             ],
         ],
-        'the_ruby_sanctum'                         => [
+        'the_ruby_sanctum' => [
             'name'   => 'Рубиновое святилище',
             'floors' => [
                 'the_ruby_sanctum' => 'Рубиновое святилище',
             ],
         ],
-        'the_violet_hold'                          => [
+        'the_violet_hold' => [
             'name'   => 'Аметистовая крепость',
             'floors' => [
                 'the_violet_hold' => 'Аметистовая крепость',
             ],
         ],
-        'trial_of_the_champion'                    => [
+        'trial_of_the_champion' => [
             'name'   => 'Испытание чемпиона',
             'floors' => [
                 'trial_of_the_champion' => 'Испытание чемпиона',
             ],
         ],
-        'ulduar'                                   => [
+        'ulduar' => [
             'name'   => 'Ульдуар',
             'floors' => [
                 'ulduar'                      => 'Ульдуар',
@@ -446,7 +446,7 @@ return [
                 'the_minds_eye'               => 'Глаз разума',
             ],
         ],
-        'utgarde_keep'                             => [
+        'utgarde_keep' => [
             'name'   => 'Крепость Утгард',
             'floors' => [
                 'njorndir_preparation' => 'Подготовка Ньорндира',
@@ -454,22 +454,22 @@ return [
                 'tyrs_terrace'         => 'Терраса Тира',
             ],
         ],
-        'utgarde_pinnacle'                         => [
+        'utgarde_pinnacle' => [
             'name'   => 'Вершина Утгард',
             'floors' => [
                 'lower_pinnacle' => 'Подножие',
                 'upper_pinnacle' => 'Вершина',
             ],
         ],
-        'vault_of_archavon'                        => [
+        'vault_of_archavon' => [
             'name'   => 'Хранилище Аркавона',
             'floors' => [
                 'vault_of_archavon' => 'Хранилище Аркавона',
             ],
         ],
     ],
-    'cata'       => [
-        'dragon_soul'         => [
+    'cata' => [
+        'dragon_soul' => [
             'name'   => 'Душа Дракона',
             'floors' => [
                 'dragon_soul'        => 'Душа Дракона',
@@ -481,7 +481,7 @@ return [
                 'the_maelstrom'      => 'Водоворот',
             ],
         ],
-        'firelands'           => [
+        'firelands' => [
             'name'   => 'Огненные Просторы',
             'floors' => [
                 'firelands'              => 'Огненные Просторы',
@@ -489,7 +489,7 @@ return [
                 'sulfuron_keep'          => 'Крепость Сульфурона',
             ],
         ],
-        'grim_batol'          => [
+        'grim_batol' => [
             'name'   => 'Грим Батол',
             'floors' => [
                 'grim_batol' => 'Грим Батол',
@@ -510,15 +510,15 @@ return [
             ],
         ],
     ],
-    'mop'        => [
-        'gate_of_the_setting_sun'    => [
+    'mop' => [
+        'gate_of_the_setting_sun' => [
             'name'   => 'Врата Заходящего Солнца',
             'floors' => [
                 'gate_of_the_setting_sun' => 'Врата Заходящего Солнца',
                 'gate_watch_tower'        => 'Дозорная башня',
             ],
         ],
-        'mogu_shan_palace'           => [
+        'mogu_shan_palace' => [
             'name'   => 'Дворец Могу\'шан',
             'floors' => [
                 'the_crimson_assembly_hall'    => 'Алый зал собраний',
@@ -526,21 +526,21 @@ return [
                 'throne_of_ancient_conquerors' => 'Трон древних завоевателей',
             ],
         ],
-        'scarlet_halls_mop'          => [
+        'scarlet_halls_mop' => [
             'name'   => 'Залы Алого ордена',
             'floors' => [
                 'training_grounds' => 'Тренировочная площадка',
                 'athenaeum'        => 'Библиотека',
             ],
         ],
-        'scarlet_monastery_mop'      => [
+        'scarlet_monastery_mop' => [
             'name'   => 'Монастырь Алого ордена',
             'floors' => [
                 'forlorn_cloister' => 'Покинутый двор',
                 'crusaders_chapel' => 'Часовня Рыцаря',
             ],
         ],
-        'scholomance_mop'            => [
+        'scholomance_mop' => [
             'name'   => 'Некроситет',
             'floors' => [
                 'the_reliquary'        => 'Хранилище реликвий',
@@ -549,7 +549,7 @@ return [
                 'headmasters_study'    => 'Кабинет ректора',
             ],
         ],
-        'shado_pan_monastery'        => [
+        'shado_pan_monastery' => [
             'name'   => 'Монастырь Шадо-Пан',
             'floors' => [
                 'shado_pan_monastery' => 'Монастырь Шадо-Пан',
@@ -558,7 +558,7 @@ return [
                 'sealed_chambers'     => 'Закрытые покои',
             ],
         ],
-        'siege_of_niu_zao_temple'    => [
+        'siege_of_niu_zao_temple' => [
             'name'   => 'Осада храма Нюцзао',
             'floors' => [
                 'siege_of_niu_zao_temple' => 'Осада храма Нюцзао',
@@ -566,7 +566,7 @@ return [
                 'upper_tree_ring'         => 'Верхнее древесное кольцо',
             ],
         ],
-        'stormstout_brewery'         => [
+        'stormstout_brewery' => [
             'name'   => 'Хмелеварня Буйных Портеров',
             'floors' => [
                 'grain_cellar'        => 'Зерновой амбар',
@@ -583,20 +583,20 @@ return [
             ],
         ],
     ],
-    'wod'        => [
-        'auchindoun'                => [
+    'wod' => [
+        'auchindoun' => [
             'name'   => 'Аукиндон',
             'floors' => [
                 'auchindoun' => 'Аукиндон',
             ],
         ],
-        'bloodmaul_slag_mines'      => [
+        'bloodmaul_slag_mines' => [
             'name'   => 'Шлаковые шахты Кровавого Молота',
             'floors' => [
                 'bloodmaul_slag_mines' => 'Шлаковые шахты Кровавого Молота',
             ],
         ],
-        'grimrail_depot'            => [
+        'grimrail_depot' => [
             'name'   => 'Депо Мрачных Путей',
             'floors' => [
                 'rafters'            => 'Стропила',
@@ -605,7 +605,7 @@ return [
                 'forward_train_cars' => 'Передние вагоны состава',
             ],
         ],
-        'iron_docks'                => [
+        'iron_docks' => [
             'name'   => 'Железные доки',
             'floors' => [
                 'iron_docks' => 'Железные доки',
@@ -619,7 +619,7 @@ return [
                 'edge_of_reality'       => 'Грань Реальности',
             ],
         ],
-        'the_everbloom'             => [
+        'the_everbloom' => [
             'name'   => 'Вечное Цветение',
             'floors' => [
                 'the_everbloom' => 'Вечное Цветение',
@@ -627,14 +627,14 @@ return [
             ],
         ],
     ],
-    'legion'     => [
-        'arcway'                      => [
+    'legion' => [
+        'arcway' => [
             'name'   => 'Катакомбы Сурамара',
             'floors' => [
                 'arcway' => 'Катакомбы Сурамара',
             ],
         ],
-        'black_rook_hold'             => [
+        'black_rook_hold' => [
             'name'   => 'Крепость Черной Ладьи',
             'floors' => [
                 'the_ravenscrypt'          => 'Крипта Воронов',
@@ -646,7 +646,7 @@ return [
                 'black_rook_hold'          => 'Крепость Черной Ладьи',
             ],
         ],
-        'cathedral_of_eternal_night'  => [
+        'cathedral_of_eternal_night' => [
             'name'   => 'Собор Вечной Ночи',
             'floors' => [
                 'hall_of_the_moon'     => 'Зал Луны',
@@ -656,25 +656,25 @@ return [
                 'sacristy_of_elune'    => 'Ризница Элуны',
             ],
         ],
-        'court_of_stars'              => [
+        'court_of_stars' => [
             'name'   => 'Квартал Звезд',
             'floors' => [
                 'court_of_stars' => 'Квартал Звезд',
             ],
         ],
-        'darkheart_thicket'           => [
+        'darkheart_thicket' => [
             'name'   => 'Чаща Темного Сердца',
             'floors' => [
                 'darkheart_thicket' => 'Чаща Темного Сердца',
             ],
         ],
-        'eye_of_azshara'              => [
+        'eye_of_azshara' => [
             'name'   => 'Око Азшары',
             'floors' => [
                 'eye_of_azshara' => 'Око Азшары',
             ],
         ],
-        'halls_of_valor'              => [
+        'halls_of_valor' => [
             'name'   => 'Чертоги Доблести',
             'floors' => [
                 'the_high_gate'              => 'Высокие врата',
@@ -682,7 +682,7 @@ return [
                 'halls_of_valor'             => 'Чертоги Доблести',
             ],
         ],
-        'lower_karazhan'              => [
+        'lower_karazhan' => [
             'name'   => 'Нижняя часть Каражана',
             'floors' => [
                 'servants_quarters'    => 'Комнаты слуг',
@@ -693,7 +693,7 @@ return [
                 'masters_terrace'      => 'Терраса Медива',
             ],
         ],
-        'maw_of_souls'                => [
+        'maw_of_souls' => [
             'name'   => 'Утесы Адской Пасти',
             'floors' => [
                 'helmouth_cliffs' => 'Утесы Адской Пасти',
@@ -701,7 +701,7 @@ return [
                 'the_naglfar'     => '"Нагльфар"',
             ],
         ],
-        'neltharions_lair'            => [
+        'neltharions_lair' => [
             'name'   => 'Логово Нелтариона',
             'floors' => [
                 'neltharions_lair' => 'Логово Нелтариона',
@@ -713,7 +713,7 @@ return [
                 'the_seat_of_the_triumvirate' => 'Престол Триумвирата',
             ],
         ],
-        'upper_karazhan'              => [
+        'upper_karazhan' => [
             'name'   => 'Каражан',
             'floors' => [
                 'lower_broken_stair' => 'Низ разрушенной лестницы',
@@ -726,7 +726,7 @@ return [
                 'netherspace'        => 'Пустомарь',
             ],
         ],
-        'vault_of_the_wardens'        => [
+        'vault_of_the_wardens' => [
             'name'   => 'Казематы Стражей',
             'floors' => [
                 'the_wardens_court'     => 'Суд Стражей',
@@ -735,34 +735,34 @@ return [
             ],
         ],
     ],
-    'bfa'        => [
-        'atal_dazar'                => [
+    'bfa' => [
+        'atal_dazar' => [
             'name'   => 'Атал\'Дазар',
             'floors' => [
                 'atal_dazar'       => 'Атал\'Дазар',
                 'sacrificial_pits' => 'Жертвенная яма',
             ],
         ],
-        'freehold'                  => [
+        'freehold' => [
             'name'   => 'Вольная Гавань',
             'floors' => [
                 'freehold' => 'Вольная Гавань',
             ],
         ],
-        'kings_rest'                => [
+        'kings_rest' => [
             'name'   => 'Гробница королей',
             'floors' => [
                 'kings_rest' => 'Гробница королей',
             ],
         ],
-        'mechagon_junkyard'         => [
+        'mechagon_junkyard' => [
             'name'   => 'Мехагон: Свалка',
             'floors' => [
                 'mechagon_island' => 'Остров Мехагон',
                 'tunnels'         => '',
             ],
         ],
-        'mechagon_workshop'         => [
+        'mechagon_workshop' => [
             'name'   => 'Операция "Мехагон"',
             'floors' => [
                 'the_robodrome'               => 'Рободром',
@@ -779,14 +779,14 @@ return [
                 'the_drag'                  => '',
             ],
         ],
-        'shrine_of_the_storm'       => [
+        'shrine_of_the_storm' => [
             'name'   => 'Святилище Штормов',
             'floors' => [
                 'shrine_of_the_storm' => 'Святилище Штормов',
                 'storms_end'          => 'Предел шторма',
             ],
         ],
-        'siege_of_boralus'          => [
+        'siege_of_boralus' => [
             'name'   => 'Осада Боралуса',
             'floors' => [
                 'siege_of_boralus' => 'Осада Боралуса',
@@ -798,27 +798,27 @@ return [
                 'stormwind_horrific_vision' => 'Штормград (Жуткие Видения)',
             ],
         ],
-        'temple_of_sethraliss'      => [
+        'temple_of_sethraliss' => [
             'name'   => 'Храм Сетралисс',
             'floors' => [
                 'temple_of_sethraliss' => 'Храм Сетралисс',
                 'atrium_of_sethraliss' => 'Атриум Сетралисс',
             ],
         ],
-        'the_motherlode'            => [
+        'the_motherlode' => [
             'name'   => 'ЗОЛОТАЯ ЖИЛА!!!',
             'floors' => [
                 'the_motherlode' => 'ЗОЛОТАЯ ЖИЛА!!!',
             ],
         ],
-        'the_underrot'              => [
+        'the_underrot' => [
             'name'   => 'Подгнилье',
             'floors' => [
                 'the_underrot'  => 'Подгнилье',
                 'ruins_descent' => 'Спуск скорби',
             ],
         ],
-        'tol_dagor'                 => [
+        'tol_dagor' => [
             'name'   => 'Тол Дагор',
             'floors' => [
                 'tol_dagor'         => 'Тол Дагор',
@@ -830,7 +830,7 @@ return [
                 'overseers_summit'  => 'Терраса надзирателя',
             ],
         ],
-        'waycrest_manor'            => [
+        'waycrest_manor' => [
             'name'   => 'Усадьба Уэйкрестов',
             'floors' => [
                 'the_grand_foyer' => 'Главный вестибюль',
@@ -842,8 +842,8 @@ return [
             ],
         ],
     ],
-    'sl'         => [
-        'de_other_side'              => [
+    'sl' => [
+        'de_other_side' => [
             'name'   => 'Та Сторона',
             'floors' => [
                 'de_other_side' => 'Та Сторона',
@@ -852,7 +852,7 @@ return [
                 'ardenweald'    => 'Арденвельд',
             ],
         ],
-        'halls_of_atonement'         => [
+        'halls_of_atonement' => [
             'name'   => 'Чертоги Покаяния',
             'floors' => [
                 'halls_of_atonement'     => 'Чертоги Покаяния',
@@ -860,27 +860,27 @@ return [
                 'the_sanctuary_of_souls' => 'Святилище Душ',
             ],
         ],
-        'mists_of_tirna_scithe'      => [
+        'mists_of_tirna_scithe' => [
             'name'   => 'Туманы Тирна Скитта',
             'floors' => [
                 'mists_of_tirna_scithe' => 'Туманы Тирна Скитта',
             ],
         ],
-        'plaguefall'                 => [
+        'plaguefall' => [
             'name'   => 'Чумные каскады',
             'floors' => [
                 'plaguefall'            => 'Чумные каскады',
                 'the_festering_sanctum' => 'Гниющее святилище',
             ],
         ],
-        'sanguine_depths'            => [
+        'sanguine_depths' => [
             'name'   => 'Кровавые катакомбы',
             'floors' => [
                 'depths_of_despair'      => 'Глубины Отчаяния',
                 'amphitheater_of_sorrow' => 'Амфитеатр Скорби',
             ],
         ],
-        'spires_of_ascension'        => [
+        'spires_of_ascension' => [
             'name'   => 'Шпили Перерождения',
             'floors' => [
                 'honors_ascent'      => 'Подъем Чести',
@@ -889,7 +889,7 @@ return [
                 'seat_of_the_archon' => 'Престол Архонта',
             ],
         ],
-        'tazavesh_so_leahs_gambit'   => [
+        'tazavesh_so_leahs_gambit' => [
             'name'   => 'Тазавеш: гамбит Со\'леи',
             'floors' => [
                 'stormheim'                => 'Штормхейм',
@@ -909,7 +909,7 @@ return [
                 'tazavesh_streets_of_wonder' => '',
             ],
         ],
-        'the_necrotic_wake'          => [
+        'the_necrotic_wake' => [
             'name'   => 'Смертельная тризна',
             'floors' => [
                 'the_necrotic_wake' => 'Смертельная тризна',
@@ -917,7 +917,7 @@ return [
                 'zolramus'          => '"Золрамус"',
             ],
         ],
-        'theater_of_pain'            => [
+        'theater_of_pain' => [
             'name'   => 'Театр Боли',
             'floors' => [
                 'theater_of_pain'         => 'Театр Боли',
@@ -928,8 +928,8 @@ return [
             ],
         ],
     ],
-    'df'         => [
-        'algeth_ar_academy'                    => [
+    'df' => [
+        'algeth_ar_academy' => [
             'name'   => 'Академия Алгет\'ар',
             'floors' => [
                 'algeth_ar_academy'        => 'Академия Алгет\'ар',
@@ -937,7 +937,7 @@ return [
                 'the_headteachers_enclave' => 'Анклав директора',
             ],
         ],
-        'brackenhide_hollow'                   => [
+        'brackenhide_hollow' => [
             'name'   => 'Лощина Бурошкуров',
             'floors' => [
                 'brackenhide_hollow' => 'Лощина Бурошкуров',
@@ -955,7 +955,7 @@ return [
                 'crossroads_of_fate'      => '',
             ],
         ],
-        'dawn_of_the_infinite_murozonds_rise'  => [
+        'dawn_of_the_infinite_murozonds_rise' => [
             'name'   => '',
             'floors' => [
                 'murozonds_rise'         => '',
@@ -968,7 +968,7 @@ return [
                 'immemorial_battlefield' => '',
             ],
         ],
-        'halls_of_infusion'                    => [
+        'halls_of_infusion' => [
             'name'   => 'Чертоги Насыщения',
             'floors' => [
                 'infusers_rotunda'  => 'Ротонда насыщателя',
@@ -976,7 +976,7 @@ return [
                 'halls_of_infusion' => 'Чертоги Насыщения',
             ],
         ],
-        'neltharus'                            => [
+        'neltharus' => [
             'name'   => 'Нелтарий',
             'floors' => [
                 'the_burning_cauldron' => 'Горячий Котел',
@@ -984,7 +984,7 @@ return [
                 'neltharus'            => 'Нелтарий',
             ],
         ],
-        'ruby_life_pools'                      => [
+        'ruby_life_pools' => [
             'name'   => 'Рубиновые Омуты Жизни',
             'floors' => [
                 'infusion_chambers' => 'Залы Насыщения',
@@ -992,7 +992,7 @@ return [
                 'ruby_life_pools'   => 'Рубиновые Омуты Жизни',
             ],
         ],
-        'the_azure_vault'                      => [
+        'the_azure_vault' => [
             'name'   => 'Лазурное хранилище',
             'floors' => [
                 'the_arcane_conservatory' => 'Магический консерваторий',
@@ -1003,13 +1003,13 @@ return [
                 'the_azure_vault'         => 'Лазурное хранилище',
             ],
         ],
-        'the_nokhud_offensive'                 => [
+        'the_nokhud_offensive' => [
             'name'   => 'Наступление клана Нокхуд',
             'floors' => [
                 'the_nokhud_offensive' => 'Наступление клана Нокхуд',
             ],
         ],
-        'uldaman_legacy_of_tyr'                => [
+        'uldaman_legacy_of_tyr' => [
             'name'   => 'Ульдаман',
             'floors' => [
                 'hall_of_the_keepers'   => 'Зал Хранителей',
@@ -1018,8 +1018,8 @@ return [
             ],
         ],
     ],
-    'tww'        => [
-        'ara_kara_city_of_echoes'    => [
+    'tww' => [
+        'ara_kara_city_of_echoes' => [
             'name'   => 'Ара-Кара, Город Отголосков',
             'floors' => [
                 'echoing_overlook'        => 'Гулкая площадка',
@@ -1027,33 +1027,33 @@ return [
                 'ara_kara_city_of_echoes' => 'Ара-Кара, Город Отголосков',
             ],
         ],
-        'cinderbrew_meadery'         => [
+        'cinderbrew_meadery' => [
             'name'   => 'Искроварня',
             'floors' => [
                 'cinderbrew_meadery' => 'Искроварня',
             ],
         ],
-        'city_of_threads'            => [
+        'city_of_threads' => [
             'name'   => 'Город Нитей',
             'floors' => [
                 'city_of_threads'    => 'Город Нитей',
                 'the_transformatory' => 'Зал трансформаций',
             ],
         ],
-        'darkflame_cleft'            => [
+        'darkflame_cleft' => [
             'name'   => 'Расселина Темного Пламени',
             'floors' => [
                 'darkflame_cleft' => 'Расселина Темного Пламени',
                 'shadow_realm'    => '',
             ],
         ],
-        'eco_dome_al_dani'           => [
+        'eco_dome_al_dani' => [
             'name'   => 'Заповедник "Аль\'дани"',
             'floors' => [
                 'eco_dome_al_dani' => 'Заповедник "Аль\'дани"',
             ],
         ],
-        'operation_floodgate'        => [
+        'operation_floodgate' => [
             'name'   => 'Операция: шлюз',
             'floors' => [
                 'the_waterworks'      => 'Водокачка',
@@ -1068,13 +1068,13 @@ return [
                 'priory_of_the_sacred_flame' => 'Приорат Священного Пламени',
             ],
         ],
-        'the_dawnbreaker'            => [
+        'the_dawnbreaker' => [
             'name'   => 'Сияющий Рассвет',
             'floors' => [
                 'the_dawnbreaker' => 'Сияющий Рассвет',
             ],
         ],
-        'the_rookery'                => [
+        'the_rookery' => [
             'name'   => 'Гнездовье',
             'floors' => [
                 'the_rookery_landing' => 'Лагерь Гнездовья',
@@ -1086,7 +1086,7 @@ return [
                 'the_rookery'         => 'Гнездовье',
             ],
         ],
-        'the_stonevault'             => [
+        'the_stonevault' => [
             'name'   => 'Каменный Свод',
             'floors' => [
                 'the_stonevault' => 'Каменный Свод',

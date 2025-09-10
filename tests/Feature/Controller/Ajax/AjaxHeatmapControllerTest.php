@@ -22,7 +22,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     use CreatesCombatLogEvent;
 
     const EVENT_TYPE = CombatLogEventEventType::NpcDeath;
-    const DATA_TYPE = CombatLogEventDataType::PlayerPosition;
+    const DATA_TYPE  = CombatLogEventDataType::PlayerPosition;
 
     /**
      * @throws Exception
@@ -40,8 +40,8 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'type' => self::EVENT_TYPE->value,
-            'dataType' => self::DATA_TYPE->value,
+            'type'      => self::EVENT_TYPE->value,
+            'dataType'  => self::DATA_TYPE->value,
             'dungeonId' => $dungeon->id,
         ]);
 
@@ -73,8 +73,8 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'type' => self::EVENT_TYPE->value,
-            'dataType' => self::DATA_TYPE->value,
+            'type'      => self::EVENT_TYPE->value,
+            'dataType'  => self::DATA_TYPE->value,
             'dungeonId' => $dungeon->id,
         ]);
 
@@ -87,7 +87,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertCount(1, $responseArr['data']);
         $this->assertCount(
             $rowCountPerFloor * $dungeon->floors()->where('facade', false)->count(),
-            $responseArr['data'][0]['lat_lngs']
+            $responseArr['data'][0]['lat_lngs'],
         );
         $this->assertEquals($runCount, $responseArr['run_count']);
         $this->assertEquals(self::DATA_TYPE, CombatLogEventDataType::from($responseArr['data_type']));
@@ -102,7 +102,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
             App::make(SeasonServiceInterface::class),
             $dungeon,
             self::EVENT_TYPE,
-            self::DATA_TYPE
+            self::DATA_TYPE,
         );
 
         $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
@@ -110,7 +110,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $combatLogEventService = ServiceFixtures::getCombatLogEventServiceMock(
             $this,
             ['getGridAggregation'],
-            $coordinatesService
+            $coordinatesService,
         );
 
         $combatLogEventService->method('getGridAggregation')
@@ -119,8 +119,8 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
                     $coordinatesService,
                     $combatLogEventFilter,
                     $this->createGridAggregationResult($dungeon, $rowCountPerFloor),
-                    $runCount
-                ))->setUseFacade($useFacade)
+                    $runCount,
+                ))->setUseFacade($useFacade),
             );
         app()->bind(CombatLogEventServiceInterface::class, fn() => $combatLogEventService);
     }

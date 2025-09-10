@@ -27,7 +27,7 @@ class GenerateItemIcons extends Command
      * @return int
      */
     public function handle(
-        ImageServiceInterface $imageService
+        ImageServiceInterface $imageService,
     ): int {
         $imagePaths = [
             '171750.png'                            => 'nw_item_goliath.png',

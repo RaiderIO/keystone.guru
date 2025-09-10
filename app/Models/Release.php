@@ -12,21 +12,21 @@ use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 
 /**
- * @property int              $id
- * @property int              $release_changelog_id
- * @property string           $version
- * @property string           $title
- * @property bool             $backup_db
- * @property bool             $silent
- * @property bool             $spotlight
- * @property bool             $released A per-environment flag to indicate if the release has been released to the public
+ * @property int    $id
+ * @property int    $release_changelog_id
+ * @property string $version
+ * @property string $title
+ * @property bool   $backup_db
+ * @property bool   $silent
+ * @property bool   $spotlight
+ * @property bool   $released             A per-environment flag to indicate if the release has been released to the public
  *
- * @property Carbon           $updated_at
- * @property Carbon           $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
- * @property string           $github_body
- * @property string           $discord_body
- * @property string           $reddit_body
+ * @property string $github_body
+ * @property string $discord_body
+ * @property string $reddit_body
  *
  * @property ReleaseChangelog $changelog
  *
@@ -97,13 +97,13 @@ class Release extends CacheModel
      */
     public function getDiscordBodyAttribute(): string
     {
-        $body       = trim(view('app.release.discord', [
+        $body = trim(view('app.release.discord', [
             'model'   => $this,
             'mention' => !$this->silent && $this->isMajorUpgrade(),
         ])->render());
         $bodyLength = strlen($body);
 
-        $footer       = trim(view('app.release.discord_footer', [
+        $footer = trim(view('app.release.discord_footer', [
             'homeUrl'      => route('home'),
             'changelogUrl' => route('misc.changelog'),
             'affixesUrl'   => route('misc.affixes'),
@@ -138,9 +138,12 @@ class Release extends CacheModel
      */
     public function getFormattedTitle(): string
     {
-        return sprintf('Release %s (%s)%s',
-            $this->version, now()->format('Y/m/d'),
-            empty($this->title) ? '' : sprintf(' - %s', $this->title));
+        return sprintf(
+            'Release %s (%s)%s',
+            $this->version,
+            now()->format('Y/m/d'),
+            empty($this->title) ? '' : sprintf(' - %s', $this->title),
+        );
     }
 
     public function getDiscordEmbeds(): array

@@ -28,7 +28,7 @@ class AffixGroupResource extends JsonResource
             'expansion' => $this->expansion->shortname,
             'season'    => $this->season_id,
             'affixes'   => $this->affixes->map(
-                static fn($affix) => new AffixResource($affix)
+                static fn($affix) => new AffixResource($affix),
             )->toArray(),
         ];
     }

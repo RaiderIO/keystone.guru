@@ -16,16 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int               $id
- * @property int               $mapping_version_id
- * @property int               $floor_id
- * @property int               $group
- * @property string            $teeming
- * @property string            $faction
- * @property string|null       $color
- * @property string|null       $color_animated
- * @property string            $label
- * @property string            $vertices_json
+ * @property int         $id
+ * @property int         $mapping_version_id
+ * @property int         $floor_id
+ * @property int         $group
+ * @property string      $teeming
+ * @property string      $faction
+ * @property string|null $color
+ * @property string|null $color_animated
+ * @property string      $label
+ * @property string      $vertices_json
  *
  * @property Floor             $floor
  * @property Collection<Enemy> $enemies

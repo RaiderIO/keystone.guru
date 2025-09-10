@@ -80,13 +80,13 @@ class MDTMapPOI implements Arrayable
 
     private readonly string $template;
     private readonly string $type;
-    private readonly ?int   $itemType;
-    private readonly ?int   $itemIndex;
-    private readonly ?int   $target;
-    private readonly ?int   $direction;
-    private readonly ?int   $connectionIndex;
-    private readonly float  $x;
-    private readonly float  $y;
+    private readonly ?int $itemType;
+    private readonly ?int $itemIndex;
+    private readonly ?int $target;
+    private readonly ?int $direction;
+    private readonly ?int $connectionIndex;
+    private readonly float $x;
+    private readonly float $y;
 
     /**
      * @throws Exception

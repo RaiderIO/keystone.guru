@@ -2,7 +2,7 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => '',
             'mdt_string_format_not_recognized'    => 'Формат строки MDT не распознан.',
@@ -31,29 +31,29 @@ return [
             'read_only_mode_enabled'          => '',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => 'Произошла ошибка при создании строки MDT: %s',
         'mdt_generate_no_lua' => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => 'Невозможно обновить отчет пользователя',
             'unable_to_save_report'        => 'Невозможно сохранить отчет',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => '',
             'unable_to_delete_brushline' => '',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Подземелье создано',
             'dungeon_updated' => 'Подземелье обновлено',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => 'Невозможно сохранить маршрут',
         'flash'          => [
             'route_cloned_successfully' => 'Маршрут успешно клонирован',
@@ -61,7 +61,7 @@ return [
             'route_created'             => 'Маршрут создан',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => 'Популярные маршруты',
         'this_week_affixes' => 'Текущие аффиксы',
         'next_week_affixes' => 'Аффиксы следующей неделе',
@@ -72,7 +72,7 @@ return [
             'next_week_affixes' => '',
             'new'               => '',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '%s популярные маршруты',
             'this_week_affixes' => '%s текущие аффиксы',
             'next_week_affixes' => '%s аффиксы следующей неделе',
@@ -86,20 +86,20 @@ return [
             'npc_deleted_successfully' => '',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => 'Не удалось сохранить дополнение',
             'expansion_updated'        => 'Дополнение обновлено',
             'expansion_created'        => 'Дополнение создано',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => '',
             'not_found'                  => '',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Регистрация прошла успешно.',
             'user_exists'             => 'Пользователь с таким именем уже существует %s. Может быть вы уже зарегистрированы?',
@@ -108,14 +108,14 @@ return [
             'read_only_mode_enabled'  => '',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => 'Регистрация прошла успешно.',
         ],
         'legal_agreed_required' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
         'legal_agreed_accepted' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => 'Невозможно сохранить релиз',
         ],
@@ -125,12 +125,12 @@ return [
             'github_exception' => 'Произошла ошибка связи с Github: :message',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => '',
         'created_bare_successfully' => '',
         'deleted_successfully'      => '',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => 'Неизвестное подземелье',
         'error'           => [
             'mdt_string_parsing_failed'             => '',
@@ -142,13 +142,13 @@ return [
             'cannot_create_route_must_be_logged_in' => 'Вы должны авторизоваться, чтобы создать маршрут',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => '',
             'unable_to_delete_path' => '',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => '',
             'link_successful'         => '',
@@ -158,7 +158,7 @@ return [
             'internal_error_occurred' => '',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Пользователь с таким электронным адресом уже существует',
             'username_already_in_use'          => 'Пользователь с таким именем уже существует',
@@ -176,7 +176,7 @@ return [
             'error_deleting_account'           => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => 'Невозможно сохранить способность',
         ],
@@ -185,7 +185,7 @@ return [
             'spell_created' => 'Способность создана',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => 'Команда обновлена',
             'team_created'                        => 'Команда создана',
@@ -195,7 +195,7 @@ return [
             'tag_already_exists'                  => 'Этот тег уже существует',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => 'Пользователь %s теперь администратор',
             'user_is_no_longer_an_admin'        => 'Пользователь %s больше не администратор',

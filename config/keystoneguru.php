@@ -26,7 +26,7 @@ return [
     ],
 
     'keystone' => [
-        'timer'  => [
+        'timer' => [
             'plustwofactor'   => 0.8,
             'plusthreefactor' => 0.6,
         ],
@@ -47,33 +47,33 @@ return [
     ],
 
     'cache' => [
-        'npcs'                   => [
+        'npcs' => [
             'ttl' => '1 hour',
         ],
-        'dungeonData'            => [
+        'dungeonData' => [
             'ttl' => '10 minutes',
         ],
-        'static_data'            => [
+        'static_data' => [
             'ttl' => '1 day',
         ],
-        'mdt'                    => [
+        'mdt' => [
             'ttl' => '1 hour',
         ],
         'displayed_affix_groups' => [
             'ttl' => '15 minutes',
         ],
-        'global_view_variables'  => [
+        'global_view_variables' => [
             'ttl' => '1 hour',
         ],
-        'default_region'         => [
+        'default_region' => [
             'ttl' => '1 week',
         ],
-        'mdt_export_strings'         => [
+        'mdt_export_strings' => [
             'ttl' => 1800, // 30 minutes
         ],
     ],
 
-    'echo'                                       => [
+    'echo' => [
         'url'    => env('LARAVEL_ECHO_SERVER_URL'),
         'port'   => env('LARAVEL_ECHO_SERVER_PORT'),
         'client' => [
@@ -126,36 +126,36 @@ return [
     ],
 
     /** The minimum size for enemies for floors if none was set */
-    'min_enemy_size_default'                     => 12,
+    'min_enemy_size_default' => 12,
 
     /** The maximum size for enemies for floors if none was set */
-    'max_enemy_size_default'                     => 26,
+    'max_enemy_size_default' => 26,
 
     /** When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up */
-    'enemy_engagement_max_range_default'         => 150,
+    'enemy_engagement_max_range_default' => 150,
 
     /** The range after which we start considering patrols too */
     'enemy_engagement_max_range_patrols_default' => 50,
 
     /** The default max zoom level on the map */
-    'zoom_max_default'                           => 5,
+    'zoom_max_default' => 5,
 
     /**
      * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
      * This prevents active mapping efforts from getting commits every 2 minutes or something
      */
-    'mapping_commit_after_change_hours'          => 1,
+    'mapping_commit_after_change_hours' => 1,
 
     /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
-    'party_size'                                 => 5,
+    'party_size' => 5,
 
     /**
      * Limits on the relationships that a DungeonRoute can have to ensure performance.
      */
-    'dungeon_route_limits'                       => [
+    'dungeon_route_limits' => [
         'kill_zones' => 50,
         'brushlines' => 150,
         'paths'      => 150,
@@ -165,35 +165,35 @@ return [
     /**
      * The amount of dungeon routes that a normal registered user can make (1 for each dungeon, teeming + non-teeming).
      */
-    'registered_user_dungeonroute_limit'         => 999,
+    'registered_user_dungeonroute_limit' => 999,
 
     /**
      * The amount of time that must pass before a view will be counted again. This is to prevent every single F5 from
      * increasing the view count of a page. When visiting the page, this amount of time in minutes must pass before
      * the view is counted for a second time.
      */
-    'view_time_threshold_mins'                   => 30,
+    'view_time_threshold_mins' => 30,
 
-    'thumbnail'                           => [
+    'thumbnail' => [
         /**
          * A secret key that must be provided to get access to the preview routes (no other auth available)
          */
-        'preview_secret'         => env('THUMBNAIL_PREVIEW_SECRET'),
+        'preview_secret' => env('THUMBNAIL_PREVIEW_SECRET'),
 
         /**
          * The amount of time in minutes that must pass before a thumbnail is generated again from a changed dungeon route.
          */
-        'refresh_min'            => 30,
+        'refresh_min' => 30,
 
         /**
          * The amount of hours when a thumbnail refresh must be in the queue for before it is re-queued
          */
-        'refresh_requeue_hours'  => 12,
+        'refresh_requeue_hours' => 12,
 
         /**
          * The maximum attempts a thumbnail generation can take before it is failed and not queued again
          */
-        'max_attempts'           => 3,
+        'max_attempts' => 3,
 
         /**
          * The maximum amount of thumbnails that will be queued in a single run.
@@ -210,11 +210,11 @@ return [
     /**
      * Prideful enemy variables
      */
-    'prideful'                            => [
+    'prideful' => [
         'npc_id' => 173729,
         'count'  => 5,
     ],
-    'shrouded'                            => [
+    'shrouded' => [
         'npc_id'           => 189878,
         'npc_id_zul_gamux' => 190128,
     ],
@@ -222,9 +222,9 @@ return [
     /**
      * For the discover section of the site - this controls various variables
      */
-    'discover'                            => [
+    'discover' => [
         /** Limits for how much dungeonroutes to display on certain pages */
-        'limits'   => [
+        'limits' => [
             'overview'       => 12,
             'category'       => 24,
             'affix_overview' => 12,
@@ -235,24 +235,24 @@ return [
         'loadmore' => [
             'count' => 12,
         ],
-        'service'  => [
+        'service' => [
             /** Redis prefix */
-            'cache_prefix'                                => 'discover',
+            'cache_prefix' => 'discover',
 
             /** The penalty that is applied when the route has an incorrect season. This is multiplicative. */
-            'popular_wrong_season_penalty'                => 0.25,
+            'popular_wrong_season_penalty' => 0.25,
 
             /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
-            'popular_days'                                => 7,
+            'popular_days' => 7,
 
             /** The amount of days a route can be old before the popularity counter will drop off to 0 */
-            'popular_falloff_days'                        => 60,
+            'popular_falloff_days' => 60,
 
             /** The penalty that is applied when the mapping version is out of date. This is multiplicative. */
             'popular_out_of_date_mapping_version_penalty' => 0.25,
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
-            'popular'                                     => [
+            'popular' => [
                 // Refreshed every 2 hours - cache needs to outlive that
                 'ttl' => '3 hours',
             ],
@@ -304,7 +304,7 @@ return [
         'common' => [
             'dungeonroute' => [
                 'card' => [
-                    'cache'        => [
+                    'cache' => [
                         'ttl' => '1 hour',
                     ],
                     'allowed_tags' => [
@@ -343,13 +343,13 @@ return [
     ],
 
     'patreon' => [
-        'oauth'             => [
+        'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
             'secret'    => env('PATREON_CLIENT_SECRET'),
             // https://docs.patreon.com/#scopes
-            'scope'     => 'identity identity[email] identity.memberships campaigns',
+            'scope' => 'identity identity[email] identity.memberships campaigns',
         ],
-        'campaign_id'       => env('PATREON_CAMPAIGN_ID'),
+        'campaign_id' => env('PATREON_CAMPAIGN_ID'),
         // The amount of ad-free giveaways that one may have in total
         'ad_free_giveaways' => 4,
     ],
@@ -360,7 +360,7 @@ return [
             'secret'    => env('REDDIT_SECRET_KEY'),
         ],
         // Used for creating release posts under the Keystoneguru user
-        'api'   => [
+        'api' => [
             'refresh_token' => env('REDDIT_REFRESH_TOKEN'),
         ],
     ],
@@ -395,13 +395,13 @@ return [
                 // for raw since the buckets would be too small, but since the coordinates
                 // are equal to enemy positions this only just increases the accuracy of the
                 // points, while still having a low bucket count.
-                'enemy'  => [
+                'enemy' => [
                     'size_x' => 300,
                     'size_y' => 200,
                 ],
             ],
         ],
-        'api'     => [
+        'api' => [
             /*
              * Exclude data points that fall below this factor of the max amount of points in the grid.
              * Say that the top hot spot was 10000 entries, then in order to be included in this heatmap, a data point
@@ -418,19 +418,19 @@ return [
              *
              * Null or false disables this
              */
-            'floors_as_array'                    => true,
+            'floors_as_array' => true,
         ],
     ],
 
     'api' => [
         'dungeon_route' => [
             'thumbnail' => [
-                'default_viewport_width'            => 768,
-                'default_viewport_height'           => 512,
-                'default_image_width'               => 384,
-                'default_image_height'              => 256,
-                'default_zoom_level'                => 1,
-                'default_quality'                   => 90,
+                'default_viewport_width'  => 768,
+                'default_viewport_height' => 512,
+                'default_image_width'     => 384,
+                'default_image_height'    => 256,
+                'default_zoom_level'      => 1,
+                'default_quality'         => 90,
                 /** I observed it to be about 8 but with settings it may be longer, so 10 to be safe. */
                 'estimated_generation_time_seconds' => 10,
                 'expiration_time_seconds'           => 86400,
@@ -444,5 +444,5 @@ return [
 
     'mdt' => [
         'version' => 'v5.6.3',
-    ]
+    ],
 ];

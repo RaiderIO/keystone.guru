@@ -2,43 +2,43 @@
 
 return [
 
-    'classic'  => [
+    'classic' => [
         'name' => '',
     ],
-    'tbc'      => [
+    'tbc' => [
         'name' => '',
     ],
-    'wotlk'    => [
+    'wotlk' => [
         'name' => '',
     ],
-    'cata'     => [
+    'cata' => [
         'name' => '',
     ],
-    'mop'      => [
+    'mop' => [
         'name' => '',
     ],
-    'wod'      => [
+    'wod' => [
         'name' => '',
     ],
-    'legion'   => [
+    'legion' => [
         'name' => '',
     ],
-    'bfa'      => [
+    'bfa' => [
         'name' => '',
     ],
-    'sl'       => [
+    'sl' => [
         'name' => '',
     ],
-    'df'       => [
+    'df' => [
         'name' => '',
     ],
-    'tww'      => [
+    'tww' => [
         'name' => '',
     ],
     'midnight' => [
         'name' => '',
     ],
-    'tlt'      => [
+    'tlt' => [
         'name' => '',
     ],
 

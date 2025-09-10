@@ -28,6 +28,7 @@ return new class extends Migration {
 
         foreach ($files as $file) {
             $fullPath = Storage::disk($file->disk)->path($file->path);
+
             try {
                 $tmpPath = tempnam(sys_get_temp_dir(), 'file_');
 
@@ -67,6 +68,5 @@ return new class extends Migration {
      */
     public function down(): void
     {
-
     }
 };

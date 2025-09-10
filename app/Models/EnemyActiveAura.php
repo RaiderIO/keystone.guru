@@ -8,9 +8,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $enemy_id
- * @property int $spell_id
+ * @property int   $id
+ * @property int   $enemy_id
+ * @property int   $spell_id
  * @property Enemy $enemy
  * @property Spell $spell
  *

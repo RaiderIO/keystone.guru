@@ -188,12 +188,13 @@ class AjaxDungeonRouteController extends Controller
                     $routes = $routes->where('team_id', $team->id);
                 }
 
-                $routes = $routes->whereIn('published_state_id',
+                $routes = $routes->whereIn(
+                    'published_state_id',
                     [
                         PublishedState::ALL[PublishedState::TEAM],
                         PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
                         PublishedState::ALL[PublishedState::WORLD],
-                    ]
+                    ],
                 );
                 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
                 //                    /** @var $query Builder */
@@ -254,7 +255,7 @@ class AjaxDungeonRouteController extends Controller
     public function htmlsearch(
         AjaxDungeonRouteSearchFormRequest $request,
         ExpansionServiceInterface         $expansionService,
-        ThumbnailServiceInterface         $thumbnailService
+        ThumbnailServiceInterface         $thumbnailService,
     ) {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -265,7 +266,7 @@ class AjaxDungeonRouteController extends Controller
 
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
-        } else if ($request->has('season')) {
+        } elseif ($request->has('season')) {
             $season = Season::find($request->get('season'));
         }
 
@@ -285,11 +286,17 @@ class AjaxDungeonRouteController extends Controller
         ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-            ->when($expansion !== null, static fn(Builder $builder
-            ) => $builder->where('dungeons.expansion_id', $expansion->id)
+            ->when(
+                $expansion !== null,
+                static fn(
+                    Builder $builder,
+                ) => $builder->where('dungeons.expansion_id', $expansion->id),
             )
-            ->when($season !== null, static fn(Builder $builder
-            ) => $builder->where('dungeon_routes.season_id', $season->id)
+            ->when(
+                $season !== null,
+                static fn(
+                    Builder $builder,
+                ) => $builder->where('dungeon_routes.season_id', $season->id),
             )
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
@@ -390,14 +397,13 @@ class AjaxDungeonRouteController extends Controller
             $thumbnailService->queueThumbnailRefreshIfMissing($result);
 
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' =>
-                    $season?->getCurrentAffixGroupInRegion($userRegion) ??
+                'currentAffixGroup' => $season?->getCurrentAffixGroupInRegion($userRegion) ??
                         $expansionService->getCurrentAffixGroup($expansion, $userRegion) ??
                         null,
-                'dungeonroutes'     => $result,
-                'showAffixes'       => true,
-                'showDungeonImage'  => true,
-                'orientation'       => 'horizontal',
+                'dungeonroutes'    => $result,
+                'showAffixes'      => true,
+                'showDungeonImage' => true,
+                'orientation'      => 'horizontal',
             ])->render();
         }
     }
@@ -406,11 +412,11 @@ class AjaxDungeonRouteController extends Controller
      * @return Response|string
      */
     public function htmlsearchcategory(
-        Request                  $request,
-        string                   $category,
-        DiscoverServiceInterface $discoverService,
+        Request                   $request,
+        string                    $category,
+        DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
-        ThumbnailServiceInterface $thumbnailService
+        ThumbnailServiceInterface $thumbnailService,
     ) {
         $result = collect();
 
@@ -505,7 +511,7 @@ class AjaxDungeonRouteController extends Controller
         SeasonService                     $seasonService,
         ExpansionServiceInterface         $expansionService,
         ThumbnailServiceInterface         $thumbnailService,
-        ?DungeonRoute                     $dungeonRoute = null
+        ?DungeonRoute                     $dungeonRoute = null,
     ): DungeonRoute {
         $this->authorize('edit', $dungeonRoute);
 
@@ -602,7 +608,7 @@ class AjaxDungeonRouteController extends Controller
         Request                   $request,
         ThumbnailServiceInterface $thumbnailService,
         DungeonRoute              $dungeonRoute,
-        Team                      $team
+        Team                      $team,
     ): Response {
         $this->authorize('clone', $dungeonRoute);
 
@@ -628,7 +634,7 @@ class AjaxDungeonRouteController extends Controller
         ExpansionServiceInterface $expansionService,
         Request                   $request,
         DungeonRoute              $dungeonRoute,
-        string                    $seasonalType
+        string                    $seasonalType,
     ): Response {
         $this->authorize('migrate', $dungeonRoute);
 
@@ -793,7 +799,7 @@ class AjaxDungeonRouteController extends Controller
     public function mdtExport(
         Request                         $request,
         MDTExportStringServiceInterface $mdtExportStringService,
-        DungeonRoute                    $dungeonRoute
+        DungeonRoute                    $dungeonRoute,
     ) {
         $this->authorize('view', $dungeonRoute);
 
@@ -839,12 +845,12 @@ class AjaxDungeonRouteController extends Controller
     public function simulate(
         AjaxDungeonRouteSimulateFormRequest $request,
         RaidEventsServiceInterface          $raidEventsService,
-        DungeonRoute                        $dungeonRoute
+        DungeonRoute                        $dungeonRoute,
     ): array {
         $this->authorize('view', $dungeonRoute);
 
         $raidEventsCollection = $raidEventsService->getRaidEvents(
-            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonRoute)
+            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonRoute),
         );
 
         return [
@@ -855,7 +861,7 @@ class AjaxDungeonRouteController extends Controller
     public function refreshThumbnail(
         Request                   $request,
         ThumbnailServiceInterface $thumbnailService,
-        DungeonRoute              $dungeonroute
+        DungeonRoute              $dungeonroute,
     ): Response {
         $thumbnailService->queueThumbnailRefresh($dungeonroute, true);
 
@@ -864,7 +870,7 @@ class AjaxDungeonRouteController extends Controller
 
     public function getDungeonRoutesData(
         AjaxDungeonRouteDataFormRequest $request,
-        CoordinatesServiceInterface     $coordinatesService
+        CoordinatesServiceInterface     $coordinatesService,
     ): Collection {
         $publicKeys = $request->validated()['public_keys'];
 

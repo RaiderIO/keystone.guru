@@ -8,11 +8,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        DB::insert('
+        DB::insert(
+            '
             INSERT INTO `roles`
                 (name, display_name, description, created_at, updated_at)
             VALUES
-                ("internal_team", "Internal Team", "Internal Team", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)'
+                ("internal_team", "Internal Team", "Internal Team", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)',
         );
     }
 

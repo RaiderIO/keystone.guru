@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int             $id
- * @property string          $name
- * @property string          $key
+ * @property int    $id
+ * @property string $name
+ * @property string $key
  *
  * @property Collection<Npc> $npcs
  *
@@ -83,7 +83,6 @@ class Characteristic extends CacheModel
         self::CHARACTERISTIC_TURN_EVIL       => 23,
         self::CHARACTERISTIC_MIND_SOOTHE     => 24,
     ];
-
 
     /**
      * Gets all derived NPCs from this classification.

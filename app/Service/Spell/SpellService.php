@@ -11,8 +11,8 @@ use Illuminate\Support\Str;
 class SpellService implements SpellServiceInterface
 {
     public function __construct(
-        private readonly SpellRepositoryInterface $spellRepository,
-        private readonly SpellServiceLoggingInterface $log
+        private readonly SpellRepositoryInterface     $spellRepository,
+        private readonly SpellServiceLoggingInterface $log,
     ) {
     }
 
@@ -41,7 +41,6 @@ class SpellService implements SpellServiceInterface
         $spellsAttributes = [];
 
         foreach ($csv as $index => $row) {
-
             $spellId = $row[$indexClassSpellId];
 
             if (empty($spellId)) {

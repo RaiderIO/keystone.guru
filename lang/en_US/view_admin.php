@@ -2,7 +2,7 @@
 
 return [
 
-    'dungeon'                    => [
+    'dungeon' => [
         'edit' => [
             'title_new'                          => 'New dungeon',
             'title_edit'                         => 'Edit dungeon',
@@ -28,9 +28,9 @@ return [
             'slug'                               => 'Slug',
             'submit'                             => 'Submit',
             'floor_management'                   => [
-                'title'                   => 'Floor management',
-                'add_floor'               => 'Add floor',
-                'table_header'            => [
+                'title'        => 'Floor management',
+                'add_floor'    => 'Add floor',
+                'table_header' => [
                     'id'      => 'Id',
                     'index'   => 'Index',
                     'name'    => 'Name',
@@ -41,7 +41,7 @@ return [
                 'floor_edit_edit'         => 'Edit',
                 'floor_edit_edit_mapping' => 'Edit mapping',
             ],
-            'mapping_versions'                   => [
+            'mapping_versions' => [
                 'title'                    => 'Mapping versions',
                 'add_bare_mapping_version' => 'Add bare mapping version',
                 'add_mapping_version'      => 'Add mapping version',
@@ -82,7 +82,7 @@ return [
             'submit'         => 'Submit',
         ],
     ],
-    'expansion'                  => [
+    'expansion' => [
         'edit' => [
             'title_new'     => 'New expansion',
             'header_new'    => 'New expansion',
@@ -110,14 +110,14 @@ return [
             'edit'                 => 'Edit',
         ],
     ],
-    'floor'                      => [
-        'flash'   => [
+    'floor' => [
+        'flash' => [
             'invalid_floor_id'           => 'Floor %s is not a part of dungeon %s',
             'invalid_mapping_version_id' => 'Mapping version is not for dungeon %s',
             'floor_updated'              => 'Floor updated',
             'floor_created'              => 'Floor created',
         ],
-        'edit'    => [
+        'edit' => [
             'title_new'                          => 'New Floor - %s',
             'header_new'                         => 'New Floor - %s',
             'title_edit'                         => 'Edit Floor - %s',
@@ -150,8 +150,8 @@ return [
                 'left'  => 'Left',
                 'right' => 'Right',
             ],
-            'submit'                             => 'Submit',
-            'speedrun_required_npcs'             => [
+            'submit'                 => 'Submit',
+            'speedrun_required_npcs' => [
                 'title_10_man'         => '10-man Speedrun Required Npcs',
                 'title_25_man'         => '25-man Speedrun Required Npcs',
                 'add_npc'              => 'Add NPC',
@@ -167,12 +167,12 @@ return [
             'header' => 'Edit Mapping - %s',
         ],
     ],
-    'npc'                        => [
-        'flash'          => [
+    'npc' => [
+        'flash' => [
             'npc_updated' => 'Npc updated',
             'npc_created' => 'Npc %s created',
         ],
-        'edit'           => [
+        'edit' => [
             'title_new'                      => 'New NPC',
             'header_new'                     => 'New NPC',
             'title_edit'                     => 'Edit NPC :name',
@@ -201,7 +201,7 @@ return [
             'all_npcs'                       => 'All npcs',
             'all_dungeons'                   => 'All dungeons',
         ],
-        'list'           => [
+        'list' => [
             'all_dungeons'                => 'All',
             'title'                       => 'Npc listing',
             'header'                      => 'View NPCs',
@@ -224,7 +224,7 @@ return [
             'table_header_enemy_forces'    => 'Enemy Forces',
             'table_header_actions'         => 'Actions',
         ],
-        'npchealth'      => [
+        'npchealth' => [
             'add_npc_health'    => 'Add health',
             'edit_npc_health'   => 'Edit',
             'delete_npc_health' => 'Delete',
@@ -237,7 +237,7 @@ return [
             ],
         ],
     ],
-    'npcenemyforces'             => [
+    'npcenemyforces' => [
         'flash' => [
             'enemy_forces_updated' => 'Enemy forces updated',
             'enemy_forces_created' => 'Enemy forces created',
@@ -253,7 +253,7 @@ return [
             'submit'               => 'Submit',
         ],
     ],
-    'npchealth'                  => [
+    'npchealth' => [
         'flash' => [
             'npc_health_updated' => 'Health updated',
             'npc_health_created' => 'Health created',
@@ -280,14 +280,14 @@ return [
                 'percentage'     => 'Percentage',
                 'actions'        => 'Actions',
             ],
-            'apply_to_npc_health'                  => 'Apply to NPC health',
-            'edit_npc_health'                      => 'Edit',
-            'percentage'                           => 'Percentage',
-            'game_version'                         => 'Game version',
-            'submit'                               => 'Submit',
+            'apply_to_npc_health' => 'Apply to NPC health',
+            'edit_npc_health'     => 'Edit',
+            'percentage'          => 'Percentage',
+            'game_version'        => 'Game version',
+            'submit'              => 'Submit',
         ],
     ],
-    'release'                    => [
+    'release' => [
         'edit' => [
             'title_new'    => 'New release',
             'header_new'   => 'New release',
@@ -319,7 +319,7 @@ return [
             'edit'                 => 'Edit',
         ],
     ],
-    'spell'                      => [
+    'spell' => [
         'edit' => [
             'title_new'         => 'New spell',
             'header_new'        => 'New spell',
@@ -349,27 +349,27 @@ return [
             'edit'                 => 'Edit',
         ],
     ],
-    'tools'                      => [
-        'datadump'      => [
+    'tools' => [
+        'datadump' => [
             'viewexporteddungeondata' => [
                 'title'   => 'Exported!',
                 'header'  => 'Dumped dungeon data',
                 'content' => 'Exported!',
             ],
-            'viewexportedrelease'     => [
+            'viewexportedrelease' => [
                 'title'   => 'Exported!',
                 'header'  => 'Dumped dungeon data',
                 'content' => 'Exported!',
             ],
         ],
-        'dungeonroute'  => [
-            'view'            => [
+        'dungeonroute' => [
+            'view' => [
                 'title'      => 'View dungeonroute',
                 'header'     => 'View dungeonroute',
                 'public_key' => 'Dungeonroute public key/id',
                 'submit'     => 'Submit',
             ],
-            'viewcontents'    => [
+            'viewcontents' => [
                 'title'  => 'View contents for :dungeonRouteTitle',
                 'header' => 'View contents for :dungeonRouteTitle',
             ],
@@ -381,7 +381,7 @@ return [
                 'table_header_actions'              => 'Actions',
             ],
         ],
-        'enemyforces'   => [
+        'enemyforces' => [
             'title'                    => 'Import Enemy Forces',
             'header'                   => 'Import Enemy Forces',
             'paste_mennos_export_json' => 'Paste Menno\'s Export Json',
@@ -392,7 +392,7 @@ return [
                 'submit' => 'Submit',
             ],
         ],
-        'exception'     => [
+        'exception' => [
             'select' => [
                 'title'                     => 'Throw an exception',
                 'header'                    => 'Throw an exception',
@@ -400,7 +400,7 @@ return [
                 'submit'                    => 'Submit',
             ],
         ],
-        'features'      => [
+        'features' => [
             'list' => [
                 'title'        => 'Feature management',
                 'header'       => 'Feature management',
@@ -409,7 +409,7 @@ return [
                     'feature' => 'Feature',
                     'actions' => 'Actions',
                 ],
-                'actions'      => [
+                'actions' => [
                     'toggle' => 'Toggle',
                     'forget' => 'Forget',
                 ],
@@ -423,11 +423,11 @@ return [
                 'submit'  => 'Submit',
             ],
         ],
-        'mdt'           => [
-            'diff'                              => [
-                'title'                 => 'MDT Diff',
-                'header'                => 'MDT Diff',
-                'headers'               => [
+        'mdt' => [
+            'diff' => [
+                'title'   => 'MDT Diff',
+                'header'  => 'MDT Diff',
+                'headers' => [
                     'mismatched_health'               => 'Mismatched health',
                     'mismatched_enemy_count'          => 'Mismatched enemy count',
                     'mismatched_enemy_type'           => 'Mismatched enemy type',
@@ -444,19 +444,19 @@ return [
                 'npc_message'           => ':npcName (:npcId, :count usages)',
                 'apply_mdt_kg'          => 'Apply (MDT -> KG)',
             ],
-            'dungeonroute'                      => [
+            'dungeonroute' => [
                 'title'      => 'View dungeonroute as MDT String',
                 'header'     => 'View dungeonroute as MDT String',
                 'public_key' => 'Dungeonroute public key/id',
                 'submit'     => 'Submit',
             ],
-            'string'                            => [
+            'string' => [
                 'title'                        => 'View MDT String Contents',
                 'header'                       => 'View MDT String Contents',
                 'paste_your_mdt_export_string' => 'Paste your Mythic Dungeon Tools export string',
                 'submit'                       => 'Submit',
             ],
-            'list'                              => [
+            'list' => [
                 'title'           => 'Failed MDT imports',
                 'header'          => 'Failed MDT imports',
                 'copy_mdt_string' => 'Copy MDT string',
@@ -468,7 +468,7 @@ return [
                     'actions'       => 'Actions',
                 ],
             ],
-            'dungeonmappinghash'                => [
+            'dungeonmappinghash' => [
                 'title'  => 'View MDT Dungeon Mapping Hash',
                 'header' => 'View MDT Dungeon Mapping Hash',
                 'submit' => 'Submit',
@@ -479,8 +479,8 @@ return [
                 'submit' => 'Submit',
             ],
         ],
-        'npc'           => [
-            'import'                => [
+        'npc' => [
+            'import' => [
                 'title'                   => 'Mass import NPCs',
                 'header'                  => 'Mass import NPCs',
                 'paste_npc_import_string' => 'Paste the NPC import string',
@@ -493,7 +493,7 @@ return [
                 'spell_not_found' => 'Spell not found',
             ],
         ],
-        'list'          => [
+        'list' => [
             'title'                                       => 'Admin tools',
             'header'                                      => 'Admin tools',
             'header_tools'                                => 'Tools',
@@ -534,7 +534,7 @@ return [
             'subheader_thumbnails'                        => 'Thumbnails',
             'thumbnails_regenerate'                       => 'Mass regenerate thumbnails',
         ],
-        'thumbnails'    => [
+        'thumbnails' => [
             'regenerate' => [
                 'title'        => 'Mass regenerate thumbnails',
                 'header'       => 'Mass regenerate thumbnails',
@@ -542,7 +542,7 @@ return [
                 'submit'       => 'Submit',
             ],
         ],
-        'wagogg'        => [
+        'wagogg' => [
             'importingamecoordinates' => [
                 'title'                       => 'Import in-game coordinates',
                 'header'                      => 'Import in-game coordinates',
@@ -550,7 +550,7 @@ return [
                 'submit'                      => 'Submit',
             ],
         ],
-        'wowtools'      => [
+        'wowtools' => [
             'importingamecoordinates' => [
                 'title'                                  => 'Import in-game coordinates',
                 'header'                                 => 'Import in-game coordinates',
@@ -561,7 +561,7 @@ return [
             ],
         ],
     ],
-    'user'                       => [
+    'user' => [
         'list' => [
             'title'                        => 'User list',
             'header'                       => 'View users',
@@ -577,7 +577,7 @@ return [
             'ip_addresses_cloudflare_link' => 'Add these IP addresses to Cloudflare to ban this user',
         ],
     ],
-    'userreport'                 => [
+    'userreport' => [
         'list' => [
             'title'                    => 'User reports',
             'header'                   => 'View user reports',

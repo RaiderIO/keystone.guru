@@ -51,9 +51,10 @@ class ConvertLocalizations extends Command
             $translations = json_decode(
                 file_get_contents(
                     base_path(
-                        sprintf('vendor/laravel-lang/lang/locales/%s/php.json', $localePath)
-                    )
-                ), true
+                        sprintf('vendor/laravel-lang/lang/locales/%s/php.json', $localePath),
+                    ),
+                ),
+                true,
             );
 
             if (json_last_error() !== JSON_ERROR_NONE) {
@@ -75,8 +76,8 @@ class ConvertLocalizations extends Command
     /**
      * Convert nested arrays to dot notation.
      *
-     * @param array  $array
-     * @param string $prefix
+     * @param  array  $array
+     * @param  string $prefix
      * @return array
      */
     protected function convertDotNotationToArray(array $array): array
@@ -98,7 +99,7 @@ class ConvertLocalizations extends Command
             if (is_array($value)) {
                 // Recursively convert nested arrays
                 $result = $this->convertDotNotationToArray($value);
-            } else if (str_contains($key, '.')) {
+            } elseif (str_contains($key, '.')) {
                 // Handle dot notation keys
                 $keys = explode('.', $key);
                 $temp = &$result;

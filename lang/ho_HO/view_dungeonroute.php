@@ -2,8 +2,8 @@
 
 return [
 
-    'discover'       => [
-        'dungeon'  => [
+    'discover' => [
+        'dungeon' => [
             'overview' => [
                 'popular'                    => 'Hodor',
                 'popular_by_current_affixes' => 'Hodor',
@@ -18,10 +18,10 @@ return [
             'popular_by_next_affixes'    => 'Hodor',
             'newly_published_routes'     => 'Hodor',
         ],
-        'panel'    => [
+        'panel' => [
             'show_more' => 'Hodor',
         ],
-        'search'   => [
+        'search' => [
             'page_title'              => 'Hodor',
             'header'                  => 'Hodor',
             'title'                   => 'Hodor',
@@ -39,18 +39,18 @@ return [
             'user_placeholder'        => 'Hodor',
         ],
     ],
-    'livesession'    => [
+    'livesession' => [
         'view' => [
             'any' => 'Hodor',
         ],
     ],
-    'edit'           => [
+    'edit' => [
         'title'                                   => 'Hodor',
         'linkpreview_title'                       => 'Hodor',
         'linkpreview_default_description'         => 'Hodor',
         'linkpreview_default_description_sandbox' => 'Hodor',
     ],
-    'embed'          => [
+    'embed' => [
         'title'            => 'Hodor',
         'any'              => 'Hodor',
         'select_floor'     => 'Hodor',
@@ -60,16 +60,16 @@ return [
         'present_route'    => 'Hodor',
         'copy_mdt_string'  => 'Hodor',
     ],
-    'limitreached'   => [
+    'limitreached' => [
         'title'                     => 'Hodor',
         'header'                    => 'Hodor',
         'limit_reached_description' => 'Hodor',
         'become_a_patreon'          => 'Hodor',
     ],
-    'new'            => [
+    'new' => [
         'title' => 'Hodor',
     ],
-    'newtemporary'   => [
+    'newtemporary' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
@@ -78,11 +78,11 @@ return [
         'header'              => 'Hodor',
         'claimed_description' => 'Hodor',
     ],
-    'unavailable'    => [
+    'unavailable' => [
         'title'                   => 'Hodor',
         'unavailable_description' => 'Hodor',
     ],
-    'view'           => [
+    'view' => [
         'any'                                     => 'Hodor',
         'linkpreview_title'                       => 'Hodor',
         'linkpreview_default_description'         => 'Hodor',

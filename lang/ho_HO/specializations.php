@@ -11,58 +11,58 @@ return [
         'havoc'     => 'Hodor',
         'vengeance' => 'Hodor',
     ],
-    'druid'        => [
+    'druid' => [
         'balance'     => 'Hodor',
         'feral'       => 'Hodor',
         'guardian'    => 'Hodor',
         'restoration' => 'Hodor',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => 'Hodor',
         'preservation' => 'Hodor',
         'augmentation' => 'Hodor',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => 'Hodor',
         'marksmanship'  => 'Hodor',
         'survival'      => 'Hodor',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => 'Hodor',
         'fire'   => 'Hodor',
         'frost'  => 'Hodor',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => 'Hodor',
         'mistweaver' => 'Hodor',
         'windwalker' => 'Hodor',
     ],
-    'paladin'      => [
+    'paladin' => [
         'holy'        => 'Hodor',
         'protection'  => 'Hodor',
         'retribution' => 'Hodor',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => 'Hodor',
         'holy'       => 'Hodor',
         'shadow'     => 'Hodor',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => 'Hodor',
         'outlaw'        => 'Hodor',
         'subtlety'      => 'Hodor',
     ],
-    'shaman'       => [
+    'shaman' => [
         'elemental'   => 'Hodor',
         'enhancement' => 'Hodor',
         'restoration' => 'Hodor',
     ],
-    'warlock'      => [
+    'warlock' => [
         'affliction'  => 'Hodor',
         'demonology'  => 'Hodor',
         'destruction' => 'Hodor',
     ],
-    'warrior'      => [
+    'warrior' => [
         'arms'       => 'Hodor',
         'fury'       => 'Hodor',
         'protection' => 'Hodor',

@@ -30,7 +30,6 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
         $allEnemyIds = [];
 
         foreach ($value as $killZoneData) {
-
             $enemyIds = $killZoneData['enemies'];
             foreach ($enemyIds as $key => $enemyId) {
                 $allEnemyIds = array_merge($allEnemyIds, $enemyIds);
@@ -60,7 +59,6 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
             $killZone = KillZone::create($killZoneData);
 
             if (count($enemyIds) > 0) {
-
                 $savedEnemyIds = collect();
 
                 foreach ($enemyIds as $key => $enemyId) {

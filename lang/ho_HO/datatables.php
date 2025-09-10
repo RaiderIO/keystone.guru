@@ -19,30 +19,30 @@ return [
         'next'     => 'Hodor',
         'previous' => 'Hodor',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => 'Hodor',
         'sortDescending' => 'Hodor',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => 'Hodor',
         'fill'           => 'Hodor',
         'fillHorizontal' => 'Hodor',
         'fillVertical'   => 'Hodor',
     ],
-    'buttons'        => [
-        'collection'      => 'Hodor',
-        'colvis'          => 'Hodor',
-        'colvisRestore'   => 'Hodor',
-        'copy'            => 'Hodor',
-        'copyKeys'        => 'Hodor',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => 'Hodor',
+        'colvis'        => 'Hodor',
+        'colvisRestore' => 'Hodor',
+        'copy'          => 'Hodor',
+        'copyKeys'      => 'Hodor',
+        'copySuccess'   => [
             1   => 'Hodor',
             '_' => 'Hodor',
         ],
-        'copyTitle'       => 'Hodor',
-        'csv'             => 'Hodor',
-        'excel'           => 'Hodor',
-        'pageLength'      => [
+        'copyTitle'  => 'Hodor',
+        'csv'        => 'Hodor',
+        'excel'      => 'Hodor',
+        'pageLength' => [
             -1  => 'Hodor',
             '_' => 'Hodor',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => 'Hodor',
         'createState'     => 'Hodor',
     ],
-    'searchBuilder'  => [
-        'add'         => 'Hodor',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => 'Hodor',
+        'button' => [
             0   => 'Hodor',
             '_' => 'Hodor',
         ],
-        'clearAll'    => 'Hodor',
-        'condition'   => 'Hodor',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => 'Hodor',
+        'condition'  => 'Hodor',
+        'conditions' => [
+            'date' => [
                 'after'      => 'Hodor',
                 'before'     => 'Hodor',
                 'between'    => 'Hodor',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => 'Hodor',
                 'notEndsWith'   => 'Hodor',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => 'Hodor',
                 'notEmpty' => 'Hodor',
                 'not'      => 'Hodor',
@@ -118,11 +118,11 @@ return [
             0   => 'Hodor',
             '_' => 'Hodor',
         ],
-        'value'       => 'Hodor',
+        'value' => 'Hodor',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => 'Hodor',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => 'Hodor',
+        'collapse'     => [
             0   => 'Hodor',
             '_' => 'Hodor',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => 'Hodor',
         'collapseMessage' => 'Hodor',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => 'Hodor',
             '_' => 'Hodor',
         ],
@@ -143,12 +143,12 @@ return [
             1   => 'Hodor',
             '_' => 'Hodor',
         ],
-        'rows'    => [
+        'rows' => [
             1   => 'Hodor',
             '_' => 'Hodor',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => 'Hodor',
         'next'     => 'Hodor',
         'hours'    => 'Hodor',
@@ -168,7 +168,7 @@ return [
             5 => 'Hodor',
             6 => 'Hodor',
         ],
-        'months'   => [
+        'months' => [
             0  => 'Hodor',
             1  => 'Hodor',
             2  => 'Hodor',
@@ -183,14 +183,14 @@ return [
             11 => 'Hodor',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => 'Hodor',
         'create' => [
             'button' => 'Hodor',
             'title'  => 'Hodor',
             'submit' => 'Hodor',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => 'Hodor',
             'title'  => 'Hodor',
             'submit' => 'Hodor',
@@ -204,17 +204,17 @@ return [
                 1   => 'Hodor',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => 'Hodor',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => 'Hodor',
             'info'    => 'Hodor',
             'restore' => 'Hodor',
             'noMulti' => 'Hodor',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => 'Hodor',
         'renameLabel'    => 'Hodor',
         'renameButton'   => 'Hodor',
@@ -240,7 +240,7 @@ return [
                 'visible' => 'Hodor',
                 'search'  => 'Hodor',
             ],
-            'button'        => 'Hodor',
+            'button' => 'Hodor',
         ],
     ],
 

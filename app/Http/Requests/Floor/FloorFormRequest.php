@@ -22,47 +22,47 @@ class FloorFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'active'                             => [
+            'active' => [
                 'nullable',
                 'bool',
             ],
-            'default'                            => [
+            'default' => [
                 'nullable',
                 'bool',
             ],
-            'facade'                             => [
+            'facade' => [
                 'nullable',
                 'bool',
             ],
-            'map_name'                           => [
+            'map_name' => [
                 'nullable',
                 'string',
             ],
-            'name'                               => [
+            'name' => [
                 'required',
                 'string',
             ],
-            'index'                              => [
+            'index' => [
                 'required',
                 'integer',
             ],
-            'mdt_sub_level'                      => [
+            'mdt_sub_level' => [
                 'nullable',
                 'integer',
             ],
-            'ui_map_id'                          => [
+            'ui_map_id' => [
                 'required',
                 'integer',
             ],
-            'min_enemy_size'                     => [
+            'min_enemy_size' => [
                 'nullable',
                 'integer',
             ],
-            'max_enemy_size'                     => [
+            'max_enemy_size' => [
                 'nullable',
                 'integer',
             ],
-            'enemy_engagement_max_range'         => [
+            'enemy_engagement_max_range' => [
                 'nullable',
                 'integer',
             ],
@@ -70,11 +70,11 @@ class FloorFormRequest extends FormRequest
                 'nullable',
                 'integer',
             ],
-            'percentage_display_zoom'            => [
+            'percentage_display_zoom' => [
                 'nullable',
                 'integer',
             ],
-            'zoom_max'                           => [
+            'zoom_max' => [
                 'nullable',
                 'integer',
             ],

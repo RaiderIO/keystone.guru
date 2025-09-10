@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => 'Hodor',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => 'Hodor',
         'header'                            => 'Hodor',
         'start_date'                        => 'Hodor',
@@ -28,26 +28,26 @@ return [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => 'Hodor',
         'header'           => 'Hodor',
         'header_people'    => 'Hodor',
         'header_libraries' => 'Hodor',
         'header_images'    => 'Hodor',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
-    'health'    => [
+    'health' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => 'Hodor',
         'header'                        => 'Hodor',
         'enemy_forces_mapping_progress' => 'Hodor',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => 'Hodor',
         'npcs_assigned'                 => 'Hodor',
     ],
-    'status'    => [
+    'status' => [
         'title'       => 'Hodor',
         'header'      => 'Hodor',
         'description' => 'Hodor',

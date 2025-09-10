@@ -25,7 +25,6 @@ class WowheadService implements WowheadServiceInterface
     private const IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
     private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
-
     private const IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST    = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
     private const IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
     private const IDENTIFYING_TOKEN_SPELL_ICON_NAME         = 'WeakAuraExport.setOptions(';
@@ -38,7 +37,7 @@ class WowheadService implements WowheadServiceInterface
     private const IDENTIFYING_TOKEN_SPELL_DURATION          = '<th>Duration</th>';
 
     public function __construct(
-        private readonly WowheadServiceLoggingInterface $log
+        private readonly WowheadServiceLoggingInterface $log,
     ) {
     }
 
@@ -63,6 +62,7 @@ class WowheadService implements WowheadServiceInterface
             // Find the health value from this little html
 
             $dom = new Dom();
+
             try {
                 $dom->loadStr($html);
                 $tds = $dom->getElementsbyTag('td');
@@ -72,7 +72,7 @@ class WowheadService implements WowheadServiceInterface
                 foreach ($tds as $td) {
                     if ($td->innerHtml === 'Normal&nbsp;&nbsp;') {
                         $grabNext = true;
-                    } else if ($grabNext) {
+                    } elseif ($grabNext) {
                         $possibleHealth = (int)str_replace(',', '', (string)$td->innerHtml);
                         if ($possibleHealth > 0) {
                             $health = $possibleHealth;
@@ -93,6 +93,7 @@ class WowheadService implements WowheadServiceInterface
         $result = true;
 
         $this->log->downloadMissingSpellIconsStart();
+
         try {
             $targetFolder = realpath(base_path('../keystone.guru.assets/images/spells'));
             Spell::whereNot('icon_name', '')->each(function (Spell $spell) use (&$result, $targetFolder) {
@@ -124,7 +125,7 @@ class WowheadService implements WowheadServiceInterface
 
         $result = $this->curlSaveToFile(
             sprintf('https://wow.zamimg.com/images/wow/icons/large/%s', $fileName),
-            $targetFilePath
+            $targetFilePath,
         );
 
         $this->log->downloadSpellIconDownloadResult($targetFilePath, $result);
@@ -183,7 +184,7 @@ class WowheadService implements WowheadServiceInterface
                 // Like, we're done, don't return anything
                 return null;
             } // Spell icon name
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
                 // WeakAuraExport.setOptions({"id":322486,"name":"Overgrowth","iconFilename":"inv_misc_herb_nightmarevine_stem","appliesABuff":true,"display":"progress-bar-medium","trigger":"player-has-debuff"});
                 if (preg_match('/{.*}/', $line, $matches)) {
                     $jsonString = $matches[0];
@@ -202,17 +203,17 @@ class WowheadService implements WowheadServiceInterface
                     // I don't know the number of the first array key - convert it to 0 always
                     $iconName = $json['iconFilename'];
                 }
-            } else if ($gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA &&
+            } elseif ($gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA &&
                 preg_match(self::IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC, $line, $matches)) {
                 $iconName = $matches[1];
-            } else if (!$categoryFound && preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
+            } elseif (!$categoryFound && preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
                 $category      = Str::slug($matches[1], '_');
                 $categoryFound = true;
             } // Mechanic
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
                 $mechanicFound = true;
             } // Triggered on the next line
-            else if ($mechanicFound) {
+            elseif ($mechanicFound) {
                 $mechanic = str_replace([
                     '<td>',
                     '</td>',
@@ -225,25 +226,25 @@ class WowheadService implements WowheadServiceInterface
                 $mechanicFound = false;
                 $mechanicSet   = true;
             } // Spell name
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
                 $name = html_entity_decode(
                     str_replace([
                         self::IDENTIFYING_TOKEN_SPELL_NAME,
                         '"',
                         '>',
                     ], '', $line),
-                    ENT_QUOTES | ENT_XML1
+                    ENT_QUOTES | ENT_XML1,
                 );
             } // Spell school
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_SCHOOL)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_SCHOOL)) {
                 $schoolFound = true;
             } // Triggered on the next line
-            else if ($schoolFound) {
+            elseif ($schoolFound) {
                 $schoolsStr = str_replace([
                     '<td>',
                     '</td>',
                 ], '', $line);
-                $schools    = explode(', ', $schoolsStr);
+                $schools = explode(', ', $schoolsStr);
 
                 foreach ($schools as $school) {
                     if (isset(Spell::ALL_SCHOOLS[$school])) {
@@ -255,17 +256,17 @@ class WowheadService implements WowheadServiceInterface
                 $schoolFound = false;
                 $schoolSet   = true;
             } // Spell dispel type
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE)) {
                 $dispelTypeFound = true;
             } // Triggered on the next line
-            else if ($dispelTypeFound) {
+            elseif ($dispelTypeFound) {
                 $dispelType = str_replace([
                     '<td>',
                     '</td>',
                 ], '', $line);
                 if (str_contains($dispelType, 'n/a')) {
                     $dispelType = Spell::DISPEL_TYPE_NOT_AVAILABLE;
-                } else if (!in_array($dispelType, Spell::ALL_DISPEL_TYPES)) {
+                } elseif (!in_array($dispelType, Spell::ALL_DISPEL_TYPES)) {
                     $this->log->getSpellDataSpellDispelTypeNotFound($dispelType);
 
                     $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
@@ -273,17 +274,17 @@ class WowheadService implements WowheadServiceInterface
                 $dispelTypeFound = false;
                 $dispelTypeSet   = true;
             } // Cast time
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_CAST_TIME)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_CAST_TIME)) {
                 $castTimeFound = true;
             } // Triggered on the next line
-            else if ($castTimeFound) {
+            elseif ($castTimeFound) {
                 $castTime = str_replace([
                     '<td>',
                     '</td>',
                 ], '', $line);
                 if (str_contains($castTime, 'n/a')) {
                     $castTime = null;
-                } else if (str_contains($castTime, 'Instant')) {
+                } elseif (str_contains($castTime, 'Instant')) {
                     $castTime = 0;
                 } else {
                     $castTime = CarbonInterval::fromString($castTime)->totalMilliseconds;
@@ -291,10 +292,10 @@ class WowheadService implements WowheadServiceInterface
                 $castTimeFound = false;
                 $castTimeSet   = true;
             } // Duration
-            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DURATION)) {
+            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DURATION)) {
                 $durationFound = true;
             } // Triggered on the next line
-            else if ($durationFound) {
+            elseif ($durationFound) {
                 /** @noinspection HtmlDeprecatedAttribute */
                 $duration = str_replace([
                     '<td width="100%">',
@@ -324,7 +325,7 @@ class WowheadService implements WowheadServiceInterface
             $name,
             $schoolsMask,
             $castTime,
-            $duration
+            $duration,
         );
     }
 
@@ -336,18 +337,19 @@ class WowheadService implements WowheadServiceInterface
     public function getNpcPageHtml(GameVersion $gameVersion, Npc $npc): string
     {
         return $this->curlGet(
-            sprintf('https://wowhead.com/%snpc=%s/%s',
+            sprintf(
+                'https://wowhead.com/%snpc=%s/%s',
                 $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
                 $npc->id,
-                Str::slug($npc->name)
-            )
+                Str::slug($npc->name),
+            ),
         );
     }
 
     public function getSpellPageHtml(GameVersion $gameVersion, int $spellId): string
     {
         return $this->curlGet(
-            Spell::getWowheadLink($gameVersion->id, $spellId)
+            Spell::getWowheadLink($gameVersion->id, $spellId),
         );
     }
 

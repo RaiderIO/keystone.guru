@@ -18,10 +18,10 @@ return [
             'reset_password'   => 'Сбросить пароль',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Войти',
     ],
-    'register'  => [
+    'register' => [
         'title'  => 'Регистрация',
         'header' => 'Регистрация',
     ],

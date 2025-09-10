@@ -26,13 +26,13 @@ use Illuminate\Support\Collection;
  */
 class CombatLogEventFilter implements Arrayable
 {
-    private ?string $region          = null;
-    private ?int    $keyLevelMin     = null;
-    private ?int    $keyLevelMax     = null;
-    private ?int    $itemLevelMin    = null;
-    private ?int    $itemLevelMax    = null;
-    private ?int    $playerDeathsMin = null;
-    private ?int    $playerDeathsMax = null;
+    private ?string $region       = null;
+    private ?int $keyLevelMin     = null;
+    private ?int $keyLevelMax     = null;
+    private ?int $itemLevelMin    = null;
+    private ?int $itemLevelMax    = null;
+    private ?int $playerDeathsMin = null;
+    private ?int $playerDeathsMax = null;
 
     /** @var Collection<Affix> */
     private Collection $affixes;
@@ -48,17 +48,17 @@ class CombatLogEventFilter implements Arrayable
 
     /** @var Collection<CharacterClassSpecialization> */
     private Collection $specializationsPlayerDeaths;
-    private ?int       $periodMin          = null;
-    private ?int       $periodMax          = null;
-    private ?int       $durationMin        = null;
-    private ?int       $durationMax        = null;
-    private ?int       $minSamplesRequired = null;
+    private ?int $periodMin          = null;
+    private ?int $periodMax          = null;
+    private ?int $durationMin        = null;
+    private ?int $durationMax        = null;
+    private ?int $minSamplesRequired = null;
 
     public function __construct(
         private readonly SeasonServiceInterface  $seasonService,
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType  $dataType
+        private readonly CombatLogEventDataType  $dataType,
     ) {
         $this->affixes                     = collect();
         $this->classes                     = collect();
@@ -175,7 +175,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection<Affix> $affixes
+     * @param  Collection<Affix>    $affixes
      * @return CombatLogEventFilter
      */
     public function setAffixes(Collection $affixes): CombatLogEventFilter
@@ -194,7 +194,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClass> $classes
+     * @param  Collection<CharacterClass> $classes
      * @return CombatLogEventFilter
      */
     public function setClasses(Collection $classes): CombatLogEventFilter
@@ -213,7 +213,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClassSpecialization> $specializations
+     * @param  Collection<CharacterClassSpecialization> $specializations
      * @return CombatLogEventFilter
      */
     public function setSpecializations(Collection $specializations): CombatLogEventFilter
@@ -222,7 +222,6 @@ class CombatLogEventFilter implements Arrayable
 
         return $this;
     }
-
 
     /**
      * @return Collection<CharacterClass>
@@ -233,7 +232,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClass> $classesPlayerDeaths
+     * @param  Collection<CharacterClass> $classesPlayerDeaths
      * @return CombatLogEventFilter
      */
     public function setClassesPlayerDeaths(Collection $classesPlayerDeaths): CombatLogEventFilter
@@ -252,7 +251,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClassSpecialization> $specializationsPlayerDeaths
+     * @param  Collection<CharacterClassSpecialization> $specializationsPlayerDeaths
      * @return CombatLogEventFilter
      */
     public function setSpecializationsPlayerDeaths(Collection $specializationsPlayerDeaths): CombatLogEventFilter
@@ -315,7 +314,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param int|null $minSamplesRequired
+     * @param  int|null             $minSamplesRequired
      * @return CombatLogEventFilter
      */
     public function setMinSamplesRequired(?int $minSamplesRequired): CombatLogEventFilter
@@ -328,40 +327,40 @@ class CombatLogEventFilter implements Arrayable
     public function toArray(): array
     {
         return array_filter([
-            'challenge_mode_id'           => $this->dungeon->challenge_mode_id,
-            'event_type'                  => $this->eventType->value,
-            'data_type'                   => $this->dataType,
-            'region'                      => $this->region,
-            'key_level_min'               => $this->keyLevelMin,
-            'key_level_max'               => $this->keyLevelMax,
-            'item_level_min'              => $this->itemLevelMin,
-            'item_level_max'              => $this->itemLevelMax,
-            'player_deaths_min'           => $this->playerDeathsMin,
-            'player_deaths_max'           => $this->playerDeathsMax,
-            'min_samples_required'        => $this->minSamplesRequired,
-            'affixes'                     => $this->affixes->map(function (Affix $affix) {
+            'challenge_mode_id'    => $this->dungeon->challenge_mode_id,
+            'event_type'           => $this->eventType->value,
+            'data_type'            => $this->dataType,
+            'region'               => $this->region,
+            'key_level_min'        => $this->keyLevelMin,
+            'key_level_max'        => $this->keyLevelMax,
+            'item_level_min'       => $this->itemLevelMin,
+            'item_level_max'       => $this->itemLevelMax,
+            'player_deaths_min'    => $this->playerDeathsMin,
+            'player_deaths_max'    => $this->playerDeathsMax,
+            'min_samples_required' => $this->minSamplesRequired,
+            'affixes'              => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
-            'specializations'             => $this->specializations->map(function (
-                CharacterClassSpecialization $characterClassSpecialization
+            'specializations' => $this->specializations->map(function (
+                CharacterClassSpecialization $characterClassSpecialization,
             ) {
                 return __($characterClassSpecialization->name, [], 'en_US');
             }),
-            'classes'                     => $this->classes->map(function (CharacterClass $characterClass) {
+            'classes' => $this->classes->map(function (CharacterClass $characterClass) {
                 return __($characterClass->name, [], 'en_US');
             }),
             'specializationsPlayerDeaths' => $this->specializationsPlayerDeaths->map(function (
-                CharacterClassSpecialization $characterClassSpecialization
+                CharacterClassSpecialization $characterClassSpecialization,
             ) {
                 return __($characterClassSpecialization->name, [], 'en_US');
             }),
-            'classesPlayerDeaths'         => $this->classesPlayerDeaths->map(function (CharacterClass $characterClass) {
+            'classesPlayerDeaths' => $this->classesPlayerDeaths->map(function (CharacterClass $characterClass) {
                 return __($characterClass->name, [], 'en_US');
             }),
-            'period_min'                  => $this->periodMin,
-            'period_max'                  => $this->periodMax,
-            'duration_min'                => $this->durationMin,
-            'duration_max'                => $this->durationMax,
+            'period_min'   => $this->periodMin,
+            'period_max'   => $this->periodMax,
+            'duration_min' => $this->durationMin,
+            'duration_max' => $this->durationMax,
         ]);
     }
 
@@ -374,12 +373,12 @@ class CombatLogEventFilter implements Arrayable
         // These are raider.io region IDs
         if ($this->region !== GameServerRegion::WORLD) {
             $must[] = MatchOne::make('region_id', match ($this->region) {
-                GameServerRegion::EUROPE => 3,
+                GameServerRegion::EUROPE   => 3,
                 GameServerRegion::AMERICAS => 2,
-                GameServerRegion::CHINA => 6,
-                GameServerRegion::KOREA => 4,
-                GameServerRegion::TAIWAN => 5,
-                default => 2, // US
+                GameServerRegion::CHINA    => 6,
+                GameServerRegion::KOREA    => 4,
+                GameServerRegion::TAIWAN   => 5,
+                default                    => 2, // US
             });
         }
 
@@ -437,7 +436,7 @@ class CombatLogEventFilter implements Arrayable
                 Should::make(
                     $this->affixes->map(function (Affix $affix) {
                         return MatchOne::make('affix_id', $affix->affix_id);
-                    })->toArray()
+                    })->toArray(),
                 ),
             ]);
         }
@@ -457,22 +456,21 @@ class CombatLogEventFilter implements Arrayable
             // Add an AffixGroup filter
             $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
             if ($mostRecentSeason !== null) {
-
                 /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
                 $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
                     $mostRecentSeason,
-                    GameServerRegion::getUserOrDefaultRegion()
+                    GameServerRegion::getUserOrDefaultRegion(),
                 );
 
                 /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
                 $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (
-                    WeeklyAffixGroup $weeklyAffixGroup
+                    WeeklyAffixGroup $weeklyAffixGroup,
                 ) use ($mostRecentSeason) {
                     return $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period;
                 });
                 /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
                 $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (
-                    WeeklyAffixGroup $weeklyAffixGroup
+                    WeeklyAffixGroup $weeklyAffixGroup,
                 ) use ($mostRecentSeason) {
                     return $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period;
                 });
@@ -498,13 +496,13 @@ class CombatLogEventFilter implements Arrayable
 
     public static function fromHeatmapDataFilter(
         SeasonServiceInterface $seasonService,
-        HeatmapDataFilter      $heatmapDataFilter
+        HeatmapDataFilter      $heatmapDataFilter,
     ): CombatLogEventFilter {
         $combatLogEventFilter = new CombatLogEventFilter(
             $seasonService,
             $heatmapDataFilter->getDungeon(),
             $heatmapDataFilter->getEventType(),
-            $heatmapDataFilter->getDataType()
+            $heatmapDataFilter->getDataType(),
         );
 
         $combatLogEventFilter->setRegion($heatmapDataFilter->getRegion());

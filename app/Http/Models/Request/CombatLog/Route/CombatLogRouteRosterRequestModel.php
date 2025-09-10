@@ -20,7 +20,7 @@ class CombatLogRouteRosterRequestModel extends RequestModel implements Arrayable
         public ?float $averageItemLevel = null,
         public ?array $characterIds = null,
         public ?array $specIds = null,
-        public ?array $classIds = null
+        public ?array $classIds = null,
     ) {
     }
 }

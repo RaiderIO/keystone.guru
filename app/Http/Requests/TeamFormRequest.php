@@ -33,9 +33,9 @@ class TeamFormRequest extends FormRequest
         }
 
         return [
-            'name' => $nameRules,
+            'name'        => $nameRules,
             'description' => 'string|nullable',
-            'logo' => [
+            'logo'        => [
                 'nullable',
                 File::image()
                     ->min(1)

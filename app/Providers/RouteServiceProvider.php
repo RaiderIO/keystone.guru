@@ -13,7 +13,7 @@ use RateLimiter;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    private const RATE_LIMIT_OVERRIDE_HTTP = null;
+    private const RATE_LIMIT_OVERRIDE_HTTP           = null;
     private const RATE_LIMIT_OVERRIDE_PER_MINUTE_API = null;
 
     /**
@@ -37,7 +37,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
     }
-
 
     /**
      * Define the "web" routes for the application.

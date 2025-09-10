@@ -44,7 +44,7 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         if ($this->defaultFloorByDungeonId->has($dungeonId)) {
             return clone $this->defaultFloorByDungeonId->get($dungeonId);
         } // If we DID have entries - we just didn't have the one we were looking for, return null
-        else if ($this->defaultFloorByDungeonId->isNotEmpty()) {
+        elseif ($this->defaultFloorByDungeonId->isNotEmpty()) {
             return null;
         }
 

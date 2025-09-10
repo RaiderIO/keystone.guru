@@ -18,10 +18,10 @@ return [
             'reset_password'   => 'Hodor',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Hodor',
     ],
-    'register'  => [
+    'register' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],

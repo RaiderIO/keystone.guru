@@ -12,7 +12,7 @@ interface MDTMappingImportServiceInterface
     public function importMappingVersionFromMDT(
         MappingServiceInterface $mappingService,
         Dungeon                 $dungeon,
-        bool                    $forceImport = false
+        bool                    $forceImport = false,
     ): MappingVersion;
 
     public function getMDTMappingHash(Dungeon $dungeon): string;

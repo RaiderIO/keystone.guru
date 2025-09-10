@@ -37,9 +37,9 @@ abstract class ContextEvent implements ShouldBroadcast
 
         if ($this->context instanceof DungeonRoute) {
             $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->getRouteKey()));
-        } else if ($this->context instanceof LiveSession) {
+        } elseif ($this->context instanceof LiveSession) {
             $result[] = new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->context->getRouteKey()));
-        } else if ($this->context instanceof Dungeon) {
+        } elseif ($this->context instanceof Dungeon) {
             $result[] = new PresenceChannel(sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->context->getRouteKey()));
         }
 //        if ($this->context instanceof DungeonRoute) {

@@ -51,8 +51,8 @@ trait HasLinkedAwakenedObelisk
     /**
      * Adds a link to an awakened obelisk by its map icon ID.
      *
-     * @param int|null $mapIconId Null to unset any previous relation.
-     * @return bool True if a new relation was added successfully, false otherwise
+     * @param  int|null $mapIconId Null to unset any previous relation.
+     * @return bool     True if a new relation was added successfully, false otherwise
      */
     public function setLinkedAwakenedObeliskByMapIconId(?int $mapIconId): bool
     {

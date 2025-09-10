@@ -33,8 +33,8 @@ class ConvertLocalizations extends Command
     public function handle(): void
     {
         foreach (glob(
-                     base_path('app/Console/Commands/Localization/Datatables/Lang/*.json')
-                 ) as $localePath) {
+            base_path('app/Console/Commands/Localization/Datatables/Lang/*.json'),
+        ) as $localePath) {
             $translations = json_decode(file_get_contents($localePath), true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {

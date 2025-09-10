@@ -19,30 +19,30 @@ return [
         'next'     => 'Наступна',
         'previous' => 'Попередня',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => ': активуйте, щоб сортувати колонку за зростанням',
         'sortDescending' => ': активуйте, щоб сортувати колонку за спаданням',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => 'Відміна',
         'fill'           => 'Заповнити всі клітинки з <i>%d</i>',
         'fillHorizontal' => 'Заповнити клітинки горизонтально',
         'fillVertical'   => 'Заповнити клітинки вертикально',
     ],
-    'buttons'        => [
-        'collection'      => 'Список <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'          => 'Видимість колонки',
-        'colvisRestore'   => 'Відновити видимість',
-        'copy'            => 'Копіювати',
-        'copyKeys'        => 'Нажміть ctrl або u2318 + C щоб копіювати інформацію з таблиці до вашого буферу обміну.<br /><br />Щоб відмінити нажміть на це повідомлення або Esc',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => 'Список <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'        => 'Видимість колонки',
+        'colvisRestore' => 'Відновити видимість',
+        'copy'          => 'Копіювати',
+        'copyKeys'      => 'Нажміть ctrl або u2318 + C щоб копіювати інформацію з таблиці до вашого буферу обміну.<br /><br />Щоб відмінити нажміть на це повідомлення або Esc',
+        'copySuccess'   => [
             1   => 'Скопійовано 1 рядок в буфер обміну',
             '_' => 'Скопійовано %d рядків в буфер обміну',
         ],
-        'copyTitle'       => 'Копіювати в буфер обміну',
-        'csv'             => 'CSV',
-        'excel'           => 'Excel',
-        'pageLength'      => [
+        'copyTitle'  => 'Копіювати в буфер обміну',
+        'csv'        => 'CSV',
+        'excel'      => 'Excel',
+        'pageLength' => [
             -1  => 'Показати усі рядки',
             '_' => 'Показати %d рядки',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => '',
         'createState'     => '',
     ],
-    'searchBuilder'  => [
-        'add'         => 'Додати умову',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => 'Додати умову',
+        'button' => [
             0   => 'Розширений пошук',
             '_' => 'Розширений пошук (%d)',
         ],
-        'clearAll'    => 'Очистити все',
-        'condition'   => 'Умова',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => 'Очистити все',
+        'condition'  => 'Умова',
+        'conditions' => [
+            'date' => [
                 'after'      => 'Після',
                 'before'     => 'До',
                 'between'    => 'Між',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => 'Не починається з',
                 'notEndsWith'   => 'Не закінчується на',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => 'Без',
                 'notEmpty' => 'Не пустий',
                 'not'      => 'Не',
@@ -118,11 +118,11 @@ return [
             0   => 'Розширений пошук',
             '_' => 'Розширений пошук (%d)',
         ],
-        'value'       => 'Значення',
+        'value' => 'Значення',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => 'Очистити все',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => 'Очистити все',
+        'collapse'     => [
             0   => 'Пошукові Панелі',
             '_' => 'Пошукові Панелі (%d)',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => 'Показати всі',
         'collapseMessage' => 'Приховати всі',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => '1 клітинку вибрано',
             '_' => '%d клітинок вибрано',
         ],
@@ -143,12 +143,12 @@ return [
             1   => '1 колонку вибрано',
             '_' => '%d колонок вибрано',
         ],
-        'rows'    => [
+        'rows' => [
             1   => '',
             '_' => '',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => 'Попередні',
         'next'     => 'Наступні',
         'hours'    => '',
@@ -168,7 +168,7 @@ return [
             5 => 'П\'ятниця',
             6 => 'Субота',
         ],
-        'months'   => [
+        'months' => [
             0  => 'Січень',
             1  => 'Лютий',
             2  => 'Березень',
@@ -183,14 +183,14 @@ return [
             11 => 'Грудень',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => 'Закрити',
         'create' => [
             'button' => 'Cтворити нову',
             'title'  => 'Cтворити новий запис',
             'submit' => 'Cтворити',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => 'Редагувати',
             'title'  => 'Редагувати запис',
             'submit' => 'Оновити',
@@ -204,17 +204,17 @@ return [
                 1   => '',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => '',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => '',
             'info'    => '',
             'restore' => '',
             'noMulti' => '',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => '',
         'renameLabel'    => '',
         'renameButton'   => '',
@@ -240,7 +240,7 @@ return [
                 'visible' => '',
                 'search'  => '',
             ],
-            'button'        => '',
+            'button' => '',
         ],
     ],
 

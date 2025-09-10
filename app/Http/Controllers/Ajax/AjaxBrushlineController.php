@@ -37,8 +37,9 @@ class AjaxBrushlineController extends Controller
         APIBrushlineFormRequest     $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        ?Brushline                  $brushline = null
+        ?Brushline                  $brushline = null,
     ) {
+        $test         = "";
         $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);
@@ -60,7 +61,7 @@ class AjaxBrushlineController extends Controller
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
                 ]);
-                $success   = $brushline instanceof Brushline;
+                $success = $brushline instanceof Brushline;
             } else {
                 $success = $brushline->update([
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -78,7 +79,7 @@ class AjaxBrushlineController extends Controller
                         Polyline::findOrNew($brushline->polyline_id),
                         $beforeModel,
                         $brushline,
-                        $validated['polyline']
+                        $validated['polyline'],
                     );
 
                     // Something's updated; broadcast it

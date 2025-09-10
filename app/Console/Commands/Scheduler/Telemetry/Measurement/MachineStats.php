@@ -26,7 +26,7 @@ class MachineStats extends Measurement
                 [
                     'load_percent' => (is_array($cpuLoadAvg) ? $cpuLoadAvg[1] : 0),
                 ],
-                time()
+                time(),
             ),
 
             new Point(
@@ -38,7 +38,7 @@ class MachineStats extends Measurement
                     'used'         => $memStats['MemTotal'] - $memStats['MemAvailable'],
                     'used_percent' => round((($memStats['MemTotal'] - $memStats['MemAvailable']) / $memStats['MemTotal']) * 100, 2),
                 ],
-                time()
+                time(),
             ),
 
             new Point(
@@ -50,7 +50,7 @@ class MachineStats extends Measurement
                     'used'         => $totalDiskSpace,
                     'used_percent' => round(($usedDiskSpace / $totalDiskSpace) * 100, 2),
                 ],
-                time()
+                time(),
             ),
 
         ];
@@ -74,13 +74,13 @@ class MachineStats extends Measurement
             [
                 $key,
                 $val,
-            ] = explode(':', $line, 2);
+            ]      = explode(':', $line, 2);
             $val   = trim($val);
             $chunk = explode(' ', $val, 2);
             $val   = intval($chunk[0]);
             if (count($chunk) > 1) {
                 $suffix = strtolower($chunk[1]);
-                $val    *= $multipliers[$suffix] ?? 1;
+                $val *= $multipliers[$suffix] ?? 1;
             }
 
             $out[$key] = $val;

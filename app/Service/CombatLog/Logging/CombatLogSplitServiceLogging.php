@@ -18,14 +18,14 @@ class CombatLogSplitServiceLogging extends RollbarStructuredLogging implements C
 
     public function splitCombatLogUsingSplitterMovingFile(
         string $originalCombatLogPath,
-        string $targetCombatLogPath
+        string $targetCombatLogPath,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
     public function splitCombatLogUsingSplitterMovingFileFailed(
         string $originalCombatLogPath,
-        string $targetCombatLogPath
+        string $targetCombatLogPath,
     ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
@@ -34,5 +34,4 @@ class CombatLogSplitServiceLogging extends RollbarStructuredLogging implements C
     {
         $this->end(__METHOD__);
     }
-
 }

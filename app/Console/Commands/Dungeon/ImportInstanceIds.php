@@ -22,10 +22,10 @@ class ImportInstanceIds extends Command
     protected $description = 'Imports instance IDs from the JournalInstance.csv import.';
 
     public function handle(
-        DungeonServiceInterface $dungeonService
+        DungeonServiceInterface $dungeonService,
     ): int {
         $dungeonService->importInstanceIdsFromCsv(
-            'JournalInstance.csv'
+            'JournalInstance.csv',
         );
 
         return 0;

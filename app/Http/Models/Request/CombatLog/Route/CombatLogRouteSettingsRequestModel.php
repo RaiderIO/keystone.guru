@@ -16,7 +16,7 @@ class CombatLogRouteSettingsRequestModel extends RequestModel implements Arrayab
     public function __construct(
         public ?bool $temporary = null,
         public ?bool $debugIcons = null,
-        public ?int  $mappingVersion = null
+        public ?int  $mappingVersion = null,
     ) {
     }
 

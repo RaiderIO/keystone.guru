@@ -17,15 +17,15 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int                      $id
- * @property string                   $public_key
- * @property string                   $name
- * @property string                   $description
- * @property string                   $invite_code
- * @property string                   $default_role
+ * @property int    $id
+ * @property string $public_key
+ * @property string $name
+ * @property string $description
+ * @property string $invite_code
+ * @property string $default_role
  *
- * @property Carbon                   $updated_at
- * @property Carbon                   $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
@@ -99,8 +99,8 @@ class Team extends Model
     /**
      * Adds a route to this Team.
      *
-     * @param DungeonRoute $dungeonRoute The route to add.
-     * @return bool True if successful, false if not (already assigned, for example).
+     * @param  DungeonRoute $dungeonRoute The route to add.
+     * @return bool         True if successful, false if not (already assigned, for example).
      */
     public function addRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -118,8 +118,8 @@ class Team extends Model
     /**
      * Removes a route from this Team.
      *
-     * @param DungeonRoute $dungeonRoute The route to remove.
-     * @return bool True if successful, false if not (already removed, for example).
+     * @param  DungeonRoute $dungeonRoute The route to remove.
+     * @return bool         True if successful, false if not (already removed, for example).
      */
     public function removeRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -140,7 +140,7 @@ class Team extends Model
     /**
      * Get the role of a user in this team, or false if the user does not exist in this team.
      *
-     * @param User $user
+     * @param  User        $user
      * @return string|null
      */
     public function getUserRole(User $user): ?string
@@ -154,7 +154,7 @@ class Team extends Model
     /**
      * Get the roles that a user may assign to other users in this team.
      *
-     * @param User $user The user attempting to change roles.
+     * @param User $user       The user attempting to change roles.
      * @param User $targetUser The user that is targeted for a role change.
      */
     public function getAssignableRoles(User $user, User $targetUser): array
@@ -175,7 +175,6 @@ class Team extends Model
             if ($targetUserRoleKey !== $admin) {
                 // If the current user is a moderator or admin, and (if user is admin or the current user outranks the other user)
                 if ($userRoleKey >= $moderator && ($userRoleKey === $admin || $userRoleKey > $targetUserRoleKey)) {
-
                     // Count down from all roles that exist, starting by the role the user currently has
                     for ($i = $userRoleKey; $i > 0; $i--) {
                         // array_search to find key by value
@@ -193,9 +192,9 @@ class Team extends Model
      *
      * @TODO Should this go to a Policy?
      *
-     * @param User   $user
-     * @param User   $targetUser
-     * @param string $role
+     * @param  User   $user
+     * @param  User   $targetUser
+     * @param  string $role
      * @return bool
      */
     public function canChangeRole(User $user, User $targetUser, string $role): bool
@@ -264,7 +263,7 @@ class Team extends Model
     /**
      * Checks if the user is a collaborator or higher.
      *
-     * @param User $user
+     * @param  User $user
      * @return bool True if the user is, false if not.
      */
     public function isUserCollaborator(User $user): bool
@@ -289,7 +288,7 @@ class Team extends Model
     /**
      * Checks if a user is a member of this team or not.
      *
-     * @param User|null $user
+     * @param  User|null $user
      * @return bool
      */
     public function isUserMember(?User $user): bool
@@ -327,7 +326,7 @@ class Team extends Model
     /**
      * Removes a member from this Team.
      *
-     * @param User $member The user to remove.
+     * @param  User $member The user to remove.
      * @return bool True if successful, false if not (already removed, for example).
      */
     public function removeMember(User $member): bool
@@ -387,8 +386,10 @@ class Team extends Model
             throw new Exception(
                 sprintf(
                     'User %d is not an admin itself - cannot fetch new admin for team %d!',
-                    $user->id, $this->id,
-                ));
+                    $user->id,
+                    $this->id,
+                ),
+            );
         }
 
         $roles = TeamUser::ALL_ROLES;

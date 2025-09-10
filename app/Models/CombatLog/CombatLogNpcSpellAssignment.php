@@ -21,8 +21,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property Npc    $npc
- * @property Spell  $spell
+ * @property Npc   $npc
+ * @property Spell $spell
  *
  * @mixin Eloquent
  */

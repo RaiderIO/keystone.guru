@@ -4,7 +4,6 @@ namespace App\Service\Wowhead\Logging;
 
 interface WowheadTranslationServiceLoggingInterface
 {
-
     public function getDungeonNamesStart(): void;
 
     public function getDungeonNamesLocaleStart(string $locale): void;

@@ -22,7 +22,7 @@ class CombatLogEventEnvelopeResource extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(
-                static fn(CombatLogEvent $combatLogEvent) => new CombatLogEventResource($combatLogEvent)
+                static fn(CombatLogEvent $combatLogEvent) => new CombatLogEventResource($combatLogEvent),
             )->toArray(),
         ];
     }

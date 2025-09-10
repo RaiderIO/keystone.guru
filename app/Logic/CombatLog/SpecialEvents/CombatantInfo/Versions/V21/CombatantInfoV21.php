@@ -11,38 +11,37 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 {
     private Player $playerGuid;
-    private int   $faction;
-    private int   $strength;
-    private int   $agility;
-    private int   $stamina;
-    private int   $intellect;
-    private int   $dodge;
-    private int   $parry;
-    private int   $block;
-    private int   $critMelee;
-    private int   $critRanged;
-    private int   $critSpell;
-    private int   $speed;
-    private int   $lifesteal;
-    private int   $hasteMelee;
-    private int   $hasteRanged;
-    private int   $hasteSpell;
-    private int   $avoidance;
-    private int   $mastery;
-    private int   $versatilityDamageDone;
-    private int   $versatilityHealingDone;
-    private int   $versatilityDamageTaken;
-    private int   $armor;
-    private int   $currentSpecId;
+    private int $faction;
+    private int $strength;
+    private int $agility;
+    private int $stamina;
+    private int $intellect;
+    private int $dodge;
+    private int $parry;
+    private int $block;
+    private int $critMelee;
+    private int $critRanged;
+    private int $critSpell;
+    private int $speed;
+    private int $lifesteal;
+    private int $hasteMelee;
+    private int $hasteRanged;
+    private int $hasteSpell;
+    private int $avoidance;
+    private int $mastery;
+    private int $versatilityDamageDone;
+    private int $versatilityHealingDone;
+    private int $versatilityDamageTaken;
+    private int $armor;
+    private int $currentSpecId;
     private array $talents;
     private array $pvpTalents;
     private array $equippedItems;
     private array $interestingAuras;
-    private int   $honorLevel;
-    private int   $season;
-    private int   $rating;
-    private int   $tier;
-
+    private int $honorLevel;
+    private int $season;
+    private int $rating;
+    private int $tier;
 
     public function getPlayerGuid(): ?Player
     {
@@ -218,7 +217,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
         if (!($playerGuid instanceof Player)) {
             throw new \Exception('PlayerGuid is not a Player');
         }
-        $this->playerGuid = $playerGuid;
+        $this->playerGuid             = $playerGuid;
         $this->faction                = (int)$parameters[1];
         $this->strength               = (int)$parameters[2];
         $this->agility                = (int)$parameters[3];

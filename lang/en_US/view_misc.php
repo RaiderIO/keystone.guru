@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '%s timewalking',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => 'About',
         'header' => 'About Keystone.guru',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => 'Affixes',
         'header'                            => 'Weekly affixes in %s',
         'start_date'                        => 'Start date (%s)',
@@ -28,26 +28,26 @@ return [
         'title'  => 'Changelog',
         'header' => 'Changelog',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => 'Credits',
         'header'           => 'Credits',
         'header_people'    => 'People',
         'header_libraries' => 'Libraries',
         'header_images'    => 'Images',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => 'Demo routes',
         'header' => 'Demo routes',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => 'Embed a route',
         'header' => 'Keystone.guru embed test on webpage',
     ],
-    'health'    => [
+    'health' => [
         'title'  => 'Health calculation',
         'header' => 'Health',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => 'Mapping',
         'header'                        => 'Mapping progress',
         'enemy_forces_mapping_progress' => 'Enemy forces mapping progress',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => 'Enemy forces',
         'npcs_assigned'                 => 'NPCs assigned',
     ],
-    'status'    => [
+    'status' => [
         'title'       => 'Status',
         'header'      => 'Status',
         'description' => 'We\'re up, yay!',

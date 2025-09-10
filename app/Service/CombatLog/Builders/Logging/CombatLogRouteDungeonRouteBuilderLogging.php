@@ -26,7 +26,7 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
 
     public function buildKillZonesCreateNewActiveChainPull(
         float $activePullAverageHPPercent,
-        int   $chainPullDetectionHPPercent
+        int   $chainPullDetectionHPPercent,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -65,6 +65,4 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
-
-
 }

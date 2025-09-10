@@ -14,7 +14,6 @@ use App\Logic\CombatLog\Guid\Guid;
  */
 class DamageSupportV22 extends DamageV20 implements DamageSupportInterface
 {
-
     private Guid $supportGuid;
 
     public function getSupportGuid(): ?Guid

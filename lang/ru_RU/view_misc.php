@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => 'Путешествие во времени: %s',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => 'О нас',
         'header' => 'О Keystone.guru',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => 'Аффиксы',
         'header'                            => 'Еженедельные аффиксы в %s',
         'start_date'                        => 'Дата начала (%s)',
@@ -28,26 +28,26 @@ return [
         'title'  => 'Журнал изменений',
         'header' => 'Журнал изменений',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => 'Благодарности',
         'header'           => '@Благодарности',
         'header_people'    => 'Люди',
         'header_libraries' => 'Библиотеки',
         'header_images'    => 'Изображения',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => 'Демо маршруты',
         'header' => 'Демо маршруты',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => 'Встроить маршрут',
         'header' => 'Keystone.guru встроит тестовое окно на ваш сайт',
     ],
-    'health'    => [
+    'health' => [
         'title'  => '',
         'header' => '',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => 'Карты',
         'header'                        => 'Отображение прогресса',
         'enemy_forces_mapping_progress' => 'Отображение прогресса вражеских силы ',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => 'Силы врага',
         'npcs_assigned'                 => 'Назначенные NPC',
     ],
-    'status'    => [
+    'status' => [
         'title'       => 'Состояние',
         'header'      => 'Состояние',
         'description' => 'Мы заработали, ура!',

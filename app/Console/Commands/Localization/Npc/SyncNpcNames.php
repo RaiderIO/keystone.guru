@@ -49,7 +49,7 @@ class SyncNpcNames extends Command
             // And then merge the new names with the existing ones, updating them
             $newNpcNames = array_replace(
                 $existingNpcNames,
-                array_intersect_key($npcNames->toArray(), $existingNpcNames)
+                array_intersect_key($npcNames->toArray(), $existingNpcNames),
             );
 
             ksort($newNpcNames);

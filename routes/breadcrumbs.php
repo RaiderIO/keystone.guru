@@ -327,7 +327,8 @@ Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Genera
         $difficulty === Dungeon::DIFFICULTY_10_MAN ?
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man') :
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
-        route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]));
+        route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]),
+    );
 });
 
 // Npcs
@@ -350,12 +351,12 @@ Breadcrumbs::for('admin.npchealth.edit', static function (Generator $trail, Npc 
     if ($npcHealth === null) {
         $trail->push(
             __('breadcrumbs.home.admin.npchealth.new_npc_health'),
-            route('admin.npc.npchealth.new', ['npc' => $npc])
+            route('admin.npc.npchealth.new', ['npc' => $npc]),
         );
     } else {
         $trail->push(
             __('breadcrumbs.home.admin.npchealth.edit_npc_health'),
-            route('admin.npc.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth])
+            route('admin.npc.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth]),
         );
     }
 });
@@ -363,15 +364,15 @@ Breadcrumbs::for('admin.npchealth.edit', static function (Generator $trail, Npc 
 // Npc enemy forces
 Breadcrumbs::for('admin.npcenemyforces.edit', static function (Generator $trail, Npc $npc, ?NpcEnemyForces $npcEnemyForces) {
     $trail->parent('admin.npc.edit', $npc);
-    if($npcEnemyForces === null) {
+    if ($npcEnemyForces === null) {
         $trail->push(
             __('breadcrumbs.home.admin.npcenemyforces.new_npc_enemy_forces'),
-            route('admin.npc.npcenemyforces.new', ['npc' => $npc])
+            route('admin.npc.npcenemyforces.new', ['npc' => $npc]),
         );
     } else {
         $trail->push(
             __('breadcrumbs.home.admin.npcenemyforces.edit_npc_enemy_forces'),
-            route('admin.npc.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces])
+            route('admin.npc.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces]),
         );
     }
 });

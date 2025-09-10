@@ -16,9 +16,9 @@ use Teapot\StatusCode\Http;
 trait ChecksForDuplicates
 {
     /**
-     * @param array $fields Additional fields to check on for duplicates.
-     * @param bool  $abort True to abort, false to return true|false upon completion.
-     * @return bool False if no duplicate was found, true if there was a duplicate.
+     * @param  array $fields Additional fields to check on for duplicates.
+     * @param  bool  $abort  True to abort, false to return true|false upon completion.
+     * @return bool  False if no duplicate was found, true if there was a duplicate.
      */
     public function checkForDuplicate(Model $candidate, array $fields = ['dungeon_route_id'], bool $abort = true)
     {

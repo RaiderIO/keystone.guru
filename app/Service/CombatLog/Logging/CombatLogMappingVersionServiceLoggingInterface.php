@@ -22,19 +22,19 @@ interface CombatLogMappingVersionServiceLoggingInterface
 
     public function createMappingVersionFromCombatLogCurrentFloorDefaultFloor(
         int $dungeonId,
-        int $defaultFloorId
+        int $defaultFloorId,
     ): void;
 
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void;
 
     public function createMappingVersionFromCombatLogAddedNewFloorConnection(
         int $previousFloorId,
-        int $currentFloorId
+        int $currentFloorId,
     ): void;
 
     public function createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound(
         int $uiMapId,
-        int $dungeonId
+        int $dungeonId,
     ): void;
 
     public function createMappingVersionFromCombatLogSkipEntryNoFloor(): void;

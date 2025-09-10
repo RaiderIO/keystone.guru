@@ -23,7 +23,7 @@ class HeatmapEmbedUrlFormRequest extends ExploreUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'style'                 => [
+            'style' => [
                 'nullable',
                 Rule::in(['compact']),
             ],
@@ -31,14 +31,14 @@ class HeatmapEmbedUrlFormRequest extends ExploreUrlFormRequest
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'mapBackgroundColor'    => [
+            'mapBackgroundColor' => [
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'showEnemyInfo'         => 'nullable|bool',
-            'showTitle'             => 'nullable|bool',
-            'showSidebar'           => 'nullable|bool',
-            'defaultZoom'           => 'nullable|numeric',
+            'showEnemyInfo' => 'nullable|bool',
+            'showTitle'     => 'nullable|bool',
+            'showSidebar'   => 'nullable|bool',
+            'defaultZoom'   => 'nullable|numeric',
         ]);
     }
 }

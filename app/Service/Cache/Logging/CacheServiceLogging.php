@@ -27,7 +27,6 @@ class CacheServiceLogging extends RollbarStructuredLogging implements CacheServi
         $this->error(__METHOD__, get_defined_vars());
     }
 
-
     public function deleteKeysByPatternFailedToDeleteAllKeys(int $amount, int $total): void
     {
         $this->error(__METHOD__, get_defined_vars());

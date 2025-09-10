@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $npc_id
  * @property int $spell_id
  *
- * @property Npc $npc
+ * @property Npc   $npc
  * @property Spell $spell
  *
  * @mixin Eloquent

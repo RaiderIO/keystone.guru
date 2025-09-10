@@ -29,7 +29,7 @@ class DevDiscoverService extends BaseDiscoverService
                 'mappingVersion',
                 'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season' => fn(BelongsTo $query) => $query->without([
+                'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
                 ]),
@@ -70,7 +70,7 @@ class DevDiscoverService extends BaseDiscoverService
                 'mappingVersion',
                 'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season' => fn(BelongsTo $query) => $query->without([
+                'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
                 ]),

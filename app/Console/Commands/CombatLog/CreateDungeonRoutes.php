@@ -27,13 +27,14 @@ class CreateDungeonRoutes extends BaseCombatLogCommand
     {
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath
+        return $this->parseCombatLogRecursively($filePath, fn(
+            string $filePath,
         ) => $this->createDungeonRouteFromCombatLog($combatLogDungeonRouteService, $filePath));
     }
 
     private function createDungeonRouteFromCombatLog(
         ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService,
-        string                                  $filePath
+        string                                  $filePath,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -48,10 +49,11 @@ class CreateDungeonRoutes extends BaseCombatLogCommand
             $this->info(
                 sprintf(
                     '- Created dungeon route %s (%s, %d/%d)',
-                    $dungeonRoute->public_key, __($dungeonRoute->dungeon->name),
+                    $dungeonRoute->public_key,
+                    __($dungeonRoute->dungeon->name),
                     $dungeonRoute->enemy_forces,
-                    $dungeonRoute->mappingVersion->enemy_forces_required
-                )
+                    $dungeonRoute->mappingVersion->enemy_forces_required,
+                ),
             );
         }
 

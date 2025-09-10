@@ -183,10 +183,10 @@ class NpcController extends Controller
         return view('admin.npc.edit', [
             'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(
                 string $name,
-                int    $id
+                int    $id,
             ) => [$id => __($name)]),
-            'spells'          => Spell::all(),
-            'bolsteringNpcs'  => Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            'spells'         => Spell::all(),
+            'bolsteringNpcs' => Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
                 ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
                 ->join('translations', static function (JoinClause $join) {
                     $join->on('translations.key', '=', 'npcs.name')
@@ -218,10 +218,10 @@ class NpcController extends Controller
             'npc'             => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(
                 string $name,
-                int    $id
+                int    $id,
             ) => [$id => __($name)]),
-            'spells'          => Spell::all(),
-            'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeons),
+            'spells'         => Spell::all(),
+            'bolsteringNpcs' => $npcService->getNpcsForDropdown($npc->dungeons),
         ]);
     }
 

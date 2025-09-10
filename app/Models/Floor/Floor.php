@@ -29,29 +29,29 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                    $id
- * @property int                                    $dungeon_id
- * @property int                                    $index
- * @property int|null                               $mdt_sub_level
- * @property int|null                               $ui_map_id
- * @property string|null                            $map_name The map name that Blizzard gives to this floor
- * @property string                                 $name
- * @property bool                                   $default
- * @property bool                                   $facade
- * @property int                                    $min_enemy_size
- * @property int                                    $max_enemy_size
- * @property int|null                               $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
- * @property int|null                               $enemy_engagement_max_range_patrols The max range after which we're considering patrols
- * @property float                                  $ingame_min_x
- * @property float                                  $ingame_min_y
- * @property float                                  $ingame_max_x
- * @property float                                  $ingame_max_y
- * @property int|null                               $percentage_display_zoom
- * @property int|null                               $zoom_max
- * @property bool                                   $active
+ * @property int         $id
+ * @property int         $dungeon_id
+ * @property int         $index
+ * @property int|null    $mdt_sub_level
+ * @property int|null    $ui_map_id
+ * @property string|null $map_name                           The map name that Blizzard gives to this floor
+ * @property string      $name
+ * @property bool        $default
+ * @property bool        $facade
+ * @property int         $min_enemy_size
+ * @property int         $max_enemy_size
+ * @property int|null    $enemy_engagement_max_range         When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int|null    $enemy_engagement_max_range_patrols The max range after which we're considering patrols
+ * @property float       $ingame_min_x
+ * @property float       $ingame_min_y
+ * @property float       $ingame_max_x
+ * @property float       $ingame_max_y
+ * @property int|null    $percentage_display_zoom
+ * @property int|null    $zoom_max
+ * @property bool        $active
  *
- * @property Dungeon                                $dungeon
- * @property FloorUnion|null                        $floorUnion
+ * @property Dungeon         $dungeon
+ * @property FloorUnion|null $floorUnion
  *
  * @property Collection<Enemy>                      $enemies
  * @property Collection<EnemyPack>                  $enemypacks
@@ -91,12 +91,12 @@ class Floor extends CacheModel implements MappingModelInterface
     // bosses) and put them on the main floor without introducing a 2nd floor.
     public const UI_MAP_ID_MAPPING = [
         // Court of Stars
-        762  => 761,
-        763  => 761,
+        762 => 761,
+        763 => 761,
         // Siege of Boralus
-        876  => 1162,
+        876 => 1162,
         // Kul Tiras -> Siege of Boralus
-        895  => 1162,
+        895 => 1162,
         // Tiragarde Sound -> Siege of Boralus
         //        1533 => 1162, // Bastion -> Siege of Boralus ????
         // Brackenhide Hollow
@@ -105,7 +105,7 @@ class Floor extends CacheModel implements MappingModelInterface
         1565 => 1669,
         // Ardenweald -> Mists of Tirna Scithe
         // Temple of the Jade Serpent
-        430  => 429,
+        430 => 429,
         // Algeth'ar Academy
         2099 => 2097,
         // Ruby Life Pools (Dragon Isles zone)
@@ -119,7 +119,7 @@ class Floor extends CacheModel implements MappingModelInterface
         2215 => 2359,
         // Harrowfall -> The Dawnbreaker
         // Grim Batol
-        241  => 293,
+        241 => 293,
         // Twilight Highlands -> Grim Batol
     ];
 
@@ -336,7 +336,7 @@ class Floor extends CacheModel implements MappingModelInterface
         Builder        $builder,
         MappingVersion $mappingVersion,
         int            $floorIndex,
-        ?string        $mapFacadeStyle = null
+        ?string        $mapFacadeStyle = null,
     ): Builder {
         $useFacade = (($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
@@ -349,7 +349,7 @@ class Floor extends CacheModel implements MappingModelInterface
         return $builder->where(
             static fn(Builder $builder) => $builder->when(
                 $useFacade,
-                static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1)
+                static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1),
             )->when(
                 !$useFacade,
                 static fn(Builder $builder) => $builder->where('facade', 0)
@@ -357,12 +357,14 @@ class Floor extends CacheModel implements MappingModelInterface
                         // Either try to resolve the actual floor, or revert to the default if not found
                         $builder->where('index', $floorIndex)
                             ->orWhere('default', 1);
-                    })
-            )
+                    }),
+            ),
         )->when($useFacade, static fn(Builder $builder) => $builder->orderByDesc('facade'))
-            ->when(!$useFacade, static fn(Builder $builder) => $builder
-                ->orderByRaw('(`index` = ?) DESC', [$floorIndex]) // preferred match first
-                ->orderByDesc('default') // fallback if index not found
+            ->when(
+                !$useFacade,
+                static fn(Builder $builder) => $builder
+                    ->orderByRaw('(`index` = ?) DESC', [$floorIndex]) // preferred match first
+                    ->orderByDesc('default'), // fallback if index not found
             )
             ->limit(1);
     }
@@ -381,7 +383,7 @@ class Floor extends CacheModel implements MappingModelInterface
     public function findClosestFloorSwitchMarker(
         CoordinatesServiceInterface $coordinatesService,
         LatLng                      $latLng,
-        int $targetFloorId
+        int                         $targetFloorId,
     ): ?DungeonFloorSwitchMarker {
         $result = null;
 
@@ -394,8 +396,10 @@ class Floor extends CacheModel implements MappingModelInterface
             $distanceToClosestFloorSwitchMarker = 99999999999;
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 $distanceToFloorSwitchMarker = $coordinatesService->distanceBetweenPoints(
-                    $latLng->getLng(), $dungeonFloorSwitchMarker->lng,
-                    $latLng->getLat(), $dungeonFloorSwitchMarker->lat
+                    $latLng->getLng(),
+                    $dungeonFloorSwitchMarker->lng,
+                    $latLng->getLat(),
+                    $dungeonFloorSwitchMarker->lat,
                 );
 
                 if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {

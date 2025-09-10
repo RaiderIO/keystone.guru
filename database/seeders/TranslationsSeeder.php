@@ -8,7 +8,6 @@ use Lang;
 
 class TranslationsSeeder extends Seeder implements TableSeederInterface
 {
-
     public function run(): void
     {
         $translationAttributes = [];
@@ -29,7 +28,7 @@ class TranslationsSeeder extends Seeder implements TableSeederInterface
 
                 $translationAttributes = array_merge(
                     $translationAttributes,
-                    $this->insertTranslationsRecursive($translations, $locale, $fileName . '.')
+                    $this->insertTranslationsRecursive($translations, $locale, $fileName . '.'),
                 );
             }
         }
@@ -47,7 +46,7 @@ class TranslationsSeeder extends Seeder implements TableSeederInterface
             if (is_array($translation)) {
                 $result = array_merge(
                     $result,
-                    $this->insertTranslationsRecursive($translation, $locale, $prefix . $key . '.')
+                    $this->insertTranslationsRecursive($translation, $locale, $prefix . $key . '.'),
                 );
             } else {
                 $result[] = [

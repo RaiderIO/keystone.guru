@@ -31,7 +31,7 @@ class PatreonController extends Controller
     public function link(
         Request                    $request,
         PatreonApiServiceInterface $patreonApiService,
-        PatreonServiceInterface    $patreonService
+        PatreonServiceInterface    $patreonService,
     ): RedirectResponse {
         $state = $request->get('state');
         $code  = $request->get('code');
@@ -44,8 +44,8 @@ class PatreonController extends Controller
             $linkResult = $patreonService->linkToUserAccount(Auth::user(), $code, $redirectUri);
 
             match ($linkResult) {
-                LinkToUserIdResult::LinkSuccessful => Session::flash('status', __('controller.patreon.flash.link_successful')),
-                LinkToUserIdResult::PatreonErrorOccurred => Session::flash('warning', __('controller.patreon.flash.patreon_error_occurred')),
+                LinkToUserIdResult::LinkSuccessful        => Session::flash('status', __('controller.patreon.flash.link_successful')),
+                LinkToUserIdResult::PatreonErrorOccurred  => Session::flash('warning', __('controller.patreon.flash.patreon_error_occurred')),
                 LinkToUserIdResult::InternalErrorOccurred => Session::flash('warning', __('controller.patreon.flash.internal_error_occurred')),
                 LinkToUserIdResult::PatreonSessionExpired => Session::flash('warning', __('controller.patreon.flash.patreon_session_expired')),
             };
@@ -62,6 +62,5 @@ class PatreonController extends Controller
      */
     public function oauth_redirect($request)
     {
-
     }
 }

@@ -38,8 +38,8 @@ class LocalizationSync extends Command
         $baseLang   = $this->argument('base');
         $targetLang = $this->argument('target');
 
-        $langDir   = lang_path();
-        $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
+        $langDir = lang_path();
+        $baseDir = $langDir . DIRECTORY_SEPARATOR . $baseLang;
 
         $targetLangs = [];
         if ($targetLang === null) {
@@ -54,7 +54,7 @@ class LocalizationSync extends Command
             $targetLangs = [$targetLang];
         }
 
-        foreach($targetLangs as $targetLang) {
+        foreach ($targetLangs as $targetLang) {
             $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
 
             $this->scanDir($baseLang, $targetLang, $baseDir, $targetDir);
@@ -153,7 +153,7 @@ class LocalizationSync extends Command
             ) {
                 $segment = $match[0];
             } // array opening
-            else if (preg_match('#^\[#', $content, $match)) {
+            elseif (preg_match('#^\[#', $content, $match)) {
                 if ($expects_key) {
                     return false;
                 }
@@ -162,7 +162,7 @@ class LocalizationSync extends Command
 
                 $expects_key = true;
             } // array closing
-            else if (preg_match('#^]#', $content, $match)) {
+            elseif (preg_match('#^]#', $content, $match)) {
                 // there are no more open array, including top level
                 if (count($tree) < 1) {
                     return false;
@@ -173,16 +173,16 @@ class LocalizationSync extends Command
                 array_pop($tree);
             }
             // unquoted numeric key
-            else if (preg_match('#^(-?\d+)\s*=>#', $content, $match)) {
+            elseif (preg_match('#^(-?\d+)\s*=>#', $content, $match)) {
                 if (!$expects_key) {
                     return false;
                 }
 
-                $segment = $match[0];
-                $tree[] = $match[1];
+                $segment     = $match[0];
+                $tree[]      = $match[1];
                 $expects_key = false;
             } // single or double quoted string
-            else if (preg_match('#^(")((?:[^"\\\\]|\\\\.)*)"#', $content, $match)
+            elseif (preg_match('#^(")((?:[^"\\\\]|\\\\.)*)"#', $content, $match)
                 || preg_match("#^(')((?:[^'\\\\]|\\\\.)*)'#", $content, $match)
             ) {
                 if ($expects_key) {
@@ -203,7 +203,7 @@ class LocalizationSync extends Command
                     if ($lemmas === false) {
                         $result[$key] = $match[2];
                     } // replace value with matching, non-empty lemma
-                    else if (array_key_exists($key, $lemmas) && strlen((string)$lemmas[$key]) > 0) {
+                    elseif (array_key_exists($key, $lemmas) && strlen((string)$lemmas[$key]) > 0) {
                         $segment = $match[1] . $lemmas[$key] . $match[1];
                     } // mark value as not specified
                     else {

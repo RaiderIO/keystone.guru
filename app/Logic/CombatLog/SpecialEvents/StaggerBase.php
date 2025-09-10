@@ -13,7 +13,6 @@ use App\Logic\CombatLog\Guid\Guid;
  */
 class StaggerBase extends SpecialEvent
 {
-
     private ?Guid $sourceGuid = null;
 
     private float $amount;

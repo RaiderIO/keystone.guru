@@ -35,5 +35,4 @@ class WowheadTranslationServiceLogging extends StructuredLogging implements Wowh
     {
         $this->end(__METHOD__, get_defined_vars());
     }
-
 }

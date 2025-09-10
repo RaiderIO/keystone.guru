@@ -32,7 +32,7 @@ class FloorController extends Controller
         $validated = $request->validated();
 
         if ($floor === null) {
-            $floor   = Floor::create(array_merge([
+            $floor = Floor::create(array_merge([
                 'dungeon_id' => $dungeon->id,
             ], $validated));
             $success = $floor instanceof Floor;
@@ -108,7 +108,7 @@ class FloorController extends Controller
         Request                    $request,
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
-        Floor $floor
+        Floor                      $floor,
     ) {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));

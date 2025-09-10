@@ -196,7 +196,6 @@ use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
-
 class RepositoryServiceProvider extends ServiceProvider
 {
     public function register(): void

@@ -104,7 +104,7 @@ class Save extends Command
         $this->saveDataToJsonFile(
             $mappingVersions->toArray(),
             $dungeonDataDir,
-            'mapping_versions.json'
+            'mapping_versions.json',
         );
     }
 
@@ -126,7 +126,7 @@ class Save extends Command
         $this->saveDataToJsonFile(
             $mappingVersions->toArray(),
             $dungeonDataDir,
-            'mapping_commit_logs.json'
+            'mapping_commit_logs.json',
         );
     }
 
@@ -188,12 +188,12 @@ class Save extends Command
                 ->makeHidden(['floor_count'])
                 ->toArray(),
             $dungeonDataDir,
-            'dungeons.json'
+            'dungeons.json',
         );
     }
 
     /**
-     * @param string $dungeonDataDir
+     * @param  string     $dungeonDataDir
      * @throws \Exception
      */
     private function saveNpcs(string $dungeonDataDir): void
@@ -233,7 +233,7 @@ class Save extends Command
     }
 
     /**
-     * @param string $dungeonDataDir
+     * @param  string     $dungeonDataDir
      * @throws \Exception
      */
     private function saveSpells(string $dungeonDataDir): void
@@ -253,7 +253,7 @@ class Save extends Command
     }
 
     /**
-     * @param string $combatlogDir
+     * @param  string     $combatlogDir
      * @return void
      * @throws \Exception
      */
@@ -268,7 +268,7 @@ class Save extends Command
     }
 
     /**
-     * @param string $dungeonDataDir
+     * @param  string     $dungeonDataDir
      * @throws \Exception
      */
     private function saveDungeonData(string $dungeonDataDir): void
@@ -286,7 +286,6 @@ class Save extends Command
             $progressBar->setFormat(self::PROGRESS_BAR_FORMAT);
             $progressBar->maxSecondsBetweenRedraws(0.1);
             $progressBar->setMessage(__($dungeon->name));
-
 
             $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
 
@@ -471,7 +470,7 @@ class Save extends Command
             return $model;
         };
 
-        $roundLatLngVerticesFn  = static function (mixed $model) {
+        $roundLatLngVerticesFn = static function (mixed $model) {
             /** @var HasVertices $model */
             $decodedLatLngs = $model->getDecodedLatLngs();
             foreach ($decodedLatLngs as $latLng) {

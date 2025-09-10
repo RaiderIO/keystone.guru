@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
-
     protected Builder $builder;
 
     /** @var DatatablesColumnHandler[] */
@@ -49,7 +48,7 @@ abstract class DatatablesHandler
     }
 
     /**
-     * @param DatatablesColumnHandler|array $dtColumnHandlers
+     * @param  DatatablesColumnHandler|array $dtColumnHandlers
      * @return $this
      */
     public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
@@ -111,17 +110,17 @@ abstract class DatatablesHandler
 
         $recordsTotal = $this->calculateRecordsTotal();
         $result       = [
-            'draw'            => (int)$this->request->get('draw'),
+            'draw' => (int)$this->request->get('draw'),
             // Initial amount of records
-            'recordsTotal'    => $recordsTotal,
+            'recordsTotal' => $recordsTotal,
             // The amount of records after filtering
-            'data'            => $data,
+            'data' => $data,
             // The amount of rows there would have been, if it were not for the limits
             'recordsFiltered' => $this->calculateRecordsFiltered() ?? $recordsTotal,
             // Only show this info in dev instance
-            'input'           => $isDev ? $this->request->toArray() : [],
+            'input' => $isDev ? $this->request->toArray() : [],
             // Debug sql queries for optimization
-            'queries'         => $isDev ? DB::getQueryLog() : [],
+            'queries' => $isDev ? DB::getQueryLog() : [],
         ];
 
         if ($isDev) {

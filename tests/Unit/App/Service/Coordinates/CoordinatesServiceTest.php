@@ -37,26 +37,34 @@ final class CoordinatesServiceTest extends PublicTestCase
     {
         return [
             [
-                new LatLng(CoordinatesService::MAP_MAX_LAT / 2, CoordinatesService::MAP_MAX_LNG / 2,
-                    new Floor(['ingame_min_x' => 0, 'ingame_max_x' => 100, 'ingame_min_y' => 0, 'ingame_max_y' => 100])
+                new LatLng(
+                    CoordinatesService::MAP_MAX_LAT / 2,
+                    CoordinatesService::MAP_MAX_LNG / 2,
+                    new Floor(['ingame_min_x' => 0, 'ingame_max_x' => 100, 'ingame_min_y' => 0, 'ingame_max_y' => 100]),
                 ),
                 new IngameXY(50, 50),
             ],
             [
-                new LatLng(CoordinatesService::MAP_MAX_LAT / 2, CoordinatesService::MAP_MAX_LNG / 2,
-                    new Floor(['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 100, 'ingame_max_y' => 1000])
+                new LatLng(
+                    CoordinatesService::MAP_MAX_LAT / 2,
+                    CoordinatesService::MAP_MAX_LNG / 2,
+                    new Floor(['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 100, 'ingame_max_y' => 1000]),
                 ),
                 new IngameXY(550, 550),
             ],
             [
-                new LatLng(CoordinatesService::MAP_MAX_LAT / 4, CoordinatesService::MAP_MAX_LNG / 4,
-                    new Floor(['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 100, 'ingame_max_y' => 1000])
+                new LatLng(
+                    CoordinatesService::MAP_MAX_LAT / 4,
+                    CoordinatesService::MAP_MAX_LNG / 4,
+                    new Floor(['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 100, 'ingame_max_y' => 1000]),
                 ),
                 new IngameXY(775, 775),
             ],
             [
-                new LatLng(CoordinatesService::MAP_MAX_LAT / 10, CoordinatesService::MAP_MAX_LNG / 4,
-                    new Floor(['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 50, 'ingame_max_y' => 100])
+                new LatLng(
+                    CoordinatesService::MAP_MAX_LAT / 10,
+                    CoordinatesService::MAP_MAX_LNG / 4,
+                    new Floor(['ingame_min_x' => 100, 'ingame_max_x' => 1000, 'ingame_min_y' => 50, 'ingame_max_y' => 100]),
                 ),
                 new IngameXY(775, 95),
             ],

@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 
 abstract class RequestModel
 {
-
     /**
      * You MUST be able to make an instance without any parameters!
      */
@@ -20,7 +19,7 @@ abstract class RequestModel
             if ($value instanceof RequestModel) {
                 // Recursively call toArray for nested RequestModel
                 $result[$key] = $value->toArray();
-            } else if ($value instanceof Collection) {
+            } elseif ($value instanceof Collection) {
                 // Map each item in the collection to its array representation
                 $result[$key] = $value->map(function ($item) {
                     return $item instanceof RequestModel ? $item->toArray() : $item;
@@ -63,7 +62,7 @@ abstract class RequestModel
 
                         $object->$key = $collection;
                     } // Handle nested RequestModel
-                    else if (!$type->isBuiltin() && is_subclass_of($typeName, RequestModel::class)) {
+                    elseif (!$type->isBuiltin() && is_subclass_of($typeName, RequestModel::class)) {
                         $object->$key = $typeName::createFromArray(is_array($value) ? $value : []);
                     } else {
                         // Direct assignment for other types

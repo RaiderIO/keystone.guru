@@ -76,7 +76,7 @@ class ViewService implements ViewServiceInterface
                 $dungeonsSelectQuery = Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
                     ->orderByRaw('expansions.released_at DESC, dungeons.name');
-                $raidsSelectQuery    = $dungeonsSelectQuery->clone()
+                $raidsSelectQuery = $dungeonsSelectQuery->clone()
                     ->where('dungeons.raid', true);
 
                 $allDungeonsByExpansionId = $dungeonsSelectQuery
@@ -100,8 +100,10 @@ class ViewService implements ViewServiceInterface
                 $latestRelease = Release::latest()->first();
                 /** @var Release $latestReleaseSpotlight */
                 $latestReleaseSpotlight = Release::where('spotlight', true)
-                    ->whereDate('created_at', '>',
-                        Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString()
+                    ->whereDate(
+                        'created_at',
+                        '>',
+                        Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString(),
                     )->first();
 
                 $allRegions    = GameServerRegion::all();
@@ -128,57 +130,58 @@ class ViewService implements ViewServiceInterface
                 $appRevision = trim(file_get_contents(base_path('version')));
 
                 return [
-                    'isLocal'                         => config('app.env') === 'local',
-                    'isMapping'                       => config('app.env') === 'mapping',
-                    'isProduction'                    => config('app.env') === 'production',
-                    'demoRoutes'                      => $demoRoutes,
-                    'demoRouteDungeons'               => $demoRouteDungeons,
-                    'demoRouteMapping'                => $demoRouteDungeons
-                        ->mapWithKeys(static fn(Dungeon $dungeon
+                    'isLocal'           => config('app.env') === 'local',
+                    'isMapping'         => config('app.env') === 'mapping',
+                    'isProduction'      => config('app.env') === 'production',
+                    'demoRoutes'        => $demoRoutes,
+                    'demoRouteDungeons' => $demoRouteDungeons,
+                    'demoRouteMapping'  => $demoRouteDungeons
+                        ->mapWithKeys(static fn(
+                            Dungeon $dungeon,
                         ) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
-                    'latestRelease'                   => $latestRelease,
-                    'latestReleaseSpotlight'          => $latestReleaseSpotlight,
-                    'appVersion'                      => $latestRelease->version,
-                    'appRevision'                     => $appRevision,
-                    'appVersionAndName'               => sprintf(
+                    'latestRelease'          => $latestRelease,
+                    'latestReleaseSpotlight' => $latestReleaseSpotlight,
+                    'appVersion'             => $latestRelease->version,
+                    'appRevision'            => $appRevision,
+                    'appVersionAndName'      => sprintf(
                         '%s® © 2018-%d %s - %s (%s), MDT %s',
                         config('app.name'),
                         date('Y'),
                         'RaiderIO, Inc.',
                         $latestRelease->version,
                         substr($appRevision, 0, 6),
-                        config('keystoneguru.mdt.version')
+                        config('keystoneguru.mdt.version'),
                     ),
 
                     // Home
-                    'userCount'                       => (int)(User::count() / 1000) * 1000,
+                    'userCount' => (int)(User::count() / 1000) * 1000,
 
                     // OAuth/register
-                    'allRegions'                      => $allRegions,
+                    'allRegions' => $allRegions,
 
                     // Composition
-                    'allFactions'                     => Faction::all(),
+                    'allFactions' => Faction::all(),
 
                     // Changelog
-                    'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
+                    'releaseChangelogCategories' => ReleaseChangelogCategory::all(),
 
                     // Map
-                    'characterClassSpecializations'   => CharacterClassSpecialization::with('class')->get(),
-                    'characterClasses'                => CharacterClass::with('specializations')->orderBy('name')->get(),
+                    'characterClassSpecializations' => CharacterClassSpecialization::with('class')->get(),
+                    'characterClasses'              => CharacterClass::with('specializations')->orderBy('name')->get(),
                     // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                    'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
-                    'allAffixes'                      => Affix::all(),
-                    'allRouteAttributes'              => RouteAttribute::all(),
-                    'allPublishedStates'              => PublishedState::all(),
-                    'selectableSpellsByCategory'      => $selectableSpellsByCategory,
+                    'characterRacesClasses'      => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
+                    'allAffixes'                 => Affix::all(),
+                    'allRouteAttributes'         => RouteAttribute::all(),
+                    'allPublishedStates'         => PublishedState::all(),
+                    'selectableSpellsByCategory' => $selectableSpellsByCategory,
 
                     // Misc
-                    'allGameVersions'                 => GameVersion::active()->get(),
-                    'activeExpansions'                => $activeExpansions,
+                    'allGameVersions'  => GameVersion::active()->get(),
+                    'activeExpansions' => $activeExpansions,
                     // Show most recent expansions first
-                    'allExpansions'                   => $allExpansions,
-                    'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
-                    'raidsByExpansionIdDesc'          => $allRaidsByExpansionId,
+                    'allExpansions'             => $allExpansions,
+                    'dungeonsByExpansionIdDesc' => $allDungeonsByExpansionId,
+                    'raidsByExpansionIdDesc'    => $allRaidsByExpansionId,
                     // Take active expansions into account
                     'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
                     'activeRaidsByExpansionIdDesc'    => $activeRaidsByExpansionId,
@@ -191,12 +194,12 @@ class ViewService implements ViewServiceInterface
                     ]),
 
                     // Create route
-                    'dungeonExpansions'               => $allDungeonsByExpansionId
+                    'dungeonExpansions' => $allDungeonsByExpansionId
                         ->pluck('expansion_id', 'id')->mapWithKeys(static fn(
                             int $expansionId,
-                            int $dungeonId
+                            int $dungeonId,
                         ) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
-                    'allSpeedrunDungeons'             => Dungeon::where('speedrun_enabled', true)->get(),
+                    'allSpeedrunDungeons' => Dungeon::where('speedrun_enabled', true)->get(),
                 ];
             }, config('keystoneguru.cache.global_view_variables.ttl'));
         });
@@ -258,19 +261,21 @@ class ViewService implements ViewServiceInterface
                         // Expansions/season data
                         'expansionsData' => $expansionsData,
 
-                        'currentSeason'                    => $currentSeason,
-                        'nextSeason'                       => $nextSeason,
-                        'currentExpansion'                 => $currentExpansion,
+                        'currentSeason'    => $currentSeason,
+                        'nextSeason'       => $nextSeason,
+                        'currentExpansion' => $currentExpansion,
 
                         // Search
                         'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,
                         'featuredAffixesByActiveExpansion' => $featuredAffixesByActiveExpansion,
 
                         // Create route
-                        'allAffixGroups'                   => $allAffixGroups,
-                        'allCurrentAffixes'                => $allCurrentAffixes,
+                        'allAffixGroups'    => $allAffixGroups,
+                        'allCurrentAffixes' => $allCurrentAffixes,
                     ];
-                }, config('keystoneguru.cache.global_view_variables.ttl'));
+                },
+                config('keystoneguru.cache.global_view_variables.ttl'),
+            );
         });
     }
 

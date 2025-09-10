@@ -20,15 +20,15 @@ return new class extends Migration {
             'chaos_brand'          => SimulationCraftRaidBuffs::ChaosBrand,
         ];
 
-        foreach($replace as $from => $to) {
+        foreach ($replace as $from => $to) {
             /** @var SimulationCraftRaidBuffs $to */
             /** @noinspection SqlResolve */
             DB::update(
                 sprintf(
                     'UPDATE `simulation_craft_raid_events_options` SET `raid_buffs_mask` = `raid_buffs_mask` | %d WHERE `%s` = 1',
                     $to->value,
-                    $from
-                )
+                    $from,
+                ),
             );
         }
     }

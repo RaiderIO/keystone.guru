@@ -26,10 +26,12 @@ class PhpArray2LuaTable
 
     public function toLuaTableString(string $tableName, array $contents): string
     {
-        return sprintf('
-%s %s %s', $tableName,
+        return sprintf(
+            '
+%s %s %s',
+            $tableName,
             self::TOKEN_ASSIGNMENT_OPERATOR,
-            implode('', $this->arrayToLuaTokens($contents))
+            implode('', $this->arrayToLuaTokens($contents)),
         );
     }
 
@@ -83,7 +85,7 @@ class PhpArray2LuaTable
                 $value,
                 self::TOKEN_STRING_QUOTE,
             ];
-        } else if (is_bool($value)) {
+        } elseif (is_bool($value)) {
             $tokens = [$value ? 'true' : 'false'];
         } else {
             // ints, floats, etc

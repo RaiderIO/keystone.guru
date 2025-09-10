@@ -95,8 +95,8 @@ class DatabaseSeeder extends Seeder
                         'Skipping %s because it is not meant for this environment (%s vs %s).',
                         $seederClass,
                         app()->environment(),
-                        implode(', ', $affectedEnvironments)
-                    )
+                        implode(', ', $affectedEnvironments),
+                    ),
                 );
 
                 continue;
@@ -164,7 +164,7 @@ class DatabaseSeeder extends Seeder
         DB::table('files')->where('model_class', $className)->delete();
 
         return DB::connection($instance->getConnectionName())->statement(
-            sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld)
+            sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld),
         );
     }
 
@@ -187,7 +187,7 @@ class DatabaseSeeder extends Seeder
                 $tableNameNewData,
                 $tableNameOriginal,
                 $tableNameNewData,
-            )
+            ),
         );
     }
 
@@ -199,7 +199,7 @@ class DatabaseSeeder extends Seeder
         $tableNameNew = sprintf('%s%s', $instance->getTable(), self::TEMP_TABLE_SUFFIX);
 
         return DB::connection($instance->getConnectionName())->statement(
-            sprintf('DROP TABLE %s;', $tableNameNew)
+            sprintf('DROP TABLE %s;', $tableNameNew),
         );
     }
 

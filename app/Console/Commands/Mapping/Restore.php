@@ -35,7 +35,6 @@ class Restore extends Command
         $changeLogs = MappingChangeLog::where('id', '>=', $id)->get();
 
         foreach ($changeLogs as $changeLog) {
-
             try {
                 if ($changeLog->model_class === Enemy::class) {
                     // This mob was marked as inspiring
@@ -69,12 +68,9 @@ class Restore extends Command
                         $this->error(sprintf('Unable to restore model %s -> ID = %s', $changeLog->model_class, $changeLog->model_id));
                     }
                 }
-
             } catch (Exception) {
-
                 $this->error(sprintf('Unable to restore model %s -> ID = %s', $changeLog->model_class, $changeLog->model_id));
             }
-
         }
 
         return 0;

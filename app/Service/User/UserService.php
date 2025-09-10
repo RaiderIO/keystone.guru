@@ -32,7 +32,7 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        $base64 = Str::replace('Basic ', '', $authentication);
+        $base64     = Str::replace('Basic ', '', $authentication);
         $usernamePw = base64_decode($base64);
         if ($usernamePw === false) {
             return false;
@@ -55,8 +55,8 @@ class UserService implements UserServiceInterface
      * Logs in as a user with the given email and password. This uses caching to prevent expensive password hashing
      * for every single correct attempt.
      *
-     * @param string $email
-     * @param string $password
+     * @param  string $email
+     * @param  string $password
      * @return bool
      */
     public function loginAsUser(string $email, string $password): bool
@@ -65,7 +65,7 @@ class UserService implements UserServiceInterface
         $cacheKey = sprintf(
             self::CACHE_KEY_USER_AUTH,
             $email,
-            hash_hmac('sha256', $password, config('app.key'))
+            hash_hmac('sha256', $password, config('app.key')),
         );
 
         // Fast-path: Check cache for authenticated user
@@ -90,6 +90,4 @@ class UserService implements UserServiceInterface
 
         return true;
     }
-
-
 }

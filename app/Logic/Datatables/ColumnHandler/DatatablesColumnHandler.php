@@ -19,18 +19,18 @@ abstract class DatatablesColumnHandler
     public function __construct(
         private readonly DatatablesHandler $dtHandler,
         private readonly string            $columnName,
-        ?string $columnData = null
+        ?string                            $columnData = null,
     ) {
         // If not set, just copy the column name
         $this->columnData = $columnData ?? $this->columnName;
     }
 
     /**
-     * @param Builder $subBuilder
-     * @param Builder $orderBuilder
-     * @param         $columnData
-     * @param         $order
-     * @param         $generalSearch
+     * @param  Builder $subBuilder
+     * @param  Builder $orderBuilder
+     * @param          $columnData
+     * @param          $order
+     * @param          $generalSearch
      * @return void
      */
     abstract protected function applyFilter(
@@ -38,7 +38,7 @@ abstract class DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void;
 
     public function getDtHandler(): DatatablesHandler
@@ -88,7 +88,7 @@ abstract class DatatablesColumnHandler
         $columnIndex = -1;
         foreach ($columns as $index => $value) {
             if ($value['name'] === $this->columnName) {
-                $column = $value;
+                $column      = $value;
                 $columnIndex = $index;
                 break;
             }

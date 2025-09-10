@@ -13,7 +13,7 @@ interface DataExtractorInterface
     public function extractData(
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
-        BaseEvent                    $parsedEvent
+        BaseEvent                    $parsedEvent,
     ): void;
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void;

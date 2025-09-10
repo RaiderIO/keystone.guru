@@ -29,7 +29,7 @@ class AjaxMetricController extends Controller
     public function storeDungeonRoute(
         APIDungeonRouteMetricFormRequest $request,
         DungeonRoute                     $dungeonRoute,
-        MetricServiceInterface           $metricService
+        MetricServiceInterface           $metricService,
     ): Response {
         $validated = $request->validated();
 

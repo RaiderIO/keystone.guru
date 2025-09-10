@@ -8,10 +8,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-
-        DB::update('
-            UPDATE `map_icons` SET mapping_version_id = null WHERE dungeon_route_id is not null
+        DB::update(
             '
+            UPDATE `map_icons` SET mapping_version_id = null WHERE dungeon_route_id is not null
+            ',
         );
     }
 

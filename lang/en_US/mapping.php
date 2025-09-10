@@ -3,16 +3,16 @@
 return [
 
     'map_icons' => [
-        'mop'    => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik Conscripts only spawn after defeating Commander Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'Door unlocks after defeating the Trial of the King',
             ],
         ],
         'legion' => [
-            'court_of_stars'   => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => 'Unlocks after killing Patrol Captain Gerdo',
                 'arcane_beacon'                      => 'Arcane Beacon',
                 'flask_of_the_solemn_night'          => 'Flask of the Solemn Night',
@@ -21,8 +21,8 @@ return [
                 'hidden_pack_in_cave' => 'Pack is in a cave below the water behind the waterfall.',
             ],
         ],
-        'sl'     => [
-            'de_other_side'              => [
+        'sl' => [
+            'de_other_side' => [
                 'start'                => 'Start',
                 'graveyard_ardenweald' => 'Activates after entering Ardenweald',
                 'graveyard_mechagon'   => 'Activates after entering Mechagon',
@@ -31,11 +31,11 @@ return [
                 'engineer_blob_button' => 'Engineers can disable the river of flowing blobs for a few minutes by pressing the red button',
                 'exit'                 => 'Exit',
             ],
-            'halls_of_atonement'         => [
+            'halls_of_atonement' => [
                 'start' => 'Start',
                 'exit'  => 'Exit',
             ],
-            'mists_of_tirna_scithe'      => [
+            'mists_of_tirna_scithe' => [
                 'start'                          => 'Start',
                 'brambles'                       => 'Night Elves, Tauren, Highmountain Tauren, Druids, and Khaz Algar Herbalists with at least 25 Skill: unlock shortcut',
                 'overgrown_roots'                => 'Night Elves, Tauren, Highmountain Tauren, Druids, and Khaz Algar Herbalists with at least 25 Skill: unlock area with buffs',
@@ -46,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => 'Unlocks after killing Ingra Maloch',
                 'exit'                           => 'Exit',
             ],
-            'plaguefall'                 => [
+            'plaguefall' => [
                 'start'              => 'Start',
                 'graveyard_dr_ickus' => 'Activates after killing Doctor Ickus',
                 'gushing_slime'      => 'Necrolord: AoE Damage Proc Aura - Using Fleshcraft on the Gushing Slime\'s corpse will grant the Corrosive Gunk aura for 2 minutes. This aura will apply the Corrosive Gunk buff to any nearby party member, giving a 10% chance to proc AoE damage around your character',
@@ -55,7 +55,7 @@ return [
                 'landing'            => 'Landing',
                 'exit'               => 'Exit',
             ],
-            'sanguine_depths'            => [
+            'sanguine_depths' => [
                 'start'                            => 'Start',
                 'anima_cage'                       => 'Venthyr: Activate Anima Cages to debuff enemies within 40 yds with Anima Drain. After 20 seconds, it will deactivate and give entire party 1 stack of Sinfall Boon for every enemy that died within range with Anima Drain active',
                 'tick_bug'                         => 'This tick seems to (sometimes) be bugged in the ground - it will however pull when the boss is pulled',
@@ -67,12 +67,12 @@ return [
                 'zrali_essence'                    => 'Z\'rali\'s Essence: 65% damage reduction bubble shield for all who stand inside it. Makes the shield around the player who is carrying/activating it',
                 'exit'                             => 'Exit',
             ],
-            'spires_of_ascension'        => [
+            'spires_of_ascension' => [
                 'start'            => 'Start',
                 'spear_of_destiny' => 'Kyrian: Spear of Destiny - throw the Spear of Destiny at a location, hitting all enemies within 8 yards, stunning them and making them take 20% additional damage for 10 seconds',
                 'exit'             => 'Exit',
             ],
-            'the_necrotic_wake'          => [
+            'the_necrotic_wake' => [
                 'start'                  => 'Start',
                 'bloody_javelin'         => 'Bloody Javelin: Throws a Kyrian javelin at the target, inflicting Physical damage to all enemies it passes through and additional Physical damage every 2 sec for 16 sec. Enemies hit take 20% increased damage for 16 sec.',
                 'forgotten_forgehammer'  => 'Forgotten Forgehammer: Hurls a mighty Kyrian hammer at the target, inflicting Physical damage and stunning the target for 8 sec.',
@@ -83,7 +83,7 @@ return [
                 'grisly_curio'           => 'Grisly Curio',
                 'exit'                   => 'Exit',
             ],
-            'theater_of_pain'            => [
+            'theater_of_pain' => [
                 'start'                => 'Start',
                 'necrolord_banner'     => 'Necrolord: Click Necrolord Banners to grant a 5-minute 10% speed and versatility buff to all party members',
                 'graveyard_gorechop'   => 'Activates after killing Gorechop',
@@ -98,8 +98,8 @@ return [
                 'bazaar_event_wave_three' => 'Bazaar Event: Wave 3',
             ],
         ],
-        'tww'    => [
-            'the_stonevault'             => [
+        'tww' => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => 'Warriors, Dwarves, Blacksmiths (25): Energy trapped inside the Imbued Iron Bar releases, increasing the Versatility of all players within 20 yards by 10% for 10 mins.',
             ],
             'priory_of_the_sacred_flame' => [

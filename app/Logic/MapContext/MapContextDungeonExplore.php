@@ -27,11 +27,10 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         protected SeasonServiceInterface $seasonService,
         Dungeon                          $dungeon,
         Floor                            $floor,
-        MappingVersion $mappingVersion
+        MappingVersion                   $mappingVersion,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
     }
-
 
     public function getFloors(): Collection
     {

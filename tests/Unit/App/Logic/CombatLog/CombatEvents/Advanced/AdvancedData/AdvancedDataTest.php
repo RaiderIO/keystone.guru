@@ -22,7 +22,7 @@ final class AdvancedDataTest extends PublicTestCase
     #[Group('AdvancedData')]
     #[DataProvider('parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider')]
     public function parseEvent_ShouldReturnAdvancedData_GivenAdvancedRangeDamageEvent(
-        string $advancedRangeDamageEvent
+        string $advancedRangeDamageEvent,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);
@@ -61,7 +61,7 @@ final class AdvancedDataTest extends PublicTestCase
         float   $expectedPositionY,
         int     $expectedUiMapId,
         float   $expectedFacing,
-        int     $expectedLevel
+        int     $expectedLevel,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($advancedRangeDamageEvent);

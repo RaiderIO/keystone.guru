@@ -26,7 +26,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
     public function __construct(
         private readonly CoordinatesServiceInterface      $coordinatesService,
-        private readonly SimulationCraftRaidEventsOptions $options
+        private readonly SimulationCraftRaidEventsOptions $options,
     ) {
     }
 
@@ -35,7 +35,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function calculateRaidEventPullEnemies(
         KillZone $killZone,
-        LatLng   $previousKillLocation
+        LatLng   $previousKillLocation,
     ): RaidEventPullInterface {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
         $this->bloodLust = $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) &&
@@ -93,16 +93,18 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $mountCasts,
         ] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
             $latLngA,
-            $latLngB
+            $latLngB,
         );
 
         $pointAIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngA);
         $pointBIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngB);
 
         $ingameDistanceToPointB = $this->coordinatesService->distanceBetweenPoints(
-                $pointAIngameCoordinates->getX(), $pointBIngameCoordinates->getX(),
-                $pointAIngameCoordinates->getY(), $pointBIngameCoordinates->getY()
-            ) - $this->options->ranged_pull_compensation_yards;
+            $pointAIngameCoordinates->getX(),
+            $pointBIngameCoordinates->getX(),
+            $pointAIngameCoordinates->getY(),
+            $pointBIngameCoordinates->getY(),
+        ) - $this->options->ranged_pull_compensation_yards;
 
         $delayMounted       = 0;
         $totalMountedFactor = 0;
@@ -110,22 +112,22 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         foreach ($mountFactorsAndSpeeds as $mountFactorAndSpeed) {
             /** @var $mountFactorAndSpeed array{factor: float, speed: int} */
             $totalMountedFactor += $mountFactorAndSpeed['factor'];
-            $delayMounted       += $this->calculateDelayForDistanceMounted(
+            $delayMounted += $this->calculateDelayForDistanceMounted(
                 $ingameDistanceToPointB,
                 $mountFactorAndSpeed['factor'],
-                $mountFactorAndSpeed['speed']
+                $mountFactorAndSpeed['speed'],
             );
         }
 
         $delayMountCasts = $this->calculateDelayForMountCasts($mountCasts);
         $delayOnFoot     = $this->calculateDelayForDistanceOnFoot(
-            $ingameDistanceToPointB * (1 - $totalMountedFactor)
+            $ingameDistanceToPointB * (1 - $totalMountedFactor),
         );
 
         // If we utilized the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
         if ($totalMountedFactor > 0) {
             $delayOnFootWithoutMounting = $this->calculateDelayForDistanceOnFoot(
-                $ingameDistanceToPointB
+                $ingameDistanceToPointB,
             );
             if ($delayOnFootWithoutMounting < $delayMounted + $delayOnFoot + $delayMountCasts) {
                 $delayMountCasts = 0;
@@ -149,7 +151,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $previousKillFloorClosestDungeonFloorSwitchMarker = $latLngA->getFloor()->findClosestFloorSwitchMarker(
             $this->coordinatesService,
             $latLngA,
-            $latLngB->getFloor()->id
+            $latLngB->getFloor()->id,
         );
 
         if ($previousKillFloorClosestDungeonFloorSwitchMarker !== null) {
@@ -170,7 +172,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self
     {
         $this->raidEventPullEnemies->push(
-            (new RaidEventPullEnemy($this->options, $enemy, $enemyIndexInPull))
+            (new RaidEventPullEnemy($this->options, $enemy, $enemyIndexInPull)),
         );
 
         return $this;
@@ -185,7 +187,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function calculateMountedFactorAndMountCastsBetweenPoints(
         LatLng $latLngA,
-        LatLng $latLngB
+        LatLng $latLngB,
     ): array {
         // 0% of the time on mounts, 0 mount casts
         if (!$this->options->use_mounts) {
@@ -210,7 +212,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $intersections = $mountableArea->getIntersections(
                 $this->coordinatesService,
                 $latLngA,
-                $latLngB
+                $latLngB,
             );
 
             if (empty($intersections)) {
@@ -221,7 +223,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $mountableAreaIntersections = collect();
             foreach ($intersections as $intersection) {
                 $mountableAreaIntersections->push(
-                    new MountableAreaIntersection($mountableArea, new LatLng($intersection->getLat(), $intersection->getLng(), $latLngA->getFloor()))
+                    new MountableAreaIntersection($mountableArea, new LatLng($intersection->getLat(), $intersection->getLng(), $latLngA->getFloor())),
                 );
             }
 
@@ -256,13 +258,18 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         /** @var Collection<MountableAreaIntersection> $allMountableAreaIntersections */
         $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
             fn(MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
-                $latLngA->getLng(), $foundIntersection->getLatLng()->getLng(),
-                $latLngA->getLat(), $foundIntersection->getLatLng()->getLat(),
-            ))->values();
+                $latLngA->getLng(),
+                $foundIntersection->getLatLng()->getLng(),
+                $latLngA->getLat(),
+                $foundIntersection->getLatLng()->getLat(),
+            ),
+        )->values();
 
         $totalDistance = $this->coordinatesService->distanceBetweenPoints(
-            $latLngA->getLng(), $latLngB->getLng(),
-            $latLngA->getLat(), $latLngB->getLat(),
+            $latLngA->getLng(),
+            $latLngB->getLng(),
+            $latLngA->getLat(),
+            $latLngB->getLat(),
         );
 
         // If we are currently mounted (as in, we finished killing the previous pack, now going to the current pack)
@@ -277,8 +284,10 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $factorsAndSpeeds = [];
         foreach ($allMountableAreaIntersections as $index => $mountableAreaIntersection) {
             $distanceBetweenLatLngs = $this->coordinatesService->distanceBetweenPoints(
-                $previousLatLng->getLng(), $mountableAreaIntersection->getLatLng()->getLng(),
-                $previousLatLng->getLat(), $mountableAreaIntersection->getLatLng()->getLat(),
+                $previousLatLng->getLng(),
+                $mountableAreaIntersection->getLatLng()->getLng(),
+                $previousLatLng->getLat(),
+                $mountableAreaIntersection->getLatLng()->getLat(),
             );
 
             // Add the distance to the appropriate totalDistance variable
@@ -290,7 +299,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             }
             // We were not mounted this intersection - mount up for the next one!
             // But only if we have another intersection after this
-            else if ($index !== $allMountableAreaIntersectionsCount - 1) {
+            elseif ($index !== $allMountableAreaIntersectionsCount - 1) {
                 $mountCasts++;
             }
 
@@ -309,8 +318,10 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $lastMountableAreaIntersection = $allMountableAreaIntersections->last();
 
             $distanceToPack = $this->coordinatesService->distanceBetweenPoints(
-                $latLngB->getLng(), $lastMountableAreaIntersection->getLatLng()->getLng(),
-                $latLngB->getLat(), $lastMountableAreaIntersection->getLatLng()->getLat(),
+                $latLngB->getLng(),
+                $lastMountableAreaIntersection->getLatLng()->getLng(),
+                $latLngB->getLat(),
+                $lastMountableAreaIntersection->getLatLng()->getLat(),
             );
 
             $factorsAndSpeeds[] = [
@@ -348,7 +359,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             (int)$this->bloodLust,
             $this->delay,
             $this->options->thundering_clear_seconds !== null ?
-                sprintf('mark_duration=%d,', $this->options->thundering_clear_seconds) : ''
+                sprintf('mark_duration=%d,', $this->options->thundering_clear_seconds) : '',
         );
 
         $enemyStrings = [];

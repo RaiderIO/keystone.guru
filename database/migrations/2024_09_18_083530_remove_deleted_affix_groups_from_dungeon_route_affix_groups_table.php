@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         $deletedCount = DungeonRouteAffixGroup
             ::join('dungeon_routes', 'dungeon_routes.id', 'dungeon_route_affix_groups.dungeon_route_id')
-            ->where('dungeon_routes.season_id', Season::SEASON_TWW_S1)
-            ->where('dungeon_route_affix_groups.affix_group_id', '>=', 143)
-            ->delete();
+                ->where('dungeon_routes.season_id', Season::SEASON_TWW_S1)
+                ->where('dungeon_route_affix_groups.affix_group_id', '>=', 143)
+                ->delete();
 
         info(sprintf('Deleted %s affix groups from dungeon routes that no longer exist.', $deletedCount));
     }

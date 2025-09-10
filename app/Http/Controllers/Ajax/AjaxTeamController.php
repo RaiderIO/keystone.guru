@@ -130,13 +130,13 @@ class AjaxTeamController extends Controller
             // Disband if no team members are left
             if ($team->members->isEmpty()) {
                 $team->delete();
-            } else if ($team->isUserAdmin($user)) {
+            } elseif ($team->isUserAdmin($user)) {
                 // Promote someone else to be the new admin
                 $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                 if ($newAdmin !== null) {
                     $team->changeRole(
                         $newAdmin,
-                        TeamUser::ROLE_ADMIN
+                        TeamUser::ROLE_ADMIN,
                     );
                 }
             }
@@ -189,7 +189,7 @@ class AjaxTeamController extends Controller
         }
 
         return PatreonAdFreeGiveaway::create([
-            'giver_user_id' => $currentUser->id,
+            'giver_user_id'    => $currentUser->id,
             'receiver_user_id' => $user->id,
         ]);
     }

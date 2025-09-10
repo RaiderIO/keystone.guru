@@ -69,7 +69,7 @@ class ProfileController extends Controller
     public function update(
         ProfileFormRequest                $request,
         User                              $user,
-        EchoServerHttpApiServiceInterface $echoServerHttpApiService
+        EchoServerHttpApiServiceInterface $echoServerHttpApiService,
     ): RedirectResponse {
         $validated = $request->validated();
 
@@ -95,7 +95,6 @@ class ProfileController extends Controller
 
         // Only when no duplicates are found!
         if ($user->save()) {
-
             // Handle changing of avatar if the user did so
             if (isset($validated['avatar'])) {
                 $user->saveUploadedFile($validated['avatar']);
@@ -119,7 +118,7 @@ class ProfileController extends Controller
                         $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
                         /** @var DungeonRoute $context */
                         $context = DungeonRoute::where('public_key', $routeKey)->first();
-                    } else if (str_contains($name, 'live-session')) {
+                    } elseif (str_contains($name, 'live-session')) {
                         $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
                         /** @var LiveSession $context */
                         $context = LiveSession::where('public_key', $routeKey)->first();
@@ -129,7 +128,6 @@ class ProfileController extends Controller
                     if ($context instanceof Model) {
                         // Check if the user is in this channel..
                         foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
-
                             if ($channelUser['id'] === $user->id) {
                                 // Broadcast that channel that our user's color has changed
                                 broadcast(new UserColorChangedEvent($context, $user));
@@ -184,10 +182,10 @@ class ProfileController extends Controller
         ])) {
             $error = ['passwords_incorrect' => __('controller.profile.flash.current_password_is_incorrect')];
         } // New passwords must match
-        else if ($newPassword !== $newPasswordConfirm) {
+        elseif ($newPassword !== $newPasswordConfirm) {
             $error = ['passwords_no_match' => __('controller.profile.flash.new_passwords_do_not_match')];
         } // But not the same password as they had
-        else if ($currentPw === $newPassword) {
+        elseif ($currentPw === $newPassword) {
             $error = ['passwords_match' => __('controller.profile.flash.new_password_equals_old_password')];
         } else {
             $user->update([
@@ -216,7 +214,6 @@ class ProfileController extends Controller
             ->where('user_id', Auth::id())
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {
-
             Tag::saveFromRequest($request, $tagCategoryId);
 
             Session::flash('status', __('controller.profile.flash.tag_created_successfully'));

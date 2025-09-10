@@ -11,5 +11,4 @@ namespace App\Logic\CombatLog\SpecialEvents;
  */
 class StaggerClear extends StaggerBase
 {
-
 }

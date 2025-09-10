@@ -6,9 +6,8 @@ use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLoggingInterfa
 
 class StructuredLoggingService implements StructuredLoggingServiceInterface
 {
-
     public function __construct(
-        private readonly StructuredLoggingServiceLoggingInterface $log
+        private readonly StructuredLoggingServiceLoggingInterface $log,
     ) {
     }
 
@@ -63,5 +62,4 @@ class StructuredLoggingService implements StructuredLoggingServiceInterface
     {
         $this->log->emergencyLog();
     }
-
 }

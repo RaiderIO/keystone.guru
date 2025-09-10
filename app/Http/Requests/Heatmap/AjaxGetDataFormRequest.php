@@ -27,36 +27,36 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'dungeonId'                    => [
+            'dungeonId' => [
                 'required',
                 Rule::exists(Dungeon::class, 'id'),
             ],
             // These are overrides since it's easier to split the csv as an array for this endpoint
-            'includeAffixIds'              => [
+            'includeAffixIds' => [
                 'nullable',
                 'array',
             ],
-            'includeAffixIds.*'            => [
+            'includeAffixIds.*' => [
                 'integer',
                 Rule::exists(Affix::class, 'affix_id'),
             ],
-            'includeClassIds'              => [
+            'includeClassIds' => [
                 'nullable',
                 'array',
             ],
-            'includeClassIds.*'            => [
+            'includeClassIds.*' => [
                 'integer',
                 Rule::exists(CharacterClass::class, 'class_id'),
             ],
-            'includeSpecIds'               => [
+            'includeSpecIds' => [
                 'nullable',
                 'array',
             ],
-            'includeSpecIds.*'             => [
+            'includeSpecIds.*' => [
                 'integer',
                 Rule::exists(CharacterClassSpecialization::class, 'specialization_id'),
             ],
-            'includePlayerDeathClassIds'   => [
+            'includePlayerDeathClassIds' => [
                 'nullable',
                 'array',
             ],
@@ -64,15 +64,14 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
                 'integer',
                 Rule::exists(CharacterClass::class, 'class_id'),
             ],
-            'includePlayerDeathSpecIds'    => [
+            'includePlayerDeathSpecIds' => [
                 'nullable',
                 'array',
             ],
-            'includePlayerDeathSpecIds.*'  => [
+            'includePlayerDeathSpecIds.*' => [
                 'integer',
                 Rule::exists(CharacterClassSpecialization::class, 'specialization_id'),
             ],
         ]);
     }
 }
-

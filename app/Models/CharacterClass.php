@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                      $id
- * @property int                                      $class_id Blizzard class ID
- * @property string                                   $key
- * @property string                                   $name
- * @property string                                   $color
+ * @property int    $id
+ * @property int    $class_id Blizzard class ID
+ * @property string $key
+ * @property string $name
+ * @property string $color
  *
  * @property Collection<CharacterClassSpecialization> $specializations
  * @property Collection<DungeonRoutePlayerClass>      $dungeonRoutePlayerClasses

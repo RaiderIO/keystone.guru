@@ -39,20 +39,20 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                                    => 'int',
-            'mapping_version_id'                    => [
+            'id'                 => 'int',
+            'mapping_version_id' => [
                 'required',
                 Rule::exists(MappingVersion::class, 'id'),
             ],
-            'floor_id'                              => [
+            'floor_id' => [
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'source_floor_id'                       => [
+            'source_floor_id' => [
                 'nullable',
                 Rule::in(array_merge([-1], Floor::all('id')->pluck('id')->toArray())),
             ],
-            'target_floor_id'                       => [
+            'target_floor_id' => [
                 'nullable',
                 Rule::exists(Floor::class, 'id'),
             ],
@@ -60,7 +60,7 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
                 'nullable',
                 Rule::exists(DungeonFloorSwitchMarker::class, 'id'),
             ],
-            'direction'                             => [
+            'direction' => [
                 'nullable',
                 Rule::in(array_merge(FloorCoupling::ALL, [
                     '-1',
@@ -68,8 +68,8 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
                     null,
                 ])),
             ],
-            'lat'                                   => 'numeric',
-            'lng'                                   => 'numeric',
+            'lat' => 'numeric',
+            'lng' => 'numeric',
         ];
     }
 }

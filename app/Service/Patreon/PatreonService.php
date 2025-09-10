@@ -15,7 +15,7 @@ class PatreonService implements PatreonServiceInterface
 
     public function __construct(
         private readonly PatreonApiServiceInterface     $patreonApiService,
-        private readonly PatreonServiceLoggingInterface $log
+        private readonly PatreonServiceLoggingInterface $log,
     ) {
     }
 
@@ -47,7 +47,8 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn(
+                $included,
             ) => $included['type'] === 'benefit')->toArray();
         } finally {
             $this->log->loadCampaignBenefitsEnd();
@@ -82,7 +83,8 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn(
+                $included,
             ) => $included['type'] === 'tier')->toArray();
         } finally {
             $this->log->loadCampaignTiersEnd();
@@ -114,8 +116,8 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-
-            return collect($membersResponse['data'])->filter(static fn($included
+            return collect($membersResponse['data'])->filter(static fn(
+                $included,
             ) => $included['type'] === 'member')->toArray();
         } finally {
             $this->log->loadCampaignMembersEnd();
@@ -205,8 +207,8 @@ class PatreonService implements PatreonServiceInterface
 
     public function linkToUserAccount(User $user, string $code, string $redirectUri): LinkToUserIdResult
     {
-
         $result = LinkToUserIdResult::LinkSuccessful;
+
         try {
             $this->log->linkToUserAccountStart($user->id, $code, $redirectUri);
 
@@ -247,11 +249,12 @@ class PatreonService implements PatreonServiceInterface
                             $identityResponse['errors'] = [$identityResponse['errors']];
                         }
                         $this->log->linkToUserAccountIdentityError($identityResponse['errors']);
-                    } else if (!isset($identityResponse['included'])) {
+                    } elseif (!isset($identityResponse['included'])) {
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
-                        $member = collect($identityResponse['included'])->filter(static fn(array $included
+                        $member = collect($identityResponse['included'])->filter(static fn(
+                            array $included,
                         ) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
@@ -261,7 +264,7 @@ class PatreonService implements PatreonServiceInterface
                         $this->applyPaidBenefitsForMember(
                             $campaignBenefits,
                             $campaignTiers,
-                            $member
+                            $member,
                         );
                     }
                 }
@@ -279,7 +282,6 @@ class PatreonService implements PatreonServiceInterface
 
         return $result;
     }
-
 
     private function loadAdminUser(): ?User
     {
@@ -318,15 +320,15 @@ class PatreonService implements PatreonServiceInterface
                     $this->log->loadAdminUserTokenRefreshError($tokens);
 
                     return null;
-                } else if (!isset($tokens['access_token'])) {
+                } elseif (!isset($tokens['access_token'])) {
                     $this->log->loadAdminUserAccessTokenNotSet($tokens);
 
                     return null;
-                } else if (!isset($tokens['refresh_token'])) {
+                } elseif (!isset($tokens['refresh_token'])) {
                     $this->log->loadAdminUserRefreshTokenNotSet($tokens);
 
                     return null;
-                } else if (!isset($tokens['expires_in'])) {
+                } elseif (!isset($tokens['expires_in'])) {
                     $this->log->loadAdminUserExpiresInNotSet($tokens);
 
                     return null;

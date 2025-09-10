@@ -24,7 +24,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
         private readonly CombatLogEventFilter        $combatLogEventFilter,
         private readonly array                       $results,
         private readonly int                         $runCount,
-        private readonly bool                        $floorsAsArray = false
+        private readonly bool                        $floorsAsArray = false,
     ) {
         $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
     }
@@ -107,7 +107,6 @@ class CombatLogEventGridAggregationResult implements Arrayable
                     }
 
                     $latLngsToCombine[] = $floorData['lat_lngs'];
-
                 }
 
                 $facadeData[$facadeFloor->id]['lat_lngs'] = array_merge(...$latLngsToCombine);
@@ -123,7 +122,6 @@ class CombatLogEventGridAggregationResult implements Arrayable
             'grid_size_x' => config('keystoneguru.heatmap.service.data.player.size_x'),
             'grid_size_y' => config('keystoneguru.heatmap.service.data.player.size_y'),
         ];
-
 
 //        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 //
@@ -170,7 +168,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
     /**
      * Only for unit tests really.
      *
-     * @param bool $useFacade
+     * @param  bool $useFacade
      * @return self
      */
     public function setUseFacade(bool $useFacade): self

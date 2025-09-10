@@ -24,7 +24,7 @@ class AuthorNameColumnHandler extends DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         // Only order
         if ($order !== null) {

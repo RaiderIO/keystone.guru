@@ -28,7 +28,7 @@ class ProfileFormRequest extends FormRequest
         $user = $this->route()->parameter('user');
 
         return [
-            'avatar'                => [
+            'avatar' => [
                 'nullable',
                 File::image()
                     ->min(1)
@@ -40,14 +40,14 @@ class ProfileFormRequest extends FormRequest
                         'png',
                     ]),
             ],
-            'name'                  => [
+            'name' => [
                 'nullable',
                 'alpha_dash',
                 'min:3',
                 'max:24',
                 Rule::unique('users', 'id')->ignore($user, 'id'),
             ],
-            'email'                 => [
+            'email' => [
                 'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($user, 'id'),
@@ -56,15 +56,15 @@ class ProfileFormRequest extends FormRequest
                 'nullable',
                 Rule::in(array_merge([0], array_values(GameServerRegion::ALL))),
             ],
-            'echo_anonymous'        => [
+            'echo_anonymous' => [
                 'nullable',
                 'boolean',
             ],
-            'echo_color'            => [
+            'echo_color' => [
                 'required',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'timezone'              => [
+            'timezone' => [
                 'required',
                 'string',
                 'timezone',

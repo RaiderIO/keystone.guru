@@ -41,7 +41,7 @@ class APIDungeonRouteController extends Controller
                 ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
                     $builder->where('dungeon_id', $validated['dungeon_id']);
                 })
-                ->paginate()
+                ->paginate(),
         );
     }
 
@@ -76,7 +76,7 @@ class APIDungeonRouteController extends Controller
     public function createThumbnails(
         DungeonRouteThumbnailRequest              $request,
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
-        DungeonRoute                              $dungeonRoute
+        DungeonRoute                              $dungeonRoute,
     ): DungeonRouteThumbnailJobEnvelopeResource {
         $model = $request->getModel();
 
@@ -88,8 +88,8 @@ class APIDungeonRouteController extends Controller
                 $model->imageWidth,
                 $model->imageHeight,
                 $model->zoomLevel,
-                $model->quality
-            )
+                $model->quality,
+            ),
         );
     }
 }

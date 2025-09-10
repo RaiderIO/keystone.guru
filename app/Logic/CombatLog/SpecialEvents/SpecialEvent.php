@@ -130,7 +130,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ) {
         parent::__construct($combatLogVersion, $timestamp, $eventName, $rawEvent);
 
@@ -155,13 +155,13 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         if (isset(self::SPECIAL_EVENT_CLASS_MAPPING[$eventName])) {
             $className = self::SPECIAL_EVENT_CLASS_MAPPING[$eventName];
 
             return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-        } else if (isset(self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName])) {
+        } elseif (isset(self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName])) {
             /** @var SpecialEventBuilderInterface $className */
             $className = self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName];
 

@@ -2,127 +2,127 @@
 
 return [
 
-    'bolstering'                  => [
+    'bolstering' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'bursting'                    => [
+    'bursting' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'explosive'                   => [
+    'explosive' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'fortified'                   => [
+    'fortified' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'grievous'                    => [
+    'grievous' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'infested'                    => [
+    'infested' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'necrotic'                    => [
+    'necrotic' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'quaking'                     => [
+    'quaking' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'raging'                      => [
+    'raging' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'relentless'                  => [
+    'relentless' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'sanguine'                    => [
+    'sanguine' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'skittish'                    => [
+    'skittish' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'teeming'                     => [
+    'teeming' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'tyrannical'                  => [
+    'tyrannical' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'volcanic'                    => [
+    'volcanic' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'reaping'                     => [
+    'reaping' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'beguiling'                   => [
+    'beguiling' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'awakened'                    => [
+    'awakened' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'inspiring'                   => [
+    'inspiring' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'spiteful'                    => [
+    'spiteful' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'storming'                    => [
+    'storming' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'prideful'                    => [
+    'prideful' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'tormented'                   => [
+    'tormented' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'unknown'                     => [
+    'unknown' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'infernal'                    => [
+    'infernal' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'encrypted'                   => [
+    'encrypted' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'shrouded'                    => [
+    'shrouded' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'thundering'                  => [
+    'thundering' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'afflicted'                   => [
+    'afflicted' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'entangling'                  => [
+    'entangling' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'incorporeal'                 => [
+    'incorporeal' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
@@ -130,7 +130,7 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'xalataths_bargain_devour'    => [
+    'xalataths_bargain_devour' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
@@ -138,26 +138,26 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'xalataths_bargain_oblivion'  => [
+    'xalataths_bargain_oblivion' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'xalataths_bargain_frenzied'  => [
+    'xalataths_bargain_frenzied' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'xalataths_guile'             => [
+    'xalataths_guile' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'challengers_peril'           => [
+    'challengers_peril' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'xalataths_bargain_pulsar'    => [
+    'xalataths_bargain_pulsar' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'seasonal_index_preset'       => 'Hodor',
+    'seasonal_index_preset' => 'Hodor',
 
 ];

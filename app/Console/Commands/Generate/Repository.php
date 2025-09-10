@@ -22,7 +22,6 @@ class Repository extends Command
      */
     protected $description = 'Generates a new repository (or all of them if they don\'t exist yet)';
 
-
     public function handle(): int
     {
         $model = $this->option('model');
@@ -41,7 +40,7 @@ class Repository extends Command
                     $interfaceNamespace,
                     $repositoryNamespace,
                     $modelNamespace,
-                    $modelClass
+                    $modelClass,
                 );
             }
 
@@ -55,7 +54,7 @@ class Repository extends Command
         string $interfaceNamespace,
         string $repositoryNamespace,
         string $modelNamespace,
-        string $modelClass
+        string $modelClass,
     ): bool {
         // Ignore non-models
         if (!is_subclass_of($modelClass, Model::class)) {
@@ -65,28 +64,29 @@ class Repository extends Command
         }
 
         return $this->saveRepository(
-                $interfaceNamespace,
-                $repositoryNamespace,
-                $modelNamespace,
-                $modelClass
-            ) && $this->saveInterface(
-                $interfaceNamespace,
-                $repositoryNamespace,
-                $modelNamespace,
-                $modelClass
-            );
+            $interfaceNamespace,
+            $repositoryNamespace,
+            $modelNamespace,
+            $modelClass,
+        ) && $this->saveInterface(
+            $interfaceNamespace,
+            $repositoryNamespace,
+            $modelNamespace,
+            $modelClass,
+        );
     }
 
     private function saveRepository(
         string $interfaceNamespace,
         string $repositoryNamespace,
         string $modelNamespace,
-        string $modelClass
+        string $modelClass,
     ): bool {
         // Check if the repository already exists for this model
-        $targetRepositoryFullClassName = sprintf('%s%sRepository',
+        $targetRepositoryFullClassName = sprintf(
+            '%s%sRepository',
             $repositoryNamespace,
-            str_replace($modelNamespace, '', $modelClass)
+            str_replace($modelNamespace, '', $modelClass),
         );
 
         if (class_exists($targetRepositoryFullClassName)) {
@@ -102,7 +102,7 @@ class Repository extends Command
             ], [
                 '',
                 '/',
-            ], $targetRepositoryFullClassName))
+            ], $targetRepositoryFullClassName)),
         );
 
         $this->ensureDirForFile($newRepositoryFilePath);
@@ -116,7 +116,7 @@ class Repository extends Command
                 ':modelFullClassName' => $modelClass,
                 ':modelClassName'     => last(explode('\\', $modelClass)),
                 ':interfaceNamespace' => sprintf('%s%s', $interfaceNamespace, $subNamespaces),
-            ])
+            ]),
         );
 
         if ($result) {
@@ -132,15 +132,17 @@ class Repository extends Command
         string $interfaceNamespace,
         string $repositoryNamespace,
         string $modelNamespace,
-        string $modelClass
+        string $modelClass,
     ): bool {
         // Check if the repository already exists for this model
-        $targetInterfaceClassName = sprintf('%s%sRepositoryInterface',
+        $targetInterfaceClassName = sprintf(
+            '%s%sRepositoryInterface',
             $repositoryNamespace,
-            str_replace($modelNamespace, '', $modelClass)
+            str_replace($modelNamespace, '', $modelClass),
         );
-        $newInterfaceFilePath     = app_path(
-            sprintf('%s.php',
+        $newInterfaceFilePath = app_path(
+            sprintf(
+                '%s.php',
                 str_replace([
                     $repositoryNamespace,
                     'App\\',
@@ -149,8 +151,8 @@ class Repository extends Command
                     $interfaceNamespace,
                     '',
                     '/',
-                ], $targetInterfaceClassName)
-            )
+                ], $targetInterfaceClassName),
+            ),
         );
 
         $this->ensureDirForFile($newInterfaceFilePath);
@@ -162,7 +164,7 @@ class Repository extends Command
                 ':namespace'          => sprintf('%s%s', $interfaceNamespace, $subNamespaces),
                 ':modelFullClassName' => $modelClass,
                 ':modelClassName'     => last(explode('\\', $modelClass)),
-            ])
+            ]),
         );
 
         if ($result) {

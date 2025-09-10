@@ -75,17 +75,17 @@ class WebhookController extends Controller
                 $totalCharacterCount += strlen($commitDescription);
 
                 $embeds[] = [
-                    'title'       => sprintf(
+                    'title' => sprintf(
                         '%s: %s',
                         $branch,
-                        substr(array_shift($lines), 0, 256)
+                        substr(array_shift($lines), 0, 256),
                     ),
                     'description' => $commitDescription,
                     'url'         => $commit['url'],
                 ];
 
                 if (!empty($commit['added']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
-                    $addedDescription    = substr(trim(view('app.commit.added', [
+                    $addedDescription = substr(trim(view('app.commit.added', [
                         'added' => $commit['added'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($addedDescription);
@@ -111,7 +111,7 @@ class WebhookController extends Controller
                 }
 
                 if (!empty($commit['removed']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
-                    $removedDescription  = substr(trim(view('app.commit.removed', [
+                    $removedDescription = substr(trim(view('app.commit.removed', [
                         'removed' => $commit['removed'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($removedDescription);

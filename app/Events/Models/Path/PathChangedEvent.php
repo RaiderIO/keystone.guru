@@ -18,13 +18,13 @@ class PathChangedEvent extends ModelChangedEvent
      * @param CoordinatesServiceInterface $coordinatesService
      * @param Model                       $context
      * @param User                        $user
-     * @param Path|Model $model
+     * @param Path|Model                  $model
      */
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected Path|Model $model
+        protected Path|Model                         $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -37,13 +37,14 @@ class PathChangedEvent extends ModelChangedEvent
     public function broadcastWith(): array
     {
         return array_merge(
-            parent::broadcastWith(), [
+            parent::broadcastWith(),
+            [
                 'model_data' => $this->model->polyline->getCoordinatesData(
                     $this->coordinatesService,
                     $this->model->dungeonRoute->mappingVersion,
-                    $this->model->floor
+                    $this->model->floor,
                 ),
-            ]
+            ],
         );
     }
 }

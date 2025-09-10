@@ -3,16 +3,16 @@
 return [
 
     'map_icons' => [
-        'mop'    => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => '',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => '',
             ],
         ],
         'legion' => [
-            'court_of_stars'   => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => '',
                 'arcane_beacon'                      => '',
                 'flask_of_the_solemn_night'          => '',
@@ -21,8 +21,8 @@ return [
                 'hidden_pack_in_cave' => '',
             ],
         ],
-        'sl'     => [
-            'de_other_side'              => [
+        'sl' => [
+            'de_other_side' => [
                 'start'                => '',
                 'graveyard_ardenweald' => '',
                 'graveyard_mechagon'   => '',
@@ -31,11 +31,11 @@ return [
                 'engineer_blob_button' => '',
                 'exit'                 => '',
             ],
-            'halls_of_atonement'         => [
+            'halls_of_atonement' => [
                 'start' => '',
                 'exit'  => '',
             ],
-            'mists_of_tirna_scithe'      => [
+            'mists_of_tirna_scithe' => [
                 'start'                          => '',
                 'brambles'                       => '',
                 'overgrown_roots'                => '',
@@ -46,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => '',
                 'exit'                           => '',
             ],
-            'plaguefall'                 => [
+            'plaguefall' => [
                 'start'              => '',
                 'graveyard_dr_ickus' => '',
                 'gushing_slime'      => '',
@@ -55,7 +55,7 @@ return [
                 'landing'            => '',
                 'exit'               => '',
             ],
-            'sanguine_depths'            => [
+            'sanguine_depths' => [
                 'start'                            => '',
                 'anima_cage'                       => '',
                 'tick_bug'                         => '',
@@ -67,12 +67,12 @@ return [
                 'zrali_essence'                    => '',
                 'exit'                             => '',
             ],
-            'spires_of_ascension'        => [
+            'spires_of_ascension' => [
                 'start'            => '',
                 'spear_of_destiny' => '',
                 'exit'             => '',
             ],
-            'the_necrotic_wake'          => [
+            'the_necrotic_wake' => [
                 'start'                  => '',
                 'bloody_javelin'         => '',
                 'forgotten_forgehammer'  => '',
@@ -83,7 +83,7 @@ return [
                 'grisly_curio'           => '',
                 'exit'                   => '',
             ],
-            'theater_of_pain'            => [
+            'theater_of_pain' => [
                 'start'                => '',
                 'necrolord_banner'     => '',
                 'graveyard_gorechop'   => '',
@@ -98,8 +98,8 @@ return [
                 'bazaar_event_wave_three' => '',
             ],
         ],
-        'tww'    => [
-            'the_stonevault'             => [
+        'tww' => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => '',
             ],
             'priory_of_the_sacred_flame' => [

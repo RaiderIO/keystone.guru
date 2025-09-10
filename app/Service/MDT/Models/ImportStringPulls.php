@@ -21,7 +21,7 @@ class ImportStringPulls
         private readonly MappingVersion $mappingVersion,
         private readonly bool           $isRouteTeeming,
         private readonly ?int           $seasonalIndex,
-        private readonly array $mdtPulls
+        private readonly array          $mdtPulls,
     ) {
         $this->killZoneAttributes = collect();
     }

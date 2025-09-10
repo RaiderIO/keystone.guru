@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'env'  => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -211,12 +211,12 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Agent'            => Jenssegers\Agent\Facades\Agent::class,
-        'Form'             => Collective\Html\FormFacade::class,
-        'GitHub'           => GrahamCampbell\GitHub\GitHubServiceProvider::class,
-        'Html'             => Collective\Html\HtmlFacade::class,
-        'Laratrust'        => Laratrust\LaratrustFacade::class,
-        'Redis'            => Illuminate\Support\Facades\Redis::class,
+        'Agent'     => Jenssegers\Agent\Facades\Agent::class,
+        'Form'      => Collective\Html\FormFacade::class,
+        'GitHub'    => GrahamCampbell\GitHub\GitHubServiceProvider::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Laratrust' => Laratrust\LaratrustFacade::class,
+        'Redis'     => Illuminate\Support\Facades\Redis::class,
         // Tinker models
         'DungeonRoute'     => DungeonRoute::class,
         'ChallengeModeRun' => ChallengeModeRun::class,

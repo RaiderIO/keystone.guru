@@ -35,7 +35,7 @@ class APIDungeonRouteThumbnailJobController extends Controller
      * @throws AuthorizationException
      */
     public function get(
-        DungeonRouteThumbnailJob $dungeonRouteThumbnailJob
+        DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
     ): DungeonRouteThumbnailJobResource {
         $this->authorize('view', $dungeonRouteThumbnailJob->dungeonRoute);
 

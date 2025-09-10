@@ -28,7 +28,7 @@ interface MDTImportStringServiceInterface
         bool       $sandbox = false,
         bool       $save = false,
         bool       $assignNotesToPulls = true,
-        bool       $importAsThisWeek = false
+        bool       $importAsThisWeek = false,
     ): DungeonRoute;
 
     public function setEncodedString(string $encodedString): self;

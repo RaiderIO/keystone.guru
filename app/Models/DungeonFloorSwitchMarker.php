@@ -145,10 +145,10 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
         $direction = $this->direction;
 
         return match ($direction) {
-            FloorCoupling::DIRECTION_UP => 1,
+            FloorCoupling::DIRECTION_UP   => 1,
             FloorCoupling::DIRECTION_DOWN => -1,
             FloorCoupling::DIRECTION_LEFT => -2,
-            default => 2,
+            default                       => 2,
         };
     }
 }

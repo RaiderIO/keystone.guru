@@ -16,8 +16,8 @@ use Illuminate\Support\Carbon;
  * @property string      $before_model
  * @property string|null $after_model
  *
- * @property Carbon      $updated_at
- * @property Carbon      $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @mixin Eloquent
  */

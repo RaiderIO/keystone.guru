@@ -11,6 +11,6 @@ interface CookieServiceInterface
         string $path = '/',
         string $domain = null,
         bool   $secure = true,
-        bool   $httponly = false
+        bool   $httponly = false,
     ): void;
 }

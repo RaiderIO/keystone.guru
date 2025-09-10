@@ -55,5 +55,4 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
     {
         $this->end(__METHOD__);
     }
-
 }

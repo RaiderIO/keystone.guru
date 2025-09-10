@@ -17,7 +17,7 @@ class Stopwatch
     /**
      * Start a timer.
      *
-     * @param  $timerName  string The name of the timer
+     * @param $timerName string The name of the timer
      */
     public static function start(string $timerName = 'default'): void
     {
@@ -48,7 +48,7 @@ class Stopwatch
     /**
      * Pause a timer.
      *
-     * @param  $timerName  string The name of the timer.
+     * @param $timerName string The name of the timer.
      */
     public static function pause(string $timerName = 'default'): void
     {
@@ -68,13 +68,13 @@ class Stopwatch
     /**
      * Get the elapsed time in seconds
      *
-     * @param  $timerName  string The name of the timer to start
+     * @param        $timerName string The name of the timer to start
      * @return float The elapsed time since start() was called
      */
     public static function elapsed(string $timerName = 'default'): float
     {
         // We've now ended, grab time asap
-        $now = self::_getTime();
+        $now        = self::_getTime();
         $timerStart = $now;
         // If timer is not set just return 0
         if (isset(self::$timers[$timerName])) {

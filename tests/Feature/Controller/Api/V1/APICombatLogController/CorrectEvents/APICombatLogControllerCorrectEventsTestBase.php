@@ -28,7 +28,7 @@ abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogC
 
         $this->assertEqualsCanonicalizing(
             $this->getJsonData(sprintf('%s_corrected', $fixtureName), '../../'),
-            $responseArr
+            $responseArr,
         );
     }
 }

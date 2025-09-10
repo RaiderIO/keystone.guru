@@ -2,8 +2,8 @@
 
 return [
 
-    'discover'       => [
-        'dungeon'  => [
+    'discover' => [
+        'dungeon' => [
             'overview' => [
                 'popular'                    => 'Популярные маршруты',
                 'popular_by_current_affixes' => 'Популярные маршруты с текущими аффиксами',
@@ -18,10 +18,10 @@ return [
             'popular_by_next_affixes'    => 'Популярные маршруты с аффиксами следующей недели',
             'newly_published_routes'     => 'Новые маршруты',
         ],
-        'panel'    => [
+        'panel' => [
             'show_more' => 'Показать еще',
         ],
-        'search'   => [
+        'search' => [
             'page_title'              => 'Поиск маршрута',
             'header'                  => 'Поиск маршрута',
             'title'                   => 'Название',
@@ -39,18 +39,18 @@ return [
             'user_placeholder'        => 'Фильтр по пользователю',
         ],
     ],
-    'livesession'    => [
+    'livesession' => [
         'view' => [
             'any' => 'Все',
         ],
     ],
-    'edit'           => [
+    'edit' => [
         'title'                                   => 'Редактировать %s',
         'linkpreview_title'                       => '',
         'linkpreview_default_description'         => '',
         'linkpreview_default_description_sandbox' => '',
     ],
-    'embed'          => [
+    'embed' => [
         'title'            => 'Встроить :routeTitle',
         'any'              => 'Все',
         'select_floor'     => 'Выбрать уровень',
@@ -60,16 +60,16 @@ return [
         'present_route'    => '',
         'copy_mdt_string'  => 'Скопировать строку MDT',
     ],
-    'limitreached'   => [
+    'limitreached' => [
         'title'                     => 'Достигнут предел',
         'header'                    => 'Достигнут предел',
         'limit_reached_description' => 'Вы создали максимального количества маршрутов, которое можете создать (%s). Пожалуйста, подумайте о том, чтобы стать подписчиком Patron, чтобы увеличить максимальное количество доступных маршрутов на аккаунте, или удалите некоторые из ваших существующих маршрутов. Спасибо, что пользуетесь сайтом!',
         'become_a_patreon'          => 'Стать подписчиком Patron %s!',
     ],
-    'new'            => [
+    'new' => [
         'title' => 'Новый маршрут',
     ],
-    'newtemporary'   => [
+    'newtemporary' => [
         'title'  => 'Создать временный маршрут',
         'header' => 'Новый временный маршрут',
     ],
@@ -78,11 +78,11 @@ return [
         'header'              => 'Маршрут уже присвоен',
         'claimed_description' => 'Этот маршрут уже кем-то присвоен (или вы использовали кнопку назад в браузере, чтобы перейти сюда).',
     ],
-    'unavailable'    => [
+    'unavailable' => [
         'title'                   => 'Неопубликованный маршрут',
         'unavailable_description' => 'У вас нет прав для просмотра этого маршрута. Попросите автора маршрута изменить настройки общего доступа к маршруту, чтобы вы могли его просмотреть.',
     ],
-    'view'           => [
+    'view' => [
         'any'                                     => 'Все',
         'linkpreview_title'                       => '',
         'linkpreview_default_description'         => '',

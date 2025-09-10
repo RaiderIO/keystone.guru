@@ -6,5 +6,4 @@ use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 
 interface FloorRepositorySwooleInterface extends FloorRepositoryInterface
 {
-
 }

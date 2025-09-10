@@ -20,19 +20,19 @@ use Exception;
 class Conversion
 {
     public const EXPANSION_NAME_MAPPING = [
-        Expansion::EXPANSION_CLASSIC      => 'ClassicEra',
-        Expansion::EXPANSION_TBC          => null,
-        Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
-        Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',
-        Expansion::EXPANSION_MOP          => 'MistsOfPandaria',
-        Expansion::EXPANSION_WOD          => 'Shadowlands',
+        Expansion::EXPANSION_CLASSIC   => 'ClassicEra',
+        Expansion::EXPANSION_TBC       => null,
+        Expansion::EXPANSION_WOTLK     => 'WrathOfTheLichKing',
+        Expansion::EXPANSION_CATACLYSM => 'Cataclysm',
+        Expansion::EXPANSION_MOP       => 'MistsOfPandaria',
+        Expansion::EXPANSION_WOD       => 'Shadowlands',
         // WoD dungeons are under Shadowlands for latest MDT
         Expansion::EXPANSION_LEGION       => 'Legion',
         Expansion::EXPANSION_BFA          => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
         // DF S1 has MoP/WoD dungeons under here
-        Expansion::EXPANSION_TWW          => 'TheWarWithin',
+        Expansion::EXPANSION_TWW => 'TheWarWithin',
     ];
 
     // @formatter:off
@@ -105,7 +105,7 @@ class Conversion
         ],
 
         Expansion::EXPANSION_LEGION => [
-            Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
+            Dungeon::DUNGEON_ARCWAY => 'TheArcway',
             //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
             Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
             Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
@@ -126,42 +126,42 @@ class Conversion
             Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
             Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
             Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
-//            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
-            Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
-            Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
+            //            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
+            Dungeon::DUNGEON_THE_UNDERROT => 'TheUnderrot',
+            Dungeon::DUNGEON_TOL_DAGOR    => 'TolDagor',
             //            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
-            Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
-//            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
+            Dungeon::DUNGEON_MECHAGON_JUNKYARD => 'MechagonIsland',
+            //            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
             // WoD
-            Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
-            Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
+            Dungeon::DUNGEON_GRIMRAIL_DEPOT => 'GrimrailDepot',
+            Dungeon::DUNGEON_IRON_DOCKS     => 'IronDocks',
             // SL
-            Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
-//            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
-            Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
-            Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
-            Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
-//            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
-//            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
-//            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
+            Dungeon::DUNGEON_DE_OTHER_SIDE => 'DeOtherSide',
+            //            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
+            Dungeon::DUNGEON_PLAGUEFALL          => 'Plaguefall',
+            Dungeon::DUNGEON_SANGUINE_DEPTHS     => 'SanguineDepths',
+            Dungeon::DUNGEON_SPIRES_OF_ASCENSION => 'SpiresOfAscension',
+            //            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
+            //            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
+            //            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
         ],
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
             // Cata
-            Dungeon::DUNGEON_THE_VORTEX_PINNACLE                  => 'TheVortexPinnacle',
+            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
             // MoP
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT           => 'TempleOfTheJadeSerpent',
-            Dungeon::DUNGEON_THRONE_OF_THE_TIDES                  => 'ThroneOfTides',
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_THRONE_OF_THE_TIDES        => 'ThroneOfTides',
             // WoD
-            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS            => 'ShadowmoonBurialGrounds',
-            Dungeon::DUNGEON_THE_EVERBLOOM                        => 'Everbloom',
+            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS => 'ShadowmoonBurialGrounds',
+            Dungeon::DUNGEON_THE_EVERBLOOM             => 'Everbloom',
             // Legion
-            Dungeon::DUNGEON_BLACK_ROOK_HOLD                      => 'BlackrookHold',
+            Dungeon::DUNGEON_BLACK_ROOK_HOLD => 'BlackrookHold',
             // BFA
-            Dungeon::DUNGEON_WAYCREST_MANOR                       => 'WaycrestManor',
+            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
             // DF
             Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
             Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
@@ -177,11 +177,11 @@ class Conversion
 
         Expansion::EXPANSION_TWW => [
             // Cata
-            Dungeon::DUNGEON_GRIM_BATOL                 => 'GrimBatol',
+            Dungeon::DUNGEON_GRIM_BATOL => 'GrimBatol',
 
             // BFA
-            Dungeon::DUNGEON_SIEGE_OF_BORALUS           => 'SiegeofBoralus',
-            Dungeon::DUNGEON_THE_MOTHERLODE             => 'TheMotherlode',
+            Dungeon::DUNGEON_SIEGE_OF_BORALUS => 'SiegeofBoralus',
+            Dungeon::DUNGEON_THE_MOTHERLODE   => 'TheMotherlode',
 
             // Shadowlands
             Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
@@ -271,8 +271,8 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
-     * @return bool True if MDT an expansion name for this dungeon, false if it has not.
+     * @param  string $dungeonKey
+     * @return bool   True if MDT an expansion name for this dungeon, false if it has not.
      */
     public static function hasMDTExpansionName(string $dungeonKey): bool
     {
@@ -285,8 +285,8 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
-     * @return bool True if MDT has a dungeon name, false if it has not.
+     * @param  string $dungeonKey
+     * @return bool   True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
     {
@@ -294,7 +294,7 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
+     * @param  string      $dungeonKey
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -370,7 +370,7 @@ class Conversion
     public static function convertWeekToAffixGroup(
         SeasonService $seasonService,
         Dungeon       $dungeon,
-        int           $mdtWeek
+        int           $mdtWeek,
     ): ?AffixGroup {
         if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;

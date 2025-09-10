@@ -4,7 +4,6 @@ namespace App\Jobs\Logging;
 
 interface ProcessRouteFloorThumbnailCustomLoggingInterface
 {
-
     public function handleStart(
         string $publicKey,
         int    $floorIndex,
@@ -15,7 +14,7 @@ interface ProcessRouteFloorThumbnailCustomLoggingInterface
         ?int   $imageWidth,
         ?int   $imageHeight,
         ?float $zoomLevel,
-        ?int   $quality
+        ?int   $quality,
     ): void;
 
     public function handleCreateCustomThumbnailError(): void;

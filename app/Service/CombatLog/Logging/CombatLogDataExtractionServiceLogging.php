@@ -17,7 +17,6 @@ class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging imp
         $this->info(__METHOD__);
     }
 
-
     public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, ?string $affixGroup): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -87,6 +86,4 @@ class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging imp
     {
         $this->end(__METHOD__);
     }
-
-
 }

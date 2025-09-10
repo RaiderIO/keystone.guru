@@ -14,7 +14,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
     use Curl;
 
     private const IDENTIFYING_TOKEN_DUNGEON_NAMES = "new Listview({template: 'zone', id: 'zones', extraCols: ['popularity']";
-    private const IDENTIFYING_TOKEN_ZONE_NAMES = 'var g_zone_areas = ';
+    private const IDENTIFYING_TOKEN_ZONE_NAMES    = 'var g_zone_areas = ';
 
     private const LOCALE_URL_MAPPING = [
         'en_US' => '',
@@ -48,17 +48,16 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
     public function __construct(private WowheadTranslationServiceLoggingInterface $log)
     {
-
     }
 
     public function getNpcNames(GameVersion $gameVersion): Collection
     {
         $env = match ($gameVersion->key) {
-            GameVersion::GAME_VERSION_RETAIL => '1',
-            GameVersion::GAME_VERSION_BETA => '3',
+            GameVersion::GAME_VERSION_RETAIL      => '1',
+            GameVersion::GAME_VERSION_BETA        => '3',
             GameVersion::GAME_VERSION_CLASSIC_ERA => '4',
-            GameVersion::GAME_VERSION_WRATH => '8',
-            default => null,
+            GameVersion::GAME_VERSION_WRATH       => '8',
+            default                               => null,
         };
 
         $result = collect();
@@ -94,28 +93,26 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     }
 
                     $locale = str_replace('name_', '', $nameLocale);
-                    $parts = str_split($locale, 2);                               // e.g., enus -> ['en', 'us']
+                    $parts  = str_split($locale, 2);                               // e.g., enus -> ['en', 'us']
                     $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
 
                     $result->put($locale, $result->get($locale, collect())
                         ->put($npcId, $npcName));
                 }
             }
-
         }
 
         return $result;
     }
 
-
     public function getSpellNames(GameVersion $gameVersion): Collection
     {
         $env = match ($gameVersion->key) {
-            GameVersion::GAME_VERSION_RETAIL => '1',
-            GameVersion::GAME_VERSION_BETA => '3',
+            GameVersion::GAME_VERSION_RETAIL      => '1',
+            GameVersion::GAME_VERSION_BETA        => '3',
             GameVersion::GAME_VERSION_CLASSIC_ERA => '4',
-            GameVersion::GAME_VERSION_WRATH => '8',
-            default => null,
+            GameVersion::GAME_VERSION_WRATH       => '8',
+            default                               => null,
         };
 
         if ($env === null) {
@@ -171,6 +168,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
     public function getDungeonNames(): Collection
     {
         $this->log->getDungeonNamesStart();
+
         try {
             $dungeons = Dungeon::all()
                 ->keyBy('zone_id');
@@ -178,6 +176,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
             $result = [];
             foreach (self::LOCALE_URL_MAPPING as $locale => $wowheadLocale) {
                 $this->log->getDungeonNamesLocaleStart($locale);
+
                 try {
                     $url = sprintf('https://wowhead.com/%szones/instances', $wowheadLocale);
                     $this->log->getDungeonNamesWowheadUrl($url);
@@ -207,14 +206,12 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     $this->log->getDungeonNamesLocaleEnd();
                 }
             }
-
         } finally {
             $this->log->getDungeonNamesEnd();
         }
 
         return collect($result);
     }
-
 
     public function getFloorNames(): Collection
     {
@@ -255,7 +252,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
      * hiddenCols: ['territory'],
      * data: [{
      *
-     * @param string $line
+     * @param  string     $line
      * @return array|null
      */
     private function correctMalformedJson(string $line): ?array
@@ -278,10 +275,10 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         // Append a closing brace to make it a "valid" JSON object
         $headersStr .= '}';
 
-        $headersJson = $this->jsObjectToJson($headersStr);
+        $headersJson   = $this->jsObjectToJson($headersStr);
         $parsedHeaders = json_decode($headersJson, true);
 
-        $dataStr = substr($jsObject, $dataPos + strlen('data: '));
+        $dataStr    = substr($jsObject, $dataPos + strlen('data: '));
         $parsedData = json_decode(sprintf('{"data": %s', $dataStr), true);
 
         return array_merge($parsedHeaders, $parsedData);

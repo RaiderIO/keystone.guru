@@ -42,7 +42,7 @@ abstract class MapContext
         protected Model                       $context,
         protected Floor                       $floor,
         MappingVersion                        $mappingVersion,
-        protected ?string                     $mapFacadeStyle = null
+        protected ?string                     $mapFacadeStyle = null,
     ) {
         $this->mappingVersion = $mappingVersion;
     }
@@ -83,7 +83,7 @@ abstract class MapContext
 
         // Get the DungeonData
         $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle);
-        $dungeonData = $this->rememberLocal($dungeonDataKey, 86400, function () use (
+        $dungeonData    = $this->rememberLocal($dungeonDataKey, 86400, function () use (
             $dungeonDataKey,
             $mapFacadeStyle
         ) {
@@ -122,14 +122,14 @@ abstract class MapContext
                         'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
                     ]);
                 },
-                config('keystoneguru.cache.dungeonData.ttl')
+                config('keystoneguru.cache.dungeonData.ttl'),
             );
         });
 
         // Npc data (for localizations)
         $locale            = Auth::user()?->locale ?? 'en_US';
         $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $locale);
-        $dungeonNpcData = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
+        $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
             $dungeonNpcDataKey,
             $mapFacadeStyle,
             $locale,
@@ -148,14 +148,15 @@ abstract class MapContext
                             ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($dungeonData) {
                                 $query->whereIn('npcs.id', $dungeonData['enemies']->pluck('npc_id')->unique());
                             })->with([
-                                'spells'      => fn(BelongsToMany $belongsToMany) => $belongsToMany
+                                'spells' => fn(BelongsToMany $belongsToMany) => $belongsToMany
                                     ->selectRaw('spells.*, translations.translation as name')
                                     ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
                                         $clause->on('translations.key', 'spells.name')
                                             ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
                                     }),
                                 // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                                'enemyForces' => fn(HasOne $query
+                                'enemyForces' => fn(
+                                    HasOne $query,
                                 ) => $query->where('mapping_version_id', $this->mappingVersion->id),
                             ])
                             // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
@@ -170,12 +171,13 @@ abstract class MapContext
                                 $npc->setHidden(['pivot']);
                             }),
                     ];
-                }, config('keystoneguru.cache.dungeonData.ttl')
+                },
+                config('keystoneguru.cache.dungeonData.ttl'),
             );
         });
 
         $selectableSpellsKey = sprintf('selectable_spells_%s', $locale);
-        $selectableSpells = $this->rememberLocal($selectableSpellsKey, 86400, function () use (
+        $selectableSpells    = $this->rememberLocal($selectableSpellsKey, 86400, function () use (
             $selectableSpellsKey,
             $locale
         ) {
@@ -189,17 +191,17 @@ abstract class MapContext
                                 ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
                         })
                         ->get();
-                }, config('keystoneguru.cache.dungeonData.ttl')
+                },
+                config('keystoneguru.cache.dungeonData.ttl'),
             );
         });
 
         $dungeonData['npcs'] = $dungeonNpcData['npcs'];
 
-
         $characterClasses = CharacterClass::all();
         $mapIconTypes     = MapIconType::all()->keyBy('id');
         $staticKey        = 'static_data';
-        $static = $this->rememberLocal($staticKey, 86400, function () use (
+        $static           = $this->rememberLocal($staticKey, 86400, function () use (
             $staticKey,
             $locale,
             $characterClasses,
@@ -249,7 +251,7 @@ abstract class MapContext
 
             'echoChannelName' => $this->getEchoChannelName(),
             // May be null
-            'userPublicKey'   => Auth::user()?->public_key,
+            'userPublicKey' => Auth::user()?->public_key,
         ];
     }
 }

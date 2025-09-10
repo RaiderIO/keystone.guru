@@ -18,9 +18,9 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     private Collection $dungeonCache;
 
     public function __construct(
-        private readonly CombatLogRouteDungeonRouteServiceInterface $createRouteDungeonRouteService,
-        private readonly CombatLogEventRepositoryInterface          $combatLogEventRepository,
-        private readonly ChallengeModeRunDataServiceLoggingInterface $log
+        private readonly CombatLogRouteDungeonRouteServiceInterface  $createRouteDungeonRouteService,
+        private readonly CombatLogEventRepositoryInterface           $combatLogEventRepository,
+        private readonly ChallengeModeRunDataServiceLoggingInterface $log,
     ) {
         $this->dungeonCache = collect();
     }
@@ -61,14 +61,14 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     public function convertChallengeModeRunData(ChallengeModeRunData $challengeModeRunData): bool
     {
         $combatLogEventsAttributes = collect();
+
         try {
             $this->log->convertChallengeModeRunDataStart($challengeModeRunData->id);
 
             $decoded = json_decode($challengeModeRunData->post_body, true);
 
             if (!isset($decoded['challengeMode']['challengeModeId'])) {
-                $decoded['challengeMode']['challengeModeId'] =
-                    $this->getDungeonFromMapId($decoded['challengeMode']['mapId'])?->challenge_mode_id;
+                $decoded['challengeMode']['challengeModeId'] = $this->getDungeonFromMapId($decoded['challengeMode']['mapId'])?->challenge_mode_id;
             }
 
             if ($decoded['challengeMode']['challengeModeId'] === null) {
@@ -78,7 +78,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
             }
 
             $combatLogEvents = $this->createRouteDungeonRouteService->convertCombatLogRouteToCombatLogEvents(
-                CombatLogRouteRequestModel::createFromArray($decoded)
+                CombatLogRouteRequestModel::createFromArray($decoded),
             );
 
             $attributes = [];
@@ -107,11 +107,10 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
         return $result;
     }
 
-
     public function insertToOpensearch(
         Collection $combatLogEvents,
         int        $count = 1000,
-        ?callable  $onProcess = null
+        ?callable  $onProcess = null,
     ): bool {
         $ids = $combatLogEvents->pluck('id')->toArray();
 

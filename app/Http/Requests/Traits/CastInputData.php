@@ -8,12 +8,11 @@ use InvalidArgumentException;
 
 trait CastInputData
 {
-
     /**
      * Cast request input data based on the target model's casts property.
      *
-     * @param Request $request
-     * @param string  $model
+     * @param  Request $request
+     * @param  string  $model
      * @return array
      */
     protected function castInputData(Request $request, string $model, string $subModel = null): array
@@ -46,8 +45,8 @@ trait CastInputData
     /**
      * Cast a value to the given type.
      *
-     * @param mixed  $value
-     * @param string $type
+     * @param  mixed  $value
+     * @param  string $type
      * @return mixed
      */
     protected function castValue(mixed $value, string $type): mixed
@@ -56,7 +55,7 @@ trait CastInputData
             'int', 'integer' => (int)$value,
             'real', 'float', 'double' => (float)$value,
             'bool', 'boolean' => (bool)$value,
-            'json' => json_decode($value, true),
+            'json'  => json_decode($value, true),
             default => $value,
         };
     }

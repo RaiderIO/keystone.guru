@@ -24,7 +24,7 @@ class MySqlStats extends Measurement
                     'current' => $threadsConnected,
                     'max'     => $maxThreads,
                 ],
-                time()
+                time(),
             ),
         ];
     }

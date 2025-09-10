@@ -27,7 +27,7 @@ class ImportStringDetails implements Arrayable
         private readonly int        $lines,
         private readonly int        $notes,
         private readonly int        $enemyForces,
-        private readonly int        $enemyForcesMax
+        private readonly int        $enemyForcesMax,
     ) {
     }
 

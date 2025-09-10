@@ -13,6 +13,7 @@ class WowToolsService implements WowToolsServiceInterface
     public function getDisplayId(int $npcId): ?int
     {
         $this->log->getDisplayIdRequestStart($npcId);
+
         try {
             $result = null;
 
@@ -27,7 +28,7 @@ class WowToolsService implements WowToolsServiceInterface
 
             if (empty($requestResult)) {
                 $this->log->getDisplayIdInvalidResponse();
-            } else if (isset($requestResult['error'])) {
+            } elseif (isset($requestResult['error'])) {
                 $this->log->getDisplayIdRequestError($requestResult['error']);
             } else {
                 if (!isset($requestResult['CreatureDisplayInfoID[0]'])) {

@@ -11,11 +11,10 @@ use Illuminate\Support\Collection;
 
 class CombatLogSplitService implements CombatLogSplitServiceInterface
 {
-
     public function __construct(
         private readonly CombatLogServiceInterface             $combatLogService,
         private readonly DungeonRepositoryInterface            $dungeonRepository,
-        private readonly CombatLogSplitServiceLoggingInterface $log
+        private readonly CombatLogSplitServiceLoggingInterface $log,
     ) {
     }
 
@@ -23,7 +22,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     {
         return $this->splitCombatLogUsingSplitter(
             $filePath,
-            new ChallengeModeSplitter($this->combatLogService)
+            new ChallengeModeSplitter($this->combatLogService),
         );
     }
 
@@ -33,14 +32,15 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
             $filePath,
             new ZoneChangeSplitter(
                 $this->combatLogService,
-                $this->dungeonRepository
-            )
+                $this->dungeonRepository,
+            ),
         );
     }
 
     private function splitCombatLogUsingSplitter(string $filePath, CombatLogSplitterInterface $splitter): Collection
     {
         $this->log->splitCombatLogUsingSplitterStart($filePath, get_class($splitter));
+
         try {
             $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
             $result         = $splitter->splitCombatLog($targetFilePath);

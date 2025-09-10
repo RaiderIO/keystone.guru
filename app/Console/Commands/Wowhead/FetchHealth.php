@@ -66,7 +66,6 @@ class FetchHealth extends Command
                     $this->info(sprintf('- %d', $health));
                     break;
                 }
-
             }
         }
     }

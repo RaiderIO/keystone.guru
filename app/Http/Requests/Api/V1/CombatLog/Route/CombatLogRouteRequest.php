@@ -13,7 +13,6 @@ use Illuminate\Validation\Rule;
  */
 class CombatLogRouteRequest extends APIFormRequest
 {
-
     protected function getRequestModelClass(): string
     {
         return CombatLogRouteRequestModel::class;
@@ -35,118 +34,118 @@ class CombatLogRouteRequest extends APIFormRequest
         $dateFormat = sprintf('date_format:"%s"', CombatLogRouteRequestModel::DATE_TIME_FORMAT);
 
         return [
-            'metadata.runId'                => [
+            'metadata.runId' => [
                 'required',
                 'string',
             ],
-            'metadata.keystoneRunId'        => [
+            'metadata.keystoneRunId' => [
                 'nullable',
                 'int',
             ],
-            'metadata.loggedRunId'          => [
-                'nullable',
-                'int',
-            ],
-            // @TODO make required after raider.io supports it
-            'metadata.period'               => [
+            'metadata.loggedRunId' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'metadata.season'               => [
+            'metadata.period' => [
+                'nullable',
+                'int',
+            ],
+            // @TODO make required after raider.io supports it
+            'metadata.season' => [
                 'nullable',
                 'string',
             ],
             // @TODO make required after raider.io supports it
-            'metadata.regionId'             => [
+            'metadata.regionId' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'metadata.realmType'            => [
+            'metadata.realmType' => [
                 'nullable',
                 'string',
             ],
             // @TODO make required after raider.io supports it
-            'metadata.wowInstanceId'        => [
+            'metadata.wowInstanceId' => [
                 'nullable',
                 'int',
             ],
-            'settings.temporary'            => [
+            'settings.temporary' => [
                 'nullable',
                 'bool',
             ],
-            'settings.debugIcons'           => [
+            'settings.debugIcons' => [
                 'nullable',
                 'bool',
             ],
-            'settings.mappingVersion'       => [
+            'settings.mappingVersion' => [
                 'nullable',
                 'numeric',
             ],
-            'roster.numMembers'             => [
+            'roster.numMembers' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'roster.averageItemLevel'       => [
+            'roster.averageItemLevel' => [
                 'nullable',
                 'numeric',
             ],
             // @TODO make required after raider.io supports it
-            'roster.characterIds'           => [
+            'roster.characterIds' => [
                 'nullable',
                 'array',
             ],
             // @TODO make required after raider.io supports it
-            'roster.characterIds.*'         => [
+            'roster.characterIds.*' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'roster.specIds'                => [
+            'roster.specIds' => [
                 'nullable',
                 'array',
             ],
             // @TODO make required after raider.io supports it
-            'roster.specIds.*'              => [
+            'roster.specIds.*' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'roster.classIds'               => [
+            'roster.classIds' => [
                 'nullable',
                 'array',
             ],
             // @TODO make required after raider.io supports it
-            'roster.classIds.*'             => [
+            'roster.classIds.*' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'challengeMode.start'           => [
+            'challengeMode.start' => [
                 'required',
                 $dateFormat,
             ],
-            'challengeMode.end'             => [
+            'challengeMode.end' => [
                 'required',
                 $dateFormat,
             ],
-            'challengeMode.durationMs'      => [
+            'challengeMode.durationMs' => [
                 'required',
                 'int',
             ],
-            'challengeMode.parTimeMs'       => [
+            'challengeMode.parTimeMs' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'challengeMode.timerFraction'   => [
+            'challengeMode.timerFraction' => [
                 'nullable',
                 'numeric',
             ],
             // @TODO make required after raider.io supports it
-            'challengeMode.success'         => [
+            'challengeMode.success' => [
                 'nullable',
                 'bool',
             ],
@@ -154,85 +153,85 @@ class CombatLogRouteRequest extends APIFormRequest
                 'required',
                 Rule::exists(Dungeon::class, 'challenge_mode_id'),
             ],
-            'challengeMode.level'           => [
+            'challengeMode.level' => [
                 'required',
                 'int',
             ],
-            'challengeMode.numDeaths'       => [
+            'challengeMode.numDeaths' => [
                 'nullable',
                 'int',
             ],
             // @TODO make required after raider.io supports it
-            'challengeMode.affixes'         => [
+            'challengeMode.affixes' => [
                 'nullable',
                 'array',
             ],
-            'challengeMode.affixes.*'       => [
+            'challengeMode.affixes.*' => [
                 'nullable',
                 'integer',
             ],
             // #1818 Rule::exists(Affix::class, 'affix_id')],
-            'npcs'                          => [
+            'npcs' => [
                 'required',
                 'array',
                 new CombatLogRouteNpcChronologicalRule(),
             ],
-            'npcs.*.npcId'                  => [
+            'npcs.*.npcId' => [
                 'required',
                 'integer',
             ],
             // #1818 Rule::exists('npcs', 'id')
-            'npcs.*.spawnUid'               => [
+            'npcs.*.spawnUid' => [
                 'required',
                 'string',
                 'max:10',
             ],
-            'npcs.*.engagedAt'              => [
+            'npcs.*.engagedAt' => [
                 'required',
                 $dateFormat,
             ],
-            'npcs.*.diedAt'                 => [
+            'npcs.*.diedAt' => [
                 'required',
                 $dateFormat,
             ],
-            'npcs.*.coord.x'                => [
+            'npcs.*.coord.x' => [
                 'required',
                 'numeric',
             ],
-            'npcs.*.coord.y'                => [
+            'npcs.*.coord.y' => [
                 'required',
                 'numeric',
             ],
-            'npcs.*.coord.uiMapId'          => [
+            'npcs.*.coord.uiMapId' => [
                 'required',
                 'integer',
             ],
             // 'Rule::exists(Floor::class, 'ui_map_id')'],
-            'spells'                        => 'nullable|array',
-            'spells.*.spellId'              => 'integer',
-            'spells.*.playerUid'            => 'string|max:32',
-            'spells.*.castAt'               => $dateFormat,
-            'spells.*.coord.x'              => 'numeric',
-            'spells.*.coord.y'              => 'numeric',
-            'spells.*.coord.uiMapId'        => 'integer',
+            'spells'                 => 'nullable|array',
+            'spells.*.spellId'       => 'integer',
+            'spells.*.playerUid'     => 'string|max:32',
+            'spells.*.castAt'        => $dateFormat,
+            'spells.*.coord.x'       => 'numeric',
+            'spells.*.coord.y'       => 'numeric',
+            'spells.*.coord.uiMapId' => 'integer',
             // 'Rule::exists(Floor::class, 'ui_map_id')',
-            'playerDeaths'                  => 'nullable|array',
+            'playerDeaths' => 'nullable|array',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.characterId'    => 'integer',
+            'playerDeaths.*.characterId' => 'integer',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.classId'        => 'integer',
+            'playerDeaths.*.classId' => 'integer',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.specId'         => 'integer',
+            'playerDeaths.*.specId' => 'integer',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.itemLevel'      => 'numeric',
+            'playerDeaths.*.itemLevel' => 'numeric',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.diedAt'         => $dateFormat,
+            'playerDeaths.*.diedAt' => $dateFormat,
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.coord.x'        => 'numeric',
+            'playerDeaths.*.coord.x' => 'numeric',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.coord.y'        => 'numeric',
+            'playerDeaths.*.coord.y' => 'numeric',
             // @TODO make required after raider.io supports it
-            'playerDeaths.*.coord.uiMapId'  => 'integer',
+            'playerDeaths.*.coord.uiMapId' => 'integer',
             // 'Rule::exists(Floor::class, 'ui_map_id')', // @TODO make required after raider.io supports it
         ];
     }

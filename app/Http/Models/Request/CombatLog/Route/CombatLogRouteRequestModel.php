@@ -42,10 +42,9 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         public ?CombatLogRouteRosterRequestModel        $roster = null,
         public ?Collection                              $npcs = null,
         public ?Collection                              $spells = null,
-        public ?Collection                              $playerDeaths = null
+        public ?Collection                              $playerDeaths = null,
     ) {
     }
-
 
     /**
      * @throws DungeonNotSupportedException
@@ -56,13 +55,13 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         AffixGroupRepositoryInterface             $affixGroupRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
         DungeonRepositoryInterface                $dungeonRepository,
-        ?int                                      $userId = null
+        ?int                                      $userId = null,
     ): DungeonRoute {
         try {
             $dungeon = $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
         } catch (Exception) {
             throw new DungeonNotSupportedException(
-                sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId)
+                sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId),
             );
         }
 
@@ -70,7 +69,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         if ($this->settings->mappingVersion !== null) {
             $mappingVersion = $dungeonRepository->getMappingVersionByVersion(
                 $dungeon,
-                $this->settings->mappingVersion
+                $this->settings->mappingVersion,
             );
         }
 
@@ -91,7 +90,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
             'level_min'          => $this->challengeMode->level,
             'level_max'          => $this->challengeMode->level,
             'expires_at'         => $this->settings->temporary ? Carbon::now()->addHours(
-                config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                config('keystoneguru.sandbox_dungeon_route_expires_hours'),
             )->toDateTimeString() : null,
         ]);
 
@@ -123,11 +122,10 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs' => CombatLogRouteNpcRequestModel::class,
-            'spells' => CombatLogRouteSpellRequestModel::class,
+            'npcs'         => CombatLogRouteNpcRequestModel::class,
+            'spells'       => CombatLogRouteSpellRequestModel::class,
             'playerDeaths' => CombatLogRoutePlayerDeathRequestModel::class,
-            default => null,
+            default        => null,
         };
     }
-
 }

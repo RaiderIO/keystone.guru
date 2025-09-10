@@ -26,10 +26,10 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        EnemyPackFormRequest $request,
+        EnemyPackFormRequest        $request,
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion       $mappingVersion,
-        ?EnemyPack           $enemyPack = null
+        MappingVersion              $mappingVersion,
+        ?EnemyPack                  $enemyPack = null,
     ): EnemyPack {
         $validated = $request->validated();
 
@@ -66,7 +66,7 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new EnemyPackChangedEvent($context, $user, $model);
     }

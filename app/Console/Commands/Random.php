@@ -51,7 +51,7 @@ class Random extends Command
             CombatLogEventEventType::PlayerDeath,
             1000000,
             100,
-            Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_MOTHERLODE)
+            Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_MOTHERLODE),
         );
 
 //        $dungeonRouteService->refreshOutdatedThumbnails();
@@ -104,9 +104,9 @@ class Random extends Command
 //
 //        if ($season?->hasDungeon($dungeonRoute->dungeon)) {
 //            $this->info(sprintf('Would update season_id to %d', $season->id));
-////            $dungeonRoute->update([
-////                'season_id' => $season->id,
-////            ]);
+        ////            $dungeonRoute->update([
+        ////                'season_id' => $season->id,
+        ////            ]);
 //        }
 //
 //        dd($dungeonRoute->id);

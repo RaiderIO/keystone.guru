@@ -11,11 +11,9 @@ use Log;
 
 class DebugInfoContextLogger
 {
-
     public function __construct(private readonly DebugInfoContextLoggerLoggingInterface $log)
     {
     }
-
 
     public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
@@ -39,7 +37,7 @@ class DebugInfoContextLogger
 
         if ($dungeonRoute instanceof DungeonRoute) {
             $context = array_merge($context, [
-                'publicKey' => $dungeonRoute->public_key,
+                'publicKey'        => $dungeonRoute->public_key,
                 'mappingVersionId' => $dungeonRoute->mapping_version_id,
             ]);
         }

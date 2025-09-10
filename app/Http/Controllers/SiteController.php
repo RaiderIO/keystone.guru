@@ -69,7 +69,7 @@ class SiteController extends Controller
      */
     public function benchmark(
         Request                                    $request,
-        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
     ) {
         $validated = json_decode(file_get_contents(app()->basePath('tmp/combatlog.json')), true);
 
@@ -77,7 +77,7 @@ class SiteController extends Controller
 
         Stopwatch::start('SiteController::benchmark');
         $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
-            CombatLogRouteRequestModel::createFromArray($validated)
+            CombatLogRouteRequestModel::createFromArray($validated),
         );
         Stopwatch::stop('SiteController::benchmark');
 
@@ -180,7 +180,7 @@ class SiteController extends Controller
         DiscoverServiceInterface         $discoverService,
         SeasonService                    $seasonService,
         ExpansionService                 $expansionService,
-        TimewalkingEventServiceInterface $timewalkingEventService
+        TimewalkingEventServiceInterface $timewalkingEventService,
     ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
@@ -239,7 +239,7 @@ class SiteController extends Controller
         Request     $request,
         GameVersion $gameVersion,
         Dungeon     $dungeon,
-        string      $floorIndex = '1'
+        string      $floorIndex = '1',
     ): View {
         return view('misc.embedexplore', [
             'gameVersion' => $gameVersion,
@@ -256,7 +256,7 @@ class SiteController extends Controller
         Request     $request,
         GameVersion $gameVersion,
         Dungeon     $dungeon,
-        string      $floorIndex = '1'
+        string      $floorIndex = '1',
     ): View {
         return view('misc.embedheatmap', [
             'gameVersion' => $gameVersion,

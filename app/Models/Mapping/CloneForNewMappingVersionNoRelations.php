@@ -8,7 +8,7 @@ trait CloneForNewMappingVersionNoRelations
 {
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,
-        ?MappingModelInterface $newParent = null
+        ?MappingModelInterface $newParent = null,
     ): Model {
         /** @var Model|MappingModelInterface $clone */
         $clone                     = clone $this;

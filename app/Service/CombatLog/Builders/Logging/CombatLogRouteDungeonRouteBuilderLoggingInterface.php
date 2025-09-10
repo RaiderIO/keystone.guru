@@ -14,7 +14,7 @@ interface CombatLogRouteDungeonRouteBuilderLoggingInterface extends DungeonRoute
 
     public function buildKillZonesCreateNewActiveChainPull(
         float $activePullAverageHPPercent,
-        int   $chainPullDetectionHPPercent
+        int   $chainPullDetectionHPPercent,
     ): void;
 
     public function buildKillZonesUnableToFindEnemyForNpc(string $uniqueUid): void;

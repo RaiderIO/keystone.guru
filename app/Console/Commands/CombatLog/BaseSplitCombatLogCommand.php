@@ -10,14 +10,14 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
      * Execute the console command.
      */
     public function parseCombatLogSplitRecursively(
-        string $filePath,
+        string   $filePath,
         callable $splitCombatLogCallable,
     ): int {
         ini_set('memory_limit', '2G');
 
         return $this->parseCombatLogRecursively(
             $filePath,
-            fn(string $filePath) => $this->splitCombatLog($splitCombatLogCallable, $filePath)
+            fn(string $filePath) => $this->splitCombatLog($splitCombatLogCallable, $filePath),
         );
     }
 

@@ -19,30 +19,30 @@ return [
         'next'     => 'Next',
         'previous' => 'Previous',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => ': activate to sort column ascending',
         'sortDescending' => ': activate to sort column descending',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => 'Cancel',
         'fill'           => 'Fill all cells with <i>%d</i>',
         'fillHorizontal' => 'Fill cells horizontally',
         'fillVertical'   => 'Fill cells vertically',
     ],
-    'buttons'        => [
-        'collection'      => 'Collection <span class=\'ui-button-icon-primary ui-icon ui-icon-triangle-1-s\'/>',
-        'colvis'          => 'Column Visibility',
-        'colvisRestore'   => 'Restore visibility',
-        'copy'            => 'Copy',
-        'copyKeys'        => 'Press ctrl or u2318 + C to copy the table data to your system clipboard.<br><br>To cancel, click this message or press escape.',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => 'Collection <span class=\'ui-button-icon-primary ui-icon ui-icon-triangle-1-s\'/>',
+        'colvis'        => 'Column Visibility',
+        'colvisRestore' => 'Restore visibility',
+        'copy'          => 'Copy',
+        'copyKeys'      => 'Press ctrl or u2318 + C to copy the table data to your system clipboard.<br><br>To cancel, click this message or press escape.',
+        'copySuccess'   => [
             1   => 'Copied 1 row to clipboard',
             '_' => 'Copied %d rows to clipboard',
         ],
-        'copyTitle'       => 'Copy to Clipboard',
-        'csv'             => 'CSV',
-        'excel'           => 'Excel',
-        'pageLength'      => [
+        'copyTitle'  => 'Copy to Clipboard',
+        'csv'        => 'CSV',
+        'excel'      => 'Excel',
+        'pageLength' => [
             -1  => 'Show all rows',
             '_' => 'Show %d rows',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => 'Remove All States',
         'createState'     => 'Create State',
     ],
-    'searchBuilder'  => [
-        'add'         => 'Add Condition',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => 'Add Condition',
+        'button' => [
             0   => 'Search Builder',
             '_' => 'Search Builder (%d)',
         ],
-        'clearAll'    => 'Clear All',
-        'condition'   => 'Condition',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => 'Clear All',
+        'condition'  => 'Condition',
+        'conditions' => [
+            'date' => [
                 'after'      => 'After',
                 'before'     => 'Before',
                 'between'    => 'Between',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => 'Does Not Start With',
                 'notEndsWith'   => 'Does Not End With',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => 'Without',
                 'notEmpty' => 'Not Empty',
                 'not'      => 'Not',
@@ -118,11 +118,11 @@ return [
             0   => 'Search Builder',
             '_' => 'Search Builder (%d)',
         ],
-        'value'       => 'Value',
+        'value' => 'Value',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => 'Clear All',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => 'Clear All',
+        'collapse'     => [
             0   => 'SearchPanes',
             '_' => 'SearchPanes (%d)',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => 'Show All',
         'collapseMessage' => 'Collapse All',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => '1 cell selected',
             '_' => '%d cells selected',
         ],
@@ -143,12 +143,12 @@ return [
             1   => '1 column selected',
             '_' => '%d columns selected',
         ],
-        'rows'    => [
+        'rows' => [
             1   => '1 row selected',
             '_' => '%d rows selected',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => 'Previous',
         'next'     => 'Next',
         'hours'    => 'Hour',
@@ -168,7 +168,7 @@ return [
             5 => 'Fri',
             6 => 'Sat',
         ],
-        'months'   => [
+        'months' => [
             0  => 'January',
             1  => 'February',
             2  => 'March',
@@ -183,14 +183,14 @@ return [
             11 => 'December',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => 'Close',
         'create' => [
             'button' => 'New',
             'title'  => 'Create new entry',
             'submit' => 'Create',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => 'Edit',
             'title'  => 'Edit Entry',
             'submit' => 'Update',
@@ -204,17 +204,17 @@ return [
                 1   => 'Are you sure you wish to delete 1 row?',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => 'A system error has occurred (<a target="" rel="nofollow" href="">More information</a>).',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => 'Multiple Values',
             'info'    => 'The selected items contain different values for this input. To edit and set all items for this input to the same value, click or tap here, otherwise they will retain their individual values.',
             'restore' => 'Undo Changes',
             'noMulti' => 'This input can be edited individually, but not part of a group. ',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => 'Rename State',
         'renameLabel'    => 'New Name for %s:',
         'renameButton'   => 'Rename',
@@ -240,7 +240,7 @@ return [
                 'visible' => 'Column Visibility',
                 'search'  => 'Column Search',
             ],
-            'button'        => 'Create',
+            'button' => 'Create',
         ],
     ],
 

@@ -11,6 +11,6 @@ interface CombatLogMappingVersionServiceInterface
     public function createMappingVersionFromDungeonOrRaid(
         string          $filePath,
         ?MappingVersion $mappingVersion = null,
-        bool            $enemyConnections = false
+        bool            $enemyConnections = false,
     ): ?MappingVersion;
 }

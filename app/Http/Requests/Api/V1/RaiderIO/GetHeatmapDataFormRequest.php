@@ -26,35 +26,35 @@ class GetHeatmapDataFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dungeon_id'      => [
+            'dungeon_id' => [
                 'required',
                 Rule::exists(Dungeon::class, 'id'),
             ],
-            'event_type'      => [
+            'event_type' => [
                 'required',
                 Rule::in(CombatLogEventEventType::cases()),
             ],
-            'data_type'       => [
+            'data_type' => [
                 'required',
                 Rule::in(CombatLogEventDataType::cases()),
             ],
-            'level'           => [
+            'level' => [
                 'nullable',
                 'regex:/^\d*;\d*$/',
             ],
-            'affixes'         => [
+            'affixes' => [
                 'nullable',
                 'array',
             ],
-            'affixes.*'       => [
+            'affixes.*' => [
                 'integer',
                 Rule::exists(Affix::class, 'id'),
             ],
-            'affix_groups'    => [
+            'affix_groups' => [
                 'nullable',
                 'array',
             ],
-            'affix_groups.*'  => [
+            'affix_groups.*' => [
                 'integer',
                 Rule::exists(AffixGroup::class, 'id'),
             ],
@@ -62,11 +62,11 @@ class GetHeatmapDataFormRequest extends FormRequest
                 'nullable',
                 'date_format:Y-m-d',
             ],
-            'date_range_to'   => [
+            'date_range_to' => [
                 'nullable',
                 'date_format:Y-m-d',
             ],
-            'duration'        => [
+            'duration' => [
                 'nullable',
                 'regex:/^\d*;\d*$/',
             ],

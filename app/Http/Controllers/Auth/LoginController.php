@@ -43,7 +43,8 @@ class LoginController extends Controller
     {
         try {
             return $this->guard()->attempt(
-                $this->credentials($request), $request->boolean('remember')
+                $this->credentials($request),
+                $request->boolean('remember'),
             );
         } catch (RuntimeException $exception) {
             // #2344 People trying to login with their OAuth account through normal methods (they don't have a password)
@@ -59,7 +60,6 @@ class LoginController extends Controller
             }
         }
     }
-
 
     /**
      * The user has been authenticated.

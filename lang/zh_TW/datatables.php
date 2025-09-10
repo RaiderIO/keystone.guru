@@ -19,30 +19,30 @@ return [
         'next'     => '下页',
         'previous' => '上页',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => ': 激活以按升序排序此列',
         'sortDescending' => ': 激活以按降序排序此列',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => '取消',
         'fill'           => '用 <i>%d</i> 填充所有单元格',
         'fillHorizontal' => '水平填充单元格',
         'fillVertical'   => '垂直填充单元格',
     ],
-    'buttons'        => [
-        'collection'      => '集合<span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'          => '列可见性',
-        'colvisRestore'   => '重置可见性',
-        'copy'            => '复制',
-        'copyKeys'        => '按 Ctrl 或 u2318 + C 键将表中数据复制到系统剪贴板。<br /><br />要取消，请单击此消息或按 Escape 键。',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => '集合<span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'        => '列可见性',
+        'colvisRestore' => '重置可见性',
+        'copy'          => '复制',
+        'copyKeys'      => '按 Ctrl 或 u2318 + C 键将表中数据复制到系统剪贴板。<br /><br />要取消，请单击此消息或按 Escape 键。',
+        'copySuccess'   => [
             1   => '已复制 1 行到剪贴板',
             '_' => '已复制 %d 行到剪贴板',
         ],
-        'copyTitle'       => '复制到剪贴板',
-        'csv'             => 'CSV',
-        'excel'           => 'Excel',
-        'pageLength'      => [
+        'copyTitle'  => '复制到剪贴板',
+        'csv'        => 'CSV',
+        'excel'      => 'Excel',
+        'pageLength' => [
             -1  => '显示所有行',
             '_' => '显示 %d 行',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => '删除所有状态',
         'createState'     => '创建状态',
     ],
-    'searchBuilder'  => [
-        'add'         => '添加条件',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => '添加条件',
+        'button' => [
             0   => '搜索生成器',
             '_' => '搜索生成器 (%d)',
         ],
-        'clearAll'    => '全部清除',
-        'condition'   => '条件',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => '全部清除',
+        'condition'  => '条件',
+        'conditions' => [
+            'date' => [
                 'after'      => '早于',
                 'before'     => '晚于',
                 'between'    => '介于',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => '开头不为',
                 'notEndsWith'   => '结尾不为',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => '无',
                 'notEmpty' => '非空',
                 'not'      => '非',
@@ -118,11 +118,11 @@ return [
             0   => '搜索生成器',
             '_' => '搜索生成器 (%d)',
         ],
-        'value'       => '值',
+        'value' => '值',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => '全部清除',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => '全部清除',
+        'collapse'     => [
             0   => '搜索面板',
             '_' => '搜索面板 (%d)',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => '全部显示',
         'collapseMessage' => '全部折叠',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => '已选择 1 个单元格',
             '_' => '已选择 %d 个单元格',
         ],
@@ -143,12 +143,12 @@ return [
             1   => '已选择 1 列',
             '_' => '已选择 %d 列',
         ],
-        'rows'    => [
+        'rows' => [
             1   => '已选择 1 行',
             '_' => '已选择 %d 行',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => '上月',
         'next'     => '下月',
         'hours'    => '时',
@@ -168,7 +168,7 @@ return [
             5 => '五',
             6 => '六',
         ],
-        'months'   => [
+        'months' => [
             0  => '1月',
             1  => '2月',
             2  => '3月',
@@ -183,14 +183,14 @@ return [
             11 => '12月',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => '关闭',
         'create' => [
             'button' => '新建',
             'title'  => '创建新记录',
             'submit' => '创建',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => '编辑',
             'title'  => '编辑记录',
             'submit' => '更新',
@@ -204,17 +204,17 @@ return [
                 1   => '确定要删除 1 行？',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => '出现了系统错误 (<a target="" rel="\ nofollow" href="">更多信息&lt;\/a&gt;)。</a>',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => '多个值',
             'info'    => '选择的多条记录的此字段含有不同的值。要编辑并将所有记录的此字段都设为相同的值，请单击或点按这里，否则它们会保持各自的值不变。',
             'restore' => '撤销更改',
             'noMulti' => '此字段可以单独编辑，不可以组合编辑。',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => '重命名状态',
         'renameLabel'    => '%s 的新名称:',
         'renameButton'   => '重命名',
@@ -240,7 +240,7 @@ return [
                 'visible' => '列可见性',
                 'search'  => '列搜索',
             ],
-            'button'        => '创建',
+            'button' => '创建',
         ],
     ],
 

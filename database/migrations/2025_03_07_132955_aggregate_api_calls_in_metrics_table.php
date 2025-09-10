@@ -30,7 +30,6 @@ return new class extends Migration {
         // are the most numerous
         Metric::orderByDesc('category')
             ->chunk(100000, function (Collection $metrics) use ($metricsService, $consoleOutput, &$newMetricsAttributes, $totalMetrics, &$processedMetrics) {
-
                 $metricsArr = $metrics->map(function (Metric $metric) {
                     $dateTime = $metric->created_at->toDateTimeString();
 
@@ -49,7 +48,7 @@ return new class extends Migration {
 
                 $newMetricsAttributes = $metricsService->groupMetrics(
                     $merged,
-                    60
+                    60,
                 );
 
                 $processedMetrics += count($metricsArr);
@@ -79,7 +78,6 @@ return new class extends Migration {
             }
         }
         $consoleOutput->writeln('Inserting done!');
-
 
         DB::statement('RENAME TABLE metrics TO metrics_old, metrics_temp TO metrics;');
     }

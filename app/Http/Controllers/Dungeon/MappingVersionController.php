@@ -18,7 +18,7 @@ class MappingVersionController extends Controller
     public function saveNew(
         Request                 $request,
         Dungeon                 $dungeon,
-        MappingServiceInterface $mappingService
+        MappingServiceInterface $mappingService,
     ): RedirectResponse {
         $gameVersionId = $request->get('game_version');
         $action        = $request->get('action');
@@ -33,7 +33,7 @@ class MappingVersionController extends Controller
             return redirect()->route('admin.dungeon.edit', [
                 'dungeon' => $dungeon,
             ]);
-        } else if ($action === 'Add bare mapping version') {
+        } elseif ($action === 'Add bare mapping version') {
             $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
 
             if ($currentMappingVersion === null) {
@@ -41,12 +41,12 @@ class MappingVersionController extends Controller
             } else {
                 $newMappingVersion = $mappingService->copyMappingVersionToDungeon(
                     $currentMappingVersion,
-                    $dungeon
+                    $dungeon,
                 );
 
                 $mappingService->copyMappingVersionContentsToDungeon(
                     $currentMappingVersion,
-                    $newMappingVersion
+                    $newMappingVersion,
                 );
             }
 

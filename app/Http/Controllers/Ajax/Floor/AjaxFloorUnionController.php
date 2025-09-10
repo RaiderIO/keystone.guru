@@ -26,7 +26,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
 {
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
-        ?MappingModelInterface $afterModel
+        ?MappingModelInterface $afterModel,
     ): bool {
         return false;
     }
@@ -35,10 +35,10 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        FloorUnionFormRequest $request,
+        FloorUnionFormRequest       $request,
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion        $mappingVersion,
-        ?FloorUnion           $floorUnion = null
+        MappingVersion              $mappingVersion,
+        ?FloorUnion                 $floorUnion = null,
     ): FloorUnion|Model {
         $validated = $request->validated();
 
@@ -75,10 +75,8 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new FloorUnionChangedEvent($context, $user, $model);
     }
-
-
 }

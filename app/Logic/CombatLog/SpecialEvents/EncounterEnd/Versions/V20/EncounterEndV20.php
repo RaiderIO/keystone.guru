@@ -14,12 +14,12 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
  */
 class EncounterEndV20 extends SpecialEvent implements EncounterEndInterface
 {
-    private int    $encounterId;
+    private int $encounterId;
     private string $encounterName;
-    private int    $difficultyId;
-    private int    $groupSize;
-    private int    $success;
-    private int    $fightTimeMS;
+    private int $difficultyId;
+    private int $groupSize;
+    private int $success;
+    private int $fightTimeMS;
 
     public function getEncounterId(): int
     {

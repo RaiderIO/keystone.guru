@@ -15,17 +15,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int                 $id
- * @property int|null            $mapping_version_id
- * @property int                 $floor_id
- * @property int|null            $dungeon_route_id
- * @property int|null            $team_id
- * @property int                 $map_icon_type_id
- * @property float               $lat
- * @property float               $lng
- * @property string              $comment
- * @property bool                $permanent_tooltip
- * @property int                 $seasonal_index
+ * @property int      $id
+ * @property int|null $mapping_version_id
+ * @property int      $floor_id
+ * @property int|null $dungeon_route_id
+ * @property int|null $team_id
+ * @property int      $map_icon_type_id
+ * @property float    $lat
+ * @property float    $lng
+ * @property string   $comment
+ * @property bool     $permanent_tooltip
+ * @property int      $seasonal_index
  *
  * @property MappingVersion|null $mappingVersion
  * @property Floor               $floor

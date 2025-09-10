@@ -10,7 +10,7 @@ readonly class MapBounds implements Arrayable
         private float $minIngameX = 0,
         private float $minIngameY = 0,
         private float $maxIngameX = 0,
-        private float $maxIngameY = 0
+        private float $maxIngameY = 0,
     ) {
     }
 

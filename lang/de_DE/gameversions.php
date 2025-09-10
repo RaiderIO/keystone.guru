@@ -2,11 +2,11 @@
 
 return [
 
-    'retail'  => [
+    'retail' => [
         'name'        => '',
         'description' => '',
     ],
-    'wotlk'   => [
+    'wotlk' => [
         'name'        => '',
         'description' => '',
     ],
@@ -14,15 +14,15 @@ return [
         'name'        => '',
         'description' => '',
     ],
-    'beta'    => [
+    'beta' => [
         'name'        => '',
         'description' => '',
     ],
-    'cata'    => [
+    'cata' => [
         'name'        => '',
         'description' => '',
     ],
-    'mop'     => [
+    'mop' => [
         'name'        => '',
         'description' => '',
     ],

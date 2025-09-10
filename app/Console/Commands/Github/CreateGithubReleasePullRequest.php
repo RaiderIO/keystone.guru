@@ -73,16 +73,16 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             $pullRequestTitle .= !empty($release->title) ? sprintf(' - %s', $release->title) : '';
 
             $params = [
-                'title'     => $pullRequestTitle,
-                'body'      => $release->github_body,
-                'labels'    => [
+                'title'  => $pullRequestTitle,
+                'body'   => $release->github_body,
+                'labels' => [
                     'release',
                 ],
                 'assignees' => [
                     $username,
                 ],
-                'base'      => $targetBranch,
-                'head'      => $sourceBranch,
+                'base' => $targetBranch,
+                'head' => $sourceBranch,
             ];
 
             if ($existingPullRequestId === 0) {
@@ -116,7 +116,6 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             //
             //                $githubIssueClient->
             //            }
-
         } else {
             $this->error(sprintf('Unable to find release %s', $version));
         }

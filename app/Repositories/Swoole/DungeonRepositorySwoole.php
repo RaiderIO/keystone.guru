@@ -20,7 +20,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
         parent::__construct();
 
         $this->dungeonsByChallengeModeId = collect();
-        $this->dungeonMappingVersions = collect();
+        $this->dungeonMappingVersions    = collect();
     }
 
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon

@@ -20,7 +20,7 @@ class DamageSplitBuilder implements SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7 => new DamageSplitV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),

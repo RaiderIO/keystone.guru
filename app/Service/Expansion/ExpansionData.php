@@ -15,7 +15,7 @@ class ExpansionData
     public function __construct(
         ExpansionServiceInterface         $expansionService,
         private readonly Expansion        $expansion,
-        private readonly GameServerRegion $gameServerRegion
+        private readonly GameServerRegion $gameServerRegion,
     ) {
         $this->activeDungeons  = $this->expansion->dungeonsAndRaids;
         $this->expansionSeason = new ExpansionSeason($expansionService, $this->expansion, $this->gameServerRegion);

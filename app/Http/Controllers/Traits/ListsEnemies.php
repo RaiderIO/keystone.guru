@@ -34,7 +34,7 @@ trait ListsEnemies
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        bool                        $showMdtEnemies = false
+        bool                        $showMdtEnemies = false,
     ): ?array {
         /** @var Collection<Enemy> $enemies */
         $enemies = Enemy::selectRaw('enemies.*')
@@ -65,7 +65,6 @@ trait ListsEnemies
                     155433,
                     155434,
                 ]));
-
             } // Thrown when Lua hasn't been configured
             catch (Error) {
                 return null;

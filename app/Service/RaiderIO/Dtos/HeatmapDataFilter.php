@@ -2,7 +2,6 @@
 
 namespace App\Service\RaiderIO\Dtos;
 
-
 use App\Models\Affix;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
@@ -19,13 +18,13 @@ use Illuminate\Support\Collection;
  */
 class HeatmapDataFilter implements Arrayable
 {
-    private ?string $region          = null;
-    private ?int    $keyLevelMin     = null;
-    private ?int    $keyLevelMax     = null;
-    private ?int    $itemLevelMin    = null;
-    private ?int    $itemLevelMax    = null;
-    private ?int    $playerDeathsMin = null;
-    private ?int    $playerDeathsMax = null;
+    private ?string $region       = null;
+    private ?int $keyLevelMin     = null;
+    private ?int $keyLevelMax     = null;
+    private ?int $itemLevelMin    = null;
+    private ?int $itemLevelMax    = null;
+    private ?int $playerDeathsMin = null;
+    private ?int $playerDeathsMax = null;
     /** @var Collection<Affix> */
     private Collection $includeAffixIds;
     /** @var Collection<CharacterClass> */
@@ -36,11 +35,11 @@ class HeatmapDataFilter implements Arrayable
     private Collection $includePlayerDeathClassIds;
     /** @var Collection<CharacterClassSpecialization> */
     private Collection $includePlayerDeathSpecIds;
-    private ?int       $minPeriod          = null;
-    private ?int       $maxPeriod          = null;
-    private ?float     $timerFractionMin   = null;
-    private ?float     $timerFractionMax   = null;
-    private ?int       $minSamplesRequired = null;
+    private ?int $minPeriod          = null;
+    private ?int $maxPeriod          = null;
+    private ?float $timerFractionMin = null;
+    private ?float $timerFractionMax = null;
+    private ?int $minSamplesRequired = null;
 
     // Passthroughs
     private ?string $excludeAffixIds;
@@ -54,7 +53,7 @@ class HeatmapDataFilter implements Arrayable
     public function __construct(
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType  $dataType
+        private readonly CombatLogEventDataType  $dataType,
     ) {
         $this->includeAffixIds            = collect();
         $this->includeClassIds            = collect();
@@ -172,7 +171,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param Collection<Affix> $includeAffixIds
+     * @param  Collection<Affix> $includeAffixIds
      * @return HeatmapDataFilter
      */
     public function setIncludeAffixIds(Collection $includeAffixIds): HeatmapDataFilter
@@ -191,7 +190,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClass> $includeClassIds
+     * @param  Collection<CharacterClass> $includeClassIds
      * @return HeatmapDataFilter
      */
     public function setIncludeClassIds(Collection $includeClassIds): HeatmapDataFilter
@@ -210,7 +209,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClassSpecialization> $includeSpecIds
+     * @param  Collection<CharacterClassSpecialization> $includeSpecIds
      * @return HeatmapDataFilter
      */
     public function setIncludeSpecIds(Collection $includeSpecIds): HeatmapDataFilter
@@ -219,7 +218,6 @@ class HeatmapDataFilter implements Arrayable
 
         return $this;
     }
-
 
     /**
      * @return Collection<CharacterClass>
@@ -230,7 +228,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClass> $includePlayerDeathClassIds
+     * @param  Collection<CharacterClass> $includePlayerDeathClassIds
      * @return HeatmapDataFilter
      */
     public function setIncludePlayerDeathClassIds(Collection $includePlayerDeathClassIds): HeatmapDataFilter
@@ -249,7 +247,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param Collection<CharacterClassSpecialization> $includePlayerDeathSpecIds
+     * @param  Collection<CharacterClassSpecialization> $includePlayerDeathSpecIds
      * @return HeatmapDataFilter
      */
     public function setIncludePlayerDeathSpecIds(Collection $includePlayerDeathSpecIds): HeatmapDataFilter
@@ -312,7 +310,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param int|null $minSamplesRequired
+     * @param  int|null          $minSamplesRequired
      * @return HeatmapDataFilter
      */
     public function setMinSamplesRequired(?int $minSamplesRequired): HeatmapDataFilter
@@ -414,23 +412,23 @@ class HeatmapDataFilter implements Arrayable
     /**
      * Converts the filter into an array that will be passed to the Raider.io API in the URL
      *
-     * @param Season|null $mostRecentSeason
+     * @param  Season|null $mostRecentSeason
      * @return array
      */
     public function toArray(Season $mostRecentSeason = null): array
     {
         $result = [
-            'challengeModeId'            => $this->dungeon->challenge_mode_id,
-            'type'                       => $this->getEventType()->value,
-            'dataType'                   => $this->getDataType()->value,
-            'minMythicLevel'             => $this->getKeyLevelMin(),
-            'maxMythicLevel'             => $this->getKeyLevelMax(),
-            'minItemLevel'               => $this->getItemLevelMin(),
-            'maxItemLevel'               => $this->getItemLevelMax(),
-            'minPlayerDeaths'            => $this->getPlayerDeathsMin(),
-            'maxPlayerDeaths'            => $this->getPlayerDeathsMax(),
-            'minTimerFraction'           => $this->getTimerFractionMin(),
-            'maxTimerFraction'           => $this->getTimerFractionMax(),
+            'challengeModeId'  => $this->dungeon->challenge_mode_id,
+            'type'             => $this->getEventType()->value,
+            'dataType'         => $this->getDataType()->value,
+            'minMythicLevel'   => $this->getKeyLevelMin(),
+            'maxMythicLevel'   => $this->getKeyLevelMax(),
+            'minItemLevel'     => $this->getItemLevelMin(),
+            'maxItemLevel'     => $this->getItemLevelMax(),
+            'minPlayerDeaths'  => $this->getPlayerDeathsMin(),
+            'maxPlayerDeaths'  => $this->getPlayerDeathsMax(),
+            'minTimerFraction' => $this->getTimerFractionMin(),
+            'maxTimerFraction' => $this->getTimerFractionMax(),
             // Passthroughs
             'excludeAffixIds'            => $this->getExcludeAffixIds(),
             'excludeClassIds'            => $this->getExcludeClassIds(),
@@ -446,33 +444,35 @@ class HeatmapDataFilter implements Arrayable
 
         if ($this->getIncludeAffixIds()->isNotEmpty()) {
             $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(
-                fn(Affix $affix) => $affix->affix_id
+                fn(Affix $affix) => $affix->affix_id,
             )->toArray());
         }
 
         if ($this->getIncludeClassIds()->isNotEmpty()) {
             $result['includeClassIds'] = implode(',', $this->getIncludeClassIds()->map(
-                fn(CharacterClass $characterClass) => $characterClass->class_id
+                fn(CharacterClass $characterClass) => $characterClass->class_id,
             )->toArray());
         }
 
         if ($this->getIncludeSpecIds()->isNotEmpty()) {
             $result['includeSpecIds'] = implode(',', $this->getIncludeSpecIds()->map(
-                fn(CharacterClassSpecialization $characterClassSpecialization
-                ) => $characterClassSpecialization->specialization_id
+                fn(
+                    CharacterClassSpecialization $characterClassSpecialization,
+                ) => $characterClassSpecialization->specialization_id,
             )->toArray());
         }
 
         if ($this->getIncludePlayerDeathClassIds()->isNotEmpty()) {
             $result['includePlayerDeathClassIds'] = implode(',', $this->getIncludePlayerDeathClassIds()->map(
-                fn(CharacterClass $characterClass) => $characterClass->class_id
+                fn(CharacterClass $characterClass) => $characterClass->class_id,
             )->toArray());
         }
 
         if ($this->getIncludePlayerDeathSpecIds()->isNotEmpty()) {
             $result['includePlayerDeathSpecIds'] = implode(',', $this->getIncludePlayerDeathSpecIds()->map(
-                fn(CharacterClassSpecialization $characterClassSpecialization
-                ) => $characterClassSpecialization->specialization_id
+                fn(
+                    CharacterClassSpecialization $characterClassSpecialization,
+                ) => $characterClassSpecialization->specialization_id,
             )->toArray());
         }
 
@@ -500,16 +500,18 @@ class HeatmapDataFilter implements Arrayable
 
         // If a value is 0 we DO want to send the value to Raider.IO
         // For example, maxPlayerDeaths 0 is a valid value.
-        return array_filter($result, fn($value) => (is_string($value) && strlen($value) > 0) ||
+        return array_filter(
+            $result,
+            fn($value) => (is_string($value) && strlen($value) > 0) ||
             (is_array($value) && count($value) > 0) ||
-            is_numeric($value)
+            is_numeric($value),
         );
     }
 
     /**
      * Populates a new HeatmapDataFilter object from the request array.
      *
-     * @param array $requestArray
+     * @param  array             $requestArray
      * @return HeatmapDataFilter
      */
     public static function fromArray(array $requestArray): HeatmapDataFilter
@@ -517,7 +519,7 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter = new HeatmapDataFilter(
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeonId']),
             eventType: CombatLogEventEventType::from($requestArray['type'] ?? CombatLogEventEventType::NpcDeath->value),
-            dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value)
+            dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value),
         );
 
         $heatmapDataFilter->setRegion($requestArray['region'] ?? null);
@@ -533,7 +535,6 @@ class HeatmapDataFilter implements Arrayable
 
         $heatmapDataFilter->setIncludeAffixIds(isset($requestArray['includeAffixIds']) ?
             Affix::whereIn('affix_id', $requestArray['includeAffixIds'])->get() : collect());
-
 
         $heatmapDataFilter->setIncludeClassIds(isset($requestArray['includeClassIds']) ?
             CharacterClass::whereIn('class_id', $requestArray['includeClassIds'])->get() : collect());

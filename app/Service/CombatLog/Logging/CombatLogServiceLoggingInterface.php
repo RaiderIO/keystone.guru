@@ -14,7 +14,7 @@ interface CombatLogServiceLoggingInterface
     public function getResultEventsForChallengeModeFilterParseError(
         string    $rawEvent,
         int       $lineNr,
-        Throwable $throwable
+        Throwable $throwable,
     ): void;
 
     public function getResultEventsForChallengeModeAdvancedLogNotEnabled(string $message): void;
@@ -37,7 +37,7 @@ interface CombatLogServiceLoggingInterface
 
     public function parseCombatLogParseEventsChangedCombatLogVersion(
         int  $combatLogVersion,
-        bool $advancedLoggingEnabled
+        bool $advancedLoggingEnabled,
     ): void;
 
     public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void;

@@ -11,7 +11,7 @@ class FloorDataExtractorLogging extends RollbarStructuredLogging implements Floo
         float $newIngameMinX,
         float $newIngameMinY,
         float $newIngameMaxX,
-        float $newIngameMaxY
+        float $newIngameMaxY,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

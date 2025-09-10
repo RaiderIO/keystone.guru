@@ -32,12 +32,12 @@ class APIKillZoneFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'          => 'nullable|int',
+            'id'       => 'nullable|int',
             'floor_id' => [
                 'nullable',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'color'       => [
+            'color' => [
                 'nullable',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
@@ -48,9 +48,9 @@ class APIKillZoneFormRequest extends FormRequest
             'index'       => 'int',
             'enemies'     => 'array',
             // Do not validate here - it's slow and we validate ourselves against the accurate mapping version
-            'enemies.*'   => 'int',
-            'spells'      => 'array',
-            'spells.*'    => Rule::exists(Spell::class, 'id'),
+            'enemies.*' => 'int',
+            'spells'    => 'array',
+            'spells.*'  => Rule::exists(Spell::class, 'id'),
         ];
     }
 }

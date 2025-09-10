@@ -42,7 +42,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         NpcRepositoryInterface           $npcRepository,
         DungeonRoute                     $dungeonRoute,
         /** @var Collection<BaseResultEvent> */
-        private readonly Collection      $resultEvents
+        private readonly Collection      $resultEvents,
     ) {
         $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
 
@@ -55,7 +55,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             $enemyRepository,
             $npcRepository,
             $dungeonRoute,
-            $this->log
+            $this->log,
         );
     }
 
@@ -66,13 +66,13 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 $baseEvent = $resultEvent->getBaseEvent();
                 $this->log->buildStart(
                     $baseEvent->getTimestamp()->toDateTimeString(),
-                    $baseEvent->getEventName()
+                    $baseEvent->getEventName(),
                 );
 
                 if ($resultEvent instanceof MapChangeResultEvent) {
                     /** @var $baseEvent MapChangeCombatLogEvent */
                     $this->currentFloor = $resultEvent->getFloor();
-                } else if ($this->currentFloor === null) {
+                } elseif ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();
 
                     continue;
@@ -80,7 +80,6 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
                 if ($resultEvent instanceof EnemyEngaged) {
                     if ($this->validNpcIds->search($resultEvent->getGuid()->getId()) !== false) {
-
                         /** @var ActivePull|null $activePull */
                         $activePull = $this->activePullCollection->last();
 
@@ -88,12 +87,12 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                             $activePull = $this->activePullCollection->addNewPull();
 
                             $this->log->buildCreateNewActivePull();
-                        } else if ($activePull->isCompleted()) {
+                        } elseif ($activePull->isCompleted()) {
                             $activePull = $this->activePullCollection->addNewPull();
 
                             $this->log->buildCreateNewActivePullChainPullCompleted();
                         } // Check if we need to account for chain pulling
-                        else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($resultEvent->getEngagedEvent()->getTimestamp()))
+                        elseif (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($resultEvent->getEngagedEvent()->getTimestamp()))
                             <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
                             $activePull = $this->activePullCollection->addNewPull();
 
@@ -103,7 +102,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         $activePullEnemy = $this->createActivePullEnemy($resultEvent);
                         $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
                             $activePullEnemy,
-                            $this->activePullCollection->getInCombatGroups()
+                            $this->activePullCollection->getInCombatGroups(),
                         );
 
                         if ($resolvedEnemy === null) {
@@ -123,7 +122,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     } else {
                         $this->log->buildEnemyNotInValidNpcIds($resultEvent->getGuid()->getGuid());
                     }
-                } else if ($resultEvent instanceof EnemyKilled) {
+                } elseif ($resultEvent instanceof EnemyKilled) {
                     if ($this->validNpcIds->search($resultEvent->getGuid()->getId()) === false) {
                         // No need to log really
                         continue;
@@ -152,7 +151,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                             $this->activePullCollection->forget($pullIndex);
                         }
                     }
-                } else if ($resultEvent instanceof SpellCast) {
+                } elseif ($resultEvent instanceof SpellCast) {
                     // Add BL to the newest pull
                     if ($this->activePullCollection->isEmpty()) {
                         $activePull = $this->activePullCollection->addNewPull();
@@ -166,10 +165,10 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($resultEvent->getSpellId());
 
                     $this->log->buildSpellCast(
-                    // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
+                        // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
                         $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getOwnerGuid()?->getGuid() ??
                         $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getInfoGuid()->getGuid(),
-                        $resultEvent->getSpellId()
+                        $resultEvent->getSpellId(),
                     );
                 }
             } finally {
@@ -201,7 +200,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             $enemyEngaged->getEngagedEvent()->getTimestamp(),
             // @TODO We don't know this yet!
             null,
-            $enemyEngaged->getResolvedEnemy()
+            $enemyEngaged->getResolvedEnemy(),
         );
     }
 }

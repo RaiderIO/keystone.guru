@@ -57,7 +57,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
      */
     private function outputCombatLogRouteJson(
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
-        string                                     $filePath
+        string                                     $filePath,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -70,7 +70,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
         if ($combatLogRouteJson !== null) {
             $result = file_put_contents(
                 $resultingFile,
-                json_encode($combatLogRouteJson, JSON_PRETTY_PRINT)
+                json_encode($combatLogRouteJson, JSON_PRETTY_PRINT),
             );
 
             if ($result) {
@@ -78,7 +78,6 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
             } else {
                 $this->warn(sprintf('- Unable to write to file %s', $resultingFile));
             }
-
         } else {
             // It's recoverable - we can parse more files if we want to
             $result = 1;

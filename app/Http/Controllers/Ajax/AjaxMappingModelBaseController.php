@@ -29,7 +29,7 @@ abstract class AjaxMappingModelBaseController extends Controller
 
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
-        ?MappingModelInterface $afterModel
+        ?MappingModelInterface $afterModel,
     ): bool {
         return true;
     }
@@ -44,7 +44,7 @@ abstract class AjaxMappingModelBaseController extends Controller
         string                      $modelClass,
         ?MappingModelInterface      $model = null,
         ?Closure                    $onSaveSuccess = null,
-        ?Model                      $echoContext = null
+        ?Model                      $echoContext = null,
     ): Model {
         $validated['mapping_version_id'] = $mappingVersion?->id;
 
@@ -65,7 +65,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             $beforeModel = $model === null ? null : clone $model;
 
             if ($model === null) {
-                $model = $modelClass::create($validated);
+                $model   = $modelClass::create($validated);
                 $success = $model instanceof $modelClass;
             } else {
                 $success = $model->update($validated);
@@ -99,10 +99,10 @@ abstract class AjaxMappingModelBaseController extends Controller
         });
     }
 
-    protected abstract function getModelChangedEvent(
+    abstract protected function getModelChangedEvent(
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent;
 }

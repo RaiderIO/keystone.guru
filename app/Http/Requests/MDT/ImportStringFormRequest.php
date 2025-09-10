@@ -32,7 +32,7 @@ class ImportStringFormRequest extends FormRequest
                     array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [
                         null,
                         -1,
-                    ])
+                    ]),
                 ),
             ],
         ];

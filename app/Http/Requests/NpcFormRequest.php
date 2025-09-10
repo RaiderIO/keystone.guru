@@ -24,12 +24,12 @@ class NpcFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                        => 'required',
-            'name'                      => 'required',
-            'dungeon_ids'               => 'array',
-            'dungeon_ids.*'             => Rule::exists('dungeons', 'id'),
-            'npc_type_id'               => Rule::exists('npc_types', 'id'),
-            'npc_class_id'              => Rule::exists('npc_classes', 'id'),
+            'id'                => 'required',
+            'name'              => 'required',
+            'dungeon_ids'       => 'array',
+            'dungeon_ids.*'     => Rule::exists('dungeons', 'id'),
+            'npc_type_id'       => Rule::exists('npc_types', 'id'),
+            'npc_class_id'      => Rule::exists('npc_classes', 'id'),
             'classification_id' => [
                 Rule::exists('npc_classifications', 'id'),
                 'required',

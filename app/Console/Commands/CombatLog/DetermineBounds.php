@@ -32,15 +32,16 @@ class DetermineBounds extends BaseCombatLogCommand
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::where('key', $this->argument('dungeon'))->firstOrFail();
 
-        return $this->parseCombatLogRecursively($filePath,
-            fn(string $filePath) => $this->extractUiMapIds($combatLogService, $filePath, $dungeon)
+        return $this->parseCombatLogRecursively(
+            $filePath,
+            fn(string $filePath) => $this->extractUiMapIds($combatLogService, $filePath, $dungeon),
         );
     }
 
     private function extractUiMapIds(
         CombatLogServiceInterface $combatLogService,
         string                    $filePath,
-        Dungeon                   $dungeon
+        Dungeon                   $dungeon,
     ): int {
         $mapBounds = $combatLogService->getBoundsFromEvents($filePath, $dungeon);
 
@@ -50,8 +51,8 @@ class DetermineBounds extends BaseCombatLogCommand
                 $mapBounds->getMinIngameX(),
                 $mapBounds->getMinIngameY(),
                 $mapBounds->getMaxIngameX(),
-                $mapBounds->getMaxIngameY()
-            )
+                $mapBounds->getMaxIngameY(),
+            ),
         );
 
         $this->info(
@@ -60,8 +61,8 @@ class DetermineBounds extends BaseCombatLogCommand
                 $mapBounds->getMinIngameX(),
                 $mapBounds->getMinIngameY(),
                 $mapBounds->getMaxIngameX(),
-                $mapBounds->getMaxIngameY()
-            )
+                $mapBounds->getMaxIngameY(),
+            ),
         );
 
         return 0;

@@ -27,7 +27,7 @@ class AjaxPridefulEnemyController extends Controller
         Request                     $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        Enemy                       $enemy
+        Enemy                       $enemy,
     ): PridefulEnemy {
         $this->authorize('edit', $dungeonRoute);
 

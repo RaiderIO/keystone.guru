@@ -1,12 +1,7 @@
 <?php
 
-use App\Models\Metrics\Metric;
-use App\Service\Metric\MetricServiceInterface;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 return new class extends Migration {
     /**

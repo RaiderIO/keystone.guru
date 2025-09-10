@@ -9,5 +9,4 @@ namespace App\Http\Requests\Heatmap;
  */
 class ExploreEmbedUrlFormRequest extends HeatmapEmbedUrlFormRequest
 {
-
 }

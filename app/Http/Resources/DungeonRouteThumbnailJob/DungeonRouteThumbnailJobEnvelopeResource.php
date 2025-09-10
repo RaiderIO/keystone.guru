@@ -23,7 +23,7 @@ class DungeonRouteThumbnailJobEnvelopeResource extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(
-                static fn(DungeonRouteThumbnailJob $dungeonRoute) => new DungeonRouteThumbnailJobResource($dungeonRoute)
+                static fn(DungeonRouteThumbnailJob $dungeonRoute) => new DungeonRouteThumbnailJobResource($dungeonRoute),
             )->toArray(),
         ];
     }
