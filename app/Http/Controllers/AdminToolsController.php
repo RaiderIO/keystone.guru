@@ -984,6 +984,7 @@ class AdminToolsController extends Controller
     ): View {
         $warnings = new Collection();
         $npcs     = Npc::with([
+            'npcEnemyForces',
             'enemies',
             'type',
         ])->get();
@@ -1001,7 +1002,7 @@ class AdminToolsController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var \App\Models\Npc\Npc $npc */
+                /** @var Npc $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
@@ -1037,7 +1038,7 @@ class AdminToolsController extends Controller
 
                     // Match enemy forces
                     /** @var NpcEnemyForces|null $npcEnemyForces */
-                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion();
                     if ($npcEnemyForces?->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
                             new ImportWarning(
@@ -1148,7 +1149,7 @@ class AdminToolsController extends Controller
         $dungeonId = $request->get('dungeon_id');
         $value     = $request->get('value');
 
-        /** @var \App\Models\Npc\Npc $npc */
+        /** @var Npc $npc */
         $npc     = Npc::with(['enemyForces'])->find($npcId);
         $dungeon = Dungeon::findOrFail($dungeonId);
 

@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @property int      $id
- * @property int      $kill_zone_id
- * @property int      $npc_id
- * @property int      $mdt_id
- * @property KillZone $killzone
- * @property Enemy    $enemy
+ * @property int $id
+ * @property int $kill_zone_id
+ * @property int $npc_id
+ * @property int $mdt_id
+ *
+ * @property KillZone $killZone
  * @property Npc      $npc
  *
  * @mixin Eloquent
@@ -35,7 +35,7 @@ class KillZoneEnemy extends Model
         'mdt_id',
     ];
 
-    public function killzone(): BelongsTo
+    public function killZone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }

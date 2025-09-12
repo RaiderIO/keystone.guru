@@ -234,7 +234,9 @@ MDT.mapPOIs[dungeonIndex] = {};
     {
         $dungeonEnemies = [];
 
-        $npcs = Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+        /** @var Collection<Npc> $npcs */
+        $npcs = Npc::with('npcEnemyForces')
+            ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
             ->select('npcs.*')
             ->where('npc_dungeons.dungeon_id', $mappingVersion->dungeon_id)
             ->get()
@@ -289,7 +291,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             ];
 
             /** @var NpcEnemyForces|null $npcEnemyForces */
-            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->first();
+            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id);
 
             $enemyForces = 0;
             if ($npcEnemyForces !== null) {

@@ -167,13 +167,15 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         $result = [];
         $npcs   = [];
 
+        $this->npcs->load('npcEnemyForces');
+
         try {
             // Loop through all floors
             foreach ($this->npcs as $npc) {
                 /** @var $npc Npc */
                 if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     /** @var NpcEnemyForces|null $npcEnemyForces */
-                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion();
 
                     $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0;
                 }

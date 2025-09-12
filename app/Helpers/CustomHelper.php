@@ -104,3 +104,35 @@ function ksgAssetImage(string $path = ''): string
 {
     return sprintf('%s/%s', config('keystoneguru.images_base_url'), trim($path, '/'));
 }
+
+/**
+ * Insert an associative array after a specific key (string-keyed arrays).
+ * If $afterKey isn't found, the $insert array is appended at the end.
+ * For duplicate keys, values from $insert take precedence.
+ */
+function array_insert_after(array $array, string $afterKey, array $insert): array
+{
+    if ($insert === []) {
+        return $array;
+    }
+
+    $keys = array_keys($array);
+    $pos  = array_search($afterKey, $keys, true);
+
+    if ($pos === false) {
+        // Append; let $insert override duplicates
+        return array_merge(
+            array_diff_key($array, $insert),
+            $insert,
+        );
+    }
+
+    $before = array_slice($array, 0, $pos + 1, true);
+    $after  = array_slice($array, $pos + 1, null, true);
+
+    // Ensure $insert wins on duplicates by removing overlapping keys first
+    $before = array_diff_key($before, $insert);
+    $after  = array_diff_key($after, $insert);
+
+    return array_merge($before, $insert, $after);
+}

@@ -13,8 +13,12 @@ use JsonSerializable;
 /**
  * @OA\Schema(schema="Pull")
  * @OA\Property(type="string",property="description",example="Pull description, if any",nullable=true)
- * @OA\Property(type="array",property="npcs",@OA\Items(type="integer",example="222923"))
  * @OA\Property(type="array",property="spells",@OA\Items(type="integer",example="403631"))
+ * @OA\Property(
+ *     property="enemies",
+ *     type="array",
+ *     @OA\Items(ref="#/components/schemas/PullEnemy")
+ * )
  * @mixin KillZone
  */
 class KillZoneResource extends JsonResource
@@ -28,8 +32,8 @@ class KillZoneResource extends JsonResource
     {
         return [
             'description' => $this->description,
-            'npcs'        => $this->killZoneEnemies->map(fn(KillZoneEnemy $enemy) => $enemy->npc_id)->toArray(),
             'spells'      => $this->spells->map(fn(Spell $spell) => $spell->id)->toArray(),
+            'enemies'     => $this->killZoneEnemies->map(fn(KillZoneEnemy $enemy) => new KillZoneEnemyResource($enemy, $this->dungeonRoute->mappingVersion))->toArray(),
         ];
     }
 }

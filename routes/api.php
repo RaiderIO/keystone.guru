@@ -26,9 +26,13 @@ Route::prefix('v1')->group(static function () {
     });
 
     Route::prefix('route')->group(static function () {
-        Route::get('/', (new APIDungeonRouteController())->get(...))->name('api.v1.route.list');
-        Route::middleware('throttle:api-create-dungeonroute-thumbnail')->group(static function () {
-            Route::post('/{dungeonRoute}/thumbnail', (new APIDungeonRouteController())->createThumbnails(...))->name('api.v1.route.thumbnail.create');
+        Route::get('/', (new APIDungeonRouteController())->list(...))->name('api.v1.route.list');
+        Route::prefix('{dungeonRoute}')->middleware('can:view,dungeonRoute')->group(static function () {
+            Route::get('/', (new APIDungeonRouteController())->get(...))->name('api.v1.route.get');
+
+            Route::middleware('throttle:api-create-dungeonroute-thumbnail')->group(static function () {
+                Route::post('/thumbnail', (new APIDungeonRouteController())->createThumbnails(...))->name('api.v1.route.thumbnail.create');
+            });
         });
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', (new APIDungeonRouteThumbnailJobController())->get(...))->name('api.v1.thumbnailjob.get');
     });

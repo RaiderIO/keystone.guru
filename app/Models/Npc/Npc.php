@@ -205,7 +205,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function setEnemyForces(int $enemyForces, MappingVersion $mappingVersion): NpcEnemyForces
     {
-        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion->id)->first();
+        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion->id);
 
         if ($npcEnemyForces === null) {
             $npcEnemyForces = NpcEnemyForces::create([
@@ -222,18 +222,14 @@ class Npc extends CacheModel implements MappingModelInterface
         return $npcEnemyForces;
     }
 
-    public function enemyForcesByMappingVersion(?int $mappingVersionId = null): HasOne
+    public function enemyForcesByMappingVersion(?int $mappingVersionId = null): ?NpcEnemyForces
     {
-        $belongsTo = $this->hasOne(NpcEnemyForces::class);
-
-        // Most recent
-        if ($mappingVersionId === null) {
-            $belongsTo->orderByDesc('mapping_version_id')->limit(1);
-        } else {
-            $belongsTo->where('mapping_version_id', $mappingVersionId);
-        }
-
-        return $belongsTo;
+        return $this->npcEnemyForces->when($mappingVersionId !== null, function (Collection $collection) use (
+            $mappingVersionId
+        ) {
+            return $collection->filter(fn(NpcEnemyForces $npcEnemyForces) => $npcEnemyForces->mapping_version_id === $mappingVersionId);
+        })->sortByDesc('mapping_version_id')
+            ->first();
     }
 
     public function isEmissary(): bool

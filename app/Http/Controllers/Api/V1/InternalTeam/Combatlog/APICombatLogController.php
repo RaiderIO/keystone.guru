@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Requests\Api\V1\CombatLog\Route\CombatLogRouteRequest;
 use App\Http\Resources\CombatLog\Route\CombatLogRouteCorrectionRequestResource;
-use App\Http\Resources\DungeonRoute\DungeonRouteResource;
+use App\Http\Resources\DungeonRoute\DungeonRouteSummaryResource;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 
 class APICombatLogController extends Controller
@@ -33,10 +33,10 @@ class APICombatLogController extends Controller
     public function createRoute(
         CombatLogRouteRequest                      $request,
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
-    ): DungeonRouteResource {
+    ): DungeonRouteSummaryResource {
         $validated = $request->validated();
 
-        return new DungeonRouteResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
+        return new DungeonRouteSummaryResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
             CombatLogRouteRequestModel::createFromArray($validated),
         ));
     }

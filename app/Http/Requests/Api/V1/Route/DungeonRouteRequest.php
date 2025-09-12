@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\V1\Route;
 use App\Http\Requests\Api\V1\APIFormRequest;
 use Illuminate\Validation\Rule;
 
-class DungeonRouteListRequest extends APIFormRequest
+class DungeonRouteRequest extends APIFormRequest
 {
     protected function getRequestModelClass(): ?string
     {
@@ -26,7 +26,9 @@ class DungeonRouteListRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-
+            'publicKey' => [
+                Rule::exists('dungeon_routes', 'public_key'),
+            ],
         ];
     }
 }

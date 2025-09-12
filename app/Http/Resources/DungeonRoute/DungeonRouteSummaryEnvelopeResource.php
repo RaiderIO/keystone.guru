@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * @OA\Schema(schema="DungeonRouteEnvelopeResource")
- * @OA\Property(property="data",type="array",@OA\Items(ref="#/components/schemas/DungeonRoute"))
+ * @OA\Schema(schema="DungeonRouteSummaryEnvelope")
+ * @OA\Property(property="data",type="array",@OA\Items(ref="#/components/schemas/DungeonRouteSummary"))
  *
  * @since 30/07/2023
  */
-class DungeonRouteEnvelopeResource extends ResourceCollection
+class DungeonRouteSummaryEnvelopeResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -21,7 +21,7 @@ class DungeonRouteEnvelopeResource extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(
-                static fn(DungeonRoute $dungeonRoute) => new DungeonRouteResource($dungeonRoute),
+                static fn(DungeonRoute $dungeonRoute) => new DungeonRouteSummaryResource($dungeonRoute),
             )->toArray(),
         ];
     }
