@@ -30,6 +30,7 @@ yarn-error.log
 _ide_helper.php
 .phpunit.result.cache
 /.phpunit.cache
+.php-cs-fixer.cache
 
 # Docker compose
 docker-compose/mysql
