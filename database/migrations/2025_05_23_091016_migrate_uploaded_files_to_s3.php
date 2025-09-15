@@ -20,7 +20,7 @@ return new class extends Migration {
 
         /** @var Collection<File> $files */
         $files = App\Models\File::query()
-            ->whereIn('model_class', ['App\\Models\\User', 'App\\Models\\Team'])
+            ->whereIn('model_class', [\App\Models\User::class, \App\Models\Team::class])
             ->whereNotIn('disk', ['s3', 's3_user_uploads'])
             ->get();
 
