@@ -321,20 +321,9 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                     <div class="filter_affix">
                         <div class="row">
                             <div class="col">
-                                {!!
-                                    Form::select(
-                                        'filter_weekly_affix_groups[]',
-                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){
-                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
-                                        }), [],
-                                        [
-                                            'id' => 'filter_weekly_affix_groups',
-                                            'name' => 'weekly_affix_groups',
-                                            'class' => 'form-control affixselect selectpicker',
-                                            'multiple' => 'multiple'
-                                        ]
-                                    )
-                                 !!}
+                                {{ html()->multiselect('filter_weekly_affix_groups[]', $seasonWeeklyAffixGroups->mapWithKeys(function (WeeklyAffixGroup $seasonWeeklyAffixGroup) {
+    return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
+}), [])->id('filter_weekly_affix_groups')->name('weekly_affix_groups')->class('form-control affixselect selectpicker') }}
                             </div>
                         </div>
                     </div>
@@ -391,19 +380,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_classes[]',
-                                $characterClassSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_classes',
-                                    'name' => 'classes',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        {{ html()->multiselect('filter_classes[]', $characterClassSelectOptions, [])->id('filter_classes')->name('classes')->class('form-control selectpicker') }}
                     @endcomponent
 
                     @component('common.forms.labelinput', [
@@ -411,19 +388,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_specializations[]',
-                                $characterClassSpecializationsSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_specializations',
-                                    'name' => 'specializations',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        {{ html()->multiselect('filter_specializations[]', $characterClassSpecializationsSelectOptions, [])->id('filter_specializations')->name('specializations')->class('form-control selectpicker') }}
                     @endcomponent
 
 
@@ -433,19 +398,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_classes_player_deaths[]',
-                                $characterClassSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_classes_player_deaths',
-                                    'name' => 'classes_player_deaths',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        {{ html()->multiselect('filter_classes_player_deaths[]', $characterClassSelectOptions, [])->id('filter_classes_player_deaths')->name('classes_player_deaths')->class('form-control selectpicker') }}
                     @endcomponent
 
                     @component('common.forms.labelinput', [
@@ -454,19 +407,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_specializations_player_deaths[]',
-                                $characterClassSpecializationsSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_specializations_player_deaths',
-                                    'name' => 'specializations_player_deaths',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        {{ html()->multiselect('filter_specializations_player_deaths[]', $characterClassSpecializationsSelectOptions, [])->id('filter_specializations_player_deaths')->name('specializations_player_deaths')->class('form-control selectpicker') }}
                     @endcomponent
 
                 @endcomponent
@@ -560,11 +501,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                                 </label>
                             </div>
                             <div class="col">
-                                {{ Form::select('pane',
-                                    ['overlayPane' => 'Overlay', 'markerPane' => 'Marker', 'tooltipPane' => 'Tooltip'],
-                                    'overlayPane',
-                                    ['id' => 'heatmap_heat_option_pane', 'class' => 'selectpicker']
-                                ) }}
+                                {{ html()->select('pane', ['overlayPane' => 'Overlay', 'markerPane' => 'Marker', 'tooltipPane' => 'Tooltip'], 'overlayPane')->id('heatmap_heat_option_pane')->class('selectpicker') }}
                             </div>
                         </div>
                     @endcomponent

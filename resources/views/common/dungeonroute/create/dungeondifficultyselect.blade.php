@@ -73,9 +73,5 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(function (Dungeon $dung
             __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty_title')
              }}"></i>
     </label>
-    {!! Form::select(
-         'dungeon_difficulty', [],
-         $dungeonroute?->difficulty ?? Dungeon::DIFFICULTY_25_MAN,
-         ['id' => $id, 'class' => 'form-control selectpicker'])
-     !!}
+    {{ html()->select('dungeon_difficulty', [], $dungeonroute?->difficulty ?? Dungeon::DIFFICULTY_25_MAN)->id($id)->class('form-control selectpicker') }}
 </div>

@@ -73,25 +73,25 @@ $gameVersionsSelect   = $allGameVersions
 
 @section('content')
     @isset($npcHealth)
-        {{ Form::model($npc, ['route' => ['admin.npc.npchealth.update', $npc, $npcHealth], 'autocomplete' => 'off', 'method' => 'patch']) }}
+        {{ html()->modelForm($npc, 'PATCH', route('admin.npc.npchealth.update', [$npc, $npcHealth]))->attribute('autocomplete', 'off')->open() }}
     @else
-        {{ Form::model($npc, ['route' => ['admin.npc.npchealth.savenew', $npc], 'autocomplete' => 'off', 'method' => 'post']) }}
+        {{ html()->modelForm($npc, 'POST', route('admin.npc.npchealth.savenew', $npc))->attribute('autocomplete', 'off')->open() }}
     @endisset
 
     <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
-        {!! Form::label('game_version_id', __('view_admin.npchealth.edit.game_version'), [], false) !!}
+        {{ html()->label(__('view_admin.npchealth.edit.game_version'), 'game_version_id') }}
         <span class="form-required">*</span>
-        {!! Form::select('game_version_id', $gameVersionsSelect, $npcHealth?->game_version_id, ['class' => 'form-control selectpicker']) !!}
+        {{ html()->select('game_version_id', $gameVersionsSelect, $npcHealth?->game_version_id)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'game_version_id'])
     </div>
 
 
     <div class="form-group{{ $errors->has('health') ? ' has-error' : '' }}">
-        {!! Form::label('health', __('view_admin.npchealth.edit.health'), [], false) !!}
+        {{ html()->label(__('view_admin.npchealth.edit.health'), 'health') }}
         <span class="form-required">*</span>
         <div class="row">
             <div class="col-3">
-                {!! Form::number('health', $npcHealth?->health, ['id' => 'health', 'class' => 'form-control']) !!}
+                {{ html()->number('health', $npcHealth?->health)->id('health')->class('form-control') }}
                 @include('common.forms.form-error', ['key' => 'health'])
             </div>
             <div class="col-9">
@@ -102,33 +102,16 @@ $gameVersionsSelect   = $allGameVersions
                         </div>
                     </div>
                     <div class="col">
-                        {!! Form::text('scaled_health', null, [
-                            'id' => 'scaled_health',
-                            'class' => 'form-control',
-                            'placeholder' => __('view_admin.npchealth.edit.scaled_health_placeholder'),
-                        ]) !!}
+                        {{ html()->text('scaled_health')->id('scaled_health')->class('form-control')->placeholder(__('view_admin.npchealth.edit.scaled_health_placeholder')) }}
                     </div>
                     <div class="col">
-                        {!! Form::text('scaled_health_percentage', null, [
-                            'id' => 'scaled_health_percentage',
-                            'class' => 'form-control',
-                            'placeholder' => __('view_admin.npchealth.edit.scaled_health_percentage_placeholder'),
-                            ]) !!}
+                        {{ html()->text('scaled_health_percentage')->id('scaled_health_percentage')->class('form-control')->placeholder(__('view_admin.npchealth.edit.scaled_health_percentage_placeholder')) }}
                     </div>
                     <div class="col">
-                        {!! Form::text('scaled_health_level', null, ['id' => 'scaled_health_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+                        {{ html()->text('scaled_health_level')->id('scaled_health_level')->class('form-control')->style('display: none;') }}
                     </div>
                     <div class="col">
-                        {!!
-                            Form::select('scaled_health_type',
-                            [
-                                'none' => __('view_admin.npchealth.edit.scaled_type_none'),
-                                'fortified' => __('view_admin.npchealth.edit.scaled_type_fortified', ['affix' => __('affixes.fortified.name')]),
-                                'tyrannical' => __('view_admin.npchealth.edit.scaled_type_tyrannical', ['affix' => __('affixes.tyrannical.name')]),
-                            ],
-                            null,
-                            ['id' => 'scaled_health_type', 'class' => 'form-control selectpicker'])
-                        !!}
+                        {{ html()->select('scaled_health_type', ['none' => __('view_admin.npchealth.edit.scaled_type_none'), 'fortified' => __('view_admin.npchealth.edit.scaled_type_fortified', ['affix' => __('affixes.fortified.name')]), 'tyrannical' => __('view_admin.npchealth.edit.scaled_type_tyrannical', ['affix' => __('affixes.tyrannical.name')])])->id('scaled_health_type')->class('form-control selectpicker') }}
                     </div>
                 </div>
             </div>
@@ -136,19 +119,19 @@ $gameVersionsSelect   = $allGameVersions
     </div>
 
     <div class="form-group{{ $errors->has('percentage') ? ' has-error' : '' }}">
-        {!! Form::label('percentage', __('view_admin.npchealth.edit.percentage')) !!}
-        {!! Form::number('percentage', $npcHealth?->percentage ?? 100, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.npchealth.edit.percentage'), 'percentage') }}
+        {{ html()->number('percentage', $npcHealth?->percentage ?? 100)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'percentage'])
     </div>
 
     <div class="form-group">
-        {!! Form::submit(__('view_admin.npchealth.edit.submit'), ['class' => 'btn btn-info', 'name' => 'submit', 'value' => 'submit']) !!}
+        {{ html()->input('submit')->value(__('view_admin.npchealth.edit.submit'))->class('btn btn-info')->name('submit')->value('submit') }}
     </div>
 
-    {!! Form::close() !!}
+    {{ html()->closeModelForm() }}
 
     <div class="form-group">
-        {!! Form::label('admin_npc_npc_health_table', __('view_admin.npchealth.edit.auto_complete_npc_healths')) !!}
+        {{ html()->label(__('view_admin.npchealth.edit.auto_complete_npc_healths'), 'admin_npc_npc_health_table') }}
 
         <table id="admin_npc_npc_health_table" class="tablesorter default_table table-striped">
             <thead>

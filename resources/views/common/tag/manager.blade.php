@@ -40,10 +40,10 @@ $isDarkTheme = $theme === User::THEME_DARKLY;
         @foreach($categoryTags as $categoryTag)
             <div id="tag_row_{{ $categoryTag->id }}" class="row mt-1">
                 <div class="col-6 col-lg-3">
-                    {!! Form::text('tag_name', $categoryTag->name, ['id' => sprintf('tag_name_%d', $categoryTag->id), 'class' => 'form-control']) !!}
+                    {{ html()->text('tag_name', $categoryTag->name)->id(sprintf('tag_name_%d', $categoryTag->id))->class('form-control') }}
                 </div>
                 <div class="col-4 col-lg-3 ">
-                    {!! Form::color('tag_color', $categoryTag->color ?? ($isDarkTheme ? '#375a7f' : '#ebebeb'), ['id' => sprintf('tag_color_%d', $categoryTag->id), 'class' => 'form-control']) !!}
+                    {{ html()->input('color', 'tag_color', $categoryTag->color ?? ($isDarkTheme ? '#375a7f' : '#ebebeb'))->id(sprintf('tag_color_%d', $categoryTag->id))->class('form-control') }}
                 </div>
                 <div class="col-lg-3 d-none d-lg-block">
                     {{ sprintf('%s %s(s)', $categoryTag->getUsage()->count(), strtolower($tagCategoryNameMapping[$categoryId])) }}
@@ -62,11 +62,11 @@ $isDarkTheme = $theme === User::THEME_DARKLY;
         @endforeach
     </div>
 @endforeach
-{{ Form::model(Auth::user(), ['route' => $category === TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
+{{ html()->modelForm(Auth::user(), 'POST', route($category === TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create'))->open() }}
 <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
-    {!! Form::label('tag_name_new', __('view_common.tag.manager.create_tag')) !!}
-    {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.tag.manager.create_tag'), 'tag_name_new') }}
+    {{ html()->text('tag_name_new')->class('form-control') }}
     @include('common.forms.form-error', ['key' => 'tag_name_new'])
 </div>
-{!! Form::submit(__('view_common.tag.manager.create_new_tag'), ['class' => 'btn btn-info']) !!}
-{!! Form::close() !!}
+{{ html()->input('submit')->value(__('view_common.tag.manager.create_new_tag'))->class('btn btn-info') }}
+{{ html()->closeModelForm() }}

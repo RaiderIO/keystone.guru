@@ -120,9 +120,9 @@ $factions ??= $allFactions;
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="form-group">
-            {!! Form::label('faction_id', __('view_common.group.composition.faction')) !!}
+            {{ html()->label(__('view_common.group.composition.faction'), 'faction_id') }}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
-            {!! Form::select('faction_id', $factions->pluck('name', 'id'), old('faction_id'), ['class' => 'form-control selectpicker']) !!}
+            {{ html()->select('faction_id', $factions->pluck('name', 'id'), old('faction_id'))->class('form-control selectpicker') }}
         </div>
     </div>
     @isset($dungeonroute)
@@ -142,7 +142,7 @@ $factions ??= $allFactions;
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
-            {!! Form::label('class[]', sprintf(__('view_common.group.composition.party_member_nr'), $i)) !!}
+            {{ html()->label(sprintf(__('view_common.group.composition.party_member_nr'), $i), 'class[]') }}
             <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
 
             </select>

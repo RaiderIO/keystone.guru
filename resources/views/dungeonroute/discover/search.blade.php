@@ -75,7 +75,7 @@ use Illuminate\Support\Collection;
     <div class="row">
         <div class="col-xl-3">
             @component('common.search.filter', ['key' => 'title', 'text' => __('view_dungeonroute.discover.search.title')])
-                {!! Form::text('title', request('title'), ['id' => 'title', 'class' => 'form-control', 'placeholder' => __('view_dungeonroute.discover.search.title_placeholder'), 'autocomplete' => 'off']) !!}
+                {{ html()->text('title', request('title'))->id('title')->class('form-control')->placeholder(__('view_dungeonroute.discover.search.title_placeholder'))->attribute('autocomplete', 'off') }}
             @endcomponent
             @component('common.search.filter', ['key' => 'level', 'text' => __('view_dungeonroute.discover.search.key_level')])
                 <input id="level" type="text" name="level" value="{{ old('level') }}" style="display: none;"/>
@@ -85,14 +85,7 @@ use Illuminate\Support\Collection;
                     <div class="filter_affix {{ $expansion }}" style="display: none;">
                         <div class="row">
                             <div class="col">
-                                {!! Form::select(sprintf('filter_affixes_%s[]', $expansion), $affixgroups->pluck('text', 'id'), [],
-                                    ['id' => 'filter_affixes_' . $expansion,
-                                    'class' => 'form-control affixselect selectpicker',
-                                    'multiple' => 'multiple',
-                                    'title' => __('view_dungeonroute.discover.search.affixes_title'),
-                                    'data-selected-text-format' => 'count > 1',
-                                    'data-none-selected-text' => __('view_dungeonroute.discover.search.select_affixes'),
-                                    'data-count-selected-text' => __('view_dungeonroute.discover.search.affixes_selected')]) !!}
+                                {{ html()->multiselect(sprintf('filter_affixes_%s[]', $expansion), $affixgroups->pluck('text', 'id'), [])->id('filter_affixes_' . $expansion)->class('form-control affixselect selectpicker')->attribute('title', __('view_dungeonroute.discover.search.affixes_title'))->data('selected-text-format', 'count > 1')->data('none-selected-text', __('view_dungeonroute.discover.search.select_affixes'))->data('count-selected-text', __('view_dungeonroute.discover.search.affixes_selected')) }}
                             </div>
                         </div>
 
@@ -132,7 +125,7 @@ use Illuminate\Support\Collection;
                 <input id="rating" type="text" name="level" value="{{ old('rating') }}" style="display: none;"/>
             @endcomponent
             @component('common.search.filter', ['key' => 'user', 'text' => __('view_dungeonroute.discover.search.user'), 'expanded' => false])
-                {!! Form::text('user', request('user'), ['id' => 'user', 'class' => 'form-control', 'placeholder' => __('view_dungeonroute.discover.search.user_placeholder'), 'autocomplete' => 'off']) !!}
+                {{ html()->text('user', request('user'))->id('user')->class('form-control')->placeholder(__('view_dungeonroute.discover.search.user_placeholder'))->attribute('autocomplete', 'off') }}
             @endcomponent
         </div>
         <div class="col-xl-9">
