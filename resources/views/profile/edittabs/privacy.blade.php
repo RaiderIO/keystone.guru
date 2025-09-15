@@ -12,13 +12,13 @@ use App\Models\UserReport;
     <h4>
         {{ __('view_profile.edit.privacy') }}
     </h4>
-    {{ Form::model($user, ['route' => ['profile.updateprivacy', $user->id], 'method' => 'patch']) }}
+    {{ html()->modelForm($user, 'PATCH', route('profile.updateprivacy', $user->id))->open() }}
     <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
-        {!! Form::label('analytics_cookie_opt_out', __('view_profile.edit.ga_cookies_opt_out')) !!}
-        {!! Form::checkbox('analytics_cookie_opt_out', 1, $user->analytics_cookie_opt_out, ['class' => 'form-control left_checkbox']) !!}
+        {{ html()->label(__('view_profile.edit.ga_cookies_opt_out'), 'analytics_cookie_opt_out') }}
+        {{ html()->checkbox('analytics_cookie_opt_out', $user->analytics_cookie_opt_out, 1)->class('form-control left_checkbox') }}
     </div>
-    {!! Form::submit(__('view_profile.edit.submit'), ['class' => 'btn btn-info']) !!}
-    {!! Form::close() !!}
+    {{ html()->input('submit')->value(__('view_profile.edit.submit'))->class('btn btn-info') }}
+    {{ html()->closeModelForm() }}
 </div>
 
 <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">

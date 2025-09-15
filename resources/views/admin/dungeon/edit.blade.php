@@ -24,119 +24,119 @@ use Illuminate\Support\Collection;
 @section('content')
     <div class="mb-4">
         @isset($dungeon)
-            {{ Form::model($dungeon, ['route' => ['admin.dungeon.update', $dungeon->slug], 'method' => 'patch']) }}
+            {{ html()->modelForm($dungeon, 'PATCH', route('admin.dungeon.update', $dungeon->slug))->open() }}
         @else
-            {{ Form::open(['route' => 'admin.dungeon.savenew']) }}
+            {{ html()->form('POST', route('admin.dungeon.savenew'))->open() }}
         @endisset
 
         <div class="row form-group">
             <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
-                {!! Form::label('active', __('view_admin.dungeon.edit.active')) !!}
-                {!! Form::checkbox('active', 1, $dungeon?->active ?? 1, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.active'), 'active') }}
+                {{ html()->checkbox('active', $dungeon?->active ?? 1, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'active'])
             </div>
 
             <div class="col {{ $errors->has('raid') ? ' has-error' : '' }}">
-                {!! Form::label('raid', __('view_admin.dungeon.edit.raid')) !!}
-                {!! Form::checkbox('raid', 1, $dungeon?->raid ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.raid'), 'raid') }}
+                {{ html()->checkbox('raid', $dungeon?->raid ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'raid'])
             </div>
 
             <div class="col {{ $errors->has('heatmap_enabled') ? ' has-error' : '' }}">
-                {!! Form::label('heatmap_enabled', __('view_admin.dungeon.edit.heatmap_enabled')) !!}
-                {!! Form::checkbox('heatmap_enabled', 1, $dungeon?->heatmap_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.heatmap_enabled'), 'heatmap_enabled') }}
+                {{ html()->checkbox('heatmap_enabled', $dungeon?->heatmap_enabled ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'heatmap_enabled'])
             </div>
 
             <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
-                {!! Form::label('speedrun_enabled', __('view_admin.dungeon.edit.speedrun_enabled')) !!}
-                {!! Form::checkbox('speedrun_enabled', 1, $dungeon?->speedrun_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.speedrun_enabled'), 'speedrun_enabled') }}
+                {{ html()->checkbox('speedrun_enabled', $dungeon?->speedrun_enabled ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
             </div>
 
             <div class="col {{ $errors->has('speedrun_difficulty_10_man_enabled') ? ' has-error' : '' }}">
-                {!! Form::label('speedrun_difficulty_10_man_enabled', __('view_admin.dungeon.edit.speedrun_difficulty_10_man_enabled')) !!}
-                {!! Form::checkbox('speedrun_difficulty_10_man_enabled', 1, $dungeon?->speedrun_difficulty_10_man_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.speedrun_difficulty_10_man_enabled'), 'speedrun_difficulty_10_man_enabled') }}
+                {{ html()->checkbox('speedrun_difficulty_10_man_enabled', $dungeon?->speedrun_difficulty_10_man_enabled ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'speedrun_difficulty_10_man_enabled'])
             </div>
 
             <div class="col {{ $errors->has('speedrun_difficulty_25_man_enabled') ? ' has-error' : '' }}">
-                {!! Form::label('speedrun_difficulty_25_man_enabled', __('view_admin.dungeon.edit.speedrun_difficulty_25_man_enabled')) !!}
-                {!! Form::checkbox('speedrun_difficulty_25_man_enabled', 1, $dungeon?->speedrun_difficulty_25_man_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.speedrun_difficulty_25_man_enabled'), 'speedrun_difficulty_25_man_enabled') }}
+                {{ html()->checkbox('speedrun_difficulty_25_man_enabled', $dungeon?->speedrun_difficulty_25_man_enabled ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'speedrun_difficulty_25_man_enabled'])
             </div>
 
             <div class="col {{ $errors->has('has_wallpaper') ? ' has-error' : '' }}">
-                {!! Form::label('has_wallpaper', __('view_admin.dungeon.edit.has_wallpaper')) !!}
-                {!! Form::checkbox('has_wallpaper', 1, $dungeon?->has_wallpaper ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.has_wallpaper'), 'has_wallpaper') }}
+                {{ html()->checkbox('has_wallpaper', $dungeon?->has_wallpaper ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'has_wallpaper'])
             </div>
         </div>
 
         <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">
-            {!! Form::label('key', __('view_admin.dungeon.edit.key')) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.key'), 'key') }}
             @isset($dungeon)
-                {!! Form::text('key', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
-                {!! Form::hidden('key', $dungeon->key) !!}
+                {{ html()->text('key')->class('form-control')->disabled() }}
+                {{ html()->hidden('key', $dungeon->key) }}
             @else
-                {!! Form::select('key', $availableKeysSelect, null, ['class' => 'form-control selectpicker']) !!}
+                {{ html()->select('key', $availableKeysSelect)->class('form-control selectpicker') }}
             @endisset
             @include('common.forms.form-error', ['key' => 'key'])
         </div>
 
         @isset($dungeon)
             <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
-                {!! Form::label('id', __('view_admin.dungeon.edit.id')) !!}
-                {!! Form::number('id', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                {{ html()->label(__('view_admin.dungeon.edit.id'), 'id') }}
+                {{ html()->number('id')->class('form-control')->attribute('disabled', 'disabled') }}
                 @include('common.forms.form-error', ['key' => 'id'])
             </div>
         @endisset
 
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
-            {!! Form::label('zone_id', __('view_admin.dungeon.edit.zone_id')) !!}
-            {!! Form::number('zone_id', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.zone_id'), 'zone_id') }}
+            {{ html()->number('zone_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'zone_id'])
         </div>
 
         <div class="form-group{{ $errors->has('map_id') ? ' has-error' : '' }}">
-            {!! Form::label('map_id', __('view_admin.dungeon.edit.map_id')) !!}
-            {!! Form::number('map_id', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.map_id'), 'map_id') }}
+            {{ html()->number('map_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'map_id'])
         </div>
 
         <div class="form-group{{ $errors->has('instance_id') ? ' has-error' : '' }}">
-            {!! Form::label('instance_id', __('view_admin.dungeon.edit.instance_id')) !!}
-            {!! Form::number('instance_id', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.instance_id'), 'instance_id') }}
+            {{ html()->number('instance_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'instance_id'])
         </div>
 
         <div class="form-group{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
-            {!! Form::label('challenge_mode_id', __('view_admin.dungeon.edit.challenge_mode_id')) !!}
-            {!! Form::number('challenge_mode_id', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.challenge_mode_id'), 'challenge_mode_id') }}
+            {{ html()->number('challenge_mode_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'challenge_mode_id'])
         </div>
 
         <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
-            {!! Form::label('mdt_id', __('view_admin.dungeon.edit.mdt_id')) !!}
-            {!! Form::number('mdt_id', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.mdt_id'), 'mdt_id') }}
+            {{ html()->number('mdt_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'mdt_id'])
         </div>
 
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            {!! Form::label('name', __('view_admin.dungeon.edit.dungeon_name')) !!}
-            {!! Form::text('name', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.dungeon_name'), 'name') }}
+            {{ html()->text('name')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
 
         <div class="form-group{{ $errors->has('slug') ? ' has-error' : '' }}">
-            {!! Form::label('slug', __('view_admin.dungeon.edit.slug')) !!}
-            {!! Form::text('slug', null, ['class' => 'form-control']) !!}
+            {{ html()->label(__('view_admin.dungeon.edit.slug'), 'slug') }}
+            {{ html()->text('slug')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'slug'])
         </div>
 
-        {!! Form::submit(__('view_admin.dungeon.edit.submit'), ['class' => 'btn btn-info']) !!}
+        {{ html()->input('submit')->value(__('view_admin.dungeon.edit.submit'))->class('btn btn-info') }}
 
-        {!! Form::close() !!}
+        {{ html()->closeModelForm() }}
         @isset($dungeon)
     </div>
 

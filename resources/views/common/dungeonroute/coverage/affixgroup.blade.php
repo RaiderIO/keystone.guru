@@ -69,9 +69,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                         {{ $seasonSelect->first() }}
                     </div>
                 @else
-                    {!! Form::select('dungeonroute_coverage_season_id', $seasonSelect->toArray(), $routeCoverageSeasonId,
-                            ['id' => 'dungeonroute_coverage_season_id', 'class' => 'form-control selectpicker']
-                    ) !!}
+                    {{ html()->select('dungeonroute_coverage_season_id', $seasonSelect->toArray(), $routeCoverageSeasonId)->id('dungeonroute_coverage_season_id')->class('form-control selectpicker') }}
                 @endif
             </th>
             @foreach($affixGroups as $affixGroup)

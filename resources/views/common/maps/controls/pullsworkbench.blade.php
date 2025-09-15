@@ -79,11 +79,7 @@ use Illuminate\Support\Collection;
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_description_modal'])
         <div class="form-group">
             <h4>
-                {!! Form::label(
-                    'map_killzonessidebar_killzone_description_modal_textarea',
-                    __('view_common.maps.controls.pullsworkbench.modal.description.label'),
-                    ['id' => 'map_killzonessidebar_killzone_description_modal_label']
-                ) !!}
+                {{ html()->label(__('view_common.maps.controls.pullsworkbench.modal.description.label'), 'map_killzonessidebar_killzone_description_modal_textarea')->id('map_killzonessidebar_killzone_description_modal_label') }}
             </h4>
             <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
             </div>
@@ -96,10 +92,7 @@ use Illuminate\Support\Collection;
             </div>
             <div id="map_killzonessidebar_killzone_description_modal_remaining_characters" class="form-group text-warning" style="display: none;">
             </div>
-            {{ Form::textarea('map_killzonessidebar_killzone_description_modal_textarea', '', [
-                'class' => 'form-control',
-                'id' => 'map_killzonessidebar_killzone_description_modal_textarea',
-            ]) }}
+            {{ html()->textarea('map_killzonessidebar_killzone_description_modal_textarea', '')->class('form-control')->id('map_killzonessidebar_killzone_description_modal_textarea') }}
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-dismiss="modal">
@@ -110,11 +103,7 @@ use Illuminate\Support\Collection;
 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_spells_modal'])
         <div class="form-group">
-            {!! Form::label(
-                'map_killzonessidebar_killzone_spells_modal_select',
-                __('view_common.maps.controls.pullsworkbench.modal.spells.label'),
-                ['id' => 'map_killzonessidebar_killzone_spells_modal_label']
-            ) !!}
+            {{ html()->label(__('view_common.maps.controls.pullsworkbench.modal.spells.label'), 'map_killzonessidebar_killzone_spells_modal_select')->id('map_killzonessidebar_killzone_spells_modal_label') }}
             <select id="map_killzonessidebar_killzone_spells_modal_select"
                     class="form-control selectpicker"
                     data-live-search="true"

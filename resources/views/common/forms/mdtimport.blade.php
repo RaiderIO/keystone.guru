@@ -19,13 +19,11 @@
     </script>
 @endsection
 
-{{ Form::open(['route' => 'dungeonroute.new.mdtimport']) }}
+{{ html()->form('POST', route('dungeonroute.new.mdtimport'))->open() }}
 <div class="form-group">
     <div class="row mb-2">
         <div class="col">
-            {!! Form::label('import_string',
-            __('view_common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', [], false)
-            !!}
+            {{ html()->label(__('view_common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', 'import_string') }}
         </div>
         <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
             <div class="btn btn-outline-warning" data-toggle="tooltip"
@@ -34,8 +32,8 @@
             </div>
         </div>
     </div>
-    {{ Form::textarea('import_string_textarea', '', ['class' => 'form-control import_mdt_string_textarea', 'data-simplebar' => '']) }}
-    {{ Form::hidden('import_string', '', ['class' => 'import_string']) }}
+    {{ html()->textarea('import_string_textarea', '')->class('form-control import_mdt_string_textarea')->data('simplebar', '') }}
+    {{ html()->hidden('import_string', '')->class('import_string') }}
 </div>
 @guest
     <div class="form-group">
@@ -47,7 +45,7 @@
                 }}
         </div>
     </div>
-    {!! Form::hidden('mdt_import_sandbox', 1) !!}
+    {{ html()->hidden('mdt_import_sandbox', 1) }}
 @else
     <div class="form-group">
         <label for="mdt_import_sandbox">
@@ -59,7 +57,7 @@
                 )
                  }}"></i>
         </label>
-        {!! Form::checkbox('mdt_import_sandbox', 1, false, ['id' => 'mdt_import_sandbox', 'class' => 'form-control left_checkbox']) !!}
+        {{ html()->checkbox('mdt_import_sandbox', false, 1)->id('mdt_import_sandbox')->class('form-control left_checkbox') }}
     </div>
     @include('common.team.select', ['id' => 'mdt_import_team_id_select',  'required' => false])
 @endguest
@@ -95,7 +93,7 @@
                 <label for="assign_notes_to_pulls">
                     {{ __('view_common.forms.mdtimport.assign_notes_to_pulls') }}
                 </label>
-                {!! Form::checkbox('assign_notes_to_pulls', 1, true, ['id' => 'assign_notes_to_pulls', 'class' => 'form-control left_checkbox']) !!}
+                {{ html()->checkbox('assign_notes_to_pulls', true, 1)->id('assign_notes_to_pulls')->class('form-control left_checkbox') }}
             </div>
         </div>
         <div class="col">
@@ -103,16 +101,16 @@
                 <label for="import_as_this_week">
                     {{ __('view_common.forms.mdtimport.import_as_this_week') }}
                 </label>
-                {!! Form::checkbox('import_as_this_week', 1, false, ['id' => 'import_as_this_week', 'class' => 'form-control left_checkbox']) !!}
+                {{ html()->checkbox('import_as_this_week', false, 1)->id('import_as_this_week')->class('form-control left_checkbox') }}
             </div>
         </div>
     </div>
 </div>
 
 <div class="form-group">
-    {!! Form::submit(__('view_common.forms.mdtimport.import_route'), ['class' => 'btn btn-primary col-md-auto', 'disabled']) !!}
+    {{ html()->input('submit')->value(__('view_common.forms.mdtimport.import_route'))->class('btn btn-primary col-md-auto')->disabled() }}
     <div class="col-md">
 
     </div>
 </div>
-{{ Form::close() }}
+{{ html()->form()->close() }}

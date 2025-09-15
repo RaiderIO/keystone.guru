@@ -74,7 +74,7 @@ use Illuminate\Support\Collection;
                             @include('common.mappingversion.select', ['dungeon' => $dungeon])
                         </div>
                         <div class="col-auto pl-1">
-                            {!! Form::submit(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'), ['class' => 'form-control']) !!}
+                            {{ html()->input('submit')->value(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'))->class('form-control') }}
                         </div>
                     </div>
                 </form>

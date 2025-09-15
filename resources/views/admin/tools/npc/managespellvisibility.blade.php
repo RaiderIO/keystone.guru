@@ -49,7 +49,7 @@ use Illuminate\Support\Collection;
 
 @section('content')
 
-    {{ Form::open(['route' => ['admin.tools.npc.managespellvisibility.submit']]) }}
+    {{ html()->form('POST', route('admin.tools.npc.managespellvisibility.submit', ))->open() }}
     @include('common.dungeon.select', [
         'id' => 'spell_visibility_dungeon_select',
         'activeOnly' => false,
@@ -63,7 +63,7 @@ use Illuminate\Support\Collection;
         </button>
     </div>
 
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
 
     {{ $npcs->links() }}
 

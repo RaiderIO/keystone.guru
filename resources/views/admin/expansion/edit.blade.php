@@ -7,32 +7,32 @@
 
 @section('content')
     @isset($expansion)
-        {{ Form::model($expansion, ['route' => ['admin.expansion.update', $expansion], 'method' => 'patch', 'files' => true]) }}
+        {{ html()->modelForm($expansion, 'PATCH', route('admin.expansion.update', $expansion))->acceptsFiles()->open() }}
     @else
-        {{ Form::open(['route' => 'admin.expansion.savenew', 'files' => true]) }}
+        {{ html()->form('POST', route('admin.expansion.savenew'))->acceptsFiles()->open() }}
     @endisset
 
     <div class="form-group{{ $errors->has('active') ? ' has-error' : '' }}">
-        {!! Form::label('active', __('view_admin.expansion.edit.active')) !!}
-        {!! Form::checkbox('active', 1, isset($expansion) ? $expansion->active : 1, ['class' => 'form-control left_checkbox']) !!}
+        {{ html()->label(__('view_admin.expansion.edit.active'), 'active') }}
+        {{ html()->checkbox('active', isset($expansion) ? $expansion->active : 1, 1)->class('form-control left_checkbox') }}
         @include('common.forms.form-error', ['key' => 'active'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('name', __('view_admin.expansion.edit.name')) !!}
-        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.expansion.edit.name'), 'name') }}
+        {{ html()->text('name')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('shortname', __('view_admin.expansion.edit.shortname')) !!}
-        {!! Form::text('shortname', null, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.expansion.edit.shortname'), 'shortname') }}
+        {{ html()->text('shortname')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'shortname'])
     </div>
 
     <div class="form-group{{ $errors->has('icon') ? ' has-error' : '' }}">
-        {!! Form::label('icon', __('view_admin.expansion.edit.icon')) !!}
-        {!! Form::file('icon', ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.expansion.edit.icon'), 'icon') }}
+        {{ html()->file('icon')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'icon'])
     </div>
 
@@ -44,14 +44,12 @@
     @endisset
 
     <div class="form-group{{ $errors->has('color') ? ' has-error' : '' }}">
-        {!! Form::label('color', __('view_admin.expansion.edit.color')) !!}
-        {!! Form::color('color', null, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.expansion.edit.color'), 'color') }}
+        {{ html()->input('color', 'color')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'color'])
     </div>
 
-    {!! Form::submit(isset($expansion) ?
-        __('view_admin.expansion.edit.edit') :
-        __('view_admin.expansion.edit.submit'), ['class' => 'btn btn-info']) !!}
+    {{ html()->input('submit')->value(isset($expansion) ? __('view_admin.expansion.edit.edit') : __('view_admin.expansion.edit.submit'))->class('btn btn-info') }}
 
-    {!! Form::close() !!}
+    {{ html()->closeModelForm() }}
 @endsection

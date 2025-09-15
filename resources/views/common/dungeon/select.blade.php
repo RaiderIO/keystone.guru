@@ -153,13 +153,12 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
 
 <div class="form-group">
     @if($label !== false)
-        {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
+        {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $name) }}
     @endif
-    {!! Form::select($name, $dungeonsSelect, $selected, array_merge(['id' => $id],
+    {{ html()->select($name, $dungeonsSelect, $selected)->attributes(array_merge(['id' => $id],
         $multiple ? ['multiple' => 'multiple'] : [], [
             'class' => 'form-control selectpicker', 'data-live-search' => 'true'
-        ])
-    ) !!}
+        ])) }}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
             <i class="fa fa-exclamation-triangle"></i> {{ __('view_common.dungeon.select.siege_of_boralus_warning') }}

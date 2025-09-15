@@ -106,7 +106,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                                    style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
                                                 <i id="route_not_favorited" class="far fa-star favorite_star"
                                                    style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
-                                                {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
+                                                {{ html()->hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0')->id('favorite') }}
                                             </h5>
                                         </div>
                                     @endisset

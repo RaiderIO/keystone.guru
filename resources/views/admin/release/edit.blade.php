@@ -23,48 +23,48 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
 
 @section('content')
     @isset($release)
-        {{ Form::model($release, ['route' => ['admin.release.update', $release->version], 'method' => 'patch', 'files' => true]) }}
+        {{ html()->modelForm($release, 'PATCH', route('admin.release.update', $release->version))->acceptsFiles()->open() }}
     @else
-        {{ Form::open(['route' => 'admin.release.savenew', 'files' => true]) }}
+        {{ html()->form('POST', route('admin.release.savenew'))->acceptsFiles()->open() }}
     @endisset
 
     <div class="form-group{{ $errors->has('version') ? ' has-error' : '' }}">
-        {!! Form::label('version', __('view_admin.release.edit.version')) !!}
-        {!! Form::text('version', null, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.release.edit.version'), 'version') }}
+        {{ html()->text('version')->class('form-control') }}
     </div>
 
     <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-        {!! Form::label('title', __('view_admin.release.edit.title')) !!}
-        {!! Form::text('title', null, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.release.edit.title'), 'title') }}
+        {{ html()->text('title')->class('form-control') }}
     </div>
 
     <div class="row form-group">
         <div class="col {{ $errors->has('backup_db') ? 'has-error' : '' }}">
-            {!! Form::label('backup_db', __('view_admin.release.edit.backup_db')) !!}
-            {!! Form::checkbox('backup_db', 1, isset($release) ? $release->backup_db : 1, ['class' => 'form-control left_checkbox']) !!}
+            {{ html()->label(__('view_admin.release.edit.backup_db'), 'backup_db') }}
+            {{ html()->checkbox('backup_db', isset($release) ? $release->backup_db : 1, 1)->class('form-control left_checkbox') }}
         </div>
 
         <div class="col {{ $errors->has('silent') ? 'has-error' : '' }}">
-            {!! Form::label('silent', __('view_admin.release.edit.silent')) !!}
-            {!! Form::checkbox('silent', 1, isset($release) ? $release->silent : 0, ['class' => 'form-control left_checkbox']) !!}
+            {{ html()->label(__('view_admin.release.edit.silent'), 'silent') }}
+            {{ html()->checkbox('silent', isset($release) ? $release->silent : 0, 1)->class('form-control left_checkbox') }}
         </div>
 
         <div class="col {{ $errors->has('spotlight') ? 'has-error' : '' }}">
-            {!! Form::label('spotlight', __('view_admin.release.edit.spotlight')) !!}
-            {!! Form::checkbox('spotlight', 1, isset($release) ? $release->spotlight : 0, ['class' => 'form-control left_checkbox']) !!}
+            {{ html()->label(__('view_admin.release.edit.spotlight'), 'spotlight') }}
+            {{ html()->checkbox('spotlight', isset($release) ? $release->spotlight : 0, 1)->class('form-control left_checkbox') }}
         </div>
 
         <div class="col {{ $errors->has('released') ? 'has-error' : '' }}">
-            {!! Form::label('released', __('view_admin.release.edit.released')) !!}
-            {!! Form::checkbox('released', 1, isset($release) ? $release->released : 0, ['class' => 'form-control left_checkbox', 'disabled' => 'disabled']) !!}
+            {{ html()->label(__('view_admin.release.edit.released'), 'released') }}
+            {{ html()->checkbox('released', isset($release) ? $release->released : 0, 1)->class('form-control left_checkbox')->disabled() }}
         </div>
     </div>
 
     <h4>{{ __('view_admin.release.edit.changelog') }}</h4>
 
     <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-        {!! Form::label('changelog_description', __('view_admin.release.edit.description')) !!}
-        {!! Form::text('changelog_description', $changelog->description, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_admin.release.edit.description'), 'changelog_description') }}
+        {{ html()->text('changelog_description', $changelog->description)->class('form-control') }}
     </div>
 
     <div id="changes_container" class="form-group mb-4">
@@ -85,10 +85,10 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
     </div>
 
     <div class="form-group">
-        {!! Form::submit(isset($release) ? __('view_admin.release.edit.edit') : __('view_admin.release.edit.submit'), ['class' => 'btn btn-info']) !!}
+        {{ html()->input('submit')->value(isset($release) ? __('view_admin.release.edit.edit') : __('view_admin.release.edit.submit'))->class('btn btn-info') }}
     </div>
 
-    {!! Form::close() !!}
+    {{ html()->closeModelForm() }}
 
 
     @isset($release)
@@ -96,8 +96,8 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
                 <?php
                 $releaseArr = $release->toArray();
                 ?>
-            {!! Form::label('release_json', __('view_admin.release.edit.release_json')) !!}
-            {!! Form::textarea('release_json', json_encode($releaseArr, JSON_PRETTY_PRINT), ['class' => 'form-control w-100']) !!}
+            {{ html()->label(__('view_admin.release.edit.release_json'), 'release_json') }}
+            {{ html()->textarea('release_json', json_encode($releaseArr, JSON_PRETTY_PRINT))->class('form-control w-100') }}
         </div>
     @endisset
 @endsection
