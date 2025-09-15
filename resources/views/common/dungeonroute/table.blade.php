@@ -106,7 +106,15 @@ if (Auth::check()) {
     </div>
     <div class="col-lg pl-1 pr-1">
         {{ html()->label(__('view_common.dungeonroute.table.affixes'), 'affixes[]') }}
-        {{ html()->multiselect('affixes[]', $affixgroups->pluck('text', 'id'))->id('affixes')->class('form-control affixselect selectpicker')->data('selected-text-format', 'count > 1')->data('none-selected-text', __('view_common.dungeonroute.table.select_affixes'))->data('count-selected-text', __('view_common.dungeonroute.table.affixes_selected')) }}
+        {{
+            html()
+                ->multiselect('affixes[]', $affixgroups->pluck('text', 'id'))
+                ->id('affixes')
+                ->class('form-control affixselect selectpicker')
+                ->data('selected-text-format', 'count > 1')
+                ->data('none-selected-text', __('view_common.dungeonroute.table.select_affixes'))
+                ->data('count-selected-text', __('view_common.dungeonroute.table.affixes_selected'))
+             }}
     </div>
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
@@ -139,7 +147,9 @@ if (Auth::check()) {
                     ->multiselect('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'))
                     ->id('dungeonroute_tags_select')
                     ->class('form-control selectpicker')
-                    ->attribute('title', $searchTags->isEmpty() ? __('view_common.dungeonroute.table.tags_title') : false)
+                    ->attribute('title', $searchTags->isEmpty() ?
+                        __('view_common.dungeonroute.table.tags_title') : __('view_common.dungeonroute.table.select_tags')
+                    )
                     ->data('selected-text-format', 'count > 1')
                     ->data('none-selected-text', __('view_common.dungeonroute.table.select_tags'))
                     ->data('count-selected-text', __('view_common.dungeonroute.table.tags_selected'))
