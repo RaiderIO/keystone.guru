@@ -121,12 +121,29 @@ if (Auth::check()) {
             $requirements['favorite'] = __('view_common.dungeonroute.table.favorite');
         }
         ?>
-        {{ html()->multiselect('dungeon_id', $requirements, 0)->id('dungeonroute_requirements_select')->class('form-control selectpicker')->data('selected-text-format', 'count > 1')->data('none-selected-text', __('view_common.dungeonroute.table.select_requirements'))->data('count-selected-text', __('view_common.dungeonroute.table.requirements_selected')) }}
+        {{
+            html()
+                ->multiselect('dungeon_id', $requirements, 0)
+                ->id('dungeonroute_requirements_select')
+                ->class('form-control selectpicker')
+                ->data('selected-text-format', 'count > 1')
+                ->data('none-selected-text', __('view_common.dungeonroute.table.select_requirements'))
+                ->data('count-selected-text', __('view_common.dungeonroute.table.requirements_selected'))
+        }}
     </div>
     @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
             {{ html()->label(__('view_common.dungeonroute.table.tags'), 'dungeonroute_tags_select[]') }}
-            {{ html()->multiselect('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'))->id('dungeonroute_tags_select')->class('form-control selectpicker')->attribute('title', $searchTags->isEmpty() ? __('view_common.dungeonroute.table.tags_title') : false)->data('selected-text-format', 'count > 1')->data('none-selected-text', __('view_common.dungeonroute.table.select_tags'))->data('count-selected-text', __('view_common.dungeonroute.table.tags_selected')) }}
+            {{
+                html()
+                    ->multiselect('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'))
+                    ->id('dungeonroute_tags_select')
+                    ->class('form-control selectpicker')
+                    ->attribute('title', $searchTags->isEmpty() ? __('view_common.dungeonroute.table.tags_title') : false)
+                    ->data('selected-text-format', 'count > 1')
+                    ->data('none-selected-text', __('view_common.dungeonroute.table.select_tags'))
+                    ->data('count-selected-text', __('view_common.dungeonroute.table.tags_selected'))
+             }}
         </div>
     @endif
     <div class="col-lg pl-1 pr-1">

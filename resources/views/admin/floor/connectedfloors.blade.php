@@ -48,7 +48,14 @@ $connectedFloorCandidates = $dungeon->floors;
                 <a href="{{ route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $connectedFloorCandidate]) }}">{{ __($connectedFloorCandidate->name) }}</a>
             </div>
             <div class="col-2">
-                {{ html()->select(sprintf('floor_%s_direction', $connectedFloorCandidate->id), [FloorCoupling::DIRECTION_NONE => __('view_admin.floor.edit.floor_direction.none'), FloorCoupling::DIRECTION_UP => __('view_admin.floor.edit.floor_direction.up'), FloorCoupling::DIRECTION_DOWN => __('view_admin.floor.edit.floor_direction.down'), FloorCoupling::DIRECTION_LEFT => __('view_admin.floor.edit.floor_direction.left'), FloorCoupling::DIRECTION_RIGHT => __('view_admin.floor.edit.floor_direction.right')], isset($floorCoupling) ? $floorCoupling->direction : '')->attributes(array_merge(['class' => 'form-control selectpicker'], $disabled)) }}
+                {{ html()->select(sprintf('floor_%s_direction', $connectedFloorCandidate->id), [
+                    FloorCoupling::DIRECTION_NONE => __('view_admin.floor.edit.floor_direction.none'),
+                    FloorCoupling::DIRECTION_UP => __('view_admin.floor.edit.floor_direction.up'),
+                    FloorCoupling::DIRECTION_DOWN => __('view_admin.floor.edit.floor_direction.down'),
+                    FloorCoupling::DIRECTION_LEFT => __('view_admin.floor.edit.floor_direction.left'),
+                    FloorCoupling::DIRECTION_RIGHT => __('view_admin.floor.edit.floor_direction.right')
+                ], isset($floorCoupling) ? $floorCoupling->direction : '')
+                    ->attributes(array_merge(['class' => 'form-control selectpicker'], $disabled)) }}
             </div>
         </div>
         <?php }

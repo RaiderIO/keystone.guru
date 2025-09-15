@@ -85,7 +85,16 @@ use Illuminate\Support\Collection;
                     <div class="filter_affix {{ $expansion }}" style="display: none;">
                         <div class="row">
                             <div class="col">
-                                {{ html()->multiselect(sprintf('filter_affixes_%s[]', $expansion), $affixgroups->pluck('text', 'id'), [])->id('filter_affixes_' . $expansion)->class('form-control affixselect selectpicker')->attribute('title', __('view_dungeonroute.discover.search.affixes_title'))->data('selected-text-format', 'count > 1')->data('none-selected-text', __('view_dungeonroute.discover.search.select_affixes'))->data('count-selected-text', __('view_dungeonroute.discover.search.affixes_selected')) }}
+                                {{
+                                    html()
+                                        ->multiselect(sprintf('filter_affixes_%s[]', $expansion), $affixgroups->pluck('text', 'id'), [])
+                                        ->id('filter_affixes_' . $expansion)
+                                        ->class('form-control affixselect selectpicker')
+                                        ->attribute('title', __('view_dungeonroute.discover.search.affixes_title'))
+                                        ->data('selected-text-format', 'count > 1')
+                                        ->data('none-selected-text', __('view_dungeonroute.discover.search.select_affixes'))
+                                        ->data('count-selected-text', __('view_dungeonroute.discover.search.affixes_selected'))
+                                }}
                             </div>
                         </div>
 
