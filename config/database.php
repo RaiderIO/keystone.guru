@@ -7,7 +7,7 @@ return [
     'connections' => [
         'mysql' => [
             'driver'         => 'mysql',
-            'url'            => env('DATABASE_URL'),
+            'url'            => env('DB_URL'),
             'host'           => env('DB_HOST', '127.0.0.1'),
             'port'           => env('DB_PORT', '3306'),
             'database'       => env('DB_DATABASE', 'forge'),
@@ -27,7 +27,7 @@ return [
 
         'migrate' => [
             'driver'         => 'mysql',
-            'url'            => env('DATABASE_URL'),
+            'url'            => env('DB_URL'),
             'host'           => env('DB_HOST', '127.0.0.1'),
             'port'           => env('DB_PORT', '3306'),
             'database'       => env('DB_DATABASE', 'forge'),
@@ -46,7 +46,7 @@ return [
 
         'phpunit' => [
             'driver'         => 'mysql',
-            'url'            => env('DATABASE_URL'),
+            'url'            => env('DB_URL'),
             'host'           => env('DB_HOST', '127.0.0.1'),
             'port'           => env('DB_PORT', '3306'),
             'database'       => env('DB_PHPUNIT_DATABASE', 'forge'),
@@ -65,7 +65,7 @@ return [
 
         'tracker' => [
             'driver'         => 'mysql',
-            'url'            => env('DATABASE_URL'),
+            'url'            => env('DB_URL'),
             'host'           => env('DB_HOST', '127.0.0.1'),
             'port'           => env('DB_PORT', '3306'),
             'database'       => env('DB_TRACKER_DATABASE', 'forge'),
@@ -84,7 +84,7 @@ return [
 
         'combatlog' => [
             'driver'         => 'mysql',
-            'url'            => env('DATABASE_URL'),
+            'url'            => env('DB_URL'),
             'host'           => env('DB_COMBATLOG_HOST', '127.0.0.1'),
             'port'           => env('DB_COMBATLOG_PORT', '3306'),
             'database'       => env('DB_COMBATLOG_DATABASE', 'forge'),
