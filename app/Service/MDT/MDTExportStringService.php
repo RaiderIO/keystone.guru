@@ -269,7 +269,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 return app('model-cache')->runDisabled(function () use ($warnings) {
                     //        $lua = $this->_getLua();
 
-                    $affixes = $this->dungeonRoute->affixes;
+                    $affixes = $this->dungeonRoute->affixes()->with(['season'])->get();
 
                     $mdtObject = [
                         //
