@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cloudflare\CloudflareServiceInterface;
 use Closure;
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
@@ -32,7 +33,7 @@ class TrustProxies extends Middleware
     ) {
     }
 
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         // https://developers.cloudflare.com/fundamentals/reference/http-request-headers/
         if (app()->isProduction()) {
