@@ -21,11 +21,7 @@ use App\Models\Season;
     </label>
     <div class="row">
         <div class="col">
-            {!!
-                Form::text('simulate_key_level',
-                $season === null ? 2 : (int)($season->key_level_min + $season->key_level_max) / 2,
-                ['id' => 'simulate_key_level', 'class' => 'form-control'])
-            !!}
+            {{ html()->text('simulate_key_level', $season === null ? 2 : (int) ($season->key_level_min + $season->key_level_max) / 2)->id('simulate_key_level')->class('form-control') }}
         </div>
     </div>
 </div>
@@ -39,12 +35,12 @@ use App\Models\Season;
         </label>
         <div class="row">
             <div class="col">
-                {!! Form::select('simulate_shrouded_bounty_type', $shroudedBountyTypes, null, ['id' => 'simulate_shrouded_bounty_type', 'class' => 'form-control selectpicker']) !!}
+                {{ html()->select('simulate_shrouded_bounty_type', $shroudedBountyTypes)->id('simulate_shrouded_bounty_type')->class('form-control selectpicker') }}
             </div>
         </div>
     </div>
 @else
-    {!! Form::hidden('simulate_shrouded_bounty_type', 'none', ['id' => 'simulate_shrouded_bounty_type']) !!}
+    {{ html()->hidden('simulate_shrouded_bounty_type', 'none')->id('simulate_shrouded_bounty_type') }}
 @endif
 
 <div class="form-group row">
@@ -56,11 +52,7 @@ use App\Models\Season;
         </label>
         <div class="row">
             <div class="col">
-                {!! Form::select('simulate_affix', $affixes, null, [
-                    'id' => 'simulate_affix',
-                    'class' => 'form-control selectpicker',
-                    'multiple' => 'multiple',
-                ]) !!}
+                {{ html()->multiselect('simulate_affix', $affixes)->id('simulate_affix')->class('form-control selectpicker') }}
             </div>
         </div>
     </div>
@@ -73,12 +65,12 @@ use App\Models\Season;
             </label>
             <div class="row">
                 <div class="col">
-                    {!! Form::text('simulate_thundering_clear_seconds', '10', ['id' => 'simulate_thundering_clear_seconds', 'class' => 'form-control']) !!}
+                    {{ html()->text('simulate_thundering_clear_seconds', '10')->id('simulate_thundering_clear_seconds')->class('form-control') }}
                 </div>
             </div>
         </div>
     @else
-        {!! Form::hidden('simulate_thundering_clear_seconds', '0', ['id' => 'simulate_thundering_clear_seconds']) !!}
+        {{ html()->hidden('simulate_thundering_clear_seconds', '0')->id('simulate_thundering_clear_seconds') }}
     @endif
 </div>
 
@@ -91,11 +83,7 @@ use App\Models\Season;
         </label>
         <div class="row">
             <div class="col">
-                {!! Form::select('simulate_raid_buffs', $raidBuffsOptions, null, [
-                    'id' => 'simulate_raid_buffs',
-                    'class' => 'form-control selectpicker',
-                    'multiple' => 'multiple',
-                ]) !!}
+                {{ html()->multiselect('simulate_raid_buffs', $raidBuffsOptions)->id('simulate_raid_buffs')->class('form-control selectpicker') }}
             </div>
         </div>
     </div>
@@ -109,7 +97,7 @@ use App\Models\Season;
     </label>
     <div class="row">
         <div class="col">
-            {!! Form::text('simulate_hp_percent', '27', ['id' => 'simulate_hp_percent', 'class' => 'form-control']) !!}
+            {{ html()->text('simulate_hp_percent', '27')->id('simulate_hp_percent')->class('form-control') }}
         </div>
     </div>
 </div>
@@ -122,7 +110,7 @@ use App\Models\Season;
     </label>
     <div class="row">
         <div class="col">
-            {!! Form::select('simulate_bloodlust_per_pull', [], null, ['id' => 'simulate_bloodlust_per_pull', 'class' => 'form-control selectpicker', 'multiple' => 'multiple']) !!}
+            {{ html()->multiselect('simulate_bloodlust_per_pull', [])->id('simulate_bloodlust_per_pull')->class('form-control selectpicker') }}
         </div>
     </div>
 </div>

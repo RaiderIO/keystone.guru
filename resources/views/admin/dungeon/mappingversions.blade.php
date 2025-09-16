@@ -41,13 +41,13 @@ $gameVersionsSelect = $allGameVersions
               action="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}">
             <div class="row no-gutters">
                 <div class="col pr-1">
-                    {!! Form::select('game_version', $gameVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+                    {{ html()->select('game_version', $gameVersionsSelect)->class('form-control selectpicker') }}
                 </div>
                 <div class="col-auto pr-1">
-                    {!! Form::submit(__('view_admin.dungeon.edit.mapping_versions.add_mapping_version'), ['class' => 'form-control', 'name' => 'action']) !!}
+                    {{ html()->input('submit')->value(__('view_admin.dungeon.edit.mapping_versions.add_mapping_version'))->class('form-control')->name('action') }}
                 </div>
                 <div class="col-auto">
-                    {!! Form::submit(__('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version'), ['class' => 'form-control', 'name' => 'action']) !!}
+                    {{ html()->input('submit')->value(__('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version'))->class('form-control')->name('action') }}
                 </div>
             </div>
         </form>

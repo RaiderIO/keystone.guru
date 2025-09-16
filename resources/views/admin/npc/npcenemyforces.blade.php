@@ -63,10 +63,10 @@ use App\Models\Npc\NpcEnemyForces;
                             </a>
                         </div>
                         <div class="col">
-                            {{ Form::open(['route' => ['admin.npc.npcenemyforces.delete', 'npc' => $npc, 'npcEnemyForces' => $npcEnemyForces]]) }}
-                            {!! Form::hidden('_method', 'delete') !!}
-                            {!! Form::submit(__('view_admin.npc.npcenemyforces.delete_npc_enemy_forces'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
-                            {!! Form::close() !!}
+                            {{ html()->form('POST', route('admin.npc.npcenemyforces.delete', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces]))->open() }}
+                            {{ html()->hidden('_method', 'delete') }}
+                            {{ html()->input('submit')->value(__('view_admin.npc.npcenemyforces.delete_npc_enemy_forces'))->class('btn btn-danger')->name('submit') }}
+                            {{ html()->form()->close() }}
                         </div>
                     </div>
                 @endif

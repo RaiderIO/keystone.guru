@@ -59,7 +59,7 @@ $editHeatmapUrl = route('dungeon.heatmap.gameversion.view.floor', $routeParams);
         <div class="col-auto px-0 px-md-1">
             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
             @if($embedOptions['show']['floorSelection'])
-                {!! Form::select('map_floor_selection_dropdown', [__('view_dungeon.heatmap.gameversion.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
+                {{ html()->select('map_floor_selection_dropdown', [__('view_dungeon.heatmap.gameversion.embed.select_floor')], 1)->id('map_floor_selection_dropdown')->class('form-control selectpicker') }}
             @endif
         </div>
         <div class="col-auto px-1 d-none d-md-block">
