@@ -4,7 +4,6 @@ use App\Logic\MapContext\MapContext;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
@@ -12,7 +11,6 @@ use Illuminate\Support\Collection;
  * @var Floor                        $floor
  * @var string                       $title
  * @var MapContext                   $mapContext
- * @var boolean                      $showHeatmapSearch
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
  * @var int                          $itemLevelMin
@@ -48,19 +46,8 @@ use Illuminate\Support\Collection;
                 'controls' => [
                     'view' => true,
                     'pulls' => false,
-                    'heatmapSearch' => $showHeatmapSearch,
+                    'heatmapSearch' => false,
                     'enemyInfo' => true,
-                ],
-            ],
-            'controlOptions' => [
-                'heatmapSearch' => [
-                    'keyLevelMin' => $keyLevelMin,
-                    'keyLevelMax' => $keyLevelMax,
-                    'itemLevelMin' => $itemLevelMin,
-                    'itemLevelMax' => $itemLevelMax,
-                    'playerDeathsMin' => $playerDeathsMin,
-                    'playerDeathsMax' => $playerDeathsMax,
-                    'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
                 ],
             ],
             'hiddenMapObjectGroups' => [

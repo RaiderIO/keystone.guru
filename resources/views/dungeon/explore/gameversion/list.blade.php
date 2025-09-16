@@ -30,22 +30,5 @@ use App\Models\GameVersion\GameVersion;
         'tabsId' => 'explore_dungeon_select_tabs',
         'route' => 'dungeon.explore.gameversion.view',
         'routeParams' => ['gameVersion' => $gameVersion],
-        'subtextFn' => function(Dungeon $dungeon) {
-            $result = '';
-
-            if( $dungeon->heatmap_enabled ) {
-                echo '<div class="row no-gutters">
-                    <div class="col">
-                    </div>
-                    <div class="col-auto px-2">
-                        <i class="fas fa-fire text-danger" data-toggle="tooltip" title="'
-                        . __('view_dungeon.explore.gameversion.list.heatmap_available') .
-                        '"></i>
-                    </div>
-                </div>';
-            }
-
-            return $result;
-        },
     ])
 @endsection
