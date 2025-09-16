@@ -54,7 +54,7 @@ use Illuminate\Support\Collection;
         'id' => 'spell_visibility_dungeon_select',
         'activeOnly' => false,
         'ignoreGameVersion' => true,
-        'selected' => isset($dungeon) ? optional($dungeon)->id : null,
+        'selected' => isset($dungeon) ? $dungeon?->id : null,
     ])
 
     <div class="form-group">
