@@ -20,42 +20,6 @@ return [
 
     'log_level' => env('LOG_LEVEL', 'debug'),
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
-        Laravel\Tinker\TinkerServiceProvider::class,
-
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\HorizonServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\TelescopeServiceProvider::class,
-
-        /**
-         * Custom
-         */
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Laratrust\LaratrustServiceProvider::class,
-        Jenssegers\Agent\AgentServiceProvider::class,
-        SocialiteProviders\Manager\ServiceProvider::class,
-        Rollbar\Laravel\RollbarServiceProvider::class,
-
-        /**
-         * Keystone.guru Service Providers...
-         */
-        HelperServiceProvider::class,
-        LoggingServiceProvider::class,
-        RepositoryServiceProvider::class,
-        OctaneServiceProvider::class,
-        KeystoneGuruServiceProvider::class,
-        ControllerServiceProvider::class,
-    ])->toArray(),
 
     'aliases' => Facade::defaultAliases()->merge([
         'Agent'     => Jenssegers\Agent\Facades\Agent::class,
