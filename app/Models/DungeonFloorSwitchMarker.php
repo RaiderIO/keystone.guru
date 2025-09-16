@@ -60,19 +60,22 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
         'lng',
     ];
 
-    protected $casts = [
-        'mapping_version_id'                    => 'integer',
-        'floor_id'                              => 'integer',
-        'source_floor_id'                       => 'integer',
-        'target_floor_id'                       => 'integer',
-        'linked_dungeon_floor_switch_marker_id' => 'integer',
-        'lat'                                   => 'float',
-        'lng'                                   => 'float',
-    ];
-
     public $timestamps = false;
 
     private string $floorCouplingDirection = 'unknown';
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id'                    => 'integer',
+            'floor_id'                              => 'integer',
+            'source_floor_id'                       => 'integer',
+            'target_floor_id'                       => 'integer',
+            'linked_dungeon_floor_switch_marker_id' => 'integer',
+            'lat'                                   => 'float',
+            'lng'                                   => 'float',
+        ];
+    }
 
     //    /** @var float Future Laravel-me, please find a better solution for this Q.Q */
     //    private float $ingameX = 0;

@@ -233,19 +233,22 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'thumbnails',
     ];
 
-    protected $casts = [
-        'thumbnail_refresh_queued_at' => 'datetime',
-        'thumbnail_updated_at'        => 'datetime',
-        'published_at'                => 'datetime',
-        'expires_at'                  => 'datetime',
-        'created_at'                  => 'datetime',
-        'updated_at'                  => 'datetime',
-        'enemy_forces'                => 'integer',
-        'demo'                        => 'integer',
-        'level_min'                   => 'integer',
-        'level_max'                   => 'integer',
-        'rating'                      => 'float',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'thumbnail_refresh_queued_at' => 'datetime',
+            'thumbnail_updated_at'        => 'datetime',
+            'published_at'                => 'datetime',
+            'expires_at'                  => 'datetime',
+            'created_at'                  => 'datetime',
+            'updated_at'                  => 'datetime',
+            'enemy_forces'                => 'integer',
+            'demo'                        => 'integer',
+            'level_min'                   => 'integer',
+            'level_max'                   => 'integer',
+            'rating'                      => 'float',
+        ];
+    }
 
     /**
      * https://stackoverflow.com/a/34485411/771270
