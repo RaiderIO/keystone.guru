@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use Bootstrap;
-    use CreatesApplication;
     use Shutdown;
 
     protected function setUp(): void
