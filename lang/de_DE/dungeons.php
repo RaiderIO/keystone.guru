@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Die Kathedrale der Ewigen Nacht',
             'floors' => [
-                'hall_of_the_moon'     => 'Halle des Mondes',
-                'twilight_groove'      => 'Zwielichtshain',
-                'the_emerald_archives' => 'Das Smaragdgrüne Archiv',
-                'path_of_illumination' => 'Pfad der Illumination',
-                'sacristy_of_elune'    => 'Sakristei der Elune',
+                'hall_of_the_moon'           => 'Halle des Mondes',
+                'twilight_groove'            => 'Zwielichtshain',
+                'the_emerald_archives'       => 'Das Smaragdgrüne Archiv',
+                'path_of_illumination'       => 'Pfad der Illumination',
+                'sacristy_of_elune'          => 'Sakristei der Elune',
+                'cathedral_of_eternal_night' => 'Die Kathedrale der Ewigen Nacht',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Die Gästezimmer',
                 'opera_hall_balcony'   => 'Balkon des Opernsaals',
                 'masters_terrace'      => 'Terrasse des Meisters',
+                'lower_karazhan'       => 'Karazhan – Untere Ebenen',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Helmaulklippen',
                 'the_hold'        => 'Der Frachtraum',
                 'the_naglfar'     => 'Die Naglfar',
+                'maw_of_souls'    => 'Die Helmaulklippen',
             ],
         ],
         'neltharions_lair' => [
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Obere Bibliothek',
                 'gamesmans_hall'     => 'Halle der Spiele',
                 'netherspace'        => 'Netherraum',
+                'upper_karazhan'     => 'Karazhan – Obere Ebenen',
             ],
         ],
         'vault_of_the_wardens' => [

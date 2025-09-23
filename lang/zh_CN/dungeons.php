@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => '熔火之心',
             'floors' => [
-                'molten_core' => '',
+                'moltencore' => '熔火之心',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => '永夜大教堂',
             'floors' => [
-                'hall_of_the_moon'     => '月之圣殿',
-                'twilight_groove'      => '黎明森林',
-                'the_emerald_archives' => '翡翠档案室',
-                'path_of_illumination' => '辉光之路',
-                'sacristy_of_elune'    => '艾露恩圣器室',
+                'hall_of_the_moon'           => '月之圣殿',
+                'twilight_groove'            => '黎明森林',
+                'the_emerald_archives'       => '翡翠档案室',
+                'path_of_illumination'       => '辉光之路',
+                'sacristy_of_elune'          => '艾露恩圣器室',
+                'cathedral_of_eternal_night' => '永夜大教堂',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => '',
                 'opera_hall_balcony'   => '',
                 'masters_terrace'      => '',
+                'lower_karazhan'       => '',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => '冥口峭壁',
                 'the_hold'        => '堡垒',
                 'the_naglfar'     => '纳格法尔号',
+                'maw_of_souls'    => '',
             ],
         ],
         'neltharions_lair' => [
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => '上层图书馆',
                 'gamesmans_hall'     => '象棋大厅',
                 'netherspace'        => '虚空异界',
+                'upper_karazhan'     => '卡拉赞',
             ],
         ],
         'vault_of_the_wardens' => [
