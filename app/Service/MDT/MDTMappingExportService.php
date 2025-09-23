@@ -30,8 +30,11 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion, bool $excludeTranslations = false): string
-    {
+    public function getMDTMappingAsLuaString(
+        MappingVersion $mappingVersion,
+        bool           $excludeTranslations = false,
+        bool           $forceEnemyPatrols = false,
+    ): string {
         $translations = collect();
 
         //        return trim($this->getDungeonEnemies($mappingVersion, $translations));
@@ -40,7 +43,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion, $translations);
         $dungeonTotalCountString = $this->getDungeonTotalCount($mappingVersion);
         $mapPOIs                 = $this->getMapPOIs($mappingVersion);
-        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations);
+        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations, $forceEnemyPatrols);
         $header                  = $this->getHeader($mappingVersion, $translations, $excludeTranslations);
 
         return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIs . $dungeonEnemies;
@@ -64,7 +67,8 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         $dungeonNameTranslationKey = $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name, [], 'en_US'));
 
         return sprintf(
-            'local MDT = MDT
+            'local addonName = ...
+local MDT = MDT
 local L = MDT.L
 %slocal dungeonIndex = %d
 MDT.dungeonList[dungeonIndex] = L["%s"]
@@ -230,7 +234,7 @@ MDT.mapPOIs[dungeonIndex] = {};
     /**
      * Takes a mapping version and outputs an array in the way MDT would read it
      */
-    private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations): string
+    private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations, bool $forceEnemyPatrols = false): string
     {
         $dungeonEnemies = [];
 
@@ -326,7 +330,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                     return [__($characteristic->name, [], 'en_US') => true];
                 })->toArray(),
                 'spells' => $npc->spells->mapWithKeys(function (Spell $spell) {
-                    return [$spell->id => []];
+                    return [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []];
                 })->toArray(),
                 'clones'           => [],
                 'healthPercentage' => $npcHealth?->percentage ?? null,
@@ -368,7 +372,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                     $patrolVertices = [];
                     $vertexIndex    = 0;
                     // Prefer the mdt polyline if it exists (it was introduced later), otherwise use the regular polyline
-                    if ($enemy->enemyPatrol->mdtPolyline !== null) {
+                    if (!$forceEnemyPatrols && $enemy->enemyPatrol->mdtPolyline !== null) {
                         $polylineMdtXYs = $enemy->enemyPatrol->mdtPolyline
                             ->getDecodedLatLngs($enemy->floor);
                         foreach ($polylineMdtXYs as $vertexMdtLatLng) {

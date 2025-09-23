@@ -183,7 +183,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
 
         // Model helpers
-        if (config('app.env') === 'local') {
+        if (in_array(config('app.env'), ['local', 'testing'])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
         } else {
