@@ -95,7 +95,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         <div class="col-auto px-1">
             <?php // Select floor thing is a placeholder because otherwise the selectpicker will complain on an empty select ?>
             @if($embedOptions['show']['floorSelection'])
-                {!! Form::select('map_floor_selection_dropdown', [__('view_dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
+                {{ html()->select('map_floor_selection_dropdown', [__('view_dungeonroute.embed.select_floor')], 1)->id('map_floor_selection_dropdown')->class('form-control selectpicker') }}
             @endif
         </div>
         <div class="col-auto px-1">

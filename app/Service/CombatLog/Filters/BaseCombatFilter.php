@@ -66,28 +66,32 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         61445 => 0.01,
 
         // Shado-Pan Monastery:
-        58198 => 0.01,
         // Shado-pan Desciples become friendly at 1hp
-        56473 => 0.01,
+        58198 => 0.01,
         // Flying Snow becomes friendly at 1hp
-        56472 => 0.01,
+        56473 => 0.01,
         // Fragrant Lotus becomes friendly at 1hp
-        56541 => 0.01,
+        56472 => 0.01,
         // Master Snowdrift becomes friendly at 1hp
-        56884 => 0.01,
+        56541 => 0.01,
         // Corrupted Taran Zhu despawns and becomes friendly Taran Zhu at 1hp
+        56884 => 0.01,
 
         // Scholomance
-        58722 => 0.01,
         // Lilian Voss
+        58722 => 0.01,
 
         // Tazavesh: Streets of Wonder
-        176555 => 0.01,
         // Achillite is never defeated, but starts pumping out lightning balls at 1hp instead
+        176555 => 0.01,
 
         // The Dawnbreaker
-        213937 => 0.61,
         // Rasha'nan is defeated at 60%
+        213937 => 0.61,
+
+        // Eco-Dome Al'Dani
+        // Soul-Scribe becomes unattackable at 1hp
+        234935 => 0.01,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */

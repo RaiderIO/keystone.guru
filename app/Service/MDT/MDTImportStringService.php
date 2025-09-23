@@ -887,9 +887,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         } elseif ($commentLower === 'ancient hysteria') {
                             $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
                         } elseif ($commentLower === 'drums') {
-                            $spellId = Spell::SPELL_FERAL_HIDE_DRUMS;
+                            $spellId = Spell::SPELL_THUNDEROUS_DRUMS;
                         } elseif ($commentLower === 'primal rage') {
                             $spellId = Spell::SPELL_PRIMAL_RAGE;
+                        } elseif ($commentLower === 'harriers cry') {
+                            $spellId = Spell::SPELL_HARRIERS_CRY;
                         }
 
                         $newAttributes = $killZoneAttribute['spells'][] = [

@@ -16,51 +16,40 @@ $gameVersionsSelect = $allGameVersions
 @include('common.general.inline', ['path' => 'common/dungeon/mappingversion'])
 
 <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
-    {!! Form::label('game_version_id', __('view_admin.dungeon.edit.game_version_id'), [], false) !!}
+    {{ html()->label(__('view_admin.dungeon.edit.game_version_id'), 'game_version_id') }}
     <span class="form-required">*</span>
-    {!! Form::select('game_version_id', $gameVersionsSelect, $mappingVersion->game_version_id,
-        ['id' => 'map_mapping_version_game_version_id', 'class' => 'form-control selectpicker']) !!}
+    {{ html()->select('game_version_id', $gameVersionsSelect, $mappingVersion->game_version_id)->id('map_mapping_version_game_version_id')->class('form-control selectpicker') }}
     @include('common.forms.form-error', ['key' => 'game_version_id'])
 </div>
 
 <div class="form-group">
-    {!! Form::label('map_mapping_version_facade_enabled', __('view_common.modal.mappingversion.facade_enabled')) !!}
-    {!! Form::checkbox('facade_enabled', 1, $mappingVersion->facade_enabled,
-        ['id' => 'map_mapping_version_facade_enabled', 'class' => 'form-control left_checkbox']) !!}
+    {{ html()->label(__('view_common.modal.mappingversion.facade_enabled'), 'map_mapping_version_facade_enabled') }}
+    {{ html()->checkbox('facade_enabled', $mappingVersion->facade_enabled, 1)->id('map_mapping_version_facade_enabled')->class('form-control left_checkbox') }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('map_mapping_version_enemy_forces_required',
-        __('view_common.modal.mappingversion.enemy_forces_required')) !!}
-    {!! Form::number('enemy_forces_required', $mappingVersion->enemy_forces_required,
-        ['id' => 'map_mapping_version_enemy_forces_required', 'class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.modal.mappingversion.enemy_forces_required'), 'map_mapping_version_enemy_forces_required') }}
+    {{ html()->number('enemy_forces_required', $mappingVersion->enemy_forces_required)->id('map_mapping_version_enemy_forces_required')->class('form-control') }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('map_mapping_version_enemy_forces_required_teeming',
-        __('view_common.modal.mappingversion.enemy_forces_required_teeming')) !!}
-    {!! Form::number('enemy_forces_required_teeming', $mappingVersion->enemy_forces_required_teeming,
-        ['id' => 'map_mapping_version_enemy_forces_required_teeming', 'class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.modal.mappingversion.enemy_forces_required_teeming'), 'map_mapping_version_enemy_forces_required_teeming') }}
+    {{ html()->number('enemy_forces_required_teeming', $mappingVersion->enemy_forces_required_teeming)->id('map_mapping_version_enemy_forces_required_teeming')->class('form-control') }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('map_mapping_version_enemy_forces_shrouded',
-        __('view_common.modal.mappingversion.enemy_forces_shrouded')) !!}
-    {!! Form::number('enemy_forces_shrouded', $mappingVersion->enemy_forces_shrouded,
-        ['id' => 'map_mapping_version_enemy_forces_shrouded', 'class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.modal.mappingversion.enemy_forces_shrouded'), 'map_mapping_version_enemy_forces_shrouded') }}
+    {{ html()->number('enemy_forces_shrouded', $mappingVersion->enemy_forces_shrouded)->id('map_mapping_version_enemy_forces_shrouded')->class('form-control') }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('map_mapping_version_enemy_forces_shrouded_zul_gamux',
-        __('view_common.modal.mappingversion.enemy_forces_shrouded_zul_gamux')) !!}
-    {!! Form::number('enemy_forces_shrouded_zul_gamux', $mappingVersion->enemy_forces_shrouded_zul_gamux,
-        ['id' => 'map_mapping_version_enemy_forces_shrouded_zul_gamux', 'class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.modal.mappingversion.enemy_forces_shrouded_zul_gamux'), 'map_mapping_version_enemy_forces_shrouded_zul_gamux') }}
+    {{ html()->number('enemy_forces_shrouded_zul_gamux', $mappingVersion->enemy_forces_shrouded_zul_gamux)->id('map_mapping_version_enemy_forces_shrouded_zul_gamux')->class('form-control') }}
 </div>
 
 <div class="form-group">
-    {!! Form::label('map_mapping_version_timer_max_seconds', __('view_common.modal.mappingversion.timer_max_seconds')) !!}
-    {!! Form::number('timer_max_seconds', $mappingVersion->timer_max_seconds,
-        ['id' => 'map_mapping_version_timer_max_seconds', 'class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.modal.mappingversion.timer_max_seconds'), 'map_mapping_version_timer_max_seconds') }}
+    {{ html()->number('timer_max_seconds', $mappingVersion->timer_max_seconds)->id('map_mapping_version_timer_max_seconds')->class('form-control') }}
 </div>
 
 <div class="form-group">

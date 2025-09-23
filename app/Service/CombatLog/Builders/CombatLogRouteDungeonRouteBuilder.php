@@ -49,6 +49,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         Spell::SPELL_ANCIENT_HYSTERIA,
         Spell::SPELL_PRIMAL_RAGE,
         Spell::SPELL_FERAL_HIDE_DRUMS,
+        Spell::SPELL_HARRIERS_CRY,
         Spell::SPELL_SHROUD_OF_CONCEALMENT,
     ];
 

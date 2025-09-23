@@ -23,10 +23,9 @@ use App\Models\TeamUser;
 
         <div class="row">
             <div class="col-xl-6">
-                {!! Form::label('team_members_invite_link', __('view_team.edittabs.members.invite_new_members'), [], false) !!}
+                {{ html()->label(__('view_team.edittabs.members.invite_new_members'), 'team_members_invite_link') }}
                 <div class="input-group-append">
-                    {!! Form::text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]),
-                        ['id' => 'team_members_invite_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                    {{ html()->text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]))->id('team_members_invite_link')->class('form-control')->isReadonly() }}
                     <div class="input-group-append">
                         <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
                                 data-toggle="tooltip"
@@ -44,11 +43,11 @@ use App\Models\TeamUser;
                 </div>
             </div>
             <div class="col-xl-6">
-                {!! Form::label('default_role', __('view_team.edittabs.members.default_role'), [], false) !!}
+                {{ html()->label(__('view_team.edittabs.members.default_role'), 'default_role') }}
                 <?php $keys = array_keys(TeamUser::ALL_ROLES); ?>
-                {!! Form::select('default_role', array_map(function($role){
-                        return __(sprintf('teamroles.%s', $role));
-                    }, array_combine($keys, $keys)), $team->default_role, ['class' => 'form-control selectpicker']) !!}
+                {{ html()->select('default_role', array_map(function ($role) {
+    return __(sprintf('teamroles.%s', $role));
+}, array_combine($keys, $keys)), $team->default_role)->class('form-control selectpicker') }}
             </div>
         </div>
     </div>

@@ -60,7 +60,7 @@ $allAffixGroupsWithSeasons = $allAffixGroups
 
 <?php // @formatter:off ?>
 <div class="form-group">
-    {!! Form::select($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
+    {{ html()->multiselect($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'))->id($id)->class('form-control affixselect d-none') }}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @if($nextSeason !== null)
             @foreach($nextSeason->affixGroups as $affixGroup)
