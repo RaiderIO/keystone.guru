@@ -11,7 +11,7 @@ use App\Logic\CombatLog\CombatLogVersion;
 class DamageSupportBuilder implements SuffixBuilderInterface
 {
     public function __construct(
-        public int $combatLogVersion
+        public int $combatLogVersion,
     ) {
     }
 

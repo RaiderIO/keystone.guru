@@ -3,7 +3,6 @@
 namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\DamageSplit;
 
 use App\Logic\CombatLog\CombatLogEntry;
-use App\Logic\CombatLog\SpecialEvents\DamageSplit;
 use App\Logic\CombatLog\SpecialEvents\DamageSplit\DamageSplitInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -18,7 +17,7 @@ final class DamageSplitTest extends PublicTestCase
     #[Group('DamageSplit')]
     #[DataProvider('parseEvent_ShouldReturnDamageSplitEvent_GivenDamageSplitEvent_DataProvider')]
     public function parseEvent_ShouldReturnDamageSplitEvent_GivenDamageSplitEvent(
-        string $damageSplitEvent
+        string $damageSplitEvent,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($damageSplitEvent);

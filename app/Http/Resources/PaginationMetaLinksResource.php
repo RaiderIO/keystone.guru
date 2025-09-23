@@ -12,5 +12,4 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class PaginationMetaLinksResource extends JsonResource
 {
-
 }

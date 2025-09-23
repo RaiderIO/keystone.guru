@@ -49,9 +49,9 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
 
             if (str_contains($combatLogSeederDataFilePath, 'combat_log_npc_spell_assignments')) {
                 $combatLogNpcSpellAssignmentAttributes = $modelsData;
-            } else if (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_updates')) {
+            } elseif (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_updates')) {
                 $combatLogSpellUpdateAttributes = $modelsData;
-            } else if (str_contains($combatLogSeederDataFilePath, 'parsed_combat_logs')) {
+            } elseif (str_contains($combatLogSeederDataFilePath, 'parsed_combat_logs')) {
                 $parsedCombatLogAttributes = $modelsData;
             } else {
                 throw new \Exception(sprintf('Unknown .json file found in combatlogs directory: %s', $combatLogSeederDataFilePath));

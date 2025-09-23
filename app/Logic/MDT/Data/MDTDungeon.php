@@ -37,7 +37,7 @@ class MDTDungeon
     public function __construct(
         private readonly CacheServiceInterface       $cacheService,
         private readonly CoordinatesServiceInterface $coordinatesService,
-        private readonly Dungeon                     $dungeon
+        private readonly Dungeon                     $dungeon,
     ) {
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
@@ -122,7 +122,7 @@ class MDTDungeon
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      *
-     * @param Collection<Floor> $floors The floors that you want to get the clones for.
+     * @param  Collection<Floor> $floors The floors that you want to get the clones for.
      * @return Collection<Enemy>
      */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
@@ -208,19 +208,19 @@ class MDTDungeon
                     foreach ($clones as $mdtCloneIndex => $clone) {
                         $enemy = new Enemy([
                             // Dummy so we can ID them later on
-                            'id'                            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
-                            'floor_id'                      => $floorId,
-                            'enemy_pack_id'                 => (int)$clone['g'],
-                            'npc_id'                        => $npcId,
+                            'id'            => ($npcId * 100000) + ($floorId * 100) + $mdtCloneIndex,
+                            'floor_id'      => $floorId,
+                            'enemy_pack_id' => (int)$clone['g'],
+                            'npc_id'        => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
-                            'mdt_id'                        => $mdtCloneIndex,
-                            'mdt_scale'                     => $clone['scale'] ?? null,
-                            'mdt_x'                         => $clone['x'],
-                            'mdt_y'                         => $clone['y'],
-                            'lat'                           => $clone['lat'],
-                            'lng'                           => $clone['lng'],
-                            'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
-                            'faction'                       => isset($clone['faction']) ?
+                            'mdt_id'    => $mdtCloneIndex,
+                            'mdt_scale' => $clone['scale'] ?? null,
+                            'mdt_x'     => $clone['x'],
+                            'mdt_y'     => $clone['y'],
+                            'lat'       => $clone['lat'],
+                            'lng'       => $clone['lng'],
+                            'teeming'   => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
+                            'faction'   => isset($clone['faction']) ?
                                 ((int)$clone['faction'] === 1 ? Faction::FACTION_HORDE : Faction::FACTION_ALLIANCE)
                                 : 'any',
                             'enemy_forces_override'         => null,
@@ -232,7 +232,8 @@ class MDTDungeon
                         $enemy->enemy_id      = -1;
 
                         $enemy->setRelation('floor', $floors->get($floorId));
-                        $enemy->setRelation('npc',
+                        $enemy->setRelation(
+                            'npc',
                             $this->dungeon->npcs->firstWhere('id', $enemy->npc_id)?->makeHidden([
                                 // We don't care for the relationships here - just want to know if the NPC exists or not
                                 'type',
@@ -244,7 +245,7 @@ class MDTDungeon
                             new Npc([
                                 'name' => 'UNABLE TO FIND NPC!',
                                 'id'   => $npcId,
-                            ])
+                            ]),
                         );
 
                         if ($enemy->npc->isEmissary()) {
@@ -265,8 +266,8 @@ class MDTDungeon
 
                         if (isset($clone['disguised']) && $clone['disguised']) {
                             $enemy->seasonal_type = Enemy::SEASONAL_TYPE_SHROUDED;
-                            $enemy->lat           += 2;
-                            $enemy->lng           += 2;
+                            $enemy->lat += 2;
+                            $enemy->lng += 2;
                         }
 
                         $enemies->push($enemy);
@@ -285,11 +286,11 @@ class MDTDungeon
     {
         $lua = null;
 
-        $mdtHome          = base_path(
+        $mdtHome = base_path(
             sprintf(
                 'vendor/nnoggie/%s',
-                Conversion::isDungeonInMainlineMDT($this->dungeon) ? 'mythicdungeontools' : 'mdt-legacy'
-            )
+                Conversion::isDungeonInMainlineMDT($this->dungeon) ? 'mythicdungeontools' : 'mdt-legacy',
+            ),
         );
         $expansionName    = Conversion::getExpansionName($this->dungeon->key);
         $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);

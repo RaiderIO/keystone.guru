@@ -201,11 +201,13 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix'  => env('REDIS_PREFIX',
-                sprintf('%s-%s-cache:',
+            'prefix'  => env(
+                'REDIS_PREFIX',
+                sprintf(
+                    '%s-%s-cache:',
                     Str::slug(env('APP_NAME', 'laravel')),
                     Str::slug(env('APP_TYPE', 'local')),
-                )
+                ),
             ),
         ],
 
@@ -218,7 +220,7 @@ return [
             'database'     => env('REDIS_DB', '0'),
             'read_timeout' => 1.0,
             'timeout'      => 1.0,
-//            'persistent'   => false, // or true if you use connection pooling
+            //            'persistent'   => false, // or true if you use connection pooling
         ],
 
         'model_cache' => [
@@ -230,7 +232,7 @@ return [
             'database'     => env('REDIS_DB_MODEL_CACHE', '0'),
             'read_timeout' => 1.0,
             'timeout'      => 1.0,
-//            'persistent'   => false, // or true if you use connection pooling
+            //            'persistent'   => false, // or true if you use connection pooling
         ],
 
         'cache' => [
@@ -242,7 +244,7 @@ return [
             'database'     => env('REDIS_CACHE_DB', '1'),
             'read_timeout' => 1.0,
             'timeout'      => 1.0,
-//            'persistent'   => false, // or true if you use connection pooling
+            //            'persistent'   => false, // or true if you use connection pooling
         ],
 
     ],

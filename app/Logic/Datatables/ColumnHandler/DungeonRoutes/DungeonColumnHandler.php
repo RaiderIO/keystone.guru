@@ -25,7 +25,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
@@ -37,7 +37,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
                     if ($explode[0] === 'season') {
                         // Joins need to be added to the main builder
                         $subBuilder->where('dungeon_routes.season_id', (int)$explode[1]);
-                    } else if ($explode[0] === 'expansion') {
+                    } elseif ($explode[0] === 'expansion') {
                         $subBuilder->where('dungeons.expansion_id', (int)$explode[1]);
                     } else {
                         throw new Exception(sprintf('Unable to find prefix %s', $explode[0]));

@@ -15,7 +15,6 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
  */
 class AuraRemovedV22 extends AuraBase implements AuraRemovedInterface
 {
-
     public function getUnknown(): ?int
     {
         return null;

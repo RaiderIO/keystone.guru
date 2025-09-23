@@ -10,24 +10,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $floor_id
- * @property int|null     $file_id
- * @property string       $status
- * @property int|null     $viewport_width
- * @property int|null     $viewport_height
- * @property int|null     $image_width
- * @property int|null     $image_height
- * @property float|null   $zoom_level
- * @property int|null     $quality
+ * @property int        $id
+ * @property int        $dungeon_route_id
+ * @property int        $floor_id
+ * @property int|null   $file_id
+ * @property string     $status
+ * @property int|null   $viewport_width
+ * @property int|null   $viewport_height
+ * @property int|null   $image_width
+ * @property int|null   $image_height
+ * @property float|null $zoom_level
+ * @property int|null   $quality
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
- * @property File|null    $file The generated thumbnail file, if available
+ * @property File|null    $file         The generated thumbnail file, if available
  *
- * @property Carbon       $created_at
- * @property Carbon       $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
  * @mixin Eloquent
  */

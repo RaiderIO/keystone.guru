@@ -29,7 +29,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     public function __construct(
         private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
-        private readonly ThumbnailServiceLoggingInterface $log
+        private readonly ThumbnailServiceLoggingInterface $log,
     ) {
     }
 
@@ -39,7 +39,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
-        int $attempts = 0
+        int          $attempts = 0,
     ): ?DungeonRouteThumbnail {
         try {
             $this->log->createThumbnailStart($dungeonRoute->public_key, $floorIndex, $attempts);
@@ -66,7 +66,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int $quality = null
+        ?int         $quality = null,
     ): ?DungeonRouteThumbnail {
         try {
             $this->log->createThumbnailCustomStart($dungeonRoute->public_key, $floorIndex, $attempts, $viewportWidth, $viewportHeight, $imageWidth, $imageHeight, $zoomLevel, $quality);
@@ -80,7 +80,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $imageWidth,
                 $imageHeight,
                 $zoomLevel,
-                $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality')
+                $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality'),
             );
         } finally {
             $this->log->createThumbnailCustomEnd();
@@ -96,7 +96,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null
+        ?int         $quality = null,
     ): ?DungeonRouteThumbnail {
         $result = null;
 
@@ -110,7 +110,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $imageWidth,
                 $imageHeight,
                 $zoomLevel,
-                $quality
+                $quality,
             );
             if (app()->isDownForMaintenance()) {
                 $this->log->doCreateThumbnailMaintenanceMode();
@@ -118,11 +118,11 @@ class ThumbnailService implements ThumbnailServiceInterface
                 return null;
             }
 
-            $viewportWidth  ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
+            $viewportWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
             $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
-            $imageWidth     ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
-            $imageHeight    ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
-            $zoomLevel      ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
+            $imageWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
+            $imageHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
+            $zoomLevel ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
 
             // 1. Headless chrome saves file in a temp location
             // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
@@ -213,7 +213,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
                         if ($removedTmpFile || $removedTmpFileAfterResize) {
                             $this->log->doCreateThumbnailRemovedTmpFileSuccess();
-                        } else if ($removedTmpFile === false || $removedTmpFileAfterResize === false) {
+                        } elseif ($removedTmpFile === false || $removedTmpFileAfterResize === false) {
                             $this->log->doCreateThumbnailRemovedTmpFileFailure();
                         }
                     }
@@ -255,7 +255,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 $this->log->queueThumbnailRefreshDispatchedJob(
                     $dungeonRoute->public_key,
                     $floor->index,
-                    $force
+                    $force,
                 );
             }
         }
@@ -272,8 +272,8 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param Collection<DungeonRoute> $dungeonRoutes
-     * @param bool                     $force
+     * @param  Collection<DungeonRoute> $dungeonRoutes
+     * @param  bool                     $force
      * @return bool
      */
     public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool
@@ -281,7 +281,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         $result = false;
 
         $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails(
-            $dungeonRoutes
+            $dungeonRoutes,
         );
 
         foreach ($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
@@ -304,7 +304,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int $quality = null
+        ?int         $quality = null,
     ): Collection {
         $result = collect();
 
@@ -330,7 +330,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             ProcessRouteFloorThumbnailCustom::dispatch(
                 $dungeonRouteThumbnailJob,
                 $dungeonRoute,
-                $floor->index
+                $floor->index,
             );
 
             $result->push($dungeonRouteThumbnailJob);
@@ -377,7 +377,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $targetDungeonRoute,
                     $thumbnail->floor->index,
                     self::getTargetFilePath($targetDungeonRoute, $thumbnail->floor->index, self::THUMBNAIL_FOLDER_PATH),
-                    $thumbnailData
+                    $thumbnailData,
                 );
 
                 if ($copiedThumbnail === null) {
@@ -392,7 +392,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $sourceDungeonRoute->public_key,
                     $targetDungeonRoute->public_key,
                     $thumbnail->id,
-                    $exception
+                    $exception,
                 );
             }
         }
@@ -433,7 +433,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 })
                 ->get();
 
-            $disk                  ??= config('filesystems.default', 'public');
+            $disk ??= config('filesystems.default', 'public');
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
@@ -459,7 +459,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $existingThumbnail->file?->id,
                     $existingThumbnail->file?->disk,
                     $existingThumbnail->file?->path,
-                    $deleteResult
+                    $deleteResult,
                 );
             }
 

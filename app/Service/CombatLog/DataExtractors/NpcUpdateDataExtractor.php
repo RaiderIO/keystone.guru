@@ -31,13 +31,12 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
 
     public function extractData(
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
-        BaseEvent                    $parsedEvent
+        BaseEvent                    $parsedEvent,
     ): void {
         if (!($parsedEvent instanceof AdvancedCombatLogEvent)) {
             return;
@@ -63,14 +62,13 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
 
     private function extractBaseHealth(
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
         AdvancedCombatLogEvent       $parsedEvent,
-        Npc $npc
+        Npc                          $npc,
     ): void {
         // This code needs to know the game version of the combat log file, so we can fetch the correct health for the NPC
 
@@ -82,10 +80,10 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 //            // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
 //            $newBaseHealth = $npcHealth->health;
 //            // Calculate the base health based on the current key level + current max hp
-////            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-////                    $currentDungeon->keyLevel,
-////                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
-////                ));
+        ////            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
+        ////                    $currentDungeon->keyLevel,
+        ////                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
+        ////                ));
 //        }
 //
 //        if ($npcHealth === null || $npcHealth->health !== $newBaseHealth) {

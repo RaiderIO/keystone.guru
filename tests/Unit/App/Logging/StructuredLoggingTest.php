@@ -31,11 +31,10 @@ class StructuredLoggingTest extends PublicTestCase
 
                 if ($methodName === 'startStart') {
                     self::assertArrayNotHasKey('test2', $context);
-                } else if ($methodName === 'log') {
+                } elseif ($methodName === 'log') {
                     self::assertArrayHasKey('test2', $context);
                 }
             });
-
 
         // Act
         $log->start('firstStart', $persistentContext);
@@ -69,15 +68,14 @@ class StructuredLoggingTest extends PublicTestCase
                 if ($methodName === 'firstStart') {
                     self::assertArrayNotHasKey('nested', $context);
                     self::assertArrayNotHasKey('test2', $context);
-                } else if ($methodName === 'nestedStart') {
+                } elseif ($methodName === 'nestedStart') {
                     self::assertArrayHasKey('nested', $context);
                     self::assertArrayNotHasKey('test2', $context);
-                } else if ($methodName === 'log') {
+                } elseif ($methodName === 'log') {
                     self::assertArrayHasKey('nested', $context);
                     self::assertArrayHasKey('test2', $context);
                 }
             });
-
 
         // Act
         $log->start('firstStart', $persistentContext);
@@ -111,7 +109,6 @@ class StructuredLoggingTest extends PublicTestCase
                     self::assertArrayHasKey('elapsed', $context);
                 }
             });
-
 
         // Act
         $log->start('myLogStart', $persistentContext);

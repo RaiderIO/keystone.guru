@@ -38,14 +38,14 @@ class DungeonRouteFilter implements CombatLogParserInterface
     {
         if ($combatLogEvent instanceof CombatLogVersion && !$combatLogEvent->isAdvancedLogEnabled()) {
             throw new AdvancedLogNotEnabledException(
-                'Advanced combat logging must be enabled in order to create a dungeon route from a combat log!'
+                'Advanced combat logging must be enabled in order to create a dungeon route from a combat log!',
             );
-        } else if ($combatLogEvent instanceof ChallengeModeStart) {
+        } elseif ($combatLogEvent instanceof ChallengeModeStart) {
             try {
                 $dungeon = Dungeon::where('challenge_mode_id', $combatLogEvent->getChallengeModeID())->firstOrFail();
             } catch (Exception) {
                 throw new DungeonNotSupportedException(
-                    sprintf('Dungeon with instance ID %d not found', $combatLogEvent->getInstanceID())
+                    sprintf('Dungeon with instance ID %d not found', $combatLogEvent->getInstanceID()),
                 );
             }
 
@@ -63,7 +63,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 'level_min'          => $combatLogEvent->getKeystoneLevel(),
                 'level_max'          => $combatLogEvent->getKeystoneLevel(),
                 'expires_at'         => Carbon::now()->addHours(
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                    config('keystoneguru.sandbox_dungeon_route_expires_hours'),
                 )->toDateTimeString(),
             ]);
 
@@ -75,7 +75,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
             if ($currentSeasonForDungeon !== null) {
                 $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
                     $currentSeasonForDungeon,
-                    collect($combatLogEvent->getAffixIDs())
+                    collect($combatLogEvent->getAffixIDs()),
                 );
 
                 foreach ($affixGroups as $affixGroup) {

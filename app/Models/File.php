@@ -118,10 +118,10 @@ class File extends Model
     /**
      * Saves a file to the database
      *
-     * @param UploadedFile $uploadedFile The uploaded file element.
-     * @param Model        $model The model that wants to save this file.
-     * @param string       $dir The directory to save this file in.
-     * @return File The newly saved file in the database.
+     * @param  UploadedFile $uploadedFile The uploaded file element.
+     * @param  Model        $model        The model that wants to save this file.
+     * @param  string       $dir          The directory to save this file in.
+     * @return File         The newly saved file in the database.
      *
      * @throws Exception
      */
@@ -129,11 +129,12 @@ class File extends Model
         UploadedFile $uploadedFile,
         Model        $model,
         string       $dir = '',
-        string       $disk = null
+        string       $disk = null,
     ): File {
         // Use explicitly provided disk or fallback to default per environment
-        $disk ??= config('filesystems.default',
-            'public'
+        $disk ??= config(
+            'filesystems.default',
+            'public',
         );
 
         // Store the file using Laravel's Storage facade
@@ -165,5 +166,4 @@ class File extends Model
             $file->deleteFromDisk();
         });
     }
-
 }

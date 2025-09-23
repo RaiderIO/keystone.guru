@@ -3,10 +3,10 @@
 return [
 
     'edittabs' => [
-        'details'         => [
+        'details' => [
             'title' => '',
         ],
-        'members'         => [
+        'members' => [
             'title'                                      => '',
             'invite_new_members'                         => '',
             'invite_code_share_warning'                  => '',
@@ -16,24 +16,24 @@ return [
             'ad_free_giveaway_description_not_available' => '',
             'ad_free_giveaway_description_available'     => '',
         ],
-        'overview'        => [
+        'overview' => [
             'title' => '',
         ],
         'routepublishing' => [
             'title' => '',
         ],
-        'routes'          => [
+        'routes' => [
             'title'                  => '',
             'add_route'              => '',
             'add_route_no_moderator' => '',
             'stop_adding_routes'     => '',
         ],
-        'tags'            => [
+        'tags' => [
             'title'       => '',
             'description' => '',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => '',
         'menu_title'     => '',
         'to_team_list'   => '',
@@ -42,7 +42,7 @@ return [
         'routes'         => '',
         'members'        => '',
     ],
-    'invite'   => [
+    'invite' => [
         'linkpreview_title'           => '',
         'linkpreview_description'     => '',
         'title'                       => '',
@@ -60,7 +60,7 @@ return [
         'invite_not_found'            => '',
         'back_to_homepage'            => '',
     ],
-    'list'     => [
+    'list' => [
         'title'                => '',
         'header'               => '',
         'create_team'          => '',
@@ -68,7 +68,7 @@ return [
         'table_header_members' => '',
         'table_header_routes'  => '',
     ],
-    'new'      => [
+    'new' => [
         'title'  => '',
         'header' => '',
     ],

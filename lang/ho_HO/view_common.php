@@ -2,17 +2,17 @@
 
 return [
 
-    'dungeon'        => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Hodor',
             'this_week' => 'Hodor',
             'next_week' => 'Hodor',
             'new'       => 'Hodor',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => 'Hodor',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => 'Hodor',
             'all'                      => 'Hodor',
             'all_dungeons'             => 'Hodor',
@@ -22,8 +22,8 @@ return [
             'siege_of_boralus_warning' => 'Hodor',
         ],
     ],
-    'dungeonroute'   => [
-        'search'     => [
+    'dungeonroute' => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Hodor',
             ],
@@ -35,7 +35,7 @@ return [
             'select_attributes'       => 'Hodor',
             'attributes_selected'     => 'Hodor',
         ],
-        'card'       => [
+        'card' => [
             'thumbnail_alt'            => 'Hodor',
             'thumbnail_dungeon_alt'    => 'Hodor',
             'no_description'           => 'Hodor',
@@ -47,13 +47,13 @@ return [
             'dominant_affix'           => 'Hodor',
             'seasonal_affix'           => 'Hodor',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => 'Hodor',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => 'Hodor',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => 'Hodor',
             'affixes'               => 'Hodor',
             'select_affixes'        => 'Hodor',
@@ -69,12 +69,12 @@ return [
             'tags_selected'         => 'Hodor',
             'filter'                => 'Hodor',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => 'Hodor',
         ],
     ],
-    'forms'          => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => 'Hodor',
             'title_title'                                    => 'Hodor',
             'dungeon_speedrun_required_npc_difficulty'       => 'Hodor',
@@ -99,7 +99,7 @@ return [
             'registered_user_message'   => 'Hodor',
             'create_route'              => 'Hodor',
         ],
-        'login'                => [
+        'login' => [
             'login'                => 'Hodor',
             'email_address'        => 'Hodor',
             'password'             => 'Hodor',
@@ -107,7 +107,7 @@ return [
             'forgot_your_password' => 'Hodor',
             'login_through_oauth2' => 'Hodor',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => 'Hodor',
             'map_facade_style'                              => 'Hodor',
             'map_facade_style_title'                        => 'Hodor',
@@ -138,7 +138,7 @@ return [
             'default_line_color'                            => 'Hodor',
             'default_line_color_title'                      => 'Hodor',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => 'Hodor',
             'reset_title'                            => 'Hodor',
             'unregistered_user_all_routes_temporary' => 'Hodor',
@@ -149,10 +149,10 @@ return [
             'import_as_this_week'                    => 'Hodor',
             'import_route'                           => 'Hodor',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => 'Hodor',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => 'Hodor',
             'pull_number_style_title'           => 'Hodor',
             'pull_number_style_percentage'      => 'Hodor',
@@ -166,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => 'Hodor',
             'always_apply_on_pull_change_title' => 'Hodor',
         ],
-        'register'             => [
+        'register' => [
             'register'                => 'Hodor',
             'username'                => 'Hodor',
             'username_title'          => 'Hodor',
@@ -183,7 +183,7 @@ return [
             'privacy_policy'          => 'Hodor',
             'cookie_policy'           => 'Hodor',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => 'Hodor',
             'america'    => 'Hodor',
             'antarctica' => 'Hodor',
@@ -195,7 +195,7 @@ return [
             'timezone'   => 'Hodor',
         ],
     ],
-    'general'        => [
+    'general' => [
         'linkpreview' => [
             'title'               => 'Hodor',
             'description'         => 'Hodor',
@@ -203,8 +203,8 @@ return [
             'twitter_description' => 'Hodor',
         ],
     ],
-    'group'          => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => 'Hodor',
             'awakened_enemy_set'       => 'Hodor',
             'awakened_enemy_set_title' => 'Hodor',
@@ -217,7 +217,7 @@ return [
             'party_member_nr' => 'Hodor',
         ],
     ],
-    'layout'         => [
+    'layout' => [
         'footer' => [
             'developer'                       => 'Hodor',
             'api_documentation'               => 'Hodor',
@@ -252,8 +252,8 @@ return [
             'explore'                 => 'Hodor',
             'new'                     => 'Hodor',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => 'Hodor',
                 'register'          => 'Hodor',
                 'telescope'         => 'Hodor',
@@ -278,21 +278,21 @@ return [
             ],
         ],
     ],
-    'maps'           => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => 'Hodor',
                 'view_this_route' => 'Hodor',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => 'Hodor',
                     'timer_title'      => 'Hodor',
                     'group_setup'      => 'Hodor',
                     'affixes'          => 'Hodor',
                     'route_info_title' => 'Hodor',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => 'Hodor',
                     'npc_class'               => 'Hodor',
                     'npc_type'                => 'Hodor',
@@ -301,31 +301,31 @@ return [
                     'enemy_visual_type_title' => 'Hodor',
                     'enemy_skippable'         => 'Hodor',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => 'Hodor',
                     'floors'        => 'Hodor',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => 'Hodor',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => 'Hodor',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'Hodor',
                     'auto_solve' => 'Hodor',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => 'Hodor',
                     'unable_to_rate_own_route' => 'Hodor',
                     'your_rating'              => 'Hodor',
                 ],
             ],
-            'enemyinfo'      => [
+            'enemyinfo' => [
                 'enemy_info'      => 'Hodor',
                 'report_an_issue' => 'Hodor',
             ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => 'Hodor',
                 'enabled'                => 'Hodor',
                 'disabled'               => 'Hodor',
@@ -358,13 +358,13 @@ return [
                     'classes_player_deaths'               => 'Hodor',
                     'classes_player_deaths_title'         => 'Hodor',
                 ],
-                'advanced_options'       => 'Hodor',
-                'advanced_option'        => [
+                'advanced_options' => 'Hodor',
+                'advanced_option'  => [
                     'min_samples_required'       => 'Hodor',
                     'min_samples_required_title' => 'Hodor',
                 ],
-                'heat_options'           => 'Hodor',
-                'heat_option'            => [
+                'heat_options' => 'Hodor',
+                'heat_option'  => [
                     'min_opacity' => 'Hodor',
                     'max_zoom'    => 'Hodor',
                     'max'         => 'Hodor',
@@ -374,7 +374,7 @@ return [
                     'pane'        => 'Hodor',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => 'Hodor',
                 'stop'                           => 'Hodor',
                 'start'                          => 'Hodor',
@@ -403,7 +403,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'Hodor',
                 'review_live_session'            => 'Hodor',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => 'Hodor',
                 'new_pull'                    => 'Hodor',
                 'delete_all_pulls_title'      => 'Hodor',
@@ -413,8 +413,8 @@ return [
                 'no_pulls_created_view'       => 'Hodor',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => 'Hodor',
                         'supported_html_tags' => 'Hodor',
                         'save'                => 'Hodor',
@@ -432,14 +432,14 @@ return [
                 'remove_kill_area' => 'Hodor',
                 'delete_killzone'  => 'Hodor',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => 'Hodor',
                 'clone_this_route_title'         => 'Hodor',
                 'report_for_moderation'          => 'Hodor',
                 'report_for_moderation_finished' => 'Hodor',
             ],
         ],
-        'map'      => [
+        'map' => [
             'no_teeming'                             => 'Hodor',
             'visible_teeming'                        => 'Hodor',
             'hidden_teeming'                         => 'Hodor',
@@ -457,15 +457,15 @@ return [
             'mapping_version'          => 'Hodor',
         ],
     ],
-    'modal'          => [
-        'dungeonroute'       => [
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => 'Hodor',
                 'description'  => 'Hodor',
                 'back_to_home' => 'Hodor',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => 'Hodor',
                 'your_name'              => 'Hodor',
@@ -474,7 +474,7 @@ return [
                 'contact_by_email_guest' => 'Hodor',
                 'submit'                 => 'Hodor',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => 'Hodor',
                 'your_name'              => 'Hodor',
                 'contact_by_email'       => 'Hodor',
@@ -482,19 +482,19 @@ return [
                 'submit'                 => 'Hodor',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Hodor',
             'create_temporary_route' => 'Hodor',
             'import_from_mdt'        => 'Hodor',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => 'Hodor',
             'terms_of_service'   => 'Hodor',
             'privacy_policy'     => 'Hodor',
             'cookie_policy'      => 'Hodor',
             'i_agree'            => 'Hodor',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => 'Hodor',
             'enemy_forces_required'           => 'Hodor',
             'enemy_forces_required_teeming'   => 'Hodor',
@@ -503,7 +503,7 @@ return [
             'timer_max_seconds'               => 'Hodor',
             'save'                            => 'Hodor',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => 'Hodor',
             'pull_settings' => 'Hodor',
         ],
@@ -518,10 +518,10 @@ return [
             'route_not_created_from_combat_log' => 'Hodor',
             'route_not_created_through_api'     => 'Hodor',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => 'Hodor',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => 'Hodor',
             'publish'                          => 'Hodor',
             'review_route_settings'            => 'Hodor',
@@ -536,7 +536,7 @@ return [
             'loading'                          => 'Hodor',
             'copy_to_clipboard'                => 'Hodor',
         ],
-        'simulate'           => [
+        'simulate' => [
             'intro'                      => 'Hodor',
             'title'                      => 'Hodor',
             'get_simulationcraft_string' => 'Hodor',
@@ -544,22 +544,22 @@ return [
             'loading'                    => 'Hodor',
             'copy_to_clipboard'          => 'Hodor',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-                'key_level'                               => 'Hodor',
-                'key_level_title'                         => 'Hodor',
-                'shrouded_bounty_type'                    => 'Hodor',
-                'shrouded_bounty_type_title'              => 'Hodor',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => 'Hodor',
+                'key_level_title'            => 'Hodor',
+                'shrouded_bounty_type'       => 'Hodor',
+                'shrouded_bounty_type_title' => 'Hodor',
+                'shrouded_bounty_types'      => [
                     'none'    => 'Hodor',
                     'crit'    => 'Hodor',
                     'haste'   => 'Hodor',
                     'mastery' => 'Hodor',
                     'vers'    => 'Hodor',
                 ],
-                'affixes'                                 => 'Hodor',
-                'affixes_title'                           => 'Hodor',
-                'affixes_map'                             => [
+                'affixes'       => 'Hodor',
+                'affixes_title' => 'Hodor',
+                'affixes_map'   => [
                     'fortified'  => 'Hodor',
                     'tyrannical' => 'Hodor',
                 ],
@@ -580,10 +580,10 @@ return [
                     'power_infusion'       => 'Hodor',
                     'bleeding'             => 'Hodor',
                 ],
-                'hp_percent'                              => 'Hodor',
-                'hp_percent_title'                        => 'Hodor',
-                'bloodlust_per_pull'                      => 'Hodor',
-                'bloodlust_per_pull_title'                => 'Hodor',
+                'hp_percent'               => 'Hodor',
+                'hp_percent_title'         => 'Hodor',
+                'bloodlust_per_pull'       => 'Hodor',
+                'bloodlust_per_pull_title' => 'Hodor',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Hodor',
@@ -596,16 +596,16 @@ return [
                 'description'                          => 'Hodor',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => 'Hodor',
         ],
     ],
-    'release'        => [
+    'release' => [
         'release' => [
             'new' => 'Hodor',
         ],
     ],
-    'tag'            => [
+    'tag' => [
         'manager' => [
             'route_personal' => 'Hodor',
             'route_team'     => 'Hodor',
@@ -619,7 +619,7 @@ return [
             'create_new_tag' => 'Hodor',
         ],
     ],
-    'team'           => [
+    'team' => [
         'details' => [
             'name'            => 'Hodor',
             'description'     => 'Hodor',
@@ -630,19 +630,19 @@ return [
             'submit'          => 'Hodor',
             'disband_team'    => 'Hodor',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => 'Hodor',
             'team'        => 'Hodor',
             'create_team' => 'Hodor',
         ],
     ],
-    'thirdparty'     => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => 'Hodor',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => 'Hodor',
             ],
@@ -651,7 +651,7 @@ return [
             'learn_more' => 'Hodor',
         ],
     ],
-    'user'           => [
+    'user' => [
         'name' => [
             'avatar_alt' => 'Hodor',
             'raider_io'  => 'Hodor',

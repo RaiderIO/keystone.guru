@@ -71,7 +71,7 @@ class IngameXY implements Arrayable
         return new IngameXY(
             $this->x,
             $this->y,
-            $this->floor
+            $this->floor,
         );
     }
 

@@ -35,7 +35,7 @@ abstract class RelationMapping
     public function __construct(
         private readonly string $fileName,
         private readonly string $class,
-        private readonly bool   $persistent = false
+        private readonly bool   $persistent = false,
     ) {
         $this->conditionals            = collect();
         $this->attributeParsers        = collect();
@@ -85,7 +85,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @param Collection<RelationParserInterface> $preSaveRelationParsers
+     * @param  Collection<RelationParserInterface> $preSaveRelationParsers
      * @return $this
      */
     protected function setPreSaveRelationParsers(Collection $preSaveRelationParsers): self
@@ -104,7 +104,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @param Collection<RelationParserInterface> $postSaveRelationParsers
+     * @param  Collection<RelationParserInterface> $postSaveRelationParsers
      * @return $this
      */
     protected function setPostSaveRelationParsers(Collection $postSaveRelationParsers): self

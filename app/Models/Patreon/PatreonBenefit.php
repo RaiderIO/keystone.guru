@@ -42,7 +42,7 @@ class PatreonBenefit extends Model
     public const AD_FREE_TEAM_MEMBERS = 'ad-free-team-members';
 
     public const ALL = [
-        self::AD_FREE              => 1,
+        self::AD_FREE => 1,
         //        self::UNLIMITED_DUNGEONROUTES => 2, // This was removed - it's now active for everyone
         self::UNLISTED_ROUTES      => 3,
         self::ANIMATED_POLYLINES   => 4,

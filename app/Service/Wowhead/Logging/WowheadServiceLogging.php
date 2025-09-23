@@ -56,10 +56,8 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
         bool $schoolSet,
         bool $dispelTypeSet,
         bool $castTimeSet,
-        bool $durationSet
+        bool $durationSet,
     ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
-
-
 }

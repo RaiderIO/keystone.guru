@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $enemy_id
- * @property int          $floor_id
- * @property float        $lat
- * @property float        $lng
+ * @property int   $id
+ * @property int   $dungeon_route_id
+ * @property int   $enemy_id
+ * @property int   $floor_id
+ * @property float $lat
+ * @property float $lng
  *
  * @property DungeonRoute $dungeonRoute
  * @property Enemy        $enemy

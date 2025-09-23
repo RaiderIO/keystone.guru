@@ -10,18 +10,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $floor_id
- * @property int          $file_id
- * @property boolean      $custom True if this thumbnail was requested through the API with custom parameters
+ * @property int  $id
+ * @property int  $dungeon_route_id
+ * @property int  $floor_id
+ * @property int  $file_id
+ * @property bool $custom           True if this thumbnail was requested through the API with custom parameters
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
  * @property File         $file
  *
- * @property Carbon       $created_at
- * @property Carbon       $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
  * @mixin Eloquent
  */

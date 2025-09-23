@@ -76,7 +76,7 @@ trait CreatesCombatLogEvent
     }
 
     /**
-     * @param Floor $floor
+     * @param  Floor $floor
      * @return array
      */
     private function getRandomCoordinates(Floor $floor): array

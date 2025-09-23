@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int                        $id
- * @property int                        $expansion_id The expansion that this game version focussed on.
- * @property string                     $key
- * @property string                     $name
- * @property string                     $description
- * @property bool                       $has_seasons
- * @property bool                       $active
+ * @property int    $id
+ * @property int    $expansion_id The expansion that this game version focussed on.
+ * @property string $key
+ * @property string $name
+ * @property string $description
+ * @property bool   $has_seasons
+ * @property bool   $active
  *
  * @property Expansion                  $expansion
  * @property Collection<MappingVersion> $mappingVersions
@@ -100,7 +100,8 @@ class GameVersion extends CacheModel
 
     public function getDungeonsWithHeatmapsEnabled(): Collection
     {
-        return $this->mappingVersions->filter(fn(MappingVersion $mappingVersion
+        return $this->mappingVersions->filter(fn(
+            MappingVersion $mappingVersion,
         ) => $mappingVersion->dungeon !== null && $mappingVersion->dungeon->heatmap_enabled);
     }
 

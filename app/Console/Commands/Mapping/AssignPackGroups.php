@@ -60,7 +60,6 @@ class AssignPackGroups extends Command
                     $enemyPack->update(['group' => ++$index]);
                 }
             }
-
         }
 
         return 0;

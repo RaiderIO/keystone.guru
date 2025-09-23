@@ -16,7 +16,7 @@ class ProcessRouteFloorThumbnailCustomLogging extends StructuredLogging implemen
         ?int   $imageWidth,
         ?int   $imageHeight,
         ?float $zoomLevel,
-        ?int   $quality
+        ?int   $quality,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
     }

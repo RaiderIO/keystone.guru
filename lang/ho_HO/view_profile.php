@@ -2,7 +2,7 @@
 
 return [
 
-    'edit'      => [
+    'edit' => [
         'title'                                            => 'Hodor',
         'profile'                                          => 'Hodor',
         'account'                                          => 'Hodor',
@@ -44,23 +44,23 @@ return [
             'header_active'  => 'Hodor',
             'header_benefit' => 'Hodor',
         ],
-        'current_password'                                 => 'Hodor',
-        'new_password'                                     => 'Hodor',
-        'new_password_confirm'                             => 'Hodor',
-        'submit'                                           => 'Hodor',
-        'ga_cookies_opt_out'                               => 'Hodor',
-        'reports_description'                              => 'Hodor',
-        'reports_table_header_id'                          => 'Hodor',
-        'reports_table_header_category'                    => 'Hodor',
-        'reports_table_header_message'                     => 'Hodor',
-        'reports_table_header_created_at'                  => 'Hodor',
-        'reports_table_header_status'                      => 'Hodor',
-        'reports_table_action_handled'                     => 'Hodor',
+        'current_password'                => 'Hodor',
+        'new_password'                    => 'Hodor',
+        'new_password_confirm'            => 'Hodor',
+        'submit'                          => 'Hodor',
+        'ga_cookies_opt_out'              => 'Hodor',
+        'reports_description'             => 'Hodor',
+        'reports_table_header_id'         => 'Hodor',
+        'reports_table_header_category'   => 'Hodor',
+        'reports_table_header_message'    => 'Hodor',
+        'reports_table_header_created_at' => 'Hodor',
+        'reports_table_header_status'     => 'Hodor',
+        'reports_table_action_handled'    => 'Hodor',
     ],
     'favorites' => [
         'title' => 'Hodor',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => 'Hodor',
         'favorites'                => 'Hodor',
         'tags'                     => 'Hodor',
@@ -74,16 +74,16 @@ return [
         'create_team'              => 'Hodor',
         'create_team_description'  => 'Hodor',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'Hodor',
     ],
-    'tags'      => [
+    'tags' => [
         'title'                             => 'Hodor',
         'header'                            => 'Hodor',
         'description'                       => 'Hodor',
         'link_your_personal_route_overview' => 'Hodor',
     ],
-    'view'      => [
+    'view' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],

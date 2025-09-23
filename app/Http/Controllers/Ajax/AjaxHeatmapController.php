@@ -12,33 +12,33 @@ use Teapot\StatusCode;
 
 class AjaxHeatmapController extends Controller
 {
-//    public function getData(
-//        GetDataFormRequest             $request,
-//        CombatLogEventServiceInterface $combatLogEventService
-//    ): JsonResponse {
-//        return \response()->json(
-//            $combatLogEventService->getCombatLogEvents(
-//                CombatLogEventFilter::fromArray($request->validated())
-//            )->toArray(),
-//            StatusCode::OK
-//        );
-//    }
+    //    public function getData(
+    //        GetDataFormRequest             $request,
+    //        CombatLogEventServiceInterface $combatLogEventService
+    //    ): JsonResponse {
+    //        return \response()->json(
+    //            $combatLogEventService->getCombatLogEvents(
+    //                CombatLogEventFilter::fromArray($request->validated())
+    //            )->toArray(),
+    //            StatusCode::OK
+    //        );
+    //    }
 
     public function getData(
         AjaxGetDataFormRequest      $request,
-        RaiderIOApiServiceInterface $raiderIOApiService
+        RaiderIOApiServiceInterface $raiderIOApiService,
     ): JsonResponse {
         try {
             return \response()->json(
                 $raiderIOApiService->getHeatmapData(
-                    HeatmapDataFilter::fromArray($request->validated())
+                    HeatmapDataFilter::fromArray($request->validated()),
                 )->toArray(),
-                StatusCode::OK
+                StatusCode::OK,
             );
         } catch (InvalidApiResponseException $exception) {
             return \response()->json(
                 ['message' => $exception->getMessage()],
-                StatusCode::INTERNAL_SERVER_ERROR
+                StatusCode::INTERNAL_SERVER_ERROR,
             );
         }
     }

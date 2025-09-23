@@ -28,5 +28,4 @@ class ZoneChangeSplitterLogging extends CombatLogSplitterLogging implements Zone
     {
         $this->debug(__METHOD__);
     }
-
 }

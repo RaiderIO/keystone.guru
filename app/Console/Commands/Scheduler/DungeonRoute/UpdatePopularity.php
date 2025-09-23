@@ -22,7 +22,7 @@ class UpdatePopularity extends SchedulerCommand
     protected $description = "Updates the popularity of all public dungeon routes.";
 
     public function handle(
-        DungeonRouteServiceInterface $dungeonRouteService
+        DungeonRouteServiceInterface $dungeonRouteService,
     ): int {
         return $this->trackTime(function () use ($dungeonRouteService) {
             $dungeonRouteService->updatePopularity();

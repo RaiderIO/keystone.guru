@@ -183,7 +183,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
 
         // Model helpers
-        if (config('app.env') === 'local') {
+        if (in_array(config('app.env'), ['local', 'testing'])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
         } else {
@@ -235,7 +235,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         MappingServiceInterface            $mappingService,
         GameVersionServiceInterface        $gameVersionService,
         MessageBannerServiceInterface      $messageBannerService,
-        ReadOnlyModeServiceInterface       $readOnlyModeService
+        ReadOnlyModeServiceInterface       $readOnlyModeService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -294,13 +294,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
                     optional($user)->hasAdFreeGiveaway();
             }
-            $userOrDefaultRegion    ??= GameServerRegion::getUserOrDefaultRegion();
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $currentUserGameVersion ??= $gameVersionService->getGameVersion($user);
-            $currentExpansion       ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
+            $currentExpansion ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (!str_starts_with((string)$view->getName(), 'layouts')) {
                 $view->with('viewName', $view->getName());
-            } else if (!isset($view->getData()['viewName'])) {
+            } elseif (!isset($view->getData()['viewName'])) {
                 $view->with('viewName', 'home');
             }
             $view->with('theme', $_COOKIE['theme'] ?? User::THEME_DARKLY);
@@ -326,12 +326,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Main view
-        view()->composer([
-            'layouts.app',
-            'layouts.sitepage',
-            'layouts.map',
-            'admin.dashboard.layouts.app',
-        ],
+        view()->composer(
+            [
+                'layouts.app',
+                'layouts.sitepage',
+                'layouts.map',
+                'admin.dashboard.layouts.app',
+            ],
             static function (View $view) use ($globalViewVariables, $messageBannerService, $readOnlyModeService) {
                 $view->with('version', $globalViewVariables['appVersion']);
                 $view->with('revision', $globalViewVariables['appRevision']);
@@ -340,7 +341,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
                 $view->with('messageBanner', $messageBannerService->getMessage());
                 $view->with('readOnlyEnabled', $readOnlyModeService->isReadOnly());
-            });
+            },
+        );
 
         view()->composer(['common.maps.map'], static function (View $view) use ($globalViewVariables) {
             $view->with('assetsBaseUrl', config('keystoneguru.assets_base_url'));
@@ -351,8 +353,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'layouts.app',
             'common.layout.footer',
         ], static function (View $view) use ($globalViewVariables) {
-            $view->with('hasNewChangelog',
-                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
+            $view->with(
+                'hasNewChangelog',
+                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'],
+            );
         });
 
         view()->composer('common.layout.navgameversions', static function (View $view) use ($globalViewVariables) {
@@ -394,7 +398,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'dungeonroute.discover.season.overview',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             /** @var Expansion $expansion */
-            $expansion           = $view->getData()['expansion'];
+            $expansion = $view->getData()['expansion'];
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
@@ -443,21 +447,23 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('routeKeyLevelFrom', $currentSeason->key_level_min);
             $view->with('routeKeyLevelTo', $currentSeason->key_level_max);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']
-                ->load([
-                    'seasonDungeons' => static function ($query) {
-                        $query->without([
-                            'season',
-                            'dungeon',
-                        ]);
-                    },
-                ])
-                ->makeHidden([
-                    'affixGroups',
-                    'expansion',
-                    'dungeons',
-                ])
-                ->makeVisible(['seasonDungeons'])
+            $view->with(
+                'currentSeason',
+                $regionViewVariables['currentSeason']
+                    ->load([
+                        'seasonDungeons' => static function ($query) {
+                            $query->without([
+                                'season',
+                                'dungeon',
+                            ]);
+                        },
+                    ])
+                    ->makeHidden([
+                        'affixGroups',
+                        'expansion',
+                        'dungeons',
+                    ])
+                    ->makeVisible(['seasonDungeons']),
             );
             $view->with('nextSeason', $regionViewVariables['nextSeason']?->without([
                 'affixGroups',
@@ -599,7 +605,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
         });
 
-        view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use ($globalViewVariables
+        view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use (
+            $globalViewVariables
         ) {
             $view->with('spellsSelect', $globalViewVariables['selectableSpellsByCategory']);
         });
@@ -666,11 +673,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
             $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static function (
-                SimulationCraftRaidBuffs $raidBuff
+                SimulationCraftRaidBuffs $raidBuff,
             ) {
                 return [
-                    $raidBuff->value =>
-                        __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
+                    $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
                 ];
             })->toArray());
         });

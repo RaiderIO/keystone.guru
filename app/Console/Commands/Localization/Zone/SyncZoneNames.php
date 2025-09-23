@@ -110,7 +110,7 @@ class SyncZoneNames extends Command
     private function syncFloorNames(WowheadTranslationServiceInterface $wowheadTranslationService, array $existingTranslationsByLocale): array
     {
         $floorNamesByLocale = $wowheadTranslationService->getFloorNames();
-        $dungeonsByZoneId = Dungeon::all()
+        $dungeonsByZoneId   = Dungeon::all()
             ->keyBy('zone_id');
 
         $englishFloorNames = $floorNamesByLocale->get('en_US', []);
@@ -126,7 +126,6 @@ class SyncZoneNames extends Command
         //    to find the zone IDs+index and then use those to find the names in the other locales.
         $zoneIdIndexReference = collect();
         foreach ($englishFloorNames as $zoneId => $floorNames) {
-
             // Find the KSG floor that this translation belongs to
             /** @var Dungeon $dungeon */
             $dungeon = $dungeonsByZoneId->get($zoneId);
@@ -150,7 +149,7 @@ class SyncZoneNames extends Command
                     if ($floorName === __($floor->name, [], 'en_US')) {
                         // We found the KSG floor for this name, so we can store where to find it in $dungeonZoneIdIndexReference
                         $dungeonZoneIdIndexReference[$floor->id] = [
-                            'index'          => $floorIndex,
+                            'index' => $floorIndex,
                             // Extract the translation name key from the floor name
                             // 0. dungeons
                             // 1. bfa
@@ -175,7 +174,7 @@ class SyncZoneNames extends Command
             if ($facadeFloor !== null) {
                 $dungeonZoneIdIndexReference[$facadeFloor->id] = [
                     // Facade floor is always the last floor (one will be added shortly so this will match up)
-                    'index'          => count($floorNames),
+                    'index' => count($floorNames),
                     // Extract the translation key from the facade floor name
                     'translationKey' => explode('.', $facadeFloor->name)[4],
                 ];
@@ -197,10 +196,10 @@ class SyncZoneNames extends Command
                 $dungeonZoneIdIndexReference = [];
 
                 /** @var Floor $floor */
-                $floor = $dungeon->floors->first();
+                $floor                                   = $dungeon->floors->first();
                 $dungeonZoneIdIndexReference[$floor->id] = [
                     // 0 based if the dungeon was not found in the Wowhead data
-                    'index'          => 0,
+                    'index' => 0,
                     // Extract the translation key from the facade floor name
                     'translationKey' => explode('.', $floor->name)[4],
                 ];
@@ -210,7 +209,6 @@ class SyncZoneNames extends Command
                 $this->info(sprintf('Added missing dungeon %s for zone ID %d to the zone ID index reference', $dungeon->key, $zoneId));
             }
         }
-
 
         // 3. Based on this mapping, we can now construct the translation array for each locale and save it to disk
         foreach ($floorNamesByLocale as $locale => $floorNamesForLocale) {
@@ -253,7 +251,7 @@ class SyncZoneNames extends Command
 //                    if ($dungeon->key === Dungeon::DUNGEON_OPERATION_FLOODGATE) {
 //                        dd(
 //                            $zoneId,
-////                            $zoneIdIndexReference,
+                    ////                            $zoneIdIndexReference,
 //                            $updatedTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey],
 //                            $floorNamesForLocale[$zoneId],
 //                            $floorData

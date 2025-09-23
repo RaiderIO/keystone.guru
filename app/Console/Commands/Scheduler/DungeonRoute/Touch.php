@@ -22,7 +22,7 @@ class Touch extends SchedulerCommand
     protected $description = "Updates the updated at of specific dungeon routes (TEMP).";
 
     public function handle(
-        DungeonRouteServiceInterface $dungeonRouteService
+        DungeonRouteServiceInterface $dungeonRouteService,
     ): int {
         $teamId = (int)$this->argument('teamId');
 

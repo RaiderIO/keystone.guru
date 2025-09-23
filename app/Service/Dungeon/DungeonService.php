@@ -7,11 +7,9 @@ use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 
 class DungeonService implements DungeonServiceInterface
 {
-
     public function __construct(
-        private readonly DungeonServiceLoggingInterface $log
+        private readonly DungeonServiceLoggingInterface $log,
     ) {
-
     }
 
     public function importInstanceIdsFromCsv(string $filePath): bool
@@ -37,7 +35,6 @@ class DungeonService implements DungeonServiceInterface
             $dungeons = Dungeon::all()->keyBy('map_id');
 
             foreach ($csv as $index => $row) {
-
                 $instanceId = $row[$indexId];
 
                 if (empty($instanceId) || !is_numeric($instanceId)) {
@@ -55,8 +52,8 @@ class DungeonService implements DungeonServiceInterface
                 }
 
                 if ($dungeon->instance_id === null && $dungeon->update([
-                        'instance_id' => $instanceId,
-                    ])) {
+                    'instance_id' => $instanceId,
+                ])) {
                     $this->log->importInstanceIdsFromCsvUpdatedZoneId($dungeon->key, $instanceId);
                 }
             }

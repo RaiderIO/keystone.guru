@@ -18,9 +18,11 @@ return new class extends Migration {
             $table->index(['floor_id', 'mode']);
         });
 
-        DB::update('
+        DB::update(
+            '
             UPDATE `dungeon_speedrun_required_npcs` SET mode = :mode
-            ', ['mode' => Dungeon::DIFFICULTY_25_MAN]
+            ',
+            ['mode' => Dungeon::DIFFICULTY_25_MAN],
         );
     }
 

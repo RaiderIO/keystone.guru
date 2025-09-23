@@ -14,7 +14,7 @@ return new class extends Migration {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('map_facade_style', [
                 User::MAP_FACADE_STYLE_SPLIT_FLOORS,
-                User::MAP_FACADE_STYLE_FACADE
+                User::MAP_FACADE_STYLE_FACADE,
             ])
                 ->default(User::MAP_FACADE_STYLE_FACADE)
                 ->change();
@@ -29,7 +29,7 @@ return new class extends Migration {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('map_facade_style', [
                 User::MAP_FACADE_STYLE_SPLIT_FLOORS,
-                User::MAP_FACADE_STYLE_FACADE
+                User::MAP_FACADE_STYLE_FACADE,
             ])
                 ->default(User::MAP_FACADE_STYLE_SPLIT_FLOORS)
                 ->change();

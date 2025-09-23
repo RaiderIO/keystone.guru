@@ -16,12 +16,12 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int    $id
- * @property int    $mapping_version_id
- * @property int    $floor_id
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
  * @property int|null $speed
- * @property string $vertices_json
- * @property Floor  $floor
+ * @property string   $vertices_json
+ * @property Floor    $floor
  *
  * @mixin Eloquent
  */
@@ -65,7 +65,7 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
     public function getIntersections(
         CoordinatesServiceInterface $coordinatesService,
         LatLng                      $latLngA,
-        LatLng                      $latLngB
+        LatLng                      $latLngB,
     ): array {
         $vertices = json_decode($this->vertices_json, true);
 
@@ -78,7 +78,7 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
                 $latLngA,
                 $latLngB,
                 LatLng::fromArray($vertex),
-                LatLng::fromArray($nextVertex)
+                LatLng::fromArray($nextVertex),
             );
 
             if ($intersection !== null) {

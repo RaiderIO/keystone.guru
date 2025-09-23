@@ -27,7 +27,6 @@ class SyncAdsTxt extends SchedulerCommand
     public function handle(AdProviderServiceInterface $adProviderService): int
     {
         return $this->trackTime(function () use ($adProviderService) {
-
             //        $nitroPayUserId = config('keystoneguru.nitro_pay.user_id');
             //
             //        if (!is_numeric($nitroPayUserId)) {

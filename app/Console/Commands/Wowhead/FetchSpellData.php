@@ -44,7 +44,7 @@ class FetchSpellData extends Command
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
 
             $spells = $dungeon->spells()->with('gameVersion')->get();
-        } else if ($spellId > 0) {
+        } elseif ($spellId > 0) {
             $spells = collect([Spell::with('gameVersion')->findOrFail($spellId)]);
         } else {
             $spells = Spell::with('gameVersion')

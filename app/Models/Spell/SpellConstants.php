@@ -231,6 +231,8 @@ trait SpellConstants
     public const SPELL_ANCIENT_HYSTERIA      = 90355;
     public const SPELL_PRIMAL_RAGE           = 264667;
     public const SPELL_FERAL_HIDE_DRUMS      = 381301;
+    public const SPELL_THUNDEROUS_DRUMS      = 444257;
+    public const SPELL_HARRIERS_CRY          = 466904;
     public const SPELL_SHROUD_OF_CONCEALMENT = 114018;
 
     public const BLOODLUSTY_SPELLS = [
@@ -241,6 +243,8 @@ trait SpellConstants
         self::SPELL_ANCIENT_HYSTERIA,
         self::SPELL_PRIMAL_RAGE,
         self::SPELL_FERAL_HIDE_DRUMS,
+        self::SPELL_THUNDEROUS_DRUMS,
+        self::SPELL_HARRIERS_CRY,
     ];
 
     public const EXCLUDE_MDT_IMPORT_SPELLS = [

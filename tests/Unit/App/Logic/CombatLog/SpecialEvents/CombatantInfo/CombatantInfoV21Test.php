@@ -45,7 +45,7 @@ class CombatantInfoV21Test extends PublicTestCase
         int    $expectedHonorLevel,
         int    $expectedSeason,
         int    $expectedRating,
-        int    $expectedTier
+        int    $expectedTier,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($combatantInfoEvent);
@@ -129,7 +129,7 @@ class CombatantInfoV21Test extends PublicTestCase
     #[DataProvider('parseEvent_GivenCombatantInfoEvent_ShouldValidateTalents_DataProvider')]
     public function parseEvent_GivenCombatantInfoEvent_ShouldValidateTalents(
         string $combatantInfoEvent,
-        array  $expectedTalents
+        array  $expectedTalents,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($combatantInfoEvent);
@@ -223,14 +223,13 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
-
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
     #[DataProvider('parseEvent_GivenCombatantInfoEvent_ShouldValidatePvpTalents_DataProvider')]
     public function parseEvent_GivenCombatantInfoEvent_ShouldValidatePvpTalents(
         string $combatantInfoEvent,
-        array  $expectedTalents
+        array  $expectedTalents,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($combatantInfoEvent);
@@ -256,14 +255,13 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
-
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
     #[DataProvider('parseEvent_GivenCombatantInfoEvent_ShouldValidateEquippedItems_DataProvider')]
     public function parseEvent_GivenCombatantInfoEvent_ShouldValidateEquippedItems(
         string $combatantInfoEvent,
-        array  $expectedEquippedItems
+        array  $expectedEquippedItems,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($combatantInfoEvent);
@@ -306,14 +304,13 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
-
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
     #[DataProvider('parseEvent_GivenCombatantInfoEvent_ShouldValidateInterestingAuras_DataProvider')]
     public function parseEvent_GivenCombatantInfoEvent_ShouldValidateInterestingAuras(
         string $combatantInfoEvent,
-        array  $expectedInterestingAuras
+        array  $expectedInterestingAuras,
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($combatantInfoEvent);
@@ -358,5 +355,4 @@ class CombatantInfoV21Test extends PublicTestCase
             ],
         ];
     }
-
 }

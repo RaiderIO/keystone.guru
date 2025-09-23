@@ -9,8 +9,8 @@ use Illuminate\Console\Command;
  */
 trait CorrectsLocalizationsHeader
 {
-    public function correctLocalizationHeader(): bool {
-
+    public function correctLocalizationHeader(): bool
+    {
         // Fix the localization.csv file
         $contents = file_get_contents(base_path('lang/localization.csv'));
         if ($contents === false) {

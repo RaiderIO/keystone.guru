@@ -70,9 +70,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_shareable_link',
-                    $shareLink,
-                ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                {{ html()->text('map_shareable_link', $shareLink)->id('map_shareable_link')->class('form-control')->isReadonly() }}
                 <div class="input-group-append">
                     <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
                             data-toggle="tooltip"
@@ -89,8 +87,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_shareable_short_link', $shareLinkShort,
-                ['id' => 'map_shareable_short_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                {{ html()->text('map_shareable_short_link', $shareLinkShort)->id('map_shareable_short_link')->class('form-control')->isReadonly() }}
                 <div class="input-group-append">
                     <button id="map_shareable_short_link_copy_to_clipboard" class="btn btn-info"
                             data-toggle="tooltip"
@@ -104,10 +101,10 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute
     <div class="form-group">
         <div class="row">
             <div class="col-auto">
-                {!! Form::checkbox('map_include_location', 1, 0, ['id' => 'map_include_location_checkbox', 'class' => 'form-control', 'style' => 'width: 23px; height: 23px;']) !!}
+                {{ html()->checkbox('map_include_location', null, 1)->id('map_include_location_checkbox')->class('form-control')->style('width: 23px; height: 23px;') }}
             </div>
             <div class="col pl-0">
-                {!! Form::label('map_include_location', __('view_common.modal.share.include_location_in_link')) !!}
+                {{ html()->label(__('view_common.modal.share.include_location_in_link'), 'map_include_location') }}
             </div>
         </div>
     </div>
@@ -119,11 +116,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_embeddable_link',
-                sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>',
-                    route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])
-                ),
-                ['id' => 'map_embeddable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                {{ html()->text('map_embeddable_link', sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])))->id('map_embeddable_link')->class('form-control')->isReadonly() }}
                 <div class="input-group-append">
                     <button id="map_embeddable_link_copy_to_clipboard" class="btn btn-info"
                             data-toggle="tooltip"

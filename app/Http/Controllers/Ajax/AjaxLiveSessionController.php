@@ -39,7 +39,6 @@ class AjaxLiveSessionController extends Controller
             } else {
                 $result = ['expires_in' => $liveSession->getExpiresInSeconds()];
             }
-
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }

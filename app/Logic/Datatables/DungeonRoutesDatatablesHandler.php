@@ -36,7 +36,6 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         return $result;
     }
 
-
     protected function calculateRecordsTotal(): int
     {
         // Clear them
@@ -72,7 +71,7 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
             ])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate')->getValue($this->builder->getGrammar()));
         // Temp store; it messes with the count
-        $havings = $query->havings;
+        $havings        = $query->havings;
         $query->havings = null;
 
         $query->orders = null;

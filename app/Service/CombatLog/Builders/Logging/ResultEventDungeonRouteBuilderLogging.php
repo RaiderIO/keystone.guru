@@ -61,7 +61,7 @@ class ResultEventDungeonRouteBuilderLogging extends DungeonRouteBuilderLogging i
 
     public function buildCreateNewActiveChainPull(
         float $activePullAverageHPPercent,
-        int   $chainPullDetectionHPPercent
+        int   $chainPullDetectionHPPercent,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

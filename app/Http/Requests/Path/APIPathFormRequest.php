@@ -38,21 +38,21 @@ class APIPathFormRequest extends FormRequest
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'polyline'                   => 'required|array',
-            'polyline.color'             => [
+            'polyline'       => 'required|array',
+            'polyline.color' => [
                 'nullable',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'polyline.color_animated'    => [
+            'polyline.color_animated' => [
                 'nullable',
                 'string',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'polyline.weight'            => [
+            'polyline.weight' => [
                 'int',
             ],
-            'polyline.vertices_json'     => [
+            'polyline.vertices_json' => [
                 'json',
                 new JsonStringCountRule(2),
             ],

@@ -27,7 +27,7 @@ class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arra
         public ?int                             $specId = null,
         public ?float                           $itemLevel = null,
         public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null
+        public ?CombatLogRouteCoordRequestModel $coord = null,
     ) {
     }
 

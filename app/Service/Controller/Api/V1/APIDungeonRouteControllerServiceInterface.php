@@ -18,6 +18,6 @@ interface APIDungeonRouteControllerServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null
+        ?int         $quality = null,
     ): Collection;
 }

@@ -23,7 +23,7 @@ class PridefulEnemyChangedEvent extends ModelChangedEvent
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected PridefulEnemy|Model                $model
+        protected PridefulEnemy|Model                $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -36,9 +36,10 @@ class PridefulEnemyChangedEvent extends ModelChangedEvent
     public function broadcastWith(): array
     {
         return array_merge(
-            parent::broadcastWith(), [
+            parent::broadcastWith(),
+            [
                 'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
-            ]
+            ],
         );
     }
 }

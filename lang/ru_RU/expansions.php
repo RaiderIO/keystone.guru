@@ -2,43 +2,43 @@
 
 return [
 
-    'classic'  => [
+    'classic' => [
         'name' => '',
     ],
-    'tbc'      => [
+    'tbc' => [
         'name' => '',
     ],
-    'wotlk'    => [
+    'wotlk' => [
         'name' => '',
     ],
-    'cata'     => [
+    'cata' => [
         'name' => '',
     ],
-    'mop'      => [
+    'mop' => [
         'name' => '',
     ],
-    'wod'      => [
+    'wod' => [
         'name' => '',
     ],
-    'legion'   => [
+    'legion' => [
         'name' => 'Легион',
     ],
-    'bfa'      => [
+    'bfa' => [
         'name' => 'Битва за Азерот',
     ],
-    'sl'       => [
+    'sl' => [
         'name' => 'Темные земли',
     ],
-    'df'       => [
+    'df' => [
         'name' => '',
     ],
-    'tww'      => [
+    'tww' => [
         'name' => '',
     ],
     'midnight' => [
         'name' => '',
     ],
-    'tlt'      => [
+    'tlt' => [
         'name' => '',
     ],
 

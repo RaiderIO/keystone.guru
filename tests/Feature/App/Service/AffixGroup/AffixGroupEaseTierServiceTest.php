@@ -38,7 +38,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $this,
             null,
             $log,
-            ['getAffixGroupByString']
+            ['getAffixGroupByString'],
         );
 
         $affixGroupEaseTierService->expects($this->once())
@@ -66,6 +66,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
 
         // Act
         $result = null;
+
         try {
             // Should not be needed if we use repositories, but we're not at the moment..
             DB::transaction(function () use (&$result, $affixGroupEaseTierService, $response) {
@@ -96,7 +97,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             $this,
             null,
             $log,
-            ['getAffixGroupByString', 'getTiersHash']
+            ['getAffixGroupByString', 'getTiersHash'],
         );
 
         $affixGroupEaseTierService->expects($this->once())
@@ -109,6 +110,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
 
         // Act
         $result = null;
+
         try {
             $result = $affixGroupEaseTierService->parseTierList($response);
         } finally {
@@ -134,7 +136,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             $this->getSeasonService(),
-            $log
+            $log,
         );
 
         $log->expects($this->once())
@@ -142,6 +144,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
 
         // Act
         $result = null;
+
         try {
             $result = $affixGroupEaseTierService->parseTierList($response);
         } finally {
@@ -168,11 +171,12 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             $this->getSeasonService(),
-            $log
+            $log,
         );
         // Act
         $result                         = null;
         $previousAffixGroupEaseTierPull = null;
+
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
             $result                         = $affixGroupEaseTierService->parseTierList($responseDifferentAffix);
@@ -208,7 +212,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             $this->getSeasonService(),
-            $log
+            $log,
         );
 
         $log->expects($this->once())
@@ -235,12 +239,13 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
             $this->getSeasonService(),
-            $log
+            $log,
         );
 
         // Act
         $result                         = null;
         $previousAffixGroupEaseTierPull = null;
+
         try {
             $previousAffixGroupEaseTierPull = $affixGroupEaseTierService->parseTierList($response);
             $result                         = $affixGroupEaseTierService->parseTierList($response);
@@ -270,7 +275,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
             ['getCurrentSeason'],
             collect([
                 $season,
-            ])
+            ]),
         );
         $seasonService->method('getCurrentSeason')
             ->willReturn($season);

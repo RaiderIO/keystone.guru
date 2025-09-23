@@ -19,30 +19,30 @@ return [
         'next'     => 'Suivante',
         'previous' => 'Précédente',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => ' : activer pour trier la colonne par ordre croissant',
         'sortDescending' => ' : activer pour trier la colonne par ordre décroissant',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => 'Annuler',
         'fill'           => 'Remplir toutes les cellules avec <i>%d</i>',
         'fillHorizontal' => 'Remplir les cellules horizontalement',
         'fillVertical'   => 'Remplir les cellules verticalement',
     ],
-    'buttons'        => [
-        'collection'      => 'Collection',
-        'colvis'          => 'Visibilité colonnes',
-        'colvisRestore'   => 'Rétablir visibilité',
-        'copy'            => 'Copier',
-        'copyKeys'        => 'Appuyez sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => 'Collection',
+        'colvis'        => 'Visibilité colonnes',
+        'colvisRestore' => 'Rétablir visibilité',
+        'copy'          => 'Copier',
+        'copyKeys'      => 'Appuyez sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.',
+        'copySuccess'   => [
             1   => '1 ligne copiée dans le presse-papier',
             '_' => '%d lignes copiées dans le presse-papier',
         ],
-        'copyTitle'       => 'Copier dans le presse-papier',
-        'csv'             => 'CSV',
-        'excel'           => 'Excel',
-        'pageLength'      => [
+        'copyTitle'  => 'Copier dans le presse-papier',
+        'csv'        => 'CSV',
+        'excel'      => 'Excel',
+        'pageLength' => [
             -1  => 'Afficher toutes les lignes',
             '_' => 'Afficher %d lignes',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => 'Supprimer tous les états',
         'createState'     => 'Créer un état',
     ],
-    'searchBuilder'  => [
-        'add'         => 'Ajouter une condition',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => 'Ajouter une condition',
+        'button' => [
             0   => 'Recherche avancée',
             '_' => 'Recherche avancée (%d)',
         ],
-        'clearAll'    => 'Effacer tout',
-        'condition'   => 'Condition',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => 'Effacer tout',
+        'condition'  => 'Condition',
+        'conditions' => [
+            'date' => [
                 'after'      => 'Après le',
                 'before'     => 'Avant le',
                 'between'    => 'Entre',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => 'Ne commence pas par',
                 'notEndsWith'   => 'Ne termine pas par',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => 'Sans',
                 'notEmpty' => 'Non vide',
                 'not'      => 'Différent de',
@@ -118,11 +118,11 @@ return [
             0   => 'Recherche avancée',
             '_' => 'Recherche avancée (%d)',
         ],
-        'value'       => 'Valeur',
+        'value' => 'Valeur',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => 'Effacer tout',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => 'Effacer tout',
+        'collapse'     => [
             0   => 'Volet de recherche',
             '_' => 'Volet de recherche (%d)',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => 'Montrer tout',
         'collapseMessage' => 'Réduire tout',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => '1 cellule sélectionnée',
             '_' => '%d cellules sélectionnées',
         ],
@@ -143,12 +143,12 @@ return [
             1   => '1 colonne sélectionnée',
             '_' => '%d colonnes sélectionnées',
         ],
-        'rows'    => [
+        'rows' => [
             1   => '1 ligne sélectionnée',
             '_' => '%d lignes sélectionnées',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => 'Précédent',
         'next'     => 'Suivant',
         'hours'    => 'Heures',
@@ -168,7 +168,7 @@ return [
             5 => 'Ven',
             6 => 'Sam',
         ],
-        'months'   => [
+        'months' => [
             0  => 'Janvier',
             1  => 'Février',
             2  => 'Mars',
@@ -183,14 +183,14 @@ return [
             11 => 'Décembre',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => 'Fermer',
         'create' => [
             'button' => 'Nouveau',
             'title'  => 'Créer une nouvelle entrée',
             'submit' => 'Créer',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => 'Editer',
             'title'  => 'Editer Entrée',
             'submit' => 'Mettre à jour',
@@ -204,17 +204,17 @@ return [
                 1   => 'Êtes-vous sûr de vouloir supprimer 1 ligne ?',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => 'Une erreur système s\'est produite (<a target="" rel="nofollow" href="">Plus d\'information</a>).',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => 'Valeurs multiples',
             'info'    => 'Les éléments sélectionnés contiennent différentes valeurs pour cette entrée. Pour modifier et définir tous les éléments de cette entrée à la même valeur, cliquez ou tapez ici, sinon ils conserveront leurs valeurs individuelles.',
             'restore' => 'Annuler les modifications',
             'noMulti' => 'Ce champ peut être modifié individuellement, mais ne fait pas partie d\'un groupe. ',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => 'Renommer l\'état',
         'renameLabel'    => 'Nouveau nom pour %s :',
         'renameButton'   => 'Renommer',
@@ -240,7 +240,7 @@ return [
                 'visible' => 'Visibilité des colonnes',
                 'search'  => 'Recherche par colonne',
             ],
-            'button'        => 'Créer',
+            'button' => 'Créer',
         ],
     ],
 

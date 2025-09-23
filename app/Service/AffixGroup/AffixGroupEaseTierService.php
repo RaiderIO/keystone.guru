@@ -23,11 +23,11 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         'Ara-Kara: City of Echoes'               => 'Ara-Kara, City of Echoes',
         'Operation Mechagon: Workshop'           => 'Operation: Mechagon - Workshop',
     ];
-    public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
+    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
-        private readonly AffixGroupEaseTierServiceLoggingInterface $log
+        private readonly AffixGroupEaseTierServiceLoggingInterface $log,
     ) {
     }
 
@@ -36,7 +36,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixes        = $tierList['encounterTierList']['label'];
         $tiersByDungeon = [];
         foreach ($tierList['encounterTierList']['tierLists'][0]['tiers'] as $tier) {
-
             foreach ($tier['entries'] as $entry) {
                 $tiersByDungeon[$dungeonNameMapping[$entry['name']] ?? $entry['name']] = $tier['tier'];
             }
@@ -51,7 +50,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 '%s|%s|%s',
                 $dungeon,
                 $affixes,
-                $tier
+                $tier,
             );
         }
 
@@ -81,6 +80,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $result    = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
+
         try {
             $lastUpdatedAt = Carbon::createFromFormat(self::DATE_TIME_FORMAT, $tierListsResponse['lastUpdated']);
         } catch (InvalidFormatException $exception) {
@@ -93,7 +93,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             $lastEaseTierPull->created_at->isBefore($lastUpdatedAt) ||
             $lastEaseTierPull->affix_group_id !== $affixGroup->id ||
             $lastEaseTierPull->tiers_hash !== $tiersHash) {
-
             $affixGroupString       = $affixGroup->text;
             $affixGroupEaseTierPull = AffixGroupEaseTierPull::create([
                 'affix_group_id'  => $affixGroup->id,
@@ -224,16 +223,17 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix
+            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(
+                Affix $affix,
             ) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {
                 // Now we must find affix groups that correspond to the affix list
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
-
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(Affix $affix
+                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(
+                        Affix $affix,
                     ) => $affixes->search($affix->key) === false);
 
                     // If we have found the match, we're done

@@ -20,14 +20,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int                       $id
- * @property int                       $dungeon_route_id
- * @property int|null                  $floor_id
- * @property string                    $color
- * @property string                    $description
- * @property int                       $index
- * @property float|null                $lat
- * @property float|null                $lng
+ * @property int        $id
+ * @property int        $dungeon_route_id
+ * @property int|null   $floor_id
+ * @property string     $color
+ * @property string     $description
+ * @property int        $index
+ * @property float|null $lat
+ * @property float|null $lng
  *
  * @property DungeonRoute              $dungeonRoute
  * @property Floor                     $floor
@@ -36,8 +36,8 @@ use Illuminate\Support\Facades\DB;
  * @property Collection<KillZoneSpell> $killZoneSpells
  * @property Collection<Spell>         $spells
  *
- * @property Carbon                    $updated_at
- * @property Carbon                    $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @mixin Eloquent
  */
@@ -287,7 +287,7 @@ class KillZone extends Model
         return new LatLng(
             $boundingBox['latMax'],
             $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
-            $this->getDominantFloor(true)
+            $this->getDominantFloor(true),
         );
     }
 

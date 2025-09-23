@@ -42,7 +42,7 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
     public function __construct(
         private readonly CombatLogServiceInterface  $combatLogService,
-        private readonly DungeonRepositoryInterface $dungeonRepository
+        private readonly DungeonRepositoryInterface $dungeonRepository,
     ) {
         $log = App::make(ZoneChangeSplitterLoggingInterface::class);
         /** @var ZoneChangeSplitterLoggingInterface $log */
@@ -71,8 +71,8 @@ class ZoneChangeSplitter extends CombatLogSplitter
                 $combatLogVersion,
                 $advancedLoggingEnabled,
                 $rawEvent,
-                $lineNr
-            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
+                $lineNr,
+            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr),
         );
 
         // Make sure that everything captured from last zone change and onwards is still saved to disk
@@ -90,7 +90,7 @@ class ZoneChangeSplitter extends CombatLogSplitter
         int    $combatLogVersion,
         bool   $advancedLoggingEnabled,
         string $rawEvent,
-        int    $lineNr
+        int    $lineNr,
     ) {
         $this->log->addContext('lineNr', [
             'combatLogVersion'       => $combatLogVersion,
@@ -114,7 +114,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
             $this->rawEvents->push($rawEvent);
             $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
         }
-
 
         // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
         if ($parsedEvent instanceof ZoneChangeEvent) {
@@ -143,7 +142,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         return $parsedEvent;
     }
-
 
     private function resetCurrentZone(): void
     {
@@ -184,11 +182,11 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
     protected function getCombatLogFileName(string $countStr): string
     {
-        return sprintf('%s_%s%s',
+        return sprintf(
+            '%s_%s%s',
             pathinfo($this->filePath, PATHINFO_FILENAME),
             Str::slug($this->lastZoneChangeEvent->getZoneName()),
-            $countStr
+            $countStr,
         );
     }
-
 }

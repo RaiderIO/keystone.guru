@@ -28,7 +28,7 @@ class CombatLogRouteNpcRequestModel extends RequestModel implements Arrayable
         public ?string                          $spawnUid = null,
         public ?string                          $engagedAt = null,
         public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null
+        public ?CombatLogRouteCoordRequestModel $coord = null,
     ) {
     }
 

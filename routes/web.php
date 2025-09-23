@@ -412,7 +412,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('features/toggle', (new AdminToolsController())->toggleFeature(...))->name('admin.tools.features.toggle');
                 Route::post('features/forget', (new AdminToolsController())->forgetFeature(...))->name('admin.tools.features.forget');
 
-
                 // Exception thrower
                 Route::get('exception', (new AdminToolsController())->exceptionselect(...))->name('admin.tools.exception.select');
                 Route::post('exception', (new AdminToolsController())->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');

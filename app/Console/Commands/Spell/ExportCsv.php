@@ -70,7 +70,7 @@ class ExportCsv extends Command
                 'duration',
                 'wowhead_link',
             ],
-            $csvData
+            $csvData,
         );
 
         return 0;
@@ -79,6 +79,7 @@ class ExportCsv extends Command
     private function outputToCsv(string $filePath, array $headers, array $data): bool
     {
         $file = null;
+
         try {
             $file = fopen($filePath, 'w');
             fputcsv($file, $headers);

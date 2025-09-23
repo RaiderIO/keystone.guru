@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'env'  => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -183,7 +183,6 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
         Rollbar\Laravel\RollbarServiceProvider::class,
@@ -211,12 +210,10 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Agent'            => Jenssegers\Agent\Facades\Agent::class,
-        'Form'             => Collective\Html\FormFacade::class,
-        'GitHub'           => GrahamCampbell\GitHub\GitHubServiceProvider::class,
-        'Html'             => Collective\Html\HtmlFacade::class,
-        'Laratrust'        => Laratrust\LaratrustFacade::class,
-        'Redis'            => Illuminate\Support\Facades\Redis::class,
+        'Agent'     => Jenssegers\Agent\Facades\Agent::class,
+        'GitHub'    => GrahamCampbell\GitHub\GitHubServiceProvider::class,
+        'Laratrust' => Laratrust\LaratrustFacade::class,
+        'Redis'     => Illuminate\Support\Facades\Redis::class,
         // Tinker models
         'DungeonRoute'     => DungeonRoute::class,
         'ChallengeModeRun' => ChallengeModeRun::class,

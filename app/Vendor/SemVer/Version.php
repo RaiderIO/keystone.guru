@@ -36,8 +36,8 @@ class Version extends \PHLAK\SemVer\Version
      *
      * Examples: 'v1', 'v1.2', 'v1-beta.4', 'v1.3+007'
      *
-     * @param string $version Version string
-     * @return self This Version object
+     * @param  string $version Version string
+     * @return self   This Version object
      *
      * @throws InvalidVersionException
      */

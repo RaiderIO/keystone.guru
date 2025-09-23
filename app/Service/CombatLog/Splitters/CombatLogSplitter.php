@@ -13,7 +13,6 @@ abstract class CombatLogSplitter implements CombatLogSplitterInterface
         $this->log = $log;
     }
 
-
     /**
      * Based on the currently known information (as for what dungeon we're doing), generate a file path
      * to save the current combat log at.
@@ -26,9 +25,10 @@ abstract class CombatLogSplitter implements CombatLogSplitterInterface
         $count = 0;
         do {
             $countStr     = $count === 0 ? '' : sprintf('-%d', $count);
-            $saveFilePath = sprintf('%s/%s.txt',
+            $saveFilePath = sprintf(
+                '%s/%s.txt',
                 dirname($filePath),
-                $this->getCombatLogFileName($countStr)
+                $this->getCombatLogFileName($countStr),
             );
 
             $this->log->generateTargetCombatLogFileNameAttempt($saveFilePath);

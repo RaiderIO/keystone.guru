@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => '',
         'header' => '',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => '',
         'header'                            => '',
         'start_date'                        => '',
@@ -28,26 +28,26 @@ return [
         'title'  => '',
         'header' => '',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => '',
         'header'           => '',
         'header_people'    => '',
         'header_libraries' => '',
         'header_images'    => '',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => '',
         'header' => '',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => '',
         'header' => '',
     ],
-    'health'    => [
+    'health' => [
         'title'  => '',
         'header' => '',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => '',
         'header'                        => '',
         'enemy_forces_mapping_progress' => '',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => '',
         'npcs_assigned'                 => '',
     ],
-    'status'    => [
+    'status' => [
         'title'       => '',
         'header'      => '',
         'description' => '',

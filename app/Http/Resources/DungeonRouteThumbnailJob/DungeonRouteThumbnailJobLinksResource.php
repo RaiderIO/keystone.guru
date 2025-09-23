@@ -34,8 +34,8 @@ class DungeonRouteThumbnailJobLinksResource extends JsonResource
                     sprintf(
                         '%s/%s',
                         ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH,
-                        ThumbnailService::getFilename($this->dungeonRoute, $this->floor->index)
-                    )
+                        ThumbnailService::getFilename($this->dungeonRoute, $this->floor->index),
+                    ),
                 )
                 : null,
         ];

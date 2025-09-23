@@ -37,13 +37,12 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
 
     public function extractData(
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
-        BaseEvent                    $parsedEvent
+        BaseEvent                    $parsedEvent,
     ): void {
         // Don't create summoned enemies!
         if ($parsedEvent instanceof CombatLogEvent && $parsedEvent->getSuffix() instanceof Summon) {
@@ -56,7 +55,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
                     $this->log->extractDataNpcWasSummoned(
                         $npcId,
-                        $parsedEvent->getGenericData()->getDestName()
+                        $parsedEvent->getGenericData()->getDestName(),
                     );
                 }
             }
@@ -82,12 +81,12 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             // Determine name
             if ($parsedEvent->getGenericData()->getSourceGuid()?->getGuid() === $guid->getGuid()) {
                 $name = $parsedEvent->getGenericData()->getSourceName();
-            } else if ($parsedEvent->getGenericData()->getDestGuid()?->getGuid() === $guid->getGuid()) {
+            } elseif ($parsedEvent->getGenericData()->getDestGuid()?->getGuid() === $guid->getGuid()) {
                 $name = $parsedEvent->getGenericData()->getDestName();
             } else {
                 $this->log->extractDataNpcNameNotFound(
                     $parsedEvent->getGenericData()->getSourceGuid()?->getGuid(),
-                    $parsedEvent->getGenericData()->getDestGuid()?->getGuid()
+                    $parsedEvent->getGenericData()->getDestGuid()?->getGuid(),
                 );
 
                 return;
@@ -120,10 +119,10 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 } else {
                     // Calculate the base health based on the current key level + current max hp
                     $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $createdNpc->getScalingFactor(
-                            $currentDungeon->keyLevel,
-                            // Affixgroup can be null for PTR keys for example, which can have arbitrary affixes
-                            $currentDungeon->affixGroup?->affixes->pluck('key')->toArray() ?? []
-                        ));
+                        $currentDungeon->keyLevel,
+                        // Affixgroup can be null for PTR keys for example, which can have arbitrary affixes
+                        $currentDungeon->affixGroup?->affixes->pluck('key')->toArray() ?? [],
+                    ));
                 }
 
                 NpcDungeon::create([
@@ -147,7 +146,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             } else {
                 $this->log->extractDataNpcNotCreated(
                     $guid->getId(),
-                    $name
+                    $name,
                 );
             }
         }
@@ -155,7 +154,5 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
-
 }

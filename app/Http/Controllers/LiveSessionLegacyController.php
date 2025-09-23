@@ -23,7 +23,7 @@ class LiveSessionLegacyController extends Controller
         Request      $request,
         DungeonRoute $dungeonroute,
         LiveSession  $livesession,
-        string       $floorIndex
+        string       $floorIndex,
     ): RedirectResponse {
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,

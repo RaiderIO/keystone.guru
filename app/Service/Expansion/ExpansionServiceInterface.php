@@ -31,6 +31,6 @@ interface ExpansionServiceInterface
 
     public function getCurrentSeasonAffixGroups(
         Expansion         $expansion,
-        ?GameServerRegion $gameServerRegion = null
+        ?GameServerRegion $gameServerRegion = null,
     ): Collection;
 }

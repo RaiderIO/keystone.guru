@@ -14,9 +14,9 @@ abstract class SetupDatabase extends Command
         $this->info('🔧 Connecting as RDS root user...');
 
         Config::set('database.connections.rds_root', [
-            'driver'    => 'mysql',
-            'host'      => $host,
-            'port'      => $port,
+            'driver'   => 'mysql',
+            'host'     => $host,
+            'port'     => $port,
             'database' => null,
             // No specific database yet
             'username' => config('database.connections.migrate.username'),
@@ -30,21 +30,21 @@ abstract class SetupDatabase extends Command
     }
 
     /**
-     * @param Connection $connection
-     * @param string     $database
-     * @return bool True if the database was created, false if it already existed
+     * @param  Connection $connection
+     * @param  string     $database
+     * @return bool       True if the database was created, false if it already existed
      */
     public function createDatabase(Connection $connection, string $database): bool
     {
         $this->info('📦 Checking for database existence...');
         $databaseExists = $connection->selectOne(
             "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
-            [$database]
+            [$database],
         );
 
         if ($databaseExists === null) {
             $connection->statement(
-                sprintf('CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;', $database)
+                sprintf('CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;', $database),
             );
             $this->info('✅ Database created.');
         } else {
@@ -58,7 +58,7 @@ abstract class SetupDatabase extends Command
         Connection $connection,
         string     $database,
         string     $username,
-        string     $password
+        string     $password,
     ): int {
         $this->info(sprintf("👤 Creating user (if not exists) '%s' for database '%s'...", $username, $database));
         $connection->statement(sprintf("CREATE USER IF NOT EXISTS '%s'@'%%' IDENTIFIED BY '%s';", $username, $password));

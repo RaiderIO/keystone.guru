@@ -36,7 +36,7 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
         DungeonFloorSwitchMarkerFormRequest $request,
         CoordinatesServiceInterface         $coordinatesService,
         MappingVersion                      $mappingVersion,
-        ?DungeonFloorSwitchMarker           $dungeonFloorSwitchMarker = null
+        ?DungeonFloorSwitchMarker           $dungeonFloorSwitchMarker = null,
     ): DungeonFloorSwitchMarker|Model {
         return $this->storeModel($coordinatesService, $mappingVersion, $request->validated(), DungeonFloorSwitchMarker::class, $dungeonFloorSwitchMarker);
     }
@@ -44,7 +44,7 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
     public function delete(
         Request                  $request,
         MappingVersion           $mappingVersion,
-        DungeonFloorSwitchMarker $dungeonFloorSwitchMarker
+        DungeonFloorSwitchMarker $dungeonFloorSwitchMarker,
     ): Response {
         try {
             $dungeon = $dungeonFloorSwitchMarker->floor->dungeon;
@@ -71,10 +71,8 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new DungeonFloorSwitchMarkerChangedEvent($context, $user, $model);
     }
-
-
 }

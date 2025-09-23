@@ -29,7 +29,8 @@ class ExtractUiMapIds extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath
+        return $this->parseCombatLogRecursively($filePath, fn(
+            string $filePath,
         ) => $this->extractUiMapIds($combatLogService, $filePath));
     }
 

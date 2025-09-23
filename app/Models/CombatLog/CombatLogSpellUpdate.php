@@ -18,10 +18,10 @@ use Illuminate\Support\Carbon;
  * @property string      $combat_log_path
  * @property string      $raw_event
  *
- * @property Carbon      $created_at
- * @property Carbon      $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
- * @property Spell       $spell
+ * @property Spell $spell
  *
  * @mixin Eloquent
  */

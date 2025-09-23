@@ -24,7 +24,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         private readonly CoordinatesServiceInterface        $coordinatesService,
         private readonly SeasonServiceInterface             $seasonService,
         private readonly CombatLogEventServiceInterface     $combatLogEventService,
-        private readonly RaiderIOApiServiceLoggingInterface $log
+        private readonly RaiderIOApiServiceLoggingInterface $log,
     ) {
     }
 
@@ -35,7 +35,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             sprintf(
                 'season=season-%s-%s',
                 $mostRecentSeason->expansion->shortname,
-                $mostRecentSeason->index
+                $mostRecentSeason->index,
             ),
         ];
 
@@ -46,7 +46,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         $url = sprintf(
             '%s?%s',
             sprintf('%s/live-tracking/heatmaps/grid', self::BASE_URL),
-            implode('&', $parameters)
+            implode('&', $parameters),
         );
 
         try {
@@ -60,7 +60,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                 $this->log->getHeatmapDataInvalidResponse(
                     __($heatmapDataFilter->getDungeon()->name, [], 'en_US'),
                     $url,
-                    $response
+                    $response,
                 );
 
                 throw new InvalidApiResponseException('Invalid response from Raider.IO API');
@@ -75,11 +75,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $json['maxSamplesInGrid'],
                     $url,
                     $heatmapDataFilter->getFloorsAsArray(),
-                ))->toArray()
+                ))->toArray(),
             );
         } finally {
             $this->log->getHeatmapDataEnd();
         }
     }
-
 }

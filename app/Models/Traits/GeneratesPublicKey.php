@@ -22,7 +22,7 @@ trait GeneratesPublicKey
     public static function generateRandomPublicKey(
         int    $length = 7,
         string $column = 'public_key',
-        bool   $checkUsages = true
+        bool   $checkUsages = true,
     ): string {
         $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);

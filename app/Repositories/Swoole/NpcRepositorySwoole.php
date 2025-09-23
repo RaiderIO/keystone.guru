@@ -35,7 +35,7 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
         }
 
         return $this->cloneCollection(
-            $this->inUseNpcsByMappingVersionId->get($mappingVersion->id)
+            $this->inUseNpcsByMappingVersionId->get($mappingVersion->id),
         );
     }
 
@@ -45,14 +45,13 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
     public function getInUseNpcIds(?MappingVersion $mappingVersion = null, ?Collection $inUseNpcs = null): Collection
     {
         if (!$this->inUseNpcIdsByMappingVersionId->has($mappingVersion->id)) {
-
             $inUseNpcIds = parent::getInUseNpcIds($mappingVersion, $inUseNpcs);
 
             $this->inUseNpcIdsByMappingVersionId->put($mappingVersion->id, $inUseNpcIds);
         }
 
         return $this->copyCollection(
-            $this->inUseNpcIdsByMappingVersionId->get($mappingVersion->id)
+            $this->inUseNpcIdsByMappingVersionId->get($mappingVersion->id),
         );
     }
 }

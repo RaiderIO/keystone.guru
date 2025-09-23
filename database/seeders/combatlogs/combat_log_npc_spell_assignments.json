@@ -9205,5 +9205,23 @@
         "raw_event": "8\/23\/2025 14:59:41.1881  SPELL_AURA_APPLIED,Creature-0-4243-2441-11844-180588-000029C94D,\"Plate of Ripe Purians\",0xa18,0x80000000,Creature-0-4243-2441-11844-180588-000029C94D,\"Plate of Ripe Purians\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
         "created_at": "2025-08-29T21:01:30+00:00",
         "updated_at": "2025-08-29T21:01:30+00:00"
+    },
+    {
+        "id": 1076,
+        "npc_id": 180579,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/WoWCombatLog-083025_192651_7_tazavesh-the-veiled-market.zip",
+        "raw_event": "8\/30\/2025 20:19:32.5981  SPELL_AURA_APPLIED,Creature-0-3891-2441-18151-180579-0000334EC6,\"Aromatic Spices\",0xa18,0x80000000,Creature-0-3891-2441-18151-180579-0000334EC6,\"Aromatic Spices\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-09-16T19:57:49+00:00",
+        "updated_at": "2025-09-16T19:57:49+00:00"
+    },
+    {
+        "id": 1077,
+        "npc_id": 180586,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/WoWCombatLog-090625_130245_7_tazavesh-the-veiled-market-1.zip",
+        "raw_event": "9\/6\/2025 14:10:31.5401  SPELL_AURA_APPLIED,Creature-0-3771-2441-29065-180586-00003C32C7,\"Bolt of Silk\",0xa18,0x80000000,Creature-0-3771-2441-29065-180586-00003C32C7,\"Bolt of Silk\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-09-16T19:59:28+00:00",
+        "updated_at": "2025-09-16T19:59:28+00:00"
     }
 ]

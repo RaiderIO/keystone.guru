@@ -25,7 +25,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $this->characterClasses = CharacterClass::all()->keyBy('key');
     }
 
-
     /**
      * Scenario: Happy path, if we have a valid row class name we should find the character class for it, and return
      * the corresponding category for it.
@@ -38,14 +37,14 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
     public function getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidClassBasedRowClassName(
         string $rowClassName,
         string $characterClassName,
-        string $expected
+        string $expected,
     ): void {
         // Arrange
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -139,7 +138,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         ];
     }
 
-
     /**
      * Scenario: Happy path, if we have a valid non-class based row class name, we should find the category immediately
      * without diving into character classes at all
@@ -151,14 +149,14 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
     #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName_DataProvider')]
     public function getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName(
         string $rowClassName,
-        string $expected
+        string $expected,
     ): void {
         // Arrange
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -190,7 +188,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         ];
     }
 
-
     /**
      * Scenario: Unhappy path, if we have an invalid row class name, and we cannot find the class for it, then we return
      * null.
@@ -208,7 +205,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -231,7 +228,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         Assert::assertNull($result);
     }
 
-
     /**
      * Scenario: Unhappy path, if we have a added a new class but there wasn't a new category added for that class yet.
      *
@@ -252,7 +248,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -274,5 +270,4 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         // Assert
         Assert::assertNull($result);
     }
-
 }

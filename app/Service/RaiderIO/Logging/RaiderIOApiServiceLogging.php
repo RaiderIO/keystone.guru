@@ -20,5 +20,4 @@ class RaiderIOApiServiceLogging extends RollbarStructuredLogging implements Raid
     {
         $this->end(__METHOD__);
     }
-
 }

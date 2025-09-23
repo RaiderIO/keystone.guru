@@ -25,10 +25,9 @@ class MissedTest extends PublicTestCase
     #[DataProvider('createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider')]
     public function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix(
         int    $combatLogVersion,
-        string $expectedClassName
+        string $expectedClassName,
     ): void {
         // Arrange
-
 
         // Act
         $suffix = Suffix::createFromEventName($combatLogVersion, 'MISSED');
@@ -111,7 +110,7 @@ class MissedTest extends PublicTestCase
         }
 
         return array_merge($guidChecks, [
-            'Offhand check'         => [
+            'Offhand check' => [
                 'combatLogLine' => '8/18/2024 14:24:27.4442  SPELL_MISSED,Creature-0-2085-2662-31810-228537-000041E7F7,"Nightfall Shadowalker",0xa48,0x0,Player-4184-00C9CE4F,"Isak-TheseGoToEleven-TR",0x511,0x20,431638,"Umbral Rush",0x20,MISS,1',
                 'missType'      => Guid::createFromGuidString('MISS'),
                 'offhand'       => true,
@@ -119,7 +118,7 @@ class MissedTest extends PublicTestCase
                 'amountTotal'   => 0,
                 'critical'      => false,
             ],
-            'Absorb check'          => [
+            'Absorb check' => [
                 'combatLogLine' => '9/29/2024 09:50:17.5901  SPELL_MISSED,Creature-0-4241-2669-4019-220195-0004F91421,"Sureki Silkbinder",0xa48,0x0,Player-1598-0F46FFFD,"Renzyzard-Sunstrider-EU",0x10512,0x0,443427,"Web Bolt",0x8,ABSORB,nil,2594650,2785099,nil',
                 'missType'      => Guid::createFromGuidString('ABSORB'),
                 'offhand'       => false,
@@ -138,7 +137,6 @@ class MissedTest extends PublicTestCase
         ]);
     }
 
-
     #[Test]
     #[Group('CombatLog')]
     #[Group('Suffix')]
@@ -151,7 +149,7 @@ class MissedTest extends PublicTestCase
         int     $amountMissed,
         int     $amountTotal,
         bool    $critical,
-        ?string $damageType
+        ?string $damageType,
     ): void {
         // Arrange
 
@@ -188,7 +186,7 @@ class MissedTest extends PublicTestCase
         }
 
         return array_merge($guidChecks, [
-            'ST check'              => [
+            'ST check' => [
                 'combatLogLine' => '11/9/2024 23:12:43.2561  SPELL_MISSED,Player-1084-0B0A5965,"Wolflocks-TarrenMill-EU",0x512,0x0,Creature-0-4251-2662-13168-214761-00002FDE4F,"Nightfall Ritualist",0xa48,0x80,30283,"Shadowfury",0x20,IMMUNE,1,ST',
                 'missType'      => Guid::createFromGuidString('IMMUNE'),
                 'offhand'       => true,
@@ -197,7 +195,7 @@ class MissedTest extends PublicTestCase
                 'critical'      => false,
                 'damageType'    => 'ST',
             ],
-            'Offhand check'         => [
+            'Offhand check' => [
                 'combatLogLine' => '11/9/2024 23:12:43.2561  SPELL_MISSED,Player-1084-0B0A5965,"Wolflocks-TarrenMill-EU",0x512,0x0,Creature-0-4251-2662-13168-214761-00002FDE4F,"Nightfall Ritualist",0xa48,0x80,30283,"Shadowfury",0x20,IMMUNE,1,AOE',
                 'missType'      => Guid::createFromGuidString('IMMUNE'),
                 'offhand'       => true,
@@ -206,7 +204,7 @@ class MissedTest extends PublicTestCase
                 'critical'      => false,
                 'damageType'    => 'AOE',
             ],
-            'Absorb check'          => [
+            'Absorb check' => [
                 'combatLogLine' => '11/9/2024 23:13:39.5971  SPELL_MISSED,Creature-0-4251-2662-13168-214762-00002FDE81,"Nightfall Commander",0xa48,0x1,Player-1096-0AC6D32F,"Andy-Ravenholdt-EU",0x512,0x0,450756,"Abyssal Howl",0x20,ABSORB,nil,559824,745709,nil,AOE',
                 'missType'      => Guid::createFromGuidString('ABSORB'),
                 'offhand'       => false,
@@ -215,7 +213,7 @@ class MissedTest extends PublicTestCase
                 'critical'      => false,
                 'damageType'    => 'AOE',
             ],
-            'Absorb ST check'       => [
+            'Absorb ST check' => [
                 'combatLogLine' => '11/9/2024 23:13:39.5971  SPELL_MISSED,Creature-0-4251-2662-13168-214762-00002FDE81,"Nightfall Commander",0xa48,0x1,Player-1096-0AC6D32F,"Andy-Ravenholdt-EU",0x512,0x0,450756,"Abyssal Howl",0x20,ABSORB,nil,559824,745709,nil,ST',
                 'missType'      => Guid::createFromGuidString('ABSORB'),
                 'offhand'       => false,
@@ -233,7 +231,7 @@ class MissedTest extends PublicTestCase
                 'critical'      => true,
                 'damageType'    => 'AOE',
             ],
-            'Swing'                 => [
+            'Swing' => [
                 'combatLogLine' => '11/9/2024 23:12:35.9441  SWING_MISSED,Creature-0-4251-2662-13168-213892-00002FDE4F,"Nightfall Shadowmage",0xa48,0x1,Player-1403-09A74524,"Llewéllyn-Draenor-EU",0x512,0x20,PARRY,nil',
                 'missType'      => Guid::createFromGuidString('PARRY'),
                 'offhand'       => false,
@@ -242,7 +240,7 @@ class MissedTest extends PublicTestCase
                 'critical'      => false,
                 'damageType'    => null,
             ],
-            'ST Spell blocked'                 => [
+            'ST Spell blocked' => [
                 'combatLogLine' => '12/1/2024 18:09:26.2060  SPELL_MISSED,Creature-0-3767-2286-7825-163128-00004CA603,"Zolramus Sorcerer",0xa48,0x1,Player-1084-0AD81BAD,"Crabix-TarrenMill-EU",0x511,0x0,320462,"Necrotic Bolt",0x20,BLOCK,nil,524669,ST',
                 'missType'      => Guid::createFromGuidString('BLOCK'),
                 'offhand'       => false,
@@ -272,10 +270,6 @@ class MissedTest extends PublicTestCase
         ]);
     }
 
-
-
-
-
     #[Test]
     #[Group('CombatLog')]
     #[Group('Suffix')]
@@ -288,7 +282,7 @@ class MissedTest extends PublicTestCase
         int     $amountMissed,
         int     $amountTotal,
         bool    $critical,
-        ?string $damageType
+        ?string $damageType,
     ): void {
         // Arrange
 
@@ -314,7 +308,7 @@ class MissedTest extends PublicTestCase
         $guidChecks = [];
 
         return array_merge($guidChecks, [
-            'Miss'              => [
+            'Miss' => [
                 'combatLogLine' => '12/9/2024 19:07:25.3510  SWING_MISSED,Player-5827-02477156,"Shineqt-LivingFlame-EU",0x514,0x0,Creature-0-5208-531-679-15262-0001573C0B,"Obsidian Eradicator",0x10a48,0x0,MISS,1',
                 'missType'      => Guid::createFromGuidString('MISS'),
                 'offhand'       => true,

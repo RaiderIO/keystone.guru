@@ -66,10 +66,10 @@ return [
                 env('MEMCACHED_USERNAME'),
                 env('MEMCACHED_PASSWORD'),
             ],
-            'options'       => [
+            'options' => [
                 // Memcached::OPT_CONNECT_TIMEOUT => 2000,
             ],
-            'servers'       => [
+            'servers' => [
                 [
                     'host'   => env('MEMCACHED_HOST', '127.0.0.1'),
                     'port'   => env('MEMCACHED_PORT', 11211),

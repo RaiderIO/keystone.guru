@@ -25,7 +25,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         $routeAttributeIds = $columnData['search']['value'] ?? null;
         // If filtering or ordering
@@ -36,7 +36,6 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
         // If filtering OR ordering add the join
         if (!empty($routeAttributeIds) || $order !== null) {
-
             // If filtering
             if (!empty($routeAttributeIds)) {
                 $allRouteAttributeIds = RouteAttribute::all()

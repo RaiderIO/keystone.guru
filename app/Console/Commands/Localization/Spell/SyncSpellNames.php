@@ -52,7 +52,7 @@ class SyncSpellNames extends Command
             // And then merge the new names with the existing ones, updating them
             $newSpellNames = array_replace(
                 $existingSpellNames,
-                array_intersect_key($spellNames->toArray(), $existingSpellNames)
+                array_intersect_key($spellNames->toArray(), $existingSpellNames),
             );
 
             ksort($newSpellNames);

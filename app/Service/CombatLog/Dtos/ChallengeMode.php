@@ -10,7 +10,7 @@ class ChallengeMode
     public function __construct(
         private readonly Carbon  $carbon,
         private readonly Dungeon $dungeon,
-        private readonly int     $keyLevel
+        private readonly int     $keyLevel,
     ) {
     }
 

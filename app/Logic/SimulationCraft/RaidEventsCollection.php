@@ -15,7 +15,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
 
     public function __construct(
         private readonly CoordinatesServiceInterface      $coordinatesService,
-        private readonly SimulationCraftRaidEventsOptions $options
+        private readonly SimulationCraftRaidEventsOptions $options,
     ) {
     }
 
@@ -41,7 +41,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
 
             $this->raidEventPulls->push(
                 (new RaidEventPull($this->coordinatesService, $this->options))
-                    ->calculateRaidEventPullEnemies($killZone, $previousKillLocation)
+                    ->calculateRaidEventPullEnemies($killZone, $previousKillLocation),
             );
 
             $previousKillZone = $killZone;
@@ -55,7 +55,8 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
      */
     public function toString(): string
     {
-        $result = sprintf('
+        $result = sprintf(
+            '
             fight_style=DungeonRoute
             override.bloodlust=%d
             override.arcane_intellect=%d
@@ -75,7 +76,8 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             %s
             keystone_level=%d
             raid_events=/invulnerable,cooldown=5160,duration=5160,retarget=1
-        ', $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) ? 1 : 0,
+        ',
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) ? 1 : 0,
             $this->options->hasRaidBuff(SimulationCraftRaidBuffs::ArcaneIntellect) ? 1 : 0,
             $this->options->hasRaidBuff(SimulationCraftRaidBuffs::PowerWordFortitude) ? 1 : 0,
             $this->options->hasRaidBuff(SimulationCraftRaidBuffs::MarkOfTheWild) ? 1 : 0,
@@ -89,7 +91,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             $this->options->dungeonRoute->title,
             $this->options->shrouded_bounty_type === SimulationCraftRaidEventsOptions::SHROUDED_BOUNTY_TYPE_NONE ?
                 '' : sprintf('keystone_bounty=%s', $this->options->shrouded_bounty_type),
-            $this->options->key_level
+            $this->options->key_level,
         );
 
         $pullStrings = [];

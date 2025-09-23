@@ -8,16 +8,16 @@
 @section('header-title', __('view_admin.tools.messagebanner.set.header'))
 
 @section('content')
-    {{ Form::open(['route' => 'admin.tools.messagebanner.set.submit']) }}
+    {{ html()->form('POST', route('admin.tools.messagebanner.set.submit'))->open() }}
     <div class="form-group">
-        {!! Form::label('message', __('view_admin.tools.messagebanner.set.message')) !!}
-        {{ Form::textarea('message', $messageBanner ?? '', ['class' => 'form-control']) }}
+        {{ html()->label(__('view_admin.tools.messagebanner.set.message'), 'message') }}
+        {{ html()->textarea('message', $messageBanner ?? '')->class('form-control') }}
     </div>
     <div class="form-group">
-        {!! Form::submit(__('view_admin.tools.messagebanner.set.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}
+        {{ html()->input('submit')->value(__('view_admin.tools.messagebanner.set.submit'))->class('btn btn-primary col-md-auto') }}
         <div class="col-md">
 
         </div>
     </div>
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
 @endsection

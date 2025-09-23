@@ -22,21 +22,21 @@ class MapContextService implements MapContextServiceInterface
         private readonly CacheServiceInterface           $cacheService,
         private readonly CoordinatesServiceInterface     $coordinatesService,
         private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
-        private readonly SeasonServiceInterface $seasonService
+        private readonly SeasonServiceInterface          $seasonService,
     ) {
     }
 
     public function createMapContextDungeonRoute(
         DungeonRoute $dungeonRoute,
         Floor        $floor,
-        ?string      $mapFacadeStyle = null
+        ?string      $mapFacadeStyle = null,
     ): MapContextDungeonRoute {
         return new MapContextDungeonRoute(
             $this->cacheService,
             $this->coordinatesService,
             $dungeonRoute,
             $floor,
-            $mapFacadeStyle
+            $mapFacadeStyle,
         );
     }
 
@@ -47,14 +47,14 @@ class MapContextService implements MapContextServiceInterface
             $this->coordinatesService,
             $this->overpulledEnemyService,
             $liveSession,
-            $floor
+            $floor,
         );
     }
 
     public function createMapContextDungeonExplore(
         Dungeon        $dungeon,
         Floor          $floor,
-        MappingVersion $mappingVersion
+        MappingVersion $mappingVersion,
     ): MapContextDungeonExplore {
         return new MapContextDungeonExplore(
             $this->cacheService,
@@ -62,21 +62,21 @@ class MapContextService implements MapContextServiceInterface
             $this->seasonService,
             $dungeon,
             $floor,
-            $mappingVersion
+            $mappingVersion,
         );
     }
 
     public function createMapContextMappingVersionEdit(
         Dungeon        $dungeon,
         Floor          $floor,
-        MappingVersion $mappingVersion
+        MappingVersion $mappingVersion,
     ): MapContextMappingVersionEdit {
         return new MapContextMappingVersionEdit(
             $this->cacheService,
             $this->coordinatesService,
             $dungeon,
             $floor,
-            $mappingVersion
+            $mappingVersion,
         );
     }
 }

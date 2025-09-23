@@ -8,7 +8,7 @@ interface MDTMappingImportServiceLoggingInterface
 {
     public function importMappingVersionFromMDTMappingChanged(
         ?string $mdtMappingHash,
-        string  $latestMdtMappingHash
+        string  $latestMdtMappingHash,
     ): void;
 
     public function importMappingVersionFromMDTCreateMappingVersion(int $version, int $id): void;
@@ -19,7 +19,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importDungeonMappingVersionFromMDTNoChangeDetected(
         string  $key,
-        ?string $latestMdtMappingHash
+        ?string $latestMdtMappingHash,
     ): void;
 
     public function importDungeonStart(): void;
@@ -44,7 +44,7 @@ interface MDTMappingImportServiceLoggingInterface
         int $npcSpellsDeleted,
         int $npcSpellsInserted,
         int $npcDungeonsDeleted,
-        int $npcDungeonsInserted
+        int $npcDungeonsInserted,
     ): void;
 
     public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void;
@@ -85,7 +85,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(
         string $mdtUniqueKey,
-        float  $distance
+        float  $distance,
     ): void;
 
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void;
@@ -116,7 +116,7 @@ interface MDTMappingImportServiceLoggingInterface
         int   $mdtCloneIndex,
         array $mdtNpcClone,
         int   $npcId,
-        int   $mdtId
+        int   $mdtId,
     ): void;
 
     public function importEnemyPatrolsEnemyHasPatrol(string $uniqueKey): void;
@@ -152,7 +152,7 @@ interface MDTMappingImportServiceLoggingInterface
     public function importMapPOIsNewDungeonFloorSwitchMarkerOK(
         int $dungeonFloorSwitchMarkerId,
         int $floorId,
-        int $targetFloorId
+        int $targetFloorId,
     ): void;
 
     public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void;

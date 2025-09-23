@@ -11,7 +11,7 @@ use App\Logic\CombatLog\CombatLogVersion;
 class AuraAppliedBuilder implements SuffixBuilderInterface
 {
     public function __construct(
-        public int $combatLogVersion
+        public int $combatLogVersion,
     ) {
     }
 
@@ -28,7 +28,7 @@ class AuraAppliedBuilder implements SuffixBuilderInterface
             CombatLogVersion::RETAIL_11_0_7,
             CombatLogVersion::RETAIL_11_1_0,
             CombatLogVersion::RETAIL_11_1_7 => new AuraAppliedV22($combatLogVersion),
-            default => new AuraAppliedV22_1($combatLogVersion),
+            default                         => new AuraAppliedV22_1($combatLogVersion),
         };
     }
 }

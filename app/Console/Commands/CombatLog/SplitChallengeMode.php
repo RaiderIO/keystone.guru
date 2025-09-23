@@ -29,7 +29,8 @@ class SplitChallengeMode extends BaseSplitCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogSplitRecursively($filePath, function (string $filePath) use ($combatLogSplitService
+        return $this->parseCombatLogSplitRecursively($filePath, function (string $filePath) use (
+            $combatLogSplitService
         ) {
             return $combatLogSplitService->splitCombatLogOnChallengeModes($filePath);
         });

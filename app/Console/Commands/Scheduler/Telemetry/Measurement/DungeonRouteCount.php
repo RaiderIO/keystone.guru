@@ -20,8 +20,7 @@ class DungeonRouteCount extends Measurement
         // Get a count of routes by published state
         $publishedStateFields = [];
         foreach ($publishedStates as $publishedState) {
-            $publishedStateFields[sprintf('published_%s', $publishedState->name)] =
-                DungeonRoute::where('published_state_id', $publishedState->id)
+            $publishedStateFields[sprintf('published_%s', $publishedState->name)] = DungeonRoute::where('published_state_id', $publishedState->id)
                     ->where('author_id', '>', 0)
                     ->count();
         }
@@ -36,7 +35,7 @@ class DungeonRouteCount extends Measurement
                     'all'       => DungeonRoute::count(),
                     'temporary' => DungeonRoute::where('author_id', '<=', 0)->count(),
                 ], $publishedStateFields),
-                time()
+                time(),
             ),
         ];
     }

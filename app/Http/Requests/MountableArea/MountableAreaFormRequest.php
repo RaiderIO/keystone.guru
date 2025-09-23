@@ -28,12 +28,12 @@ class MountableAreaFormRequest extends FormRequest
                 'required',
                 Rule::exists(MappingVersion::class, 'id'),
             ],
-            'floor_id'           => [
+            'floor_id' => [
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'speed'              => 'nullable|int',
-            'vertices'           => 'required:array',
+            'speed'    => 'nullable|int',
+            'vertices' => 'required:array',
         ];
     }
 }

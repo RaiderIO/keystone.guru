@@ -25,7 +25,7 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
     'levelTo' => $routeKeyLevelTo,
 ]])
 
-{{ Form::open(['route' => 'dungeonroute.temporary.savenew']) }}
+{{ html()->form('POST', route('dungeonroute.temporary.savenew'))->open() }}
 <div class="container">
     @if( !isset($model) )
         @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true])
@@ -38,8 +38,7 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
                 <i class="fas fa-info-circle" data-toggle="tooltip"
                    title="{{ __('view_common.forms.createroutetemporary.key_levels_title') }}"></i>
             </label>
-            {!! Form::text('dungeon_route_level', sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
-                ['id' => 'temporary_dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+            {{ html()->text('dungeon_route_level', sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo))->id('temporary_dungeon_route_level')->class('form-control')->style('display: none;') }}
         </div>
     @endif
 
@@ -66,9 +65,9 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
 
     <div class="col-lg-12">
         <div class="form-group">
-            {!! Form::submit(__('view_common.forms.createroutetemporary.create_route'), ['class' => 'btn btn-info col-md-auto']) !!}
+            {{ html()->input('submit')->value(__('view_common.forms.createroutetemporary.create_route'))->class('btn btn-info col-md-auto') }}
         </div>
     </div>
 </div>
 
-{!! Form::close() !!}
+{{ html()->form()->close() }}

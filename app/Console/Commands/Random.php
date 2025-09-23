@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Season;
+use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
@@ -46,13 +47,23 @@ class Random extends Command
         WowheadServiceInterface              $wowheadService,
         DungeonRouteServiceInterface         $dungeonRouteService,
     ): int {
-        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
-            Season::findOrFail(Season::SEASON_TWW_S2),
-            CombatLogEventEventType::PlayerDeath,
-            1000000,
-            100,
-            Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_MOTHERLODE)
-        );
+        $json = json_decode(file_get_contents(base_path('tmp/tmp.json')), true);
+
+        $spells = Spell::all()->keyBy('id');
+        foreach ($json['spells'] as $spellData) {
+            $spellId = $spellData['spellId'];
+            $this->info(
+                sprintf('%d: %s', $spellId, __($spells->get($spellId)->name?? 'Unknown Spell')),
+            );
+        }
+
+//        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+//            Season::findOrFail(Season::SEASON_TWW_S2),
+//            CombatLogEventEventType::PlayerDeath,
+//            1000000,
+//            100,
+//            Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_MOTHERLODE),
+//        );
 
 //        $dungeonRouteService->refreshOutdatedThumbnails();
 
@@ -104,9 +115,9 @@ class Random extends Command
 //
 //        if ($season?->hasDungeon($dungeonRoute->dungeon)) {
 //            $this->info(sprintf('Would update season_id to %d', $season->id));
-////            $dungeonRoute->update([
-////                'season_id' => $season->id,
-////            ]);
+        ////            $dungeonRoute->update([
+        ////                'season_id' => $season->id,
+        ////            ]);
 //        }
 //
 //        dd($dungeonRoute->id);

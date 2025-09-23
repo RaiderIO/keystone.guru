@@ -14,10 +14,10 @@ class BattleNetLoginController extends OAuthLoginController
     protected function getUser($oauthUser, $oAuthId)
     {
         return new User([
-            'public_key'      => User::generateRandomPublicKey(),
-            'oauth_id'        => $oAuthId,
+            'public_key' => User::generateRandomPublicKey(),
+            'oauth_id'   => $oAuthId,
             // Prefer nickname over full name
-            'name'            => $oauthUser->nickname,
+            'name' => $oauthUser->nickname,
             // Email is likely null in Battle.net's case, so make up one to make the database happy
             'email'           => sprintf('%s@battle.net', $oauthUser->id),
             'echo_color'      => randomHexColor(),
@@ -34,7 +34,7 @@ class BattleNetLoginController extends OAuthLoginController
 
     public function redirectToProvider(
         Request                      $request,
-        ReadOnlyModeServiceInterface $readOnlyModeService
+        ReadOnlyModeServiceInterface $readOnlyModeService,
     ): RedirectResponse {
         $this->redirectTo = $request->get('redirect', '/');
 

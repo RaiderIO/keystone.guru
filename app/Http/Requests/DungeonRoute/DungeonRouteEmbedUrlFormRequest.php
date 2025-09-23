@@ -20,7 +20,7 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'style'                 => [
+            'style' => [
                 'nullable',
                 Rule::in([
                     'compact',
@@ -33,16 +33,16 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'mapBackgroundColor'    => [
+            'mapBackgroundColor' => [
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'showEnemyInfo'         => 'nullable|bool',
-            'showPulls'             => 'nullable|bool',
-            'showEnemyForces'       => 'nullable|bool',
-            'showAffixes'           => 'nullable|bool',
-            'showTitle'             => 'nullable|bool',
-            'showPresenterButton'   => 'nullable|bool',
+            'showEnemyInfo'       => 'nullable|bool',
+            'showPulls'           => 'nullable|bool',
+            'showEnemyForces'     => 'nullable|bool',
+            'showAffixes'         => 'nullable|bool',
+            'showTitle'           => 'nullable|bool',
+            'showPresenterButton' => 'nullable|bool',
         ]);
     }
 }

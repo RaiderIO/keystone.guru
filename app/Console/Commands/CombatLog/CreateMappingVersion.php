@@ -35,13 +35,14 @@ class CreateMappingVersion extends BaseCombatLogCommand
             $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
         }
 
-        return $this->parseCombatLogRecursively($filePath,
+        return $this->parseCombatLogRecursively(
+            $filePath,
             fn(string $filePath) => $this->createMappingVersionFromCombatLog(
                 $combatLogMappingVersionService,
                 $filePath,
                 $mappingVersion,
-                $enemyConnections
-            )
+                $enemyConnections,
+            ),
         );
     }
 
@@ -49,7 +50,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
         CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
         string                                  $filePath,
         ?MappingVersion                         $mappingVersion = null,
-        bool $enemyConnections = false
+        bool                                    $enemyConnections = false,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -74,7 +75,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
                     __($mappingVersion->dungeon->name, [], 'en_US'),
                     $mappingVersion->id,
                     $mappingVersion->enemies()->count(),
-                )
+                ),
             );
         }
 

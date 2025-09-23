@@ -9,7 +9,7 @@ interface FloorDataExtractorLoggingInterface
         float $newIngameMinX,
         float $newIngameMinY,
         float $newIngameMaxX,
-        float $newIngameMaxY
+        float $newIngameMaxY,
     ): void;
 
     public function extractDataAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void;

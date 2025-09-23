@@ -46,14 +46,14 @@ class CharacterRaceClassesSeeder extends Seeder implements TableSeederInterface
             CharacterRace::CHARACTER_RACE_LIGHTFORGED_DRAENEI => ['x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' ', ' '],
             CharacterRace::CHARACTER_RACE_DARK_IRON_DWARF     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
 
-            CharacterRace::CHARACTER_RACE_PANDAREN_ALLIANCE   => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
-            CharacterRace::CHARACTER_RACE_PANDAREN_HORDE      => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_PANDAREN_ALLIANCE => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_PANDAREN_HORDE    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
 
-            CharacterRace::CHARACTER_RACE_DRACTHYR_ALLIANCE   => [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
-            CharacterRace::CHARACTER_RACE_DRACTHYR_HORDE      => [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
+            CharacterRace::CHARACTER_RACE_DRACTHYR_ALLIANCE => [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
+            CharacterRace::CHARACTER_RACE_DRACTHYR_HORDE    => [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
 
-            CharacterRace::CHARACTER_RACE_EARTHEN_ALLIANCE    => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
-            CharacterRace::CHARACTER_RACE_EARTHEN_HORDE       => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_EARTHEN_ALLIANCE => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_EARTHEN_HORDE    => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
 
             CharacterRace::CHARACTER_RACE_ORC                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
             CharacterRace::CHARACTER_RACE_UNDEAD              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
@@ -65,11 +65,11 @@ class CharacterRaceClassesSeeder extends Seeder implements TableSeederInterface
             CharacterRace::CHARACTER_RACE_HIGHMOUNTAIN_TAUREN => ['x', 'x', 'x', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' ', ' '],
             CharacterRace::CHARACTER_RACE_MAGHAR_ORC          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
 
-            CharacterRace::CHARACTER_RACE_KUL_TIRAN_HUMAN     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' ', ' '],
-            CharacterRace::CHARACTER_RACE_ZANDALARI_TROLL     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_KUL_TIRAN_HUMAN => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_ZANDALARI_TROLL => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' '],
 
-            CharacterRace::CHARACTER_RACE_MECHAGNOME          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            CharacterRace::CHARACTER_RACE_VULPERA             => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_MECHAGNOME => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            CharacterRace::CHARACTER_RACE_VULPERA    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
         ];
 
         // @formatter:on

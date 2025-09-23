@@ -10,7 +10,7 @@ return [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
-    'terms'   => [
+    'terms' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],

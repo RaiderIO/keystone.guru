@@ -37,22 +37,22 @@ class EnemyPatrolFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                      => 'int',
+            'id'                 => 'int',
             'mapping_version_id' => [
                 'required',
                 'int',
                 Rule::exists(MappingVersion::class, 'id'),
             ],
-            'floor_id'           => [
+            'floor_id' => [
                 'required',
                 'int',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'polyline_id'        => [
+            'polyline_id' => [
                 'nullable',
                 Rule::exists(Polyline::class, 'id'),
             ],
-            'teeming'            => [
+            'teeming' => [
                 Rule::in(array_merge(Enemy::TEEMING_ALL, [
                     '',
                     null,

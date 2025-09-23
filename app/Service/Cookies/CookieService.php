@@ -11,7 +11,7 @@ class CookieService implements CookieServiceInterface
         string $path = '/',
         string $domain = null,
         bool   $secure = true,
-        bool   $httponly = false
+        bool   $httponly = false,
     ): void {
         $_COOKIE[$key] = $value;
         setcookie(
@@ -21,8 +21,7 @@ class CookieService implements CookieServiceInterface
             $path,
             $domain,
             config('app.env') === 'local' ? false : $secure,
-            $httponly
+            $httponly,
         );
     }
-
 }

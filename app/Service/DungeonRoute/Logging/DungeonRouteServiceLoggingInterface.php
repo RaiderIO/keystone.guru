@@ -4,7 +4,6 @@ namespace App\Service\DungeonRoute\Logging;
 
 interface DungeonRouteServiceLoggingInterface
 {
-
     public function updatePopularityStart(): void;
 
     public function updatePopularityEnd(int $updatedRouteCount): void;

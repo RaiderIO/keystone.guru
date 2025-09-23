@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $floor_id
- * @property int          $polyline_id
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $floor_id
+ * @property int $polyline_id
  *
- * @property Carbon       $updated_at
- * @property Carbon       $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline

@@ -29,7 +29,7 @@ abstract class MapContextMappingVersion extends MapContext
         CoordinatesServiceInterface $coordinatesService,
         Dungeon                     $dungeon,
         Floor                       $floor,
-        MappingVersion $mappingVersion
+        MappingVersion              $mappingVersion,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
     }

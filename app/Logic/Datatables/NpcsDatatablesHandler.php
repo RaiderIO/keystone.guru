@@ -22,7 +22,7 @@ class NpcsDatatablesHandler extends DatatablesHandler
             ])->cloneWithoutBindings(['select'])
             ->selectRaw('SQL_CALC_FOUND_ROWS *');
 
-        $havings = $query->havings;
+        $havings        = $query->havings;
         $query->havings = null;
 
         $query->orders = null;

@@ -17,16 +17,16 @@ trait ChangesDungeonRoute
     ];
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param Model|null   $beforeModel
-     * @param Model|null   $afterModel
+     * @param  DungeonRoute $dungeonRoute
+     * @param  Model|null   $beforeModel
+     * @param  Model|null   $afterModel
      * @throws Exception
      */
     public function dungeonRouteChanged(
         DungeonRoute $dungeonRoute,
         ?Model       $beforeModel,
         ?Model       $afterModel,
-        ?callable    $modifyAttributes = null
+        ?callable    $modifyAttributes = null,
     ): void {
         // We only care for these changes when the route is part of a team
         if ($dungeonRoute->team_id === -1) {
@@ -39,9 +39,9 @@ trait ChangesDungeonRoute
 
         $user = Auth::user();
 
-        $boolToInt       = fn($value) => is_bool($value) ? (int)$value : $value;
+        $boolToInt        = fn($value) => is_bool($value) ? (int)$value : $value;
         $beforeAttributes = $beforeModel !== null ? array_map($boolToInt, $beforeModel->getAttributes()) : [];
-        $afterAttributes = $afterModel !== null ? array_map($boolToInt, $afterModel->getAttributes()) : [];
+        $afterAttributes  = $afterModel !== null ? array_map($boolToInt, $afterModel->getAttributes()) : [];
         if ($modifyAttributes !== null) {
             $modifyAttributes($beforeAttributes, $afterAttributes);
         }
@@ -75,7 +75,7 @@ trait ChangesDungeonRoute
                 ];
             }
         } // Deleting a model
-        else if (empty($after)) {
+        elseif (empty($after)) {
             foreach ($before as $key => $value) {
                 $alteredKeys[$key] = [
                     'before' => $value,

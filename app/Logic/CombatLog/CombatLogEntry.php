@@ -75,7 +75,7 @@ class CombatLogEntry
      */
     public function parseEvent(
         array $eventWhiteList = [],
-        int   $combatLogVersion = CombatLogVersion::RETAIL_11_0_5
+        int   $combatLogVersion = CombatLogVersion::RETAIL_11_0_5,
     ): ?BaseEvent {
         $matches = [];
         if (!preg_match('/(\d*\/\d*(?:\/\d*)? \d*:\d*:\d*.\d*(?:-\d*)?)\s\s(.+)/', $this->rawEvent, $matches)) {
@@ -92,7 +92,7 @@ class CombatLogEntry
             throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $invalidFormatException->getCode(), $invalidFormatException);
         }
 
-        $eventData = $matches[2];
+        $eventData     = $matches[2];
         $mayParseEvent = empty($eventWhiteList);
 
         if (!$mayParseEvent) {
@@ -114,12 +114,11 @@ class CombatLogEntry
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
-                else if (count($parameters) > 23) {
+                elseif (count($parameters) > 23) {
                     $this->parsedEvent = (new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 } else {
                     $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
                 }
-
             } catch (Error|Exception $exception) {
                 echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
 

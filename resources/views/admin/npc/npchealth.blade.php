@@ -63,10 +63,10 @@ use App\Models\Npc\npchealth;
                         </a>
                     </div>
                     <div class="col">
-                        {{ Form::open(['route' => ['admin.npc.npchealth.delete', 'npc' => $npc, 'npcHealth' => $npcHealth]]) }}
-                        {!! Form::hidden('_method', 'delete') !!}
-                        {!! Form::submit(__('view_admin.npc.npchealth.delete_npc_health'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
-                        {!! Form::close() !!}
+                        {{ html()->form('POST', route('admin.npc.npchealth.delete', ['npc' => $npc, 'npcHealth' => $npcHealth]))->open() }}
+                        {{ html()->hidden('_method', 'delete') }}
+                        {{ html()->input('submit')->value(__('view_admin.npc.npchealth.delete_npc_health'))->class('btn btn-danger')->name('submit') }}
+                        {{ html()->form()->close() }}
                     </div>
                 </div>
             </td>

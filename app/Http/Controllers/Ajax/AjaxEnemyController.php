@@ -29,10 +29,10 @@ use Throwable;
 class AjaxEnemyController extends AjaxMappingModelBaseController
 {
     /**
-     * @param APIEnemyFormRequest         $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MappingVersion              $mappingVersion
-     * @param Enemy|null                  $enemy
+     * @param  APIEnemyFormRequest         $request
+     * @param  CoordinatesServiceInterface $coordinatesService
+     * @param  MappingVersion              $mappingVersion
+     * @param  Enemy|null                  $enemy
      * @return Enemy|Model
      *
      * @throws Throwable
@@ -41,7 +41,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         APIEnemyFormRequest         $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        ?Enemy                      $enemy = null
+        ?Enemy                      $enemy = null,
     ): Enemy|Model {
         $validated = $request->validated();
 
@@ -59,7 +59,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         ]) ? null : (int)$validated['kill_priority'];
 
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (
-            Enemy $enemy
+            Enemy $enemy,
         ) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
             // Clear current active auras
@@ -128,7 +128,6 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             } else {
                 $result = ['name' => ''];
             }
-
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -144,7 +143,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     public function delete(
         Request        $request,
         MappingVersion $mappingVersion,
-        Enemy          $enemy
+        Enemy          $enemy,
     ): Response {
         return DB::transaction(function () use ($enemy) {
             try {
@@ -172,7 +171,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new EnemyChangedEvent($coordinatesService, $context, $user, $model);
     }

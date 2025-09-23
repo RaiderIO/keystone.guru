@@ -31,7 +31,7 @@ class AjaxOverpulledEnemyController extends Controller
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonRoute,
-        LiveSession $liveSession
+        LiveSession                     $liveSession,
     ) {
         $this->authorize('view', $dungeonRoute);
         $this->authorize('view', $liveSession);
@@ -76,7 +76,7 @@ class AjaxOverpulledEnemyController extends Controller
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonroute,
-        LiveSession $livesession
+        LiveSession                     $livesession,
     ) {
         $this->authorize('view', $dungeonroute);
         $this->authorize('view', $livesession);

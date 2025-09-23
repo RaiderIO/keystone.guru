@@ -34,7 +34,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
         private readonly CoordinatesServiceInterface           $coordinatesService,
-        private readonly CombatLogEventServiceLoggingInterface $log
+        private readonly CombatLogEventServiceLoggingInterface $log,
     ) {
     }
 
@@ -203,7 +203,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     $searchResult = $openSearchBuilder->get();
 
                     $buckets = $searchResult['aggregations']['heatmap']['buckets'];
-                } else if ($dataType === CombatLogEventDataType::EnemyPosition) {
+                } elseif ($dataType === CombatLogEventDataType::EnemyPosition) {
                     $openSearchBuilder->aggregations([
                         Aggregation::make(
                             name: 'nested_heatmap',
@@ -224,9 +224,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 }
 
                 $gridResult[$floor->id] = array_combine(
-                    array_map(fn($bucket
+                    array_map(fn(
+                        $bucket,
                     ) => sprintf('%s,%s', $bucket['key']['pos_grid_x'], $bucket['key']['pos_grid_y']), $buckets),
-                    array_column($buckets, 'doc_count')
+                    array_column($buckets, 'doc_count'),
                 );
             }
 
@@ -237,7 +238,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 $this->coordinatesService,
                 $filters,
                 $gridResult,
-                $runCount
+                $runCount,
             );
         } catch (Exception $e) {
             $this->log->getGeotileGridAggregationException($e);
@@ -267,6 +268,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         // </editor-fold>
 
         $result = 0;
+
         try {
             $runCountSearchResult = CombatLogEvent::opensearch()
                 ->builder()
@@ -274,7 +276,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 ->aggregations([
                     Aggregation::make(
                         name: "run_count",
-                        aggregationType: Cardinality::make('run_id')
+                        aggregationType: Cardinality::make('run_id'),
                     ),
                 ])
                 ->size(0)
@@ -295,6 +297,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     public function getRunCountPerDungeon(): Collection
     {
         $result = collect();
+
         try {
             // <editor-fold desc="OS Query" defaultState="collapsed">
 //            POST /combat_log_events/_search
@@ -331,7 +334,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                         aggregationType: Terms::make('challenge_mode_id', 10000),
                         aggregation: Aggregation::make(
                             name: "run_count",
-                            aggregationType: Cardinality::make('run_id')
+                            aggregationType: Cardinality::make('run_id'),
                         ),
                     ),
                 ])
@@ -387,6 +390,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         // </editor-fold>
 
         $result = null;
+
         try {
             $runCountSearchResult = CombatLogEvent::opensearch()
                 ->builder()
@@ -394,11 +398,11 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 ->aggregations([
                     Aggregation::make(
                         name: "min_date",
-                        aggregationType: Minimum::make('start')
+                        aggregationType: Minimum::make('start'),
                     ),
                     Aggregation::make(
                         name: "max_date",
-                        aggregationType: Maximum::make('start')
+                        aggregationType: Maximum::make('start'),
                     ),
                 ])
                 ->size(0)
@@ -406,7 +410,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $result = new CarbonPeriod(
                 Carbon::createFromTimestamp((int)$runCountSearchResult['aggregations']['min_date']['value_as_string'])->toDate(),
-                Carbon::createFromTimestamp((int)$runCountSearchResult['aggregations']['max_date']['value_as_string'])->toDate()
+                Carbon::createFromTimestamp((int)$runCountSearchResult['aggregations']['max_date']['value_as_string'])->toDate(),
             );
             $this->log->getAvailableDateRangeResult($result->start->getTimestamp(), $result->end->getTimestamp());
         } catch (Exception $e) {
@@ -417,10 +421,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     }
 
     /**
-     * @param Season                  $season
-     * @param CombatLogEventEventType $type
-     * @param int                     $runCount
-     * @param int                     $eventsPerRun
+     * @param  Season                    $season
+     * @param  CombatLogEventEventType   $type
+     * @param  int                       $runCount
+     * @param  int                       $eventsPerRun
      * @return Collection
      * @throws OpenSearchCreateException
      */
@@ -429,7 +433,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         CombatLogEventEventType $type,
         int                     $runCount = 1,
         int                     $eventsPerRun = 5,
-        ?Dungeon                $dungeon = null
+        ?Dungeon                $dungeon = null,
     ): Collection {
         // 24 weeks, 24 hours
         $now               = Carbon::now();
@@ -453,25 +457,25 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $runStart      = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
             $runPeriod     = $season->start_period + rand(0, $seasonLengthWeeks);
             // RaiderIO regions
-            $regions       = array_values(GameServerRegion::ALL);
-            $regionId      = match ($regions[array_rand($regions)]) {
-                GameServerRegion::EUROPE => 3,
+            $regions  = array_values(GameServerRegion::ALL);
+            $regionId = match ($regions[array_rand($regions)]) {
+                GameServerRegion::EUROPE   => 3,
                 GameServerRegion::AMERICAS => 2,
-                GameServerRegion::CHINA => 6,
-                GameServerRegion::KOREA => 4,
-                GameServerRegion::TAIWAN => 5,
-                default => 2, // US
+                GameServerRegion::CHINA    => 6,
+                GameServerRegion::KOREA    => 4,
+                GameServerRegion::TAIWAN   => 5,
+                default                    => 2, // US
             };
             $runDurationMs = rand(600, $currentMappingVersion->timer_max_seconds) * 1000;
             $timerFraction = $runDurationMs / ($currentMappingVersion->timer_max_seconds * 1000);
 
             $success = $currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000);
-            $start = $runStart->toDateTimeString();
-            $end = $runStart->addMilliseconds($runDurationMs)->toDateTimeString();
+            $start   = $runStart->toDateTimeString();
+            $end     = $runStart->addMilliseconds($runDurationMs)->toDateTimeString();
 
             /** @var AffixGroup $affixGroup */
             $affixGroup = $season->affixGroups->random();
-            $affixIds = json_encode($affixGroup->affixes->pluck('affix_id')->toArray());
+            $affixIds   = json_encode($affixGroup->affixes->pluck('affix_id')->toArray());
 
             $level            = rand($season->key_level_min, $season->key_level_max);
             $averageItemLevel = rand($season->item_level_min, $season->item_level_max);
@@ -489,7 +493,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 $enemyGridIngameXY = $this->coordinatesService->calculateGridLocationForIngameLocation(
                     $enemyIngameXY,
                     config('keystoneguru.heatmap.service.data.player.size_x'),
-                    config('keystoneguru.heatmap.service.data.player.size_y')
+                    config('keystoneguru.heatmap.service.data.player.size_y'),
                 );
 
                 // @TODO This uses old format - needs to use new format IF you were to use this again, right now this function appears not to be used
@@ -534,12 +538,12 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                         'pos_enemy_grid_x' => $enemyGridIngameXY->getX(2),
                         'pos_enemy_grid_y' => $enemyGridIngameXY->getY(2),
                     ]);
-                } else if ($type === CombatLogEventEventType::PlayerDeath) {
+                } elseif ($type === CombatLogEventEventType::PlayerDeath) {
                     $attributes['context'] = json_encode([
                         '@timestamp' => $now->unix(),
                         'npc_id'     => $enemy->npc_id,
                     ]);
-                } else if ($type === CombatLogEventEventType::PlayerSpell) {
+                } elseif ($type === CombatLogEventEventType::PlayerSpell) {
                     $attributes['context'] = json_encode([
                         '@timestamp' => $now->unix(),
                         'spell_id'   => rand(10000, 1000000),

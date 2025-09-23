@@ -48,7 +48,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 $this->dungeonRoute->id,
                 $this->dungeonRoute->mapping_version_id,
                 $this->floorIndex,
-                $this->attempts
+                $this->attempts,
             );
 
             if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {

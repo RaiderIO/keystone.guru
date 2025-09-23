@@ -78,7 +78,6 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->error(__METHOD__, get_defined_vars());
     }
 
-
     public function loadCampaignMembersEnd(): void
     {
         $this->end(__METHOD__);

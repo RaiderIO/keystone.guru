@@ -7,7 +7,7 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
- * @property int $id
+ * @property int    $id
  * @property string $locale
  * @property string $key
  * @property string $translation

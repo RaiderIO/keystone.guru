@@ -26,33 +26,33 @@ use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 
 /**
- * @property int                       $id
- * @property string                    $public_key
- * @property int                       $game_server_region_id
- * @property int                       $patreon_user_link_id
- * @property int                       $game_version_id
- * @property string                    $name
- * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string                    $email
- * @property string                    $locale
- * @property string                    $theme
- * @property string                    $echo_color
- * @property bool                      $echo_anonymous
- * @property bool                      $changed_username
- * @property string                    $timezone
- * @property string                    $map_facade_style
- * @property string                    $password
- * @property string                    $raw_patreon_response_data
- * @property bool                      $legal_agreed
- * @property int                       $legal_agreed_ms
- * @property bool                      $analytics_cookie_opt_out
+ * @property int    $id
+ * @property string $public_key
+ * @property int    $game_server_region_id
+ * @property int    $patreon_user_link_id
+ * @property int    $game_version_id
+ * @property string $name
+ * @property string $initials                  The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string $email
+ * @property string $locale
+ * @property string $theme
+ * @property string $echo_color
+ * @property bool   $echo_anonymous
+ * @property bool   $changed_username
+ * @property string $timezone
+ * @property string $map_facade_style
+ * @property string $password
+ * @property string $raw_patreon_response_data
+ * @property bool   $legal_agreed
+ * @property int    $legal_agreed_ms
+ * @property bool   $analytics_cookie_opt_out
  *
- * @property PatreonUserLink           $patreonUserLink
- * @property GameServerRegion          $gameServerRegion
- * @property GameVersion               $gameVersion
- * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
+ * @property PatreonUserLink       $patreonUserLink
+ * @property GameServerRegion      $gameServerRegion
+ * @property GameVersion           $gameVersion
+ * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
  *
- * @property bool                      $is_admin
+ * @property bool $is_admin
  *
  * @property Collection<DungeonRoute>  $dungeonRoutes
  * @property Collection<UserReport>    $reports
@@ -71,7 +71,7 @@ class User extends Authenticatable implements LaratrustUser
     use Notifiable;
 
     public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
-    public const MAP_FACADE_STYLE_FACADE = 'facade';
+    public const MAP_FACADE_STYLE_FACADE       = 'facade';
 
     public const MAP_FACADE_STYLE_ALL = [
         self::MAP_FACADE_STYLE_SPLIT_FLOORS,
@@ -81,7 +81,7 @@ class User extends Authenticatable implements LaratrustUser
     public const DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
     public const THEME_DARKLY = 'darkly';
-    public const THEME_LUX               = 'lux';
+    public const THEME_LUX    = 'lux';
 
     public const THEME_ALL = [
         self::THEME_DARKLY,
@@ -232,7 +232,7 @@ class User extends Authenticatable implements LaratrustUser
         // Admins have all patreon benefits
         if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));
-        } else if (isset($this->patreonUserLink)) {
+        } elseif (isset($this->patreonUserLink)) {
             $result = $this->patreonUserLink->patreonBenefits->pluck(['key']);
         } else {
             $result = collect();
@@ -270,8 +270,9 @@ class User extends Authenticatable implements LaratrustUser
      */
     public function getRemainingRouteCount(): int
     {
-        return (int)max(0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count()
+        return (int)max(
+            0,
+            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count(),
         );
     }
 
@@ -304,13 +305,13 @@ class User extends Authenticatable implements LaratrustUser
         }
 
         return array_merge($teams, [
-            'patreon'       => [
+            'patreon' => [
                 'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
                 'delete_count' => ($this->dungeonRoutes()->count() - $this->dungeonRoutes()->isSandbox()->count()),
             ],
-            'reports'       => [
+            'reports' => [
                 'delete_count' => ($this->reports()->where('status', 0)->count()),
             ],
         ]);

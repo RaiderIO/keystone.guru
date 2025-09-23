@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Localization\Spell;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
-use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;

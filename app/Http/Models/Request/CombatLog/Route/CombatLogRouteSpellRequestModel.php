@@ -21,7 +21,7 @@ class CombatLogRouteSpellRequestModel extends RequestModel implements Arrayable
         public ?int                             $spellId = null,
         public ?string                          $playerUid = null,
         public ?string                          $castAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null
+        public ?CombatLogRouteCoordRequestModel $coord = null,
     ) {
     }
 

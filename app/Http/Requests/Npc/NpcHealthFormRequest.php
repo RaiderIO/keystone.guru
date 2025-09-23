@@ -35,7 +35,6 @@ class NpcHealthFormRequest extends FormRequest
         ]);
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      */
@@ -47,7 +46,7 @@ class NpcHealthFormRequest extends FormRequest
                 'required',
                 'regex:/^[\d\s,]*$/',
             ],
-            'percentage'      => 'nullable|int',
+            'percentage' => 'nullable|int',
         ];
     }
 }

@@ -53,7 +53,7 @@ class UserController extends Controller
                         Session::flash('status', __('controller.user.flash.user_is_no_longer_an_admin', ['user' => $user->name]));
                     }
                 }
-            } else if ($role === Role::ROLE_USER) {
+            } elseif ($role === Role::ROLE_USER) {
                 $user->removeRoles($user->roles->toArray());
 
                 $user->addRole($role);

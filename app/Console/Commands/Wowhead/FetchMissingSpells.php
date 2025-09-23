@@ -30,7 +30,7 @@ class FetchMissingSpells extends Command
      * @throws Exception
      */
     public function handle(
-        SpellServiceInterface $spellService
+        SpellServiceInterface $spellService,
     ): int {
         $missingSpellIds = $spellService->getMissingSpellIds();
 

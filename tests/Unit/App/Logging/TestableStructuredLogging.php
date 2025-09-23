@@ -19,7 +19,6 @@ class TestableStructuredLogging extends StructuredLogging
         parent::__construct();
     }
 
-
     public function start(string $functionName, array $context = [], bool $addContext = true): void
     {
         parent::start($functionName, $context, $addContext);

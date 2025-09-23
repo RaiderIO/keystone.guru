@@ -17,23 +17,23 @@ interface MapContextServiceInterface
     public function createMapContextDungeonRoute(
         DungeonRoute $dungeonRoute,
         Floor        $floor,
-        ?string      $mapFacadeStyle = null
+        ?string      $mapFacadeStyle = null,
     ): MapContextDungeonRoute;
 
     public function createMapContextLiveSession(
         LiveSession $liveSession,
-        Floor       $floor
+        Floor       $floor,
     ): MapContextLiveSession;
 
     public function createMapContextDungeonExplore(
         Dungeon        $dungeon,
         Floor          $floor,
-        MappingVersion $mappingVersion
+        MappingVersion $mappingVersion,
     ): MapContextDungeonExplore;
 
     public function createMapContextMappingVersionEdit(
         Dungeon        $dungeon,
         Floor          $floor,
-        MappingVersion $mappingVersion
+        MappingVersion $mappingVersion,
     ): MapContextMappingVersionEdit;
 }

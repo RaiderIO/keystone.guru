@@ -56,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
         // Bind our custom rate limiter
         $this->app->extend(RateLimiter::class, function ($command, $app) {
             return new CustomRateLimiter($app->make('cache')->driver(
-                $app['config']->get('cache.limiter')
+                $app['config']->get('cache.limiter'),
             ));
         });
     }

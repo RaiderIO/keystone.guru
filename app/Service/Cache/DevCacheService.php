@@ -4,10 +4,18 @@ namespace App\Service\Cache;
 
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
+use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class DevCacheService extends CacheService
 {
+    public function __construct(CacheServiceLoggingInterface $log)
+    {
+        parent::__construct($log);
+
+        $this->setBypassCache(true);
+    }
+
     public function get(string $key): mixed
     {
         $result = parent::get($key);

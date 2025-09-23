@@ -55,8 +55,8 @@ class AjaxUserController extends Controller
                 'routes',
                 'ip_addresses_string',
             ]);
-            $user->roles_string = $user->roles->pluck(['display_name'])->join(', ');
-            $user->routes       = $user->dungeonRoutes->count();
+            $user->roles_string        = $user->roles->pluck(['display_name'])->join(', ');
+            $user->routes              = $user->dungeonRoutes->count();
             $user->ip_addresses_string = $user->ipAddresses->pluck('ip_address')->join(',');
             $user->unsetRelation('roles')->unsetRelation('dungeonRoutes');
         }

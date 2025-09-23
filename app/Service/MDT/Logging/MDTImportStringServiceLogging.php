@@ -11,7 +11,6 @@ class MDTImportStringServiceLogging extends StructuredLogging implements MDTImpo
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-
     public function getDetailsStart(): void
     {
         $this->start(__METHOD__);

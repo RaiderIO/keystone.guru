@@ -23,10 +23,9 @@ class DamageSupportTest extends PublicTestCase
     #[DataProvider('createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider')]
     public function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix(
         int    $combatLogVersion,
-        string $expectedClassName
+        string $expectedClassName,
     ): void {
         // Arrange
-
 
         // Act
         $suffix = Suffix::createFromEventName($combatLogVersion, 'DAMAGE_SUPPORT');
@@ -66,10 +65,9 @@ class DamageSupportTest extends PublicTestCase
     public function setParameters_givenValidEvent_shouldReturnCorrectValues(
         int    $combatLogVersion,
         string $rawEvent,
-        array  $expectedValues
+        array  $expectedValues,
     ): void {
         // Arrange
-
 
         // Act
         /** @var AdvancedCombatLogEvent $advancedCombatLogEvent */

@@ -15,7 +15,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
 {
     /**
      * @var string[] The simple column handler may use these column names - the columns that are requested are coming
-     * from the front end and cannot be trusted - so add a filter here.
+     *               from the front end and cannot be trusted - so add a filter here.
      */
     const VALID_COLUMN_NAMES = [
         'id',
@@ -35,7 +35,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         // If the column name is not valid, ignore it entirely
         if (!in_array($this->getColumnName(), self::VALID_COLUMN_NAMES)) {

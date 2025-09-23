@@ -87,7 +87,7 @@ class MappingService implements MappingServiceInterface
 
     public function createNewMappingVersionFromPreviousMapping(
         Dungeon     $dungeon,
-        GameVersion $gameVersion
+        GameVersion $gameVersion,
     ): MappingVersion {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
@@ -145,7 +145,7 @@ class MappingService implements MappingServiceInterface
 
     public function copyMappingVersionContentsToDungeon(
         MappingVersion $sourceMappingVersion,
-        MappingVersion $targetMappingVersion
+        MappingVersion $targetMappingVersion,
     ): MappingVersion {
         // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
         // MDT mapping
@@ -156,8 +156,8 @@ class MappingService implements MappingServiceInterface
 
         foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
             /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
-            $newDungeonFloorSwitchMarker                                      = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
-                $targetMappingVersion
+            $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
+                $targetMappingVersion,
             );
             $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
             $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
@@ -166,8 +166,7 @@ class MappingService implements MappingServiceInterface
         // Restore the links between the floor switches
         foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
             $newDungeonFloorSwitchMarker->update([
-                'linked_dungeon_floor_switch_marker_id' =>
-                    $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+                'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
             ]);
         }
 
@@ -213,7 +212,6 @@ class MappingService implements MappingServiceInterface
 
         return $targetMappingVersion;
     }
-
 
     /**
      * {@inheritDoc}

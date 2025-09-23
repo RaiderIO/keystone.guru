@@ -21,7 +21,7 @@ class CombatLogServiceLogging extends RollbarStructuredLogging implements Combat
     public function getResultEventsForChallengeModeFilterParseError(
         string    $rawEvent,
         int       $lineNr,
-        Throwable $throwable
+        Throwable $throwable,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -73,7 +73,7 @@ class CombatLogServiceLogging extends RollbarStructuredLogging implements Combat
 
     public function parseCombatLogParseEventsChangedCombatLogVersion(
         int  $combatLogVersion,
-        bool $advancedLoggingEnabled
+        bool $advancedLoggingEnabled,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

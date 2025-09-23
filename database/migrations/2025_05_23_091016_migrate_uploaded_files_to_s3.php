@@ -20,7 +20,7 @@ return new class extends Migration {
 
         /** @var Collection<File> $files */
         $files = App\Models\File::query()
-            ->whereIn('model_class', ['App\\Models\\User', 'App\\Models\\Team'])
+            ->whereIn('model_class', [\App\Models\User::class, \App\Models\Team::class])
             ->whereNotIn('disk', ['s3', 's3_user_uploads'])
             ->get();
 
@@ -28,6 +28,7 @@ return new class extends Migration {
 
         foreach ($files as $file) {
             $fullPath = Storage::disk($file->disk)->path($file->path);
+
             try {
                 $tmpPath = tempnam(sys_get_temp_dir(), 'file_');
 
@@ -67,6 +68,5 @@ return new class extends Migration {
      */
     public function down(): void
     {
-
     }
 };

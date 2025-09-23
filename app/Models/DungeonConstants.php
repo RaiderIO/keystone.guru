@@ -61,7 +61,6 @@ trait DungeonConstants
     public const RAID_NAXXRAMAS           = 'naxxramas_classic';
     public const RAID_SCARLET_ENCLAVE     = 'scarlet_enclave';
 
-
     // The Burning Crusade
     public const DUNGEON_AUCHENAI_CRYPTS         = 'auchenai_crypts';
     public const DUNGEON_HELLFIRE_RAMPARTS       = 'hellfire_ramparts';
@@ -216,7 +215,7 @@ trait DungeonConstants
     // @formatter:on
 
     public const ALL = [
-        Expansion::EXPANSION_CLASSIC      => [
+        Expansion::EXPANSION_CLASSIC => [
             self::DUNGEON_BLACKFATHOM_DEEPS,
             self::DUNGEON_BLACKROCK_DEPTHS,
             self::DUNGEON_DEADMINES,
@@ -244,7 +243,7 @@ trait DungeonConstants
             self::DUNGEON_WAILING_CAVERNS,
             self::DUNGEON_ZUL_FARRAK,
         ],
-        Expansion::EXPANSION_TBC          => [
+        Expansion::EXPANSION_TBC => [
             self::DUNGEON_AUCHENAI_CRYPTS,
             self::DUNGEON_HELLFIRE_RAMPARTS,
             self::DUNGEON_MAGISTERS_TERRACE,
@@ -262,7 +261,7 @@ trait DungeonConstants
             self::DUNGEON_THE_STEAMVAULT,
             self::DUNGEON_THE_UNDERBOG,
         ],
-        Expansion::EXPANSION_WOTLK        => [
+        Expansion::EXPANSION_WOTLK => [
             self::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM,
             self::DUNGEON_AZJOL_NERUB,
             self::DUNGEON_DRAK_THARON_KEEP,
@@ -280,7 +279,7 @@ trait DungeonConstants
             self::DUNGEON_UTGARDE_KEEP,
             self::DUNGEON_UTGARDE_PINNACLE,
         ],
-        Expansion::EXPANSION_CATACLYSM    => [
+        Expansion::EXPANSION_CATACLYSM => [
             self::DUNGEON_BLACKROCK_CAVERNS,
             self::DUNGEON_DEADMINES_CATACLYSM,
             self::DUNGEON_END_TIME,
@@ -296,7 +295,7 @@ trait DungeonConstants
             self::DUNGEON_ZUL_AMAN,
             self::DUNGEON_ZUL_GURUB,
         ],
-        Expansion::EXPANSION_MOP          => [
+        Expansion::EXPANSION_MOP => [
             self::DUNGEON_GATE_OF_THE_SETTING_SUN,
             self::DUNGEON_MOGU_SHAN_PALACE,
             self::DUNGEON_SCARLET_HALLS_MOP,
@@ -307,7 +306,7 @@ trait DungeonConstants
             self::DUNGEON_STORMSTOUT_BREWERY,
             self::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ],
-        Expansion::EXPANSION_WOD          => [
+        Expansion::EXPANSION_WOD => [
             self::DUNGEON_AUCHINDOUN,
             self::DUNGEON_BLOODMAUL_SLAG_MINES,
             self::DUNGEON_IRON_DOCKS,
@@ -316,7 +315,7 @@ trait DungeonConstants
             self::DUNGEON_SKYREACH,
             self::DUNGEON_THE_EVERBLOOM,
         ],
-        Expansion::EXPANSION_LEGION       => [
+        Expansion::EXPANSION_LEGION => [
             self::DUNGEON_ARCWAY,
             self::DUNGEON_BLACK_ROOK_HOLD,
             self::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT,
@@ -331,7 +330,7 @@ trait DungeonConstants
             self::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
             self::DUNGEON_VAULT_OF_THE_WARDENS,
         ],
-        Expansion::EXPANSION_BFA          => [
+        Expansion::EXPANSION_BFA => [
             self::DUNGEON_ATAL_DAZAR,
             self::DUNGEON_FREEHOLD,
             self::DUNGEON_KINGS_REST,
@@ -345,7 +344,7 @@ trait DungeonConstants
             self::DUNGEON_MECHAGON_JUNKYARD,
             self::DUNGEON_MECHAGON_WORKSHOP,
         ],
-        Expansion::EXPANSION_SHADOWLANDS  => [
+        Expansion::EXPANSION_SHADOWLANDS => [
             self::DUNGEON_DE_OTHER_SIDE,
             self::DUNGEON_HALLS_OF_ATONEMENT,
             self::DUNGEON_MISTS_OF_TIRNA_SCITHE,
@@ -369,7 +368,7 @@ trait DungeonConstants
             self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
             self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
         ],
-        Expansion::EXPANSION_TWW          => [
+        Expansion::EXPANSION_TWW => [
             self::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
             self::DUNGEON_CINDERBREW_MEADERY,
             self::DUNGEON_CITY_OF_THREADS,
@@ -384,7 +383,7 @@ trait DungeonConstants
     ];
 
     public const ALL_RAID = [
-        Expansion::EXPANSION_CLASSIC   => [
+        Expansion::EXPANSION_CLASSIC => [
             self::RAID_GNOMEREGAN_SOD,
             self::RAID_ZUL_GURUB,
             self::RAID_ONYXIAS_LAIR,
@@ -397,7 +396,7 @@ trait DungeonConstants
             self::RAID_NAXXRAMAS,
             self::RAID_SCARLET_ENCLAVE,
         ],
-        Expansion::EXPANSION_WOTLK     => [
+        Expansion::EXPANSION_WOTLK => [
             self::RAID_ICECROWN_CITADEL,
             self::RAID_NAXXRAMAS_WOTLK,
             self::RAID_ONYXIAS_LAIR_WOTLK,

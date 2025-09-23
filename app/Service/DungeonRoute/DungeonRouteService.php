@@ -14,13 +14,14 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function __construct(
         private readonly DungeonRouteRepositoryInterface     $dungeonRouteRepository,
         private readonly ThumbnailServiceInterface           $thumbnailService,
-        private readonly DungeonRouteServiceLoggingInterface $log
+        private readonly DungeonRouteServiceLoggingInterface $log,
     ) {
     }
 
     public function updatePopularity(): int
     {
         $updatedRouteCount = 0;
+
         try {
             $this->log->updatePopularityStart();
 
@@ -77,6 +78,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function updateRating(): int
     {
         $updatedRouteCount = 0;
+
         try {
             $this->log->updateRatingStart();
 
@@ -101,6 +103,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         $routes = collect();
 
         $sendResult = true;
+
         try {
             $this->log->refreshOutdatedThumbnailsStart();
 
@@ -120,6 +123,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function deleteExpiredDungeonRoutes(): int
     {
         $deletedRouteCount = 0;
+
         try {
             $this->log->deleteOutdatedDungeonRoutesStart();
 
@@ -144,7 +148,6 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                     $this->log->deleteOutdatedDungeonRouteException($dungeonRoute->id, $ex);
                 }
             }
-
         } finally {
             $this->log->deleteOutdatedDungeonRoutesEnd($deletedRouteCount);
         }
@@ -155,6 +158,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function touchRoutesForTeam(int $teamId): int
     {
         $updatedRouteCount = 0;
+
         try {
             $this->log->touchRoutesForTeamStart($teamId);
 
@@ -165,5 +169,4 @@ class DungeonRouteService implements DungeonRouteServiceInterface
 
         return $updatedRouteCount;
     }
-
 }

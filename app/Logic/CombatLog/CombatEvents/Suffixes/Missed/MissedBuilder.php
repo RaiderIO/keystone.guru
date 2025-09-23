@@ -12,7 +12,7 @@ use App\Logic\CombatLog\CombatLogVersion;
 class MissedBuilder implements SuffixBuilderInterface
 {
     public function __construct(
-        public int $combatLogVersion
+        public int $combatLogVersion,
     ) {
     }
 

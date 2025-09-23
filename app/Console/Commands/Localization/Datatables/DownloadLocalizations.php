@@ -2,13 +2,9 @@
 
 namespace App\Console\Commands\Localization\Datatables;
 
-use App\Console\Commands\Localization\Traits\ExportsTranslations;
-use App\Models\GameVersion\GameVersion;
 use App\Service\Traits\Curl;
-use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class DownloadLocalizations extends Command
 {
@@ -55,7 +51,7 @@ class DownloadLocalizations extends Command
 
             $url = sprintf(
                 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/%s.json',
-                $localeMapping[$locale['long']] ?? $localeDt
+                $localeMapping[$locale['long']] ?? $localeDt,
             );
 
             $response = $this->curlGet($url);
@@ -68,9 +64,9 @@ class DownloadLocalizations extends Command
             // Save the response to a file or process it as needed
             if (file_put_contents(
                 base_path(
-                    sprintf('app/Console/Commands/Localization/Datatables/Lang/%s.json', $locale['long'])
+                    sprintf('app/Console/Commands/Localization/Datatables/Lang/%s.json', $locale['long']),
                 ),
-                $response
+                $response,
             )) {
                 $this->info(sprintf('- Successfully saved localizations for %s', $locale['long']));
             } else {

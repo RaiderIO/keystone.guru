@@ -30,7 +30,9 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     ->where(function (Builder $builder) use ($mappingVersion) {
                         // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
                         // or for other exceptions listed below
-                        $builder->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id
+                        $builder->where(
+                            'npc_enemy_forces.mapping_version_id',
+                            $mappingVersion->id,
                         )->orWhereNull('npc_enemy_forces.id');
                     });
             })
@@ -79,7 +81,8 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     197857,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE, function (Builder $builder
+            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE, function (
+                Builder $builder,
             ) {
                 $builder->orWhereIn('npcs.id', [
                     // War Ohuna gives 0 enemy forces but is in the mapping regardless
@@ -122,6 +125,4 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             // Witherlings would never get mapped properly
             ->push(194373);
     }
-
-
 }

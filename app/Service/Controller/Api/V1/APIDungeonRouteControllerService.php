@@ -23,7 +23,7 @@ class APIDungeonRouteControllerService implements APIDungeonRouteControllerServi
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null
+        ?int         $quality = null,
     ): Collection {
         return $this->thumbnailService->queueThumbnailRefreshForApi(
             $dungeonRoute,
@@ -32,7 +32,7 @@ class APIDungeonRouteControllerService implements APIDungeonRouteControllerServi
             $imageWidth,
             $imageHeight,
             $zoomLevel,
-            $quality
+            $quality,
         );
     }
 }

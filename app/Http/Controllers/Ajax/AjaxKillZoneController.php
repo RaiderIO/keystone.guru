@@ -39,7 +39,7 @@ class AjaxKillZoneController extends Controller
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonroute,
         array                       $data,
-        bool                        $recalculateEnemyForces = true
+        bool                        $recalculateEnemyForces = true,
     ): KillZone {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
@@ -95,7 +95,7 @@ class AjaxKillZoneController extends Controller
                         'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                         'mdt_id'       => $enemy->mdt_id,
                     ];
-                    $validEnemyIds[]   = (int)$enemyId;
+                    $validEnemyIds[] = (int)$enemyId;
                 }
 
                 // Bulk insert
@@ -125,8 +125,8 @@ class AjaxKillZoneController extends Controller
             }
 
             $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (
-                array &$beforeAttributes,
-                array &$afterAttributes
+                array & $beforeAttributes,
+                array & $afterAttributes,
             ) use ($beforeModel, $killZone) {
                 $beforeAttributes['enemies'] = $beforeModel?->getEnemiesAttribute() ?? [];
                 $afterAttributes['enemies']  = $killZone->getEnemiesAttribute();
@@ -144,7 +144,7 @@ class AjaxKillZoneController extends Controller
                 if ($useFacade && $originalLatLng->getFloor() !== null) {
                     $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
                         $dungeonroute->mappingVersion,
-                        $originalLatLng
+                        $originalLatLng,
                     );
 
                     // Save the killzone with converted lat/lngs in the database
@@ -183,7 +183,7 @@ class AjaxKillZoneController extends Controller
         CoordinatesServiceInterface $coordinatesService,
         APIKillZoneFormRequest      $request,
         DungeonRoute                $dungeonRoute,
-        ?KillZone                   $killZone = null
+        ?KillZone                   $killZone = null,
     ): KillZone {
         $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
 
@@ -217,7 +217,7 @@ class AjaxKillZoneController extends Controller
     public function storeAll(
         CoordinatesServiceInterface $coordinatesService,
         APIKillZoneMassFormRequest  $request,
-        DungeonRoute                $dungeonRoute
+        DungeonRoute                $dungeonRoute,
     ) {
         $this->authorize('edit', $dungeonRoute);
 
@@ -247,7 +247,8 @@ class AjaxKillZoneController extends Controller
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn(
+                        $item,
                     ) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
@@ -297,7 +298,6 @@ class AjaxKillZoneController extends Controller
         }
 
         try {
-
             if ($killZone->delete()) {
                 if (Auth::check()) {
                     /** @var User $user */
@@ -317,7 +317,6 @@ class AjaxKillZoneController extends Controller
             } else {
                 $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
             }
-
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }

@@ -49,7 +49,7 @@ class SavePending extends SchedulerCommand
         $result = Metric::insert($pendingMetrics);
         if ($result) {
             Log::channel('scheduler')->info(
-                sprintf('Successfully saved metrics to the database in %d ms.', Stopwatch::stop('metric:savepending'))
+                sprintf('Successfully saved metrics to the database in %d ms.', Stopwatch::stop('metric:savepending')),
             );
         } else {
             Log::channel('scheduler')->error('Failed to save metrics to the database.');

@@ -25,11 +25,10 @@ class CombatLogRouteCorrectionRequestModel extends CombatLogRouteRequestModel
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs' => CombatLogRouteNpcCorrectionRequestModel::class,
-            'spells' => CombatLogRouteSpellCorrectionRequestModel::class,
+            'npcs'         => CombatLogRouteNpcCorrectionRequestModel::class,
+            'spells'       => CombatLogRouteSpellCorrectionRequestModel::class,
             'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestModel::class,
-            default => null,
+            default        => null,
         };
     }
-
 }

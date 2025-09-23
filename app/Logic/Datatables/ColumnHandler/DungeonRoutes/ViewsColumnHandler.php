@@ -24,7 +24,7 @@ class ViewsColumnHandler extends DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         //        $views = $columnData['search']['value'] ?? null;
         //        if (!empty($views)) {

@@ -25,9 +25,9 @@ class FactionSelectionRequiredRule implements ValidationRule
     }
 
     /**
-     * @param string $attribute
-     * @param mixed  $value
-     * @param Closure $fail
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  Closure $fail
      * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
@@ -50,6 +50,4 @@ class FactionSelectionRequiredRule implements ValidationRule
             $fail(__('rules.faction_selection_required_rule.message'));
         }
     }
-
-
 }

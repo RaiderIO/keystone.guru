@@ -29,10 +29,10 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        MountableAreaFormRequest $request,
+        MountableAreaFormRequest    $request,
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion           $mappingVersion,
-        ?MountableArea           $mountableArea = null
+        MappingVersion              $mappingVersion,
+        ?MountableArea              $mountableArea = null,
     ): MountableArea {
         $validated = $request->validated();
 
@@ -75,7 +75,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         Model                       $context,
         User                        $user,
-        Model                       $model
+        Model                       $model,
     ): ModelChangedEvent {
         return new MountableAreaChangedEvent($context, $user, $model);
     }

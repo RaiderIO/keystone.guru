@@ -47,7 +47,7 @@ class SpellDataExtractor implements DataExtractorInterface
     private ?string $currentCombatLogFilePath = null;
 
     public function __construct(
-        private readonly WowheadServiceInterface $wowheadService
+        private readonly WowheadServiceInterface $wowheadService,
     ) {
         $this->spellIdsForDungeon = collect();
         $this->summonedNpcs       = collect();
@@ -68,7 +68,7 @@ class SpellDataExtractor implements DataExtractorInterface
     public function extractData(
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
-        BaseEvent                    $parsedEvent
+        BaseEvent                    $parsedEvent,
     ): void {
         if (!($parsedEvent instanceof CombatLogEvent)) {
             // Don't log anything because that'd just spam the hell out of it
@@ -106,8 +106,6 @@ class SpellDataExtractor implements DataExtractorInterface
             // If destination is an NPC, and it's a buff, or if the target was a player
             (($destIsNpc && $suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) ||
                 $destGuid instanceof Player)) {
-
-
             // 8/2/2024 16:37:04.342-4  SPELL_AURA_BROKEN_SPELL,Creature-0-2085-2290-22770-171772-00002D40C5,"Mistveil Defender",0xa48,0x0,Player-4184-005B8B04,"Gulagcool-TheseGoToEleven-TR",0x512,0x0,1784,"Stealth",0x1,457129,"Deathstalker's Mark",1,DEBUFF
             // If the NPC broke an aura - that's not the NPC casting "Stealth" on a player - no it broke it out of it,
             // so don't assign that spell to this NPC
@@ -143,7 +141,7 @@ class SpellDataExtractor implements DataExtractorInterface
 
                     $this->log->isSummonedNpcNpcWasSummoned(
                         $npcId,
-                        $parsedEvent->getGenericData()->getDestName()
+                        $parsedEvent->getGenericData()->getDestName(),
                     );
                 }
             }
@@ -158,7 +156,7 @@ class SpellDataExtractor implements DataExtractorInterface
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
         CombatLogEvent               $parsedEvent,
-        Spell                        $spell
+        Spell                        $spell,
     ): void {
         // Now that we've extract spell data from the combat log, either update the data that's there in the database,
         // or fetch some additional info from Wowhead
@@ -184,7 +182,7 @@ class SpellDataExtractor implements DataExtractorInterface
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
         CombatLogEvent               $parsedEvent,
-        Spell                        $prefix
+        Spell                        $prefix,
     ): void {
         if (!$this->spellIdsForDungeon->has($currentDungeon->dungeon->id)) {
             $this->spellIdsForDungeon->put($currentDungeon->dungeon->id, collect());
@@ -207,7 +205,6 @@ class SpellDataExtractor implements DataExtractorInterface
                 if ($spell->spellDungeons
                     ->where('dungeon_id', $currentDungeon->dungeon->id)
                     ->isEmpty()) {
-
                     // Assign it
                     SpellDungeon::create([
                         'spell_id'   => $spell->id,
@@ -230,7 +227,7 @@ class SpellDataExtractor implements DataExtractorInterface
         DataExtractionCurrentDungeon $currentDungeon,
         CombatLogEvent               $parsedEvent,
         Creature                     $sourceGuid,
-        Spell                        $prefix
+        Spell                        $prefix,
     ): void {
         // Check if the spell can be assigned
         $spell = $this->allSpells->get($prefix->getSpellId());
@@ -239,7 +236,7 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         // Assign spell IDs to NPCs
-        /** @var Npc|null|boolean $npc */
+        /** @var Npc|null|bool $npc */
         $npc = $this->npcCache->get($sourceGuid->getId());
         if ($npc === false) {
             return;
@@ -296,12 +293,12 @@ class SpellDataExtractor implements DataExtractorInterface
     private function updateSpell(
         ExtractedDataResult $result,
         SpellModel          $spell,
-        CombatLogEvent      $combatLogEvent
+        CombatLogEvent      $combatLogEvent,
     ): bool {
         $before = $spell->getAttributes();
 
-        $suffix        = $combatLogEvent->getSuffix();
-        $spell->aura   = $spell->aura ||
+        $suffix      = $combatLogEvent->getSuffix();
+        $spell->aura = $spell->aura ||
         ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
             $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
             $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE) ? 1 : 0;
@@ -336,7 +333,7 @@ class SpellDataExtractor implements DataExtractorInterface
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
         Spell                        $spell,
-        CombatLogEvent               $combatLogEvent
+        CombatLogEvent               $combatLogEvent,
     ): ?SpellModel {
         try {
             $this->log->createSpellAndFetchInfoStart($spell->getSpellId());
@@ -344,7 +341,7 @@ class SpellDataExtractor implements DataExtractorInterface
             // @TODO We need to know the game version assigned to the combat log to do this properly
             $spellDataResult = $this->wowheadService->getSpellData(
                 GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
-                $spell->getSpellId()
+                $spell->getSpellId(),
             );
 
             $spellAttributes = [

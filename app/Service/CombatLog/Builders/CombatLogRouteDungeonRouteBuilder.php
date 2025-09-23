@@ -49,6 +49,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         Spell::SPELL_ANCIENT_HYSTERIA,
         Spell::SPELL_PRIMAL_RAGE,
         Spell::SPELL_FERAL_HIDE_DRUMS,
+        Spell::SPELL_HARRIERS_CRY,
         Spell::SPELL_SHROUD_OF_CONCEALMENT,
     ];
 
@@ -76,11 +77,12 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         protected readonly FloorRepositoryInterface   $floorRepository,
         protected readonly DungeonRepositoryInterface $dungeonRepository,
         protected readonly CombatLogRouteRequestModel $combatLogRoute,
-        ?int                                          $userId = null
+        ?int                                          $userId = null,
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
 
-        parent::__construct($coordinatesService,
+        parent::__construct(
+            $coordinatesService,
             $dungeonRouteRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,
@@ -93,9 +95,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $affixGroupRepository,
                 $dungeonRouteAffixGroupRepository,
                 $this->dungeonRepository,
-                $userId
+                $userId,
             ),
-            $log
+            $log,
         );
 
         $this->validSpellIds = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
@@ -115,7 +117,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     private function buildKillZones(): void
     {
-        $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(CombatLogRouteNpcRequestModel $npc
+        $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(
+            CombatLogRouteNpcRequestModel $npc,
         ) => $this->validNpcIds->search($npc->npcId) !== false);
 
         $npcEngagedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestModel $npc) => [
@@ -125,7 +128,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         ]);
 
         $npcDiedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestModel $npc) => [
-            'type'      => 'died',
+            'type' => 'died',
             // A bit of a hack - but prevent one-shot enemies from having their diedAt event
             // potentially come _before_ engagedAt event due to sorting
             'timestamp' => $npc->getDiedAt()->addSecond(),
@@ -165,7 +168,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($newFloor === null) {
                     $floorCache->put(
                         $event['npc']->coord->uiMapId,
-                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id)
+                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id),
                     );
                 }
 
@@ -194,11 +197,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($activePull === null) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePull();
-                } else if ($activePull->isCompleted()) {
+                } elseif ($activePull->isCompleted()) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePullChainPullCompleted();
                 } // Check if we need to account for chain pulling
-                else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
+                elseif (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
                     <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
@@ -207,7 +210,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $activePullEnemy = $this->createActivePullEnemy($event['npc']);
                 $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
                     $activePullEnemy,
-                    $this->activePullCollection->getInCombatGroups()
+                    $this->activePullCollection->getInCombatGroups(),
                 );
 
                 if ($resolvedEnemy === null) {
@@ -230,7 +233,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
                 $activePull->enemyEngaged($activePullEnemy);
-            } else if ($event['type'] === 'died') {
+            } elseif ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
                 foreach ($this->activePullCollection as $activePull) {
                     /** @var $activePull ActivePull */
@@ -302,7 +305,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($spell->spellId);
                     $assignedSpells++;
                 }
-            } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
+            } elseif ($spell->getCastAt()->isAfter($firstEngagedAt)) {
                 if (!$this->validSpellIds->has($spell->spellId)) {
                     $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
 
@@ -325,7 +328,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $npc->coord->x,
             $npc->coord->y,
             $npc->getEngagedAt(),
-            $npc->getDiedAt()
+            $npc->getDiedAt(),
         );
     }
 }

@@ -56,4 +56,4 @@ $mappingVersionsSelect = $mappingVersions->groupBy('dungeon_id')
     });
 ?>
 
-{!! Form::select($id, $mappingVersionsSelect, $selected, ['class' => 'form-control selectpicker']) !!}
+{{ html()->select($id, $mappingVersionsSelect, $selected)->class('form-control selectpicker') }}

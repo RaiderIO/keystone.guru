@@ -2,15 +2,11 @@
 
 namespace App\Http\Resources\DungeonRoute;
 
-use App\Http\Resources\AffixGroup\AffixGroupResource;
 use App\Http\Resources\KillZone\KillZoneResource;
-use App\Http\Resources\User\UserResource;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
 /**
@@ -26,9 +22,16 @@ use JsonSerializable;
  * @OA\Property(property="affixGroups", type="array", @OA\Items(ref="#/components/schemas/AffixGroup"))
  * @OA\Property(property="links",type="object",ref="#/components/schemas/DungeonRouteLinks")
  *
+ * @OA\Schema(
+ *      schema="DungeonRouteWrap",
+ *      type="object",
+ *      required={"data"},
+ *      @OA\Property(property="data", ref="#/components/schemas/DungeonRoute")
+ *  )
+ *
  * @mixin DungeonRoute
  */
-class DungeonRouteResource extends JsonResource
+class DungeonRouteResource extends DungeonRouteSummaryResource
 {
     /**
      * Transform the resource into an array.
@@ -37,23 +40,10 @@ class DungeonRouteResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'dungeonId'           => $this->dungeon_id,
-            'mappingVersion'      => $this->mappingVersion->version,
-            'publicKey'           => $this->public_key,
-            'title'               => $this->title,
-            'enemyForces'         => $this->enemy_forces,
-            'enemyForcesRequired' => $this->mappingVersion->enemy_forces_required,
-            'expiresAt'           => $this->expires_at,
-            'pulls'               => $this->killZones()->with('killZoneEnemies')->get()->map(
-                fn(KillZone $killZone) => new KillZoneResource($killZone)
+        return array_insert_after(parent::toArray($request), 'expiresAt', [
+            'pulls' => $this->killZones()->with(['killZoneEnemies.npc.npcEnemyForces', 'dungeonRoute'])->get()->map(
+                fn(KillZone $killZone) => new KillZoneResource($killZone),
             )->toArray(),
-            'author'              => new UserResource($this->author),
-            'affixGroups'         => $this->affixes->map(
-                fn(AffixGroup $affixGroup
-                ) => new AffixGroupResource($affixGroup->setRelation('expansion', $this->dungeon->expansion))
-            )->toArray(),
-            'links'               => new DungeonRouteLinksResource($this),
-        ];
+        ]);
     }
 }

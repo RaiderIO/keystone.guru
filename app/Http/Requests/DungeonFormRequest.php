@@ -36,11 +36,11 @@ class DungeonFormRequest extends FormRequest
             'instance_id'                        => 'nullable|int',
             'challenge_mode_id'                  => 'nullable|int',
             'mdt_id'                             => 'int',
-            'name' => [
+            'name'                               => [
                 'required',
                 Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name'),
             ],
-            'key'                                => [
+            'key' => [
                 'required',
                 Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),
                 Rule::in(collect(array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),

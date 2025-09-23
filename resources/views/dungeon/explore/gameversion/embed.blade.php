@@ -13,7 +13,6 @@ use Illuminate\Support\Collection;
  * @var Floor                        $floor
  * @var string                       $title
  * @var MapContext                   $mapContext
- * @var boolean                      $showHeatmapSearch
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
  * @var int                          $itemLevelMin
@@ -97,7 +96,7 @@ use Illuminate\Support\Collection;
                     'pulls' => false,
                     'enemyInfo' => $embedOptions['show']['enemyInfo'],
                     'title' => $embedOptions['show']['enemyInfo'],
-                    'heatmapSearch' => $showHeatmapSearch,
+                    'heatmapSearch' => false,
                     'heatmapSearchDefaultState' => false,
                     'heatmapSearchSidebar' => $embedOptions['show']['sidebar'],
                 ],

@@ -37,7 +37,7 @@ class CombatLogService implements CombatLogServiceInterface
         private readonly SeasonServiceInterface           $seasonService,
         private readonly NpcRepositoryInterface           $npcRepository,
         private readonly DungeonRepositoryInterface       $dungeonRepository,
-        private readonly CombatLogServiceLoggingInterface $log
+        private readonly CombatLogServiceLoggingInterface $log,
     ) {
     }
 
@@ -53,7 +53,7 @@ class CombatLogService implements CombatLogServiceInterface
         $this->parseCombatLog($filePath, function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
-            string $rawEvent
+            string $rawEvent,
         ) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
 
@@ -78,7 +78,7 @@ class CombatLogService implements CombatLogServiceInterface
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
             string $rawEvent,
-            int    $lineNr
+            int    $lineNr,
         ) use ($callable) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
 
@@ -104,24 +104,25 @@ class CombatLogService implements CombatLogServiceInterface
         $this->parseCombatLog($filePath, static function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
-            string $rawEvent
+            string $rawEvent,
         ) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent(
-                [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START], $combatLogVersion
+                [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START],
+                $combatLogVersion,
             );
             if ($parsedEvent instanceof ChallengeModeStartEvent) {
                 try {
                     $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeId())->firstOrFail();
                 } catch (Exception) {
                     throw new DungeonNotSupportedException(
-                        sprintf('Dungeon with challenge mode ID %d not found', $parsedEvent->getChallengeModeId())
+                        sprintf('Dungeon with challenge mode ID %d not found', $parsedEvent->getChallengeModeId()),
                     );
                 }
 
                 $events->push((new ChallengeMode(
                     $parsedEvent->getTimestamp(),
                     $dungeon,
-                    $parsedEvent->getKeystoneLevel()
+                    $parsedEvent->getKeystoneLevel(),
                 )));
             }
 
@@ -143,7 +144,7 @@ class CombatLogService implements CombatLogServiceInterface
         $this->parseCombatLog($filePath, static function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
-            string $rawEvent
+            string $rawEvent,
         ) use ($result) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
             if ($parsedEvent instanceof MapChangeEvent) {
@@ -166,7 +167,7 @@ class CombatLogService implements CombatLogServiceInterface
         $this->parseCombatLog($filePath, function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
-            string $rawEvent
+            string $rawEvent,
         ) use (
             &$dungeon,
             &$ingameMinX,
@@ -190,7 +191,6 @@ class CombatLogService implements CombatLogServiceInterface
                         return $parsedEvent;
                     }
 
-
                     if ($advancedData->getUiMapId() === 0) {
                         $ingameMinX = min($ingameMinX, $advancedData->getPositionX());
                         $ingameMinY = min($ingameMinY, $advancedData->getPositionY());
@@ -200,20 +200,18 @@ class CombatLogService implements CombatLogServiceInterface
                 }
             }
 
-
             return $parsedEvent;
         });
 
         return new MapBounds($ingameMinX, $ingameMinY, $ingameMaxX, $ingameMaxY);
     }
 
-
     /**
      * @throws Exception
      */
     public function getResultEventsForChallengeMode(
         string        $combatLogFilePath,
-        ?DungeonRoute &$dungeonRoute = null
+        ?DungeonRoute & $dungeonRoute = null,
     ): Collection {
         try {
             $this->log->getResultEventsForChallengeModeStart($combatLogFilePath);
@@ -221,7 +219,8 @@ class CombatLogService implements CombatLogServiceInterface
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             try {
-                $this->parseCombatLogStreaming($combatLogFilePath,
+                $this->parseCombatLogStreaming(
+                    $combatLogFilePath,
                     function (BaseEvent $baseEvent, int $lineNr) use (
                         &$dungeonRouteFilter,
                         &
@@ -230,7 +229,7 @@ class CombatLogService implements CombatLogServiceInterface
                         // If parsing was successful, it generated a dungeonroute, so then construct our filter
                         if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
                             $combatLogDungeonRouteFilter->setValidNpcIds(
-                                $this->npcRepository->getInUseNpcIds($dungeonRouteFilter->getDungeonRoute()->mappingVersion)
+                                $this->npcRepository->getInUseNpcIds($dungeonRouteFilter->getDungeonRoute()->mappingVersion),
                             );
                         }
 
@@ -241,7 +240,7 @@ class CombatLogService implements CombatLogServiceInterface
 
                             throw $throwable;
                         }
-                    }
+                    },
                 );
             } catch (AdvancedLogNotEnabledException $e) {
                 $this->log->getResultEventsForChallengeModeAdvancedLogNotEnabled($e->getMessage());
@@ -260,16 +259,17 @@ class CombatLogService implements CombatLogServiceInterface
      * @throws Exception
      */
     public function getResultEventsForDungeonOrRaid(
-        string $combatLogFilePath
+        string $combatLogFilePath,
     ): Collection {
         try {
             $this->log->getResultEventsForDungeonOrRaidStart($combatLogFilePath);
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
-            $this->parseCombatLogStreaming($combatLogFilePath,
+            $this->parseCombatLogStreaming(
+                $combatLogFilePath,
                 static function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter) {
                     $combatLogDungeonOrRaidFilter->parse($baseEvent, $lineNr);
-                }
+                },
             );
 
             return $combatLogDungeonOrRaidFilter->getResultEvents();
@@ -289,10 +289,12 @@ class CombatLogService implements CombatLogServiceInterface
 
         $this->log->extractCombatLogExtractingArchiveStart();
         $zip = new ZipArchive();
+
         try {
             $status = $zip->open($filePath);
             if ($status !== true) {
                 $this->log->extractCombatLogInvalidZipFile();
+
                 throw new InvalidArgumentException('File is not a valid .zip file');
             }
 
@@ -322,15 +324,17 @@ class CombatLogService implements CombatLogServiceInterface
         $targetFilePath = sprintf(
             '%s/%s.zip',
             dirname($filePathToTxt),
-            pathinfo($filePathToTxt, PATHINFO_FILENAME)
+            pathinfo($filePathToTxt, PATHINFO_FILENAME),
         );
 
         $this->log->compressCombatLogCompressingArchiveStart();
         $zip = new ZipArchive();
+
         try {
             $status = $zip->open($targetFilePath, ZipArchive::CREATE);
             if ($status !== true) {
                 $this->log->compressCombatLogInvalidZipFile();
+
                 throw new InvalidArgumentException('Could not create new .zip file');
             }
 
@@ -362,6 +366,7 @@ class CombatLogService implements CombatLogServiceInterface
 
         $lineNr   = 0;
         $rawEvent = '';
+
         try {
             $this->log->parseCombatLogParseEventsStart();
             $combatLogVersion         = CombatLogVersion::RETAIL_11_0_5;
@@ -392,6 +397,7 @@ class CombatLogService implements CombatLogServiceInterface
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
     {
         $fileHandle = null;
+
         try {
             $fileHandle = fopen($filePath, 'w');
             if ($fileHandle === false) {

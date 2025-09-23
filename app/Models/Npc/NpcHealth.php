@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $health
  * @property int $percentage
  *
- * @property Npc $npc
+ * @property Npc         $npc
  * @property GameVersion $gameVersion
  *
  * @mixin Eloquent

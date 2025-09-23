@@ -7,8 +7,8 @@ return [
         3 => 'Hodor',
         4 => 'Hodor',
     ],
-    'classic'    => [
-        'blackfathom_deeps'           => [
+    'classic' => [
+        'blackfathom_deeps' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_pool_of_ask_ar' => 'Hodor',
@@ -16,14 +16,14 @@ return [
                 'the_forgotten_pool' => 'Hodor',
             ],
         ],
-        'blackrock_depths'            => [
+        'blackrock_depths' => [
             'name'   => 'Hodor',
             'floors' => [
                 'detention_block'  => 'Hodor',
                 'shadowforge_city' => 'Hodor',
             ],
         ],
-        'blackwinglair'               => [
+        'blackwinglair' => [
             'name'   => 'Hodor',
             'floors' => [
                 'dragonmaw_garrison'   => 'Hodor',
@@ -32,27 +32,27 @@ return [
                 'nefarians_lair'       => 'Hodor',
             ],
         ],
-        'deadmines'                   => [
+        'deadmines' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_deadmines' => 'Hodor',
                 'ironclad_cove' => 'Hodor',
             ],
         ],
-        'dire_maul_east'              => [
+        'dire_maul_east' => [
             'name'   => 'Hodor',
             'floors' => [
                 'warpwood_quarter'         => 'Hodor',
                 'the_shrine_of_eldretharr' => 'Hodor',
             ],
         ],
-        'dire_maul_north'             => [
+        'dire_maul_north' => [
             'name'   => 'Hodor',
             'floors' => [
                 'gordok_commons' => 'Hodor',
             ],
         ],
-        'dire_maul_west'              => [
+        'dire_maul_west' => [
             'name'   => 'Hodor',
             'floors' => [
                 'capital_gardens'        => 'Hodor',
@@ -60,7 +60,7 @@ return [
                 'prison_of_immol_thar'   => 'Hodor',
             ],
         ],
-        'gnomeregan'                  => [
+        'gnomeregan' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_hall_of_gears' => 'Hodor',
@@ -69,7 +69,7 @@ return [
                 'tinkers_court'     => 'Hodor',
             ],
         ],
-        'gnomeregan_sod'              => [
+        'gnomeregan_sod' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_hall_of_gears' => 'Hodor',
@@ -78,7 +78,7 @@ return [
                 'tinkers_court'     => 'Hodor',
             ],
         ],
-        'karazhan_crypts'             => [
+        'karazhan_crypts' => [
             'name'   => 'Hodor',
             'floors' => [
                 'karazhan_crypts'         => 'Hodor',
@@ -87,7 +87,7 @@ return [
                 'the_pit_of_criminals'    => 'Hodor',
             ],
         ],
-        'lower_blackrock_spire'       => [
+        'lower_blackrock_spire' => [
             'name'   => 'Hodor',
             'floors' => [
                 'tazz_alor'          => 'Hodor',
@@ -98,20 +98,20 @@ return [
                 'chamber_of_battle'  => 'Hodor',
             ],
         ],
-        'maraudon'                    => [
+        'maraudon' => [
             'name'   => 'Hodor',
             'floors' => [
                 'caverns_of_maraudon' => 'Hodor',
                 'zaetars_grave'       => 'Hodor',
             ],
         ],
-        'moltencore'                  => [
+        'moltencore' => [
             'name'   => 'Hodor',
             'floors' => [
                 'molten_core' => 'Hodor',
             ],
         ],
-        'naxxramas_classic'           => [
+        'naxxramas_classic' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_construct_quarter' => 'Hodor',
@@ -122,43 +122,43 @@ return [
                 'the_upper_necropolis'  => 'Hodor',
             ],
         ],
-        'onyxias_lair_classic'        => [
+        'onyxias_lair_classic' => [
             'name'   => 'Hodor',
             'floors' => [
                 'onyxias_lair' => 'Hodor',
             ],
         ],
-        'ragefire_chasm'              => [
+        'ragefire_chasm' => [
             'name'   => 'Hodor',
             'floors' => [
                 'ragefire_chasm' => 'Hodor',
             ],
         ],
-        'razorfen_downs'              => [
+        'razorfen_downs' => [
             'name'   => 'Hodor',
             'floors' => [
                 'razorfen_downs' => 'Hodor',
             ],
         ],
-        'razorfen_kraul'              => [
+        'razorfen_kraul' => [
             'name'   => 'Hodor',
             'floors' => [
                 'razorfen_kraul' => 'Hodor',
             ],
         ],
-        'ruins_of_ahnqiraj_classic'   => [
+        'ruins_of_ahnqiraj_classic' => [
             'name'   => 'Hodor',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Hodor',
             ],
         ],
-        'ruins_of_ahnqiraj_sod'       => [
+        'ruins_of_ahnqiraj_sod' => [
             'name'   => 'Hodor',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Hodor',
             ],
         ],
-        'scarlet_enclave'             => [
+        'scarlet_enclave' => [
             'name'   => 'Hodor',
             'floors' => [
                 'tyrs_hand'              => 'Hodor',
@@ -168,7 +168,7 @@ return [
                 'ashbringer_chapel'      => 'Hodor',
             ],
         ],
-        'scarlet_monastery_armory'    => [
+        'scarlet_monastery_armory' => [
             'name'   => 'Hodor',
             'floors' => [
                 'armory' => 'Hodor',
@@ -186,13 +186,13 @@ return [
                 'graveyard' => 'Hodor',
             ],
         ],
-        'scarlet_monastery_library'   => [
+        'scarlet_monastery_library' => [
             'name'   => 'Hodor',
             'floors' => [
                 'library' => 'Hodor',
             ],
         ],
-        'scholomance'                 => [
+        'scholomance' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_reliquary'        => 'Hodor',
@@ -201,7 +201,7 @@ return [
                 'headmasters_story'    => 'Hodor',
             ],
         ],
-        'shadowfang_keep'             => [
+        'shadowfang_keep' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_courtyard'         => 'Hodor',
@@ -213,14 +213,14 @@ return [
                 'the_wall_walk'         => 'Hodor',
             ],
         ],
-        'stratholme'                  => [
+        'stratholme' => [
             'name'   => 'Hodor',
             'floors' => [
                 'crusaders_square' => 'Hodor',
                 'the_gauntlet'     => 'Hodor',
             ],
         ],
-        'temple_of_ahnqiraj_classic'  => [
+        'temple_of_ahnqiraj_classic' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_hive_undergrounds' => 'Hodor',
@@ -228,7 +228,7 @@ return [
                 'vault_of_cthun'        => 'Hodor',
             ],
         ],
-        'temple_of_ahnqiraj_sod'      => [
+        'temple_of_ahnqiraj_sod' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_hive_undergrounds' => 'Hodor',
@@ -236,13 +236,13 @@ return [
                 'vault_of_cthun'        => 'Hodor',
             ],
         ],
-        'the_stockade'                => [
+        'the_stockade' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_stockade' => 'Hodor',
             ],
         ],
-        'the_temple_of_atal_hakkar'   => [
+        'the_temple_of_atal_hakkar' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_pit_of_refuse'         => 'Hodor',
@@ -252,14 +252,14 @@ return [
                 'hall_of_the_cursed'        => 'Hodor',
             ],
         ],
-        'uldaman'                     => [
+        'uldaman' => [
             'name'   => 'Hodor',
             'floors' => [
                 'hall_of_the_keepers' => 'Hodor',
                 'khaz_goroths_seat'   => 'Hodor',
             ],
         ],
-        'upper_blackrock_spire'       => [
+        'upper_blackrock_spire' => [
             'name'   => 'Hodor',
             'floors' => [
                 'dragonspire_hall'  => 'Hodor',
@@ -267,33 +267,33 @@ return [
                 'hall_of_blackhand' => 'Hodor',
             ],
         ],
-        'wailing_caverns'             => [
+        'wailing_caverns' => [
             'name'   => 'Hodor',
             'floors' => [
                 'wailing_caverns' => 'Hodor',
             ],
         ],
-        'zul_farrak'                  => [
+        'zul_farrak' => [
             'name'   => 'Hodor',
             'floors' => [
                 'zul_farrak' => 'Hodor',
             ],
         ],
-        'zulgurub'                    => [
+        'zulgurub' => [
             'name'   => 'Hodor',
             'floors' => [
                 'zulgurub' => 'Hodor',
             ],
         ],
     ],
-    'wotlk'      => [
-        'ahn_kahet_the_old_kingdom'                => [
+    'wotlk' => [
+        'ahn_kahet_the_old_kingdom' => [
             'name'   => 'Hodor',
             'floors' => [
                 'ahn_kahet_the_old_kingdom' => 'Hodor',
             ],
         ],
-        'azjol_nerub'                              => [
+        'azjol_nerub' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_brood_pit'   => 'Hodor',
@@ -308,39 +308,39 @@ return [
                 'the_icy_depths'      => 'Hodor',
             ],
         ],
-        'drak_tharon_keep'                         => [
+        'drak_tharon_keep' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_vestibules_of_drak_tharon' => 'Hodor',
                 'drak_tharon_overlook'          => 'Hodor',
             ],
         ],
-        'gundrak'                                  => [
+        'gundrak' => [
             'name'   => 'Hodor',
             'floors' => [
                 'gundrak' => 'Hodor',
             ],
         ],
-        'halls_of_lightning'                       => [
+        'halls_of_lightning' => [
             'name'   => 'Hodor',
             'floors' => [
                 'unyielding_garrison' => 'Hodor',
                 'walk_of_the_makers'  => 'Hodor',
             ],
         ],
-        'halls_of_reflection'                      => [
+        'halls_of_reflection' => [
             'name'   => 'Hodor',
             'floors' => [
                 'halls_of_reflection' => 'Hodor',
             ],
         ],
-        'halls_of_stone'                           => [
+        'halls_of_stone' => [
             'name'   => 'Hodor',
             'floors' => [
                 'halls_of_stone' => 'Hodor',
             ],
         ],
-        'icecrown_citadel'                         => [
+        'icecrown_citadel' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_lower_citadel'     => 'Hodor',
@@ -353,7 +353,7 @@ return [
                 'frostmourne'           => 'Hodor',
             ],
         ],
-        'naxxramas'                                => [
+        'naxxramas' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_construct_quarter' => 'Hodor',
@@ -364,50 +364,50 @@ return [
                 'the_upper_necropolis'  => 'Hodor',
             ],
         ],
-        'onyxias_lair'                             => [
+        'onyxias_lair' => [
             'name'   => 'Hodor',
             'floors' => [
                 'onyxias_lair' => 'Hodor',
             ],
         ],
-        'pit_of_saron'                             => [
+        'pit_of_saron' => [
             'name'   => 'Hodor',
             'floors' => [
                 'pit_of_saron' => 'Hodor',
             ],
         ],
-        'the_culling_of_stratholme'                => [
+        'the_culling_of_stratholme' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_culling_of_stratholme' => 'Hodor',
                 'stratholme_city'           => 'Hodor',
             ],
         ],
-        'the_eye_of_eternity'                      => [
+        'the_eye_of_eternity' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_eye_of_eternity' => 'Hodor',
             ],
         ],
-        'the_forge_of_souls'                       => [
+        'the_forge_of_souls' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_forge_of_souls' => 'Hodor',
             ],
         ],
-        'the_nexus'                                => [
+        'the_nexus' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_nexus' => 'Hodor',
             ],
         ],
-        'the_obsidian_sanctum'                     => [
+        'the_obsidian_sanctum' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_obsidian_sanctum' => 'Hodor',
             ],
         ],
-        'the_oculus'                               => [
+        'the_oculus' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_oculus'            => 'Hodor',
@@ -417,25 +417,25 @@ return [
                 'band_of_alignment'     => 'Hodor',
             ],
         ],
-        'the_ruby_sanctum'                         => [
+        'the_ruby_sanctum' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_ruby_sanctum' => 'Hodor',
             ],
         ],
-        'the_violet_hold'                          => [
+        'the_violet_hold' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_violet_hold' => 'Hodor',
             ],
         ],
-        'trial_of_the_champion'                    => [
+        'trial_of_the_champion' => [
             'name'   => 'Hodor',
             'floors' => [
                 'trial_of_the_champion' => 'Hodor',
             ],
         ],
-        'ulduar'                                   => [
+        'ulduar' => [
             'name'   => 'Hodor',
             'floors' => [
                 'ulduar'                      => 'Hodor',
@@ -446,7 +446,7 @@ return [
                 'the_minds_eye'               => 'Hodor',
             ],
         ],
-        'utgarde_keep'                             => [
+        'utgarde_keep' => [
             'name'   => 'Hodor',
             'floors' => [
                 'njorndir_preparation' => 'Hodor',
@@ -454,22 +454,22 @@ return [
                 'tyrs_terrace'         => 'Hodor',
             ],
         ],
-        'utgarde_pinnacle'                         => [
+        'utgarde_pinnacle' => [
             'name'   => 'Hodor',
             'floors' => [
                 'lower_pinnacle' => 'Hodor',
                 'upper_pinnacle' => 'Hodor',
             ],
         ],
-        'vault_of_archavon'                        => [
+        'vault_of_archavon' => [
             'name'   => 'Hodor',
             'floors' => [
                 'vault_of_archavon' => 'Hodor',
             ],
         ],
     ],
-    'cata'       => [
-        'dragon_soul'         => [
+    'cata' => [
+        'dragon_soul' => [
             'name'   => 'Hodor',
             'floors' => [
                 'dragon_soul'        => 'Hodor',
@@ -481,7 +481,7 @@ return [
                 'the_maelstrom'      => 'Hodor',
             ],
         ],
-        'firelands'           => [
+        'firelands' => [
             'name'   => 'Hodor',
             'floors' => [
                 'firelands'              => 'Hodor',
@@ -489,7 +489,7 @@ return [
                 'sulfuron_keep'          => 'Hodor',
             ],
         ],
-        'grim_batol'          => [
+        'grim_batol' => [
             'name'   => 'Hodor',
             'floors' => [
                 'grim_batol' => 'Hodor',
@@ -510,15 +510,15 @@ return [
             ],
         ],
     ],
-    'mop'        => [
-        'gate_of_the_setting_sun'    => [
+    'mop' => [
+        'gate_of_the_setting_sun' => [
             'name'   => 'Hodor',
             'floors' => [
                 'gate_of_the_setting_sun' => 'Hodor',
                 'gate_watch_tower'        => 'Hodor',
             ],
         ],
-        'mogu_shan_palace'           => [
+        'mogu_shan_palace' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_crimson_assembly_hall'    => 'Hodor',
@@ -526,21 +526,21 @@ return [
                 'throne_of_ancient_conquerors' => 'Hodor',
             ],
         ],
-        'scarlet_halls_mop'          => [
+        'scarlet_halls_mop' => [
             'name'   => 'Hodor',
             'floors' => [
                 'training_grounds' => 'Hodor',
                 'athenaeum'        => 'Hodor',
             ],
         ],
-        'scarlet_monastery_mop'      => [
+        'scarlet_monastery_mop' => [
             'name'   => 'Hodor',
             'floors' => [
                 'forlorn_cloister' => 'Hodor',
                 'crusaders_chapel' => 'Hodor',
             ],
         ],
-        'scholomance_mop'            => [
+        'scholomance_mop' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_reliquary'        => 'Hodor',
@@ -549,7 +549,7 @@ return [
                 'headmasters_study'    => 'Hodor',
             ],
         ],
-        'shado_pan_monastery'        => [
+        'shado_pan_monastery' => [
             'name'   => 'Hodor',
             'floors' => [
                 'shado_pan_monastery' => 'Hodor',
@@ -558,7 +558,7 @@ return [
                 'sealed_chambers'     => 'Hodor',
             ],
         ],
-        'siege_of_niu_zao_temple'    => [
+        'siege_of_niu_zao_temple' => [
             'name'   => 'Hodor',
             'floors' => [
                 'siege_of_niu_zao_temple' => 'Hodor',
@@ -566,7 +566,7 @@ return [
                 'upper_tree_ring'         => 'Hodor',
             ],
         ],
-        'stormstout_brewery'         => [
+        'stormstout_brewery' => [
             'name'   => 'Hodor',
             'floors' => [
                 'grain_cellar'        => 'Hodor',
@@ -583,20 +583,20 @@ return [
             ],
         ],
     ],
-    'wod'        => [
-        'auchindoun'                => [
+    'wod' => [
+        'auchindoun' => [
             'name'   => 'Hodor',
             'floors' => [
                 'auchindoun' => 'Hodor',
             ],
         ],
-        'bloodmaul_slag_mines'      => [
+        'bloodmaul_slag_mines' => [
             'name'   => 'Hodor',
             'floors' => [
                 'bloodmaul_slag_mines' => 'Hodor',
             ],
         ],
-        'grimrail_depot'            => [
+        'grimrail_depot' => [
             'name'   => 'Hodor',
             'floors' => [
                 'rafters'            => 'Hodor',
@@ -605,7 +605,7 @@ return [
                 'forward_train_cars' => 'Hodor',
             ],
         ],
-        'iron_docks'                => [
+        'iron_docks' => [
             'name'   => 'Hodor',
             'floors' => [
                 'iron_docks' => 'Hodor',
@@ -619,7 +619,7 @@ return [
                 'edge_of_reality'       => 'Hodor',
             ],
         ],
-        'the_everbloom'             => [
+        'the_everbloom' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_everbloom' => 'Hodor',
@@ -627,14 +627,14 @@ return [
             ],
         ],
     ],
-    'legion'     => [
-        'arcway'                      => [
+    'legion' => [
+        'arcway' => [
             'name'   => 'Hodor',
             'floors' => [
                 'arcway' => 'Hodor',
             ],
         ],
-        'black_rook_hold'             => [
+        'black_rook_hold' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_ravenscrypt'          => 'Hodor',
@@ -646,7 +646,7 @@ return [
                 'black_rook_hold'          => 'Hodor',
             ],
         ],
-        'cathedral_of_eternal_night'  => [
+        'cathedral_of_eternal_night' => [
             'name'   => 'Hodor',
             'floors' => [
                 'hall_of_the_moon'     => 'Hodor',
@@ -656,25 +656,25 @@ return [
                 'sacristy_of_elune'    => 'Hodor',
             ],
         ],
-        'court_of_stars'              => [
+        'court_of_stars' => [
             'name'   => 'Hodor',
             'floors' => [
                 'court_of_stars' => 'Hodor',
             ],
         ],
-        'darkheart_thicket'           => [
+        'darkheart_thicket' => [
             'name'   => 'Hodor',
             'floors' => [
                 'darkheart_thicket' => 'Hodor',
             ],
         ],
-        'eye_of_azshara'              => [
+        'eye_of_azshara' => [
             'name'   => 'Hodor',
             'floors' => [
                 'eye_of_azshara' => 'Hodor',
             ],
         ],
-        'halls_of_valor'              => [
+        'halls_of_valor' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_high_gate'              => 'Hodor',
@@ -682,7 +682,7 @@ return [
                 'halls_of_valor'             => 'Hodor',
             ],
         ],
-        'lower_karazhan'              => [
+        'lower_karazhan' => [
             'name'   => 'Hodor',
             'floors' => [
                 'servants_quarters'    => 'Hodor',
@@ -693,7 +693,7 @@ return [
                 'masters_terrace'      => 'Hodor',
             ],
         ],
-        'maw_of_souls'                => [
+        'maw_of_souls' => [
             'name'   => 'Hodor',
             'floors' => [
                 'helmouth_cliffs' => 'Hodor',
@@ -701,7 +701,7 @@ return [
                 'the_naglfar'     => 'Hodor',
             ],
         ],
-        'neltharions_lair'            => [
+        'neltharions_lair' => [
             'name'   => 'Hodor',
             'floors' => [
                 'neltharions_lair' => 'Hodor',
@@ -713,7 +713,7 @@ return [
                 'the_seat_of_the_triumvirate' => 'Hodor',
             ],
         ],
-        'upper_karazhan'              => [
+        'upper_karazhan' => [
             'name'   => 'Hodor',
             'floors' => [
                 'lower_broken_stair' => 'Hodor',
@@ -726,7 +726,7 @@ return [
                 'netherspace'        => 'Hodor',
             ],
         ],
-        'vault_of_the_wardens'        => [
+        'vault_of_the_wardens' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_wardens_court'     => 'Hodor',
@@ -735,34 +735,34 @@ return [
             ],
         ],
     ],
-    'bfa'        => [
-        'atal_dazar'                => [
+    'bfa' => [
+        'atal_dazar' => [
             'name'   => 'Hodor',
             'floors' => [
                 'atal_dazar'       => 'Hodor',
                 'sacrificial_pits' => 'Hodor',
             ],
         ],
-        'freehold'                  => [
+        'freehold' => [
             'name'   => 'Hodor',
             'floors' => [
                 'freehold' => 'Hodor',
             ],
         ],
-        'kings_rest'                => [
+        'kings_rest' => [
             'name'   => 'Hodor',
             'floors' => [
                 'kings_rest' => 'Hodor',
             ],
         ],
-        'mechagon_junkyard'         => [
+        'mechagon_junkyard' => [
             'name'   => 'Hodor',
             'floors' => [
                 'mechagon_island' => 'Hodor',
                 'tunnels'         => 'Hodor',
             ],
         ],
-        'mechagon_workshop'         => [
+        'mechagon_workshop' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_robodrome'               => 'Hodor',
@@ -779,14 +779,14 @@ return [
                 'the_drag'                  => 'Hodor',
             ],
         ],
-        'shrine_of_the_storm'       => [
+        'shrine_of_the_storm' => [
             'name'   => 'Hodor',
             'floors' => [
                 'shrine_of_the_storm' => 'Hodor',
                 'storms_end'          => 'Hodor',
             ],
         ],
-        'siege_of_boralus'          => [
+        'siege_of_boralus' => [
             'name'   => 'Hodor',
             'floors' => [
                 'siege_of_boralus' => 'Hodor',
@@ -798,27 +798,27 @@ return [
                 'stormwind_horrific_vision' => 'Hodor',
             ],
         ],
-        'temple_of_sethraliss'      => [
+        'temple_of_sethraliss' => [
             'name'   => 'Hodor',
             'floors' => [
-                'temple_of_sethraliss'  => 'Hodor',
+                'temple_of_sethraliss' => 'Hodor',
                 'atrium_of_sethraliss' => 'Hodor',
             ],
         ],
-        'the_motherlode'            => [
+        'the_motherlode' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_motherlode' => 'Hodor',
             ],
         ],
-        'the_underrot'              => [
+        'the_underrot' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_underrot'  => 'Hodor',
                 'ruins_descent' => 'Hodor',
             ],
         ],
-        'tol_dagor'                 => [
+        'tol_dagor' => [
             'name'   => 'Hodor',
             'floors' => [
                 'tol_dagor'         => 'Hodor',
@@ -830,7 +830,7 @@ return [
                 'overseers_summit'  => 'Hodor',
             ],
         ],
-        'waycrest_manor'            => [
+        'waycrest_manor' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_grand_foyer' => 'Hodor',
@@ -842,8 +842,8 @@ return [
             ],
         ],
     ],
-    'sl'         => [
-        'de_other_side'              => [
+    'sl' => [
+        'de_other_side' => [
             'name'   => 'Hodor',
             'floors' => [
                 'de_other_side' => 'Hodor',
@@ -852,7 +852,7 @@ return [
                 'ardenweald'    => 'Hodor',
             ],
         ],
-        'halls_of_atonement'         => [
+        'halls_of_atonement' => [
             'name'   => 'Hodor',
             'floors' => [
                 'halls_of_atonement'     => 'Hodor',
@@ -860,27 +860,27 @@ return [
                 'the_sanctuary_of_souls' => 'Hodor',
             ],
         ],
-        'mists_of_tirna_scithe'      => [
+        'mists_of_tirna_scithe' => [
             'name'   => 'Hodor',
             'floors' => [
                 'mists_of_tirna_scithe' => 'Hodor',
             ],
         ],
-        'plaguefall'                 => [
+        'plaguefall' => [
             'name'   => 'Hodor',
             'floors' => [
                 'plaguefall'            => 'Hodor',
                 'the_festering_sanctum' => 'Hodor',
             ],
         ],
-        'sanguine_depths'            => [
+        'sanguine_depths' => [
             'name'   => 'Hodor',
             'floors' => [
                 'depths_of_despair'      => 'Hodor',
                 'amphitheater_of_sorrow' => 'Hodor',
             ],
         ],
-        'spires_of_ascension'        => [
+        'spires_of_ascension' => [
             'name'   => 'Hodor',
             'floors' => [
                 'honors_ascent'      => 'Hodor',
@@ -889,7 +889,7 @@ return [
                 'seat_of_the_archon' => 'Hodor',
             ],
         ],
-        'tazavesh_so_leahs_gambit'   => [
+        'tazavesh_so_leahs_gambit' => [
             'name'   => 'Hodor',
             'floors' => [
                 'stormheim'                => 'Hodor',
@@ -909,7 +909,7 @@ return [
                 'tazavesh_streets_of_wonder' => 'Hodor',
             ],
         ],
-        'the_necrotic_wake'          => [
+        'the_necrotic_wake' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_necrotic_wake' => 'Hodor',
@@ -917,7 +917,7 @@ return [
                 'zolramus'          => 'Hodor',
             ],
         ],
-        'theater_of_pain'            => [
+        'theater_of_pain' => [
             'name'   => 'Hodor',
             'floors' => [
                 'theater_of_pain'         => 'Hodor',
@@ -928,8 +928,8 @@ return [
             ],
         ],
     ],
-    'df'         => [
-        'algeth_ar_academy'                    => [
+    'df' => [
+        'algeth_ar_academy' => [
             'name'   => 'Hodor',
             'floors' => [
                 'algeth_ar_academy'        => 'Hodor',
@@ -937,7 +937,7 @@ return [
                 'the_headteachers_enclave' => 'Hodor',
             ],
         ],
-        'brackenhide_hollow'                   => [
+        'brackenhide_hollow' => [
             'name'   => 'Hodor',
             'floors' => [
                 'brackenhide_hollow' => 'Hodor',
@@ -955,7 +955,7 @@ return [
                 'crossroads_of_fate'      => 'Hodor',
             ],
         ],
-        'dawn_of_the_infinite_murozonds_rise'  => [
+        'dawn_of_the_infinite_murozonds_rise' => [
             'name'   => 'Hodor',
             'floors' => [
                 'murozonds_rise'         => 'Hodor',
@@ -968,7 +968,7 @@ return [
                 'immemorial_battlefield' => 'Hodor',
             ],
         ],
-        'halls_of_infusion'                    => [
+        'halls_of_infusion' => [
             'name'   => 'Hodor',
             'floors' => [
                 'infusers_rotunda'  => 'Hodor',
@@ -976,7 +976,7 @@ return [
                 'halls_of_infusion' => 'Hodor',
             ],
         ],
-        'neltharus'                            => [
+        'neltharus' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_burning_cauldron' => 'Hodor',
@@ -984,7 +984,7 @@ return [
                 'neltharus'            => 'Hodor',
             ],
         ],
-        'ruby_life_pools'                      => [
+        'ruby_life_pools' => [
             'name'   => 'Hodor',
             'floors' => [
                 'infusion_chambers' => 'Hodor',
@@ -992,7 +992,7 @@ return [
                 'ruby_life_pools'   => 'Hodor',
             ],
         ],
-        'the_azure_vault'                      => [
+        'the_azure_vault' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_arcane_conservatory' => 'Hodor',
@@ -1003,13 +1003,13 @@ return [
                 'the_azure_vault'         => 'Hodor',
             ],
         ],
-        'the_nokhud_offensive'                 => [
+        'the_nokhud_offensive' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_nokhud_offensive' => 'Hodor',
             ],
         ],
-        'uldaman_legacy_of_tyr'                => [
+        'uldaman_legacy_of_tyr' => [
             'name'   => 'Hodor',
             'floors' => [
                 'hall_of_the_keepers'   => 'Hodor',
@@ -1018,8 +1018,8 @@ return [
             ],
         ],
     ],
-    'tww'        => [
-        'ara_kara_city_of_echoes'    => [
+    'tww' => [
+        'ara_kara_city_of_echoes' => [
             'name'   => 'Hodor',
             'floors' => [
                 'echoing_overlook'        => 'Hodor',
@@ -1027,33 +1027,33 @@ return [
                 'ara_kara_city_of_echoes' => 'Hodor',
             ],
         ],
-        'cinderbrew_meadery'         => [
+        'cinderbrew_meadery' => [
             'name'   => 'Hodor',
             'floors' => [
                 'cinderbrew_meadery' => 'Hodor',
             ],
         ],
-        'city_of_threads'            => [
+        'city_of_threads' => [
             'name'   => 'Hodor',
             'floors' => [
                 'city_of_threads'    => 'Hodor',
                 'the_transformatory' => 'Hodor',
             ],
         ],
-        'darkflame_cleft'            => [
+        'darkflame_cleft' => [
             'name'   => 'Hodor',
             'floors' => [
                 'darkflame_cleft' => 'Hodor',
                 'shadow_realm'    => 'Hodor',
             ],
         ],
-        'eco_dome_al_dani'           => [
+        'eco_dome_al_dani' => [
             'name'   => 'Hodor',
             'floors' => [
                 'eco_dome_al_dani' => 'Hodor',
             ],
         ],
-        'operation_floodgate'        => [
+        'operation_floodgate' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_waterworks'      => 'Hodor',
@@ -1068,13 +1068,13 @@ return [
                 'priory_of_the_sacred_flame' => 'Hodor',
             ],
         ],
-        'the_dawnbreaker'            => [
+        'the_dawnbreaker' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_dawnbreaker' => 'Hodor',
             ],
         ],
-        'the_rookery'                => [
+        'the_rookery' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_rookery_landing' => 'Hodor',
@@ -1086,7 +1086,7 @@ return [
                 'the_rookery'         => 'Hodor',
             ],
         ],
-        'the_stonevault'             => [
+        'the_stonevault' => [
             'name'   => 'Hodor',
             'floors' => [
                 'the_stonevault' => 'Hodor',

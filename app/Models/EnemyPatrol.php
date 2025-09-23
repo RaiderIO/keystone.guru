@@ -13,15 +13,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int            $id
- * @property int            $mapping_version_id
- * @property int            $floor_id
- * @property int            $polyline_id
- * @property int|null       $mdt_polyline_id The polyline that represents this patrol in MDT
- * @property int|null       $mdt_npc_id Keeps track of which enemy this patrol was assigned to in MDT
- * @property int|null       $mdt_id
- * @property string         $teeming
- * @property string         $faction
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
+ * @property int      $polyline_id
+ * @property int|null $mdt_polyline_id    The polyline that represents this patrol in MDT
+ * @property int|null $mdt_npc_id         Keeps track of which enemy this patrol was assigned to in MDT
+ * @property int|null $mdt_id
+ * @property string   $teeming
+ * @property string   $faction
  *
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
@@ -98,7 +98,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,
-        ?MappingModelInterface $newParent = null
+        ?MappingModelInterface $newParent = null,
     ): EnemyPatrol {
         /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
         $clonedEnemyPatrol                     = clone $this;

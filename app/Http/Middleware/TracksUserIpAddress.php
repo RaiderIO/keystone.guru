@@ -37,7 +37,7 @@ class TracksUserIpAddress
                 [
                     'count' => DB::raw('count + 1'),
                     'updated_at',
-                ] // Update these columns if a conflict occurs
+                ], // Update these columns if a conflict occurs
             );
         }
 

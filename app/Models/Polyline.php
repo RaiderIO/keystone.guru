@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string      $color
  * @property string|null $color_animated
  * @property int         $weight
- * @property string      $vertices_json JSON encoded vertices
+ * @property string      $vertices_json  JSON encoded vertices
  *
- * @property Model       $model
+ * @property Model $model
  *
  * @mixin Eloquent
  */
@@ -57,7 +57,7 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
 
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,
-        ?MappingModelInterface $newParent = null
+        ?MappingModelInterface $newParent = null,
     ): Polyline {
         /** @var Polyline|MappingModelInterface $clone */
         $clone           = clone $this;

@@ -6,13 +6,12 @@ use App\Logging\StructuredLogging;
 
 class ProcessRouteFloorThumbnailLogging extends StructuredLogging implements ProcessRouteFloorThumbnailLoggingInterface
 {
-
     public function handleStart(
         string $publicKey,
         int    $dungeonRouteId,
         int    $mappingVersionId,
         int    $floorIndex,
-        int    $attempts
+        int    $attempts,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
     }

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string     $name
  * @property Carbon     $epoch_start
  * @property string     $timezone
- * @property int        $reset_day_offset ISO-8601 numeric representation of the day of the week
+ * @property int        $reset_day_offset   ISO-8601 numeric representation of the day of the week
  * @property string     $reset_hours_offset
  * @property Collection $users
  *
@@ -94,15 +94,16 @@ class GameServerRegion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_region',
-            static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first()
+        return $cacheService->remember(
+            'default_region',
+            static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first(),
         );
     }
 
     /**
      * Get the leaderboard period based on the region and a given date.
      *
-     * @param Carbon $dateTime
+     * @param  Carbon $dateTime
      * @return int
      */
     public function getKeystoneLeaderboardPeriod(Carbon $dateTime): int
@@ -115,7 +116,7 @@ class GameServerRegion extends CacheModel
     /**
      * Get the epoch date for a region based on the given date.
      *
-     * @param Carbon $dateTime
+     * @param  Carbon      $dateTime
      * @return Carbon|null
      */
     public function getRegionEpochByDate(Carbon $dateTime): ?Carbon

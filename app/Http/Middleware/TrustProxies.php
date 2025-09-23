@@ -21,15 +21,14 @@ class TrustProxies extends Middleware
      *
      * @var int
      */
-    protected $headers =
-        Request::HEADER_X_FORWARDED_FOR |
+    protected $headers = Request::HEADER_X_FORWARDED_FOR |
         Request::HEADER_X_FORWARDED_HOST |
         Request::HEADER_X_FORWARDED_PORT |
         Request::HEADER_X_FORWARDED_PROTO |
         Request::HEADER_X_FORWARDED_AWS_ELB;
 
     public function __construct(
-        private readonly CloudflareServiceInterface $cloudflareService
+        private readonly CloudflareServiceInterface $cloudflareService,
     ) {
     }
 
@@ -42,7 +41,7 @@ class TrustProxies extends Middleware
             // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
             Request::setTrustedProxies(
                 $this->proxies,
-                $this->headers
+                $this->headers,
             );
         }
 

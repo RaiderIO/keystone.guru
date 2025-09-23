@@ -2,43 +2,43 @@
 
 return [
 
-    'classic'  => [
+    'classic' => [
         'name' => 'Hodor',
     ],
-    'tbc'      => [
+    'tbc' => [
         'name' => 'Hodor',
     ],
-    'wotlk'    => [
+    'wotlk' => [
         'name' => 'Hodor',
     ],
-    'cata'     => [
+    'cata' => [
         'name' => 'Hodor',
     ],
-    'mop'      => [
+    'mop' => [
         'name' => 'Hodor',
     ],
-    'wod'      => [
+    'wod' => [
         'name' => 'Hodor',
     ],
-    'legion'   => [
+    'legion' => [
         'name' => 'Hodor',
     ],
-    'bfa'      => [
+    'bfa' => [
         'name' => 'Hodor',
     ],
-    'sl'       => [
+    'sl' => [
         'name' => 'Hodor',
     ],
-    'df'       => [
+    'df' => [
         'name' => 'Hodor',
     ],
-    'tww'      => [
+    'tww' => [
         'name' => 'Hodor',
     ],
     'midnight' => [
         'name' => 'Hodor',
     ],
-    'tlt'      => [
+    'tlt' => [
         'name' => 'Hodor',
     ],
 

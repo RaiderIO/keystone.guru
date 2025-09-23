@@ -19,30 +19,30 @@ return [
         'next'     => 'Nächste',
         'previous' => 'Vorherige',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => ': aktivieren, um Spalte aufsteigend zu sortieren',
         'sortDescending' => ': aktivieren, um Spalte absteigend zu sortieren',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => 'Abbrechen',
         'fill'           => 'Alle Zellen mit <i>%d<i> füllen</i></i>',
         'fillHorizontal' => 'Alle horizontalen Zellen füllen',
         'fillVertical'   => 'Alle vertikalen Zellen füllen',
     ],
-    'buttons'        => [
-        'collection'      => 'Aktionen <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'          => 'Spaltensichtbarkeit',
-        'colvisRestore'   => 'Sichtbarkeit wiederherstellen',
-        'copy'            => 'Kopieren',
-        'copyKeys'        => 'Taste <i>STRG&lt;\/i&gt; oder <i>⌘&lt;\/i&gt; + <i>C&lt;\/i&gt; drücken um die Tabelle<br />in den Zwischenspeicher zu kopieren.<br /><br />Um den Vorgang abzubrechen, Nachricht anklicken oder Escape-Taste drücken.</i></i></i>',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => 'Aktionen <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'        => 'Spaltensichtbarkeit',
+        'colvisRestore' => 'Sichtbarkeit wiederherstellen',
+        'copy'          => 'Kopieren',
+        'copyKeys'      => 'Taste <i>STRG&lt;\/i&gt; oder <i>⌘&lt;\/i&gt; + <i>C&lt;\/i&gt; drücken um die Tabelle<br />in den Zwischenspeicher zu kopieren.<br /><br />Um den Vorgang abzubrechen, Nachricht anklicken oder Escape-Taste drücken.</i></i></i>',
+        'copySuccess'   => [
             1   => '1 Zeile kopiert',
             '_' => '%d Zeilen kopiert',
         ],
-        'copyTitle'       => 'In Zwischenablage kopieren',
-        'csv'             => 'CSV',
-        'excel'           => 'Excel',
-        'pageLength'      => [
+        'copyTitle'  => 'In Zwischenablage kopieren',
+        'csv'        => 'CSV',
+        'excel'      => 'Excel',
+        'pageLength' => [
             -1  => 'Alle Zeilen anzeigen',
             '_' => 'Zeige %d Zeilen',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => 'Alle Ansichten entfernen',
         'createState'     => 'Ansicht erstellen',
     ],
-    'searchBuilder'  => [
-        'add'         => 'Bedingung hinzufügen',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => 'Bedingung hinzufügen',
+        'button' => [
             0   => 'Such-Baukasten',
             '_' => 'Such-Baukasten (%d)',
         ],
-        'clearAll'    => 'Alle entfernen',
-        'condition'   => 'Bedingung',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => 'Alle entfernen',
+        'condition'  => 'Bedingung',
+        'conditions' => [
+            'date' => [
                 'after'      => 'Nach',
                 'before'     => 'Vor',
                 'between'    => 'Zwischen',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => 'startet nicht mit',
                 'notEndsWith'   => 'endet nicht mit',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => 'aber nicht',
                 'notEmpty' => 'ist nicht leer',
                 'not'      => 'ist ungleich',
@@ -118,11 +118,11 @@ return [
             0   => 'Such-Baukasten',
             '_' => 'Such-Baukasten (%d)',
         ],
-        'value'       => 'Wert',
+        'value' => 'Wert',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => 'Leeren',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => 'Leeren',
+        'collapse'     => [
             0   => 'Suchmasken',
             '_' => 'Suchmasken (%d)',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => 'zeige Alle',
         'collapseMessage' => 'Alle einklappen',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => '1 Zelle ausgewählt',
             '_' => '%d Zellen ausgewählt',
         ],
@@ -143,12 +143,12 @@ return [
             1   => '1 Spalte ausgewählt',
             '_' => '%d Spalten ausgewählt',
         ],
-        'rows'    => [
+        'rows' => [
             1   => '1 Zeile ausgewählt',
             '_' => '%d Zeilen ausgewählt',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => 'Vorher',
         'next'     => 'Nachher',
         'hours'    => 'Stunden',
@@ -168,7 +168,7 @@ return [
             5 => 'Freitag',
             6 => 'Samstag',
         ],
-        'months'   => [
+        'months' => [
             0  => 'Januar',
             1  => 'Februar',
             2  => 'März',
@@ -183,14 +183,14 @@ return [
             11 => 'Dezember',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => 'Schließen',
         'create' => [
             'button' => 'Neu',
             'title'  => 'Neuen Eintrag erstellen',
             'submit' => 'Erstellen',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => 'Bearbeiten',
             'title'  => 'Eintrag bearbeiten',
             'submit' => 'Bearbeiten',
@@ -204,17 +204,17 @@ return [
                 1   => 'Soll diese Zeile gelöscht werden?',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => 'Ein Systemfehler ist aufgetreten',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => 'Mehrere Werte',
             'info'    => 'Die ausgewählten Elemente enthalten mehrere Werte für dieses Feld. Um alle Elemente für dieses Feld zu bearbeiten und auf denselben Wert zu setzen, hier klicken oder tippen, andernfalls behalten diese ihre individuellen Werte bei.',
             'restore' => 'Änderungen zurücksetzen',
             'noMulti' => 'Dieses Feld kann nur einzeln bearbeitet werden, nicht als Teil einer Mengen-Änderung.',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => 'Ansicht umbenennen',
         'renameLabel'    => 'Neuer Name für %s:',
         'renameButton'   => 'Umbenennen',
@@ -240,7 +240,7 @@ return [
                 'visible' => 'Spalten Sichtbarkeit',
                 'search'  => 'Spalten Suche',
             ],
-            'button'        => 'Erstellen',
+            'button' => 'Erstellen',
         ],
     ],
 

@@ -37,8 +37,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     private DungeonRoute $dungeonRoute;
 
     public function __construct(
-        private readonly CacheServiceInterface $cacheService,
-        private readonly CoordinatesServiceInterface $coordinatesService
+        private readonly CacheServiceInterface       $cacheService,
+        private readonly CoordinatesServiceInterface $coordinatesService,
     ) {
     }
 
@@ -54,7 +54,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
-                    $latLng
+                    $latLng,
                 );
             }
 
@@ -73,7 +73,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         }
 
         $lines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->merge(
-            $this->dungeonRoute->paths()->with(['floor'])->get()
+            $this->dungeonRoute->paths()->with(['floor'])->get(),
         );
 
         foreach ($lines as $line) {
@@ -103,7 +103,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                     $vertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                         $this->dungeonRoute->mappingVersion,
-                        $vertexLatLng
+                        $vertexLatLng,
                     );
 
                     // The floor of the line should be updated too
@@ -143,7 +143,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
-                    $latLng
+                    $latLng,
                 );
             }
 
@@ -206,14 +206,17 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!in_array($enemy->npc->classification_id, [
+                    if (!in_array(
+                        $enemy->npc->classification_id,
+                        [
                             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
                             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                        ]
+                        ],
                     )) {
-                        $warnings->push(new ImportWarning(sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
+                        $warnings->push(new ImportWarning(
+                            sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
                             sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), __($enemy->npc->name), $enemy->id, $enemy->getMdtNpcId()),
-                            ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
+                            ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')],
                         ));
                     }
 
@@ -232,7 +235,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
             if ($killZoneEnemies->count() !== 0 && $enemiesAdded === 0) {
-                $warnings->push(new ImportWarning(sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
+                $warnings->push(new ImportWarning(
+                    sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
                     __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'),
                 ));
 
@@ -254,8 +258,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
      */
     public function getEncodedString(Collection $warnings, bool $useCache = true): string
     {
-        return $this->rememberLocal(sprintf('mdt_export_string:%s_%s', $this->dungeonRoute->id, $this->dungeonRoute->updated_at->timestamp),
-            config('keystoneguru.cache.mdt_export_strings.ttl'), function () use ($warnings) {
+        return $this->rememberLocal(
+            sprintf('mdt_export_string:%s_%s', $this->dungeonRoute->id, $this->dungeonRoute->updated_at->timestamp),
+            config('keystoneguru.cache.mdt_export_strings.ttl'),
+            function () use ($warnings) {
                 // #2945 I just had a weird issue where copying an MDT string from one route, would actually generate a string
                 // based on another route. The route title was extracted correctly, but the pulls/map icons were from
                 // another route entirely. Clearing the caches solved this issue. I'm disabling the model cache for this operation
@@ -263,35 +269,35 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 return app('model-cache')->runDisabled(function () use ($warnings) {
                     //        $lua = $this->_getLua();
 
-                    $affixes = $this->dungeonRoute->affixes;
+                    $affixes = $this->dungeonRoute->affixes()->with(['season'])->get();
 
                     $mdtObject = [
                         //
-                        'objects'    => $this->extractObjects($warnings),
+                        'objects' => $this->extractObjects($warnings),
                         // M+ level
                         'difficulty' => $this->dungeonRoute->level_min,
                         'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() ? 1 :
                             Conversion::convertAffixGroupToWeek($affixes->first()),
-                        'value'      => [
+                        'value' => [
                             'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
                             'selection'         => [],
                             'currentPull'       => 1,
                             'teeming'           => $this->dungeonRoute->teeming,
                             // Legacy - we don't do anything with it
-                            'riftOffsets'       => [
+                            'riftOffsets' => [
 
                             ],
-                            'pulls'             => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
-                            'currentSublevel'   => 1,
+                            'pulls'           => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
+                            'currentSublevel' => 1,
                         ],
-                        'text'       => $this->dungeonRoute->title,
-                        'mdi'        => [
+                        'text' => $this->dungeonRoute->title,
+                        'mdi'  => [
                             'freeholdJoined' => false,
                             'freehold'       => 1,
                             'beguiling'      => 1,
                         ],
                         // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
-                        'uid'        => $this->dungeonRoute->public_key . 'xxKG',
+                        'uid' => $this->dungeonRoute->public_key . 'xxKG',
                     ];
 
                     try {
@@ -304,10 +310,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                             // If stripping ascii characters worked in changing the title somehow
                             if ($asciiTitle !== $this->dungeonRoute->title) {
                                 $warnings->push(
-                                    new ImportWarning(__('services.mdt.io.export_string.category.title'),
+                                    new ImportWarning(
+                                        __('services.mdt.io.export_string.category.title'),
                                         __('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
-                                        ['details' => sprintf(__('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)]
-                                    )
+                                        ['details' => sprintf(__('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)],
+                                    ),
                                 );
                                 $this->dungeonRoute->title = $asciiTitle;
 
@@ -319,10 +326,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                                     $asciiComment = preg_replace('/[[:^print:]]/', '', $mapIcon->comment ?? '');
                                     if ($asciiComment !== $mapIcon->comment) {
                                         $warnings->push(
-                                            new ImportWarning(__('services.mdt.io.export_string.category.map_icon'),
+                                            new ImportWarning(
+                                                __('services.mdt.io.export_string.category.map_icon'),
                                                 __('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
-                                                ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapIcon->comment)]
-                                            )
+                                                ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapIcon->comment)],
+                                            ),
                                         );
                                         $mapIcon->comment = $asciiComment;
 
@@ -342,13 +350,15 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                         }
                     }
                 });
-            }, $useCache);
+            },
+            $useCache,
+        );
     }
 
     /**
      * Sets a dungeon route to be staged for encoding to an encoded string.
      *
-     * @param  $dungeonRoute  DungeonRoute
+     * @param        $dungeonRoute DungeonRoute
      * @return $this Returns self to allow for chaining.
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self

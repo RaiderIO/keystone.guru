@@ -25,7 +25,7 @@ class RatingColumnHandler extends DatatablesColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         //        $rating = $columnData['search']['value'] ?? null;
         //        if (!empty($rating)) {

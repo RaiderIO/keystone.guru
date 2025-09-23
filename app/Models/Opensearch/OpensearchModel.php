@@ -17,7 +17,6 @@ abstract class OpensearchModel extends Model implements OpenSearchable
         parent::__construct($attributes);
     }
 
-
     public function setAttributes(array $attributes): void
     {
         foreach ($attributes as $key => $value) {
@@ -31,7 +30,7 @@ abstract class OpensearchModel extends Model implements OpenSearchable
 
         foreach ($rows['hits']['hits'] as $hit) {
             $result->push(
-                (new static())->openSearchArrayToModel($hit['_source'])
+                (new static())->openSearchArrayToModel($hit['_source']),
             );
         }
 

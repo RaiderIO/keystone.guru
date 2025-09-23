@@ -2,7 +2,7 @@
 
 return [
 
-    'category'            => [
+    'category' => [
         'class' => 'Hodor',
         'item'  => 'Hodor',
         'misc'  => 'Hodor',

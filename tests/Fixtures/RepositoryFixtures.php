@@ -2,7 +2,6 @@
 
 namespace Tests\Fixtures;
 
-
 use App\Repositories\Interfaces\AffixGroup\AffixGroupBaseRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupCouplingRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierPullRepositoryInterface;
@@ -105,7 +104,7 @@ class RepositoryFixtures
 {
     public static function getAffixGroupBaseRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|AffixGroupBaseRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(AffixGroupBaseRepositoryInterface::class);
 
@@ -118,7 +117,7 @@ class RepositoryFixtures
 
     public static function getAffixGroupCouplingRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|AffixGroupCouplingRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(AffixGroupCouplingRepositoryInterface::class);
 
@@ -132,7 +131,7 @@ class RepositoryFixtures
     // Add similar methods for all other repositories
     public static function getAffixGroupEaseTierPullRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|AffixGroupEaseTierPullRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(AffixGroupEaseTierPullRepositoryInterface::class);
 
@@ -145,7 +144,7 @@ class RepositoryFixtures
 
     public static function getAffixGroupEaseTierRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|AffixGroupEaseTierRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(AffixGroupEaseTierRepositoryInterface::class);
 
@@ -158,7 +157,7 @@ class RepositoryFixtures
 
     public static function getAffixGroupRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|AffixGroupRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(AffixGroupRepositoryInterface::class);
 
@@ -171,7 +170,7 @@ class RepositoryFixtures
 
     public static function getChallengeModeRunDataRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ChallengeModeRunDataRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ChallengeModeRunDataRepositoryInterface::class);
 
@@ -184,7 +183,7 @@ class RepositoryFixtures
 
     public static function getChallengeModeRunRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ChallengeModeRunRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ChallengeModeRunRepositoryInterface::class);
 
@@ -197,7 +196,7 @@ class RepositoryFixtures
 
     public static function getCombatLogEventRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CombatLogEventRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(CombatLogEventRepositoryInterface::class);
 
@@ -210,7 +209,7 @@ class RepositoryFixtures
 
     public static function getEnemyPositionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|EnemyPositionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(EnemyPositionRepositoryInterface::class);
 
@@ -223,7 +222,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteAffixGroupRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteAffixGroupRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteAffixGroupRepositoryInterface::class);
 
@@ -236,7 +235,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteAttributeRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteAttributeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteAttributeRepositoryInterface::class);
 
@@ -249,7 +248,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteEnemyRaidMarkerRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteEnemyRaidMarkerRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteEnemyRaidMarkerRepositoryInterface::class);
 
@@ -262,7 +261,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteFavoriteRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteFavoriteRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteFavoriteRepositoryInterface::class);
 
@@ -275,7 +274,7 @@ class RepositoryFixtures
 
     public static function getDungeonRoutePlayerClassRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRoutePlayerClassRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRoutePlayerClassRepositoryInterface::class);
 
@@ -288,7 +287,7 @@ class RepositoryFixtures
 
     public static function getDungeonRoutePlayerRaceRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRoutePlayerRaceRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRoutePlayerRaceRepositoryInterface::class);
 
@@ -301,7 +300,7 @@ class RepositoryFixtures
 
     public static function getDungeonRoutePlayerSpecializationRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRoutePlayerSpecializationRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRoutePlayerSpecializationRepositoryInterface::class);
 
@@ -314,7 +313,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteRatingRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteRatingRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteRatingRepositoryInterface::class);
 
@@ -327,7 +326,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteRepositoryInterface::class);
 
@@ -340,7 +339,7 @@ class RepositoryFixtures
 
     public static function getDungeonRouteThumbnailJobRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRouteThumbnailJobRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRouteThumbnailJobRepositoryInterface::class);
 
@@ -353,7 +352,7 @@ class RepositoryFixtures
 
     public static function getOverpulledEnemyRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|OverpulledEnemyRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(OverpulledEnemyRepositoryInterface::class);
 
@@ -366,7 +365,7 @@ class RepositoryFixtures
 
     public static function getPridefulEnemyRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PridefulEnemyRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PridefulEnemyRepositoryInterface::class);
 
@@ -379,7 +378,7 @@ class RepositoryFixtures
 
     public static function getFloorCouplingRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|FloorCouplingRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(FloorCouplingRepositoryInterface::class);
 
@@ -392,7 +391,7 @@ class RepositoryFixtures
 
     public static function getFloorRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|FloorRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(FloorRepositoryInterface::class);
 
@@ -405,7 +404,7 @@ class RepositoryFixtures
 
     public static function getFloorUnionAreaRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|FloorUnionAreaRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(FloorUnionAreaRepositoryInterface::class);
 
@@ -418,7 +417,7 @@ class RepositoryFixtures
 
     public static function getFloorUnionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|FloorUnionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(FloorUnionRepositoryInterface::class);
 
@@ -431,7 +430,7 @@ class RepositoryFixtures
 
     public static function getGameVersionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|GameVersionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(GameVersionRepositoryInterface::class);
 
@@ -444,7 +443,7 @@ class RepositoryFixtures
 
     public static function getKillZoneEnemyRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|KillZoneEnemyRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(KillZoneEnemyRepositoryInterface::class);
 
@@ -457,7 +456,7 @@ class RepositoryFixtures
 
     public static function getKillZoneRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|KillZoneRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(KillZoneRepositoryInterface::class);
 
@@ -470,7 +469,7 @@ class RepositoryFixtures
 
     public static function getKillZoneSpellRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|KillZoneSpellRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(KillZoneSpellRepositoryInterface::class);
 
@@ -483,7 +482,7 @@ class RepositoryFixtures
 
     public static function getPermissionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PermissionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PermissionRepositoryInterface::class);
 
@@ -496,7 +495,7 @@ class RepositoryFixtures
 
     public static function getRoleRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|RoleRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(RoleRepositoryInterface::class);
 
@@ -509,7 +508,7 @@ class RepositoryFixtures
 
     public static function getTeamRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|TeamRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(TeamRepositoryInterface::class);
 
@@ -522,7 +521,7 @@ class RepositoryFixtures
 
     public static function getMappingChangeLogRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MappingChangeLogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MappingChangeLogRepositoryInterface::class);
 
@@ -535,7 +534,7 @@ class RepositoryFixtures
 
     public static function getMappingCommitLogRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MappingCommitLogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MappingCommitLogRepositoryInterface::class);
 
@@ -548,7 +547,7 @@ class RepositoryFixtures
 
     public static function getMappingVersionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MappingVersionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MappingVersionRepositoryInterface::class);
 
@@ -561,7 +560,7 @@ class RepositoryFixtures
 
     public static function getMetricAggregationRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MetricAggregationRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MetricAggregationRepositoryInterface::class);
 
@@ -574,7 +573,7 @@ class RepositoryFixtures
 
     public static function getMetricRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MetricRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MetricRepositoryInterface::class);
 
@@ -587,7 +586,7 @@ class RepositoryFixtures
 
     public static function getNpcEnemyForcesRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcEnemyForcesRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcEnemyForcesRepositoryInterface::class);
 
@@ -600,7 +599,7 @@ class RepositoryFixtures
 
     public static function getOpensearchModelRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|OpensearchModelRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(OpensearchModelRepositoryInterface::class);
 
@@ -613,7 +612,7 @@ class RepositoryFixtures
 
     public static function getPatreonAdFreeGiveawayRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PatreonAdFreeGiveawayRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PatreonAdFreeGiveawayRepositoryInterface::class);
 
@@ -626,7 +625,7 @@ class RepositoryFixtures
 
     public static function getPatreonBenefitRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PatreonBenefitRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PatreonBenefitRepositoryInterface::class);
 
@@ -639,7 +638,7 @@ class RepositoryFixtures
 
     public static function getPatreonUserBenefitRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PatreonUserBenefitRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PatreonUserBenefitRepositoryInterface::class);
 
@@ -652,7 +651,7 @@ class RepositoryFixtures
 
     public static function getPatreonUserLinkRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PatreonUserLinkRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PatreonUserLinkRepositoryInterface::class);
 
@@ -665,7 +664,7 @@ class RepositoryFixtures
 
     public static function getSimulationCraftRaidEventsOptionsRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|SimulationCraftRaidEventsOptionsRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(SimulationCraftRaidEventsOptionsRepositoryInterface::class);
 
@@ -678,7 +677,7 @@ class RepositoryFixtures
 
     public static function getDungeonSpeedrunRequiredNpcRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonSpeedrunRequiredNpcRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonSpeedrunRequiredNpcRepositoryInterface::class);
 
@@ -691,7 +690,7 @@ class RepositoryFixtures
 
     public static function getTagCategoryRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|TagCategoryRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(TagCategoryRepositoryInterface::class);
 
@@ -704,7 +703,7 @@ class RepositoryFixtures
 
     public static function getTagRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|TagRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(TagRepositoryInterface::class);
 
@@ -717,7 +716,7 @@ class RepositoryFixtures
 
     public static function getTimewalkingEventRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|TimewalkingEventRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(TimewalkingEventRepositoryInterface::class);
 
@@ -730,7 +729,7 @@ class RepositoryFixtures
 
     public static function getAffixRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|AffixRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(AffixRepositoryInterface::class);
 
@@ -743,7 +742,7 @@ class RepositoryFixtures
 
     public static function getBrushlineRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|BrushlineRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(BrushlineRepositoryInterface::class);
 
@@ -756,7 +755,7 @@ class RepositoryFixtures
 
     public static function getCacheModelRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CacheModelRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(CacheModelRepositoryInterface::class);
 
@@ -769,7 +768,7 @@ class RepositoryFixtures
 
     public static function getCharacterClassRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CharacterClassRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(CharacterClassRepositoryInterface::class);
 
@@ -782,7 +781,7 @@ class RepositoryFixtures
 
     public static function getCharacterRaceRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CharacterRaceRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(CharacterRaceRepositoryInterface::class);
 
@@ -795,7 +794,7 @@ class RepositoryFixtures
 
     public static function getNpcRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcRepositoryInterface::class);
 
@@ -808,7 +807,7 @@ class RepositoryFixtures
 
     public static function getDungeonRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonRepositoryInterface::class);
 
@@ -821,7 +820,7 @@ class RepositoryFixtures
 
     public static function getEnemyRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|EnemyRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(EnemyRepositoryInterface::class);
 
@@ -834,7 +833,7 @@ class RepositoryFixtures
 
     public static function getMapIconRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MapIconRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MapIconRepositoryInterface::class);
 
@@ -847,7 +846,7 @@ class RepositoryFixtures
 
     public static function getMapIconTypeRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MapIconTypeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MapIconTypeRepositoryInterface::class);
 
@@ -860,7 +859,7 @@ class RepositoryFixtures
 
     public static function getPathRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PathRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PathRepositoryInterface::class);
 
@@ -873,7 +872,7 @@ class RepositoryFixtures
 
     public static function getPublishedStateRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PublishedStateRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PublishedStateRepositoryInterface::class);
 
@@ -886,7 +885,7 @@ class RepositoryFixtures
 
     public static function getRaidMarkerRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|RaidMarkerRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(RaidMarkerRepositoryInterface::class);
 
@@ -899,7 +898,7 @@ class RepositoryFixtures
 
     public static function getSpellRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|SpellRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(SpellRepositoryInterface::class);
 
@@ -912,7 +911,7 @@ class RepositoryFixtures
 
     public static function getCharacterClassSpecializationRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CharacterClassSpecializationRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(CharacterClassSpecializationRepositoryInterface::class);
 
@@ -925,7 +924,7 @@ class RepositoryFixtures
 
     public static function getCharacterRaceClassCouplingRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CharacterRaceClassCouplingRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(CharacterRaceClassCouplingRepositoryInterface::class);
 
@@ -938,7 +937,7 @@ class RepositoryFixtures
 
     public static function getDungeonFloorSwitchMarkerRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|DungeonFloorSwitchMarkerRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(DungeonFloorSwitchMarkerRepositoryInterface::class);
 
@@ -951,7 +950,7 @@ class RepositoryFixtures
 
     public static function getEnemyActiveAuraRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|EnemyActiveAuraRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(EnemyActiveAuraRepositoryInterface::class);
 
@@ -964,7 +963,7 @@ class RepositoryFixtures
 
     public static function getEnemyPackRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|EnemyPackRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(EnemyPackRepositoryInterface::class);
 
@@ -977,7 +976,7 @@ class RepositoryFixtures
 
     public static function getEnemyPatrolRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|EnemyPatrolRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(EnemyPatrolRepositoryInterface::class);
 
@@ -990,7 +989,7 @@ class RepositoryFixtures
 
     public static function getExpansionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ExpansionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ExpansionRepositoryInterface::class);
 
@@ -1003,7 +1002,7 @@ class RepositoryFixtures
 
     public static function getFactionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|FactionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(FactionRepositoryInterface::class);
 
@@ -1016,7 +1015,7 @@ class RepositoryFixtures
 
     public static function getFileRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|FileRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(FileRepositoryInterface::class);
 
@@ -1029,7 +1028,7 @@ class RepositoryFixtures
 
     public static function getGameIconRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|GameIconRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(GameIconRepositoryInterface::class);
 
@@ -1042,7 +1041,7 @@ class RepositoryFixtures
 
     public static function getGameServerRegionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|GameServerRegionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(GameServerRegionRepositoryInterface::class);
 
@@ -1055,7 +1054,7 @@ class RepositoryFixtures
 
     public static function getLiveSessionRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|LiveSessionRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(LiveSessionRepositoryInterface::class);
 
@@ -1068,7 +1067,7 @@ class RepositoryFixtures
 
     public static function getMapObjectToAwakenedObeliskLinkRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MapObjectToAwakenedObeliskLinkRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MapObjectToAwakenedObeliskLinkRepositoryInterface::class);
 
@@ -1081,7 +1080,7 @@ class RepositoryFixtures
 
     public static function getMDTImportRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MDTImportRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MDTImportRepositoryInterface::class);
 
@@ -1094,7 +1093,7 @@ class RepositoryFixtures
 
     public static function getMountableAreaRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|MountableAreaRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(MountableAreaRepositoryInterface::class);
 
@@ -1107,7 +1106,7 @@ class RepositoryFixtures
 
     public static function getNpcBolsteringWhitelistRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcBolsteringWhitelistRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcBolsteringWhitelistRepositoryInterface::class);
 
@@ -1120,7 +1119,7 @@ class RepositoryFixtures
 
     public static function getNpcClassificationRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcClassificationRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcClassificationRepositoryInterface::class);
 
@@ -1133,7 +1132,7 @@ class RepositoryFixtures
 
     public static function getNpcClassRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcClassRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcClassRepositoryInterface::class);
 
@@ -1146,7 +1145,7 @@ class RepositoryFixtures
 
     public static function getNpcSpellRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcSpellRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcSpellRepositoryInterface::class);
 
@@ -1159,7 +1158,7 @@ class RepositoryFixtures
 
     public static function getNpcTypeRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|NpcTypeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(NpcTypeRepositoryInterface::class);
 
@@ -1172,7 +1171,7 @@ class RepositoryFixtures
 
     public static function getPageViewRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PageViewRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PageViewRepositoryInterface::class);
 
@@ -1185,7 +1184,7 @@ class RepositoryFixtures
 
     public static function getPolylineRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|PolylineRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(PolylineRepositoryInterface::class);
 
@@ -1198,7 +1197,7 @@ class RepositoryFixtures
 
     public static function getReleaseChangelogCategoryRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ReleaseChangelogCategoryRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogCategoryRepositoryInterface::class);
 
@@ -1209,10 +1208,9 @@ class RepositoryFixtures
         return $mockBuilder->getMock();
     }
 
-
     public static function getReleaseChangelogChangeRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ReleaseChangelogChangeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogChangeRepositoryInterface::class);
 
@@ -1225,7 +1223,7 @@ class RepositoryFixtures
 
     public static function getReleaseChangelogRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ReleaseChangelogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogRepositoryInterface::class);
 
@@ -1238,7 +1236,7 @@ class RepositoryFixtures
 
     public static function getReleaseReportLogRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ReleaseReportLogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseReportLogRepositoryInterface::class);
 
@@ -1251,7 +1249,7 @@ class RepositoryFixtures
 
     public static function getReleaseRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ReleaseRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseRepositoryInterface::class);
 
@@ -1264,7 +1262,7 @@ class RepositoryFixtures
 
     public static function getRouteAttributeRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|RouteAttributeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(RouteAttributeRepositoryInterface::class);
 
@@ -1277,7 +1275,7 @@ class RepositoryFixtures
 
     public static function getSeasonDungeonRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|SeasonDungeonRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(SeasonDungeonRepositoryInterface::class);
 
@@ -1290,7 +1288,7 @@ class RepositoryFixtures
 
     public static function getSeasonRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|SeasonRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(SeasonRepositoryInterface::class);
 
@@ -1303,7 +1301,7 @@ class RepositoryFixtures
 
     public static function getTeamUserRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|TeamUserRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(TeamUserRepositoryInterface::class);
 
@@ -1316,7 +1314,7 @@ class RepositoryFixtures
 
     public static function getUserReportRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|UserReportRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(UserReportRepositoryInterface::class);
 
@@ -1329,7 +1327,7 @@ class RepositoryFixtures
 
     public static function getUserRepositoryMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|UserRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(UserRepositoryInterface::class);
 

@@ -110,6 +110,7 @@ class RegisterController extends Controller
     {
         /** @var \Illuminate\Validation\Validator $validator */
         $validator = $this->validator($request->all());
+
         try {
             $validator->validate();
         } catch (ValidationException) {

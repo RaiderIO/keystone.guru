@@ -32,7 +32,6 @@ return new class extends Migration {
             $table->integer('level_max')->default(28)->nullable(false)->change();
         });
 
-
         DB::update('
             UPDATE `dungeon_routes`
                 SET `level_min` = 2, `level_max` = 28

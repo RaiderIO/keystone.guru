@@ -26,13 +26,14 @@ class DungeonController extends Controller
     {
         $validated = $request->validated();
 
-        $validated['expansion_id']                       = Expansion::where('shortname',
-            Dungeon::findExpansionByKey($validated['key'])
+        $validated['expansion_id'] = Expansion::where(
+            'shortname',
+            Dungeon::findExpansionByKey($validated['key']),
         )->firstOrFail()->id;
-        $validated['active']                             ??= 0;
-        $validated['raid']                               ??= 0;
-        $validated['heatmap_enabled']                    ??= 0;
-        $validated['speedrun_enabled']                   ??= 0;
+        $validated['active'] ??= 0;
+        $validated['raid'] ??= 0;
+        $validated['heatmap_enabled'] ??= 0;
+        $validated['speedrun_enabled'] ??= 0;
         $validated['speedrun_difficulty_10_man_enabled'] ??= 0;
         $validated['speedrun_difficulty_25_man_enabled'] ??= 0;
 
@@ -62,7 +63,6 @@ class DungeonController extends Controller
         $dungeons            = Dungeon::all()->keyBy('key');
         $availableKeysSelect = collect();
         foreach (array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID) as $expansion => $dungeonKeys) {
-
             $availableKeysForExpansion = collect();
             foreach ($dungeonKeys as $dungeonKey) {
                 if (!isset($dungeons[$dungeonKey])) {

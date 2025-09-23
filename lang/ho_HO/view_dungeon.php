@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Hodor',
                 'header'            => 'Hodor',
                 'description'       => 'Hodor',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Hodor',
                 'header'            => 'Hodor',
                 'raider_io'         => 'Hodor',

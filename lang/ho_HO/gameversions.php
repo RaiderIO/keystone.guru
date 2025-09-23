@@ -2,11 +2,11 @@
 
 return [
 
-    'retail'  => [
+    'retail' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'wotlk'   => [
+    'wotlk' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
@@ -14,15 +14,15 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'beta'    => [
+    'beta' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'cata'    => [
+    'cata' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-    'mop'     => [
+    'mop' => [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],

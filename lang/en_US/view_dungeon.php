@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Explore',
                 'header'            => 'Explore dungeon',
                 'description'       => 'Exploring a dungeon allows you to see the layout of the dungeon and the enemies that are present. Ideal for simply viewing the dungeon without creating a route.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Heatmaps',
                 'header'            => 'Dungeon heatmaps',
                 'raider_io'         => 'Raider.IO',

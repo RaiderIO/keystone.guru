@@ -9,17 +9,18 @@ class RedditApiService implements RedditApiServiceInterface
         $ch = curl_init();
 
         curl_setopt_array($ch, [
-            CURLOPT_URL            => 'https://www.reddit.com/api/v1/access_token',
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => http_build_query([
+            CURLOPT_URL        => 'https://www.reddit.com/api/v1/access_token',
+            CURLOPT_POST       => true,
+            CURLOPT_POSTFIELDS => http_build_query([
                 'grant_type'    => 'refresh_token',
                 'refresh_token' => config('keystoneguru.reddit.api.refresh_token'),
             ]),
-            CURLOPT_HTTPHEADER     => [
-                sprintf('Authorization: Basic %s',
+            CURLOPT_HTTPHEADER => [
+                sprintf(
+                    'Authorization: Basic %s',
                     base64_encode(
-                        sprintf('%s:%s', config('keystoneguru.reddit.oauth.client_id'), config('keystoneguru.reddit.oauth.secret'))
-                    )
+                        sprintf('%s:%s', config('keystoneguru.reddit.oauth.client_id'), config('keystoneguru.reddit.oauth.secret')),
+                    ),
                 ),
                 'Content-Type: application/x-www-form-urlencoded',
                 'User-Agent: keystone.guru/v3.3',
@@ -46,15 +47,15 @@ class RedditApiService implements RedditApiServiceInterface
             $ch = curl_init();
 
             curl_setopt_array($ch, [
-                CURLOPT_URL            => 'https://oauth.reddit.com/api/submit',
-                CURLOPT_POST           => true,
-                CURLOPT_POSTFIELDS     => http_build_query([
+                CURLOPT_URL        => 'https://oauth.reddit.com/api/submit',
+                CURLOPT_POST       => true,
+                CURLOPT_POSTFIELDS => http_build_query([
                     'sr'    => $subreddit,
                     'title' => $subject,
                     'text'  => $body,
                     'kind'  => 'self',
                 ]),
-                CURLOPT_HTTPHEADER     => [
+                CURLOPT_HTTPHEADER => [
                     sprintf('Authorization: Bearer %s', $token),
                     'Content-Type: application/x-www-form-urlencoded',
                     'User-Agent: keystone.guru/v3.3',

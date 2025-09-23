@@ -3,10 +3,10 @@
 return [
 
     'edittabs' => [
-        'details'         => [
+        'details' => [
             'title' => 'Team details',
         ],
-        'members'         => [
+        'members' => [
             'title'                                      => 'Members',
             'invite_new_members'                         => 'Invite new members',
             'invite_code_share_warning'                  => 'Be careful who you share the invite link with, everyone with the link can join your team!',
@@ -16,25 +16,25 @@ return [
             'ad_free_giveaway_description_not_available' => 'Subscribing to :patreon allows you to give away up to :max ad-free experiences to Keystone.guru to any team member.',
             'ad_free_giveaway_description_available'     => 'Thank you for subscribing to Keystone.guru\'s :patreon! You can give away :current more ad-free experiences to Keystone.guru to any team member.',
         ],
-        'overview'        => [
+        'overview' => [
             'title' => 'Overview',
         ],
         'routepublishing' => [
             'title' => 'Route publishing',
         ],
-        'routes'          => [
+        'routes' => [
             'title'                  => 'Route list',
             'add_route'              => 'Add route',
             'add_route_no_moderator' => 'You must be a Moderator of this team to add routes',
             'stop_adding_routes'     => 'Stop adding routes',
         ],
-        'tags'            => [
+        'tags' => [
             'title'       => 'Tags',
             'description' => 'You can manage tags for the team\'s routes here. Everyone that is a member of this team may view the tags attached to the routes.
                         The personal tags that may or may not have been attached by the route owner will not be visible.',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => 'Team %s',
         'menu_title'     => 'Teams',
         'to_team_list'   => 'Team list',
@@ -43,7 +43,7 @@ return [
         'routes'         => 'Routes',
         'members'        => 'Members',
     ],
-    'invite'   => [
+    'invite' => [
         'linkpreview_title'           => 'Invitation to join team %s',
         'linkpreview_description'     => 'You have been invited to join team %s. Login or register on Keystone.guru to join the team, it\'s free!',
         'title'                       => 'Invitation to join team %s',
@@ -61,7 +61,7 @@ return [
         'invite_not_found'            => 'This team could not be found. Perhaps the invite link has been changed or the team has been deleted.',
         'back_to_homepage'            => 'Back to the home page',
     ],
-    'list'     => [
+    'list' => [
         'title'                => 'My teams',
         'header'               => 'My teams',
         'create_team'          => 'Create team',
@@ -69,7 +69,7 @@ return [
         'table_header_members' => 'Members',
         'table_header_routes'  => 'Routes',
     ],
-    'new'      => [
+    'new' => [
         'title'  => 'New team',
         'header' => 'New team',
     ],

@@ -4,7 +4,6 @@ namespace App\Service\Wowhead\Logging;
 
 interface WowheadServiceLoggingInterface
 {
-
     public function getNpcHealthHtmlParsingException(\Throwable $ex): void;
 
     public function downloadMissingSpellIconsStart(): void;
@@ -28,6 +27,6 @@ interface WowheadServiceLoggingInterface
         bool $schoolSet,
         bool $dispelTypeSet,
         bool $castTimeSet,
-        bool $durationSet
+        bool $durationSet,
     ): void;
 }

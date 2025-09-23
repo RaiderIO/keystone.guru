@@ -14,7 +14,7 @@ class GameVersionController extends Controller
     public function update(
         Request                     $request,
         GameVersion                 $gameVersion,
-        GameVersionServiceInterface $gameVersionService
+        GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
         $gameVersionService->setGameVersion($gameVersion, Auth::user());
 

@@ -19,25 +19,25 @@ use Illuminate\Support\Collection;
 use Str;
 
 /**
- * @property int                      $id
- * @property int                      $game_version_id
- * @property string|null              $category
- * @property string|null              $cooldown_group
- * @property string                   $dispel_type
- * @property string                   $mechanic
- * @property string                   $icon_name
- * @property string                   $name
- * @property int                      $schools_mask
- * @property int                      $miss_types_mask
- * @property bool                     $aura Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool                     $debuff Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
- * @property int                      $cast_time
- * @property int                      $duration
- * @property bool                     $selectable
- * @property bool                     $hidden_on_map
- * @property Carbon                   $fetched_data_at
+ * @property int         $id
+ * @property int         $game_version_id
+ * @property string|null $category
+ * @property string|null $cooldown_group
+ * @property string      $dispel_type
+ * @property string      $mechanic
+ * @property string      $icon_name
+ * @property string      $name
+ * @property int         $schools_mask
+ * @property int         $miss_types_mask
+ * @property bool        $aura            Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
+ * @property bool        $debuff          Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property int         $cast_time
+ * @property int         $duration
+ * @property bool        $selectable
+ * @property bool        $hidden_on_map
+ * @property Carbon      $fetched_data_at
  *
- * @property string                   $icon_url
+ * @property string $icon_url
  *
  * @property GameVersion              $gameVersion
  * @property Collection<Dungeon>      $dungeons

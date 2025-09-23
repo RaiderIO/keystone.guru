@@ -33,4 +33,3 @@ class CombatLogRouteCorrectionRequestResource extends JsonResource
         return $this->resource->toArray();
     }
 }
-

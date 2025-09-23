@@ -16,7 +16,7 @@ class ActivePullEnemy
         private readonly float   $x,
         private readonly float   $y,
         private readonly Carbon  $engagedAt,
-        private readonly ?Carbon $diedAt
+        private readonly ?Carbon $diedAt,
     ) {
     }
 

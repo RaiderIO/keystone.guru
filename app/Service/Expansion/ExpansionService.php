@@ -20,12 +20,13 @@ class ExpansionService implements ExpansionServiceInterface
         $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
 
         /** @var Expansion|null $expansion */
-        $expansion = Expansion::whereRaw('DATE_ADD(DATE_ADD(`released_at`, INTERVAL ? day), INTERVAL ? hour) < ?',
+        $expansion = Expansion::whereRaw(
+            'DATE_ADD(DATE_ADD(`released_at`, INTERVAL ? day), INTERVAL ? hour) < ?',
             [
                 $gameServerRegion->reset_day_offset,
                 $gameServerRegion->reset_hours_offset,
                 $carbon,
-            ]
+            ],
         )->orderBy('released_at', 'desc')
             ->first();
 
@@ -105,7 +106,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentSeasonAffixGroups(
         Expansion         $expansion,
-        ?GameServerRegion $gameServerRegion = null
+        ?GameServerRegion $gameServerRegion = null,
     ): Collection {
         $currentSeason = $this->getCurrentSeason($expansion, $gameServerRegion);
 

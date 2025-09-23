@@ -33,7 +33,7 @@ class ImportMapping extends Command
      */
     public function handle(
         MappingServiceInterface          $mappingService,
-        MDTMappingImportServiceInterface $mappingImportService
+        MDTMappingImportServiceInterface $mappingImportService,
     ): void {
         $dungeonKey = $this->argument('dungeon');
         $force      = (bool)$this->option('force');

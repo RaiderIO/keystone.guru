@@ -15,5 +15,4 @@ class NpcUpdateDataExtractorLogging extends RollbarStructuredLogging implements 
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-
 }

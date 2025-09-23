@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 
 interface WowheadTranslationServiceInterface
 {
-
     /** @return Collection<string, Collection<string, string>> */
     public function getNpcNames(GameVersion $gameVersion): Collection;
 

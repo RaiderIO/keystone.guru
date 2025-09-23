@@ -10,7 +10,7 @@ class AjaxSpellController extends Controller
 {
     public function update(
         AjaxSpellUpdateFormRequest $request,
-        Spell                      $spell
+        Spell                      $spell,
     ): Spell {
         $spell->update($request->validated());
 

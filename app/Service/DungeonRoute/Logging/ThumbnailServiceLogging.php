@@ -27,7 +27,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         ?int   $imageWidth,
         ?int   $imageHeight,
         ?int   $zoomLevel,
-        ?int   $quality
+        ?int   $quality,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -46,7 +46,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         ?int   $imageWidth,
         ?int   $imageHeight,
         ?int   $zoomLevel,
-        ?int   $quality
+        ?int   $quality,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -121,7 +121,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         ?int    $fileId,
         ?string $fileDisk,
         ?string $filePath,
-        bool    $deleteResult
+        bool    $deleteResult,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -130,9 +130,8 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         string    $sourcePublicKey,
         string    $targetPublicKey,
         int       $id,
-        Exception $exception
+        Exception $exception,
     ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
-
 }

@@ -32,7 +32,7 @@ class SeedOne extends Command
     /**
      * Create a new database seed command instance.
      *
-     * @param Resolver $resolver
+     * @param  Resolver $resolver
      * @return void
      */
     public function __construct(Resolver $resolver)
@@ -48,7 +48,7 @@ class SeedOne extends Command
      */
     public function handle(
         CacheServiceInterface $cacheService,
-        DatabaseSeeder        $databaseSeeder
+        DatabaseSeeder        $databaseSeeder,
     ): int {
         $className = $this->argument('className');
 

@@ -9,7 +9,7 @@ interface HandlerLoggingInterface
         string     $url,
         ?int       $userId,
         ?string    $username,
-        \Throwable $throwable
+        \Throwable $throwable,
     ): void;
 
     public function uncaughtException(
@@ -19,6 +19,6 @@ interface HandlerLoggingInterface
         ?string $username,
         ?array  $body,
         string  $exceptionClass,
-        string  $message
+        string  $message,
     ): void;
 }

@@ -11,37 +11,36 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
 {
     private Player $playerGuid;
-    private int    $faction;
-    private int    $strength;
-    private int    $agility;
-    private int    $stamina;
-    private int    $intellect;
-    private int    $spirit;
-    private int    $dodge;
-    private int    $parry;
-    private int    $block;
-    private int    $critMelee;
-    private int    $critRanged;
-    private int    $critSpell;
-    private int    $speed;
-    private int    $lifesteal;
-    private int    $hasteMelee;
-    private int    $hasteRanged;
-    private int    $hasteSpell;
-    private int    $avoidance;
-    private int    $versatilityDamageDone;
-    private int    $versatilityHealingDone;
-    private int    $versatilityDamageTaken;
-    private int    $armor;
-    private int    $currentSpecId;
-    private array  $talents;
-    private array  $pvpTalents;
-    private array  $equippedItems;
-    private array  $interestingAuras;
-    private int    $honorLevel;
-    private int    $season;
-    private int    $rating;
-
+    private int $faction;
+    private int $strength;
+    private int $agility;
+    private int $stamina;
+    private int $intellect;
+    private int $spirit;
+    private int $dodge;
+    private int $parry;
+    private int $block;
+    private int $critMelee;
+    private int $critRanged;
+    private int $critSpell;
+    private int $speed;
+    private int $lifesteal;
+    private int $hasteMelee;
+    private int $hasteRanged;
+    private int $hasteSpell;
+    private int $avoidance;
+    private int $versatilityDamageDone;
+    private int $versatilityHealingDone;
+    private int $versatilityDamageTaken;
+    private int $armor;
+    private int $currentSpecId;
+    private array $talents;
+    private array $pvpTalents;
+    private array $equippedItems;
+    private array $interestingAuras;
+    private int $honorLevel;
+    private int $season;
+    private int $rating;
 
     public function getPlayerGuid(): ?Player
     {

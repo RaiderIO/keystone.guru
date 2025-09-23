@@ -3,17 +3,17 @@
 return [
 
     'home' => [
-        'keystone_guru'    => '',
-        'affixes'          => '',
-        'about'            => '',
-        'credits'          => '',
-        'changelog'        => [
+        'keystone_guru' => '',
+        'affixes'       => '',
+        'about'         => '',
+        'credits'       => '',
+        'changelog'     => [
             'list'    => '',
             'release' => [
                 'view' => '',
             ],
         ],
-        'legal'            => [
+        'legal' => [
             'cookies' => '',
             'privacy' => '',
             'terms'   => '',
@@ -27,10 +27,10 @@ return [
                 'explore'  => '',
             ],
         ],
-        'dungeonroute'     => [
+        'dungeonroute' => [
             'new' => '',
         ],
-        'dungeonroutes'    => [
+        'dungeonroutes' => [
             'search'            => '',
             'popular'           => '',
             'next_week_affixes' => '',
@@ -43,24 +43,24 @@ return [
                 'this_week_affixes' => '',
                 'new'               => '',
             ],
-            'discoverdungeon'   => [
+            'discoverdungeon' => [
                 'popular'           => '',
                 'next_week_affixes' => '',
                 'this_week_affixes' => '',
                 'new'               => '',
             ],
         ],
-        'my_profile'       => '',
-        'my_routes'        => '',
-        'my_tags'          => '',
-        'my_teams'         => '',
-        'overview'         => '',
-        'new_team'         => '',
-        'edit_team'        => '',
-        'join_team'        => '',
-        'admin'            => [
-            'admin'                      => '',
-            'tools'                      => [
+        'my_profile' => '',
+        'my_routes'  => '',
+        'my_tags'    => '',
+        'my_teams'   => '',
+        'overview'   => '',
+        'new_team'   => '',
+        'edit_team'  => '',
+        'join_team'  => '',
+        'admin'      => [
+            'admin' => '',
+            'tools' => [
                 'admin_tools'               => '',
                 'view_exported_dungeondata' => '',
                 'view_exported_releases'    => '',
@@ -69,20 +69,20 @@ return [
                 'view_mdt_string_contents'  => '',
                 'import_npcs'               => '',
             ],
-            'releases'                   => '',
-            'new_release'                => '',
-            'edit_release'               => '',
-            'expansions'                 => [
+            'releases'     => '',
+            'new_release'  => '',
+            'edit_release' => '',
+            'expansions'   => [
                 'expansions'     => '',
                 'new_expansion'  => '',
                 'edit_expansion' => '',
             ],
-            'dungeons'                   => [
+            'dungeons' => [
                 'dungeons'     => '',
                 'new_dungeon'  => '',
                 'edit_dungeon' => '',
             ],
-            'floors'                     => [
+            'floors' => [
                 'new_floor'  => '',
                 'edit_floor' => '',
             ],
@@ -90,28 +90,28 @@ return [
                 'new_dungeonspeedrunrequirednpc10man' => '',
                 'new_dungeonspeedrunrequirednpc25man' => '',
             ],
-            'npcs'                       => [
+            'npcs' => [
                 'npcs'     => '',
                 'new_npc'  => '',
                 'edit_npc' => '',
             ],
-            'npcenemyforces'             => [
+            'npcenemyforces' => [
                 'new_npc_enemy_forces'  => '',
                 'edit_npc_enemy_forces' => '',
             ],
-            'npchealth'                  => [
+            'npchealth' => [
                 'new_npc_health'  => '',
                 'edit_npc_health' => '',
             ],
-            'spells'                     => [
+            'spells' => [
                 'spells'     => '',
                 'new_spell'  => '',
                 'edit_spell' => '',
             ],
-            'users'                      => [
+            'users' => [
                 'users' => '',
             ],
-            'user_reports'               => [
+            'user_reports' => [
                 'user_reports' => '',
             ],
         ],

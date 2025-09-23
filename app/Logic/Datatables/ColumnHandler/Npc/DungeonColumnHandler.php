@@ -26,7 +26,7 @@ class DungeonColumnHandler extends SimpleColumnHandler
         Builder $orderBuilder,
                 $columnData,
                 $order,
-                $generalSearch
+                $generalSearch,
     ): void {
         // Only order
         $subBuilder

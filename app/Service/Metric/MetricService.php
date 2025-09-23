@@ -15,7 +15,6 @@ class MetricService implements MetricServiceInterface
     public function __construct(
         private readonly CacheServiceInterface $cacheService,
     ) {
-
     }
 
     public function storeMetric(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): Metric
@@ -110,8 +109,8 @@ class MetricService implements MetricServiceInterface
     }
 
     /**
-     * @param array{array{model_id: int, model_class: string, category: string, tag: string, value: int, created_at: string, updated_at: string}} $pendingMetrics
-     * @param int                                                                                                                                 $seconds
+     * @param  array{array{model_id: int, model_class: string, category: string, tag: string, value: int, created_at: string, updated_at: string}} $pendingMetrics
+     * @param  int                                                                                                                                 $seconds
      * @return array
      */
     public function groupMetrics(array $pendingMetrics, int $seconds = 30): array
@@ -123,8 +122,8 @@ class MetricService implements MetricServiceInterface
             if (isset($cachedCarbon[$metric['created_at']])) {
                 $carbonCache = $cachedCarbon[$metric['created_at']];
             } else {
-                $carbon                              = Carbon::parse($metric['created_at']);
-                $carbonCache                         = [
+                $carbon      = Carbon::parse($metric['created_at']);
+                $carbonCache = [
                     'carbon'    => $carbon,
                     'timestamp' => $carbon->timestamp,
                 ];
@@ -133,12 +132,13 @@ class MetricService implements MetricServiceInterface
 
             $timestamp = $carbonCache['timestamp'];
 
-            $groupKey = sprintf('%d-%d-%s-%s-%s',
+            $groupKey = sprintf(
+                '%d-%d-%s-%s-%s',
                 $timestamp - ($timestamp % $seconds),
                 $metric['model_id'],
                 $metric['model_class'],
                 $metric['category'],
-                $metric['tag']
+                $metric['tag'],
             );
 
             if (!isset($groupedMetrics[$groupKey])) {

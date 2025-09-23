@@ -27,78 +27,78 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'type'                       => [
+            'type' => [
                 'nullable',
                 Rule::in(CombatLogEventEventType::cases()),
             ],
-            'dataType'                   => [
+            'dataType' => [
                 'nullable',
                 Rule::in(CombatLogEventDataType::cases()),
             ],
-            'region'                     => [
+            'region' => [
                 'nullable',
                 Rule::exists(GameServerRegion::class, 'short'),
             ],
-            'minMythicLevel'             => [
+            'minMythicLevel' => [
                 'nullable',
                 'integer',
             ],
-            'maxMythicLevel'             => [
+            'maxMythicLevel' => [
                 'nullable',
                 'integer',
             ],
-            'minItemLevel'               => [
+            'minItemLevel' => [
                 'nullable',
                 'integer',
             ],
-            'maxItemLevel'               => [
+            'maxItemLevel' => [
                 'nullable',
                 'integer',
             ],
-            'minPlayerDeaths'            => [
+            'minPlayerDeaths' => [
                 'nullable',
                 'integer',
             ],
-            'maxPlayerDeaths'            => [
+            'maxPlayerDeaths' => [
                 'nullable',
                 'integer',
             ],
-            'includeAffixIds'            => [
+            'includeAffixIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'excludeAffixIds'            => [
+            'excludeAffixIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'includeClassIds'            => [
+            'includeClassIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'excludeClassIds'            => [
+            'excludeClassIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'includeSpecIds'             => [
+            'includeSpecIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'excludeSpecIds'             => [
+            'excludeSpecIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'includePlayerDeathSpecIds'  => [
+            'includePlayerDeathSpecIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'excludePlayerDeathSpecIds'  => [
+            'excludePlayerDeathSpecIds' => [
                 'nullable',
                 'string',
             ],
@@ -113,32 +113,32 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
                 'string',
             ],
             // csv
-            'includePlayerSpellIds'      => [
+            'includePlayerSpellIds' => [
                 'nullable',
                 'string',
             ],
             // csv
-            'minPeriod'                  => [
+            'minPeriod' => [
                 'nullable',
                 'integer',
             ],
-            'maxPeriod'                  => [
+            'maxPeriod' => [
                 'nullable',
                 'integer',
             ],
-            'minTimerFraction'           => [
+            'minTimerFraction' => [
                 'nullable',
                 'numeric',
             ],
-            'maxTimerFraction'           => [
+            'maxTimerFraction' => [
                 'nullable',
                 'numeric',
             ],
-            'minSamplesRequired'         => [
+            'minSamplesRequired' => [
                 'nullable',
                 'integer',
             ],
-            'token'                      => [
+            'token' => [
                 'nullable',
                 'string',
             ],

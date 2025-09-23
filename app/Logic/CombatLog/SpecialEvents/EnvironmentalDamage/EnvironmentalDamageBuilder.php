@@ -18,7 +18,7 @@ class EnvironmentalDamageBuilder implements SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC => new EnvironmentalDamageV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),

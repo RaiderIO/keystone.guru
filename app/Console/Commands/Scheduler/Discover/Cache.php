@@ -31,7 +31,6 @@ class Cache extends SchedulerCommand
     public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int
     {
         return $this->trackTime(function () use ($discoverService, $expansionService) {
-
             $async = (bool)$this->option('async');
 
             if ($async) {

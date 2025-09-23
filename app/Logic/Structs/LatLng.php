@@ -52,9 +52,9 @@ class LatLng implements Arrayable
 
     public function scale(
         LatLng $currentMapCenter,
-        int    $currentMapSize,
+        float  $currentMapSize,
         LatLng $targetMapCenter,
-        int    $targetMapSize
+        float  $targetMapSize,
     ): self {
         $currentMapSizeLat = $currentMapSize;
         $currentMapSizeLng = $currentMapSize * CoordinatesService::MAP_ASPECT_RATIO;
@@ -120,7 +120,7 @@ class LatLng implements Arrayable
         return new LatLng(
             $this->lat,
             $this->lng,
-            $this->floor
+            $this->floor,
         );
     }
 

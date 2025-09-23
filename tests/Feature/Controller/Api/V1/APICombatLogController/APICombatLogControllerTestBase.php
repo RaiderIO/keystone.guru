@@ -21,5 +21,4 @@ abstract class APICombatLogControllerTestBase extends APIPublicTestCase
 
         $this->dungeon = Dungeon::where('key', $this->getDungeonKey())->first();
     }
-
 }

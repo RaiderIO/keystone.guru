@@ -46,14 +46,14 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
         protected KillZoneSpellRepositoryInterface                    $killZoneSpellRepository,
         protected EnemyRepositoryInterface                            $enemyRepository,
         protected NpcRepositoryInterface                              $npcRepository,
-        private readonly CombatLogDungeonRouteServiceLoggingInterface $log
+        private readonly CombatLogDungeonRouteServiceLoggingInterface $log,
     ) {
     }
 
     /**
      * @return Collection<DungeonRoute>
      *
-     * @throws InvalidArgumentException If combat log does not exist
+     * @throws InvalidArgumentException           If combat log does not exist
      * @throws AdvancedLogNotEnabledException
      * @throws DungeonNotSupportedException
      * @throws NoChallangeModeStartFoundException
@@ -120,14 +120,14 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 $this->enemyRepository,
                 $this->npcRepository,
                 $dungeonRoute,
-                $resultEvents
+                $resultEvents,
             ))->build();
 
             if (config('app.debug')) {
                 $this->generateMapIconsFromEvents(
                     $dungeonRoute->mappingVersion,
                     $resultEvents,
-                    $dungeonRoute
+                    $dungeonRoute,
                 );
             }
 
@@ -184,8 +184,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                     new IngameXY(
                         $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
                         $resultEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
-                        $currentFloor
-                    )
+                        $currentFloor,
+                    ),
                 );
 
                 $enemyPositionAttributes[] = array_merge([
@@ -231,7 +231,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     private function generateMapIconsFromEvents(
         MappingVersion $mappingVersion,
         Collection     $resultEvents,
-        ?DungeonRoute  $dungeonRoute = null
+        ?DungeonRoute  $dungeonRoute = null,
     ): void {
         $currentFloor      = null;
         $mapIconAttributes = collect();
@@ -240,11 +240,11 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 $currentFloor = $resultEvent->getFloor();
 
                 continue;
-            } else if ($currentFloor === null) {
+            } elseif ($currentFloor === null) {
                 continue;
-            } else if ($resultEvent instanceof ChallengeModeEndResultEvent) {
+            } elseif ($resultEvent instanceof ChallengeModeEndResultEvent) {
                 break;
-            } else if (!($resultEvent->getBaseEvent() instanceof AdvancedCombatLogEvent)) {
+            } elseif (!($resultEvent->getBaseEvent() instanceof AdvancedCombatLogEvent)) {
                 // Non-advanced combat logs don't have the info we need
                 continue;
             }
@@ -256,8 +256,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 new IngameXY(
                     $combatLogEvent->getAdvancedData()->getPositionX(),
                     $combatLogEvent->getAdvancedData()->getPositionY(),
-                    $currentFloor
-                )
+                    $currentFloor,
+                ),
             );
 
             $comment    = '';
@@ -273,7 +273,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                     $combatLogEvent->getAdvancedData()->getPositionX(),
                     $combatLogEvent->getAdvancedData()->getPositionY(),
                 );
-            } else if ($destGuid instanceof Creature) {
+            } elseif ($destGuid instanceof Creature) {
                 $comment = sprintf(
                     '%s: dest (%s): %s -> %s @ %s,%s',
                     $combatLogEvent->getTimestamp()->toDateTimeString('millisecond'),

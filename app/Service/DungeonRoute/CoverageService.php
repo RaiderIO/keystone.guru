@@ -39,7 +39,6 @@ class CoverageService implements CoverageServiceInterface
         //              and `expires_at` is null
         //            group by `dungeon_routes`.`id`
 
-
         //        select dungeon_routes.*, IF(mapping_versions.enemy_forces_required > dungeon_routes.enemy_forces, 0, 1) as has_enemy_forces
         //        from `dungeon_routes`
         //                 inner join `mapping_versions` on `mapping_versions`.`id` = `dungeon_routes`.`mapping_version_id`

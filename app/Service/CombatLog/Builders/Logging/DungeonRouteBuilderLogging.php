@@ -68,7 +68,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         float  $ingameY,
         ?float $previousPullLat,
         ?float $previousPullLng,
-        array  $preferredGroups
+        array  $preferredGroups,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -77,7 +77,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         int   $id,
         float $distanceBetweenEnemies,
         float $distanceBetweenLastPullAndEnemy,
-        int   $group
+        int   $group,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -86,7 +86,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         int   $id,
         float $distanceBetweenEnemies,
         float $distanceBetweenLastPullAndEnemy,
-        int   $floorId
+        int   $floorId,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -118,7 +118,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
 
     public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy
+        float $distanceBetweenLastPullAndEnemy,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -132,7 +132,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         ?int  $enemyId,
         float $distanceBetweenEnemies,
         float $distanceBetweenLastPullAndEnemy,
-        int   $maxDistance
+        int   $maxDistance,
     ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
@@ -145,7 +145,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
     public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
         int   $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy
+        float $distanceBetweenLastPullAndEnemy,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -163,7 +163,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
     public function findClosestEnemyAndDistanceFromListResult(
         ?int  $enemyId,
         float $distanceBetweenEnemies,
-        float $distanceBetweenLastPullAndEnemy
+        float $distanceBetweenLastPullAndEnemy,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -172,7 +172,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         array $enemyXY,
         array $targetEnemyXY,
         float $distanceBetweenEnemies,
-        float $closestEnemyDistanceBetweenEnemies
+        float $closestEnemyDistanceBetweenEnemies,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

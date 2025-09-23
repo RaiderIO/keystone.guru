@@ -13,7 +13,6 @@ use Intervention\Image\ImageManager;
 
 class ImageService implements ImageServiceInterface
 {
-
     /**
      * @throws ImagickException
      * @throws ImagickPixelException
@@ -33,7 +32,6 @@ class ImageService implements ImageServiceInterface
             // Get the image dimensions
             $width  = $image->width();
             $height = $image->height();
-
 
             $imagickImage->readImage($filePath);
             $imagickImage->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
@@ -144,7 +142,7 @@ class ImageService implements ImageServiceInterface
         int    $height,
         string $color,
         int    $strokeWidth,
-        int    $margin = 0
+        int    $margin = 0,
     ): Imagick {
         // Set up the drawing object for the border
         $mask = new Imagick();
@@ -164,33 +162,50 @@ class ImageService implements ImageServiceInterface
         // This is because the line is drawn as a brush stroke - the circle's corners
         // (if you draw it in a square) are not covered. These corners need to be corrected for
         // This is what the overflow does - it overflows the line a bit so that the corners are covered.
-        $overflow = 1.5;
+        $overflow        = 1.5;
         $quarterOverflow = $overflow / 4;
 
         // Middle top to top right
         $borderDraw->line(
-            $hexagonPoints[0]['x'] - $quarterOverflow, $hexagonPoints[0]['y'] - $quarterOverflow,
-            $hexagonPoints[1]['x'] + $quarterOverflow, $hexagonPoints[1]['y'] + $quarterOverflow);
+            $hexagonPoints[0]['x'] - $quarterOverflow,
+            $hexagonPoints[0]['y'] - $quarterOverflow,
+            $hexagonPoints[1]['x'] + $quarterOverflow,
+            $hexagonPoints[1]['y'] + $quarterOverflow,
+        );
         // Top right to bottom right
         $borderDraw->line(
-            $hexagonPoints[1]['x'], $hexagonPoints[1]['y'] - $overflow,
-            $hexagonPoints[2]['x'], $hexagonPoints[2]['y'] + $overflow);
+            $hexagonPoints[1]['x'],
+            $hexagonPoints[1]['y'] - $overflow,
+            $hexagonPoints[2]['x'],
+            $hexagonPoints[2]['y'] + $overflow,
+        );
         // Bottom right to bottom
         $borderDraw->line(
-            $hexagonPoints[2]['x'] + $quarterOverflow, $hexagonPoints[2]['y'] - $quarterOverflow,
-            $hexagonPoints[3]['x'] - $quarterOverflow, $hexagonPoints[3]['y'] + $quarterOverflow);
+            $hexagonPoints[2]['x'] + $quarterOverflow,
+            $hexagonPoints[2]['y'] - $quarterOverflow,
+            $hexagonPoints[3]['x'] - $quarterOverflow,
+            $hexagonPoints[3]['y'] + $quarterOverflow,
+        );
         // Bottom to bottom left
         $borderDraw->line(
-            $hexagonPoints[3]['x'] + $quarterOverflow, $hexagonPoints[3]['y'] + $quarterOverflow,
-            $hexagonPoints[4]['x'] - $quarterOverflow, $hexagonPoints[4]['y'] - $quarterOverflow);
+            $hexagonPoints[3]['x'] + $quarterOverflow,
+            $hexagonPoints[3]['y'] + $quarterOverflow,
+            $hexagonPoints[4]['x'] - $quarterOverflow,
+            $hexagonPoints[4]['y'] - $quarterOverflow,
+        );
         // Bottom left to top left
         $borderDraw->line(
-            $hexagonPoints[4]['x'], $hexagonPoints[4]['y'] + $overflow,
-            $hexagonPoints[5]['x'], $hexagonPoints[5]['y'] - $overflow);
+            $hexagonPoints[4]['x'],
+            $hexagonPoints[4]['y'] + $overflow,
+            $hexagonPoints[5]['x'],
+            $hexagonPoints[5]['y'] - $overflow,
+        );
         // Top left to middle top
         $borderDraw->line(
-            $hexagonPoints[5]['x'] - $quarterOverflow, $hexagonPoints[5]['y'] + $quarterOverflow,
-            $hexagonPoints[0]['x'] + $quarterOverflow, $hexagonPoints[0]['y'] - $quarterOverflow
+            $hexagonPoints[5]['x'] - $quarterOverflow,
+            $hexagonPoints[5]['y'] + $quarterOverflow,
+            $hexagonPoints[0]['x'] + $quarterOverflow,
+            $hexagonPoints[0]['y'] - $quarterOverflow,
         );
 
         $mask->drawImage($borderDraw); // Apply the border drawing to the mask

@@ -19,7 +19,7 @@ class EncounterStartBuilder implements SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7 => new EncounterStartV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),

@@ -35,7 +35,7 @@ $dungeonSelectId = 'dungeon_id_select';
 ]])
 
 @if(!isset($dungeonroute))
-    {{ Form::open(['route' => 'dungeonroute.savenew']) }}
+    {{ html()->form('POST', route('dungeonroute.savenew'))->open() }}
 @endisset
 
 <div class="container">
@@ -57,7 +57,7 @@ $dungeonSelectId = 'dungeon_id_select';
             __('view_common.forms.createroute.title_title')
              }}"></i>
         </label>
-        {!! Form::text('dungeon_route_title', $dungeonroute?->title ?? '', ['id' => 'dungeon_route_title', 'class' => 'form-control']) !!}
+        {{ html()->text('dungeon_route_title', $dungeonroute?->title ?? '')->id('dungeon_route_title')->class('form-control') }}
     </div>
     <?php // The user does not really know a description for his/her route when creating it, so hide it. It will be available from the route settings ?>
     @isset($dungeonroute)
@@ -68,7 +68,7 @@ $dungeonSelectId = 'dungeon_id_select';
             __('view_common.forms.createroute.description_title')
              }}"></i>
             </label>
-            {!! Form::textarea('dungeon_route_description', $dungeonroute->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
+            {{ html()->textarea('dungeon_route_description', $dungeonroute->description ?? '')->id('dungeon_route_description')->class('form-control') }}
         </div>
     @endisset
 
@@ -79,10 +79,7 @@ $dungeonSelectId = 'dungeon_id_select';
                 <i class="fas fa-info-circle" data-toggle="tooltip"
                    title="{{ __('view_common.forms.createroute.key_levels_title') }}"></i>
             </label>
-            {!! Form::text('dungeon_route_level', isset($dungeonroute) ?
-                    sprintf('%d;%d', $dungeonroute->level_min, $dungeonroute->level_max) ?? '' :
-                    sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
-                ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+            {{ html()->text('dungeon_route_level', isset($dungeonroute) ? sprintf('%d;%d', $dungeonroute->level_min, $dungeonroute->level_max) ?? '' : sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo))->id('dungeon_route_level')->class('form-control')->style('display: none;') }}
         </div>
 
         <p>{{ __('view_common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
@@ -154,8 +151,8 @@ $dungeonSelectId = 'dungeon_id_select';
                                 {{ __('view_common.forms.createroute.admin') }}
                             </h3>
                             <div class="form-group">
-                                {!! Form::label('demo', __('view_common.forms.createroute.demo_route')) !!}
-                                {!! Form::checkbox('demo', 1, 0, ['class' => 'form-control left_checkbox']) !!}
+                                {{ html()->label(__('view_common.forms.createroute.demo_route'), 'demo') }}
+                                {{ html()->checkbox('demo', null, 1)->class('form-control left_checkbox') }}
                             </div>
                         @endif
                     </div>
@@ -167,14 +164,14 @@ $dungeonSelectId = 'dungeon_id_select';
     @if(!isset($dungeonroute))
         <div class="col-lg-12">
             <div class="form-group">
-                {!! Form::submit(__('view_common.forms.createroute.create_route'), ['class' => 'btn btn-info col-md-auto']) !!}
+                {{ html()->input('submit')->value(__('view_common.forms.createroute.create_route'))->class('btn btn-info col-md-auto') }}
             </div>
         </div>
     @endif
 </div>
 
 @if(!isset($dungeonroute))
-    {!! Form::close() !!}
+    {{ html()->form()->close() }}
 @else
     <div class="form-group">
         <div id="save_route_settings" class="offset-xl-5 col-xl-2 btn btn-success">

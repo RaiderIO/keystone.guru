@@ -23,13 +23,13 @@ interface ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null
+        ?int         $quality = null,
     ): Collection;
 
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
-        int          $attempts
+        int          $attempts,
     ): ?DungeonRouteThumbnail;
 
     public function createThumbnailCustom(
@@ -41,7 +41,7 @@ interface ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null
+        ?int         $quality = null,
     ): ?DungeonRouteThumbnail;
 
     public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): ?Collection;

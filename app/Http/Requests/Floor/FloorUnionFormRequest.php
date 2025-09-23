@@ -28,18 +28,18 @@ class FloorUnionFormRequest extends FormRequest
                 'required',
                 Rule::exists(MappingVersion::class, 'id'),
             ],
-            'floor_id'           => [
+            'floor_id' => [
                 'required',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'target_floor_id'    => [
+            'target_floor_id' => [
                 'nullable',
                 Rule::exists(Floor::class, 'id'),
             ],
-            'lat'                => 'numeric',
-            'lng'                => 'numeric',
-            'size'               => 'numeric',
-            'rotation'           => 'numeric',
+            'lat'      => 'numeric',
+            'lng'      => 'numeric',
+            'size'     => 'numeric',
+            'rotation' => 'numeric',
         ];
     }
 }

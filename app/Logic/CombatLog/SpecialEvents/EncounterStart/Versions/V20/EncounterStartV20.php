@@ -14,11 +14,11 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
  */
 class EncounterStartV20 extends SpecialEvent implements EncounterStartInterface
 {
-    private int    $encounterId;
+    private int $encounterId;
     private string $encounterName;
-    private int    $difficultyId;
-    private int    $groupSize;
-    private int    $instanceID;
+    private int $difficultyId;
+    private int $groupSize;
+    private int $instanceID;
 
     public function getEncounterId(): int
     {

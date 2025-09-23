@@ -17,24 +17,24 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int                       $id
- * @property int                       $expansion_id
- * @property int                       $seasonal_affix_id
- * @property int                       $index
- * @property Carbon                    $start
- * @property int                       $presets
- * @property int                       $affix_group_count
- * @property int                       $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property int                       $key_level_min
- * @property int                       $key_level_max
- * @property int                       $item_level_min The minimum item level of items that can be obtained in this season
- * @property int                       $item_level_max The maximum item level of items that can be obtained in this season
- * @property string                    $name Dynamic attribute
- * @property string                    $name_med Dynamic attribute
- * @property string                    $name_long Dynamic attribute
- * @property int                       $start_period Dynamic attribute
+ * @property int    $id
+ * @property int    $expansion_id
+ * @property int    $seasonal_affix_id
+ * @property int    $index
+ * @property Carbon $start
+ * @property int    $presets
+ * @property int    $affix_group_count
+ * @property int    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property int    $key_level_min
+ * @property int    $key_level_max
+ * @property int    $item_level_min          The minimum item level of items that can be obtained in this season
+ * @property int    $item_level_max          The maximum item level of items that can be obtained in this season
+ * @property string $name                    Dynamic attribute
+ * @property string $name_med                Dynamic attribute
+ * @property string $name_long               Dynamic attribute
+ * @property int    $start_period            Dynamic attribute
  *
- * @property Expansion                 $expansion
+ * @property Expansion $expansion
  *
  * @property Collection<AffixGroup>    $affixGroups
  * @property Collection<Dungeon>       $dungeons
@@ -229,6 +229,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => $region->short,
             ]);
+
             throw $exception;
         }
 
@@ -249,6 +250,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => ($region ?? GameServerRegion::getUserOrDefaultRegion())->short,
             ]);
+
             throw $exception;
         }
 
@@ -263,6 +265,7 @@ class Season extends CacheModel
     public function getCurrentAffixGroup(): ?AffixGroup
     {
         $region = GameServerRegion::getUserOrDefaultRegion();
+
         try {
             $result = $this->getAffixGroupAt(Carbon::now(), $region);
         } catch (Exception $exception) {
@@ -270,6 +273,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => $region->short,
             ]);
+
             throw new Exception('Error getting current affix group');
         }
 
@@ -284,6 +288,7 @@ class Season extends CacheModel
     public function getNextAffixGroup(): ?AffixGroup
     {
         $region = GameServerRegion::getUserOrDefaultRegion();
+
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), $region);
         } catch (Exception $exception) {
@@ -291,6 +296,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => $region->short,
             ]);
+
             throw new Exception('Error getting next affix group');
         }
 
@@ -300,7 +306,7 @@ class Season extends CacheModel
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param Carbon $date The date at which you want to know the affix group.
+     * @param  Carbon          $date The date at which you want to know the affix group.
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      *
      * @throws Exception
@@ -334,12 +340,12 @@ class Season extends CacheModel
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
-        $region          = GameServerRegion::getUserOrDefaultRegion();
-        $startIndex      = $this->affixGroups->search(
-            $this->getAffixGroupAt($this->start($region), $region)
+        $region     = GameServerRegion::getUserOrDefaultRegion();
+        $startIndex = $this->affixGroups->search(
+            $this->getAffixGroupAt($this->start($region), $region),
         );
         $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(
-            AffixGroup $affixGroupCandidate
+            AffixGroup $affixGroupCandidate,
         ) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixGroups->count()) % $this->presets + 1 : 0;

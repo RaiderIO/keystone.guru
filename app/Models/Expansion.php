@@ -18,21 +18,21 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                   $id
- * @property int                   $icon_file_id
- * @property bool                  $active
- * @property bool                  $has_wallpaper
- * @property string                $name
- * @property string                $shortname
- * @property string                $color
+ * @property int    $id
+ * @property int    $icon_file_id
+ * @property bool   $active
+ * @property bool   $has_wallpaper
+ * @property string $name
+ * @property string $shortname
+ * @property string $color
  *
- * @property Carbon                $released_at
- * @property Carbon                $created_at
- * @property Carbon                $updated_at
+ * @property Carbon $released_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
- * @property Collection<Dungeon>   $dungeons
- * @property Collection<Dungeon>   $raids
- * @property Collection<Dungeon>   $dungeonsAndRaids
+ * @property Collection<Dungeon> $dungeons
+ * @property Collection<Dungeon> $raids
+ * @property Collection<Dungeon> $dungeonsAndRaids
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
@@ -157,12 +157,13 @@ class Expansion extends CacheModel
 
         /** @var Season|null $season */
         $season = $this->hasOne(Season::class)
-            ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
+            ->whereRaw(
+                'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
                 [
                     $gameServerRegion->reset_day_offset,
                     $gameServerRegion->reset_hours_offset,
                     Carbon::now(),
-                ]
+                ],
             )
             ->orderBy('start', 'desc')
             ->limit(1)
@@ -188,12 +189,13 @@ class Expansion extends CacheModel
         /** @var Season|null $season */
         $season = $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
-            ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
+            ->whereRaw(
+                'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
                 [
                     $gameServerRegion->reset_day_offset,
                     $gameServerRegion->reset_hours_offset,
                     Carbon::now(),
-                ]
+                ],
             )
             ->orderBy('start')
             ->limit(1)

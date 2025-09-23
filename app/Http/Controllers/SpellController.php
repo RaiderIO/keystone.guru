@@ -141,18 +141,16 @@ class SpellController extends Controller
     private function getEditViewParams(): array
     {
         return [
-            'categories'     => collect(Spell::ALL_CATEGORIES)->mapWithKeys(function (string $category) {
+            'categories' => collect(Spell::ALL_CATEGORIES)->mapWithKeys(function (string $category) {
                 return [
-                    $category =>
-                        __(sprintf('spellcategory.%s', $category)),
+                    $category => __(sprintf('spellcategory.%s', $category)),
                 ];
             })->toArray(),
             'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
             'schools'        => Spell::ALL_SCHOOLS,
             'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
                 return [
-                    $cooldownGroupKey =>
-                        __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
+                    $cooldownGroupKey => __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
                 ];
             })->toArray(),
         ];

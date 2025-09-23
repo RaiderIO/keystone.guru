@@ -49,7 +49,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
         SpellRepositoryInterface                  $spellRepository,
         FloorRepositoryInterface                  $floorRepository,
         DungeonRepositoryInterface                $dungeonRepository,
-        CombatLogRouteRequestModel                $combatLogRoute
+        CombatLogRouteRequestModel                $combatLogRoute,
     ) {
         /** @var CombatLogRouteCombatLogEventsBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCombatLogEventsBuilderLoggingInterface::class);
@@ -69,7 +69,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
             $spellRepository,
             $floorRepository,
             $dungeonRepository,
-            $combatLogRoute
+            $combatLogRoute,
         );
     }
 
@@ -97,14 +97,14 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
                         'pos_grid_y' => $npc->gridCoord->y,
                         'event_type' => CombatLogEventEventType::NpcDeath->value,
                         'context'    => json_encode([
-                            '@timestamp'       => $npc->getDiedAt(),
+                            '@timestamp' => $npc->getDiedAt(),
                             // Resolved enemy location
                             'pos_enemy_x'      => $npc->coordEnemy->x,
                             'pos_enemy_y'      => $npc->coordEnemy->y,
                             'pos_enemy_grid_x' => $npc->gridCoordEnemy->x,
                             'pos_enemy_grid_y' => $npc->gridCoordEnemy->y,
                         ]),
-                    ]
+                    ],
                 )));
             }
 
@@ -122,7 +122,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
                             '@timestamp' => $spell->getCastAt(),
                             'spell_id'   => $spell->spellId,
                         ]),
-                    ]
+                    ],
                 )));
             }
 
@@ -143,10 +143,9 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
                             'spec_id'      => $playerDeath->specId,
                             'item_level'   => $playerDeath->itemLevel,
                         ]),
-                    ]
+                    ],
                 )));
             }
-
         } finally {
             $this->log->getCombatLogEventsEnd();
         }
@@ -191,7 +190,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
     }
 
     private function getCharactersJsonFromRoster(
-        CombatLogRouteRequestModel $correctedCombatLogRoute
+        CombatLogRouteRequestModel $correctedCombatLogRoute,
     ): string {
         $result = [];
 
@@ -200,7 +199,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
                 'id'    => $correctedCombatLogRoute->roster->characterIds[$i] ?? 12345,
                 'class' => $correctedCombatLogRoute->roster->classIds[$i] ?? 1,
                 // Warrior
-                'spec'  => $correctedCombatLogRoute->roster->specIds[$i] ?? 73,
+                'spec' => $correctedCombatLogRoute->roster->specIds[$i] ?? 73,
                 // Warrior Protection
             ];
         }

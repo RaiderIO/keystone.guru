@@ -43,6 +43,7 @@ trait ConvertsMDTStrings
 
         // Save a temp file so that the parser can handle it
         $fileName = null;
+
         try {
             $fileName = $this->saveFile(self::$TMP_FILE_SUB_DIR, $string);
 
@@ -76,7 +77,6 @@ trait ConvertsMDTStrings
 
                 $result = $process->getOutput();
             }
-
         } finally {
             if ($fileName !== null) {
                 unlink($fileName);

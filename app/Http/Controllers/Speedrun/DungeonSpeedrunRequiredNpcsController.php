@@ -26,7 +26,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         Request             $request,
         Dungeon             $dungeon,
         Floor               $floor,
-        int                 $difficulty
+        int                 $difficulty,
     ): \Illuminate\View\View {
         $npcs = $npcService->getNpcsForDropdown(collect([$dungeon]))->toArray();
 
@@ -43,7 +43,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         DungeonSpeedrunRequiredNpcsFormRequest $request,
         Dungeon                                $dungeon,
         Floor                                  $floor,
-        int                                    $difficulty
+        int                                    $difficulty,
     ): RedirectResponse {
         $validated            = $request->validated();
         $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
@@ -65,7 +65,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         Dungeon                    $dungeon,
         Floor                      $floor,
         int                        $difficulty,
-        DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc
+        DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc,
     ): RedirectResponse {
         try {
             $dungeonspeedrunrequirednpc->delete();

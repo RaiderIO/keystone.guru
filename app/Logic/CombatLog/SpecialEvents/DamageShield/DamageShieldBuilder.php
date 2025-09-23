@@ -18,7 +18,7 @@ class DamageShieldBuilder implements SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC => new DamageShieldV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),

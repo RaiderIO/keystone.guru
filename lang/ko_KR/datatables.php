@@ -19,30 +19,30 @@ return [
         'next'     => '다음',
         'previous' => '이전',
     ],
-    'aria'           => [
+    'aria' => [
         'sortAscending'  => ': 오름차순 정렬',
         'sortDescending' => ': 내림차순 정렬',
     ],
-    'autoFill'       => [
+    'autoFill' => [
         'cancel'         => '취소',
         'fill'           => '모든 셀에서 <i>%d<i>을(를) 삽입</i></i>',
         'fillHorizontal' => '수평 셀에서 값을 삽입',
         'fillVertical'   => '수직 설에서 값을 삽입',
     ],
-    'buttons'        => [
-        'collection'      => '집합 <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'          => '컬럼 보기',
-        'colvisRestore'   => '보기 복원',
-        'copy'            => '복사',
-        'copyKeys'        => 'ctrl키 나 u2318 + C키로 테이블 데이터를 시스텝 복사판에서 복사하고 취소하려면 이 메시지를 클릭하거나 ESC키를 누르면됩니다. to copy the table data to your system clipboard. To cancel, click this message or press escape.',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => '집합 <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'        => '컬럼 보기',
+        'colvisRestore' => '보기 복원',
+        'copy'          => '복사',
+        'copyKeys'      => 'ctrl키 나 u2318 + C키로 테이블 데이터를 시스텝 복사판에서 복사하고 취소하려면 이 메시지를 클릭하거나 ESC키를 누르면됩니다. to copy the table data to your system clipboard. To cancel, click this message or press escape.',
+        'copySuccess'   => [
             1   => '1행을 복사판에서 복사됨',
             '_' => '%d행을 복사판에서 복사됨',
         ],
-        'copyTitle'       => '복사판에서 복사',
-        'csv'             => 'CSV',
-        'excel'           => '엑셀',
-        'pageLength'      => [
+        'copyTitle'  => '복사판에서 복사',
+        'csv'        => 'CSV',
+        'excel'      => '엑셀',
+        'pageLength' => [
             -1  => '모든 행 보기',
             '_' => '%d행 보기',
         ],
@@ -56,16 +56,16 @@ return [
         'removeAllStates' => '',
         'createState'     => '',
     ],
-    'searchBuilder'  => [
-        'add'         => '조건 추가',
-        'button'      => [
+    'searchBuilder' => [
+        'add'    => '조건 추가',
+        'button' => [
             0   => '빌더 조회',
             '_' => '빌더 조회(%d)',
         ],
-        'clearAll'    => '모두 지우기',
-        'condition'   => '조건',
-        'conditions'  => [
-            'date'   => [
+        'clearAll'   => '모두 지우기',
+        'condition'  => '조건',
+        'conditions' => [
+            'date' => [
                 'after'      => '',
                 'before'     => '',
                 'between'    => '',
@@ -99,7 +99,7 @@ return [
                 'notStartsWith' => '',
                 'notEndsWith'   => '',
             ],
-            'array'  => [
+            'array' => [
                 'without'  => '',
                 'notEmpty' => '',
                 'not'      => '',
@@ -118,11 +118,11 @@ return [
             0   => '빌더 조회',
             '_' => '빌더 조회(%d)',
         ],
-        'value'       => '값',
+        'value' => '값',
     ],
-    'searchPanes'    => [
-        'clearMessage'    => '',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => '',
+        'collapse'     => [
             0   => '',
             '_' => '',
         ],
@@ -134,8 +134,8 @@ return [
         'showMessage'     => '',
         'collapseMessage' => '',
     ],
-    'select'         => [
-        'cells'   => [
+    'select' => [
+        'cells' => [
             1   => '',
             '_' => '',
         ],
@@ -143,12 +143,12 @@ return [
             1   => '',
             '_' => '',
         ],
-        'rows'    => [
+        'rows' => [
             1   => '',
             '_' => '',
         ],
     ],
-    'datetime'       => [
+    'datetime' => [
         'previous' => '이전',
         'next'     => '다음',
         'hours'    => '시',
@@ -168,7 +168,7 @@ return [
             5 => '금',
             6 => '토',
         ],
-        'months'   => [
+        'months' => [
             0  => '1월',
             1  => '2월',
             2  => '3월',
@@ -183,14 +183,14 @@ return [
             11 => '12월',
         ],
     ],
-    'editor'         => [
+    'editor' => [
         'close'  => '닫기',
         'create' => [
             'button' => '추가',
             'title'  => '항목 추가',
             'submit' => '완료',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => '수정',
             'title'  => '항목 수정',
             'submit' => '완료',
@@ -204,17 +204,17 @@ return [
                 1   => '',
             ],
         ],
-        'error'  => [
+        'error' => [
             'system' => '에러가 발생하였습니다 (&lt;a target="" rel="nofollow" href=""&gt;자세한 정보&lt;/a&gt;).',
         ],
-        'multi'  => [
+        'multi' => [
             'title'   => '',
             'info'    => '',
             'restore' => '',
             'noMulti' => '',
         ],
     ],
-    'stateRestore'   => [
+    'stateRestore' => [
         'renameTitle'    => '',
         'renameLabel'    => '',
         'renameButton'   => '',
@@ -240,7 +240,7 @@ return [
                 'visible' => '',
                 'search'  => '',
             ],
-            'button'        => '',
+            'button' => '',
         ],
     ],
 

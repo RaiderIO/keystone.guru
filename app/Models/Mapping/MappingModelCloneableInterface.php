@@ -8,6 +8,6 @@ interface MappingModelCloneableInterface
 {
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,
-        ?MappingModelInterface $newParent = null
+        ?MappingModelInterface $newParent = null,
     ): Model;
 }

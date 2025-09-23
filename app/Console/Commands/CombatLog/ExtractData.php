@@ -31,7 +31,8 @@ class ExtractData extends BaseCombatLogCommand
         $filePath = $this->argument('filePath');
         $force    = (bool)$this->option('force');
 
-        $parseResult = $this->parseCombatLogRecursively($filePath, fn(string $filePath
+        $parseResult = $this->parseCombatLogRecursively($filePath, fn(
+            string $filePath,
         ) => $this->extractData($combatLogDataExtractionService, $filePath, $force));
 
         $this->info('Total result:');
@@ -45,13 +46,13 @@ class ExtractData extends BaseCombatLogCommand
     private function extractData(
         CombatLogDataExtractionServiceInterface $combatLogDataExtractionService,
         string                                  $filePath,
-        bool                                    $force = false
+        bool                                    $force = false,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
         if (!$force && ParsedCombatLog::where('combat_log_path', $filePath)->exists()) {
             $this->warn(
-                '- Data already extracted for this file'
+                '- Data already extracted for this file',
             );
 
             return 0;
@@ -70,7 +71,7 @@ class ExtractData extends BaseCombatLogCommand
             }
         } else {
             $this->comment(
-                '- Did not find any data to update'
+                '- Did not find any data to update',
             );
         }
 
