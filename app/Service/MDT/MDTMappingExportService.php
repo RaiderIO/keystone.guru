@@ -313,7 +313,7 @@ MDT.mapPOIs[dungeonIndex] = {};
 
             $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->gameVersion);
             $dungeonEnemy = array_filter([
-                'name'          => addslashes(__($npc->name, [], 'en_US')),
+                'name'          => __($npc->name, [], 'en_US'),
                 'id'            => $npc->id,
                 'count'         => $enemyForces,
                 'health'        => $npcHealth?->health ?? 123456,
@@ -329,9 +329,11 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'characteristics' => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
                     return [__($characteristic->name, [], 'en_US') => true];
                 })->toArray(),
-                'spells' => $npc->spells->mapWithKeys(function (Spell $spell) {
-                    return [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []];
-                })->toArray(),
+                'spells' => $npc->spells
+                    ->filter(fn(Spell $spell) => !$spell->hidden_on_map)
+                    ->mapWithKeys(function (Spell $spell) {
+                        return [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []];
+                    })->toArray(),
                 'clones'           => [],
                 'healthPercentage' => $npcHealth?->percentage ?? null,
             ], fn($value) => $value !== null);
