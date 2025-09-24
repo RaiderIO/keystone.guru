@@ -478,6 +478,10 @@ return [
                 'header' => 'Convert Dungeon Mapping to MDT Mapping',
                 'submit' => 'Submit',
             ],
+            'dungeonmappingversionaccuracy' => [
+                'title'  => 'View Dungeon Mapping Version Accuracy vs MDT Mapping',
+                'header' => 'View Dungeon Mapping Version Accuracy vs MDT Mapping',
+            ],
         ],
         'npc' => [
             'import' => [

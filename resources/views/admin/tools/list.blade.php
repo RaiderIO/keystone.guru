@@ -46,6 +46,9 @@
     <div class="form-group">
         <a href="{{ route('admin.tools.mdt.dungeonmappingversiontomdtmapping') }}">{{ __('view_admin.tools.list.view_dungeon_mapping_version_to_mdt_mapping') }}</a>
     </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.mdt.dungeon_mapping_version_accuracy') }}">{{ __('view_admin.tools.list.view_dungeon_mapping_version_accuracy') }}</a>
+    </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_enemy_forces') }}</h4>
     <div class="form-group">

@@ -397,6 +397,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     // Convert Mapping Version to MDT Mapping
                     Route::get('dungeonmappingversiontomdtmapping', (new AdminToolsController())->dungeonmappingversiontomdtmapping(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
                     Route::post('dungeonmappingversiontomdtmapping', (new AdminToolsController())->dungeonmappingversiontomdtmappingsubmit(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
+
+                    Route::get('dungeon/mappingversion/accuracy', (new AdminToolsController())->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
                 });
 
                 // Wow.tools
@@ -628,3 +630,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('preview/{floorIndex}', (new DungeonRouteLegacyController())->previewOld(...));
     });
 });
+
+Route::fallback(function () {
+    // Render your 404 page, but now with web middleware (sessions) active
+    return response()->view('errors.404', [], 404);
+})->middleware('web');

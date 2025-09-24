@@ -272,16 +272,11 @@ class MappingVersion extends Model
         return $floorUnions;
     }
 
-    public function getFloorUnionForLatLng(
-        CoordinatesServiceInterface $coordinatesService,
-        MappingVersion              $mappingVersion,
-        LatLng                      $latLng,
-    ): ?FloorUnion {
-        $floor = $latLng->getFloor();
-        if ($floor === null) {
-            return null;
-        }
-
+    /**
+     * @return Collection<FloorUnion>
+     */
+    public function getFloorUnionsForFloor(Floor $floor): Collection
+    {
         if ($this->cachedFloorUnionsForFloor === null) {
             $this->cachedFloorUnionsForFloor = collect();
         }
@@ -300,6 +295,21 @@ class MappingVersion extends Model
 
             $this->cachedFloorUnionsForFloor->put($floor->id, $floorUnions);
         }
+
+        return $floorUnions;
+    }
+
+    public function getFloorUnionForLatLng(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        LatLng                      $latLng,
+    ): ?FloorUnion {
+        $floor = $latLng->getFloor();
+        if ($floor === null) {
+            return null;
+        }
+
+        $floorUnions = $this->getFloorUnionsForFloor($floor);
 
         // Now that we know the floor union candidates, check which floor union we need to use
         $result = null;

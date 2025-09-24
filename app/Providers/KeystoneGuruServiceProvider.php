@@ -84,6 +84,8 @@ use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\MDTMappingVersionService;
+use App\Service\MDT\MDTMappingVersionServiceInterface;
 use App\Service\MessageBanner\MessageBannerService;
 use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Service\Metric\MetricService;
@@ -159,8 +161,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
-        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
-        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
@@ -196,6 +196,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+
+        // Depends on CacheService, CoordinatesService
+        $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);
+        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
+        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
