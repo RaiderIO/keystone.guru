@@ -57,15 +57,18 @@ class FloorUnion extends CacheModel implements MappingModelCloneableInterface, M
         'floor',
     ];
 
-    protected $casts = [
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'target_floor_id'    => 'integer',
-        'lat'                => 'float',
-        'lng'                => 'float',
-        'size'               => 'float',
-        'rotation'           => 'float',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'target_floor_id'    => 'integer',
+            'lat'                => 'float',
+            'lng'                => 'float',
+            'size'               => 'float',
+            'rotation'           => 'float',
+        ];
+    }
 
     public function mappingVersion(): BelongsTo
     {

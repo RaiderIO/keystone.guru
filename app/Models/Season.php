@@ -113,16 +113,19 @@ class Season extends CacheModel
         'start_period',
     ];
 
-    protected $casts = [
-        'start'          => 'datetime',
-        'key_level_min'  => 'integer',
-        'key_level_max'  => 'integer',
-        'item_level_min' => 'integer',
-        'item_level_max' => 'integer',
-    ];
-
     /** @var bool|null Cache for if we're a timewalking season or not */
     private ?bool $isTimewalkingSeason = null;
+
+    protected function casts(): array
+    {
+        return [
+            'start'          => 'datetime',
+            'key_level_min'  => 'integer',
+            'key_level_max'  => 'integer',
+            'item_level_min' => 'integer',
+            'item_level_max' => 'integer',
+        ];
+    }
 
     public function getNameAttribute(): string
     {

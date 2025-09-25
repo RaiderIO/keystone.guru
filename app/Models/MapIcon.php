@@ -75,23 +75,26 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
         'is_admin',
     ];
 
-    protected $casts = [
-        'mapping_version_id'         => 'integer',
-        'floor_id'                   => 'integer',
-        'dungeon_route_id'           => 'integer',
-        'team_id'                    => 'integer',
-        'map_icon_type_id'           => 'integer',
-        'lat'                        => 'float',
-        'lng'                        => 'float',
-        'permanent_tooltip'          => 'integer',
-        'seasonal_index'             => 'integer',
-        'linked_awakened_obelisk_id' => 'integer',
-    ];
-
     protected $with = [
         'mapIconType',
         'linkedawakenedobelisks',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id'         => 'integer',
+            'floor_id'                   => 'integer',
+            'dungeon_route_id'           => 'integer',
+            'team_id'                    => 'integer',
+            'map_icon_type_id'           => 'integer',
+            'lat'                        => 'float',
+            'lng'                        => 'float',
+            'permanent_tooltip'          => 'integer',
+            'seasonal_index'             => 'integer',
+            'linked_awakened_obelisk_id' => 'integer',
+        ];
+    }
 
     public function getIsAdminAttribute(): bool
     {

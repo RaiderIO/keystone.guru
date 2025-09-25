@@ -41,10 +41,13 @@ class DungeonRouteChange extends Model
         'after',
     ];
 
-    protected $casts = [
-        'before' => 'array',
-        'after'  => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'before' => 'array',
+            'after'  => 'array',
+        ];
+    }
 
     public function dungeonRoute(): BelongsTo
     {

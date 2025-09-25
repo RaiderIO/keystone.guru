@@ -37,7 +37,7 @@ class BitMasksTest extends TestCase
 
     #[Test]
     #[Group('BitMasks')]
-    public function testBitMaskAdd()
+    public function testBitMaskAdd(): void
     {
         $this->assertEquals(6, $this->bitMask->testBitMaskAdd(4, 2));  // 4 | 2 = 6
         $this->assertEquals(5, $this->bitMask->testBitMaskAdd(5, 0));  // 5 | 0 = 5
@@ -45,7 +45,7 @@ class BitMasksTest extends TestCase
 
     #[Test]
     #[Group('BitMasks')]
-    public function testBitMaskRemove()
+    public function testBitMaskRemove(): void
     {
         $this->assertEquals(4, $this->bitMask->testBitMaskRemove(6, 2)); // 6 & ~2 = 4
         $this->assertEquals(1, $this->bitMask->testBitMaskRemove(3, 2)); // 3 & ~2 = 1
@@ -53,7 +53,7 @@ class BitMasksTest extends TestCase
 
     #[Test]
     #[Group('BitMasks')]
-    public function testBitMaskHasValue()
+    public function testBitMaskHasValue(): void
     {
         $this->assertTrue($this->bitMask->testBitMaskHasValue(6, 2));   // 6 & 2 > 0
         $this->assertFalse($this->bitMask->testBitMaskHasValue(4, 2));  // 4 & 2 == 0

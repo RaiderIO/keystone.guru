@@ -74,14 +74,6 @@ class KillZone extends Model
         'created_at',
     ];
 
-    protected $casts = [
-        'dungeon_route_id' => 'integer',
-        'floor_id'         => 'integer',
-        'index'            => 'integer',
-        'lat'              => 'float',
-        'lng'              => 'float',
-    ];
-
     /** @var Collection<int>|null */
     private ?Collection $enemiesAttributeCache = null;
 
@@ -89,6 +81,17 @@ class KillZone extends Model
     private ?Collection $enemiesCache = null;
 
     private ?Floor $dominantFloorCache = null;
+
+    protected function casts(): array
+    {
+        return [
+            'dungeon_route_id' => 'integer',
+            'floor_id'         => 'integer',
+            'index'            => 'integer',
+            'lat'              => 'float',
+            'lng'              => 'float',
+        ];
+    }
 
     public function setEnemiesAttributeCache(?Collection $enemyIds): void
     {

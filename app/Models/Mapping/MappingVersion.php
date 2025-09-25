@@ -95,18 +95,6 @@ class MappingVersion extends Model
         'created_at',
     ];
 
-    protected $casts = [
-        'game_version_id'                 => 'integer',
-        'dungeon_id'                      => 'integer',
-        'version'                         => 'integer',
-        'enemy_forces_required'           => 'integer',
-        'enemy_forces_required_teeming'   => 'integer',
-        'enemy_forces_shrouded'           => 'integer',
-        'enemy_forces_shrouded_zul_gamux' => 'integer',
-        'timer_max_seconds'               => 'integer',
-        'facade_enabled'                  => 'integer',
-    ];
-
     protected $appends = [
         'merged',
     ];
@@ -123,6 +111,21 @@ class MappingVersion extends Model
     private ?Collection $cachedFloorUnionsForFloor = null;
 
     private ?int $isLatestForDungeonCache = null;
+
+    protected function casts(): array
+    {
+        return [
+            'game_version_id'                 => 'integer',
+            'dungeon_id'                      => 'integer',
+            'version'                         => 'integer',
+            'enemy_forces_required'           => 'integer',
+            'enemy_forces_required_teeming'   => 'integer',
+            'enemy_forces_shrouded'           => 'integer',
+            'enemy_forces_shrouded_zul_gamux' => 'integer',
+            'timer_max_seconds'               => 'integer',
+            'facade_enabled'                  => 'integer',
+        ];
+    }
 
     public function getMergedAttribute(): bool
     {

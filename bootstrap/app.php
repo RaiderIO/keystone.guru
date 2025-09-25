@@ -1,55 +1,58 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Create The Application
-|--------------------------------------------------------------------------
-|
-| The first thing we will do is create a new Laravel application instance
-| which serves as the "glue" for all the components of Laravel, and is
-| the IoC container for the system binding all of the various parts.
-|
-*/
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
 
-$app = new Illuminate\Foundation\Application(
-    realpath(__DIR__ . '/../'),
-);
+return Application::configure(basePath: dirname(__DIR__))
+    ->withProviders([
+        \Laravel\Tinker\TinkerServiceProvider::class,
+        \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        \Laratrust\LaratrustServiceProvider::class,
+        \Jenssegers\Agent\AgentServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
+        \Rollbar\Laravel\RollbarServiceProvider::class,
+    ])
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo(fn () => route('login'));
+        $middleware->redirectUsersTo('/home');
 
-/*
-|--------------------------------------------------------------------------
-| Bind Important Interfaces
-|--------------------------------------------------------------------------
-|
-| Next, we need to bind some important interfaces into the container so
-| we will be able to resolve them when needed. The kernels serve the
-| incoming requests to this application from both the web and CLI.
-|
-*/
+        $middleware->validateCsrfTokens(except: [
+            '*',
+        ]);
 
-$app->singleton(
-    Illuminate\Contracts\Http\Kernel::class,
-    App\Http\Kernel::class,
-);
+        $middleware->append([
+            \BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware::class,
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \App\Http\Middleware\PoweredBySwoole::class,
+        ]);
 
-$app->singleton(
-    Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class,
-);
+        $middleware->api([
+            \App\Http\'authentication' => ApiAuthentication::class,
+            \App\Http\'debug_info_context_logger' => DebugInfoContextLogger::class,
+            \App\Http\'read_only_mode'            => ReadOnlyMode::class,
+        ]);
 
-$app->singleton(
-    Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class,
-);
+        $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, \App\Http\Middleware\TrustProxies::class);
 
-/*
-|--------------------------------------------------------------------------
-| Return The Application
-|--------------------------------------------------------------------------
-|
-| This script returns the application instance. The instance is given to
-| the calling script so we can separate the building of the instances
-| from the actual running of the application and sending responses.
-|
-*/
-
-return $app;
+        $middleware->alias([
+            'ajax' => \App\Http\Middleware\OnlyAjax::class,
+            'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'debug_info_context_logger' => \App\Http\Middleware\DebugInfoContextLogger::class,
+            'debugbarmessagelogger' => \App\Http\Middleware\DebugBarMessageLogger::class,
+            'legal_agreed' => \App\Http\Middleware\LegalAgreed::class,
+            'read_only_mode' => \App\Http\Middleware\ReadOnlyMode::class,
+            'track_ip' => \App\Http\Middleware\TracksUserIpAddress::class,
+            'viewcachebuster' => \App\Http\Middleware\ViewCacheBuster::class,
+        ]);
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        //
+    })->create();

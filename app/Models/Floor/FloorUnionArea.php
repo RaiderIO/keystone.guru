@@ -46,13 +46,16 @@ class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, Ma
         'floor',
     ];
 
-    protected $casts = [
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'floor_union_id'     => 'integer',
-    ];
-
     private ?array $cachedVertices = null;
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'floor_union_id'     => 'integer',
+        ];
+    }
 
     public function mappingVersion(): BelongsTo
     {

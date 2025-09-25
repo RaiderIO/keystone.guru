@@ -62,17 +62,20 @@ class SimulationCraftRaidEventsOptions extends Model
 
     protected $with = ['dungeonRoute'];
 
-    protected $casts = [
-        'id'                             => 'int',
-        'dungeon_route_id'               => 'int',
-        'user_id'                        => 'int',
-        'key_level'                      => 'int',
-        'thundering_clear_seconds'       => 'int',
-        'raid_buffs_mask'                => 'int',
-        'hp_percent'                     => 'float',
-        'ranged_pull_compensation_yards' => 'int',
-        'use_mounts'                     => 'bool',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id'                             => 'int',
+            'dungeon_route_id'               => 'int',
+            'user_id'                        => 'int',
+            'key_level'                      => 'int',
+            'thundering_clear_seconds'       => 'int',
+            'raid_buffs_mask'                => 'int',
+            'hp_percent'                     => 'float',
+            'ranged_pull_compensation_yards' => 'int',
+            'use_mounts'                     => 'bool',
+        ];
+    }
 
     public const SHROUDED_BOUNTY_TYPE_NONE    = 'none';
     public const SHROUDED_BOUNTY_TYPE_CRIT    = 'crit';

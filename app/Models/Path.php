@@ -45,13 +45,6 @@ class Path extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'id'               => 'int',
-        'dungeon_route_id' => 'int',
-        'floor_id'         => 'int',
-        'polyline_id'      => 'int',
-    ];
-
     protected $with = [
         'polyline',
         'linkedawakenedobelisks',
@@ -60,6 +53,16 @@ class Path extends Model
     protected $appends = ['linked_awakened_obelisk_id'];
 
     public $timestamps = true;
+
+    protected function casts(): array
+    {
+        return [
+            'id'               => 'int',
+            'dungeon_route_id' => 'int',
+            'floor_id'         => 'int',
+            'polyline_id'      => 'int',
+        ];
+    }
 
     /**
      * Get the dungeon route that this route is attached to.

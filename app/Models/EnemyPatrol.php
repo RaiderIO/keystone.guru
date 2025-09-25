@@ -55,19 +55,22 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'faction',
     ];
 
-    protected $casts = [
-        'id'                 => 'integer',
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'polyline_id'        => 'integer',
-        'mdt_polyline_id'    => 'integer',
-        'mdt_npc_id'         => 'integer',
-        'mdt_id'             => 'integer',
-    ];
-
     public $with = ['polyline'];
 
     public $timestamps = false;
+
+    protected function casts(): array
+    {
+        return [
+            'id'                 => 'integer',
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'polyline_id'        => 'integer',
+            'mdt_polyline_id'    => 'integer',
+            'mdt_npc_id'         => 'integer',
+            'mdt_id'             => 'integer',
+        ];
+    }
 
     public function mappingVersion(): BelongsTo
     {

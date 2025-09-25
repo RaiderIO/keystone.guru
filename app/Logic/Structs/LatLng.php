@@ -111,7 +111,7 @@ class LatLng implements Arrayable
         return [
             'lat'      => $this->lat,
             'lng'      => $this->lng,
-            'floor_id' => optional($this->floor)->id,
+            'floor_id' => $this->floor?->id,
         ];
     }
 

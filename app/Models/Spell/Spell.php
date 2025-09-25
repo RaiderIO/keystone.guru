@@ -85,19 +85,22 @@ class Spell extends CacheModel implements MappingModelInterface
         'fetched_data_at',
     ];
 
-    protected $casts = [
-        'id'              => 'integer',
-        'game_version_id' => 'integer',
-        'schools_mask'    => 'integer',
-        'miss_types_mask' => 'integer',
-        'aura'            => 'boolean',
-        'debuff'          => 'boolean',
-        'cast_time'       => 'integer',
-        'duration'        => 'integer',
-        'selectable'      => 'boolean',
-        'hidden_on_map'   => 'boolean',
-        'fetched_data_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id'              => 'integer',
+            'game_version_id' => 'integer',
+            'schools_mask'    => 'integer',
+            'miss_types_mask' => 'integer',
+            'aura'            => 'boolean',
+            'debuff'          => 'boolean',
+            'cast_time'       => 'integer',
+            'duration'        => 'integer',
+            'selectable'      => 'boolean',
+            'hidden_on_map'   => 'boolean',
+            'fetched_data_at' => 'datetime',
+        ];
+    }
 
     public function getWowheadUrlAttribute(): string
     {

@@ -58,11 +58,14 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
         'floor',
     ];
 
-    protected $casts = [
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'group'              => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'group'              => 'integer',
+        ];
+    }
 
     public function mappingVersion(): BelongsTo
     {

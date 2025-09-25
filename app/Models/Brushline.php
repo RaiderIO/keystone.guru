@@ -47,14 +47,17 @@ class Brushline extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'id'               => 'int',
-        'dungeon_route_id' => 'int',
-        'floor_id'         => 'int',
-        'polyline_id'      => 'int',
-    ];
-
     protected $with = ['polyline'];
+
+    protected function casts(): array
+    {
+        return [
+            'id'               => 'int',
+            'dungeon_route_id' => 'int',
+            'floor_id'         => 'int',
+            'polyline_id'      => 'int',
+        ];
+    }
 
     /**
      * Get the dungeon route that this brushline is attached to.

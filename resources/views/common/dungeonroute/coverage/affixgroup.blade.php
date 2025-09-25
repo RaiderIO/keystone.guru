@@ -73,7 +73,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                 @endif
             </th>
             @foreach($affixGroups as $affixGroup)
-                <th class="p-1 {{ optional($currentAffixGroup)->id === $affixGroup->id ? 'bg-success' : '' }}">
+                <th class="p-1 {{ $currentAffixGroup?->id === $affixGroup->id ? 'bg-success' : '' }}">
                     @include('common.affixgroup.affixgroup', [
                         'affixgroup' => $affixGroup,
                         'showText' => false,

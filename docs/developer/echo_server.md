@@ -22,7 +22,7 @@ Supervisor handles running echo server.
 `laravel-echo-server start --config="<config.json>"`
 
 ### Modify .env
-`BROADCAST_DRIVER=redis`
+`BROADCAST_CONNECTION=redis`
 
 ### Apache2 proxy
 (Note I run the server on port 6002)
