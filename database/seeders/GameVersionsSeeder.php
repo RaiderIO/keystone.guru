@@ -62,6 +62,14 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'has_seasons'  => false,
                 'active'       => true,
             ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_LEGION],
+                'key'          => GameVersion::GAME_VERSION_LEGION_REMIX,
+                'name'         => 'gameversions.legion_remix.name',
+                'description'  => 'gameversions.legion_remix.description',
+                'has_seasons'  => false,
+                'active'       => true,
+            ],
         ];
 
         GameVersion::from(DatabaseSeeder::getTempTableName(GameVersion::class))->insert($gameVersionAttributes);

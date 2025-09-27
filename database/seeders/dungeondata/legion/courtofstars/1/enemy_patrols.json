@@ -1370,5 +1370,19 @@
             "vertices_json": "[{\"lat\":-81,\"lng\":212},{\"lat\":-84,\"lng\":216},{\"lat\":-89,\"lng\":215},{\"lat\":-92,\"lng\":223},{\"lat\":-89,\"lng\":215},{\"lat\":-84,\"lng\":216},{\"lat\":-81,\"lng\":212}]"
         },
         "mdt_polyline": null
+    },
+    {
+        "id": 21579,
+        "mapping_version_id": 614,
+        "floor_id": 13,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 2,
+            "vertices_json": "[{\"lat\":-142,\"lng\":163},{\"lat\":-146,\"lng\":155},{\"lat\":-142,\"lng\":163}]"
+        },
+        "mdt_polyline": null
     }
 ]
