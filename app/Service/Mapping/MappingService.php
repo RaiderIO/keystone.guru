@@ -105,9 +105,9 @@ class MappingService implements MappingServiceInterface
         ]);
     }
 
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion
     {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
         $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([

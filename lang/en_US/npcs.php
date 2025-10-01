@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Stormwind City Guard',
@@ -5499,4 +5499,5 @@ return [
     246285    => 'Bazaar Overseer',
     555555    => 'Priory of the Sacred Flame',
     129547000 => 'Blacktooth Knuckleduster',
-];
+]
+;

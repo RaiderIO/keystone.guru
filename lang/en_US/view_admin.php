@@ -517,6 +517,7 @@ return [
             'view_mdt_diff'                               => 'View MDT Diff',
             'view_dungeon_mapping_hash'                   => 'View dungeon mapping hash',
             'view_dungeon_mapping_version_to_mdt_mapping' => 'Convert mapping version to MDT mapping',
+            'view_dungeon_mapping_version_accuracy'       => 'View mapping version accuracy vs MDT mapping',
             'subheader_enemy_forces'                      => 'Enemy Forces',
             'enemy_forces_import'                         => 'Import enemy forces',
             'subheader_wowtools'                          => 'WoW.tools',

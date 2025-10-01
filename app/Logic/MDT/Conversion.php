@@ -105,8 +105,8 @@ class Conversion
         ],
 
         Expansion::EXPANSION_LEGION => [
-            Dungeon::DUNGEON_ARCWAY => 'TheArcway',
-            //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
+            Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
+            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
             Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
             Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
             Dungeon::DUNGEON_DARKHEART_THICKET           => 'DarkheartThicket',
@@ -127,9 +127,9 @@ class Conversion
             Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
             Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
             //            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
-            Dungeon::DUNGEON_THE_UNDERROT => 'TheUnderrot',
-            Dungeon::DUNGEON_TOL_DAGOR    => 'TolDagor',
-            //            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
+            Dungeon::DUNGEON_THE_UNDERROT      => 'TheUnderrot',
+            Dungeon::DUNGEON_TOL_DAGOR         => 'TolDagor',
+            Dungeon::DUNGEON_WAYCREST_MANOR    => 'WaycrestManor',
             Dungeon::DUNGEON_MECHAGON_JUNKYARD => 'MechagonIsland',
             //            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
         ],
@@ -159,9 +159,9 @@ class Conversion
             Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS => 'ShadowmoonBurialGrounds',
             Dungeon::DUNGEON_THE_EVERBLOOM             => 'Everbloom',
             // Legion
-            Dungeon::DUNGEON_BLACK_ROOK_HOLD => 'BlackrookHold',
+            //            Dungeon::DUNGEON_BLACK_ROOK_HOLD => 'BlackrookHold',
             // BFA
-            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
+            //            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
             // DF
             Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
             Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
