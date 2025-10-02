@@ -75,6 +75,7 @@ class Enemy extends VersionableMapObject {
         this.overpulledKillZoneId = null;
         this.obsolete = false;
         this.selectNpcs = [];
+        this.selectable = false;
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {

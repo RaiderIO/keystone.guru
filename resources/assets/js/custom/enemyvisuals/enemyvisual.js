@@ -88,7 +88,9 @@ class EnemyVisual extends Signalable {
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.previousMapState instanceof EnemySelection ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EnemySelection ||
                 mapStateChangedEvent.data.previousMapState instanceof DeleteMapState ||
                 mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
                 self.buildVisual();
@@ -381,8 +383,11 @@ class EnemyVisual extends Signalable {
             let mapState = this.map.getMapState();
 
             let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
-            let isSelectable = ((mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection) && this.enemy.isSelectable()) ||
-                (mapState instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
+            let isSelectable = (
+                mapState instanceof EnemySelection && this.enemy.isSelectable()
+            ) || (
+                mapState instanceof EditMapState && this.enemy.isEditable()
+            ) || isDeletable;
 
             // Set a default color which may be overridden by any visuals
             let borderThickness = getState().getMapZoomLevel();
@@ -539,8 +544,11 @@ class EnemyVisual extends Signalable {
         let mapState = this.map.getMapState();
 
         let isDeletable = mapState instanceof DeleteMapState && this.enemy.isDeletable();
-        let isSelectable = ((mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection) && this.enemy.isSelectable()) ||
-            (mapState instanceof EditMapState && this.enemy.isEditable()) || isDeletable;
+        let isSelectable = (
+            mapState instanceof EnemySelection && this.enemy.isSelectable()
+        ) || (
+            mapState instanceof EditMapState && this.enemy.isEditable()
+        ) || isDeletable;
 
         let size = this.mainVisual.getSize();
 
