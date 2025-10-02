@@ -62,7 +62,7 @@ class GameVersion extends CacheModel
     public const GAME_VERSION_BETA         = 'beta';
     public const GAME_VERSION_CATA         = 'cata';
     public const GAME_VERSION_MOP          = 'mop';
-    public const GAME_VERSION_LEGION_REMIX = 'legion_remix';
+    public const GAME_VERSION_LEGION_REMIX = 'legion-remix';
 
     public const ALL = [
         self::GAME_VERSION_RETAIL       => 1,

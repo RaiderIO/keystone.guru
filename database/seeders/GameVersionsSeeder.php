@@ -65,8 +65,8 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
             [
                 'expansion_id' => Expansion::ALL[Expansion::EXPANSION_LEGION],
                 'key'          => GameVersion::GAME_VERSION_LEGION_REMIX,
-                'name'         => 'gameversions.legion_remix.name',
-                'description'  => 'gameversions.legion_remix.description',
+                'name'         => 'gameversions.legion-remix.name',
+                'description'  => 'gameversions.legion-remix.description',
                 'has_seasons'  => false,
                 'active'       => true,
             ],
