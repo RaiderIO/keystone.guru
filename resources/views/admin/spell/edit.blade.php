@@ -95,10 +95,10 @@ $gameVersionsSelect = $allGameVersions
     </div>
 
     <div>
-        {{ html()->input('submit')->value(__('view_admin.spell.edit.submit'))->class('btn btn-info')->name('submit')->value('submit') }}
+        {{ html()->input('submit')->value(__('view_admin.spell.edit.submit'))->class('btn btn-info')->name('submit') }}
         @isset($spell)
             <div class="float-right">
-                {{ html()->input('submit')->value(__('view_admin.spell.edit.save_as_new_spell'))->class('btn btn-info')->name('submit')->value('saveasnew') }}
+                {{ html()->input('submit')->value(__('view_admin.spell.edit.save_as_new_spell'))->class('btn btn-info')->name('submit') }}
             </div>
         @endisset
     </div>

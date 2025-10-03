@@ -32,10 +32,10 @@ $gameVersionsSelect   = $allGameVersions
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc, $npcHealth],
     'showAds' => false,
-    'title' => __('view_admin.npchealth.edit.title', ['name' => $npc->name]),
+    'title' => __('view_admin.npchealth.edit.title', ['name' => __($npc->name)]),
 ])
 @section('header-title')
-    {{ __('view_admin.npchealth.edit.header', ['name' => $npc->name]) }}
+    {{ __('view_admin.npchealth.edit.header', ['name' => __($npc->name)]) }}
 @endsection
 
 @include('common.general.inline', ['path' => 'admin/npchealth/edit', 'options' => [
@@ -125,7 +125,7 @@ $gameVersionsSelect   = $allGameVersions
     </div>
 
     <div class="form-group">
-        {{ html()->input('submit')->value(__('view_admin.npchealth.edit.submit'))->class('btn btn-info')->name('submit')->value('submit') }}
+        {{ html()->input('submit')->value(__('view_admin.npchealth.edit.submit'))->class('btn btn-info')->name('submit') }}
     </div>
 
     {{ html()->closeModelForm() }}

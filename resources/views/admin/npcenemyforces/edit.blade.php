@@ -13,10 +13,10 @@ $npcEnemyForces = $npcEnemyForces ?? null;
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc, $npcEnemyForces],
     'showAds' => false,
-    'title' => __('view_admin.npcenemyforces.edit.title', ['name' => $npc->name]),
+    'title' => __('view_admin.npcenemyforces.edit.title', ['name' => __($npc->name)]),
 ])
 @section('header-title')
-    {{ __('view_admin.npcenemyforces.edit.header', ['name' => $npc->name]) }}
+    {{ __('view_admin.npcenemyforces.edit.header', ['name' => __($npc->name)]) }}
 @endsection
 
 @section('content')
@@ -51,7 +51,7 @@ $npcEnemyForces = $npcEnemyForces ?? null;
     </div>
 
     <div class="form-group">
-        {{ html()->input('submit')->value(__('view_admin.npcenemyforces.edit.submit'))->class('btn btn-info')->name('submit')->value('submit') }}
+        {{ html()->input('submit')->value(__('view_admin.npcenemyforces.edit.submit'))->class('btn btn-info')->name('submit') }}
     </div>
 
     {{ html()->closeModelForm() }}
