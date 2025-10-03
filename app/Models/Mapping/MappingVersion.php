@@ -301,7 +301,6 @@ class MappingVersion extends Model
 
     public function getFloorUnionForLatLng(
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion              $mappingVersion,
         LatLng                      $latLng,
     ): ?FloorUnion {
         $floor = $latLng->getFloor();
@@ -318,11 +317,11 @@ class MappingVersion extends Model
             foreach ($floorUnions as $floorUnion) {
                 // We need to translate the target point using this floor union first, prior to checking the floor union areas
                 // Only if the translated point falls in the floor union area, can we properly check if this floor union matches
-                $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng, $floorUnion);
+                $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($this, $latLng, $floorUnion);
                 foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
                     if ($floorUnionArea->containsPoint($coordinatesService, $tmpConvertedLatLng)) {
                         $result = $floorUnion;
-                        break;
+                        break 2;
                     }
                 }
             }
