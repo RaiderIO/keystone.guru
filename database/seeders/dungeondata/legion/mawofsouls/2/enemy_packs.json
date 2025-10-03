@@ -1,1 +1,110 @@
-[]
+[
+    {
+        "id": 17913,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 11,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 11",
+        "vertices_json": "[{\"lat\":-177.1004,\"lng\":152.96},{\"lat\":-161.4341,\"lng\":154.1706},{\"lat\":-160.5083,\"lng\":175.4625},{\"lat\":-178.0819,\"lng\":175.0648}]"
+    },
+    {
+        "id": 17914,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 7,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 7",
+        "vertices_json": "[{\"lat\":-179.5905,\"lng\":125.3848},{\"lat\":-161.4229,\"lng\":125.3848},{\"lat\":-161.4229,\"lng\":144.36},{\"lat\":-179.5905,\"lng\":144.36}]"
+    },
+    {
+        "id": 17918,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 6,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 6",
+        "vertices_json": "[{\"lat\":-146.4476,\"lng\":124.501},{\"lat\":-132.3943,\"lng\":124.501},{\"lat\":-132.3943,\"lng\":126.6838},{\"lat\":-146.4476,\"lng\":126.6838}]"
+    },
+    {
+        "id": 17919,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 12,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 12",
+        "vertices_json": "[{\"lat\":-176.9897,\"lng\":193.4844},{\"lat\":-163.794,\"lng\":193.6434},{\"lat\":-164.2312,\"lng\":208.7072},{\"lat\":-177.1885,\"lng\":208.3892}]"
+    },
+    {
+        "id": 17920,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 13,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 13",
+        "vertices_json": "[{\"lat\":-176.6038,\"lng\":235.8},{\"lat\":-157.1562,\"lng\":235.8},{\"lat\":-157.1562,\"lng\":261.221},{\"lat\":-176.6038,\"lng\":261.221}]"
+    },
+    {
+        "id": 17923,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 8,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 8",
+        "vertices_json": "[{\"lat\":-123.4077,\"lng\":126.5409},{\"lat\":-110.9459,\"lng\":127.6091},{\"lat\":-110.661,\"lng\":141.78},{\"lat\":-124.1198,\"lng\":141.78}]"
+    },
+    {
+        "id": 17924,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 9,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 9",
+        "vertices_json": "[{\"lat\":-129.884,\"lng\":168.752},{\"lat\":-110.1908,\"lng\":169.2054},{\"lat\":-109.4152,\"lng\":197.2971},{\"lat\":-129.0914,\"lng\":197.2971}]"
+    },
+    {
+        "id": 17925,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 10,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 10",
+        "vertices_json": "[{\"lat\":-146.7981,\"lng\":195.2057},{\"lat\":-135.2133,\"lng\":195.2057},{\"lat\":-135.2133,\"lng\":208.3905},{\"lat\":-146.7981,\"lng\":208.3905}]"
+    },
+    {
+        "id": 17926,
+        "mapping_version_id": 635,
+        "floor_id": 26,
+        "group": 14,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 14",
+        "vertices_json": "[{\"lat\":-150.8819,\"lng\":295.061},{\"lat\":-134.9238,\"lng\":295.061},{\"lat\":-134.9238,\"lng\":297.061},{\"lat\":-150.8819,\"lng\":297.061}]"
+    }
+]
