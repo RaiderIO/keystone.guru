@@ -69,7 +69,7 @@ class MappingService implements MappingServiceInterface
 
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
     {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
 
         $now = Carbon::now()->toDateTimeString();

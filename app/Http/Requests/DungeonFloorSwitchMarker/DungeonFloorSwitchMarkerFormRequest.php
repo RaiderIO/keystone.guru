@@ -10,9 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * @property string $source_floor_id
- * @property string $linked_dungeon_floor_switch_marker_id
- * @property string $direction
+ * @mixin DungeonFloorSwitchMarker
  */
 class DungeonFloorSwitchMarkerFormRequest extends FormRequest
 {
@@ -67,6 +65,10 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
                     '',
                     null,
                 ])),
+            ],
+            'hidden_in_facade' => [
+                'nullable',
+                'boolean',
             ],
             'lat' => 'numeric',
             'lng' => 'numeric',
