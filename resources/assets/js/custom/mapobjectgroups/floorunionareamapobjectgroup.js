@@ -5,6 +5,9 @@ class FloorUnionAreaMapObjectGroup extends PolygonMapObjectGroup {
         this.fa_class = 'fa-chart-pie';
 
         this._setColor(c.map.floorunionarea.color);
+        // Show the floor union areas always on top of the floor unions - you can always select floor unions
+        // from their map icons, but you can't select floor union areas the other way around
+        this.options.pane = 'shadowPane';
     }
 
     /**

@@ -19,7 +19,7 @@ return [
             'terms'   => 'Terms',
         ],
         'routes'           => 'Routes',
-        'routes_expansion' => ':expansion routes',
+        'routes_game_version' => ':gameVersion routes',
         'gameversion'      => [
             'update'  => ':gameVersion',
             'dungeon' => [

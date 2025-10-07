@@ -1,11 +1,22 @@
 <?php
+/**
+ * @var GameVersion $gameVersion
+ * @var Dungeon     $dungeon
+ * @var string      $category
+ * @var string|null $routeLoaderSelector
+ * @var string      $routeListContainerSelector
+ */
+
+use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
+
 $dungeon             ??= null;
 $hasLoader           = isset($routeLoaderSelector);
 $routeLoaderSelector ??= '#category_route_load_more_loader';
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/searchloadmore', 'options' => [
         'category' => $category,
-        'expansion' => $expansion,
+        'gameVersion' => $gameVersion,
         'dungeon' => $dungeon,
         'routeContainerListSelector' => $routeListContainerSelector,
         'routeLoadMoreSelector' => '#category_route_load_more',

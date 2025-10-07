@@ -354,6 +354,7 @@ return [
     'dungeonfloorswitchmarker_linked_dungeon_floor_switch_marker_id_label' => 'Linked floor switch ID',
     'dungeonfloorswitchmarker_direction_label'                             => 'Direction',
     'dungeonfloorswitchmarker_direction_select_default_label'              => 'Use floor coupling direction',
+    'dungeonfloorswitchmarker_hidden_in_facade_label'                      => 'Hidden in facade',
     'dungeonfloorswitchmarker_to_label'                                    => 'To :floor',
     'dungeonfloorswitchmarker_go_to_label'                                 => 'Go to :floor',
     'dungeonfloorswitchmarker_unknown_label'                               => 'Unknown',

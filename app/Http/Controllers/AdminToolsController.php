@@ -31,6 +31,7 @@ use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\MDTMappingVersionServiceInterface;
 use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
@@ -678,6 +679,36 @@ class AdminToolsController extends Controller
 
         echo $mdtMappingService->getMDTMappingAsLuaString($mappingVersion);
         dd();
+    }
+
+    public function dungeonMappingVersionAccuracy(
+        Request                           $request,
+        MDTMappingVersionServiceInterface $mappingVersionService,
+    ): View {
+        /** @var Collection<Dungeon> $allDungeons */
+        $allDungeons = Dungeon::with(['mappingVersions', 'mappingVersions.dungeon'])->get();
+
+        $dungeonAccuracyByFloor = collect();
+        foreach ($allDungeons as $dungeon) {
+            /**
+             * @var MappingVersion $latestMappingVersion I load the latest mapping version for this dungeon regardless
+             *                     of game version because we want to compare to the latest MDT version. The newest mapping version will
+             *                     generally be the mapping version that was used in the most recent version of MDT.
+             */
+            $latestMappingVersion = $dungeon->mappingVersions->first();
+
+            $dungeonAccuracyByFloor->put(
+                $dungeon->id,
+                $mappingVersionService->getMappingVersionAccuracy(
+                    $latestMappingVersion,
+                ),
+            );
+        }
+
+        return view('admin.tools.mdt.dungeonmappingversionaccuracy', [
+            'dungeonAccuracyByFloor' => $dungeonAccuracyByFloor,
+            'dungeonsById'           => $allDungeons->keyBy('id'),
+        ]);
     }
 
     /**

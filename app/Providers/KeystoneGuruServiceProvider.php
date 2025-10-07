@@ -7,8 +7,8 @@ use App\Logic\Utils\Stopwatch;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
-use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
@@ -84,6 +84,8 @@ use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\MDTMappingVersionService;
+use App\Service\MDT\MDTMappingVersionServiceInterface;
 use App\Service\MessageBanner\MessageBannerService;
 use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Service\Metric\MetricService;
@@ -159,8 +161,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
-        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
-        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
@@ -196,6 +196,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+
+        // Depends on CacheService, CoordinatesService
+        $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);
+        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
+        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
@@ -397,12 +402,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'dungeonroute.discover.dungeon.overview',
             'dungeonroute.discover.season.overview',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
-            /** @var Expansion $expansion */
-            $expansion = $view->getData()['expansion'];
+            /** @var GameVersion $gameVersion */
+            $gameVersion = $view->getData()['gameVersion'];
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
-            $expansionsData = $regionViewVariables['expansionsData']->get($expansion->shortname);
+            $expansionsData = $regionViewVariables['expansionsData']->get($gameVersion->expansion->shortname);
             $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
             $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
         });
@@ -410,8 +415,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Dungeon grid view
         view()->composer('dungeonroute.discover.search', static function (View $view) use (
             $viewService,
-            &
-            $userOrDefaultRegion
+            &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);

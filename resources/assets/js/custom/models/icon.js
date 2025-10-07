@@ -83,7 +83,9 @@ class Icon extends VersionableMapObject {
         this.register('object:changed', this, this._onObjectChanged.bind(this));
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.previousMapState instanceof EnemySelection ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EnemySelection ||
                 mapStateChangedEvent.data.previousMapState instanceof DeleteMapState ||
                 mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
                 self._refreshVisual();
@@ -184,10 +186,12 @@ class Icon extends VersionableMapObject {
 
         // Init once or only when visible (as in, only update icons on the same floor)
         if (this.isVisible() || (this.layer !== null && this.layer.getIcon() === LeafletIconUnknown)) {
+            let mapState = this.map.getMapState();
             this.layer.setIcon(
                 getLeafletIcon(this.map_icon_type,
-                    this.map.getMapState() instanceof EditMapState && this.isEditable(),
-                    this.map.getMapState() instanceof DeleteMapState && this.isDeletable()
+                    (mapState instanceof EditMapState && this.isEditable())
+                    || (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection),
+                    mapState instanceof DeleteMapState && this.isDeletable()
                 )
             );
 

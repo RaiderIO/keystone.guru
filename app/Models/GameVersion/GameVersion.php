@@ -56,20 +56,22 @@ class GameVersion extends CacheModel
 
     public const DEFAULT_GAME_VERSION = self::GAME_VERSION_RETAIL;
 
-    public const GAME_VERSION_RETAIL      = 'retail';
-    public const GAME_VERSION_WRATH       = 'wotlk';
-    public const GAME_VERSION_CLASSIC_ERA = 'classic';
-    public const GAME_VERSION_BETA        = 'beta';
-    public const GAME_VERSION_CATA        = 'cata';
-    public const GAME_VERSION_MOP         = 'mop';
+    public const GAME_VERSION_RETAIL       = 'retail';
+    public const GAME_VERSION_WRATH        = 'wotlk';
+    public const GAME_VERSION_CLASSIC_ERA  = 'classic';
+    public const GAME_VERSION_BETA         = 'beta';
+    public const GAME_VERSION_CATA         = 'cata';
+    public const GAME_VERSION_MOP          = 'mop';
+    public const GAME_VERSION_LEGION_REMIX = 'legion-remix';
 
     public const ALL = [
-        self::GAME_VERSION_RETAIL      => 1,
-        self::GAME_VERSION_CLASSIC_ERA => 2,
-        self::GAME_VERSION_WRATH       => 3,
-        self::GAME_VERSION_BETA        => 4,
-        self::GAME_VERSION_CATA        => 5,
-        self::GAME_VERSION_MOP         => 6,
+        self::GAME_VERSION_RETAIL       => 1,
+        self::GAME_VERSION_CLASSIC_ERA  => 2,
+        self::GAME_VERSION_WRATH        => 3,
+        self::GAME_VERSION_BETA         => 4,
+        self::GAME_VERSION_CATA         => 5,
+        self::GAME_VERSION_MOP          => 6,
+        self::GAME_VERSION_LEGION_REMIX => 7,
     ];
 
     /**
@@ -103,6 +105,18 @@ class GameVersion extends CacheModel
         return $this->mappingVersions->filter(fn(
             MappingVersion $mappingVersion,
         ) => $mappingVersion->dungeon !== null && $mappingVersion->dungeon->heatmap_enabled);
+    }
+
+    /**
+     * Returns if we should display individual dungeon images
+     */
+    public function showDiscoverRoutesCardDungeonImage(): bool
+    {
+        return !in_array($this->expansion->shortname, [
+            Expansion::EXPANSION_MOP,
+            Expansion::EXPANSION_SHADOWLANDS,
+            Expansion::EXPANSION_TWW,
+        ]);
     }
 
     /**

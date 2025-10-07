@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Cathedral of Eternal Night',
             'floors' => [
-                'hall_of_the_moon'     => 'Hall of the Moon',
-                'twilight_groove'      => 'Twilight Grove',
-                'the_emerald_archives' => 'The Emerald Archives',
-                'path_of_illumination' => 'Path of Illumination',
-                'sacristy_of_elune'    => 'Sacristy of Elune',
+                'hall_of_the_moon'           => 'Hall of the Moon',
+                'twilight_groove'            => 'Twilight Grove',
+                'the_emerald_archives'       => 'The Emerald Archives',
+                'path_of_illumination'       => 'Path of Illumination',
+                'sacristy_of_elune'          => 'Sacristy of Elune',
+                'cathedral_of_eternal_night' => 'Cathedral of Eternal Night',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'The Guest Chambers',
                 'opera_hall_balcony'   => 'Opera Hall Balcony',
                 'masters_terrace'      => 'Master\'s Terrace',
+                'lower_karazhan'       => 'Return to Karazhan: Lower',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Helmouth Cliffs',
                 'the_hold'        => 'The Hold',
                 'the_naglfar'     => 'The Naglfar',
+                'maw_of_souls'    => 'Maw of Souls',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Return to Karazhan',
+            'name'   => 'Return to Karazhan: Upper',
             'floors' => [
                 'lower_broken_stair' => 'Lower Broken Stair',
                 'upper_broken_stair' => 'Upper Broken Stair',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Upper Library',
                 'gamesmans_hall'     => 'Gamesman\'s Hall',
                 'netherspace'        => 'Netherspace',
+                'upper_karazhan'     => 'Return to Karazhan: Upper',
             ],
         ],
         'vault_of_the_wardens' => [

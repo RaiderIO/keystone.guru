@@ -75,15 +75,18 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     public function importMappingVersionFromMDT(
         MappingServiceInterface $mappingService,
         Dungeon                 $dungeon,
+        ?GameVersion            $gameVersion = null,
         bool                    $forceImport = false,
     ): MappingVersion {
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $gameVersion ??= GameVersion::getDefaultGameVersion();
+
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
         if ($forceImport || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion->mdt_mapping_hash, $latestMdtMappingHash);
 
-            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $this->getMDTMappingHash($dungeon));
+            $newMappingVersion = $mappingService->createNewMappingVersionFromMDTMapping($dungeon, $gameVersion, $this->getMDTMappingHash($dungeon));
             $this->log->importMappingVersionFromMDTCreateMappingVersion($newMappingVersion->version, $newMappingVersion->id);
 
             $mdtDungeon = new MDTDungeon($this->cacheService, $this->coordinatesService, $dungeon);
@@ -92,7 +95,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $this->log->importMappingVersionFromMDTStart($dungeon->id);
 
                 $this->importDungeon($mdtDungeon, $dungeon, $newMappingVersion);
-                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon);
+                $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon, $gameVersion);
                 $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $forceImport);
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
@@ -127,7 +130,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         );
     }
 
-    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion): void
     {
         try {
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
@@ -144,7 +147,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcSpellsAttributes          = [];
             $npcDungeonsAttributes        = [];
             $affectedNpcIds               = [];
-            $gameVersionRetail            = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
 
             /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
@@ -188,11 +190,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 }
 
                 // Save/update health
-                $npcHealth = $npc->getHealthByGameVersion($gameVersionRetail);
+                $npcHealth = $npc->getHealthByGameVersion($gameVersion);
                 if ($npcHealth === null) {
                     $npcHealth = new NpcHealth([
                         'npc_id'          => $npc->id,
-                        'game_version_id' => $gameVersionRetail->id,
+                        'game_version_id' => $gameVersion->id,
                         'health'          => $mdtNpc->getHealth(),
                     ]);
                 }
@@ -388,12 +390,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @throws Exception
      */
-    private function importNpcs(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    private function importNpcs(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion): void
     {
         try {
             $this->log->importNpcsStart();
 
-            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon);
+            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion);
 
             // Get a list of NPCs and update/save them (re-fetch the list to include any new NPCs)
             $npcs = $dungeon->npcs()->get()->keyBy('id');

@@ -34,7 +34,7 @@ interface MappingServiceInterface
     /**
      * Creates a new mapping version for a dungeon.
      */
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion;
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion;
 
     /**
      * Takes an existing mapping version and applies it to a dungeon (can be the same dungeon, or another one).

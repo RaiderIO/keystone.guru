@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "id": 17640,
+        "mapping_version_id": 630,
+        "floor_id": 12,
+        "group": 41,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 41",
+        "vertices_json": "[{\"lat\":-131.048,\"lng\":163.5945},{\"lat\":-56.3709,\"lng\":163.5945},{\"lat\":-56.3709,\"lng\":242.8257},{\"lat\":-131.048,\"lng\":242.8257}]"
+    }
+]

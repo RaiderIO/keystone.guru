@@ -272,16 +272,11 @@ class MappingVersion extends Model
         return $floorUnions;
     }
 
-    public function getFloorUnionForLatLng(
-        CoordinatesServiceInterface $coordinatesService,
-        MappingVersion              $mappingVersion,
-        LatLng                      $latLng,
-    ): ?FloorUnion {
-        $floor = $latLng->getFloor();
-        if ($floor === null) {
-            return null;
-        }
-
+    /**
+     * @return Collection<FloorUnion>
+     */
+    public function getFloorUnionsForFloor(Floor $floor): Collection
+    {
         if ($this->cachedFloorUnionsForFloor === null) {
             $this->cachedFloorUnionsForFloor = collect();
         }
@@ -301,6 +296,20 @@ class MappingVersion extends Model
             $this->cachedFloorUnionsForFloor->put($floor->id, $floorUnions);
         }
 
+        return $floorUnions;
+    }
+
+    public function getFloorUnionForLatLng(
+        CoordinatesServiceInterface $coordinatesService,
+        LatLng                      $latLng,
+    ): ?FloorUnion {
+        $floor = $latLng->getFloor();
+        if ($floor === null) {
+            return null;
+        }
+
+        $floorUnions = $this->getFloorUnionsForFloor($floor);
+
         // Now that we know the floor union candidates, check which floor union we need to use
         $result = null;
         // If we have more than 1 target we must make a choice based on the floor union areas attached to the floor union
@@ -308,11 +317,11 @@ class MappingVersion extends Model
             foreach ($floorUnions as $floorUnion) {
                 // We need to translate the target point using this floor union first, prior to checking the floor union areas
                 // Only if the translated point falls in the floor union area, can we properly check if this floor union matches
-                $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng, $floorUnion);
+                $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($this, $latLng, $floorUnion);
                 foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {
                     if ($floorUnionArea->containsPoint($coordinatesService, $tmpConvertedLatLng)) {
                         $result = $floorUnion;
-                        break;
+                        break 2;
                     }
                 }
             }

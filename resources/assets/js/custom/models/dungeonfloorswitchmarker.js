@@ -52,6 +52,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
  * @property {Number|null} linked_dungeon_floor_switch_marker_id
  * @property {String} floorCouplingDirection
  * @property {String|null} direction
+ * @property {Boolean} hidden_in_facade
  */
 class DungeonFloorSwitchMarker extends Icon {
 
@@ -159,6 +160,11 @@ class DungeonFloorSwitchMarker extends Icon {
                     self.direction = value;
                 },
                 default: null
+            }),
+            new Attribute({
+                name: 'hidden_in_facade',
+                type: 'bool',
+                default: 0,
             }),
             new Attribute({
                 name: 'ingameX',
@@ -314,6 +320,16 @@ class DungeonFloorSwitchMarker extends Icon {
 
     toString() {
         return `Floor switcher (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
+    }
+
+    shouldBeVisible() {
+        let state = getState();
+        if (!(state.getMapContext() instanceof MapContextMappingVersionEdit) &&
+            state.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE && this.hidden_in_facade) {
+            return false;
+        }
+
+        return super.shouldBeVisible();
     }
 
     cleanup() {

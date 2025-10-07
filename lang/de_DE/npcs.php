@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Stadtwache von Sturmwind',
@@ -5486,4 +5486,5 @@ return [
     246285    => 'Basaraufseher',
     555555    => '',
     129547000 => '',
-];
+]
+;

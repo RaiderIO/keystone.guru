@@ -31,7 +31,7 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
      */
     public function toString(): string
     {
-        $name = sprintf('%s_%s', Str::slug($this->enemy->npc->name), $this->enemyIndexInPull);
+        $name = sprintf('%s_%s', Str::slug(__($this->enemy->npc->name)), $this->enemyIndexInPull);
 
         if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
             $name = sprintf('BOUNTY1_%s', $name);

@@ -2,9 +2,11 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
+ * @var GameVersion              $gameVersion
  * @var string                   $category
  * @var AffixGroup               $currentAffixGroup
  * @var Collection<DungeonRoute> $dungeonroutes
@@ -16,16 +18,16 @@ $affixgroup ??= null;
     'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'title' => $title,
-    'breadcrumbsParams' => [$expansion],
+    'breadcrumbsParams' => [$gameVersion],
 ])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
-    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
+    @include('dungeonroute.discover.wallpaper', ['gameVersion' => $gameVersion])
 
     @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
+        'gameVersion' => $gameVersion,
         'category' => $category,
         'title' => $title,
         'dungeonroutes' => $dungeonroutes,

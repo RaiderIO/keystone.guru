@@ -99,9 +99,9 @@ Breadcrumbs::for('dungeonroutes', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.routes'), route('dungeonroutes'));
 });
-Breadcrumbs::for('dungeonroutes.expansion', static function (Generator $trail, Expansion $expansion) {
+Breadcrumbs::for('dungeonroutes.gameVersion', static function (Generator $trail, GameVersion $gameVersion) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.routes_expansion', ['expansion' => __($expansion->name)]), route('dungeonroutes.expansion', ['expansion' => $expansion]));
+    $trail->push(__('breadcrumbs.home.routes_game_version', ['gameVersion' => __($gameVersion->name)]), route('dungeonroutes.gameVersion', ['gameVersion' => $gameVersion]));
 });
 Breadcrumbs::for('dungeonroute.discover.search', static function (Generator $trail) {
     $trail->parent('dungeonroutes');
@@ -111,82 +111,82 @@ Breadcrumbs::for('dungeonroute.discover.search', static function (Generator $tra
 /**
  * Season
  */
-Breadcrumbs::for('dungeonroutes.season', static function (Generator $trail, Expansion $expansion, Season $season) {
-    $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.routes_season', ['season' => $season->index]), route('dungeonroutes.season', ['expansion' => $expansion, 'season' => $season->index]));
+Breadcrumbs::for('dungeonroutes.season', static function (Generator $trail, GameVersion $gameVersion, Season $season) {
+    $trail->parent('dungeonroutes.gameVersion', $gameVersion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.routes_season', ['season' => $season->index]), route('dungeonroutes.season', ['gameVersion' => $gameVersion, 'season' => $season->index]));
 });
-Breadcrumbs::for('dungeonroutes.season.popular', static function (Generator $trail, Expansion $expansion, Season $season) {
-    $trail->parent('dungeonroutes.season', $expansion, $season);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.season.popular'), route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]));
-});
-
-Breadcrumbs::for('dungeonroutes.season.nextweek', static function (Generator $trail, Expansion $expansion, Season $season) {
-    $trail->parent('dungeonroutes.season', $expansion, $season);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.season.next_week_affixes'), route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]));
+Breadcrumbs::for('dungeonroutes.season.popular', static function (Generator $trail, GameVersion $gameVersion, Season $season) {
+    $trail->parent('dungeonroutes.season', $gameVersion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.popular'), route('dungeonroutes.season.popular', ['gameVersion' => $gameVersion, 'season' => $season->index]));
 });
 
-Breadcrumbs::for('dungeonroutes.season.thisweek', static function (Generator $trail, Expansion $expansion, Season $season) {
-    $trail->parent('dungeonroutes.season', $expansion, $season);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.season.this_week_affixes'), route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]));
+Breadcrumbs::for('dungeonroutes.season.nextweek', static function (Generator $trail, GameVersion $gameVersion, Season $season) {
+    $trail->parent('dungeonroutes.season', $gameVersion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.next_week_affixes'), route('dungeonroutes.season.nextweek', ['gameVersion' => $gameVersion, 'season' => $season->index]));
 });
 
-Breadcrumbs::for('dungeonroutes.season.new', static function (Generator $trail, Expansion $expansion, Season $season) {
-    $trail->parent('dungeonroutes.season', $expansion, $season);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.season.new'), route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]));
+Breadcrumbs::for('dungeonroutes.season.thisweek', static function (Generator $trail, GameVersion $gameVersion, Season $season) {
+    $trail->parent('dungeonroutes.season', $gameVersion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.this_week_affixes'), route('dungeonroutes.season.thisweek', ['gameVersion' => $gameVersion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.season.new', static function (Generator $trail, GameVersion $gameVersion, Season $season) {
+    $trail->parent('dungeonroutes.season', $gameVersion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.new'), route('dungeonroutes.season.new', ['gameVersion' => $gameVersion, 'season' => $season->index]));
 });
 
 /**
  * General categories
  */
-Breadcrumbs::for('dungeonroutes.popular', static function (Generator $trail, Expansion $expansion) {
-    $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.popular', ['expansion' => $expansion]));
+Breadcrumbs::for('dungeonroutes.popular', static function (Generator $trail, GameVersion $gameVersion) {
+    $trail->parent('dungeonroutes.gameVersion', $gameVersion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.popular', ['gameVersion' => $gameVersion]));
 });
 
-Breadcrumbs::for('dungeonroutes.nextweek', static function (Generator $trail, Expansion $expansion) {
-    $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.nextweek', ['expansion' => $expansion]));
+Breadcrumbs::for('dungeonroutes.nextweek', static function (Generator $trail, GameVersion $gameVersion) {
+    $trail->parent('dungeonroutes.gameVersion', $gameVersion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.nextweek', ['gameVersion' => $gameVersion]));
 });
 
-Breadcrumbs::for('dungeonroutes.thisweek', static function (Generator $trail, Expansion $expansion) {
-    $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.thisweek', ['expansion' => $expansion]));
+Breadcrumbs::for('dungeonroutes.thisweek', static function (Generator $trail, GameVersion $gameVersion) {
+    $trail->parent('dungeonroutes.gameVersion', $gameVersion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.thisweek', ['gameVersion' => $gameVersion]));
 });
 
-Breadcrumbs::for('dungeonroutes.new', static function (Generator $trail, Expansion $expansion) {
-    $trail->parent('dungeonroutes.expansion', $expansion);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.new', ['expansion' => $expansion]));
+Breadcrumbs::for('dungeonroutes.new', static function (Generator $trail, GameVersion $gameVersion) {
+    $trail->parent('dungeonroutes.gameVersion', $gameVersion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.new', ['gameVersion' => $gameVersion]));
 });
 
 /**
  * General for a dungeon
  */
-Breadcrumbs::for('dungeonroutes.discoverdungeon', static function (Generator $trail, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.expansion', $dungeon->expansion);
-    $trail->push(__($dungeon->name), route('dungeonroutes.discoverdungeon', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon]));
+Breadcrumbs::for('dungeonroutes.discoverdungeon', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
+    $trail->parent('dungeonroutes.gameVersion', $gameVersion);
+    $trail->push(__($dungeon->name), route('dungeonroutes.discoverdungeon', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
 });
 
 /**
  * Dungeon categories
  */
-Breadcrumbs::for('dungeonroutes.discoverdungeon.popular', static function (Generator $trail, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.discoverdungeon.popular', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon]));
+Breadcrumbs::for('dungeonroutes.discoverdungeon.popular', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
+    $trail->parent('dungeonroutes.discoverdungeon', $gameVersion, $dungeon);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.popular'), route('dungeonroutes.discoverdungeon.popular', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
 });
 
-Breadcrumbs::for('dungeonroutes.discoverdungeon.nextweek', static function (Generator $trail, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.discoverdungeon.nextweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon]));
+Breadcrumbs::for('dungeonroutes.discoverdungeon.nextweek', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
+    $trail->parent('dungeonroutes.discoverdungeon', $gameVersion, $dungeon);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.next_week_affixes'), route('dungeonroutes.discoverdungeon.nextweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
 });
 
-Breadcrumbs::for('dungeonroutes.discoverdungeon.thisweek', static function (Generator $trail, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.discoverdungeon.thisweek', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon]));
+Breadcrumbs::for('dungeonroutes.discoverdungeon.thisweek', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
+    $trail->parent('dungeonroutes.discoverdungeon', $gameVersion, $dungeon);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.this_week_affixes'), route('dungeonroutes.discoverdungeon.thisweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
 });
 
-Breadcrumbs::for('dungeonroutes.discoverdungeon.new', static function (Generator $trail, Dungeon $dungeon) {
-    $trail->parent('dungeonroutes.discoverdungeon', $dungeon);
-    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.discoverdungeon.new', ['expansion' => $dungeon->expansion, 'dungeon' => $dungeon]));
+Breadcrumbs::for('dungeonroutes.discoverdungeon.new', static function (Generator $trail, GameVersion $gameVersion, Dungeon $dungeon) {
+    $trail->parent('dungeonroutes.discoverdungeon', $gameVersion, $dungeon);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.new'), route('dungeonroutes.discoverdungeon.new', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]));
 });
 
 /**

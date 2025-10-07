@@ -58,6 +58,7 @@ use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\MDT\ImportNpcs;
 use App\Console\Commands\MDT\ImportSpells;
+use App\Console\Commands\MDT\MappingVersionAccuracy;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
 use App\Console\Commands\ReadOnlyMode\Enable as EnableReadOnlyMode;
@@ -203,6 +204,7 @@ class Kernel extends ConsoleKernel
         ImportMapping::class,
         ImportNpcs::class,
         ImportSpells::class,
+        MappingVersionAccuracy::class,
 
         // Patreon
         RefreshMembershipStatus::class,

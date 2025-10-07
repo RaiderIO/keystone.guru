@@ -10,5 +10,17 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-119.3153,\"lng\":201.9219},{\"lat\":-127.1781,\"lng\":202.1113},{\"lat\":-127.0625,\"lng\":209.7813},{\"lat\":-119.3125,\"lng\":209.9375}]"
+    },
+    {
+        "id": 18060,
+        "mapping_version_id": 639,
+        "floor_id": 39,
+        "group": 14,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 14",
+        "vertices_json": "[{\"lat\":-127.3513,\"lng\":201.985},{\"lat\":-118.3857,\"lng\":201.8654},{\"lat\":-118.2263,\"lng\":211.7475},{\"lat\":-127.3912,\"lng\":211.9069}]"
     }
 ]

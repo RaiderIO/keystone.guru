@@ -18,7 +18,7 @@ class DungeonColumnHandler extends SimpleColumnHandler
 {
     public function __construct(DatatablesHandler $dtHandler)
     {
-        parent::__construct($dtHandler, 'dungeon_id', 'dungeons_names');
+        parent::__construct($dtHandler, 'dungeon_id', 'dungeon_names');
     }
 
     protected function applyFilter(
