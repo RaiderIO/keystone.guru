@@ -385,7 +385,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": 1.2,
-        "seasonal_type": null,
+        "seasonal_type": "mdt_placeholder",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",

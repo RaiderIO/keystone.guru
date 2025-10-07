@@ -26,7 +26,13 @@ class NpcHealthController extends Controller
     public function create(Npc $npc)
     {
         return view('admin.npchealth.edit', [
-            'npc' => $npc,
+            'npc'                    => $npc,
+            'npcHealthsAutoComplete' => Npc::with('classification')
+                ->selectRaw('npcs.*')
+                ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                ->whereIn('npc_dungeons.dungeon_id', $npc->dungeons->pluck('id')->toArray())
+                ->orderBy('npcs.id')
+                ->get(),
         ]);
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Npc                     $npc
- * @var NpcHealth               $npcHealth
+ * @var NpcHealth|null          $npcHealth
  * @var Collection<GameVersion> $allGameVersions
  * @var Collection<Npc>         $npcHealthsAutoComplete
  */
@@ -57,9 +57,7 @@ $gameVersionsSelect   = $allGameVersions
                 'order': [[3, 'desc']],
                 // Amount per page
                 'pageLength': 25,
-                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-
-                })
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {})
             });
 
             $('.apply-health').on('click', function (e) {
@@ -130,50 +128,53 @@ $gameVersionsSelect   = $allGameVersions
 
     {{ html()->closeModelForm() }}
 
-    <div class="form-group">
-        {{ html()->label(__('view_admin.npchealth.edit.auto_complete_npc_healths'), 'admin_npc_npc_health_table') }}
+    @if($npcHealth !== null)
+        <div class="form-group">
+            {{ html()->label(__('view_admin.npchealth.edit.auto_complete_npc_healths'), 'admin_npc_npc_health_table') }}
 
-        <table id="admin_npc_npc_health_table" class="tablesorter default_table table-striped">
-            <thead>
-            <tr>
-                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.npc_id') }}</th>
-                <th width="40%">{{ __('view_admin.npchealth.edit.table_header.npc_name') }}</th>
-                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.classification') }}</th>
-                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.health') }}</th>
-                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.percentage') }}</th>
-                <th width="20%">{{ __('view_admin.npchealth.edit.table_header.actions') }}</th>
-            </tr>
-            </thead>
+            <table id="admin_npc_npc_health_table" class="tablesorter default_table table-striped">
+                <thead>
+                <tr>
+                    <th width="10%">{{ __('view_admin.npchealth.edit.table_header.npc_id') }}</th>
+                    <th width="40%">{{ __('view_admin.npchealth.edit.table_header.npc_name') }}</th>
+                    <th width="10%">{{ __('view_admin.npchealth.edit.table_header.classification') }}</th>
+                    <th width="10%">{{ __('view_admin.npchealth.edit.table_header.health') }}</th>
+                    <th width="10%">{{ __('view_admin.npchealth.edit.table_header.percentage') }}</th>
+                    <th width="20%">{{ __('view_admin.npchealth.edit.table_header.actions') }}</th>
+                </tr>
+                </thead>
 
-            <tbody>
-            @foreach($npcHealthsAutoComplete as $autoCompleteNpc)
-                @if(($autoCompleteNpcHealth = $autoCompleteNpc->getHealthByGameVersion($npcHealth->gameVersion)) && $autoCompleteNpc->id !== $npc->id)
-                    <tr>
-                        <td>{{ __($autoCompleteNpc->id) }}</td>
-                        <td>{{ __($autoCompleteNpc->name) }}</td>
-                        <td>{{ __($autoCompleteNpc->classification->name) }}</td>
-                        <td>{{ number_format($autoCompleteNpcHealth->health) }}</td>
-                        <td>{{ $autoCompleteNpcHealth->percentage }}</td>
-                        <td>
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <a class="btn btn-success apply-health" data-health="{{ $autoCompleteNpcHealth->health }}">
-                                        <i class="fas fa-check"></i>&nbsp;{{ __('view_admin.npchealth.edit.apply_to_npc_health') }}
-                                    </a>
+                <tbody>
+                @foreach($npcHealthsAutoComplete as $autoCompleteNpc)
+                    @if(($autoCompleteNpcHealth = $autoCompleteNpc->getHealthByGameVersion($npcHealth->gameVersion)) && $autoCompleteNpc->id !== $npc->id)
+                        <tr>
+                            <td>{{ __($autoCompleteNpc->id) }}</td>
+                            <td>{{ __($autoCompleteNpc->name) }}</td>
+                            <td>{{ __($autoCompleteNpc->classification->name) }}</td>
+                            <td>{{ number_format($autoCompleteNpcHealth->health) }}</td>
+                            <td>{{ $autoCompleteNpcHealth->percentage }}</td>
+                            <td>
+                                <div class="row no-gutters">
+                                    <div class="col">
+                                        <a class="btn btn-success apply-health"
+                                           data-health="{{ $autoCompleteNpcHealth->health }}">
+                                            <i class="fas fa-check"></i>&nbsp;{{ __('view_admin.npchealth.edit.apply_to_npc_health') }}
+                                        </a>
+                                    </div>
+                                    <div class="col-auto">
+                                        <a class="btn btn-info"
+                                           href="{{ route('admin.npc.npchealth.edit', ['npc' => $autoCompleteNpc, 'npcHealth' => $autoCompleteNpcHealth]) }}">
+                                            <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.npchealth.edit.edit_npc_health') }}
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                    <a class="btn btn-info"
-                                       href="{{ route('admin.npc.npchealth.edit', ['npc' => $autoCompleteNpc, 'npcHealth' => $autoCompleteNpcHealth]) }}">
-                                        <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.npchealth.edit.edit_npc_health') }}
-                                    </a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                @endif
-            @endforeach
-            </tbody>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+                </tbody>
 
-        </table>
-    </div>
+            </table>
+        </div>
+    @endif
 @endsection
