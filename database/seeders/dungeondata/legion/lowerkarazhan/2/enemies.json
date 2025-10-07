@@ -1100,13 +1100,13 @@
         "kill_priority": null
     },
     {
-        "id": 107223,
+        "id": 107183,
         "mapping_version_id": 634,
         "enemy_pack_id": null,
         "enemy_patrol_id": 21671,
-        "npc_id": 114544,
+        "npc_id": 114542,
         "floor_id": 20,
-        "mdt_id": 8,
+        "mdt_id": 15,
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": 1,
@@ -1120,8 +1120,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -163.6742,
-        "lng": 300.2084,
+        "lat": -160.3859,
+        "lng": 303.0143,
         "kill_priority": null
     }
 ]
