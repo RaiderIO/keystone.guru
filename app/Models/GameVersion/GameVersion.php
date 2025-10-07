@@ -108,6 +108,18 @@ class GameVersion extends CacheModel
     }
 
     /**
+     * Returns if we should display individual dungeon images
+     */
+    public function showDiscoverRoutesCardDungeonImage(): bool
+    {
+        return !in_array($this->expansion->shortname, [
+            Expansion::EXPANSION_MOP,
+            Expansion::EXPANSION_SHADOWLANDS,
+            Expansion::EXPANSION_TWW,
+        ]);
+    }
+
+    /**
      * @return GameVersion Gets the default game version.
      */
     public static function getUserOrDefaultGameVersion(): GameVersion

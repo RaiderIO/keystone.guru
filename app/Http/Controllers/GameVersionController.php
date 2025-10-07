@@ -18,6 +18,12 @@ class GameVersionController extends Controller
     ): RedirectResponse {
         $gameVersionService->setGameVersion($gameVersion, Auth::user());
 
+        // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
+        $referer = $request->headers->get('referer');
+        if ($referer && str_contains($referer, '/routes')) {
+            return redirect()->route('dungeonroutes.current');
+        }
+
         return Redirect::back();
     }
 }

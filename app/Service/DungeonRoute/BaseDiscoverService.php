@@ -2,8 +2,7 @@
 
 namespace App\Service\DungeonRoute;
 
-use App\Models\Expansion;
-use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -22,7 +21,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
 
     protected ?Season $season = null;
 
-    protected ?Expansion $expansion = null;
+    protected ?GameVersion $gameVersion = null;
 
     /**
      * DiscoverService constructor.
@@ -36,10 +35,10 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     /**
      * Makes sure that we have an expansion set at the end of this function if it wasn't set before
      */
-    public function ensureExpansion(): DiscoverServiceInterface
+    public function ensureGameVersion(): DiscoverServiceInterface
     {
-        if ($this->expansion === null) {
-            $this->expansion = $this->expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+        if ($this->gameVersion === null) {
+            $this->gameVersion = GameVersion::getDefaultGameVersion();
         }
 
         return $this;
@@ -78,9 +77,9 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function withExpansion(Expansion $expansion): DiscoverServiceInterface
+    public function withGameVersion(GameVersion $gameVersion): DiscoverServiceInterface
     {
-        $this->expansion = $expansion;
+        $this->gameVersion = $gameVersion;
 
         return $this;
     }

@@ -11,7 +11,7 @@ class DungeonRouteDiscoverSeasonPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the dungeon.
+     * Determine whether the user can view the season.
      */
     public function view(?User $user, Season $season): bool
     {

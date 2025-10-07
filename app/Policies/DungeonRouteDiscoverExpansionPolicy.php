@@ -11,7 +11,7 @@ class DungeonRouteDiscoverExpansionPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the dungeon.
+     * Determine whether the user can view the expansion.
      */
     public function view(?User $user, Expansion $expansion): bool
     {

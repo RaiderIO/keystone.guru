@@ -1,15 +1,15 @@
 <?php
 
 use App\Models\Dungeon;
-use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 
 // @formatter:off
 // ^ important - it BREAKS the display of wallpapers when the contents of url('') get a new line..
 /**
- * @var Expansion|null $expansion
+ * @var GameVersion|null $gameVersion
  * @var Dungeon|null $dungeon
  */
-if( isset($dungeon) || isset($expansion) ) {
+if( isset($dungeon) || isset($gameVersion) ) {
 ?>
 <div class="dungeon_wallpaper"
      @if(isset($dungeon))
@@ -19,8 +19,8 @@ if( isset($dungeon) || isset($expansion) ) {
              style="background-image:
             url('{{ $dungeon->getImageWallpaperUrl() }}')">
          @endif
-     @elseif(isset($expansion))
-        style="background-image: url('{{ $expansion->getWallpaperUrl() }}')">
+     @elseif(isset($gameVersion))
+        style="background-image: url('{{ $gameVersion->expansion->getWallpaperUrl() }}')">
      @else
     @endif
 </div>

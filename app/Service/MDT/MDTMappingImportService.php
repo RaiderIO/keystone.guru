@@ -80,7 +80,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     ): MappingVersion {
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
-        $gameVersion ??= GameVersion::firstWhere('key', GameVersion::DEFAULT_GAME_VERSION);
+        $gameVersion ??= GameVersion::getDefaultGameVersion();
 
         $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
         if ($forceImport || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {

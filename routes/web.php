@@ -111,25 +111,29 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::post('new/temporary', (new DungeonRouteController())->saveNewTemporary(...))->name('dungeonroute.temporary.savenew');
         Route::post('new/mdtimport', (new MDTImportController())->import(...))->name('dungeonroute.new.mdtimport');
     });
+
     Route::get('patreon-link', (new PatreonController())->link(...))->name('patreon.link');
     Route::get('patreon-oauth', (new PatreonController())->oauth_redirect(...))->name('patreon.oauth.redirect');
     Route::get('dungeonroutes', (new SiteController())->dungeonroutes(...));
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::get('search', (new DungeonRouteDiscoverController())->search(...))->name('dungeonroutes.search');
     });
+
     // Game version toggle
     Route::prefix('gameversion')->group(static function () {
         Route::get('/{gameVersion}', (new GameVersionController())->update(...))->name('gameversion.update');
     });
-    // Profile routes
+
+    // Discover routes
     Route::prefix('routes')->group(static function () {
         Route::get('/', (new DungeonRouteDiscoverController())->discover(...))->name('dungeonroutes');
-        Route::prefix('{expansion}')->group(static function () {
-            Route::get('/', (new DungeonRouteDiscoverController())->discoverExpansion(...))->name('dungeonroutes.expansion');
-            Route::get('popular', (new DungeonRouteDiscoverController())->discoverpopular(...))->name('dungeonroutes.popular');
-            Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverthisweek(...))->name('dungeonroutes.thisweek');
-            Route::get('affixes/next', (new DungeonRouteDiscoverController())->discovernextweek(...))->name('dungeonroutes.nextweek');
-            Route::get('new', (new DungeonRouteDiscoverController())->discovernew(...))->name('dungeonroutes.new');
+        Route::get('/current', (new DungeonRouteDiscoverController())->discoverCurrentGameVersion(...))->name('dungeonroutes.current');
+        Route::prefix('{gameVersion}')->group(static function () {
+            Route::get('/', (new DungeonRouteDiscoverController())->discoverGameVersion(...))->name('dungeonroutes.gameVersion');
+            Route::get('popular', (new DungeonRouteDiscoverController())->discoverPopular(...))->name('dungeonroutes.popular');
+            Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverThisWeek(...))->name('dungeonroutes.thisweek');
+            Route::get('affixes/next', (new DungeonRouteDiscoverController())->discoverNextWeek(...))->name('dungeonroutes.nextweek');
+            Route::get('new', (new DungeonRouteDiscoverController())->discoverNew(...))->name('dungeonroutes.new');
             Route::prefix('season/{season}')->group(static function () {
                 Route::get('/', (new DungeonRouteDiscoverController())->discoverSeason(...))->name('dungeonroutes.season');
                 Route::get('popular', (new DungeonRouteDiscoverController())->discoverSeasonPopular(...))->name('dungeonroutes.season.popular');
@@ -138,14 +142,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('new', (new DungeonRouteDiscoverController())->discoverSeasonNew(...))->name('dungeonroutes.season.new');
             });
             Route::prefix('{dungeon}')->group(static function () {
-                Route::get('/', (new DungeonRouteDiscoverController())->discoverdungeon(...))->name('dungeonroutes.discoverdungeon');
-                Route::get('popular', (new DungeonRouteDiscoverController())->discoverdungeonpopular(...))->name('dungeonroutes.discoverdungeon.popular');
-                Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverdungeonthisweek(...))->name('dungeonroutes.discoverdungeon.thisweek');
-                Route::get('affixes/next', (new DungeonRouteDiscoverController())->discoverdungeonnextweek(...))->name('dungeonroutes.discoverdungeon.nextweek');
-                Route::get('new', (new DungeonRouteDiscoverController())->discoverdungeonnew(...))->name('dungeonroutes.discoverdungeon.new');
+                Route::get('/', (new DungeonRouteDiscoverController())->discoverDungeon(...))->name('dungeonroutes.discoverdungeon');
+                Route::get('popular', (new DungeonRouteDiscoverController())->discoverDungeonPopular(...))->name('dungeonroutes.discoverdungeon.popular');
+                Route::get('affixes/current', (new DungeonRouteDiscoverController())->discoverDungeonThisWeek(...))->name('dungeonroutes.discoverdungeon.thisweek');
+                Route::get('affixes/next', (new DungeonRouteDiscoverController())->discoverDungeonNextWeek(...))->name('dungeonroutes.discoverdungeon.nextweek');
+                Route::get('new', (new DungeonRouteDiscoverController())->discoverDungeonNew(...))->name('dungeonroutes.discoverdungeon.new');
             });
         });
     });
+
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('heatmaps')->group(static function () {
         Route::get('/', (new DungeonHeatmapController())->get(...))->name('dungeon.heatmaps.list');
@@ -179,8 +184,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
         });
     });
+
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', (new TeamController())->invite(...))->name('team.invite');
+
     // May not be logged in - we have anonymous routes
     Route::prefix('/route/{dungeon}/{dungeonroute}')->group(static function () {
         Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.editnotitle');
@@ -205,6 +212,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
         });
     });
+
     Route::prefix('{dungeonroute}')->group(static function () {
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
@@ -221,6 +229,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('claim', (new DungeonRouteLegacyController())->claimOld(...));
         });
     });
+
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
         Route::get('patreon-unlink', (new PatreonController())->unlink(...))->name('patreon.unlink');
         // Profile routes
@@ -252,6 +261,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('invite/{invitecode}/accept', (new TeamController())->inviteaccept(...))->name('team.invite.accept');
         });
     });
+
     Route::middleware(['auth', 'role:admin'])->group(static function () {
         // Only admins may view a list of profiles
         Route::get('profiles', (new ProfileController())->get(...))->name('profile.list');
@@ -426,6 +436,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
         });
     });
+
     Route::prefix('ajax')->middleware('ajax')->group(static function () {
         Route::get('refresh-csrf', (new AjaxSiteController())->refreshCsrf(...))->name('api.refresh_csrf');
 
@@ -605,8 +616,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
         });
     });
+
     // At the bottom to let routes such as profile/routes pass through first
     Route::get('profile/{user}', (new ProfileController())->view(...))->name('profile.view');
+
     // View any dungeon route (catch all)
     Route::prefix('/route/{dungeon}/{dungeonroute}')->group(static function () {
         Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.viewnotitle');
@@ -621,6 +634,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('preview/{floorIndex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
         });
     });
+
     Route::prefix('{dungeonroute}')->group(static function () {
         Route::get('/', (new DungeonRouteLegacyController())->viewOld(...))->name('dungeonroute.viewold');
         Route::get('embed/', (new DungeonRouteLegacyController())->embedOld(...));

@@ -7,8 +7,8 @@ use App\Logic\Utils\Stopwatch;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
-use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
@@ -402,12 +402,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'dungeonroute.discover.dungeon.overview',
             'dungeonroute.discover.season.overview',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
-            /** @var Expansion $expansion */
-            $expansion = $view->getData()['expansion'];
+            /** @var GameVersion $gameVersion */
+            $gameVersion = $view->getData()['gameVersion'];
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
-            $expansionsData = $regionViewVariables['expansionsData']->get($expansion->shortname);
+            $expansionsData = $regionViewVariables['expansionsData']->get($gameVersion->expansion->shortname);
             $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
             $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
         });
@@ -415,8 +415,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Dungeon grid view
         view()->composer('dungeonroute.discover.search', static function (View $view) use (
             $viewService,
-            &
-            $userOrDefaultRegion
+            &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);

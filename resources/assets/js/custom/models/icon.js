@@ -190,7 +190,7 @@ class Icon extends VersionableMapObject {
             this.layer.setIcon(
                 getLeafletIcon(this.map_icon_type,
                     (mapState instanceof EditMapState && this.isEditable())
-                    || mapState instanceof EnemySelection,
+                    || (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection),
                     mapState instanceof DeleteMapState && this.isDeletable()
                 )
             );

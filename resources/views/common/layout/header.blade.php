@@ -20,17 +20,17 @@ $navs = [];
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
-        $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
+        $navs[route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $nextSeason->index])] = [
             'text' => $nextSeason->expansion_id !== $currentSeason->expansion_id ? $nextSeason->name_long : $nextSeason->name,
         ];
     }
 
-    $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
+    $navs[route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $currentSeason->index])] = [
         'fa'   => 'fa fa-route',
         'text' => __('view_common.layout.header.browse_routes'),
     ];
 } else {
-    $navs[route('dungeonroutes.expansion', ['expansion' => $currentUserGameVersion->expansion])] = [
+    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] = [
         'fa'   => 'fa fa-route',
         'text' => __('view_common.layout.header.browse_routes'),
     ];
@@ -38,7 +38,7 @@ if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
 
 $expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
-    $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
+    $expansionRoutes[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] =
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
             ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)),
             __($expansion->name),
