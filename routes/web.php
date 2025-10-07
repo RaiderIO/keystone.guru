@@ -128,6 +128,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('routes')->group(static function () {
         Route::get('/', (new DungeonRouteDiscoverController())->discover(...))->name('dungeonroutes');
         Route::get('/current', (new DungeonRouteDiscoverController())->discoverCurrentGameVersion(...))->name('dungeonroutes.current');
+        Route::get('/expansion/{expansion}', (new DungeonRouteDiscoverController())->discoverExpansion(...))->name('dungeonroutes.expansion');
         Route::prefix('{gameVersion}')->group(static function () {
             Route::get('/', (new DungeonRouteDiscoverController())->discoverGameVersion(...))->name('dungeonroutes.gameVersion');
             Route::get('popular', (new DungeonRouteDiscoverController())->discoverPopular(...))->name('dungeonroutes.popular');

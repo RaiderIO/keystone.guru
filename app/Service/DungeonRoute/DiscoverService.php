@@ -86,8 +86,12 @@ class DiscoverService extends BaseDiscoverService
             //                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
             //            })
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id)
-                    ->orderBy('dungeon_routes.popularity', 'desc');
+                if ($this->expansion !== null) {
+                    $builder->where('dungeons.expansion_id', $this->expansion->id);
+                } else {
+                    $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
+                }
+                $builder->orderBy('dungeon_routes.popularity', 'desc');
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder
@@ -143,7 +147,11 @@ class DiscoverService extends BaseDiscoverService
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
+                if ($this->expansion !== null) {
+                    $builder->where('dungeons.expansion_id', $this->expansion->id);
+                } else {
+                    $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
+                }
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', 'dungeons.id')

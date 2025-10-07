@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -255,6 +256,41 @@ class DungeonRouteDiscoverController extends Controller
                 ->withGameVersion($gameVersion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->newBySeason($season),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     *
+     * @throws AuthorizationException
+     */
+    public function discoverExpansion(
+        Expansion                   $expansion,
+        ExpansionServiceInterface   $expansionService,
+        DiscoverServiceInterface    $discoverService,
+        GameVersionServiceInterface $gameVersionService,
+    ) {
+        $this->authorize('view', $expansion);
+
+        $discoverService = $discoverService->withExpansion($expansion);
+
+        $userRegion  = GameServerRegion::getUserOrDefaultRegion();
+        $gameVersion = $gameVersionService->getGameVersion(Auth::user());
+
+        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
+        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
+
+        return view('dungeonroute.discover.discover', [
+            'breadcrumbs'       => 'dungeonroutes.expansion',
+            'breadcrumbsParams' => [$gameVersion],
+            'gridDungeons'      => $expansion->dungeonsAndRaids()->active()->get(),
+            'gameVersion'       => $gameVersion,
+            'dungeonroutes'     => [
+                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
+                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
+                'new'      => $discoverService->new(),
+                'popular'  => $discoverService->popularGroupedByDungeon(),
+            ],
         ]);
     }
 

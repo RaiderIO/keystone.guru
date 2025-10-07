@@ -38,7 +38,7 @@ if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
 
 $expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
-    $expansionRoutes[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] =
+    $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
             ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)),
             __($expansion->name),

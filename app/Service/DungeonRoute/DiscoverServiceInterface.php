@@ -4,6 +4,7 @@ namespace App\Service\DungeonRoute;
 
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Closure;
@@ -25,6 +26,11 @@ interface DiscoverServiceInterface
      * @return $this
      */
     public function withSeason(?Season $season): self;
+
+    /**
+     * @return $this
+     */
+    public function withExpansion(Expansion $expansion): DiscoverServiceInterface;
 
     /**
      * @return $this
