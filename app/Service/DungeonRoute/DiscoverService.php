@@ -74,10 +74,10 @@ class DiscoverService extends BaseDiscoverService
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
             // It also applies a big penalty for routes that do not belong to the current season
-            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use (
-                $currentSeasonAffixGroups
-            ) {
-            })
+//            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use (
+//                $currentSeasonAffixGroups
+//            ) {
+//            })
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.

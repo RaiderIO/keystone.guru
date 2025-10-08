@@ -9,6 +9,7 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Illuminate\Support\Collection;
@@ -16,6 +17,7 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion         $currentUserGameVersion
  * @var GameVersion         $gameVersion
+ * @var Expansion           $expansion
  * @var Season|null         $season
  * @var Collection<Dungeon> $gridDungeons
  * @var AffixGroup          $currentAffixGroup

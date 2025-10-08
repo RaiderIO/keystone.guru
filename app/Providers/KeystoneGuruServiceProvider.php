@@ -7,6 +7,7 @@ use App\Logic\Utils\Stopwatch;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
@@ -404,10 +405,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             /** @var GameVersion $gameVersion */
             $gameVersion = $view->getData()['gameVersion'];
+            // @TODO Should be loaded but it's not??
+            $gameVersion->load(['expansion']);
+
+            /** @var Expansion $expansion */
+            $expansion = $view->getData()['expansion'] ?? null;
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
-            $expansionsData = $regionViewVariables['expansionsData']->get($gameVersion->expansion->shortname);
+            $expansionsData = $regionViewVariables['expansionsData']->get(($expansion ?? $gameVersion->expansion)->shortname);
             $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
             $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
         });

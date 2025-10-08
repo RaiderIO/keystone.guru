@@ -99,6 +99,10 @@ Breadcrumbs::for('dungeonroutes', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.routes'), route('dungeonroutes'));
 });
+Breadcrumbs::for('dungeonroutes.expansion', static function (Generator $trail, Expansion $expansion) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.routes_expansion', ['expansion' => __($expansion->name)]), route('dungeonroutes.expansion', ['expansion' => $expansion]));
+});
 Breadcrumbs::for('dungeonroutes.gameVersion', static function (Generator $trail, GameVersion $gameVersion) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.routes_game_version', ['gameVersion' => __($gameVersion->name)]), route('dungeonroutes.gameVersion', ['gameVersion' => $gameVersion]));

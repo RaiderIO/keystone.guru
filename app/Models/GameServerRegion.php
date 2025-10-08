@@ -97,6 +97,7 @@ class GameServerRegion extends CacheModel
         return $cacheService->remember(
             'default_region',
             static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first(),
+            config('keystoneguru.cache.default_game_region.ttl')
         );
     }
 

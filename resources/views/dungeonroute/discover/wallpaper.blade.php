@@ -9,7 +9,7 @@ use App\Models\GameVersion\GameVersion;
  * @var GameVersion|null $gameVersion
  * @var Dungeon|null $dungeon
  */
-if( isset($dungeon) || isset($gameVersion) ) {
+if( isset($dungeon) || (isset($gameVersion->expansion)) ) {
 ?>
 <div class="dungeon_wallpaper"
      @if(isset($dungeon))
