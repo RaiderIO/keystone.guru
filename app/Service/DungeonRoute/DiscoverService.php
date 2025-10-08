@@ -39,11 +39,15 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureGameVersion();
 
+        $expansion                = $this->expansion ?? $this->gameVersion->expansion;
+        $currentSeasonAffixGroups = collect();
         // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
-        $currentSeasonAffixGroups = $this->season?->affixGroups ??
-            // This can cause issues when we're in between seasons between different regions, but a minor issue
-            optional($this->expansionService->getCurrentSeason($this->gameVersion->expansion))->affixGroups ??
-            collect();
+        if ($expansion !== null) {
+            $currentSeasonAffixGroups = $this->season?->affixGroups ??
+                // This can cause issues when we're in between seasons between different regions, but a minor issue
+                $this->expansionService->getCurrentSeason($expansion)?->affixGroups ??
+                collect();
+        }
 
         return DungeonRoute::query()
             ->selectRaw('`dungeon_routes`.*')
@@ -216,7 +220,7 @@ class DiscoverService extends BaseDiscoverService
                     $result = collect();
 
                     /** @var Collection<Dungeon> $activeDungeons */
-                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->gameVersion->expansion->dungeonsAndRaids())->active()->get();
+                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : ($this->expansion ?? $this->gameVersion->expansion)->dungeonsAndRaids())->active()->get();
                     foreach ($activeDungeons as $dungeon) {
                         // Limit the amount of results of our queries
                         $result = $result->merge(
@@ -275,7 +279,7 @@ class DiscoverService extends BaseDiscoverService
                     $result = collect();
 
                     /** @var Collection<Dungeon> $activeDungeons */
-                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->gameVersion->expansion->dungeonsAndRaids())->active()->get();
+                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : ($this->expansion ?? $this->gameVersion->expansion)->dungeonsAndRaids())->active()->get();
                     foreach ($activeDungeons as $dungeon) {
                         // Limit the amount of results of our queries
                         $result = $result->merge(

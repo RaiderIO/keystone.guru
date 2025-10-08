@@ -319,8 +319,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('home', static function (View $view) use (
             $viewService,
             $globalViewVariables,
-            &
-            $userOrDefaultRegion
+            &$userOrDefaultRegion
         ) {
             $view->with('userCount', $globalViewVariables['userCount']);
             $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
@@ -328,6 +327,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
+            $view->with('defaultGameVersion', GameVersion::getDefaultGameVersion());
         });
 
         // Main view

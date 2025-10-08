@@ -13,7 +13,6 @@ use App\Models\GameVersion\GameVersion;
  * @var GameVersion $gameVersion
  */
 
-$dungeonHasMappingVersionWithSeasons = $dungeon->hasMappingVersionWithSeasons();
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',
@@ -46,7 +45,7 @@ $dungeonHasMappingVersionWithSeasons = $dungeon->hasMappingVersionWithSeasons();
         </div>
     @endif
 
-    @if($dungeonHasMappingVersionWithSeasons)
+    @if($gameVersion->has_seasons)
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
@@ -65,7 +64,7 @@ $dungeonHasMappingVersionWithSeasons = $dungeon->hasMappingVersionWithSeasons();
         </div>
     @endif
 
-    @if($dungeonHasMappingVersionWithSeasons)
+    @if($gameVersion->has_seasons)
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
