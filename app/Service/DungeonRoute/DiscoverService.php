@@ -22,6 +22,8 @@ class DiscoverService extends BaseDiscoverService
 
         if ($this->season !== null) {
             return sprintf('discover:%s:season-%s:%s:%d', $this->gameVersion->key, $this->season->index, $key, $this->limit);
+        } elseif ($this->expansion !== null) {
+            return sprintf('discover:expansion-%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
         } else {
             return sprintf('discover:%s:%s:%d', $this->gameVersion->key, $key, $this->limit);
         }
@@ -39,15 +41,15 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureGameVersion();
 
-        $expansion                = $this->expansion ?? $this->gameVersion->expansion;
-        $currentSeasonAffixGroups = collect();
-        // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
-        if ($expansion !== null) {
-            $currentSeasonAffixGroups = $this->season?->affixGroups ??
-                // This can cause issues when we're in between seasons between different regions, but a minor issue
-                $this->expansionService->getCurrentSeason($expansion)?->affixGroups ??
-                collect();
-        }
+        $expansion = $this->expansion ?? $this->gameVersion->expansion;
+//        $currentSeasonAffixGroups = collect();
+//        // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
+//        if ($expansion !== null) {
+//            $currentSeasonAffixGroups = $this->season?->affixGroups ??
+//                // This can cause issues when we're in between seasons between different regions, but a minor issue
+//                $this->expansionService->getCurrentSeason($expansion)?->affixGroups ??
+//                collect();
+//        }
 
         return DungeonRoute::query()
             ->selectRaw('`dungeon_routes`.*')

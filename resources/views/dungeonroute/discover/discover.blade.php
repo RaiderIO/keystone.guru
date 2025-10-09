@@ -15,19 +15,22 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion         $currentUserGameVersion
- * @var GameVersion         $gameVersion
- * @var Expansion           $expansion
- * @var Season|null         $season
- * @var Collection<Dungeon> $gridDungeons
- * @var AffixGroup          $currentAffixGroup
- * @var AffixGroup          $nextAffixGroup
+ * @var GameVersion              $currentUserGameVersion
+ * @var GameVersion              $gameVersion
+ * @var Expansion                $expansion
+ * @var Season|null              $season
+ * @var Collection<Dungeon>      $gridDungeons
+ * @var Collection<DungeonRoute> $dungeonroutes
+ * @var AffixGroup               $currentAffixGroup
+ * @var AffixGroup               $nextAffixGroup
  */
+
+$expansion ??= null;
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
-    @include('dungeonroute.discover.wallpaper', ['gameVersion' => $gameVersion])
+    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion, 'gameVersion' => $gameVersion])
 
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [

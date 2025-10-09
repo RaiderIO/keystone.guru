@@ -47,10 +47,19 @@ class DungeonRouteDiscoverController extends Controller
 
     public function discoverCurrentGameVersion(
         GameVersionServiceInterface $gameVersionService,
+        SeasonServiceInterface      $seasonService,
     ): RedirectResponse {
-        return redirect()->route('dungeonroutes.gameVersion', [
-            'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
-        ]);
+        $gameVersion = $gameVersionService->getGameVersion(Auth::user());
+        if ($gameVersion->has_seasons) {
+            return redirect()->route('dungeonroutes.season', [
+                'gameVersion' => $gameVersion,
+                'season'      => $seasonService->getCurrentSeason($gameVersion->expansion)->index,
+            ]);
+        } else {
+            return redirect()->route('dungeonroutes.gameVersion', [
+                'gameVersion' => $gameVersion,
+            ]);
+        }
     }
 
     /**
