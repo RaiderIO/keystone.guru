@@ -11,12 +11,12 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class DungeonRouteDiscoverController extends Controller
@@ -275,7 +275,6 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverExpansion(
         Expansion                   $expansion,
-        ExpansionServiceInterface   $expansionService,
         DiscoverServiceInterface    $discoverService,
         GameVersionServiceInterface $gameVersionService,
     ) {
@@ -283,11 +282,7 @@ class DungeonRouteDiscoverController extends Controller
 
         $discoverService = $discoverService->withExpansion($expansion);
 
-        $userRegion  = GameServerRegion::getUserOrDefaultRegion();
         $gameVersion = $gameVersionService->getGameVersion(Auth::user());
-
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $userRegion);
-        $nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $userRegion);
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.expansion',
@@ -296,8 +291,8 @@ class DungeonRouteDiscoverController extends Controller
             'gameVersion'       => $gameVersion,
             'expansion'         => $expansion,
             'dungeonroutes'     => [
-                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
-                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
+                'thisweek' => collect(),
+                'nextweek' => collect(),
                 'new'      => $discoverService->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
             ],
@@ -318,19 +313,14 @@ class DungeonRouteDiscoverController extends Controller
 
         $discoverService = $discoverService->withGameVersion($gameVersion);
 
-        $userRegion = GameServerRegion::getUserOrDefaultRegion();
-
-        $currentAffixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, $userRegion);
-        $nextAffixGroup    = $expansionService->getNextAffixGroup($gameVersion->expansion, $userRegion);
-
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.gameVersion',
             'breadcrumbsParams' => [$gameVersion],
             'gridDungeons'      => $gameVersion->expansion->dungeonsAndRaids()->active()->get(),
             'gameVersion'       => $gameVersion,
             'dungeonroutes'     => [
-                'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),
-                'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($nextAffixGroup),
+                'thisweek' => collect(),
+                'nextweek' => collect(),
                 'new'      => $discoverService->new(),
                 'popular'  => $discoverService->popularGroupedByDungeon(),
             ],

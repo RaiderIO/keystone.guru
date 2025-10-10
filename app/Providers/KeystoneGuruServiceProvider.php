@@ -186,7 +186,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Model helpers
         if (in_array(config('app.env'), ['local', 'testing'])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
-            $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
+            $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         } else {
             $this->app->bind(CacheServiceInterface::class, CacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);

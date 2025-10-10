@@ -9,6 +9,7 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -25,6 +26,7 @@ use Illuminate\Support\Collection;
  * @var AffixGroup               $nextAffixGroup
  */
 
+$season ??= null;
 $expansion ??= null;
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
@@ -35,6 +37,7 @@ $expansion ??= null;
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
             'gameVersion' => $gameVersion,
+            'season' => $season,
             'dungeons' => $gridDungeons,
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup' => $nextAffixGroup,
@@ -48,7 +51,7 @@ $expansion ??= null;
     @include('dungeonroute.discover.panel', [
         'gameVersion' => $gameVersion,
         'title' => __('view_dungeonroute.discover.discover.popular'),
-        'link' => isset($season) ?
+        'link' => $season !== null ?
             route('dungeonroutes.season.popular', ['gameVersion' => $gameVersion, 'season' => $season->index]) :
             route('dungeonroutes.popular', ['gameVersion' => $gameVersion]),
         'currentAffixGroup' => $currentAffixGroup,
@@ -63,14 +66,12 @@ $expansion ??= null;
         </div>
     @endif
 
-    @if($currentUserGameVersion->has_seasons)
+    @if($season !== null)
         @if($currentAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
                 'gameVersion' => $gameVersion,
                 'title' => __('view_dungeonroute.discover.discover.popular_by_current_affixes'),
-                'link' => isset($season) ?
-                    route('dungeonroutes.season.thisweek', ['gameVersion' => $gameVersion, 'season' => $season->index]) :
-                    route('dungeonroutes.thisweek', ['gameVersion' => $gameVersion]) ,
+                'link' => route('dungeonroutes.season.thisweek', ['gameVersion' => $gameVersion, 'season' => $season->index]),
                 'currentAffixGroup' => $currentAffixGroup,
                 'affixgroup' => $currentAffixGroup,
                 'dungeonroutes' => $dungeonroutes['thisweek'],
@@ -89,9 +90,7 @@ $expansion ??= null;
             @include('dungeonroute.discover.panel', [
                 'gameVersion' => $gameVersion,
                 'title' => __('view_dungeonroute.discover.discover.popular_by_next_affixes'),
-                'link' => isset($season) ?
-                    route('dungeonroutes.season.nextweek', ['gameVersion' => $gameVersion, 'season' => $season->index]) :
-                    route('dungeonroutes.nextweek', ['gameVersion' => $gameVersion]),
+                'link' => route('dungeonroutes.season.nextweek', ['gameVersion' => $gameVersion, 'season' => $season->index]),
                 'currentAffixGroup' => $nextAffixGroup,
                 'affixgroup' => $nextAffixGroup,
                 'dungeonroutes' => $dungeonroutes['nextweek'],

@@ -3,12 +3,14 @@
 namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
+use Illuminate\Console\Command;
 
-class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
+class CreateGithubReleasePullRequest extends Command
 {
     use ExecutesShellCommands;
 
@@ -32,12 +34,14 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
      *
      * @throws MissingArgumentException
      */
-    public function handle(): int
+    public function handle(
+        ReleaseRepositoryInterface $releaseRepository,
+    ): int
     {
         $result = 0;
 
         $version = $this->argument('version');
-        $release = $this->findReleaseByVersion($version);
+        $release = $releaseRepository->findReleaseByVersion($version);
 
         $this->info(sprintf('>> Creating Github pull request for %s', $version));
 
