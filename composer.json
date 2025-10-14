@@ -130,7 +130,7 @@
         "larastan/larastan": "^2.8",
         "laravel-lang/lang": "^15.2",
         "lukasss93/laravel-larex": "^4.5",
-        "lukasss93/laravel-larex-crowdin": "^2.2",
+        "lukasss93/laravel-larex-crowdin": "^2.3",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^11.0.1",

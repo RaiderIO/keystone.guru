@@ -106,7 +106,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|AffixGroupBaseRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(AffixGroupBaseRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(AffixGroupBaseRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -119,7 +119,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|AffixGroupCouplingRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(AffixGroupCouplingRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(AffixGroupCouplingRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -133,7 +133,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|AffixGroupEaseTierPullRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(AffixGroupEaseTierPullRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(AffixGroupEaseTierPullRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -146,7 +146,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|AffixGroupEaseTierRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(AffixGroupEaseTierRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(AffixGroupEaseTierRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -159,7 +159,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|AffixGroupRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(AffixGroupRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(AffixGroupRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -172,7 +172,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ChallengeModeRunDataRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ChallengeModeRunDataRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ChallengeModeRunDataRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -185,7 +185,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ChallengeModeRunRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ChallengeModeRunRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ChallengeModeRunRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -198,7 +198,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|CombatLogEventRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(CombatLogEventRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(CombatLogEventRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -211,7 +211,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|EnemyPositionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(EnemyPositionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(EnemyPositionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -224,7 +224,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteAffixGroupRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteAffixGroupRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteAffixGroupRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -237,7 +237,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteAttributeRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteAttributeRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteAttributeRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -250,7 +250,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteEnemyRaidMarkerRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteEnemyRaidMarkerRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteEnemyRaidMarkerRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -263,7 +263,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteFavoriteRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteFavoriteRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteFavoriteRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -276,7 +276,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRoutePlayerClassRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRoutePlayerClassRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRoutePlayerClassRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -289,7 +289,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRoutePlayerRaceRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRoutePlayerRaceRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRoutePlayerRaceRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -302,7 +302,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRoutePlayerSpecializationRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRoutePlayerSpecializationRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRoutePlayerSpecializationRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -315,7 +315,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteRatingRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteRatingRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteRatingRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -328,7 +328,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -341,7 +341,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRouteThumbnailJobRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRouteThumbnailJobRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRouteThumbnailJobRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -354,7 +354,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|OverpulledEnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(OverpulledEnemyRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(OverpulledEnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -367,7 +367,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PridefulEnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PridefulEnemyRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PridefulEnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -380,7 +380,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|FloorCouplingRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(FloorCouplingRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(FloorCouplingRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -393,7 +393,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|FloorRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(FloorRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(FloorRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -406,7 +406,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|FloorUnionAreaRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(FloorUnionAreaRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(FloorUnionAreaRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -419,7 +419,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|FloorUnionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(FloorUnionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(FloorUnionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -432,7 +432,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|GameVersionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(GameVersionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(GameVersionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -445,7 +445,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|KillZoneEnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(KillZoneEnemyRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(KillZoneEnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -458,7 +458,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|KillZoneRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(KillZoneRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(KillZoneRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -471,7 +471,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|KillZoneSpellRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(KillZoneSpellRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(KillZoneSpellRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -484,7 +484,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PermissionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PermissionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PermissionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -497,7 +497,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|RoleRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(RoleRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(RoleRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -510,7 +510,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|TeamRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(TeamRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(TeamRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -523,7 +523,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MappingChangeLogRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MappingChangeLogRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MappingChangeLogRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -536,7 +536,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MappingCommitLogRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MappingCommitLogRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MappingCommitLogRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -549,7 +549,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MappingVersionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MappingVersionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MappingVersionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -562,7 +562,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MetricAggregationRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MetricAggregationRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MetricAggregationRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -575,7 +575,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MetricRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MetricRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MetricRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -588,7 +588,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcEnemyForcesRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcEnemyForcesRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcEnemyForcesRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -601,7 +601,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|OpensearchModelRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(OpensearchModelRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(OpensearchModelRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -614,7 +614,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PatreonAdFreeGiveawayRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PatreonAdFreeGiveawayRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PatreonAdFreeGiveawayRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -627,7 +627,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PatreonBenefitRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PatreonBenefitRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PatreonBenefitRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -640,7 +640,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PatreonUserBenefitRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PatreonUserBenefitRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PatreonUserBenefitRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -653,7 +653,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PatreonUserLinkRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PatreonUserLinkRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PatreonUserLinkRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -666,7 +666,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|SimulationCraftRaidEventsOptionsRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(SimulationCraftRaidEventsOptionsRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(SimulationCraftRaidEventsOptionsRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -679,7 +679,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonSpeedrunRequiredNpcRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonSpeedrunRequiredNpcRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonSpeedrunRequiredNpcRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -692,7 +692,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|TagCategoryRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(TagCategoryRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(TagCategoryRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -705,7 +705,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|TagRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(TagRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(TagRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -718,7 +718,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|TimewalkingEventRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(TimewalkingEventRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(TimewalkingEventRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -731,7 +731,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|AffixRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(AffixRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(AffixRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -744,7 +744,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|BrushlineRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(BrushlineRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(BrushlineRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -757,7 +757,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|CacheModelRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(CacheModelRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(CacheModelRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -770,7 +770,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|CharacterClassRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(CharacterClassRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(CharacterClassRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -783,7 +783,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|CharacterRaceRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(CharacterRaceRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(CharacterRaceRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -796,7 +796,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -809,7 +809,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -822,7 +822,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|EnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(EnemyRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(EnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -835,7 +835,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MapIconRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MapIconRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MapIconRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -848,7 +848,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MapIconTypeRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MapIconTypeRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MapIconTypeRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -861,7 +861,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PathRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PathRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PathRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -874,7 +874,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PublishedStateRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PublishedStateRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PublishedStateRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -887,7 +887,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|RaidMarkerRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(RaidMarkerRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(RaidMarkerRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -900,7 +900,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|SpellRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(SpellRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(SpellRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -913,7 +913,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|CharacterClassSpecializationRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(CharacterClassSpecializationRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(CharacterClassSpecializationRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -926,7 +926,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|CharacterRaceClassCouplingRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(CharacterRaceClassCouplingRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(CharacterRaceClassCouplingRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -939,7 +939,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|DungeonFloorSwitchMarkerRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(DungeonFloorSwitchMarkerRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonFloorSwitchMarkerRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -952,7 +952,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|EnemyActiveAuraRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(EnemyActiveAuraRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(EnemyActiveAuraRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -965,7 +965,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|EnemyPackRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(EnemyPackRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(EnemyPackRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -978,7 +978,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|EnemyPatrolRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(EnemyPatrolRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(EnemyPatrolRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -991,7 +991,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ExpansionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ExpansionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ExpansionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1004,7 +1004,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|FactionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(FactionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(FactionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1017,7 +1017,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|FileRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(FileRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(FileRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1030,7 +1030,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|GameIconRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(GameIconRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(GameIconRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1043,7 +1043,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|GameServerRegionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(GameServerRegionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(GameServerRegionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1056,7 +1056,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|LiveSessionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(LiveSessionRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(LiveSessionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1069,7 +1069,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MapObjectToAwakenedObeliskLinkRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MapObjectToAwakenedObeliskLinkRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MapObjectToAwakenedObeliskLinkRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1082,7 +1082,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MDTImportRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MDTImportRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MDTImportRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1095,7 +1095,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|MountableAreaRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(MountableAreaRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(MountableAreaRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1108,7 +1108,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcBolsteringWhitelistRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcBolsteringWhitelistRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcBolsteringWhitelistRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1121,7 +1121,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcClassificationRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcClassificationRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcClassificationRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1134,7 +1134,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcClassRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcClassRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcClassRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1147,7 +1147,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcSpellRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcSpellRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcSpellRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1160,7 +1160,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|NpcTypeRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(NpcTypeRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(NpcTypeRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1173,7 +1173,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PageViewRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PageViewRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PageViewRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1186,7 +1186,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|PolylineRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(PolylineRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(PolylineRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1199,7 +1199,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ReleaseChangelogCategoryRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogCategoryRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseChangelogCategoryRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1212,7 +1212,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ReleaseChangelogChangeRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogChangeRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseChangelogChangeRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1225,7 +1225,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ReleaseChangelogRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseChangelogRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1238,7 +1238,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ReleaseReportLogRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ReleaseReportLogRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseReportLogRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1251,7 +1251,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ReleaseRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(ReleaseRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(ReleaseRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1264,7 +1264,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|RouteAttributeRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(RouteAttributeRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(RouteAttributeRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1277,7 +1277,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|SeasonDungeonRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(SeasonDungeonRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(SeasonDungeonRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1290,7 +1290,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|SeasonRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(SeasonRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(SeasonRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1303,7 +1303,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|TeamUserRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(TeamUserRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(TeamUserRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1316,7 +1316,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|UserReportRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(UserReportRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(UserReportRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);
@@ -1329,7 +1329,7 @@ class RepositoryFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|UserRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilder(UserRepositoryInterface::class);
+        $mockBuilder = $testCase->getMockBuilderPublic(UserRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

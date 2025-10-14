@@ -22,7 +22,7 @@ class LoggingFixtures
     public static function createLogManager(
         PublicTestCase $testCase,
     ): MockObject|LogManager {
-        $logManager = $testCase->createMock(LogManager::class);
+        $logManager = $testCase->createMockPublic(LogManager::class);
         $logManager->method('channel')->willReturnSelf();
 
         return $logManager;
@@ -34,7 +34,7 @@ class LoggingFixtures
     public static function createAffixGroupEaseTierServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|AffixGroupEaseTierServiceLoggingInterface {
-        return $testCase->createMock(AffixGroupEaseTierServiceLoggingInterface::class);
+        return $testCase->createMockPublic(AffixGroupEaseTierServiceLoggingInterface::class);
     }
 
     /**
@@ -43,7 +43,7 @@ class LoggingFixtures
     public static function createCombatLogServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|CombatLogServiceLoggingInterface {
-        return $testCase->createMock(CombatLogServiceLoggingInterface::class);
+        return $testCase->createMockPublic(CombatLogServiceLoggingInterface::class);
     }
 
     /**
@@ -52,7 +52,7 @@ class LoggingFixtures
     public static function createCombatLogDungeonRouteServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|CombatLogDungeonRouteServiceLoggingInterface {
-        return $testCase->createMock(CombatLogDungeonRouteServiceLoggingInterface::class);
+        return $testCase->createMockPublic(CombatLogDungeonRouteServiceLoggingInterface::class);
     }
 
     /**
@@ -61,7 +61,7 @@ class LoggingFixtures
     public static function createSpellServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|SpellServiceLoggingInterface {
-        return $testCase->createMock(SpellServiceLoggingInterface::class);
+        return $testCase->createMockPublic(SpellServiceLoggingInterface::class);
     }
 
     /**
@@ -70,7 +70,7 @@ class LoggingFixtures
     public static function createCombatLogEventServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|CombatLogEventServiceLoggingInterface {
-        return $testCase->createMock(CombatLogEventServiceLoggingInterface::class);
+        return $testCase->createMockPublic(CombatLogEventServiceLoggingInterface::class);
     }
 
     /**
@@ -79,7 +79,7 @@ class LoggingFixtures
     public static function createCloudflareServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|CloudflareServiceLoggingInterface {
-        return $testCase->createMock(CloudflareServiceLoggingInterface::class);
+        return $testCase->createMockPublic(CloudflareServiceLoggingInterface::class);
     }
 
     /**
@@ -88,6 +88,6 @@ class LoggingFixtures
     public static function createCacheServiceLogging(
         PublicTestCase $testCase,
     ): MockObject|CacheServiceLoggingInterface {
-        return $testCase->createMock(CacheServiceLoggingInterface::class);
+        return $testCase->createMockPublic(CacheServiceLoggingInterface::class);
     }
 }

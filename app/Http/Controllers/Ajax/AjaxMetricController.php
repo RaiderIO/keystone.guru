@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpVoidFunctionResultUsedInspection */
-
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
@@ -11,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Metric\MetricServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxMetricController extends Controller
 {

@@ -93,7 +93,7 @@ class LiveSession extends Model
 
     public function getExpiresInSeconds(): ?int
     {
-        return $this->expires_at === null ? null : Carbon::createFromTimeString($this->expires_at)->diffInSeconds(now());
+        return $this->expires_at === null ? null : (int)Carbon::createFromTimeString($this->expires_at)->diffInSeconds(now(), true);
     }
 
     public function getExpiresInHoursSeconds(): ?string

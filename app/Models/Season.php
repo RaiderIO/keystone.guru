@@ -195,7 +195,7 @@ class Season extends CacheModel
         $targetTime = Carbon::create($date->year, $date->month, $date->day, $date->hour, null, null, $date->timezone);
 
         // Get the week difference
-        return $start->diffInWeeks($targetTime);
+        return (int)$start->diffInWeeks($targetTime, true);
     }
 
     /**
@@ -344,8 +344,10 @@ class Season extends CacheModel
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
         $region     = GameServerRegion::getUserOrDefaultRegion();
+        $startAffix = $this->getAffixGroupAt($this->start($region), $region);
+
         $startIndex = $this->affixGroups->search(
-            $this->getAffixGroupAt($this->start($region), $region),
+            static fn(AffixGroup $g) => $startAffix !== null && $g->id === $startAffix->id,
         );
         $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(
             AffixGroup $affixGroupCandidate,

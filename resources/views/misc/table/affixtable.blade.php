@@ -70,7 +70,7 @@ $now = Carbon::now();
         $startDate = $arr['date_start'];
         /** @var AffixGroup $affixGroup */
         $affixGroup = $arr['affix_group'];
-        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks($now) <= 1;
+        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && (int)$startDate->diffInWeeks($now, true) <= 1;
         $isFirst = $affixGroupIndex === 0;
         $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 

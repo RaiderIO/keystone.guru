@@ -9,6 +9,12 @@ return [
             'lock_path' => env('CACHE_FILE_PATH', storage_path('framework/cache/data')),
         ],
 
+        'redis' => [
+            'driver'          => 'redis',
+            'connection'      => 'default',
+            'lock_connection' => 'default',
+        ],
+
         'redis_model_cache' => [
             'driver'     => 'redis',
             'connection' => 'model_cache',

@@ -25,6 +25,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
 use Throwable;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxEnemyController extends AjaxMappingModelBaseController
 {
@@ -108,7 +109,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
      */
     public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             $raidMarkerName = $request->get('raid_marker_name', '');

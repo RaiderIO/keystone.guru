@@ -61,6 +61,7 @@ use Illuminate\Support\Facades\Log;
 use Random\RandomException;
 use Teapot\StatusCode\Http;
 use Throwable;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxDungeonRouteController extends Controller
 {
@@ -513,7 +514,7 @@ class AjaxDungeonRouteController extends Controller
         ThumbnailServiceInterface         $thumbnailService,
         ?DungeonRoute                     $dungeonRoute = null,
     ): DungeonRoute {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         $beforeDungeonRoute = null;
 
@@ -541,7 +542,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function storePullGradient(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         $beforeDungeonRoute = clone $dungeonRoute;
 
@@ -563,7 +564,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        $this->authorize('delete', $dungeonRoute);
+        Gate::authorize('delete', $dungeonRoute);
 
         if (!$dungeonRoute->delete()) {
             abort(500, 'Unable to delete dungeonroute');
@@ -579,7 +580,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function publishedState(PublishFormRequest $request, DungeonRoute $dungeonRoute): Response
     {
-        $this->authorize('publish', $dungeonRoute);
+        Gate::authorize('publish', $dungeonRoute);
 
         $publishedState = $request->get('published_state', PublishedState::UNPUBLISHED);
 
@@ -610,7 +611,7 @@ class AjaxDungeonRouteController extends Controller
         DungeonRoute              $dungeonRoute,
         Team                      $team,
     ): Response {
-        $this->authorize('clone', $dungeonRoute);
+        Gate::authorize('clone', $dungeonRoute);
 
         /** @var User $user */
         $user = Auth::user();
@@ -636,7 +637,7 @@ class AjaxDungeonRouteController extends Controller
         DungeonRoute              $dungeonRoute,
         string                    $seasonalType,
     ): Response {
-        $this->authorize('migrate', $dungeonRoute);
+        Gate::authorize('migrate', $dungeonRoute);
 
         $dungeonRoute->migrateToSeasonalType($expansionService, $seasonalType);
 
@@ -650,7 +651,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function rate(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('rate', $dungeonRoute);
+        Gate::authorize('rate', $dungeonRoute);
 
         $value = $request->get('rating', -1);
         if ($value > 0) {
@@ -677,7 +678,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function rateDelete(Request $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('rate', $dungeonRoute);
+        Gate::authorize('rate', $dungeonRoute);
 
         $user = Auth::user();
 
@@ -698,7 +699,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favorite(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        $this->authorize('favorite', $dungeonRoute);
+        Gate::authorize('favorite', $dungeonRoute);
 
         $user = Auth::user();
 
@@ -717,7 +718,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function favoriteDelete(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        $this->authorize('favorite', $dungeonRoute);
+        Gate::authorize('favorite', $dungeonRoute);
 
         $user = Auth::user();
 
@@ -801,7 +802,7 @@ class AjaxDungeonRouteController extends Controller
         MDTExportStringServiceInterface $mdtExportStringService,
         DungeonRoute                    $dungeonRoute,
     ) {
-        $this->authorize('view', $dungeonRoute);
+        Gate::authorize('view', $dungeonRoute);
 
         $useCache = (int)$request->get('useCache', 1) === 1;
 
@@ -847,7 +848,7 @@ class AjaxDungeonRouteController extends Controller
         RaidEventsServiceInterface          $raidEventsService,
         DungeonRoute                        $dungeonRoute,
     ): array {
-        $this->authorize('view', $dungeonRoute);
+        Gate::authorize('view', $dungeonRoute);
 
         $raidEventsCollection = $raidEventsService->getRaidEvents(
             SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonRoute),
