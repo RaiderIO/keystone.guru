@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
+use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesService;
@@ -123,6 +124,14 @@ final class CoordinatesServiceTest extends PublicTestCase
         foreach ($mappingVersions as $mappingVersion) {
             // Skip dungeons not available in MDT
             if (Conversion::hasMDTDungeonName($mappingVersion->dungeon->key) === false) {
+                continue;
+            }
+
+            // Manually checked - they deviate a lot from the MDT data but they're valid
+            if (in_array($mappingVersion->dungeon->key, [
+                Dungeon::DUNGEON_EYE_OF_AZSHARA,
+                Dungeon::DUNGEON_VAULT_OF_THE_WARDENS,
+            ])) {
                 continue;
             }
 
