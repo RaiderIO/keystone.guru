@@ -494,6 +494,10 @@ class DungeonRouteDiscoverController extends Controller
         ExpansionServiceInterface $expansionService,
         SeasonServiceInterface    $seasonService,
     ): View {
+        if (!$gameVersion->has_seasons) {
+            return redirect()->route('dungeonroutes');
+        }
+
         $this->authorize('view', $gameVersion);
         $this->authorize('view', $dungeon);
 
@@ -531,7 +535,11 @@ class DungeonRouteDiscoverController extends Controller
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
         SeasonServiceInterface    $seasonService,
-    ): View {
+    ): View|RedirectResponse {
+        if (!$gameVersion->has_seasons) {
+            return redirect()->route('dungeonroutes');
+        }
+
         $this->authorize('view', $gameVersion);
         $this->authorize('view', $dungeon);
 
