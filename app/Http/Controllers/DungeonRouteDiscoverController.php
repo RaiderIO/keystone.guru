@@ -493,7 +493,7 @@ class DungeonRouteDiscoverController extends Controller
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
         SeasonServiceInterface    $seasonService,
-    ): View {
+    ): View|RedirectResponse {
         if (!$gameVersion->has_seasons) {
             return redirect()->route('dungeonroutes');
         }
