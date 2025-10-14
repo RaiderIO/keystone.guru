@@ -163,7 +163,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
         // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
         /** @var FloorUnion $floorUnion */
-        $floorUnion = $forceFloorUnion ?? $mappingVersion->getFloorUnionForLatLng($this, $mappingVersion, $latLng);
+        $floorUnion = $forceFloorUnion ?? $mappingVersion->getFloorUnionForLatLng($this, $latLng);
 
         // No floor unions mean we don't need to do anything - we're done
         if ($floorUnion === null) {

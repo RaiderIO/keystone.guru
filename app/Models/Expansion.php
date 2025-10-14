@@ -269,15 +269,6 @@ class Expansion extends CacheModel
         return $result;
     }
 
-    /**
-     * Returns if we should display individual dungeon images
-     */
-    public function showDiscoverRoutesCardDungeonImage(): bool
-    {
-        // So far we only have dungeon wallpapers for Shadowlands :(
-        return !in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
-    }
-
     public function getWallpaperUrl(): string
     {
         return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));

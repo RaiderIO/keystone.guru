@@ -29,6 +29,7 @@ use App\Console\Commands\Github\CreateGithubRelease;
 use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
+use App\Console\Commands\Hotfix\MakeHotfix;
 use App\Console\Commands\Localization\Datatables\ConvertLocalizations;
 use App\Console\Commands\Localization\Datatables\DownloadLocalizations;
 use App\Console\Commands\Localization\Larex\WriteKsg;
@@ -58,6 +59,7 @@ use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\MDT\ImportNpcs;
 use App\Console\Commands\MDT\ImportSpells;
+use App\Console\Commands\MDT\MappingVersionAccuracy;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
 use App\Console\Commands\ReadOnlyMode\Enable as EnableReadOnlyMode;
@@ -160,6 +162,9 @@ class Kernel extends ConsoleKernel
         // Handlebars
         HandlebarsRefresh::class,
 
+        // Hotfix
+        MakeHotfix::class,
+
         // Larex
         WriteKsg::class,
         WriteKsgFromCrowdin::class,
@@ -203,6 +208,7 @@ class Kernel extends ConsoleKernel
         ImportMapping::class,
         ImportNpcs::class,
         ImportSpells::class,
+        MappingVersionAccuracy::class,
 
         // Patreon
         RefreshMembershipStatus::class,

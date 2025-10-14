@@ -338,7 +338,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1160,
+                        "floor1_id": 8,
+                        "floor2_id": 9,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -362,7 +369,20 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1161,
+                        "floor1_id": 9,
+                        "floor2_id": 8,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1162,
+                        "floor1_id": 9,
+                        "floor2_id": 10,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -386,7 +406,20 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1163,
+                        "floor1_id": 10,
+                        "floor2_id": 9,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1164,
+                        "floor1_id": 10,
+                        "floor2_id": 11,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -410,7 +443,20 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1165,
+                        "floor1_id": 11,
+                        "floor2_id": 10,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1166,
+                        "floor1_id": 11,
+                        "floor2_id": 12,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -431,6 +477,37 @@
                 "ingame_min_y": -650,
                 "ingame_max_x": -2660.03,
                 "ingame_max_y": -480,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1167,
+                        "floor1_id": 12,
+                        "floor2_id": 11,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 387,
+                "index": 6,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.legion.cathedral_of_eternal_night.floors.cathedral_of_eternal_night",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
@@ -553,7 +630,7 @@
                 "id": 15,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": 697,
+                "ui_map_id": 713,
                 "map_name": null,
                 "name": "dungeons.legion.eye_of_azshara.floors.eye_of_azshara",
                 "default": 1,
@@ -690,6 +767,30 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 388,
+                "index": 4,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.legion.halls_of_valor.floors.halls_of_valor",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
@@ -971,6 +1072,30 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 389,
+                "index": 7,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.legion.lower_karazhan.floors.lower_karazhan",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -1091,6 +1216,30 @@
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 390,
+                "index": 4,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.legion.maw_of_souls.floors.maw_of_souls",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
             }
         ]
     },
@@ -1162,7 +1311,7 @@
                 "id": 29,
                 "index": 1,
                 "mdt_sub_level": 1,
-                "ui_map_id": null,
+                "ui_map_id": 356,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.lower_broken_stair",
                 "default": 1,
@@ -1193,7 +1342,7 @@
                 "id": 30,
                 "index": 2,
                 "mdt_sub_level": 1,
-                "ui_map_id": null,
+                "ui_map_id": 357,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_broken_stair",
                 "default": 0,
@@ -1230,7 +1379,7 @@
                 "id": 31,
                 "index": 3,
                 "mdt_sub_level": 1,
-                "ui_map_id": null,
+                "ui_map_id": 358,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.the_menagerie",
                 "default": 0,
@@ -1267,7 +1416,7 @@
                 "id": 32,
                 "index": 4,
                 "mdt_sub_level": 2,
-                "ui_map_id": null,
+                "ui_map_id": 359,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.guardians_library",
                 "default": 0,
@@ -1304,7 +1453,7 @@
                 "id": 33,
                 "index": 5,
                 "mdt_sub_level": 3,
-                "ui_map_id": null,
+                "ui_map_id": 360,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.library_floor",
                 "default": 0,
@@ -1341,7 +1490,7 @@
                 "id": 34,
                 "index": 6,
                 "mdt_sub_level": 4,
-                "ui_map_id": null,
+                "ui_map_id": 361,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.upper_library",
                 "default": 0,
@@ -1378,7 +1527,7 @@
                 "id": 35,
                 "index": 7,
                 "mdt_sub_level": 5,
-                "ui_map_id": null,
+                "ui_map_id": 362,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.gamesmans_hall",
                 "default": 0,
@@ -1396,16 +1545,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 387,
+                        "id": 1168,
                         "floor1_id": 35,
                         "floor2_id": 34,
                         "direction": "up"
                     },
                     {
-                        "id": 388,
+                        "id": 1169,
                         "floor1_id": 35,
                         "floor2_id": 36,
-                        "direction": "left"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1415,7 +1564,7 @@
                 "id": 36,
                 "index": 8,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 363,
                 "map_name": null,
                 "name": "dungeons.legion.upper_karazhan.floors.netherspace",
                 "default": 0,
@@ -1439,6 +1588,30 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 391,
+                "index": 9,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.legion.upper_karazhan.floors.upper_karazhan",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
@@ -1467,13 +1640,13 @@
                 "id": 37,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 903,
                 "map_name": null,
                 "name": "dungeons.legion.the_seat_of_the_triumvirate.floors.the_seat_of_the_triumvirate",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 8,
+                "max_enemy_size": 20,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": -9612.5,
@@ -1481,7 +1654,7 @@
                 "ingame_max_x": -11156.3,
                 "ingame_max_y": 6304.17,
                 "percentage_display_zoom": null,
-                "zoom_max": null,
+                "zoom_max": 7,
                 "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -1512,7 +1685,7 @@
                 "id": 38,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 710,
                 "map_name": null,
                 "name": "dungeons.legion.vault_of_the_wardens.floors.the_wardens_court",
                 "default": 1,
@@ -1543,7 +1716,7 @@
                 "id": 39,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 711,
                 "map_name": null,
                 "name": "dungeons.legion.vault_of_the_wardens.floors.vault_of_the_wardens",
                 "default": 0,
@@ -1580,7 +1753,7 @@
                 "id": 40,
                 "index": 3,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 712,
                 "map_name": null,
                 "name": "dungeons.legion.vault_of_the_wardens.floors.vault_of_the_betrayer",
                 "default": 0,
@@ -1604,6 +1777,30 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 392,
+                "index": 4,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.legion.vault_of_the_wardens.floors.vault_of_the_wardens",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

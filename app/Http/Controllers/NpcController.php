@@ -258,7 +258,7 @@ class NpcController extends Controller
         $npc = $this->store($request);
 
         // Message to the user
-        Session::flash('status', sprintf(__('view_admin.npc.flash.npc_created'), $npc->name));
+        Session::flash('status', sprintf(__('view_admin.npc.flash.npc_created'), __($npc->name)));
 
         return redirect()->route('admin.npc.edit', ['npc' => $npc->id]);
     }

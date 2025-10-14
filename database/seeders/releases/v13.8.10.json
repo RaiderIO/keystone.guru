@@ -1,0 +1,37 @@
+{
+  "id": 321,
+  "release_changelog_id": 328,
+  "version": "v13.8.10",
+  "title": "Eco-Dome Al'Dani mapping changes\/auto-route improvements and minor bugfixes",
+  "backup_db": 0,
+  "silent": 0,
+  "spotlight": 0,
+  "released": 0,
+  "created_at": "2025-09-23T12:37:46+00:00",
+  "updated_at": "2025-09-23T12:37:46+00:00",
+  "changelog": {
+    "id": 328,
+    "release_id": 321,
+    "description": null,
+    "changes": [
+      {
+        "release_changelog_id": 328,
+        "release_changelog_category_id": 11,
+        "ticket_id": 2966,
+        "change": "Harrier's Call and the latest drums are now properly recognized as Bloodlust spells."
+      },
+      {
+        "release_changelog_id": 328,
+        "release_changelog_category_id": 11,
+        "ticket_id": 2979,
+        "change": "Eco-Dome Al'Dani performance has been drastically improved. This also caused a shift in the mapping to much better reflect where the enemies are in-game whch has been submitted for change to MDT as well."
+      },
+      {
+        "release_changelog_id": 328,
+        "release_changelog_category_id": 12,
+        "ticket_id": 2973,
+        "change": "Added \/api\/v1\/route\/{route} endpoint."
+      }
+    ]
+  }
+}

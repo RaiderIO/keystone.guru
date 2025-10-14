@@ -20,17 +20,17 @@ $navs = [];
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
-        $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
+        $navs[route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $nextSeason->index])] = [
             'text' => $nextSeason->expansion_id !== $currentSeason->expansion_id ? $nextSeason->name_long : $nextSeason->name,
         ];
     }
 
-    $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
+    $navs[route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $currentSeason->index])] = [
         'fa'   => 'fa fa-route',
         'text' => __('view_common.layout.header.browse_routes'),
     ];
 } else {
-    $navs[route('dungeonroutes.expansion', ['expansion' => $currentUserGameVersion->expansion])] = [
+    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] = [
         'fa'   => 'fa fa-route',
         'text' => __('view_common.layout.header.browse_routes'),
     ];

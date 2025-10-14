@@ -184,11 +184,19 @@ class SiteController extends Controller
     ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
+        $minOffset = -50;
+        $maxOffset = 10;
+        $offset    = (int)$request->get('offset', 0);
+        $offset    = max($offset, min($offset, $maxOffset), $minOffset);
+
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
+            'gameVersion'             => GameVersion::getDefaultGameVersion(),
             'seasonService'           => $seasonService,
-            'offset'                  => min((int)$request->get('offset', 0), 10),
+            'offset'                  => $offset,
+            'showPrevious'            => $offset > $minOffset,
+            'showNext'                => $offset < $maxOffset,
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))

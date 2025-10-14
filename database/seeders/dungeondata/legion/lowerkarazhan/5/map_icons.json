@@ -50,5 +50,57 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 619,
+        "floor_id": 23,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -84.8787,
+        "lng": 195.7651,
+        "comment": "Ghost Trap",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 619,
+        "floor_id": 23,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -79.2201,
+        "lng": 198.1591,
+        "comment": "Ghost Trap",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 634,
+        "floor_id": 23,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -84.8787,
+        "lng": 195.7651,
+        "comment": "Ghost Trap",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 634,
+        "floor_id": 23,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -79.2201,
+        "lng": 198.1591,
+        "comment": "Ghost Trap",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

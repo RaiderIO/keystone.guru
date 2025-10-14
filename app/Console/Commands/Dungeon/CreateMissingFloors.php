@@ -45,17 +45,27 @@ class CreateMissingFloors extends Command
             if (!is_array($translatedFloors)) {
                 throw new \Exception(sprintf('Translated floors should be an array for %s', $dungeon->name));
             }
+
             foreach ($translatedFloors as $key => $value) {
                 $floorKey = sprintf('%s.%s', $floorsTranslationKey, $key);
 
-                Floor::create([
+                $floorAttributes = [
                     'dungeon_id' => $dungeon->id,
                     'name'       => $floorKey,
                     'index'      => $index,
                     'default'    => $index === 1,
-                ]);
+                ];
 
-                $this->comment(sprintf('-- Added new floor %s', __($floorKey, [], 'en_US')));
+                $facade = '';
+                if (__($floorKey, [], 'en_US') === __($dungeon->name, [], 'en_US')) {
+                    $floorAttributes['facade']        = 1;
+                    $floorAttributes['mdt_sub_level'] = 1;
+                    $floorAttributes['ui_map_id']     = 0;
+                    $facade                           = ' facade';
+                }
+                Floor::create($floorAttributes);
+
+                $this->comment(sprintf('-- Added new %s floor %s', $facade, __($floorKey, [], 'en_US')));
 
                 $index++;
             }

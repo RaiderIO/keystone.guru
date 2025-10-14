@@ -21,4 +21,6 @@ interface ReleaseRepositoryInterface extends BaseRepositoryInterface
     public function getLatestUnreleasedRelease(): ?Release;
 
     public function releaseSuccessful(): void;
+
+    public function findReleaseByVersion(?string $version): ?Release;
 }

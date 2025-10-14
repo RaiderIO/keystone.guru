@@ -7,6 +7,7 @@
         "target_floor_id": 353,
         "linked_dungeon_floor_switch_marker_id": 2049,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -218.99,
         "lng": 77.08
     }

@@ -144,7 +144,7 @@ class CommonMapsMap extends InlineCode {
             map_unkilled_enemy_opacity: '50',
             map_unkilled_important_enemy_opacity: '80',
             map_enemy_aggressiveness_border: 0,
-            map_enemy_dangerous_border: 0,
+            map_enemy_dangerous_border: 1,
             enemy_display_type: 'enemy_portrait',
             echo_cursors_enabled: 1,
             map_controls_show_hide_labels: 1

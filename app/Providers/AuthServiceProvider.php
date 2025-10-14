@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\LiveSession;
 use App\Models\Season;
 use App\Models\Tags\Tag;
@@ -12,6 +13,7 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Policies\DungeonRouteDiscoverDungeonPolicy;
 use App\Policies\DungeonRouteDiscoverExpansionPolicy;
+use App\Policies\DungeonRouteDiscoverGameVersionPolicy;
 use App\Policies\DungeonRouteDiscoverSeasonPolicy;
 use App\Policies\DungeonRoutePolicy;
 use App\Policies\LiveSessionPolicy;
@@ -31,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         Dungeon::class      => DungeonRouteDiscoverDungeonPolicy::class,
         Expansion::class    => DungeonRouteDiscoverExpansionPolicy::class,
         Season::class       => DungeonRouteDiscoverSeasonPolicy::class,
+        GameVersion::class  => DungeonRouteDiscoverGameVersionPolicy::class,
         DungeonRoute::class => DungeonRoutePolicy::class,
         LiveSession::class  => LiveSessionPolicy::class,
         Tag::class          => TagPolicy::class,

@@ -5,6 +5,7 @@ namespace App\Console\Commands\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
@@ -18,7 +19,7 @@ class ImportNpcs extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importnpcs {--dungeon=}';
+    protected $signature = 'mdt:importnpcs {gameVersion} {--dungeon=}';
 
     /**
      * The console command description.
@@ -38,9 +39,15 @@ class ImportNpcs extends Command
         CoordinatesServiceInterface      $coordinatesService,
         MDTMappingImportServiceInterface $mappingImportService,
     ): void {
-        $dungeonKey = $this->option('dungeon');
+        $gameVersionKey = $this->argument('gameVersion');
 
-        $dungeons = collect();
+        $gameVersion = GameVersion::firstWhere('key', $gameVersionKey);
+        if ($gameVersion === null) {
+            throw new Exception(sprintf('Game version %s not found', $gameVersionKey));
+        }
+
+        $dungeonKey = $this->option('dungeon');
+        $dungeons   = collect();
 
         if ($dungeonKey !== null) {
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
@@ -62,7 +69,7 @@ class ImportNpcs extends Command
 
             $mdtDungeon = new MDTDungeon($cacheService, $coordinatesService, $dungeon);
 
-            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon);
+            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion);
         }
     }
 }

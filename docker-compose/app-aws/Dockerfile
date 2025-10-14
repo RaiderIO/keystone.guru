@@ -16,7 +16,8 @@ RUN git config --global --add safe.directory /var/www/html && \
     echo "Using branch: $BRANCH" && \
     git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
     git rev-list HEAD -1 > version && \
-    cat version
+    cat version; \
+    rm -rf .git
 
 # Install composer packages (token is already configured in main image)
 RUN composer install --no-dev --optimize-autoloader && \

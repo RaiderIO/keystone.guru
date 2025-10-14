@@ -107,7 +107,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
         $clonedEnemyPatrol->save();
 
-        $clonedPolyLine    = $this->polyline?->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
+        $clonedPolyLine = $this->polyline?->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
+        $this->load('mdtPolyline');
         $clonedMdtPolyLine = $this->mdtPolyline?->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
         $clonedEnemyPatrol->update([
             'polyline_id'     => $clonedPolyLine->id,

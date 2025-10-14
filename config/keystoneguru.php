@@ -66,7 +66,10 @@ return [
             'ttl' => '1 hour',
         ],
         'default_region' => [
-            'ttl' => '1 week',
+            'ttl' => '1 hour',
+        ],
+        'default_game_version' => [
+            'ttl' => '1 hour',
         ],
         'mdt_export_strings' => [
             'ttl' => 1800, // 30 minutes

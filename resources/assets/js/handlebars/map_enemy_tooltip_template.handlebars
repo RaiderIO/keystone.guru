@@ -13,7 +13,12 @@
     {{#each healths}}
         <div class="row">
             <div class="col-5 no-gutters">{{ game_version }}</div>
-            <div class="col-7 no-gutters">{{ health }} @ {{percentage}}%</div>
+                <div class="col-7 no-gutters">
+                    {{ health }}
+            {{#if percentage}}
+                    @ {{percentage}}%
+            {{/if}}
+                </div>
         </div>
     {{/each}}
     {{#if is_teeming}}

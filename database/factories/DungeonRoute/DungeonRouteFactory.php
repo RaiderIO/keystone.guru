@@ -48,7 +48,7 @@ class DungeonRouteFactory extends Factory
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
 
             'clone_of'                   => null,
-            'title'                      => $this->faker->title(),
+            'title'                      => $this->faker->sentence(),
             'description'                => '',
             'level_min'                  => $activeSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
             'level_max'                  => $activeSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),

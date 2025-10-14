@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Guardia Cittadina di Roccavento',
@@ -5499,4 +5499,5 @@ return [
     246285    => 'Sovrintendente del Bazar',
     555555    => '',
     129547000 => '',
-];
+]
+;
