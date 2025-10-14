@@ -17,7 +17,7 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function popularBuilder(): Builder
     {
-        $this->ensureExpansion();
+        $this->ensureGameVersion();
 
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
@@ -41,8 +41,9 @@ class DevDiscoverService extends BaseDiscoverService
                 'races',
             ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('dungeons.expansion_id', $this->expansion->id);
+                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
@@ -58,7 +59,7 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function newBuilder(): Builder
     {
-        $this->ensureExpansion();
+        $this->ensureGameVersion();
 
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
@@ -82,8 +83,9 @@ class DevDiscoverService extends BaseDiscoverService
                 'races',
             ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('dungeons.expansion_id', $this->expansion->id);
+                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')

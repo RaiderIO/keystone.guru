@@ -166,10 +166,10 @@ use App\Models\Spell\Spell;
 
 
     <div class="form-group">
-        {{ html()->input('submit')->value(__('view_admin.npc.edit.submit'))->class('btn btn-info')->name('submit')->value('submit') }}
+        {{ html()->input('submit')->value(__('view_admin.npc.edit.submit'))->class('btn btn-info')->name('submit') }}
         @isset($npc)
             <div class="float-right">
-                {{ html()->input('submit')->value(__('view_admin.npc.edit.save_as_new_npc'))->class('btn btn-info')->name('submit')->value('saveasnew') }}
+                {{ html()->input('submit')->value(__('view_admin.npc.edit.save_as_new_npc'))->class('btn btn-info')->name('submit') }}
             </div>
         @endisset
     </div>

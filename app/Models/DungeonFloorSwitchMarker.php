@@ -15,16 +15,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int                           $id
- * @property int                           $mapping_version_id
- * @property int                           $floor_id
- * @property int                           $source_floor_id
- * @property int                           $target_floor_id
- * @property int|null                      $linked_dungeon_floor_switch_marker_id
- * @property float                         $lat
- * @property float                         $lng
- * @property string                        $direction
- * @property string                        $floorCouplingDirection
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
+ * @property int      $source_floor_id
+ * @property int      $target_floor_id
+ * @property int|null $linked_dungeon_floor_switch_marker_id
+ * @property float    $lat
+ * @property float    $lng
+ * @property string   $direction
+ * @property bool     $hidden_in_facade
+ * @property string   $floorCouplingDirection
+ *
  * @property Floor                         $floor
  * @property Floor|null                    $sourceFloor
  * @property Floor                         $targetFloor
@@ -56,6 +58,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
         'target_floor_id',
         'linked_dungeon_floor_switch_marker_id',
         'direction',
+        'hidden_in_facade',
         'lat',
         'lng',
     ];
@@ -72,7 +75,8 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
             'source_floor_id'                       => 'integer',
             'target_floor_id'                       => 'integer',
             'linked_dungeon_floor_switch_marker_id' => 'integer',
-            'lat'                                   => 'float',
+            'hidden_in_facade'                      => 'boolean',
+        'lat'                                   => 'float',
             'lng'                                   => 'float',
         ];
     }

@@ -34,11 +34,11 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "5.6.2",
+                "version": "5.6.5",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "c5c84229bda9c4ca5e79fdf91ec1e03e4acbf931"
+                    "reference": "bdc8fea594fe4e4fdd6ef0e0c12e6198282c37c9"
                 }
             }
         },
@@ -46,11 +46,11 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mdt-legacy",
-                "version": "1.0.1",
+                "version": "1.1.6",
                 "source": {
-                    "url": "https://github.com/Wotuu/MDT_Legacy.git",
+                    "url": "https://github.com/Nnoggie/MDT_Legacy.git",
                     "type": "git",
-                    "reference": "c39f3fe717207090301d3489cd0c5a3f15353d1f"
+                    "reference": "894efd58fdfb803b892f34881d88d72cb331ffd9"
                 }
             }
         },
@@ -100,7 +100,7 @@
         "laravel/ui": "^4.4",
         "league/flysystem-aws-s3-v3": "^3.0",
         "marvinlabs/laravel-discord-logger": "^1.4",
-        "nnoggie/mdt-legacy": "^1.0",
+        "nnoggie/mdt-legacy": "^1.1",
         "nnoggie/mythicdungeontools": "^5.5",
         "paquettg/php-html-parser": "^3.1",
         "patreon/patreon": "^1.0.0",

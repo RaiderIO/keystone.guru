@@ -9,47 +9,51 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion         $currentUserGameVersion
- * @var Expansion           $expansion
- * @var Season|null         $season
- * @var Collection<Dungeon> $gridDungeons
- * @var AffixGroup          $currentAffixGroup
- * @var AffixGroup          $nextAffixGroup
+ * @var GameVersion              $currentUserGameVersion
+ * @var GameVersion              $gameVersion
+ * @var Expansion                $expansion
+ * @var Season|null              $season
+ * @var Collection<Dungeon>      $gridDungeons
+ * @var Collection<DungeonRoute> $dungeonroutes
+ * @var AffixGroup               $currentAffixGroup
+ * @var AffixGroup               $nextAffixGroup
  */
+
+$season ??= null;
+$expansion ??= null;
 ?>
-@include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
-        'options' =>  [
-        ],
-])
+@include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
 @section('content')
-    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
+    @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion, 'gameVersion' => $gameVersion])
 
     <div class="discover_panel">
         @include('common.dungeon.griddiscover', [
-            'expansion' => $expansion,
+            'gameVersion' => $gameVersion,
+            'season' => $season,
             'dungeons' => $gridDungeons,
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup' => $nextAffixGroup,
             'colCount' => 4,
-            'links' => $gridDungeons->map(function(Dungeon $dungeon) use($expansion) {
-                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];
+            'links' => $gridDungeons->map(function(Dungeon $dungeon) use($gameVersion) {
+                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug])];
             }),
         ])
     </div>
 
     @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
+        'gameVersion' => $gameVersion,
         'title' => __('view_dungeonroute.discover.discover.popular'),
-        'link' => isset($season) ?
-            route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]) :
-            route('dungeonroutes.popular', ['expansion' => $expansion]),
+        'link' => $season !== null ?
+            route('dungeonroutes.season.popular', ['gameVersion' => $gameVersion, 'season' => $season->index]) :
+            route('dungeonroutes.popular', ['gameVersion' => $gameVersion]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['popular'],
         'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
@@ -62,14 +66,12 @@ use Illuminate\Support\Collection;
         </div>
     @endif
 
-    @if($currentUserGameVersion->has_seasons)
+    @if($season !== null)
         @if($currentAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
-                'expansion' => $expansion,
+                'gameVersion' => $gameVersion,
                 'title' => __('view_dungeonroute.discover.discover.popular_by_current_affixes'),
-                'link' => isset($season) ?
-                    route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]) :
-                    route('dungeonroutes.thisweek', ['expansion' => $expansion]) ,
+                'link' => route('dungeonroutes.season.thisweek', ['gameVersion' => $gameVersion, 'season' => $season->index]),
                 'currentAffixGroup' => $currentAffixGroup,
                 'affixgroup' => $currentAffixGroup,
                 'dungeonroutes' => $dungeonroutes['thisweek'],
@@ -86,11 +88,9 @@ use Illuminate\Support\Collection;
 
         @if($nextAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
-                'expansion' => $expansion,
+                'gameVersion' => $gameVersion,
                 'title' => __('view_dungeonroute.discover.discover.popular_by_next_affixes'),
-                'link' => isset($season) ?
-                    route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]) :
-                    route('dungeonroutes.nextweek', ['expansion' => $expansion]),
+                'link' => route('dungeonroutes.season.nextweek', ['gameVersion' => $gameVersion, 'season' => $season->index]),
                 'currentAffixGroup' => $nextAffixGroup,
                 'affixgroup' => $nextAffixGroup,
                 'dungeonroutes' => $dungeonroutes['nextweek'],
@@ -107,11 +107,11 @@ use Illuminate\Support\Collection;
     @endif
 
     @include('dungeonroute.discover.panel', [
-        'expansion' => $expansion,
+        'gameVersion' => $gameVersion,
         'title' => __('view_dungeonroute.discover.discover.newly_published_routes'),
         'link' => isset($season) ?
-            route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]) :
-            route('dungeonroutes.new', ['expansion' => $expansion]),
+            route('dungeonroutes.season.new', ['gameVersion' => $gameVersion, 'season' => $season->index]) :
+            route('dungeonroutes.new', ['gameVersion' => $gameVersion]),
         'currentAffixGroup' => $currentAffixGroup,
         'dungeonroutes' => $dungeonroutes['new'],
         'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),

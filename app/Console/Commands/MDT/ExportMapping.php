@@ -16,7 +16,7 @@ class ExportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:exportmapping {expansion} {gameVersion} {targetFolder} {--excludeTranslations}';
+    protected $signature = 'mdt:exportmapping {expansion} {gameVersion} {targetFolder} {--excludeTranslations} {--forceEnemyPatrols}';
 
     /**
      * The console command description.
@@ -36,6 +36,7 @@ class ExportMapping extends Command
         $gameVersion         = GameVersion::firstWhere('key', $this->argument('gameVersion'));
         $targetFolder        = $this->argument('targetFolder');
         $excludeTranslations = $this->option('excludeTranslations');
+        $forceEnemyPatrols   = $this->option('forceEnemyPatrols');
 
         foreach ($expansion->dungeonsAndRaids as $dungeon) {
             if (!$dungeon->enemies()->exists()) {
@@ -51,7 +52,7 @@ class ExportMapping extends Command
                 continue;
             }
 
-            $luaString = $mappingExportService->getMDTMappingAsLuaString($currentMappingVersion, $excludeTranslations);
+            $luaString = $mappingExportService->getMDTMappingAsLuaString($currentMappingVersion, $excludeTranslations, $forceEnemyPatrols);
 
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));

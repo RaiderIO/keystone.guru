@@ -2,11 +2,11 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Expansion                $expansion
+ * @var GameVersion              $gameVersion
  * @var string                   $title
  * @var int                      $cols
  * @var Collection<DungeonRoute> $dungeonroutes
@@ -68,7 +68,7 @@ $cache            ??= true;
     @if($loadMore)
         @include('common.search.loadmore', [
             'category' => $category,
-            'expansion' => $expansion,
+            'gameVersion' => $gameVersion,
             'dungeon' => $dungeon,
             'routeListContainerSelector' => '#category_route_list',
         ])

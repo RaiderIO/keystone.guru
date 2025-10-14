@@ -94,5 +94,53 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-48.6569,\"lng\":184.4012},{\"lat\":-76.8613,\"lng\":182.7518},{\"lat\":-74.8821,\"lng\":196.1119},{\"lat\":-44.3685,\"lng\":196.1119}]"
+    },
+    {
+        "id": 17814,
+        "mapping_version_id": 634,
+        "floor_id": 20,
+        "group": 5,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 5",
+        "vertices_json": "[{\"lat\":-70.1924,\"lng\":209.4496},{\"lat\":-58.7079,\"lng\":209.4496},{\"lat\":-58.7079,\"lng\":220.6929},{\"lat\":-70.1924,\"lng\":220.6929}]"
+    },
+    {
+        "id": 17815,
+        "mapping_version_id": 634,
+        "floor_id": 20,
+        "group": 6,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 6",
+        "vertices_json": "[{\"lat\":-124.9427,\"lng\":289.5589},{\"lat\":-110.366,\"lng\":289.5589},{\"lat\":-110.366,\"lng\":303.6457},{\"lat\":-124.9427,\"lng\":303.6457}]"
+    },
+    {
+        "id": 17816,
+        "mapping_version_id": 634,
+        "floor_id": 20,
+        "group": 7,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 7",
+        "vertices_json": "[{\"lat\":-204.821,\"lng\":276.2308},{\"lat\":-190.0037,\"lng\":276.2308},{\"lat\":-190.0037,\"lng\":290.455},{\"lat\":-204.821,\"lng\":290.455}]"
+    },
+    {
+        "id": 17817,
+        "mapping_version_id": 634,
+        "floor_id": 20,
+        "group": 8,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 8",
+        "vertices_json": "[{\"lat\":-222.9822,\"lng\":216.6199},{\"lat\":-212.0273,\"lng\":216.6199},{\"lat\":-212.0273,\"lng\":228.3396},{\"lat\":-222.9822,\"lng\":228.3396}]"
     }
 ]

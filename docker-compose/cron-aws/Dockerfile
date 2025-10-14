@@ -17,7 +17,8 @@ ARG STAGE
 RUN git config --global --add safe.directory /var/www/html && \
     BRANCH=$([ "$STAGE" = "production" ] && echo "master" || echo "development") && \
     git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
-    git rev-list HEAD -1 > version
+    git rev-list HEAD -1 > version; \
+    rm -rf .git
 
 # Install composer packages (token is already configured in main image)
 RUN composer install --no-dev --optimize-autoloader && \

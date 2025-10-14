@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Nucleo Ardente',
             'floors' => [
-                'molten_core' => 'Nucleo Ardente',
+                'moltencore' => 'Nucleo Ardente',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Cattedrale della Notte Eterna',
             'floors' => [
-                'hall_of_the_moon'     => 'Sala della Luna',
-                'twilight_groove'      => 'Bosco del Crepuscolo',
-                'the_emerald_archives' => 'Archivi di Smeraldo',
-                'path_of_illumination' => 'Sentiero dell\'Illuminazione',
-                'sacristy_of_elune'    => 'Sagrestia di Elune',
+                'hall_of_the_moon'           => 'Sala della Luna',
+                'twilight_groove'            => 'Bosco del Crepuscolo',
+                'the_emerald_archives'       => 'Archivi di Smeraldo',
+                'path_of_illumination'       => 'Sentiero dell\'Illuminazione',
+                'sacristy_of_elune'          => 'Sagrestia di Elune',
+                'cathedral_of_eternal_night' => 'Cattedrale della Notte Eterna',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Camere degli Ospiti',
                 'opera_hall_balcony'   => 'Balcone della Sala dell\'Opera',
                 'masters_terrace'      => 'Terrazza del Padrone',
+                'lower_karazhan'       => 'Karazhan (Inferiore)',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Alture degli Helmunn',
                 'the_hold'        => 'Rocca',
                 'the_naglfar'     => 'Naglfar',
+                'maw_of_souls'    => 'Alture degli Helmunn',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Karazhan',
+            'name'   => 'Karazhan (Superiore)',
             'floors' => [
                 'lower_broken_stair' => 'Scala Spezzata Inferiore',
                 'upper_broken_stair' => 'Scala Spezzata Superiore',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Biblioteca Superiore',
                 'gamesmans_hall'     => 'Sala degli Scacchi',
                 'netherspace'        => 'Spaziofatuo',
+                'upper_karazhan'     => 'Karazhan (Superiore)',
             ],
         ],
         'vault_of_the_wardens' => [

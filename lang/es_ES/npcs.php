@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Guardia de la ciudad de Ventormenta',
@@ -2270,6 +2270,7 @@ return [
     45932     => 'Estrella de Hundecielos',
     45935     => 'Adepto del templo',
     45992     => 'Valiona',
+    47203     => '',
     47238     => 'Viento fustigador',
     48523     => 'Draco rojo apaleado',
     48756     => 'Red con ganchos',
@@ -4306,6 +4307,7 @@ return [
     177996    => 'Comprador del bazar',
     177998    => 'Xy\'nara',
     177999    => 'Xy\'darid',
+    178001    => '',
     178074    => 'Al\'dalil',
     178133    => 'Saltaolas Salmuerasucia',
     178139    => 'Rompeconchas Salmuerasucia',
@@ -4314,7 +4316,13 @@ return [
     178163    => 'Correcostas Salmuerasucia',
     178165    => 'Goliat caminacostas',
     178171    => 'Guardián Tronaforjado',
+    178315    => '',
     178316    => 'Especias baratas',
+    178317    => '',
+    178318    => '',
+    178319    => '',
+    178320    => '',
+    178321    => '',
     178322    => 'Frasco dañado',
     178373    => 'Devastador jurafauces',
     178374    => 'Destripador jurafauces',
@@ -4436,7 +4444,12 @@ return [
     180567    => 'Garranoche enloquecido',
     180571    => 'Beeyuh',
     180572    => 'Bigotillos',
+    180579    => '',
+    180584    => '',
+    180586    => '',
     180588    => 'Plato de purianas maduras',
+    180590    => '',
+    180592    => '',
     180594    => 'Flauta vulpera',
     180613    => 'Acomodador del Oasis',
     180614    => 'Servidor del Oasis',
@@ -5486,4 +5499,5 @@ return [
     246285    => 'Sobrestante del bazar',
     555555    => '',
     129547000 => '',
-];
+]
+;

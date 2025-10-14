@@ -1,0 +1,31 @@
+{
+  "id": 322,
+  "release_changelog_id": 329,
+  "version": "v13.9",
+  "title": "Added Legion Remix dungeons",
+  "backup_db": 0,
+  "silent": 0,
+  "spotlight": 0,
+  "released": 0,
+  "created_at": "2025-10-07T10:32:41+00:00",
+  "updated_at": "2025-10-07T10:32:41+00:00",
+  "changelog": {
+    "id": 329,
+    "release_id": 322,
+    "description": null,
+    "changes": [
+      {
+        "release_changelog_id": 329,
+        "release_changelog_category_id": 1,
+        "ticket_id": 2933,
+        "change": "Route browsing is now based on selected game version (at the top) instead of by expansion. A subtle change - but a welcome one. This also solves the issue of recycled dungeons with different mapping versions (Temple of the Jade Serpent, all Legion dungeons now) not having separate route lists. They do now."
+      },
+      {
+        "release_changelog_id": 329,
+        "release_changelog_category_id": 4,
+        "ticket_id": 2982,
+        "change": "Added support for Legion Remix."
+      }
+    ]
+  }
+}

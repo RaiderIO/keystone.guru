@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Guardia Cittadina di Roccavento',
@@ -2270,6 +2270,7 @@ return [
     45932     => 'Stella dal Cielo',
     45935     => 'Adepto del Tempio',
     45992     => 'Valiona',
+    47203     => '',
     47238     => 'Vento Sferzante',
     48523     => 'Draco Rosso Stremato',
     48756     => 'Rete con Ganci',
@@ -4306,6 +4307,7 @@ return [
     177996    => 'Acquirente del Bazar',
     177998    => 'Xy\'nara',
     177999    => 'Xy\'darid',
+    178001    => '',
     178074    => 'Al\'dalil',
     178133    => 'Guardiaonde Acquasporca',
     178139    => 'Frantumagusci Acquasporca',
@@ -4314,7 +4316,13 @@ return [
     178163    => 'Calcacoste Acquasporca',
     178165    => 'Mastodonte Calcacoste',
     178171    => 'Guardiano Forgiatuono',
+    178315    => '',
     178316    => 'Spezie Economiche',
+    178317    => '',
+    178318    => '',
+    178319    => '',
+    178320    => '',
+    178321    => '',
     178322    => 'Tonico Danneggiato',
     178373    => 'Devastatore Giurafauce',
     178374    => 'Squartatore Giurafauce',
@@ -4436,7 +4444,12 @@ return [
     180567    => 'Zannacupa Frenetica',
     180571    => 'Beeyuh',
     180572    => 'Botolo',
+    180579    => '',
+    180584    => '',
+    180586    => '',
     180588    => 'Piatto di Puriani Maturi',
+    180590    => '',
+    180592    => '',
     180594    => 'Flauto dei Vulpera',
     180613    => 'Anfitrione dell\'Oasi',
     180614    => 'Cameriere dell\'Oasi',
@@ -5486,4 +5499,5 @@ return [
     246285    => 'Sovrintendente del Bazar',
     555555    => '',
     129547000 => '',
-];
+]
+;

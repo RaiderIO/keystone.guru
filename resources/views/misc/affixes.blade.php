@@ -9,6 +9,7 @@
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Illuminate\Support\Collection;
@@ -20,7 +21,10 @@ use Illuminate\Support\Collection;
  * @var AffixGroup              $nextAffixGroup
  * @var int                     $offset
  * @var Expansion               $expansion
+ * @var GameVersion             $gameVersion
  * @var GameServerRegion        $userOrDefaultRegion
+ * @var bool                    $showPrevious
+ * @var bool                    $showNext
  */
 
 $affixGroupsBySeason = collect();
@@ -70,16 +74,20 @@ try {
                     </div>
                     <div class="col-auto">
                         <ul class="pagination" role="navigation">
-                            <li class="page-item">
-                                <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
-                                    ‹ {{ __('view_misc.affixes.previous') }}
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
-                                    {{ __('view_misc.affixes.next') }} ›
-                                </a>
-                            </li>
+                            @if($showPrevious)
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset - 1]) }}">
+                                        ‹ {{ __('view_misc.affixes.previous') }}
+                                    </a>
+                                </li>
+                            @endif
+                            @if($showNext)
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ route('misc.affixes', ['offset' => $offset + 1]) }}">
+                                        {{ __('view_misc.affixes.next') }} ›
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -105,9 +113,9 @@ try {
         @endif
 
         @include('dungeonroute.discover.panel', [
-            'expansion' => $expansion,
+            'gameVersion' => $gameVersion,
             'title' => __('view_misc.affixes.popular_routes_by_current_affixes'),
-            'link' => route('dungeonroutes.thisweek', ['expansion' => $expansion]),
+            'link' => route('dungeonroutes.thisweek', ['gameVersion' => $gameVersion]),
             'currentAffixGroup' => $currentAffixGroup,
             'affixgroup' => $currentAffixGroup,
             'dungeonroutes' => $dungeonroutes['thisweek'],
@@ -121,11 +129,11 @@ try {
             </div>
         @endif
 
-        <?php /* The next week's affix group is current for that week */ ?>
+            <?php /* The next week's affix group is current for that week */ ?>
         @include('dungeonroute.discover.panel', [
-            'expansion' => $expansion,
+            'gameVersion' => $gameVersion,
             'title' => __('view_misc.affixes.popular_routes_by_next_affixes'),
-            'link' => route('dungeonroutes.nextweek', ['expansion' => $expansion]),
+            'link' => route('dungeonroutes.nextweek', ['gameVersion' => $gameVersion]),
             'currentAffixGroup' => $nextAffixGroup,
             'affixgroup' => $nextAffixGroup,
             'dungeonroutes' => $dungeonroutes['nextweek'],
@@ -145,16 +153,16 @@ try {
     @endcomponent
 @endsection
 
-<?php
+    <?php
 } catch (Throwable $throwable) {
     Log::withContext([
-        'user' => Auth::id(),
-        'url' => request()->fullUrl(),
+        'user'              => Auth::id(),
+        'url'               => request()->fullUrl(),
         'currentAffixGroup' => $currentAffixGroup?->id,
-        'nextAffixGroup' => $nextAffixGroup?->id,
-        'offset' => $offset,
-        'expansion' => $expansion->id,
-        'gameServerRegion' => $userOrDefaultRegion->id,
+        'nextAffixGroup'    => $nextAffixGroup?->id,
+        'offset'            => $offset,
+        'expansion'         => $expansion->id,
+        'gameServerRegion'  => $userOrDefaultRegion->id,
     ]);
 
     throw $throwable;

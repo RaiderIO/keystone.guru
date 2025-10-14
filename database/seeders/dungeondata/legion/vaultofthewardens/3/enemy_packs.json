@@ -34,5 +34,53 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-65.4126,\"lng\":206.99},{\"lat\":-71.1913,\"lng\":209.7846},{\"lat\":-67.1652,\"lng\":217.1738},{\"lat\":-62.5233,\"lng\":213.3845}]"
+    },
+    {
+        "id": 18061,
+        "mapping_version_id": 639,
+        "floor_id": 40,
+        "group": 18,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 18",
+        "vertices_json": "[{\"lat\":-124.7909,\"lng\":185.4245},{\"lat\":-115.425,\"lng\":185.4245},{\"lat\":-115.425,\"lng\":199.879},{\"lat\":-124.7909,\"lng\":199.879}]"
+    },
+    {
+        "id": 18062,
+        "mapping_version_id": 639,
+        "floor_id": 40,
+        "group": 15,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 15",
+        "vertices_json": "[{\"lat\":-76.5114,\"lng\":206.4019},{\"lat\":-65.1837,\"lng\":206.3224},{\"lat\":-65.2235,\"lng\":215.3051},{\"lat\":-76.6306,\"lng\":215.5038}]"
+    },
+    {
+        "id": 18063,
+        "mapping_version_id": 639,
+        "floor_id": 40,
+        "group": 16,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 16",
+        "vertices_json": "[{\"lat\":-76.1823,\"lng\":157.1546},{\"lat\":-65.7888,\"lng\":157.6853},{\"lat\":-65.6589,\"lng\":175.1554},{\"lat\":-76.1823,\"lng\":176.0537}]"
+    },
+    {
+        "id": 18064,
+        "mapping_version_id": 639,
+        "floor_id": 40,
+        "group": 17,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 17",
+        "vertices_json": "[{\"lat\":-97.3125,\"lng\":191.3125},{\"lat\":-90.5625,\"lng\":191.5625},{\"lat\":-92.1563,\"lng\":202.4688},{\"lat\":-97.7813,\"lng\":202.0938}]"
     }
 ]

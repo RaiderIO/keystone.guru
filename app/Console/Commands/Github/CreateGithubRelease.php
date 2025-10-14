@@ -3,13 +3,15 @@
 namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
 use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
+use Illuminate\Console\Command;
 use Throwable;
 
-class CreateGithubRelease extends BaseGithubReleaseCommand
+class CreateGithubRelease extends Command
 {
     use ExecutesShellCommands;
 
@@ -34,10 +36,11 @@ class CreateGithubRelease extends BaseGithubReleaseCommand
      * @throws MissingArgumentException
      * @throws Throwable
      */
-    public function handle(): void
-    {
+    public function handle(
+        ReleaseRepositoryInterface $releaseRepository,
+    ): void {
         $version = $this->argument('version');
-        $release = $this->findReleaseByVersion($version);
+        $release = $releaseRepository->findReleaseByVersion($version);
 
         if ($release !== null) {
             $this->info(sprintf('>> Creating Github release for %s', $release->version));

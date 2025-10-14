@@ -104,10 +104,10 @@ class Release extends CacheModel
         $bodyLength = strlen($body);
 
         $footer = trim(view('app.release.discord_footer', [
-            'homeUrl'      => route('home'),
-            'changelogUrl' => route('misc.changelog'),
-            'affixesUrl'   => route('misc.affixes'),
-            'newRouteUrl'  => route('dungeonroute.new'),
+            'homeUrl'      => $this->publicRoute('home'),
+            'changelogUrl' => $this->publicRoute('misc.changelog'),
+            'affixesUrl'   => $this->publicRoute('misc.affixes'),
+            'newRouteUrl'  => $this->publicRoute('dungeonroute.new'),
             'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
         $footerLength = strlen($footer);
@@ -235,5 +235,10 @@ class Release extends CacheModel
     public function isBugfixUpgrade(): bool
     {
         return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+    }
+
+    private function publicRoute(string $name, array $params = [], string $host = 'https://keystone.guru'): string
+    {
+        return rtrim($host, '/') . route($name, $params, false);
     }
 }

@@ -218,7 +218,7 @@ class ServiceFixtures
         PublicTestCase                $testCase,
         array                         $methodsToMock = [],
         ?CacheServiceLoggingInterface $log = null,
-    ): MockObject|CloudflareService {
+    ): MockObject|CacheService {
         return $testCase
             ->getMockBuilder(CacheService::class)
             ->onlyMethods($methodsToMock)

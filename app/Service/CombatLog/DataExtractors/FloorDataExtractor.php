@@ -43,7 +43,11 @@ class FloorDataExtractor implements DataExtractorInterface
         }
 
         // Blizzard's floor coordinates are not accurate for The Necrotic Wake
-        if ($currentDungeon->dungeon->key === Dungeon::DUNGEON_THE_NECROTIC_WAKE) {
+        if (in_array($currentDungeon->dungeon->key, [
+            Dungeon::DUNGEON_THE_NECROTIC_WAKE,
+            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
+        ])) {
             return;
         }
 

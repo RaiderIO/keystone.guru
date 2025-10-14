@@ -127,8 +127,6 @@ class DungeonExploreController extends Controller
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
-
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
@@ -138,7 +136,6 @@ class DungeonExploreController extends Controller
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
-                'showHeatmapSearch'       => $heatmapActive,
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
@@ -221,8 +218,6 @@ class DungeonExploreController extends Controller
 
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-        $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
-
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 
         return view('dungeon.explore.gameversion.embed', array_merge($this->getFilterSettings($mostRecentSeason), [
@@ -232,7 +227,6 @@ class DungeonExploreController extends Controller
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
-            'showHeatmapSearch'       => $heatmapActive,
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),

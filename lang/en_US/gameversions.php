@@ -26,5 +26,8 @@ return [
         'name'        => 'Mists',
         'description' => 'Mists of Pandaria',
     ],
-
+    'legion-remix' => [
+        'name'        => 'Legion Remix',
+        'description' => 'Legion Remix',
+    ],
 ];

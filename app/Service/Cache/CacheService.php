@@ -17,6 +17,9 @@ class CacheService implements CacheServiceInterface
 
     private bool $cacheEnabled = true;
 
+    /** @var bool Bypassing the cache means that the closure is always called and the result is never cached */
+    private bool $bypassCache = false;
+
     public function __construct(private readonly CacheServiceLoggingInterface $log)
     {
     }
@@ -37,6 +40,17 @@ class CacheService implements CacheServiceInterface
     {
         $this->cacheEnabled = $cacheEnabled;
 
+        return $this;
+    }
+
+    public function isBypassCache(): bool
+    {
+        return $this->bypassCache;
+    }
+
+    public function setBypassCache(bool $bypassCache): CacheService
+    {
+        $this->bypassCache = $bypassCache;
         return $this;
     }
 
@@ -83,7 +97,7 @@ class CacheService implements CacheServiceInterface
                     }
 
                     // Only write it to cache when we're not local
-                    if (config('app.env') !== 'local') {
+                    if (!$this->isBypassCache()) {
                         if (is_string($ttl)) {
                             $ttl = DateInterval::createFromDateString($ttl);
                         }

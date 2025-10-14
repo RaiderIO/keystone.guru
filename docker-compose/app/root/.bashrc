@@ -95,3 +95,5 @@ git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.dep
 # cd ru_RU && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
 # cd uk_UA && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
 # cd zh_CN && sudo chown wouterkoppenol:wouterkoppenol *.php && cd ..
+
+# docker exec -it keystone.guru-app-swoole php artisan octane:reload

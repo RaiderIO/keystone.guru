@@ -18,10 +18,11 @@ $affixgroup       ??= null;
 $cache            ??= true;
 $orientation      ??= 'vertical';
 
+$renderedDungeonRouteCount = 0;
 $i = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = static function (Collection $collection, string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env) {
+$renderDungeonRouteCollection = static function (Collection $collection, string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount) {
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
     <div class="row no-gutters mt-2">
@@ -46,6 +47,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, string 
                     'showDungeonImage' => $showDungeonImage,
                     'cache' => $cache
                 ])
+                @php($renderedDungeonRouteCount++)
             @endif
         </div>
         <?php }
@@ -54,13 +56,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, string 
 <?php }
 }; ?>
 
-@if($dungeonroutes->isEmpty())
-    <div class="row no-gutters">
-        <div class="col-xl text-center">
-            {{ __('view_common.dungeonroute.cardlist.no_dungeonroutes') }}
-        </div>
-    </div>
-@else
+@if(!$dungeonroutes->isEmpty())
     <?php
     // If it's grouped by something, add a loop
     if( $dungeonroutes->first() instanceof Collection ){
@@ -71,6 +67,14 @@ $renderDungeonRouteCollection = static function (Collection $collection, string 
         $renderDungeonRouteCollection($dungeonroutes);
     }
     ?>
+@endif
+
+@if($renderedDungeonRouteCount === 0)
+    <div class="row no-gutters">
+        <div class="col-xl text-center">
+            {{ __('view_common.dungeonroute.cardlist.no_dungeonroutes') }}
+        </div>
+    </div>
 @endif
 
 <?php
