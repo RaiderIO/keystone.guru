@@ -31,7 +31,7 @@ RUN npm i -g handlebars puppeteer@19.9.0
 # Required for puppeteer to work
 RUN apt-get install -y libxdamage-dev \
                 libnss3-dev \
-                libgdk-pixbuf-xlib-2.0-dev \
+                libgdk-pixbuf2.0-dev \
                 libgtk-3-dev \
                 libxss-dev \
                 libasound2
