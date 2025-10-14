@@ -18,9 +18,10 @@ return [
             'privacy' => 'Privacy',
             'terms'   => 'Terms',
         ],
-        'routes'           => 'Routes',
+        'routes'              => 'Routes',
+        'routes_expansion'    => ':expansion routes',
         'routes_game_version' => ':gameVersion routes',
-        'gameversion'      => [
+        'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
                 'heatmaps' => 'Heatmaps',

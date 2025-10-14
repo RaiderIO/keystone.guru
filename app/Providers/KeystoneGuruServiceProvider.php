@@ -7,6 +7,7 @@ use App\Logic\Utils\Stopwatch;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
@@ -185,7 +186,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Model helpers
         if (in_array(config('app.env'), ['local', 'testing'])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
-            $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
+            $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         } else {
             $this->app->bind(CacheServiceInterface::class, CacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
@@ -319,8 +320,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('home', static function (View $view) use (
             $viewService,
             $globalViewVariables,
-            &
-            $userOrDefaultRegion
+            &$userOrDefaultRegion
         ) {
             $view->with('userCount', $globalViewVariables['userCount']);
             $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
@@ -328,6 +328,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
+            $view->with('defaultGameVersion', GameVersion::getDefaultGameVersion());
         });
 
         // Main view
@@ -404,10 +405,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             /** @var GameVersion $gameVersion */
             $gameVersion = $view->getData()['gameVersion'];
+            // @TODO Should be loaded but it's not??
+            $gameVersion->load(['expansion']);
+
+            /** @var Expansion $expansion */
+            $expansion = $view->getData()['expansion'] ?? null;
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
-            $expansionsData = $regionViewVariables['expansionsData']->get($gameVersion->expansion->shortname);
+            $expansionsData = $regionViewVariables['expansionsData']->get(($expansion ?? $gameVersion->expansion)->shortname);
             $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
             $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
         });

@@ -6,10 +6,12 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
  * @var GameVersion $gameVersion
+ * @var Season|null $season
  * @var Collection<Dungeon> $dungeons
  * @var AffixGroup|null $currentAffixGroup
  * @var AffixGroup|null $nextAffixGroup
@@ -61,9 +63,12 @@ for ($i = 0;
 
                             &middot;
 
-                            @if($gameVersion->has_seasons)
+                            @if($season !== null)
                                 @if($currentAffixGroup !== null)
-                                        <?php $url = route('dungeonroutes.discoverdungeon.thisweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug]); ?>
+                                        <?php $url = route('dungeonroutes.discoverdungeon.thisweek', [
+                                        'gameVersion' => $gameVersion,
+                                        'dungeon'     => $dungeon->slug
+                                    ]); ?>
                                     <a href="{{ $url }}">
                                         {{ __('view_common.dungeon.griddiscover.this_week') }}
                                     </a>
@@ -86,7 +91,10 @@ for ($i = 0;
                                     &middot;
 
                                     @if($nextAffixGroup !== null)
-                                            <?php $url = route('dungeonroutes.discoverdungeon.nextweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug]); ?>
+                                            <?php $url = route('dungeonroutes.discoverdungeon.nextweek', [
+                                            'gameVersion' => $gameVersion,
+                                            'dungeon'     => $dungeon->slug
+                                        ]); ?>
                                         <a href="{{ $url }}">
                                             {{ __('view_common.dungeon.griddiscover.next_week') }}
                                         </a>
@@ -124,7 +132,7 @@ for ($i = 0;
                                 </a>
                             </h4>
                         </div>
-                        @if($gameVersion->has_seasons)
+                        @if($season !== null)
                             <div class="col">
                                 <h4>
                                     @isset($thisWeekTier)
@@ -150,7 +158,7 @@ for ($i = 0;
                             </h4>
                         </div>
                         <div class="col">
-                            @if($gameVersion->has_seasons)
+                            @if($season !== null)
                                 <h4>
                                     @isset($nextWeekTier)
                                         <a href="{{ route('dungeonroutes.discoverdungeon.nextweek', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug]) }}">

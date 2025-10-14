@@ -22,6 +22,8 @@ class DiscoverService extends BaseDiscoverService
 
         if ($this->season !== null) {
             return sprintf('discover:%s:season-%s:%s:%d', $this->gameVersion->key, $this->season->index, $key, $this->limit);
+        } elseif ($this->expansion !== null) {
+            return sprintf('discover:expansion-%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
         } else {
             return sprintf('discover:%s:%s:%d', $this->gameVersion->key, $key, $this->limit);
         }
@@ -39,11 +41,15 @@ class DiscoverService extends BaseDiscoverService
     {
         $this->ensureGameVersion();
 
-        // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
-        $currentSeasonAffixGroups = $this->season?->affixGroups ??
-            // This can cause issues when we're in between seasons between different regions, but a minor issue
-            optional($this->expansionService->getCurrentSeason($this->gameVersion->expansion))->affixGroups ??
-            collect();
+        $expansion = $this->expansion ?? $this->gameVersion->expansion;
+//        $currentSeasonAffixGroups = collect();
+//        // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
+//        if ($expansion !== null) {
+//            $currentSeasonAffixGroups = $this->season?->affixGroups ??
+//                // This can cause issues when we're in between seasons between different regions, but a minor issue
+//                $this->expansionService->getCurrentSeason($expansion)?->affixGroups ??
+//                collect();
+//        }
 
         return DungeonRoute::query()
             ->selectRaw('`dungeon_routes`.*')
@@ -70,10 +76,10 @@ class DiscoverService extends BaseDiscoverService
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
             // It also applies a big penalty for routes that do not belong to the current season
-            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use (
-                $currentSeasonAffixGroups
-            ) {
-            })
+//            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use (
+//                $currentSeasonAffixGroups
+//            ) {
+//            })
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
@@ -216,7 +222,7 @@ class DiscoverService extends BaseDiscoverService
                     $result = collect();
 
                     /** @var Collection<Dungeon> $activeDungeons */
-                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->gameVersion->expansion->dungeonsAndRaids())->active()->get();
+                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : ($this->expansion ?? $this->gameVersion->expansion)->dungeonsAndRaids())->active()->get();
                     foreach ($activeDungeons as $dungeon) {
                         // Limit the amount of results of our queries
                         $result = $result->merge(
@@ -275,7 +281,7 @@ class DiscoverService extends BaseDiscoverService
                     $result = collect();
 
                     /** @var Collection<Dungeon> $activeDungeons */
-                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->gameVersion->expansion->dungeonsAndRaids())->active()->get();
+                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : ($this->expansion ?? $this->gameVersion->expansion)->dungeonsAndRaids())->active()->get();
                     foreach ($activeDungeons as $dungeon) {
                         // Limit the amount of results of our queries
                         $result = $result->merge(

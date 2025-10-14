@@ -2,6 +2,7 @@
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Illuminate\Support\Collection;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Models\User;
  * @var int                      $userCount
  * @var string                   $theme
  * @var Season                   $currentSeason
+ * @var GameVersion              $defaultGameVersion
  */
 
 $dungeonSelectId    = 'demo_dungeon_id';
@@ -52,7 +54,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     </p>
                     <div class="mbr-section-btn mt-3">
                         <a class="btn btn-primary display-4" href="{{ $currentSeason !== null ?
-                                route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index]) :
+                                route('dungeonroutes.season', ['gameVersion' => $defaultGameVersion, 'season' => $currentSeason->index]) :
                                 route('dungeonroutes') }}">
                             <i class="fas fa-binoculars"></i>&nbsp;{{ __('view_home.discover_routes') }}
                         </a>
@@ -76,7 +78,8 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img class="darkly_image" src="{{ ksgAssetImage('home/darkly_feature_discover_new_routes.jpg') }}"
+                        <img class="darkly_image"
+                             src="{{ ksgAssetImage('home/darkly_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
                              style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_discover_new_routes.jpg') }}"
@@ -260,7 +263,6 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
     @if($demoRoutes->isNotEmpty())
         <section class="map1 cid-soU5dLgjOI" id="map1-k" style="position: relative;">
-
 
             <div class="mbr-section-head mb-4">
                 <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">
