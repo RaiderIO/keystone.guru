@@ -60,8 +60,6 @@ class Update extends Command
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
 
-        $this->call('horizon:publish');
-
         $this->call('migrate', [
             '--database' => 'migrate',
             '--force'    => true,

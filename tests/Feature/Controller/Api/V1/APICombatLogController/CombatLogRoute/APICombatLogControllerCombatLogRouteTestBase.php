@@ -36,6 +36,9 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
 
     protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
     {
+        if(!isset($responseArr['data']['pulls'])){
+            dd($responseArr);
+        }
         $this->assertCount($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
         /** @var MappingVersion|null $mappingVersion */

@@ -177,7 +177,7 @@ class SeasonService implements SeasonServiceInterface
             because the season start date is past the target date!');
         }
 
-        $elapsedWeeks = $seasonStart->diffInWeeks($date);
+        $elapsedWeeks = (int)$seasonStart->diffInWeeks($date, true);
 
         return ($season->start_affix_group_index + $elapsedWeeks) % $season->affix_group_count;
     }

@@ -114,7 +114,7 @@ class GameServerRegion extends CacheModel
     {
         $epoch = self::getRegionEpochByDate($dateTime);
 
-        return $epoch->diffInWeeks($dateTime);
+        return (int)$epoch->diffInWeeks($dateTime, true);
     }
 
     /**

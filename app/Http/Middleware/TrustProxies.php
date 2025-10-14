@@ -2,48 +2,36 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cloudflare\CloudflareServiceInterface;
 use Closure;
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TrustProxies extends Middleware
 {
-    /**
-     * The trusted proxies for this application.
-     *
-     * @var array<int, string>|string|null
-     */
+    /** @var array<int, string>|string|null */
     protected $proxies;
 
-    /**
-     * The headers that should be used to detect proxies.
-     *
-     * @var int
-     */
+    /** @var int */
     protected $headers = Request::HEADER_X_FORWARDED_FOR |
         Request::HEADER_X_FORWARDED_HOST |
         Request::HEADER_X_FORWARDED_PORT |
         Request::HEADER_X_FORWARDED_PROTO |
         Request::HEADER_X_FORWARDED_AWS_ELB;
 
-    public function __construct(
-        private readonly CloudflareServiceInterface $cloudflareService,
-    ) {
+    public function __construct(private readonly CloudflareServiceInterface $cloudflareService)
+    {
     }
 
     public function handle(Request $request, Closure $next): Response
     {
-        // https://developers.cloudflare.com/fundamentals/reference/http-request-headers/
         if (app()->isProduction()) {
-            $this->proxies = $this->cloudflareService->getIpRanges();
-            // Ensure that we know the original IP address that made the request
+            // Prefer caching inside the service so this isn’t fetched every request.
             // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
-            Request::setTrustedProxies(
-                $this->proxies,
-                $this->headers,
-            );
+            $this->proxies = $this->cloudflareService->getIpRanges();
+        } else {
+            $this->proxies = null; // no trusted proxies locally
         }
 
         return parent::handle($request, $next);

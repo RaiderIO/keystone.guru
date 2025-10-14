@@ -106,12 +106,6 @@ use App\Console\Commands\ChallengeModeRunData\ConvertToEvents;
 |
 */
 
-Artisan::command('inspire', function () {
-//    /** @var Command $this */
-//    $this->comment(Inspiring::quote());
-})->describe('Display an inspiring quote');
-
-
 try {
     Log::channel('scheduler')->debug('Starting scheduler');
 
