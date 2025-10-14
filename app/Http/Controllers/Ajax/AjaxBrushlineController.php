@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 use Throwable;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxBrushlineController extends Controller
 {
@@ -42,8 +43,8 @@ class AjaxBrushlineController extends Controller
         $test         = "";
         $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
 
-        $this->authorize('edit', $dungeonRoute);
-        $this->authorize('addBrushline', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
+        Gate::authorize('addBrushline', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -112,7 +113,7 @@ class AjaxBrushlineController extends Controller
         $dungeonRoute = $brushline->dungeonRoute;
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's brush line
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             if ($brushline->delete()) {

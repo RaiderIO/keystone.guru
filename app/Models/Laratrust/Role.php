@@ -10,6 +10,8 @@ use Laratrust\Models\Role as LaratrustRole;
  */
 class Role extends LaratrustRole
 {
+    protected $hidden = []; // <-- unhide 'pivot'
+
     public const ROLE_USER          = 'user';
     public const ROLE_INTERNAL_TEAM = 'internal_team';
     public const ROLE_ADMIN         = 'admin';

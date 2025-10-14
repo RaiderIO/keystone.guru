@@ -119,7 +119,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
     {
         $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(
             CombatLogRouteNpcRequestModel $npc,
-        ) => $this->validNpcIds->search($npc->npcId) !== false);
+        ) => $this->validNpcIds->search((int)$npc->npcId) !== false);
 
         $npcEngagedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestModel $npc) => [
             'type'      => 'engaged',
@@ -163,6 +163,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             /** @var $event array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
+                /** @var Floor|null $newFloor */
                 $newFloor = $floorCache->get($event['npc']->coord->uiMapId);
 
                 if ($newFloor === null) {
@@ -305,7 +306,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($spell->spellId);
                     $assignedSpells++;
                 }
-            } elseif ($spell->getCastAt()->isAfter($firstEngagedAt)) {
+            } elseif ($firstEngagedAt !== null && $spell->getCastAt()->isAfter($firstEngagedAt)) {
                 if (!$this->validSpellIds->has($spell->spellId)) {
                     $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
 

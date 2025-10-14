@@ -31,7 +31,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     protected function validateDungeon(array $response): void
     {
         $this->assertEquals($this->dungeon->id, $response['data']['dungeonId']);
-        $this->assertEquals(__($this->dungeon->name, [], 'en'), $response['data']['title']);
+        $this->assertEquals(__($this->dungeon->name, [], 'en_US'), $response['data']['title']);
     }
 
     protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void

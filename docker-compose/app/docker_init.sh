@@ -12,11 +12,10 @@ php artisan vendor:publish --provider="Folklore\Image\ImageServiceProvider" &&
   php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" &&
   php artisan vendor:publish --tag=language
 
-php artisan horizon:install &&
-  php artisan horizon:publish
+php artisan horizon:install
 
 # Ensure there's default users in the database
 php artisan db:seed --class=LaratrustSeeder --database=migrate
 
 # Ensure the mapping is up to date
-php artisan environment:update local
+php artisan environment:update

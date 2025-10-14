@@ -113,16 +113,19 @@ class Season extends CacheModel
         'start_period',
     ];
 
-    protected $casts = [
-        'start'          => 'datetime',
-        'key_level_min'  => 'integer',
-        'key_level_max'  => 'integer',
-        'item_level_min' => 'integer',
-        'item_level_max' => 'integer',
-    ];
-
     /** @var bool|null Cache for if we're a timewalking season or not */
     private ?bool $isTimewalkingSeason = null;
+
+    protected function casts(): array
+    {
+        return [
+            'start'          => 'datetime',
+            'key_level_min'  => 'integer',
+            'key_level_max'  => 'integer',
+            'item_level_min' => 'integer',
+            'item_level_max' => 'integer',
+        ];
+    }
 
     public function getNameAttribute(): string
     {
@@ -192,7 +195,7 @@ class Season extends CacheModel
         $targetTime = Carbon::create($date->year, $date->month, $date->day, $date->hour, null, null, $date->timezone);
 
         // Get the week difference
-        return $start->diffInWeeks($targetTime);
+        return (int)$start->diffInWeeks($targetTime, true);
     }
 
     /**
@@ -341,8 +344,10 @@ class Season extends CacheModel
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
         $region     = GameServerRegion::getUserOrDefaultRegion();
+        $startAffix = $this->getAffixGroupAt($this->start($region), $region);
+
         $startIndex = $this->affixGroups->search(
-            $this->getAffixGroupAt($this->start($region), $region),
+            static fn(AffixGroup $g) => $startAffix !== null && $g->id === $startAffix->id,
         );
         $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(
             AffixGroup $affixGroupCandidate,

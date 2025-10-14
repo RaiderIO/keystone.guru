@@ -40,7 +40,7 @@ class ExportCsv extends Command
 
             return [
                 'id'           => $spell->id,
-                'npc_id'       => optional($npc)->id ?? 'UNKNOWN',
+                'npc_id'       => $npc?->id ?? 'UNKNOWN',
                 'mechanic'     => __($spell->mechanic, [], 'en_US'),
                 'name'         => __($spell->name, [], 'en_US'),
                 'dispel_type'  => $spell->dispel_type,

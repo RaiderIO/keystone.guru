@@ -155,7 +155,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $this->log->extractDataSetChallengeMode(
                 __($dungeon->name, [], 'en_US'),
                 $currentKeyLevel,
-                optional($currentKeyAffixGroup)->getTextAttribute(),
+                $currentKeyAffixGroup?->getTextAttribute(),
             );
         } elseif ($parsedEvent instanceof ZoneChange) {
             if ($currentDungeon?->keyLevel !== null) {

@@ -6,7 +6,7 @@ use App\Models\Dungeon;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class DungeonRouteDiscoverDungeonPolicy
+class DungeonPolicy
 {
     use HandlesAuthorization;
 

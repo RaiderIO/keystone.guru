@@ -33,6 +33,7 @@ use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 use Teapot\StatusCode\Http;
+use Illuminate\Support\Facades\Gate;
 
 class DungeonRouteController extends Controller
 {
@@ -83,7 +84,7 @@ class DungeonRouteController extends Controller
         string                         $title,
         string                         $floorIndex,
     ) {
-        $this->authorize('view', $dungeonroute);
+        Gate::authorize('view', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
@@ -188,7 +189,7 @@ class DungeonRouteController extends Controller
         string                         $title,
         string                         $floorIndex,
     ) {
-        $this->authorize('present', $dungeonroute);
+        Gate::authorize('present', $dungeonroute);
 
         // @TODO fix this - it has a different connection and that messes with the relation
         $challengeModeRun = ChallengeModeRun::firstWhere('dungeon_route_id', $dungeonroute->id);
@@ -264,7 +265,7 @@ class DungeonRouteController extends Controller
         string                            $title,
         string                            $floorIndex,
     ) {
-        $this->authorize('preview', [
+        Gate::authorize('preview', [
             $dungeonroute,
             $request->get('secret', '') ?? '',
         ]);
@@ -314,7 +315,7 @@ class DungeonRouteController extends Controller
         string                           $title,
         string                           $seasonalType,
     ): RedirectResponse {
-        $this->authorize('migrate', $dungeonroute);
+        Gate::authorize('migrate', $dungeonroute);
 
         $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
 
@@ -377,7 +378,7 @@ class DungeonRouteController extends Controller
         string                    $title,
         ThumbnailServiceInterface $thumbnailService,
     ) {
-        $this->authorize('clone', $dungeonroute);
+        Gate::authorize('clone', $dungeonroute);
 
         /** @var User $user */
         $user = Auth::user();
@@ -449,7 +450,7 @@ class DungeonRouteController extends Controller
         ?string                        $title,
         ?string                        $floorIndex,
     ) {
-        $this->authorize('edit', $dungeonroute);
+        Gate::authorize('edit', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
@@ -533,7 +534,7 @@ class DungeonRouteController extends Controller
             }
         }
 
-        $this->authorize('embed', $dungeonroute);
+        Gate::authorize('embed', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
@@ -608,7 +609,7 @@ class DungeonRouteController extends Controller
         ThumbnailServiceInterface     $thumbnailService,
         DungeonRoute                  $dungeonroute,
     ): RedirectResponse {
-        $this->authorize('edit', $dungeonroute);
+        Gate::authorize('edit', $dungeonroute);
 
         // Store it and show the edit page again
         $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
@@ -678,7 +679,7 @@ class DungeonRouteController extends Controller
         DungeonRoute $dungeonroute,
         ?string      $title,
     ): RedirectResponse {
-        $this->authorize('edit', $dungeonroute);
+        Gate::authorize('edit', $dungeonroute);
 
         // Store it
         $dungeonroute->update([

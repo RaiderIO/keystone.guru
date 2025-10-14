@@ -134,6 +134,7 @@ class User extends Authenticatable implements LaratrustUser
         'iconfile',
         'patreonUserLink',
         'gameVersion',
+        'roles',
     ];
 
     public function getInitialsAttribute(): string

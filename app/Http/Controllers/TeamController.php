@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode;
+use Illuminate\Support\Facades\Gate;
 
 class TeamController extends Controller
 {
@@ -90,7 +91,7 @@ class TeamController extends Controller
      */
     public function edit(Request $request, Team $team): View
     {
-        $this->authorize('edit', $team);
+        Gate::authorize('edit', $team);
 
         /** @var User $user */
         $user = Auth::user();
@@ -109,7 +110,7 @@ class TeamController extends Controller
      */
     public function delete(Request $request, Team $team): RedirectResponse
     {
-        $this->authorize('delete', $team);
+        Gate::authorize('delete', $team);
 
         try {
             $team->delete();
@@ -127,7 +128,7 @@ class TeamController extends Controller
      */
     public function update(TeamFormRequest $request, Team $team)
     {
-        $this->authorize('edit', $team);
+        Gate::authorize('edit', $team);
 
         // Store it and show the edit page again
         $teamModel = $this->store($request, $team);

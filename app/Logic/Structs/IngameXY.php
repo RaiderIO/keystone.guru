@@ -62,7 +62,7 @@ class IngameXY implements Arrayable
         return [
             'x'        => $this->x,
             'y'        => $this->y,
-            'floor_id' => optional($this->floor)->id,
+            'floor_id' => $this->floor?->id,
         ];
     }
 

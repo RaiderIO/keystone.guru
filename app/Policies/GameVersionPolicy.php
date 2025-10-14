@@ -6,7 +6,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class DungeonRouteDiscoverGameVersionPolicy
+class GameVersionPolicy
 {
     use HandlesAuthorization;
 

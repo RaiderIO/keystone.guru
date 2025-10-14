@@ -1,55 +1,77 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Create The Application
-|--------------------------------------------------------------------------
-|
-| The first thing we will do is create a new Laravel application instance
-| which serves as the "glue" for all the components of Laravel, and is
-| the IoC container for the system binding all of the various parts.
-|
-*/
+use App\Http\Middleware\Api\ApiAuthentication;
+use App\Http\Middleware\DebugBarMessageLogger;
+use App\Http\Middleware\DebugInfoContextLogger;
+use App\Http\Middleware\LegalAgreed;
+use App\Http\Middleware\OnlyAjax;
+use App\Http\Middleware\PoweredBySwoole;
+use App\Http\Middleware\ReadOnlyMode;
+use App\Http\Middleware\TracksUserIpAddress;
+use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\ViewCacheBuster;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Jenssegers\Agent\AgentServiceProvider;
+use Laratrust\LaratrustServiceProvider;
+use Laravel\Tinker\TinkerServiceProvider;
+use Rollbar\Laravel\RollbarServiceProvider;
+use SocialiteProviders\Manager\ServiceProvider;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
 
-$app = new Illuminate\Foundation\Application(
-    realpath(__DIR__ . '/../'),
-);
+return Application::configure(basePath: dirname(__DIR__))
+    ->withProviders([
+        TinkerServiceProvider::class,
+        IdeHelperServiceProvider::class,
+        LaratrustServiceProvider::class,
+        AgentServiceProvider::class,
+        ServiceProvider::class,
+        RollbarServiceProvider::class,
+    ])
+    ->withRouting(
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
+        channels: __DIR__ . '/../routes/channels.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo(fn() => route('login'));
+        $middleware->redirectUsersTo('/home');
 
-/*
-|--------------------------------------------------------------------------
-| Bind Important Interfaces
-|--------------------------------------------------------------------------
-|
-| Next, we need to bind some important interfaces into the container so
-| we will be able to resolve them when needed. The kernels serve the
-| incoming requests to this application from both the web and CLI.
-|
-*/
+        $middleware->validateCsrfTokens(except: [
+            '*',
+        ]);
 
-$app->singleton(
-    Illuminate\Contracts\Http\Kernel::class,
-    App\Http\Kernel::class,
-);
+        $middleware->append([
+            ServerTimingMiddleware::class,
+            CheckForMaintenanceMode::class,
+            PoweredBySwoole::class,
+        ]);
 
-$app->singleton(
-    Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class,
-);
+        $middleware->api([
+            'authentication'            => ApiAuthentication::class,
+            'debug_info_context_logger' => DebugInfoContextLogger::class,
+            'read_only_mode'            => ReadOnlyMode::class,
+        ]);
 
-$app->singleton(
-    Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class,
-);
+        $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
 
-/*
-|--------------------------------------------------------------------------
-| Return The Application
-|--------------------------------------------------------------------------
-|
-| This script returns the application instance. The instance is given to
-| the calling script so we can separate the building of the instances
-| from the actual running of the application and sending responses.
-|
-*/
-
-return $app;
+        $middleware->alias([
+            'ajax'                      => OnlyAjax::class,
+            'bindings'                  => SubstituteBindings::class,
+            'debug_info_context_logger' => DebugInfoContextLogger::class,
+            'debugbarmessagelogger'     => DebugBarMessageLogger::class,
+            'legal_agreed'              => LegalAgreed::class,
+            'read_only_mode'            => ReadOnlyMode::class,
+            'track_ip'                  => TracksUserIpAddress::class,
+            'viewcachebuster'           => ViewCacheBuster::class,
+        ]);
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        //
+    })->create();
