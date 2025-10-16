@@ -9,6 +9,8 @@ return [
             'driver' => 'local',
             'root'   => storage_path('app'),
             'throw'  => false,
+            'serve' => true,
+            'report' => false,
         ],
 
         's3_user_uploads' => [
