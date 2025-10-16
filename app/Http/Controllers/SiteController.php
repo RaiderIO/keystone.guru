@@ -65,7 +65,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return string
      */
     public function benchmark(
         Request                                    $request,

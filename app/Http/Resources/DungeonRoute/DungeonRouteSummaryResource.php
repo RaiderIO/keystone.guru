@@ -19,6 +19,7 @@ use JsonSerializable;
  * @OA\Property(property="enemyForces", type="integer", example=100)
  * @OA\Property(property="enemyForcesRequired", type="integer", example=100)
  * @OA\Property(property="expiresAt", type="string", format="date-time", example="2021-01-01T00:00:00Z")
+ * @OA\Property(property="pullCount", type="integer", example=16)
  * @OA\Property(property="author",type="object",ref="#/components/schemas/User")
  * @OA\Property(property="affixGroups", type="array", @OA\Items(ref="#/components/schemas/AffixGroup"))
  * @OA\Property(property="links",type="object",ref="#/components/schemas/DungeonRouteLinks")
@@ -49,6 +50,7 @@ class DungeonRouteSummaryResource extends JsonResource
             'enemyForces'         => $this->enemy_forces,
             'enemyForcesRequired' => $this->mappingVersion->enemy_forces_required,
             'expiresAt'           => $this->expires_at,
+            'pullCount'           => $this->killZones->count(),
             'author'              => new UserResource($this->author),
             'affixGroups'         => $this->affixes->map(
                 fn(

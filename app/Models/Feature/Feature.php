@@ -20,14 +20,18 @@ use Illuminate\Support\Carbon;
  */
 class Feature extends Model
 {
-    protected $casts = [
-        'id'         => 'int',
-        'name'       => 'string',
-        'scope'      => 'string',
-        'value'      => 'string',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+
+    protected function casts(): array
+    {
+        return [
+            'id'         => 'int',
+            'name'       => 'string',
+            'scope'      => 'string',
+            'value'      => 'string',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     public static function getAdminValue(string $name): bool
     {

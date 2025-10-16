@@ -17,6 +17,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class DungeonRouteDiscoverController extends Controller
@@ -80,8 +81,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $season);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $season);
 
         $discoverService = $discoverService
             ->withGameVersion($gameVersion)
@@ -127,8 +128,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $season);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $season);
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.popular',
@@ -166,8 +167,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $season);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $season);
 
         $affixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
 
@@ -208,8 +209,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $season);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $season);
 
         $affixGroup = $expansionService->getNextAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
 
@@ -248,8 +249,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $season = Season::where('expansion_id', $gameVersion->expansion_id)->where('index', $seasonIndex)->first();
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $season);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $season);
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.new',
@@ -278,7 +279,7 @@ class DungeonRouteDiscoverController extends Controller
         DiscoverServiceInterface    $discoverService,
         GameVersionServiceInterface $gameVersionService,
     ) {
-        $this->authorize('view', $expansion);
+        Gate::authorize('view', $expansion);
 
         $discoverService = $discoverService->withExpansion($expansion);
 
@@ -309,7 +310,7 @@ class DungeonRouteDiscoverController extends Controller
         ExpansionServiceInterface $expansionService,
         DiscoverServiceInterface  $discoverService,
     ) {
-        $this->authorize('view', $gameVersion);
+        Gate::authorize('view', $gameVersion);
 
         $discoverService = $discoverService->withGameVersion($gameVersion);
 
@@ -338,8 +339,8 @@ class DungeonRouteDiscoverController extends Controller
         ExpansionServiceInterface $expansionService,
         SeasonServiceInterface    $seasonService,
     ): View {
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $dungeon);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $dungeon);
 
         $discoverService = $discoverService
             ->withGameVersion($gameVersion)
@@ -379,7 +380,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverPopular(GameVersion $gameVersion, DiscoverServiceInterface $discoverService): View
     {
-        $this->authorize('view', $gameVersion);
+        Gate::authorize('view', $gameVersion);
 
         return view('dungeonroute.discover.category', [
             'breadcrumbs'   => 'dungeonroutes.popular',
@@ -398,7 +399,7 @@ class DungeonRouteDiscoverController extends Controller
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
     ): View {
-        $this->authorize('view', $gameVersion);
+        Gate::authorize('view', $gameVersion);
 
         $affixGroup = $expansionService->getCurrentAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
 
@@ -423,7 +424,7 @@ class DungeonRouteDiscoverController extends Controller
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
     ): View {
-        $this->authorize('view', $gameVersion);
+        Gate::authorize('view', $gameVersion);
 
         $affixGroup = $expansionService->getNextAffixGroup($gameVersion->expansion, GameServerRegion::getUserOrDefaultRegion());
 
@@ -445,7 +446,7 @@ class DungeonRouteDiscoverController extends Controller
      */
     public function discoverNew(GameVersion $gameVersion, DiscoverServiceInterface $discoverService): View
     {
-        $this->authorize('view', $gameVersion);
+        Gate::authorize('view', $gameVersion);
 
         return view('dungeonroute.discover.category', [
             'breadcrumbs'   => 'dungeonroutes.new',
@@ -467,8 +468,8 @@ class DungeonRouteDiscoverController extends Controller
         Dungeon                  $dungeon,
         DiscoverServiceInterface $discoverService,
     ): View {
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $dungeon);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $dungeon);
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.popular',
@@ -498,8 +499,8 @@ class DungeonRouteDiscoverController extends Controller
             return redirect()->route('dungeonroutes');
         }
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $dungeon);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $dungeon);
 
         $userRegion    = GameServerRegion::getUserOrDefaultRegion();
         $currentSeason = $seasonService->getCurrentSeason(null, $userRegion);
@@ -540,8 +541,8 @@ class DungeonRouteDiscoverController extends Controller
             return redirect()->route('dungeonroutes');
         }
 
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $dungeon);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $dungeon);
 
         $userRegion    = GameServerRegion::getUserOrDefaultRegion();
         $currentSeason = $seasonService->getCurrentSeason($gameVersion->expansion, $userRegion);
@@ -575,8 +576,8 @@ class DungeonRouteDiscoverController extends Controller
         Dungeon                  $dungeon,
         DiscoverServiceInterface $discoverService,
     ): View {
-        $this->authorize('view', $gameVersion);
-        $this->authorize('view', $dungeon);
+        Gate::authorize('view', $gameVersion);
+        Gate::authorize('view', $dungeon);
 
         return view('dungeonroute.discover.dungeon.category', [
             'breadcrumbs'   => 'dungeonroutes.discoverdungeon.new',

@@ -294,11 +294,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var User|null $user */
             $user = Auth::getUser();
             if ($isUserAdmin === null) {
-                $isUserAdmin = optional($user)->hasRole(Role::ROLE_ADMIN);
+                $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
             }
             if ($adFree === null) {
-                $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
-                    optional($user)->hasAdFreeGiveaway();
+                $adFree = $user?->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
+                    $user?->hasAdFreeGiveaway();
             }
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $currentUserGameVersion ??= $gameVersionService->getGameVersion($user);

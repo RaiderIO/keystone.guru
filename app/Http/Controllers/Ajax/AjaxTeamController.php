@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxTeamController extends Controller
 {
@@ -34,7 +35,7 @@ class AjaxTeamController extends Controller
      */
     public function changeDefaultRole(TeamDefaultRoleFormRequest $request, Team $team): Response
     {
-        $this->authorize('change-default-role', $team);
+        Gate::authorize('change-default-role', $team);
 
         $team->update(['default_role' => $request->get('default_role')]);
 
@@ -48,7 +49,7 @@ class AjaxTeamController extends Controller
      */
     public function changeRole(Request $request, Team $team)
     {
-        $this->authorize('change-role', $team);
+        Gate::authorize('change-role', $team);
 
         /** @var User $user */
         $user = Auth::user();
@@ -74,7 +75,7 @@ class AjaxTeamController extends Controller
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        $this->authorize('moderate-route', $team);
+        Gate::authorize('moderate-route', $team);
 
         /** @var User $user */
         $user = Auth::user();
@@ -96,7 +97,7 @@ class AjaxTeamController extends Controller
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        $this->authorize('moderate-route', $team);
+        Gate::authorize('moderate-route', $team);
 
         /** @var User $user */
         $user = Auth::user();
@@ -118,7 +119,7 @@ class AjaxTeamController extends Controller
      */
     public function removeMember(Request $request, Team $team, User $user)
     {
-        $this->authorize('remove-member', [
+        Gate::authorize('remove-member', [
             $team,
             $user,
         ]);
@@ -156,7 +157,7 @@ class AjaxTeamController extends Controller
      */
     public function refreshInviteLink(Request $request, Team $team)
     {
-        $this->authorize('refresh-invite-link', $team);
+        Gate::authorize('refresh-invite-link', $team);
 
         $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         $team->save();
@@ -171,7 +172,7 @@ class AjaxTeamController extends Controller
      */
     public function addAdFreeGiveaway(Request $request, Team $team, User $user): PatreonAdFreeGiveaway
     {
-        $this->authorize('can-ad-free-giveaway', $team);
+        Gate::authorize('can-ad-free-giveaway', $team);
 
         /** @var User $currentUser */
         $currentUser = Auth::user();
@@ -201,7 +202,7 @@ class AjaxTeamController extends Controller
      */
     public function removeAdFreeGiveaway(Request $request, Team $team, User $user): Response
     {
-        $this->authorize('can-ad-free-giveaway', $team);
+        Gate::authorize('can-ad-free-giveaway', $team);
 
         /** @var User $currentUser */
         $currentUser = Auth::user();

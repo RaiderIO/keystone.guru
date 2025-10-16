@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => '화산 심장부',
             'floors' => [
-                'molten_core' => '화산 심장부',
+                'moltencore' => '화산 심장부',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => '영원한 밤의 대성당',
             'floors' => [
-                'hall_of_the_moon'     => '달의 전당',
-                'twilight_groove'      => '황혼의 숲',
-                'the_emerald_archives' => '에메랄드 기록 보관소',
-                'path_of_illumination' => '계시의 길',
-                'sacristy_of_elune'    => '엘룬의 성물실',
+                'hall_of_the_moon'           => '달의 전당',
+                'twilight_groove'            => '황혼의 숲',
+                'the_emerald_archives'       => '에메랄드 기록 보관소',
+                'path_of_illumination'       => '계시의 길',
+                'sacristy_of_elune'          => '엘룬의 성물실',
+                'cathedral_of_eternal_night' => '영원한 밤의 대성당',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => '객실',
                 'opera_hall_balcony'   => '오페라 전당 발코니',
                 'masters_terrace'      => '주인의 테라스',
+                'lower_karazhan'       => '하층 카라잔',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => '지옥어귀 벼랑',
                 'the_hold'        => '요새',
                 'the_naglfar'     => '나글파르',
+                'maw_of_souls'    => '지옥어귀 벼랑',
             ],
         ],
         'neltharions_lair' => [
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => '도서관 상층',
                 'gamesmans_hall'     => '승부사의 전당',
                 'netherspace'        => '황천의 영역',
+                'upper_karazhan'     => '카라잔',
             ],
         ],
         'vault_of_the_wardens' => [

@@ -21,6 +21,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Teapot\StatusCode;
+use Illuminate\Support\Facades\Gate;
 
 class LiveSessionController extends Controller
 {
@@ -34,7 +35,7 @@ class LiveSessionController extends Controller
         ?string                           $title,
         EchoServerHttpApiServiceInterface $echoServerHttpApiService,
     ): RedirectResponse {
-        $this->authorize('view', $dungeonroute);
+        Gate::authorize('view', $dungeonroute);
 
         $liveSession = LiveSession::create([
             'dungeon_route_id' => $dungeonroute->id,
@@ -122,10 +123,10 @@ class LiveSessionController extends Controller
         LiveSession                $livesession,
         string                     $floorIndex,
     ) {
-        $this->authorize('view', $dungeonroute);
+        Gate::authorize('view', $dungeonroute);
 
         try {
-            $this->authorize('view', $livesession);
+            Gate::authorize('view', $livesession);
         } catch (AuthorizationException) {
             abort(StatusCode::GONE);
         }

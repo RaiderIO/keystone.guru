@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteTazaveshSoLeahsGambitTest extends APIC
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 13, 210);
+        $this->validatePulls($responseArr, 17, 349);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

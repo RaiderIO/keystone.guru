@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Molten Core',
             'floors' => [
-                'molten_core' => 'Molten Core',
+                'moltencore' => 'Molten Core',
             ],
         ],
         'naxxramas_classic' => [

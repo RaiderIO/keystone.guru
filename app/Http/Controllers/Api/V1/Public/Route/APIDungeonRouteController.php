@@ -14,6 +14,7 @@ use App\Service\Controller\Api\V1\APIDungeonRouteControllerServiceInterface;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Gate;
 
 class APIDungeonRouteController extends Controller
 {
@@ -74,7 +75,7 @@ class APIDungeonRouteController extends Controller
             'mappingVersion',
         ]);
 
-        $this->authorize('view', $dungeonRoute);
+        Gate::authorize('view', $dungeonRoute);
 
         return new DungeonRouteResource($dungeonRoute);
     }

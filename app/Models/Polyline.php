@@ -38,13 +38,6 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
         'vertices_json',
     ];
 
-    protected $casts = [
-        'id'            => 'int',
-        'model_id'      => 'int',
-        'weight'        => 'int',
-        'vertices_json' => 'string',
-    ];
-
     public $fillable = [
         'id',
         'model_id',
@@ -54,6 +47,16 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
         'weight',
         'vertices_json',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'id'            => 'int',
+            'model_id'      => 'int',
+            'weight'        => 'int',
+            'vertices_json' => 'string',
+        ];
+    }
 
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,

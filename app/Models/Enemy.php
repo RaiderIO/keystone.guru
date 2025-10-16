@@ -108,24 +108,27 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
 
     public $timestamps = false;
 
-    protected $casts = [
-        'id'                 => 'integer',
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'npc_id'             => 'integer',
-        'mdt_id'             => 'integer',
-        'mdt_npc_id'         => 'integer',
-        'exclusive_enemy_id' => 'integer',
-        'mdt_scale'          => 'double',
-        'enemy_pack_id'      => 'integer',
-        'enemy_patrol_id'    => 'integer',
-        'required'           => 'integer',
-        'skippable'          => 'integer',
-        'hyper_respawn'      => 'integer',
-        'lat'                => 'double',
-        'lng'                => 'double',
-        'kill_priority'      => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id'                 => 'integer',
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'npc_id'             => 'integer',
+            'mdt_id'             => 'integer',
+            'mdt_npc_id'         => 'integer',
+            'exclusive_enemy_id' => 'integer',
+            'mdt_scale'          => 'double',
+            'enemy_pack_id'      => 'integer',
+            'enemy_patrol_id'    => 'integer',
+            'required'           => 'integer',
+            'skippable'          => 'integer',
+            'hyper_respawn'      => 'integer',
+            'lat'                => 'double',
+            'lng'                => 'double',
+            'kill_priority'      => 'integer',
+        ];
+    }
 
     public const SEASONAL_TYPE_BEGUILING           = 'beguiling';
     public const SEASONAL_TYPE_AWAKENED            = 'awakened';

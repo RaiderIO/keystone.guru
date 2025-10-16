@@ -106,20 +106,23 @@ class Npc extends CacheModel implements MappingModelInterface
         'runs_away_in_fear',
     ];
 
-    protected $casts = [
-        'id'                => 'integer',
-        'dungeon_id'        => 'integer',
-        'classification_id' => 'integer',
-        'npc_type_id'       => 'integer',
-        'npc_class_id'      => 'integer',
-        'display_id'        => 'integer',
-        'level'             => 'integer',
-        'mdt_scale'         => 'float',
-    ];
-
     protected $appends = [
         'enemy_portrait_url',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'id'                => 'integer',
+            'dungeon_id'        => 'integer',
+            'classification_id' => 'integer',
+            'npc_type_id'       => 'integer',
+            'npc_class_id'      => 'integer',
+            'display_id'        => 'integer',
+            'level'             => 'integer',
+            'mdt_scale'         => 'float',
+        ];
+    }
 
     public function getEnemyPortraitUrlAttribute(): string
     {

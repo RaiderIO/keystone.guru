@@ -23,6 +23,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxTagController extends Controller
 {
@@ -73,7 +74,7 @@ class AjaxTagController extends Controller
         $model = $query->firstOrFail();
 
         // Now that we know the category and created an instance of the model, check if we may actually do this
-        $this->authorize('create-tag', [
+        Gate::authorize('create-tag', [
             $tagCategory,
             $model,
         ]);
@@ -112,7 +113,7 @@ class AjaxTagController extends Controller
      */
     public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
     {
-        $this->authorize('edit', $tag);
+        Gate::authorize('edit', $tag);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)
@@ -132,7 +133,7 @@ class AjaxTagController extends Controller
      */
     public function deleteAll(Request $request, Tag $tag): Response
     {
-        $this->authorize('delete', $tag);
+        Gate::authorize('delete', $tag);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)

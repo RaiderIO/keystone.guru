@@ -122,7 +122,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
         if ($this->lastChallengeModeStartEvent instanceof ChallengeModeStartEvent) {
             // If there's too much of a gap between the last entry and the next one, just ditch the run
             if ($this->lastTimestamp instanceof Carbon &&
-                ($seconds = $this->lastTimestamp->diffInSeconds($combatLogEntry->getParsedTimestamp())) > self::MAX_TIMESTAMP_GAP_SECONDS) {
+                ($seconds = (int)$this->lastTimestamp->diffInSeconds($combatLogEntry->getParsedTimestamp(), true)) > self::MAX_TIMESTAMP_GAP_SECONDS) {
                 $this->log->parseCombatLogEventTooBigTimestampGap(
                     $seconds,
                     $this->lastTimestamp->toDateTimeString(),
