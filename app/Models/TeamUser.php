@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -47,7 +48,8 @@ class TeamUser extends Model
 
     protected $with = ['user'];
 
-    public function scopeIsModerator(Builder $query, int $userId): Builder
+    #[Scope]
+    protected function isModerator(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId)->whereIn('role', [
             self::ROLE_ADMIN,

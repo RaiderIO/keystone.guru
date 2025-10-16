@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -370,7 +371,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only the Siege of Boralus dungeon.
      */
-    public function scopeFactionSelectionRequired(Builder $query): Builder
+    #[Scope]
+    protected function factionSelectionRequired(Builder $query): Builder
     {
         return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/
             self::DUNGEON_THE_NEXUS,
@@ -380,7 +382,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('dungeons.active', 1);
     }
@@ -388,7 +391,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
     }
@@ -396,7 +400,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeForGameVersion(Builder $query, GameVersion $gameVersion): Builder
+    #[Scope]
+    protected function forGameVersion(Builder $query, GameVersion $gameVersion): Builder
     {
         return $query->whereHas('mappingVersions', function (Builder $query) use ($gameVersion) {
             $query->where('game_version_id', $gameVersion->id);

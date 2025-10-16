@@ -2,6 +2,7 @@
 
 namespace App\Models\Spell;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
@@ -131,7 +132,8 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public function scopeVisible(): Builder
+    #[Scope]
+    protected function visible(): Builder
     {
         return $this->where('hidden_on_map', false);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Timewalking\TimewalkingEvent;
@@ -209,7 +210,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('expansions.active', 1);
     }
@@ -217,7 +219,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
     }

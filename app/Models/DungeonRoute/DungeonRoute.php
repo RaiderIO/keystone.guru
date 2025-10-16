@@ -2,6 +2,7 @@
 
 namespace App\Models\DungeonRoute;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
@@ -601,7 +602,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * Scope a query to only include active dungeons and non-demo routes.
      */
-    public function scopeVisible(Builder $query): Builder
+    #[Scope]
+    protected function visible(Builder $query): Builder
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {

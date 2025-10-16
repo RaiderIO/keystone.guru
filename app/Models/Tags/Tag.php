@@ -2,6 +2,7 @@
 
 namespace App\Models\Tags;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Traits\HasGenericModelRelation;
@@ -46,7 +47,8 @@ class Tag extends Model
         return $this->belongsTo(TagCategory::class);
     }
 
-    public function scopeUnique(Builder $query, ?int $categoryId = null): Builder
+    #[Scope]
+    protected function unique(Builder $query, ?int $categoryId = null): Builder
     {
         if ($categoryId !== null) {
             $query = $query->where('tag_category_id', $categoryId);
