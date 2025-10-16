@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dungeon;
 
-use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\ExploreUrlFormRequest;
@@ -19,7 +18,6 @@ use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Laravel\Pennant\Feature;
 
 class DungeonExploreController extends Controller
 {
@@ -33,18 +31,8 @@ class DungeonExploreController extends Controller
     }
 
     public function getByGameVersion(
-        Request                        $request,
-        GameVersion                    $gameVersion,
-        CombatLogEventServiceInterface $combatLogEventService,
-        GameVersionServiceInterface    $gameVersionService,
+        GameVersion $gameVersion,
     ): View|RedirectResponse {
-        $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
-        if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
-            return redirect()->route('dungeon.explore.gameversion.list', [
-                'gameVersion' => $userOrDefaultGameVersion,
-            ]);
-        }
-
         return view('dungeon.explore.gameversion.list', [
             'gameVersion' => $gameVersion,
         ]);
