@@ -21,8 +21,12 @@ class GameVersionController extends Controller
 
         // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
         $referer = $request->headers->get('referer');
-        if ($referer && str_contains($referer, sprintf('/routes/%s', $previousGameVersion->key))) {
-            return redirect()->route('dungeonroutes.current');
+        if ($referer) {
+            if (str_contains($referer, sprintf('/routes/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeonroutes.current');
+            } elseif (str_contains($referer, sprintf('/explore/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeon.explore.list');
+            }
         }
 
         return Redirect::back();
