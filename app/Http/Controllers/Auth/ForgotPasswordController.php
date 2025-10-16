@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
-class ForgotPasswordController extends Controller
+class ForgotPasswordController extends Controller implements HasMiddleware
 {
     /*
     |--------------------------------------------------------------------------
@@ -20,8 +22,10 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('guest');
+        return [
+            'guest',
+        ];
     }
 }
