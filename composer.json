@@ -136,7 +136,8 @@
         "phpunit/phpunit": "^11.0.1",
         "rector/rector": "^1.0",
         "swoole/ide-helper": "~6.0.0",
-        "wotuu/keystone.guru.deployer": "0.1"
+        "wotuu/keystone.guru.deployer": "0.1",
+        "laravel/pail": "^1.2.2"
     },
     "autoload": {
         "classmap": [
@@ -161,7 +162,11 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
-        "php-cs-fixer": "php-cs-fixer --config=./.php-cs-fixer.php"
+        "php-cs-fixer": "php-cs-fixer --config=./.php-cs-fixer.php",
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
+        ]
     },
     "config": {
         "preferred-install": "dist",
