@@ -17,7 +17,7 @@ return [
         ],
     ],
 
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'encryption' => env('MAIL_SCHEME', 'tls'),
 
     'username' => env('MAIL_USERNAME'),
 

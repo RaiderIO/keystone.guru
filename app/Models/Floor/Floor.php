@@ -2,6 +2,7 @@
 
 namespace App\Models\Floor;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Logic\Structs\LatLng;
 use App\Logic\Structs\MapBounds;
 use App\Models\CacheModel;
@@ -328,12 +329,14 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * Scope a query to only include active floors.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('floors.active', 1);
     }
 
-    public function scopeIndexOrFacade(
+    #[Scope]
+    protected function indexOrFacade(
         Builder        $builder,
         MappingVersion $mappingVersion,
         int            $floorIndex,
@@ -370,7 +373,8 @@ class Floor extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
-    public function scopeDefaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
+    #[Scope]
+    protected function defaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
     {
         $useFacade = (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 

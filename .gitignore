@@ -15,11 +15,13 @@
 /resources/assets/js/handlebars.js
 /resources/assets/js/precompile.js
 /storage/*.key
+/storage/pail
 /storage/debugbar/*.json
 /storage/framework/maintenance.php
 /vendor
 /version
 /.idea
+/.nova
 /.vagrant
 Homestead.json
 Homestead.yaml
