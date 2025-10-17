@@ -49,7 +49,7 @@ class ServiceFixtures
         array                                      $methodsToMock = [],
     ): MockObject|AffixGroupEaseTierServiceInterface {
         return $testCase
-            ->getMockBuilder(AffixGroupEaseTierService::class)
+            ->getMockBuilderPublic(AffixGroupEaseTierService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $seasonService ?? self::getSeasonServiceMock($testCase),
@@ -69,7 +69,7 @@ class ServiceFixtures
         array                               $methodsToMock = [],
     ): MockObject|ViewService {
         return $testCase
-            ->getMockBuilder(ViewService::class)
+            ->getMockBuilderPublic(ViewService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $cacheService ?? self::getCacheServiceMock($testCase),
@@ -85,7 +85,7 @@ class ServiceFixtures
         array                            $methodsToMock = [],
     ): MockObject|CombatLogServiceInterface {
         return $testCase
-            ->getMockBuilder(CombatLogService::class)
+            ->getMockBuilderPublic(CombatLogService::class)
             ->setConstructorArgs([
                 $log,
             ])
@@ -100,7 +100,7 @@ class ServiceFixtures
         array                                        $methodsToMock = [],
     ): MockObject|ResultEventDungeonRouteServiceInterface {
         return $testCase
-            ->getMockBuilder(ResultEventDungeonRouteService::class)
+            ->getMockBuilderPublic(ResultEventDungeonRouteService::class)
             ->setConstructorArgs([
                 $combatLogService,
                 $log,
@@ -113,7 +113,7 @@ class ServiceFixtures
         PublicTestCase $testCase,
         array          $methodsToMock = [],
     ): MockObject|ExpansionServiceInterface {
-        return $testCase->getMockBuilder(ExpansionService::class)
+        return $testCase->getMockBuilderPublic(ExpansionService::class)
             ->onlyMethods($methodsToMock)
             ->getMock();
     }
@@ -127,7 +127,7 @@ class ServiceFixtures
     {
         $methodsToMock[]          = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
-            ->getMockBuilder(SeasonService::class)
+            ->getMockBuilderPublic(SeasonService::class)
             ->setConstructorArgs([
                 self::getExpansionServiceMock($testCase),
                 $seasonRepository ?? RepositoryFixtures::getSeasonRepositoryMock($testCase),
@@ -151,7 +151,7 @@ class ServiceFixtures
         array          $methodsToMock = [],
     ): MockObject|CoordinatesServiceInterface {
         return $testCase
-            ->getMockBuilder(CoordinatesService::class)
+            ->getMockBuilderPublic(CoordinatesService::class)
             ->onlyMethods($methodsToMock)
             ->getMock();
     }
@@ -165,7 +165,7 @@ class ServiceFixtures
         CacheServiceInterface $cacheService = null,
     ): MockObject|MetricService {
         return $testCase
-            ->getMockBuilder(MetricService::class)
+            ->getMockBuilderPublic(MetricService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $cacheService ?? self::getCacheServiceMock($testCase),
@@ -183,7 +183,7 @@ class ServiceFixtures
         SpellServiceLoggingInterface $log = null,
     ): MockObject|SpellService {
         return $testCase
-            ->getMockBuilder(SpellService::class)
+            ->getMockBuilderPublic(SpellService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $spellRepository ?? RepositoryFixtures::getSpellRepositoryMock($testCase),
@@ -202,7 +202,7 @@ class ServiceFixtures
         CombatLogEventServiceLoggingInterface $log = null,
     ): MockObject|CombatLogEventService {
         return $testCase
-            ->getMockBuilder(CombatLogEventService::class)
+            ->getMockBuilderPublic(CombatLogEventService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $coordinatesService ?? ServiceFixtures::getCoordinatesServiceMock($testCase),
@@ -220,7 +220,7 @@ class ServiceFixtures
         ?CacheServiceLoggingInterface $log = null,
     ): MockObject|CacheService {
         return $testCase
-            ->getMockBuilder(CacheService::class)
+            ->getMockBuilderPublic(CacheService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $log ?? LoggingFixtures::createCacheServiceLogging($testCase),
@@ -238,7 +238,7 @@ class ServiceFixtures
         ?CloudflareServiceLoggingInterface    $log = null,
     ): MockObject|CloudflareService {
         return $testCase
-            ->getMockBuilder(CloudflareService::class)
+            ->getMockBuilderPublic(CloudflareService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $cacheService ?? ServiceFixtures::getCacheServiceMock($testCase),

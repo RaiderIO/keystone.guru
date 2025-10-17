@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => '熔火之心',
             'floors' => [
-                'molten_core' => '',
+                'moltencore' => '熔火之心',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => '永夜聖殿',
             'floors' => [
-                'hall_of_the_moon'     => '月之殿堂',
-                'twilight_groove'      => '暮光森林',
-                'the_emerald_archives' => '翡翠圖書館',
-                'path_of_illumination' => '神啟之徑',
-                'sacristy_of_elune'    => '伊露恩聖器室',
+                'hall_of_the_moon'           => '月之殿堂',
+                'twilight_groove'            => '暮光森林',
+                'the_emerald_archives'       => '翡翠圖書館',
+                'path_of_illumination'       => '神啟之徑',
+                'sacristy_of_elune'          => '伊露恩聖器室',
+                'cathedral_of_eternal_night' => '永夜聖殿',
             ],
         ],
         'court_of_stars' => [
@@ -683,7 +684,7 @@ return [
             ],
         ],
         'lower_karazhan' => [
-            'name'   => '',
+            'name'   => '下卡拉赞',
             'floors' => [
                 'servants_quarters'    => '',
                 'upper_livery_stables' => '',
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => '',
                 'opera_hall_balcony'   => '',
                 'masters_terrace'      => '',
+                'lower_karazhan'       => '下卡拉赞',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => '獄喉山崖',
                 'the_hold'        => '船艙',
                 'the_naglfar'     => '奈格法號',
+                'maw_of_souls'    => '獄喉山崖',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => '卡拉贊',
+            'name'   => '上卡拉赞',
             'floors' => [
                 'lower_broken_stair' => '破碎樓梯下層',
                 'upper_broken_stair' => '破碎樓梯上層',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => '圖書館上層',
                 'gamesmans_hall'     => '棋戲大廳',
                 'netherspace'        => '虛空空間',
+                'upper_karazhan'     => '上卡拉赞',
             ],
         ],
         'vault_of_the_wardens' => [

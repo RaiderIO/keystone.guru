@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Cathédrale de la Nuit éternelle',
             'floors' => [
-                'hall_of_the_moon'     => 'Salle de la Lune',
-                'twilight_groove'      => 'Bosquet crépusculaire',
-                'the_emerald_archives' => 'Les Archives d’émeraude',
-                'path_of_illumination' => 'Chemin de l’Illumination',
-                'sacristy_of_elune'    => 'Sacristie d’Élune',
+                'hall_of_the_moon'           => 'Salle de la Lune',
+                'twilight_groove'            => 'Bosquet crépusculaire',
+                'the_emerald_archives'       => 'Les Archives d’émeraude',
+                'path_of_illumination'       => 'Chemin de l’Illumination',
+                'sacristy_of_elune'          => 'Sacristie d’Élune',
+                'cathedral_of_eternal_night' => 'Cathédrale de la Nuit éternelle',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Chambres des invités',
                 'opera_hall_balcony'   => 'Balcon de la salle d’opéra',
                 'masters_terrace'      => 'Terrasse du maître',
+                'lower_karazhan'       => 'Karazhan (inférieur)',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Falaises de l’embouchure de Hel',
                 'the_hold'        => 'Le Fort',
                 'the_naglfar'     => 'Le Naglfar',
+                'maw_of_souls'    => 'Falaises de l’embouchure de Hel',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Karazhan',
+            'name'   => 'Karazhan (partie inférieure)',
             'floors' => [
                 'lower_broken_stair' => 'Partie inférieure de l’Escalier brisé',
                 'upper_broken_stair' => 'Partie supérieure de l’Escalier brisé',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Bibliothèque supérieure',
                 'gamesmans_hall'     => 'Hall du Flambeur',
                 'netherspace'        => 'Néantespace',
+                'upper_karazhan'     => 'Karazhan (partie inférieure)',
             ],
         ],
         'vault_of_the_wardens' => [

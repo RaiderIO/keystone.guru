@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => '',
             'floors' => [
-                'hall_of_the_moon'     => '',
-                'twilight_groove'      => '',
-                'the_emerald_archives' => '',
-                'path_of_illumination' => '',
-                'sacristy_of_elune'    => '',
+                'hall_of_the_moon'           => '',
+                'twilight_groove'            => '',
+                'the_emerald_archives'       => '',
+                'path_of_illumination'       => '',
+                'sacristy_of_elune'          => '',
+                'cathedral_of_eternal_night' => '',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => '',
                 'opera_hall_balcony'   => '',
                 'masters_terrace'      => '',
+                'lower_karazhan'       => '',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => '',
                 'the_hold'        => '',
                 'the_naglfar'     => '',
+                'maw_of_souls'    => '',
             ],
         ],
         'neltharions_lair' => [
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => '',
                 'gamesmans_hall'     => '',
                 'netherspace'        => '',
+                'upper_karazhan'     => '',
             ],
         ],
         'vault_of_the_wardens' => [

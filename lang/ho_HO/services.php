@@ -14,9 +14,9 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Hodor',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Hodor',
                 'route_title_contains_non_ascii_char_bug'           => 'Hodor',
-                'route_title_contains_non_ascii_char_bug_details'   => 'Hodor',
-                'map_icon_contains_non_ascii_char_bug'              => 'Hodor',
-                'map_icon_contains_non_ascii_char_bug_details'      => 'Hodor',
+                'route_title_contains_non_ascii_char_bug_details' => 'Hodor',
+                'map_icon_contains_non_ascii_char_bug'            => 'Hodor',
+                'map_icon_contains_non_ascii_char_bug_details'    => 'Hodor',
             ],
             'import_string' => [
                 'category' => [

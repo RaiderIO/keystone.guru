@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxMapIconController extends AjaxMappingModelBaseController
 {
@@ -72,8 +73,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             }
         } // We're editing a map comment for the user, carry on
         else {
-            $this->authorize('edit', $dungeonRoute);
-            $this->authorize('addMapIcon', $dungeonRoute);
+            Gate::authorize('edit', $dungeonRoute);
+            Gate::authorize('addMapIcon', $dungeonRoute);
         }
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;
@@ -172,7 +173,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         } // We're editing a map icon for the user, carry on
         elseif ($dungeonRoute !== null) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonRoute);
+            Gate::authorize('edit', $dungeonRoute);
         }
 
         try {

@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Teapot\StatusCode\Http;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxPridefulEnemyController extends Controller
 {
@@ -29,7 +30,7 @@ class AjaxPridefulEnemyController extends Controller
         DungeonRoute                $dungeonRoute,
         Enemy                       $enemy,
     ): PridefulEnemy {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         /** @var PridefulEnemy $pridefulEnemy */
         $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
@@ -67,7 +68,7 @@ class AjaxPridefulEnemyController extends Controller
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             /** @var PridefulEnemy $pridefulEnemy */

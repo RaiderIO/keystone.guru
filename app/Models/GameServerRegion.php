@@ -68,11 +68,14 @@ class GameServerRegion extends CacheModel
         'reset_hours_offset',
     ];
 
-    protected $casts = [
-        'epoch_start' => 'datetime',
-    ];
-
     public $timestamps = false;
+
+    protected function casts(): array
+    {
+        return [
+            'epoch_start' => 'datetime',
+        ];
+    }
 
     public function users(): HasMany
     {
@@ -111,7 +114,7 @@ class GameServerRegion extends CacheModel
     {
         $epoch = self::getRegionEpochByDate($dateTime);
 
-        return $epoch->diffInWeeks($dateTime);
+        return (int)$epoch->diffInWeeks($dateTime, true);
     }
 
     /**

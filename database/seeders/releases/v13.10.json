@@ -1,0 +1,31 @@
+{
+    "id": 324,
+    "release_changelog_id": 331,
+    "version": "v13.10",
+    "title": "Laravel 11 update",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-10-17T18:45:57+00:00",
+    "updated_at": "2025-10-17T18:45:57+00:00",
+    "changelog": {
+        "id": 331,
+        "release_id": 324,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 331,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2972,
+                "change": "Upgraded to Laravel 11."
+            },
+            {
+                "release_changelog_id": 331,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2996,
+                "change": "Visiting different game version's explore page no longer redirects to your current game version's explore page, but keeps you on that game version's explore page instead."
+            }
+        ]
+    }
+}

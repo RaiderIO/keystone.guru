@@ -141,7 +141,7 @@ class Release extends CacheModel
         return sprintf(
             'Release %s (%s)%s',
             $this->version,
-            now()->format('Y/m/d'),
+            $this->created_at->format('Y/m/d'),
             empty($this->title) ? '' : sprintf(' - %s', $this->title),
         );
     }

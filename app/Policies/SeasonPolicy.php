@@ -6,7 +6,7 @@ use App\Models\Season;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class DungeonRouteDiscoverSeasonPolicy
+class SeasonPolicy
 {
     use HandlesAuthorization;
 

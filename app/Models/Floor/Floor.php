@@ -118,41 +118,42 @@ class Floor extends CacheModel implements MappingModelInterface
         // The Dawnbreaker
         2215 => 2359,
         // Harrowfall -> The Dawnbreaker
-        // Grim Batol
-        241 => 293,
         // Twilight Highlands -> Grim Batol
+        241 => 293,
     ];
 
     /**
      * Some IDs which are open world, and we cannot resolve to a dungeon floor.
      */
     public const UI_MAP_ID_OPEN_WORLD = [
-        0,
         // Unknown
-        1536,
+        0,
+        // Azsuna
+        630,
         // Maldraxxus
-        1550,
+        1536,
         // The Shadowlands
+        1550,
+        // Mechagon
         1490,
         // Mechagon
         1493,
-        // Mechagon
-        1525,
         // Revendreth
-        2016,
+        1525,
         // Tazavesh, the Veiled Market
-        2214,
+        2016,
         // The Ringing Deeps
-        2248,
+        2214,
         // Isle of Dorn
-        2274,
+        2248,
         // Khaz Algar
-        2339,
+        2274,
         // Dornogal
-        2346,
+        2339,
         // Undermine
-        2472,
+        2346,
         // Tazavesh
+        2472,
     ];
 
     public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;

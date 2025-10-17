@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Núcleo de Magma',
             'floors' => [
-                'moltencore' => 'Núcleo de Magma',
+                'molten_core' => 'Núcleo de Magma',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Catedral de la Noche Eterna',
             'floors' => [
-                'hall_of_the_moon'     => 'Sala de la Luna',
-                'twilight_groove'      => 'Arboleda del Crepúsculo',
-                'the_emerald_archives' => 'Archivos Esmeralda',
-                'path_of_illumination' => 'Senda de la Iluminación',
-                'sacristy_of_elune'    => 'Dependencia de Elune',
+                'hall_of_the_moon'           => 'Sala de la Luna',
+                'twilight_groove'            => 'Arboleda del Crepúsculo',
+                'the_emerald_archives'       => 'Archivos Esmeralda',
+                'path_of_illumination'       => 'Senda de la Iluminación',
+                'sacristy_of_elune'          => 'Dependencia de Elune',
+                'cathedral_of_eternal_night' => 'Catedral de la Noche Eterna',
             ],
         ],
         'court_of_stars' => [
@@ -683,7 +684,7 @@ return [
             ],
         ],
         'lower_karazhan' => [
-            'name'   => 'Lower Karazhan',
+            'name'   => 'Karazhan Inferior',
             'floors' => [
                 'servants_quarters'    => 'Aposentos de los Sirvientes',
                 'upper_livery_stables' => 'Establos Superiores',
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Habitaciones de Huéspedes',
                 'opera_hall_balcony'   => 'Balcón del Salón de la Ópera',
                 'masters_terrace'      => 'Terraza del Maestro',
+                'lower_karazhan'       => 'Karazhan Inferior',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Acantilados Boca Infernal',
                 'the_hold'        => 'El Bastión',
                 'the_naglfar'     => 'Naglfar',
+                'maw_of_souls'    => 'Acantilados Boca Infernal',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Karazhan',
+            'name'   => 'Karazhan Superior',
             'floors' => [
                 'lower_broken_stair' => 'La Escalera Quebrada Inferior',
                 'upper_broken_stair' => 'La Escalera Quebrada Superior',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'La Biblioteca Superior',
                 'gamesmans_hall'     => 'Sala del Tablero',
                 'netherspace'        => 'Espacio Abisal',
+                'upper_karazhan'     => 'Karazhan Superior',
             ],
         ],
         'vault_of_the_wardens' => [

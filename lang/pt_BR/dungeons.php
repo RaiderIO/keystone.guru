@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Núcleo Derretido',
             'floors' => [
-                'molten_core' => 'Núcleo Derretido',
+                'moltencore' => 'Núcleo Derretido',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Catedral da Noite Eterna',
             'floors' => [
-                'hall_of_the_moon'     => 'Salão da Lua',
-                'twilight_groove'      => 'Bosque do Crepúsculo',
-                'the_emerald_archives' => 'Arquivos Esmeralda',
-                'path_of_illumination' => 'Caminho da Iluminação',
-                'sacristy_of_elune'    => 'Sacristia de Eluna',
+                'hall_of_the_moon'           => 'Salão da Lua',
+                'twilight_groove'            => 'Bosque do Crepúsculo',
+                'the_emerald_archives'       => 'Arquivos Esmeralda',
+                'path_of_illumination'       => 'Caminho da Iluminação',
+                'sacristy_of_elune'          => 'Sacristia de Eluna',
+                'cathedral_of_eternal_night' => 'Catedral da Noite Eterna',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Guest Chambers',
                 'opera_hall_balcony'   => 'Opera Salão Balcony',
                 'masters_terrace'      => 'Masters Terrace',
+                'lower_karazhan'       => 'Karazhan Inferior',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Penhascos da Boca do Inferno',
                 'the_hold'        => 'O Castelo',
                 'the_naglfar'     => 'O Naglfar',
+                'maw_of_souls'    => 'Penhascos da Boca do Inferno',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Karazhan',
+            'name'   => 'Karazhan Superior',
             'floors' => [
                 'lower_broken_stair' => 'A Escadaria Partida Inferior',
                 'upper_broken_stair' => 'A Escadaria Partida Superior',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Biblioteca Superior',
                 'gamesmans_hall'     => 'Salão de Jogos',
                 'netherspace'        => 'Eterespaço',
+                'upper_karazhan'     => 'Karazhan Superior',
             ],
         ],
         'vault_of_the_wardens' => [

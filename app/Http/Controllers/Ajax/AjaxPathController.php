@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxPathController extends Controller
 {
@@ -41,8 +42,8 @@ class AjaxPathController extends Controller
     ) {
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
 
-        $this->authorize('edit', $dungeonRoute);
-        $this->authorize('addPath', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
+        Gate::authorize('addPath', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -116,7 +117,7 @@ class AjaxPathController extends Controller
         $dungeonRoute = $path->dungeonRoute;
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's path
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             if ($path->delete()) {

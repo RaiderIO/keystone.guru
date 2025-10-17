@@ -27,6 +27,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
+use Illuminate\Support\Facades\Gate;
 
 class AjaxKillZoneController extends Controller
 {
@@ -53,10 +54,10 @@ class AjaxKillZoneController extends Controller
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
         // Prevent someone from updating different killzones than they are allowed to
         if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $killZone->dungeonRoute);
+            Gate::authorize('edit', $killZone->dungeonRoute);
         }
 
-        $this->authorize('addKillZone', $dungeonroute);
+        Gate::authorize('addKillZone', $dungeonroute);
 
         /** @var KillZone|null $beforeModel */
         $beforeModel = $killZone === null ? null : clone $killZone;
@@ -219,7 +220,7 @@ class AjaxKillZoneController extends Controller
         APIKillZoneMassFormRequest  $request,
         DungeonRoute                $dungeonRoute,
     ) {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -294,7 +295,7 @@ class AjaxKillZoneController extends Controller
 
         if (!$dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonRoute);
+            Gate::authorize('edit', $dungeonRoute);
         }
 
         try {
@@ -331,7 +332,7 @@ class AjaxKillZoneController extends Controller
      */
     public function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 

@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Огненные Недра',
             'floors' => [
-                'molten_core' => '',
+                'moltencore' => 'Огненные Недра',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Собор Вечной Ночи',
             'floors' => [
-                'hall_of_the_moon'     => 'Зал Луны',
-                'twilight_groove'      => 'Сумеречная роща',
-                'the_emerald_archives' => 'Изумрудные архивы',
-                'path_of_illumination' => 'Путь Озарения',
-                'sacristy_of_elune'    => 'Ризница Элуны',
+                'hall_of_the_moon'           => 'Зал Луны',
+                'twilight_groove'            => 'Сумеречная роща',
+                'the_emerald_archives'       => 'Изумрудные архивы',
+                'path_of_illumination'       => 'Путь Озарения',
+                'sacristy_of_elune'          => 'Ризница Элуны',
+                'cathedral_of_eternal_night' => 'Собор Вечной Ночи',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Гостевые комнаты',
                 'opera_hall_balcony'   => 'Балкон в опере',
                 'masters_terrace'      => 'Терраса Медива',
+                'lower_karazhan'       => 'Нижняя часть Каражана',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Утесы Адской Пасти',
                 'the_hold'        => 'Трюм',
                 'the_naglfar'     => '"Нагльфар"',
+                'maw_of_souls'    => 'Утесы Адской Пасти',
             ],
         ],
         'neltharions_lair' => [
@@ -714,7 +717,7 @@ return [
             ],
         ],
         'upper_karazhan' => [
-            'name'   => 'Каражан',
+            'name'   => 'Верхняя часть Каражана',
             'floors' => [
                 'lower_broken_stair' => 'Низ разрушенной лестницы',
                 'upper_broken_stair' => 'Верх разрушенной лестницы',
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Верхний ярус библиотеки',
                 'gamesmans_hall'     => 'Игровой зал',
                 'netherspace'        => 'Пустомарь',
+                'upper_karazhan'     => 'Верхняя часть Каражана',
             ],
         ],
         'vault_of_the_wardens' => [

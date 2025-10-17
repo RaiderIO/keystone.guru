@@ -36,18 +36,18 @@ $user = Auth::user();
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item"
                    href="{{ route('admin.releases') }}">{{__('view_common.layout.nav.user.view_releases')}}</a>
-                @if( $user->isAbleTo('read-expansions') )
+{{--                @if( $user->isAbleTo('read-expansions') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.expansions') }}">{{__('view_common.layout.nav.user.view_expansions')}}</a>
-                @endif
-                @if( $user->isAbleTo('read-dungeons') )
+{{--                @endif--}}
+{{--                @if( $user->isAbleTo('read-dungeons') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.dungeons') }}">{{__('view_common.layout.nav.user.view_dungeons')}}</a>
-                @endif
-                @if( $user->isAbleTo('read-npcs') )
+{{--                @endif--}}
+{{--                @if( $user->isAbleTo('read-npcs') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.npcs') }}">{{__('view_common.layout.nav.user.view_npcs')}}</a>
-                @endif
+{{--                @endif--}}
                 <a class="dropdown-item"
                    href="{{ route('admin.spells') }}">{{__('view_common.layout.nav.user.view_spells')}}</a>
                 <a class="dropdown-item"

@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Hodor',
             'floors' => [
-                'molten_core' => 'Hodor',
+                'moltencore' => 'Hodor',
             ],
         ],
         'naxxramas_classic' => [
@@ -649,11 +649,12 @@ return [
         'cathedral_of_eternal_night' => [
             'name'   => 'Hodor',
             'floors' => [
-                'hall_of_the_moon'     => 'Hodor',
-                'twilight_groove'      => 'Hodor',
-                'the_emerald_archives' => 'Hodor',
-                'path_of_illumination' => 'Hodor',
-                'sacristy_of_elune'    => 'Hodor',
+                'hall_of_the_moon'           => 'Hodor',
+                'twilight_groove'            => 'Hodor',
+                'the_emerald_archives'       => 'Hodor',
+                'path_of_illumination'       => 'Hodor',
+                'sacristy_of_elune'          => 'Hodor',
+                'cathedral_of_eternal_night' => 'Hodor',
             ],
         ],
         'court_of_stars' => [
@@ -691,6 +692,7 @@ return [
                 'the_guest_chambers'   => 'Hodor',
                 'opera_hall_balcony'   => 'Hodor',
                 'masters_terrace'      => 'Hodor',
+                'lower_karazhan'       => 'Hodor',
             ],
         ],
         'maw_of_souls' => [
@@ -699,6 +701,7 @@ return [
                 'helmouth_cliffs' => 'Hodor',
                 'the_hold'        => 'Hodor',
                 'the_naglfar'     => 'Hodor',
+                'maw_of_souls'    => 'Hodor',
             ],
         ],
         'neltharions_lair' => [
@@ -724,6 +727,7 @@ return [
                 'upper_library'      => 'Hodor',
                 'gamesmans_hall'     => 'Hodor',
                 'netherspace'        => 'Hodor',
+                'upper_karazhan'     => 'Hodor',
             ],
         ],
         'vault_of_the_wardens' => [
