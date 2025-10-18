@@ -1,0 +1,18 @@
+{
+    "id": 325,
+    "release_changelog_id": 332,
+    "version": "v13.10.1",
+    "title": "Config changes",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-10-18T21:18:39+00:00",
+    "updated_at": "2025-10-18T21:18:39+00:00",
+    "changelog": {
+        "id": 332,
+        "release_id": 325,
+        "description": "Bots now crash the site due to a locale issue. Hotfixes on configs seem to not be working - so this release has to properly apply the code changes without a hotfix.",
+        "changes": []
+    }
+}

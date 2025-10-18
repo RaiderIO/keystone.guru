@@ -9,6 +9,13 @@ use Monolog\Processor\PsrLogMessageProcessor;
 return [
 
     'channels' => [
+        'stack' => [
+            'driver' => 'stack',
+            // stderr so that logs show up in EC2
+            'channels'          => ['stderr', 'daily', 'discord', /*'rollbar'*/],
+            'ignore_exceptions' => false,
+        ],
+
         'stack_docker' => [
             'driver'            => 'stack',
             'channels'          => ['stderr', 'daily', 'discord', /*'rollbar'*/],

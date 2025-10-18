@@ -39,6 +39,10 @@
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
                     "reference": "bdc8fea594fe4e4fdd6ef0e0c12e6198282c37c9"
+                },
+                "dist": {
+                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/bdc8fea594fe4e4fdd6ef0e0c12e6198282c37c9.zip",
+                    "type": "zip"
                 }
             }
         },
@@ -51,6 +55,10 @@
                     "url": "https://github.com/Nnoggie/MDT_Legacy.git",
                     "type": "git",
                     "reference": "894efd58fdfb803b892f34881d88d72cb331ffd9"
+                },
+                "dist": {
+                    "url": "https://github.com/Nnoggie/MDT_Legacy/archive/894efd58fdfb803b892f34881d88d72cb331ffd9.zip",
+                    "type": "zip"
                 }
             }
         },

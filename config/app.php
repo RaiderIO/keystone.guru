@@ -3,14 +3,7 @@
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\User;
-use App\Providers\ControllerServiceProvider;
-use App\Providers\HelperServiceProvider;
-use App\Providers\KeystoneGuruServiceProvider;
-use App\Providers\LoggingServiceProvider;
-use App\Providers\OctaneServiceProvider;
-use App\Providers\RepositoryServiceProvider;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\ServiceProvider;
 
 return [
 
@@ -19,7 +12,6 @@ return [
     'log' => env('APP_LOG', 'single'),
 
     'log_level' => env('LOG_LEVEL', 'debug'),
-
 
     'aliases' => Facade::defaultAliases()->merge([
         'Agent'     => Jenssegers\Agent\Facades\Agent::class,
@@ -32,4 +24,27 @@ return [
         'User'             => User::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Locale Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The application locale determines the default locale that will be used
+    | by the translation service provider. You are free to set this value
+    | to any of the locales which will be supported by the application.
+    |
+    */
+    'locale' => env('APP_LOCALE', 'en'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Fallback Locale
+    |--------------------------------------------------------------------------
+    |
+    | The fallback locale determines the locale to use when the current one
+    | is not available. Change the value to correspond to any of the language
+    | folders that are provided through your application.
+    |
+    */
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 ];
