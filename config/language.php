@@ -52,7 +52,7 @@ return [
     | This option the language of carbon library.
     |
     */
-    'carbon' => true,
+    'carbon' => false,
 
     /*
     |--------------------------------------------------------------------------
