@@ -7,7 +7,6 @@ use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
 use App\Models\Faction;
-use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -34,17 +33,14 @@ abstract class MapContext
     use ListsEnemies;
     use RemembersToFile;
 
-    protected MappingVersion $mappingVersion;
-
     public function __construct(
         protected CacheServiceInterface       $cacheService,
         protected CoordinatesServiceInterface $coordinatesService,
         protected Model                       $context,
-        protected Floor                       $floor,
-        MappingVersion                        $mappingVersion,
+        protected Dungeon                     $dungeon,
+        protected MappingVersion              $mappingVersion,
         protected ?string                     $mapFacadeStyle = null,
     ) {
-        $this->mappingVersion = $mappingVersion;
     }
 
     abstract public function getType(): string;
@@ -82,7 +78,7 @@ abstract class MapContext
         $mapFacadeStyle = $this->getMapFacadeStyle();
 
         // Get the DungeonData
-        $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle);
+        $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle);
         $dungeonData    = $this->rememberLocal($dungeonDataKey, 86400, function () use (
             $dungeonDataKey,
             $mapFacadeStyle
@@ -93,24 +89,22 @@ abstract class MapContext
                     $useFacade = $mapFacadeStyle === 'facade';
 
                     /** @var Dungeon $dungeon */
-                    $dungeon = $this->floor->dungeon()
-                        ->with([
+                    $dungeon = $this->dungeon
+                        ->load([
                             'dungeonSpeedrunRequiredNpcs10Man',
                             'dungeonSpeedrunRequiredNpcs25Man',
                         ])
-                        ->without([
-                            'floors',
-                            'mapIcons',
-                            'enemyPacks',
-                        ])
-                        ->first();
+                        ->unsetRelation('floors')
+                        ->unsetRelation('mapIcons')
+                        ->unsetRelation('enemyPacks');
+
                     $dungeon->setRelation('floors', $this->getFloors());
 
                     $auras   = collect();
                     $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
 
                     return array_merge($dungeon->toArray(), $this->getEnemies(), [
-                        'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
+                        'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
                         'auras'                     => $auras,
                         'enemies'                   => $enemies,
                         'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
@@ -128,7 +122,7 @@ abstract class MapContext
 
         // Npc data (for localizations)
         $locale            = Auth::user()?->locale ?? 'en_US';
-        $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $locale);
+        $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $locale);
         $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
             $dungeonNpcDataKey,
             $mapFacadeStyle,
@@ -139,7 +133,7 @@ abstract class MapContext
                 $dungeonNpcDataKey,
                 function () use ($dungeonData, $locale) {
                     return [
-                        'npcs' => $this->floor->dungeon->npcs()
+                        'npcs' => $this->dungeon->npcs()
                             ->selectRaw('npcs.*, translations.translation as name')
                             ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
                                 $clause->on('translations.key', 'npcs.name')
@@ -226,7 +220,7 @@ abstract class MapContext
         [
             $npcMinHealth,
             $npcMaxHealth,
-        ] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
+        ] = $this->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
 
         // Prevent the values being exactly the same, which causes issues in the front end
         if ($npcMaxHealth <= $npcMinHealth) {
@@ -234,10 +228,11 @@ abstract class MapContext
         }
 
         return [
-            'environment'         => config('app.env'),
-            'type'                => $this->getType(),
-            'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
-            'floorId'             => $this->floor->id,
+            'environment'    => config('app.env'),
+            'type'           => $this->getType(),
+            'mappingVersion' => $this->mappingVersion->makeVisible(['gameVersion']),
+            // @TODO Verify if this is correct?
+            'floorId'             => $this->dungeon->floors->first()?->id,
             'teeming'             => $this->isTeeming(),
             'seasonalIndex'       => $this->getSeasonalIndex(),
             'dungeon'             => $dungeonData,

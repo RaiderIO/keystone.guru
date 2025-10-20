@@ -135,7 +135,7 @@ class DungeonHeatmapController extends Controller
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
@@ -229,7 +229,7 @@ class DungeonHeatmapController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion),
             'showHeatmapSearch'       => $heatmapActive,
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :

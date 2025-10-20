@@ -22,13 +22,12 @@ class MapContextLiveSession extends MapContext
     use DungeonRouteProperties;
 
     public function __construct(
-        CacheServiceInterface                   $cacheService,
-        CoordinatesServiceInterface             $coordinatesService,
-        private OverpulledEnemyServiceInterface $overpulledEnemyService,
-        LiveSession                             $liveSession,
-        Floor                                   $floor,
+        CacheServiceInterface                            $cacheService,
+        CoordinatesServiceInterface                      $coordinatesService,
+        private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
+        LiveSession                                      $liveSession,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $liveSession, $liveSession->dungeonRoute->dungeon, $liveSession->dungeonRoute->mappingVersion);
     }
 
     public function getType(): string
@@ -38,12 +37,12 @@ class MapContextLiveSession extends MapContext
 
     public function isTeeming(): bool
     {
-        return $this->context->dungeonroute->teeming;
+        return $this->context->dungeonRoute->teeming;
     }
 
     public function getSeasonalIndex(): int
     {
-        return $this->context->dungeonroute->seasonal_index;
+        return $this->context->dungeonRoute->seasonal_index;
     }
 
     public function getEnemies(): array
@@ -62,7 +61,7 @@ class MapContextLiveSession extends MapContext
 
         return array_merge(parent::getProperties(), $this->getDungeonRouteProperties(
             $this->coordinatesService,
-            $this->context->dungeonroute,
+            $this->context->dungeonRoute,
         ), [
             'liveSessionPublicKey' => $this->context->public_key,
             'expiresInSeconds'     => $this->context->getExpiresInSeconds(),

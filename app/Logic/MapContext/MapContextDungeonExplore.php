@@ -26,17 +26,16 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         CoordinatesServiceInterface      $coordinatesService,
         protected SeasonServiceInterface $seasonService,
         Dungeon                          $dungeon,
-        Floor                            $floor,
         MappingVersion                   $mappingVersion,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion);
     }
 
     public function getFloors(): Collection
     {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
 
-        return $this->floor->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
+        return $this->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
     }
 
     public function getType(): string

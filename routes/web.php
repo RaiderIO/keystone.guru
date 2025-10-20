@@ -52,6 +52,7 @@ use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\Floor\FloorController;
 use App\Http\Controllers\GameVersionController;
+use App\Http\Controllers\Javascript\JavascriptController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
@@ -77,6 +78,8 @@ Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group
 
 Route::middleware(['viewcachebuster', /*'language',*/ 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     Auth::routes();
+    
+    Route::get('js-gen/{version}/{dungeon}/route/{mappingVersion}_{facadeStyle}.js', (new JavascriptController())->mapContextDungeonRoute(...))->name('js.mapcontext.dungeon_route');
 
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));

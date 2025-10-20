@@ -118,7 +118,7 @@ class FloorController extends Controller
 
             return view('admin.floor.mapping', [
                 'floor'          => $floor,
-                'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $floor, $mappingVersion),
+                'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $mappingVersion),
                 'mappingVersion' => $mappingVersion,
             ]);
         } else {

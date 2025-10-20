@@ -28,10 +28,9 @@ abstract class MapContextMappingVersion extends MapContext
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
         Dungeon                     $dungeon,
-        Floor                       $floor,
         MappingVersion              $mappingVersion,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $dungeon, $dungeon, $mappingVersion);
     }
 
     public function isTeeming(): bool

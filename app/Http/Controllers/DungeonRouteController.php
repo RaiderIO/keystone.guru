@@ -148,7 +148,7 @@ class DungeonRouteController extends Controller
                 'current_report' => $currentReport,
                 'floor'          => $floor,
                 'parameters'     => $request->validated(),
-                'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+                'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute),
             ]);
         }
     }
@@ -247,7 +247,7 @@ class DungeonRouteController extends Controller
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
                 'parameters'   => $request->validated(),
-                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute),
             ]);
         }
     }
@@ -297,7 +297,7 @@ class DungeonRouteController extends Controller
         return view('dungeonroute.preview', [
             'dungeonroute'   => $dungeonroute,
             'floorId'        => $floor->id,
-            'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor, $mapFacadeStyle),
+            'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $mapFacadeStyle),
             'defaultZoom'    => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
             'parameters'     => $request->validated(),
@@ -506,7 +506,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute),
                 'floorIndex'   => $floorIndex,
                 'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
@@ -568,7 +568,7 @@ class DungeonRouteController extends Controller
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
+            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute),
             'parameters'   => $request->validated(),
             'embedOptions' => [
                 'style' => $style,
@@ -686,7 +686,6 @@ class DungeonRouteController extends Controller
             'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion(
                 $dungeonroute->mappingVersion->gameVersion,
             )->id,
-            'updated_at' => Carbon::now()->toDateTimeString(),
         ]);
 
         // Refresh the enemy forces

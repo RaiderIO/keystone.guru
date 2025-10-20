@@ -24,10 +24,9 @@ class MapContextDungeonRoute extends MapContext
         CacheServiceInterface       $cacheService,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        Floor                       $floor,
         ?string                     $mapFacadeStyle = null,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $floor, $dungeonRoute->mappingVersion, $mapFacadeStyle);
+        parent::__construct($cacheService, $coordinatesService, $dungeonRoute, $dungeonRoute->dungeon, $dungeonRoute->mappingVersion, $mapFacadeStyle);
     }
 
     public function getType(): string

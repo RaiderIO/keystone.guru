@@ -45,7 +45,7 @@ $dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
             'show' => [
                 'header' => true,
                 'controls' => [
-                    'live' => true,
+                    'liveSession' => true,
                     'pulls' => true,
                     'enemyInfo' => true,
                 ],

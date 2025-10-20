@@ -66,7 +66,7 @@ $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dung
 Broadcast::channel(sprintf('%s-route-edit.{dungeonRoute}', config('app.type')), $dungeonRouteChannelCallback);
 Broadcast::channel(
     sprintf('%s-live-session.{liveSession}', config('app.type')),
-    static fn(?User $user, LiveSession $liveSession) => $dungeonRouteChannelCallback($user, $liveSession->dungeonroute),
+    static fn(?User $user, LiveSession $liveSession) => $dungeonRouteChannelCallback($user, $liveSession->dungeonRoute),
 );
 Broadcast::channel(
     sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', config('app.type')),

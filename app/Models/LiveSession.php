@@ -19,8 +19,9 @@ use Illuminate\Support\Collection;
  * @property int                         $dungeon_route_id
  * @property int                         $user_id
  * @property string                      $public_key
+ *
  * @property User                        $user
- * @property DungeonRoute                $dungeonroute
+ * @property DungeonRoute                $dungeonRoute
  * @property Collection<OverpulledEnemy> $overpulledenemies
  * @property Carbon                      $expires_at
  *
@@ -38,7 +39,7 @@ class LiveSession extends Model
 
     protected $with = [
         'user',
-        'dungeonroute',
+        'dungeonRoute',
     ];
 
     use GeneratesPublicKey;
@@ -59,9 +60,9 @@ class LiveSession extends Model
     /**
      * Get the dungeon route that this live session is attached to.
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
-        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
     public function overpulledenemies(): HasMany

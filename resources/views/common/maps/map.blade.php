@@ -212,6 +212,14 @@ if ($isAdmin) {
             'selectedFloorId' => $floor->id,
             'isMobile' => $isMobile,
         ])
+    @elseif(isset($show['controls']['liveSession']) && $show['controls']['liveSession'])
+        @include('common.maps.controls.livesession', [
+            'isAdmin' => $isAdmin,
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
+            'selectedFloorId' => $floor->id,
+            'dungeonroute' => $dungeonroute,
+            'isMobile' => $isMobile,
+        ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
         @include('common.maps.controls.view', [
             'isAdmin' => $isAdmin,

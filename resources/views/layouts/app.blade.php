@@ -59,7 +59,6 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
 <html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @hasSection('linkpreview')
         @yield('linkpreview')
@@ -105,9 +104,9 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     @if($analytics)
         @include('common.thirdparty.analytics')
     @endif
-    @if(!$isLocal)
+{{--    @if(!$isLocal)--}}
         @include('common.thirdparty.rollbar.rollbar')
-    @endif
+{{--    @endif--}}
 </head>
 <body class="{{ $bodyClass }}">
 <div id="app">

@@ -19,7 +19,7 @@ trait DungeonRouteProperties
     {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
 
-        return $this->floor->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
+        return $this->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
     }
 
     /**
