@@ -35,7 +35,7 @@ jobs:
 
       - name: Build assets
         # NOTE: pass flags *after* `--` so they reach your npm script
-        run: npm run production -- --full=true --output_version=${{ env.GIT_VERSION }}
+        run: npm --output_version=${{ env.GIT_VERSION }} run production
 
       # ---- Choose ONE of the following credential steps ----
       # Option A: (Quick) Use access keys stored as GitHub Secrets:
