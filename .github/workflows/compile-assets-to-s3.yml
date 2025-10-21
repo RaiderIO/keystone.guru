@@ -1,0 +1,61 @@
+name: Build & Upload Frontend Assets
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '20'
+  S3_BUCKET: your-assets-bucket-name
+  AWS_REGION: eu-west-1
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Compute short git version
+        run: echo "GIT_VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Build assets
+        # NOTE: pass flags *after* `--` so they reach your npm script
+        run: npm run production -- --full=true --output_version=${{ env.GIT_VERSION }}
+
+      # ---- Choose ONE of the following credential steps ----
+      # Option A: (Quick) Use access keys stored as GitHub Secrets:
+      - name: Configure AWS (access keys)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS CLI v2
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload JS
+        run: |
+          aws s3 cp public/js s3://${{ env.S3_BUCKET }}/js/${{ env.GIT_VERSION }} \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable"
+      - name: Upload CSS
+        run: |
+          aws s3 cp public/css s3://${{ env.S3_BUCKET }}/css/${{ env.GIT_VERSION }} \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable"
