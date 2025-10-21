@@ -10,8 +10,6 @@ permissions:
 
 env:
   NODE_VERSION: '20'
-  S3_BUCKET: your-assets-bucket-name
-  AWS_REGION: eu-west-1
 
 jobs:
   build-and-upload:
