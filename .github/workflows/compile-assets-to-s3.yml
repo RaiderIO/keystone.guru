@@ -29,7 +29,7 @@ jobs:
         run: npm ci
 
       - name: Compute short git version
-        run: echo "GIT_VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: echo "GIT_VERSION=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build assets
         # NOTE: pass flags *after* `--` so they reach your npm script

@@ -56,7 +56,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
 }
 
 ?><!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" class="theme {{$theme}}">
+<html lang="{{ str_replace('_', '-', $lang ?? app()->getLocale()) }}" class="theme {{$theme}}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -76,13 +76,13 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     <title>{{ $title . config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset(sprintf('css/app-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/custom-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ ksgCompiledAsset(sprintf('css/app-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ ksgCompiledAsset(sprintf('css/custom-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     {{--    <link href="{{ asset(sprintf('css/lib-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">--}}
-    <link href="{{ asset(sprintf('css/theme-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/home-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/custom-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ asset(sprintf('css/assets-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ ksgCompiledAsset(sprintf('css/theme-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ ksgCompiledAsset(sprintf('css/home-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ ksgCompiledAsset(sprintf('css/custom-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link href="{{ ksgCompiledAsset(sprintf('css/assets-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="{{ ksgAssetImage('icon/favicon.ico') }}">
     @yield('head')
 
@@ -142,10 +142,10 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
 @endif
 
 <!-- Scripts -->
-<script src="{{ asset(sprintf('js/app-%s.js', $revision)) . $devCacheBuster }}"></script>
+<script src="{{ ksgCompiledAsset(sprintf('js/app-%s.js', $revision)) . $devCacheBuster }}"></script>
 <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
-<script src="{{ asset(sprintf('js/custom-%s.js', $revision)) .$devCacheBuster }}"></script>
-<script src="{{ asset(sprintf('js/lib-%s.js', $revision)) . $devCacheBuster }}"></script>
+<script src="{{ ksgCompiledAsset(sprintf('js/custom-%s.js', $revision)) .$devCacheBuster }}"></script>
+<script src="{{ ksgCompiledAsset(sprintf('js/lib-%s.js', $revision)) . $devCacheBuster }}"></script>
 @yield('scripts')
 <script type="application/javascript">
     $(function () {
