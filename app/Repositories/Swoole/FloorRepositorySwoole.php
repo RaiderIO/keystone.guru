@@ -9,7 +9,10 @@ use Illuminate\Support\Collection;
 
 class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySwooleInterface
 {
+    /** @var Collection<string, Floor> */
     private Collection $floorsByUiMapIdAndDungeonId;
+
+    /** @var Collection<int, Floor> */
     private Collection $defaultFloorByDungeonId;
 
     public function __construct()
@@ -28,15 +31,11 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
 
         $key = sprintf('%d-%s', $uiMapId, $dungeonId ?? 'null');
 
-        if ($this->floorsByUiMapIdAndDungeonId->has($key)) {
-            return $this->floorsByUiMapIdAndDungeonId->get($key);
+        if (!$this->floorsByUiMapIdAndDungeonId->has($key)) {
+            $this->floorsByUiMapIdAndDungeonId->put($key, parent::findByUiMapId($uiMapId, $dungeonId));
         }
 
-        $floor = parent::findByUiMapId($uiMapId, $dungeonId);
-
-        $this->floorsByUiMapIdAndDungeonId->put($key, $floor);
-
-        return $floor;
+        return $this->floorsByUiMapIdAndDungeonId->get($key);
     }
 
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor

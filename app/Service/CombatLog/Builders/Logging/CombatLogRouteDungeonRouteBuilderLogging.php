@@ -58,7 +58,7 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
 
     public function determineSpellsCastBetweenInvalidSpellIdBetween(int $spellId): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     public function determineSpellsCastBetweenInvalidSpellIdAfter(int $spellId): void
