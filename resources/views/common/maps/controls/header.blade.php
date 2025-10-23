@@ -24,9 +24,10 @@ use App\Models\User;
  * @var bool                $edit
  */
 
-$echo        ??= false;
-$mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
-$showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
+$echo               ??= false;
+$mayUserEdit        = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
+$showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
+$showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
@@ -181,7 +182,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
                 </li>
                 @auth
-                    @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
+                    @if( $showCreateRouteBtn )
                         @component('common.maps.controls.buttons.headerbutton')
                             <a href="{{ route('dungeonroute.claim', [
                                     'dungeon' => $dungeonroute->dungeon,
@@ -279,9 +280,11 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
         @endif
     @endauth
 
-    @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
-        @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
-    @endcomponent
+    @if($showCreateRouteBtn)
+        @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
+            @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
+        @endcomponent
+    @endif
 
     @component('common.general.modal', ['id' => 'simulate_modal', 'size' => 'xl'])
         @include('common.modal.simulate', ['dungeonroute' => $dungeonroute])

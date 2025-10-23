@@ -148,6 +148,7 @@ if ($isAdmin) {
     @parent
 
     @include('common.handlebars.groupsetup')
+    @include('common.handlebars.affixgroups')
 
     @include('common.general.statemanager', [
         'echo' => $echo,
