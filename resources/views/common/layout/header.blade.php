@@ -173,7 +173,7 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
                     </a>
                 </li>
                 @include('common.layout.nav.gameversions')
-{{--                @include('vendor.language.flags')--}}
+                @include('vendor.language.flags')
                 @include('common.layout.nav.user')
                 @include('common.layout.nav.themeswitch')
                 {{--                <li class="nav-item nav-item-divider"></li>--}}

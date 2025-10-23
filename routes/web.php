@@ -76,9 +76,9 @@ Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group
     Route::get('benchmark', (new SiteController())->benchmark(...));
 });
 
-Route::middleware(['viewcachebuster', /*'language',*/ 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
+Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     Auth::routes();
-    
+
     Route::get('js-gen/{version}/{dungeon}/route/{mappingVersion}_{facadeStyle}.js', (new JavascriptController())->mapContextDungeonRoute(...))->name('js.mapcontext.dungeon_route');
 
     // Catch for hard-coded /home route in RedirectsUsers.php

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\Language\SetLocaleFixed;
+
 return [
 
     /*
@@ -52,7 +54,7 @@ return [
     | This option the language of carbon library.
     |
     */
-    'carbon' => false,
+    'carbon' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +95,7 @@ return [
     | This option indicates the middleware to change language.
     |
     */
-    'middleware' => \Akaunting\Language\Middleware\SetLocale::class,
+    'middleware' => SetLocaleFixed::class,
 
     /*
     |--------------------------------------------------------------------------
