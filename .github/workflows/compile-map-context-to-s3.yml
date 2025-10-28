@@ -1,5 +1,6 @@
 # Creates MySQL and Redis services, runs migrations, seeds, and generates mapcontext JS
 # Then, the compiled JS files are uploaded to S3
+name: Generate & Upload Map Context
 
 on:
   push:
@@ -64,7 +65,7 @@ jobs:
           sudo apt-get install -y default-mysql-client redis-tools
 
       - name: Install PHP dependencies
-        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req=ext-lua
 
       - name: Prepare .env for CI
         run: |
@@ -104,6 +105,7 @@ jobs:
         run: |
           mkdir -p storage/mapcontext
           php artisan make:mapcontext --output=storage/mapcontext
+          php artisan make:mapcontextstatic --output=storage/mapcontext
           ls -la storage/mapcontext
 
       - name: Compute git version
