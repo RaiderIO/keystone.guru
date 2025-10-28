@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Logic\MapContext;
+namespace App\Logic\MapContext\Map;
 
 use App\Http\Controllers\Traits\ListsEnemies;
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
 use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;

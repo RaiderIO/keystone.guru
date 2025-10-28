@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Logic\MapContext;
+namespace App\Logic\MapContext\Map;
 
 use App\Http\Controllers\Traits\ListsEnemies;
+use App\Logic\MapContext\Map\MapContextMappingVersion;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;

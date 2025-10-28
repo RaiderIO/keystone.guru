@@ -109,7 +109,7 @@ class MapContextDungeonData implements Arrayable
         });
 
         // Npc data (for localizations)
-        $locale            = Auth::user()?->locale ?? 'en_US';
+        $locale            = app()->getLocale();
         $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $locale);
         $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
             $dungeonNpcDataKey,
@@ -156,51 +156,6 @@ class MapContextDungeonData implements Arrayable
             );
         });
 
-        $selectableSpellsKey = sprintf('selectable_spells_%s', $locale);
-        $selectableSpells    = $this->rememberLocal($selectableSpellsKey, 86400, function () use (
-            $selectableSpellsKey,
-            $locale
-        ) {
-            return $this->cacheService->remember(
-                $selectableSpellsKey,
-                function () use ($locale) {
-                    return Spell::where('selectable', true)
-                        ->selectRaw('spells.*, translations.translation as name')
-                        ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
-                            $clause->on('translations.key', 'spells.name')
-                                ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
-                        })
-                        ->get();
-                },
-                config('keystoneguru.cache.dungeonData.ttl'),
-            );
-        });
-
-        $characterClasses = CharacterClass::all();
-        $mapIconTypes     = MapIconType::all()->keyBy('id');
-        $staticKey        = 'static_data';
-        $static           = $this->rememberLocal($staticKey, 86400, function () use (
-            $staticKey,
-            $locale,
-            $characterClasses,
-            $mapIconTypes
-        ) {
-            return $this->cacheService->remember($staticKey, static fn() => [
-                'mapIconTypes'                      => $mapIconTypes->values(),
-                'unknownMapIconType'                => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
-                'awakenedObeliskGatewayMapIconType' => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
-                'classColors'                       => $characterClasses->pluck('color'),
-                'characterClasses'                  => $characterClasses,
-                'characterClassSpecializations'     => CharacterClassSpecialization::all(),
-                'raidMarkers'                       => RaidMarker::all(),
-                'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
-                'publishStates'                     => PublishedState::all(),
-                'gameVersions'                      => GameVersion::all(),
-            ], config('keystoneguru.cache.static_data.ttl'));
-        });
-
-        $static['selectableSpells'] = $selectableSpells;
-
         [
             $npcMinHealth,
             $npcMaxHealth,
@@ -214,7 +169,6 @@ class MapContextDungeonData implements Arrayable
         return [
             'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
             'dungeon'             => array_merge($dungeonData, $dungeonNpcData),
-            'static'              => $static,
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             'npcsMinHealth'       => $npcMinHealth,

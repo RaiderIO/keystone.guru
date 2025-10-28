@@ -1,6 +1,6 @@
 <?php
 
-use App\Logic\MapContext\MapContextMappingVersion;
+use App\Logic\MapContext\Map\MapContextMappingVersion;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 

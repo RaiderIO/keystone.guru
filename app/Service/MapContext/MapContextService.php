@@ -2,11 +2,12 @@
 
 namespace App\Service\MapContext;
 
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextLiveSession;
+use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Logic\MapContext\MapContextDungeonData;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextDungeonRoute;
-use App\Logic\MapContext\MapContextLiveSession;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
+use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession;
@@ -43,9 +44,18 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
+    public function createMapContextStaticData(
+        string $locale,
+    ): MapContextStaticData {
+        return new MapContextStaticData(
+            $this->cacheService,
+            $locale,
+        );
+    }
+
     public function createMapContextDungeonRoute(
         DungeonRoute $dungeonRoute,
-        string $mapFacadeStyle,
+        string       $mapFacadeStyle,
     ): MapContextDungeonRoute {
         return new MapContextDungeonRoute(
             $this->cacheService,
@@ -69,7 +79,7 @@ class MapContextService implements MapContextServiceInterface
     public function createMapContextDungeonExplore(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
-        string $mapFacadeStyle,
+        string         $mapFacadeStyle,
     ): MapContextDungeonExplore {
         return new MapContextDungeonExplore(
             $this->cacheService,

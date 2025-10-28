@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\MapContext;
 
+use App\Console\Commands\MapContext\Traits\SavesToFile;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
@@ -10,6 +11,8 @@ use Illuminate\Console\Command;
 
 class MakeMapContext extends Command
 {
+    use SavesToFile;
+
     /**
      * The name and signature of the console command.
      *
@@ -59,25 +62,15 @@ class MakeMapContext extends Command
                     $mapFacadeStyle,
                 );
 
-                $targetDir = sprintf(
-                    '%s/%s/mapcontext/data/%s/%d',
+                $result = $this->saveFileToMapContext(
                     $output,
-                    file_get_contents(base_path('version')),
-                    $dungeon->slug,
-                    $mappingVersion->id,
-                );
-
-                if (!is_dir($targetDir)) {
-                    mkdir($targetDir, 0777, true);
-                }
-
-                $result = file_put_contents(
                     sprintf(
-                        '%s/%s.js',
-                        $targetDir,
-                        $mapFacadeStyle,
+                        'data/%s/%d',
+                        $dungeon->slug,
+                        $mappingVersion->id,
                     ),
-                    sprintf('let mapContextDungeonData = %s;', json_encode($mapContext->toArray(), JSON_PRETTY_PRINT)),
+                    sprintf('%s.js', $mapFacadeStyle),
+                    sprintf('let mapContextDungeonData = %s;', json_encode($mapContext->toArray())),
                 );
 
                 if ($result === false) {

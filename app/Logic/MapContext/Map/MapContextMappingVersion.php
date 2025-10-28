@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\MapContext;
+namespace App\Logic\MapContext\Map;
 
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Mapping\MappingVersion;

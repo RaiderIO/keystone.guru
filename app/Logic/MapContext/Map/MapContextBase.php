@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\MapContext;
+namespace App\Logic\MapContext\Map;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\Dungeon;

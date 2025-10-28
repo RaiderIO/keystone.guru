@@ -1,10 +1,10 @@
 <?php
 
-use App\Logic\MapContext\MapContextBase;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\MapContextDungeonData;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextLiveSession;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextLiveSession;
+use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;

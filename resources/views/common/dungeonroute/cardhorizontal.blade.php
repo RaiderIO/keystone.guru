@@ -212,7 +212,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 $cache = true;
 
 if ($cache) {
-    $currentUserLocale = Auth::user()?->locale ?? 'en_US';
+    $currentUserLocale = app()->getLocale();
 // Echo the result of this function
     echo $cacheService->remember(
         DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),

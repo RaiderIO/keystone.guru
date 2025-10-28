@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\MapContext;
+namespace App\Logic\MapContext\Traits;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;

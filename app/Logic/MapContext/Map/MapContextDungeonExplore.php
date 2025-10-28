@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Logic\MapContext;
+namespace App\Logic\MapContext\Map;
 
 use App\Http\Controllers\Traits\ListsEnemies;
+use App\Logic\MapContext\Map\MapContextMappingVersion;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;

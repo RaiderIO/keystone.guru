@@ -1,6 +1,6 @@
 <?php
 
-use App\Logic\MapContext\MapContextBase;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;

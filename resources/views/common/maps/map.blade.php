@@ -1,10 +1,10 @@
 <?php
 
-use App\Logic\MapContext\MapContextBase;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\MapContextDungeonData;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextDungeonRoute;
-use App\Logic\MapContext\MapContextLiveSession;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -15,7 +15,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 
 /**
- * @var User              $user
+ * @var User|null         $user
  * @var MapContextBase    $mapContext
  * @var Dungeon           $dungeon
  * @var Floor             $floor
@@ -188,6 +188,11 @@ if ($isAdmin) {
                 'mapFacadeStyle' => $mapFacadeStyleForMappingVersion,
                 't' => time()
             ]) }}" type="application/javascript"></script>
+        <script src="{{ route('js.mapcontext.static', [
+                'locale' => app()->getLocale(),
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+
     @else
         <script
             src="{{ ksgCompiledAsset(

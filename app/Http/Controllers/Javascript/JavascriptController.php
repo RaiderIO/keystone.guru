@@ -29,4 +29,18 @@ class JavascriptController
 
         return sprintf('let mapContextDungeonData = %s;', json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT));
     }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function mapContextStaticData(
+        MapContextServiceInterface $mapContextService,
+        string                     $locale,
+    ) {
+        $mapContextStaticData = $mapContextService->createMapContextStaticData(
+            $locale,
+        );
+
+        return sprintf('let mapContextStaticData = %s;', json_encode($mapContextStaticData->toArray(), JSON_PRETTY_PRINT));
+    }
 }
