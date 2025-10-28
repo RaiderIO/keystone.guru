@@ -2,7 +2,7 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\Floor\Floor;
+use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -14,20 +14,19 @@ use App\Service\LiveSession\OverpulledEnemyServiceInterface;
  * @author  Wouter
  *
  * @since   13/05/2021
- *
- * @property LiveSession $context
  */
-class MapContextLiveSession extends MapContext
+class MapContextLiveSession extends MapContextDungeonRoute
 {
-    use DungeonRouteProperties;
+    use ListsEnemies;
 
     public function __construct(
         CacheServiceInterface                            $cacheService,
         CoordinatesServiceInterface                      $coordinatesService,
         private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
-        LiveSession                                      $liveSession,
+        private readonly LiveSession                     $liveSession,
+        string                                           $mapFacadeStyle,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $liveSession, $liveSession->dungeonRoute->dungeon, $liveSession->dungeonRoute->mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
     }
 
     public function getType(): string
@@ -35,37 +34,19 @@ class MapContextLiveSession extends MapContext
         return 'livesession';
     }
 
-    public function isTeeming(): bool
-    {
-        return $this->context->dungeonRoute->teeming;
-    }
-
-    public function getSeasonalIndex(): int
-    {
-        return $this->context->dungeonRoute->seasonal_index;
-    }
-
-    public function getEnemies(): array
-    {
-        return $this->listEnemies($this->cacheService, $this->coordinatesService, $this->mappingVersion, false) ?? [];
-    }
-
     public function getEchoChannelName(): string
     {
-        return sprintf('%s-live-session.%s', config('app.type'), $this->context->getRouteKey());
+        return sprintf('%s-live-session.%s', config('app.type'), $this->liveSession->getRouteKey());
     }
 
-    public function getProperties(): array
+    public function toArray(): array
     {
-        $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->context);
+        $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->liveSession);
 
-        return array_merge(parent::getProperties(), $this->getDungeonRouteProperties(
-            $this->coordinatesService,
-            $this->context->dungeonRoute,
-        ), [
-            'liveSessionPublicKey' => $this->context->public_key,
-            'expiresInSeconds'     => $this->context->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->context->getEnemies()->pluck('id'),
+        return array_merge(parent::toArray(), [
+            'liveSessionPublicKey' => $this->liveSession->public_key,
+            'expiresInSeconds'     => $this->liveSession->getExpiresInSeconds(),
+            'overpulledEnemies'    => $this->liveSession->getEnemies()->pluck('id'),
             'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
             'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
         ]);

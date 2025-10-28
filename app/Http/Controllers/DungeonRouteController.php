@@ -27,13 +27,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 use Teapot\StatusCode\Http;
-use Illuminate\Support\Facades\Gate;
 
 class DungeonRouteController extends Controller
 {
@@ -148,7 +147,7 @@ class DungeonRouteController extends Controller
                 'current_report' => $currentReport,
                 'floor'          => $floor,
                 'parameters'     => $request->validated(),
-                'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute),
+                'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
             ]);
         }
     }
@@ -247,7 +246,7 @@ class DungeonRouteController extends Controller
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
                 'parameters'   => $request->validated(),
-                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute),
+                'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
             ]);
         }
     }
@@ -296,7 +295,7 @@ class DungeonRouteController extends Controller
 
         return view('dungeonroute.preview', [
             'dungeonroute'   => $dungeonroute,
-            'floorId'        => $floor->id,
+            'floor' => $floor,
             'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $mapFacadeStyle),
             'defaultZoom'    => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
@@ -506,7 +505,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute),
+                'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
                 'floorIndex'   => $floorIndex,
                 'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
@@ -568,7 +567,7 @@ class DungeonRouteController extends Controller
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute),
+            'mapContext' => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
             'parameters'   => $request->validated(),
             'embedOptions' => [
                 'style' => $style,

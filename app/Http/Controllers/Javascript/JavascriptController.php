@@ -4,40 +4,29 @@ namespace App\Http\Controllers\Javascript;
 
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
-use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\MapContext\MapContextServiceInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class JavascriptController
 {
     use RemembersToFile;
 
-    public function mapContextDungeonRoute(
-        string                     $version,
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function mapContextDungeonData(
+        MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
         MappingVersion             $mappingVersion,
-        string                     $facadeStyle,
-        MapContextServiceInterface $mapContextService,
-        CacheServiceInterface      $cacheService,
+        string                     $mapFacadeStyle,
     ) {
-//        return $this->rememberLocal(
-//            sprintf('ks_mapcontext_dungeonroute_%s_%d_%d_%s', $version, $dungeon->id, $mappingVersion->id, $facadeStyle),
-//            86400,
-//            function () use (
-//                $dungeon,
-//                $mappingVersion,
-//                $facadeStyle,
-//                $mapContextService,
-//                $cacheService
-//            ) {
-//                return $mapContextService->createMapContextDungeonRoute(
-//                    $dungeon,
-//                    $mappingVersion,
-//                    $facadeStyle,
-//                );
-//            }
-//        );
+        $mapContextDungeonData = $mapContextService->createMapContextDungeonData(
+            $dungeon,
+            $mappingVersion,
+            $mapFacadeStyle,
+        );
 
-        return view('common.maps.context');
+        return sprintf('let mapContextDungeonData = %s;', json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT));
     }
 }

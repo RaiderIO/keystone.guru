@@ -12,6 +12,7 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -135,7 +136,7 @@ class DungeonHeatmapController extends Controller
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
@@ -229,7 +230,7 @@ class DungeonHeatmapController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion),
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
             'showHeatmapSearch'       => $heatmapActive,
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :

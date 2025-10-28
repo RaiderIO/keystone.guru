@@ -2,9 +2,10 @@
 
 namespace App\Logic\MapContext;
 
+use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\Dungeon;
-use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -16,26 +17,28 @@ use Illuminate\Support\Collection;
  * @author  Wouter
  *
  * @since   28/08/2023
- *
- * @property Dungeon $context
  */
 class MapContextDungeonExplore extends MapContextMappingVersion
 {
+    use ListsEnemies;
+
     public function __construct(
-        CacheServiceInterface            $cacheService,
-        CoordinatesServiceInterface      $coordinatesService,
-        protected SeasonServiceInterface $seasonService,
-        Dungeon                          $dungeon,
-        MappingVersion                   $mappingVersion,
+        CacheServiceInterface                   $cacheService,
+        CoordinatesServiceInterface             $coordinatesService,
+        private readonly SeasonServiceInterface $seasonService,
+        Dungeon                                 $dungeon,
+        MappingVersion                          $mappingVersion,
+        string                                  $mapFacadeStyle,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion);
+        parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
     }
 
-    public function getFloors(): Collection
+    public function getVisibleFloors(): array
     {
-        $useFacade = $this->getMapFacadeStyle() === 'facade';
-
-        return $this->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
+        return $this->dungeon->floorsForMapFacade(
+            $this->mappingVersion,
+            $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE,
+        )->active()->get()->toArray();
     }
 
     public function getType(): string
@@ -45,16 +48,22 @@ class MapContextDungeonExplore extends MapContextMappingVersion
 
     public function getEchoChannelName(): string
     {
-        return sprintf('%s-dungeon-explore.%s', config('app.type'), $this->context->getRouteKey());
+        return sprintf('%s-dungeon-explore.%s', config('app.type'), $this->dungeon->getRouteKey());
     }
 
-    public function getProperties(): array
+    public function getEnemies(): ?array
     {
-        $activeSeason = $this->context->getActiveSeason($this->seasonService);
+        // Do not override the enemies
+        return null;
+    }
 
-        return array_merge([
+    public function toArray(): array
+    {
+        $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);
+
+        return array_merge(parent::toArray(), [
             'featuredAffixes'   => $activeSeason?->getFeaturedAffixes() ?? [],
             'seasonStartPeriod' => $activeSeason?->start_period ?? 0,
-        ], parent::getProperties());
+        ]);
     }
 }

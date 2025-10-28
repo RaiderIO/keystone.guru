@@ -2,10 +2,10 @@
 
 namespace App\Logic\MapContext;
 
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
+use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\GameVersion\GameVersion;
 use App\Models\MapIconType;
@@ -14,12 +14,10 @@ use App\Models\Npc\Npc;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell\Spell;
-use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use DragonCode\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
@@ -28,93 +26,83 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
-abstract class MapContext
+class MapContextDungeonData implements Arrayable
 {
-    use ListsEnemies;
     use RemembersToFile;
 
     public function __construct(
         protected CacheServiceInterface       $cacheService,
         protected CoordinatesServiceInterface $coordinatesService,
-        protected Model                       $context,
         protected Dungeon                     $dungeon,
         protected MappingVersion              $mappingVersion,
-        protected ?string                     $mapFacadeStyle = null,
+        protected string                      $mapFacadeStyle,
     ) {
-    }
-
-    abstract public function getType(): string;
-
-    abstract public function isTeeming(): bool;
-
-    abstract public function getSeasonalIndex(): int;
-
-    abstract public function getFloors(): Collection;
-
-    abstract public function getEnemies(): array;
-
-    abstract public function getEchoChannelName(): string;
-
-    public function onlyLoadInUseNpcs(): bool
-    {
-        return true;
-    }
-
-    public function getMapFacadeStyle(): string
-    {
-        return $this->mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle();
-    }
-
-    public function getContext(): Model
-    {
-        return $this->context;
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function getProperties(): array
+    public function toArray(): array
     {
-        $mapFacadeStyle = $this->getMapFacadeStyle();
+        $this->mappingVersion->load([
+            'floorUnions',
+            'floorUnionAreas',
+            'mountableAreas',
+        ]);
 
         // Get the DungeonData
-        $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle);
+        $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $this->mapFacadeStyle);
         $dungeonData    = $this->rememberLocal($dungeonDataKey, 86400, function () use (
-            $dungeonDataKey,
-            $mapFacadeStyle
+            $dungeonDataKey
         ) {
             return $this->cacheService->remember(
                 $dungeonDataKey,
-                function () use ($mapFacadeStyle) {
-                    $useFacade = $mapFacadeStyle === 'facade';
+                function () {
+                    $useFacade = $this->mapFacadeStyle === 'facade';
 
-                    /** @var Dungeon $dungeon */
                     $dungeon = $this->dungeon
                         ->load([
                             'dungeonSpeedrunRequiredNpcs10Man',
                             'dungeonSpeedrunRequiredNpcs25Man',
                         ])
-                        ->unsetRelation('floors')
                         ->unsetRelation('mapIcons')
-                        ->unsetRelation('enemyPacks');
+                        ->unsetRelation('enemyPacks')
+                        ->setHidden(['floors']);
 
-                    $dungeon->setRelation('floors', $this->getFloors());
+                    $auras = collect();
 
-                    $auras   = collect();
-                    $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
+                    /** @var Collection<Enemy> $enemies */
+                    $enemies = $this->mappingVersion->enemies()
+                        ->with('npc', 'npc.type', 'npc.class', 'floor')
+                        ->get()
+                        ->makeHidden(['enemy_active_auras']);
 
-                    return array_merge($dungeon->toArray(), $this->getEnemies(), [
-                        'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
-                        'auras'                     => $auras,
-                        'enemies'                   => $enemies,
-                        'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
-                        'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
-                        'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
-                        'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
-                        'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
-                        'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
-                        'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
-                    ]);
+                    if ($this->mappingVersion->facade_enabled && $useFacade) {
+                        foreach ($enemies as $enemy) {
+                            $convertedLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                                $this->mappingVersion,
+                                $enemy->getLatLng(),
+                            );
+
+                            $enemy->setLatLng($convertedLatLng);
+                        }
+                    }
+
+                    return array_merge(
+                        $dungeon->toArray(),
+                        [
+                            'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
+                            'auras'                     => $auras,
+                            'enemies'                   => $enemies,
+                            'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
+                            'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
+                            'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
+                            'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
+                            'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
+                            'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
+                            'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
+                        ],
+                    );
                 },
                 config('keystoneguru.cache.dungeonData.ttl'),
             );
@@ -125,7 +113,6 @@ abstract class MapContext
         $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $locale);
         $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
             $dungeonNpcDataKey,
-            $mapFacadeStyle,
             $locale,
             $dungeonData
         ) {
@@ -139,9 +126,8 @@ abstract class MapContext
                                 $clause->on('translations.key', 'npcs.name')
                                     ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
                             })
-                            ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($dungeonData) {
-                                $query->whereIn('npcs.id', $dungeonData['enemies']->pluck('npc_id')->unique());
-                            })->with([
+                            ->with([
+                                // @TODO This should just return IDs, and Spells should be a separate list of all spells found in the dungeon (cast by enemies)
                                 'spells' => fn(BelongsToMany $belongsToMany) => $belongsToMany
                                     ->selectRaw('spells.*, translations.translation as name')
                                     ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
@@ -190,8 +176,6 @@ abstract class MapContext
             );
         });
 
-        $dungeonData['npcs'] = $dungeonNpcData['npcs'];
-
         $characterClasses = CharacterClass::all();
         $mapIconTypes     = MapIconType::all()->keyBy('id');
         $staticKey        = 'static_data';
@@ -228,25 +212,13 @@ abstract class MapContext
         }
 
         return [
-            'environment'    => config('app.env'),
-            'type'           => $this->getType(),
-            'mappingVersion' => $this->mappingVersion->makeVisible(['gameVersion']),
-            // @TODO Verify if this is correct?
-            'floorId'             => $this->dungeon->floors->first()?->id,
-            'teeming'             => $this->isTeeming(),
-            'seasonalIndex'       => $this->getSeasonalIndex(),
-            'dungeon'             => $dungeonData,
+            'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
+            'dungeon'             => array_merge($dungeonData, $dungeonNpcData),
             'static'              => $static,
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             'npcsMinHealth'       => $npcMinHealth,
             'npcsMaxHealth'       => $npcMaxHealth,
-
-            'keystoneScalingFactor' => config('keystoneguru.keystone.scaling_factor'),
-
-            'echoChannelName' => $this->getEchoChannelName(),
-            // May be null
-            'userPublicKey' => Auth::user()?->public_key,
         ];
     }
 }

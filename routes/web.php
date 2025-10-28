@@ -79,7 +79,8 @@ Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group
 Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     Auth::routes();
 
-    Route::get('js-gen/{version}/{dungeon}/route/{mappingVersion}_{facadeStyle}.js', (new JavascriptController())->mapContextDungeonRoute(...))->name('js.mapcontext.dungeon_route');
+    /** Local usage only */
+    Route::get('js-gen/{dungeon}/data/{mappingVersion}/{mapFacadeStyle}.js', (new JavascriptController())->mapContextDungeonData(...))->name('js.mapcontext.dungeon_data');
 
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));

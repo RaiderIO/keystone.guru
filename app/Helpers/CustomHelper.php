@@ -108,11 +108,13 @@ function ksgAsset(string $path): string
  */
 function ksgCompiledAsset(string $path): string
 {
-    if(app()->environment('local')) {
+    if (app()->environment('local')) {
         return asset($path);
     }
 
-    return sprintf('%s/%s', config('keystoneguru.assets_base_url'), $path);
+    $revision = trim(file_get_contents(base_path('version')));
+
+    return sprintf('%s/compiled/%s/%s', config('keystoneguru.assets_base_url'), $revision, $path);
 }
 
 function ksgAssetImage(string $path = ''): string

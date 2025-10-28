@@ -7,6 +7,7 @@
  * @property {boolean} readonly
  * @property {boolean} sandbox
  * @property {String} defaultEnemyVisualType
+ * @property {String} defaultHeatmapShowTooltips
  * @property {String} defaultUnkilledEnemyOpacity
  * @property {String} defaultUnkilledImportantEnemyOpacity
  * @property {String} defaultEnemyAggressivenessBorder
@@ -22,6 +23,7 @@
  * @property {Object} dungeonroute
  * @property {String} assetsBaseUrl
  * @property {String} tilesBaseUrl
+ * @property {Number} floorId
  * @property {DungeonMapOptionsParamters} parameters
  */
 
@@ -682,9 +684,9 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
-        let dungeonData = getState().getMapContext().getDungeon();
-        for (let i = 0; i < dungeonData.floors.length; i++) {
-            let floor = dungeonData.floors[i];
+        let floors = getState().getMapContext().getVisibleFloors();
+        for (let i = 0; i < floors.length; i++) {
+            let floor = floors[i];
             if (floor.id === floorId) {
                 result = floor;
                 break;

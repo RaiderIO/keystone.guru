@@ -1,6 +1,7 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
+use App\Logic\MapContext\MapContextBase;
+use App\Logic\MapContext\MapContextDungeonData;
 use App\Logic\MapContext\MapContextDungeonExplore;
 use App\Logic\MapContext\MapContextLiveSession;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
@@ -15,7 +16,7 @@ use App\Models\User;
 /**
  * @var string              $theme
  * @var bool                $isUserAdmin
- * @var MapContext          $mapContext
+ * @var MapContextBase      $mapContext
  * @var Dungeon             $dungeon
  * @var Floor               $floor
  * @var DungeonRoute|null   $dungeonroute

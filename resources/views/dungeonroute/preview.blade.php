@@ -1,10 +1,11 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
 
 /**
  * @var DungeonRoute $dungeonroute
- * @var int          $floorId
+ * @var Floor        $floor
  * @var float        $defaultZoom
  * @var string       $mapFacadeStyle
  * @var array        $parameters
@@ -44,7 +45,7 @@ use App\Models\DungeonRoute\DungeonRoute;
         'noUI' => true,
         'defaultZoom' => $defaultZoom,
         'mapFacadeStyle' => $mapFacadeStyle,
-        'floorId' => $floorId,
+        'floor' => $floor,
         'showAttribution' => false,
         'zoomToContents' => false,
         'parameters' => $parameters,

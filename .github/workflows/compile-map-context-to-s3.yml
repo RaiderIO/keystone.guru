@@ -1,0 +1,130 @@
+# Creates MySQL and Redis services, runs migrations, seeds, and generates mapcontext JS
+# Then, the compiled JS files are uploaded to S3
+
+on:
+  push:
+    branches:
+      - feature/3006-map-context-to-external-files
+
+permissions:
+  contents: read
+
+jobs:
+  compile-map-context-to-s3:
+    name: Generate Map Context JS & Upload to S3
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: app
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: laravel
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping || exit 1"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo_mysql, bcmath, gd
+          coverage: none
+
+      - name: Cache composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install system clients (mysql + redis CLI)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-mysql-client redis-tools
+
+      - name: Install PHP dependencies
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+      - name: Prepare .env for CI
+        run: |
+          cp .env.example .env || true
+          php -r "file_exists('.env') || copy('.env.example','.env');"
+          php artisan key:generate --force
+          {
+            echo "APP_ENV=production"
+            echo "APP_DEBUG=false"
+            echo "DB_CONNECTION=mysql"
+            echo "DB_HOST=mysql"
+            echo "DB_PORT=3306"
+            echo "DB_DATABASE=app"
+            echo "DB_USERNAME=laravel"
+            echo "DB_PASSWORD=laravel"
+            echo "REDIS_HOST=redis"
+            echo "REDIS_PORT=6379"
+            # add anything else your app expects here (QUEUE_CONNECTION, CACHE_DRIVER, etc.)
+          } >> .env
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..60}; do
+            if mysqladmin ping -h"mysql" -uroot -proot --silent; then
+              echo "MySQL is up"; break
+            fi
+            echo "Waiting for MySQL... ($i/60)"; sleep 2
+          done
+
+      - name: Migrate & seed
+        run: |
+          ./migrate.sh
+          ./refresh_db_seed.sh
+
+      - name: Generate Map Context JS
+        # Replace with your real command/options/output dir
+        run: |
+          mkdir -p storage/mapcontext
+          php artisan make:mapcontext --output=storage/mapcontext
+          ls -la storage/mapcontext
+
+      - name: Compute git version
+        run: echo "GIT_VERSION=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      # Access keys (quick start)
+      - name: Configure AWS (keys)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload Map Context JS files
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
+          aws s3 cp storage/mapcontext "s3://${S3_BUCKET}/compiled" \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress

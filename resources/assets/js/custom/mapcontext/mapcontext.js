@@ -218,14 +218,6 @@ class MapContext extends Signalable {
     }
 
     /**
-     *
-     * @returns {null}
-     */
-    getInitialFloorId() {
-        return this._options.floorId;
-    }
-
-    /**
      * Finds a floor by id.
      * @param index {Number}
      * @returns {*}|bool
@@ -234,8 +226,8 @@ class MapContext extends Signalable {
         console.assert(this instanceof MapContext, 'this is not a MapContext', this);
         let result = false;
 
-        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
-            let floor = this._options.dungeon.floors[i];
+        for (let i = 0; i < this._options.visibleFloors.length; i++) {
+            let floor = this._options.visibleFloors[i];
             if (floor.index === index) {
                 result = floor;
                 break;
@@ -254,8 +246,8 @@ class MapContext extends Signalable {
         console.assert(this instanceof MapContext, 'this is not a MapContext', this);
         let result = false;
 
-        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
-            let floor = this._options.dungeon.floors[i];
+        for (let i = 0; i < this._options.visibleFloors.length; i++) {
+            let floor = this._options.visibleFloors[i];
             if (floor.id === floorId) {
                 result = floor;
                 break;
@@ -275,12 +267,12 @@ class MapContext extends Signalable {
         }
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
-        let dungeonData = this.getDungeon();
         let selectFloors = [];
+        let visibleFloors = this.getVisibleFloors();
 
-        for (let i in dungeonData.floors) {
-            if (dungeonData.floors.hasOwnProperty(i)) {
-                let floor = dungeonData.floors[i];
+        for (let i in visibleFloors) {
+            if (visibleFloors.hasOwnProperty(i)) {
+                let floor = visibleFloors[i];
                 if (floor.id !== excludeFloorId) {
                     selectFloors.push({
                         id: floor.id,
@@ -298,10 +290,10 @@ class MapContext extends Signalable {
      * @returns {*}|bool
      */
     getDefaultFloor() {
-        let result = this._options.dungeon.floors[0];
+        let result = this._options.visibleFloors[0];
 
-        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
-            let floor = this._options.dungeon.floors[i];
+        for (let i = 0; i < this._options.visibleFloors.length; i++) {
+            let floor = this._options.visibleFloors[i];
             if (floor.default) {
                 result = floor;
                 break;
@@ -339,6 +331,14 @@ class MapContext extends Signalable {
             (ingameMapSizeX * factorLng) + floor.ingame_min_x,
             (ingameMapSizeY * factorLat) + floor.ingame_min_y
         ];
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
+    getVisibleFloors() {
+        return this._options.visibleFloors;
     }
 
     /**
@@ -527,14 +527,6 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @returns {Number}
-     */
-    getKeystoneScalingFactor() {
-        return this._options.keystoneScalingFactor;
-    }
-
-    /**
-     *
      * @returns {[]}
      */
     getAuras() {
@@ -564,14 +556,6 @@ class MapContext extends Signalable {
      */
     getEchoChannelName() {
         return this._options.echoChannelName;
-    }
-
-    /**
-     *
-     * @returns {Number|null}
-     */
-    getUserPublicKey() {
-        return this._options.userPublicKey;
     }
 
     /**
