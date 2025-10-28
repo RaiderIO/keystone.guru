@@ -67,11 +67,13 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req=ext-lua
 
+      - name: Compute git version and save to file
+        run: echo "$(git rev-parse HEAD)" >> version
+
       - name: Prepare .env for CI
         run: |
           cp .env.example .env || true
           php -r "file_exists('.env') || copy('.env.example','.env');"
-          php artisan key:generate --force
           {
             echo "APP_ENV=production"
             echo "APP_DEBUG=false"
@@ -85,6 +87,7 @@ jobs:
             echo "REDIS_PORT=6379"
             # add anything else your app expects here (QUEUE_CONNECTION, CACHE_DRIVER, etc.)
           } >> .env
+          php artisan key:generate --force
 
       - name: Wait for MySQL
         run: |
