@@ -46,7 +46,7 @@ jobs:
       redis:
         image: redis:7-alpine
         ports:
-          - 6380:6379
+          - 6379:6379
         options: >-
           --health-cmd="redis-cli ping || exit 1"
           --health-interval=5s
@@ -86,15 +86,17 @@ jobs:
 
       - name: Prepare .env for CI
         run: |
-          cp .env.docker.example .env || true
-          php -r "file_exists('.env') || copy('.env.docker.example','.env');"
+          cp .env.example .env || true
+          php -r "file_exists('.env') || copy('.env.example','.env');"
           {
             echo "APP_ENV=production"
             echo "APP_DEBUG=false"
             echo "DB_MIGRATION_USERNAME=root"
             echo "DB_MIGRATION_PASSWORD=root"
+            echo "DB_COMBATLOG_PORT=3307"
             echo "DB_COMBATLOG_USERNAME=root"
             echo "DB_COMBATLOG_PASSWORD=root"
+            echo "REDIS_PORT=6379"
             # add anything else your app expects here (QUEUE_CONNECTION, CACHE_DRIVER, etc.)
           } >> .env
           php artisan key:generate --force
