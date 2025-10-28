@@ -15,15 +15,29 @@ jobs:
     name: Generate Map Context JS & Upload to S3
     runs-on: ubuntu-latest
     services:
-      mysql:
+      db:
         image: mysql:8.0
         ports:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: app
-          MYSQL_USER: laravel
-          MYSQL_PASSWORD: laravel
+          MYSQL_DATABASE: keystone.guru.dev
+          MYSQL_USER: homestead
+          MYSQL_PASSWORD: secret
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+      db-combatlog:
+        image: mysql:8.0
+        ports:
+          - 3307:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: keystone.guru.combatlog
+          MYSQL_USER: homestead
+          MYSQL_PASSWORD: secret
         options: >-
           --health-cmd="mysqladmin ping -h localhost -proot"
           --health-interval=10s
@@ -77,26 +91,21 @@ jobs:
           {
             echo "APP_ENV=production"
             echo "APP_DEBUG=false"
-            echo "DB_CONNECTION=mysql"
-            echo "DB_HOST=mysql"
-            echo "DB_PORT=3306"
-            echo "DB_DATABASE=app"
-            echo "DB_USERNAME=laravel"
-            echo "DB_PASSWORD=laravel"
-            echo "REDIS_HOST=redis"
+            echo "DB_MIGRATION_USERNAME=root"
+            echo "DB_MIGRATION_PASSWORD=root"
             echo "REDIS_PORT=6379"
             # add anything else your app expects here (QUEUE_CONNECTION, CACHE_DRIVER, etc.)
           } >> .env
           php artisan key:generate --force
 
-      - name: Wait for MySQL
-        run: |
-          for i in {1..60}; do
-            if mysqladmin ping -h"mysql" -uroot -proot --silent; then
-              echo "MySQL is up"; break
-            fi
-            echo "Waiting for MySQL... ($i/60)"; sleep 2
-          done
+#      - name: Wait for MySQL
+#        run: |
+#          for i in {1..20}; do
+#            if mysqladmin ping -h"mysql" -uroot -proot --silent; then
+#              echo "MySQL is up"; break
+#            fi
+#            echo "Waiting for MySQL... ($i/60)"; sleep 2
+#          done
 
       - name: Migrate & seed
         run: |
