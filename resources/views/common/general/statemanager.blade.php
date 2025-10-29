@@ -14,9 +14,10 @@ use Illuminate\Support\Collection;
     _stateManager = new StateManager();
     /**
      * mapContextStaticData is defined in an external file, loaded per locale
-     * mapContextDungeonData is defined in an external file, loaded per mapping version
+     * mapContextDungeonData is defined in an external file, loaded per dungeon, locale
+     * mapContextMappingVersionData is defined in an external file, loaded per mapping version
      * */
-    _stateManager.setMapContext($.extend({}, mapContextStaticData, mapContextDungeonData, {!! new Collection($mapContext->toArray()) !!}));
+    _stateManager.setMapContext($.extend({}, mapContextStaticData, mapContextDungeonData, mapContextMappingVersionData, {!! new Collection($mapContext->toArray()) !!}));
     _stateManager.setPatreonBenefits({!! $patreonBenefits !!});
     @isset($userData)
     _stateManager.setUserData({!! $userData !!});

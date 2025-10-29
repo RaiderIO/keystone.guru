@@ -1,6 +1,7 @@
 <?php
 
-use App\Logic\MapContext\MapContextDungeonData;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -12,7 +13,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                      $dungeon
  * @var Floor                        $floor
  * @var string                       $title
- * @var MapContextDungeonData        $mapContext
+ * @var MapContextBase               $mapContext
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
  * @var int                          $itemLevelMin

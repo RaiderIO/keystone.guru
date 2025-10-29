@@ -7,7 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use DragonCode\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Arrayable;
 
 abstract class MapContextBase implements Arrayable
 {

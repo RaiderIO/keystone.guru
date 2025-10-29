@@ -1,7 +1,7 @@
 <?php
 
+use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
-use App\Logic\MapContext\MapContextDungeonData;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
 use App\Logic\MapContext\Map\MapContextLiveSession;
@@ -184,6 +184,11 @@ if ($isAdmin) {
     @if(config('app.type') === 'local')
         <script src="{{ route('js.mapcontext.dungeon_data', [
                 'dungeon' => $dungeon,
+                'locale' => app()->getLocale(),
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+        <script src="{{ route('js.mapcontext.mapping_version_data', [
+                'dungeon' => $dungeon,
                 'mappingVersion' => $mappingVersion,
                 'mapFacadeStyle' => $mapFacadeStyleForMappingVersion,
                 't' => time()
@@ -196,10 +201,23 @@ if ($isAdmin) {
     @else
         <script
             src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/data/%s/%s.js',
+                        $dungeon->slug,
+                        app()->getLocale()
+                    )) }}"
+            type="application/javascript"></script>
+        <script
+            src="{{ ksgCompiledAsset(
                     sprintf('mapcontext/data/%s/%d/%s.js',
                         $dungeon->slug,
                         $mappingVersion->id,
                         $mapFacadeStyleForMappingVersion
+                    )) }}"
+            type="application/javascript"></script>
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/static/%s.js',
+                        app()->getLocale()
                     )) }}"
             type="application/javascript"></script>
     @endif

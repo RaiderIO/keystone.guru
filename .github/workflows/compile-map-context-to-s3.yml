@@ -119,8 +119,9 @@ jobs:
         # Replace with your real command/options/output dir
         run: |
           mkdir -p storage/mapcontext
-          php artisan make:mapcontext --output=storage/mapcontext
           php artisan make:mapcontextstatic --output=storage/mapcontext
+          php artisan make:mapcontextdungeon --output=storage/mapcontext
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext
           ls -la storage/mapcontext
 
       - name: Compute git version

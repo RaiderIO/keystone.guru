@@ -1,7 +1,7 @@
 <?php
 
+use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
-use App\Logic\MapContext\MapContextDungeonData;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Logic\MapContext\Map\MapContextMappingVersionEdit;

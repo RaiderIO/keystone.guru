@@ -8,8 +8,9 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
-class MakeMapContext extends Command
+class MakeMapContextMappingVersion extends Command
 {
     use SavesToFile;
 
@@ -18,14 +19,14 @@ class MakeMapContext extends Command
      *
      * @var string
      */
-    protected $signature = 'make:mapcontext {--output= : The output folder to place the generated map context in}';
+    protected $signature = 'make:mapcontextmappingversion {--output= : The output folder to place the generated map context in}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generates map context for a specific mapping version';
+    protected $description = 'Generates map context for all mapping versions';
 
     /**
      * Execute the console command.
@@ -35,9 +36,10 @@ class MakeMapContext extends Command
     ): int {
         $output = $this->option('output') ?? storage_path('mapcontext');
 
+        /** @var Collection<Dungeon> $dungeonsById */
         $dungeonsById    = Dungeon::all()->keyBy('id');
+        /** @var Collection<MappingVersion> $mappingVersions */
         $mappingVersions = MappingVersion::all();
-//        $mappingVersions = MappingVersion::where('id', 605)->get();
         $mapFacadeStyles = User::MAP_FACADE_STYLE_ALL;
 
         $bar = $this->output->createProgressBar($mappingVersions->count() * count($mapFacadeStyles));
@@ -55,7 +57,7 @@ class MakeMapContext extends Command
                     continue;
                 }
 
-                $mapContext = $mapContextService->createMapContextDungeonData(
+                $mapContext = $mapContextService->createMapContextMappingVersionData(
                 // Can't do $mappingVersion->dungeon because of infinite loop
                     $dungeon,
                     $mappingVersion,
@@ -70,7 +72,7 @@ class MakeMapContext extends Command
                         $mappingVersion->id,
                     ),
                     sprintf('%s.js', $mapFacadeStyle),
-                    sprintf('let mapContextDungeonData = %s;', json_encode($mapContext->toArray())),
+                    sprintf('let mapContextMappingVersionData = %s;', json_encode($mapContext->toArray())),
                 );
 
                 if ($result === false) {

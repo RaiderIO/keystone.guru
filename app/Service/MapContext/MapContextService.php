@@ -7,6 +7,7 @@ use App\Logic\MapContext\Map\MapContextDungeonRoute;
 use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Logic\MapContext\MapContextDungeonData;
+use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -30,12 +31,12 @@ class MapContextService implements MapContextServiceInterface
     ) {
     }
 
-    public function createMapContextDungeonData(
+    public function createMapContextMappingVersionData(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         string         $mapFacadeStyle,
-    ): MapContextDungeonData {
-        return new MapContextDungeonData(
+    ): MapContextMappingVersionData {
+        return new MapContextMappingVersionData(
             $this->cacheService,
             $this->coordinatesService,
             $dungeon,
@@ -43,6 +44,17 @@ class MapContextService implements MapContextServiceInterface
             $mapFacadeStyle,
         );
     }
+
+    public function createMapContextDungeonData(Dungeon $dungeon, string $locale): MapContextDungeonData
+    {
+        return new MapContextDungeonData(
+            $this->cacheService,
+            $this->coordinatesService,
+            $dungeon,
+            $locale,
+        );
+    }
+
 
     public function createMapContextStaticData(
         string $locale,

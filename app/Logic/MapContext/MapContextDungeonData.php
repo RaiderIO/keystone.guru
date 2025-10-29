@@ -2,27 +2,14 @@
 
 namespace App\Logic\MapContext;
 
-use App\Models\CharacterClass;
-use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
-use App\Models\Enemy;
-use App\Models\Faction;
-use App\Models\GameVersion\GameVersion;
-use App\Models\MapIconType;
-use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\PublishedState;
-use App\Models\RaidMarker;
 use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use DragonCode\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -34,8 +21,7 @@ class MapContextDungeonData implements Arrayable
         protected CacheServiceInterface       $cacheService,
         protected CoordinatesServiceInterface $coordinatesService,
         protected Dungeon                     $dungeon,
-        protected MappingVersion              $mappingVersion,
-        protected string                      $mapFacadeStyle,
+        protected string                      $locale,
     ) {
     }
 
@@ -44,135 +30,98 @@ class MapContextDungeonData implements Arrayable
      */
     public function toArray(): array
     {
-        $this->mappingVersion->load([
-            'floorUnions',
-            'floorUnionAreas',
-            'mountableAreas',
-        ]);
-
-        // Get the DungeonData
-        $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $this->mapFacadeStyle);
-        $dungeonData    = $this->rememberLocal($dungeonDataKey, 86400, function () use (
-            $dungeonDataKey
-        ) {
-            return $this->cacheService->remember(
-                $dungeonDataKey,
-                function () {
-                    $useFacade = $this->mapFacadeStyle === 'facade';
-
-                    $dungeon = $this->dungeon
-                        ->load([
-                            'dungeonSpeedrunRequiredNpcs10Man',
-                            'dungeonSpeedrunRequiredNpcs25Man',
-                        ])
-                        ->unsetRelation('mapIcons')
-                        ->unsetRelation('enemyPacks')
-                        ->setHidden(['floors']);
-
-                    $auras = collect();
-
-                    /** @var Collection<Enemy> $enemies */
-                    $enemies = $this->mappingVersion->enemies()
-                        ->with('npc', 'npc.type', 'npc.class', 'floor')
-                        ->get()
-                        ->makeHidden(['enemy_active_auras']);
-
-                    if ($this->mappingVersion->facade_enabled && $useFacade) {
-                        foreach ($enemies as $enemy) {
-                            $convertedLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                                $this->mappingVersion,
-                                $enemy->getLatLng(),
-                            );
-
-                            $enemy->setLatLng($convertedLatLng);
-                        }
-                    }
-
-                    return array_merge(
-                        $dungeon->toArray(),
-                        [
-                            'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
-                            'auras'                     => $auras,
-                            'enemies'                   => $enemies,
-                            'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
-                            'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
-                            'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
-                            'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
-                            'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
-                            'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
-                            'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
-                        ],
-                    );
-                },
-                config('keystoneguru.cache.dungeonData.ttl'),
-            );
-        });
-
         // Npc data (for localizations)
-        $locale            = app()->getLocale();
-        $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $locale);
+        $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%s', $this->dungeon->id, $this->locale);
         $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
             $dungeonNpcDataKey,
-            $locale,
-            $dungeonData
         ) {
             return $this->cacheService->remember(
                 $dungeonNpcDataKey,
-                function () use ($dungeonData, $locale) {
+                function () {
                     return [
                         'npcs' => $this->dungeon->npcs()
                             ->selectRaw('npcs.*, translations.translation as name')
-                            ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
+                            ->leftJoin('translations', function (JoinClause $clause) {
                                 $clause->on('translations.key', 'npcs.name')
-                                    ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
+                                    ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
                             })
                             ->with([
-                                // @TODO This should just return IDs, and Spells should be a separate list of all spells found in the dungeon (cast by enemies)
-                                'spells' => fn(BelongsToMany $belongsToMany) => $belongsToMany
-                                    ->selectRaw('spells.*, translations.translation as name')
-                                    ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
-                                        $clause->on('translations.key', 'spells.name')
-                                            ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
-                                    }),
-                                // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                                'enemyForces' => fn(
-                                    HasOne $query,
-                                ) => $query->where('mapping_version_id', $this->mappingVersion->id),
+                                // Return only spell IDs for each NPC
+                                'spells:id',
                             ])
-                            // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
-                            ->disableCache()
                             ->get()
-                            // Only show what we need in the FE
-                            ->each(function (Npc $npc) {
-                                $npc->enemyForces?->setVisible([
-                                    'enemy_forces',
-                                    'enemy_forces_teeming',
-                                ]);
-                                $npc->setHidden(['pivot']);
-                            }),
+                            // Map the spells relation to an array of IDs to avoid serializing full models
+                            ->map(function (Npc $npc) {
+                                $npc->setAttribute('spell_ids', $npc->spells->pluck('id')->values());
+                                // Remove the full spells relation from output
+                                $npc->unsetRelation('spells');
+
+                                return $npc;
+                            })
+                            ->makeHidden([
+                                'display_id',
+                                'encounter_id',
+                                'level',
+                                'mdt_scale',
+                                'pivot',
+                                'characteristics',
+                            ])
+                            ->values(),
                     ];
                 },
                 config('keystoneguru.cache.dungeonData.ttl'),
             );
         });
 
-        [
-            $npcMinHealth,
-            $npcMaxHealth,
-        ] = $this->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
+        // Unique, localized spells for the dungeon (referenced by ID from NPCs)
+        $dungeonSpellsKey = sprintf('dungeon_spells_%d_%s', $this->dungeon->id, $this->locale);
+        $dungeonSpells    = $this->rememberLocal($dungeonSpellsKey, 86400, function () use ($dungeonSpellsKey) {
+            return $this->cacheService->remember(
+                $dungeonSpellsKey,
+                function () {
+                    // Gather unique spell IDs from all NPCs in the dungeon
+                    $spellIds = $this->dungeon->npcs()
+                        ->with(['spells:id'])
+                        ->get()
+                        ->flatMap(fn(Npc $npc) => $npc->spells->pluck('id'))
+                        ->unique()
+                        ->values();
 
-        // Prevent the values being exactly the same, which causes issues in the front end
-        if ($npcMaxHealth <= $npcMinHealth) {
-            $npcMaxHealth = $npcMinHealth + 1;
-        }
+                    if ($spellIds->isEmpty()) {
+                        return collect();
+                    }
+
+                    // Load full spell data once, with localization
+                    return Spell::query()
+                        ->selectRaw('spells.*, translations.translation as name')
+                        ->leftJoin('translations', function (JoinClause $clause) {
+                            $clause->on('translations.key', 'spells.name')
+                                ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                        })
+                        ->whereIn('spells.id', $spellIds)
+                        ->get()
+                        ->makeHidden([
+                            'cooldown_group',
+                            'dispel_type',
+                            'mechanic',
+                            'schools_mask',
+                            'miss_types_mask',
+                            'debuff',
+                            'cast_time',
+                            'duration',
+                            'selectable',
+                            'fetched_data_at',
+                        ])
+                        ->keyBy('id')
+                        ->values();
+                },
+                config('keystoneguru.cache.dungeonData.ttl'),
+            );
+        });
 
         return [
-            'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
-            'dungeon'             => array_merge($dungeonData, $dungeonNpcData),
-            'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
-            'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
-            'npcsMinHealth'       => $npcMinHealth,
-            'npcsMaxHealth'       => $npcMaxHealth,
+            'dungeonNpcs'   => $dungeonNpcData,
+            'dungeonSpells' => $dungeonSpells,
         ];
     }
 }

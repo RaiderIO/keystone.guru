@@ -80,7 +80,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Auth::routes();
 
     /** Local usage only */
-    Route::get('js-gen/{dungeon}/data/{mappingVersion}/{mapFacadeStyle}.js', (new JavascriptController())->mapContextDungeonData(...))->name('js.mapcontext.dungeon_data');
+    Route::get('js-gen/{dungeon}/data/{mappingVersion}/{mapFacadeStyle}.js', (new JavascriptController())->mapContextMappingVersionData(...))->name('js.mapcontext.mapping_version_data');
+    Route::get('js-gen/{dungeon}/data/{locale}.js', (new JavascriptController())->mapContextDungeonData(...))->name('js.mapcontext.dungeon_data');
     Route::get('js-gen/static/{locale}.js', (new JavascriptController())->mapContextStaticData(...))->name('js.mapcontext.static');
 
     // Catch for hard-coded /home route in RedirectsUsers.php

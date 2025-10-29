@@ -15,16 +15,32 @@ class JavascriptController
     /**
      * @throws InvalidArgumentException
      */
-    public function mapContextDungeonData(
+    public function mapContextMappingVersionData(
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
         MappingVersion             $mappingVersion,
         string                     $mapFacadeStyle,
     ) {
-        $mapContextDungeonData = $mapContextService->createMapContextDungeonData(
+        $mapContextMappingVersionData = $mapContextService->createMapContextMappingVersionData(
             $dungeon,
             $mappingVersion,
             $mapFacadeStyle,
+        );
+
+        return sprintf('let mapContextMappingVersionData = %s;', json_encode($mapContextMappingVersionData->toArray(), JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function mapContextDungeonData(
+        MapContextServiceInterface $mapContextService,
+        Dungeon                    $dungeon,
+        string                     $locale,
+    ) {
+        $mapContextDungeonData = $mapContextService->createMapContextDungeonData(
+            $dungeon,
+            $locale,
         );
 
         return sprintf('let mapContextDungeonData = %s;', json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT));

@@ -3,6 +3,7 @@
 namespace App\Service\MapContext;
 
 use App\Logic\MapContext\MapContextDungeonData;
+use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
 use App\Logic\MapContext\Map\MapContextLiveSession;
@@ -19,10 +20,15 @@ interface MapContextServiceInterface
         string $locale
     ): MapContextStaticData;
 
-    public function createMapContextDungeonData(
+    public function createMapContextMappingVersionData(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
         string         $mapFacadeStyle,
+    ): MapContextMappingVersionData;
+
+    public function createMapContextDungeonData(
+        Dungeon $dungeon,
+        string  $locale,
     ): MapContextDungeonData;
 
     public function createMapContextDungeonRoute(
