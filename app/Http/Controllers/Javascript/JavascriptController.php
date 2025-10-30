@@ -6,11 +6,20 @@ use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\MapContext\MapContextServiceInterface;
+use Debugbar;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class JavascriptController
 {
     use RemembersToFile;
+
+    public function __construct()
+    {
+        // Disable Debugbar for all actions in this controller
+        if (class_exists(Debugbar::class)) {
+            Debugbar::disable();
+        }
+    }
 
     /**
      * @throws InvalidArgumentException

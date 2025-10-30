@@ -38,8 +38,7 @@ class MapContextDungeonData implements Arrayable
             return $this->cacheService->remember(
                 $dungeonNpcDataKey,
                 function () {
-                    return [
-                        'npcs' => $this->dungeon->npcs()
+                    return $this->dungeon->npcs()
                             ->selectRaw('npcs.*, translations.translation as name')
                             ->leftJoin('translations', function (JoinClause $clause) {
                                 $clause->on('translations.key', 'npcs.name')
@@ -66,8 +65,7 @@ class MapContextDungeonData implements Arrayable
                                 'pivot',
                                 'characteristics',
                             ])
-                            ->values(),
-                    ];
+                        ->values();
                 },
                 config('keystoneguru.cache.dungeonData.ttl'),
             );

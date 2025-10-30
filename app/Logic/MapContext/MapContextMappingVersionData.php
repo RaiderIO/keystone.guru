@@ -105,26 +105,24 @@ class MapContextMappingVersionData implements Arrayable
             return $this->cacheService->remember(
                 $dungeonNpcDataKey,
                 function () use ($mappingVersionData) {
-                    return [
-                        'npcEnemyForces' => $this->dungeon->npcs()
-                            ->with([
-                                'enemyForces' => fn(HasOne $q) => $q
-                                    ->where('mapping_version_id', $this->mappingVersion->id)
-                                    ->select([
-                                        'id',
-                                        'npc_id',
-                                        'mapping_version_id',
-                                        'enemy_forces',
-                                        'enemy_forces_teeming',
-                                    ]),
-                            ])
-                            ->disableCache()
-                            ->get()
-                            ->setVisible([
-                                'id',
-                                'enemyForces',
-                            ]),
-                    ];
+                    return $this->dungeon->npcs()
+                        ->with([
+                            'enemyForces' => fn(HasOne $q) => $q
+                                ->where('mapping_version_id', $this->mappingVersion->id)
+                                ->select([
+                                    'id',
+                                    'npc_id',
+                                    'mapping_version_id',
+                                    'enemy_forces',
+                                    'enemy_forces_teeming',
+                                ]),
+                        ])
+                        ->disableCache()
+                        ->get()
+                        ->setVisible([
+                            'id',
+                            'enemyForces',
+                        ]);
                 },
                 config('keystoneguru.cache.dungeonData.ttl'),
             );
@@ -142,7 +140,8 @@ class MapContextMappingVersionData implements Arrayable
 
         return [
             'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
-            'dungeon'             => array_merge($mappingVersionData, $dungeonNpcData),
+            'dungeon'             => $mappingVersionData,
+            'npcEnemyForces'      => $dungeonNpcData,
             'minEnemySizeDefault' => config('keystoneguru.min_enemy_size_default'),
             'maxEnemySizeDefault' => config('keystoneguru.max_enemy_size_default'),
             'npcsMinHealth'       => $npcMinHealth,

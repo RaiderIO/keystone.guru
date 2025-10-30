@@ -113,7 +113,7 @@ jobs:
       - name: Migrate & seed
         run: |
           ./migrate.sh
-          ./refresh_db_seed.sh
+          php artisan db:seed --database=migrate --force -v
 
       - name: Generate Map Context JS
         # Replace with your real command/options/output dir

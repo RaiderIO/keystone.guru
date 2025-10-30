@@ -4,6 +4,15 @@ class MapContext extends Signalable {
 
         this._options = options;
 
+        // Init npcs (ensure the enemy forces are inserted properly)
+        for (let i = 0; i < this._options.dungeonNpcs.length; i++) {
+            for (let j = 0; j < this._options.npcEnemyForces.length; j++) {
+                if (this._options.dungeonNpcs[i].id === this._options.npcEnemyForces[j].id) {
+                    this._options.dungeonNpcs[i].enemy_forces = this._options.npcEnemyForces[j].enemy_forces;
+                }
+            }
+        }
+
         // Init class colors
         c.map.colorPickerDefaultOptions.swatches = this.getStaticClassColors();
 
@@ -17,12 +26,10 @@ class MapContext extends Signalable {
         }
 
         // Init spells
-        let spells = this._options.static.selectableSpells;
+        let spells = this._options.static.selectableSpells.concat(this._options.dungeonSpells);
         this.spells = [];
         for (let i = 0; i < spells.length; i++) {
-            this.spells.push(
-                new Spell(spells[i])
-            )
+            this.spells[spells[i].id] = new Spell(spells[i]);
         }
 
         this.unknownMapIconType = this.getMapIconType(this._options.static.unknownMapIconType.id);
@@ -115,15 +122,8 @@ class MapContext extends Signalable {
      * @param spellId {Number}
      * @returns {Spell}
      */
-    getSpell(spellId) {
-        let spell = null;
-        for (let i = 0; i < this.spells.length; i++) {
-            if (this.spells[i].id === spellId) {
-                spell = this.spells[i];
-                break;
-            }
-        }
-        return spell;
+    findSpellById(spellId) {
+        return this.spells[spellId] ?? null;
     }
 
     /**
@@ -436,9 +436,9 @@ class MapContext extends Signalable {
     findNpcById(npcId) {
         let result = null;
 
-        for (let i = 0; i < this._options.dungeon.npcs.length; i++) {
-            if (this._options.dungeon.npcs[i].id === npcId) {
-                result = this._options.dungeon.npcs[i];
+        for (let i = 0; i < this._options.dungeonNpcs.length; i++) {
+            if (this._options.dungeonNpcs[i].id === npcId) {
+                result = this._options.dungeonNpcs[i];
                 break;
             }
         }

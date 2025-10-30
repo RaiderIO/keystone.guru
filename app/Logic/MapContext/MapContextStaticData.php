@@ -42,7 +42,19 @@ class MapContextStaticData implements Arrayable
                     $clause->on('translations.key', 'spells.name')
                         ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
                 })
-                ->get();
+                ->get()
+                ->makeHidden([
+                    'cooldown_group',
+                    'dispel_type',
+                    'mechanic',
+                    'schools_mask',
+                    'miss_types_mask',
+                    'debuff',
+                    'cast_time',
+                    'duration',
+                    'selectable',
+                    'fetched_data_at',
+                ]);
 
             $characterClasses = CharacterClass::all();
             $mapIconTypes     = MapIconType::all()->keyBy('id');
