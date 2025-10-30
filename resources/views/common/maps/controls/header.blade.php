@@ -281,7 +281,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
         @endif
     @endauth
 
-    @if($showCreateRouteBtn)
+    @if($showCreateRouteBtn || $edit)
         @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
             @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
         @endcomponent

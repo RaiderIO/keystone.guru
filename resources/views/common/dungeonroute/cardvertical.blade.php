@@ -18,11 +18,38 @@ use App\Service\Cache\CacheServiceInterface;
 
 $showAffixes      ??= true;
 $showDungeonImage ??= false;
-$isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
+$isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
+// Generate a unique string so we can assign affixes properly - route key is not unique enough since multiple cards can be on one page
+$uniqueString     = uniqid();
+?>
+@section('scripts')
+    @parent
 
+    <script type="application/javascript">
+        $(function () {
+            // Set content right before it opens
+            $('#dungeonroute_card_vertical_{{ $uniqueString }} .affix_toggle').on('show.bs.popover', function () {
+                // Wrap the rendered HTML in a container div and assign to data-content
+                const html = '<div>' + handlebarsAffixGroupsParse({!!
+                    $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {
+                        $affixGroup->setVisible([
+                            'affixes'
+                        ]);
+
+                        $affixGroup->affixes->setVisible([
+                            'name',
+                            'image_name',
+                        ]);
+                    }) !!}, false) + '</div>';
+                $(this).attr('data-content', html);
+            });
+        });
+    </script>
+@endsection
+<?php
 $cacheFn = static function ()
 
-use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
+use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
 
 {
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
@@ -45,7 +72,8 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     $owlClass              = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
     ob_start();
     ?>
-<div class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
+<div id="dungeonroute_card_vertical_{{ $uniqueString }}"
+     class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col">
         <div class="row">
             <div class="col">
@@ -149,29 +177,12 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 
                                 @if( $showAffixes )
                                     <div class="col-auto pl-1 pr-0">
-                                            <?php
-                                            ob_start();
-                                            ?>
-                                        @foreach($dungeonroute->affixes as $affixgroup)
-                                            <?php /** @var object{first: bool} $loop */ ?>
-                                            <div
-                                                class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
-                                                @include('common.affixgroup.affixgroup', [
-                                                    'affixgroup' => $affixgroup,
-                                                    'showText' => false,
-                                                    'dungeon' => $dungeonroute->dungeon,
-                                                    'isFirst' => $loop->first,
-                                                ])
-                                            </div>
-                                        @endforeach
-                                            <?php
-                                            $affixes = ob_get_clean();
-                                            ?>
-                                        <div class="row no-gutters" data-container="body" data-toggle="popover"
-                                             data-placement="bottom"
-                                             data-html="true"
-                                             data-content="{{ $affixes }}" style="cursor: pointer;">
-                                            @if($seasonalAffix !== null)
+                                        @if($seasonalAffix !== null)
+                                            <div class="row no-gutters affix_toggle" data-container="body"
+                                                 data-toggle="popover"
+                                                 data-placement="bottom"
+                                                 data-html="true"
+                                                 data-content="" style="cursor: pointer;">
                                                 <div class="col-auto">
                                                     <img class="select_icon mr-1"
                                                          src="{{ url($seasonalAffix->image_url) }}"
@@ -180,8 +191,8 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                                          title="{{ __($seasonalAffix->name) }}"
                                                     />
                                                 </div>
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="col-auto px-1">
                                         @if($tierAffixGroup !== null)
