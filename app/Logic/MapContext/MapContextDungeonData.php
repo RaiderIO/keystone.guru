@@ -39,32 +39,32 @@ class MapContextDungeonData implements Arrayable
                 $dungeonNpcDataKey,
                 function () {
                     return $this->dungeon->npcs()
-                            ->selectRaw('npcs.*, translations.translation as name')
-                            ->leftJoin('translations', function (JoinClause $clause) {
-                                $clause->on('translations.key', 'npcs.name')
-                                    ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
-                            })
-                            ->with([
-                                // Return only spell IDs for each NPC
-                                'spells:id',
-                            ])
-                            ->get()
+                        ->selectRaw('npcs.*, translations.translation as name')
+                        ->leftJoin('translations', function (JoinClause $clause) {
+                            $clause->on('translations.key', 'npcs.name')
+                                ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                        })
+                        ->with([
+                            // Return only spell IDs for each NPC
+                            'spells:id',
+                        ])
+                        ->get()
                             // Map the spells relation to an array of IDs to avoid serializing full models
-                            ->map(function (Npc $npc) {
-                                $npc->setAttribute('spell_ids', $npc->spells->pluck('id')->values());
-                                // Remove the full spells relation from output
-                                $npc->unsetRelation('spells');
+                        ->map(function (Npc $npc) {
+                            $npc->setAttribute('spell_ids', $npc->spells->pluck('id')->values());
+                            // Remove the full spells relation from output
+                            $npc->unsetRelation('spells');
 
-                                return $npc;
-                            })
-                            ->makeHidden([
-                                'display_id',
-                                'encounter_id',
-                                'level',
-                                'mdt_scale',
-                                'pivot',
-                                'characteristics',
-                            ])
+                            return $npc;
+                        })
+                        ->makeHidden([
+                            'display_id',
+                            'encounter_id',
+                            'level',
+                            'mdt_scale',
+                            'pivot',
+                            'characteristics',
+                        ])
                         ->values();
                 },
                 config('keystoneguru.cache.dungeonData.ttl'),

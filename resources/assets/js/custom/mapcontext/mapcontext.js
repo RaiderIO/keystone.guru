@@ -426,7 +426,7 @@ class MapContext extends Signalable {
      * @returns {[]}
      */
     getNpcs() {
-        return this._options.npcs;
+        return this._options.dungeonNpcs;
     }
 
     /**
