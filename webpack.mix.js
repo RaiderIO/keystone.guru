@@ -81,10 +81,6 @@ mix.options({
     ].concat(gitRevisionPluginList)
 });
 
-let sassOptions = {
-    // additionalData: `$asset-url: "${process.env.ASSETS_BASE_URL}";`,
-};
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -337,7 +333,7 @@ mix.js('resources/assets/js/app.js', `public/js/app-${version}.js`)
     .sass('resources/assets/sass/theme/theme.scss', `public/css/theme-${version}.css`)
     .sass('resources/assets/sass/home.scss', `public/css/home-${version}.css`)
     .sass('resources/assets/sass/custom/custom.scss', `public/css/custom-compiled-${version}.css`)
-    .sass('resources/assets/sass/custom/assets/assets.scss', `public/css/assets-compiled-${version}.css`, sassOptions)
+    .sass('resources/assets/sass/custom/assets/assets.scss', `public/css/assets-compiled-${version}.css`)
     // Lib processing
     // .styles(['resources/assets/lib/**/*.css'], `public/css/lib-${version}.css`)
     .babel('resources/assets/lib/**/*.js', `public/js/lib-${version}.js`);
