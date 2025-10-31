@@ -2,13 +2,15 @@
 
 namespace App\Service\MapContext;
 
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextDungeonRoute;
-use App\Logic\MapContext\MapContextLiveSession;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextLiveSession;
+use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
+use App\Logic\MapContext\MapContextDungeonData;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
@@ -16,6 +18,9 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
+/**
+ * @TODO Add caching layer here, instead of in the map context classes?
+ */
 class MapContextService implements MapContextServiceInterface
 {
     public function __construct(
@@ -26,9 +31,43 @@ class MapContextService implements MapContextServiceInterface
     ) {
     }
 
+    public function createMapContextMappingVersionData(
+        Dungeon        $dungeon,
+        MappingVersion $mappingVersion,
+        string         $mapFacadeStyle,
+    ): MapContextMappingVersionData {
+        return new MapContextMappingVersionData(
+            $this->cacheService,
+            $this->coordinatesService,
+            $dungeon,
+            $mappingVersion,
+            $mapFacadeStyle,
+        );
+    }
+
+    public function createMapContextDungeonData(Dungeon $dungeon, string $locale): MapContextDungeonData
+    {
+        return new MapContextDungeonData(
+            $this->cacheService,
+            $this->coordinatesService,
+            $dungeon,
+            $locale,
+        );
+    }
+
+
+    public function createMapContextStaticData(
+        string $locale,
+    ): MapContextStaticData {
+        return new MapContextStaticData(
+            $this->cacheService,
+            $locale,
+        );
+    }
+
     public function createMapContextDungeonRoute(
         DungeonRoute $dungeonRoute,
-        ?string      $mapFacadeStyle = null,
+        string       $mapFacadeStyle,
     ): MapContextDungeonRoute {
         return new MapContextDungeonRoute(
             $this->cacheService,
@@ -38,19 +77,21 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    public function createMapContextLiveSession(LiveSession $liveSession): MapContextLiveSession
+    public function createMapContextLiveSession(LiveSession $liveSession, string $mapFacadeStyle): MapContextLiveSession
     {
         return new MapContextLiveSession(
             $this->cacheService,
             $this->coordinatesService,
             $this->overpulledEnemyService,
             $liveSession,
+            $mapFacadeStyle,
         );
     }
 
     public function createMapContextDungeonExplore(
         Dungeon        $dungeon,
         MappingVersion $mappingVersion,
+        string         $mapFacadeStyle,
     ): MapContextDungeonExplore {
         return new MapContextDungeonExplore(
             $this->cacheService,
@@ -58,6 +99,7 @@ class MapContextService implements MapContextServiceInterface
             $this->seasonService,
             $dungeon,
             $mappingVersion,
+            $mapFacadeStyle,
         );
     }
 

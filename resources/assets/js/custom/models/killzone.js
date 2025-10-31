@@ -891,7 +891,7 @@ class KillZone extends MapObject {
             let spellId = parseInt(spellIds[i]);
 
             this.spellIds.push(spellId);
-            this.spells.push(mapContext.getSpell(spellId));
+            this.spells.push(mapContext.findSpellById(spellId));
         }
 
         this.signal('killzone:spellschanged');

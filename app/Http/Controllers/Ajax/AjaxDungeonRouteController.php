@@ -67,7 +67,6 @@ class AjaxDungeonRouteController extends Controller
 {
     use ListsBrushlines;
     use ListsDungeonFloorSwitchMarkers;
-    use ListsEnemies;
     use ListsEnemyPacks;
     use ListsEnemyPatrols;
     use ListsMapIcons;

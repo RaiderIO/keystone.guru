@@ -1,9 +1,10 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextLiveSession;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\Map\MapContextBase;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextLiveSession;
+use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -15,7 +16,7 @@ use App\Models\User;
 /**
  * @var string              $theme
  * @var bool                $isUserAdmin
- * @var MapContext          $mapContext
+ * @var MapContextBase      $mapContext
  * @var Dungeon             $dungeon
  * @var Floor               $floor
  * @var DungeonRoute|null   $dungeonroute
@@ -280,7 +281,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
         @endif
     @endauth
 
-    @if($showCreateRouteBtn)
+    @if($showCreateRouteBtn || $edit)
         @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
             @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
         @endcomponent

@@ -27,6 +27,8 @@ git config --global --add safe.directory /var/www/vendor/nnoggie/mythicdungeonto
 git config --global --add safe.directory /var/www/vendor/nnoggie/mdt-legacy
 git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.deployer
 
+alias ignore_mysql_ssl='mkdir -p /root && { [ -f /root/.my.cnf ] || echo -e "[client]\n" > /root/.my.cnf; } && grep -q "^skip-ssl" /root/.my.cnf || echo "skip-ssl" >> /root/.my.cnf'
+
 # # Take combat logs, extract their data, ingest them in the database and then in Opensearch:
 # php artisan combatlog:extractdata tmp
 # # Fetch any spells that may have been fetched from the combat log

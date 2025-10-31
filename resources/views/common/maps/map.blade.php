@@ -1,8 +1,10 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextDungeonRoute;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\Map\MapContextBase;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -13,8 +15,8 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 
 /**
- * @var User              $user
- * @var MapContext        $mapContext
+ * @var User|null         $user
+ * @var MapContextBase    $mapContext
  * @var Dungeon           $dungeon
  * @var Floor             $floor
  * @var MappingVersion    $mappingVersion
@@ -37,9 +39,17 @@ use App\Models\User;
 $user = Auth::user();
 // Load the roles so we can use role-based checks in the JS
 $user?->load(['roles'])
-    ->makeVisible(['roles', 'map_facade_style']);
+    ->makeVisible([
+        'roles',
+        'map_facade_style'
+    ]);
 $user?->setRelation('roles', $user->roles->map(function ($role) {
-    return $role->makeHidden(['id', 'pivot', 'created_at', 'updated_at']);
+    return $role->makeHidden([
+        'id',
+        'pivot',
+        'created_at',
+        'updated_at'
+    ]);
 }));
 
 $isAdmin            = isset($admin) && $admin;
@@ -54,11 +64,11 @@ $controlOptions     ??= [];
 $parameters         ??= [];
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                         ??= [];
-$show['controls']['enemyInfo']            ??= true;
-$show['controls']['pulls']                ??= true;
+$show['controls']              ??= [];
+$show['controls']['enemyInfo'] ??= true;
+$show['controls']['pulls']     ??= true;
 // This controls whether heatmaps are shown at all
-$show['controls']['heatmapSearch']        ??= false;
+$show['controls']['heatmapSearch'] ??= false;
 // This allows you to show heatmaps, but not the sidebar to influence them. You'll have to do that through parameters then.
 $show['controls']['heatmapSearchSidebar'] ??= true;
 $show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
@@ -76,6 +86,8 @@ $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opaci
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 $mapFacadeStyle                   ??= User::getCurrentUserMapFacadeStyle();
 $useFacade                        = $mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
+$mapFacadeStyleForMappingVersion  = ($useFacade && $mappingVersion->facade_enabled) ? User::MAP_FACADE_STYLE_FACADE : User::MAP_FACADE_STYLE_SPLIT_FLOORS;
+
 
 // Allow echo to be overridden
 $echo           ??= Auth::check() && !$sandboxMode;
@@ -105,15 +117,33 @@ if ($isAdmin) {
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
-            ['key' => '', 'description' => __('view_common.maps.map.no_teeming')],
-            ['key' => Enemy::TEEMING_VISIBLE, 'description' => __('view_common.maps.map.visible_teeming')],
-            ['key' => Enemy::TEEMING_HIDDEN, 'description' => __('view_common.maps.map.hidden_teeming')],
+            [
+                'key'         => '',
+                'description' => __('view_common.maps.map.no_teeming')
+            ],
+            [
+                'key'         => Enemy::TEEMING_VISIBLE,
+                'description' => __('view_common.maps.map.visible_teeming')
+            ],
+            [
+                'key'         => Enemy::TEEMING_HIDDEN,
+                'description' => __('view_common.maps.map.hidden_teeming')
+            ],
         ],
         // Display options for changing Faction status for map objects
         'factions'       => [
-            ['key' => 'any', 'description' => __('view_common.maps.map.any')],
-            ['key' => Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
-            ['key' => Faction::FACTION_HORDE, 'description' => __('factions.horde')],
+            [
+                'key'         => 'any',
+                'description' => __('view_common.maps.map.any')
+            ],
+            [
+                'key'         => Faction::FACTION_ALLIANCE,
+                'description' => __('factions.alliance')
+            ],
+            [
+                'key'         => Faction::FACTION_HORDE,
+                'description' => __('factions.horde')
+            ],
         ],
     ];
 }
@@ -141,6 +171,7 @@ if ($isAdmin) {
     'assetsBaseUrl' => $assetsBaseUrl,
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
+    'floorId' => $floor->id,
 ], $adminOptions)])
 
 @section('scripts')
@@ -150,11 +181,52 @@ if ($isAdmin) {
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')
 
+    @if(config('app.type') === 'local')
+        <script src="{{ route('js.mapcontext.dungeon_data', [
+                'dungeon' => $dungeon,
+                'locale' => app()->getLocale(),
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+        <script src="{{ route('js.mapcontext.mapping_version_data', [
+                'dungeon' => $dungeon,
+                'mappingVersion' => $mappingVersion,
+                'mapFacadeStyle' => $mapFacadeStyleForMappingVersion,
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+        <script src="{{ route('js.mapcontext.static', [
+                'locale' => app()->getLocale(),
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+
+    @else
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/data/%s/%s.js',
+                        $dungeon->slug,
+                        app()->getLocale()
+                    )) }}"
+            type="application/javascript"></script>
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/data/%s/%d/%s.js',
+                        $dungeon->slug,
+                        $mappingVersion->id,
+                        $mapFacadeStyleForMappingVersion
+                    )) }}"
+            type="application/javascript"></script>
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/static/%s.js',
+                        app()->getLocale()
+                    )) }}"
+            type="application/javascript"></script>
+    @endif
+
     @include('common.general.statemanager', [
         'echo' => $echo,
         'patreonBenefits' => $user?->getPatreonBenefits() ?? collect(),
         'userData' => $user,
-        'mapContext' => $mapContext->getProperties(),
+        'mapContext' => $mapContext,
     ])
     <script>
         var dungeonMap;

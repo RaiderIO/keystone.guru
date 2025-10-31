@@ -40,7 +40,7 @@ class Stopwatch
             ];
         }
 
-        if (config('debugbar.enabled')) {
+        if (config('debugbar.enabled') && class_exists('Debugbar')) {
             \Debugbar::startMeasure($timerName);
         }
     }
@@ -60,7 +60,7 @@ class Stopwatch
             self::$timers[$timerName]['end'] = $now;
         }
 
-        if (config('debugbar.enabled')) {
+        if (config('debugbar.enabled') && class_exists('Debugbar')) {
             \Debugbar::stopMeasure($timerName);
         }
     }
@@ -108,7 +108,7 @@ class Stopwatch
         $elapsed = self::elapsed($timerName);
 
         unset(self::$timers[$timerName]);
-        if (config('debugbar.enabled')) {
+        if (config('debugbar.enabled') && class_exists('Debugbar')) {
             \Debugbar::stopMeasure($timerName);
         }
 

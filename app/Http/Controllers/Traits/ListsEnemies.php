@@ -37,20 +37,12 @@ trait ListsEnemies
         bool                        $showMdtEnemies = false,
     ): ?array {
         /** @var Collection<Enemy> $enemies */
-        $enemies = Enemy::selectRaw('enemies.*')
+        $enemies = Enemy::with('npc', 'npc.type', 'npc.class')
+            ->selectRaw('enemies.*')
             ->join('floors', 'enemies.floor_id', '=', 'floors.id')
             ->where('floors.dungeon_id', $mappingVersion->dungeon_id)
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->get();
-
-        // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-        /** @var Collection<Npc> $npcs */
-        $npcs = Npc::whereIn('id', $enemies->pluck('npc_id')->unique()->toArray())->get();
-
-        /** @var Collection $npcTypes */
-        $npcTypes = NpcType::all();
-        /** @var Collection $npcClasses */
-        $npcClasses = NpcClass::all();
 
         // Only if we should show MDT enemies
         $mdtEnemies = collect();
@@ -73,12 +65,6 @@ trait ListsEnemies
 
         // Post process enemies
         foreach ($enemies as $enemy) {
-            $enemy->npc = $npcs->first(static fn($item) => $enemy->npc_id === $item->id);
-
-            if ($enemy->npc !== null) {
-                $enemy->npc->type  = $npcTypes->get($enemy->npc->npc_type_id - 1); // $npcTypes->get(rand(0, 9));//
-                $enemy->npc->class = $npcClasses->get($enemy->npc->npc_class_id - 1);
-            }
 
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
             foreach ($mdtEnemies as $mdtEnemy) {

@@ -581,23 +581,28 @@ class Enemy extends VersionableMapObject {
                 });
             }
 
-            if (typeof this.npc.spells !== 'undefined' && this.npc.spells.length > 0) {
+            if (typeof this.npc.spell_ids !== 'undefined' && this.npc.spell_ids.length > 0) {
                 let spellHtml = '';
                 let count = 0;
                 let spellTemplate = Handlebars.templates['spell_template'];
                 let gameVersion = mapContext.getMappingVersion().game_version;
 
-                for (let index in this.npc.spells) {
-                    if (this.npc.spells.hasOwnProperty(index)) {
-                        let spell = this.npc.spells[index];
+                let spells = [];
+                for (let index in this.npc.spell_ids) {
+                    spells.push(
+                        mapContext.findSpellById(this.npc.spell_ids[index])
+                    );
+                }
 
-                        spell.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
+                for (let index in spells) {
+                    let spell = spells[index];
 
-                        spellHtml += spellTemplate(spell);
-                        // Stop before the end
-                        if (count < this.npc.spells.length - 1) {
-                            spellHtml += '<br>';
-                        }
+                    spell.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
+
+                    spellHtml += spellTemplate(spell);
+                    // Stop before the end
+                    if (count < spells.length - 1) {
+                        spellHtml += '<br>';
                     }
                     count++;
                 }
