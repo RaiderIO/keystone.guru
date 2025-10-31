@@ -11,7 +11,7 @@
         "key": "arcway",
         "name": "dungeons.legion.arcway.name",
         "slug": "arcway",
-        "heatmap_enabled": 0,
+        "heatmap_enabled": 1,
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,

@@ -135,7 +135,7 @@ class StateManager extends Signalable {
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
         this.setMapFacadeStyle(this._map.options.mapFacadeStyle);
-        this.setFloorId(this.getMapContext().getInitialFloorId());
+        this.setFloorId(this._map.options.floorId);
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
@@ -565,7 +565,7 @@ class StateManager extends Signalable {
         let self = this;
         let result = false;
         // Iterate over the found floors
-        $.each(this._mapContext.getDungeon().floors, function (index, value) {
+        $.each(this._mapContext.getVisibleFloors(), function (index, value) {
             // Find the floor we're looking for
             if (parseInt(value.id) === parseInt(self._floorId)) {
                 result = value;

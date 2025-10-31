@@ -100,6 +100,23 @@ function ksgAsset(string $path): string
     return sprintf('%s/%s', config('keystoneguru.assets_base_url'), $path);
 }
 
+/**
+ * Retains functionality of locally compiled assets but also allows for assets to be served from a CDN in non-local environments.
+ *
+ * @param string $path
+ * @return string
+ */
+function ksgCompiledAsset(string $path): string
+{
+    if (app()->environment('local')) {
+        return asset($path);
+    }
+
+    $revision = trim(file_get_contents(base_path('version')));
+
+    return sprintf('%s/compiled/%s/%s', config('keystoneguru.assets_base_url'), $revision, $path);
+}
+
 function ksgAssetImage(string $path = ''): string
 {
     return sprintf('%s/%s', config('keystoneguru.images_base_url'), trim($path, '/'));

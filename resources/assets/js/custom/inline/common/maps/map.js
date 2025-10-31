@@ -96,11 +96,15 @@ class CommonMapsMap extends InlineCode {
 
             // Trigger info popover
             $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
+                $('#view_dungeonroute_affixes').html(
+                    handlebarsAffixGroupsParse(self.options.dungeonroute.affixes)
+                );
+
                 $('#view_dungeonroute_group_setup').html(
                     handlebarsGroupSetupParse(self.options.dungeonroute.setup)
                 );
 
-                // refreshTooltips();
+                refreshTooltips($('#view_dungeonroute_affixes .select_icon'));
             });
 
             // Enemy info should be set on mouseover

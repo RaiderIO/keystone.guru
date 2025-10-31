@@ -6,18 +6,19 @@
         <div class="row affix_list_row no-gutters" style="width: 200px">
             {{#affixes}}
                 <div class="affix_row col-md">
-                    <div class="select_icon affix_icon_{{class}} mr-2" style="height: 24px;">
+                    <div class="select_icon affix_icon_{{class}} {{#unless @last}}mr-2{{/unless}}"
+                         style="height: 24px;">
                         &nbsp;
                     </div>
                 </div>
             {{/affixes}}
+            {{#if seasonal_index}}
             <div class="affix_row col-md">
                 <div class="select_icon" style="height: 24px; max-width: 100% !important;">
-                    {{#if seasonal_index}}
                         {{seasonal_index}}
-                    {{/if}}
                 </div>
             </div>
+            {{/if}}
         </div>
     {{/affixgroups}}
 </div>

@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                       $id
- * @property int                       $icon_file_id
- * @property string                    $key
- * @property string                    $name
- * @property string                    $color
+ * @property int    $id
+ * @property int    $icon_file_id
+ * @property string $key
+ * @property string $name
+ * @property string $color
+ *
  * @property Collection<CharacterRace> $races
  * @property Collection<DungeonRoute>  $dungeonRoutes
  *

@@ -1,5 +1,7 @@
-@php use App\Models\Laratrust\Role; @endphp
 <?php
+
+use App\Models\Laratrust\Role;
+
 /** @var boolean $hasNewChangelog */
 ?>
 <div class="home">

@@ -1,5 +1,9 @@
-@php use App\Logic\MapContext\MapContextMappingVersion;use App\Models\Floor\Floor;use App\Models\Mapping\MappingVersion; @endphp
 <?php
+
+use App\Logic\MapContext\Map\MapContextMappingVersion;
+use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
+
 /**
  * @var Floor                    $floor
  * @var MapContextMappingVersion $mapContext
@@ -27,7 +31,9 @@
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,
-            'floorId' => $floor->id,
+            // Always show split floors for admin mapping
+            'mapFacadeStyle' => User::MAP_FACADE_STYLE_SPLIT_FLOORS,
+            'floor' => $floor,
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',

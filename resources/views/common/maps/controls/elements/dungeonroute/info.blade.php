@@ -39,12 +39,9 @@ ob_start();
             {{ __('view_common.maps.controls.elements.dungeonrouteinfo.affixes') }}
         </div>
     </div>
-    @foreach($dungeonroute->affixes as $affixGroup)
-        <?php /** @var object{first: bool} $loop */ ?>
-        <div class="row no-gutters">
-            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixGroup, 'showText' => false, 'isFirst' => $loop->first, 'class' => 'w-100', 'cols' => 1])
-        </div>
-    @endforeach
+    <div id="view_dungeonroute_affixes" class="row no-gutters">
+
+    </div>
 </div>
 <?php $content = ob_get_clean(); ?>
     <!-- Dungeonroute info -->

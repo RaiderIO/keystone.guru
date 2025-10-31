@@ -1,0 +1,25 @@
+{
+    "id": 326,
+    "release_changelog_id": 333,
+    "version": "v13.11",
+    "title": "Site optimizations to drastically reduce data usage",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-10-31T20:37:24+00:00",
+    "updated_at": "2025-10-31T20:37:24+00:00",
+    "changelog": {
+        "id": 333,
+        "release_id": 326,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 333,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3006,
+                "change": "Viewing \/routes pages payload size reduced by at least 80%, viewing routes page size reduced by 90% (after initial load and caching). Many elements are now also served directly by Cloudflare to further reduce data usage hitting the origin."
+            }
+        ]
+    }
+}

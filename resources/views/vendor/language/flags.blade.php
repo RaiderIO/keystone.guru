@@ -1,7 +1,7 @@
 <?php
 $user = Auth::user();
 // Default local or user locale
-$currentUserLocale     = Auth::check() ? Auth::user()->locale : 'en_US';
+$currentUserLocale     = Auth::check() ? Auth::user()->locale : config('app.locale');
 $currentUserLocaleName = language()->getName($currentUserLocale);
 ?>
 <li class="nav-item dropdown">

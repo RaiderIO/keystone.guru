@@ -1,9 +1,10 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextLiveSession;
-use App\Logic\MapContext\MapContextMappingVersionEdit;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\Map\MapContextBase;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextLiveSession;
+use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -15,7 +16,7 @@ use App\Models\User;
 /**
  * @var string              $theme
  * @var bool                $isUserAdmin
- * @var MapContext          $mapContext
+ * @var MapContextBase      $mapContext
  * @var Dungeon             $dungeon
  * @var Floor               $floor
  * @var DungeonRoute|null   $dungeonroute
@@ -24,9 +25,10 @@ use App\Models\User;
  * @var bool                $edit
  */
 
-$echo        ??= false;
-$mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
-$showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
+$echo               ??= false;
+$mayUserEdit        = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
+$showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
+$showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
@@ -181,7 +183,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
                 </li>
                 @auth
-                    @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
+                    @if( $showCreateRouteBtn )
                         @component('common.maps.controls.buttons.headerbutton')
                             <a href="{{ route('dungeonroute.claim', [
                                     'dungeon' => $dungeonroute->dungeon,
@@ -279,9 +281,11 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
         @endif
     @endauth
 
-    @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
-        @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
-    @endcomponent
+    @if($showCreateRouteBtn || $edit)
+        @component('common.general.modal', ['id' => 'edit_route_settings_modal', 'size' => 'xl'])
+            @include('common.modal.routesettings', ['dungeonroute' => $dungeonroute])
+        @endcomponent
+    @endif
 
     @component('common.general.modal', ['id' => 'simulate_modal', 'size' => 'xl'])
         @include('common.modal.simulate', ['dungeonroute' => $dungeonroute])
