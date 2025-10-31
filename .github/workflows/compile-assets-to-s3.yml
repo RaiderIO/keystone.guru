@@ -34,6 +34,8 @@ jobs:
 
       - name: Build assets
         # NOTE: pass flags *after* `--` so they reach your npm script
+        env:
+          ASSETS_BASE_URL: https://assets.keystone.guru/
         run: npm --output_version=${{ env.GIT_VERSION }} run production
 
       # ---- Choose ONE of the following credential steps ----
@@ -56,5 +58,10 @@ jobs:
       - name: Upload CSS
         run: |
           aws s3 cp public/css s3://${{ secrets.S3_BUCKET }}/compiled/${{ env.GIT_VERSION }}/css \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable"
+      - name: Upload Webfonts
+        run: |
+          aws s3 cp public/webfonts s3://${{ secrets.S3_BUCKET }}/compiled/${{ env.GIT_VERSION }}/webfonts \
             --recursive \
             --cache-control "public,max-age=31536000,immutable"
