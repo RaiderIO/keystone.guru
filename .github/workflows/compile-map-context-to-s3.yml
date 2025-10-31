@@ -5,7 +5,7 @@ name: Generate & Upload Map Context
 on:
   push:
     branches:
-      - feature/3006-map-context-to-external-files
+      - master
 
 permissions:
   contents: read
