@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Compute git version
-        run: echo "GIT_VERSION=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        run: echo -n "GIT_VERSION=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build assets
         # NOTE: pass flags *after* `--` so they reach your npm script
@@ -54,14 +54,17 @@ jobs:
         run: |
           aws s3 cp public/js s3://${{ secrets.S3_BUCKET }}/compiled/${{ env.GIT_VERSION }}/js \
             --recursive \
-            --cache-control "public,max-age=31536000,immutable"
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
       - name: Upload CSS
         run: |
           aws s3 cp public/css s3://${{ secrets.S3_BUCKET }}/compiled/${{ env.GIT_VERSION }}/css \
             --recursive \
-            --cache-control "public,max-age=31536000,immutable"
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
       - name: Upload Webfonts
         run: |
           aws s3 cp public/webfonts s3://${{ secrets.S3_BUCKET }}/compiled/${{ env.GIT_VERSION }}/webfonts \
             --recursive \
-            --cache-control "public,max-age=31536000,immutable"
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress

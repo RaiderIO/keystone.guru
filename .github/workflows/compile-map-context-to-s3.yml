@@ -82,7 +82,7 @@ jobs:
         run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req=ext-lua
 
       - name: Compute git version and save to file
-        run: echo "$(git rev-parse HEAD)" >> version
+        run: echo -n "$(git rev-parse HEAD)" >> version
 
       - name: Prepare .env for CI
         run: |
