@@ -72,7 +72,7 @@ $expansion ??= null;
         </div>
     @endif
 
-    @if($season !== null)
+    @if($season !== null && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL)
         @if($currentAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
                 'gameVersion' => $gameVersion,
