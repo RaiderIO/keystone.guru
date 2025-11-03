@@ -3,7 +3,6 @@ name: Build & Upload Frontend Assets
 on:
   push:
     branches:
-      - development
       - master
 
 permissions:
