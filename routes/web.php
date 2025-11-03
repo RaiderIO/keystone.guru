@@ -37,6 +37,7 @@ use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
 use App\Http\Controllers\Ajax\AjaxUserReportController;
+use App\Http\Controllers\Ajax\AjaxViewController;
 use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionAreaController;
 use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
@@ -446,6 +447,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
     Route::prefix('ajax')->middleware('ajax')->group(static function () {
         Route::get('refresh-csrf', (new AjaxSiteController())->refreshCsrf(...))->name('api.refresh_csrf');
+        Route::get('view/{view}', (new AjaxViewController())->view(...))->name('ajax.view');
 
         Route::prefix('tag')->group(static function () {
             Route::get('/', (new AjaxTagController())->all(...))->name('ajax.tag.all');

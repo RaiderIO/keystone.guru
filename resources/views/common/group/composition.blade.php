@@ -122,7 +122,10 @@ $factions ??= $allFactions;
         <div class="form-group">
             {{ html()->label(__('view_common.group.composition.faction'), 'faction_id') }}
             {{--array_combine because we want keys to be equal to values https://stackoverflow.com/questions/6175548/array-copy-values-to-keys-in-php--}}
-            {{ html()->select('faction_id', $factions->pluck('name', 'id'), old('faction_id'))->class('form-control selectpicker') }}
+            {{ html()->select('faction_id', $factions->pluck('name', 'id')->mapWithKeys(static fn(
+                string $name,
+                int    $id,
+            ) => [$id => __($name)]), old('faction_id'))->class('form-control selectpicker') }}
         </div>
     </div>
     @isset($dungeonroute)

@@ -19,6 +19,7 @@ use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
 use Rollbar\Laravel\RollbarServiceProvider;
+use Sentry\Laravel\Integration;
 use SocialiteProviders\Manager\ServiceProvider;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -73,5 +74,5 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        Integration::handles($exceptions);
     })->create();

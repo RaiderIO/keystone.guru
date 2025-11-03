@@ -232,7 +232,7 @@ return [
             'category'       => 24,
             'affix_overview' => 12,
             'search'         => 24,
-            'per_dungeon'    => 4,
+            'per_dungeon'    => 8,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [

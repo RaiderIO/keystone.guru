@@ -22,9 +22,14 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
+use Predis\Response\Status;
+use Teapot\StatusCode;
 
 class SiteController extends Controller
 {
@@ -209,11 +214,62 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return Response
      */
-    public function status(Request $request): View
+    public function status(Request $request): Response
     {
-        return view('misc.status');
+        $checks = [
+            'database' => [
+                'ok'    => false,
+                'error' => null,
+            ],
+            'redis' => [
+                'ok'    => false,
+                'error' => null,
+            ],
+            'disk' => [
+                'ok'    => false,
+                'error' => null,
+            ],
+        ];
+
+        // Database check: simple query
+        try {
+            DB::connection()->getPdo(); // ensure PDO established
+            DB::select('SELECT 1');     // trivial round trip
+            $checks['database']['ok'] = true;
+        } catch (\Throwable $e) {
+            $checks['database']['error'] = $e->getMessage();
+        }
+
+        // Redis check: PING
+        try {
+            /** @var Status $pong */
+            $pong = Redis::connection()->client()->ping();
+
+            // Some clients return "PONG" or true
+            $checks['redis']['ok'] = $pong->getPayload() === 'PONG';
+            if (!$checks['redis']['ok']) {
+                $checks['redis']['error'] = 'Unexpected PING response';
+            }
+        } catch (\Throwable $e) {
+            $checks['redis']['error'] = $e->getMessage();
+        }
+
+        // Check if the disk is writable
+        $checks['disk']['ok'] = is_writable(storage_path());
+        if (!$checks['disk']['ok']) {
+            $checks['disk']['error'] = 'Storage path is not writable';
+        }
+
+        $success = true;
+        foreach ($checks as $check) {
+            $success = $success && $check['ok'];
+        }
+
+        return response()
+            ->view('misc.status', ['checks' => $checks])
+            ->setStatusCode($success ? StatusCode::OK : StatusCode::SERVICE_UNAVAILABLE);
     }
 
     /**

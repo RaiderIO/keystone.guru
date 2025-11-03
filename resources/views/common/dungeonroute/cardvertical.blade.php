@@ -182,7 +182,7 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                                                  data-toggle="popover"
                                                  data-placement="bottom"
                                                  data-html="true"
-                                                 data-content="" style="cursor: pointer;">
+                                                 data-content="&nbsp;" style="cursor: pointer;">
                                                 <div class="col-auto">
                                                     <img class="select_icon mr-1"
                                                          src="{{ url($seasonalAffix->image_url) }}"

@@ -170,7 +170,7 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                                 @if($seasonalAffix !== null)
                                     <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
                                          data-html="true"
-                                         data-content="" style="cursor: pointer;">
+                                         data-content="&nbsp;" style="cursor: pointer;">
                                             <div class="col ml-1">
                                                 <img class="select_icon"
                                                      src="{{ url($seasonalAffix->image_url) }}"
