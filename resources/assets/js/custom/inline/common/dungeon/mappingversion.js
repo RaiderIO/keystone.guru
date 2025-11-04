@@ -23,6 +23,7 @@ class CommonDungeonMappingversion extends InlineCode {
                 enemy_forces_shrouded: $('#map_mapping_version_enemy_forces_shrouded').val(),
                 enemy_forces_shrouded_zul_gamux: $('#map_mapping_version_enemy_forces_shrouded_zul_gamux').val(),
                 timer_max_seconds: $('#map_mapping_version_timer_max_seconds').val(),
+                timer_max_minutes: $('#map_mapping_version_timer_max_minutes').val(),
 
                 _method: 'PATCH'
             },

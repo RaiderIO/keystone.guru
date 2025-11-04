@@ -10,7 +10,7 @@ $showClose ??= true;
 ?>
 @include('common.general.inline', ['path' => 'modal/lazy', 'options' => [
     'id' => '#' . $id,
-    'view' => $targetView,
+    'ajax_url' => route('ajax.view', ['view' => $targetView]),
 ]])
 @component('common.general.modal', [
     'id' => $id,

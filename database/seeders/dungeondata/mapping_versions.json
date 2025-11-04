@@ -7432,11 +7432,11 @@
         "enemy_forces_required_teeming": 466,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2700,
         "mdt_mapping_hash": "af276da09111d655e4d149e09ac65dd9",
         "facade_enabled": 0,
         "created_at": "2025-10-02T19:38:36.000000Z",
-        "updated_at": "2025-10-02T19:38:36.000000Z",
+        "updated_at": "2025-11-04T10:21:22.000000Z",
         "merged": false
     },
     {
@@ -7464,11 +7464,11 @@
         "enemy_forces_required_teeming": 335,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "mdt_mapping_hash": "b392f2ec815a8fc6ae1076158fda0a11",
         "facade_enabled": 1,
         "created_at": "2025-10-02T21:02:04.000000Z",
-        "updated_at": "2025-10-02T21:02:04.000000Z",
+        "updated_at": "2025-11-04T10:22:23.000000Z",
         "merged": false
     },
     {
@@ -7496,11 +7496,11 @@
         "enemy_forces_required_teeming": 336,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1800,
         "mdt_mapping_hash": "956bcea8cdc07e5cb56e568237adbae9",
         "facade_enabled": 0,
         "created_at": "2025-10-03T08:40:37.000000Z",
-        "updated_at": "2025-10-03T08:40:37.000000Z",
+        "updated_at": "2025-11-04T10:22:47.000000Z",
         "merged": false
     },
     {
@@ -7512,11 +7512,11 @@
         "enemy_forces_required_teeming": 242,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 2100,
         "mdt_mapping_hash": "9de5884a87cd308d354d55bff3427d6e",
         "facade_enabled": 0,
         "created_at": "2025-10-03T09:00:08.000000Z",
-        "updated_at": "2025-10-03T09:00:08.000000Z",
+        "updated_at": "2025-11-04T10:23:22.000000Z",
         "merged": false
     },
     {
@@ -7544,11 +7544,11 @@
         "enemy_forces_required_teeming": 180,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1440,
         "mdt_mapping_hash": "2ee20fd781386a7d47d2cda9459e77b3",
         "facade_enabled": 1,
         "created_at": "2025-10-03T20:29:04.000000Z",
-        "updated_at": "2025-10-03T20:29:04.000000Z",
+        "updated_at": "2025-11-04T10:23:39.000000Z",
         "merged": false
     },
     {
@@ -7608,11 +7608,11 @@
         "enemy_forces_required_teeming": 252,
         "enemy_forces_shrouded": null,
         "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
+        "timer_max_seconds": 1980,
         "mdt_mapping_hash": "4496825076f04d19e9ae0088c47b696f",
         "facade_enabled": 1,
         "created_at": "2025-10-05T19:55:18.000000Z",
-        "updated_at": "2025-10-05T19:55:18.000000Z",
+        "updated_at": "2025-11-04T10:24:21.000000Z",
         "merged": false
     }
 ]
