@@ -505,6 +505,7 @@ return [
             'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
             'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
             'timer_max_seconds'               => 'Timer (seconds)',
+            'timer_max_minutes'               => 'Timer (minutes)',
             'save'                            => 'Save',
         ],
         'mapsettings' => [
