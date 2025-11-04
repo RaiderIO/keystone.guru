@@ -21,7 +21,7 @@ return [
     'heatmap' => [
         'gameversion' => [
             'list' => [
-                'title'             => '',
+                'title'             => 'Теплокарти',
                 'header'            => '',
                 'raider_io'         => '',
                 'description'       => '',

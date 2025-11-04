@@ -348,6 +348,7 @@ return [
     'dungeonfloorswitchmarker_linked_dungeon_floor_switch_marker_id_label' => '',
     'dungeonfloorswitchmarker_direction_label'                             => 'Направление',
     'dungeonfloorswitchmarker_direction_select_default_label'              => '',
+    'dungeonfloorswitchmarker_hidden_in_facade_label'                      => '',
     'dungeonfloorswitchmarker_to_label'                                    => '',
     'dungeonfloorswitchmarker_go_to_label'                                 => '',
     'dungeonfloorswitchmarker_unknown_label'                               => '',

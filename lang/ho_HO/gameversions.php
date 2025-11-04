@@ -26,5 +26,8 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
-
+    'legion-remix' => [
+        'name'        => 'Hodor',
+        'description' => 'Hodor',
+    ],
 ];

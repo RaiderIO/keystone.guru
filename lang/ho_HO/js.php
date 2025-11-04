@@ -347,6 +347,7 @@ return [
     'dungeonfloorswitchmarker_linked_dungeon_floor_switch_marker_id_label' => 'Hodor',
     'dungeonfloorswitchmarker_direction_label'                             => 'Hodor',
     'dungeonfloorswitchmarker_direction_select_default_label'              => 'Hodor',
+    'dungeonfloorswitchmarker_hidden_in_facade_label'                      => 'Hodor',
     'dungeonfloorswitchmarker_to_label'                                    => 'Hodor',
     'dungeonfloorswitchmarker_go_to_label'                                 => 'Hodor',
     'dungeonfloorswitchmarker_unknown_label'                               => 'Hodor',

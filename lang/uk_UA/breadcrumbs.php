@@ -19,6 +19,7 @@ return [
             'terms'   => '',
         ],
         'routes'              => '',
+        'routes_expansion'    => '',
         'routes_game_version' => '',
         'gameversion'         => [
             'update'  => '',
@@ -104,7 +105,7 @@ return [
                 'edit_npc_health' => '',
             ],
             'spells' => [
-                'spells'     => '',
+                'spells'     => 'Заклинання',
                 'new_spell'  => '',
                 'edit_spell' => '',
             ],

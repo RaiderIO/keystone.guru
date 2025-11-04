@@ -478,6 +478,10 @@ return [
                 'header' => '',
                 'submit' => '',
             ],
+            'dungeonmappingversionaccuracy' => [
+                'title'  => '',
+                'header' => '',
+            ],
         ],
         'npc' => [
             'import' => [
@@ -513,6 +517,7 @@ return [
             'view_mdt_diff'                               => 'Просмотр различия с MDT',
             'view_dungeon_mapping_hash'                   => '',
             'view_dungeon_mapping_version_to_mdt_mapping' => '',
+            'view_dungeon_mapping_version_accuracy'       => '',
             'subheader_enemy_forces'                      => 'Силы врага',
             'enemy_forces_import'                         => 'Импорт силы врага',
             'subheader_wowtools'                          => '',

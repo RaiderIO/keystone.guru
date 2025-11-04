@@ -4,26 +4,26 @@ return [
 
     'passwords' => [
         'email' => [
-            'title'                    => '',
-            'header'                   => '',
-            'email_address'            => '',
-            'send_password_reset_link' => '',
+            'title'                    => 'Скидання пароля',
+            'header'                   => 'Скидання пароля',
+            'email_address'            => 'Електронна скринька',
+            'send_password_reset_link' => 'Надіслати посилання для скидання',
         ],
         'reset' => [
-            'title'            => '',
-            'header'           => '',
-            'email_address'    => '',
-            'password'         => '',
+            'title'            => 'Скидання пароля',
+            'header'           => 'Скидання пароля',
+            'email_address'    => 'Електронна скринька',
+            'password'         => 'Пароль',
             'confirm_password' => '',
-            'reset_password'   => '',
+            'reset_password'   => 'Скинути пароль',
         ],
     ],
     'login' => [
-        'title' => '',
+        'title' => 'Вхід',
     ],
     'register' => [
-        'title'  => '',
-        'header' => '',
+        'title'  => 'Реєстрація',
+        'header' => 'Реєстрація',
     ],
 
 ];

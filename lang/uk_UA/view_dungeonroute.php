@@ -70,7 +70,7 @@ return [
         'title' => '',
     ],
     'newtemporary' => [
-        'title'  => '',
+        'title'  => 'Створити тимчасовий маршрут',
         'header' => '',
     ],
     'sandboxclaimed' => [

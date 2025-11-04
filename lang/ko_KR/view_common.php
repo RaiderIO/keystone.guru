@@ -502,6 +502,7 @@ return [
             'enemy_forces_shrouded'           => '',
             'enemy_forces_shrouded_zul_gamux' => '',
             'timer_max_seconds'               => '',
+            'timer_max_minutes'               => '',
             'save'                            => '',
         ],
         'mapsettings' => [

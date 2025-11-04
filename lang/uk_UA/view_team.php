@@ -56,7 +56,7 @@ return [
         'return_to_team'              => '',
         'accept_invitation'           => '',
         'login'                       => '',
-        'register'                    => '',
+        'register'                    => 'Реєстрація',
         'invite_not_found'            => '',
         'back_to_homepage'            => '',
     ],

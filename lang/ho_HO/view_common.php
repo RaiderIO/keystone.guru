@@ -502,6 +502,7 @@ return [
             'enemy_forces_shrouded'           => 'Hodor',
             'enemy_forces_shrouded_zul_gamux' => 'Hodor',
             'timer_max_seconds'               => 'Hodor',
+            'timer_max_minutes'               => 'Hodor',
             'save'                            => 'Hodor',
         ],
         'mapsettings' => [

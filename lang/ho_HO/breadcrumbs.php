@@ -19,6 +19,7 @@ return [
             'terms'   => 'Hodor',
         ],
         'routes'              => 'Hodor',
+        'routes_expansion'    => 'Hodor',
         'routes_game_version' => 'Hodor',
         'gameversion'         => [
             'update'  => 'Hodor',

@@ -51,7 +51,7 @@ return [
         'title'                         => '',
         'header'                        => '',
         'enemy_forces_mapping_progress' => '',
-        'dungeon'                       => '',
+        'dungeon'                       => 'Підземелля',
         'enemy_forces_assigned'         => '',
         'npcs_assigned_to_enemies'      => '',
         'teeming'                       => '',

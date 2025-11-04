@@ -18,7 +18,7 @@ return [
             'home'        => '',
             'changelog'   => '',
             'affixes'     => '',
-            'patreon'     => '',
+            'patreon'     => 'Patreon',
             'get_started' => '',
         ],
     ],
