@@ -36,7 +36,7 @@ class WriteKsgFromCrowdin extends Command
             'php artisan larex:import crowdin',
         ]);
 
-        if (!$this->correctLocalizationHeader()) {
+        if (!$this->convertLocalizationHeaderToCrowdinFormat()) {
             return 1;
         }
 
