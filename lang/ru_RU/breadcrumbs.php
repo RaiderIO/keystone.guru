@@ -18,9 +18,9 @@ return [
             'privacy' => '',
             'terms'   => '',
         ],
-        'routes'           => 'Маршруты',
+        'routes'              => 'Маршруты',
         'routes_game_version' => ':gameVersion маршруты',
-        'gameversion'      => [
+        'gameversion'         => [
             'update'  => '',
             'dungeon' => [
                 'heatmaps' => '',

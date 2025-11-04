@@ -18,9 +18,9 @@ return [
             'privacy' => 'Hodor',
             'terms'   => 'Hodor',
         ],
-        'routes'           => 'Hodor',
+        'routes'              => 'Hodor',
         'routes_game_version' => 'Hodor',
-        'gameversion'      => [
+        'gameversion'         => [
             'update'  => 'Hodor',
             'dungeon' => [
                 'heatmaps' => 'Hodor',
