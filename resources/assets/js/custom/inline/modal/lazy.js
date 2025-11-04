@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} ModalLazyOptions
  * @property {string} id
- * @property {string} view
+ * @property {string} ajax_url
  */
 
 /**
@@ -22,7 +22,7 @@ class ModalLazy extends InlineCode {
             // request the html from the server using ajax
             $.ajax({
                 type: 'GET',
-                url: `ajax/view/${self.options.view}`,
+                url: self.options.ajax_url,
                 dataType: 'html',
                 success: function (data) {
                     $(self.options.id).find('.probootstrap-modal-content').html(data);
