@@ -1,23 +1,7 @@
-@section('scripts')
-    @parent
-
-    <script>
-        $(function () {
-            let $temporaryRoute = $('#mdt_import_sandbox');
-            $temporaryRoute.bind('change', function () {
-                let $mdtImportTeamIdSelect = $('#mdt_import_team_id_select');
-
-                if ($temporaryRoute.is(':checked')) {
-                    $mdtImportTeamIdSelect.attr('disabled', true);
-                } else {
-                    $mdtImportTeamIdSelect.removeAttr('disabled');
-                }
-
-                refreshSelectPickers();
-            });
-        })
-    </script>
-@endsection
+@include('common.general.inline', ['path' => 'common/forms/mdtimport', 'options' => [
+    'temporaryRouteSelector' => '#mdt_import_sandbox',
+    'mdtImportTeamIdSelector' => '#mdt_import_team_id_select',
+]])
 
 {{ html()->form('POST', route('dungeonroute.new.mdtimport'))->open() }}
 <div class="form-group">

@@ -17,8 +17,14 @@ class ModalLazy extends InlineCode {
 
         let self = this;
 
+        this.loaded = false;
+
         // When the modal is shown
         $(this.options.id).on('shown.bs.modal', function () {
+            if(self.loaded) {
+                return;
+            }
+
             // request the html from the server using ajax
             $.ajax({
                 type: 'GET',
@@ -26,6 +32,7 @@ class ModalLazy extends InlineCode {
                 dataType: 'html',
                 success: function (data) {
                     $(self.options.id).find('.probootstrap-modal-content').html(data);
+                    self.loaded = true;
 
                     refreshSelectPickers();
                     refreshTooltips();
