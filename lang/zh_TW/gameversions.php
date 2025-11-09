@@ -26,5 +26,9 @@ return [
         'name'        => '',
         'description' => '',
     ],
+    'legion-remix' => [
+        'name'        => '',
+        'description' => '',
+    ],
 
 ];

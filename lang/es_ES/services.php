@@ -14,9 +14,9 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => '',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '',
                 'route_title_contains_non_ascii_char_bug'           => '',
-                'route_title_contains_non_ascii_char_bug_details' => '',
-                'map_icon_contains_non_ascii_char_bug'            => '',
-                'map_icon_contains_non_ascii_char_bug_details'    => '',
+                'route_title_contains_non_ascii_char_bug_details'   => '',
+                'map_icon_contains_non_ascii_char_bug'              => '',
+                'map_icon_contains_non_ascii_char_bug_details'      => '',
             ],
             'import_string' => [
                 'category' => [

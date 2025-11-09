@@ -3,13 +3,13 @@
 return [
 
     'sitepage' => [
-        'staging_banner_description'        => '',
-        'staging_banner_take_me_away'       => '',
-        'readonly_mode_enabled_description' => '',
+        'staging_banner_description'        => 'Увага! Зараз ви перебуваєте в тестовому середовищі Keystone.guru. Це НЕ основний сайт.',
+        'staging_banner_take_me_away'       => 'Заберіть мене на основний сайт!',
+        'readonly_mode_enabled_description' => 'Увімкнено режим для читання. Ви можете переглядати маршрути, але не можете змінювати їх або створювати нові.',
     ],
     'app' => [
-        'linkpreview_title'       => '',
-        'linkpreview_description' => '',
+        'linkpreview_title'       => 'Маршрути М+ без клопотів',
+        'linkpreview_description' => 'Плануйте маршрути онлайн спільно з командою або знаходьте нові, які відповідають вашому стилю гри й рівню майстерності. Keystone.guru — це єдине місце, де ви можете керувати своїми маршрутами для M+ та ділитися ними.',
     ],
 
 ];

@@ -3,17 +3,17 @@
 return [
 
     'seasonal_type' => [
-        'beguiling'           => '',
-        'awakened'            => '',
-        'inspiring'           => '',
-        'prideful'            => '',
-        'tormented'           => '',
-        'encrypted'           => '',
-        'mdt_placeholder'     => '',
-        'requires_activation' => '',
-        'shrouded'            => '',
-        'shrouded_zul_gamux'  => '',
-        'no_shrouded'         => '',
+        'beguiling'           => 'Приманливий',
+        'awakened'            => 'Пробуджений',
+        'inspiring'           => 'Наснажливий',
+        'prideful'            => 'Гордий',
+        'tormented'           => 'Замучений',
+        'encrypted'           => 'Зашифрований',
+        'mdt_placeholder'     => 'Заготовлені місце від MDT',
+        'requires_activation' => 'Потребує активації',
+        'shrouded'            => 'Прихований',
+        'shrouded_zul_gamux'  => 'Прихований (Зул\'ґамукс)',
+        'no_shrouded'         => 'Неприхований',
     ],
 
 ];

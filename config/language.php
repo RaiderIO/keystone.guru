@@ -140,9 +140,7 @@ return [
     | This options indicates the language allowed languages.
     |
     */
-
-    // Only allow DE when debugging, it's still WIP
-    'allowed' => env('APP_DEBUG') ? ['en_US', 'de_DE', 'ru_RU', 'ho_HO'] : ['en_US', 'ru_RU'],
+    'allowed' => env('APP_DEBUG') ? ['en_US', 'de_DE', 'ru_RU', 'ho_HO', 'uk_UA'] : ['en_US', 'ru_RU'],
 
     /*
     |--------------------------------------------------------------------------
