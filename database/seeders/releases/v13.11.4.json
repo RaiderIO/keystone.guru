@@ -1,0 +1,25 @@
+{
+    "id": 330,
+    "release_changelog_id": 337,
+    "version": "v13.11.4",
+    "title": "Fixed MDT string import",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-11-09T09:46:37+00:00",
+    "updated_at": "2025-11-09T09:46:37+00:00",
+    "changelog": {
+        "id": 337,
+        "release_id": 330,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 337,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3023,
+                "change": "Fixed MDT string importing not working anymore. I forgot to move some code after a refactor which enabled the dialog to work - sorry! Thanks to TFJ_Demise for reporting!"
+            }
+        ]
+    }
+}
