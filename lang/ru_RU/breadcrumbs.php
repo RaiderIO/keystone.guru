@@ -19,7 +19,7 @@ return [
             'terms'   => '',
         ],
         'routes'              => 'Маршруты',
-        'routes_expansion'    => '',
+        'routes_expansion'    => ':expansion маршруты',
         'routes_game_version' => ':gameVersion маршруты',
         'gameversion'         => [
             'update'  => '',

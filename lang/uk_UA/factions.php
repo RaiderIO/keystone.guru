@@ -2,7 +2,7 @@
 
 return [
 
-    'unspecified' => '',
+    'unspecified' => 'Невизначена',
     'horde'       => 'Орда',
     'alliance'    => 'Альянс',
 

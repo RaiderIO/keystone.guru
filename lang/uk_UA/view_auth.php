@@ -14,7 +14,7 @@ return [
             'header'           => 'Скидання пароля',
             'email_address'    => 'Електронна скринька',
             'password'         => 'Пароль',
-            'confirm_password' => '',
+            'confirm_password' => 'Підтвердьте пароль',
             'reset_password'   => 'Скинути пароль',
         ],
     ],

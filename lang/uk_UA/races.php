@@ -25,7 +25,7 @@ return [
     'maghar_orc'          => 'Орк-маґ\'гар',
     'dracthyrhorde'       => 'Драктир',
     'kul_tiran_human'     => 'Култірасець',
-    'zandalari_troll'     => 'Зандаларець',
+    'zandalari_troll'     => 'Зандаларський троль',
     'mechagnome'          => 'Мехагном',
     'vulpera'             => 'Вульпера',
     'earthenalliance'     => 'Земельник',

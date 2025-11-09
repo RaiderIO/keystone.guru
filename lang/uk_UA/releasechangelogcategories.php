@@ -2,18 +2,18 @@
 
 return [
 
-    'general_changes'          => '',
-    'route_changes'            => '',
-    'map_changes'              => '',
-    'mapping_changes'          => '',
-    'bugfixes'                 => '',
-    'mdt_importer_changes'     => '',
-    'team_changes'             => '',
-    'mdt_exporter_changes'     => '',
-    'live_session_changes'     => '',
-    'simulation_craft_changes' => '',
-    'auto_route_changes'       => '',
-    'api_changes'              => '',
-    'heatmap_changes'          => '',
+    'general_changes'          => 'Загальні зміни',
+    'route_changes'            => 'Зміни маршрутів',
+    'map_changes'              => 'Зміни мапи',
+    'mapping_changes'          => 'Зміни складання мап',
+    'bugfixes'                 => 'Виправлення',
+    'mdt_importer_changes'     => 'Зміни імпортера MDT',
+    'team_changes'             => 'Зміни команд',
+    'mdt_exporter_changes'     => 'Зміни експортера MDT',
+    'live_session_changes'     => 'Зміни до живих сеансів',
+    'simulation_craft_changes' => 'Зміни SimulationCraft',
+    'auto_route_changes'       => 'Зміни автомаршрутів',
+    'api_changes'              => 'Зміни API',
+    'heatmap_changes'          => 'Зміни теплокарт',
 
 ];

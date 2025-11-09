@@ -4,22 +4,22 @@ return [
 
     'commit' => [
         'added' => [
-            'added' => '',
+            'added' => 'Додано',
         ],
         'modified' => [
-            'modified' => '',
+            'modified' => 'Змінено',
         ],
         'removed' => [
-            'removed' => '',
+            'removed' => 'Видалено',
         ],
     ],
     'release' => [
         'discord_footer' => [
-            'home'        => '',
-            'changelog'   => '',
-            'affixes'     => '',
+            'home'        => 'Домівка',
+            'changelog'   => 'Список змін',
+            'affixes'     => 'Модифікатори',
             'patreon'     => 'Patreon',
-            'get_started' => '',
+            'get_started' => 'Розпочніть з',
         ],
     ],
 

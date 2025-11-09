@@ -3,7 +3,7 @@
 return [
 
     'name'      => 'Сезон :season',
-    'name_med'  => ':expansion – сезон :season',
-    'name_long' => ':expansion – сезон :season',
+    'name_med'  => 'Сезон :season (:expansion)',
+    'name_long' => 'Сезон :season (:expansion)',
 
 ];
