@@ -1,3 +1,17 @@
+### Rust builder (nightly for edition2024)
+FROM rustlang/rust:nightly-bookworm AS wa-builder
+# or: FROM rustlang/rust:nightly     # (Debian base)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  build-essential cmake pkg-config libssl-dev git ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN ls -lh /usr/local/cargo/bin
+
+
+RUN cargo --version && rustc --version
+RUN cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git --locked
+
+### ---- Runtime image ----
 FROM php:8.2-fpm
 
 # Arguments defined in docker-compose.yml
@@ -8,7 +22,7 @@ ARG uid
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     libpng-dev \
@@ -22,25 +36,20 @@ RUN apt-get update && apt-get install -y \
     unzip \
     default-mysql-client  \
     wget \
-    gettext
-
+    gettext \
+    libxdamage-dev \
+    libnss3-dev \
+    libgdk-pixbuf-xlib-2.0-dev \
+    libgtk-3-dev \
+    libxss-dev \
+    libasound2 \
+ && rm -rf /var/lib/apt/lists/*
 
 # Install global packages
 RUN npm i -g handlebars puppeteer@19.9.0
 
-# Required for puppeteer to work
-RUN apt-get install -y libxdamage-dev \
-                libnss3-dev \
-                libgdk-pixbuf2.0-dev \
-                libgtk-3-dev \
-                libxss-dev \
-                libasound2
-
 # Have puppeteer download chromium (this really should be done when puppeteer is installed from npm..)
 RUN node /usr/lib/node_modules/puppeteer/install.js
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN pecl install imagick swoole && docker-php-ext-enable imagick swoole
@@ -52,62 +61,45 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy scripts
 COPY docker_init.sh /usr/local/bin/docker_init.sh
 
-# Make them executable
 RUN chmod +x /usr/local/bin/docker_init.sh
 
 USER root
 
+# ----- ADD: copy the compiled WA parser from the builder stage -----
+COPY --from=wa-builder /usr/local/cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
+
+RUN chmod 0755 /usr/bin/cli_weakauras_parser
+
+
 # Set working directory
-WORKDIR /tmp
-
-## Download cmake, required for cargo, which is required for cli-weakauras-parser
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && \
-    # Temp fix so that cargo works https://github.com/rust-lang/rustup/issues/686#issuecomment-272023791
-    export PATH="$HOME/.cargo/bin:$PATH" && \
-    # cli-weakauras-parser requires cmake..
-    # https://vitux.com/how-to-install-cmake-on-ubuntu-18-04/
-    wget https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2.tar.gz && \
-    tar -zxvf cmake-3.19.2.tar.gz && \
-    rm cmake-3.19.2.tar.gz
-
-# Install cmake
-RUN apt-get update && apt-get install -y libssl-dev && \
-    cd cmake-3.19.2 && \
-    ./bootstrap && \
-    make && \
-    sudo make install && \
-    cmake --version
-
-# Install cli weakauras parser
-RUN /root/.cargo/bin/cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git && \
-    ln -s ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
+WORKDIR /var/www
 
 # Install actual LUA language
-RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \
-    ln -s /usr/include/lua5.3/ /usr/include/lua && \
-    cp /usr/lib/*-linux-gnu/liblua5.3.a /usr/lib/liblua.a && \
-    cp /usr/lib/*-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so && \
-    ln /usr/include/lua5.3/lua.h /usr/include/lauxlib.h && \
-    ln /usr/include/lua5.3/lua.h /usr/include/lua.h && \
-    ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h
+RUN apt-get update && apt-get install -y --no-install-recommends lua5.3 liblua5.3-dev \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /usr/include/lua5.3/ /usr/include/lua \
+ && cp /usr/lib/*-linux-gnu/liblua5.3.a /usr/lib/liblua.a || true \
+ && cp /usr/lib/*-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so || true \
+ && ln /usr/include/lua5.3/lua.h /usr/include/lauxlib.h || true \
+ && ln /usr/include/lua5.3/lua.h /usr/include/lua.h || true \
+ && ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h || true
 
-# Install PHP Lua https://serverfault.com/a/219577/1076801
-RUN mkdir /tmp/php-lua && \
-    cd /tmp/php-lua && \
-    git clone https://github.com/Wotuu/php-lua.git . && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install
+# Install PHP Lua extension
+RUN mkdir -p /tmp/php-lua \
+ && cd /tmp/php-lua \
+ && git clone https://github.com/Wotuu/php-lua.git . \
+ && phpize \
+ && ./configure \
+ && make -j"$(nproc)" \
+ && make install
 
 # Install LUA BitOp
 COPY LuaBitOp-1.0.3.zip /tmp/LuaBitOp-1.0.3.zip
-
-RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
-    cd /tmp/LuaBitOp-1.0.3 && \
-    make && \
-    sudo mkdir -p /usr/lib/lua/5.3/ && \
-    cp bit.so /usr/lib/lua/5.3/
+RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp \
+ && cd /tmp/LuaBitOp-1.0.3 \
+ && make -j"$(nproc)" \
+ && sudo mkdir -p /usr/lib/lua/5.3/ \
+ && cp bit.so /usr/lib/lua/5.3/
 
 # Enable LUA
 RUN docker-php-ext-enable lua
@@ -130,13 +122,10 @@ COPY usr/local/etc/php-fpm.d/ /usr/local/etc/php-fpm.d/
 COPY var/ /var/
 
 # Import .env file and apply it to the current environment
-RUN cd /tmp && \
-    export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst) && \
-    envsubst < /root/.config/composer/auth.json > /root/.config/composer/auth.json.tmp && \
-    mv /root/.config/composer/auth.json.tmp /root/.config/composer/auth.json &&  \
-    rm /tmp/.env
-
-# Set working directory
-WORKDIR /var/www
+RUN cd /tmp \
+ && export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst) \
+ && envsubst < /root/.config/composer/auth.json > /root/.config/composer/auth.json.tmp \
+ && mv /root/.config/composer/auth.json.tmp /root/.config/composer/auth.json \
+ && rm /tmp/.env
 
 #ENTRYPOINT ["/usr/local/bin/docker_init.sh"]
