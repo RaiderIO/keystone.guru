@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
         $postBody = $this->getJsonData('TWW/tww_s2_ptr_priory_of_the_sacred_flame_13', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -47,7 +47,7 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
         $postBody = $this->getJsonData('TWW/tww_s3_ptr_priory_of_the_sacred_flame_7', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

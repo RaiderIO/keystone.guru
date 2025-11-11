@@ -31,7 +31,7 @@ class APICombatLogController extends Controller
      *     )
      * )
      */
-    public function createRoute(
+    public function store(
         CombatLogRouteRequest                      $request,
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
     ): DungeonRouteResource {

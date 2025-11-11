@@ -13,7 +13,8 @@ class RaiderIOApiServiceLogging extends RollbarStructuredLogging implements Raid
 
     public function getHeatmapDataInvalidResponse(string $dungeonName, string $url, string $response): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        // @TODO temporarily disable logging of invalid responses, it's spamming the logs
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
     public function getHeatmapDataEnd(): void

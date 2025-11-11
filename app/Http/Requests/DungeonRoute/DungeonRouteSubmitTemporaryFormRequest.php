@@ -4,6 +4,7 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
+use App\Rules\DungeonRouteLevelRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -29,8 +30,8 @@ class DungeonRouteSubmitTemporaryFormRequest extends FormRequest
                 'required',
                 Rule::exists(Dungeon::class, 'id')->where('active', '1'),
             ],
-
             'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
+            'dungeon_route_level' => new DungeonRouteLevelRule(),
         ];
 
         // Validate demo state, optional or numeric

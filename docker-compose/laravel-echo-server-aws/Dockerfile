@@ -5,11 +5,7 @@ FROM laravel-echo-server
 # Working directory = /app
 
 # Install required packages
-RUN apk add --no-cache python3 py3-pip git
-
-# Install awscli through pip
-RUN pip install --no-cache-dir awscli && \
-    aws --version
+RUN apk add --no-cache aws-cli git
 
 ARG STAGE
 # Checkout the correct version of the repo

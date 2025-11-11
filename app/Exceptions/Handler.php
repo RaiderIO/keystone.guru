@@ -12,6 +12,7 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
+use MarvinLabs\DiscordLogger\Discord\Exceptions\MessageCouldNotBeSent;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -42,6 +43,8 @@ class Handler extends ExceptionHandler
         MethodNotAllowedHttpException::class,
         NotFoundHttpException::class,
         AccessDeniedHttpException::class,
+        // No point in logging Discord message send failures to Discord
+        MessageCouldNotBeSent::class,
     ];
 
     /**

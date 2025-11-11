@@ -143,12 +143,16 @@ class Floor extends CacheModel implements MappingModelInterface
     public const UI_MAP_ID_OPEN_WORLD = [
         // Unknown
         0,
+        // Eastern Kingdoms
+        13,
         // Broken Isles
         619,
         // Azsuna
         630,
         // Highmountain
         650,
+        // Suramar
+        680,
         // Maldraxxus
         1536,
         // The Shadowlands
