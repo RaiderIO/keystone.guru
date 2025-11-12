@@ -11,7 +11,7 @@ class AjaxViewController extends Controller
     {
         // $request->validated() now includes 'view' from the URL
         return view('layouts.ajax', [
-            'view' => $view,
+            'view'  => $view,
             'async' => true,
         ])->render();
     }

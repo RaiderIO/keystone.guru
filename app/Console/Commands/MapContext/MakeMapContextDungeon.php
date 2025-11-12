@@ -4,8 +4,6 @@ namespace App\Console\Commands\MapContext;
 
 use App\Console\Commands\MapContext\Traits\SavesToFile;
 use App\Models\Dungeon;
-use App\Models\Mapping\MappingVersion;
-use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;

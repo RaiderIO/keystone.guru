@@ -11,7 +11,6 @@ use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
-use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 

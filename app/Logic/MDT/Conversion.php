@@ -153,8 +153,8 @@ class Conversion
             // Cata
             Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
             // MoP
-//            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
-            Dungeon::DUNGEON_THRONE_OF_THE_TIDES        => 'ThroneOfTides',
+            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+            Dungeon::DUNGEON_THRONE_OF_THE_TIDES => 'ThroneOfTides',
             // WoD
             Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS => 'ShadowmoonBurialGrounds',
             Dungeon::DUNGEON_THE_EVERBLOOM             => 'Everbloom',

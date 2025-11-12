@@ -37,7 +37,7 @@ class MakeMapContextMappingVersion extends Command
         $output = $this->option('output') ?? storage_path('mapcontext');
 
         /** @var Collection<Dungeon> $dungeonsById */
-        $dungeonsById    = Dungeon::all()->keyBy('id');
+        $dungeonsById = Dungeon::all()->keyBy('id');
         /** @var Collection<MappingVersion> $mappingVersions */
         $mappingVersions = MappingVersion::all();
         $mapFacadeStyles = User::MAP_FACADE_STYLE_ALL;
@@ -58,7 +58,7 @@ class MakeMapContextMappingVersion extends Command
                 }
 
                 $mapContext = $mapContextService->createMapContextMappingVersionData(
-                // Can't do $mappingVersion->dungeon because of infinite loop
+                    // Can't do $mappingVersion->dungeon because of infinite loop
                     $dungeon,
                     $mappingVersion,
                     $mapFacadeStyle,

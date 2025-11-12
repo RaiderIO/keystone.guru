@@ -55,7 +55,6 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-
     public function createMapContextStaticData(
         string $locale,
     ): MapContextStaticData {

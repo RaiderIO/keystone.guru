@@ -44,7 +44,7 @@ return [
     | It can be 'session' (default) or 'referer'
     |
     */
-    'back' => 'session',
+    'back' => 'referer',
 
     /*
     |--------------------------------------------------------------------------

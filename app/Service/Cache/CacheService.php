@@ -51,6 +51,7 @@ class CacheService implements CacheServiceInterface
     public function setBypassCache(bool $bypassCache): CacheService
     {
         $this->bypassCache = $bypassCache;
+
         return $this;
     }
 

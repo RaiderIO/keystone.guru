@@ -2,12 +2,12 @@
 
 namespace App\Service\MapContext;
 
-use App\Logic\MapContext\MapContextDungeonData;
-use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
 use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
+use App\Logic\MapContext\MapContextDungeonData;
+use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -17,7 +17,7 @@ use App\Models\Mapping\MappingVersion;
 interface MapContextServiceInterface
 {
     public function createMapContextStaticData(
-        string $locale
+        string $locale,
     ): MapContextStaticData;
 
     public function createMapContextMappingVersionData(

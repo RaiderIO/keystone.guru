@@ -20,7 +20,6 @@ use Illuminate\Support\Carbon;
  */
 class Feature extends Model
 {
-
     protected function casts(): array
     {
         return [

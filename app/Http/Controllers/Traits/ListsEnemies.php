@@ -14,8 +14,6 @@ use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcClass;
-use App\Models\Npc\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Error;
@@ -65,7 +63,6 @@ trait ListsEnemies
 
         // Post process enemies
         foreach ($enemies as $enemy) {
-
             // Match an enemy with an MDT enemy so that the MDT enemy knows which enemy it's coupled with (vice versa is already known)
             foreach ($mdtEnemies as $mdtEnemy) {
                 // Match them

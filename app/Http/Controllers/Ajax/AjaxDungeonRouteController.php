@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
 use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
@@ -57,11 +56,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Random\RandomException;
 use Teapot\StatusCode\Http;
 use Throwable;
-use Illuminate\Support\Facades\Gate;
 
 class AjaxDungeonRouteController extends Controller
 {

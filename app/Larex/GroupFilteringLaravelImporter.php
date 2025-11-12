@@ -70,7 +70,7 @@ class GroupFilteringLaravelImporter implements Importer
             $index = $data->search(
                 fn(
                     $item,
-            ) => $item['group'] === $rawValue['group'] && $item['key'] === $rawValue['key'],
+                ) => $item['group'] === $rawValue['group'] && $item['key'] === $rawValue['key'],
             );
 
             if ($index === false) {

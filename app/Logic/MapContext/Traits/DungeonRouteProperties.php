@@ -2,10 +2,7 @@
 
 namespace App\Logic\MapContext\Traits;
 
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
-use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
@@ -14,7 +11,6 @@ use Illuminate\Support\Collection;
  */
 trait DungeonRouteProperties
 {
-
 //    /**
 //     * @return Collection<DungeonRoute>
 //     */

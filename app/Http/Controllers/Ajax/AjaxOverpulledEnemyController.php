@@ -18,8 +18,8 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode\Http;
 use Illuminate\Support\Facades\Gate;
+use Teapot\StatusCode\Http;
 
 class AjaxOverpulledEnemyController extends Controller
 {

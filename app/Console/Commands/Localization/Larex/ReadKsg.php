@@ -42,7 +42,7 @@ class ReadKsg extends Command
 
         $this->shell([
             'php artisan larex:export',
-            './vendor/bin/php-cs-fixer fix lang'
+            './vendor/bin/php-cs-fixer fix lang',
         ]);
 
         return 0;
