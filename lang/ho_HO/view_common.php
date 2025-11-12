@@ -478,6 +478,7 @@ return [
             'enemy' => [
                 'report_enemy_bug'       => 'Hodor',
                 'your_name'              => 'Hodor',
+                'what_is_wrong'          => 'Hodor',
                 'contact_by_email'       => 'Hodor',
                 'contact_by_email_guest' => 'Hodor',
                 'submit'                 => 'Hodor',

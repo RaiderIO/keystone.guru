@@ -97,7 +97,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <p class="mbr-text mbr-fonts-style display-7">
                             {!! __('view_home.discover_new_routes_description',
                                     ['archon_gg' => '<a href="https://www.archon.gg/wow" target="_blank">archon.gg</a>',
-                                    'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
+                                    'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('view_home.discover_new_routes_route_search'))]) !!}
                         </p>
                     </div>
                 </div>
