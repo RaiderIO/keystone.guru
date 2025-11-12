@@ -3,7 +3,7 @@
 return [
 
     'selectpicker' => [
-        'none_selected_text' => 'Nothing selected zzz',
+        'none_selected_text' => 'Nothing selected',
     ],
 
 ];
