@@ -9,7 +9,7 @@ return [
         'prideful'            => 'Гордий',
         'tormented'           => 'Замучений',
         'encrypted'           => 'Зашифрований',
-        'mdt_placeholder'     => 'Заготовлені місце від MDT',
+        'mdt_placeholder'     => 'Заготовлене місце від MDT',
         'requires_activation' => 'Потребує активації',
         'shrouded'            => 'Прихований',
         'shrouded_zul_gamux'  => 'Прихований (Зул\'ґамукс)',

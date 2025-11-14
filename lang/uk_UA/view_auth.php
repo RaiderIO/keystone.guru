@@ -6,13 +6,13 @@ return [
         'email' => [
             'title'                    => 'Скидання пароля',
             'header'                   => 'Скидання пароля',
-            'email_address'            => 'Електронна скринька',
-            'send_password_reset_link' => 'Надіслати посилання для скидання',
+            'email_address'            => 'Електронна адреса',
+            'send_password_reset_link' => 'Відправити посилання для скидання',
         ],
         'reset' => [
             'title'            => 'Скидання пароля',
             'header'           => 'Скидання пароля',
-            'email_address'    => 'Електронна скринька',
+            'email_address'    => 'Електронна адреса',
             'password'         => 'Пароль',
             'confirm_password' => 'Підтвердьте пароль',
             'reset_password'   => 'Скинути пароль',

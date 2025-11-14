@@ -7,6 +7,6 @@ return [
     'unlisted-routes'         => 'Маршрути з доступом лише за посиланням',
     'animated-polylines'      => 'Анімовані ламані лінії',
     'advanced-simulation'     => 'Розширена симуляція',
-    'ad-free-team-members'    => 'Відсутність реклами для членів команди',
+    'ad-free-team-members'    => 'Відсутність реклами для учасників команди',
 
 ];

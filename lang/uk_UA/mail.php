@@ -2,7 +2,7 @@
 
 return [
 
-    'Custom Password Reset Email' => 'Повідомлення про скидання пароля',
-    'Reset Password Notification' => 'Повідомлення про скидання пароля',
+    'Custom Password Reset Email' => 'Сповіщення про скидання пароля',
+    'Reset Password Notification' => 'Сповіщення про скидання пароля',
 
 ];

@@ -1,18 +1,9 @@
 <?php
 
 return [
-    // format: {
-    //  numeric: {
-    //      delimiters: {
-    //          thousands: ',',
-    //          decimal: '.'
-    //      }
-    //  }
-    // },
+
     'draw' => [
         'toolbar' => [
-            // #TODO: this should be reorganized where actions are nested in actions
-            // ex: actions.undo  or actions.cancel
             'actions' => [
                 'title' => 'Hodor',
                 'text'  => 'Hodor',
@@ -129,4 +120,5 @@ return [
             ],
         ],
     ],
+
 ];
