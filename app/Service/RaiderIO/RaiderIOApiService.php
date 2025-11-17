@@ -34,7 +34,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         $parameters       = [];
 
         if ($mostRecentSeason !== null) {
-            sprintf(
+            $parameters[] = sprintf(
                 'season=season-%s-%s',
                 $mostRecentSeason->expansion->shortname,
                 $mostRecentSeason->index,

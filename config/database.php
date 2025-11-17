@@ -18,7 +18,8 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            'strict'         => false, // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
+            // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
+            'strict'         => false,
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -56,7 +57,8 @@ return [
             'collation'      => 'utf8mb4_unicode_ci',
             'prefix'         => '',
             'prefix_indexes' => true,
-            'strict'         => false, // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
+            // this is probably a bad idea, https://stackoverflow.com/questions/43776758/how-can-i-solve-incompatible-with-sql-mode-only-full-group-by-in-laravel-eloquen
+            'strict'         => false,
             'engine'         => null,
             'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
@@ -131,6 +133,7 @@ return [
             'database'     => env('REDIS_DB', '0'),
             'read_timeout' => 1.0,
             'timeout'      => 1.0,
+            'scheme'       => env('REDIS_SCHEME', 'tcp'),
             //            'persistent'   => false, // or true if you use connection pooling
         ],
 
@@ -143,6 +146,7 @@ return [
             'database'     => env('REDIS_DB_MODEL_CACHE', '0'),
             'read_timeout' => 1.0,
             'timeout'      => 1.0,
+            'scheme'       => env('REDIS_SCHEME', 'tcp'),
             //            'persistent'   => false, // or true if you use connection pooling
         ],
 
@@ -155,6 +159,7 @@ return [
             'database'     => env('REDIS_CACHE_DB', '1'),
             'read_timeout' => 1.0,
             'timeout'      => 1.0,
+            'scheme'       => env('REDIS_SCHEME', 'tcp'),
             //            'persistent'   => false, // or true if you use connection pooling
         ],
 
