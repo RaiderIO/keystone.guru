@@ -39,7 +39,7 @@ export function startEcho() {
     }
 
     window.Echo = new Echo({
-        broadcaster: 'reverb',
+        broadcaster: 'pusher',
         key: process.env.MIX_REVERB_APP_KEY,
         wsHost: window.location.hostname,
         wsPort: window.location.protocol === 'https:' ? null : (window.location.port ?? 80),
@@ -47,6 +47,8 @@ export function startEcho() {
         forceTLS: window.location.protocol === 'https:',
         wsPath: '/reverb',
         enabledTransports: ['ws', 'wss'],
+        disableStats: true,
+        cluster: 'mt1', // Required by pusher-js, even if unused by Reverb
     });
     return window.Echo;
 }
