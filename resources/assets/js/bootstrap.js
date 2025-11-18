@@ -30,18 +30,39 @@ import Echo from 'laravel-echo'
 import messages from './messages';
 
 import Pusher from 'pusher-js';
+
 window.Pusher = Pusher;
 
-window.Echo = new Echo({
-    broadcaster: 'reverb',
-    key: process.env.MIX_REVERB_APP_KEY,
-    wsHost: window.location.hostname,        // or your domain
-    wsPort: window.location.protocol === 'https:' ? null : (window.location.port ?? 80),
-    wssPort: 443,
-    forceTLS: window.location.protocol === 'https:',
-    wsPath: '/reverb',
-    enabledTransports: ['ws', 'wss'],
-});
+export function startEcho() {
+    if (window.Echo) {
+        return window.Echo;
+    }
+
+    window.Echo = new Echo({
+        broadcaster: 'reverb',
+        key: process.env.MIX_REVERB_APP_KEY,
+        wsHost: window.location.hostname,
+        wsPort: window.location.protocol === 'https:' ? null : (window.location.port ?? 80),
+        wssPort: 443,
+        forceTLS: window.location.protocol === 'https:',
+        wsPath: '/reverb',
+        enabledTransports: ['ws', 'wss'],
+    });
+    return window.Echo;
+}
+
+export function stopEcho() {
+    if (!window.Echo) return;
+    try {
+        window.Echo.disconnect();
+    } catch (e) {
+    }
+    window.Echo = null;
+    delete window.Echo;
+}
+
+window.startEcho = startEcho;
+window.stopEcho = stopEcho;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

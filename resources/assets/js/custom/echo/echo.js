@@ -57,6 +57,8 @@ class Echo extends Signalable {
 
         let self = this;
 
+        window.startEcho();
+
         // This will probably not trigger the first time around, but it will trigger upon reconnect
         window.Echo.connector.pusher.connection.bind('connect', function () {
             self._status = ECHO_STATUS_CONNECTED;
