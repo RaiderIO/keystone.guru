@@ -57,16 +57,14 @@ class Echo extends Signalable {
 
         let self = this;
 
-        window.startEcho();
-
         // This will probably not trigger the first time around, but it will trigger upon reconnect
-        window.Echo.connector.socket.on('connect', function () {
+        window.Echo.connector.pusher.connection.bind('connect', function () {
             self._status = ECHO_STATUS_CONNECTED;
             self.signal('status:changed', {newStatus: self._status});
         });
 
         // Whenever disconnected..
-        window.Echo.connector.socket.on('disconnect', function () {
+        window.Echo.connector.pusher.connection.bind('disconnect', function () {
             self._status = ECHO_STATUS_DISCONNECTED;
             self.signal('status:changed', {newStatus: self._status});
 
@@ -91,6 +89,9 @@ class Echo extends Signalable {
             })
             .leaving(rawUser => {
                 self._removeUser(rawUser);
+            })
+            .error(error => {
+                console.error('Error in presence channel', error);
             });
 
         // Attach all our handlers to the presence channel
