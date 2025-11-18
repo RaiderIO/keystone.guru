@@ -63,22 +63,8 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
 
 // Add some new strings to the draw controls
 // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
-$.extend(L.drawLocal.draw.handlers, {
-    route: {
-        tooltip: {
-            start: lang.get('messages.draw_handler_route_tooltip_start'),
-            cont: lang.get('messages.draw_handler_route_tooltip_cont'),
-            end: lang.get('messages.draw_handler_route_tooltip_end')
-        }
-    },
-    brushline: {
-        tooltip: {
-            start: lang.get('messages.draw_handler_brushline_tooltip_start'),
-            cont: lang.get('messages.draw_handler_brushline_tooltip_cont'),
-            end: lang.get('messages.draw_handler_brushline_tooltip_end')
-        }
-    }
-});
+console.log(lang.messages[`${lang.locale}.leafletdraw`]);
+L.drawLocal = $.extend(L.drawLocal, lang.messages[`${lang.locale}.leafletdraw`]);
 
 class DrawControls extends MapControl {
     constructor(map, editableItemsLayer) {

@@ -20,9 +20,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
-use Illuminate\Support\Facades\Gate;
 
 class AjaxPathController extends Controller
 {

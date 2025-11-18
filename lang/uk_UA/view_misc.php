@@ -13,10 +13,10 @@ return [
     ],
     'affixes' => [
         'title'                             => 'Модифікатори',
-        'header'                            => 'Тижневі модифікатори в %s',
+        'header'                            => 'Тижневі модифікатори (%s)',
         'start_date'                        => 'Дата початку (%s)',
         'header_season'                     => ':season',
-        'header_season_start'               => 'Початок :season',
+        'header_season_start'               => ':season — початок',
         'seasonal'                          => 'Сезонне',
         'previous'                          => 'Назад',
         'next'                              => 'Далі',

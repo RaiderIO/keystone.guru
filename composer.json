@@ -101,6 +101,7 @@
         "laravel/framework": "^11.46",
         "laravel/octane": "^2.4",
         "laravel/pennant": "^1.7",
+        "laravel/reverb": "^1.6",
         "laravel/socialite": "^5.11",
         "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.9",
@@ -170,7 +171,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
-        "php-cs-fixer": "php-cs-fixer --config=./.php-cs-fixer.php"
+        "fix": "php-cs-fixer fix"
     },
     "config": {
         "preferred-install": "dist",

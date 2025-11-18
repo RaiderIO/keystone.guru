@@ -1,0 +1,37 @@
+{
+    "id": 331,
+    "release_changelog_id": 338,
+    "version": "v13.12",
+    "title": "Replaced Laravel Echo Server with Laravel Reverb",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-11-18T13:11:58+00:00",
+    "updated_at": "2025-11-18T13:11:58+00:00",
+    "changelog": {
+        "id": 338,
+        "release_id": 331,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 338,
+                "release_changelog_category_id": 2,
+                "ticket_id": 3033,
+                "change": "Replaced the backend of route synchronisation from Laravel Echo Server to Laravel Reverb. Echo Server has been abandoned for a long time, and setup was VERY cumbersome. Reverb is a lot simpler and cleaner. In the end it works the same so no changes are visible.."
+            },
+            {
+                "release_changelog_id": 338,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3030,
+                "change": "Fixed various smaller crashes found by malicious bots."
+            },
+            {
+                "release_changelog_id": 338,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3023,
+                "change": "[Hotfixed] Importing MDT strings is now functional again."
+            }
+        ]
+    }
+}

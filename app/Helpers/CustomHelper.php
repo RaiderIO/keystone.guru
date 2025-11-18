@@ -103,7 +103,7 @@ function ksgAsset(string $path): string
 /**
  * Retains functionality of locally compiled assets but also allows for assets to be served from a CDN in non-local environments.
  *
- * @param string $path
+ * @param  string $path
  * @return string
  */
 function ksgCompiledAsset(string $path): string

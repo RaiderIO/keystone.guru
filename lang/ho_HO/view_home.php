@@ -9,6 +9,7 @@ return [
     'create_route'                                 => 'Hodor',
     'discover_new_routes'                          => 'Hodor',
     'discover_new_routes_description'              => 'Hodor',
+    'discover_new_routes_route_search'             => 'Hodor',
     'create_your_own_routes'                       => 'Hodor',
     'create_your_own_routes_description'           => 'Hodor',
     'get_organized'                                => 'Hodor',

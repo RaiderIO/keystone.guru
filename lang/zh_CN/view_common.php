@@ -478,6 +478,7 @@ return [
             'enemy' => [
                 'report_enemy_bug'       => '',
                 'your_name'              => '',
+                'what_is_wrong'          => '',
                 'contact_by_email'       => '',
                 'contact_by_email_guest' => '',
                 'submit'                 => '',

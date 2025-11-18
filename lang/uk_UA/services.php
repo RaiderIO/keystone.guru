@@ -8,7 +8,7 @@ return [
                 'category' => [
                     'pull'     => 'Сутичка %d',
                     'title'    => 'Назва',
-                    'map_icon' => 'Позначка',
+                    'map_icon' => 'Значок',
                 ],
                 'unable_to_find_mdt_enemy_for_kg_enemy'             => 'Не вдалося знайти відповідного НІПа %s в MDT для ворога з Keystone.guru (enemy_id: %d, npc_id: %d).',
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Це означає, що у вашому маршруті помирає ворог, який відомий MDT, однак Keystone.guru ще не прив\'язав відповідного НІПа з MDT (або ж його не існує в MDT).',

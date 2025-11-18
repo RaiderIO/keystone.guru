@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteTazaveshSoLeahsGambitTest extends APIC
         $postBody = $this->getJsonData('SL/tww_s3_ptr_tazavesh_so_leahs_gambit_7', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

@@ -9,7 +9,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Metric\MetricServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 
 class AjaxMetricController extends Controller
 {

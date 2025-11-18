@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteTheaterOfPainTest extends APICombatLog
         $postBody = $this->getJsonData('SL/tww_s2_ptr_theater_of_pain_14', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

@@ -76,7 +76,7 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
             'target_floor_id'                       => 'integer',
             'linked_dungeon_floor_switch_marker_id' => 'integer',
             'hidden_in_facade'                      => 'boolean',
-        'lat'                                   => 'float',
+            'lat'                                   => 'float',
             'lng'                                   => 'float',
         ];
     }

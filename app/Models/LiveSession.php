@@ -15,10 +15,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                         $id
- * @property int                         $dungeon_route_id
- * @property int                         $user_id
- * @property string                      $public_key
+ * @property int    $id
+ * @property int    $dungeon_route_id
+ * @property int    $user_id
+ * @property string $public_key
  *
  * @property User                        $user
  * @property DungeonRoute                $dungeonRoute

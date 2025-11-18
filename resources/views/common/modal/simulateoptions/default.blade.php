@@ -35,7 +35,7 @@ use App\Models\Season;
         </label>
         <div class="row">
             <div class="col">
-                {{ html()->select('simulate_shrouded_bounty_type', $shroudedBountyTypes)->id('simulate_shrouded_bounty_type')->class('form-control selectpicker') }}
+                {{ html()->select('simulate_shrouded_bounty_type', $shroudedBountyTypes)->id('simulate_shrouded_bounty_type')->class('form-control selectpicker')->data('none-selected-text', __('html.selectpicker.none_selected_text')) }}
             </div>
         </div>
     </div>
@@ -48,11 +48,11 @@ use App\Models\Season;
         <label for="simulate_affix">
             {{ __('view_common.modal.simulateoptions.default.affixes') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('view_common.modal.simulateoptions.default.affix_title') }}"></i>
+               title="{{ __('view_common.modal.simulateoptions.default.affixes_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
-                {{ html()->multiselect('simulate_affix', $affixes)->id('simulate_affix')->class('form-control selectpicker') }}
+                {{ html()->multiselect('simulate_affix', $affixes)->id('simulate_affix')->class('form-control selectpicker')->data('none-selected-text', __('html.selectpicker.none_selected_text')) }}
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@ use App\Models\Season;
         </label>
         <div class="row">
             <div class="col">
-                {{ html()->multiselect('simulate_raid_buffs', $raidBuffsOptions)->id('simulate_raid_buffs')->class('form-control selectpicker') }}
+                {{ html()->multiselect('simulate_raid_buffs', $raidBuffsOptions)->id('simulate_raid_buffs')->class('form-control selectpicker')->data('none-selected-text', __('html.selectpicker.none_selected_text')) }}
             </div>
         </div>
     </div>
@@ -110,7 +110,7 @@ use App\Models\Season;
     </label>
     <div class="row">
         <div class="col">
-            {{ html()->multiselect('simulate_bloodlust_per_pull', [])->id('simulate_bloodlust_per_pull')->class('form-control selectpicker') }}
+            {{ html()->multiselect('simulate_bloodlust_per_pull', [])->id('simulate_bloodlust_per_pull')->class('form-control selectpicker')->data('none-selected-text', __('html.selectpicker.none_selected_text')) }}
         </div>
     </div>
 </div>

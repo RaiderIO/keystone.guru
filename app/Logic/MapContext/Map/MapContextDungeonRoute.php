@@ -3,7 +3,6 @@
 namespace App\Logic\MapContext\Map;
 
 use App\Http\Controllers\Traits\ListsEnemies;
-use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;

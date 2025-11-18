@@ -31,10 +31,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
     public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse
     {
         $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
-        $parameters = [];
+        $parameters       = [];
 
         if ($mostRecentSeason !== null) {
-            sprintf(
+            $parameters[] = sprintf(
                 'season=season-%s-%s',
                 $mostRecentSeason->expansion->shortname,
                 $mostRecentSeason->index,

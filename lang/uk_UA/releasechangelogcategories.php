@@ -10,10 +10,10 @@ return [
     'mdt_importer_changes'     => 'Зміни імпортера MDT',
     'team_changes'             => 'Зміни команд',
     'mdt_exporter_changes'     => 'Зміни експортера MDT',
-    'live_session_changes'     => 'Зміни до живих сеансів',
+    'live_session_changes'     => 'Зміни презентацій',
     'simulation_craft_changes' => 'Зміни SimulationCraft',
     'auto_route_changes'       => 'Зміни автомаршрутів',
     'api_changes'              => 'Зміни API',
-    'heatmap_changes'          => 'Зміни теплокарт',
+    'heatmap_changes'          => 'Зміни тепломап',
 
 ];

@@ -28,11 +28,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode;
-use Illuminate\Support\Facades\Gate;
 
 class TeamController extends Controller
 {

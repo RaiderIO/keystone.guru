@@ -6,17 +6,17 @@ return [
         'keystone_guru' => 'Keystone.guru',
         'affixes'       => 'Модифікатори',
         'about'         => 'Про нас',
-        'credits'       => 'Творці',
+        'credits'       => 'Подяки',
         'changelog'     => [
             'list'    => 'Список змін',
             'release' => [
-                'view' => 'Реліз :version',
+                'view' => 'Версія :version',
             ],
         ],
         'legal' => [
-            'cookies' => 'Файли Cookies',
-            'privacy' => 'Приватність',
-            'terms'   => 'Умови',
+            'cookies' => 'Політика cookie-файлів',
+            'privacy' => 'Політика конфіденційності',
+            'terms'   => 'Умови надання послуг',
         ],
         'routes'              => 'Маршрути',
         'routes_expansion'    => 'Маршрути :expansion',
@@ -24,7 +24,7 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => 'Теплокарти',
+                'heatmaps' => 'Тепломапи',
                 'explore'  => 'Огляд',
             ],
         ],
@@ -64,19 +64,19 @@ return [
             'tools' => [
                 'admin_tools'               => 'Панель адміністратора',
                 'view_exported_dungeondata' => 'Показати експортовані дані підземель',
-                'view_exported_releases'    => 'Показати експортовані релізи',
+                'view_exported_releases'    => 'Показати експортовані версії',
                 'select_exception'          => 'Вибрати виняток',
                 'mdt_diff'                  => 'Різниця з MDT',
                 'view_mdt_string_contents'  => 'Показати вміст рядка MDT',
                 'import_npcs'               => 'Імпортувати НІПів',
             ],
-            'releases'     => 'Релізи',
-            'new_release'  => 'Новий реліз',
-            'edit_release' => 'Змінити реліз',
+            'releases'     => 'Версії',
+            'new_release'  => 'Нова версія',
+            'edit_release' => 'Змінити версію',
             'expansions'   => [
-                'expansions'     => 'Доповнення',
-                'new_expansion'  => 'Нове доповнення',
-                'edit_expansion' => 'Змінити доповнення',
+                'expansions'     => 'Розширення',
+                'new_expansion'  => 'Нове розширення',
+                'edit_expansion' => 'Змінити розширення',
             ],
             'dungeons' => [
                 'dungeons'     => 'Підземелля',
@@ -88,8 +88,8 @@ return [
                 'edit_floor' => 'Змінити поверх',
             ],
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc10man' => 'Новий обов\'язковий НІП для швидкісного забігу в підземеллі на 10 гравців',
-                'new_dungeonspeedrunrequirednpc25man' => 'Новий обов\'язковий НІП для швидкісного забігу в підземеллі на 25 гравців',
+                'new_dungeonspeedrunrequirednpc10man' => 'Новий обов\'язковий НІП для швидкісного забігу в підземеллі (10 гравців)',
+                'new_dungeonspeedrunrequirednpc25man' => 'Новий обов\'язковий НІП для швидкісного забігу в підземеллі (25 гравців)',
             ],
             'npcs' => [
                 'npcs'     => 'НІПи',
@@ -97,8 +97,8 @@ return [
                 'edit_npc' => 'Змінити :npc',
             ],
             'npcenemyforces' => [
-                'new_npc_enemy_forces'  => 'Нові війська ворожих НІПів',
-                'edit_npc_enemy_forces' => 'Змінити війська ворожих НІПів',
+                'new_npc_enemy_forces'  => 'Нові очки військ НІПа',
+                'edit_npc_enemy_forces' => 'Змінити очки військ НІПа',
             ],
             'npchealth' => [
                 'new_npc_health'  => 'Нове здоров\'я НІПа',

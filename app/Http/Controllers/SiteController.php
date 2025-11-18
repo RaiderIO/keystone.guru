@@ -192,7 +192,7 @@ class SiteController extends Controller
         $minOffset = -50;
         $maxOffset = 10;
         $offset    = (int)$request->get('offset', 0);
-        $offset    = max($offset, min($offset, $maxOffset), $minOffset);
+        $offset    = max(min($offset, $maxOffset), $minOffset);
 
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,

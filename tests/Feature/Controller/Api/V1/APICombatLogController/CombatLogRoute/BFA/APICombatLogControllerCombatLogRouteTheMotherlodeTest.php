@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteTheMotherlodeTest extends APICombatLog
         $postBody = $this->getJsonData('BFA/tww_s2_ptr_the_motherlode_16', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

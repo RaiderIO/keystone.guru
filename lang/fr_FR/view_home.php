@@ -9,6 +9,7 @@ return [
     'create_route'                                 => '',
     'discover_new_routes'                          => '',
     'discover_new_routes_description'              => '',
+    'discover_new_routes_route_search'             => '',
     'create_your_own_routes'                       => '',
     'create_your_own_routes_description'           => '',
     'get_organized'                                => '',
