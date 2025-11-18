@@ -33,7 +33,7 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-export function startEcho() {
+function startEcho() {
     if (window.Echo) {
         return window.Echo;
     }
@@ -53,7 +53,7 @@ export function startEcho() {
     return window.Echo;
 }
 
-export function stopEcho() {
+function stopEcho() {
     if (!window.Echo) return;
     try {
         window.Echo.disconnect();
