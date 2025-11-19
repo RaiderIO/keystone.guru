@@ -57,16 +57,16 @@ class Echo extends Signalable {
 
         let self = this;
 
-        window.startEcho();
+        window.startLaravelEcho();
 
         // This will probably not trigger the first time around, but it will trigger upon reconnect
-        window.Echo.connector.pusher.connection.bind('connect', function () {
+        window.LaravelEcho.connector.pusher.connection.bind('connect', function () {
             self._status = ECHO_STATUS_CONNECTED;
             self.signal('status:changed', {newStatus: self._status});
         });
 
         // Whenever disconnected..
-        window.Echo.connector.pusher.connection.bind('disconnect', function () {
+        window.LaravelEcho.connector.pusher.connection.bind('disconnect', function () {
             self._status = ECHO_STATUS_DISCONNECTED;
             self.signal('status:changed', {newStatus: self._status});
 
@@ -76,7 +76,7 @@ class Echo extends Signalable {
 
         // Keep track of the current users in this channel
         /** @type Channel */
-        let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName())
+        let presenceChannel = window.LaravelEcho.join(getState().getMapContext().getEchoChannelName())
             .here(rawUsers => {
                 // Join any existing users already
                 for (let index in rawUsers) {

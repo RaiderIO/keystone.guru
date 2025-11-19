@@ -50,7 +50,7 @@ class MapObjectGroup extends Signalable {
 
         // @TODO Convert this to the new echo message system
         // if (getState().isEchoEnabled()) {
-        //     let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
+        //     let presenceChannel = window.LaravelEcho.join(getState().getMapContext().getEchoChannelName());
         //
         //     for (let index in this.names) {
         //         if (this.names.hasOwnProperty(index)) {

@@ -11,7 +11,7 @@ class WhisperMessageHandler extends MessageHandler {
         let self = this;
 
         // Set up the private channel so that we may communicate using it
-        this.privateChannel = window.Echo.private(getState().getMapContext().getEchoChannelName())
+        this.privateChannel = window.LaravelEcho.private(getState().getMapContext().getEchoChannelName())
             .listenForWhisper(this.getMessage(), (e) => {
                 self.onReceive(e);
             });

@@ -33,13 +33,13 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-export function startEcho() {
-    if (window.Echo) {
-        return window.Echo;
+function startLaravelEcho() {
+    if (window.LaravelEcho) {
+        return window.LaravelEcho;
     }
 
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
+    window.LaravelEcho = new Echo({
+        broadcaster: 'reverb',
         key: process.env.MIX_REVERB_APP_KEY,
         wsHost: window.location.hostname,
         wsPort: window.location.protocol === 'https:' ? null : (window.location.port ?? 80),
@@ -47,24 +47,25 @@ export function startEcho() {
         forceTLS: window.location.protocol === 'https:',
         wsPath: '/reverb',
         enabledTransports: ['ws', 'wss'],
-        disableStats: true,
-        cluster: 'mt1', // Required by pusher-js, even if unused by Reverb
+        // disableStats: true,
+        // cluster: 'mt1', // Required by pusher-js, even if unused by Reverb
     });
-    return window.Echo;
+
+    return window.LaravelEcho;
 }
 
-export function stopEcho() {
-    if (!window.Echo) return;
+function stopLaravelEcho() {
+    if (!window.LaravelEcho) return;
     try {
-        window.Echo.disconnect();
+        window.LaravelEcho.disconnect();
     } catch (e) {
     }
-    window.Echo = null;
-    delete window.Echo;
+    window.LaravelEcho = null;
+    delete window.LaravelEcho;
 }
 
-window.startEcho = startEcho;
-window.stopEcho = stopEcho;
+window.startLaravelEcho = startLaravelEcho;
+window.stopLaravelEcho = stopLaravelEcho;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
