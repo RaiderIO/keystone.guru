@@ -177,7 +177,7 @@ let scripts = [
 
     // Echo objects
     'resources/assets/js/custom/echo/echouser.js',
-    'resources/assets/js/custom/echo/echo.js',
+    'resources/assets/js/custom/echo/echohandler.js',
 
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
@@ -225,7 +225,7 @@ let scripts = [
     'resources/assets/js/custom/echo/messagehandler/whisper/viewport.js',
     'resources/assets/js/custom/echo/messagehandler/whisper/mouseposition.js',
 
-    // Depends on Echo
+    // Depends on EchoHandler
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/hotkeys.js',
 

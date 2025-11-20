@@ -71,7 +71,7 @@ class LiveSessionController extends Controller
             } catch (Exception $exception) {
                 report($exception);
 
-                Log::error('Echo server is probably not running!');
+                Log::error('Reverb server is probably not running!');
             }
         }
 

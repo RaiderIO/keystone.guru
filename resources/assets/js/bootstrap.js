@@ -20,9 +20,6 @@ require('bootstrap');
 
 // window.Vue = require('vue');
 
-/**
- * Echo server
- */
 import Echo from 'laravel-echo'
 /**
  * Translations coupling from server to client.
@@ -38,9 +35,14 @@ function startLaravelEcho() {
         return window.LaravelEcho;
     }
 
+    if (getState() === false) {
+        console.error(`Unable to start Laravel Echo outside of map context!`);
+        return null;
+    }
+
     window.LaravelEcho = new Echo({
         broadcaster: 'reverb',
-        key: process.env.MIX_REVERB_APP_KEY,
+        key: getState().getLaravelEchoAppKey(),
         wsHost: window.location.hostname,
         wsPort: window.location.protocol === 'https:' ? null : (window.location.port ?? 80),
         wssPort: 443,

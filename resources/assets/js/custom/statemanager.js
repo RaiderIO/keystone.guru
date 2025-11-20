@@ -7,9 +7,9 @@ class StateManager extends Signalable {
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
 
-        // Echo handler
-        this.echoEnabled = false;
-        this._echo = null;
+        // Echohandler handler
+        this.laravelEchoEnabled = false;
+        this._echoHandler = null;
 
         /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
@@ -36,12 +36,22 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Enables the Laravel Echo for this session.
+     * Enables the Laravel Echohandler for this session.
+     * @param {String} appKey
      */
-    enableEcho() {
+    enableLaravelEcho(appKey) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        this.echoEnabled = true;
+        this.laravelEchoEnabled = true;
+        this.laravelEchoAppKey = appKey;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getLaravelEchoAppKey() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.laravelEchoAppKey;
     }
 
     /**
@@ -100,14 +110,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Sets the map icon types to be used in the state.
-     * @param {Number} mapIconTypes
-     */
-    setMapIconTypes(mapIconTypes) {
-        this.mapIconTypes = [];
-    }
-
-    /**
      *
      * @param {Object} patreonBenefits
      */
@@ -160,8 +162,8 @@ class StateManager extends Signalable {
 
         // Set up the echo handler if we should
         if (this.isEchoEnabled()) {
-            this._echo = new Echo(this._map);
-            this._echo.connect();
+            this._echoHandler = new EchoHandler(this._map);
+            this._echoHandler.connect();
 
             this.signal('echo:enabled');
         }
@@ -373,17 +375,17 @@ class StateManager extends Signalable {
     isEchoEnabled() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this.echoEnabled;
+        return this.laravelEchoEnabled;
     }
 
     /**
-     * Gets the Echo instance used for Echo communication.
-     * @returns {Echo}
+     * Gets the EchoHandler instance used for Echo communication.
+     * @returns {EchoHandler}
      */
-    getEcho() {
+    getEchoHandler() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._echo;
+        return this._echoHandler;
     }
 
     /**
