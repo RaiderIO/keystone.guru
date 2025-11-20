@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\SL;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\SL;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
