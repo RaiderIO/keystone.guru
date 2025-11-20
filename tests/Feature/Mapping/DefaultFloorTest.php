@@ -14,7 +14,7 @@ class DefaultFloorTest extends TestCase
 {
     #[Test]
     #[Group('Mapping')]
-    public function mapTilesExistence_givenDungeon_shouldHaveAllMapTilesAvailable(): void
+    public function defaultFloorExistence_givenDungeon_shouldHaveOneDefaultFloor(): void
     {
         // Arrange
         $zoomLevels = 5;
@@ -23,7 +23,7 @@ class DefaultFloorTest extends TestCase
 
         // Act & Assert
         foreach ($dungeons as $dungeon) {
-            if (in_array($dungeon->key, ['stormwindcityhorrificvision'
+            if (in_array($dungeon->key, ['stormwindcityhorrificvision',
             ])) {
                 continue;
             }

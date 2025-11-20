@@ -67,7 +67,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
-                    5 => strip_tags($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''),
+                    5 => $this->convertHtmlToMdtComment($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''),
                 ],
             ];
         }
@@ -156,14 +156,41 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $floor->mdt_sub_level ?? $floor->index,
                     4 => true,
-                    // @TODO #2932
-                    5 => strip_tags($killZone->description),
+                    5 => $this->convertHtmlToMdtComment($killZone->description),
                     // MDT does not support HTML tags - get rid of them.
                 ],
             ];
         }
 
         return $result;
+    }
+
+    /**
+     * Convert HTML to a format MDT understands:
+     * - Replace <a href="...">...</a> with "(href)"
+     * - Strip all remaining HTML tags.
+     */
+    private function convertHtmlToMdtComment(?string $html): string
+    {
+        $html = $html ?? '';
+
+        if ($html === '') {
+            return '';
+        }
+
+        // Replace anchors with "(href)"
+        $html = preg_replace_callback(
+            '/<a\b[^>]*?href=(?:"([^"]+)"|\'([^\']+)\')[^>]*>.*?<\/a>/i',
+            static function (array $matches): string {
+                $href = $matches[1] !== '' ? $matches[1] : ($matches[2] ?? '');
+
+                return $href !== '' ? sprintf('(%s)', $href) : '';
+            },
+            $html,
+        );
+
+        // Strip any remaining HTML tags
+        return trim(strip_tags($html));
     }
 
     /**

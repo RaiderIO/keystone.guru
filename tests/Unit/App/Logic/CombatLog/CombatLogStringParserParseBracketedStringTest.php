@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Logic\CombatLog;
+namespace Tests\Unit\App\Logic\CombatLog;
 
+use App\Logic\CombatLog\CombatLogStringParser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

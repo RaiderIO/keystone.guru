@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Metric;
+namespace Tests\Unit\App\Service\Metric;
 
 use App\Models\Metrics\Metric;
 use App\Models\User;

@@ -9,6 +9,7 @@ use App\Models\PublishedState;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Random\RandomException;
 
 class DungeonRouteFactory extends Factory
 {
@@ -16,6 +17,7 @@ class DungeonRouteFactory extends Factory
 
     /**
      * Define the model's default state.
+     * @throws RandomException
      */
     public function definition(): array
     {
@@ -49,7 +51,7 @@ class DungeonRouteFactory extends Factory
 
             'clone_of'                   => null,
             'title'                      => $this->faker->sentence(),
-            'description'                => '',
+            'description'                => $this->faker->paragraph(),
             'level_min'                  => $activeSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
             'level_max'                  => $activeSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
             'difficulty'                 => 'Casual',

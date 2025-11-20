@@ -86,12 +86,12 @@ trait ConvertsMDTStrings
         return $result;
     }
 
-    private function encode(string $string): ?string
+    protected function encode(string $string): ?string
     {
         return $this->transform(true, $string);
     }
 
-    private function decode(string $string): string
+    protected function decode(string $string): string
     {
         return $this->transform(false, $string);
     }
