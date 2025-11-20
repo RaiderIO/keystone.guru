@@ -143,7 +143,7 @@ class GameVersion extends CacheModel
         return $cacheService->remember(
             'default_game_version',
             static fn(
-        ) => GameVersion::firstWhere('key', self::DEFAULT_GAME_VERSION),
+            ) => GameVersion::firstWhere('key', self::DEFAULT_GAME_VERSION),
             config('keystoneguru.cache.default_game_version.ttl'),
         );
     }
