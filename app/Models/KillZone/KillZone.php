@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -44,6 +45,7 @@ use Illuminate\Support\Facades\DB;
 class KillZone extends Model
 {
     use HasLatLng;
+    use HasFactory;
 
     public $visible = [
         'id',

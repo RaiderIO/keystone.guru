@@ -5,6 +5,7 @@ namespace App\Models\KillZone;
 use App\Models\Enemy;
 use App\Models\Npc\Npc;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
@@ -22,6 +23,8 @@ use Illuminate\Database\Query\JoinClause;
  */
 class KillZoneEnemy extends Model
 {
+    use HasFactory;
+
     public $hidden = [
         'id',
         'kill_zone_id',
