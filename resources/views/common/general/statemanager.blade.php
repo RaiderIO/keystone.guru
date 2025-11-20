@@ -23,7 +23,7 @@ use Illuminate\Support\Collection;
     _stateManager.setUserData({!! $userData !!});
     @endisset
     @if($echo)
-    _stateManager.enableEcho();
+    _stateManager.enableLaravelEcho(@json(config('reverb.apps.apps.0.key')));
 
     @endif
 

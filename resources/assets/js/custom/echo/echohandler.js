@@ -4,7 +4,7 @@ const ECHO_STATUS_DISCONNECTED = 'connecting';
 /**
  * @property {DungeonMap} map
  */
-class Echo extends Signalable {
+class EchoHandler extends Signalable {
     constructor(map) {
         super();
         console.assert(map instanceof DungeonMap, 'map is not a DungeonMap', map);
@@ -53,7 +53,7 @@ class Echo extends Signalable {
     }
 
     connect() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         let self = this;
 
@@ -111,7 +111,7 @@ class Echo extends Signalable {
      * @returns {string}
      */
     getStatus() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         return this._status;
     }
@@ -121,7 +121,7 @@ class Echo extends Signalable {
      * @returns {object[]}
      */
     getUsers() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         return this._echoUsers;
     }
@@ -132,7 +132,7 @@ class Echo extends Signalable {
      * @returns {EchoUser}
      */
     getUserByPublicKey(publicKey) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
         let result = null;
 
         for (let i = 0; i < this._echoUsers.length; i++) {
@@ -151,7 +151,7 @@ class Echo extends Signalable {
      * @returns {string}
      */
     getUserColor(publicKey) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         let user = this.getUserByPublicKey(publicKey);
         return user === null || user.getColor() === null ||
@@ -164,7 +164,7 @@ class Echo extends Signalable {
      * @param color {string} The new color of the user.
      */
     setUserColorByPublicKey(publicKey, color) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         let echoUser = this.getUserByPublicKey(publicKey);
         echoUser.setColor(color);
@@ -178,7 +178,7 @@ class Echo extends Signalable {
      * @param publicKey {String}
      */
     followUserByPublicKey(publicKey) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         // Unfollow the current user
         this.unfollowUser();
@@ -199,7 +199,7 @@ class Echo extends Signalable {
      *
      */
     unfollowUser() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         let previousEchoUserFollow = this._echoUserFollow;
 
@@ -217,7 +217,7 @@ class Echo extends Signalable {
      * Refollows the user we were previously following.
      */
     refollowUser() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         if (this._echoUserRefollow !== null) {
             this.followUserByPublicKey(this._echoUserRefollow.getPublicKey());
@@ -228,7 +228,7 @@ class Echo extends Signalable {
      * @returns {boolean} True if we're currently following a user, false if we're not.
      */
     isFollowingUser() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         return this._echoUserFollow !== null;
     }
@@ -245,7 +245,7 @@ class Echo extends Signalable {
      * @param mousePositionReceivedEvent {Object}
      */
     onMousePositionReceived(mousePositionReceivedEvent) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         this.signal('mouseposition:received', mousePositionReceivedEvent.data.message);
     }
@@ -255,7 +255,7 @@ class Echo extends Signalable {
      * @private
      */
     _clearUsers() {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         // Let everyone know we removed all users
         for (let i = 0; i < this._echoUsers.length; i++) {
@@ -271,7 +271,7 @@ class Echo extends Signalable {
      * @private
      */
     _addUser(rawUser) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         let existingEchoUser = this.getUserByPublicKey(rawUser.public_key);
         if (existingEchoUser === null) {
@@ -288,7 +288,7 @@ class Echo extends Signalable {
      * @private
      */
     _removeUser(rawUser) {
-        console.assert(this instanceof Echo, 'this is not an Echo', this);
+        console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         for (let i = 0; i < this._echoUsers.length; i++) {
             let echoUserCandidate = this._echoUsers[i];

@@ -6,7 +6,7 @@ class EchoControls extends MapControl {
 
         this._mapControl = null;
 
-        let echo = getState().getEcho();
+        let echo = getState().getEchoHandler();
         echo.register('status:changed', this, this._onStatusChanged.bind(this));
         echo.register('user:add', this, this._onUserAdd.bind(this));
         echo.register('user:remove', this, this._onUserRemove.bind(this));
@@ -85,7 +85,7 @@ class EchoControls extends MapControl {
 
                     // Make sure we can unfollow the user
                     $('#route_echo_unfollow_user').on('click', function () {
-                        getState().getEcho().unfollowUser();
+                        getState().getEchoHandler().unfollowUser();
 
                         self._refreshVisual();
                         self._removeCurrentSnackbar();
@@ -117,19 +117,19 @@ class EchoControls extends MapControl {
 
                     // Make sure we can unfollow the user
                     $('#route_echo_unfollow_user').on('click', function () {
-                        getState().getEcho().unfollowUser();
+                        getState().getEchoHandler().unfollowUser();
 
                         self._refreshVisual();
                         self._removeCurrentSnackbar();
                     });
 
                     $('#route_echo_refollow_user').on('click', function () {
-                        getState().getEcho().refollowUser();
+                        getState().getEchoHandler().refollowUser();
                         // Do not refresh visual or remove current snackbar - that'll be handled
                     });
 
                     $('#route_echo_follow_stop_user').on('click', function () {
-                        getState().getEcho().unfollowUser();
+                        getState().getEchoHandler().unfollowUser();
 
                         self._refreshVisual();
                         self._removeCurrentSnackbar();
@@ -143,7 +143,7 @@ class EchoControls extends MapControl {
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
 
         // Initial status while we wait for status changes
-        let echo = getState().getEcho();
+        let echo = getState().getEchoHandler();
         this._setStatus(echo.getStatus());
 
         this._refreshVisual();
@@ -167,9 +167,9 @@ class EchoControls extends MapControl {
         let result = template($.extend({}, getHandlebarsDefaultVariables(), {
             cursorsEnabled: getState().getDungeonMap().options.edit,
             cursorsActive: getState().getEchoCursorsEnabled(),
-            users: getState().getEcho().getUsers().slice(0, c.map.echo.userOverflowCount),
-            hasUsersOverflow: getState().getEcho().getUsers().length > c.map.echo.userOverflowCount,
-            usersOverflow: getState().getEcho().getUsers().slice(c.map.echo.userOverflowCount),
+            users: getState().getEchoHandler().getUsers().slice(0, c.map.echo.userOverflowCount),
+            hasUsersOverflow: getState().getEchoHandler().getUsers().length > c.map.echo.userOverflowCount,
+            usersOverflow: getState().getEchoHandler().getUsers().slice(c.map.echo.userOverflowCount),
             type: getState().getMapContext().getType(),
         }));
 
@@ -184,14 +184,14 @@ class EchoControls extends MapControl {
         });
 
         $('.echo_follow_user').on('click', function () {
-            getState().getEcho().followUserByPublicKey($(this).data('public_key'));
+            getState().getEchoHandler().followUserByPublicKey($(this).data('public_key'));
 
             // Rebuild the layout so that the button switches from follow to unfollow
             self._refreshVisual();
         });
 
         $('.echo_unfollow_user').on('click', function () {
-            getState().getEcho().unfollowUser();
+            getState().getEchoHandler().unfollowUser();
 
             getState().removeSnackbar(self.echoFollowSnackbarId);
             self.echoFollowSnackbarId = null;
@@ -273,12 +273,12 @@ class EchoControls extends MapControl {
             // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
             .html(`
             .echo_user_${user.public_key} {
-                border: 3px ${getState().getEcho().getUserColor(user.public_key)} solid !important;
+                border: 3px ${getState().getEchoHandler().getUserColor(user.public_key)} solid !important;
                 border-radius: 16px;
             }
 
             .echo_user_${user.public_key}_tooltip {
-                background-color: ${getState().getEcho().getUserColor(user.public_key)};
+                background-color: ${getState().getEchoHandler().getUserColor(user.public_key)};
             }
 
             `)
@@ -333,7 +333,7 @@ class EchoControls extends MapControl {
         $routeEchoContainer.append(container);
 
         // In case the control was recreated by switching floors
-        if (getState().getEcho().getUsers().length > 0) {
+        if (getState().getEchoHandler().getUsers().length > 0) {
             this._restoreExistingEchoState();
         }
     }
@@ -341,7 +341,7 @@ class EchoControls extends MapControl {
     cleanup() {
         super.cleanup();
 
-        let echo = getState().getEcho();
+        let echo = getState().getEchoHandler();
         echo.unregister('status:changed', this);
         echo.unregister('user:add', this);
         echo.unregister('user:remove', this);
