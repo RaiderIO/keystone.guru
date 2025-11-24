@@ -95,6 +95,11 @@ jobs:
             --no-progress
 
       # ===== Tests mode =====
+      - name: Switch APP_ENV to testing for tests
+        if: ${{ inputs.mode == 'tests' }}
+        run: |
+          echo "APP_ENV=testing" >> .env
+
       - name: Run PHPUnit
         if: ${{ inputs.mode == 'tests' }}
         run: ./vendor/bin/phpunit

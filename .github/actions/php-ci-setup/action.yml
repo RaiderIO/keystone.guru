@@ -42,7 +42,7 @@ runs:
         cp .env.example .env || true
         php -r "file_exists('.env') || copy('.env.example','.env');"
         {
-          echo "APP_ENV=testing"
+          echo "APP_ENV=production"
           echo "APP_DEBUG=true"
           echo "DB_MIGRATION_USERNAME=root"
           echo "DB_MIGRATION_PASSWORD=root"
