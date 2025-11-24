@@ -54,6 +54,11 @@ jobs:
           --health-retries=10
 
     steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
 
