@@ -33,6 +33,10 @@ runs:
       run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
       shell: bash
 
+    - name: Compute git version and save to file
+      run: echo -n "$(git rev-parse HEAD)" >> version
+      shell: bash
+
     - name: Prepare .env for CI
       run: |
         cp .env.example .env || true
