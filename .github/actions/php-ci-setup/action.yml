@@ -51,8 +51,9 @@ runs:
           echo "DB_COMBATLOG_PASSWORD=root"
           echo "REDIS_PORT=6379"
         } >> .env
+        pwd
         cat .env
-        php artisan key:generate --force
+        php artisan key:generate --force -v
       shell: bash
 
     - name: Migrate & seed
