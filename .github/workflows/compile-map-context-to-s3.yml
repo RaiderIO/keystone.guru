@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   mapcontext:
-    uses: ./.github/workflows/php-ci-setup/_ci-base.yml
+    uses: ./.github/workflows/_ci-base.yml
     with:
       mode: mapcontext
     secrets: inherit

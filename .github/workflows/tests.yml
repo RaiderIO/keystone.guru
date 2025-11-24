@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   tests:
-    uses: ./.github/workflows/php-ci-setup/_ci-base.yml
+    uses: ./.github/workflows/_ci-base.yml
     with:
       mode: tests
     secrets: inherit
