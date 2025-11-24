@@ -1,0 +1,100 @@
+name: PHP CI Base
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        description: "What to run: mapcontext or tests"
+        required: true
+        type: string
+
+jobs:
+  php-ci:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: keystone.guru.dev
+          MYSQL_USER: homestead
+          MYSQL_PASSWORD: secret
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+      db-combatlog:
+        image: mysql:8.0
+        ports:
+          - 3307:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: keystone.guru.combatlog
+          MYSQL_USER: homestead
+          MYSQL_PASSWORD: secret
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping || exit 1"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
+
+    steps:
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+
+      # ===== Map context + S3 mode =====
+      - name: Generate Map Context JS
+        if: ${{ inputs.mode == 'mapcontext' }}
+        run: |
+          mkdir -p storage/mapcontext
+          php artisan make:mapcontextstatic --output=storage/mapcontext
+          php artisan make:mapcontextdungeon --output=storage/mapcontext
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext
+          ls -la storage/mapcontext
+
+      - name: Configure AWS (keys)
+        if: ${{ inputs.mode == 'mapcontext' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install AWS CLI
+        if: ${{ inputs.mode == 'mapcontext' }}
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload Map Context JS files
+        if: ${{ inputs.mode == 'mapcontext' }}
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
+          aws s3 cp storage/mapcontext "s3://${S3_BUCKET}/compiled" \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
+
+      # ===== Tests mode =====
+      - name: Run PHPUnit
+        if: ${{ inputs.mode == 'tests' }}
+        run: ./vendor/bin/phpunit
+
+      - name: Run PHPStan
+        if: ${{ inputs.mode == 'tests' }}
+        run: |
+          vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G

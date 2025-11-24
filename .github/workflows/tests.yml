@@ -1,16 +1,20 @@
-name: Generate & Upload Map Context
+name: Tests & Static Analysis
 
 on:
   push:
     branches:
+      - development
+  pull_request:
+    branches:
+      - development
       - master
 
 permissions:
   contents: read
 
 jobs:
-  mapcontext:
+  tests:
     uses: ./.github/workflows/php-ci-setup/_ci-base.yml
     with:
-      mode: mapcontext
+      mode: tests
     secrets: inherit
