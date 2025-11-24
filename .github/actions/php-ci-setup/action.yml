@@ -51,6 +51,7 @@ runs:
           echo "DB_COMBATLOG_PASSWORD=root"
           echo "REDIS_PORT=6379"
         } >> .env
+        cat .env
         php artisan key:generate --force
       shell: bash
 
