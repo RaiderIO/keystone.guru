@@ -145,6 +145,8 @@ class Floor extends CacheModel implements MappingModelInterface
         0,
         // Eastern Kingdoms
         13,
+        // Deadwind Pass
+        42,
         // Broken Isles
         619,
         // Azsuna
