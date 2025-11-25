@@ -21,18 +21,6 @@
         {
             "type": "package",
             "package": {
-                "name": "wotuu/keystone.guru.deployer",
-                "version": "0.1",
-                "source": {
-                    "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
-                    "type": "git",
-                    "reference": "b43bfe2d5420e3bee55bb3bf7c2f86ffdefe48a4"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
                 "name": "nnoggie/mythicdungeontools",
                 "version": "5.6.5",
                 "source": {
@@ -68,7 +56,7 @@
                 "name": "paquettg/php-html-parser",
                 "version": "3.1",
                 "source": {
-                    "url": "git@github.com:Wotuu/php-html-parser.git",
+                    "url": "https://github.com/Wotuu/php-html-parser.git",
                     "type": "git",
                     "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
                 }
@@ -145,8 +133,7 @@
         "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^11.0.1",
         "rector/rector": "^1.0",
-        "swoole/ide-helper": "~6.0.0",
-        "wotuu/keystone.guru.deployer": "0.1"
+        "swoole/ide-helper": "~6.0.0"
     },
     "autoload": {
         "classmap": [

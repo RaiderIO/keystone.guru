@@ -29,6 +29,12 @@ runs:
         sudo apt-get install -y default-mysql-client redis-tools
       shell: bash
 
+    - name: Configure Composer GitHub token
+      run: composer config -g github-oauth.github.com "${GH_COMPOSER_TOKEN}"
+      env:
+        GH_COMPOSER_TOKEN: ${{ secrets.GH_COMPOSER_TOKEN }}
+      shell: bash
+
     - name: Install PHP dependencies
       run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
       shell: bash
@@ -39,20 +45,7 @@ runs:
 
     - name: Prepare .env for CI
       run: |
-        cp .env.example .env || true
-        php -r "file_exists('.env') || copy('.env.example','.env');"
-        {
-          echo "APP_ENV=production"
-          echo "APP_DEBUG=true"
-          echo "DB_MIGRATION_USERNAME=root"
-          echo "DB_MIGRATION_PASSWORD=root"
-          echo "DB_COMBATLOG_PORT=3307"
-          echo "DB_COMBATLOG_USERNAME=root"
-          echo "DB_COMBATLOG_PASSWORD=root"
-          echo "REDIS_PORT=6379"
-        } >> .env
-        pwd
-        cat .env
+        cp .env.ci.example .env || true
         php artisan key:generate --force -v
       shell: bash
 
