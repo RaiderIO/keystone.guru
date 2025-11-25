@@ -47,4 +47,5 @@ runs:
       run: |
         ./migrate.sh
         php artisan db:seed --database=migrate --force -v
+        php artisan db:seed --class=LaratrustSeeder --database=migrate
       shell: bash

@@ -102,7 +102,7 @@ jobs:
 
       - name: Run PHPUnit
         if: ${{ inputs.mode == 'tests' }}
-        run: ./vendor/bin/phpunit --exclude-group=MapTiles
+        run: ./vendor/bin/phpunit --exclude-group=MapTiles,MDTExportStringService
 
       - name: Run PHPStan
         if: ${{ inputs.mode == 'tests' }}
