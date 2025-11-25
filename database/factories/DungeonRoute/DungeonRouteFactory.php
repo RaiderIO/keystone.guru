@@ -35,7 +35,7 @@ class DungeonRouteFactory extends Factory
 
             $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
             $count++;
-        } while ($dungeon->getCurrentMappingVersion() === null);
+        } while ($dungeon->getCurrentMappingVersion() === null || $dungeon->floors->isEmpty());
 
         $activeSeason = $dungeon->getActiveSeason($seasonService);
 
