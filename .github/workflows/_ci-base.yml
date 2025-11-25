@@ -100,6 +100,10 @@ jobs:
         run: |
           echo "APP_ENV=testing" >> .env
 
+      - name: Seed users
+        if: ${{ inputs.mode == 'tests' }}
+        run: php artisan db:seed --class=LaratrustSeeder --database=migrate
+
       - name: Run PHPUnit
         if: ${{ inputs.mode == 'tests' }}
         run: ./vendor/bin/phpunit --exclude-group=MapTiles,MDTExportStringService
