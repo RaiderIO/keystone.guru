@@ -29,12 +29,6 @@ runs:
         sudo apt-get install -y default-mysql-client redis-tools
       shell: bash
 
-    - name: Configure Composer GitHub token
-      run: composer config -g github-oauth.github.com "${GH_COMPOSER_TOKEN}"
-      env:
-        GH_COMPOSER_TOKEN: ${{ secrets.GH_COMPOSER_TOKEN }}
-      shell: bash
-
     - name: Install PHP dependencies
       run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
       shell: bash
