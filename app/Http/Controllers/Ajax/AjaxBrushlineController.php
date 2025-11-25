@@ -70,7 +70,7 @@ class AjaxBrushlineController extends Controller
                 ]);
             }
 
-            try {
+//            try {
                 if ($success) {
                     // Create a new polyline and save it
                     $this->savePolylineToModel(
@@ -95,9 +95,9 @@ class AjaxBrushlineController extends Controller
                 }
 
                 $result = $brushline;
-            } catch (Exception) {
-                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
-            }
+//            } catch (Exception) {
+//                $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
+//            }
         });
 
         return $result;
