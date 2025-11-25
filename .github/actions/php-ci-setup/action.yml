@@ -30,7 +30,7 @@ runs:
       shell: bash
 
     - name: Install PHP dependencies
-      run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
       shell: bash
 
     - name: Compute git version and save to file
