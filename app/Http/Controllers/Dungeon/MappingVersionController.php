@@ -11,7 +11,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Session;
-use Swoole\Http\Status;
+use Teapot\StatusCode;
 
 class MappingVersionController extends Controller
 {
@@ -56,7 +56,7 @@ class MappingVersionController extends Controller
                 'dungeon' => $dungeon,
             ]);
         } else {
-            abort(Status::INTERNAL_SERVER_ERROR);
+            abort(StatusCode::INTERNAL_SERVER_ERROR);
         }
     }
 
