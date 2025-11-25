@@ -11,10 +11,10 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
+#[Group('UsesLua')]
 class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTestBase
 {
     #[Test]
-    #[Group('UsesLua')]
     #[Group('MDTExportStringService')]
     #[Group('MDTExportStringServiceExtractObjects')]
     public function extractObjects_givenMapIconWithLinkInComment_shouldExportToMDTWithUrlIntact(): void

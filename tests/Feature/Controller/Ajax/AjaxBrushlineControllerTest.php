@@ -31,7 +31,6 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         ]);
 
         // Assert
-        dump($response->content());
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
