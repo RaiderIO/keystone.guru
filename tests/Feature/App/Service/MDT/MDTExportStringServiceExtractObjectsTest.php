@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\Test;
 class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTestBase
 {
     #[Test]
+    #[Group('UsesLua')]
     #[Group('MDTExportStringService')]
     #[Group('MDTExportStringServiceExtractObjects')]
     public function extractObjects_givenMapIconWithLinkInComment_shouldExportToMDTWithUrlIntact(): void

@@ -106,7 +106,7 @@ jobs:
 
       - name: Run PHPUnit
         if: ${{ inputs.mode == 'tests' }}
-        run: ./vendor/bin/phpunit --exclude-group=MapTiles --exclude-group=MDTExportStringService
+        run: ./vendor/bin/phpunit --exclude-group=MapTiles --exclude-group=UsesLua
 
       - name: Run PHPStan
         if: ${{ inputs.mode == 'tests' }}

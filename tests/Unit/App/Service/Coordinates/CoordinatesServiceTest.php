@@ -103,6 +103,7 @@ final class CoordinatesServiceTest extends PublicTestCase
      * @throws \Exception
      */
     #[Test]
+    #[Group('UsesLua')]
     #[Group('CoordinatesService')]
     public function checkConvertMapLocationToFacadeMapLocationAccuracy_GivenMappingVersion_ShouldBeWithinMargin(): void
     {
