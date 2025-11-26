@@ -13,6 +13,10 @@ trait ExportsTranslations
     {
         $exportToString = $this->arrayToPhpCode($data) . PHP_EOL;
 
+        if (!str_ends_with($fileName, '.php')) {
+            $fileName = sprintf('%s.php', $fileName);
+        }
+
         $langPath = lang_path(sprintf('%s/%s', $locale, $fileName));
         if (file_put_contents($langPath, '<?php ' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';')) {
             $this->info(sprintf('Translations exported successfully to %s/%s', $locale, $fileName));

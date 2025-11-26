@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'default_driver' => env('TRANSLATION_DEFAULT_DRIVER', 'chatgpt'),
+    'default_driver' => env('TRANSLATION_DEFAULT_DRIVER', 'openai'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'source_language' => env('TRANSLATION_SOURCE_LANGUAGE', 'en'),
+    'source_language' => env('TRANSLATION_SOURCE_LANGUAGE', 'en_US'),
 
     /*
     |--------------------------------------------------------------------------
