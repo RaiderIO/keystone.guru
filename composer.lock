@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "919ff68038702f302869868537824afc",
+    "content-hash": "f61b6ecbdde8fbc0851c2d4211286f47",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -12681,16 +12681,10 @@
         {
             "name": "vildanbina/laravel-auto-translation",
             "version": "1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vildanbina/laravel-auto-translation.git",
-                "reference": "b8c87a92e310bc7d12a4c7e763760403c7eb32de"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vildanbina/laravel-auto-translation/zipball/b8c87a92e310bc7d12a4c7e763760403c7eb32de",
-                "reference": "b8c87a92e310bc7d12a4c7e763760403c7eb32de",
-                "shasum": ""
+                "type": "path",
+                "url": "../laravel-auto-translation",
+                "reference": "b86755bcc7035e34cb0f9a6a334a5e7d1e47a21c"
             },
             "require": {
                 "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
@@ -12704,12 +12698,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "aliases": {
-                        "LaravelAutoTranslation": "VildanBina\\LaravelAutoTranslation\\Facades\\LaravelAutoTranslation"
-                    },
                     "providers": [
                         "VildanBina\\LaravelAutoTranslation\\AutoTranslationsServiceProvider"
-                    ]
+                    ],
+                    "aliases": {
+                        "LaravelAutoTranslation": "VildanBina\\LaravelAutoTranslation\\Facades\\LaravelAutoTranslation"
+                    }
                 }
             },
             "autoload": {
@@ -12717,7 +12711,11 @@
                     "VildanBina\\LaravelAutoTranslation\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "VildanBina\\LaravelAutoTranslation\\Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -12737,17 +12735,10 @@
                 "localization",
                 "translations"
             ],
-            "support": {
-                "issues": "https://github.com/vildanbina/laravel-auto-translation/issues",
-                "source": "https://github.com/vildanbina/laravel-auto-translation/tree/1.5.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/vildanbina",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-04-10T15:19:48+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "vlucas/phpdotenv",

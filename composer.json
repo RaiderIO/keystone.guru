@@ -61,6 +61,13 @@
                     "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
                 }
             }
+        },
+        {
+            "type": "path",
+            "url": "../laravel-auto-translation",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "require": {

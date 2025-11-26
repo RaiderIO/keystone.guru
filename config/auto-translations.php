@@ -51,7 +51,7 @@ return [
 
     'drivers' => [
 
-        'chatgpt' => [
+        'openai' => [
             'api_key'      => env('CHATGPT_API_KEY'),
             'model'        => env('CHATGPT_MODEL', 'gpt-3.5-turbo'),
             'temperature'  => (float)env('CHATGPT_TEMPERATURE', 0.7),
