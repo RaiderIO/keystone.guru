@@ -42,7 +42,7 @@ function initials(string $name): string
         // Take the first character of each word (multibyte‑safe)
         $letters = array_map(
             static fn(string $part) => mb_substr($part, 0, 1, 'UTF-8'),
-            $parts
+            $parts,
         );
         $result = implode('', $letters);
     } else {
