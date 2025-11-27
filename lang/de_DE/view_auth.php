@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'login'     => [
+    'login' => [
         'title' => 'Login',
     ],
     'passwords' => [

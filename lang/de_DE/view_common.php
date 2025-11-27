@@ -47,7 +47,7 @@ return [
         'rating' => [
             'nr_of_votes' => '%s Stimme(n)',
         ],
-        'search'     => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Wird geladen...',
             ],
@@ -255,7 +255,7 @@ return [
             'uploadlogs' => [
                 'upload_logs' => 'Logs hochladen, um Keystone.guru zu verbessern',
             ],
-            'user'       => [
+            'user' => [
                 'account_settings'  => 'Kontoeinstellungen',
                 'login'             => 'Anmelden',
                 'logout'            => 'Abmelden',
@@ -361,16 +361,16 @@ return [
                 'you_cannot_rate_your_own_route' => 'Sie können Ihre eigene Route nicht bewerten - danke, dass Sie Live-Sitzungen nutzen!',
             ],
             'heatmapsearch' => [
-                'advanced_option'        => [
+                'advanced_option' => [
                     'min_samples_required'       => 'Min. erforderliche Proben',
                     'min_samples_required_title' => 'Verringert die Schwelle, die erforderlich ist, damit Daten in der Heatmap angezeigt werden. Eine Verringerung dieses Wertes führt dazu, dass mehr Datenpunkte gerendert werden.',
                 ],
-                'advanced_options'       => 'Erweiterte Optionen',
-                'affixes'                => 'Affixe',
-                'affixes_selected'       => '{0} Affixe ausgewählt',
-                'affixes_title'          => 'Affixe',
-                'bloodlust_alt'          => 'Kampfrausch',
-                'class_and_spec_option'  => [
+                'advanced_options'      => 'Erweiterte Optionen',
+                'affixes'               => 'Affixe',
+                'affixes_selected'      => '{0} Affixe ausgewählt',
+                'affixes_title'         => 'Affixe',
+                'bloodlust_alt'         => 'Kampfrausch',
+                'class_and_spec_option' => [
                     'classes'                             => 'Klassen',
                     'classes_player_deaths'               => 'Klassen (Tod)',
                     'classes_player_deaths_title'         => 'Nur Todesfälle dieser Klassen anzeigen.',
@@ -400,14 +400,14 @@ return [
                     'pane'        => 'Bereich',
                     'radius'      => 'Radius',
                 ],
-                'heat_options'           => 'Leaflet.heat-Optionen',
-                'item_level'             => 'Gegenstandsstufe',
-                'key_level'              => 'Schlüsselstufe',
-                'npc_death_alt'          => 'Feindlicher Tod',
-                'player_death_alt'       => 'Spielertod',
-                'player_deaths'          => 'Spielertode',
-                'settings_title'         => 'Karteneinstellungen',
-                'weekly_affix_groups'    => 'Woche',
+                'heat_options'        => 'Leaflet.heat-Optionen',
+                'item_level'          => 'Gegenstandsstufe',
+                'key_level'           => 'Schlüsselstufe',
+                'npc_death_alt'       => 'Feindlicher Tod',
+                'player_death_alt'    => 'Spielertod',
+                'player_deaths'       => 'Spielertode',
+                'settings_title'      => 'Karteneinstellungen',
+                'weekly_affix_groups' => 'Woche',
             ],
             'pulls' => [
                 'delete_all_pulls_title'      => 'Alle Pulls löschen',
@@ -419,10 +419,10 @@ return [
                 'toggle_all_required_enemies' => 'Alle erforderlichen Feinde umschalten',
             ],
             'pullsworkbench' => [
-                'add_kill_area'    => 'Tötungsbereich hinzufügen',
-                'delete_killzone'  => 'Zug löschen',
-                'description'      => 'Beschreibung bearbeiten',
-                'modal'            => [
+                'add_kill_area'   => 'Tötungsbereich hinzufügen',
+                'delete_killzone' => 'Zug löschen',
+                'description'     => 'Beschreibung bearbeiten',
+                'modal'           => [
                     'description' => [
                         'label'               => 'Beschreibung',
                         'save'                => 'Speichern',
@@ -454,14 +454,14 @@ return [
                             Jedes Mal, wenn Blizzard eine Änderung am Mapping vornimmt oder ein Fehler korrigiert wird, wird eine neue Mapping-Version erstellt.
                             Routen, die mit vorherigen Mapping-Versionen erstellt wurden, werden nicht automatisch auf die neueste Version aktualisiert.
                             Diese Warnung zeigt an, dass die von dieser Route verwendete Mapping-Version veraltet ist und möglicherweise nicht dem In-Game-Mapping entspricht',
-            'new_mapping_version_header_title'       => 'Es gibt eine neue Mapping-Version für diesen Dungeon',
-            'no_teeming'                             => 'Immer sichtbar',
-            'route'                                  => 'Route',
-            'visible_teeming'                        => 'Sichtbar nur bei Wimmelnd',
+            'new_mapping_version_header_title' => 'Es gibt eine neue Mapping-Version für diesen Dungeon',
+            'no_teeming'                       => 'Immer sichtbar',
+            'route'                            => 'Route',
+            'visible_teeming'                  => 'Sichtbar nur bei Wimmelnd',
         ],
     ],
     'modal' => [
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Route erstellen',
             'create_temporary_route' => 'Temporäre Route erstellen',
             'import_from_mdt'        => 'Aus MDT importieren',
@@ -528,9 +528,9 @@ return [
             'get_simulationcraft_string' => 'SimulationCraft-String abrufen',
             'intro'                      => 'Um die Simulationsfunktion zu nutzen, generiere eine SimulationCraft-String für deinen Charakter und füge den
             generierten String von Keystone.guru unter dem Ausgabestring deines Charakters ein. Dann klicke auf Simulieren, wie du es normalerweise tun würdest! Wenn du raidbots.com verwendest, erstelle den SimC-String deines Charakters entweder über das Addon oder die Website, wähle Erweitert und füge den Ausgabestring von Keystone.guru unter dem SimC-String deines Charakters ein.',
-            'loading'                    => 'Lädt...',
-            'simulationcraft_string'     => 'Simulationcraft-String',
-            'title'                      => 'Route simulieren',
+            'loading'                => 'Lädt...',
+            'simulationcraft_string' => 'Simulationcraft-String',
+            'title'                  => 'Route simulieren',
         ],
         'simulateoptions' => [
             'advanced' => [
@@ -544,24 +544,24 @@ return [
                                         und die Verzögerung zwischen den Packs zu reduzieren. Hinweis: Dies wird die Gehstrecke um diesen Betrag reduzieren, daher ist es nicht ratsam, dies auf die
                                         maximale Reichweite deiner Fähigkeit einzustellen, um genaue Sim-Ergebnisse zu erzielen. Zwischen 50%-75% der maximalen Reichweite deines Zaubers sollten gut sein,
                                         es sei denn, du ziehst buchstäblich ohne Pausen dazwischen.',
-                'use_mounts'                           => 'Reittiere verwenden',
-                'use_mounts_title'                     => 'Es wird versucht, dein Reittier zu benutzen (wenn es schneller und verfügbar ist), um die Entfernung zwischen dem aktuellen Pull und dem nächsten Pull zu verringern.',
+                'use_mounts'       => 'Reittiere verwenden',
+                'use_mounts_title' => 'Es wird versucht, dein Reittier zu benutzen (wenn es schneller und verfügbar ist), um die Entfernung zwischen dem aktuellen Pull und dem nächsten Pull zu verringern.',
             ],
             'default' => [
-                'affixes'                                 => 'Affixe',
-                'affixes_map'                             => [
+                'affixes'     => 'Affixe',
+                'affixes_map' => [
                     'fortified'  => 'Verstärkt',
                     'tyrannical' => 'Tyrannisch',
                 ],
-                'affixes_title'                           => 'Wähle Verstärkt, um die Gesundheit aller Nicht-Boss-Gegner um 20% zu skalieren, Tyrannisch, um die Gesundheit des Bosses um 30% zu skalieren. Du kannst beide gleichzeitig auswählen.',
-                'bloodlust_per_pull'                      => 'Kampfrausch/Heldentum/etc. pro Pull',
-                'bloodlust_per_pull_title'                => 'Ermöglicht es dir, auszuwählen, welche Pulls Kampfrausch/Heldentum/etc. haben. Das Zuweisen dieser Zauber zu einem Pull füllt dieses Dropdown automatisch aus.',
-                'hp_percent'                              => 'HP-Prozentsatz',
-                'hp_percent_title'                        => 'Der Prozentsatz, den dein Charakter an Schaden an allen Gegnern verursachen muss, bevor er als \'getötet\' gilt. Dies wird dein Anteil am Schaden in einem Dungeon sein.',
-                'key_level'                               => 'Schlüsselstufe',
-                'key_level_title'                         => 'Eine höhere Schlüsselstufe wird die Gesundheit der Gegner skalieren, mit denen dein Charakter konfrontiert ist, wie es in einem echten M+-Dungeon der Fall wäre.',
-                'raid_buffs'                              => 'Raid-Buffs',
-                'raid_buffs_map'                          => [
+                'affixes_title'            => 'Wähle Verstärkt, um die Gesundheit aller Nicht-Boss-Gegner um 20% zu skalieren, Tyrannisch, um die Gesundheit des Bosses um 30% zu skalieren. Du kannst beide gleichzeitig auswählen.',
+                'bloodlust_per_pull'       => 'Kampfrausch/Heldentum/etc. pro Pull',
+                'bloodlust_per_pull_title' => 'Ermöglicht es dir, auszuwählen, welche Pulls Kampfrausch/Heldentum/etc. haben. Das Zuweisen dieser Zauber zu einem Pull füllt dieses Dropdown automatisch aus.',
+                'hp_percent'               => 'HP-Prozentsatz',
+                'hp_percent_title'         => 'Der Prozentsatz, den dein Charakter an Schaden an allen Gegnern verursachen muss, bevor er als \'getötet\' gilt. Dies wird dein Anteil am Schaden in einem Dungeon sein.',
+                'key_level'                => 'Schlüsselstufe',
+                'key_level_title'          => 'Eine höhere Schlüsselstufe wird die Gesundheit der Gegner skalieren, mit denen dein Charakter konfrontiert ist, wie es in einem echten M+-Dungeon der Fall wäre.',
+                'raid_buffs'               => 'Raid-Buffs',
+                'raid_buffs_map'           => [
                     'arcane_intellect'     => 'Arkane Intelligenz',
                     'battle_shout'         => 'Schlachtruf',
                     'bleeding'             => 'Bluten',
@@ -574,10 +574,10 @@ return [
                     'power_word_fortitude' => 'Machtwort: Seelenstärke',
                     'skyfury'              => 'Himmelsfuror Totem',
                 ],
-                'raid_buffs_title'                        => 'Ermöglicht die Auswahl von raidweiten Buffs. Hinweis: Wenn Kampfrausch deaktiviert ist, hat Kampfrausch/Heldentum/etc. pro Pull keine Wirkung.',
-                'shrouded_bounty_type'                    => 'Verschleierte Belohnung',
-                'shrouded_bounty_type_title'              => 'Die verschleierte Belohnung, die du zu Beginn des Dungeons auswählen kannst.',
-                'shrouded_bounty_types'                   => [
+                'raid_buffs_title'           => 'Ermöglicht die Auswahl von raidweiten Buffs. Hinweis: Wenn Kampfrausch deaktiviert ist, hat Kampfrausch/Heldentum/etc. pro Pull keine Wirkung.',
+                'shrouded_bounty_type'       => 'Verschleierte Belohnung',
+                'shrouded_bounty_type_title' => 'Die verschleierte Belohnung, die du zu Beginn des Dungeons auswählen kannst.',
+                'shrouded_bounty_types'      => [
                     'crit'    => 'Krit',
                     'haste'   => 'Tempo',
                     'mastery' => 'Meisterschaft',
@@ -591,7 +591,7 @@ return [
         'uploadlogs' => [
             'title' => 'Logs hochladen',
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'contact_by_email'       => 'Kontaktiere mich per E-Mail, wenn weitere Untersuchungen erforderlich sind',
                 'contact_by_email_guest' => 'Kontaktieren Sie mich per E-Mail, falls eine weitere Untersuchung erforderlich ist (fügen Sie Ihre E-Mail-Adresse im Berichtstext hinzu)',
@@ -600,7 +600,7 @@ return [
                 'why_report_this_route'  => 'Warum möchten Sie diese Route melden? (max. 1000 Zeichen)',
                 'your_name'              => 'Ihr Name',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'contact_by_email'       => 'Kontaktieren Sie mich per E-Mail, falls eine weitere Untersuchung erforderlich ist',
                 'contact_by_email_guest' => 'Kontaktieren Sie mich per E-Mail, falls eine weitere Untersuchung erforderlich ist (fügen Sie Ihre E-Mail-Adresse im Berichtstext hinzu)',
                 'report_enemy_bug'       => 'Fehler bei Feind melden',

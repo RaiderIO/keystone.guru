@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'edit'     => [
+    'edit' => [
         'icon_image_alt' => 'Kein Bild',
         'members'        => 'Mitglieder',
         'menu_title'     => 'Teams',
@@ -39,7 +39,7 @@ return [
         'tags' => [
             'description' => 'Sie können hier Tags für die Routen des Teams verwalten. Jeder, der Mitglied dieses Teams ist, kann die an die Routen angehängten Tags anzeigen.
                                     Die persönlichen Tags, die möglicherweise vom Routeninhaber angehängt wurden, werden nicht sichtbar sein.',
-            'title'       => 'Tags',
+            'title' => 'Tags',
         ],
     ],
     'invite' => [

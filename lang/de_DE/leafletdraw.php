@@ -3,7 +3,7 @@
 return [
     'draw' => [
         'handlers' => [
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'cont'  => 'Klicken und ziehen, um die Linie weiter zu zeichnen.',
                     'end'   => 'Klicken/Ziehen Sie weiter. Wenn Sie fertig sind, drücken Sie die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihre Linie zu vervollständigen.',
@@ -26,7 +26,7 @@ return [
                     'start' => 'Karte anklicken, um den Marker zu platzieren.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'cont'  => 'Klicken, um den Pfad weiter zu zeichnen.',
                     'end'   => 'Klicken Sie auf die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihren Pfad zu vervollständigen.',
@@ -72,11 +72,11 @@ return [
                 'polyline'     => 'Eine Polylinie zeichnen',
                 'rectangle'    => 'Ein Rechteck zeichnen',
             ],
-            'finish'  => [
+            'finish' => [
                 'text'  => 'Fertig',
                 'title' => 'Zeichnen beenden',
             ],
-            'undo'    => [
+            'undo' => [
                 'text'  => 'Letzten Punkt löschen',
                 'title' => 'Zuletzt gezeichneten Punkt löschen',
             ],
@@ -96,9 +96,9 @@ return [
                 ],
             ],
         ],
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'cancel'   => [
+                'cancel' => [
                     'text'  => 'Abbrechen',
                     'title' => 'Bearbeitung abbrechen, verwirft alle Änderungen',
                 ],
@@ -106,7 +106,7 @@ return [
                     'text'  => 'Alle löschen',
                     'title' => 'Alle Ebenen löschen',
                 ],
-                'save'     => [
+                'save' => [
                     'text'  => 'Speichern',
                     'title' => 'Änderungen speichern',
                 ],

@@ -53,7 +53,7 @@ return [
         ],
     ],
     'dungeonroute' => [
-        'flash'          => [
+        'flash' => [
             'route_cloned_successfully' => 'Route erfolgreich geklont',
             'route_created'             => 'Route erstellt',
             'route_updated'             => 'Route aktualisiert',
@@ -67,10 +67,10 @@ return [
             'popular'           => '%s beliebte Routen',
             'this_week_affixes' => '%s diese Woche',
         ],
-        'new'     => 'Neu',
+        'new'               => 'Neu',
         'next_week_affixes' => 'Affixe der nächsten Woche',
-        'popular' => 'Beliebte Routen',
-        'season' => [
+        'popular'           => 'Beliebte Routen',
+        'season'            => [
             'new'               => '%s neue Routen',
             'next_week_affixes' => '%s nächste Woche',
             'popular'           => '%s beliebte Routen',
@@ -79,7 +79,7 @@ return [
         'this_week_affixes' => 'Affixe dieser Woche',
     ],
     'dungeonspeedrunrequirednpcs' => [
-        'flash'         => [
+        'flash' => [
             'npc_added_successfully'   => 'NPC erfolgreich hinzugefügt',
             'npc_deleted_successfully' => 'NPC erfolgreich entfernt',
         ],
@@ -104,7 +104,7 @@ return [
         'deleted_successfully'      => 'Mapping-Version erfolgreich gelöscht',
     ],
     'mdtimport' => [
-        'error'           => [
+        'error' => [
             'cannot_create_route_must_be_logged_in' => 'Sie müssen eingeloggt sein, um eine Route zu erstellen',
             'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser nicht installiert.',
             'invalid_mdt_string'                    => 'Ungültiger MDT-String',
@@ -159,7 +159,7 @@ return [
         ],
     ],
     'register' => [
-        'flash'                 => [
+        'flash' => [
             'registered_successfully' => 'Erfolgreich registriert. Viel Spaß auf der Website!',
         ],
         'legal_agreed_accepted' => 'Sie müssen unseren rechtlichen Bedingungen zustimmen, um sich zu registrieren.',

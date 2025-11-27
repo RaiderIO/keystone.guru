@@ -1,18 +1,16 @@
 <?php
 
 return [
-
     'category' => [
-        'class' => '',
-        'item'  => '',
-        'misc'  => '',
-        'meta'  => '',
+        'class' => 'Clase',
+        'item'  => 'Ítem',
+        'meta'  => 'Meta',
+        'misc'  => 'Misceláneo',
     ],
-    'no_attributes'       => '',
-    'rogue_shroud_skip'   => '',
-    'warlock_gate_skip'   => '',
-    'mage_slow_fall_skip' => '',
-    'invisibility_potion' => '',
-    'death_skip'          => '',
-
+    'death_skip' => 'Salto de muerte',
+    'invisibility_potion' => 'Poción de invisibilidad',
+    'mage_slow_fall_skip' => 'Salto de caída lenta de mago',
+    'no_attributes' => 'Sin atributos',
+    'rogue_shroud_skip' => 'Salto de velo de pícaro',
+    'warlock_gate_skip' => 'Salto de puerta de brujo',
 ];

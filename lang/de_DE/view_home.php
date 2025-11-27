@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'create_route'                                 => 'Route erstellen',
-    'create_your_own_routes'                       => 'Erstellen Sie Ihre eigenen Routen',
-    'create_your_own_routes_description'           => 'Importieren Sie Ihre Routen von Mythic Dungeon Tools oder :createANewRoute von Grund auf neu. Keystone.guru bietet verschiedene Tools, um Ihre Route unvergesslich zu machen,
+    'create_route'                       => 'Route erstellen',
+    'create_your_own_routes'             => 'Erstellen Sie Ihre eigenen Routen',
+    'create_your_own_routes_description' => 'Importieren Sie Ihre Routen von Mythic Dungeon Tools oder :createANewRoute von Grund auf neu. Keystone.guru bietet verschiedene Tools, um Ihre Route unvergesslich zu machen,
                                     wie freies Zeichnen, Pfadfindung und Platzierung von Symbolen/Kommentaren. Feindliche Kräfte können roh oder in Prozent angezeigt werden. Verschiedene andere Einstellungen ermöglichen es Ihnen,
                                     das Erlebnis der Routenerstellung nach Ihren Wünschen anzupassen.',
-    'custom_dungeon_mapping'                       => 'Benutzerdefinierte Dungeon-Kartierung',
-    'custom_dungeon_mapping_description'           => 'Keystone.guru hat seine eigene Dungeon-Kartierung ohne Abhängigkeiten von externen Tools. Sehen Sie, welche Feinde andere verstärken, sanguines Ichor fallen lassen oder Ihre Gruppe platzen lassen. Die Kartierung ist Open Source und kostenlos. Immer.',
-    'discover_new_routes'                          => 'Neue Routen entdecken',
-    'discover_new_routes_description'              => 'Durchsuchen Sie einfach Routen pro Dungeon in verschiedenen Kategorien, um eine Route zu finden, die perfekt zu Ihrer Gruppe passt.
+    'custom_dungeon_mapping'             => 'Benutzerdefinierte Dungeon-Kartierung',
+    'custom_dungeon_mapping_description' => 'Keystone.guru hat seine eigene Dungeon-Kartierung ohne Abhängigkeiten von externen Tools. Sehen Sie, welche Feinde andere verstärken, sanguines Ichor fallen lassen oder Ihre Gruppe platzen lassen. Die Kartierung ist Open Source und kostenlos. Immer.',
+    'discover_new_routes'                => 'Neue Routen entdecken',
+    'discover_new_routes_description'    => 'Durchsuchen Sie einfach Routen pro Dungeon in verschiedenen Kategorien, um eine Route zu finden, die perfekt zu Ihrer Gruppe passt.
                                     Die Integration mit :archon_gg macht es einfach zu sehen, welche Dungeons für jeden Affix am einfachsten zu timen sind.
                                     Finden Sie immer noch keine Route, die Ihren Bedürfnissen entspricht? Die Seite :routesearch ermöglicht es Ihnen, genau auf Ihre Bedürfnisse einzugehen, um eine perfekte Übereinstimmung zu finden.',
     'discover_new_routes_route_search'             => 'Routensuche',

@@ -1,21 +1,19 @@
 <?php
 
 return [
-
     'create_route_npc_chronological_rule' => [
-        'message' => '',
+        'message' => '¡Npc(s) :npcs diedAt debe ser antes de engagedAt!',
     ],
     'dungeon_route_level_rule' => [
-        'message' => '',
+        'message' => 'Debes seleccionar un rango de nivel de llave.',
     ],
     'faction_selection_required_rule' => [
-        'message' => '',
+        'message' => 'Necesitas seleccionar una facción para este calabozo.',
     ],
     'json_string_count_rule' => [
-        'message' => '',
+        'message' => 'La cadena JSON debe tener al menos :count elementos.',
     ],
     'map_icon_type_role_check_rule' => [
-        'message' => '',
+        'message' => 'Ese tipo de icono de mapa no está disponible para tu nivel de acceso.',
     ],
-
 ];
