@@ -1,26 +1,24 @@
 <?php
 
 return [
-
     'commit' => [
         'added' => [
-            'added' => '',
+            'added' => 'Hinzugefügt',
         ],
         'modified' => [
-            'modified' => '',
+            'modified' => 'Geändert',
         ],
         'removed' => [
-            'removed' => '',
+            'removed' => 'Entfernt',
         ],
     ],
     'release' => [
         'discord_footer' => [
-            'home'        => '',
-            'changelog'   => '',
-            'affixes'     => '',
-            'patreon'     => '',
-            'get_started' => '',
+            'affixes'     => 'Affixe',
+            'changelog'   => 'Änderungsprotokoll',
+            'get_started' => 'Erste Schritte',
+            'home'        => 'Startseite',
+            'patreon'     => 'Patreon',
         ],
     ],
-
 ];

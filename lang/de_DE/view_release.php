@@ -1,7 +1,5 @@
 <?php
 
 return [
-
-    'header' => '',
-
+    'header' => 'Veröffentlichung %s',
 ];

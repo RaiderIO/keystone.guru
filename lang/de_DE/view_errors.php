@@ -1,42 +1,40 @@
 <?php
 
 return [
-
-    '400' => [
-        'title'   => '',
-        'message' => '',
+    400 => [
+        'message' => 'Ihr Browser hat eine ungültige Anfrage gesendet, bitte versuchen Sie es erneut.',
+        'title'   => '400 Ungültige Anfrage',
     ],
-    '401' => [
-        'title'   => '',
-        'message' => '',
+    401 => [
+        'message' => 'Entschuldigung, Sie sind nicht berechtigt, auf diese Seite zuzugreifen.',
+        'title'   => '401 Nicht autorisiert',
     ],
-    '403' => [
-        'title'   => '',
-        'message' => '',
+    403 => [
+        'message' => 'Entschuldigung, Ihnen ist es verboten, auf diese Seite zuzugreifen.',
+        'title'   => '403 Verboten',
     ],
-    '404' => [
-        'title'   => '',
-        'message' => '',
+    404 => [
+        'message' => 'Entschuldigung, die gesuchte Seite konnte nicht gefunden werden.',
+        'title'   => '404 Nicht gefunden',
     ],
-    '410' => [
-        'title'   => '',
-        'message' => '',
+    410 => [
+        'message' => 'Entschuldigung, die gesuchte Seite ist abgelaufen.',
+        'title'   => '410 Seite abgelaufen',
     ],
-    '419' => [
-        'title'   => '',
-        'message' => '',
+    419 => [
+        'message' => 'Entschuldigung, Ihre Sitzung ist abgelaufen. Bitte aktualisieren und erneut versuchen.',
+        'title'   => '419 Seite abgelaufen',
     ],
-    '429' => [
-        'title'   => '',
-        'message' => '',
+    429 => [
+        'message' => 'Entschuldigung, Sie stellen zu viele Anfragen an unsere Server.',
+        'title'   => '429 Zu viele Anfragen',
     ],
-    '500' => [
-        'title'   => '',
-        'message' => '',
+    500 => [
+        'message' => 'Hoppla, etwas ist auf unseren Servern schiefgelaufen.',
+        'title'   => '500 Interner Serverfehler',
     ],
-    '503' => [
-        'title'   => '',
-        'message' => '',
+    503 => [
+        'message' => 'Keystone.guru ist wegen Wartungsarbeiten nicht erreichbar. Wir sind bald zurück!',
+        'title'   => 'Dienst nicht verfügbar',
     ],
-
 ];

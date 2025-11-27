@@ -1,21 +1,19 @@
 <?php
 
 return [
-
-    'general'      => '',
-    'death_knight' => '',
-    'demon_hunter' => '',
-    'druid'        => '',
-    'evoker'       => '',
-    'hunter'       => '',
-    'mage'         => '',
-    'monk'         => '',
-    'paladin'      => '',
-    'priest'       => '',
-    'rogue'        => '',
-    'shaman'       => '',
-    'warlock'      => '',
-    'warrior'      => '',
-    'unknown'      => '',
-
+    'death_knight' => 'Todesritter',
+    'demon_hunter' => 'Dämonenjäger',
+    'druid'        => 'Druide',
+    'evoker'       => 'Herbeirufer',
+    'general'      => 'Allgemein',
+    'hunter'       => 'Jäger',
+    'mage'         => 'Magier',
+    'monk'         => 'Mönch',
+    'paladin'      => 'Paladin',
+    'priest'       => 'Priester',
+    'rogue'        => 'Schurke',
+    'shaman'       => 'Schamane',
+    'unknown'      => 'Unbekannt',
+    'warlock'      => 'Hexenmeister',
+    'warrior'      => 'Krieger',
 ];

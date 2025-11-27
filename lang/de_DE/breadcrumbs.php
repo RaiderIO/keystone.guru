@@ -1,121 +1,119 @@
 <?php
 
 return [
-
     'home' => [
-        'keystone_guru' => '',
-        'affixes'       => '',
-        'about'         => '',
-        'credits'       => '',
-        'changelog'     => [
-            'list'    => '',
-            'release' => [
-                'view' => '',
-            ],
-        ],
-        'legal' => [
-            'cookies' => '',
-            'privacy' => '',
-            'terms'   => '',
-        ],
-        'routes'              => '',
-        'routes_expansion'    => '',
-        'routes_game_version' => '',
-        'gameversion'         => [
-            'update'  => '',
-            'dungeon' => [
-                'heatmaps' => '',
-                'explore'  => '',
-            ],
-        ],
-        'dungeonroute' => [
-            'new' => '',
-        ],
-        'dungeonroutes' => [
-            'search'            => '',
-            'popular'           => '',
-            'next_week_affixes' => '',
-            'this_week_affixes' => '',
-            'new'               => '',
-            'routes_season'     => '',
-            'season'            => [
-                'popular'           => '',
-                'next_week_affixes' => '',
-                'this_week_affixes' => '',
-                'new'               => '',
-            ],
-            'discoverdungeon' => [
-                'popular'           => '',
-                'next_week_affixes' => '',
-                'this_week_affixes' => '',
-                'new'               => '',
-            ],
-        ],
-        'my_profile' => '',
-        'my_routes'  => '',
-        'my_tags'    => '',
-        'my_teams'   => '',
-        'overview'   => '',
-        'new_team'   => '',
-        'edit_team'  => '',
-        'join_team'  => '',
-        'admin'      => [
-            'admin' => '',
-            'tools' => [
-                'admin_tools'               => '',
-                'view_exported_dungeondata' => '',
-                'view_exported_releases'    => '',
-                'select_exception'          => '',
-                'mdt_diff'                  => '',
-                'view_mdt_string_contents'  => '',
-                'import_npcs'               => '',
-            ],
-            'releases'     => '',
-            'new_release'  => '',
-            'edit_release' => '',
-            'expansions'   => [
-                'expansions'     => '',
-                'new_expansion'  => '',
-                'edit_expansion' => '',
-            ],
+        'about'               => 'Über',
+        'admin'               => [
+            'admin'                      => 'Admin',
             'dungeons' => [
-                'dungeons'     => '',
-                'new_dungeon'  => '',
-                'edit_dungeon' => '',
-            ],
-            'floors' => [
-                'new_floor'  => '',
-                'edit_floor' => '',
+                'dungeons'     => 'Dungeons',
+                'edit_dungeon' => 'Bearbeite :dungeon',
+                'new_dungeon'  => 'Neuer Dungeon',
             ],
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc10man' => '',
-                'new_dungeonspeedrunrequirednpc25man' => '',
+                'new_dungeonspeedrunrequirednpc10man' => 'Neuer 10-Mann-Dungeon-Geschwindigkeitslauf erforderlicher NPC',
+                'new_dungeonspeedrunrequirednpc25man' => 'Neuer 25-Mann-Dungeon-Geschwindigkeitslauf erforderlicher NPC',
             ],
-            'npcs' => [
-                'npcs'     => '',
-                'new_npc'  => '',
-                'edit_npc' => '',
+            'edit_release'               => 'Release bearbeiten',
+            'expansions'                 => [
+                'edit_expansion' => 'Erweiterung bearbeiten',
+                'expansions'     => 'Erweiterungen',
+                'new_expansion'  => 'Neue Erweiterung',
             ],
+            'floors'                     => [
+                'edit_floor' => 'Etage bearbeiten',
+                'new_floor'  => 'Neue Etage',
+            ],
+            'new_release'                => 'Neues Release',
             'npcenemyforces' => [
-                'new_npc_enemy_forces'  => '',
-                'edit_npc_enemy_forces' => '',
+                'edit_npc_enemy_forces' => 'NPC-Feindkräfte bearbeiten',
+                'new_npc_enemy_forces'  => 'Neue NPC-Feindkräfte',
             ],
             'npchealth' => [
-                'new_npc_health'  => '',
-                'edit_npc_health' => '',
+                'edit_npc_health' => 'NPC-Gesundheit bearbeiten',
+                'new_npc_health'  => 'Neue NPC-Gesundheit',
             ],
-            'spells' => [
-                'spells'     => '',
-                'new_spell'  => '',
-                'edit_spell' => '',
+            'npcs'                       => [
+                'edit_npc' => 'Bearbeite :npc',
+                'new_npc'  => 'Neuer NPC',
+                'npcs'     => 'NPCs',
+            ],
+            'releases'                   => 'Releases',
+            'spells'                     => [
+                'edit_spell' => 'Zauber bearbeiten',
+                'new_spell'  => 'Neuer Zauber',
+                'spells'     => 'Zauber',
+            ],
+            'tools'                      => [
+                'admin_tools'               => 'Admin-Tools',
+                'import_npcs'               => 'NPCs importieren',
+                'mdt_diff'                  => 'MDT-Diff',
+                'select_exception'          => 'Ausnahme auswählen',
+                'view_exported_dungeondata' => 'Exportierte Dungeondaten anzeigen',
+                'view_exported_releases'    => 'Exportierte Releases anzeigen',
+                'view_mdt_string_contents'  => 'MDT-String-Inhalte anzeigen',
+            ],
+            'user_reports'               => [
+                'user_reports' => 'Benutzerberichte',
             ],
             'users' => [
-                'users' => '',
-            ],
-            'user_reports' => [
-                'user_reports' => '',
+                'users' => 'Benutzer',
             ],
         ],
+        'affixes'             => 'Affixe',
+        'changelog'           => [
+            'list'    => 'Änderungsprotokoll',
+            'release' => [
+                'view' => 'Release :version',
+            ],
+        ],
+        'credits'             => 'Credits',
+        'dungeonroute'        => [
+            'new' => 'Neue Route',
+        ],
+        'dungeonroutes'       => [
+            'discoverdungeon'   => [
+                'new'               => 'Neu',
+                'next_week_affixes' => 'Affixe der nächsten Woche',
+                'popular'           => 'Beliebt',
+                'this_week_affixes' => 'Affixe dieser Woche',
+            ],
+            'new'               => 'Neu',
+            'next_week_affixes' => 'Affixe der nächsten Woche',
+            'popular'           => 'Beliebt',
+            'routes_season'     => 'Saison :season',
+            'search'            => 'Suche',
+            'season'            => [
+                'new'               => 'Neu',
+                'next_week_affixes' => 'Affixe der nächsten Woche',
+                'popular'           => 'Beliebt',
+                'this_week_affixes' => 'Affixe dieser Woche',
+            ],
+            'this_week_affixes' => 'Affixe dieser Woche',
+        ],
+        'edit_team'           => 'Team bearbeiten',
+        'gameversion'         => [
+            'dungeon' => [
+                'explore'  => 'Erkunden',
+                'heatmaps' => 'Heatmaps',
+            ],
+            'update'  => ':gameVersion',
+        ],
+        'join_team'           => 'Team beitreten',
+        'keystone_guru'       => 'Keystone.guru',
+        'legal'               => [
+            'cookies' => 'Cookies',
+            'privacy' => 'Datenschutz',
+            'terms'   => 'Bedingungen',
+        ],
+        'my_profile'          => 'Mein öffentliches Profil',
+        'my_routes'           => 'Meine Routen',
+        'my_tags'             => 'Meine Tags',
+        'my_teams'            => 'Meine Teams',
+        'new_team'            => 'Neues Team',
+        'overview'            => 'Übersicht',
+        'routes'              => 'Routen',
+        'routes_expansion'    => ':expansion Routen',
+        'routes_game_version' => ':gameVersion Routen',
     ],
-
 ];

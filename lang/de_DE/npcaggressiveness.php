@@ -1,11 +1,9 @@
 <?php
 
 return [
-
-    'aggressive' => '',
-    'unfriendly' => '',
-    'neutral'    => '',
-    'friendly'   => '',
-    'awakened'   => '',
-
+    'aggressive' => 'Aggressiv',
+    'awakened'   => 'Erwacht',
+    'friendly'   => 'Freundlich',
+    'neutral'    => 'Neutral',
+    'unfriendly' => 'Unfreundlich',
 ];

@@ -32,7 +32,7 @@ class Translate extends Command
         TranslationEngineService $translationEngineService,
     ): int {
         if (!file_exists(base_path('lang/texts_to_translate.json'))) {
-            $this->error('lang/localization.csv does not exist - run this first: php artisan translate:scan --exclude-files=datatables,dungeons,npcs,spells,view_admin,validation');
+            $this->error('lang/localization.csv does not exist - run this first: php artisan translate:scan --exclude-files=datatables,dungeons,expansions,npcs,spells,view_admin,validation');
 
             return 1;
         }
@@ -43,9 +43,9 @@ class Translate extends Command
         $texts = json_decode(file_get_contents(base_path('lang/texts_to_translate.json')), true);
 
         $validKeys = [
-            'affixes',
-            'characteristics',
-            'classes',
+            //            'affixes',
+            //            'characteristics',
+            //            'classes',
         ];
         if (!empty($validKeys)) {
             $validTexts = [];
