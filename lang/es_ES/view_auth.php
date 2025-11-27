@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'login'     => [
+    'login' => [
         'title' => 'Iniciar sesión',
     ],
     'passwords' => [

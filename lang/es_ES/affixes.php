@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'afflicted'                   => [
+    'afflicted' => [
         'description' => 'Mientras estás en combate, las almas afligidas aparecen periódicamente y buscan la ayuda de los jugadores.',
         'name'        => 'Afligido',
     ],
-    'awakened'                    => [
+    'awakened' => [
         'description' => 'Obeliscos a lo largo del calabozo permiten a los jugadores entrar en Ny\'alotha y enfrentar poderosos sirvientes de N\'Zoth. Si no se enfrenta a un sirviente, deberán enfrentarse durante el encuentro con el jefe final.',
         'name'        => 'Despierto',
     ],
-    'beguiling'                   => [
+    'beguiling' => [
         'description' => 'Los emisarios de Azshara están presentes a lo largo del calabozo.',
         'name'        => 'Seductor',
     ],
@@ -21,15 +21,15 @@ return [
         'description' => 'Cuando son derrotados, los enemigos que no son jefes explotan, haciendo que todos los jugadores sufran un 10% de su salud máxima en daño durante 4 segundos. Este efecto se acumula.',
         'name'        => 'Explosivo',
     ],
-    'challengers_peril'           => [
+    'challengers_peril' => [
         'description' => 'El temporizador se incrementa en 90 segundos, pero morir resta 15 segundos del tiempo restante.',
         'name'        => 'Peligro del Desafiante',
     ],
-    'encrypted'                   => [
+    'encrypted' => [
         'description' => 'Los enemigos a lo largo del calabozo poseen reliquias de los Primeros. Destruye las reliquias para invocar a los Automa de los Primeros y obtener poderosos bonos, basado en el orden en el que fueron destruidas.',
         'name'        => 'Encriptado',
     ],
-    'entangling'                  => [
+    'entangling' => [
         'description' => 'Mientras estás en combate, lianas enredadoras aparecen periódicamente y atrapan a los jugadores.',
         'name'        => 'Enredador',
     ],
@@ -45,11 +45,11 @@ return [
         'description' => 'Cuando están heridos por debajo del 90% de salud, los jugadores sufrirán daño creciente con el tiempo hasta que sean curados por encima del 90% de salud.',
         'name'        => 'Grave',
     ],
-    'incorporeal'                 => [
+    'incorporeal' => [
         'description' => 'Mientras estás en combate, seres incorpóreos aparecen periódicamente e intentan debilitar a los jugadores.',
         'name'        => 'Incorpóreo',
     ],
-    'infernal'                    => [
+    'infernal' => [
         'description' => 'Se pueden encontrar Balizas Infernales cerca de algunos jefes. Activar una Baliza o enfrentarse a un jefe cercano desencadenará una invasión de la Legión.',
         'name'        => 'Infernal',
     ],
@@ -57,7 +57,7 @@ return [
         'description' => 'Algunos enemigos que no son jefes han sido infestados con una Cría de G\'huun.',
         'name'        => 'Infestado',
     ],
-    'inspiring'                   => [
+    'inspiring' => [
         'description' => 'Algunos enemigos que no son jefes tienen una presencia inspiradora que fortalece a sus aliados.',
         'name'        => 'Inspirador',
     ],
@@ -65,7 +65,7 @@ return [
         'description' => 'Todos los ataques cuerpo a cuerpo de los enemigos aplican una plaga acumulativa que inflige daño con el tiempo y reduce la sanación recibida.',
         'name'        => 'Necrótico',
     ],
-    'prideful'                    => [
+    'prideful' => [
         'description' => 'Los jugadores rebosan de orgullo al derrotar enemigos que no son jefes, eventualmente formando una Manifestación de Orgullo. Derrotar esta Manifestación empodera enormemente a los jugadores.',
         'name'        => 'Orgulloso',
     ],
@@ -77,7 +77,7 @@ return [
         'description' => 'Los enemigos que no son jefes se enfurecen al 30% de salud, volviéndose inmunes al control de masas, excepto a las interrupciones.',
         'name'        => 'Furioso',
     ],
-    'reaping'                     => [
+    'reaping' => [
         'description' => 'Los enemigos que no son jefes son empoderados por Bwonsamdi y periódicamente buscan venganza desde el más allá.',
         'name'        => 'Cosecha',
     ],
@@ -89,8 +89,8 @@ return [
         'description' => 'Cuando son derrotados, los enemigos que no son jefes dejan atrás un charco persistente de icor que cura a sus aliados y daña a los jugadores.',
         'name'        => 'Sanguino',
     ],
-    'seasonal_index_preset'       => '%s preset %d',
-    'shrouded'                    => [
+    'seasonal_index_preset' => '%s preset %d',
+    'shrouded'              => [
         'description' => 'Infiltradores Nathrezim se han disfrazado entre los enemigos a lo largo del calabozo. El Cartel Ta te recompensará generosamente por ayudar en su captura.',
         'name'        => 'Velo',
     ],
@@ -106,11 +106,11 @@ return [
         'description' => 'Mientras estás en combate, los enemigos periódicamente invocan torbellinos dañinos.',
         'name'        => 'Tormentoso',
     ],
-    'teeming'                     => [
+    'teeming' => [
         'description' => 'Adicionales enemigos que no son jefes están presentes a lo largo del calabozo.',
         'name'        => 'Abundante',
     ],
-    'thundering'                  => [
+    'thundering' => [
         'description' => 'Los enemigos tienen un 5% más de salud. Mientras estás en combate, los jugadores son periódicamente sobrecargados con el poder primigenio de la tormenta interminable de Raszageth. Este poder conlleva un gran riesgo, y no descargarlo rápidamente puede tener consecuencias aturdidoras.',
         'name'        => 'Atronador',
     ],
@@ -118,7 +118,7 @@ return [
         'description' => 'Sirvientes del Carcelero se pueden encontrar a lo largo del calabozo y otorgan poderosas bendiciones al ser derrotados. Si no se enfrenta a un sirviente, empoderan al jefe final.',
         'name'        => 'Atormentado',
     ],
-    'tyrannical'                  => [
+    'tyrannical' => [
         'description' => 'Los enemigos jefes tienen un 25% más de salud e infligen hasta un 15% más de daño.',
         'name'        => 'Tiránico',
     ],
@@ -126,7 +126,7 @@ return [
         'description' => 'Los afijos de esta semana aún no se conocen.',
         'name'        => 'Desconocido',
     ],
-    'volcanic'                    => [
+    'volcanic' => [
         'description' => 'Mientras estás en combate, los enemigos periódicamente causan erupciones de llamas bajo los pies de jugadores distantes.',
         'name'        => 'Volcánico',
     ],
@@ -138,15 +138,15 @@ return [
         'description' => 'Mientras estás en combate, Xal\'atath rasga aberturas que devoran la esencia de los jugadores.',
         'name'        => 'Oferta de Xal\'atath: Devorar',
     ],
-    'xalataths_bargain_frenzied'  => [
+    'xalataths_bargain_frenzied' => [
         'description' => 'Los enemigos que no son jefes se enfurecen al quedar con un 30% de salud restante, aumentando su Celeridad en un 40%, pero aumentando el daño que reciben en un 20%.',
         'name'        => 'Oferta de Xal\'atath: Frenético',
     ],
-    'xalataths_bargain_oblivion'  => [
+    'xalataths_bargain_oblivion' => [
         'description' => 'Mientras estás en combate, Xal\'atath manifiesta cristales del vacío que pueden ser absorbidos por enemigos o jugadores.',
         'name'        => 'Pacto de Xal\'atath: Olvido',
     ],
-    'xalataths_bargain_pulsar'    => [
+    'xalataths_bargain_pulsar' => [
         'description' => 'Mientras estás en combate, Xal\'atath invoca púlsares que orbitan a los jugadores.',
         'name'        => 'Pacto de Xal\'atath: Púlsar',
     ],

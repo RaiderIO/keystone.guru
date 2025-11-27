@@ -47,7 +47,7 @@ return [
         'rating' => [
             'nr_of_votes' => '%s voto(s)',
         ],
-        'search'     => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Cargando...',
             ],
@@ -255,7 +255,7 @@ return [
             'uploadlogs' => [
                 'upload_logs' => 'Subir registros para mejorar Keystone.guru',
             ],
-            'user'       => [
+            'user' => [
                 'account_settings'  => 'Configuración de la cuenta',
                 'login'             => 'Iniciar sesión',
                 'logout'            => 'Cerrar sesión',
@@ -361,16 +361,16 @@ return [
                 'you_cannot_rate_your_own_route' => 'No puedes calificar tu propia ruta - ¡gracias por usar sesiones en vivo!',
             ],
             'heatmapsearch' => [
-                'advanced_option'        => [
+                'advanced_option' => [
                     'min_samples_required'       => 'Mín. muestras requeridas',
                     'min_samples_required_title' => 'Disminuye el umbral requerido para que los datos aparezcan en el mapa de calor. Disminuir este valor llevará a que se representen más puntos de datos.',
                 ],
-                'advanced_options'       => 'Opciones avanzadas',
-                'affixes'                => 'Afijos',
-                'affixes_selected'       => '{0} afijos seleccionados',
-                'affixes_title'          => 'Afijos',
-                'bloodlust_alt'          => 'Ansia de sangre',
-                'class_and_spec_option'  => [
+                'advanced_options'      => 'Opciones avanzadas',
+                'affixes'               => 'Afijos',
+                'affixes_selected'      => '{0} afijos seleccionados',
+                'affixes_title'         => 'Afijos',
+                'bloodlust_alt'         => 'Ansia de sangre',
+                'class_and_spec_option' => [
                     'classes'                             => 'Clases',
                     'classes_player_deaths'               => 'Clases (muerte)',
                     'classes_player_deaths_title'         => 'Mostrar solo las muertes de estas clases.',
@@ -400,14 +400,14 @@ return [
                     'pane'        => 'Panel',
                     'radius'      => 'Radio',
                 ],
-                'heat_options'           => 'Opciones de Leaflet.heat',
-                'item_level'             => 'Nivel de objeto',
-                'key_level'              => 'Nivel de llave',
-                'npc_death_alt'          => 'Muerte de enemigo',
-                'player_death_alt'       => 'Muerte de jugador',
-                'player_deaths'          => 'Muertes de jugadores',
-                'settings_title'         => 'Configuración del mapa',
-                'weekly_affix_groups'    => 'Semana',
+                'heat_options'        => 'Opciones de Leaflet.heat',
+                'item_level'          => 'Nivel de objeto',
+                'key_level'           => 'Nivel de llave',
+                'npc_death_alt'       => 'Muerte de enemigo',
+                'player_death_alt'    => 'Muerte de jugador',
+                'player_deaths'       => 'Muertes de jugadores',
+                'settings_title'      => 'Configuración del mapa',
+                'weekly_affix_groups' => 'Semana',
             ],
             'pulls' => [
                 'delete_all_pulls_title'      => 'Eliminar todos los pulls',
@@ -419,10 +419,10 @@ return [
                 'toggle_all_required_enemies' => 'Alternar todos los enemigos requeridos',
             ],
             'pullsworkbench' => [
-                'add_kill_area'    => 'Agregar área de eliminación',
-                'delete_killzone'  => 'Eliminar pull',
-                'description'      => 'Editar descripción',
-                'modal'            => [
+                'add_kill_area'   => 'Agregar área de eliminación',
+                'delete_killzone' => 'Eliminar pull',
+                'description'     => 'Editar descripción',
+                'modal'           => [
                     'description' => [
                         'label'               => 'Descripción',
                         'save'                => 'Guardar',
@@ -454,14 +454,14 @@ return [
                             Cada vez que Blizzard hace un cambio en el mapeo o se corrige un error, se crea una nueva versión de mapeo.
                             Las rutas que se crean con versiones de mapeo anteriores no se actualizan automáticamente a la última versión.
                             Esta advertencia indica que la versión de mapeo utilizada por esta ruta está desactualizada y puede no representar el mapeo del juego',
-            'new_mapping_version_header_title'       => 'Hay una nueva versión de mapeo para esta mazmorra',
-            'no_teeming'                             => 'Siempre visible',
-            'route'                                  => 'Ruta',
-            'visible_teeming'                        => 'Visible solo cuando está en Teeming',
+            'new_mapping_version_header_title' => 'Hay una nueva versión de mapeo para esta mazmorra',
+            'no_teeming'                       => 'Siempre visible',
+            'route'                            => 'Ruta',
+            'visible_teeming'                  => 'Visible solo cuando está en Teeming',
         ],
     ],
     'modal' => [
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Crear ruta',
             'create_temporary_route' => 'Crear ruta temporal',
             'import_from_mdt'        => 'Importar desde MDT',
@@ -543,24 +543,24 @@ return [
                                         y reducir el retraso entre los grupos. Nota: esto reducirá la distancia de caminata en esta cantidad, por lo que no se aconseja establecer esto
                                         al rango máximo de tu habilidad para obtener resultados de simulación precisos. Entre el 50% y el 75% del rango máximo de tu hechizo debería ser bueno,
                                         a menos que literalmente estés encadenando atracciones sin tiempo de inactividad entre ellas.',
-                'use_mounts'                           => 'Usar monturas',
-                'use_mounts_title'                     => 'Intentará usar tu montura (si es más rápida y está disponible) para reducir la distancia entre la atracción actual y la siguiente.',
+                'use_mounts'       => 'Usar monturas',
+                'use_mounts_title' => 'Intentará usar tu montura (si es más rápida y está disponible) para reducir la distancia entre la atracción actual y la siguiente.',
             ],
             'default' => [
-                'affixes'                                 => 'Afijos',
-                'affixes_map'                             => [
+                'affixes'     => 'Afijos',
+                'affixes_map' => [
                     'fortified'  => 'Fortificado',
                     'tyrannical' => 'Tiránico',
                 ],
-                'affixes_title'                           => 'Selecciona Fortificado para escalar la salud de todos los enemigos que no son jefes en un 20%, Tiránico para escalar la salud de los jefes en un 30%. Puedes seleccionar ambos a la vez.',
-                'bloodlust_per_pull'                      => 'Ansia de Sangre/Heroísmo/etc. por atracción',
-                'bloodlust_per_pull_title'                => 'Te permite seleccionar qué atracciones tienen Ansia de Sangre/Heroísmo/etc. Asignar estos hechizos a una atracción llena automáticamente este desplegable.',
-                'hp_percent'                              => 'Porcentaje de HP',
-                'hp_percent_title'                        => 'La cantidad de porcentaje que tu personaje debe dañar a todos los enemigos antes de que se considere \'muerto\'. Esta será tu parte del daño en una mazmorra.',
-                'key_level'                               => 'Nivel de llave',
-                'key_level_title'                         => 'Un nivel de llave más alto escalará la salud de los enemigos a los que se enfrenta tu personaje, como lo haría en una mazmorra M+ real.',
-                'raid_buffs'                              => 'Beneficios de banda',
-                'raid_buffs_map'                          => [
+                'affixes_title'            => 'Selecciona Fortificado para escalar la salud de todos los enemigos que no son jefes en un 20%, Tiránico para escalar la salud de los jefes en un 30%. Puedes seleccionar ambos a la vez.',
+                'bloodlust_per_pull'       => 'Ansia de Sangre/Heroísmo/etc. por atracción',
+                'bloodlust_per_pull_title' => 'Te permite seleccionar qué atracciones tienen Ansia de Sangre/Heroísmo/etc. Asignar estos hechizos a una atracción llena automáticamente este desplegable.',
+                'hp_percent'               => 'Porcentaje de HP',
+                'hp_percent_title'         => 'La cantidad de porcentaje que tu personaje debe dañar a todos los enemigos antes de que se considere \'muerto\'. Esta será tu parte del daño en una mazmorra.',
+                'key_level'                => 'Nivel de llave',
+                'key_level_title'          => 'Un nivel de llave más alto escalará la salud de los enemigos a los que se enfrenta tu personaje, como lo haría en una mazmorra M+ real.',
+                'raid_buffs'               => 'Beneficios de banda',
+                'raid_buffs_map'           => [
                     'arcane_intellect'     => 'Intelecto Arcano',
                     'battle_shout'         => 'Grito de Batalla',
                     'bleeding'             => 'Sangrado',
@@ -573,10 +573,10 @@ return [
                     'power_word_fortitude' => 'Palabra de Poder: Entereza',
                     'skyfury'              => 'Tótem de Furia del Cielo',
                 ],
-                'raid_buffs_title'                        => 'Permite la selección de beneficios de banda. Nota: si Ansia de Sangre está deshabilitada, Ansia de Sangre/Heroísmo/etc. por atracción no hace nada.',
-                'shrouded_bounty_type'                    => 'Botín velado',
-                'shrouded_bounty_type_title'              => 'El botín velado que puedes seleccionar al comienzo de la mazmorra.',
-                'shrouded_bounty_types'                   => [
+                'raid_buffs_title'           => 'Permite la selección de beneficios de banda. Nota: si Ansia de Sangre está deshabilitada, Ansia de Sangre/Heroísmo/etc. por atracción no hace nada.',
+                'shrouded_bounty_type'       => 'Botín velado',
+                'shrouded_bounty_type_title' => 'El botín velado que puedes seleccionar al comienzo de la mazmorra.',
+                'shrouded_bounty_types'      => [
                     'crit'    => 'Crítico',
                     'haste'   => 'Celeridad',
                     'mastery' => 'Maestría',
@@ -590,7 +590,7 @@ return [
         'uploadlogs' => [
             'title' => 'Subir registros',
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'contact_by_email'       => 'Contáctame por correo electrónico si es necesario para una investigación más a fondo',
                 'contact_by_email_guest' => 'Contáctame por correo electrónico si es necesario para una mayor investigación (agrega tu dirección de correo electrónico en el cuerpo del informe)',
@@ -599,7 +599,7 @@ return [
                 'why_report_this_route'  => '¿Por qué quieres informar esta ruta? (máx. 1000 caracteres)',
                 'your_name'              => 'Tu nombre',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'contact_by_email'       => 'Contáctame por correo electrónico si es necesario para una mayor investigación',
                 'contact_by_email_guest' => 'Contáctame por correo electrónico si es necesario para una mayor investigación (agrega tu dirección de correo electrónico en el cuerpo del informe)',
                 'report_enemy_bug'       => 'Informar error del enemigo',

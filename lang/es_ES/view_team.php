@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'edit'     => [
+    'edit' => [
         'icon_image_alt' => 'Sin imagen',
         'members'        => 'Miembros',
         'menu_title'     => 'Equipos',
@@ -39,7 +39,7 @@ return [
         'tags' => [
             'description' => 'Puedes gestionar etiquetas para las rutas del equipo aquí. Todos los miembros de este equipo pueden ver las etiquetas adjuntas a las rutas.
                                     Las etiquetas personales que pueden o no haber sido adjuntadas por el propietario de la ruta no serán visibles.',
-            'title'       => 'Etiquetas',
+            'title' => 'Etiquetas',
         ],
     ],
     'invite' => [

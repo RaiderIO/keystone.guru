@@ -53,7 +53,7 @@ return [
         ],
     ],
     'dungeonroute' => [
-        'flash'          => [
+        'flash' => [
             'route_cloned_successfully' => 'Ruta clonada con éxito',
             'route_created'             => 'Ruta creada',
             'route_updated'             => 'Ruta actualizada',
@@ -67,10 +67,10 @@ return [
             'popular'           => '%s rutas populares',
             'this_week_affixes' => '%s esta semana',
         ],
-        'new'     => 'Nuevo',
+        'new'               => 'Nuevo',
         'next_week_affixes' => 'Afijos de la próxima semana',
-        'popular' => 'Rutas populares',
-        'season' => [
+        'popular'           => 'Rutas populares',
+        'season'            => [
             'new'               => '%s nuevas rutas',
             'next_week_affixes' => '%s la próxima semana',
             'popular'           => '%s rutas populares',
@@ -79,7 +79,7 @@ return [
         'this_week_affixes' => 'Afijos de esta semana',
     ],
     'dungeonspeedrunrequirednpcs' => [
-        'flash'         => [
+        'flash' => [
             'npc_added_successfully'   => 'NPC añadido con éxito',
             'npc_deleted_successfully' => 'NPC eliminado con éxito',
         ],
@@ -104,7 +104,7 @@ return [
         'deleted_successfully'      => 'Versión de mapeo eliminada con éxito',
     ],
     'mdtimport' => [
-        'error'           => [
+        'error' => [
             'cannot_create_route_must_be_logged_in' => 'Debe iniciar sesión para crear una ruta',
             'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser no está instalado.',
             'invalid_mdt_string'                    => 'Cadena MDT no válida',
@@ -159,7 +159,7 @@ return [
         ],
     ],
     'register' => [
-        'flash'                 => [
+        'flash' => [
             'registered_successfully' => 'Registrado con éxito. ¡Disfruta del sitio web!',
         ],
         'legal_agreed_accepted' => 'Tiene que aceptar nuestros términos legales para registrarse.',

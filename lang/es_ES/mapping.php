@@ -12,11 +12,11 @@ return [
                 'hidden_pack_in_cave' => 'El paquete está en una cueva debajo del agua detrás de la cascada.',
             ],
         ],
-        'mop'    => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: Los Reclutas Krik\'thik solo aparecen después de derrotar al Comandante Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'La puerta se desbloquea después de derrotar la Prueba del Rey',
             ],
         ],
@@ -101,7 +101,7 @@ return [
             'priory_of_the_sacred_flame' => [
                 'miniboss_explanation' => 'Keystone.guru: Cuando los mini jefes son asesinados junto con el jefe, no otorgan ningún conteo. Cuando son invocados por otro mini jefe, SÍ otorgan conteo.',
             ],
-            'the_stonevault'             => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => 'Guerreros, Enanos, Herreros (25): La energía atrapada dentro de la Barra de Hierro Imbuido se libera, aumentando la Versatilidad de todos los jugadores en un radio de 20 yardas en un 10% durante 10 minutos.',
             ],
         ],

@@ -3,7 +3,7 @@
 return [
     'draw' => [
         'handlers' => [
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'cont'  => 'Haga clic y arrastre para continuar dibujando la línea.',
                     'end'   => 'Continúe haciendo clic/arrastrando, cuando termine, presione el botón \'Terminar\' en la barra de herramientas para completar su línea.',
@@ -26,7 +26,7 @@ return [
                     'start' => 'Haga clic en el mapa para colocar un marcador.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'cont'  => 'Haga clic para continuar dibujando el camino.',
                     'end'   => 'Haga clic en el botón \'Terminar\' en la barra de herramientas para completar su camino.',
@@ -72,11 +72,11 @@ return [
                 'polyline'     => 'Dibujar una polilínea',
                 'rectangle'    => 'Dibujar un rectángulo',
             ],
-            'finish'  => [
+            'finish' => [
                 'text'  => 'Terminar',
                 'title' => 'Terminar dibujo',
             ],
-            'undo'    => [
+            'undo' => [
                 'text'  => 'Eliminar el último punto',
                 'title' => 'Eliminar el último punto dibujado',
             ],
@@ -96,9 +96,9 @@ return [
                 ],
             ],
         ],
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'cancel'   => [
+                'cancel' => [
                     'text'  => 'Cancelar',
                     'title' => 'Cancelar la edición, descarta todos los cambios',
                 ],
@@ -106,7 +106,7 @@ return [
                     'text'  => 'Borrar todo',
                     'title' => 'Borrar todas las capas',
                 ],
-                'save'     => [
+                'save' => [
                     'text'  => 'Guardar',
                     'title' => 'Guardar cambios',
                 ],

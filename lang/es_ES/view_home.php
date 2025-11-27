@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'create_route'                                 => 'Crear ruta',
-    'create_your_own_routes'                       => 'Crea tus propias rutas',
-    'create_your_own_routes_description'           => 'Importa tus rutas desde Mythic Dungeon Tools o :createANewRoute desde cero. Keystone.guru ofrece varias herramientas para hacer que tu ruta sea memorable,
+    'create_route'                       => 'Crear ruta',
+    'create_your_own_routes'             => 'Crea tus propias rutas',
+    'create_your_own_routes_description' => 'Importa tus rutas desde Mythic Dungeon Tools o :createANewRoute desde cero. Keystone.guru ofrece varias herramientas para hacer que tu ruta sea memorable,
                                     como dibujo libre, trazado y colocación de iconos/comentarios. Las fuerzas enemigas pueden mostrarse en bruto o en porcentaje a voluntad. Varios otros ajustes te permiten
                                     personalizar tu experiencia de creación de rutas a tu gusto.',
-    'custom_dungeon_mapping'                       => 'Mapeo de mazmorras personalizado',
-    'custom_dungeon_mapping_description'           => 'Keystone.guru tiene su propio mapeo de mazmorras sin dependencias de ninguna herramienta externa. Ve qué enemigos fortalecen a otros, sueltan icor sanguino o hacen estallar a tu grupo. El mapeo es de código abierto y gratuito. Siempre.',
-    'discover_new_routes'                          => 'Descubre nuevas rutas',
-    'discover_new_routes_description'              => 'Navega fácilmente por rutas por mazmorra en varias categorías para encontrar una ruta que se adapte perfectamente a tu grupo.
+    'custom_dungeon_mapping'             => 'Mapeo de mazmorras personalizado',
+    'custom_dungeon_mapping_description' => 'Keystone.guru tiene su propio mapeo de mazmorras sin dependencias de ninguna herramienta externa. Ve qué enemigos fortalecen a otros, sueltan icor sanguino o hacen estallar a tu grupo. El mapeo es de código abierto y gratuito. Siempre.',
+    'discover_new_routes'                => 'Descubre nuevas rutas',
+    'discover_new_routes_description'    => 'Navega fácilmente por rutas por mazmorra en varias categorías para encontrar una ruta que se adapte perfectamente a tu grupo.
                                     La integración con :archon_gg facilita ver qué mazmorras son las más fáciles de cronometrar para cualquier afijo.
                                     ¿Aún no encuentras una ruta que se adapte a tus necesidades? La página :routesearch te permite ajustar tus necesidades exactas para encontrar una coincidencia perfecta.',
     'discover_new_routes_route_search'             => 'búsqueda de rutas',
