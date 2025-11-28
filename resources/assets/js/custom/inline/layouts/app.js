@@ -97,11 +97,11 @@ class LayoutsApp extends InlineCode {
         if ($selector.length > 0) {
             $selector.password({
                 enterPass: '&nbsp;',
-                shortPass: lang.get('messages.min_password_length'),
-                badPass: lang.get('messages.weak'),
-                goodPass: lang.get('messages.medium'),
-                strongPass: lang.get('messages.strong'),
-                containsUsername: lang.get('messages.contains_username'),
+                shortPass: lang.get('js.min_password_length'),
+                badPass: lang.get('js.weak'),
+                goodPass: lang.get('js.medium'),
+                strongPass: lang.get('js.strong'),
+                containsUsername: lang.get('js.contains_username'),
                 showText: true, // shows the text tips
                 animate: false, // whether or not to animate the progress bar on input blur/focus
                 minimumLength: 8
@@ -114,17 +114,17 @@ class LayoutsApp extends InlineCode {
  * The default function that should be called when an ajax request fails (error handler)
  **/
 function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
-    let message = lang.get('messages.ajax_error_default');
+    let message = lang.get('js.ajax_error_default');
 
     switch (xhr.status) {
         case 403:
-            message = lang.get('messages.ajax_error_403');
+            message = lang.get('js.ajax_error_403');
             break;
         case 404:
-            message = lang.get('messages.ajax_error_404');
+            message = lang.get('js.ajax_error_404');
             break;
         case 419:
-            message = lang.get('messages.ajax_error_419');
+            message = lang.get('js.ajax_error_419');
             break;
     }
 
@@ -260,14 +260,14 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('messages.yes_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.yes_label'), 'btn btn-success mr-1', function (n) {
                     if (typeof yesCallback === 'function') {
                         yesCallback();
                     }
                     n.close();
                 }, {id: 'yes-button', 'data-status': 'ok'}),
 
-                Noty.button(lang.get('messages.cancel_label'), 'btn btn-danger', function (n) {
+                Noty.button(lang.get('js.cancel_label'), 'btn btn-danger', function (n) {
                     if (typeof noCallback === 'function') {
                         noCallback();
                     }
@@ -289,7 +289,7 @@ function showConfirmFinished(text, doneCallback = null, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('messages.finished_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.finished_label'), 'btn btn-success mr-1', function (n) {
                     if (typeof doneCallback === 'function') {
                         doneCallback();
                     }

@@ -89,7 +89,7 @@ class EnemyPack extends VersionableMapObject {
                 name: 'mark_as_skippable',
                 type: 'button',
                 buttonType: 'info',
-                buttonText: lang.get('messages.enemypack_mark_as_skippable_button_text_label'),
+                buttonText: lang.get('js.enemypack_mark_as_skippable_button_text_label'),
                 clicked: function (e) {
                     self.map.leafletMap.closePopup();
 

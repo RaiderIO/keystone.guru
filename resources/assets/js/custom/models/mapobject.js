@@ -478,13 +478,13 @@ class MapObject extends Signalable {
                         id: this.id,
                         property: name,
                         map_object_name: mapObjectName,
-                        label: lang.get(`messages.${mapObjectName}_${name}_label`),
+                        label: lang.get(`js.${mapObjectName}_${name}_label`),
                         description: attribute.hasOwnProperty('description') ? attribute.description : false,
                         value: this._getValue(name, parentAttribute),
                         values: attribute.hasOwnProperty('values') ?
                             (typeof attribute.values === 'function' ? attribute.values() : attribute.values)
                             : [],
-                        select_default_label: attribute.type === 'select' ? lang.get(`messages.${mapObjectName}_${name}_select_default_label`) : '',
+                        select_default_label: attribute.type === 'select' ? lang.get(`js.${mapObjectName}_${name}_select_default_label`) : '',
                         show_default: attribute.hasOwnProperty('show_default') ? attribute.show_default : true,
                         live_search: attribute.hasOwnProperty('live_search') ? attribute.live_search : false,
                         multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
@@ -498,7 +498,7 @@ class MapObject extends Signalable {
         let popupTemplate = Handlebars.templates['map_popup_template'];
 
         if (parentAttribute === null) {
-            let translatedMapObjectName = lang.get(`messages.${mapObjectName}`);
+            let translatedMapObjectName = lang.get(`js.${mapObjectName}`);
             let mapObjectNamePretty = getState().isMapAdmin() ? `${translatedMapObjectName} ${this.id}` : translatedMapObjectName;
 
             let resultHtml = '';
@@ -514,7 +514,7 @@ class MapObject extends Signalable {
                     resultHtml += categoryTemplate($.extend({}, getHandlebarsDefaultVariables(), {
                         id: this.id,
                         html: attributeHtmlByCategory[category].join(''),
-                        label: lang.get(`messages.map_object_category_${category}_label`),
+                        label: lang.get(`js.map_object_category_${category}_label`),
                         category: category,
                         map_object_name: mapObjectName,
                         map_object_name_pretty: mapObjectNamePretty,

@@ -220,7 +220,7 @@ class DrawControls extends MapControl {
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         let assignedPridefulEnemies = enemyMapObjectGroup.getAssignedPridefulEnemies();
-        let buttonText = `${lang.get(`messages.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.pridefulenemy.max})`;
+        let buttonText = `${lang.get(`js.pridefulenemy`)} (${assignedPridefulEnemies}/${c.map.pridefulenemy.max})`;
         $('.leaflet-draw-draw-pridefulenemy .button-text').text(buttonText);
 
         let limitReached = assignedPridefulEnemies === c.map.pridefulenemy.max || !c.map.pridefulenemy.isEnabled();
@@ -257,7 +257,7 @@ class DrawControls extends MapControl {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-route',
-                    title: lang.get('messages.path_title', {hotkey: hotkeys.path}),
+                    title: lang.get('js.path_title', {hotkey: hotkeys.path}),
                     hotkey: hotkeys.path
                 },
                 killzone: {
@@ -270,7 +270,7 @@ class DrawControls extends MapControl {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-icons',
-                    title: lang.get('messages.mapicon_title', {hotkey: hotkeys.mapicon}),
+                    title: lang.get('js.mapicon_title', {hotkey: hotkeys.mapicon}),
                     hotkey: hotkeys.mapicon
                 },
                 awakenedobeliskgatewaymapicon: {
@@ -283,7 +283,7 @@ class DrawControls extends MapControl {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-user',
-                    title: lang.get('messages.pridefulenemy_title', {hotkey: hotkeys.pridefulenemy}),
+                    title: lang.get('js.pridefulenemy_title', {hotkey: hotkeys.pridefulenemy}),
                     hotkey: hotkeys.pridefulenemy
                 } : false,
                 brushline: false,
@@ -348,9 +348,9 @@ class DrawControls extends MapControl {
         $disabledPridefulButton.html(
             this._getButtonHtml(
                 'fa-user',
-                lang.get('messages.brushline'),
+                lang.get('js.brushline'),
                 '',
-                c.map.pridefulenemy.isEnabled() ? lang.get('messages.pridefulenemy_disabled_title') : lang.get('messages.pridefulenemy_disabled_no_shadowlands_title')
+                c.map.pridefulenemy.isEnabled() ? lang.get('js.pridefulenemy_disabled_title') : lang.get('js.pridefulenemy_disabled_no_shadowlands_title')
             )
         );
 
@@ -459,9 +459,9 @@ class DrawControls extends MapControl {
         $brushlineButton.html(
             this._getButtonHtml(
                 'fa-paint-brush',
-                lang.get('messages.brushline'),
+                lang.get('js.brushline'),
                 hotkey,
-                lang.get('messages.brushline_title', {hotkey: hotkey})
+                lang.get('js.brushline_title', {hotkey: hotkey})
             )
         );
         $brushlineButton.unbind('click').bind('click', function () {
@@ -493,8 +493,8 @@ class DrawControls extends MapControl {
                 class: 'd-inline-block w-100 h-100',
                 'data-toggle': 'tooltip',
                 'data-placement': 'right',
-                title: lang.get('messages.finish_drawing'),
-                text: lang.get('messages.finish')
+                title: lang.get('js.finish_drawing'),
+                text: lang.get('js.finish')
             });
 
             // On click, disable pather
@@ -539,13 +539,13 @@ class DrawControls extends MapControl {
         let $buttons = $editRouteControls.find('a');
         let $editButton = $($buttons[0]);
         let editHotkey = this._findHotkeyByCssClass('edit');
-        $editButton.html(this._getButtonHtml('fa-edit', lang.get('messages.edit'), editHotkey, lang.get('messages.edit_title', {hotkey: editHotkey})));
+        $editButton.html(this._getButtonHtml('fa-edit', lang.get('js.edit'), editHotkey, lang.get('js.edit_title', {hotkey: editHotkey})));
         $editButton.attr('title', '');
 
         let $deleteButton = $($buttons[1]);
         let deleteHotkey = this._findHotkeyByCssClass('remove');
         $deleteButton.html(
-            this._getButtonHtml('fa-trash', lang.get('messages.delete'), deleteHotkey, lang.get('messages.delete_title', {hotkey: deleteHotkey}), 'btn-danger')
+            this._getButtonHtml('fa-trash', lang.get('js.delete'), deleteHotkey, lang.get('js.delete_title', {hotkey: deleteHotkey}), 'btn-danger')
         );
         $deleteButton.attr('title', '');
 
@@ -577,7 +577,7 @@ class DrawControls extends MapControl {
                 if (option.hasOwnProperty('faClass')) {
                     // Set the FA icon and remove the background image that was initially there
                     let $option = $(`.leaflet-draw-draw-${optionName}`)
-                        .html(this._getButtonHtml(option.faClass, lang.get(`messages.${optionName}`), option.hotkey))
+                        .html(this._getButtonHtml(option.faClass, lang.get(`js.${optionName}`), option.hotkey))
                         .css('background-image', 'none');
 
                     // Add any css class that may or may not have been set

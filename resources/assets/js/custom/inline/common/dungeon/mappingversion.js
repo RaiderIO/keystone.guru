@@ -32,7 +32,7 @@ class CommonDungeonMappingversion extends InlineCode {
                 $('#save_mapping_version_saving').show();
             },
             success: function () {
-                showSuccessNotification(lang.get('messages.mapping_version_saved'));
+                showSuccessNotification(lang.get('js.mapping_version_saved'));
             },
             complete: function () {
                 $('#save_mapping_version').show();

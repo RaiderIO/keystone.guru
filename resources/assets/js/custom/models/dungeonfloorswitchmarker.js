@@ -305,12 +305,12 @@ class DungeonFloorSwitchMarker extends Icon {
 
         if (targetFloor !== false) {
             // if (state.isCurrentDungeonFacadeEnabled()) {
-            //     return lang.get('messages.dungeonfloorswitchmarker_to_label', {floor: lang.get(targetFloor.name)});
+            //     return lang.get('js.dungeonfloorswitchmarker_to_label', {floor: lang.get(targetFloor.name)});
             // } else {
-            return lang.get('messages.dungeonfloorswitchmarker_go_to_label', {floor: lang.get(targetFloor.name)});
+            return lang.get('js.dungeonfloorswitchmarker_go_to_label', {floor: lang.get(targetFloor.name)});
             // }
         } else {
-            return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
+            return `${lang.get('js.dungeonfloorswitchmarker_unknown_label')}`;
         }
     }
 

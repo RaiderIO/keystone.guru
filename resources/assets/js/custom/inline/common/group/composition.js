@@ -405,7 +405,7 @@ class CommonGroupComposition extends InlineCode {
             // Append default option
             $specializationSelect.append(jQuery('<option>', {
                 value: '0', // Laravel can then accept values that haven't been set
-                text: lang.get('messages.specialization_select')
+                text: lang.get('js.specialization_select')
             }));
 
             self._addIconOptionToSelect($specializationSelect, self.options.specializations, function (item) {
@@ -430,7 +430,7 @@ class CommonGroupComposition extends InlineCode {
             // Append default option
             $classSelect.append(jQuery('<option>', {
                 value: '0', // Laravel can then accept values that haven't been set
-                text: lang.get('messages.class_select')
+                text: lang.get('js.class_select')
             }));
 
             self._addIconOptionToSelect($classSelect, self.options.classDetails, 'class_icon_');
@@ -452,7 +452,7 @@ class CommonGroupComposition extends InlineCode {
             // Append default option
             $raceSelect.append(jQuery('<option>', {
                 value: '0', // Laravel can then accept values that haven't been set
-                text: lang.get('messages.race_select')
+                text: lang.get('js.race_select')
             }));
 
             self._addIconOptionToSelect($raceSelect, self.options.races, function (item) {

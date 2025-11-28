@@ -16,7 +16,7 @@ class TeamList extends InlineCode {
             'searching': false,
             'bLengthChange': false,
             'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-                'emptyTable': lang.get('messages.datatable_no_teams_in_table')
+                'emptyTable': lang.get('js.datatable_no_teams_in_table')
             })
         });
 

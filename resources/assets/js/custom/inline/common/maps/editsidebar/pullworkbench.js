@@ -97,7 +97,7 @@ class PullWorkBench extends Signalable {
         }
 
         $(`#pull_sidebar_workbench_header`).text(
-            lang.get('messages.pull_workbench_header_label', {index: this.killZone.index})
+            lang.get('js.pull_workbench_header_label', {index: this.killZone.index})
         );
 
         this._initDescriptionButton();
@@ -116,10 +116,10 @@ class PullWorkBench extends Signalable {
         let self = this;
 
         $(`#map_killzonessidebar_killzone_description_modal_label`).text(
-            lang.get('messages.pull_workbench_pull_description_label', {index: this.killZone.index})
+            lang.get('js.pull_workbench_pull_description_label', {index: this.killZone.index})
         );
         $(`#map_killzonessidebar_killzone_description_modal_supported_html_tags`).text(
-            lang.get('messages.pull_workbench_pull_supported_tags_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
+            lang.get('js.pull_workbench_pull_supported_tags_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
         );
         let $supportedDomains = $(`#map_killzonessidebar_killzone_description_modal_supported_domains`).attr(
             'title',
@@ -155,7 +155,7 @@ class PullWorkBench extends Signalable {
             description.length > c.map.editsidebar.pullsWorkbench.description.maxLength *
             c.map.editsidebar.pullsWorkbench.description.warningThreshold
         ).text(
-            lang.get('messages.pull_workbench_pull_description_length', {
+            lang.get('js.pull_workbench_pull_description_length', {
                 current: description.length,
                 max: c.map.editsidebar.pullsWorkbench.description.maxLength
             })
@@ -180,10 +180,10 @@ class PullWorkBench extends Signalable {
         // Set and is currently 0
         if (this.killZone.hasKillArea()) {
             // It was not, update it
-            resultMessage = lang.get('messages.pull_workbench_remove_kill_area_label');
+            resultMessage = lang.get('js.pull_workbench_remove_kill_area_label');
         } else {
             // Default
-            resultMessage = lang.get('messages.pull_workbench_add_kill_area_label');
+            resultMessage = lang.get('js.pull_workbench_add_kill_area_label');
         }
 
         $killAreaLabel.attr('title', resultMessage).refreshTooltips();
@@ -262,7 +262,7 @@ class PullWorkBench extends Signalable {
             $self.find('i').removeClass(trashIcon).addClass(loadingIcon);
 
             self.killZone.register('object:deleted', '123123', function () {
-                showSuccessNotification(lang.get('messages.object.deleted'));
+                showSuccessNotification(lang.get('js.object.deleted'));
 
                 // Bit hacky?
                 if (self.killZone.isKillAreaVisible()) {

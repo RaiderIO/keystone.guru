@@ -157,7 +157,7 @@ class MountableArea extends VersionableMapObject {
         super.bindTooltip();
 
         if (this.layer !== null) {
-            let displayText = lang.get('messages.mountablearea_tooltip_label', {speed: this.speed ?? MOVEMENT_SPEED_MOUNTED});
+            let displayText = lang.get('js.mountablearea_tooltip_label', {speed: this.speed ?? MOVEMENT_SPEED_MOUNTED});
 
             this.layer.bindTooltip(displayText.trim(), {
                 sticky: true,
