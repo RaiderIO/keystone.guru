@@ -1,19 +1,17 @@
 <?php
 
 return [
-
     'seasonal_type' => [
-        'beguiling'           => '',
-        'awakened'            => '',
-        'inspiring'           => '',
-        'prideful'            => '',
-        'tormented'           => '',
-        'encrypted'           => '',
-        'mdt_placeholder'     => '',
-        'requires_activation' => '',
-        'shrouded'            => '',
-        'shrouded_zul_gamux'  => '',
-        'no_shrouded'         => '',
+        'awakened'            => 'Despierto',
+        'beguiling'           => 'Engañoso',
+        'encrypted'           => 'Encriptado',
+        'inspiring'           => 'Inspirador',
+        'mdt_placeholder'     => 'MDT Placeholder',
+        'no_shrouded'         => 'Sin Encubierto',
+        'prideful'            => 'Orgulloso',
+        'requires_activation' => 'Requiere Activación',
+        'shrouded'            => 'Encubierto',
+        'shrouded_zul_gamux'  => 'Encubierto (Zul\'gamux)',
+        'tormented'           => 'Atormentado',
     ],
-
 ];

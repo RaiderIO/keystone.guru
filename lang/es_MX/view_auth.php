@@ -1,29 +1,27 @@
 <?php
 
 return [
-
+    'login' => [
+        'title' => 'Iniciar sesión',
+    ],
     'passwords' => [
         'email' => [
-            'title'                    => '',
-            'header'                   => '',
-            'email_address'            => '',
-            'send_password_reset_link' => '',
+            'email_address'            => 'Dirección de correo electrónico',
+            'header'                   => 'Restablecer contraseña',
+            'send_password_reset_link' => 'Enviar enlace para restablecer la contraseña',
+            'title'                    => 'Restablecer contraseña',
         ],
         'reset' => [
-            'title'            => '',
-            'header'           => '',
-            'email_address'    => '',
-            'password'         => '',
-            'confirm_password' => '',
-            'reset_password'   => '',
+            'confirm_password' => 'Confirmar contraseña',
+            'email_address'    => 'Dirección de correo electrónico',
+            'header'           => 'Restablecer contraseña',
+            'password'         => 'Contraseña',
+            'reset_password'   => 'Restablecer contraseña',
+            'title'            => 'Restablecer contraseña',
         ],
     ],
-    'login' => [
-        'title' => '',
-    ],
     'register' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'Registrarse',
+        'title'  => 'Registrarse',
     ],
-
 ];

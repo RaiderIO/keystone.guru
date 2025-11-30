@@ -1,15 +1,13 @@
 <?php
 
 return [
-
-    'sitepage' => [
-        'staging_banner_description'        => '',
-        'staging_banner_take_me_away'       => '',
-        'readonly_mode_enabled_description' => '',
-    ],
     'app' => [
-        'linkpreview_title'       => '',
-        'linkpreview_description' => '',
+        'linkpreview_description' => 'Planifica rutas en línea cooperativamente con tu equipo o descubre rutas que se adapten a tu estilo de juego y nivel de habilidad. Keystone.guru es el lugar ideal para gestionar y compartir tus rutas M+.',
+        'linkpreview_title'       => 'Rutas M+ fáciles',
     ],
-
+    'sitepage' => [
+        'readonly_mode_enabled_description' => 'El modo de solo lectura está habilitado. Puedes ver rutas, pero no hacer cambios ni crear nuevas rutas.',
+        'staging_banner_description'        => '¡Advertencia! Actualmente estás en el entorno de prueba de Keystone.guru. Este NO es el sitio principal.',
+        'staging_banner_take_me_away'       => '¡Llévame al sitio principal!',
+    ],
 ];
