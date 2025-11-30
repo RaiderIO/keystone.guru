@@ -1,19 +1,17 @@
 <?php
 
 return [
-
-    'death_knight' => '',
-    'demon_hunter' => '',
-    'druid'        => '',
-    'evoker'       => '',
-    'hunter'       => '',
-    'mage'         => '',
-    'monk'         => '',
-    'paladin'      => '',
-    'priest'       => '',
-    'rogue'        => '',
-    'shaman'       => '',
-    'warlock'      => '',
-    'warrior'      => '',
-
+    'death_knight' => 'Cavaliere della Morte',
+    'demon_hunter' => 'Cacciatore di Demoni',
+    'druid'        => 'Druido',
+    'evoker'       => 'Evocatore',
+    'hunter'       => 'Cacciatore',
+    'mage'         => 'Mago',
+    'monk'         => 'Monaco',
+    'paladin'      => 'Paladino',
+    'priest'       => 'Sacerdote',
+    'rogue'        => 'Ladro',
+    'shaman'       => 'Sciamano',
+    'warlock'      => 'Stregone',
+    'warrior'      => 'Guerriero',
 ];

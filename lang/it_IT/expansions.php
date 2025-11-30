@@ -1,45 +1,43 @@
 <?php
 
 return [
-
-    'classic' => [
-        'name' => 'Classic',
-    ],
-    'tbc' => [
-        'name' => 'The Burning Crusade',
-    ],
-    'wotlk' => [
-        'name' => 'Wrath of the Lich King',
+    'bfa' => [
+        'name' => 'Battaglia per Azeroth',
     ],
     'cata' => [
-        'name' => 'Cataclysm',
+        'name' => 'Cataclisma',
     ],
-    'mop' => [
-        'name' => 'Mists of Pandaria',
-    ],
-    'wod' => [
-        'name' => 'Warlords of Draenor',
-    ],
-    'legion' => [
-        'name' => 'Legion',
-    ],
-    'bfa' => [
-        'name' => 'Battle for Azeroth',
-    ],
-    'sl' => [
-        'name' => 'Shadowlands',
+    'classic' => [
+        'name' => 'Classico',
     ],
     'df' => [
-        'name' => 'Dragonflight',
+        'name' => 'Volo dei Draghi',
     ],
-    'tww' => [
-        'name' => 'The War Within',
+    'legion' => [
+        'name' => 'Legione',
     ],
     'midnight' => [
-        'name' => 'Midnight',
+        'name' => 'Mezzanotte',
+    ],
+    'mop' => [
+        'name' => 'Nebbie di Pandaria',
+    ],
+    'sl' => [
+        'name' => 'Terre Ombrose',
+    ],
+    'tbc' => [
+        'name' => 'La Crociata Infuocata',
     ],
     'tlt' => [
-        'name' => 'The Last Titan',
+        'name' => 'L\'Ultimo Titano',
     ],
-
+    'tww' => [
+        'name' => 'La Guerra Interna',
+    ],
+    'wod' => [
+        'name' => 'Signori della Guerra di Draenor',
+    ],
+    'wotlk' => [
+        'name' => 'L\'Ira del Re dei Lich',
+    ],
 ];

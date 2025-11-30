@@ -1,34 +1,32 @@
 <?php
 
 return [
-
-    'retail' => [
-        'name'        => '',
-        'description' => '',
-    ],
-    'wotlk' => [
-        'name'        => '',
-        'description' => '',
-    ],
-    'classic' => [
-        'name'        => '',
-        'description' => '',
-    ],
     'beta' => [
-        'name'        => '',
-        'description' => '',
+        'description' => 'Beta al dettaglio',
+        'name'        => 'Beta al dettaglio',
     ],
     'cata' => [
-        'name'        => '',
-        'description' => '',
+        'description' => 'Cataclisma',
+        'name'        => 'Cata',
     ],
-    'mop' => [
-        'name'        => '',
-        'description' => '',
+    'classic' => [
+        'description' => 'Era Classica',
+        'name'        => 'Era Classica',
     ],
     'legion-remix' => [
-        'name'        => '',
-        'description' => '',
+        'description' => 'Remix di Legione',
+        'name'        => 'Remix di Legione',
     ],
-
+    'mop' => [
+        'description' => 'Nebbie di Pandaria',
+        'name'        => 'Nebbie',
+    ],
+    'retail' => [
+        'description' => 'Al dettaglio',
+        'name'        => 'Al dettaglio',
+    ],
+    'wotlk' => [
+        'description' => 'L\'Ira del Re dei Lich',
+        'name'        => 'Ira',
+    ],
 ];

@@ -1,42 +1,40 @@
 <?php
 
 return [
-
-    '400' => [
-        'title'   => '',
-        'message' => '',
+    400 => [
+        'message' => 'Il tuo browser ha inviato una richiesta non valida, per favore riprova.',
+        'title'   => '400 Richiesta non valida',
     ],
-    '401' => [
-        'title'   => '',
-        'message' => '',
+    401 => [
+        'message' => 'Spiacenti, non sei autorizzato ad accedere a questa pagina.',
+        'title'   => '401 Non autorizzato',
     ],
-    '403' => [
-        'title'   => '',
-        'message' => '',
+    403 => [
+        'message' => 'Spiacenti, ti è vietato accedere a questa pagina.',
+        'title'   => '403 Vietato',
     ],
-    '404' => [
-        'title'   => '',
-        'message' => '',
+    404 => [
+        'message' => 'Spiacenti, la pagina che stai cercando non è stata trovata.',
+        'title'   => '404 Non trovata',
     ],
-    '410' => [
-        'title'   => '',
-        'message' => '',
+    410 => [
+        'message' => 'Spiacenti, la pagina che stai cercando è scaduta.',
+        'title'   => '410 Pagina scaduta',
     ],
-    '419' => [
-        'title'   => '',
-        'message' => '',
+    419 => [
+        'message' => 'Spiacenti, la tua sessione è scaduta. Per favore aggiorna e riprova.',
+        'title'   => '419 Pagina scaduta',
     ],
-    '429' => [
-        'title'   => '',
-        'message' => '',
+    429 => [
+        'message' => 'Spiacenti, stai facendo troppe richieste ai nostri server.',
+        'title'   => '429 Troppe richieste',
     ],
-    '500' => [
-        'title'   => '',
-        'message' => '',
+    500 => [
+        'message' => 'Ops, qualcosa è andato storto sui nostri server.',
+        'title'   => '500 Errore interno del server',
     ],
-    '503' => [
-        'title'   => '',
-        'message' => '',
+    503 => [
+        'message' => 'Keystone.guru è in manutenzione. Torneremo presto!',
+        'title'   => 'Servizio non disponibile',
     ],
-
 ];

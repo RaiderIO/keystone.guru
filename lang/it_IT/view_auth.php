@@ -1,29 +1,27 @@
 <?php
 
 return [
-
+    'login' => [
+        'title' => 'Accesso',
+    ],
     'passwords' => [
         'email' => [
-            'title'                    => '',
-            'header'                   => '',
-            'email_address'            => '',
-            'send_password_reset_link' => '',
+            'email_address'            => 'Indirizzo e-mail',
+            'header'                   => 'Reimposta password',
+            'send_password_reset_link' => 'Invia link per reimpostare la password',
+            'title'                    => 'Reimposta password',
         ],
         'reset' => [
-            'title'            => '',
-            'header'           => '',
-            'email_address'    => '',
-            'password'         => '',
-            'confirm_password' => '',
-            'reset_password'   => '',
+            'confirm_password' => 'Conferma password',
+            'email_address'    => 'Indirizzo e-mail',
+            'header'           => 'Reimposta password',
+            'password'         => 'Password',
+            'reset_password'   => 'Reimposta password',
+            'title'            => 'Reimposta password',
         ],
     ],
-    'login' => [
-        'title' => '',
-    ],
     'register' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'Registrati',
+        'title'  => 'Registrati',
     ],
-
 ];

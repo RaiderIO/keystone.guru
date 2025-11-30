@@ -1,12 +1,10 @@
 <?php
 
 return [
-
-    'ad-free'                 => '',
-    'unlimited-dungeonroutes' => '',
-    'unlisted-routes'         => '',
-    'animated-polylines'      => '',
-    'advanced-simulation'     => '',
-    'ad-free-team-members'    => '',
-
+    'ad-free'                 => 'Senza pubblicità',
+    'ad-free-team-members'    => 'Senza pubblicità per i membri del team',
+    'advanced-simulation'     => 'Simulazione avanzata',
+    'animated-polylines'      => 'Polilinee animate',
+    'unlimited-dungeonroutes' => 'Percorsi illimitati',
+    'unlisted-routes'         => 'Percorsi non elencati',
 ];
