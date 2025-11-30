@@ -1,21 +1,19 @@
 <?php
 
 return [
-
-    'all'            => '',
-    'cd_external'    => '',
-    'cd_group'       => '',
-    'cd_personal'    => '',
-    'dr_external'    => '',
-    'dr_group'       => '',
-    'dr_personal'    => '',
-    'group_dr'       => '',
-    'group_heal_dps' => '',
-    'immunity'       => '',
-    'movement'       => '',
-    'personal'       => '',
-    'personal_cd'    => '',
-    'utility'        => '',
-    'unknown'        => '',
-
+    'all'            => 'Tous',
+    'cd_external'    => 'CD Externe',
+    'cd_group'       => 'CD Groupe',
+    'cd_personal'    => 'CD Personnel',
+    'dr_external'    => 'DR Externe',
+    'dr_group'       => 'DR Groupe',
+    'dr_personal'    => 'DR Personnel',
+    'group_dr'       => 'Groupe DR',
+    'group_heal_dps' => 'Groupe Soin DPS',
+    'immunity'       => 'Immunité',
+    'movement'       => 'Mouvement',
+    'personal'       => 'Personnel',
+    'personal_cd'    => 'CD Personnel',
+    'unknown'        => 'Inconnu',
+    'utility'        => 'Utilitaire',
 ];

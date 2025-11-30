@@ -1,18 +1,16 @@
 <?php
 
 return [
-
     'cookies' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'Politique des cookies',
+        'title'  => 'Politique des cookies',
     ],
     'privacy' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'Politique de confidentialité',
+        'title'  => 'Politique de confidentialité',
     ],
     'terms' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'Conditions d\'utilisation',
+        'title'  => 'Conditions d\'utilisation',
     ],
-
 ];

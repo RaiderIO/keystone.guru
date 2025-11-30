@@ -1,29 +1,27 @@
 <?php
 
 return [
-
+    'login' => [
+        'title' => 'Connexion',
+    ],
     'passwords' => [
         'email' => [
-            'title'                    => '',
-            'header'                   => '',
-            'email_address'            => '',
-            'send_password_reset_link' => '',
+            'email_address'            => 'Adresse e-mail',
+            'header'                   => 'Réinitialiser le mot de passe',
+            'send_password_reset_link' => 'Envoyer le lien de réinitialisation du mot de passe',
+            'title'                    => 'Réinitialiser le mot de passe',
         ],
         'reset' => [
-            'title'            => '',
-            'header'           => '',
-            'email_address'    => '',
-            'password'         => '',
-            'confirm_password' => '',
-            'reset_password'   => '',
+            'confirm_password' => 'Confirmer le mot de passe',
+            'email_address'    => 'Adresse e-mail',
+            'header'           => 'Réinitialiser le mot de passe',
+            'password'         => 'Mot de passe',
+            'reset_password'   => 'Réinitialiser le mot de passe',
+            'title'            => 'Réinitialiser le mot de passe',
         ],
     ],
-    'login' => [
-        'title' => '',
-    ],
     'register' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'S\'inscrire',
+        'title'  => 'S\'inscrire',
     ],
-
 ];

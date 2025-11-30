@@ -1,8 +1,6 @@
 <?php
 
 return [
-
-    'player_position' => '',
-    'enemy_position'  => '',
-
+    'enemy_position'  => 'Position de l\'ennemi',
+    'player_position' => 'Position du joueur',
 ];
