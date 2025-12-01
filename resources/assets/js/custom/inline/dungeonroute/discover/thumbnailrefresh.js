@@ -1,10 +1,14 @@
 class ThumbnailRefresh {
 
+    constructor(selector = '.thumbnail_refresh') {
+        this.selector = selector;
+    }
+
     /**
      * Refreshes the click handler on the 'refresh thumbnail' button
      */
     refreshHandlers() {
-        $('.refresh_thumbnail').unbind('click').bind('click', function () {
+        $(this.selector).unbind('click').bind('click', function () {
             let $this = $(this);
 
             $.ajax({

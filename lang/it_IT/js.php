@@ -19,7 +19,7 @@ return [
     'admin_enemy_pack_faction_label'                                       => 'Fazione',
     'admin_enemy_pack_label_label'                                         => 'Etichetta',
     'admin_enemy_pack_teeming_label'                                       => 'Affollato',
-    'admin_label'                                                          => 'Proprio',
+    'admin_label'                                                          => '',
     'admin_map_icon_comment_label'                                         => 'Commento',
     'admin_map_icon_faction_label'                                         => 'Fazione',
     'admin_map_icon_map_icon_type_id_label'                                => 'Icona',

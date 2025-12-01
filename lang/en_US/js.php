@@ -366,7 +366,7 @@ return [
     'view_label'                                                           => 'View',
     'collaborator_label'                                                   => 'Edit',
     'moderator_label'                                                      => 'Moderate',
-    'admin_label'                                                          => 'Own',
+    'admin_label'                                                          => 'Admin',
     'change_role_success'                                                  => 'Permissions updated',
     'change_default_role_success'                                          => 'Default role updated',
     'team_admin'                                                           => 'Administrate team',
@@ -477,5 +477,6 @@ return [
     'too_much_data_label'                                                  => 'Too much runs found - please further refine your search',
     'error_loading_data_label'                                             => 'Error loading data - please try again',
     'run_count_label'                                                      => 'Showing data from :count runs',
+    'refresh_thumbnails_label'                                             => 'Refresh thumbnails',
 
 ];

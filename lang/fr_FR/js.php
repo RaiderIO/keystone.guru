@@ -19,7 +19,7 @@ return [
     'admin_enemy_pack_faction_label'                                       => 'Faction',
     'admin_enemy_pack_label_label'                                         => 'Étiquette',
     'admin_enemy_pack_teeming_label'                                       => 'Foisonnant',
-    'admin_label'                                                          => 'Propre',
+    'admin_label'                                                          => '',
     'admin_map_icon_comment_label'                                         => 'Commentaire',
     'admin_map_icon_faction_label'                                         => 'Faction',
     'admin_map_icon_map_icon_type_id_label'                                => 'Icône',

@@ -734,7 +734,7 @@ js,add_to_team_label,Add to team...,,,,,,,,Добавить в команду ..
 js,view_label,View,,,,,,,,Показать,Переглянути,
 js,collaborator_label,Edit,,,,,,,,Редактировать,Змінити,
 js,moderator_label,Moderate,,,,,,,,Модерировать,Модерувати,
-js,admin_label,Own,,,,,,,,Собственный,Власний,
+js,admin_label,,,,,,,,,Собственный,Власний,
 js,change_role_success,Permissions updated,,,,,,,,Разрешения обновлены,Доступ оновлено,
 js,change_default_role_success,Default role updated,,,,,,,,Роль по умолчанию обновлена,Стандартну роль оновлено,
 js,team_admin,Administrate team,,,,,,,,Управление командой,Команда адміністраторів,
@@ -1686,7 +1686,7 @@ view_common,modal.share.mdt_string,MDT String,,,,,,,,Строка MDT,Рядок
 view_common,modal.share.loading,Loading...,,,,,,,,Загрузка...,Завантаження...,
 view_common,modal.share.copy_to_clipboard,Copy to clipboard,,,,,,,,Скопировать в буфер обмена,Скопіювати в буфер обміну,
 view_common,modal.simulate.intro,"To use the simulation feature, generate a SimulationCraft string for your character and paste the
-                generated string of Keystone.guru under your character's output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character's SimC string through either the addon or the site, select Advanced and paste Keystone.guru's output below your character's SimC string.",,,,,,,,,"Щоб скористатися функцією симуляції, згенеруйте рядок SimulationCraft для свого персонажа й вставте під ним вихідний текст від Keystone.guru. Потім натисніть «Simulate» як зазвичай! 
+                generated string of Keystone.guru under your character's output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character's SimC string through either the addon or the site, select Advanced and paste Keystone.guru's output below your character's SimC string.",,,,,,,,,"Щоб скористатися функцією симуляції, згенеруйте рядок SimulationCraft для свого персонажа й вставте під ним вихідний текст від Keystone.guru. Потім натисніть «Simulate» як зазвичай!
 Для Raidbots.com створіть рядок SimC через додаток або сайт, виберіть вкладку «Advanced» та вставте під ним підготовані дані від Keystone.guru.",
 view_common,modal.simulate.title,Simulate route,,,,,,,,,Симуляція маршруту,
 view_common,modal.simulate.get_simulationcraft_string,Get SimulationCraft string,,,,,,,,,Згенерувати рядок для SimulationCraft,

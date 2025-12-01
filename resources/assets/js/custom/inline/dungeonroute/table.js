@@ -174,6 +174,8 @@ class DungeonrouteTable extends InlineCode {
             self._tagsHandler.activate();
             self._teamsHandler.activate();
 
+            (new ThumbnailRefresh(`.dungeonroute-refresh-thumbnails`)).refreshHandlers();
+
             let $publishBtns = $('.dungeonroute-publish');
             $publishBtns.unbind('click').bind('click', self._publishDungeonRouteClicked);
 
@@ -420,7 +422,6 @@ class DungeonrouteTable extends InlineCode {
                     // 9 = Shadowlands, 10 = Dragonflight
                     let seasonId = row.affixes.length === 0 ? false : row.affixes[0].expansion_id;
                     let isShadowlandsRoute = seasonId === 9;
-                    let isDragonflightRoute = seasonId === 10;
 
                     let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
                     let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
@@ -482,7 +483,7 @@ class DungeonrouteTable extends InlineCode {
     }
 
     _renderTitle(data, type, row, meta, showDescription) {
-        let result = '';
+        let result;
 
         let published = Handlebars.templates['dungeonroute_table_title_published'](
             $.extend({}, getHandlebarsDefaultVariables(), {

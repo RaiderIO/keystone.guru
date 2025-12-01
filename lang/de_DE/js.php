@@ -19,7 +19,7 @@ return [
     'admin_enemy_pack_faction_label'                                       => 'Fraktion',
     'admin_enemy_pack_label_label'                                         => 'Label',
     'admin_enemy_pack_teeming_label'                                       => 'Wimmelnd',
-    'admin_label'                                                          => 'Eigentum',
+    'admin_label'                                                          => '',
     'admin_map_icon_comment_label'                                         => 'Kommentar',
     'admin_map_icon_faction_label'                                         => 'Fraktion',
     'admin_map_icon_map_icon_type_id_label'                                => 'Symbol',

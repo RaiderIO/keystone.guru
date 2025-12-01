@@ -19,7 +19,7 @@ return [
     'admin_enemy_pack_faction_label'                                       => 'Facción',
     'admin_enemy_pack_label_label'                                         => 'Etiqueta',
     'admin_enemy_pack_teeming_label'                                       => 'Repleto',
-    'admin_label'                                                          => 'Propio',
+    'admin_label'                                                          => '',
     'admin_map_icon_comment_label'                                         => 'Comentario',
     'admin_map_icon_faction_label'                                         => 'Facción',
     'admin_map_icon_map_icon_type_id_label'                                => 'Ícono',
