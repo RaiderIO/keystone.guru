@@ -14,7 +14,6 @@ services:
     volumes:
       - ./:/var/www
       - ../keystone.guru.assets:/var/keystone.guru.assets
-      - ../laravel-auto-translation:/var/laravel-auto-translation
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru

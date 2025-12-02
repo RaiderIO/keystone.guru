@@ -63,10 +63,15 @@
             }
         },
         {
-            "type": "path",
-            "url": "../laravel-auto-translation",
-            "options": {
-                "symlink": true
+            "type": "package",
+            "package": {
+                "name": "vildanbina/laravel-auto-translation",
+                "version": "2.0.1",
+                "source": {
+                    "url": "https://github.com/Wotuu/laravel-auto-translation.git",
+                    "type": "git",
+                    "reference": "814373fd5d94e3a68a4557e1c4204f2e59a42ff7"
+                }
             }
         }
     ],
@@ -121,7 +126,7 @@
         "symfony/mailgun-mailer": "^7.1",
         "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
-        "vildanbina/laravel-auto-translation": "^1.5",
+        "vildanbina/laravel-auto-translation": "^2.0",
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
