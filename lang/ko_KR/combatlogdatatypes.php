@@ -1,8 +1,6 @@
 <?php
 
 return [
-
-    'player_position' => '',
-    'enemy_position'  => '',
-
+    'enemy_position'  => '적 위치',
+    'player_position' => '플레이어 위치',
 ];

@@ -6,7 +6,6 @@ use App\Http\Models\Request\RequestModel;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Teapot\StatusCode;
 
 abstract class APIFormRequest extends FormRequest
 {

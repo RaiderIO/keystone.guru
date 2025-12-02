@@ -1,45 +1,43 @@
 <?php
 
 return [
-
-    'classic' => [
-        'name' => 'Classic',
-    ],
-    'tbc' => [
-        'name' => 'The Burning Crusade',
-    ],
-    'wotlk' => [
-        'name' => 'Wrath of the Lich King',
+    'bfa' => [
+        'name' => '아제로스의 전투',
     ],
     'cata' => [
-        'name' => 'Cataclysm',
+        'name' => '대격변',
     ],
-    'mop' => [
-        'name' => 'Mists of Pandaria',
-    ],
-    'wod' => [
-        'name' => 'Warlords of Draenor',
-    ],
-    'legion' => [
-        'name' => 'Legion',
-    ],
-    'bfa' => [
-        'name' => 'Battle for Azeroth',
-    ],
-    'sl' => [
-        'name' => 'Shadowlands',
+    'classic' => [
+        'name' => '클래식',
     ],
     'df' => [
-        'name' => 'Dragonflight',
+        'name' => '용군단',
     ],
-    'tww' => [
-        'name' => 'The War Within',
+    'legion' => [
+        'name' => '군단',
     ],
     'midnight' => [
-        'name' => 'Midnight',
+        'name' => '자정',
+    ],
+    'mop' => [
+        'name' => '판다리아의 안개',
+    ],
+    'sl' => [
+        'name' => '어둠땅',
+    ],
+    'tbc' => [
+        'name' => '불타는 성전',
     ],
     'tlt' => [
-        'name' => 'The Last Titan',
+        'name' => '최후의 타이탄',
     ],
-
+    'tww' => [
+        'name' => '내부의 전쟁',
+    ],
+    'wod' => [
+        'name' => '드레노어의 전쟁군주',
+    ],
+    'wotlk' => [
+        'name' => '리치 왕의 분노',
+    ],
 ];

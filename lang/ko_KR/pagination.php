@@ -1,8 +1,6 @@
 <?php
 
 return [
-
-    'previous' => '',
-    'next'     => '',
-
+    'next'     => '다음 &raquo;',
+    'previous' => '&laquo; 이전',
 ];

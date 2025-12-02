@@ -2,9 +2,6 @@
 
 namespace App\Console\Commands\Database;
 
-use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Models\Release;
-use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Illuminate\Console\Command;
 
 class Migrate extends Command

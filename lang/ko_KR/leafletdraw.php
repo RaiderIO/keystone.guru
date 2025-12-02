@@ -1,124 +1,122 @@
 <?php
 
 return [
-
     'draw' => [
-        'toolbar' => [
-            'actions' => [
-                'title' => '',
-                'text'  => '',
-            ],
-            'finish' => [
-                'title' => '',
-                'text'  => '',
-            ],
-            'undo' => [
-                'title' => '',
-                'text'  => '',
-            ],
-            'buttons' => [
-                'polyline'     => '',
-                'polygon'      => '',
-                'rectangle'    => '',
-                'circle'       => '',
-                'marker'       => '',
-                'circlemarker' => '',
-            ],
-        ],
         'handlers' => [
-            'circle' => [
+            'brushline' => [
                 'tooltip' => [
-                    'start' => '',
+                    'cont'  => '선을 계속 그리려면 클릭하고 드래그하세요.',
+                    'end'   => '계속 클릭/드래그하고, 완료되면 툴바의 \'완료\' 버튼을 눌러 선을 완성하세요.',
+                    'start' => '선을 그리려면 클릭하세요.',
                 ],
-                'radius' => '',
+            ],
+            'circle' => [
+                'radius'  => '반지름',
+                'tooltip' => [
+                    'start' => '원을 그리려면 클릭하고 드래그하세요.',
+                ],
             ],
             'circlemarker' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => '원형 마커를 놓으려면 지도를 클릭하세요.',
                 ],
             ],
             'marker' => [
                 'tooltip' => [
-                    'start' => '',
-                ],
-            ],
-            'polygon' => [
-                'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
-                ],
-            ],
-            'polyline' => [
-                'error'   => '',
-                'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
-                ],
-            ],
-            'rectangle' => [
-                'tooltip' => [
-                    'start' => '',
-                ],
-            ],
-            'simpleshape' => [
-                'tooltip' => [
-                    'end' => '',
+                    'start' => '마커를 놓으려면 지도를 클릭하세요.',
                 ],
             ],
             'path' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'cont'  => '경로를 계속 그리려면 클릭하세요.',
+                    'end'   => '경로를 완성하려면 툴바의 \'완료\' 버튼을 클릭하세요.',
+                    'start' => '경로를 그리려면 클릭하세요.',
                 ],
             ],
-            'brushline' => [
+            'polygon' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'cont'  => '모양을 계속 그리려면 클릭하세요.',
+                    'end'   => '이 모양을 닫으려면 첫 번째 점을 클릭하세요.',
+                    'start' => '모양을 그리려면 클릭하세요.',
                 ],
+            ],
+            'polyline' => [
+                'error'   => '<strong>오류:</strong> 모양의 가장자리가 교차할 수 없습니다!',
+                'tooltip' => [
+                    'cont'  => '선을 계속 그리려면 클릭하세요.',
+                    'end'   => '선을 마무리하려면 마지막 점을 클릭하세요.',
+                    'start' => '선을 그리려면 클릭하세요.',
+                ],
+            ],
+            'rectangle' => [
+                'tooltip' => [
+                    'start' => '사각형을 그리려면 클릭하고 드래그하세요.',
+                ],
+            ],
+            'simpleshape' => [
+                'tooltip' => [
+                    'end' => '그리기를 마치려면 마우스를 놓으세요.',
+                ],
+            ],
+        ],
+        'toolbar' => [
+            'actions' => [
+                'text'  => '취소',
+                'title' => '그리기 취소',
+            ],
+            'buttons' => [
+                'circle'       => '원을 그리기',
+                'circlemarker' => '원형 마커 그리기',
+                'marker'       => '마커 그리기',
+                'polygon'      => '다각형 그리기',
+                'polyline'     => '폴리라인 그리기',
+                'rectangle'    => '사각형 그리기',
+            ],
+            'finish' => [
+                'text'  => '완료',
+                'title' => '그리기 완료',
+            ],
+            'undo' => [
+                'text'  => '마지막 점 삭제',
+                'title' => '마지막 점 삭제',
             ],
         ],
     ],
     'edit' => [
-        'toolbar' => [
-            'actions' => [
-                'save' => [
-                    'title' => '',
-                    'text'  => '',
-                ],
-                'cancel' => [
-                    'title' => '',
-                    'text'  => '',
-                ],
-                'clearAll' => [
-                    'title' => '',
-                    'text'  => '',
-                ],
-            ],
-            'buttons' => [
-                'edit'           => '',
-                'editDisabled'   => '',
-                'remove'         => '',
-                'removeDisabled' => '',
-            ],
-        ],
         'handlers' => [
             'edit' => [
                 'tooltip' => [
-                    'text'    => '',
-                    'subtext' => '',
+                    'subtext' => '변경 사항을 취소하려면 취소를 클릭하세요.',
+                    'text'    => '기능을 편집하려면 핸들이나 마커를 드래그하세요.',
                 ],
             ],
             'remove' => [
                 'tooltip' => [
-                    'text' => '',
+                    'text' => '기능을 제거하려면 클릭하세요.',
                 ],
             ],
         ],
+        'toolbar' => [
+            'actions' => [
+                'cancel' => [
+                    'text'  => '취소',
+                    'title' => '편집 취소, 모든 변경 사항 취소',
+                ],
+                'clearAll' => [
+                    'text'  => '모두 지우기',
+                    'title' => '모든 레이어 지우기',
+                ],
+                'save' => [
+                    'text'  => '저장',
+                    'title' => '변경 사항 저장',
+                ],
+            ],
+            'buttons' => [
+                'edit'           => '레이어 편집',
+                'editDisabled'   => '편집할 레이어 없음',
+                'remove'         => '레이어 삭제',
+                'removeDisabled' => '삭제할 레이어 없음',
+            ],
+        ],
     ],
-
 ];
