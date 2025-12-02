@@ -19,7 +19,7 @@ return [
     'admin_enemy_pack_faction_label'                                       => 'Fraktion',
     'admin_enemy_pack_label_label'                                         => 'Label',
     'admin_enemy_pack_teeming_label'                                       => 'Wimmelnd',
-    'admin_label'                                                          => '',
+    'admin_label'                                                          => 'Administrator',
     'admin_map_icon_comment_label'                                         => 'Kommentar',
     'admin_map_icon_faction_label'                                         => 'Fraktion',
     'admin_map_icon_map_icon_type_id_label'                                => 'Symbol',
@@ -476,4 +476,5 @@ return [
     'week_label'                                    => 'Woche',
     'weight_label'                                  => 'Gewicht',
     'yes_label'                                     => 'Ja',
+    'refresh_thumbnails_label'                      => 'Vorschaubilder aktualisieren',
 ];
