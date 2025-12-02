@@ -1,14 +1,13 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
-                'krik_thik_spawn_note' => '',
+                'krik_thik_spawn_note' => 'Keystone.guru: Конскрипты Крик\'тика появляются только после победы над Командиром Ри\'моком',
             ],
             'mogu_shan_palace' => [
-                'door_unlocks_after_trial_of_the_king' => '',
+                'door_unlocks_after_trial_of_the_king' => 'Дверь открывается после победы в Испытании Короля',
             ],
         ],
         'legion' => [
@@ -38,7 +37,7 @@ return [
             'mists_of_tirna_scithe' => [
                 'start'                          => 'Начало',
                 'brambles'                       => 'Ночной Народец: Открывает короткий путь.',
-                'overgrown_roots'                => '',
+                'overgrown_roots'                => 'Ночные эльфы, таурены, высокогорные таурены, друиды и травники Каз Алгара с навыком не менее 25: открытие области с бафами',
                 'depleted_anima_seed'            => 'Истощенное анимасемя: Ночной Народец активирует дополнительные точки возрождения.',
                 'map_missing_wall'               => 'Стена, которой нет на карте',
                 'savory_statshroom'              => 'Деликатесный лютогриб  – мгновенно восполняет 100% здоровья и повышает силу, ловкость и интеллект на 10% на 10 мин.',
@@ -93,19 +92,18 @@ return [
                 'exit'                 => 'Выход',
             ],
             'tazavesh_streets_of_wonder' => [
-                'bazaar_event_wave_one'   => '',
-                'bazaar_event_wave_two'   => '',
-                'bazaar_event_wave_three' => '',
+                'bazaar_event_wave_one'   => 'Событие на базаре: Волна 1',
+                'bazaar_event_wave_two'   => 'Событие на базаре: Волна 2',
+                'bazaar_event_wave_three' => 'Событие на базаре: Волна 3',
             ],
         ],
         'tww' => [
             'the_stonevault' => [
-                'imbued_iron_energy' => '',
+                'imbued_iron_energy' => 'Воины, гномы, кузнецы (25): Энергия, заключенная в насыщенной железной полосе, высвобождается, увеличивая универсальность всех игроков в радиусе 20 ярдов на 10% на 10 минут.',
             ],
             'priory_of_the_sacred_flame' => [
-                'miniboss_explanation' => '',
+                'miniboss_explanation' => 'Keystone.guru: Когда мини-боссы убиваются вместе с боссом, они не дают счёт. Когда вызываются другим мини-боссом, они ДАЮТ счёт.',
             ],
         ],
     ],
-
 ];

@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Localization\AutoTranslation;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
+use Arr;
 use Illuminate\Console\Command;
 use VildanBina\LaravelAutoTranslation\Services\TranslationEngineService;
 use VildanBina\LaravelAutoTranslation\TranslationWorkflowService;
@@ -67,58 +68,14 @@ class Translate extends Command
             $driver,
         );
 
-        $groupedTexts = $this->dotToNestedArray($translatedTexts);
+        $groupedTexts = Arr::undot($translatedTexts);
 
         foreach ($groupedTexts as $filename => $texts) {
-            if (!$this->exportTranslations($targetLang, $filename, $texts)) {
+            if (!$this->exportTranslations($targetLang, $filename, $texts, true)) {
                 return -1;
             }
         }
 
         return 0;
-    }
-
-    /**
-     * Convert an array of dotted keys => values into a nested array structure.
-     *
-     * @param  array $flat ['a.b.c' => 'value', ...]
-     * @return array
-     */
-    private function dotToNestedArray(array $flat): array
-    {
-        $nested = [];
-
-        foreach ($flat as $dottedKey => $value) {
-            $parts = explode('.', $dottedKey);
-            $this->setNestedValue($nested, $parts, $value);
-        }
-
-        return $nested;
-    }
-
-    /**
-     * Recursively walks the target array and assigns the value at the correct depth.
-     *
-     * @param array $array Reference to the array being built
-     * @param array $keys  Remaining keys
-     * @param mixed $value Value to set
-     */
-    private function setNestedValue(array &$array, array $keys, mixed $value): void
-    {
-        $key = array_shift($keys);
-
-        if ($keys === []) {
-            // Last level → assign the actual value
-            $array[$key] = $value;
-
-            return;
-        }
-
-        // Ensure intermediate level exists
-        if (!isset($array[$key]) || !is_array($array[$key])) {
-            $array[$key] = [];
-        }
-
-        $this->setNestedValue($array[$key], $keys, $value);
     }
 }

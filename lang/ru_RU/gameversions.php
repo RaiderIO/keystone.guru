@@ -1,34 +1,32 @@
 <?php
 
 return [
-
     'retail' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Розничная версия',
+        'description' => 'Розничная версия',
     ],
     'wotlk' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Гнев',
+        'description' => 'Гнев Короля-лича',
     ],
     'classic' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Эра классики',
+        'description' => 'Эра классики',
     ],
     'beta' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Розничная бета',
+        'description' => 'Розничная бета',
     ],
     'cata' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Катаклизм',
+        'description' => 'Катаклизм',
     ],
     'mop' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Туманы',
+        'description' => 'Туманы Пандарии',
     ],
     'legion-remix' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Легион Ремикс',
+        'description' => 'Легион Ремикс',
     ],
-
 ];

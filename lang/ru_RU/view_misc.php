@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => 'Путешествие во времени: %s',
@@ -15,9 +14,9 @@ return [
         'title'                             => 'Аффиксы',
         'header'                            => 'Еженедельные аффиксы в %s',
         'start_date'                        => 'Дата начала (%s)',
-        'header_season'                     => '',
-        'header_season_start'               => '',
-        'seasonal'                          => '',
+        'header_season'                     => ':season',
+        'header_season_start'               => ':season начало',
+        'seasonal'                          => 'Сезонный',
         'previous'                          => 'Предыдущий',
         'next'                              => 'Следующий',
         'updated_at'                        => 'Обновлено %s. Для получения дополнительной информации об аффиксах и M+ посетите',
@@ -44,8 +43,8 @@ return [
         'header' => 'Keystone.guru встроит тестовое окно на ваш сайт',
     ],
     'health' => [
-        'title'  => '',
-        'header' => '',
+        'title'  => 'Расчет здоровья',
+        'header' => 'Здоровье',
     ],
     'mapping' => [
         'title'                         => 'Карты',
@@ -63,5 +62,4 @@ return [
         'header'      => 'Состояние',
         'description' => 'Мы заработали, ура!',
     ],
-
 ];

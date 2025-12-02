@@ -1,21 +1,19 @@
 <?php
 
 return [
-
-    'all'            => '',
-    'cd_external'    => '',
-    'cd_group'       => '',
-    'cd_personal'    => '',
-    'dr_external'    => '',
-    'dr_group'       => '',
-    'dr_personal'    => '',
-    'group_dr'       => '',
-    'group_heal_dps' => '',
-    'immunity'       => '',
-    'movement'       => '',
-    'personal'       => '',
-    'personal_cd'    => '',
-    'utility'        => '',
-    'unknown'        => '',
-
+    'all'            => 'Все',
+    'cd_external'    => 'Внешний КД',
+    'cd_group'       => 'Групповой КД',
+    'cd_personal'    => 'Личный КД',
+    'dr_external'    => 'Внешний ДР',
+    'dr_group'       => 'Групповой ДР',
+    'dr_personal'    => 'Личный ДР',
+    'group_dr'       => 'Групповой ДР',
+    'group_heal_dps' => 'Групповое лечение и урон',
+    'immunity'       => 'Иммунитет',
+    'movement'       => 'Передвижение',
+    'personal'       => 'Личный',
+    'personal_cd'    => 'Личный КД',
+    'utility'        => 'Полезность',
+    'unknown'        => 'Неизвестно',
 ];

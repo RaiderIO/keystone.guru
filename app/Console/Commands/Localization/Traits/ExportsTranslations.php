@@ -9,16 +9,25 @@ use Illuminate\Console\Command;
  */
 trait ExportsTranslations
 {
-    public function exportTranslations(string $locale, string $fileName, array $data): bool
-    {
-        $exportToString = $this->arrayToPhpCode($data) . PHP_EOL;
-
+    public function exportTranslations(
+        string $locale,
+        string $fileName,
+        array  $data,
+        bool   $preserveExisting = false,
+    ): bool {
         if (!str_ends_with($fileName, '.php')) {
             $fileName = sprintf('%s.php', $fileName);
         }
 
-        $langPath = lang_path(sprintf('%s/%s', $locale, $fileName));
-        if (file_put_contents($langPath, '<?php ' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';')) {
+        $filePath = lang_path(sprintf('%s/%s', $locale, $fileName));
+        if ($preserveExisting && file_exists($filePath)) {
+            $existingTranslations = include $filePath;
+            $data                 = array_replace_recursive($existingTranslations, $data);
+        }
+
+        $exportToString = $this->arrayToPhpCode($data) . PHP_EOL;
+
+        if (file_put_contents($filePath, '<?php ' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';')) {
             $this->info(sprintf('Translations exported successfully to %s/%s', $locale, $fileName));
 
             return true;

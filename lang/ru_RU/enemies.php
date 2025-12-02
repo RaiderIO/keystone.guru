@@ -1,19 +1,17 @@
 <?php
 
 return [
-
     'seasonal_type' => [
-        'beguiling'           => '',
-        'awakened'            => '',
-        'inspiring'           => '',
-        'prideful'            => '',
-        'tormented'           => '',
-        'encrypted'           => '',
-        'mdt_placeholder'     => '',
-        'requires_activation' => '',
-        'shrouded'            => '',
-        'shrouded_zul_gamux'  => '',
-        'no_shrouded'         => '',
+        'beguiling'           => 'Очаровывающий',
+        'awakened'            => 'Пробужденный',
+        'inspiring'           => 'Вдохновляющий',
+        'prideful'            => 'Горделивый',
+        'tormented'           => 'Мучимый',
+        'encrypted'           => 'Зашифрованный',
+        'mdt_placeholder'     => 'Заполнитель MDT',
+        'requires_activation' => 'Требует активации',
+        'shrouded'            => 'Покров',
+        'shrouded_zul_gamux'  => 'Покров (Зул\'гамукс)',
+        'no_shrouded'         => 'Без Покрова',
     ],
-
 ];

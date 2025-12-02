@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'death_knight' => [
         'blood'  => 'Кровь',
         'frost'  => 'Лед',
@@ -18,13 +17,13 @@ return [
         'restoration' => 'Исцеление',
     ],
     'evoker' => [
-        'devastation'  => '',
-        'preservation' => '',
-        'augmentation' => '',
+        'devastation'  => 'Опустошение',
+        'preservation' => 'Сохранение',
+        'augmentation' => 'Увеличение',
     ],
     'hunter' => [
         'beast_mastery' => 'Повелитель зверей',
-        'marksmanship'  => '',
+        'marksmanship'  => 'Стрельба',
         'survival'      => 'Выживание',
     ],
     'mage' => [
@@ -67,5 +66,4 @@ return [
         'fury'       => 'Неистовство',
         'protection' => 'Защита',
     ],
-
 ];

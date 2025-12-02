@@ -1,35 +1,34 @@
 <?php
 
 return [
-
     'home' => [
         'keystone_guru' => 'Keystone.guru',
         'affixes'       => 'Аффиксы',
-        'about'         => '',
-        'credits'       => '',
+        'about'         => 'О нас',
+        'credits'       => 'Благодарности',
         'changelog'     => [
-            'list'    => '',
+            'list'    => 'Список изменений',
             'release' => [
-                'view' => '',
+                'view' => 'Релиз :version',
             ],
         ],
         'legal' => [
-            'cookies' => '',
-            'privacy' => '',
-            'terms'   => '',
+            'cookies' => 'Куки',
+            'privacy' => 'Конфиденциальность',
+            'terms'   => 'Условия',
         ],
         'routes'              => 'Маршруты',
         'routes_expansion'    => ':expansion маршруты',
         'routes_game_version' => ':gameVersion маршруты',
         'gameversion'         => [
-            'update'  => '',
+            'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => '',
-                'explore'  => '',
+                'heatmaps' => 'Тепловые карты',
+                'explore'  => 'Исследовать',
             ],
         ],
         'dungeonroute' => [
-            'new' => '',
+            'new' => 'Новый маршрут',
         ],
         'dungeonroutes' => [
             'search'            => 'Поиск',
@@ -37,12 +36,12 @@ return [
             'next_week_affixes' => 'Аффиксы следующей недели',
             'this_week_affixes' => 'Текущие Аффиксы',
             'new'               => 'Новые',
-            'routes_season'     => '',
+            'routes_season'     => 'Сезон :season',
             'season'            => [
-                'popular'           => '',
-                'next_week_affixes' => '',
-                'this_week_affixes' => '',
-                'new'               => '',
+                'popular'           => 'Популярные',
+                'next_week_affixes' => 'Аффиксы на следующую неделю',
+                'this_week_affixes' => 'Аффиксы на эту неделю',
+                'new'               => 'Новый',
             ],
             'discoverdungeon' => [
                 'popular'           => 'Популярные',
@@ -88,8 +87,8 @@ return [
                 'edit_floor' => 'редактировать этаж',
             ],
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc10man' => '',
-                'new_dungeonspeedrunrequirednpc25man' => '',
+                'new_dungeonspeedrunrequirednpc10man' => 'Новый 10-игроковый НПЦ для забега на скорость в подземелье',
+                'new_dungeonspeedrunrequirednpc25man' => 'Новый 25-игроковый НПЦ для забега на скорость в подземелье',
             ],
             'npcs' => [
                 'npcs'     => 'НПЦ',
@@ -97,12 +96,12 @@ return [
                 'edit_npc' => 'Редактировать НПЦ',
             ],
             'npcenemyforces' => [
-                'new_npc_enemy_forces'  => '',
-                'edit_npc_enemy_forces' => '',
+                'new_npc_enemy_forces'  => 'Новые силы врагов НПЦ',
+                'edit_npc_enemy_forces' => 'Редактировать силы врагов НПЦ',
             ],
             'npchealth' => [
-                'new_npc_health'  => '',
-                'edit_npc_health' => '',
+                'new_npc_health'  => 'Новое здоровье НПЦ',
+                'edit_npc_health' => 'Редактировать здоровье НПЦ',
             ],
             'spells' => [
                 'spells'     => 'Способность',
@@ -117,5 +116,4 @@ return [
             ],
         ],
     ],
-
 ];

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'human'               => 'Люди',
     'dwarf'               => 'Дворфы',
     'night_elf'           => 'Ночные эльфы',
@@ -12,7 +11,7 @@ return [
     'void_elf'            => 'Эльфы Бездны',
     'lightforged_draenei' => 'Озарённые дренеи',
     'dark_iron_dwarf'     => 'Дворфы из клана Чёрного Железа',
-    'dracthyralliance'    => '',
+    'dracthyralliance'    => 'Драктир',
     'orc'                 => 'Орки',
     'undead'              => 'Отрёкшиеся',
     'tauren'              => 'Таурены',
@@ -23,12 +22,11 @@ return [
     'nightborne'          => 'Ночнорождённые',
     'highmountain_tauren' => 'Таурены Крутогорья',
     'maghar_orc'          => 'Маг’хары',
-    'dracthyrhorde'       => '',
+    'dracthyrhorde'       => 'Драктир',
     'kul_tiran_human'     => 'Култирасцы',
     'zandalari_troll'     => 'Зандалары',
     'mechagnome'          => 'Механогномы',
     'vulpera'             => 'Вульперы',
-    'earthenalliance'     => '',
-    'earthenhorde'        => '',
-
+    'earthenalliance'     => 'Земной',
+    'earthenhorde'        => 'Земной',
 ];
