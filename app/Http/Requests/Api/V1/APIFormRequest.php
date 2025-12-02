@@ -6,6 +6,7 @@ use App\Http\Models\Request\RequestModel;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Teapot\StatusCode;
 
 abstract class APIFormRequest extends FormRequest
 {
@@ -17,7 +18,7 @@ abstract class APIFormRequest extends FormRequest
             'success' => false,
             'message' => 'Validation errors',
             'data'    => $validator->errors(),
-        ]));
+        ], 422));
     }
 
     public function getModel(): ?RequestModel
