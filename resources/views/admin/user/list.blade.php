@@ -56,7 +56,7 @@ use Illuminate\Support\Collection;
                             },
                             dataType: 'json',
                             success: function () {
-                                showSuccessNotification(lang.get('messages.updated_patreon_benefits_successfully_label'));
+                                showSuccessNotification(lang.get('js.updated_patreon_benefits_successfully_label'));
                             }
                         });
                     });
@@ -67,34 +67,34 @@ use Illuminate\Support\Collection;
                 'order': [[0, 'asc']],
                 'columns': [
                     {
-                        'title': lang.get('messages.id_label'),
+                        'title': lang.get('js.id_label'),
                         'data': 'id',
                         'name': 'id'
                     },
                     {
-                        'title': lang.get('messages.name_label'),
+                        'title': lang.get('js.name_label'),
                         'data': 'name',
                         'name': 'name'
                     },
                     {
-                        'title': lang.get('messages.email_label'),
+                        'title': lang.get('js.email_label'),
                         'data': 'email',
                         'name': 'email'
                     },
                     {
-                        'title': lang.get('messages.route_count_label'),
+                        'title': lang.get('js.route_count_label'),
                         'data': 'routes',
                         'name': 'routes',
                         'searchable': false
                     },
                     {
-                        'title': lang.get('messages.roles_label'),
+                        'title': lang.get('js.roles_label'),
                         'data': 'roles_string',
                         'name': 'roles_string',
                         'searchable': false
                     },
                     {
-                        'title': lang.get('messages.registered_label'),
+                        'title': lang.get('js.registered_label'),
                         'data': 'created_at',
                         'name': 'created_at',
                         'searchable': false,
@@ -109,7 +109,7 @@ use Illuminate\Support\Collection;
                         }
                     },
                     {
-                        'title': lang.get('messages.actions_label'),
+                        'title': lang.get('js.actions_label'),
                         'data': 'id',
                         'name': 'id',
                         'orderable': false,
@@ -124,7 +124,7 @@ use Illuminate\Support\Collection;
                         }
                     },
                     {
-                        'title': lang.get('messages.patreon_label'),
+                        'title': lang.get('js.patreon_label'),
                         'data': 'id',
                         'name': 'id',
                         'orderable': false,
@@ -155,7 +155,7 @@ use Illuminate\Support\Collection;
                     },
                 ],
                 'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-                    'emptyTable': lang.get('messages.datatable_no_users_in_table')
+                    'emptyTable': lang.get('js.datatable_no_users_in_table')
                 })
             });
         });
