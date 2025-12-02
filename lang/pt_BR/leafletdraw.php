@@ -1,124 +1,122 @@
 <?php
 
 return [
-
     'draw' => [
-        'toolbar' => [
-            'actions' => [
-                'title' => '',
-                'text'  => '',
-            ],
-            'finish' => [
-                'title' => '',
-                'text'  => '',
-            ],
-            'undo' => [
-                'title' => '',
-                'text'  => '',
-            ],
-            'buttons' => [
-                'polyline'     => '',
-                'polygon'      => '',
-                'rectangle'    => '',
-                'circle'       => '',
-                'marker'       => '',
-                'circlemarker' => '',
-            ],
-        ],
         'handlers' => [
-            'circle' => [
+            'brushline' => [
                 'tooltip' => [
-                    'start' => '',
+                    'cont'  => 'Clique e arraste para continuar desenhando a linha.',
+                    'end'   => 'Continue clicando/arrastando, quando terminar, pressione o botão \'Concluir\' na barra de ferramentas para completar sua linha.',
+                    'start' => 'Clique para começar a desenhar a linha.',
                 ],
-                'radius' => '',
+            ],
+            'circle' => [
+                'radius'  => 'Raio',
+                'tooltip' => [
+                    'start' => 'Clique e arraste para desenhar um círculo.',
+                ],
             ],
             'circlemarker' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Clique no mapa para posicionar o marcador de círculo.',
                 ],
             ],
             'marker' => [
                 'tooltip' => [
-                    'start' => '',
-                ],
-            ],
-            'polygon' => [
-                'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
-                ],
-            ],
-            'polyline' => [
-                'error'   => '',
-                'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
-                ],
-            ],
-            'rectangle' => [
-                'tooltip' => [
-                    'start' => '',
-                ],
-            ],
-            'simpleshape' => [
-                'tooltip' => [
-                    'end' => '',
+                    'start' => 'Clique no mapa para posicionar o marcador.',
                 ],
             ],
             'path' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'cont'  => 'Clique para continuar desenhando o caminho.',
+                    'end'   => 'Clique no botão \'Concluir\' na barra de ferramentas para completar seu caminho.',
+                    'start' => 'Clique para começar a desenhar o caminho.',
                 ],
             ],
-            'brushline' => [
+            'polygon' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'cont'  => 'Clique para continuar desenhando a forma.',
+                    'end'   => 'Clique no primeiro ponto para fechar esta forma.',
+                    'start' => 'Clique para começar a desenhar a forma.',
                 ],
+            ],
+            'polyline' => [
+                'error'   => '<strong>Erro:</strong> as arestas da forma não podem se cruzar!',
+                'tooltip' => [
+                    'cont'  => 'Clique para continuar desenhando a linha.',
+                    'end'   => 'Clique no último ponto para finalizar a linha.',
+                    'start' => 'Clique para começar a desenhar a linha.',
+                ],
+            ],
+            'rectangle' => [
+                'tooltip' => [
+                    'start' => 'Clique e arraste para desenhar um retângulo.',
+                ],
+            ],
+            'simpleshape' => [
+                'tooltip' => [
+                    'end' => 'Solte o mouse para terminar de desenhar.',
+                ],
+            ],
+        ],
+        'toolbar' => [
+            'actions' => [
+                'text'  => 'Cancelar',
+                'title' => 'Cancelar desenho',
+            ],
+            'buttons' => [
+                'circle'       => 'Desenhar um círculo',
+                'circlemarker' => 'Desenhar um marcador de círculo',
+                'marker'       => 'Desenhar um marcador',
+                'polygon'      => 'Desenhar um polígono',
+                'polyline'     => 'Desenhar uma polilinha',
+                'rectangle'    => 'Desenhar um retângulo',
+            ],
+            'finish' => [
+                'text'  => 'Concluir',
+                'title' => 'Concluir desenho',
+            ],
+            'undo' => [
+                'text'  => 'Excluir último ponto',
+                'title' => 'Excluir último ponto desenhado',
             ],
         ],
     ],
     'edit' => [
-        'toolbar' => [
-            'actions' => [
-                'save' => [
-                    'title' => '',
-                    'text'  => '',
-                ],
-                'cancel' => [
-                    'title' => '',
-                    'text'  => '',
-                ],
-                'clearAll' => [
-                    'title' => '',
-                    'text'  => '',
-                ],
-            ],
-            'buttons' => [
-                'edit'           => '',
-                'editDisabled'   => '',
-                'remove'         => '',
-                'removeDisabled' => '',
-            ],
-        ],
         'handlers' => [
             'edit' => [
                 'tooltip' => [
-                    'text'    => '',
-                    'subtext' => '',
+                    'subtext' => 'Clique em cancelar para desfazer as alterações.',
+                    'text'    => 'Arraste as alças ou marcadores para editar as funcionalidades.',
                 ],
             ],
             'remove' => [
                 'tooltip' => [
-                    'text' => '',
+                    'text' => 'Clique em uma funcionalidade para remover.',
                 ],
             ],
         ],
+        'toolbar' => [
+            'actions' => [
+                'cancel' => [
+                    'text'  => 'Cancelar',
+                    'title' => 'Cancelar edição, descarta todas as alterações',
+                ],
+                'clearAll' => [
+                    'text'  => 'Limpar Tudo',
+                    'title' => 'Limpar todas as camadas',
+                ],
+                'save' => [
+                    'text'  => 'Salvar',
+                    'title' => 'Salvar alterações',
+                ],
+            ],
+            'buttons' => [
+                'edit'           => 'Editar camadas',
+                'editDisabled'   => 'Nenhuma camada para editar',
+                'remove'         => 'Excluir camadas',
+                'removeDisabled' => 'Nenhuma camada para excluir',
+            ],
+        ],
     ],
-
 ];

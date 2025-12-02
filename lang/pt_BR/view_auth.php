@@ -1,29 +1,27 @@
 <?php
 
 return [
-
+    'login' => [
+        'title' => 'Entrar',
+    ],
     'passwords' => [
         'email' => [
-            'title'                    => '',
-            'header'                   => '',
-            'email_address'            => '',
-            'send_password_reset_link' => '',
+            'email_address'            => 'Endereço de e-mail',
+            'header'                   => 'Redefinir senha',
+            'send_password_reset_link' => 'Enviar link de redefinição de senha',
+            'title'                    => 'Redefinir senha',
         ],
         'reset' => [
-            'title'            => '',
-            'header'           => '',
-            'email_address'    => '',
-            'password'         => '',
-            'confirm_password' => '',
-            'reset_password'   => '',
+            'confirm_password' => 'Confirmar senha',
+            'email_address'    => 'Endereço de e-mail',
+            'header'           => 'Redefinir senha',
+            'password'         => 'Senha',
+            'reset_password'   => 'Redefinir senha',
+            'title'            => 'Redefinir senha',
         ],
     ],
-    'login' => [
-        'title' => '',
-    ],
     'register' => [
-        'title'  => '',
-        'header' => '',
+        'header' => 'Registrar',
+        'title'  => 'Registrar',
     ],
-
 ];
