@@ -1,0 +1,25 @@
+{
+    "id": 332,
+    "release_changelog_id": 339,
+    "version": "v13.13",
+    "title": "Added German, Spanish, Mexican, French, Italian, Korean, Portugese (Brasil) and Ukrainian translations. Russian is brought up-to-date.",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-12-03T20:34:34+00:00",
+    "updated_at": "2025-12-03T20:34:34+00:00",
+    "changelog": {
+        "id": 339,
+        "release_id": 332,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 339,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3022,
+                "change": "Added German, Spanish, Mexican, French, Italian, Korean, Portugese (Brasil) and Ukrainian translations. Special thanks to kasatushi for hand-crafting the Ukrainian translation!"
+            }
+        ]
+    }
+}
