@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'all'            => '모두',
     'cd_external'    => '외부 CD',
     'cd_group'       => '그룹 CD',
@@ -14,6 +15,7 @@ return [
     'movement'       => '이동',
     'personal'       => '개인',
     'personal_cd'    => '개인 CD',
-    'unknown'        => '알 수 없음',
     'utility'        => '유틸리티',
+    'unknown' => '알 수 없음',
+
 ];

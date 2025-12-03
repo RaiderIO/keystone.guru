@@ -1,20 +1,36 @@
 <?php
 
 return [
+
     'draw' => [
-        'handlers' => [
-            'brushline' => [
-                'tooltip' => [
-                    'cont'  => 'Cliquez et faites glisser pour continuer à dessiner la ligne.',
-                    'end'   => 'Continuez à cliquer/glisser, une fois terminé, appuyez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre ligne.',
-                    'start' => 'Cliquez pour commencer à dessiner la ligne.',
-                ],
+        'toolbar'  => [
+            'actions' => [
+                'title' => 'Annuler le dessin',
+                'text'  => 'Annuler',
             ],
+            'finish'  => [
+                'title' => 'Terminer le dessin',
+                'text'  => 'Terminer',
+            ],
+            'undo'    => [
+                'title' => 'Supprimer le dernier point dessiné',
+                'text'  => 'Supprimer le dernier point',
+            ],
+            'buttons' => [
+                'polyline'     => 'Dessiner une polyligne',
+                'polygon'      => 'Dessiner un polygone',
+                'rectangle'    => 'Dessiner un rectangle',
+                'circle'       => 'Dessiner un cercle',
+                'marker'       => 'Dessiner un marqueur',
+                'circlemarker' => 'Dessiner un marqueur circulaire',
+            ],
+        ],
+        'handlers' => [
             'circle' => [
-                'radius'  => 'Rayon',
                 'tooltip' => [
                     'start' => 'Cliquez et faites glisser pour dessiner un cercle.',
                 ],
+                'radius' => 'Rayon',
             ],
             'circlemarker' => [
                 'tooltip' => [
@@ -26,26 +42,19 @@ return [
                     'start' => 'Cliquez sur la carte pour placer un marqueur.',
                 ],
             ],
-            'path' => [
-                'tooltip' => [
-                    'cont'  => 'Cliquez pour continuer à dessiner le chemin.',
-                    'end'   => 'Cliquez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre chemin.',
-                    'start' => 'Cliquez pour commencer à dessiner le chemin.',
-                ],
-            ],
             'polygon' => [
                 'tooltip' => [
+                    'start' => 'Cliquez pour commencer à dessiner la forme.',
                     'cont'  => 'Cliquez pour continuer à dessiner la forme.',
                     'end'   => 'Cliquez sur le premier point pour fermer cette forme.',
-                    'start' => 'Cliquez pour commencer à dessiner la forme.',
                 ],
             ],
             'polyline' => [
                 'error'   => '<strong>Erreur:</strong> les bords de la forme ne peuvent pas se croiser !',
                 'tooltip' => [
+                    'start' => 'Cliquez pour commencer à dessiner la ligne.',
                     'cont'  => 'Cliquez pour continuer à dessiner la ligne.',
                     'end'   => 'Cliquez sur le dernier point pour terminer la ligne.',
-                    'start' => 'Cliquez pour commencer à dessiner la ligne.',
                 ],
             ],
             'rectangle' => [
@@ -58,57 +67,36 @@ return [
                     'end' => 'Relâchez la souris pour terminer le dessin.',
                 ],
             ],
-        ],
-        'toolbar' => [
-            'actions' => [
-                'text'  => 'Annuler',
-                'title' => 'Annuler le dessin',
+            'path' => [
+                'tooltip' => [
+                    'start' => 'Cliquez pour commencer à dessiner le chemin.',
+                    'cont'  => 'Cliquez pour continuer à dessiner le chemin.',
+                    'end'   => 'Cliquez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre chemin.',
+                ],
             ],
-            'buttons' => [
-                'circle'       => 'Dessiner un cercle',
-                'circlemarker' => 'Dessiner un marqueur circulaire',
-                'marker'       => 'Dessiner un marqueur',
-                'polygon'      => 'Dessiner un polygone',
-                'polyline'     => 'Dessiner une polyligne',
-                'rectangle'    => 'Dessiner un rectangle',
-            ],
-            'finish' => [
-                'text'  => 'Terminer',
-                'title' => 'Terminer le dessin',
-            ],
-            'undo' => [
-                'text'  => 'Supprimer le dernier point',
-                'title' => 'Supprimer le dernier point dessiné',
+            'brushline' => [
+                'tooltip' => [
+                    'start' => 'Cliquez pour commencer à dessiner la ligne.',
+                    'cont'  => 'Cliquez et faites glisser pour continuer à dessiner la ligne.',
+                    'end'   => 'Continuez à cliquer/glisser, une fois terminé, appuyez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre ligne.',
+                ],
             ],
         ],
     ],
     'edit' => [
-        'handlers' => [
-            'edit' => [
-                'tooltip' => [
-                    'subtext' => 'Cliquez sur annuler pour annuler les modifications.',
-                    'text'    => 'Faites glisser les poignées ou les marqueurs pour modifier les fonctionnalités.',
-                ],
-            ],
-            'remove' => [
-                'tooltip' => [
-                    'text' => 'Cliquez sur une fonctionnalité pour la supprimer.',
-                ],
-            ],
-        ],
         'toolbar' => [
             'actions' => [
+                'save'     => [
+                    'title' => 'Enregistrer les modifications',
+                    'text'  => 'Enregistrer',
+                ],
                 'cancel' => [
-                    'text'  => 'Annuler',
                     'title' => 'Annuler l\'édition, annule toutes les modifications',
+                    'text' => 'Annuler',
                 ],
                 'clearAll' => [
-                    'text'  => 'Tout effacer',
                     'title' => 'Effacer toutes les couches',
-                ],
-                'save' => [
-                    'text'  => 'Enregistrer',
-                    'title' => 'Enregistrer les modifications',
+                    'text'  => 'Tout effacer',
                 ],
             ],
             'buttons' => [
@@ -118,5 +106,19 @@ return [
                 'removeDisabled' => 'Pas de couches à supprimer',
             ],
         ],
+        'handlers' => [
+            'edit'   => [
+                'tooltip' => [
+                    'text'    => 'Faites glisser les poignées ou les marqueurs pour modifier les fonctionnalités.',
+                    'subtext' => 'Cliquez sur annuler pour annuler les modifications.',
+                ],
+            ],
+            'remove' => [
+                'tooltip' => [
+                    'text' => 'Cliquez sur une fonctionnalité pour la supprimer.',
+                ],
+            ],
+        ],
     ],
+
 ];

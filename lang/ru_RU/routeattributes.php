@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'category' => [
         'class' => 'Класс',
         'item'  => 'Предмет',
@@ -13,4 +14,5 @@ return [
     'mage_slow_fall_skip' => 'Пропуск медленного падения мага',
     'invisibility_potion' => 'Зелье невидимости',
     'death_skip'          => 'Пропуск смерти',
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'general_changes'          => 'Общие изменения',
     'route_changes'            => 'Изменения маршрута',
     'map_changes'              => 'Изменения карты',
@@ -14,4 +15,5 @@ return [
     'auto_route_changes'       => 'Изменения авто маршрутов',
     'api_changes'              => 'Изменения API',
     'heatmap_changes'          => 'Изменения тепловой карты',
+
 ];

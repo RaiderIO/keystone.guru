@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'all'            => 'Todo',
     'cd_external'    => 'CD Externo',
     'cd_group'       => 'CD Grupo',
@@ -14,6 +15,7 @@ return [
     'movement'       => 'Movimiento',
     'personal'       => 'Personal',
     'personal_cd'    => 'CD Personal',
-    'unknown'        => 'Desconocido',
     'utility'        => 'Utilidad',
+    'unknown'        => 'Desconocido',
+
 ];

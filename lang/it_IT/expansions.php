@@ -1,43 +1,45 @@
 <?php
 
 return [
-    'bfa' => [
-        'name' => 'Battaglia per Azeroth',
-    ],
-    'cata' => [
-        'name' => 'Cataclisma',
-    ],
+
     'classic' => [
         'name' => 'Classico',
-    ],
-    'df' => [
-        'name' => 'Volo dei Draghi',
-    ],
-    'legion' => [
-        'name' => 'Legione',
-    ],
-    'midnight' => [
-        'name' => 'Mezzanotte',
-    ],
-    'mop' => [
-        'name' => 'Nebbie di Pandaria',
-    ],
-    'sl' => [
-        'name' => 'Terre Ombrose',
     ],
     'tbc' => [
         'name' => 'La Crociata Infuocata',
     ],
-    'tlt' => [
-        'name' => 'L\'Ultimo Titano',
+    'wotlk' => [
+        'name' => 'L\'Ira del Re dei Lich',
     ],
-    'tww' => [
-        'name' => 'La Guerra Interna',
+    'cata' => [
+        'name' => 'Cataclisma',
+    ],
+    'mop' => [
+        'name' => 'Nebbie di Pandaria',
     ],
     'wod' => [
         'name' => 'Signori della Guerra di Draenor',
     ],
-    'wotlk' => [
-        'name' => 'L\'Ira del Re dei Lich',
+    'legion' => [
+        'name' => 'Legione',
     ],
+    'bfa' => [
+        'name' => 'Battaglia per Azeroth',
+    ],
+    'sl' => [
+        'name' => 'Terre Ombrose',
+    ],
+    'df' => [
+        'name' => 'Volo dei Draghi',
+    ],
+    'tww' => [
+        'name' => 'La Guerra Interna',
+    ],
+    'midnight' => [
+        'name' => 'Mezzanotte',
+    ],
+    'tlt' => [
+        'name' => 'L\'Ultimo Titano',
+    ],
+
 ];

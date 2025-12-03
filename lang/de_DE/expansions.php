@@ -1,43 +1,45 @@
 <?php
 
 return [
-    'bfa' => [
-        'name' => 'Battle for Azeroth',
-    ],
-    'cata' => [
-        'name' => 'Cataclysm',
-    ],
+
     'classic' => [
         'name' => 'Classic',
-    ],
-    'df' => [
-        'name' => 'Dragonflight',
-    ],
-    'legion' => [
-        'name' => 'Legion',
-    ],
-    'midnight' => [
-        'name' => 'Midnight',
-    ],
-    'mop' => [
-        'name' => 'Mists of Pandaria',
-    ],
-    'sl' => [
-        'name' => 'Shadowlands',
     ],
     'tbc' => [
         'name' => 'The Burning Crusade',
     ],
-    'tlt' => [
-        'name' => 'The Last Titan',
+    'wotlk' => [
+        'name' => 'Wrath of the Lich King',
     ],
-    'tww' => [
-        'name' => 'The War Within',
+    'cata' => [
+        'name' => 'Cataclysm',
+    ],
+    'mop' => [
+        'name' => 'Mists of Pandaria',
     ],
     'wod' => [
         'name' => 'Warlords of Draenor',
     ],
-    'wotlk' => [
-        'name' => 'Wrath of the Lich King',
+    'legion' => [
+        'name' => 'Legion',
     ],
+    'bfa' => [
+        'name' => 'Battle for Azeroth',
+    ],
+    'sl' => [
+        'name' => 'Shadowlands',
+    ],
+    'df' => [
+        'name' => 'Dragonflight',
+    ],
+    'tww' => [
+        'name' => 'The War Within',
+    ],
+    'midnight' => [
+        'name' => 'Midnight',
+    ],
+    'tlt' => [
+        'name' => 'The Last Titan',
+    ],
+
 ];

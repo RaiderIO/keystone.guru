@@ -1,8 +1,10 @@
 <?php
 
 return [
-    'admin'        => 'Admin',
-    'collaborator' => 'Collaborateur',
+
     'member'       => 'Membre',
+    'collaborator' => 'Collaborateur',
     'moderator'    => 'Modérateur',
+    'admin'        => 'Admin',
+
 ];

@@ -2,10 +2,7 @@
 
 return [
     'aria' => [
-        'orderable'        => 'Активувати сортування',
-        'orderableRemove'  => 'Вимкнути сортування',
-        'orderableReverse' => 'Зворотне сортування',
-        'paginate'         => [
+        'paginate' => [
             'first'    => 'Перша',
             'last'     => 'Остання',
             'next'     => 'Наступна',
@@ -36,7 +33,6 @@ return [
         'pageLength'  => [
             '_' => 'Показати %d рядків',
             -1  => 'Показати усі рядки',
-            1   => 'Показати 1 рядок',
         ],
         'pdf'             => 'PDF',
         'print'           => 'Друкувати',
@@ -46,61 +42,6 @@ return [
         'savedStates'     => 'Збережені стани',
         'stateRestore'    => 'Стан %d',
         'updateState'     => 'Оновити',
-    ],
-    'columnControl' => [
-        'buttons' => [
-            'searchClear' => 'Очистити пошук',
-        ],
-        'colVis'         => 'Видимість колонки',
-        'colVisDropdown' => 'Видимість випадаючого списку',
-        'dropdown'       => 'Більше...',
-        'list'           => [
-            'all'    => 'Вибрати все',
-            'empty'  => 'Пусто',
-            'none'   => 'Скасувати вибір усіх',
-            'search' => 'Пошук...',
-        ],
-        'orderAddAsc'  => 'Додати сортування за зростанням',
-        'orderAddDesc' => 'Додати сортування за спаданням',
-        'orderAsc'     => 'Сортування за зростанням',
-        'orderClear'   => 'Очистити сортування',
-        'orderDesc'    => 'Сортування за спаданням',
-        'orderRemove'  => 'Очистити сортування',
-        'reorder'      => 'Переупорядкувати стовпці',
-        'reorderLeft'  => 'Зсунути стовпець ліворуч',
-        'reorderRight' => 'Зсунути стовпець праворуч',
-        'search'       => [
-            'datetime' => [
-                'empty'    => 'Пусто',
-                'equal'    => 'Дорівнює',
-                'greater'  => 'Після',
-                'less'     => 'До',
-                'notEmpty' => 'Не порожньо',
-                'notEqual' => 'Не дорівнює',
-            ],
-            'number' => [
-                'empty'          => 'Пусто',
-                'equal'          => 'Дорівнює',
-                'greater'        => 'Більше ніж',
-                'greaterOrEqual' => 'Більше або дорівнює',
-                'less'           => 'Менше ніж',
-                'lessOrEqual'    => 'Менше або дорівнює',
-                'notEmpty'       => 'Не порожньо',
-                'notEqual'       => 'Не дорівнює',
-            ],
-            'text' => [
-                'contains'    => 'Містить',
-                'empty'       => 'Пусто',
-                'ends'        => 'Закінчується на',
-                'equal'       => 'Дорівнює',
-                'notContains' => 'Не містить',
-                'notEmpty'    => 'Не порожній',
-                'notEqual'    => 'Не дорівнює',
-                'starts'      => 'Починається з',
-            ],
-        ],
-        'searchClear'    => 'Очистити пошук',
-        'searchDropdown' => 'Пошук',
     ],
     'datetime' => [
         'amPm' => [
@@ -169,18 +110,14 @@ return [
             'title'  => 'Видалити',
         ],
     ],
-    'emptyTable'    => 'Ця таблиця не містить даних',
-    'info'          => 'Показано від _START_ по _END_ з _TOTAL_ записів',
-    'infoEmpty'     => 'Показано від 0 по 0 з 0 записів',
-    'infoFiltered'  => '(відфільтровано з _MAX_ записів)',
-    'infoPostFix'   => '',
+    'emptyTable' => 'Ця таблиця не містить даних',
+    'info' => 'Показано від _START_ по _END_ з _TOTAL_ записів',
+    'infoEmpty' => 'Показано від 0 по 0 з 0 записів',
+    'infoFiltered' => '(відфільтровано з _MAX_ записів)',
+    'infoPostFix' => '',
     'infoThousands' => ',',
-    'lengthLabels'  => [
-        -1 => 'Усі',
-    ],
     'lengthMenu'     => 'Показати _MENU_ записів',
     'loadingRecords' => 'Завантаження',
-    'orderClear'     => 'Очистити сортування',
     'processing'     => 'Опрацювання...',
     'search'         => 'Пошук:',
     'searchBuilder'  => [
@@ -241,7 +178,6 @@ return [
         'logicAnd'    => 'ТА',
         'logicOr'     => 'АБО',
         'rightTitle'  => 'Зробити відступ критерію',
-        'search'      => 'Пошук',
         'title'       => [
             '_' => 'Розширений пошук (%d)',
             0   => 'Розширений пошук',
@@ -257,7 +193,6 @@ return [
         'collapseMessage' => 'Приховати всі',
         'count'           => '{total}',
         'countFiltered'   => '{shown} ({total})',
-        'emptyMessage'    => '<em>немає даних</em>',
         'emptyPanes'      => 'Немає панелей пошуку',
         'loadMessage'     => 'Завантаження панелей пошуку',
         'showMessage'     => 'Показати всі',

@@ -1,7 +1,9 @@
 <?php
 
 return [
-    'alliance'    => 'Alleanza',
-    'horde'       => 'Orda',
+
     'unspecified' => 'Non specificato',
+    'horde'       => 'Orda',
+    'alliance'    => 'Alleanza',
+
 ];

@@ -1,11 +1,12 @@
 <?php
 
 return [
+
+    'general' => 'Général',
     'death_knight' => 'Chevalier de la mort',
     'demon_hunter' => 'Chasseur de démons',
     'druid'        => 'Druide',
     'evoker'       => 'Évocateur',
-    'general'      => 'Général',
     'hunter'       => 'Chasseur',
     'mage'         => 'Mage',
     'monk'         => 'Moine',
@@ -13,7 +14,8 @@ return [
     'priest'       => 'Prêtre',
     'rogue'        => 'Voleur',
     'shaman'       => 'Chaman',
-    'unknown'      => 'Inconnu',
     'warlock'      => 'Démoniste',
     'warrior'      => 'Guerrier',
+    'unknown' => 'Inconnu',
+
 ];

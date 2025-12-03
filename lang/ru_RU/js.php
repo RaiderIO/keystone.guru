@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => 'Имя',
     'enemy_forces_label'                              => 'Способности врага',
     'enemy_display_type_label'                        => 'Отображаймый тип врага',
@@ -476,6 +477,6 @@ return [
     'too_much_data_label'                                                  => 'Найдено слишком много запусков - пожалуйста, уточните поиск',
     'error_loading_data_label'                                             => 'Ошибка загрузки данных - пожалуйста, попробуйте снова',
     'run_count_label'                                                      => 'Отображение данных из :count запусков',
-    'newly_added_key'                                                      => 'Недавно добавлено',
     'refresh_thumbnails_label'                                             => 'Обновить миниатюры',
+
 ];

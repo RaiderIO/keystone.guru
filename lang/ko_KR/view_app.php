@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'commit' => [
         'added' => [
             'added' => '추가됨',
@@ -14,11 +15,12 @@ return [
     ],
     'release' => [
         'discord_footer' => [
-            'affixes'     => '접미사',
-            'changelog'   => '변경 내역',
-            'get_started' => '시작하기',
             'home'        => '홈',
+            'changelog'   => '변경 내역',
+            'affixes'     => '접미사',
             'patreon'     => 'Patreon',
+            'get_started' => '시작하기',
         ],
     ],
+
 ];

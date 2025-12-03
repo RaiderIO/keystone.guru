@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'taunt'           => 'Насмешка',
     'incapacitate'    => 'Обезвреживание',
     'subjugate_demon' => 'Подчинение демона',
@@ -25,4 +26,5 @@ return [
     'hibernate'       => 'Спячка',
     'turn_evil'       => 'Изгнание зла',
     'mind_soothe'     => 'Успокоение разума',
+
 ];

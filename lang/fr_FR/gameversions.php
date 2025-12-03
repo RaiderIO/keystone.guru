@@ -1,32 +1,34 @@
 <?php
 
 return [
-    'beta' => [
-        'description' => 'Beta Retail',
-        'name'        => 'Beta Retail',
-    ],
-    'cata' => [
-        'description' => 'Cataclysm',
-        'name'        => 'Cata',
-    ],
-    'classic' => [
-        'description' => 'Ère Classique',
-        'name'        => 'Ère Classique',
-    ],
-    'legion-remix' => [
-        'description' => 'Remix de Légion',
-        'name'        => 'Remix de Légion',
-    ],
-    'mop' => [
-        'description' => 'Mists of Pandaria',
-        'name'        => 'Mists',
-    ],
+
     'retail' => [
-        'description' => 'Retail',
         'name'        => 'Retail',
+        'description' => 'Retail',
     ],
     'wotlk' => [
-        'description' => 'Wrath of the Lich King',
         'name'        => 'Wrath',
+        'description' => 'Wrath of the Lich King',
     ],
+    'classic' => [
+        'name'        => 'Ère Classique',
+        'description' => 'Ère Classique',
+    ],
+    'beta' => [
+        'name'        => 'Beta Retail',
+        'description' => 'Beta Retail',
+    ],
+    'cata' => [
+        'name'        => 'Cata',
+        'description' => 'Cataclysm',
+    ],
+    'mop' => [
+        'name'        => 'Mists',
+        'description' => 'Mists of Pandaria',
+    ],
+    'legion-remix' => [
+        'name'        => 'Remix de Légion',
+        'description' => 'Remix de Légion',
+    ],
+
 ];

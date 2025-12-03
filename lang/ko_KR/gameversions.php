@@ -1,32 +1,34 @@
 <?php
 
 return [
-    'beta' => [
-        'description' => '리테일 베타',
-        'name'        => '리테일 베타',
-    ],
-    'cata' => [
-        'description' => '대격변',
-        'name'        => '대격변',
-    ],
-    'classic' => [
-        'description' => '클래식 시대',
-        'name'        => '클래식 시대',
-    ],
-    'legion-remix' => [
-        'description' => '군단 리믹스',
-        'name'        => '군단 리믹스',
-    ],
-    'mop' => [
-        'description' => '판다리아의 안개',
-        'name'        => '안개',
-    ],
+
     'retail' => [
-        'description' => '리테일',
         'name'        => '리테일',
+        'description' => '리테일',
     ],
     'wotlk' => [
-        'description' => '리치 왕의 분노',
         'name'        => '분노',
+        'description' => '리치 왕의 분노',
     ],
+    'classic' => [
+        'name'        => '클래식 시대',
+        'description' => '클래식 시대',
+    ],
+    'beta' => [
+        'name'        => '리테일 베타',
+        'description' => '리테일 베타',
+    ],
+    'cata' => [
+        'name'        => '대격변',
+        'description' => '대격변',
+    ],
+    'mop' => [
+        'name'        => '안개',
+        'description' => '판다리아의 안개',
+    ],
+    'legion-remix' => [
+        'name'        => '군단 리믹스',
+        'description' => '군단 리믹스',
+    ],
+
 ];

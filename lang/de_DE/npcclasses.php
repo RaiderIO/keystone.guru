@@ -1,14 +1,16 @@
 <?php
 
 return [
+
+    'melee'        => 'Nahkämpfer',
+    'ranged'       => 'Fernkämpfer',
     'caster'        => 'Zauberwirker',
-    'caster_melee'  => 'Zauberwirker/Nahkämpfer',
     'healer'        => 'Heiler',
+    'caster_melee' => 'Zauberwirker/Nahkämpfer',
     'healer_caster' => 'Heiler/Zauberwirker',
     'healer_melee'  => 'Heiler/Nahkämpfer',
-    'melee'         => 'Nahkämpfer',
-    'ranged'        => 'Fernkämpfer',
     'ranged_caster' => 'Fernkämpfer/Zauberwirker',
     'ranged_healer' => 'Fernkämpfer/Heiler',
     'ranged_melee'  => 'Fernkämpfer/Nahkämpfer',
+
 ];

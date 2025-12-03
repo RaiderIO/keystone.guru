@@ -1,32 +1,34 @@
 <?php
 
 return [
+
+    'retail'       => [
+        'name'        => 'Comercial',
+        'description' => 'Comercial',
+    ],
+    'wotlk'        => [
+        'name'        => 'Wrath',
+        'description' => 'Wrath of the Lich King',
+    ],
+    'classic'      => [
+        'name'        => 'Era Clásica',
+        'description' => 'Era Clásica',
+    ],
     'beta' => [
-        'description' => 'Beta Comercial',
         'name'        => 'Beta Comercial',
+        'description' => 'Beta Comercial',
     ],
     'cata' => [
-        'description' => 'Cataclysm',
         'name'        => 'Cata',
-    ],
-    'classic' => [
-        'description' => 'Era Clásica',
-        'name'        => 'Era Clásica',
-    ],
-    'legion-remix' => [
-        'description' => 'Legion Remix',
-        'name'        => 'Legion Remix',
+        'description' => 'Cataclysm',
     ],
     'mop' => [
+        'name' => 'Mists',
         'description' => 'Mists of Pandaria',
-        'name'        => 'Mists',
     ],
-    'retail' => [
-        'description' => 'Comercial',
-        'name'        => 'Comercial',
+    'legion-remix' => [
+        'name'        => 'Legion Remix',
+        'description' => 'Legion Remix',
     ],
-    'wotlk' => [
-        'description' => 'Wrath of the Lich King',
-        'name'        => 'Wrath',
-    ],
+
 ];

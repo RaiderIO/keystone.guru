@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'death_knight' => [
         'blood'  => 'Sang',
         'frost'  => 'Givre',
@@ -17,9 +18,9 @@ return [
         'restoration' => 'Restauration',
     ],
     'evoker' => [
-        'augmentation' => 'Augmentation',
         'devastation'  => 'Dévastation',
         'preservation' => 'Préservation',
+        'augmentation' => 'Augmentation',
     ],
     'hunter' => [
         'beast_mastery' => 'Maîtrise des bêtes',
@@ -66,4 +67,5 @@ return [
         'fury'       => 'Fureur',
         'protection' => 'Protection',
     ],
+
 ];

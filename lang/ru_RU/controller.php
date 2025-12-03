@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'Ошибка разбора строки MDT. Вы действительно вставили строку MDT?',
@@ -207,4 +208,5 @@ return [
             'error_granting_all_benefits'       => 'Произошла ошибка при попытке предоставить все преимущества.',
         ],
     ],
+
 ];

@@ -470,5 +470,6 @@ return [
     'too_much_data_label'                                                  => 'Hodor',
     'error_loading_data_label'                                             => 'Hodor',
     'run_count_label'                                                      => 'Hodor',
+    'refresh_thumbnails_label'                                             => 'Hodor',
 
 ];

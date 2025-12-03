@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'unknown'                               => 'Неизвестно',
     'comment'                               => 'Комментарий',
     'door'                                  => 'Дверь',
@@ -108,4 +109,5 @@ return [
     'eco_dome_al_dani_shatter_conduit'      => 'Разрушитель каналов',
     'eco_dome_al_dani_disruption_grenade'   => 'Граната разрушения',
     'eco_dome_al_dani_kareshi_surge'        => 'Напор Кареши',
+
 ];

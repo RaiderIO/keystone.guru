@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'edit' => [
         'title'                   => 'Профиль',
         'profile'                 => 'Профиль',
@@ -89,4 +90,5 @@ return [
         'title'  => '%s\'s маршруты',
         'header' => '%s\'s маршруты',
     ],
+
 ];

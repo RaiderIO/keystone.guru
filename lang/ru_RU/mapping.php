@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -106,4 +107,5 @@ return [
             ],
         ],
     ],
+
 ];

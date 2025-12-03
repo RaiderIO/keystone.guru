@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'edittabs' => [
         'details' => [
             'title' => 'Детали команды',
@@ -72,4 +73,5 @@ return [
         'title'  => 'Новая команда',
         'header' => 'Новая команда',
     ],
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'death_knight' => [
         'blood'  => 'Кровь',
         'frost'  => 'Лед',
@@ -66,4 +67,5 @@ return [
         'fury'       => 'Неистовство',
         'protection' => 'Защита',
     ],
+
 ];

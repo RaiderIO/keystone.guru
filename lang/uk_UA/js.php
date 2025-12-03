@@ -478,5 +478,6 @@ return [
     'too_much_data_label'                                                  => 'Знайдено забагато забігів. Будь ласка, уточніть пошук.',
     'error_loading_data_label'                                             => 'Помилка завантаження даних. Спробуйте знову',
     'run_count_label'                                                      => 'Показано дані з :count забігів',
+    'refresh_thumbnails_label'                                             => '',
 
 ];

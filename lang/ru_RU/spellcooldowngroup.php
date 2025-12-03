@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'all'            => 'Все',
     'cd_external'    => 'Внешний КД',
     'cd_group'       => 'Групповой КД',
@@ -16,4 +17,5 @@ return [
     'personal_cd'    => 'Личный КД',
     'utility'        => 'Полезность',
     'unknown'        => 'Неизвестно',
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'general'      => 'Общие',
     'death_knight' => 'Рыцарь смерти',
     'demon_hunter' => 'Охотник на демонов',
@@ -16,4 +17,5 @@ return [
     'warlock'      => 'Чернокнижник',
     'warrior'      => 'Воин',
     'unknown'      => 'Неизвестно',
+
 ];

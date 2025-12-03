@@ -1,16 +1,18 @@
 <?php
 
 return [
+
     'category' => [
         'class' => 'Classe',
         'item'  => 'Objet',
-        'meta'  => 'Méta',
         'misc'  => 'Divers',
+        'meta'  => 'Méta',
     ],
-    'death_skip'          => 'Contournement par mort',
-    'invisibility_potion' => 'Potion d\'invisibilité',
-    'mage_slow_fall_skip' => 'Contournement par chute lente de mage',
     'no_attributes'       => 'Aucun attribut',
     'rogue_shroud_skip'   => 'Contournement par voile du voleur',
     'warlock_gate_skip'   => 'Contournement par portail du démoniste',
+    'mage_slow_fall_skip' => 'Contournement par chute lente de mage',
+    'invisibility_potion' => 'Potion d\'invisibilité',
+    'death_skip'          => 'Contournement par mort',
+
 ];

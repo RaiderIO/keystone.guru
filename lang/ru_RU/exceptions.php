@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'handler' => [
         'api_model_not_found'   => ':ids не найден для :model',
         'api_route_not_found'   => 'Маршрут API не найден',
@@ -8,4 +9,5 @@ return [
         'unauthenticated'       => 'Не аутентифицирован',
         'too_many_requests'     => 'Слишком много запросов',
     ],
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'create_route_npc_chronological_rule' => [
         'message' => 'Npc(s) :npcs diedAt deve ser antes de engagedAt!',
     ],
@@ -16,4 +17,5 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => 'Esse tipo de ícone de mapa não está disponível para seu nível de acesso.',
     ],
+
 ];

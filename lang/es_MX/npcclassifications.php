@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'boss'      => 'Jefe',
+
+    'normal' => 'Normal',
     'elite'     => 'Élite',
+    'boss'   => 'Jefe',
     'finalboss' => 'Jefe final',
-    'normal'    => 'Normal',
     'rare'      => 'Raro',
+
 ];

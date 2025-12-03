@@ -1,10 +1,12 @@
 <?php
 
 return [
-    'cn'    => 'Chine',
+
+    'us' => 'Amériques',
     'eu'    => 'Europe',
-    'kr'    => 'Corée',
+    'cn' => 'Chine',
     'tw'    => 'Taïwan',
-    'us'    => 'Amériques',
+    'kr' => 'Corée',
     'world' => 'Monde',
+
 ];

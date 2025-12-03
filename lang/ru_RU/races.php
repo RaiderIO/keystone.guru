@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'human'               => 'Люди',
     'dwarf'               => 'Дворфы',
     'night_elf'           => 'Ночные эльфы',
@@ -29,4 +30,5 @@ return [
     'vulpera'             => 'Вульперы',
     'earthenalliance'     => 'Земной',
     'earthenhorde'        => 'Земной',
+
 ];

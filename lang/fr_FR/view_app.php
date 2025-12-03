@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'commit' => [
         'added' => [
             'added' => 'Ajouté',
@@ -14,11 +15,12 @@ return [
     ],
     'release' => [
         'discord_footer' => [
-            'affixes'     => 'Affixes',
-            'changelog'   => 'Journal des modifications',
-            'get_started' => 'Commencer',
             'home'        => 'Accueil',
+            'changelog'   => 'Journal des modifications',
+            'affixes'     => 'Affixes',
             'patreon'     => 'Patreon',
+            'get_started' => 'Commencer',
         ],
     ],
+
 ];

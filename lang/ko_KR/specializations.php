@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'death_knight' => [
         'blood'  => '혈기',
         'frost'  => '냉기',
@@ -17,9 +18,9 @@ return [
         'restoration' => '회복',
     ],
     'evoker' => [
-        'augmentation' => '증강',
         'devastation'  => '황폐',
         'preservation' => '보존',
+        'augmentation' => '증강',
     ],
     'hunter' => [
         'beast_mastery' => '야수',
@@ -66,4 +67,5 @@ return [
         'fury'       => '분노',
         'protection' => '방어',
     ],
+
 ];

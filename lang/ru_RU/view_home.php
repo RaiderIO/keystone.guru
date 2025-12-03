@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported' => 'Похоже, вы просматриваете Keystone.guru с помощью Internet Explorer. К сожалению, Internet Explorer
               не поддерживаемый браузер. Попробуйте Google Chrome, Mozilla Firefox или Microsoft Edge.',
     'tagline'                         => 'Маршруты M+ делают прохождение подземелья проще',
@@ -31,4 +32,5 @@ return [
     'loading'                                      => 'Загрузка...',
     'start_planning_today'                         => 'Начните планировать сегодня',
     'join_other_users'                             => 'Присоединяйтесь к %d+ другим пользователям и начните планировать свои маршруты для M+ онлайн!',
+
 ];

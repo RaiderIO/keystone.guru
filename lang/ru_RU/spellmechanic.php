@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'asleep'        => 'Спит',
     'banished'      => 'Изгнан',
     'bleeding'      => 'Кровотечение',
@@ -32,4 +33,5 @@ return [
     'stunned'       => 'Оглушен',
     'turned'        => 'Обращённый',
     'wounded'       => 'Раненый',
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => 'Путешествие во времени: %s',
@@ -62,4 +63,5 @@ return [
         'header'      => 'Состояние',
         'description' => 'Мы заработали, ура!',
     ],
+
 ];

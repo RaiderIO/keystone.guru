@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'create_route_npc_chronological_rule' => [
         'message' => 'Npc(s) :npcs diedAt는 engagedAt보다 이전이어야 합니다!',
     ],
@@ -16,4 +17,5 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => '해당 지도 아이콘 유형은 사용자의 접근 수준에서 사용할 수 없습니다.',
     ],
+
 ];

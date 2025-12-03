@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'home' => [
         'keystone_guru' => 'Keystone.guru',
         'affixes'       => 'Аффиксы',
@@ -116,4 +117,5 @@ return [
             ],
         ],
     ],
+
 ];
