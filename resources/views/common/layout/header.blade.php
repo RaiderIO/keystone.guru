@@ -57,7 +57,6 @@ if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVers
     $navs[route('dungeon.heatmaps.list')] = [
         'fa'   => 'fas fa-fire text-danger',
         'text' => __('view_common.layout.header.heatmaps'),
-        'new'  => true
     ];
 }
 
@@ -72,16 +71,10 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
     <div class="container">
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
-                @php($isSelectedGameVersion = $currentUserGameVersion->id === $gameVersion->id)
-                <div class="game_version col-auto px-2 m-1  {{ $isSelectedGameVersion ? 'bg-primary' : '' }}">
-                    <a class="{{ $isSelectedGameVersion ? 'active' : '' }}"
-                       href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
-                        @include('common.gameversion.gameversionheader', [
-                            'gameVersion' => $gameVersion,
-                            'iconType' => $isSelectedGameVersion ? 'black' : 'white',
-                        ])
-                    </a>
-                </div>
+                @include('common.gameversion.gameversionheader', [
+                    'gameVersion' => $gameVersion,
+                    '$currentUserGameVersion' => $currentUserGameVersion
+                ])
             @endforeach
             <div class="col">
                 &nbsp;

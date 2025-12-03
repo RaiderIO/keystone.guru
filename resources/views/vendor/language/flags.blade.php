@@ -16,5 +16,10 @@ $currentUserLocaleName = language()->getName($currentUserLocale);
                 @include('vendor.language.flag', ['code' => $code, 'name' => $name]) {{ $name }}
             </a>
         @endforeach
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="https://crowdin.com/project/keystoneguru">
+            <i class="fas fa-external-link-alt"></i> {{ __('view_vendor.language.flags.contribute_translations') }}
+        </a>
+
     </div>
 </li>
