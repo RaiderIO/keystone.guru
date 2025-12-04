@@ -12,7 +12,7 @@ return [
             ],
             'embed' => [
                 'title'                   => ':dungeon',
-                'any'                     => 'Будь-який',
+                'any'                     => 'Будь-яке',
                 'select_floor'            => 'Вибрати поверх',
                 'view_heatmap_fullscreen' => 'На весь екран',
             ],
@@ -29,8 +29,8 @@ return [
             ],
             'embed' => [
                 'title'                   => ':dungeon',
-                'any'                     => 'Будь-який',
-                'select_floor'            => 'Обрати поверх',
+                'any'                     => 'Будь-яке',
+                'select_floor'            => 'Вибрати поверх',
                 'view_heatmap_fullscreen' => 'На весь екран',
             ],
         ],

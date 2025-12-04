@@ -3,7 +3,7 @@
 return [
 
     'sitepage' => [
-        'staging_banner_description'        => 'Увага! Зараз ви перебуваєте в тестовому середовищі Keystone.guru. Це НЕ основний сайт.',
+        'staging_banner_description'        => 'Увага! Ви зараз перебуваєте в тестовому середовищі Keystone.guru. Це НЕ основний сайт.',
         'staging_banner_take_me_away'       => 'Заберіть мене на основний сайт!',
         'readonly_mode_enabled_description' => 'Увімкнено режим для читання. Ви можете переглядати маршрути, але не можете змінювати їх або створювати нові.',
     ],

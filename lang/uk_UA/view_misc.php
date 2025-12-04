@@ -29,8 +29,8 @@ return [
         'header' => 'Список змін',
     ],
     'credits' => [
-        'title'            => 'Творці',
-        'header'           => 'Творці',
+        'title'            => 'Подяки',
+        'header'           => 'Подяки',
         'header_people'    => 'Люди',
         'header_libraries' => 'Бібліотеки',
         'header_images'    => 'Зображення',

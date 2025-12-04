@@ -13,7 +13,7 @@ return [
             'copy_to_clipboard_title'                    => 'Скопіювати в буфер обміну',
             'refresh_invite_link_title'                  => 'Оновити запрошення',
             'default_role'                               => 'Стандартна роль',
-            'ad_free_giveaway_description_not_available' => 'Підписавшись на Patreon, ви зможете надати учасникам команди до :max безрекламних доступів до Keystone.guru. ',
+            'ad_free_giveaway_description_not_available' => 'Підписавшись на Patreon, ви зможете надати учасникам команди до :max безрекламних доступів до Keystone.guru.',
             'ad_free_giveaway_description_available'     => 'Дякуємо за підписку на Patreon Keystone.guru! Ви можете надати ще стільки безрекламних доступів будь-кому з команди: :current.',
         ],
         'overview' => [
@@ -25,7 +25,7 @@ return [
         'routes' => [
             'title'                  => 'Список маршрутів',
             'add_route'              => 'Додати маршрут',
-            'add_route_no_moderator' => 'Потрібні права модератора, щоб додавати маршрути',
+            'add_route_no_moderator' => 'Щоб додавати маршрути, потрібні права модератора команди ',
             'stop_adding_routes'     => 'Припинити додавання маршрутів',
         ],
         'tags' => [
@@ -47,7 +47,7 @@ return [
         'linkpreview_description'     => 'Вас запросили доєднатися до команди %s. Увійдіть або зареєструйтеся на Keystone.guru, щоб долучитися. Це безплатно!',
         'title'                       => 'Запрошення доєднатися до команди %s',
         'header'                      => 'Запрошення доєднатися до команди %s',
-        'invalid_team'                => 'Недійсна команда',
+        'invalid_team'                => 'Неправильна команда',
         'logo_image_alt'              => 'Логотип команди',
         'already_a_member'            => 'Ви вже належите до команди %s!',
         'invited_to_join'             => 'Вас запросили доєднатися до команди %s.',
