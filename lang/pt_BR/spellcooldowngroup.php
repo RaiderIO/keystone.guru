@@ -16,6 +16,6 @@ return [
     'personal'       => 'Pessoal',
     'personal_cd'    => 'CD Pessoal',
     'utility'        => 'Utilidade',
-    'unknown' => 'Desconhecido',
+    'unknown'        => 'Desconhecido',
 
 ];

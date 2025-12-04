@@ -2,15 +2,15 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => 'Comercial',
         'description' => 'Comercial',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => 'Wrath',
         'description' => 'Wrath of the Lich King',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => 'Era Clásica',
         'description' => 'Era Clásica',
     ],
@@ -23,7 +23,7 @@ return [
         'description' => 'Cataclysm',
     ],
     'mop' => [
-        'name' => 'Mists',
+        'name'        => 'Mists',
         'description' => 'Mists of Pandaria',
     ],
     'legion-remix' => [

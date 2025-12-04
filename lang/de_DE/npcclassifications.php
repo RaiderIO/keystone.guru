@@ -2,9 +2,9 @@
 
 return [
 
-    'normal' => 'Normal',
+    'normal'    => 'Normal',
     'elite'     => 'Elite',
-    'boss'   => 'Boss',
+    'boss'      => 'Boss',
     'finalboss' => 'Endboss',
     'rare'      => 'Selten',
 

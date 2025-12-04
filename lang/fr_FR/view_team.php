@@ -23,18 +23,18 @@ return [
             'title' => 'Publication de routes',
         ],
         'routes' => [
-            'title' => 'Liste des routes',
+            'title'                  => 'Liste des routes',
             'add_route'              => 'Ajouter une route',
             'add_route_no_moderator' => 'Vous devez être modérateur de cette équipe pour ajouter des routes',
             'stop_adding_routes'     => 'Arrêter d\'ajouter des routes',
         ],
         'tags' => [
-            'title' => 'Balises',
+            'title'       => 'Balises',
             'description' => 'Vous pouvez gérer les balises pour les routes de l\'équipe ici. Tous les membres de cette équipe peuvent voir les balises attachées aux routes.
                                     Les balises personnelles qui ont pu être attachées par le propriétaire de la route ne seront pas visibles.',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => 'Équipe %s',
         'menu_title'     => 'Équipes',
         'to_team_list'   => 'Liste des équipes',
@@ -62,15 +62,15 @@ return [
         'back_to_homepage'            => 'Retour à la page d\'accueil',
     ],
     'list' => [
-        'title'             => 'Mes équipes',
+        'title'                => 'Mes équipes',
         'header'               => 'Mes équipes',
-        'create_team'       => 'Créer une équipe',
-        'table_header_team' => 'Équipe',
+        'create_team'          => 'Créer une équipe',
+        'table_header_team'    => 'Équipe',
         'table_header_members' => 'Membres',
         'table_header_routes'  => 'Routes',
     ],
     'new' => [
-        'title' => 'Nouvelle équipe',
+        'title'  => 'Nouvelle équipe',
         'header' => 'Nouvelle équipe',
     ],
 

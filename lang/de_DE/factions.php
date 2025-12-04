@@ -3,7 +3,7 @@
 return [
 
     'unspecified' => 'Nicht spezifiziert',
-    'horde'    => 'Horde',
-    'alliance' => 'Allianz',
+    'horde'       => 'Horde',
+    'alliance'    => 'Allianz',
 
 ];

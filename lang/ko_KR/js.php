@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => '이름',
     'enemy_forces_label'                              => '적 병력',
     'enemy_display_type_label'                        => '적 표시 유형',
@@ -476,6 +475,6 @@ return [
     'too_much_data_label'                                                  => '너무 많은 실행이 발견되었습니다 - 검색을 더 세분화하세요',
     'error_loading_data_label'                                             => '데이터 로드 오류 - 다시 시도하세요',
     'run_count_label'                                                      => ':count 개의 실행 데이터 표시',
-    'refresh_thumbnails_label'                                             => '',
-
-];
+    'refresh_thumbnails_label'                                             => '썸네일 새로고침',
+]
+;

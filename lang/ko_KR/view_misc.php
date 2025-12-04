@@ -2,7 +2,7 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '%s 시간여행',
         ],
@@ -12,15 +12,15 @@ return [
         'header' => 'Keystone.guru에 대하여',
     ],
     'affixes' => [
-        'title'      => '속성',
+        'title'                             => '속성',
         'header'                            => '주간 속성 %s',
-        'start_date' => '시작일 (%s)',
+        'start_date'                        => '시작일 (%s)',
         'header_season'                     => ':season',
         'header_season_start'               => ':season 시작',
-        'seasonal'   => '시즌별',
-        'previous'   => '이전',
+        'seasonal'                          => '시즌별',
+        'previous'                          => '이전',
         'next'                              => '다음',
-        'updated_at' => '%s에 업데이트됨. 속성 및 M+에 대한 자세한 정보는',
+        'updated_at'                        => '%s에 업데이트됨. 속성 및 M+에 대한 자세한 정보는',
         'popular_routes_by_current_affixes' => '현재 속성에 따른 인기 경로',
         'popular_routes_by_next_affixes'    => '다음 속성에 따른 인기 경로',
     ],
@@ -44,7 +44,7 @@ return [
         'header' => '웹페이지에서 Keystone.guru 임베드 테스트',
     ],
     'health' => [
-        'title' => '건강 계산',
+        'title'  => '건강 계산',
         'header' => '건강',
     ],
     'mapping' => [
@@ -59,8 +59,8 @@ return [
         'npcs_assigned'                 => '할당된 NPC',
     ],
     'status' => [
-        'title'  => '상태',
-        'header' => '상태',
+        'title'       => '상태',
+        'header'      => '상태',
         'description' => '시스템이 정상 작동 중입니다!',
     ],
 

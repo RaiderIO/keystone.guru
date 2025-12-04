@@ -4,8 +4,8 @@ return [
 
     'aggressive' => 'Agressivo',
     'unfriendly' => 'Hostil',
-    'neutral'  => 'Neutro',
-    'friendly' => 'Amigável',
-    'awakened' => 'Desperto',
+    'neutral'    => 'Neutro',
+    'friendly'   => 'Amigável',
+    'awakened'   => 'Desperto',
 
 ];

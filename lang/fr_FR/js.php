@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => 'Nom',
     'enemy_forces_label'                              => 'Forces ennemies',
     'enemy_display_type_label'                        => 'Type d\'affichage de l\'ennemi',
@@ -366,7 +365,7 @@ return [
     'view_label'                                                           => 'Voir',
     'collaborator_label'                                                   => 'Éditer',
     'moderator_label'                                                      => 'Modérer',
-    'admin_label'                                                          => '',
+    'admin_label'                                                          => 'Admin',
     'change_role_success'                                                  => 'Permissions mises à jour',
     'change_default_role_success'                                          => 'Rôle par défaut mis à jour',
     'team_admin'                                                           => 'Administrer l\'équipe',
@@ -477,6 +476,6 @@ return [
     'too_much_data_label'                                                  => 'Trop de tirages trouvés - affinez davantage votre recherche',
     'error_loading_data_label'                                             => 'Erreur de chargement des données - veuillez réessayer',
     'run_count_label'                                                      => 'Affichage des données de :count tirages',
-    'refresh_thumbnails_label'                                             => '',
-
-];
+    'refresh_thumbnails_label'                                             => 'Actualiser les vignettes',
+]
+;

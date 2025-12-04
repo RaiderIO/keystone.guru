@@ -26,11 +26,11 @@ return [
             '_' => '%d행을 복사판에서 복사됨',
             1   => '1행을 복사판에서 복사됨',
         ],
-        'copyTitle'       => '복사판에서 복사',
-        'createState'     => '',
-        'csv'             => 'CSV',
-        'excel'           => '엑셀',
-        'pageLength'      => [
+        'copyTitle'   => '복사판에서 복사',
+        'createState' => '',
+        'csv'         => 'CSV',
+        'excel'       => '엑셀',
+        'pageLength'  => [
             '_' => '%d행 보기',
             -1  => '모든 행 보기',
         ],
@@ -94,7 +94,7 @@ return [
         'error' => [
             'system' => '에러가 발생하였습니다 (&lt;a target="\\" rel="nofollow" href="\\"&gt;자세한 정보&lt;/a&gt;).',
         ],
-        'multi'  => [
+        'multi' => [
             'info'    => '',
             'noMulti' => '',
             'restore' => '',
@@ -129,7 +129,7 @@ return [
         'clearAll'   => '모두 지우기',
         'condition'  => '조건',
         'conditions' => [
-            'array'  => [
+            'array' => [
                 'contains' => '',
                 'empty'    => '',
                 'equals'   => '',
@@ -137,7 +137,7 @@ return [
                 'notEmpty' => '',
                 'without'  => '',
             ],
-            'date'   => [
+            'date' => [
                 'after'      => '',
                 'before'     => '',
                 'between'    => '',
@@ -174,10 +174,10 @@ return [
         ],
         'data'        => '데이터',
         'deleteTitle' => '필터 규칙을 삭제',
-        'leftTitle'  => '',
+        'leftTitle'   => '',
         'logicAnd'    => 'And',
         'logicOr'     => 'Or',
-        'rightTitle' => '',
+        'rightTitle'  => '',
         'title'       => [
             '_' => '빌더 조회(%d)',
             0   => '빌더 조회',
@@ -185,8 +185,8 @@ return [
         'value' => '값',
     ],
     'searchPanes' => [
-        'clearMessage'    => '',
-        'collapse'        => [
+        'clearMessage' => '',
+        'collapse'     => [
             '_' => '',
             0   => '',
         ],
@@ -217,9 +217,9 @@ return [
         ],
     ],
     'stateRestore' => [
-        'creationModal'  => [
-            'button'        => '',
-            'columns'       => [
+        'creationModal' => [
+            'button'  => '',
+            'columns' => [
                 'search'  => '',
                 'visible' => '',
             ],
@@ -245,6 +245,6 @@ return [
         'renameLabel'    => '',
         'renameTitle'    => '',
     ],
-    'thousands' => '',
+    'thousands'   => '',
     'zeroRecords' => '검색 결과가 없습니다',
 ];

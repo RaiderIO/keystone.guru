@@ -3,7 +3,7 @@
 return [
 
     'discover' => [
-        'dungeon'  => [
+        'dungeon' => [
             'overview' => [
                 'popular'                    => 'Beliebte Routen',
                 'popular_by_current_affixes' => 'Beliebte Routen nach aktuellen Affixen',
@@ -22,15 +22,15 @@ return [
             'show_more' => 'Mehr anzeigen',
         ],
         'search' => [
-            'page_title'        => 'Routen suchen',
-            'header'            => 'Routen suchen',
-            'title'             => 'Titel',
-            'title_placeholder' => 'Nach Titel filtern',
-            'key_level'         => 'Schlüsselstufe',
+            'page_title'              => 'Routen suchen',
+            'header'                  => 'Routen suchen',
+            'title'                   => 'Titel',
+            'title_placeholder'       => 'Nach Titel filtern',
+            'key_level'               => 'Schlüsselstufe',
             'affixes'                 => 'Affixe',
             'affixes_title'           => 'Affixe auswählen',
-            'select_affixes'    => 'Affixe auswählen',
-            'affixes_selected'  => '{0} Affixe ausgewählt',
+            'select_affixes'          => 'Affixe auswählen',
+            'affixes_selected'        => '{0} Affixe ausgewählt',
             'enemy_forces'            => 'Feindliche Kräfte',
             'enemy_forces_complete'   => 'Vollständig',
             'enemy_forces_incomplete' => 'Unvollständig',
@@ -45,8 +45,8 @@ return [
         ],
     ],
     'edit' => [
-        'title'             => '%s bearbeiten',
-        'linkpreview_title' => '%s | Keystone.guru',
+        'title'                                   => '%s bearbeiten',
+        'linkpreview_title'                       => '%s | Keystone.guru',
         'linkpreview_default_description'         => 'M+-Route für Dungeon %s von %s bearbeiten',
         'linkpreview_default_description_sandbox' => 'M+-Route für Dungeon %s bearbeiten',
     ],
@@ -61,10 +61,10 @@ return [
         'copy_mdt_string'  => 'MDT-String kopieren',
     ],
     'limitreached' => [
-        'title'            => 'Limit erreicht',
+        'title'                     => 'Limit erreicht',
         'header'                    => 'Limit erreicht',
         'limit_reached_description' => 'Sie haben die maximale Anzahl von Routen erreicht, die Sie erstellen dürfen (%s). Bitte überlegen Sie, Patron zu werden, um weiterhin mehr Routen zu erstellen, oder löschen Sie einige Ihrer bestehenden Routen. Vielen Dank für die Nutzung der Seite!',
-        'become_a_patreon' => 'Werde ein %s Patron!',
+        'become_a_patreon'          => 'Werde ein %s Patron!',
     ],
     'new' => [
         'title' => 'Neue Route',

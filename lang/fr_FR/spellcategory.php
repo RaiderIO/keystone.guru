@@ -2,7 +2,7 @@
 
 return [
 
-    'general' => 'Général',
+    'general'      => 'Général',
     'death_knight' => 'Chevalier de la mort',
     'demon_hunter' => 'Chasseur de démons',
     'druid'        => 'Druide',
@@ -16,6 +16,6 @@ return [
     'shaman'       => 'Chaman',
     'warlock'      => 'Démoniste',
     'warrior'      => 'Guerrier',
-    'unknown' => 'Inconnu',
+    'unknown'      => 'Inconnu',
 
 ];

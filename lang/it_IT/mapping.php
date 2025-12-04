@@ -3,11 +3,11 @@
 return [
 
     'map_icons' => [
-        'mop'    => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: I Coscritti Krik\'thik compaiono solo dopo aver sconfitto il Comandante Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'La porta si sblocca dopo aver sconfitto la Prova del Re',
             ],
         ],
@@ -47,25 +47,25 @@ return [
                 'exit'                           => 'Uscita',
             ],
             'plaguefall' => [
-                'start'            => 'Inizio',
+                'start'              => 'Inizio',
                 'graveyard_dr_ickus' => 'Si attiva dopo aver ucciso il Dottor Ickus',
                 'gushing_slime'      => 'Necrosignore: Aura di Danno ad Area - Usare Scultura di Carne sul cadavere della Melma Traboccante conferirà l\'aura di Melma Corrosiva per 2 minuti. Questa aura applicherà il potenziamento di Melma Corrosiva a qualsiasi membro del gruppo nelle vicinanze, concedendo una probabilità del 10% di attivare danni ad area attorno al tuo personaggio',
-                'congealed_slime'  => 'Necrosignore: Aura di Riduzione del Danno del 25% - Usare Scultura di Carne sul cadavere della Melma Coagulata conferirà l\'aura di Contagio Coagulato per 2 minuti. Questa aura applicherà il potenziamento di Contagio Coagulato a qualsiasi membro del gruppo nelle vicinanze entro 10 metri, concedendogli una Riduzione del Danno del 10%',
-                'pestilence_slime' => 'Necrosignore: Aura di Celerità del 25% - Usare Scultura di Carne sul cadavere della Melma Pestilente conferirà l\'aura di Infezione Rapida per 2 minuti. Questa aura applicherà il potenziamento di Infezione Rapida a qualsiasi membro del gruppo nelle vicinanze entro 10 metri, fornendo loro una Celerità del 25%',
+                'congealed_slime'    => 'Necrosignore: Aura di Riduzione del Danno del 25% - Usare Scultura di Carne sul cadavere della Melma Coagulata conferirà l\'aura di Contagio Coagulato per 2 minuti. Questa aura applicherà il potenziamento di Contagio Coagulato a qualsiasi membro del gruppo nelle vicinanze entro 10 metri, concedendogli una Riduzione del Danno del 10%',
+                'pestilence_slime'   => 'Necrosignore: Aura di Celerità del 25% - Usare Scultura di Carne sul cadavere della Melma Pestilente conferirà l\'aura di Infezione Rapida per 2 minuti. Questa aura applicherà il potenziamento di Infezione Rapida a qualsiasi membro del gruppo nelle vicinanze entro 10 metri, fornendo loro una Celerità del 25%',
                 'landing'            => 'Atterraggio',
-                'exit'             => 'Uscita',
+                'exit'               => 'Uscita',
             ],
             'sanguine_depths' => [
-                'start'                          => 'Inizio',
+                'start'                            => 'Inizio',
                 'anima_cage'                       => 'Venthyr: Attiva le Gabbie dell\'Anima per indebolire i nemici entro 40 metri con Drenaggio dell\'Anima. Dopo 20 secondi, si disattiverà e darà all\'intero gruppo 1 accumulo di Dono di Peccamorte per ogni nemico che è morto entro il raggio con Drenaggio dell\'Anima attivo',
-                'tick_bug'                       => 'Questa zecca sembra (a volte) essere buggata nel terreno - tuttavia, si attirerà quando il boss viene attivato',
-                'graveyard_kryxis_the_voracious' => 'Si attiva dopo aver ucciso Kryxis il Vorace',
+                'tick_bug'                         => 'Questa zecca sembra (a volte) essere buggata nel terreno - tuttavia, si attirerà quando il boss viene attivato',
+                'graveyard_kryxis_the_voracious'   => 'Si attiva dopo aver ucciso Kryxis il Vorace',
                 'graveyard_executor_tarvold'       => 'Si attiva dopo aver ucciso l\'Esecutore Tarvold',
                 'graveyard_grand_proctor_beryllia' => 'Si attiva dopo aver ucciso il Gran Prorettore Beryllia',
-                'chamber_sentinel'               => 'I Gargoyle di Pietra possono attivarsi per diventare Sentinelle della Camera. Nessuna attivazione garantita',
-                'gauntlet_explanation'           => 'Ci sono ondate infinite di cani che appariranno durante il percorso. Il Generale Kaal sarà in alcuni dei gruppi e si sposterà al prossimo gruppo ogni 10% di salute e andrà alla stanza finale al 70%',
+                'chamber_sentinel'                 => 'I Gargoyle di Pietra possono attivarsi per diventare Sentinelle della Camera. Nessuna attivazione garantita',
+                'gauntlet_explanation'             => 'Ci sono ondate infinite di cani che appariranno durante il percorso. Il Generale Kaal sarà in alcuni dei gruppi e si sposterà al prossimo gruppo ogni 10% di salute e andrà alla stanza finale al 70%',
                 'zrali_essence'                    => 'Essenza di Z\'rali: bolla di scudo con riduzione del danno del 65% per tutti coloro che si trovano al suo interno. Forma lo scudo attorno al giocatore che lo trasporta/attiva',
-                'exit'                           => 'Uscita',
+                'exit'                             => 'Uscita',
             ],
             'spires_of_ascension' => [
                 'start'            => 'Inizio',
@@ -73,15 +73,15 @@ return [
                 'exit'             => 'Uscita',
             ],
             'the_necrotic_wake' => [
-                'start'               => 'Inizio',
+                'start'                  => 'Inizio',
                 'bloody_javelin'         => 'Giavellotto Sanguinolento: Lancia un giavellotto Kyrian al bersaglio, infliggendo danni fisici a tutti i nemici che attraversa e danni fisici aggiuntivi ogni 2 sec per 16 sec. I nemici colpiti subiscono il 20% di danni aumentati per 16 sec.',
                 'forgotten_forgehammer'  => 'Martello della Forgia Dimenticato: Lancia un possente martello Kyrian al bersaglio, infliggendo danni fisici e stordendo il bersaglio per 8 sec.',
                 'malfunctioning_goliath' => 'Goliath Malfunzionante: Espelle 5 sfere di Anima che rimangono a terra per circa 12 secondi. Passare su una sfera conferisce Esaurimento Anima. Questo aumenta la velocità di movimento del 20% e provoca danni ad area e cura ogni 4 secondi per 1 minuto.',
-                'discharged_anima'    => 'Anima Scaricata: Libera l\'anima immagazzinata, infliggendo danni arcani ai nemici vicini e interrompendo il loro lancio di incantesimi ogni 1 sec per 8 sec.',
-                'discarded_shield'    => 'Scudo Scartato: Attiva per ridurre i danni ricevuti del 50% per tutti gli alleati entro 8 metri per 6 sec.',
-                'anima_crystal_shard' => 'Frammento di Cristallo d\'Anima',
-                'grisly_curio'        => 'Cimelio Macabro',
-                'exit'                => 'Uscita',
+                'discharged_anima'       => 'Anima Scaricata: Libera l\'anima immagazzinata, infliggendo danni arcani ai nemici vicini e interrompendo il loro lancio di incantesimi ogni 1 sec per 8 sec.',
+                'discarded_shield'       => 'Scudo Scartato: Attiva per ridurre i danni ricevuti del 50% per tutti gli alleati entro 8 metri per 6 sec.',
+                'anima_crystal_shard'    => 'Frammento di Cristallo d\'Anima',
+                'grisly_curio'           => 'Cimelio Macabro',
+                'exit'                   => 'Uscita',
             ],
             'theater_of_pain' => [
                 'start'                => 'Inizio',

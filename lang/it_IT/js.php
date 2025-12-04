@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => 'Nome',
     'enemy_forces_label'                              => 'Forze nemiche',
     'enemy_display_type_label'                        => 'Tipo di visualizzazione nemico',
@@ -366,7 +365,7 @@ return [
     'view_label'                                                           => 'Visualizza',
     'collaborator_label'                                                   => 'Modifica',
     'moderator_label'                                                      => 'Modera',
-    'admin_label'                                                          => '',
+    'admin_label'                                                          => 'Amministratore',
     'change_role_success'                                                  => 'Permessi aggiornati',
     'change_default_role_success'                                          => 'Ruolo predefinito aggiornato',
     'team_admin'                                                           => 'Amministra team',
@@ -477,6 +476,6 @@ return [
     'too_much_data_label'                                                  => 'Troppe esecuzioni trovate - perfeziona ulteriormente la tua ricerca',
     'error_loading_data_label'                                             => 'Errore nel caricamento dei dati - per favore riprova',
     'run_count_label'                                                      => 'Mostrando dati da :count esecuzioni',
-    'refresh_thumbnails_label'                                             => '',
-
-];
+    'refresh_thumbnails_label'                                             => 'Aggiorna le miniature',
+]
+;

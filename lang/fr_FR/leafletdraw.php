@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Annuler le dessin',
                 'text'  => 'Annuler',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Terminer le dessin',
                 'text'  => 'Terminer',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Supprimer le dernier point dessiné',
                 'text'  => 'Supprimer le dernier point',
             ],
@@ -86,13 +86,13 @@ return [
     'edit' => [
         'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Enregistrer les modifications',
                     'text'  => 'Enregistrer',
                 ],
                 'cancel' => [
                     'title' => 'Annuler l\'édition, annule toutes les modifications',
-                    'text' => 'Annuler',
+                    'text'  => 'Annuler',
                 ],
                 'clearAll' => [
                     'title' => 'Effacer toutes les couches',
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Faites glisser les poignées ou les marqueurs pour modifier les fonctionnalités.',
                     'subtext' => 'Cliquez sur annuler pour annuler les modifications.',

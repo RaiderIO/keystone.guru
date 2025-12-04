@@ -4,9 +4,9 @@ return [
 
     'passwords' => [
         'email' => [
-            'title'         => 'Réinitialiser le mot de passe',
+            'title'                    => 'Réinitialiser le mot de passe',
             'header'                   => 'Réinitialiser le mot de passe',
-            'email_address' => 'Adresse e-mail',
+            'email_address'            => 'Adresse e-mail',
             'send_password_reset_link' => 'Envoyer le lien de réinitialisation du mot de passe',
         ],
         'reset' => [
@@ -18,7 +18,7 @@ return [
             'reset_password'   => 'Réinitialiser le mot de passe',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Connexion',
     ],
     'register' => [

@@ -3,11 +3,11 @@
 return [
 
     'map_icons' => [
-        'mop'    => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru : Les Conscrits Krik\'thik n\'apparaissent qu\'après avoir vaincu le Commandant Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'La porte se déverrouille après avoir vaincu l\'Épreuve du Roi',
             ],
         ],
@@ -47,25 +47,25 @@ return [
                 'exit'                           => 'Sortie',
             ],
             'plaguefall' => [
-                'start'            => 'Début',
+                'start'              => 'Début',
                 'graveyard_dr_ickus' => 'S\'active après avoir tué le Docteur Ickus',
                 'gushing_slime'      => 'Nécro-seigneur : Aura de proc de dégâts de zone - Utiliser la chair sur le cadavre de la Gelée suintante conférera l\'aura de Boue corrosive pendant 2 minutes. Cette aura appliquera le buff de Boue corrosive à tout membre du groupe à proximité, donnant une chance de 10% de déclencher des dégâts de zone autour de votre personnage',
-                'congealed_slime'  => 'Nécro-seigneur : Aura de réduction de dégâts de 25% - Utiliser la chair sur le cadavre de la Gelée figée conférera l\'aura de Contagion figée pendant 2 minutes. Cette aura appliquera le buff de Contagion figée à tout membre du groupe à proximité dans un rayon de 10 mètres, leur donnant une réduction de dégâts de 10%',
-                'pestilence_slime' => 'Nécro-seigneur : Aura de hâte de 25% - Utiliser la chair sur le cadavre de la Gelée de pestilence conférera l\'aura d\'Infection rapide pendant 2 minutes. Cette aura appliquera le buff d\'Infection rapide à tout membre du groupe à proximité dans un rayon de 10 mètres, leur fournissant une hâte de 25%',
+                'congealed_slime'    => 'Nécro-seigneur : Aura de réduction de dégâts de 25% - Utiliser la chair sur le cadavre de la Gelée figée conférera l\'aura de Contagion figée pendant 2 minutes. Cette aura appliquera le buff de Contagion figée à tout membre du groupe à proximité dans un rayon de 10 mètres, leur donnant une réduction de dégâts de 10%',
+                'pestilence_slime'   => 'Nécro-seigneur : Aura de hâte de 25% - Utiliser la chair sur le cadavre de la Gelée de pestilence conférera l\'aura d\'Infection rapide pendant 2 minutes. Cette aura appliquera le buff d\'Infection rapide à tout membre du groupe à proximité dans un rayon de 10 mètres, leur fournissant une hâte de 25%',
                 'landing'            => 'Atterrissage',
-                'exit'             => 'Sortie',
+                'exit'               => 'Sortie',
             ],
             'sanguine_depths' => [
-                'start'                          => 'Début',
+                'start'                            => 'Début',
                 'anima_cage'                       => 'Venthyr : Activez les cages d\'anima pour affaiblir les ennemis dans un rayon de 40 mètres avec Drain d\'anima. Après 20 secondes, il se désactivera et donnera à tout le groupe 1 pile de Bénédiction de Chute-de-Péché pour chaque ennemi mort à portée avec Drain d\'anima actif',
-                'tick_bug'                       => 'Cette tique semble (parfois) être buggée dans le sol - elle se déclenchera cependant lorsque le boss est engagé',
-                'graveyard_kryxis_the_voracious' => 'S\'active après avoir tué Kryxis le Vorace',
+                'tick_bug'                         => 'Cette tique semble (parfois) être buggée dans le sol - elle se déclenchera cependant lorsque le boss est engagé',
+                'graveyard_kryxis_the_voracious'   => 'S\'active après avoir tué Kryxis le Vorace',
                 'graveyard_executor_tarvold'       => 'S\'active après avoir tué l\'Exécuteur Tarvold',
                 'graveyard_grand_proctor_beryllia' => 'S\'active après avoir tué la Grande Protectrice Beryllia',
-                'chamber_sentinel'               => 'Les gargouilles de pierre peuvent s\'activer pour devenir des Sentinelles de la chambre. Pas d\'activation garantie',
-                'gauntlet_explanation'           => 'Il y a des vagues infinies de chiens qui apparaîtront tout au long du gant. Le Général Kaal sera dans certains des groupes et se déplacera vers le groupe suivant tous les 10% de PV et ira à la salle finale à 70%',
+                'chamber_sentinel'                 => 'Les gargouilles de pierre peuvent s\'activer pour devenir des Sentinelles de la chambre. Pas d\'activation garantie',
+                'gauntlet_explanation'             => 'Il y a des vagues infinies de chiens qui apparaîtront tout au long du gant. Le Général Kaal sera dans certains des groupes et se déplacera vers le groupe suivant tous les 10% de PV et ira à la salle finale à 70%',
                 'zrali_essence'                    => 'Essence de Z\'rali : Bouclier de bulle de réduction de dégâts de 65% pour tous ceux qui se tiennent à l\'intérieur. Crée le bouclier autour du joueur qui le transporte/l\'active',
-                'exit'                           => 'Sortie',
+                'exit'                             => 'Sortie',
             ],
             'spires_of_ascension' => [
                 'start'            => 'Début',
@@ -73,15 +73,15 @@ return [
                 'exit'             => 'Sortie',
             ],
             'the_necrotic_wake' => [
-                'start'               => 'Début',
+                'start'                  => 'Début',
                 'bloody_javelin'         => 'Javelot Sanglant : Lance un javelot kyrian sur la cible, infligeant des dégâts physiques à tous les ennemis qu\'il traverse et des dégâts physiques supplémentaires toutes les 2 secondes pendant 16 secondes. Les ennemis touchés subissent 20% de dégâts supplémentaires pendant 16 secondes.',
                 'forgotten_forgehammer'  => 'Marteau de Forge Oublié : Lance un puissant marteau kyrian sur la cible, infligeant des dégâts physiques et étourdissant la cible pendant 8 secondes.',
                 'malfunctioning_goliath' => 'Goliath défaillant : éjecte 5 orbes d\'Anima qui restent au sol pendant environ 12 secondes. Marcher sur une orbe accorde l\'Épuisement d\'Anima. Cela augmente la vitesse de déplacement de 20 % et provoque des dégâts AoE et des soins toutes les 4 secondes pendant 1 min.',
-                'discharged_anima'    => 'Anima Déchargée : Libère l\'anima stockée, infligeant des dégâts des arcanes aux ennemis à proximité et interrompant leur incantation de sorts toutes les secondes pendant 8 secondes.',
-                'discarded_shield'    => 'Bouclier Délaissé : Activez pour réduire les dégâts subis de 50% pour tous les alliés dans un rayon de 8 mètres pendant 6 secondes.',
-                'anima_crystal_shard' => 'Éclat de cristal d\'anima',
-                'grisly_curio'        => 'Curiosité Macabre',
-                'exit'                => 'Sortie',
+                'discharged_anima'       => 'Anima Déchargée : Libère l\'anima stockée, infligeant des dégâts des arcanes aux ennemis à proximité et interrompant leur incantation de sorts toutes les secondes pendant 8 secondes.',
+                'discarded_shield'       => 'Bouclier Délaissé : Activez pour réduire les dégâts subis de 50% pour tous les alliés dans un rayon de 8 mètres pendant 6 secondes.',
+                'anima_crystal_shard'    => 'Éclat de cristal d\'anima',
+                'grisly_curio'           => 'Curiosité Macabre',
+                'exit'                   => 'Sortie',
             ],
             'theater_of_pain' => [
                 'start'                => 'Début',

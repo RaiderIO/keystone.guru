@@ -4,19 +4,19 @@ return [
 
     'admintools' => [
         'error' => [
-            'mdt_string_parsing_failed'        => 'MDT-String-Parsing fehlgeschlagen. Haben Sie wirklich einen MDT-String eingefügt?',
-            'mdt_string_format_not_recognized' => 'Das MDT-String-Format wurde nicht erkannt.',
+            'mdt_string_parsing_failed'           => 'MDT-String-Parsing fehlgeschlagen. Haben Sie wirklich einen MDT-String eingefügt?',
+            'mdt_string_format_not_recognized'    => 'Das MDT-String-Format wurde nicht erkannt.',
             'cli_weakauras_parser_not_found'      => 'cli_weakauras_parser nicht installiert.',
             'invalid_mdt_string'                  => 'Ungültiger MDT-String',
             'invalid_mdt_string_exception'        => 'Ungültiger MDT-String: %s',
             'mdt_importer_not_configured'         => 'MDT-Importer ist nicht richtig konfiguriert. Bitte kontaktieren Sie den Administrator über dieses Problem.',
-            'mdt_unable_to_find_npc_for_id'    => 'Konnte NPC für ID %d nicht finden',
-            'mdt_mismatched_health'            => 'NPC %s hat nicht übereinstimmende Gesundheitswerte, MDT: %s, KG: %s',
+            'mdt_unable_to_find_npc_for_id'       => 'Konnte NPC für ID %d nicht finden',
+            'mdt_mismatched_health'               => 'NPC %s hat nicht übereinstimmende Gesundheitswerte, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_forces'         => 'NPC %s hat nicht übereinstimmende Feindkräfte, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_forces_teeming' => 'NPC %s hat nicht übereinstimmende wimmelnde Feindkräfte, MDT: %s, KG: %s',
-            'mdt_mismatched_enemy_count'       => 'NPC %s hat eine nicht übereinstimmende Feindanzahl, MDT: %s, KG: %s',
+            'mdt_mismatched_enemy_count'          => 'NPC %s hat eine nicht übereinstimmende Feindanzahl, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_type'           => 'NPC %s hat nicht übereinstimmenden Feindtyp, MDT: %s, KG: %s',
-            'mdt_invalid_category'             => 'Ungültige Kategorie',
+            'mdt_invalid_category'                => 'Ungültige Kategorie',
         ],
         'flash' => [
             'message_banner_set_successfully' => 'Nachrichtenbanner erfolgreich gesetzt',
@@ -57,7 +57,7 @@ return [
         'unable_to_save' => 'Route konnte nicht gespeichert werden',
         'flash'          => [
             'route_cloned_successfully' => 'Route erfolgreich geklont',
-            'route_updated' => 'Route aktualisiert',
+            'route_updated'             => 'Route aktualisiert',
             'route_created'             => 'Route erstellt',
         ],
     ],
@@ -72,7 +72,7 @@ return [
             'next_week_affixes' => '%s nächste Woche',
             'new'               => '%s neue Routen',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '%s beliebte Routen',
             'this_week_affixes' => '%s diese Woche',
             'next_week_affixes' => '%s nächste Woche',
@@ -109,7 +109,7 @@ return [
         ],
     ],
     'register' => [
-        'flash'                 => [
+        'flash' => [
             'registered_successfully' => 'Erfolgreich registriert. Viel Spaß auf der Website!',
         ],
         'legal_agreed_required' => 'Sie müssen unseren rechtlichen Bedingungen zustimmen, um sich zu registrieren.',
@@ -161,19 +161,19 @@ return [
     'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Dieser Benutzername wird bereits verwendet.',
-            'username_already_in_use'         => 'Dieser Benutzername wird bereits verwendet.',
-            'profile_updated'                 => 'Profil aktualisiert',
-            'unexpected_error_when_saving'    => 'Ein unerwarteter Fehler ist aufgetreten, als versucht wurde, Ihr Profil zu speichern',
-            'privacy_settings_updated'        => 'Datenschutzeinstellungen aktualisiert',
-            'password_changed'                => 'Passwort geändert',
+            'username_already_in_use'          => 'Dieser Benutzername wird bereits verwendet.',
+            'profile_updated'                  => 'Profil aktualisiert',
+            'unexpected_error_when_saving'     => 'Ein unerwarteter Fehler ist aufgetreten, als versucht wurde, Ihr Profil zu speichern',
+            'privacy_settings_updated'         => 'Datenschutzeinstellungen aktualisiert',
+            'password_changed'                 => 'Passwort geändert',
             'new_password_equals_old_password' => 'Neues Passwort entspricht dem alten Passwort',
             'new_passwords_do_not_match'       => 'Neue Passwörter stimmen nicht überein',
-            'current_password_is_incorrect'   => 'Aktuelles Passwort ist falsch',
-            'tag_created_successfully'        => 'Tag erfolgreich erstellt',
+            'current_password_is_incorrect'    => 'Aktuelles Passwort ist falsch',
+            'tag_created_successfully'         => 'Tag erfolgreich erstellt',
             'tag_already_exists'               => 'Dieses Tag existiert bereits',
-            'admins_cannot_delete_themselves' => 'Administratoren können sich nicht selbst löschen!',
-            'account_deleted_successfully'    => 'Konto erfolgreich gelöscht.',
-            'error_deleting_account'          => 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
+            'admins_cannot_delete_themselves'  => 'Administratoren können sich nicht selbst löschen!',
+            'account_deleted_successfully'     => 'Konto erfolgreich gelöscht.',
+            'error_deleting_account'           => 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
         ],
     ],
     'spell' => [
@@ -197,13 +197,13 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'       => 'Benutzer :user ist jetzt ein Admin',
-            'user_is_no_longer_an_admin' => 'Benutzer :user ist kein Administrator mehr',
-            'user_is_now_a_user'         => 'Benutzer :user ist jetzt ein Benutzer',
-            'user_is_now_a_role'         => 'Benutzer :user ist jetzt ein :role',
+            'user_is_now_an_admin'              => 'Benutzer :user ist jetzt ein Admin',
+            'user_is_no_longer_an_admin'        => 'Benutzer :user ist kein Administrator mehr',
+            'user_is_now_a_user'                => 'Benutzer :user ist jetzt ein Benutzer',
+            'user_is_now_a_role'                => 'Benutzer :user ist jetzt ein :role',
             'account_deleted_successfully'      => 'Konto erfolgreich gelöscht.',
             'account_deletion_error'            => 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
-            'user_is_not_a_patron'       => 'Dieser Benutzer ist kein Patron.',
+            'user_is_not_a_patron'              => 'Dieser Benutzer ist kein Patron.',
             'all_benefits_granted_successfully' => 'Alle Vorteile erfolgreich gewährt.',
             'error_granting_all_benefits'       => 'Beim Versuch, alle Vorteile zu gewähren, ist ein Fehler aufgetreten.',
         ],
