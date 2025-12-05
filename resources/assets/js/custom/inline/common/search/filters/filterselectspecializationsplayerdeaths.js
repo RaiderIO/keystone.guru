@@ -19,7 +19,7 @@ class SearchFilterSpecializationsPlayerDeaths extends SearchFilterSpecialization
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_select_specializations_player_deaths_header')
+        return lang.get('js.filter_input_select_specializations_player_deaths_header')
             .replace(':specializations', this._getSpecializationNames().join(', '));
     }
 }

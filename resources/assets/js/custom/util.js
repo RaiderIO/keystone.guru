@@ -136,7 +136,7 @@ function rotateLatLng(centerLatLng, latLng, degrees) {
 
 function _getHandlebarsTranslations() {
     let locale = lang.getLocale();
-    return lang.messages[locale + '.messages'];
+    return lang.messages[locale + '.js'];
 }
 
 /** Some built-in caching since this function is called a lot */
@@ -229,7 +229,7 @@ function copyToClipboard(value, $input = null, timeoutMS = null) {
         if (timeoutMS !== null) {
             opts.timeout = timeoutMS;
         }
-        showInfoNotification(lang.get('messages.copied_to_clipboard'), opts);
+        showInfoNotification(lang.get('js.copied_to_clipboard'), opts);
     }
     if ($input === null && $temp !== null) {
         $temp.remove();

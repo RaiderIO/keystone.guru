@@ -54,7 +54,7 @@ class SearchFilterSpecializations extends SearchFilterSelect {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_select_specializations_header')
+        return lang.get('js.filter_input_select_specializations_header')
             .replace(':specializations', this._getSpecializationNames().join(', '));
     }
 }

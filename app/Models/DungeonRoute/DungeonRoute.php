@@ -834,7 +834,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
 
-        $dungeonRouteLevel = $validated['dungeon_route_level'];
+        $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
         if ($dungeonRouteLevel !== null) {
             $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
             $this->level_min        = $dungeonRouteLevelParts[0] ?? null;

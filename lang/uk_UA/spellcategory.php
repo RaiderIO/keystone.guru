@@ -16,6 +16,6 @@ return [
     'shaman'       => 'Шаман',
     'warlock'      => 'Чорнокнижник',
     'warrior'      => 'Воїн',
-    'unknown'      => 'Невідоме',
+    'unknown'      => 'Невідомо',
 
 ];

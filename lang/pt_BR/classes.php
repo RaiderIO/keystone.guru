@@ -2,18 +2,18 @@
 
 return [
 
-    'death_knight' => '',
-    'demon_hunter' => '',
-    'druid'        => '',
-    'evoker'       => '',
-    'hunter'       => '',
-    'mage'         => '',
-    'monk'         => '',
-    'paladin'      => '',
-    'priest'       => '',
-    'rogue'        => '',
-    'shaman'       => '',
-    'warlock'      => '',
-    'warrior'      => '',
+    'death_knight' => 'Cavaleiro da Morte',
+    'demon_hunter' => 'Caçador de Demônios',
+    'druid'        => 'Druida',
+    'evoker'       => 'Evocador',
+    'hunter'       => 'Caçador',
+    'mage'         => 'Mago',
+    'monk'         => 'Monge',
+    'paladin'      => 'Paladino',
+    'priest'       => 'Sacerdote',
+    'rogue'        => 'Ladino',
+    'shaman'       => 'Xamã',
+    'warlock'      => 'Bruxo',
+    'warrior'      => 'Guerreiro',
 
 ];

@@ -4,33 +4,34 @@ return [
 
     'edittabs' => [
         'details' => [
-            'title' => '',
+            'title' => 'Детали команды',
         ],
         'members' => [
-            'title'                                      => '',
-            'invite_new_members'                         => '',
-            'invite_code_share_warning'                  => '',
-            'copy_to_clipboard_title'                    => '',
-            'refresh_invite_link_title'                  => '',
-            'default_role'                               => '',
-            'ad_free_giveaway_description_not_available' => '',
-            'ad_free_giveaway_description_available'     => '',
+            'title'                                      => 'Участники',
+            'invite_new_members'                         => 'Пригласить новых участников',
+            'invite_code_share_warning'                  => 'Будьте осторожны, с кем вы делитесь ссылкой-приглашением, любой, у кого есть ссылка, может присоединиться к вашей команде!',
+            'copy_to_clipboard_title'                    => 'Копировать в буфер обмена',
+            'refresh_invite_link_title'                  => 'Обновить ссылку-приглашение',
+            'default_role'                               => 'Роль по умолчанию',
+            'ad_free_giveaway_description_not_available' => 'Подписка на :patreon позволяет вам подарить до :max безрекламных впечатлений любому участнику команды.',
+            'ad_free_giveaway_description_available'     => 'Спасибо за подписку на :patreon от Keystone.guru! Вы можете подарить :current больше безрекламных впечатлений любому участнику команды.',
         ],
         'overview' => [
-            'title' => '',
+            'title' => 'Обзор',
         ],
         'routepublishing' => [
-            'title' => '',
+            'title' => 'Публикация маршрутов',
         ],
         'routes' => [
-            'title'                  => '',
-            'add_route'              => '',
-            'add_route_no_moderator' => '',
-            'stop_adding_routes'     => '',
+            'title'                  => 'Список маршрутов',
+            'add_route'              => 'Добавить маршрут',
+            'add_route_no_moderator' => 'Вы должны быть модератором этой команды, чтобы добавлять маршруты',
+            'stop_adding_routes'     => 'Прекратить добавление маршрутов',
         ],
         'tags' => [
-            'title'       => '',
-            'description' => '',
+            'title'       => 'Теги',
+            'description' => 'Здесь вы можете управлять тегами для маршрутов команды. Каждый, кто является участником этой команды, может просматривать теги, прикрепленные к маршрутам.
+                                    Личные теги, которые могли быть прикреплены владельцем маршрута, не будут видны.',
         ],
     ],
     'edit' => [
@@ -39,12 +40,12 @@ return [
         'to_team_list'   => 'Список команд',
         'team_header'    => 'Команда %s',
         'icon_image_alt' => 'Нет изображения',
-        'routes'         => '',
-        'members'        => '',
+        'routes'         => 'Маршруты',
+        'members'        => 'Участники',
     ],
     'invite' => [
-        'linkpreview_title'           => '',
-        'linkpreview_description'     => '',
+        'linkpreview_title'           => 'Приглашение присоединиться к команде %s',
+        'linkpreview_description'     => 'Вас пригласили присоединиться к команде %s. Войдите или зарегистрируйтесь на Keystone.guru, чтобы присоединиться к команде, это бесплатно!',
         'title'                       => 'Приглашение в команду %s',
         'header'                      => 'Приглашение в команду %s',
         'invalid_team'                => 'Неверная команда',

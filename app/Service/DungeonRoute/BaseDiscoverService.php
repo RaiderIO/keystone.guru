@@ -7,6 +7,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use Closure;
 use Illuminate\Support\Facades\App;
 
@@ -33,7 +34,7 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     public function __construct()
     {
         $this->cacheService     = App::make(CacheServiceInterface::class);
-        $this->expansionService = App::make(ExpansionService::class);
+        $this->expansionService = App::make(ExpansionServiceInterface::class);
     }
 
     /**

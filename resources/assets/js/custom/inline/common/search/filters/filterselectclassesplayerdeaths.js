@@ -19,7 +19,7 @@ class SearchFilterClassesPlayerDeaths extends SearchFilterClasses {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_select_classes_header')
+        return lang.get('js.filter_input_select_classes_header')
             .replace(':classes', this._getClassNames().join(', '));
     }
 }

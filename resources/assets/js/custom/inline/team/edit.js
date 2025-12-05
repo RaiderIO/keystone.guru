@@ -44,7 +44,7 @@ class TeamEdit extends InlineCode {
         });
 
         $('#delete_team').unbind('click').bind('click', function (clickEvent) {
-            showConfirmYesCancel(lang.get('messages.delete_team_confirm_label'), function () {
+            showConfirmYesCancel(lang.get('js.delete_team_confirm_label'), function () {
                 // Change the method to DELETE
                 $('#details [name="_method"]').val('DELETE');
                 // Submit the form
@@ -77,7 +77,7 @@ class TeamEdit extends InlineCode {
                     role: $(this).val()
                 },
                 success: function () {
-                    showSuccessNotification(lang.get('messages.change_role_success'));
+                    showSuccessNotification(lang.get('js.change_role_success'));
                 }
             });
         });
@@ -91,7 +91,7 @@ class TeamEdit extends InlineCode {
                     default_role: $(this).val()
                 },
                 success: function () {
-                    showSuccessNotification(lang.get('messages.change_default_role_success'));
+                    showSuccessNotification(lang.get('js.change_default_role_success'));
                 }
             });
         });
@@ -108,19 +108,19 @@ class TeamEdit extends InlineCode {
         let icons = [{
             name: 'member',
             icon: 'fa-eye',
-            label: lang.get('messages.team_member')
+            label: lang.get('js.team_member')
         }, {
             name: 'collaborator',
             icon: 'fa-edit',
-            label: lang.get('messages.team_collaborator')
+            label: lang.get('js.team_collaborator')
         }, {
             name: 'moderator',
             icon: 'fa-user-cog',
-            label: lang.get('messages.team_moderator')
+            label: lang.get('js.team_moderator')
         }, {
             name: 'admin',
             icon: 'fa-crown',
-            label: lang.get('messages.team_admin')
+            label: lang.get('js.team_admin')
         }];
 
         let result = false;
@@ -153,16 +153,16 @@ class TeamEdit extends InlineCode {
             dataType: 'json',
             failed: function () {
                 if (add) {
-                    showErrorNotification(lang.get('messages.ad_free_giveaway_add_failed'));
+                    showErrorNotification(lang.get('js.ad_free_giveaway_add_failed'));
                 } else {
-                    showErrorNotification(lang.get('messages.ad_free_giveaway_remove_failed'));
+                    showErrorNotification(lang.get('js.ad_free_giveaway_remove_failed'));
                 }
             },
             success: function () {
                 if (add) {
-                    showSuccessNotification(lang.get('messages.ad_free_giveaway_add_success'));
+                    showSuccessNotification(lang.get('js.ad_free_giveaway_add_success'));
                 } else {
-                    showSuccessNotification(lang.get('messages.ad_free_giveaway_remove_success'));
+                    showSuccessNotification(lang.get('js.ad_free_giveaway_remove_success'));
                 }
 
                 // Give user a second to read the notification
@@ -201,7 +201,7 @@ class TeamEdit extends InlineCode {
                 if (userId === self.options.currentUserId) {
                     window.location.href = '/';
                 } else {
-                    showSuccessNotification(lang.get('messages.remove_member_success'));
+                    showSuccessNotification(lang.get('js.remove_member_success'));
 
                     self.refreshTeamMembersTable();
                 }
@@ -223,11 +223,11 @@ class TeamEdit extends InlineCode {
 
         let columns = [{
             'data': 'name',
-            'title': lang.get('messages.name_label'),
+            'title': lang.get('js.name_label'),
             'width': '45%'
         }, {
             'data': 'join_date',
-            'title': lang.get('messages.join_date_label'),
+            'title': lang.get('js.join_date_label'),
             'width': '20%',
             'className': 'd-none d-lg-table-cell'
         }];
@@ -236,7 +236,7 @@ class TeamEdit extends InlineCode {
         if (self.options.userIsModerator) {
             columns.push({
                 'data': 'assignable_roles',
-                'title': lang.get('messages.assignable_roles_label'),
+                'title': lang.get('js.assignable_roles_label'),
                 'width': '20%',
                 'render': function (data, type, row, meta) {
                     let roles = [];
@@ -288,7 +288,7 @@ class TeamEdit extends InlineCode {
         } else {
             columns.push({
                 'data': 'role',
-                'title': lang.get('messages.role_label'),
+                'title': lang.get('js.role_label'),
                 'width': '20%',
                 'render': function (data, type, row, meta) {
                     return _.startCase(_.toLower(row.role));
@@ -299,7 +299,7 @@ class TeamEdit extends InlineCode {
 
         columns.push({
             'data': 'join_date',
-            'title': lang.get('messages.actions_label'),
+            'title': lang.get('js.actions_label'),
             'width': '15%',
             'render': function (data, type, row, meta) {
                 let result = '';
@@ -336,7 +336,7 @@ class TeamEdit extends InlineCode {
             'bLengthChange': false,
             'columns': columns,
             'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-                'emptyTable': lang.get('messages.datatable_no_members_in_table')
+                'emptyTable': lang.get('js.datatable_no_members_in_table')
             })
         });
 
@@ -350,7 +350,7 @@ class TeamEdit extends InlineCode {
 
         $('.remove_user_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
-            showConfirmYesCancel(lang.get('messages.remove_member_confirm_label'), function () {
+            showConfirmYesCancel(lang.get('js.remove_member_confirm_label'), function () {
                 self._removeUserFromTeam(userId);
             }, null, {type: 'error'});
         });
@@ -358,8 +358,8 @@ class TeamEdit extends InlineCode {
         $('.leave_team_btn').unbind('click').bind('click', function (e) {
             let userId = parseInt($(this).data('userid'));
             showConfirmYesCancel(lang.get(self.options.data.length === 1 ?
-                'messages.leave_team_disband_confirm_label' :
-                'messages.leave_team_confirm_label'), function () {
+                'js.leave_team_disband_confirm_label' :
+                'js.leave_team_confirm_label'), function () {
                 self._removeUserFromTeam(userId);
             }, null, {type: 'error'});
         });
@@ -392,7 +392,7 @@ class TeamEdit extends InlineCode {
             success: function (response) {
                 $('#team_members_invite_link').val(response.new_invite_link);
 
-                showInfoNotification(lang.get('messages.invite_link_refreshed'));
+                showInfoNotification(lang.get('js.invite_link_refreshed'));
             }
         });
 

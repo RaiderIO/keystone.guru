@@ -28,7 +28,7 @@ class SearchFilterDuration extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_duration_header')
+        return lang.get('js.filter_input_duration_header')
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 

@@ -2,14 +2,14 @@
 
 return [
 
-    'view_route_not_published'                => '',
-    'present_route_not_published'             => '',
-    'embed_route_not_published'               => '',
-    'embed_route_sandbox_not_allowed'         => '',
-    'publish_not_all_required_enemies_killed' => '',
-    'add_kill_zone_limit_reached'             => '',
-    'add_brushline_limit_reached'             => '',
-    'add_path_limit_reached'                  => '',
-    'add_map_icon_limit_reached'              => '',
+    'view_route_not_published'                => 'Esta ruta no está publicada y no se puede ver. Por favor, pide al autor que publique esta ruta para verla.',
+    'present_route_not_published'             => 'Esta ruta no está publicada y no se puede presentar. Por favor, pide al autor que publique esta ruta para presentarla.',
+    'embed_route_not_published'               => 'Esta ruta no está publicada y no se puede ver. Por favor, pide al autor que publique esta ruta para verla.',
+    'embed_route_sandbox_not_allowed'         => 'Las rutas temporales no se pueden incrustar.',
+    'publish_not_all_required_enemies_killed' => 'No se pueden cambiar las configuraciones de compartición: no todos los enemigos requeridos han sido eliminados.',
+    'add_kill_zone_limit_reached'             => 'No se pueden añadir más de :limit ataques a una sola ruta.',
+    'add_brushline_limit_reached'             => 'No se pueden añadir más de :limit líneas dibujadas a mano a una sola ruta.',
+    'add_path_limit_reached'                  => 'No se pueden añadir más de :limit caminos a una sola ruta.',
+    'add_map_icon_limit_reached'              => 'No se pueden añadir más de :limit iconos de mapa a una sola ruta.',
 
 ];

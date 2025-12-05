@@ -3,32 +3,32 @@
 return [
 
     'retail' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Retail',
+        'description' => 'Retail',
     ],
     'wotlk' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Wrath',
+        'description' => 'Wrath of the Lich King',
     ],
     'classic' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Ère Classique',
+        'description' => 'Ère Classique',
     ],
     'beta' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Beta Retail',
+        'description' => 'Beta Retail',
     ],
     'cata' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Cata',
+        'description' => 'Cataclysm',
     ],
     'mop' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Mists',
+        'description' => 'Mists of Pandaria',
     ],
     'legion-remix' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Remix de Légion',
+        'description' => 'Remix de Légion',
     ],
 
 ];

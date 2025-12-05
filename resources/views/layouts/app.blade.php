@@ -143,6 +143,7 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
 
 <!-- Scripts -->
 <script src="{{ ksgCompiledAsset(sprintf('js/app-%s.js', $revision)) . $devCacheBuster }}"></script>
+<script src="{{ ksgCompiledAsset(sprintf('js/lang-%s-%s.js', app()->getLocale(), $revision)) . $devCacheBuster }}"></script>
 <?php // Compiled only in production, otherwise include all files as-is to prevent having to recompile everything all the time ?>
 <script src="{{ ksgCompiledAsset(sprintf('js/custom-%s.js', $revision)) .$devCacheBuster }}"></script>
 <script src="{{ ksgCompiledAsset(sprintf('js/lib-%s.js', $revision)) . $devCacheBuster }}"></script>

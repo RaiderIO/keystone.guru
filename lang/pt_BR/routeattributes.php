@@ -3,16 +3,16 @@
 return [
 
     'category' => [
-        'class' => '',
-        'item'  => '',
-        'misc'  => '',
-        'meta'  => '',
+        'class' => 'Classe',
+        'item'  => 'Item',
+        'misc'  => 'Diversos',
+        'meta'  => 'Meta',
     ],
-    'no_attributes'       => '',
-    'rogue_shroud_skip'   => '',
-    'warlock_gate_skip'   => '',
-    'mage_slow_fall_skip' => '',
-    'invisibility_potion' => '',
-    'death_skip'          => '',
+    'no_attributes'       => 'Sem atributos',
+    'rogue_shroud_skip'   => 'Pular Cobertura do Ladino',
+    'warlock_gate_skip'   => 'Pular Portal do Bruxo',
+    'mage_slow_fall_skip' => 'Pular Queda Lenta do Mago',
+    'invisibility_potion' => 'Poção de Invisibilidade',
+    'death_skip'          => 'Pular Morte',
 
 ];

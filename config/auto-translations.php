@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'default_driver' => env('TRANSLATION_DEFAULT_DRIVER', 'chatgpt'),
+    'default_driver' => env('TRANSLATION_DEFAULT_DRIVER', 'openai'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'source_language' => env('TRANSLATION_SOURCE_LANGUAGE', 'en'),
+    'source_language' => env('TRANSLATION_SOURCE_LANGUAGE', 'en_US'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,7 @@ return [
 
     'drivers' => [
 
-        'chatgpt' => [
+        'openai' => [
             'api_key'      => env('CHATGPT_API_KEY'),
             'model'        => env('CHATGPT_MODEL', 'gpt-3.5-turbo'),
             'temperature'  => (float)env('CHATGPT_TEMPERATURE', 0.7),

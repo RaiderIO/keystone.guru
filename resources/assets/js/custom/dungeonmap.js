@@ -255,7 +255,7 @@ class DungeonMap extends Signalable {
             let layerDeletedFn = function () {
                 layersDeleted++;
                 if (layersDeleted === layersLength) {
-                    showSuccessNotification(lang.get('messages.object.deleted'));
+                    showSuccessNotification(lang.get('js.object.deleted'));
                 }
             };
 

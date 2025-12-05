@@ -5,80 +5,80 @@ return [
     'draw' => [
         'toolbar' => [
             'actions' => [
-                'title' => '',
-                'text'  => '',
+                'title' => 'Cancelar dibujo',
+                'text'  => 'Cancelar',
             ],
             'finish' => [
-                'title' => '',
-                'text'  => '',
+                'title' => 'Terminar dibujo',
+                'text'  => 'Terminar',
             ],
             'undo' => [
-                'title' => '',
-                'text'  => '',
+                'title' => 'Eliminar el último punto dibujado',
+                'text'  => 'Eliminar el último punto',
             ],
             'buttons' => [
-                'polyline'     => '',
-                'polygon'      => '',
-                'rectangle'    => '',
-                'circle'       => '',
-                'marker'       => '',
-                'circlemarker' => '',
+                'polyline'     => 'Dibujar una polilínea',
+                'polygon'      => 'Dibujar un polígono',
+                'rectangle'    => 'Dibujar un rectángulo',
+                'circle'       => 'Dibujar un círculo',
+                'marker'       => 'Dibujar un marcador',
+                'circlemarker' => 'Dibujar un marcador de círculo',
             ],
         ],
         'handlers' => [
             'circle' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Haga clic y arrastre para dibujar un círculo.',
                 ],
-                'radius' => '',
+                'radius' => 'Radio',
             ],
             'circlemarker' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Haga clic en el mapa para colocar un marcador de círculo.',
                 ],
             ],
             'marker' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Haga clic en el mapa para colocar un marcador.',
                 ],
             ],
             'polygon' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Haga clic para comenzar a dibujar la forma.',
+                    'cont'  => 'Haga clic para continuar dibujando la forma.',
+                    'end'   => 'Haga clic en el primer punto para cerrar esta forma.',
                 ],
             ],
             'polyline' => [
-                'error'   => '',
+                'error'   => '<strong>Error:</strong> ¡los bordes de la forma no pueden cruzarse!',
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Haga clic para comenzar a dibujar la línea.',
+                    'cont'  => 'Haga clic para continuar dibujando la línea.',
+                    'end'   => 'Haga clic en el último punto para terminar la línea.',
                 ],
             ],
             'rectangle' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Haga clic y arrastre para dibujar un rectángulo.',
                 ],
             ],
             'simpleshape' => [
                 'tooltip' => [
-                    'end' => '',
+                    'end' => 'Suelte el mouse para terminar de dibujar.',
                 ],
             ],
             'path' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Haga clic para comenzar a dibujar el camino.',
+                    'cont'  => 'Haga clic para continuar dibujando el camino.',
+                    'end'   => 'Haga clic en el botón \'Terminar\' en la barra de herramientas para completar su camino.',
                 ],
             ],
             'brushline' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Haga clic para comenzar a dibujar la línea.',
+                    'cont'  => 'Haga clic y arrastre para continuar dibujando la línea.',
+                    'end'   => 'Continúe haciendo clic/arrastrando, cuando termine, presione el botón \'Terminar\' en la barra de herramientas para completar su línea.',
                 ],
             ],
         ],
@@ -87,35 +87,35 @@ return [
         'toolbar' => [
             'actions' => [
                 'save' => [
-                    'title' => '',
-                    'text'  => '',
+                    'title' => 'Guardar cambios',
+                    'text'  => 'Guardar',
                 ],
                 'cancel' => [
-                    'title' => '',
-                    'text'  => '',
+                    'title' => 'Cancelar la edición, descarta todos los cambios',
+                    'text'  => 'Cancelar',
                 ],
                 'clearAll' => [
-                    'title' => '',
-                    'text'  => '',
+                    'title' => 'Borrar todas las capas',
+                    'text'  => 'Borrar todo',
                 ],
             ],
             'buttons' => [
-                'edit'           => '',
-                'editDisabled'   => '',
-                'remove'         => '',
-                'removeDisabled' => '',
+                'edit'           => 'Editar capas',
+                'editDisabled'   => 'No hay capas para editar',
+                'remove'         => 'Eliminar capas',
+                'removeDisabled' => 'No hay capas para eliminar',
             ],
         ],
         'handlers' => [
             'edit' => [
                 'tooltip' => [
-                    'text'    => '',
-                    'subtext' => '',
+                    'text'    => 'Arrastre los controladores o marcadores para editar las características.',
+                    'subtext' => 'Haga clic en cancelar para deshacer los cambios.',
                 ],
             ],
             'remove' => [
                 'tooltip' => [
-                    'text' => '',
+                    'text' => 'Haga clic en una característica para eliminarla.',
                 ],
             ],
         ],

@@ -31,7 +31,7 @@ class DungeonRouteTableTeam {
                 url: `/ajax/team/${teamPublicKey}/route/${key}`,
                 dataType: 'json',
                 success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_add_route_successful'));
+                    showSuccessNotification(lang.get('js.team_add_route_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }
@@ -61,7 +61,7 @@ class DungeonRouteTableTeam {
                 },
                 dataType: 'json',
                 success: function (json) {
-                    showSuccessNotification(lang.get('messages.team_remove_route_successful'));
+                    showSuccessNotification(lang.get('js.team_remove_route_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }

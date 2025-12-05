@@ -11,6 +11,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
+#[Group('UsesLua')]
 class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTestBase
 {
     #[Test]

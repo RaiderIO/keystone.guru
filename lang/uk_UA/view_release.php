@@ -2,6 +2,6 @@
 
 return [
 
-    'header' => 'Реліз %s',
+    'header' => 'Версія %s',
 
 ];

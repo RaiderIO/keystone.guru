@@ -50,7 +50,7 @@ class DownloadLocalizations extends Command
             $this->info(sprintf('Downloading %s', $locale['long']));
 
             $url = sprintf(
-                'https://cdn.datatables.net/plug-ins/2.3.2/i18n/%s.json',
+                'https://cdn.datatables.net/plug-ins/2.3.5/i18n/%s.json',
                 $localeMapping[$locale['long']] ?? $localeDt,
             );
 

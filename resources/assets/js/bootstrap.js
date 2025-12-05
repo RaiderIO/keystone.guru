@@ -24,7 +24,6 @@ import Echo from 'laravel-echo'
 /**
  * Translations coupling from server to client.
  */
-import messages from './messages';
 
 import Pusher from 'pusher-js';
 
@@ -120,7 +119,9 @@ require('@fortawesome/fontawesome-free');
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
-window.lang = new Lang({messages});
+// Initialize with empty messages; language bundles (public/js/lang-<locale>-<version>.js)
+// will populate messages at runtime via window.lang.setMessages(...)
+window.lang = new Lang({messages: {}});
 
 // https://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
 window.Handlebars.registerHelper('select', function (value, options) {

@@ -4,22 +4,22 @@ return [
 
     'commit' => [
         'added' => [
-            'added' => '',
+            'added' => '추가됨',
         ],
         'modified' => [
-            'modified' => '',
+            'modified' => '수정됨',
         ],
         'removed' => [
-            'removed' => '',
+            'removed' => '제거됨',
         ],
     ],
     'release' => [
         'discord_footer' => [
-            'home'        => '',
-            'changelog'   => '',
-            'affixes'     => '',
-            'patreon'     => '',
-            'get_started' => '',
+            'home'        => '홈',
+            'changelog'   => '변경 내역',
+            'affixes'     => '접미사',
+            'patreon'     => 'Patreon',
+            'get_started' => '시작하기',
         ],
     ],
 

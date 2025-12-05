@@ -5,80 +5,80 @@ return [
     'draw' => [
         'toolbar' => [
             'actions' => [
-                'title' => '',
-                'text'  => '',
+                'title' => 'Zeichnen abbrechen',
+                'text'  => 'Abbrechen',
             ],
             'finish' => [
-                'title' => '',
-                'text'  => '',
+                'title' => 'Zeichnen beenden',
+                'text'  => 'Fertig',
             ],
             'undo' => [
-                'title' => '',
-                'text'  => '',
+                'title' => 'Zuletzt gezeichneten Punkt löschen',
+                'text'  => 'Letzten Punkt löschen',
             ],
             'buttons' => [
-                'polyline'     => '',
-                'polygon'      => '',
-                'rectangle'    => '',
-                'circle'       => '',
-                'marker'       => '',
-                'circlemarker' => '',
+                'polyline'     => 'Eine Polylinie zeichnen',
+                'polygon'      => 'Ein Polygon zeichnen',
+                'rectangle'    => 'Ein Rechteck zeichnen',
+                'circle'       => 'Einen Kreis zeichnen',
+                'marker'       => 'Einen Marker zeichnen',
+                'circlemarker' => 'Einen Kreismarker zeichnen',
             ],
         ],
         'handlers' => [
             'circle' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Klicken und ziehen, um einen Kreis zu zeichnen.',
                 ],
-                'radius' => '',
+                'radius' => 'Radius',
             ],
             'circlemarker' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Karte anklicken, um den Kreismarker zu platzieren.',
                 ],
             ],
             'marker' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Karte anklicken, um den Marker zu platzieren.',
                 ],
             ],
             'polygon' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Klicken, um mit dem Zeichnen der Form zu beginnen.',
+                    'cont'  => 'Klicken, um die Form weiter zu zeichnen.',
+                    'end'   => 'Klicken Sie auf den ersten Punkt, um diese Form zu schließen.',
                 ],
             ],
             'polyline' => [
-                'error'   => '',
+                'error'   => '<strong>Fehler:</strong> Formkanten dürfen sich nicht kreuzen!',
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Klicken, um mit dem Zeichnen der Linie zu beginnen.',
+                    'cont'  => 'Klicken, um die Linie weiter zu zeichnen.',
+                    'end'   => 'Klicken Sie auf den letzten Punkt, um die Linie zu beenden.',
                 ],
             ],
             'rectangle' => [
                 'tooltip' => [
-                    'start' => '',
+                    'start' => 'Klicken und ziehen, um ein Rechteck zu zeichnen.',
                 ],
             ],
             'simpleshape' => [
                 'tooltip' => [
-                    'end' => '',
+                    'end' => 'Maus loslassen, um das Zeichnen zu beenden.',
                 ],
             ],
             'path' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Klicken, um mit dem Zeichnen des Pfades zu beginnen.',
+                    'cont'  => 'Klicken, um den Pfad weiter zu zeichnen.',
+                    'end'   => 'Klicken Sie auf die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihren Pfad zu vervollständigen.',
                 ],
             ],
             'brushline' => [
                 'tooltip' => [
-                    'start' => '',
-                    'cont'  => '',
-                    'end'   => '',
+                    'start' => 'Klicken, um mit dem Zeichnen der Linie zu beginnen.',
+                    'cont'  => 'Klicken und ziehen, um die Linie weiter zu zeichnen.',
+                    'end'   => 'Klicken/Ziehen Sie weiter. Wenn Sie fertig sind, drücken Sie die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihre Linie zu vervollständigen.',
                 ],
             ],
         ],
@@ -87,35 +87,35 @@ return [
         'toolbar' => [
             'actions' => [
                 'save' => [
-                    'title' => '',
-                    'text'  => '',
+                    'title' => 'Änderungen speichern',
+                    'text'  => 'Speichern',
                 ],
                 'cancel' => [
-                    'title' => '',
-                    'text'  => '',
+                    'title' => 'Bearbeitung abbrechen, verwirft alle Änderungen',
+                    'text'  => 'Abbrechen',
                 ],
                 'clearAll' => [
-                    'title' => '',
-                    'text'  => '',
+                    'title' => 'Alle Ebenen löschen',
+                    'text'  => 'Alle löschen',
                 ],
             ],
             'buttons' => [
-                'edit'           => '',
-                'editDisabled'   => '',
-                'remove'         => '',
-                'removeDisabled' => '',
+                'edit'           => 'Ebenen bearbeiten',
+                'editDisabled'   => 'Keine Ebenen zum Bearbeiten',
+                'remove'         => 'Ebenen löschen',
+                'removeDisabled' => 'Keine Ebenen zum Löschen',
             ],
         ],
         'handlers' => [
             'edit' => [
                 'tooltip' => [
-                    'text'    => '',
-                    'subtext' => '',
+                    'text'    => 'Ziehen Sie Griffe oder Marker, um Merkmale zu bearbeiten.',
+                    'subtext' => 'Klicken Sie auf Abbrechen, um Änderungen rückgängig zu machen.',
                 ],
             ],
             'remove' => [
                 'tooltip' => [
-                    'text' => '',
+                    'text' => 'Klicken Sie auf ein Merkmal, um es zu entfernen.',
                 ],
             ],
         ],

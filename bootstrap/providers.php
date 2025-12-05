@@ -11,7 +11,7 @@ $providers = [
     App\Providers\ControllerServiceProvider::class,
 ];
 
-if (app()->environment('local', 'testing')) {
+if (app()->environment('local')) {
     $providers[] = App\Providers\HorizonServiceProvider::class;
 }
 

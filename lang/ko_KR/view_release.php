@@ -2,6 +2,6 @@
 
 return [
 
-    'header' => '',
+    'header' => '릴리스 %s',
 
 ];

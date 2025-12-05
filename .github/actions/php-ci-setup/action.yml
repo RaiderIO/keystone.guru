@@ -1,0 +1,51 @@
+name: "PHP CI Setup"
+description: "Common setup for Keystone.guru CI"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, intl, pdo_mysql, bcmath, gd
+        coverage: none
+
+    - name: Cache composer
+      uses: actions/cache@v4
+      with:
+        path: ~/.composer/cache/files
+        key: composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: composer-
+
+    - name: Install system clients (mysql + redis CLI)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y default-mysql-client redis-tools
+      shell: bash
+
+    - name: Install PHP dependencies
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
+      shell: bash
+
+    - name: Compute git version and save to file
+      run: echo -n "$(git rev-parse HEAD)" >> version
+      shell: bash
+
+    - name: Prepare .env for CI
+      run: |
+        cp .env.ci.example .env || true
+        php artisan key:generate --force -v
+      shell: bash
+
+    - name: Migrate & seed
+      run: |
+        php artisan migrate --database=migrate --force
+        php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
+        php artisan db:seed --database=migrate --force -v
+      shell: bash

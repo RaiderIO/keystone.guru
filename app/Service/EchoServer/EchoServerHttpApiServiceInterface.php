@@ -4,6 +4,8 @@ namespace App\Service\EchoServer;
 
 interface EchoServerHttpApiServiceInterface
 {
+    public function getHealth(): array;
+
     public function getStatus(): array;
 
     public function getChannels(): array;

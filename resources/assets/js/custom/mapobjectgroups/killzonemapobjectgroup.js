@@ -414,7 +414,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     callback();
                 }
 
-                showSuccessNotification(lang.get('messages.delete_all_pulls_successful'));
+                showSuccessNotification(lang.get('js.delete_all_pulls_successful'));
             }
         });
     }

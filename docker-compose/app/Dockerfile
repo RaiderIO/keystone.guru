@@ -1,5 +1,5 @@
 ### Rust builder (nightly for edition2024)
-FROM rustlang/rust:nightly-bookworm AS wa-builder
+FROM rust:1.91.1-bookworm AS wa-builder
 # or: FROM rustlang/rust:nightly     # (Debian base)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential cmake pkg-config libssl-dev git ca-certificates \

@@ -37,22 +37,22 @@
                 'order': [[0, 'asc']],
                 'columns': [
                     {
-                        'title': lang.get('messages.id_label'),
+                        'title': lang.get('js.id_label'),
                         'data': 'id',
                         'name': 'id',
                     },
                     {
-                        'title': lang.get('messages.name_label'),
+                        'title': lang.get('js.name_label'),
                         'data': 'name',
                         'name': 'name',
                     },
                     {
-                        'title': lang.get('messages.dungeons_label'),
+                        'title': lang.get('js.dungeons_label'),
                         'data': 'dungeon_names',
                         'name': 'dungeon_id',
                     },
                     {
-                        'title': lang.get('messages.enemy_forces_label'),
+                        'title': lang.get('js.enemy_forces_label'),
                         'data': 'enemy_forces',
                         'name': 'enemy_forces',
                         'searchable': false,
@@ -63,13 +63,13 @@
                         },
                     },
                     {
-                        'title': lang.get('messages.enemy_count_label'),
+                        'title': lang.get('js.enemy_count_label'),
                         'data': 'enemy_count',
                         'name': 'enemy_count',
                         'searchable': false
                     },
                     {
-                        'title': lang.get('messages.classification_label'),
+                        'title': lang.get('js.classification_label'),
                         'data': 'classification.name',
                         'name': 'classification.name',
                         'searchable': false,
@@ -82,20 +82,20 @@
                         },
                     },
                     {
-                        'title': lang.get('messages.actions_label'),
+                        'title': lang.get('js.actions_label'),
                         'data': 'id',
                         'name': 'id',
                         'orderable': false,
                         'searchable': false,
                         'render': function (data, type, row) {
                             return `<a class="btn btn-primary" href="/admin/npc/${row.id}">` +
-                                `    <i class="fas fa-edit"></i> ${lang.get('messages.edit_label')}` +
+                                `    <i class="fas fa-edit"></i> ${lang.get('js.edit_label')}` +
                                 `</a>`;
                         }
                     }
                 ],
                 'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-                    'emptyTable': lang.get('messages.datatable_no_npcs_in_table')
+                    'emptyTable': lang.get('js.datatable_no_npcs_in_table')
                 })
             });
         });

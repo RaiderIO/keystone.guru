@@ -19,16 +19,8 @@
             "url": "https://github.com/Wotuu/opensearch-laravel"
         },
         {
-            "type": "package",
-            "package": {
-                "name": "wotuu/keystone.guru.deployer",
-                "version": "0.1",
-                "source": {
-                    "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
-                    "type": "git",
-                    "reference": "b43bfe2d5420e3bee55bb3bf7c2f86ffdefe48a4"
-                }
-            }
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/laravel-auto-translation.git"
         },
         {
             "type": "package",
@@ -68,7 +60,7 @@
                 "name": "paquettg/php-html-parser",
                 "version": "3.1",
                 "source": {
-                    "url": "git@github.com:Wotuu/php-html-parser.git",
+                    "url": "https://github.com/Wotuu/php-html-parser.git",
                     "type": "git",
                     "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
                 }
@@ -126,7 +118,6 @@
         "symfony/mailgun-mailer": "^7.1",
         "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
-        "vildanbina/laravel-auto-translation": "^1.5",
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
@@ -146,7 +137,7 @@
         "phpunit/phpunit": "^11.0.1",
         "rector/rector": "^1.0",
         "swoole/ide-helper": "~6.0.0",
-        "wotuu/keystone.guru.deployer": "0.1"
+        "vildanbina/laravel-auto-translation": "dev-main"
     },
     "autoload": {
         "classmap": [
