@@ -45,6 +45,7 @@ runs:
 
     - name: Migrate & seed
       run: |
-        ./migrate.sh
+        php artisan migrate --database=migrate --force
+        php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
         php artisan db:seed --database=migrate --force -v
       shell: bash
