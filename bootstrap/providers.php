@@ -1,8 +1,7 @@
 <?php
 
-return [
+$providers = [
     App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
     App\Providers\HelperServiceProvider::class,
     App\Providers\LoggingServiceProvider::class,
@@ -11,3 +10,9 @@ return [
     App\Providers\KeystoneGuruServiceProvider::class,
     App\Providers\ControllerServiceProvider::class,
 ];
+
+if (app()->environment('local')) {
+    $providers[] = App\Providers\HorizonServiceProvider::class;
+}
+
+return $providers;

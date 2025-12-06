@@ -1,0 +1,25 @@
+{
+    "id": 328,
+    "release_changelog_id": 335,
+    "version": "v13.11.2",
+    "title": "Further optimized page size and load speed",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-11-03T20:58:47+00:00",
+    "updated_at": "2025-11-03T20:58:47+00:00",
+    "changelog": {
+        "id": 335,
+        "release_id": 328,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 335,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3016,
+                "change": "Create route dialog contents are now fetched when they're needed, instead of being loaded & activated every page view."
+            }
+        ]
+    }
+}

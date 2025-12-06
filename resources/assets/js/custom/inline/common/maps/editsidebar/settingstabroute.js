@@ -63,7 +63,7 @@ class SettingsTabRoute extends SettingsTab {
                 $('#save_route_settings_saving').show();
             },
             success: function (json) {
-                showSuccessNotification(lang.get('messages.settings_saved'));
+                showSuccessNotification(lang.get('js.settings_saved'));
 
                 let $title = $('#route_title');
                 if ($title.length > 0) {

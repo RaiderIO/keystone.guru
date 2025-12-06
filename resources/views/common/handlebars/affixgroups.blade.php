@@ -7,12 +7,12 @@
      * Converts a received affix group list from a dungeon route to a parsed handlebars template.
      * @returns {*}
      */
-    function handlebarsAffixGroupsParse(data) {
-        let template = null;
+    function handlebarsAffixGroupsParse(data, summarizeMultipleAffixes = true) {
+        let template;
         if (data.length === 1) {
-            template = Handlebars.templates['affixgroups_single_template'];
+            template = Handlebars.templates['affixgroups_single'];
         } else {
-            template = Handlebars.templates['affixgroups_complex_template'];
+            template = Handlebars.templates['affixgroups_complex'];
         }
         let handlebarsData = $.extend({
             count: data.length,
@@ -52,15 +52,19 @@
 
         // Only for complex affixes
         if (data.length > 1) {
-            let $rowContainer = $($result.find('.affix_list_row_container'));
             let $targetTooltip = $($result.find('.target_tooltip'));
+            if (summarizeMultipleAffixes) {
+                let $rowContainer = $($result.find('.affix_list_row_container'));
 
-            // Put the contents of the row container in the tooltip
-            $targetTooltip.attr('title', $rowContainer.html());
-            // Delete the container, it was only a placeholder
-            $rowContainer.remove();
+                // Put the contents of the row container in the tooltip
+                $targetTooltip.attr('title', $rowContainer.html());
+                // Delete the container, it was only a placeholder
+                $rowContainer.remove();
 
-            $targetTooltip.tooltip();
+                $targetTooltip.tooltip();
+            } else {
+                $targetTooltip.remove();
+            }
         }
 
         return $result.html();

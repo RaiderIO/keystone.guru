@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\BFA;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\BFA;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteMechagonWorkshopTest extends APICombat
         $postBody = $this->getJsonData('BFA/tww_s2_ptr_mechagon_workshop_15', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

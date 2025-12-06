@@ -4,26 +4,26 @@ return [
 
     'passwords' => [
         'email' => [
-            'title'                    => '',
-            'header'                   => '',
-            'email_address'            => '',
-            'send_password_reset_link' => '',
+            'title'                    => 'Redefinir senha',
+            'header'                   => 'Redefinir senha',
+            'email_address'            => 'Endereço de e-mail',
+            'send_password_reset_link' => 'Enviar link de redefinição de senha',
         ],
         'reset' => [
-            'title'            => '',
-            'header'           => '',
-            'email_address'    => '',
-            'password'         => '',
-            'confirm_password' => '',
-            'reset_password'   => '',
+            'title'            => 'Redefinir senha',
+            'header'           => 'Redefinir senha',
+            'email_address'    => 'Endereço de e-mail',
+            'password'         => 'Senha',
+            'confirm_password' => 'Confirmar senha',
+            'reset_password'   => 'Redefinir senha',
         ],
     ],
     'login' => [
-        'title' => '',
+        'title' => 'Entrar',
     ],
     'register' => [
-        'title'  => '',
-        'header' => '',
+        'title'  => 'Registrar',
+        'header' => 'Registrar',
     ],
 
 ];

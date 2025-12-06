@@ -53,7 +53,7 @@ class Random extends Command
         foreach ($json['spells'] as $spellData) {
             $spellId = $spellData['spellId'];
             $this->info(
-                sprintf('%d: %s', $spellId, __($spells->get($spellId)->name?? 'Unknown Spell')),
+                sprintf('%d: %s', $spellId, __($spells->get($spellId)->name ?? 'Unknown Spell')),
             );
         }
 

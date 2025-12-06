@@ -3,28 +3,32 @@
 return [
 
     'retail' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Comercial',
+        'description' => 'Comercial',
     ],
     'wotlk' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'La Ira',
+        'description' => 'La Ira del Rey Exánime',
     ],
     'classic' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Era Clásica',
+        'description' => 'Era Clásica',
     ],
     'beta' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Beta Comercial',
+        'description' => 'Beta Comercial',
     ],
     'cata' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Cata',
+        'description' => 'Cataclysm',
     ],
     'mop' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Mists',
+        'description' => 'Mists of Pandaria',
+    ],
+    'legion-remix' => [
+        'name'        => 'Legion Remix',
+        'description' => 'Legion Remix',
     ],
 
 ];

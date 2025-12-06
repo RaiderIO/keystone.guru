@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Núcleo de Magma',
             'floors' => [
-                'molten_core' => 'Núcleo de Magma',
+                'moltencore' => 'Núcleo de Magma',
             ],
         ],
         'naxxramas_classic' => [

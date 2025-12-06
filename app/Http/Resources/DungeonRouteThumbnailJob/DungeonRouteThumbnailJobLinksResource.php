@@ -28,7 +28,7 @@ class DungeonRouteThumbnailJobLinksResource extends JsonResource
         $isCompleted = $this->status === DungeonRouteThumbnailJob::STATUS_COMPLETED;
 
         return [
-            'status' => route('api.v1.thumbnailjob.get', ['dungeonRouteThumbnailJob' => $this]),
+            'status' => route('api.v1.thumbnailjob.show', ['dungeonRouteThumbnailJob' => $this]),
             'result' => $isCompleted
                 ? url(
                     sprintf(

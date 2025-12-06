@@ -120,6 +120,21 @@ class Floor extends CacheModel implements MappingModelInterface
         // Harrowfall -> The Dawnbreaker
         // Twilight Highlands -> Grim Batol
         241 => 293,
+        // Karazhan
+        809 => 350, // Servant's Quarters
+        810 => 351, // Upper Livery Stables
+        811 => 352, // The Banquet Hall
+        812 => 353, // The Guest Chambers
+        813 => 354, // Opera Hall Balcony
+        814 => 355, // Master's Terrace
+        815 => 356, // Lower Broken Stair
+        816 => 357, // Upper Broken Stair
+        817 => 358, // The Menagerie
+        818 => 359, // Guardian's Library
+        819 => 360, // Library Floor
+        820 => 361, // Upper Library
+        821 => 362, // Gamesman's Hall
+        822 => 363, // Netherspace
     ];
 
     /**
@@ -128,8 +143,18 @@ class Floor extends CacheModel implements MappingModelInterface
     public const UI_MAP_ID_OPEN_WORLD = [
         // Unknown
         0,
+        // Eastern Kingdoms
+        13,
+        // Deadwind Pass
+        42,
+        // Broken Isles
+        619,
         // Azsuna
         630,
+        // Highmountain
+        650,
+        // Suramar
+        680,
         // Maldraxxus
         1536,
         // The Shadowlands

@@ -2,15 +2,15 @@
 
 return [
 
-    'melee'         => '',
-    'ranged'        => '',
-    'caster'        => '',
-    'healer'        => '',
-    'caster_melee'  => '',
-    'healer_caster' => '',
-    'healer_melee'  => '',
-    'ranged_caster' => '',
-    'ranged_healer' => '',
-    'ranged_melee'  => '',
+    'melee'         => 'Cuerpo a cuerpo',
+    'ranged'        => 'A distancia',
+    'caster'        => 'Lanzador',
+    'healer'        => 'Sanador',
+    'caster_melee'  => 'Lanzador/Cuerpo a cuerpo',
+    'healer_caster' => 'Sanador/Lanzador',
+    'healer_melee'  => 'Sanador/Cuerpo a cuerpo',
+    'ranged_caster' => 'A distancia/Lanzador',
+    'ranged_healer' => 'A distancia/Sanador',
+    'ranged_melee'  => 'A distancia/Cuerpo a cuerpo',
 
 ];

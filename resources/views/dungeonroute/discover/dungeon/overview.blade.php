@@ -26,6 +26,12 @@ use App\Models\GameVersion\GameVersion;
         ],
 ])
 
+@section('scripts')
+    @parent
+
+    @include('common.handlebars.affixgroups')
+@endsection
+
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 

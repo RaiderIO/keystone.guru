@@ -478,6 +478,10 @@ return [
                 'header' => 'Hodor',
                 'submit' => 'Hodor',
             ],
+            'dungeonmappingversionaccuracy' => [
+                'title'  => 'Hodor',
+                'header' => 'Hodor',
+            ],
         ],
         'npc' => [
             'import' => [
@@ -513,6 +517,7 @@ return [
             'view_mdt_diff'                               => 'Hodor',
             'view_dungeon_mapping_hash'                   => 'Hodor',
             'view_dungeon_mapping_version_to_mdt_mapping' => 'Hodor',
+            'view_dungeon_mapping_version_accuracy'       => 'Hodor',
             'subheader_enemy_forces'                      => 'Hodor',
             'enemy_forces_import'                         => 'Hodor',
             'subheader_wowtools'                          => 'Hodor',

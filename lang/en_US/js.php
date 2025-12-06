@@ -133,12 +133,6 @@ return [
     'floorunion_title'                                => 'Mark a location on the map that represents another floor. Hotkey: <b>:hotkey</b>',
     'floorunionarea'                                  => 'Unionarea',
     'floorunionarea_title'                            => 'Draws a floor union area on the map which represents the area in which a floor union is actually active. Hotkey: <b>:hotkey</b>',
-    'draw_handler_route_tooltip_start'                => 'Click to start drawing path.',
-    'draw_handler_route_tooltip_cont'                 => 'Click to continue drawing path.',
-    'draw_handler_route_tooltip_end'                  => 'Click the \'Finish\' button on the toolbar to complete your path.',
-    'draw_handler_brushline_tooltip_start'            => 'Click to start drawing line.',
-    'draw_handler_brushline_tooltip_cont'             => 'Click and drag to continue drawing line.',
-    'draw_handler_brushline_tooltip_end'              => 'Continue clicking/dragging, when done, press the \'Finish\' button on the toolbar to complete your line.',
     'title_raid_marker_no_selection'                  => 'No raid marker',
     'title_raid_marker_star'                          => 'Star',
     'title_raid_marker_circle'                        => 'Circle',
@@ -372,7 +366,7 @@ return [
     'view_label'                                                           => 'View',
     'collaborator_label'                                                   => 'Edit',
     'moderator_label'                                                      => 'Moderate',
-    'admin_label'                                                          => 'Own',
+    'admin_label'                                                          => 'Admin',
     'change_role_success'                                                  => 'Permissions updated',
     'change_default_role_success'                                          => 'Default role updated',
     'team_admin'                                                           => 'Administrate team',
@@ -483,5 +477,6 @@ return [
     'too_much_data_label'                                                  => 'Too much runs found - please further refine your search',
     'error_loading_data_label'                                             => 'Error loading data - please try again',
     'run_count_label'                                                      => 'Showing data from :count runs',
+    'refresh_thumbnails_label'                                             => 'Refresh thumbnails',
 
 ];

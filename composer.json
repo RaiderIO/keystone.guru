@@ -19,16 +19,8 @@
             "url": "https://github.com/Wotuu/opensearch-laravel"
         },
         {
-            "type": "package",
-            "package": {
-                "name": "wotuu/keystone.guru.deployer",
-                "version": "0.1",
-                "source": {
-                    "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
-                    "type": "git",
-                    "reference": "b43bfe2d5420e3bee55bb3bf7c2f86ffdefe48a4"
-                }
-            }
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/laravel-auto-translation.git"
         },
         {
             "type": "package",
@@ -39,6 +31,10 @@
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
                     "reference": "bdc8fea594fe4e4fdd6ef0e0c12e6198282c37c9"
+                },
+                "dist": {
+                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/bdc8fea594fe4e4fdd6ef0e0c12e6198282c37c9.zip",
+                    "type": "zip"
                 }
             }
         },
@@ -51,6 +47,10 @@
                     "url": "https://github.com/Nnoggie/MDT_Legacy.git",
                     "type": "git",
                     "reference": "894efd58fdfb803b892f34881d88d72cb331ffd9"
+                },
+                "dist": {
+                    "url": "https://github.com/Nnoggie/MDT_Legacy/archive/894efd58fdfb803b892f34881d88d72cb331ffd9.zip",
+                    "type": "zip"
                 }
             }
         },
@@ -60,7 +60,7 @@
                 "name": "paquettg/php-html-parser",
                 "version": "3.1",
                 "source": {
-                    "url": "git@github.com:Wotuu/php-html-parser.git",
+                    "url": "https://github.com/Wotuu/php-html-parser.git",
                     "type": "git",
                     "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
                 }
@@ -91,9 +91,9 @@
         "intervention/image": "^3.4",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^11.46",
-        "laravel/horizon": "^5.22",
         "laravel/octane": "^2.4",
         "laravel/pennant": "^1.7",
+        "laravel/reverb": "^1.6",
         "laravel/socialite": "^5.11",
         "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.9",
@@ -108,17 +108,17 @@
         "predis/predis": "^2.0",
         "rollbar/rollbar-laravel": "^8.0",
         "santigarcor/laratrust": "^8.3",
+        "sentry/sentry-laravel": "^4.18",
         "shrikeh/teapot": "^2.3",
         "socialiteproviders/battlenet": "^4.1.0",
         "socialiteproviders/discord": "^4.2.0",
+        "spatie/laravel-html": "^3.11",
         "spatie/url": "^2.3",
         "symfony/http-client": "^7.1",
         "symfony/mailgun-mailer": "^7.1",
         "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
-        "vildanbina/laravel-auto-translation": "^1.5",
-        "zircote/swagger-php": "^4.8",
-        "spatie/laravel-html": "^3.11"
+        "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
@@ -129,6 +129,7 @@
         "friendsofphp/php-cs-fixer": "^3.66",
         "larastan/larastan": "^2.8",
         "laravel-lang/lang": "^15.2",
+        "laravel/horizon": "^5.36",
         "lukasss93/laravel-larex": "^4.5",
         "lukasss93/laravel-larex-crowdin": "^2.3",
         "mockery/mockery": "^1.6",
@@ -136,7 +137,7 @@
         "phpunit/phpunit": "^11.0.1",
         "rector/rector": "^1.0",
         "swoole/ide-helper": "~6.0.0",
-        "wotuu/keystone.guru.deployer": "0.1"
+        "vildanbina/laravel-auto-translation": "dev-main"
     },
     "autoload": {
         "classmap": [
@@ -161,7 +162,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
-        "php-cs-fixer": "php-cs-fixer --config=./.php-cs-fixer.php"
+        "fix": "php-cs-fixer fix"
     },
     "config": {
         "preferred-install": "dist",

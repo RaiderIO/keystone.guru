@@ -118,7 +118,7 @@ class SettingsTabPull extends SettingsTab {
                 $('#save_pull_settings_saving').show();
             },
             success: function (json) {
-                // showSuccessNotification(lang.get('messages.pull_gradient_settings_saved'));
+                // showSuccessNotification(lang.get('js.pull_gradient_settings_saved'));
             },
             complete: function () {
                 $('#save_pull_settings').show();

@@ -44,7 +44,7 @@ if (count($affixes) == 0) {
             'mappingVersion' => $dungeonroute->mappingVersion,
             'dungeonroute' => $dungeonroute,
             'edit' => false,
-            'floorId' => $floor->id,
+            'floor' => $floor,
             'noUI' => false,
             'gestureHandling' => false,
             'showAttribution' => false,

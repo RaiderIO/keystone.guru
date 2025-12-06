@@ -40,8 +40,8 @@ class KillZoneEnemyResource extends JsonResource
         $enemyForces = $this->npc->enemyForcesByMappingVersion($this->mappingVersion->id);
 
         return [
-            'npcId'       => $this->npc_id,
-//            'mdtIndex'    => $this->mdt_id,
+            'npcId' => $this->npc_id,
+            //            'mdtIndex'    => $this->mdt_id,
             'enemyForces' => $enemyForces?->enemy_forces ?? 0,
         ];
     }

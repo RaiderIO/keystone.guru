@@ -2,8 +2,8 @@
 
 return [
 
-    'npc_death'    => '',
-    'player_death' => '',
-    'player_spell' => '',
+    'npc_death'    => 'Mort de l\'ennemi',
+    'player_death' => 'Mort du joueur',
+    'player_spell' => 'Lancer de Soif de sang',
 
 ];

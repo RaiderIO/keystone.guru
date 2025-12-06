@@ -26,6 +26,12 @@ $affixgroup ??= null;
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
+@section('scripts')
+    @parent
+
+    @include('common.handlebars.affixgroups')
+@endsection
+
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 

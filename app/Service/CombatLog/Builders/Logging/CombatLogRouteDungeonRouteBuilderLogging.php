@@ -48,7 +48,7 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
 
     public function buildKillZonesNotAllSpellsAssigned(int $totalAssignedSpells, int $totalSpells): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function buildKillZonesCreateNewFinalPull(array $guids): void
@@ -58,7 +58,7 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
 
     public function determineSpellsCastBetweenInvalidSpellIdBetween(int $spellId): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function determineSpellsCastBetweenInvalidSpellIdAfter(int $spellId): void

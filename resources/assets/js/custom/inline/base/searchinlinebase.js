@@ -98,7 +98,7 @@ class SearchInlineBase extends InlineCode {
 
 
         $(this.options.currentFiltersSelector).html(
-            `<span class="mr-2">${lang.get('messages.filters')}:</span>${html}`
+            `<span class="mr-2">${lang.get('js.filters')}:</span>${html}`
         )
     }
 

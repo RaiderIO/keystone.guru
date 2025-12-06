@@ -76,12 +76,12 @@ return [
         ],
     ],
 
-    'echo' => [
-        'url'    => env('LARAVEL_ECHO_SERVER_URL'),
-        'port'   => env('LARAVEL_ECHO_SERVER_PORT'),
+    'reverb' => [
+        'url'    => env('REVERB_INTERNAL_URL'),
+        'port'   => env('REVERB_INTERNAL_PORT'),
         'client' => [
-            'app_id' => env('LARAVEL_ECHO_SERVER_CLIENT_APP_ID'),
-            'key'    => env('LARAVEL_ECHO_SERVER_CLIENT_KEY'),
+            'app_id' => env('REVERB_APP_ID'),
+            'key'    => env('REVERB_APP_KEY'),
         ],
 
         'randomsuffixes' => [
@@ -232,7 +232,7 @@ return [
             'category'       => 24,
             'affix_overview' => 12,
             'search'         => 24,
-            'per_dungeon'    => 4,
+            'per_dungeon'    => 8,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [

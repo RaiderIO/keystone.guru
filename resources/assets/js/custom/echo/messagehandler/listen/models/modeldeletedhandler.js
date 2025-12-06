@@ -25,7 +25,7 @@ class ModelDeletedHandler extends BaseModelHandler {
 
         let state = getState();
         if (state.isEchoEnabled() && state.getUser().public_key !== user.public_key && user.name !== null) {
-            showInfoNotification(lang.get('messages.echo_object_deleted_notification')
+            showInfoNotification(lang.get('js.echo_object_deleted_notification')
                 .replace('{object}', localMapObject.toString())
                 .replace('{user}', user.name));
         }

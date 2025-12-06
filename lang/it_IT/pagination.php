@@ -2,7 +2,7 @@
 
 return [
 
-    'previous' => '',
-    'next'     => '',
+    'previous' => '&laquo; Precedente',
+    'next'     => 'Successivo &raquo;',
 
 ];

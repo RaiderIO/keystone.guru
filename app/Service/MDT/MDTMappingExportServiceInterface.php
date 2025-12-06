@@ -8,7 +8,7 @@ interface MDTMappingExportServiceInterface
 {
     public function getMDTMappingAsLuaString(
         MappingVersion $mappingVersion,
-        bool $excludeTranslations = false,
-        bool $forceEnemyPatrols = false
+        bool           $excludeTranslations = false,
+        bool           $forceEnemyPatrols = false,
     ): string;
 }

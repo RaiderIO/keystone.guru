@@ -11,17 +11,17 @@ use Teapot\StatusCode;
 class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
 {
     /** @var Client Guzzle client; used for communicating with the echo server API. */
-    private Client $_client;
+    private Client $client;
 
     public function __construct()
     {
         // Make sure we don't have a trailing slash in the app_url
-        $appUrl = trim((string)config('keystoneguru.echo.url'), '/');
+        $appUrl = trim((string)config('reverb.apps.apps.0.options.host'), '/');
 
         try {
-            $this->_client = new Client([
+            $this->client = new Client([
                 // Base URI is used with relative requests
-                'base_uri' => sprintf('%s:%s', $appUrl, config('keystoneguru.echo.port')),
+                'base_uri' => sprintf('%s:%s', $appUrl, config('reverb.apps.apps.0.options.port')),
                 // You can set any number of default request options.
                 'timeout' => 2.0,
             ]);
@@ -37,15 +37,15 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     /**
      * @throws Exception
      */
-    private function _doRequest($uri): array
+    private function doRequest($uri): array
     {
         $result = [];
 
-        if ($this->_client !== null) {
+        if ($this->client !== null) {
             // Perform the API request with the correct auth key
-            $response = $this->_client->get(
-                sprintf('apps/%s/%s', config('keystoneguru.echo.client.app_id'), $uri),
-                ['query' => ['auth_key' => config('keystoneguru.echo.client.key')]],
+            $response = $this->client->get(
+                sprintf('apps/%s/%s', config('reverb.apps.apps.0.app_id'), $uri),
+                ['query' => ['auth_key' => config('reverb.apps.apps.0.key')]],
             );
             if ($response->getStatusCode() === StatusCode::OK) {
                 $result = json_decode((string)$response->getBody(), true);
@@ -60,9 +60,17 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
     /**
      * {@inheritDoc}
      **/
+    public function getHealth(): array
+    {
+        return $this->doRequest('up');
+    }
+
+    /**
+     * {@inheritDoc}
+     **/
     public function getStatus(): array
     {
-        return $this->_doRequest('status');
+        return $this->doRequest('status');
     }
 
     /**
@@ -70,7 +78,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
      **/
     public function getChannels(): array
     {
-        return $this->_doRequest('channels')['channels'];
+        return $this->doRequest('channels')['channels'];
     }
 
     /**
@@ -78,7 +86,7 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
      **/
     public function getChannelInfo($channelName): array
     {
-        return $this->_doRequest(sprintf('channels/%s', $channelName));
+        return $this->doRequest(sprintf('channels/%s', $channelName));
     }
 
     /**
@@ -86,6 +94,6 @@ class EchoServerHttpApiService implements EchoServerHttpApiServiceInterface
      **/
     public function getChannelUsers($channelName): array
     {
-        return $this->_doRequest(sprintf('channels/%s/users', $channelName))['users'];
+        return $this->doRequest(sprintf('channels/%s/users', $channelName))['users'];
     }
 }

@@ -22,6 +22,7 @@ use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
+use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -112,7 +113,7 @@ class AdminToolsController extends Controller
             'dungeonroute' => $dungeonRoute,
             'title'        => $dungeonRoute->getTitleSlug(),
             'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, $floor),
+            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, User::getCurrentUserMapFacadeStyle()),
             'floorIndex'   => 1,
         ]);
     }

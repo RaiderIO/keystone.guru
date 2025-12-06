@@ -91,19 +91,21 @@ services:
     environment:
       - "APP_URL=http://nginx"
 
-  laravel-echo-server:
+  reverb:
     build:
-      context: docker-compose/laravel-echo-server
+      context: docker-compose/app
       dockerfile: Dockerfile
-    image: laravel-echo-server
-    container_name: keystone.guru-laravel-echo-server
+    image: keystone.guru
+    container_name: keystone.guru-reverb
     depends_on:
       - redis
     restart: no
+    working_dir: /var/www/
+    command: php /var/www/artisan reverb:start --debug
     ports:
       - "6001:6001"
     volumes:
-      - ./:/app
+      - ./:/var/www
     networks:
       - keystone.guru
 
@@ -183,7 +185,7 @@ services:
       # It complains about php-fpm not being there if this is not running first
       - app
       - app-swoole
-      - laravel-echo-server
+      - reverb
 #      - php-deployer
     ports:
       - "8008:80"

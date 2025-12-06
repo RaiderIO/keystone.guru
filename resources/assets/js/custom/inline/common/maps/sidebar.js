@@ -47,6 +47,8 @@ class Sidebar {
         else if (this.options.defaultState === 1) {
             // But if we forcibly show the sidebar, do not save it in the cookie but remember the previous value instead
             this.showSidebar(true);
+        } else if (this.options.defaultState === 0) {
+            this.hideSidebar();
         }
     }
 
@@ -80,7 +82,7 @@ class Sidebar {
         $sidebar.removeClass('active');
         // Move toggle button back
         $sidebarToggle.removeClass('active');
-        // $sidebarToggle.attr('title', lang.get('messages.sidebar_expand'));
+        $sidebarToggle.attr('title', lang.get('js.sidebar_expand'));
         // Toggle image
         if (this.options.anchor === 'left') {
             $sidebarToggle.find('i').removeClass('fa-arrow-left').addClass('fa-arrow-right');
@@ -102,7 +104,7 @@ class Sidebar {
         $sidebar.addClass('active');
         // Move toggle button
         $sidebarToggle.addClass('active');
-        $sidebarToggle.attr('title', lang.get('messages.sidebar_collapse'));
+        $sidebarToggle.attr('title', lang.get('js.sidebar_collapse'));
         // Toggle image
         if (this.options.anchor === 'left') {
             $sidebarToggle.find('i').removeClass('fa-arrow-right').addClass('fa-arrow-left');

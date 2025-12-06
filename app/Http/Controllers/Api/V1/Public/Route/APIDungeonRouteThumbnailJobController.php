@@ -35,7 +35,7 @@ class APIDungeonRouteThumbnailJobController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function get(
+    public function show(
         DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
     ): DungeonRouteThumbnailJobResource {
         Gate::authorize('view', $dungeonRouteThumbnailJob->dungeonRoute);

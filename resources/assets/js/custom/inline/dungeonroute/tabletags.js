@@ -124,7 +124,7 @@ class DungeonRouteTableTagsHandler {
                 name: name,
             },
             success: function (json) {
-                showSuccessNotification(lang.get('messages.tag_create_success'));
+                showSuccessNotification(lang.get('js.tag_create_success'));
 
                 self._renderTag(json);
                 self._refreshTagListeners();
@@ -153,7 +153,7 @@ class DungeonRouteTableTagsHandler {
                 _method: 'DELETE',
             },
             success: function () {
-                showSuccessNotification(lang.get('messages.tag_delete_success'));
+                showSuccessNotification(lang.get('js.tag_delete_success'));
 
                 self._removeRenderedTagById(id);
             }

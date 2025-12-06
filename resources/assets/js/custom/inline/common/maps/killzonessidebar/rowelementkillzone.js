@@ -178,7 +178,7 @@ class RowElementKillZone extends RowElement {
         // Reset any previous states
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_placeholder:not(.draggable--original)`).toggle(!hasAnything);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`)
-            .attr('title', lang.get(`messages.kill_zone_has_boss_label`, {bosses: bossNames.join(', ')}))
+            .attr('title', lang.get(`js.kill_zone_has_boss_label`, {bosses: bossNames.join(', ')}))
             .toggle(bossNames.length > 0)
             .refreshTooltips();
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);

@@ -160,13 +160,11 @@ $breadcrumbsParams ??= [];
     @endif
 
     @if($header)
-        @component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
-            @include('common.modal.createroute')
-        @endcomponent
+        @include('common.general.modallazy', ['targetView' => 'common.modal.createroute', 'id' => 'create_route_modal', 'size' => 'xl'])
 
-        @component('common.general.modal', ['id' => 'upload_logs_modal', 'size' => 'lg'])
-            @include('common.modal.uploadlogs')
-        @endcomponent
+{{--        @component('common.general.modal', ['id' => 'upload_logs_modal', 'size' => 'lg'])--}}
+{{--            @include('common.modal.uploadlogs')--}}
+{{--        @endcomponent--}}
     @endif
 
 @endsection

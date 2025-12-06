@@ -2,8 +2,8 @@
 
 return [
 
-    'name'      => '',
-    'name_med'  => '',
-    'name_long' => '',
+    'name'      => 'Saison :season',
+    'name_med'  => ':expansion Saison :season',
+    'name_long' => ':expansion Saison :season',
 
 ];

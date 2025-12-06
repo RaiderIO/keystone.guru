@@ -96,11 +96,15 @@ class CommonMapsMap extends InlineCode {
 
             // Trigger info popover
             $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
+                $('#view_dungeonroute_affixes').html(
+                    handlebarsAffixGroupsParse(self.options.dungeonroute.affixes)
+                );
+
                 $('#view_dungeonroute_group_setup').html(
                     handlebarsGroupSetupParse(self.options.dungeonroute.setup)
                 );
 
-                // refreshTooltips();
+                refreshTooltips($('#view_dungeonroute_affixes .select_icon'));
             });
 
             // Enemy info should be set on mouseover
@@ -228,7 +232,7 @@ class CommonMapsMap extends InlineCode {
                     // Floor selection may not exist
                     if ($selector.length > 0) {
                         let messageKey = selectors[i][0];
-                        $selector.attr('data-intro', lang.get(`messages.${messageKey}`));
+                        $selector.attr('data-intro', lang.get(`js.${messageKey}`));
                         $selector.attr('data-position', selectors[i][2]);
                         $selector.attr('data-step', step);
 
@@ -305,7 +309,7 @@ class CommonMapsMap extends InlineCode {
 
         // Add the header
         $mapObjectGroupVisibilityDropdown.append($('<a>', {
-            text: lang.get(`messages.header_map_object_group_label`),
+            text: lang.get(`js.header_map_object_group_label`),
             class: 'dropdown-item disabled'
         }));
 
@@ -342,7 +346,7 @@ class CommonMapsMap extends InlineCode {
                 }
 
                 $mapObjectGroupVisibilityDropdown.append($('<a>', {
-                    text: lang.get(`messages.${group.names[0]}_map_object_group_label`),
+                    text: lang.get(`js.${group.names[0]}_map_object_group_label`),
                     class: 'dropdown-item ' + (selected ? 'active' : ''),
                     'data-group': group.names[0]
                 }));
@@ -538,7 +542,7 @@ class CommonMapsMap extends InlineCode {
             },
             success: function () {
                 $('#userreport_enemy_modal').modal('hide');
-                showSuccessNotification(lang.get('messages.user_report_enemy_success'));
+                showSuccessNotification(lang.get('js.user_report_enemy_success'));
             },
             complete: function () {
                 $('#userreport_enemy_modal_submit').show();

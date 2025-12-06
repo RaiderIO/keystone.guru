@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\Generic;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\Generic;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
@@ -27,7 +27,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_npc_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -50,7 +50,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_npc_first_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -73,7 +73,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_npc_multiple_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -96,7 +96,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_spell_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -120,7 +120,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_spell_first_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -144,7 +144,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_spell_multiple_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -168,7 +168,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_spell_multiple_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

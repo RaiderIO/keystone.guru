@@ -3,16 +3,16 @@
 return [
 
     'category' => [
-        'class' => '',
-        'item'  => '',
-        'misc'  => '',
-        'meta'  => '',
+        'class' => 'Klasse',
+        'item'  => 'Gegenstand',
+        'misc'  => 'Verschiedenes',
+        'meta'  => 'Meta',
     ],
-    'no_attributes'       => '',
-    'rogue_shroud_skip'   => '',
-    'warlock_gate_skip'   => '',
-    'mage_slow_fall_skip' => '',
-    'invisibility_potion' => '',
-    'death_skip'          => '',
+    'no_attributes'       => 'Keine Attribute',
+    'rogue_shroud_skip'   => 'Schurke Schattensprung',
+    'warlock_gate_skip'   => 'Hexenmeister Tor-Sprung',
+    'mage_slow_fall_skip' => 'Magier Langsamer Fall-Sprung',
+    'invisibility_potion' => 'Unsichtbarkeitstrank',
+    'death_skip'          => 'Todessprung',
 
 ];

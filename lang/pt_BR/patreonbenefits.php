@@ -2,11 +2,11 @@
 
 return [
 
-    'ad-free'                 => '',
-    'unlimited-dungeonroutes' => '',
-    'unlisted-routes'         => '',
-    'animated-polylines'      => '',
-    'advanced-simulation'     => '',
-    'ad-free-team-members'    => '',
+    'ad-free'                 => 'Sem anúncios',
+    'unlimited-dungeonroutes' => 'Rotas ilimitadas',
+    'unlisted-routes'         => 'Rotas não listadas',
+    'animated-polylines'      => 'Linhas poligonais animadas',
+    'advanced-simulation'     => 'Simulação avançada',
+    'ad-free-team-members'    => 'Sem anúncios para membros da equipe',
 
 ];

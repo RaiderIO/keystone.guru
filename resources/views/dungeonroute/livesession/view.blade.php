@@ -41,11 +41,11 @@ $dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
             'mappingVersion' => $dungeonroute->mappingVersion,
             'livesession' => $livesession,
             'edit' => false,
-            'floorId' => $floor->id,
+            'floor' => $floor,
             'show' => [
                 'header' => true,
                 'controls' => [
-                    'live' => true,
+                    'liveSession' => true,
                     'pulls' => true,
                     'enemyInfo' => true,
                 ],

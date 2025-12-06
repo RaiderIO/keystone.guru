@@ -29,7 +29,7 @@ return [
             'key_level'               => 'Уровень ключа',
             'affixes'                 => 'Аффикс',
             'affixes_title'           => 'Выбрать аффикс',
-            'select_affixes'          => '',
+            'select_affixes'          => 'Выбрать аффиксы',
             'affixes_selected'        => '{0} аффиксов выбрано',
             'enemy_forces'            => 'Силы врага',
             'enemy_forces_complete'   => 'Завершенные',
@@ -46,9 +46,9 @@ return [
     ],
     'edit' => [
         'title'                                   => 'Редактировать %s',
-        'linkpreview_title'                       => '',
-        'linkpreview_default_description'         => '',
-        'linkpreview_default_description_sandbox' => '',
+        'linkpreview_title'                       => '%s | Keystone.guru',
+        'linkpreview_default_description'         => 'Редактировать маршрут М+ для подземелья %s от %s',
+        'linkpreview_default_description_sandbox' => 'Редактировать маршрут М+ для подземелья %s',
     ],
     'embed' => [
         'title'            => 'Встроить :routeTitle',
@@ -56,8 +56,8 @@ return [
         'select_floor'     => 'Выбрать уровень',
         'affixes_title'    => 'Аффикс',
         'affixes_selected' => '{0} аффиксов выбрано',
-        'view_route'       => '',
-        'present_route'    => '',
+        'view_route'       => 'Просмотреть маршрут',
+        'present_route'    => 'Представить маршрут',
         'copy_mdt_string'  => 'Скопировать строку MDT',
     ],
     'limitreached' => [
@@ -84,10 +84,10 @@ return [
     ],
     'view' => [
         'any'                                     => 'Все',
-        'linkpreview_title'                       => '',
-        'linkpreview_default_description'         => '',
-        'linkpreview_default_description_sandbox' => '',
-        'linkpreview_default_description_explore' => '',
+        'linkpreview_title'                       => '%s',
+        'linkpreview_default_description'         => 'Маршрут М+ для подземелья %s от %s.',
+        'linkpreview_default_description_sandbox' => 'Временный маршрут М+ для подземелья %s.',
+        'linkpreview_default_description_explore' => 'Исследовать %s.',
     ],
 
 ];

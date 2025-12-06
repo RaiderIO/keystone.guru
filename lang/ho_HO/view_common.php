@@ -449,7 +449,7 @@ return [
             'horde'                                  => 'Hodor',
             'new_mapping_version_header_title'       => 'Hodor',
             'new_mapping_version_header_description' => 'Hodor',
-            'route' => 'Hodor',
+            'route'                                  => 'Hodor',
         ],
     ],
     'mappingversion' => [
@@ -478,6 +478,7 @@ return [
             'enemy' => [
                 'report_enemy_bug'       => 'Hodor',
                 'your_name'              => 'Hodor',
+                'what_is_wrong'          => 'Hodor',
                 'contact_by_email'       => 'Hodor',
                 'contact_by_email_guest' => 'Hodor',
                 'submit'                 => 'Hodor',
@@ -502,6 +503,7 @@ return [
             'enemy_forces_shrouded'           => 'Hodor',
             'enemy_forces_shrouded_zul_gamux' => 'Hodor',
             'timer_max_seconds'               => 'Hodor',
+            'timer_max_minutes'               => 'Hodor',
             'save'                            => 'Hodor',
         ],
         'mapsettings' => [
@@ -538,7 +540,7 @@ return [
             'copy_to_clipboard'                => 'Hodor',
         ],
         'simulate' => [
-            'intro' => 'Hodor',
+            'intro'                      => 'Hodor',
             'title'                      => 'Hodor',
             'get_simulationcraft_string' => 'Hodor',
             'simulationcraft_string'     => 'Hodor',
@@ -589,12 +591,12 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Hodor',
                 'ranged_pull_compensation_yards_title' => 'Hodor',
-                'use_mounts'        => 'Hodor',
-                'use_mounts_title'  => 'Hodor',
-                'patreon_link_text' => 'Hodor',
-                'patreon_only'      => 'Hodor',
-                'advanced_options'  => 'Hodor',
-                'description'       => 'Hodor',
+                'use_mounts'                           => 'Hodor',
+                'use_mounts_title'                     => 'Hodor',
+                'patreon_link_text'                    => 'Hodor',
+                'patreon_only'                         => 'Hodor',
+                'advanced_options'                     => 'Hodor',
+                'description'                          => 'Hodor',
             ],
         ],
         'uploadlogs' => [

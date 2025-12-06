@@ -24,7 +24,7 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_player_deaths_header')
+        return lang.get('js.filter_input_player_deaths_header')
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 

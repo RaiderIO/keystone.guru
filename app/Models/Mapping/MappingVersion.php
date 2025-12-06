@@ -336,32 +336,6 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<Enemy>
-     */
-    public function mapContextEnemies(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
-    {
-        /** @var Collection<Enemy> $enemies */
-        $enemies = $this->enemies()
-            ->with(['floor'])
-            ->without(['npc'])
-            ->get()
-            ->makeHidden(['enemy_active_auras']);
-
-        if ($this->facade_enabled && $useFacade) {
-            foreach ($enemies as $enemy) {
-                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-                    $this,
-                    $enemy->getLatLng(),
-                );
-
-                $enemy->setLatLng($convertedLatLng);
-            }
-        }
-
-        return $enemies;
-    }
-
-    /**
      * @todo duplicated function in DungeonRoute.php
      */
     private function convertVerticesForFacade(

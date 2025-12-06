@@ -13,6 +13,7 @@ return [
     'discover_new_routes_description' => 'Easily browse for routes per dungeon in various categories to find a route that suits your group perfectly.
                                     Integration with :archon_gg makes it easy to see which dungeons are the easiest to time for any affix.
                                     Still can\'t find a route that suits your needs? The :routesearch page allows you to dial in on your exact needs to find a perfect match.',
+    'discover_new_routes_route_search'   => 'route search',
     'create_your_own_routes'             => 'Create your own routes',
     'create_your_own_routes_description' => 'Import your routes from Mythic Dungeon Tools or :createANewRoute from scratch. Keystone.guru offers various tools to make your route a memorable one,
                                     such as free drawing, pathing and placing of icons/comments. Enemy forces can be displayed raw or in percentage on a whim. Various other settings allow you

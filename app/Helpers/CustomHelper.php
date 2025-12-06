@@ -26,21 +26,31 @@ function isAlertDismissed(string $id): bool
 
 /**
  * Get the initials from a name
- *
- * @param $name string
  */
 function initials(string $name): string
 {
-    $explode = explode(' ', $name);
-    if (count($explode) > 1) {
-        $explode = array_filter($explode, static fn($element) => !empty($element));
+    // Ensure we're working in UTF‑8
+    $name = trim($name);
 
-        $result = implode('', array_map(static fn($element) => $element[0], $explode));
-    } else {
-        $result = substr($name, 0, 2);
+    if ($name === '') {
+        return '';
     }
 
-    return strtoupper($result);
+    $parts = preg_split('/\s+/u', $name) ?: [];
+
+    if (count($parts) > 1) {
+        // Take the first character of each word (multibyte‑safe)
+        $letters = array_map(
+            static fn(string $part) => mb_substr($part, 0, 1, 'UTF-8'),
+            $parts,
+        );
+        $result = implode('', $letters);
+    } else {
+        // Single word: first two characters (multibyte‑safe)
+        $result = mb_substr($name, 0, 2, 'UTF-8');
+    }
+
+    return mb_strtoupper($result, 'UTF-8');
 }
 
 /**
@@ -98,6 +108,23 @@ if (!function_exists('onSwooleServer')) {
 function ksgAsset(string $path): string
 {
     return sprintf('%s/%s', config('keystoneguru.assets_base_url'), $path);
+}
+
+/**
+ * Retains functionality of locally compiled assets but also allows for assets to be served from a CDN in non-local environments.
+ *
+ * @param  string $path
+ * @return string
+ */
+function ksgCompiledAsset(string $path): string
+{
+    if (app()->environment('local')) {
+        return asset($path);
+    }
+
+    $revision = trim(file_get_contents(base_path('version')));
+
+    return sprintf('%s/compiled/%s/%s', config('keystoneguru.assets_base_url'), $revision, $path);
 }
 
 function ksgAssetImage(string $path = ''): string

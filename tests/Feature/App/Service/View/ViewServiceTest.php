@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\View;
+namespace Tests\Feature\App\Service\View;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;

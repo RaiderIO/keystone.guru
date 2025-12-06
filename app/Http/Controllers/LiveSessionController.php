@@ -19,9 +19,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Teapot\StatusCode;
-use Illuminate\Support\Facades\Gate;
 
 class LiveSessionController extends Controller
 {
@@ -71,7 +71,7 @@ class LiveSessionController extends Controller
             } catch (Exception $exception) {
                 report($exception);
 
-                Log::error('Echo server is probably not running!');
+                Log::error('Reverb server is probably not running!');
             }
         }
 
@@ -145,7 +145,7 @@ class LiveSessionController extends Controller
         }
 
         // It's broken - get rid of it
-        if ($livesession->dungeonroute === null) {
+        if ($livesession->dungeonRoute === null) {
             logger()->debug('Live session is attached to a deleted dungeon route - deleting live session', [
                 'live_session_id'               => $livesession->id,
                 'live_session_public_key'       => $livesession->public_key,
@@ -177,7 +177,7 @@ class LiveSessionController extends Controller
                 'title'        => $dungeonroute->getTitleSlug(),
                 'livesession'  => $livesession,
                 'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextLiveSession($livesession, $floor),
+                'mapContext'   => $mapContextService->createMapContextLiveSession($livesession, User::getCurrentUserMapFacadeStyle()),
             ]);
         }
     }

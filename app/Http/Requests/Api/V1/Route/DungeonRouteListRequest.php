@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\V1\Route;
 
 use App\Http\Requests\Api\V1\APIFormRequest;
-use Illuminate\Validation\Rule;
 
 class DungeonRouteListRequest extends APIFormRequest
 {

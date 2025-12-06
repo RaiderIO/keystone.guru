@@ -2,7 +2,7 @@
 
 return [
 
-    'player_position' => '',
-    'enemy_position'  => '',
+    'player_position' => 'Posizione del giocatore',
+    'enemy_position'  => 'Posizione nemica',
 
 ];

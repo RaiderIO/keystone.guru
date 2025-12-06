@@ -37,6 +37,7 @@ use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
 use App\Http\Controllers\Ajax\AjaxUserReportController;
+use App\Http\Controllers\Ajax\AjaxViewController;
 use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionAreaController;
 use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
@@ -52,6 +53,7 @@ use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\Floor\FloorController;
 use App\Http\Controllers\GameVersionController;
+use App\Http\Controllers\Javascript\JavascriptController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
@@ -77,6 +79,11 @@ Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group
 
 Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     Auth::routes();
+
+    /** Local usage only */
+    Route::get('js-gen/{dungeon}/data/{mappingVersion}/{mapFacadeStyle}.js', (new JavascriptController())->mapContextMappingVersionData(...))->name('js.mapcontext.mapping_version_data');
+    Route::get('js-gen/{dungeon}/data/{locale}.js', (new JavascriptController())->mapContextDungeonData(...))->name('js.mapcontext.dungeon_data');
+    Route::get('js-gen/static/{locale}.js', (new JavascriptController())->mapContextStaticData(...))->name('js.mapcontext.static');
 
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));
@@ -440,6 +447,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
     Route::prefix('ajax')->middleware('ajax')->group(static function () {
         Route::get('refresh-csrf', (new AjaxSiteController())->refreshCsrf(...))->name('api.refresh_csrf');
+        Route::get('view/{view}', (new AjaxViewController())->view(...))->name('ajax.view');
 
         Route::prefix('tag')->group(static function () {
             Route::get('/', (new AjaxTagController())->all(...))->name('ajax.tag.all');

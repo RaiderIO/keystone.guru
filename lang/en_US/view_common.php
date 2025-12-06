@@ -481,6 +481,7 @@ return [
             'enemy' => [
                 'report_enemy_bug'       => 'Report enemy bug',
                 'your_name'              => 'Your name',
+                'what_is_wrong'          => 'Please describe what is wrong with this enemy',
                 'contact_by_email'       => 'Contact me by e-mail if required for further investigation',
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
                 'submit'                 => 'Submit',
@@ -505,6 +506,7 @@ return [
             'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
             'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
             'timer_max_seconds'               => 'Timer (seconds)',
+            'timer_max_minutes'               => 'Timer (minutes)',
             'save'                            => 'Save',
         ],
         'mapsettings' => [

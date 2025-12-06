@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -123,7 +124,7 @@ class DungeonExploreController extends Controller
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
@@ -214,7 +215,7 @@ class DungeonExploreController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),

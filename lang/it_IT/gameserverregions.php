@@ -2,11 +2,11 @@
 
 return [
 
-    'us'    => '',
-    'eu'    => '',
-    'cn'    => '',
-    'tw'    => '',
-    'kr'    => '',
-    'world' => '',
+    'us'    => 'Americhe',
+    'eu'    => 'Europa',
+    'cn'    => 'Cina',
+    'tw'    => 'Taiwan',
+    'kr'    => 'Corea',
+    'world' => 'Mondo',
 
 ];
