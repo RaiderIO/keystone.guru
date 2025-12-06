@@ -34,12 +34,12 @@ use Illuminate\Support\Collection;
                     },
                     dataType: 'json',
                     success: function () {
-                        showSuccessNotification(lang.get('messages.toggle_spell_visibility_success'));
+                        showSuccessNotification(lang.get('js.toggle_spell_visibility_success'));
 
                         $(`.spell-${spellId}`).prop('checked', hiddenOnMap);
                     },
                     error: function () {
-                        showErrorNotification(lang.get('messages.toggle_spell_visibility_error'));
+                        showErrorNotification(lang.get('js.toggle_spell_visibility_error'));
                     }
                 });
             });

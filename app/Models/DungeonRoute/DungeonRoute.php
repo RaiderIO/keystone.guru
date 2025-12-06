@@ -208,11 +208,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'mapping_version_id',
         'season_id',
         'faction_id',
+        'team_id',
         'published_state_id',
         'teeming',
         'title',
         'description',
         'difficulty',
+        'seasonal_index',
         'level_min',
         'level_max',
         'expires_at',
@@ -220,6 +222,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'views',
         'views_embed',
         'popularity',
+        'rating',
+        'rating_count',
+        'thumbnail_refresh_queued_at',
+        'thumbnail_updated_at',
     ];
 
     protected $with = [
@@ -802,7 +808,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
 
-        $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $validated = $request->validated();
+
+        $this->dungeon_id         = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
         $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
         $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
 
@@ -824,11 +832,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->pull_gradient              = '';
         $this->pull_gradient_apply_always = 0;
 
-        $this->dungeon_difficulty = $request->get('dungeon_difficulty');
+        $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
 
         $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
 
-        $dungeonRouteLevel = $request->get('dungeon_route_level');
+        $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
         if ($dungeonRouteLevel !== null) {
             $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
             $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
@@ -875,7 +883,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         /** @var User|null $user */
         $user = Auth::user();
 
-        $this->dungeon_id = (int)$request->get('dungeon_id', $this->dungeon_id);
+        $validated = $request->validated();
+
+        $this->dungeon_id = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
         if ($new) {
             $this->author_id  = $user?->id ?? -1;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
@@ -883,10 +893,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->mapping_version_id = $this->dungeon->getCurrentMappingVersion()->id;
         }
 
-        $teamIdFromRequest = (int)$request->get('team_id', $this->team_id);
+        $teamIdFromRequest = (int)($validated['team_id'] ?? $this->team_id);
         $this->team_id     = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
 
-        $this->faction_id = (int)$request->get('faction_id', $this->faction_id);
+        $this->faction_id = (int)($validated['faction_id'] ?? $this->faction_id);
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
 
@@ -900,9 +910,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->setRelation('season', $activeSeason);
         }
 
-        //$this->difficulty = $request->get('difficulty', $this->difficulty);
-//        $this->difficulty     = 1;
-        $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
+        $this->seasonal_index = (int)($validated['seasonal_index'] ?? [$this->seasonal_index])[0];
         $this->teeming        = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient              = $request->get('pull_gradient', '');
@@ -910,14 +918,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         // Sandbox routes have some fixed properties
         // Fetch the title if the user set anything
-        $this->title       = $request->get('dungeon_route_title', $this->title);
-        $this->description = $request->get('dungeon_route_description', $this->description) ?? '';
+        $this->title       = $validated['dungeon_route_title'] ?? $this->title;
+        $this->description = $validated['dungeon_route_description'] ?? ($this->description ?? '');
         // Title slug CAN resolve to empty if they're just using special characters only
         if (empty($this->title) || empty($this->getTitleSlug())) {
             $this->title = __($this->dungeon->name);
         }
 
-        $dungeonRouteLevel = $request->get('dungeon_route_level');
+        $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
         if ($dungeonRouteLevel !== null) {
             $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
             $this->level_min        = $dungeonRouteLevelParts[0] ?? $activeSeason?->key_level_min;
@@ -932,17 +940,17 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         if ($user?->hasRole(Role::ROLE_ADMIN)) {
-            $this->demo = intval($request->get('demo', 0)) > 0;
+            $this->demo = intval($validated['demo'] ?? 0) > 0;
         }
 
-        $this->dungeon_difficulty = $request->get('dungeon_difficulty', null);
+        $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
 
         // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
         $this->unsetRelations();
 
         // Update or insert it
         if ($this->save()) {
-            $newAttributes = $request->get('attributes', []);
+            $newAttributes = $validated['attributes'] ?? [];
             if (!empty($newAttributes)) {
                 // Remove old attributes
                 $this->routeattributesraw()->delete();
@@ -957,7 +965,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
 
-            $newClasses = $request->get('class', []);
+            $newClasses = $validated['class'] ?? [];
             if (!empty($newClasses)) {
                 // Remove old classes
                 $this->playerclasses()->delete();
@@ -971,7 +979,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
 
-            $newSpecs = $request->get('specialization', []);
+            $newSpecs = $validated['specialization'] ?? [];
             if (!empty($newSpecs)) {
                 // Remove old specializations
                 $this->playerspecializations()->delete();
@@ -986,7 +994,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
 
-            $newRaces = $request->get('race', []);
+            $newRaces = $validated['race'] ?? [];
             if (!empty($newRaces)) {
                 // Remove old races
                 $this->playerraces()->delete();
@@ -1000,7 +1008,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
 
-            $newAffixes = $request->get('route_select_affixes', []);
+            $newAffixes = $validated['route_select_affixes'] ?? [];
             if (!empty($newAffixes)) {
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
@@ -1049,7 +1057,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $thumbnailService->queueThumbnailRefresh($this);
 
                 // If the user requested a template route..
-                if ($request->get('template', false)) {
+                if ($validated['template'] ?? false) {
                     // Check if there's a route that we can use as a template..
                     $templateRoute = DungeonRoute::where('demo', true)
                         ->where('dungeon_id', $this->dungeon_id)
@@ -1275,7 +1283,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                             Enemy $enemy,
                         ) => $enemy->id === $seasonalTypeEnemy->id)->isEmpty()) {
                             KillZoneEnemy::create([
-                                'enemy_id'     => $seasonalTypeEnemy->id,
+                                'npc_id'       => $seasonalTypeEnemy->npc_id,
+                                'mdt_id'       => $seasonalTypeEnemy->mdt_id,
                                 'kill_zone_id' => $killZone->id,
                             ]);
                         }

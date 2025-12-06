@@ -3,16 +3,16 @@
 return [
 
     'cookies' => [
-        'title'  => '',
-        'header' => '',
+        'title'  => 'Politica sui Cookie',
+        'header' => 'Politica sui Cookie',
     ],
     'privacy' => [
-        'title'  => '',
-        'header' => '',
+        'title'  => 'Politica sulla Privacy',
+        'header' => 'Politica sulla Privacy',
     ],
     'terms' => [
-        'title'  => '',
-        'header' => '',
+        'title'  => 'Termini di Servizio',
+        'header' => 'Termini di Servizio',
     ],
 
 ];

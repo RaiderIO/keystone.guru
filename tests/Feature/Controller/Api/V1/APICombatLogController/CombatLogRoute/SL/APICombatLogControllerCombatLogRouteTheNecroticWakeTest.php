@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteTheNecroticWakeTest extends APICombatL
         $postBody = $this->getJsonData('SL/tww_s1_the_necrotic_wake_7', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

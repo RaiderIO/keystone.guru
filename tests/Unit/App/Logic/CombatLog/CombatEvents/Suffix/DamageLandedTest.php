@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents\Suffix;
+namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Suffix;
 
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\V20\DamageLandedV20;

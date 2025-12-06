@@ -36,8 +36,7 @@ class CreateGithubReleasePullRequest extends Command
      */
     public function handle(
         ReleaseRepositoryInterface $releaseRepository,
-    ): int
-    {
+    ): int {
         $result = 0;
 
         $version = $this->argument('version');

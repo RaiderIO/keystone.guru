@@ -2,6 +2,8 @@
 $options ??= [];
 $section ??= true;
 $modal   ??= false;
+$async ??= false;
+$randomString = uniqid();
 
 // Wrap in section tags of the inline code, otherwise just spit it out right now
 if ($section) { ?>
@@ -9,10 +11,12 @@ if ($section) { ?>
     @parent
 
     <script>
+        @if(!$async)
         document.addEventListener('DOMContentLoaded', function () {
-            let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
+            @endif
+            let code{{ $randomString }} = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
-            if (!code.isActivated()) {
+            if (!code{{ $randomString }}.isActivated()) {
                     <?php
                     /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
                 if ($modal){ ?>
@@ -25,17 +29,21 @@ if ($section) { ?>
                 <?php }
                     ?>
             }
+            @if(!$async)
         });
+        @endif
     </script>
 @endsection
 
 <?php } else { ?>
 
 <script>
+    @if(!$async)
     document.addEventListener('DOMContentLoaded', function () {
-        let code = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
+        @endif
+        let code{{ $randomString }} = _inlineManager.init('{{ $path }}', {!!  json_encode($options) !!});
 
-        if (!code.isActivated()) {
+        if (!code{{ $randomString }}.isActivated()) {
                 <?php
                 /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
             if ($modal){ ?>
@@ -48,7 +56,9 @@ if ($section) { ?>
             <?php }
                 ?>
         }
+        @if(!$async)
     });
+    @endif
 </script>
 
 <?php } ?>

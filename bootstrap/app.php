@@ -13,15 +13,16 @@ use App\Http\Middleware\ViewCacheBuster;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
 use Rollbar\Laravel\RollbarServiceProvider;
+use Sentry\Laravel\Integration;
 use SocialiteProviders\Manager\ServiceProvider;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withProviders([
@@ -73,5 +74,5 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        Integration::handles($exceptions);
     })->create();

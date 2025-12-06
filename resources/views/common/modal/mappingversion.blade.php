@@ -48,8 +48,16 @@ $gameVersionsSelect = $allGameVersions
 </div>
 
 <div class="form-group">
-    {{ html()->label(__('view_common.modal.mappingversion.timer_max_seconds'), 'map_mapping_version_timer_max_seconds') }}
-    {{ html()->number('timer_max_seconds', $mappingVersion->timer_max_seconds)->id('map_mapping_version_timer_max_seconds')->class('form-control') }}
+    <div class="row">
+        <div class="col">
+            {{ html()->label(__('view_common.modal.mappingversion.timer_max_seconds'), 'map_mapping_version_timer_max_seconds') }}
+            {{ html()->number('timer_max_seconds', $mappingVersion->timer_max_seconds)->id('map_mapping_version_timer_max_seconds')->class('form-control') }}
+        </div>
+        <div class="col">
+            {{ html()->label(__('view_common.modal.mappingversion.timer_max_minutes'), 'map_mapping_version_timer_max_minutes') }}
+            {{ html()->number('timer_max_minutes', (int)($mappingVersion->timer_max_seconds / 60))->id('map_mapping_version_timer_max_minutes')->class('form-control') }}
+        </div>
+    </div>
 </div>
 
 <div class="form-group">

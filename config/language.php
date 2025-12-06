@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\Language\SetLocaleFixed;
+
 return [
 
     /*
@@ -42,7 +44,7 @@ return [
     | It can be 'session' (default) or 'referer'
     |
     */
-    'back' => 'session',
+    'back' => 'referer',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +95,7 @@ return [
     | This option indicates the middleware to change language.
     |
     */
-    'middleware' => \Akaunting\Language\Middleware\SetLocale::class,
+    'middleware' => SetLocaleFixed::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -138,9 +140,9 @@ return [
     | This options indicates the language allowed languages.
     |
     */
-
-    // Only allow DE when debugging, it's still WIP
-    'allowed' => env('APP_DEBUG') ? ['en_US', 'de_DE', 'ru_RU', 'ho_HO'] : ['en_US', 'ru_RU'],
+    'allowed' => env('APP_DEBUG') ?
+        ['en_US', 'de_DE', 'es_ES', 'es_MX', 'fr_FR', 'ho_HO', 'it_IT', 'ko_KR', 'pt_BR', 'ru_RU', 'uk_UA'] :
+        ['en_US', 'ru_RU'],
 
     /*
     |--------------------------------------------------------------------------

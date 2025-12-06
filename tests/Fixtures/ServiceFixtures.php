@@ -123,8 +123,7 @@ class ServiceFixtures
         SeasonRepositoryInterface $seasonRepository = null,
         array                     $methodsToMock = [],
         ?Collection               $seasons = null,
-    ): MockObject|SeasonServiceInterface
-    {
+    ): MockObject|SeasonServiceInterface {
         $methodsToMock[]          = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
             ->getMockBuilderPublic(SeasonService::class)

@@ -17,8 +17,8 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Teapot\StatusCode\Http;
 use Illuminate\Support\Facades\Gate;
+use Teapot\StatusCode\Http;
 
 class AjaxTeamController extends Controller
 {

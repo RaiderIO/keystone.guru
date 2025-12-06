@@ -23,7 +23,7 @@ class WriteKsg extends Command
      *
      * @var string
      */
-    protected $description = 'Refreshes lang/localization.csv in such a way that it can be used by Keystone.guru';
+    protected $description = 'Refreshes lang/localization.csv in such a way that it can be used by Crowdin. This will exclude certain groups from being written to localization.csv/uploaded to Crowdin.';
 
     /**
      * Execute the console command.
@@ -33,10 +33,10 @@ class WriteKsg extends Command
         // php artisan larex:import laravel-group --exclude=npcs,spells,view_admin
         $this->shell([
             'rm -f lang/localization.csv',
-            'php artisan larex:import laravel-group --exclude=datatables,npcs,spells,view_admin,validation',
+            'php artisan larex:import laravel-group --exclude=datatables,dungeons,npcs,spells,view_admin,validation',
         ]);
 
-        if (!$this->correctLocalizationHeader()) {
+        if (!$this->convertLocalizationHeaderToCrowdinFormat()) {
             return 1;
         }
 

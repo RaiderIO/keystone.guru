@@ -9,7 +9,10 @@ use Illuminate\Support\Collection;
 
 class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySwooleInterface
 {
+    /** @var Collection<string, Floor> */
     private Collection $floorsByUiMapIdAndDungeonId;
+
+    /** @var Collection<int, Floor> */
     private Collection $defaultFloorByDungeonId;
 
     public function __construct()
@@ -28,15 +31,11 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
 
         $key = sprintf('%d-%s', $uiMapId, $dungeonId ?? 'null');
 
-        if ($this->floorsByUiMapIdAndDungeonId->has($key)) {
-            return $this->floorsByUiMapIdAndDungeonId->get($key);
+        if (!$this->floorsByUiMapIdAndDungeonId->has($key)) {
+            $this->floorsByUiMapIdAndDungeonId->put($key, parent::findByUiMapId($uiMapId, $dungeonId));
         }
 
-        $floor = parent::findByUiMapId($uiMapId, $dungeonId);
-
-        $this->floorsByUiMapIdAndDungeonId->put($key, $floor);
-
-        return $floor;
+        return $this->floorsByUiMapIdAndDungeonId->get($key);
     }
 
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor
@@ -50,6 +49,11 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
 
         // Get it all at once and store it in the cache
         $this->defaultFloorByDungeonId = Floor::where('default', 1)->get()->keyBy('dungeon_id');
+
+        // Hotfix for Seat of the Triumvirate not having default floor set
+        if ($dungeonId === 12) {
+            $this->defaultFloorByDungeonId->put(12, Floor::find('id', 37));
+        }
 
         return clone $this->defaultFloorByDungeonId->get($dungeonId);
     }

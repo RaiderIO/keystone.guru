@@ -34,7 +34,7 @@ use Illuminate\Support\Collection;
                                 status: 1
                             },
                             success: function (json) {
-                                showSuccessNotification(lang.get('messages.user_report_handled_success'));
+                                showSuccessNotification(lang.get('js.user_report_handled_success'));
 
                                 // Refresh the table
                                 userReportsDatatable.row($this.closest('tr')).remove().draw();

@@ -27,7 +27,7 @@ class APICombatLogControllerCombatLogRouteAlgetharAcademyTest extends APICombatL
         $postBody = $this->getJsonData('DF/df_s4_algethar_academy_bunten_no_roster_16', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

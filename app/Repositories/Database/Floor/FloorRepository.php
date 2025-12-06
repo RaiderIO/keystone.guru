@@ -27,6 +27,11 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
 
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor
     {
+        // Hotfix for Seat of the Triumvirate not having default floor set
+        if ($dungeonId === 12) {
+            return Floor::find(37);
+        }
+
         return Floor::where('dungeon_id', $dungeonId)->where('default', 1)->first();
     }
 }

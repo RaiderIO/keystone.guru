@@ -140,7 +140,7 @@ class ProfileController extends Controller
             } catch (Exception $exception) {
                 report($exception);
 
-                Log::warning('Echo server is probably not running!');
+                Log::warning('Reverb server is probably not running!');
             }
         } else {
             abort(500, __('controller.profile.flash.unexpected_error_when_saving'));

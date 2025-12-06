@@ -19,22 +19,6 @@ class LayoutsApp extends InlineCode {
         // Make sure selectpicker is enabled
         $('.selectpicker').selectpicker();
 
-        // When the MDT import modal is close, reset it
-        $('#create_route_modal').on('hidden.bs.modal', this._resetMdtModal.bind(this));
-
-        this.$importStringTextArea = $('.import_mdt_string_textarea').bind('paste', this._importStringPasted.bind(this));
-        this.$root = this.$importStringTextArea.closest('.tab-pane');
-
-        this.$loader = this.$root.find('.import_mdt_string_loader');
-        this.$details = this.$root.find('.import_mdt_string_details');
-        this.$warnings = this.$root.find('.mdt_string_warnings');
-        this.$errors = this.$root.find('.mdt_string_errors');
-        this.$importAsThisWeekContainer = this.$root.find('.import_as_this_week_container');
-        this.$importAsThisWeek = this.$root.find('#import_as_this_week');
-        this.$importString = this.$root.find('.import_string');
-        this.$submitBtn = this.$root.find('input[type="submit"]');
-        this.$resetBtn = this.$root.find('.import_mdt_string_reset_btn').unbind('click').bind('click', this._resetMdtModal.bind(this));
-
         if (this.options.guest) {
             this._newPassword('#register_password');
             this._newPassword('#modal-register_password');
@@ -113,110 +97,16 @@ class LayoutsApp extends InlineCode {
         if ($selector.length > 0) {
             $selector.password({
                 enterPass: '&nbsp;',
-                shortPass: lang.get('messages.min_password_length'),
-                badPass: lang.get('messages.weak'),
-                goodPass: lang.get('messages.medium'),
-                strongPass: lang.get('messages.strong'),
-                containsUsername: lang.get('messages.contains_username'),
+                shortPass: lang.get('js.min_password_length'),
+                badPass: lang.get('js.weak'),
+                goodPass: lang.get('js.medium'),
+                strongPass: lang.get('js.strong'),
+                containsUsername: lang.get('js.contains_username'),
                 showText: true, // shows the text tips
                 animate: false, // whether or not to animate the progress bar on input blur/focus
                 minimumLength: 8
             });
         }
-    }
-
-    /**
-     * Called whenever the MDT import string has been pasted into the text area.
-     **/
-    _importStringPasted(typedEvent) {
-        let self = this;
-        // https://stackoverflow.com/questions/686995/catch-paste-input
-
-        // Ugly, but needed since otherwise the field would be disabled prior to the value being actually assigned
-        setTimeout(function () {
-            // Can no longer edit it
-            self.$importStringTextArea.prop('disabled', true);
-        }, 10);
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/mdt/details',
-            dataType: 'json',
-            data: {
-                'import_string': typedEvent.originalEvent.clipboardData.getData('text')
-            },
-            beforeSend: function () {
-                self.$loader.show();
-            },
-            complete: function () {
-                self.$loader.hide();
-            },
-            success: function (responseData) {
-                let detailsTemplate = Handlebars.templates['import_string_details_template'];
-
-                let details = [];
-                if (responseData.hasOwnProperty('faction')) {
-                    details.push({key: lang.get('messages.mdt_faction'), value: responseData.faction});
-                }
-                details.push({key: lang.get('messages.mdt_dungeon'), value: responseData.dungeon});
-                details.push({key: lang.get('messages.mdt_affixes'), value: responseData.affixes.join('<br>')});
-                details.push({key: lang.get('messages.mdt_pulls'), value: responseData.pulls});
-                details.push({key: lang.get('messages.mdt_paths'), value: responseData.paths});
-                details.push({key: lang.get('messages.mdt_drawn_lines'), value: responseData.lines});
-                details.push({key: lang.get('messages.mdt_notes'), value: responseData.notes});
-                details.push({
-                    key: lang.get('messages.mdt_enemy_forces'),
-                    value: `${responseData.enemy_forces}/${responseData.enemy_forces_max}`
-                });
-
-
-                let data = $.extend({}, getHandlebarsDefaultVariables(), {
-                    details: details
-                });
-
-                // Build the preview from the template
-                self.$details.html(detailsTemplate(data));
-
-                // Inject the warnings, if there are any
-                if (responseData.warnings.length > 0) {
-                    (new MdtStringNoticesWarnings(responseData.warnings))
-                        .render(self.$warnings);
-                }
-                if (responseData.errors.length > 0) {
-                    (new MdtStringNoticesErrors(responseData.errors))
-                        .render(self.$errors);
-                }
-
-                // If the route did not contain this week's affixes, offer to import it as such anyways
-                self.$importAsThisWeek.prop('checked', !responseData.has_this_weeks_affix_group);
-                self.$importAsThisWeekContainer.toggle(!responseData.has_this_weeks_affix_group);
-
-                // Tooltips may be added above
-                refreshTooltips();
-
-                self.$importString.val(self.$importStringTextArea.val());
-                self.$submitBtn.prop('disabled', responseData.errors.length > 0);
-
-                self.$resetBtn.show();
-            }, error: function (xhr, textStatus, errorThrown) {
-                self._resetMdtModal();
-
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
-            }
-        });
-    }
-
-    /**
-     * Reset the MDT modal to accept pastes again
-     */
-    _resetMdtModal() {
-        this.$importStringTextArea.removeAttr('disabled').val('');
-
-        this.$details.html('');
-        this.$warnings.html('');
-        this.$errors.html('');
-
-        this.$submitBtn.prop('disabled', true);
     }
 }
 
@@ -224,17 +114,17 @@ class LayoutsApp extends InlineCode {
  * The default function that should be called when an ajax request fails (error handler)
  **/
 function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
-    let message = lang.get('messages.ajax_error_default');
+    let message = lang.get('js.ajax_error_default');
 
     switch (xhr.status) {
         case 403:
-            message = lang.get('messages.ajax_error_403');
+            message = lang.get('js.ajax_error_403');
             break;
         case 404:
-            message = lang.get('messages.ajax_error_404');
+            message = lang.get('js.ajax_error_404');
             break;
         case 419:
-            message = lang.get('messages.ajax_error_419');
+            message = lang.get('js.ajax_error_419');
             break;
     }
 
@@ -370,14 +260,14 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('messages.yes_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.yes_label'), 'btn btn-success mr-1', function (n) {
                     if (typeof yesCallback === 'function') {
                         yesCallback();
                     }
                     n.close();
                 }, {id: 'yes-button', 'data-status': 'ok'}),
 
-                Noty.button(lang.get('messages.cancel_label'), 'btn btn-danger', function (n) {
+                Noty.button(lang.get('js.cancel_label'), 'btn btn-danger', function (n) {
                     if (typeof noCallback === 'function') {
                         noCallback();
                     }
@@ -399,7 +289,7 @@ function showConfirmFinished(text, doneCallback = null, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('messages.finished_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.finished_label'), 'btn btn-success mr-1', function (n) {
                     if (typeof doneCallback === 'function') {
                         doneCallback();
                     }

@@ -11,6 +11,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -40,6 +41,7 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
     use HasLinkedAwakenedObelisk;
+    use HasFactory;
 
     protected $visible = [
         'id',

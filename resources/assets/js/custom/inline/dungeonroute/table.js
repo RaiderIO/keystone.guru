@@ -164,7 +164,7 @@ class DungeonrouteTable extends InlineCode {
             'columns': self._getColumns(),
             'searchCols': self._getDefaultSearchColumns(),
             'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-                'emptyTable': lang.get('messages.datatable_no_routes_in_table')
+                'emptyTable': lang.get('js.datatable_no_routes_in_table')
             })
         });
 
@@ -173,6 +173,8 @@ class DungeonrouteTable extends InlineCode {
 
             self._tagsHandler.activate();
             self._teamsHandler.activate();
+
+            (new ThumbnailRefresh(`.dungeonroute-refresh-thumbnails`)).refreshHandlers();
 
             let $publishBtns = $('.dungeonroute-publish');
             $publishBtns.unbind('click').bind('click', self._publishDungeonRouteClicked);
@@ -256,7 +258,7 @@ class DungeonrouteTable extends InlineCode {
 
         let columns = {
             preview: {
-                'title': lang.get('messages.preview_label'),
+                'title': lang.get('js.preview_label'),
                 'data': 'public_key',
                 'name': 'public_key',
                 'render': function (data, type, row, meta) {
@@ -265,7 +267,7 @@ class DungeonrouteTable extends InlineCode {
                 'orderable': false
             },
             title: {
-                'title': lang.get('messages.title_label'),
+                'title': lang.get('js.title_label'),
                 'data': 'title',
                 'name': 'title',
                 'className': 'test',
@@ -274,7 +276,7 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             title_description: {
-                'title': lang.get('messages.title_label'),
+                'title': lang.get('js.title_label'),
                 'data': 'title',
                 'name': 'title',
                 'className': 'test',
@@ -283,7 +285,7 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             dungeon: {
-                'title': lang.get('messages.dungeon_label'),
+                'title': lang.get('js.dungeon_label'),
                 'data': 'dungeon.name',
                 'name': 'dungeon_id',
                 'render': function (data, type, row, meta) {
@@ -291,7 +293,7 @@ class DungeonrouteTable extends InlineCode {
                 },
             },
             features: {
-                'title': lang.get('messages.features_label'),
+                'title': lang.get('js.features_label'),
                 'data': 'affixes',
                 'name': 'affixes.id',
                 'render': function (data, type, row, meta) {
@@ -299,7 +301,7 @@ class DungeonrouteTable extends InlineCode {
                 },
             },
             affixes: {
-                'title': lang.get('messages.affixes_label'),
+                'title': lang.get('js.affixes_label'),
                 'data': 'affixes',
                 'name': 'affixes.id',
                 'render': function (data, type, row, meta) {
@@ -308,7 +310,7 @@ class DungeonrouteTable extends InlineCode {
                 'className': 'd-none d-md-table-cell'
             },
             attributes: {
-                'title': lang.get('messages.attributes_label'),
+                'title': lang.get('js.attributes_label'),
                 'data': 'routeattributes',
                 'name': 'routeattributes.name',
                 'render': function (data, type, row, meta) {
@@ -319,7 +321,7 @@ class DungeonrouteTable extends InlineCode {
                 'className': this._viewMode === 'biglist' ? 'd-none' : ''
             },
             setup: {
-                'title': lang.get('messages.setup_label'),
+                'title': lang.get('js.setup_label'),
                 'data': 'setup',
                 'render': function (data, type, row, meta) {
                     return handlebarsGroupSetupParse(data);
@@ -328,13 +330,13 @@ class DungeonrouteTable extends InlineCode {
                 'orderable': false
             },
             author: {
-                'title': lang.get('messages.author_label'),
+                'title': lang.get('js.author_label'),
                 'data': 'author.name',
                 'name': 'author.name',
                 'className': 'd-none ' + (self._tableView.getName() === 'profile' ? '' : 'd-lg-table-cell')
             },
             enemy_forces: {
-                'title': lang.get('messages.enemy_forces_label'),
+                'title': lang.get('js.enemy_forces_label'),
                 'data': 'enemy_forces',
                 'name': 'enemy_forces',
                 'orderable': false,
@@ -350,7 +352,7 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             views: {
-                'title': lang.get('messages.metrics_label'),
+                'title': lang.get('js.metrics_label'),
                 'data': 'views',
                 'name': 'views',
                 'render': function (data, type, row, meta) {
@@ -376,7 +378,7 @@ class DungeonrouteTable extends InlineCode {
                 // 'className': 'd-none {{ $profile ? '' : 'd-lg-table-cell'}}'
             },
             rating: {
-                'title': lang.get('messages.rating_label'),
+                'title': lang.get('js.rating_label'),
                 'name': 'rating',
                 'render': function (data, type, row, meta) {
                     let result = '-';
@@ -384,9 +386,9 @@ class DungeonrouteTable extends InlineCode {
                     if (row.rating_count !== 0) {
                         result = row.rating;
                         if (row.rating_count === 1) {
-                            result += ' (' + row.rating_count + ' ' + lang.get('messages.vote') + ')';
+                            result += ' (' + row.rating_count + ' ' + lang.get('js.vote') + ')';
                         } else {
-                            result += ' (' + row.rating_count + ' ' + lang.get('messages.votes') + ' )';
+                            result += ' (' + row.rating_count + ' ' + lang.get('js.votes') + ' )';
                         }
                     }
 
@@ -394,7 +396,7 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             actions: {
-                'title': lang.get('messages.actions_label'),
+                'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
                     if (row.author.id !== self.options.currentUserId && !isUserAdmin) {
                         return '';
@@ -420,7 +422,6 @@ class DungeonrouteTable extends InlineCode {
                     // 9 = Shadowlands, 10 = Dragonflight
                     let seasonId = row.affixes.length === 0 ? false : row.affixes[0].expansion_id;
                     let isShadowlandsRoute = seasonId === 9;
-                    let isDragonflightRoute = seasonId === 10;
 
                     let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
                     let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
@@ -436,7 +437,7 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             addremoveroute: {
-                'title': lang.get('messages.actions_label'),
+                'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
                     let result;
                     if (row.has_team) {
@@ -482,7 +483,7 @@ class DungeonrouteTable extends InlineCode {
     }
 
     _renderTitle(data, type, row, meta, showDescription) {
-        let result = '';
+        let result;
 
         let published = Handlebars.templates['dungeonroute_table_title_published'](
             $.extend({}, getHandlebarsDefaultVariables(), {
@@ -541,7 +542,7 @@ class DungeonrouteTable extends InlineCode {
             },
             dataType: 'json',
             success: function (json) {
-                showSuccessNotification(lang.get('messages.route_published_state_changed'));
+                showSuccessNotification(lang.get('js.route_published_state_changed'));
                 // Refresh the table
                 $('#dungeonroute_filter').trigger('click');
             }
@@ -554,7 +555,7 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _promptDeleteDungeonRouteClicked(clickEvent) {
-        showConfirmYesCancel(lang.get('messages.route_delete_confirm'), function () {
+        showConfirmYesCancel(lang.get('js.route_delete_confirm'), function () {
             let publicKey = $(clickEvent.target).data('publickey');
 
             $.ajax({
@@ -562,7 +563,7 @@ class DungeonrouteTable extends InlineCode {
                 url: `/ajax/${publicKey}`,
                 dataType: 'json',
                 success: function (json) {
-                    showSuccessNotification(lang.get('messages.route_delete_successful'));
+                    showSuccessNotification(lang.get('js.route_delete_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }
@@ -607,7 +608,7 @@ class DungeonrouteTable extends InlineCode {
             let targetTeam = $(`input[type='radio'][name='clone-to-team-${publicKey}']:checked`).val();
 
             if (typeof targetTeam === 'undefined') {
-                showErrorNotification(lang.get('messages.route_clone_select_team'));
+                showErrorNotification(lang.get('js.route_clone_select_team'));
                 return;
             }
 
@@ -616,7 +617,7 @@ class DungeonrouteTable extends InlineCode {
                 url: `/ajax/${publicKey}/clone/team/${targetTeam}`,
                 dataType: 'json',
                 success: function (json) {
-                    showSuccessNotification(lang.get('messages.route_clone_successful'));
+                    showSuccessNotification(lang.get('js.route_clone_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }
@@ -656,13 +657,13 @@ class DungeonrouteTable extends InlineCode {
     _migrateTo(clickEvent, affixName) {
         let publicKey = $(clickEvent.target).data('publickey');
 
-        showConfirmYesCancel(lang.get(`messages.route_migration_to_${affixName}_confirm_warning`), function () {
+        showConfirmYesCancel(lang.get(`js.route_migration_to_${affixName}_confirm_warning`), function () {
             $.ajax({
                 type: 'POST',
                 url: `/ajax/${publicKey}/migrate/${affixName}`,
                 dataType: 'json',
                 success: function (json) {
-                    showSuccessNotification(lang.get('messages.route_migration_successful'));
+                    showSuccessNotification(lang.get('js.route_migration_successful'));
                     // Refresh the table
                     $('#dungeonroute_filter').trigger('click');
                 }

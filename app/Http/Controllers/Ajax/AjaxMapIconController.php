@@ -22,10 +22,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
-use Illuminate\Support\Facades\Gate;
 
 class AjaxMapIconController extends AjaxMappingModelBaseController
 {

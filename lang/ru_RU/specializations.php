@@ -18,13 +18,13 @@ return [
         'restoration' => 'Исцеление',
     ],
     'evoker' => [
-        'devastation'  => '',
-        'preservation' => '',
-        'augmentation' => '',
+        'devastation'  => 'Опустошение',
+        'preservation' => 'Сохранение',
+        'augmentation' => 'Увеличение',
     ],
     'hunter' => [
         'beast_mastery' => 'Повелитель зверей',
-        'marksmanship'  => '',
+        'marksmanship'  => 'Стрельба',
         'survival'      => 'Выживание',
     ],
     'mage' => [

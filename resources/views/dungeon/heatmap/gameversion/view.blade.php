@@ -1,6 +1,6 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                      $dungeon
  * @var Floor                        $floor
  * @var string                       $title
- * @var MapContext                   $mapContext
+ * @var MapContextBase               $mapContext
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
  * @var int                          $itemLevelMin

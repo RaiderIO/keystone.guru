@@ -76,7 +76,7 @@ class ModelChangedHandler extends BaseModelHandler {
 
         let state = getState();
         if (state.isEchoEnabled() && state.getUser().public_key !== user.public_key && user.name !== null) {
-            showInfoNotification(lang.get('messages.echo_object_changed_notification', {
+            showInfoNotification(lang.get('js.echo_object_changed_notification', {
                 object: localMapObject.toString(),
                 user: user.name
             }));

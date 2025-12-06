@@ -3,17 +3,17 @@
 return [
 
     'seasonal_type' => [
-        'beguiling'           => '',
-        'awakened'            => '',
-        'inspiring'           => '',
-        'prideful'            => '',
-        'tormented'           => '',
-        'encrypted'           => '',
-        'mdt_placeholder'     => '',
-        'requires_activation' => '',
-        'shrouded'            => '',
-        'shrouded_zul_gamux'  => '',
-        'no_shrouded'         => '',
+        'beguiling'           => 'Ammaliante',
+        'awakened'            => 'Risvegliato',
+        'inspiring'           => 'Ispiratore',
+        'prideful'            => 'Orgoglioso',
+        'tormented'           => 'Tormentato',
+        'encrypted'           => 'Criptato',
+        'mdt_placeholder'     => 'Segnaposto MDT',
+        'requires_activation' => 'Richiede Attivazione',
+        'shrouded'            => 'Velato',
+        'shrouded_zul_gamux'  => 'Velato (Zul\'gamux)',
+        'no_shrouded'         => 'Non Velato',
     ],
 
 ];

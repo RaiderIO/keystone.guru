@@ -45,7 +45,7 @@ class CommonDungeonrouteReport extends InlineCode {
             },
             success: function (json) {
                 $('#userreport_dungeonroute_modal').modal('hide');
-                showSuccessNotification(lang.get('messages.dungeonroute_report_enemy_success'));
+                showSuccessNotification(lang.get('js.dungeonroute_report_enemy_success'));
             },
             complete: function () {
                 $root.find('.dungeonroute_report_submit').show();

@@ -505,15 +505,15 @@ class Enemy extends VersionableMapObject {
             let group = this.getPackGroup();
             if (group !== null) {
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_group_label'),
+                    key: lang.get('js.sidebar_enemy_group_label'),
                     value: this.getPackGroup()
                 });
             }
 
             result.info.push({
-                key: lang.get('messages.sidebar_enemy_health_label') + keyLevelLabel,
+                key: lang.get('js.sidebar_enemy_health_label') + keyLevelLabel,
                 value: scaledHealth.toLocaleString() + percentageString,
-                info: affixes.length === 0 ? false : lang.get('messages.sidebar_enemy_health_affixes_label', {
+                info: affixes.length === 0 ? false : lang.get('js.sidebar_enemy_health_affixes_label', {
                     affixes: affixes.join(', '),
                     baseHealth: mapContext.getNpcHealth(this.npc).toLocaleString(),
                     factor: Math.round(c.map.enemy.getKeyScalingFactor(mapContext.getLevelMin(), affixes) * 100)
@@ -524,36 +524,36 @@ class Enemy extends VersionableMapObject {
             // noinspection JSUnresolvedReference
             if (isUserAdmin) {
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_id_label'),
+                    key: lang.get('js.sidebar_enemy_id_label'),
                     value: this.id
                 });
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_npc_id_label'),
+                    key: lang.get('js.sidebar_enemy_npc_id_label'),
                     value: `<a href="/admin/npc/${this.npc.id}">${this.npc.id}</a>`
                 });
             }
 
             if (mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // These affixes have been removed
-                // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
-                // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
-                // result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+                // result.info.push({key: lang.get('js.sidebar_enemy_bursting_label'), value: this.npc.bursting});
+                // result.info.push({key: lang.get('js.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
+                // result.info.push({key: lang.get('js.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
 
 
                 // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
                 // result.info.push({
-                //     key: lang.get('messages.sidebar_enemy_skippable_label'),
+                //     key: lang.get('js.sidebar_enemy_skippable_label'),
                 //     value: this.required ? 0 : 1
                 // });
                 // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_skippable_label'),
+                    key: lang.get('js.sidebar_enemy_skippable_label'),
                     value: this.skippable ? 1 : 0,
-                    info: lang.get('messages.sidebar_enemy_skippable_info_label')
+                    info: lang.get('js.sidebar_enemy_skippable_info_label')
                 });
             } else {
-                result.info.push({key: lang.get('messages.sidebar_enemy_runs_away_in_fear_label'), value: this.npc.runs_away_in_fear});
-                result.info.push({key: lang.get('messages.sidebar_hyper_respawns_label'), value: this.hyper_respawn ? 1 : 0});
+                result.info.push({key: lang.get('js.sidebar_enemy_runs_away_in_fear_label'), value: this.npc.runs_away_in_fear});
+                result.info.push({key: lang.get('js.sidebar_hyper_respawns_label'), value: this.hyper_respawn ? 1 : 0});
             }
             // @formatter:on
 
@@ -576,28 +576,33 @@ class Enemy extends VersionableMapObject {
                 let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
 
                 result.custom.push({
-                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
+                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('js.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
                         customTemplate({html: npcBolsteringWhitelistHtml})
                 });
             }
 
-            if (typeof this.npc.spells !== 'undefined' && this.npc.spells.length > 0) {
+            if (typeof this.npc.spell_ids !== 'undefined' && this.npc.spell_ids.length > 0) {
                 let spellHtml = '';
                 let count = 0;
                 let spellTemplate = Handlebars.templates['spell_template'];
                 let gameVersion = mapContext.getMappingVersion().game_version;
 
-                for (let index in this.npc.spells) {
-                    if (this.npc.spells.hasOwnProperty(index)) {
-                        let spell = this.npc.spells[index];
+                let spells = [];
+                for (let index in this.npc.spell_ids) {
+                    spells.push(
+                        mapContext.findSpellById(this.npc.spell_ids[index])
+                    );
+                }
 
-                        spell.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
+                for (let index in spells) {
+                    let spell = spells[index];
 
-                        spellHtml += spellTemplate(spell);
-                        // Stop before the end
-                        if (count < this.npc.spells.length - 1) {
-                            spellHtml += '<br>';
-                        }
+                    spell.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
+
+                    spellHtml += spellTemplate(spell);
+                    // Stop before the end
+                    if (count < spells.length - 1) {
+                        spellHtml += '<br>';
                     }
                     count++;
                 }
@@ -605,7 +610,7 @@ class Enemy extends VersionableMapObject {
                 let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
 
                 result.custom.push({
-                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('messages.sidebar_enemy_spell_label')}:</span>`}) +
+                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('js.sidebar_enemy_spell_label')}:</span>`}) +
                         customTemplate({html: spellHtml})
                 });
             }
@@ -780,7 +785,7 @@ class Enemy extends VersionableMapObject {
                     text += ` (G ${group})`;
                 }
             } else {
-                text = lang.get('messages.no_npc_found_label');
+                text = lang.get('js.no_npc_found_label');
             }
 
             // Only rebind if the text has changed

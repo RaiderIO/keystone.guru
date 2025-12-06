@@ -3,43 +3,43 @@
 return [
 
     'classic' => [
-        'name' => '',
+        'name' => 'Classique',
     ],
     'tbc' => [
-        'name' => '',
+        'name' => 'The Burning Crusade',
     ],
     'wotlk' => [
-        'name' => '',
+        'name' => 'Wrath of the Lich King',
     ],
     'cata' => [
-        'name' => '',
+        'name' => 'Cataclysm',
     ],
     'mop' => [
-        'name' => '',
+        'name' => 'Mists of Pandaria',
     ],
     'wod' => [
-        'name' => '',
+        'name' => 'Warlords of Draenor',
     ],
     'legion' => [
-        'name' => '',
+        'name' => 'Légion',
     ],
     'bfa' => [
-        'name' => '',
+        'name' => 'Battle for Azeroth',
     ],
     'sl' => [
-        'name' => '',
+        'name' => 'Shadowlands',
     ],
     'df' => [
-        'name' => '',
+        'name' => 'Dragonflight',
     ],
     'tww' => [
-        'name' => '',
+        'name' => 'The War Within',
     ],
     'midnight' => [
-        'name' => '',
+        'name' => 'Minuit',
     ],
     'tlt' => [
-        'name' => '',
+        'name' => 'The Last Titan',
     ],
 
 ];

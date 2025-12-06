@@ -30,7 +30,7 @@ class APIDungeonRouteController extends Controller
      *    )
      * )
      */
-    public function list(DungeonRouteListRequest $request): DungeonRouteSummaryEnvelopeResource
+    public function index(DungeonRouteListRequest $request): DungeonRouteSummaryEnvelopeResource
     {
         $validated = $request->validated();
 
@@ -64,7 +64,7 @@ class APIDungeonRouteController extends Controller
      * )
      * @throws AuthorizationException
      */
-    public function get(DungeonRouteRequest $request, DungeonRoute $dungeonRoute): DungeonRouteResource
+    public function show(DungeonRouteRequest $request, DungeonRoute $dungeonRoute): DungeonRouteResource
     {
         $dungeonRoute->load([
             'dungeon',
@@ -108,7 +108,7 @@ class APIDungeonRouteController extends Controller
      *     @OA\Response(response=200, description="Successful operation")
      * )
      */
-    public function createThumbnails(
+    public function storeThumbnails(
         DungeonRouteThumbnailRequest              $request,
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
         DungeonRoute                              $dungeonRoute,

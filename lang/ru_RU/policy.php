@@ -2,14 +2,14 @@
 
 return [
 
-    'view_route_not_published'                => '',
-    'present_route_not_published'             => '',
-    'embed_route_not_published'               => '',
-    'embed_route_sandbox_not_allowed'         => '',
-    'publish_not_all_required_enemies_killed' => '',
-    'add_kill_zone_limit_reached'             => '',
-    'add_brushline_limit_reached'             => '',
-    'add_path_limit_reached'                  => '',
-    'add_map_icon_limit_reached'              => '',
+    'view_route_not_published'                => 'Этот маршрут не опубликован и не может быть просмотрен. Пожалуйста, попросите автора опубликовать этот маршрут, чтобы его просмотреть.',
+    'present_route_not_published'             => 'Этот маршрут не опубликован и не может быть представлен. Пожалуйста, попросите автора опубликовать этот маршрут, чтобы его представить.',
+    'embed_route_not_published'               => 'Этот маршрут не опубликован и не может быть просмотрен. Пожалуйста, попросите автора опубликовать этот маршрут, чтобы его просмотреть.',
+    'embed_route_sandbox_not_allowed'         => 'Временные маршруты не могут быть встроены.',
+    'publish_not_all_required_enemies_killed' => 'Невозможно изменить настройки доступа: не все требуемые враги были убиты.',
+    'add_kill_zone_limit_reached'             => 'Невозможно добавить более :limit захватов к одному маршруту.',
+    'add_brushline_limit_reached'             => 'Невозможно добавить более :limit нарисованных от руки линий к одному маршруту.',
+    'add_path_limit_reached'                  => 'Невозможно добавить более :limit путей к одному маршруту.',
+    'add_map_icon_limit_reached'              => 'Невозможно добавить более :limit иконок карты к одному маршруту.',
 
 ];

@@ -108,7 +108,7 @@ return [
         'moltencore' => [
             'name'   => 'Der Geschmolzene Kern',
             'floors' => [
-                'molten_core' => 'Der Geschmolzene Kern',
+                'moltencore' => '',
             ],
         ],
         'naxxramas_classic' => [

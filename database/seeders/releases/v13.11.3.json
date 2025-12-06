@@ -1,0 +1,25 @@
+{
+    "id": 329,
+    "release_changelog_id": 336,
+    "version": "v13.11.3",
+    "title": "Creating routes is once again possible from other pages than the front page",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-11-04T11:15:47+00:00",
+    "updated_at": "2025-11-04T11:15:47+00:00",
+    "changelog": {
+        "id": 336,
+        "release_id": 329,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 336,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3016,
+                "change": "Async loading of dialogs now also works from pages other than the front page"
+            }
+        ]
+    }
+}

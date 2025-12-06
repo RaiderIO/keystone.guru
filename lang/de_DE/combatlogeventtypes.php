@@ -2,8 +2,8 @@
 
 return [
 
-    'npc_death'    => '',
-    'player_death' => '',
-    'player_spell' => '',
+    'npc_death'    => 'Feindtod',
+    'player_death' => 'Spielertod',
+    'player_spell' => 'Kampfrausch wirkt',
 
 ];
