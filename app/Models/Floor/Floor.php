@@ -2,7 +2,6 @@
 
 namespace App\Models\Floor;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Logic\Structs\LatLng;
 use App\Logic\Structs\MapBounds;
 use App\Models\CacheModel;
@@ -21,6 +20,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

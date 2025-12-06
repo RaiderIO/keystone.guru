@@ -2,7 +2,6 @@
 
 namespace App\Models\DungeonRoute;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
@@ -53,6 +52,7 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

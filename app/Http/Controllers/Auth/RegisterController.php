@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\TrustProxies;
 use App\Models\GameServerRegion;
@@ -15,6 +13,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -48,10 +47,10 @@ class RegisterController extends Controller implements HasMiddleware
     {
         return [
             [
-            'guest',
-            TrustProxies::class,
-            'throttle:create-user',
-        ],
+                'guest',
+                TrustProxies::class,
+                'throttle:create-user',
+            ],
         ];
     }
 

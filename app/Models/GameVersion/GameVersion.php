@@ -2,13 +2,13 @@
 
 namespace App\Models\GameVersion;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Models\CacheModel;
 use App\Models\Expansion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

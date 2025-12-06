@@ -2,7 +2,6 @@
 
 namespace App\Models\Spell;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
@@ -11,6 +10,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
