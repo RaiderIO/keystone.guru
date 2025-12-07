@@ -104,6 +104,8 @@ use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
+use App\Service\Reverb\ReverbHttpApiService;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
@@ -157,6 +159,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Bind the interface to the actual service
         $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
+        $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
