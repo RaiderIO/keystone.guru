@@ -31,6 +31,7 @@ class DungeonRouteThumbnail extends Model
         'dungeon_route_id',
         'floor_id',
         'file_id',
+        'custom',
         'created_at',
         'updated_at',
     ];
