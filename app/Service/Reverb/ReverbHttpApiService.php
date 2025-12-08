@@ -23,7 +23,7 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
                 // Base URI is used with relative requests
                 'base_uri' => sprintf('%s:%s', $appUrl, config('reverb.apps.apps.0.options.port')),
                 // You can set any number of default request options.
-                'timeout'  => 2.0,
+                'timeout' => 2.0,
             ]);
         } catch (InvalidArgumentException $invalidArgumentException) {
             report($invalidArgumentException);
@@ -34,7 +34,6 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
         }
     }
 
-
     private function signedQuery(string $method, string $path, array $extraParams = [], string $body = ''): array
     {
         $method = strtoupper($method);
@@ -44,19 +43,10 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
             $path = '/' . $path;
         }
 
-        $key    = config('reverb.apps.apps.0.key');
         $secret = config('reverb.apps.apps.0.secret');
 
-        // Base params that will be sent
-        $params = [
-            'auth_key'       => $key,
-            'auth_timestamp' => time(),
-            'auth_version'   => '1.0',
-            // auth_signature will be added later
-        ];
-
         // Subset of params used for signature (exactly what Reverb does)
-        $paramsForSignature = $params; // GET, no body_md5
+        $paramsForSignature = $extraParams; // GET, no body_md5
 
         // These unsets mirror Arr::except() in Controller::verifySignature
         unset(
@@ -76,7 +66,7 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
                 }
 
                 return $key . '=' . $value;
-            }
+            },
         )->implode('&');
 
         $stringToSign = implode("\n", [
@@ -94,7 +84,7 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
     private function doRequestForApp(string $uri): array
     {
         return $this->doRequest(
-            sprintf('/apps/%s/%s', config('reverb.apps.apps.0.app_id'), $uri)
+            sprintf('/apps/%s/%s', config('reverb.apps.apps.0.app_id'), $uri),
         );
     }
 
@@ -111,11 +101,9 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
                 // any extra query params for this endpoint go here, e.g. 'filter_by_prefix' => 'presence-'
             ]);
 
-            dump($query, get_defined_vars());
-
             $response = $this->client->get(
                 $uri,
-                $query,
+                ['query' => $query],
             );
             if ($response->getStatusCode() === StatusCode::OK) {
                 $result = json_decode((string)$response->getBody(), true);

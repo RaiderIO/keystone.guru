@@ -62,8 +62,6 @@ use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EchoServer\EchoServerHttpApiService;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -158,7 +156,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Bind the interface to the actual service
-        $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
         $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
