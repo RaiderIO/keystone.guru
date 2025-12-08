@@ -52,6 +52,7 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -607,7 +608,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * Scope a query to only include active dungeons and non-demo routes.
      */
-    public function scopeVisible(Builder $query): Builder
+    #[Scope]
+    protected function visible(Builder $query): Builder
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {

@@ -8,6 +8,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -85,7 +86,8 @@ class GameVersion extends CacheModel
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('game_versions.active', 1);
     }

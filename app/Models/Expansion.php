@@ -10,6 +10,7 @@ use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -209,7 +210,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('expansions.active', 1);
     }
@@ -217,7 +219,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
     }

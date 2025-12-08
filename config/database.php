@@ -122,6 +122,7 @@ return [
                     Str::slug(env('APP_TYPE', 'local')),
                 ),
             ),
+            'persistent' => env('REDIS_PERSISTENT', false),
         ],
 
         'default' => [
