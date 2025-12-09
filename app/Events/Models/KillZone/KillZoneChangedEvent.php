@@ -30,6 +30,7 @@ class KillZoneChangedEvent extends ModelChangedEvent
         return 'killzone-changed';
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         $parentResult = parent::broadcastWith();

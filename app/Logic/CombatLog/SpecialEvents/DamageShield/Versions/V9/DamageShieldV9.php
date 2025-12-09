@@ -18,6 +18,7 @@ class DamageShieldV9 extends SpecialEvent implements DamageShieldInterface
     /**
      * @return HasParameters|$this
      */
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

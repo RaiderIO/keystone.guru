@@ -36,6 +36,7 @@ class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySw
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection
     {
         if (!$this->availableEnemiesByMappingVersion->has($mappingVersion->id)) {

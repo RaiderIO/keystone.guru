@@ -51,6 +51,7 @@ class MissedV9SoD extends Suffix implements MissedInterface
         return false;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

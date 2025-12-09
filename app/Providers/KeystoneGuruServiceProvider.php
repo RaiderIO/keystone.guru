@@ -137,6 +137,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
+    #[\Override]
     public function register(): void
     {
         // External communication - no dependencies

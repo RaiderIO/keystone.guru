@@ -142,6 +142,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -586,6 +587,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $result;
     }
 
+    #[\Override]
     public static function boot(): void
     {
         parent::boot();

@@ -46,6 +46,7 @@ class ChallengeModeStart extends SpecialEvent
         return $this->affixIDs;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

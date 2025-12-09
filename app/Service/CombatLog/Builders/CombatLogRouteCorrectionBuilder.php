@@ -84,6 +84,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         );
     }
 
+    #[\Override]
     protected function buildFinished(): void
     {
         // Do not call parent - we don't care about enemy forces etc

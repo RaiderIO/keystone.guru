@@ -13,7 +13,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
-    private const LOCK_BLOCK_TIMEOUT = 20;
+    private const int LOCK_BLOCK_TIMEOUT = 20;
 
     private bool $cacheEnabled = true;
 

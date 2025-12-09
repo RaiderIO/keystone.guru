@@ -51,6 +51,7 @@ class Team extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -408,6 +409,7 @@ class Team extends Model
             ->get();
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

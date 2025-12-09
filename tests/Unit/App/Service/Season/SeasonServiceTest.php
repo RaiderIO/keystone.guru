@@ -12,6 +12,7 @@ class SeasonServiceTest extends PublicTestCase
     /** @var Collection<Season> */
     private Collection $seasons;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

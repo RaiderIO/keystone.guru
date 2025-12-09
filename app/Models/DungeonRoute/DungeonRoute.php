@@ -260,6 +260,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -1664,6 +1665,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         );
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

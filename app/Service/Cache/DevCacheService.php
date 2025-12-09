@@ -16,6 +16,7 @@ class DevCacheService extends CacheService
         $this->setBypassCache(true);
     }
 
+    #[\Override]
     public function get(string $key): mixed
     {
         $result = parent::get($key);
@@ -29,6 +30,7 @@ class DevCacheService extends CacheService
      *
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function rememberWhen(bool $condition, string $key, mixed $value, mixed $ttl = null): mixed
     {
         $measureKey = sprintf('cacheservice-rememberwhen[%s]:%s', $key, $condition ? 'pass' : 'fail');
@@ -43,6 +45,7 @@ class DevCacheService extends CacheService
     /**
      * @param Closure|mixed $value
      */
+    #[\Override]
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
         $measureKey = sprintf('cacheservice-remember[%s]', $key);

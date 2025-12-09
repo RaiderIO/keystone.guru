@@ -62,6 +62,7 @@ class CombatLogVersion extends SpecialEvent
     /**
      * @throws Exception
      */
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

@@ -9,6 +9,7 @@ class HelperServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
+    #[\Override]
     public function register(): void
     {
         require_once app_path('Helpers/CustomHelper.php');

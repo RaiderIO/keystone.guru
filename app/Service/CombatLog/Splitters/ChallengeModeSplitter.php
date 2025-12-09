@@ -22,7 +22,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
 {
     private const MAX_TIMESTAMP_GAP_SECONDS = 10 * 60;
 
-    private const EVENTS_TO_KEEP = [
+    private const array EVENTS_TO_KEEP = [
         SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
         SpecialEvent::SPECIAL_EVENT_MAP_CHANGE,

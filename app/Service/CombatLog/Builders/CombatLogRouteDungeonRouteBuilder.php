@@ -41,7 +41,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
      * A list of spell IDs that can be assigned to pulls through ARC. We really don't want to assign dozens of spells
      * to a single pull, so we limit it to a few that are actually useful.
      */
-    private const VALID_SPELL_IDS = [
+    private const array VALID_SPELL_IDS = [
         Spell::SPELL_BLOODLUST,
         Spell::SPELL_HEROISM,
         Spell::SPELL_TIME_WARP,

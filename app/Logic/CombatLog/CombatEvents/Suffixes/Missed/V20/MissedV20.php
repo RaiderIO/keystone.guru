@@ -49,6 +49,7 @@ class MissedV20 extends Suffix implements MissedInterface
         return null;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

@@ -31,12 +31,12 @@ class ViewService implements ViewServiceInterface
 {
     use RemembersToFile;
 
-    private const VIEW_VARIABLES_URL_WHITELIST = [
+    private const array VIEW_VARIABLES_URL_WHITELIST = [
         // search actually renders views back to the user which we need
         '/ajax/search',
     ];
 
-    private const VIEW_VARIABLES_URL_BLACKLIST = [
+    private const array VIEW_VARIABLES_URL_BLACKLIST = [
         '/ajax/',
         '/api/',
         '/benchmark',

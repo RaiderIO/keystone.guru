@@ -51,6 +51,7 @@ class EncounterEndV20 extends SpecialEvent implements EncounterEndInterface
         return $this->fightTimeMS;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

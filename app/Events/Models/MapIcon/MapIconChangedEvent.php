@@ -33,6 +33,7 @@ class MapIconChangedEvent extends ModelChangedEvent
         return 'mapicon-changed';
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(

@@ -16,6 +16,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
     /**
      * @throws Exception
      */
+    #[\Override]
     public function setParameters(array $parameters): CombatLogEvent
     {
         $this->genericData = GenericDataBuilder::create($this->getCombatLogVersion());

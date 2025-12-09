@@ -24,6 +24,7 @@ use Throwable;
 
 class AjaxFloorUnionController extends AjaxMappingModelBaseController
 {
+    #[\Override]
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,

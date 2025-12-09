@@ -18,8 +18,8 @@ use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private const RATE_LIMIT_OVERRIDE_HTTP           = null;
-    private const RATE_LIMIT_OVERRIDE_PER_MINUTE_API = null;
+    private const ?int RATE_LIMIT_OVERRIDE_HTTP           = null;
+    private const ?int RATE_LIMIT_OVERRIDE_PER_MINUTE_API = null;
 
     /**
      * Bootstrap any application services.
@@ -71,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
+    #[\Override]
     public function register(): void
     {
         // Bind our custom rate limiter

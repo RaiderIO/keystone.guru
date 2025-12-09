@@ -13,10 +13,10 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 {
     use Curl;
 
-    private const IDENTIFYING_TOKEN_DUNGEON_NAMES = "new Listview({template: 'zone', id: 'zones', extraCols: ['popularity']";
-    private const IDENTIFYING_TOKEN_ZONE_NAMES    = 'var g_zone_areas = ';
+    private const string IDENTIFYING_TOKEN_DUNGEON_NAMES = "new Listview({template: 'zone', id: 'zones', extraCols: ['popularity']";
+    private const string IDENTIFYING_TOKEN_ZONE_NAMES    = 'var g_zone_areas = ';
 
-    private const LOCALE_URL_MAPPING = [
+    private const array LOCALE_URL_MAPPING = [
         'en_US' => '',
         'ko_KR' => 'ko/',
         'fr_FR' => 'fr/',
@@ -30,7 +30,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         'it_IT' => 'it/',
     ];
 
-    private const EXPANSION_URL_MAPPING = [
+    private const array EXPANSION_URL_MAPPING = [
         Expansion::EXPANSION_CLASSIC      => 'classic',
         Expansion::EXPANSION_TBC          => 'burning-crusade',
         Expansion::EXPANSION_WOTLK        => 'wrath',

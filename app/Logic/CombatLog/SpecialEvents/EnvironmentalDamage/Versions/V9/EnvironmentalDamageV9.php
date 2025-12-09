@@ -17,6 +17,7 @@ class EnvironmentalDamageV9 extends SpecialEvent
     /**
      * @return HasParameters|$this
      */
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

@@ -26,6 +26,7 @@ class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
         parent::__construct($coordinatesService, $combatLogEventFilter, $results, $runCount, $floorsAsArray);
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $result = parent::toArray();

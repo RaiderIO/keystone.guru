@@ -23,6 +23,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
         $this->dungeonMappingVersions    = collect();
     }
 
+    #[\Override]
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon
     {
         if ($this->dungeonsByChallengeModeId->isEmpty()) {
@@ -41,6 +42,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
         return $dungeon;
     }
 
+    #[\Override]
     public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion
     {
         if (!$this->dungeonMappingVersions->has($dungeon->id)) {

@@ -48,7 +48,7 @@ class CombatLogEntry
         'm/d/Y H:i:s.v14',
     ];
 
-    private const RAW_EVENT_IGNORE = [
+    private const array RAW_EVENT_IGNORE = [
         'Search the gold piles for magic items!',
         'Everyone within 10 yards will be consumed!',
         ':20|t Voidstone Monstrosity is weakened by |cFFFF0000|Hspell:423839|h[Storm\'s Vengeance]|h|r!',

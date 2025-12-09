@@ -56,6 +56,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
+    #[\Override]
     public function report(Throwable $e): void
     {
         // request() is not available in console
@@ -83,6 +84,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
+    #[\Override]
     public function render($request, Throwable $e)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {
@@ -113,6 +115,7 @@ class Handler extends ExceptionHandler
      * @param  Request $request
      * @return mixed
      */
+    #[\Override]
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {

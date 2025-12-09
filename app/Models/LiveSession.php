@@ -45,6 +45,7 @@ class LiveSession extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -101,6 +102,7 @@ class LiveSession extends Model
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

@@ -29,16 +29,19 @@ class MapContextLiveSession extends MapContextDungeonRoute
         parent::__construct($cacheService, $coordinatesService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
     }
 
+    #[\Override]
     public function getType(): string
     {
         return 'livesession';
     }
 
+    #[\Override]
     public function getEchoChannelName(): string
     {
         return sprintf('%s-live-session.%s', config('app.type'), $this->liveSession->getRouteKey());
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->liveSession);

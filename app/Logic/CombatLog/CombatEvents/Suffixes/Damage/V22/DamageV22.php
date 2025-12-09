@@ -17,6 +17,7 @@ class DamageV22 extends DamageV20
         return $this->damageType;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -26,6 +27,7 @@ class DamageV22 extends DamageV20
         return $this;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 11;

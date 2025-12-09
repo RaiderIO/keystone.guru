@@ -108,6 +108,7 @@ class Expansion extends CacheModel
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'shortname';

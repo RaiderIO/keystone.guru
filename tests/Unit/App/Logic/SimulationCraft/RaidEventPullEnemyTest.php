@@ -22,11 +22,11 @@ final class RaidEventPullEnemyTest extends TestCase
     use CreatesRaidEventPullEnemy;
     use CreatesSimulationCraftRaidEventsOptions;
 
-    private const NPC_ID              = 123123;
-    private const NPC_NAME            = 'My NPC';
-    private const NPC_BASE_HEALTH     = 439587;
-    private const ENEMY_ID            = 51234123;
-    private const ENEMY_INDEX_IN_PULL = 1;
+    private const int NPC_ID              = 123123;
+    private const string NPC_NAME         = 'My NPC';
+    private const int NPC_BASE_HEALTH     = 439587;
+    private const int ENEMY_ID            = 51234123;
+    private const int ENEMY_INDEX_IN_PULL = 1;
 
     #[Test]
     #[Group('SimulationCraft')]

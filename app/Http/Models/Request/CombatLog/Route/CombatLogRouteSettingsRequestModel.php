@@ -20,6 +20,7 @@ class CombatLogRouteSettingsRequestModel extends RequestModel implements Arrayab
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         // Make sure that mappingVersion is not echoed if it is null

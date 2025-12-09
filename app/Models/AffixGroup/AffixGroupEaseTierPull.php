@@ -53,6 +53,7 @@ class AffixGroupEaseTierPull extends CacheModel
         return $this->hasMany(AffixGroupEaseTier::class);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

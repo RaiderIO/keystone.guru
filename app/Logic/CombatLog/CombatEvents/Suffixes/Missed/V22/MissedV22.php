@@ -61,6 +61,7 @@ class MissedV22 extends Suffix implements MissedInterface
         return $this->damageType;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

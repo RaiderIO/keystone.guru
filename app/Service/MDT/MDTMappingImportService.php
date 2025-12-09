@@ -41,20 +41,20 @@ use Psr\SimpleCache\InvalidArgumentException;
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
     /** @var array Ignore these enemies when their NPC ID is in this list */
-    private const IGNORE_ENEMY_NPC_IDS = [
+    private const array IGNORE_ENEMY_NPC_IDS = [
         // Black Rook Hold, Troubled Soul
         98362,
     ];
 
     /** @var array Do not import data from these NPC IDs */
-    private const IGNORE_NPC_DATA_NPC_IDS = [
+    private const array IGNORE_NPC_DATA_NPC_IDS = [
         // Priory of the Sacred Flame - 3 mini bosses where MDT has high health values - they mess up auto map sizing based on health
         211289,
         211290,
         211291,
     ];
 
-    private const IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
+    private const array IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
         // Darkflame Cleft, The Darkness - we move it to an entirely different area so please ignore this check
         208747,
     ];

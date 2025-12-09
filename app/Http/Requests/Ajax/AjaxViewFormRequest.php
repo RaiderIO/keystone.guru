@@ -30,6 +30,7 @@ class AjaxViewFormRequest extends FormRequest
         ];
     }
 
+    #[\Override]
     public function validationData(): array
     {
         // Merge route params into the data being validated

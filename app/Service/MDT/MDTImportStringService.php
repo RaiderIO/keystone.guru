@@ -58,7 +58,7 @@ use InvalidArgumentException;
 class MDTImportStringService extends MDTBaseService implements MDTImportStringServiceInterface
 {
     /** @var int */
-    private const IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
+    private const int IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
 
     /** @var string The MDT encoded string that's currently staged for conversion to a DungeonRoute. */
     private string $encodedString;

@@ -13,6 +13,7 @@ use Illuminate\Notifications\Messages\MailMessage;
  */
 class CustomPasswordResetEmail extends ResetPassword
 {
+    #[\Override]
     public function toMail($notifiable)
     {
         return (new MailMessage())

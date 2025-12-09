@@ -16,7 +16,7 @@ use Str;
 
 class RaiderIOApiService implements RaiderIOApiServiceInterface
 {
-    private const BASE_URL = 'https://raider.io/api/v1';
+    private const string BASE_URL = 'https://raider.io/api/v1';
 
     use Curl;
 

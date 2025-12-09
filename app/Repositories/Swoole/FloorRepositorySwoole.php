@@ -23,6 +23,7 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         $this->defaultFloorByDungeonId     = collect();
     }
 
+    #[\Override]
     public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
         if ($uiMapId === 0) {
@@ -38,6 +39,7 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         return $this->floorsByUiMapIdAndDungeonId->get($key);
     }
 
+    #[\Override]
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor
     {
         if ($this->defaultFloorByDungeonId->has($dungeonId)) {
