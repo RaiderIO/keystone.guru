@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\DungeonRoute\Dungeonroute;
+use App\Models\DungeonRoute\DungeonRoute;
 
-/** @var Dungeonroute $dungeonroute */
+/** @var DungeonRoute $dungeonroute */
 
 ob_start();
 ?>

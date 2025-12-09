@@ -539,9 +539,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/tools/mdt/diff/apply', (new AdminToolsController())->applyChange(...));
             Route::put('/user/{user}/patreon/benefits', (new UserController())->storePatreonBenefits(...));
         });
-        Route::prefix('dungeonRoute')->group(static function () {
-            Route::post('/data', (new AjaxDungeonRouteController())->getDungeonRoutesData(...));
-        });
 
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {

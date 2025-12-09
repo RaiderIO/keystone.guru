@@ -866,13 +866,4 @@ class AjaxDungeonRouteController extends Controller
 
         return response()->noContent();
     }
-
-    public function getDungeonRoutesData(
-        AjaxDungeonRouteDataFormRequest $request,
-        CoordinatesServiceInterface     $coordinatesService,
-    ): Collection {
-        $publicKeys = $request->validated()['public_keys'];
-
-        return $this->getDungeonRoutesProperties($coordinatesService, $publicKeys);
-    }
 }

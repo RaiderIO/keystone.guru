@@ -62,8 +62,6 @@ use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EchoServer\EchoServerHttpApiService;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -104,6 +102,8 @@ use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
+use App\Service\Reverb\ReverbHttpApiService;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
@@ -156,7 +156,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Bind the interface to the actual service
-        $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
+        $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);

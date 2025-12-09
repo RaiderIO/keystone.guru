@@ -11,7 +11,7 @@ use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -67,9 +67,9 @@ class ProfileController extends Controller
      * @throws Exception
      */
     public function update(
-        ProfileFormRequest                $request,
-        User                              $user,
-        EchoServerHttpApiServiceInterface $echoServerHttpApiService,
+        ProfileFormRequest            $request,
+        User                          $user,
+        ReverbHttpApiServiceInterface $reverbHttpApiService,
     ): RedirectResponse {
         $validated = $request->validated();
 
@@ -110,7 +110,7 @@ class ProfileController extends Controller
             // Send an event that the user's color has changed
             try {
                 // Propagate changes to any channel the user may be in
-                foreach ($echoServerHttpApiService->getChannels() as $name => $channel) {
+                foreach ($reverbHttpApiService->getChannels() as $name => $channel) {
                     $context = null;
 
                     // If it's a route edit page
@@ -127,8 +127,8 @@ class ProfileController extends Controller
                     // Only if we could find a route
                     if ($context instanceof Model) {
                         // Check if the user is in this channel..
-                        foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
-                            if ($channelUser['id'] === $user->id) {
+                        foreach ($reverbHttpApiService->getChannelUsers($name) as $reverbChannelUser) {
+                            if ((int)$reverbChannelUser['id'] === $user->id) {
                                 // Broadcast that channel that our user's color has changed
                                 broadcast(new UserColorChangedEvent($context, $user));
 

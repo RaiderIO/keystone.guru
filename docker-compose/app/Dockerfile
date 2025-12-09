@@ -12,7 +12,7 @@ RUN cargo --version && rustc --version
 RUN cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git --locked
 
 ### ---- Runtime image ----
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-mysql-client  \
     wget \
     gettext \
+    nano \
     libxdamage-dev \
     libnss3-dev \
     libgdk-pixbuf-xlib-2.0-dev \

@@ -9,8 +9,8 @@ use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Team;
 use App\Models\User;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -29,11 +29,11 @@ class LiveSessionController extends Controller
      * @throws AuthorizationException
      */
     public function create(
-        Request                           $request,
-        Dungeon                           $dungeon,
-        DungeonRoute                      $dungeonroute,
-        ?string                           $title,
-        EchoServerHttpApiServiceInterface $echoServerHttpApiService,
+        Request                       $request,
+        Dungeon                       $dungeon,
+        DungeonRoute                  $dungeonroute,
+        ?string                       $title,
+        ReverbHttpApiServiceInterface $reverbHttpApiService,
     ): RedirectResponse {
         Gate::authorize('view', $dungeonroute);
 
@@ -52,15 +52,14 @@ class LiveSessionController extends Controller
 
                 $invitees = collect();
                 // Check if the user is in this channel..
-                foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $channelUser) {
-                    $publicKey = $channelUser['public_key'] ?? $channelUser['user_info']['public_key'];
-                    /** @var array $channelUser */
+                foreach ($reverbHttpApiService->getChannelUsers($channelName) as $reverbChannelUser) {
+                    /** @var array{id: string} $reverbChannelUser */
                     // Ignore the current user!
-                    if (!isset($publicKey)) {
-                        logger()->notice('Echo user public_key not set', $channelUser);
-                    } elseif ($publicKey !== $user->public_key &&
-                        $dungeonroute->team->isUserMember(new User($channelUser))) {
-                        $invitees->push($publicKey);
+                    $channelUser = User::find($reverbChannelUser['id']);
+                    if ($channelUser !== null &&
+                        $channelUser->id !== $user->id &&
+                        $dungeonroute->team->isUserMember($channelUser)) {
+                        $invitees->push($channelUser->public_key);
                     }
                 }
 
