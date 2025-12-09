@@ -13,7 +13,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
-    private const LOCK_BLOCK_TIMEOUT = 20;
+    private const int LOCK_BLOCK_TIMEOUT = 20;
 
     private bool $cacheEnabled = true;
 
@@ -280,9 +280,7 @@ class CacheService implements CacheServiceInterface
 
                 if (!empty($toDelete)) {
                     // Remove the prefix from each key if present.
-                    $toDeleteWithoutPrefix = array_map(function ($key) use ($prefix) {
-                        return str_replace($prefix, '', $key);
-                    }, $toDelete);
+                    $toDeleteWithoutPrefix = array_map(fn($key) => str_replace($prefix, '', $key), $toDelete);
 
                     // Delete the keys and sum up the count.
                     $nrOfDeletedKeys = $redis->command('DEL', $toDeleteWithoutPrefix);

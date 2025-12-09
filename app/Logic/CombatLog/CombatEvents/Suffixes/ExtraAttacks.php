@@ -13,6 +13,7 @@ class ExtraAttacks extends Suffix
         return $this->amount;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

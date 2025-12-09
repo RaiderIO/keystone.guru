@@ -148,7 +148,7 @@ function hex2rgb($hex): array
         throw new Exception('Invalid hex value');
     }
 
-    return array_map(static fn($p) => hexdec($p), $parts);
+    return array_map(hexdec(...), $parts);
 }
 
 /**
@@ -237,9 +237,9 @@ function pickHexFromHandlers(array $handlers, float $weight): string
 
     // If color is before the start or after the end of any gradients, return last known color
     if ($handlers[0][0] >= $weight) {
-        return strtolower($handlers[0][1]);
+        return strtolower((string)$handlers[0][1]);
     } elseif ($handlers[count($handlers) - 1][0] <= $weight) {
-        return strtolower($handlers[count($handlers) - 1][1]);
+        return strtolower((string)$handlers[count($handlers) - 1][1]);
     } else {
         // Color is in between gradients, determine which gradient it is
         $color1       = null;

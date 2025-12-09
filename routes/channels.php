@@ -24,40 +24,37 @@ use App\Models\User;
 
 $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dungeonRoute) {
     // Shouldn't happen - but it may if the route was deleted and someone left their browser window open
-    if ($dungeonRoute === null) {
+    if ($user === null || $dungeonRoute === null) {
         return false;
     }
 
-    $result = false;
-    if (Auth::check()) {
-        if ($user->echo_anonymous &&
-            // If we didn't create this route, don't show our name
-            $dungeonRoute->author_id !== $user->id &&
-            // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
-            ($dungeonRoute->team === null || (!$dungeonRoute->team->isUserMember($user)))) {
-            $randomName = collect(config('keystoneguru.reverb.randomsuffixes'))->random();
+    if ($user->echo_anonymous &&
+        // If we didn't create this route, don't show our name
+        $dungeonRoute->author_id !== $user->id &&
+        // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
+        ($dungeonRoute->team === null || (!$dungeonRoute->team->isUserMember($user)))) {
+        $randomName = collect(config('keystoneguru.reverb.randomsuffixes'))->random();
 
-            $result = [
-                'public_key' => $user->public_key,
-                'name'       => sprintf('Anonymous %s', $randomName),
-                'initials'   => initials($randomName),
-                // https://stackoverflow.com/a/9901154/771270
-                'color'      => randomHexColor(),
-                'avatar_url' => null,
-                'anonymous'  => true,
-                'url'        => '#',
-            ];
-        } else {
-            $result = [
-                'public_key' => $user->public_key,
-                'name'       => $user->name,
-                'initials'   => $user->initials,
-                'color'      => $user->echo_color,
-                'avatar_url' => $user->iconfile?->getURL(),
-                'anonymous'  => false,
-                'url'        => route('profile.view', $user),
-            ];
-        }
+        $result = [
+            'public_key' => $user->public_key,
+            'name'       => sprintf('Anonymous %s', $randomName),
+            'initials'   => initials($randomName),
+            // https://stackoverflow.com/a/9901154/771270
+            'color'      => randomHexColor(),
+            'avatar_url' => null,
+            'anonymous'  => true,
+            'url'        => '#',
+        ];
+    } else {
+        $result = [
+            'public_key' => $user->public_key,
+            'name'       => $user->name,
+            'initials'   => $user->initials,
+            'color'      => $user->echo_color,
+            'avatar_url' => $user->iconfile?->getURL(),
+            'anonymous'  => false,
+            'url'        => route('profile.view', $user),
+        ];
     }
 
     return $result;

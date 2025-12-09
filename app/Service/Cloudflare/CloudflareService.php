@@ -13,7 +13,7 @@ class CloudflareService implements CloudflareServiceInterface
 {
     use Curl;
 
-    private const CLOUDFLARE_BASE_URL = 'https://cloudflare.com/';
+    private const string CLOUDFLARE_BASE_URL = 'https://cloudflare.com/';
 
     public function __construct(
         private readonly CacheServiceInterface             $cacheService,

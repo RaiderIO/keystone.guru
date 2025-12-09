@@ -3,6 +3,7 @@ $user = Auth::user();
 // Default local or user locale
 $currentUserLocale     = Auth::check() ? Auth::user()->locale : config('app.locale');
 $currentUserLocaleName = language()->getName($currentUserLocale);
+$allLanguages = collect(config('language.all'))->keyBy('long');
 ?>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
@@ -14,6 +15,9 @@ $currentUserLocaleName = language()->getName($currentUserLocale);
             <a class="dropdown-item {{ $currentUserLocale === $code ? 'active' : '' }}"
                href="{{ language()->back($code) }}">
                 @include('vendor.language.flag', ['code' => $code, 'name' => $name]) {{ $name }}
+                @if(isset($allLanguages[$code]['ai']) && $allLanguages[$code])
+                    <sup class="text-warning">AI</sup>
+                @endif
             </a>
         @endforeach
         <div class="dropdown-divider"></div>

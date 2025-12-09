@@ -366,6 +366,7 @@ class KillZone extends Model
         return collect($queryResult);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

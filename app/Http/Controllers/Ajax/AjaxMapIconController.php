@@ -31,6 +31,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use ChangesDungeonRoute;
 
+    #[\Override]
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,

@@ -9,6 +9,7 @@ abstract class TestCase extends BaseTestCase
     use Bootstrap;
     use Shutdown;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

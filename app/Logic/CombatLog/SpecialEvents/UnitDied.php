@@ -18,6 +18,7 @@ class UnitDied extends GenericSpecialEvent
         return $this->unconsciousOnDeath;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

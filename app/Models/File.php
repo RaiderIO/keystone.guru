@@ -54,6 +54,7 @@ class File extends Model
      *
      * @throws Exception
      */
+    #[\Override]
     public function delete(): void
     {
         if (parent::delete()) {
@@ -157,6 +158,7 @@ class File extends Model
         return $file;
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

@@ -25,6 +25,7 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         $this->log = $log;
     }
 
+    #[\Override]
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // First, we wait for the challenge mode to start

@@ -23,6 +23,7 @@ class DurabilityDamage extends Suffix
         return $this->itemName;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

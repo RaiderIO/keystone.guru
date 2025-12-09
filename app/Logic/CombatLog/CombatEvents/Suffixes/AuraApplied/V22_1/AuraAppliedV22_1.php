@@ -18,6 +18,7 @@ class AuraAppliedV22_1 extends AuraBase implements AuraAppliedInterface
     /**
      * @return HasParameters|$this
      */
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -27,11 +28,13 @@ class AuraAppliedV22_1 extends AuraBase implements AuraAppliedInterface
         return $this;
     }
 
+    #[\Override]
     public function getOptionalParameterCount(): int
     {
         return 2;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 3;

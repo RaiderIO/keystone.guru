@@ -119,6 +119,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         return $dungeonRoute;
     }
 
+    #[\Override]
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {

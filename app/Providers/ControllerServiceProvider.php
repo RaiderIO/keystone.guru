@@ -8,6 +8,7 @@ use MarvinLabs\DiscordLogger\ServiceProvider;
 
 class ControllerServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         // API

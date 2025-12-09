@@ -22,9 +22,9 @@ use Illuminate\Support\Collection;
 class CreateMissingNpcDataExtractor implements DataExtractorInterface
 {
     /** @var Collection<int>> */
-    private Collection $checkedNpcIds;
+    private readonly Collection $checkedNpcIds;
 
-    private CreateMissingNpcDataExtractorLoggingInterface $log;
+    private readonly CreateMissingNpcDataExtractorLoggingInterface $log;
 
     public function __construct()
     {

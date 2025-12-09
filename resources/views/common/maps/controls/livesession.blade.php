@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\DungeonRoute\Dungeonroute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 

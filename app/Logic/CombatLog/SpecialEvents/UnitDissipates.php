@@ -9,6 +9,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
  */
 class UnitDissipates extends SpecialEvent
 {
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

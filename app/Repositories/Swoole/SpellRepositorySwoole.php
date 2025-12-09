@@ -21,6 +21,7 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function findAllById(Collection $spellIds): Collection
     {
         if ($this->allSpellsById->isEmpty()) {

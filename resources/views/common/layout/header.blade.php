@@ -135,7 +135,7 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
                                 // Check if the route that we're currently on is the same as the route in the nav
                                 // If so, show it as active
                                 $active    = '';
-                                $parsedUrl = (parse_url($route));
+                                $parsedUrl = (parse_url((string) $route));
                                 if (is_array($parsedUrl)) {
                                     $routePath = trim($parsedUrl['path'], '/');
                                     if (Str::startsWith($routePath, Request::path())) {

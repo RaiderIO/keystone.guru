@@ -62,8 +62,6 @@ use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EchoServer\EchoServerHttpApiService;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -104,6 +102,8 @@ use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
+use App\Service\Reverb\ReverbHttpApiService;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
@@ -137,6 +137,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
+    #[\Override]
     public function register(): void
     {
         // External communication - no dependencies
@@ -156,7 +157,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Bind the interface to the actual service
-        $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
+        $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
@@ -682,13 +683,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
-            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static function (
-                SimulationCraftRaidBuffs $raidBuff,
-            ) {
-                return [
-                    $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
-                ];
-            })->toArray());
+            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(SimulationCraftRaidBuffs $raidBuff) => [
+                $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
+            ])->toArray());
         });
 
         view()->composer('common.modal.mappingversion', static function (View $view) use ($globalViewVariables) {

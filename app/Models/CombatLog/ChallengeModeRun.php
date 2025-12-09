@@ -108,6 +108,7 @@ class ChallengeModeRun extends Model
         }
     }
 
+    #[\Override]
     public static function boot(): void
     {
         parent::boot();

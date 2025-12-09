@@ -31,6 +31,7 @@ class DungeonRouteThumbnail extends Model
         'dungeon_route_id',
         'floor_id',
         'file_id',
+        'custom',
         'created_at',
         'updated_at',
     ];
@@ -55,6 +56,7 @@ class DungeonRouteThumbnail extends Model
         return $this->belongsTo(File::class);
     }
 
+    #[\Override]
     public static function booted(): void
     {
         parent::booted();

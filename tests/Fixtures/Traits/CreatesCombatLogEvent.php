@@ -24,7 +24,7 @@ trait CreatesCombatLogEvent
             $randomFloor = $dungeon->floors->where('facade', 0)->random(1)->first();
 
             $result->push($this->createCombatLogEvent(array_merge([
-                'id'        => rand(1, 100000),
+                'id'        => random_int(1, 100000),
                 'ui_map_id' => $randomFloor->ui_map_id,
             ], $this->getRandomCoordinates($randomFloor))));
         }
@@ -47,7 +47,7 @@ trait CreatesCombatLogEvent
                 if (isset($rows[$coordinatesString])) {
                     $i--;
                 } else {
-                    $rows[$coordinatesString] = rand(1, 100);
+                    $rows[$coordinatesString] = random_int(1, 100);
                 }
             }
 
@@ -69,9 +69,9 @@ trait CreatesCombatLogEvent
     {
         return [
             'id'        => 123123,
-            'ui_map_id' => rand(1, 200),
-            'pos_x'     => rand(0, 100),
-            'pos_y'     => rand(0, 100),
+            'ui_map_id' => random_int(1, 200),
+            'pos_x'     => random_int(0, 100),
+            'pos_y'     => random_int(0, 100),
         ];
     }
 
@@ -81,10 +81,15 @@ trait CreatesCombatLogEvent
      */
     private function getRandomCoordinates(Floor $floor): array
     {
+        $minX = (int)$floor->ingame_min_x;
+        $maxX = (int)$floor->ingame_max_x;
+        $minY = (int)$floor->ingame_min_y;
+        $maxY = (int)$floor->ingame_max_y;
+
         return [
             // Add 1 so that we're always in between the bounds
-            'pos_x' => rand((int)$floor->ingame_min_x + 1, (int)$floor->ingame_max_x),
-            'pos_y' => rand((int)$floor->ingame_min_y + 1, (int)$floor->ingame_max_y),
+            'pos_x' => random_int(min($minX, $maxX), max($minX, $maxX)),
+            'pos_y' => random_int(min($minY, $maxY), max($minY, $maxY)),
         ];
     }
 }

@@ -21,9 +21,7 @@ abstract class RequestModel
                 $result[$key] = $value->toArray();
             } elseif ($value instanceof Collection) {
                 // Map each item in the collection to its array representation
-                $result[$key] = $value->map(function ($item) {
-                    return $item instanceof RequestModel ? $item->toArray() : $item;
-                })->toArray();
+                $result[$key] = $value->map(fn($item) => $item instanceof RequestModel ? $item->toArray() : $item)->toArray();
             } else {
                 // Directly assign scalar or non-nested types
                 $result[$key] = $value;

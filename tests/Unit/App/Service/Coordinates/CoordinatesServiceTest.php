@@ -161,7 +161,7 @@ final class CoordinatesServiceTest extends PublicTestCase
 
             // Assert
             foreach ($result as $uniqueKey => $converted) {
-                [$npcId, $index] = explode('-', $uniqueKey);
+                [$npcId, $index] = explode('-', (string)$uniqueKey);
 
                 foreach ($mdtNpcs as $mdtNpc) {
                     if ($mdtNpc->getId() === (int)$npcId) {

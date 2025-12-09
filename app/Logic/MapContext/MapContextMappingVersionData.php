@@ -39,94 +39,83 @@ class MapContextMappingVersionData implements Arrayable
 
         // Get the DungeonData
         $mappingVersionDataKey = sprintf('dungeon_%d_%d_%s', $this->dungeon->id, $this->mappingVersion->id, $this->mapFacadeStyle);
-        $mappingVersionData    = $this->rememberLocal($mappingVersionDataKey, 86400, function () use (
-            $mappingVersionDataKey
-        ) {
-            return $this->cacheService->remember(
-                $mappingVersionDataKey,
-                function () {
-                    $useFacade = $this->mapFacadeStyle === 'facade';
+        $mappingVersionData    = $this->rememberLocal($mappingVersionDataKey, 86400, fn() => $this->cacheService->remember(
+            $mappingVersionDataKey,
+            function () {
+                $useFacade = $this->mapFacadeStyle === 'facade';
 
-                    $dungeon = $this->dungeon
-                        ->load([
-                            'dungeonSpeedrunRequiredNpcs10Man',
-                            'dungeonSpeedrunRequiredNpcs25Man',
-                        ])
-                        ->unsetRelation('mapIcons')
-                        ->unsetRelation('enemyPacks')
-                        ->setHidden(['floors']);
+                $dungeon = $this->dungeon
+                    ->load([
+                        'dungeonSpeedrunRequiredNpcs10Man',
+                        'dungeonSpeedrunRequiredNpcs25Man',
+                    ])
+                    ->unsetRelation('mapIcons')
+                    ->unsetRelation('enemyPacks')
+                    ->setHidden(['floors']);
 
-                    $auras = collect();
+                $auras = collect();
 
-                    /** @var Collection<Enemy> $enemies */
-                    $enemies = $this->mappingVersion->enemies()
-                        ->without('npc')
-                        ->with(/*'npc', 'npc.type', 'npc.class',*/ 'floor')
-                        ->get()
-                        ->makeHidden(['enemy_active_auras']);
+                /** @var Collection<Enemy> $enemies */
+                $enemies = $this->mappingVersion->enemies()
+                    ->without('npc')
+                    ->with(/*'npc', 'npc.type', 'npc.class',*/ 'floor')
+                    ->get()
+                    ->makeHidden(['enemy_active_auras']);
 
-                    if ($this->mappingVersion->facade_enabled && $useFacade) {
-                        foreach ($enemies as $enemy) {
-                            $convertedLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
-                                $this->mappingVersion,
-                                $enemy->getLatLng(),
-                            );
+                if ($this->mappingVersion->facade_enabled && $useFacade) {
+                    foreach ($enemies as $enemy) {
+                        $convertedLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                            $this->mappingVersion,
+                            $enemy->getLatLng(),
+                        );
 
-                            $enemy->setLatLng($convertedLatLng);
-                        }
+                        $enemy->setLatLng($convertedLatLng);
                     }
+                }
 
-                    return array_merge(
-                        $dungeon->toArray(),
-                        [
-                            'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
-                            'auras'                     => $auras,
-                            'enemies'                   => $enemies,
-                            'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
-                            'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
-                            'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
-                            'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
-                            'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
-                            'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
-                            'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
-                        ],
-                    );
-                },
-                config('keystoneguru.cache.dungeonData.ttl'),
-            );
-        });
+                return array_merge(
+                    $dungeon->toArray(),
+                    [
+                        'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
+                        'auras'                     => $auras,
+                        'enemies'                   => $enemies,
+                        'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
+                        'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
+                        'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
+                        'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
+                        'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
+                        'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
+                        'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
+                    ],
+                );
+            },
+            config('keystoneguru.cache.dungeonData.ttl'),
+        ));
 
         // Npc data (for localizations)
         $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d', $this->dungeon->id, $this->mappingVersion->id);
-        $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
+        $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, fn() => $this->cacheService->remember(
             $dungeonNpcDataKey,
-            $mappingVersionData
-        ) {
-            return $this->cacheService->remember(
-                $dungeonNpcDataKey,
-                function () use ($mappingVersionData) {
-                    return $this->dungeon->npcs()
-                        ->with([
-                            'enemyForces' => fn(HasOne $q) => $q
-                                ->where('mapping_version_id', $this->mappingVersion->id)
-                                ->select([
-                                    'id',
-                                    'npc_id',
-                                    'mapping_version_id',
-                                    'enemy_forces',
-                                    'enemy_forces_teeming',
-                                ]),
-                        ])
-                        ->disableCache()
-                        ->get()
-                        ->setVisible([
+            fn() => $this->dungeon->npcs()
+                ->with([
+                    'enemyForces' => fn(HasOne $q) => $q
+                        ->where('mapping_version_id', $this->mappingVersion->id)
+                        ->select([
                             'id',
-                            'enemyForces',
-                        ]);
-                },
-                config('keystoneguru.cache.dungeonData.ttl'),
-            );
-        });
+                            'npc_id',
+                            'mapping_version_id',
+                            'enemy_forces',
+                            'enemy_forces_teeming',
+                        ]),
+                ])
+                ->disableCache()
+                ->get()
+                ->setVisible([
+                    'id',
+                    'enemyForces',
+                ]),
+            config('keystoneguru.cache.dungeonData.ttl'),
+        ));
 
         [
             $npcMinHealth,

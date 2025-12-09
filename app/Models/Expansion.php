@@ -10,6 +10,7 @@ use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -64,12 +65,6 @@ class Expansion extends CacheModel
 
     public $with = ['timewalkingEvent'];
 
-    protected $dates = [
-        // 'released_at',
-        'created_at',
-        'updated_at',
-    ];
-
 //    protected $casts = [
 //        'released_at' => 'datetime',
 //        'created_at'  => 'datetime',
@@ -113,6 +108,7 @@ class Expansion extends CacheModel
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'shortname';
@@ -209,7 +205,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('expansions.active', 1);
     }
@@ -217,7 +214,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
     }
@@ -316,5 +314,12 @@ class Expansion extends CacheModel
         }
 
         return false;
+    }
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }

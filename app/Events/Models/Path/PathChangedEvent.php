@@ -34,6 +34,7 @@ class PathChangedEvent extends ModelChangedEvent
         return 'path-changed';
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(

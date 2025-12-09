@@ -323,6 +323,7 @@ class User extends Authenticatable implements LaratrustUser
         return Auth::user()?->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

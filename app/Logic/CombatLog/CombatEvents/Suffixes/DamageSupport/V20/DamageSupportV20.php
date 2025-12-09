@@ -16,6 +16,7 @@ class DamageSupportV20 extends DamageV20 implements DamageSupportInterface
         return $this->supportGuid;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -25,6 +26,7 @@ class DamageSupportV20 extends DamageV20 implements DamageSupportInterface
         return $this;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 11;

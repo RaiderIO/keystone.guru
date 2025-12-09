@@ -73,17 +73,17 @@ function str_getcsv_assoc(
     $enc = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
     $enc = preg_replace_callback(
         '/"(.*?)"/s',
-        static fn($field) => urlencode(utf8_encode($field[1])),
+        static fn($field) => urlencode(mb_convert_encoding($field[1], 'UTF-8', 'ISO-8859-1')),
         (string)$enc,
     );
     $lines = preg_split($skip_empty_lines ? ($trim_fields ? '/( *\R)+/s' : '/\R+/s') : '/\R/s', (string)$enc);
 
     return array_map(
         static function ($line) use ($delimiter, $trim_fields) {
-            $fields = $trim_fields ? array_map('trim', explode($delimiter, $line)) : explode($delimiter, $line);
+            $fields = $trim_fields ? array_map(trim(...), explode($delimiter, $line)) : explode($delimiter, $line);
 
             return array_map(
-                static fn($field) => str_replace('!!Q!!', '"', utf8_decode(urldecode($field))),
+                static fn($field) => str_replace('!!Q!!', '"', mb_convert_encoding(urldecode($field), 'ISO-8859-1')),
                 $fields,
             );
         },

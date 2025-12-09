@@ -9,6 +9,7 @@ final class MappingVersionTestBase extends AjaxPublicTestCase
 {
     protected MappingVersion $mappingVersion;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -20,6 +21,7 @@ final class MappingVersionTestBase extends AjaxPublicTestCase
         $this->mappingVersion->save();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->mappingVersion->delete();

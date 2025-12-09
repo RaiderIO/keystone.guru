@@ -20,6 +20,7 @@ class CombatLogRouteSettingsRequestModel extends RequestModel implements Arrayab
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         // Make sure that mappingVersion is not echoed if it is null
@@ -28,8 +29,6 @@ class CombatLogRouteSettingsRequestModel extends RequestModel implements Arrayab
             'temporary'      => $this->temporary,
             'debugIcons'     => $this->debugIcons,
             'mappingVersion' => $this->mappingVersion,
-        ], function ($value) {
-            return !is_null($value);
-        });
+        ], fn($value) => !is_null($value));
     }
 }

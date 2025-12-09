@@ -75,6 +75,7 @@ class PatreonUserLink extends Model
         return Carbon::createFromTimeString($this->expires_at)->isPast();
     }
 
+    #[\Override]
     protected static function boot()
     {
         parent::boot();

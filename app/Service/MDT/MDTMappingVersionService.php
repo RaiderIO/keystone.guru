@@ -17,8 +17,8 @@ use Illuminate\Support\Collection;
 class MDTMappingVersionService implements MDTMappingVersionServiceInterface
 {
     public function __construct(
-        private CacheServiceInterface       $cacheService,
-        private CoordinatesServiceInterface $coordinatesService,
+        private readonly CacheServiceInterface       $cacheService,
+        private readonly CoordinatesServiceInterface $coordinatesService,
     ) {
     }
 
@@ -130,6 +130,6 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
 
     private function getDistanceSquared(array $xy1, array $xy2): float
     {
-        return pow($xy1['x'] - $xy2['x'], 2) + pow($xy1['y'] - $xy2['y'], 2);
+        return ($xy1['x'] - $xy2['x']) ** 2 + ($xy1['y'] - $xy2['y']) ** 2;
     }
 }

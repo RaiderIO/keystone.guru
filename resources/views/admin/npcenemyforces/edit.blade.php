@@ -8,7 +8,7 @@ use App\Models\Npc\NpcEnemyForces;
  * @var Npc                 $npc
  * @var NpcEnemyForces      $npcEnemyForces
  */
-$npcEnemyForces = $npcEnemyForces ?? null;
+$npcEnemyForces ??= null;
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc, $npcEnemyForces],

@@ -22,7 +22,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
 {
     private const MAX_TIMESTAMP_GAP_SECONDS = 10 * 60;
 
-    private const EVENTS_TO_KEEP = [
+    private const array EVENTS_TO_KEEP = [
         SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
         SpecialEvent::SPECIAL_EVENT_MAP_CHANGE,
@@ -30,18 +30,18 @@ class ChallengeModeSplitter extends CombatLogSplitter
         SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_END,
     ];
 
-    private ChallengeModeSplitterLoggingInterface $log;
+    private readonly ChallengeModeSplitterLoggingInterface $log;
     /** @var Collection<string> */
     private Collection $rawEvents;
-    private ?CombatLogVersionEvent $lastCombatLogVersionEvent;
+    private ?CombatLogVersionEvent $lastCombatLogVersionEvent     = null;
     private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
     private ?Dungeon $currentDungeon                              = null;
-    private ?ZoneChangeEvent $lastZoneChangeEvent;
-    private ?MapChangeEvent $lastMapChangeEvent;
-    private ?Carbon $lastTimestamp = null;
-    private ?Collection $result    = null;
-    private ?string $filePath;
-    private bool $isInWrongZone = false;
+    private ?ZoneChangeEvent $lastZoneChangeEvent                 = null;
+    private ?MapChangeEvent $lastMapChangeEvent                   = null;
+    private ?Carbon $lastTimestamp                                = null;
+    private ?Collection $result                                   = null;
+    private ?string $filePath                                     = null;
+    private bool $isInWrongZone                                   = false;
 
     public function __construct(
         private readonly CombatLogServiceInterface $combatLogService,
@@ -241,7 +241,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
     {
         return sprintf(
             '%s_%d_%s%s',
-            pathinfo($this->filePath, PATHINFO_FILENAME),
+            pathinfo((string)$this->filePath, PATHINFO_FILENAME),
             $this->lastChallengeModeStartEvent->getKeystoneLevel(),
             Str::slug($this->lastChallengeModeStartEvent->getZoneName()),
             $countStr,

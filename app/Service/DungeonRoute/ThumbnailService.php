@@ -373,6 +373,11 @@ class ThumbnailService implements ThumbnailServiceInterface
             try {
                 $thumbnailData = Storage::disk($thumbnail->file->disk)->get($thumbnail->file->path);
 
+                if ($thumbnailData === null) {
+                    // File was linked but contained no data?
+                    continue;
+                }
+
                 $copiedThumbnail = $this->attachThumbnailToDungeonRoute(
                     $targetDungeonRoute,
                     $thumbnail->floor->index,

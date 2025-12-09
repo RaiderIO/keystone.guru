@@ -41,6 +41,7 @@ class Version extends \PHLAK\SemVer\Version
      *
      * @throws InvalidVersionException
      */
+    #[\Override]
     public static function parse(string $version): self
     {
         $semverRegex = '/^v?(?<major>\d+)(?:\.(?<minor>\d+)(?:\.(?<patch>\d+))?)?(?:-(?<pre_release>[0-9A-Za-z-.]+))?(?:\+(?<build>[0-9A-Za-z-.]+)?)?$/';

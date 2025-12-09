@@ -18,6 +18,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
     /** @var Collection<CharacterClass> */
     private Collection $characterClasses;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

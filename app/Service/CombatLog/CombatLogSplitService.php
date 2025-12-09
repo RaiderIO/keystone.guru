@@ -39,7 +39,7 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
     private function splitCombatLogUsingSplitter(string $filePath, CombatLogSplitterInterface $splitter): Collection
     {
-        $this->log->splitCombatLogUsingSplitterStart($filePath, get_class($splitter));
+        $this->log->splitCombatLogUsingSplitterStart($filePath, $splitter::class);
 
         try {
             $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;

@@ -496,6 +496,7 @@ class MappingVersion extends Model
         return $this->floorUnionAreas;
     }
 
+    #[\Override]
     protected static function boot()
     {
         parent::boot();

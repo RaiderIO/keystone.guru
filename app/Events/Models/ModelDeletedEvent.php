@@ -20,6 +20,7 @@ abstract class ModelDeletedEvent extends ContextEvent
         parent::__construct($context, $user);
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

@@ -40,7 +40,7 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
             'thundering_clear_seconds' => 'required|int|max:15',
             'raid_buffs_mask'          => sprintf(
                 'required|int|max:%d',
-                pow(2, collect(SimulationCraftRaidBuffs::cases())->count() - 1),
+                2 ** (collect(SimulationCraftRaidBuffs::cases())->count() - 1),
             ),
             'hp_percent'                     => 'required|int',
             'ranged_pull_compensation_yards' => 'required|int',

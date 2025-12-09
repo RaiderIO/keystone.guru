@@ -43,14 +43,12 @@ $user?->load(['roles'])
         'roles',
         'map_facade_style'
     ]);
-$user?->setRelation('roles', $user->roles->map(function ($role) {
-    return $role->makeHidden([
-        'id',
-        'pivot',
-        'created_at',
-        'updated_at'
-    ]);
-}));
+$user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
+    'id',
+    'pivot',
+    'created_at',
+    'updated_at'
+])));
 
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;

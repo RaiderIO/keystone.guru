@@ -67,13 +67,14 @@ class Release extends CacheModel
     /**
      * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
      */
-    private const DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
+    private const int DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
 
     private function getPreviousRelease(): ?Release
     {
         return Release::where('id', '<', $this->id)->orderBy('id', 'desc')->first();
     }
 
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'version';

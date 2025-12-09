@@ -50,6 +50,7 @@ class EncounterEndV9 extends SpecialEvent implements EncounterEndInterface
         return 0;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

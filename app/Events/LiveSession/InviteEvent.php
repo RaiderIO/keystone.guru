@@ -38,6 +38,7 @@ class InviteEvent extends ContextEvent
      *
      * @return Channel|array
      */
+    #[\Override]
     public function broadcastOn(): array
     {
         return [
@@ -45,6 +46,7 @@ class InviteEvent extends ContextEvent
         ];
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

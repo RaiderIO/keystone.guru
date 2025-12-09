@@ -41,20 +41,20 @@ use Psr\SimpleCache\InvalidArgumentException;
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
     /** @var array Ignore these enemies when their NPC ID is in this list */
-    private const IGNORE_ENEMY_NPC_IDS = [
+    private const array IGNORE_ENEMY_NPC_IDS = [
         // Black Rook Hold, Troubled Soul
         98362,
     ];
 
     /** @var array Do not import data from these NPC IDs */
-    private const IGNORE_NPC_DATA_NPC_IDS = [
+    private const array IGNORE_NPC_DATA_NPC_IDS = [
         // Priory of the Sacred Flame - 3 mini bosses where MDT has high health values - they mess up auto map sizing based on health
         211289,
         211290,
         211291,
     ];
 
-    private const IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
+    private const array IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
         // Darkflame Cleft, The Darkness - we move it to an entirely different area so please ignore this check
         208747,
     ];
@@ -138,9 +138,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of NPCs and update/save them
             $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
 
-            $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
-                return [__($characteristic->name, [], 'en_US') => $characteristic];
-            });
+            $characteristicsByName = Characteristic::all()->mapWithKeys(fn(Characteristic $characteristic) => [__($characteristic->name, [], 'en_US') => $characteristic]);
 
             $npcsUpdated                  = $npcsInserted = 0;
             $npcCharacteristicsAttributes = [];
@@ -178,10 +176,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 if (!$npc->exists) {
                     $npc->load('npcDungeons');
 
-                    if ($npc->npcDungeons->filter(function (NpcDungeon $npcDungeon) use ($dungeon) {
+                    if ($npc->npcDungeons->filter(
                         // Check if this NPC is already associated with this dungeon
-                        return $npcDungeon->dungeon_id === $dungeon->id;
-                    })->isEmpty()) {
+
+                        fn(NpcDungeon $npcDungeon) => $npcDungeon->dungeon_id === $dungeon->id,
+                    )->isEmpty()) {
                         $npcDungeonsAttributes[] = [
                             'npc_id'     => $npc->id,
                             'dungeon_id' => $dungeon->id,
@@ -262,7 +261,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // For new NPCs go back and create enemy forces for all historical mapping versions
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
-                } catch (UniqueConstraintViolationException $exception) {
+                } catch (UniqueConstraintViolationException) {
                     $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc?->id ?? 0);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);

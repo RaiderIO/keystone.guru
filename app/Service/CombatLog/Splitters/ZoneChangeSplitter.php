@@ -18,27 +18,27 @@ class ZoneChangeSplitter extends CombatLogSplitter
 {
     private const MAX_TIMESTAMP_GAP_SECONDS = 10 * 60;
 
-    private const EVENTS_TO_KEEP = [
+    private const array EVENTS_TO_KEEP = [
         SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
     ];
 
-    private ZoneChangeSplitterLoggingInterface $log;
+    private readonly ZoneChangeSplitterLoggingInterface $log;
 
-    private Collection $validDungeonMapIds;
+    private readonly Collection $validDungeonMapIds;
 
     /** @var Collection<string> */
     private Collection $rawEvents;
 
-    private ?string $lastCombatLogVersion;
+    private ?string $lastCombatLogVersion = null;
 
-    private ?ZoneChangeEvent $lastZoneChangeEvent;
+    private ?ZoneChangeEvent $lastZoneChangeEvent = null;
 
     private ?Carbon $lastTimestamp = null;
 
     private ?Collection $result = null;
 
-    private ?string $filePath;
+    private ?string $filePath = null;
 
     public function __construct(
         private readonly CombatLogServiceInterface  $combatLogService,
@@ -51,9 +51,7 @@ class ZoneChangeSplitter extends CombatLogSplitter
         parent::__construct($this->log);
 
         // Flip keys and values, and yes
-        $this->validDungeonMapIds = $this->dungeonRepository->getAllMapIds()->mapWithKeys(function (int $mapId) {
-            return [$mapId => $mapId];
-        });
+        $this->validDungeonMapIds = $this->dungeonRepository->getAllMapIds()->mapWithKeys(fn(int $mapId) => [$mapId => $mapId]);
         // Nerub-ar Palace
         $this->validDungeonMapIds->put(2657, 2657);
     }
@@ -184,7 +182,7 @@ class ZoneChangeSplitter extends CombatLogSplitter
     {
         return sprintf(
             '%s_%s%s',
-            pathinfo($this->filePath, PATHINFO_FILENAME),
+            pathinfo((string)$this->filePath, PATHINFO_FILENAME),
             Str::slug($this->lastZoneChangeEvent->getZoneName()),
             $countStr,
         );

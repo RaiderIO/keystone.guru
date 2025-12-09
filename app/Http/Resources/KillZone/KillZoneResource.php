@@ -28,6 +28,7 @@ class KillZoneResource extends JsonResource
      *
      * @return array|Arrayable|JsonSerializable
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return [

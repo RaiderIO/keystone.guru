@@ -15,6 +15,7 @@ abstract class APICombatLogControllerTestBase extends APIPublicTestCase
 
     protected abstract function getDungeonKey(): string;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

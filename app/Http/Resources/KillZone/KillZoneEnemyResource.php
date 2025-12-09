@@ -34,6 +34,7 @@ class KillZoneEnemyResource extends JsonResource
      *
      * @return array|Arrayable|JsonSerializable
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         /** @var NpcEnemyForces|null $enemyForces */
