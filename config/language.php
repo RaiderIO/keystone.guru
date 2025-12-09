@@ -142,7 +142,7 @@ return [
     */
     'allowed' => env('APP_DEBUG') ?
         ['en_US', 'de_DE', 'es_ES', 'es_MX', 'fr_FR', 'ho_HO', 'it_IT', 'ko_KR', 'pt_BR', 'ru_RU', 'uk_UA'] :
-        ['en_US', 'ru_RU'],
+        ['en_US', 'de_DE', 'es_ES', 'es_MX', 'fr_FR', 'it_IT', 'ko_KR', 'pt_BR', 'ru_RU', 'uk_UA'],
 
     /*
     |--------------------------------------------------------------------------
