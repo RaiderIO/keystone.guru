@@ -60,12 +60,8 @@ trait HasVertices
 
         return [
             'coordinates' => [
-                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLngs->map(function (LatLng $latLng) {
-                    return $latLng->toArrayWithFloor();
-                })->toArray(),
-                User::MAP_FACADE_STYLE_FACADE => $facadeLatLngs->map(function (LatLng $latLng) {
-                    return $latLng->toArrayWithFloor();
-                })->toArray(),
+                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLngs->map(fn(LatLng $latLng) => $latLng->toArrayWithFloor())->toArray(),
+                User::MAP_FACADE_STYLE_FACADE       => $facadeLatLngs->map(fn(LatLng $latLng) => $latLng->toArrayWithFloor())->toArray(),
             ],
         ];
     }

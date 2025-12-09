@@ -17,7 +17,7 @@ class FloorDataExtractor implements DataExtractorInterface
 //    private ?Floor $previousFloor = null;
     private ?Floor $currentFloor = null;
 
-    private FloorDataExtractorLoggingInterface $log;
+    private readonly FloorDataExtractorLoggingInterface $log;
 
     public function __construct(
         private readonly FloorRepositoryInterface $floorRepository,

@@ -288,7 +288,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
-        $useFacade = $useFacade ?? $mappingVersion->facade_enabled;
+        $useFacade ??= $mappingVersion->facade_enabled;
 
         // If we use facade
         // If we have facade, only return facade floor
@@ -510,11 +510,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function hasMappingVersionWithSeasons(): bool
     {
-        return $this->loadMappingVersions()->mappingVersions->contains(static function (
-            MappingVersion $mappingVersion,
-        ) {
-            return $mappingVersion->gameVersion->has_seasons;
-        });
+        return $this->loadMappingVersions()->mappingVersions->contains(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion->has_seasons);
     }
 
     /**
@@ -522,9 +518,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      */
     public function getMappingVersionGameVersions(): Collection
     {
-        return $this->loadMappingVersions()->mappingVersions->map(static function (MappingVersion $mappingVersion) {
-            return $mappingVersion->gameVersion;
-        })->unique('id');
+        return $this->loadMappingVersions()->mappingVersions->map(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion)->unique('id');
     }
 
     public function isFactionSelectionRequired(): bool

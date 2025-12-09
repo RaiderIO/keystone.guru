@@ -168,9 +168,7 @@ abstract class DungeonRouteBuilder
                 }
             }
 
-            $killZone->setRelation('killZoneEnemies', $killZoneEnemiesAttributes->map(function (array $attributes) {
-                return new KillZoneEnemy($attributes);
-            }));
+            $killZone->setRelation('killZoneEnemies', $killZoneEnemiesAttributes->map(fn(array $attributes) => new KillZoneEnemy($attributes)));
 
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
                 $this->killZoneEnemyRepository->insert($killZoneEnemiesAttributes->toArray());
@@ -343,11 +341,7 @@ abstract class DungeonRouteBuilder
             // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
             // Therefore, these enemies should be in combat with us regardless
             /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
-            $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use (
-                $preferredGroups
-            ) {
-                return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
-            });
+            $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static fn(Enemy $availableEnemy) => $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group));
 
             if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
                 $this->findClosestEnemyAndDistanceFromList(

@@ -16,14 +16,12 @@ $difficultySelect    = collect([
     Dungeon::DIFFICULTY_10_MAN => __('dungeons.difficulty.1'),
     Dungeon::DIFFICULTY_25_MAN => __('dungeons.difficulty.2'),
 ]);
-$difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(function (Dungeon $dungeon) {
-    return [
-        $dungeon->id => [
-            Dungeon::DIFFICULTY_10_MAN => $dungeon->speedrun_difficulty_10_man_enabled,
-            Dungeon::DIFFICULTY_25_MAN => $dungeon->speedrun_difficulty_25_man_enabled,
-        ],
-    ];
-});
+$difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
+    $dungeon->id => [
+        Dungeon::DIFFICULTY_10_MAN => $dungeon->speedrun_difficulty_10_man_enabled,
+        Dungeon::DIFFICULTY_25_MAN => $dungeon->speedrun_difficulty_25_man_enabled,
+    ],
+]);
 ?>
 @section('scripts')
     @parent

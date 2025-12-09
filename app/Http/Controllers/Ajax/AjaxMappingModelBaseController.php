@@ -88,7 +88,7 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-                    $echoContext = $echoContext ?? $model->floor->dungeon;
+                    $echoContext ??= $model->floor->dungeon;
                     broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));
                 }
 

@@ -269,18 +269,12 @@ class AdminToolsController extends Controller
     public function manageSpellVisibility(Request $request, ?Dungeon $dungeon = null): View
     {
         return view('admin.tools.npc.managespellvisibility', [
-            'npcs' => Npc::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
-                return $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
-                    ->select('npcs.*')
-                    ->where('npc_dungeons.dungeon_id', $dungeon->id);
-            })->with('npcSpells')
+            'npcs' => Npc::when($dungeon !== null, fn(Builder $builder) => $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                ->select('npcs.*')
+                ->where('npc_dungeons.dungeon_id', $dungeon->id))->with('npcSpells')
                 ->has('npcSpells')
                 ->paginate(50),
-            'spells' => Spell::with('gameVersion')->when($dungeon !== null, function (Builder $builder) use (
-                $dungeon
-            ) {
-                return $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id);
-            })->get()
+            'spells' => Spell::with('gameVersion')->when($dungeon !== null, fn(Builder $builder) => $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id))->get()
                 ->keyBy('id'),
             'dungeon' => $dungeon,
         ]);
@@ -973,12 +967,7 @@ class AdminToolsController extends Controller
         dump('Changed floors:');
 
         $allUiMapIds                = $allFloors->pluck('ui_map_id')->toArray();
-        $uiMapAssignmentTableParsed = array_filter($uiMapAssignmentTableParsed, function (array $item) use (
-            $allUiMapIds,
-            $uiMapAssignmentTableHeaderIndexUiMapId
-        ) {
-            return in_array($item[$uiMapAssignmentTableHeaderIndexUiMapId], $allUiMapIds);
-        });
+        $uiMapAssignmentTableParsed = array_filter($uiMapAssignmentTableParsed, fn(array $item) => in_array($item[$uiMapAssignmentTableHeaderIndexUiMapId], $allUiMapIds));
 
         // Go over the UI Map Assignments and find the ones we're interested in
         foreach ($allFloors as $floor) {

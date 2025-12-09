@@ -138,9 +138,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of NPCs and update/save them
             $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
 
-            $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
-                return [__($characteristic->name, [], 'en_US') => $characteristic];
-            });
+            $characteristicsByName = Characteristic::all()->mapWithKeys(fn(Characteristic $characteristic) => [__($characteristic->name, [], 'en_US') => $characteristic]);
 
             $npcsUpdated                  = $npcsInserted = 0;
             $npcCharacteristicsAttributes = [];
@@ -178,10 +176,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 if (!$npc->exists) {
                     $npc->load('npcDungeons');
 
-                    if ($npc->npcDungeons->filter(function (NpcDungeon $npcDungeon) use ($dungeon) {
+                    if ($npc->npcDungeons->filter(
                         // Check if this NPC is already associated with this dungeon
-                        return $npcDungeon->dungeon_id === $dungeon->id;
-                    })->isEmpty()) {
+
+                        fn(NpcDungeon $npcDungeon) => $npcDungeon->dungeon_id === $dungeon->id,
+                    )->isEmpty()) {
                         $npcDungeonsAttributes[] = [
                             'npc_id'     => $npc->id,
                             'dungeon_id' => $dungeon->id,
@@ -262,7 +261,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // For new NPCs go back and create enemy forces for all historical mapping versions
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
-                } catch (UniqueConstraintViolationException $exception) {
+                } catch (UniqueConstraintViolationException) {
                     $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc?->id ?? 0);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);

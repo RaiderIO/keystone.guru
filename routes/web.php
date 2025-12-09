@@ -651,7 +651,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 });
 
-Route::fallback(function () {
+Route::fallback(
     // Render your 404 page, but now with web middleware (sessions) active
-    return response()->view('errors.404', [], 404);
-})->middleware('web');
+
+    fn() => response()->view('errors.404', [], 404),
+)->middleware('web');

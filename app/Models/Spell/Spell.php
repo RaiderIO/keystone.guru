@@ -113,7 +113,7 @@ class Spell extends CacheModel implements MappingModelInterface
         if (is_string($value)) {
             try {
                 $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::SERIALIZED_DATE_TIME_FORMAT, $value);
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::DATABASE_DATE_TIME_FORMAT, $value);
             }
         } else {

@@ -79,9 +79,7 @@ class FetchSpellData extends Command
             }
 
             // Try the spell's game version first
-            $gameVersions = $gameVersions->sortBy(function (GameVersion $gameVersion) use ($spell) {
-                return $gameVersion->id === $spell->gameVersion->id ? 0 : 1;
-            });
+            $gameVersions = $gameVersions->sortBy(fn(GameVersion $gameVersion) => $gameVersion->id === $spell->gameVersion->id ? 0 : 1);
 
             foreach ($gameVersions as $gameVersion) {
                 $spellDataResult = $wowheadService->getSpellData($gameVersion, $spell->id);

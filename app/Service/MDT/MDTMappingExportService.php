@@ -326,14 +326,10 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'encounterID'   => $npc->encounter_id,
                 // $npc->dungeon may be null if dungeon_id = -1
                 'instanceID'      => $isBoss ? $mappingVersion->dungeon->instance_id : null,
-                'characteristics' => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
-                    return [__($characteristic->name, [], 'en_US') => true];
-                })->toArray(),
-                'spells' => $npc->spells
+                'characteristics' => $npc->characteristics->mapWithKeys(fn(Characteristic $characteristic) => [__($characteristic->name, [], 'en_US') => true])->toArray(),
+                'spells'          => $npc->spells
                     ->filter(fn(Spell $spell) => !$spell->hidden_on_map)
-                    ->mapWithKeys(function (Spell $spell) {
-                        return [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []];
-                    })->toArray(),
+                    ->mapWithKeys(fn(Spell $spell) => [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []])->toArray(),
                 'clones'           => [],
                 'healthPercentage' => $npcHealth?->percentage ?? null,
             ], fn($value) => $value !== null);

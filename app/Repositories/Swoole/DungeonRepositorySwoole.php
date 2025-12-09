@@ -13,7 +13,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
     /** @var Collection<Dungeon> */
     private Collection $dungeonsByChallengeModeId;
 
-    private Collection $dungeonMappingVersions;
+    private readonly Collection $dungeonMappingVersions;
 
     public function __construct()
     {

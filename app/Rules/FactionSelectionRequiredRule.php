@@ -12,16 +12,14 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class FactionSelectionRequiredRule implements ValidationRule
 {
     /**
-     * The request control provider instance.
-     */
-    public ParameterBag $request;
-
-    /**
      * Create a new rule instance.
      */
-    public function __construct(ParameterBag $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        /**
+         * The request control provider instance.
+         */
+        public ParameterBag $request,
+    ) {
     }
 
     /**

@@ -156,7 +156,7 @@ class CombatLogEntry
         if (self::$previousDateFormat !== null) {
             try {
                 return Carbon::createFromFormat(self::DATE_FORMATS[self::$previousDateFormat], $timestamp);
-            } catch (InvalidFormatException $invalidFormatException) {
+            } catch (InvalidFormatException) {
                 // Ignore, we'll try the other formats
             }
         }
@@ -171,7 +171,7 @@ class CombatLogEntry
                 $parsedTimestamp = Carbon::createFromFormat($dateFormat, $timestamp);
 
                 self::$previousDateFormat = $key;
-            } catch (InvalidFormatException $invalidFormatException) {
+            } catch (InvalidFormatException) {
                 continue;
             }
         }

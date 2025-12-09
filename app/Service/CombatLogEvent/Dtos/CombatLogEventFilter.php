@@ -327,40 +327,26 @@ class CombatLogEventFilter implements Arrayable
     public function toArray(): array
     {
         return array_filter([
-            'challenge_mode_id'    => $this->dungeon->challenge_mode_id,
-            'event_type'           => $this->eventType->value,
-            'data_type'            => $this->dataType,
-            'region'               => $this->region,
-            'key_level_min'        => $this->keyLevelMin,
-            'key_level_max'        => $this->keyLevelMax,
-            'item_level_min'       => $this->itemLevelMin,
-            'item_level_max'       => $this->itemLevelMax,
-            'player_deaths_min'    => $this->playerDeathsMin,
-            'player_deaths_max'    => $this->playerDeathsMax,
-            'min_samples_required' => $this->minSamplesRequired,
-            'affixes'              => $this->affixes->map(function (Affix $affix) {
-                return __($affix->name, [], 'en_US');
-            }),
-            'specializations' => $this->specializations->map(function (
-                CharacterClassSpecialization $characterClassSpecialization,
-            ) {
-                return __($characterClassSpecialization->name, [], 'en_US');
-            }),
-            'classes' => $this->classes->map(function (CharacterClass $characterClass) {
-                return __($characterClass->name, [], 'en_US');
-            }),
-            'specializationsPlayerDeaths' => $this->specializationsPlayerDeaths->map(function (
-                CharacterClassSpecialization $characterClassSpecialization,
-            ) {
-                return __($characterClassSpecialization->name, [], 'en_US');
-            }),
-            'classesPlayerDeaths' => $this->classesPlayerDeaths->map(function (CharacterClass $characterClass) {
-                return __($characterClass->name, [], 'en_US');
-            }),
-            'period_min'   => $this->periodMin,
-            'period_max'   => $this->periodMax,
-            'duration_min' => $this->durationMin,
-            'duration_max' => $this->durationMax,
+            'challenge_mode_id'           => $this->dungeon->challenge_mode_id,
+            'event_type'                  => $this->eventType->value,
+            'data_type'                   => $this->dataType,
+            'region'                      => $this->region,
+            'key_level_min'               => $this->keyLevelMin,
+            'key_level_max'               => $this->keyLevelMax,
+            'item_level_min'              => $this->itemLevelMin,
+            'item_level_max'              => $this->itemLevelMax,
+            'player_deaths_min'           => $this->playerDeathsMin,
+            'player_deaths_max'           => $this->playerDeathsMax,
+            'min_samples_required'        => $this->minSamplesRequired,
+            'affixes'                     => $this->affixes->map(fn(Affix $affix) => __($affix->name, [], 'en_US')),
+            'specializations'             => $this->specializations->map(fn(CharacterClassSpecialization $characterClassSpecialization) => __($characterClassSpecialization->name, [], 'en_US')),
+            'classes'                     => $this->classes->map(fn(CharacterClass $characterClass) => __($characterClass->name, [], 'en_US')),
+            'specializationsPlayerDeaths' => $this->specializationsPlayerDeaths->map(fn(CharacterClassSpecialization $characterClassSpecialization) => __($characterClassSpecialization->name, [], 'en_US')),
+            'classesPlayerDeaths'         => $this->classesPlayerDeaths->map(fn(CharacterClass $characterClass) => __($characterClass->name, [], 'en_US')),
+            'period_min'                  => $this->periodMin,
+            'period_max'                  => $this->periodMax,
+            'duration_min'                => $this->durationMin,
+            'duration_max'                => $this->durationMax,
         ]);
     }
 
@@ -434,9 +420,7 @@ class CombatLogEventFilter implements Arrayable
         if ($this->affixes->isNotEmpty()) {
             $must[] = BoolQuery::make([
                 Should::make(
-                    $this->affixes->map(function (Affix $affix) {
-                        return MatchOne::make('affix_id', $affix->affix_id);
-                    })->toArray(),
+                    $this->affixes->map(fn(Affix $affix) => MatchOne::make('affix_id', $affix->affix_id))->toArray(),
                 ),
             ]);
         }
@@ -463,17 +447,9 @@ class CombatLogEventFilter implements Arrayable
                 );
 
                 /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
-                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (
-                    WeeklyAffixGroup $weeklyAffixGroup,
-                ) use ($mostRecentSeason) {
-                    return $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period;
-                });
+                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period);
                 /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
-                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (
-                    WeeklyAffixGroup $weeklyAffixGroup,
-                ) use ($mostRecentSeason) {
-                    return $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period;
-                });
+                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period);
 
                 // Add a date range filter
                 $must[] = Range::make('start', [

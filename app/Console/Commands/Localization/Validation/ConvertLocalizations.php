@@ -99,9 +99,9 @@ class ConvertLocalizations extends Command
             if (is_array($value)) {
                 // Recursively convert nested arrays
                 $result = $this->convertDotNotationToArray($value);
-            } elseif (str_contains($key, '.')) {
+            } elseif (str_contains((string)$key, '.')) {
                 // Handle dot notation keys
-                $keys = explode('.', $key);
+                $keys = explode('.', (string)$key);
                 $temp = &$result;
 
                 // Build key hierarchy

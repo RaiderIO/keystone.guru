@@ -65,7 +65,7 @@ class UserService implements UserServiceInterface
         $cacheKey = sprintf(
             self::CACHE_KEY_USER_AUTH,
             $email,
-            hash_hmac('sha256', $password, config('app.key')),
+            hash_hmac('sha256', $password, (string)config('app.key')),
         );
 
         // Fast-path: Check cache for authenticated user

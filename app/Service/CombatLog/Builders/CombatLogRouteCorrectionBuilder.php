@@ -44,7 +44,7 @@ use Illuminate\Support\Collection;
  */
 class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 {
-    private CombatLogRouteCorrectionBuilderLoggingInterface $log;
+    private readonly CombatLogRouteCorrectionBuilderLoggingInterface $log;
 
     public function __construct(
         SeasonServiceInterface                    $seasonService,

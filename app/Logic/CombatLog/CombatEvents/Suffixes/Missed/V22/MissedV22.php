@@ -29,7 +29,7 @@ class MissedV22 extends Suffix implements MissedInterface
 
     private bool $critical;
 
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getMissType(): Guid
     {

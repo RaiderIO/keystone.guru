@@ -28,8 +28,6 @@ class CombatLogRouteSettingsRequestModel extends RequestModel implements Arrayab
             'temporary'      => $this->temporary,
             'debugIcons'     => $this->debugIcons,
             'mappingVersion' => $this->mappingVersion,
-        ], function ($value) {
-            return !is_null($value);
-        });
+        ], fn($value) => !is_null($value));
     }
 }

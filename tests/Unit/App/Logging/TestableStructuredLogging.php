@@ -7,15 +7,11 @@ use Illuminate\Log\LogManager;
 
 class TestableStructuredLogging extends StructuredLogging
 {
-    private LogManager $logManager;
-
     /**
      * @param LogManager $logManager
      */
-    public function __construct(LogManager $logManager)
+    public function __construct(private readonly LogManager $logManager)
     {
-        $this->logManager = $logManager;
-
         parent::__construct();
     }
 

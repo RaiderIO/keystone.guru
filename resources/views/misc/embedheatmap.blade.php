@@ -15,20 +15,14 @@ use Illuminate\Support\Collection;
 
 $showStyle = 'regular';
 
-$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization) {
-    return __($characterClassSpecialization->class->name);
-})->mapWithKeys(function (Collection $specializations, string $className) {
-    return [
-        $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {
-            return [
-                $characterClassSpecialization->specialization_id => [
-                    'icon_url' => $characterClassSpecialization->icon_url,
-                    'name'     => __($characterClassSpecialization->name),
-                ]
-            ];
-        })
-    ];
-})->toArray();
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization) => __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
+    $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
+        $characterClassSpecialization->specialization_id => [
+            'icon_url' => $characterClassSpecialization->icon_url,
+            'name'     => __($characterClassSpecialization->name),
+        ]
+    ])
+])->toArray();
 ?>
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.embed.title')])
 

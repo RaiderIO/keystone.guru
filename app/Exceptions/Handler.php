@@ -67,8 +67,8 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
-            } elseif (!in_array(get_class($e), $this->dontReport)) {
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), get_class($e), $e->getMessage());
+            } elseif (!in_array($e::class, $this->dontReport)) {
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage());
             }
         }
 

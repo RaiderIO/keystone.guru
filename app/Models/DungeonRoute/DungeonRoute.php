@@ -495,6 +495,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
+        /** @noinspection PhpDynamicFieldDeclarationInspection */
         $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(
             LatLng $latLng,
         ) => $latLng->toArray()));
@@ -843,8 +844,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
 
             if ($this->level_min === null || $this->level_max === null) {
-                $this->level_min = $this->level_min ?? $activeSeason?->key_level_min;
-                $this->level_max = $this->level_max ?? $activeSeason?->key_level_max;
+                $this->level_min ??= $activeSeason?->key_level_min;
+                $this->level_max ??= $activeSeason?->key_level_max;
             }
             if ($this->level_min !== null) {
                 $this->level_min = (int)$this->level_min;
@@ -1469,11 +1470,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         else {
             $this->affixes->each(static function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
                 foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
-                    $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function (Affix $affix) use (
-                        $seasonalAffix
-                    ) {
-                        return $affix->key === $seasonalAffix;
-                    });
+                    $foundSeasonalAffix ??= $affixGroup->affixes->first(fn(Affix $affix) => $affix->key === $seasonalAffix);
                 }
 
                 return true;

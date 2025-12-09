@@ -53,7 +53,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         Spell::SPELL_SHROUD_OF_CONCEALMENT,
     ];
 
-    private CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
+    private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
     /** @var Collection<int> */
     protected Collection $validSpellIds;

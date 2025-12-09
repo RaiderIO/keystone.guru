@@ -417,9 +417,7 @@ class Team extends Model
             // Delete icons
             $team->iconfile?->delete();
             // Remove any ad-free giveaways if the giver was part of this team
-            foreach ($team->members->filter(function (User $member) {
-                return $member->patreonAdFreeGiveaway !== null;
-            }) as $teamMember) {
+            foreach ($team->members->filter(fn(User $member) => $member->patreonAdFreeGiveaway !== null) as $teamMember) {
                 /** @var User $teamMember */
                 // If the giver of the patreon ad-free giveaway was part of this team
                 if ($team->members->pluck('id')->search($teamMember->patreonAdFreeGiveaway->giver_user_id)) {

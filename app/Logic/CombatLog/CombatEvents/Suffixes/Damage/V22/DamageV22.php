@@ -10,7 +10,7 @@ class DamageV22 extends DamageV20
     /**
      * @var string|null "AOE" or "ST"
      */
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getDamageType(): ?string
     {

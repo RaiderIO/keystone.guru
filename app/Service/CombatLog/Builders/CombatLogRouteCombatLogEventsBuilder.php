@@ -33,7 +33,7 @@ use Illuminate\Support\Collection;
  */
 class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuilder
 {
-    private CombatLogRouteCombatLogEventsBuilderLoggingInterface $log;
+    private readonly CombatLogRouteCombatLogEventsBuilderLoggingInterface $log;
 
     public function __construct(
         SeasonServiceInterface                    $seasonService,

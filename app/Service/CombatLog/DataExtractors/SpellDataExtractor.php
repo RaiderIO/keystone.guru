@@ -40,9 +40,9 @@ class SpellDataExtractor implements DataExtractorInterface
     private Collection $npcCache;
 
     /** @var Collection<int, SpellModel> */
-    private Collection $allSpells;
+    private readonly Collection $allSpells;
 
-    private SpellDataExtractorLoggingInterface $log;
+    private readonly SpellDataExtractorLoggingInterface $log;
 
     private ?string $currentCombatLogFilePath = null;
 
@@ -249,9 +249,7 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         if ($npc instanceof Npc) {
-            $npcHasSpell = $npc->npcSpells->filter(function (NpcSpell $npcSpell) use ($prefix) {
-                return $npcSpell->spell_id === $prefix->getSpellId();
-            })->isNotEmpty();
+            $npcHasSpell = $npc->npcSpells->filter(fn(NpcSpell $npcSpell) => $npcSpell->spell_id === $prefix->getSpellId())->isNotEmpty();
 
             // This NPC now casts this spell - we have proof
             if (!$npcHasSpell) {
@@ -308,7 +306,7 @@ class SpellDataExtractor implements DataExtractorInterface
         // If a spell was missed somehow, write it to the miss_types_mask field
         if ($suffix instanceof MissedInterface) {
             $spell->miss_types_mask |=
-                SpellModel::GUID_MISS_TYPE_MAPPING[get_class($suffix->getMissType())] ?? 0;
+                SpellModel::GUID_MISS_TYPE_MAPPING[$suffix->getMissType()::class] ?? 0;
         }
 
         if ($spell->isDirty() && $spell->save()) {

@@ -19,7 +19,7 @@ class MissedV9SoD extends Suffix implements MissedInterface
 
     private int $amountTotal;
 
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getMissType(): Guid
     {

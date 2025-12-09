@@ -280,9 +280,7 @@ class CacheService implements CacheServiceInterface
 
                 if (!empty($toDelete)) {
                     // Remove the prefix from each key if present.
-                    $toDeleteWithoutPrefix = array_map(function ($key) use ($prefix) {
-                        return str_replace($prefix, '', $key);
-                    }, $toDelete);
+                    $toDeleteWithoutPrefix = array_map(fn($key) => str_replace($prefix, '', $key), $toDelete);
 
                     // Delete the keys and sum up the count.
                     $nrOfDeletedKeys = $redis->command('DEL', $toDeleteWithoutPrefix);

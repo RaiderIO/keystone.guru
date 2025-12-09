@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySwooleInterface
 {
     /** @var Collection<string, Floor> */
-    private Collection $floorsByUiMapIdAndDungeonId;
+    private readonly Collection $floorsByUiMapIdAndDungeonId;
 
     /** @var Collection<int, Floor> */
     private Collection $defaultFloorByDungeonId;

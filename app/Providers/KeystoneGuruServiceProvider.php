@@ -682,13 +682,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
-            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static function (
-                SimulationCraftRaidBuffs $raidBuff,
-            ) {
-                return [
-                    $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
-                ];
-            })->toArray());
+            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(SimulationCraftRaidBuffs $raidBuff) => [
+                $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
+            ])->toArray());
         });
 
         view()->composer('common.modal.mappingversion', static function (View $view) use ($globalViewVariables) {

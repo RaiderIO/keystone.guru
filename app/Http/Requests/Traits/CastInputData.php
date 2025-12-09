@@ -55,7 +55,7 @@ trait CastInputData
             'int', 'integer' => (int)$value,
             'real', 'float', 'double' => (float)$value,
             'bool', 'boolean' => (bool)$value,
-            'json'  => json_decode($value, true),
+            'json'  => json_decode((string)$value, true),
             default => $value,
         };
     }
