@@ -163,9 +163,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
                 if ($npc !== null) {
                     // Npc was found, now retrieve the relevant GUID of the boss
                     /** @var CombatLogEvent $enemyEngagedEvent */
-                    $enemyEngagedEvent = $this->accurateEnemySightings->first(function ($value, $key) use ($npc) {
-                        return str_contains($key, $npc->id);
-                    });
+                    $enemyEngagedEvent = $this->accurateEnemySightings->first(fn($value, $key) => str_contains((string)$key, (string)$npc->id));
 
                     if ($enemyEngagedEvent !== null) {
                         // Found, now construct the GUID and continue as if this was a normal death

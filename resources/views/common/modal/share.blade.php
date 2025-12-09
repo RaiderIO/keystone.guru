@@ -13,7 +13,7 @@ $showLink      = $show['link'] ?? true;
 $showEmbed     = $show['embed'] ?? true;
 $showMdtExport = $show['mdt-export'] ?? true;
 $showPublish   = $show['publish'] ?? true;
-$modalId       = $modalId ?? null;
+$modalId       ??= null;
 
 $shareLink      = route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]);
 $shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute]);

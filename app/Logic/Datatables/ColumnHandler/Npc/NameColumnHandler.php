@@ -20,6 +20,7 @@ class NameColumnHandler extends SimpleColumnHandler
         parent::__construct($dtHandler, 'name', 'npc_name_translations.translation');
     }
 
+    #[\Override]
     protected function applyFilter(
         Builder $subBuilder,
         Builder $orderBuilder,

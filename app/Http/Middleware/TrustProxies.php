@@ -24,6 +24,7 @@ class TrustProxies extends Middleware
     {
     }
 
+    #[\Override]
     public function handle(Request $request, Closure $next): Response
     {
         if (app()->isProduction()) {

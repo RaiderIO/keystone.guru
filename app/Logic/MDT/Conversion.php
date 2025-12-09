@@ -208,7 +208,7 @@ class Conversion
     ];
     // @formatter:on
 
-    private const MAINLINE_MDT_DUNGEONS = [
+    private const array MAINLINE_MDT_DUNGEONS = [
         // Mists of Pandaria
         Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
         Dungeon::DUNGEON_MOGU_SHAN_PALACE,

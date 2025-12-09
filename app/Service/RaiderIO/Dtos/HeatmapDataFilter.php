@@ -42,13 +42,13 @@ class HeatmapDataFilter implements Arrayable
     private ?int $minSamplesRequired = null;
 
     // Passthroughs
-    private ?string $excludeAffixIds;
-    private ?string $excludeClassIds;
-    private ?string $excludeSpecIds;
-    private ?string $excludePlayerDeathSpecIds;
-    private ?string $excludePlayerDeathClassIds;
-    private ?string $includePlayerSpellIds;
-    private ?string $token;
+    private ?string $excludeAffixIds            = null;
+    private ?string $excludeClassIds            = null;
+    private ?string $excludeSpecIds             = null;
+    private ?string $excludePlayerDeathSpecIds  = null;
+    private ?string $excludePlayerDeathClassIds = null;
+    private ?string $includePlayerSpellIds      = null;
+    private ?string $token                      = null;
 
     public function __construct(
         private readonly Dungeon                 $dungeon,
@@ -60,7 +60,6 @@ class HeatmapDataFilter implements Arrayable
         $this->includeSpecIds             = collect();
         $this->includePlayerDeathClassIds = collect();
         $this->includePlayerDeathSpecIds  = collect();
-        $this->includePlayerSpellIds      = collect();
     }
 
     public function getDungeon(): Dungeon

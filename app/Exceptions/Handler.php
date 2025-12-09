@@ -56,6 +56,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
+    #[\Override]
     public function report(Throwable $e): void
     {
         // request() is not available in console
@@ -67,8 +68,8 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
-            } elseif (!in_array(get_class($e), $this->dontReport)) {
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), get_class($e), $e->getMessage());
+            } elseif (!in_array($e::class, $this->dontReport)) {
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage());
             }
         }
 
@@ -83,6 +84,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
+    #[\Override]
     public function render($request, Throwable $e)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {
@@ -113,6 +115,7 @@ class Handler extends ExceptionHandler
      * @param  Request $request
      * @return mixed
      */
+    #[\Override]
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {

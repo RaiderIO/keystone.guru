@@ -446,16 +446,16 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $combatLogEventAttributes = collect();
 
             /** @var Dungeon $dungeon */
-            $dungeon = $dungeon ?? $season->dungeons->random();
+            $dungeon ??= $season->dungeons->random();
             // Cannot load directly on the relation - need to fix
             $currentMappingVersion = $dungeon->getCurrentMappingVersion()
                 ->load('enemies');
 
-            $runId         = rand(1000, 100000000);
-            $keystoneRunId = rand(1000, 100000000);
-            $loggedRunId   = rand(1000, 100000000);
-            $runStart      = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
-            $runPeriod     = $season->start_period + rand(0, $seasonLengthWeeks);
+            $runId         = random_int(1000, 100000000);
+            $keystoneRunId = random_int(1000, 100000000);
+            $loggedRunId   = random_int(1000, 100000000);
+            $runStart      = $season->start->copy()->addHours(random_int(0, $seasonLengthHours));
+            $runPeriod     = $season->start_period + random_int(0, $seasonLengthWeeks);
             // RaiderIO regions
             $regions  = array_values(GameServerRegion::ALL);
             $regionId = match ($regions[array_rand($regions)]) {
@@ -466,7 +466,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 GameServerRegion::TAIWAN   => 5,
                 default                    => 2, // US
             };
-            $runDurationMs = rand(600, $currentMappingVersion->timer_max_seconds) * 1000;
+            $runDurationMs = random_int(600, $currentMappingVersion->timer_max_seconds) * 1000;
             $timerFraction = $runDurationMs / ($currentMappingVersion->timer_max_seconds * 1000);
 
             $success = $currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000);
@@ -477,8 +477,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $affixGroup = $season->affixGroups->random();
             $affixIds   = json_encode($affixGroup->affixes->pluck('affix_id')->toArray());
 
-            $level            = rand($season->key_level_min, $season->key_level_max);
-            $averageItemLevel = rand($season->item_level_min, $season->item_level_max);
+            $level            = random_int($season->key_level_min, $season->key_level_max);
+            $averageItemLevel = random_int($season->item_level_min, $season->item_level_max);
 
             $dateTime = $now->toDateTimeString();
             for ($j = 0; $j < $eventsPerRun; $j++) {
@@ -546,7 +546,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 } elseif ($type === CombatLogEventEventType::PlayerSpell) {
                     $attributes['context'] = json_encode([
                         '@timestamp' => $now->unix(),
-                        'spell_id'   => rand(10000, 1000000),
+                        'spell_id'   => random_int(10000, 1000000),
                     ]);
                 }
 

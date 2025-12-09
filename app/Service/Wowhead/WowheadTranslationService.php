@@ -13,10 +13,10 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 {
     use Curl;
 
-    private const IDENTIFYING_TOKEN_DUNGEON_NAMES = "new Listview({template: 'zone', id: 'zones', extraCols: ['popularity']";
-    private const IDENTIFYING_TOKEN_ZONE_NAMES    = 'var g_zone_areas = ';
+    private const string IDENTIFYING_TOKEN_DUNGEON_NAMES = "new Listview({template: 'zone', id: 'zones', extraCols: ['popularity']";
+    private const string IDENTIFYING_TOKEN_ZONE_NAMES    = 'var g_zone_areas = ';
 
-    private const LOCALE_URL_MAPPING = [
+    private const array LOCALE_URL_MAPPING = [
         'en_US' => '',
         'ko_KR' => 'ko/',
         'fr_FR' => 'fr/',
@@ -30,7 +30,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         'it_IT' => 'it/',
     ];
 
-    private const EXPANSION_URL_MAPPING = [
+    private const array EXPANSION_URL_MAPPING = [
         Expansion::EXPANSION_CLASSIC      => 'classic',
         Expansion::EXPANSION_TBC          => 'burning-crusade',
         Expansion::EXPANSION_WOTLK        => 'wrath',
@@ -127,7 +127,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                 continue; // Skip Hodor language
             }
 
-            $parts = explode('_', $locale);
+            $parts = explode('_', (string)$locale);
             if (count($parts) !== 2) {
                 continue; // Skip invalid locales
             }
@@ -185,7 +185,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
                     $lines = explode(PHP_EOL, $response);
                     foreach ($lines as $line) {
-                        if (strpos($line, self::IDENTIFYING_TOKEN_DUNGEON_NAMES) !== false) {
+                        if (str_contains($line, self::IDENTIFYING_TOKEN_DUNGEON_NAMES)) {
                             $json = $this->correctMalformedJson($line);
                             foreach ($json['data'] as $dungeonData) {
                                 /** @var Dungeon|null $dungeon */
@@ -221,7 +221,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
             $lines = explode(PHP_EOL, $response);
             foreach ($lines as $line) {
-                if (strpos($line, self::IDENTIFYING_TOKEN_ZONE_NAMES) !== false) {
+                if (str_contains($line, self::IDENTIFYING_TOKEN_ZONE_NAMES)) {
                     $json = substr($line, strlen(self::IDENTIFYING_TOKEN_ZONE_NAMES));
                     // Remove );
                     $json = rtrim($json, ');');
@@ -309,10 +309,10 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
             ], $inner);
 
             return '"' . $inner . '"';
-        }, $s);
+        }, (string)$s);
 
         // 3) Remove trailing commas before } or ] (common in JS, invalid in JSON)
-        $s = preg_replace('/,\s*([\]}])/', '$1', $s);
+        $s = preg_replace('/,\s*([\]}])/', '$1', (string)$s);
 
         return $s;
     }

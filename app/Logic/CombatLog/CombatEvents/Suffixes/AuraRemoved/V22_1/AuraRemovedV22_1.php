@@ -18,6 +18,7 @@ class AuraRemovedV22_1 extends AuraBase implements AuraRemovedInterface
     /**
      * @return HasParameters|$this
      */
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -27,11 +28,13 @@ class AuraRemovedV22_1 extends AuraBase implements AuraRemovedInterface
         return $this;
     }
 
+    #[\Override]
     public function getOptionalParameterCount(): int
     {
         return 2;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 3;

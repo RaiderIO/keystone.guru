@@ -29,7 +29,7 @@ class MissedV22 extends Suffix implements MissedInterface
 
     private bool $critical;
 
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getMissType(): Guid
     {
@@ -61,6 +61,7 @@ class MissedV22 extends Suffix implements MissedInterface
         return $this->damageType;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

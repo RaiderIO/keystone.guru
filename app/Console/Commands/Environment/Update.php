@@ -122,7 +122,7 @@ class Update extends Command
         ]);
 
         $this->call('vendor:publish', [
-            '--provider' => 'L5Swagger\L5SwaggerServiceProvider',
+            '--provider' => \L5Swagger\L5SwaggerServiceProvider::class,
         ]);
 
         // A bit of a nasty hack to fix permission issues

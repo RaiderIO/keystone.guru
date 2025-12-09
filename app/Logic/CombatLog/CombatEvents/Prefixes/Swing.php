@@ -11,6 +11,7 @@ class Swing extends Prefix
         return 0;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         return $this;

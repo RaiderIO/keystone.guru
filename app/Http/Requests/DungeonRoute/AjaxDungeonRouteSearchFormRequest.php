@@ -23,6 +23,7 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function failedValidation(Validator $validator)
     {
         $errors = (new ValidationException($validator))->errors();

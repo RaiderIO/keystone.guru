@@ -65,26 +65,15 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     return $a->id <=> $b->id;
 });
 
-$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (
-    CharacterClassSpecialization $characterClassSpecialization
-) {
-    return __($characterClassSpecialization->class->name);
-})->mapWithKeys(function (Collection $specializations, string $className) {
-    return [
-        $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization
-        ) {
-            return [
-                $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
-            ];
-        })
-    ];
-})->toArray();
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization) => __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
+    $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
+        $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
+    ])
+])->toArray();
 
-$characterClassSelectOptions = $characterClasses->mapWithKeys(function (CharacterClass $characterClass) {
-    return [
-        $characterClass->class_id => __($characterClass->name)
-    ];
-})->toArray();
+$characterClassSelectOptions = $characterClasses->mapWithKeys(fn(CharacterClass $characterClass) => [
+    $characterClass->class_id => __($characterClass->name)
+])->toArray();
 
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [

@@ -28,7 +28,7 @@ class Save extends Command
     use ExecutesShellCommands;
     use SavesArrayToJsonFile;
 
-    private const PROGRESS_BAR_FORMAT = ' %current%/%max% [%bar%] %percent:3s%% %message%';
+    private const string PROGRESS_BAR_FORMAT = ' %current%/%max% [%bar%] %percent:3s%% %message%';
 
     /**
      * The name and signature of the console command.

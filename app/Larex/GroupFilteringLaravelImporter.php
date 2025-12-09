@@ -29,8 +29,8 @@ class GroupFilteringLaravelImporter implements Importer
 
         foreach ($files as $file) {
             $items = include $file;
-            $group = pathinfo($file, PATHINFO_FILENAME);
-            $lang  = str_replace('_', '-', basename(dirname($file)));
+            $group = pathinfo((string)$file, PATHINFO_FILENAME);
+            $lang  = str_replace('_', '-', basename(dirname((string)$file)));
 
             // group filtering logic
             if ($includeGroups->isNotEmpty() && !$includeGroups->contains($group)) {

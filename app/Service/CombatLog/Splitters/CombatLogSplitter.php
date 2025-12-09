@@ -6,11 +6,8 @@ use App\Service\CombatLog\Splitters\Logging\CombatLogSplitterLoggingInterface;
 
 abstract class CombatLogSplitter implements CombatLogSplitterInterface
 {
-    private CombatLogSplitterLoggingInterface $log;
-
-    public function __construct($log)
+    public function __construct(private readonly CombatLogSplitterLoggingInterface $log)
     {
-        $this->log = $log;
     }
 
     /**

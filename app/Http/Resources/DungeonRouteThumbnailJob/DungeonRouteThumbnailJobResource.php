@@ -40,6 +40,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
      *
      * @return array|Arrayable|JsonSerializable
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         $queueSize = Queue::size(sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env')));

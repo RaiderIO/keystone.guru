@@ -208,6 +208,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
         return $this->tier;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

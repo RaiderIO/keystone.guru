@@ -67,7 +67,7 @@ trait ExportsTranslations
         foreach ($data as $key => $_) {
             $keyStr          = $this->formatPhpKey($key);
             $printableKeys[] = $keyStr;
-            $len             = strlen($keyStr);
+            $len             = strlen((string)$keyStr);
             if ($len > $maxKeyLen) {
                 $maxKeyLen = $len;
             }
@@ -77,7 +77,7 @@ trait ExportsTranslations
         $i     = 0;
         foreach ($data as $key => $value) {
             $keyStr = $printableKeys[$i++];
-            $pad    = $maxKeyLen - strlen($keyStr);
+            $pad    = $maxKeyLen - strlen((string)$keyStr);
             $arrow  = ' => ';
 
             $valueStr = $this->formatPhpValue($value, $indentLevel + 1);
@@ -86,11 +86,11 @@ trait ExportsTranslations
             // key .... => [
             //     ...
             // ],
-            if (is_array($value) && substr($valueStr, 0, 1) === '[' && strpos($valueStr, "\n") !== false) {
+            if (is_array($value) && str_starts_with((string)$valueStr, '[') && str_contains((string)$valueStr, "\n")) {
                 // indent inner lines
-                $valueStr = preg_replace('/^/m', $nextIndent, $valueStr);
+                $valueStr = preg_replace('/^/m', $nextIndent, (string)$valueStr);
                 // but remove the first extra indent to keep "["
-                $valueStr = preg_replace('/^' . preg_quote($nextIndent, '/') . '/', '', $valueStr, 1);
+                $valueStr = preg_replace('/^' . preg_quote($nextIndent, '/') . '/', '', (string)$valueStr, 1);
 
                 $lines[] = sprintf(
                     '%s%s%s%s,',

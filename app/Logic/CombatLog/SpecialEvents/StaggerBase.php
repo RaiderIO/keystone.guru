@@ -27,6 +27,7 @@ class StaggerBase extends SpecialEvent
         return $this->amount;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

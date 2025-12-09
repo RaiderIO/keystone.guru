@@ -38,6 +38,7 @@ class DungeonRouteResource extends DungeonRouteSummaryResource
      *
      * @return array|Arrayable|JsonSerializable
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return array_insert_after(parent::toArray($request), 'expiresAt', [

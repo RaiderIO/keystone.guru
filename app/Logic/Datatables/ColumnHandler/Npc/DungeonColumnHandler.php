@@ -21,6 +21,7 @@ class DungeonColumnHandler extends SimpleColumnHandler
         parent::__construct($dtHandler, 'dungeon_id', 'dungeon_names');
     }
 
+    #[\Override]
     protected function applyFilter(
         Builder $subBuilder,
         Builder $orderBuilder,

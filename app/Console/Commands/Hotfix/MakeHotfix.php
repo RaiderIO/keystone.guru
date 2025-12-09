@@ -89,9 +89,7 @@ class MakeHotfix extends Command
         $files = array_filter(explode("\n", trim($result->output())));
 
         // Filter out only existing files
-        return array_filter($files, function ($file) {
-            return file_exists(base_path($file));
-        });
+        return array_filter($files, fn($file) => file_exists(base_path($file)));
     }
 
     /**

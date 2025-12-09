@@ -56,6 +56,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         return null;
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);

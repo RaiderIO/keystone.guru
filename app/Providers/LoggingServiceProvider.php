@@ -92,6 +92,7 @@ use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         parent::register();

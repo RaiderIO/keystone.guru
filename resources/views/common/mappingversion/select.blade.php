@@ -10,10 +10,10 @@ use Illuminate\Support\Collection;
  * @var Dungeon                 $dungeon
  * @var Collection<GameVersion> $allGameVersions
  */
-$dungeons        = $dungeons ?? collect([$dungeon]);
+$dungeons        ??= collect([$dungeon]);
 $dungeons        = $dungeons->keyBy('id');
-$id              = $id ?? 'mapping_version';
-$selected        = $selected ?? null;
+$id              ??= 'mapping_version';
+$selected        ??= null;
 $allGameVersions = $allGameVersions->keyBy('id');
 
 $mappingVersions = collect();

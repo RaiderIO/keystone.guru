@@ -45,6 +45,7 @@ class EncounterStartV9 extends SpecialEvent implements EncounterStartInterface
         return $this->instanceID;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

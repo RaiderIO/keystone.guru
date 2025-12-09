@@ -6,6 +6,7 @@ use App\Models\User;
 
 abstract class AjaxPublicTestCase extends PublicTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

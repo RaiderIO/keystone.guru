@@ -152,7 +152,7 @@ class Affix extends CacheModel
         self::AFFIX_XALATATHS_BARGAIN_PULSAR,
     ];
 
-    private const SEASONAL_TYPE_AFFIX_MAPPING = [
+    private const array SEASONAL_TYPE_AFFIX_MAPPING = [
         Enemy::SEASONAL_TYPE_SHROUDED           => Affix::AFFIX_SHROUDED,
         Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX => Affix::AFFIX_SHROUDED,
         Enemy::SEASONAL_TYPE_ENCRYPTED          => Affix::AFFIX_ENCRYPTED,

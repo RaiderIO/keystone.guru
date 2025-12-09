@@ -24,6 +24,7 @@ class CombatFilter extends BaseCombatFilter
         $this->log = $log;
     }
 
+    #[\Override]
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // First, we wait for the dungeon to start

@@ -13,8 +13,8 @@ class UserService implements UserServiceInterface
 {
     use AuthenticatesUsers;
 
-    private const CACHE_KEY_USER_AUTH = 'user_auth:%s-%s';
-    private const CACHE_TTL_USER_AUTH = 300;
+    private const string CACHE_KEY_USER_AUTH = 'user_auth:%s-%s';
+    private const int CACHE_TTL_USER_AUTH    = 300;
 
     public function __construct(
         private readonly CacheServiceInterface $cacheService,
@@ -65,7 +65,7 @@ class UserService implements UserServiceInterface
         $cacheKey = sprintf(
             self::CACHE_KEY_USER_AUTH,
             $email,
-            hash_hmac('sha256', $password, config('app.key')),
+            hash_hmac('sha256', $password, (string)config('app.key')),
         );
 
         // Fast-path: Check cache for authenticated user

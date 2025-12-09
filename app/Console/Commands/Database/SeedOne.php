@@ -60,9 +60,7 @@ class SeedOne extends Command
             $classNames = explode(',', $className);
             $this->info(sprintf('Seeding database with only %s...', implode(', ', $classNames)));
 
-            $fullClassNames = collect($classNames)->map(function ($className) {
-                return 'Database\\Seeders\\' . $className;
-            })->toArray();
+            $fullClassNames = collect($classNames)->map(fn($className) => 'Database\\Seeders\\' . $className)->toArray();
 
             $databaseSeeder->run($cacheService, $fullClassNames);
         } finally {

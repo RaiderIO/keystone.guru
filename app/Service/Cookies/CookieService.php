@@ -16,12 +16,14 @@ class CookieService implements CookieServiceInterface
         $_COOKIE[$key] = $value;
         setcookie(
             $key,
-            $value,
-            $expires,
-            $path,
-            $domain,
-            config('app.env') === 'local' ? false : $secure,
-            $httponly,
+            (string)$value,
+            [
+                'expires'  => $expires,
+                'path'     => $path,
+                'domain'   => $domain,
+                'secure'   => config('app.env') === 'local' ? false : $secure,
+                'httponly' => $httponly,
+            ],
         );
     }
 }

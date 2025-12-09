@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\DungeonRoute\Dungeonroute;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
  * @var boolean           $isAdmin
  * @var Collection<Floor> $floors
- * @var Dungeonroute|null $dungeonroute
+ * @var DungeonRoute|null $dungeonroute
  * @var bool              $isMobile
  */
 ?>

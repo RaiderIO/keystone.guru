@@ -20,6 +20,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -353,12 +354,14 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * Scope a query to only include active floors.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('floors.active', 1);
     }
 
-    public function scopeIndexOrFacade(
+    #[Scope]
+    protected function indexOrFacade(
         Builder        $builder,
         MappingVersion $mappingVersion,
         int            $floorIndex,
@@ -395,7 +398,8 @@ class Floor extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
-    public function scopeDefaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
+    #[Scope]
+    protected function defaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
     {
         $useFacade = (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 

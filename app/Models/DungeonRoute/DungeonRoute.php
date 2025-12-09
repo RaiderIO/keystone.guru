@@ -52,6 +52,7 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -259,6 +260,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -494,6 +496,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
+        /** @noinspection PhpDynamicFieldDeclarationInspection */
         $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(
             LatLng $latLng,
         ) => $latLng->toArray()));
@@ -607,7 +610,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * Scope a query to only include active dungeons and non-demo routes.
      */
-    public function scopeVisible(Builder $query): Builder
+    #[Scope]
+    protected function visible(Builder $query): Builder
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {
@@ -841,8 +845,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
 
             if ($this->level_min === null || $this->level_max === null) {
-                $this->level_min = $this->level_min ?? $activeSeason?->key_level_min;
-                $this->level_max = $this->level_max ?? $activeSeason?->key_level_max;
+                $this->level_min ??= $activeSeason?->key_level_min;
+                $this->level_max ??= $activeSeason?->key_level_max;
             }
             if ($this->level_min !== null) {
                 $this->level_min = (int)$this->level_min;
@@ -1467,11 +1471,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         else {
             $this->affixes->each(static function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
                 foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
-                    $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function (Affix $affix) use (
-                        $seasonalAffix
-                    ) {
-                        return $affix->key === $seasonalAffix;
-                    });
+                    $foundSeasonalAffix ??= $affixGroup->affixes->first(fn(Affix $affix) => $affix->key === $seasonalAffix);
                 }
 
                 return true;
@@ -1665,6 +1665,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         );
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

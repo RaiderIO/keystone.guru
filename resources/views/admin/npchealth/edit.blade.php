@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
  * @var Collection<Npc>         $npcHealthsAutoComplete
  */
 
-$npcHealth            = $npcHealth ?? null;
+$npcHealth            ??= null;
 $existingGameVersions = $npc->npcHealths->keyBy('game_version_id');
 $gameVersionsSelect   = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)])

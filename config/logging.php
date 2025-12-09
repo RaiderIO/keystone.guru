@@ -55,6 +55,7 @@ return [
                 'level'  => env('LOG_LEVEL', 'debug'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
+            'stream'     => 'php://stderr',
         ],
 
         'discord' => empty(env('APP_LOG_DISCORD_WEBHOOK')) ? [] : [

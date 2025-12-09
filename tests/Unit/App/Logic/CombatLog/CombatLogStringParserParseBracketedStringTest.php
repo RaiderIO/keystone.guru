@@ -15,7 +15,7 @@ class CombatLogStringParserParseBracketedStringTest extends PublicTestCase
     #[Group('CombatLogStringParser')]
     #[Group('ParseBracketedString')]
     #[DataProvider('parseBracketedString_GivenInput_ShouldSplitValuesProperly_DataProvider')]
-    public function parseBracketedString_GivenInput_ShouldSplitValuesProperly(string $input, array $expected)
+    public function parseBracketedString_GivenInput_ShouldSplitValuesProperly(string $input, array $expected): void
     {
         $this->assertSame($expected, CombatLogStringParser::parseBracketedString($input));
     }

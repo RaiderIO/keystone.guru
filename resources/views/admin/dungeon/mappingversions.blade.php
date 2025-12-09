@@ -10,9 +10,7 @@ use Illuminate\Support\Collection;
  * @var Collection<GameVersion> $allGameVersions
  */
 $gameVersionsSelect = $allGameVersions
-    ->mapWithKeys(static function (GameVersion $gameVersion) {
-        return [$gameVersion->id => __($gameVersion->name)];
-    });
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @section('scripts')

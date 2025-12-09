@@ -38,7 +38,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     ];
 
     /** @var Collection<DataExtractorInterface> */
-    private Collection $dataExtractors;
+    private readonly Collection $dataExtractors;
 
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,

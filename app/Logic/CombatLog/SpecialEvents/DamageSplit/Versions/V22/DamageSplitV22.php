@@ -16,6 +16,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
  */
 class DamageSplitV22 extends SpecialEvent implements DamageSplitInterface
 {
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

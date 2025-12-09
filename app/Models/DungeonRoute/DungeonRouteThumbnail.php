@@ -56,6 +56,7 @@ class DungeonRouteThumbnail extends Model
         return $this->belongsTo(File::class);
     }
 
+    #[\Override]
     public static function booted(): void
     {
         parent::booted();

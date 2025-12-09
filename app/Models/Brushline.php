@@ -83,6 +83,7 @@ class Brushline extends Model
         return $this->belongsTo(Floor::class);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

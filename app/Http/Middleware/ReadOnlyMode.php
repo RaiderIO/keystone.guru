@@ -11,7 +11,7 @@ use Teapot\StatusCode\RFC\RFC7231;
 
 class ReadOnlyMode
 {
-    private const ROUTE_WHITELIST = [
+    private const array ROUTE_WHITELIST = [
         'login',
         'logout',
         'ajax/heatmap/data',

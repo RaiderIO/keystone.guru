@@ -5,8 +5,8 @@
  * @var string|null $title
  */
 
-$id    = $id ?? null;
-$title = $title ?? null;
+$id    ??= null;
+$title ??= null;
 ?>
 <div @if($id !== null) id="{{ $id }}" @endif class="form-group">
     <div class="row">

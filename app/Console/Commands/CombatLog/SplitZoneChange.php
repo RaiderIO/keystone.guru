@@ -29,10 +29,6 @@ class SplitZoneChange extends BaseSplitCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogSplitRecursively($filePath, function (string $filePath) use (
-            $combatLogSplitService
-        ) {
-            return $combatLogSplitService->splitCombatLogOnDungeonZoneChanges($filePath);
-        });
+        return $this->parseCombatLogSplitRecursively($filePath, $combatLogSplitService->splitCombatLogOnDungeonZoneChanges(...));
     }
 }

@@ -16,9 +16,9 @@ use Illuminate\Support\Collection;
 class NpcUpdateDataExtractor implements DataExtractorInterface
 {
     /** @var Collection<int> */
-    private Collection $checkedNpcIds;
+    private readonly Collection $checkedNpcIds;
 
-    private NpcUpdateDataExtractorLoggingInterface $log;
+    private readonly NpcUpdateDataExtractorLoggingInterface $log;
 
     public function __construct()
     {

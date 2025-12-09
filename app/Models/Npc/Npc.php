@@ -227,11 +227,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function enemyForcesByMappingVersion(?int $mappingVersionId = null): ?NpcEnemyForces
     {
-        return $this->npcEnemyForces->when($mappingVersionId !== null, function (Collection $collection) use (
-            $mappingVersionId
-        ) {
-            return $collection->filter(fn(NpcEnemyForces $npcEnemyForces) => $npcEnemyForces->mapping_version_id === $mappingVersionId);
-        })->sortByDesc('mapping_version_id')
+        return $this->npcEnemyForces->when($mappingVersionId !== null, fn(Collection $collection) => $collection->filter(fn(NpcEnemyForces $npcEnemyForces) => $npcEnemyForces->mapping_version_id === $mappingVersionId))->sortByDesc('mapping_version_id')
             ->first();
     }
 
@@ -379,6 +375,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $dungeon?->id ?? null;
     }
 
+    #[\Override]
     protected static function booted(): void
     {
         parent::booted();

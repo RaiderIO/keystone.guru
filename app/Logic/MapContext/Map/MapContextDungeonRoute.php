@@ -64,6 +64,7 @@ class MapContextDungeonRoute extends MapContextBase
         return null;
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $useFacade = $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;

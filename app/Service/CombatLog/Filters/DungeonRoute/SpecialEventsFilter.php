@@ -19,6 +19,7 @@ class SpecialEventsFilter extends BaseSpecialEventsFilter
      * @throws DungeonNotSupportedException
      * @throws FloorNotSupportedException
      */
+    #[\Override]
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // Starts

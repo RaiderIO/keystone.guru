@@ -10,6 +10,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -112,7 +113,7 @@ class Spell extends CacheModel implements MappingModelInterface
         if (is_string($value)) {
             try {
                 $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::SERIALIZED_DATE_TIME_FORMAT, $value);
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::DATABASE_DATE_TIME_FORMAT, $value);
             }
         } else {
@@ -131,7 +132,8 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public function scopeVisible(): Builder
+    #[Scope]
+    protected function visible(): Builder
     {
         return $this->where('hidden_on_map', false);
     }

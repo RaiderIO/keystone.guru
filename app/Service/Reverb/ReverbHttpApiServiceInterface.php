@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Service\EchoServer;
+namespace App\Service\Reverb;
 
-interface EchoServerHttpApiServiceInterface
+interface ReverbHttpApiServiceInterface
 {
     public function getHealth(): array;
-
-    public function getStatus(): array;
 
     public function getChannels(): array;
 

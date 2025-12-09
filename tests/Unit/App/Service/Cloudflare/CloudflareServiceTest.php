@@ -18,6 +18,7 @@ final class CloudflareServiceTest extends PublicTestCase
     /**
      * @throws Exception
      */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

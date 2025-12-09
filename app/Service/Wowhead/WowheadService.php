@@ -22,19 +22,19 @@ class WowheadService implements WowheadServiceInterface
 {
     use Curl;
 
-    private const IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
-    private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
+    private const string IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
+    private const string IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
-    private const IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST    = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
-    private const IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
-    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME         = 'WeakAuraExport.setOptions(';
-    private const IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC = '/Icon\.create\("([^"]+)"/';
-    private const IDENTIFYING_REGEX_SPELL_CATEGORY          = '/WH\.Gatherer\.addData\(13,\s*1,\s*\{[^}]*"name_enus":"([^"]+)"}/';
-    private const IDENTIFYING_TOKEN_SPELL_MECHANIC          = '<th>Mechanic</th>';
-    private const IDENTIFYING_TOKEN_SPELL_SCHOOL            = '<th>School</th>';
-    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE       = '<th>Dispel type</th>';
-    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME         = '<th>Cast time</th>';
-    private const IDENTIFYING_TOKEN_SPELL_DURATION          = '<th>Duration</th>';
+    private const string IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST    = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
+    private const string IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
+    private const string IDENTIFYING_TOKEN_SPELL_ICON_NAME         = 'WeakAuraExport.setOptions(';
+    private const string IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC = '/Icon\.create\("([^"]+)"/';
+    private const string IDENTIFYING_REGEX_SPELL_CATEGORY          = '/WH\.Gatherer\.addData\(13,\s*1,\s*\{[^}]*"name_enus":"([^"]+)"}/';
+    private const string IDENTIFYING_TOKEN_SPELL_MECHANIC          = '<th>Mechanic</th>';
+    private const string IDENTIFYING_TOKEN_SPELL_SCHOOL            = '<th>School</th>';
+    private const string IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE       = '<th>Dispel type</th>';
+    private const string IDENTIFYING_TOKEN_SPELL_CAST_TIME         = '<th>Cast time</th>';
+    private const string IDENTIFYING_TOKEN_SPELL_DURATION          = '<th>Duration</th>';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log,

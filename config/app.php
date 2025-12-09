@@ -17,7 +17,7 @@ return [
         'Agent'     => Jenssegers\Agent\Facades\Agent::class,
         'GitHub'    => GrahamCampbell\GitHub\GitHubServiceProvider::class,
         'Laratrust' => Laratrust\LaratrustFacade::class,
-        'Redis'     => Illuminate\Support\Facades\Redis::class,
+        //        'Redis'     => Illuminate\Support\Facades\Redis::class,
         // Tinker models
         'DungeonRoute'     => DungeonRoute::class,
         'ChallengeModeRun' => ChallengeModeRun::class,

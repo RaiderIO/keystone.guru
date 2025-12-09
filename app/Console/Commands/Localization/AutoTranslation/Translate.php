@@ -51,7 +51,7 @@ class Translate extends Command
         if (!empty($validKeys)) {
             $validTexts = [];
             foreach ($texts as $key => $text) {
-                if (in_array(explode('.', $key)[0], $validKeys)) {
+                if (in_array(explode('.', (string)$key)[0], $validKeys)) {
                     $validTexts[$key] = $text;
                 }
             }

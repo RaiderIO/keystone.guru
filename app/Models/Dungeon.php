@@ -19,6 +19,7 @@ use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -141,6 +142,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -287,7 +289,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
-        $useFacade = $useFacade ?? $mappingVersion->facade_enabled;
+        $useFacade ??= $mappingVersion->facade_enabled;
 
         // If we use facade
         // If we have facade, only return facade floor
@@ -370,7 +372,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only the Siege of Boralus dungeon.
      */
-    public function scopeFactionSelectionRequired(Builder $query): Builder
+    #[Scope]
+    protected function factionSelectionRequired(Builder $query): Builder
     {
         return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/
             self::DUNGEON_THE_NEXUS,
@@ -380,7 +383,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('dungeons.active', 1);
     }
@@ -388,7 +392,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
     }
@@ -396,7 +401,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeForGameVersion(Builder $query, GameVersion $gameVersion): Builder
+    #[Scope]
+    protected function forGameVersion(Builder $query, GameVersion $gameVersion): Builder
     {
         return $query->whereHas('mappingVersions', function (Builder $query) use ($gameVersion) {
             $query->where('game_version_id', $gameVersion->id);
@@ -505,11 +511,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function hasMappingVersionWithSeasons(): bool
     {
-        return $this->loadMappingVersions()->mappingVersions->contains(static function (
-            MappingVersion $mappingVersion,
-        ) {
-            return $mappingVersion->gameVersion->has_seasons;
-        });
+        return $this->loadMappingVersions()->mappingVersions->contains(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion->has_seasons);
     }
 
     /**
@@ -517,9 +519,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      */
     public function getMappingVersionGameVersions(): Collection
     {
-        return $this->loadMappingVersions()->mappingVersions->map(static function (MappingVersion $mappingVersion) {
-            return $mappingVersion->gameVersion;
-        })->unique('id');
+        return $this->loadMappingVersions()->mappingVersions->map(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion)->unique('id');
     }
 
     public function isFactionSelectionRequired(): bool
@@ -587,6 +587,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $result;
     }
 
+    #[\Override]
     public static function boot(): void
     {
         parent::boot();

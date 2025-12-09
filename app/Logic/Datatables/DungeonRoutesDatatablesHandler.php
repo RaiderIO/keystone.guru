@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class DungeonRoutesDatatablesHandler extends DatatablesHandler
 {
+    #[\Override]
     public function getResult(): array
     {
         /** @var array{ draw: int, recordsTotal: int, data: Collection<Builder>, recordsFiltered: int, input: array, queries: array } $result */

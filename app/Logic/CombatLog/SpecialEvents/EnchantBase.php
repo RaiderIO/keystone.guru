@@ -33,6 +33,7 @@ abstract class EnchantBase extends SpecialEvent
         return $this->itemName;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

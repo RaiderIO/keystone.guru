@@ -198,6 +198,7 @@ use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         parent::register();

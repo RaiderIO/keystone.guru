@@ -207,6 +207,7 @@ class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
         return 0;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

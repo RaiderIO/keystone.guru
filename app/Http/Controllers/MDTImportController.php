@@ -40,11 +40,11 @@ class MDTImportController extends Controller
 
             return $mdtImportStringService->setEncodedString($string)
                 ->getDetails($warnings, $errors);
-        } catch (MDTStringParseException $ex) {
+        } catch (MDTStringParseException) {
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
-        } catch (InvalidMDTStringException $ex) {
+        } catch (InvalidMDTStringException) {
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
-        } catch (CliWeakaurasParserNotFoundException $ex) {
+        } catch (CliWeakaurasParserNotFoundException) {
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.cli_weakauras_parser_not_found'));
         } catch (Exception $ex) {
             // Different message based on our deployment settings

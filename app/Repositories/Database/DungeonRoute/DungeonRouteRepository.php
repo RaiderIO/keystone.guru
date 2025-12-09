@@ -20,7 +20,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     {
         try {
             return DungeonRoute::generateRandomPublicKey();
-        } catch (RandomException $e) {
+        } catch (RandomException) {
             return 'RandomException!';
         }
     }

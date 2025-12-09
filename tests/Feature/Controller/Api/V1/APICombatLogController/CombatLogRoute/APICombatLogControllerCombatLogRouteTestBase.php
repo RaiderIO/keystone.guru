@@ -70,9 +70,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->assertNotEmpty($responseArr['data']['affixGroups']);
         $this->assertNotEmpty($responseArr['data']['affixGroups'][0]['affixes'][0]);
 
-        $validAffixIds = array_map(function (array $affix) {
-            return $affix['id'];
-        }, $responseArr['data']['affixGroups'][0]['affixes']);
+        $validAffixIds = array_map(fn(array $affix) => $affix['id'], $responseArr['data']['affixGroups'][0]['affixes']);
 
         foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
             /** @var Affix $affix */
