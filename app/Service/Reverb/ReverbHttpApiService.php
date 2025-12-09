@@ -75,7 +75,7 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
             $queryForSignature,
         ]);
 
-        $params['auth_signature'] = hash_hmac('sha256', $stringToSign, $secret);
+        $params['auth_signature'] = hash_hmac('sha256', $stringToSign, (string)$secret);
 
         // For debugging in tinker you can temporarily dd($stringToSign, $params);
         return $params;

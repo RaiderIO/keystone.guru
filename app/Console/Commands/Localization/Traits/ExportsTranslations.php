@@ -90,7 +90,7 @@ trait ExportsTranslations
                 // indent inner lines
                 $valueStr = preg_replace('/^/m', $nextIndent, (string)$valueStr);
                 // but remove the first extra indent to keep "["
-                $valueStr = preg_replace('/^' . preg_quote($nextIndent, '/') . '/', '', $valueStr, 1);
+                $valueStr = preg_replace('/^' . preg_quote($nextIndent, '/') . '/', '', (string)$valueStr, 1);
 
                 $lines[] = sprintf(
                     '%s%s%s%s,',

@@ -24,7 +24,7 @@ trait CreatesCombatLogEvent
             $randomFloor = $dungeon->floors->where('facade', 0)->random(1)->first();
 
             $result->push($this->createCombatLogEvent(array_merge([
-                'id' => random_int(1, 100000),
+                'id'        => random_int(1, 100000),
                 'ui_map_id' => $randomFloor->ui_map_id,
             ], $this->getRandomCoordinates($randomFloor))));
         }

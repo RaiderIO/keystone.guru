@@ -65,11 +65,6 @@ class Expansion extends CacheModel
 
     public $with = ['timewalkingEvent'];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime'
-    ];
-
 //    protected $casts = [
 //        'released_at' => 'datetime',
 //        'created_at'  => 'datetime',
@@ -318,5 +313,12 @@ class Expansion extends CacheModel
         }
 
         return false;
+    }
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }
