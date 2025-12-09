@@ -1,0 +1,31 @@
+{
+    "id": 333,
+    "release_changelog_id": 340,
+    "version": "v13.14",
+    "title": "Upgrade to Laravel 12 and PHP 8.3",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-12-09T21:17:32+00:00",
+    "updated_at": "2025-12-09T21:17:32+00:00",
+    "changelog": {
+        "id": 340,
+        "release_id": 333,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 340,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3026,
+                "change": "Upgraded from PHP 8.2 to 8.3."
+            },
+            {
+                "release_changelog_id": 340,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2964,
+                "change": "Upgraded to Laravel 12."
+            }
+        ]
+    }
+}
