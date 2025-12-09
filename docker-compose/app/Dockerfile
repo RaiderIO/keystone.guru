@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-mysql-client  \
     wget \
     gettext \
+    nano \
     libxdamage-dev \
     libnss3-dev \
     libgdk-pixbuf-xlib-2.0-dev \

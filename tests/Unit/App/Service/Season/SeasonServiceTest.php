@@ -7,17 +7,16 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Tests\TestCases\PublicTestCase;
 
-final class SeasonServiceTest extends PublicTestCase
+class SeasonServiceTest extends PublicTestCase
 {
-    /** @var Collection<array{start: Carbon, affix_group_count: int}> */
-    private readonly Collection $seasonAttributes;
-
     /** @var Collection<Season> */
     private Collection $seasons;
 
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        $this->seasonAttributes = collect([
+        parent::setUp();
+
+        $attributesList = [
             [
                 'start'             => Carbon::createFromDate(2018, 9, 4),
                 'affix_group_count' => 12,
@@ -31,17 +30,10 @@ final class SeasonServiceTest extends PublicTestCase
                 'start'             => Carbon::createFromDate(2020, 01, 21),
                 'affix_group_count' => 6,
             ],
-        ]);
-
-        parent::__construct($name, $data, $dataName);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
+        ];
 
         $this->seasons = collect();
-        foreach ($this->seasonAttributes as $attributes) {
+        foreach ($attributesList as $attributes) {
             $this->seasons->push(new Season($attributes));
         }
     }

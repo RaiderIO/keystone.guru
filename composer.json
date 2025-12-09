@@ -91,7 +91,6 @@
         "intervention/image": "^3.4",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^12.34",
-        "laravel/horizon": "^5.30",
         "laravel/octane": "^2.8",
         "laravel/pennant": "^1.15",
         "laravel/reverb": "^1.6",

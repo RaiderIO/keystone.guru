@@ -22,15 +22,13 @@ use Illuminate\Support\Collection;
  *
  * @property User                        $user
  * @property DungeonRoute                $dungeonRoute
- * @property Collection<OverpulledEnemy> $overpulledenemies
+ * @property Collection<OverpulledEnemy> $overpulledEnemies
  * @property Carbon                      $expires_at
  *
  * @mixin Eloquent
  */
 class LiveSession extends Model
 {
-    protected $appends = ['enemies'];
-
     protected $fillable = [
         'dungeon_route_id',
         'user_id',
@@ -65,7 +63,7 @@ class LiveSession extends Model
         return $this->belongsTo(DungeonRoute::class);
     }
 
-    public function overpulledenemies(): HasMany
+    public function overpulledEnemies(): HasMany
     {
         return $this->hasMany(OverpulledEnemy::class);
     }
@@ -103,7 +101,7 @@ class LiveSession extends Model
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

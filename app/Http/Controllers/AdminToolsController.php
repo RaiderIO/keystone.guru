@@ -1299,8 +1299,6 @@ class AdminToolsController extends Controller
                 );
 
                 return [
-                    'LOG_CHANNEL'     => env('LOG_CHANNEL'),
-                    'LOG_LEVEL'       => env('LOG_LEVEL'),
                     'logging.default' => Config::get('logging.default'),
                     'stack_channels'  => Config::get('logging.channels.stack.channels'),
                     'discord_config'  => Config::get('logging.channels.discord'),

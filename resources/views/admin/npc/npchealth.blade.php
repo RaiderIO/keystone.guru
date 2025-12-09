@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Npc\Npc;
-use App\Models\Npc\npchealth;
+use App\Models\Npc\NpcHealth;
 
 /**
  * @var Npc $npc
