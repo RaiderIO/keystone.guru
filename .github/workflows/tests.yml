@@ -12,11 +12,6 @@ on:
 permissions:
   contents: read
 
-# Ensure that pushing to development branch doesn't run concurrently with PRs
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.head.sha || github.sha }}
-  cancel-in-progress: true
-
 jobs:
   tests:
     uses: ./.github/workflows/_ci-base.yml
