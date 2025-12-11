@@ -1,7 +1,7 @@
 name: Build & Upload Frontend Assets
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
