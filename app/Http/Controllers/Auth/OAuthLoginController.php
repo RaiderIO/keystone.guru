@@ -62,7 +62,7 @@ abstract class OAuthLoginController extends LoginController
     public function redirectToProvider(
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,
-    ) {
+    ) : RedirectResponse {
         if ($readOnlyModeService->isReadOnly()) {
             Session::flash('warning', __('controller.oauthlogin.flash.read_only_mode_enabled'));
             $this->redirectTo = '/';
