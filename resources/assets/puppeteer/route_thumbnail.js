@@ -20,7 +20,6 @@ function delay(timeout) {
     const browser = await puppeteer.launch({
         headless: 'new',
         args: ['--no-sandbox'],
-        userDataDir: '/dev/null'
     });
 
     try {
