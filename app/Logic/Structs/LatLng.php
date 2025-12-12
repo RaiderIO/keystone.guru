@@ -26,7 +26,7 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    public function getLng(int $precision = null): float
+    public function getLng(?int $precision = null): float
     {
         return $precision === null ? $this->lng : round($this->lng, $precision);
     }

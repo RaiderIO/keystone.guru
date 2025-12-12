@@ -68,7 +68,7 @@
         }
     ],
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "ext-curl": "*",
         "ext-exif": "*",
         "ext-imagick": "*",

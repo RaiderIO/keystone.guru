@@ -12,7 +12,7 @@ RUN cargo --version && rustc --version
 RUN cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git --locked
 
 ### ---- Runtime image ----
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
