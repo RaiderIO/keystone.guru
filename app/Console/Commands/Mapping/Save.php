@@ -320,7 +320,7 @@ class Save extends Command
         // Demo routes, load it in a specific way to make it easier to import it back in again
         foreach ($dungeon->dungeonRoutesForExport as $demoRoute) {
             /** @var $demoRoute DungeonRoute */
-            unset($demoRoute->relations);
+            $demoRoute->unsetRelations();
             // Do not reload them
             $demoRoute->setAppends([]);
             // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created

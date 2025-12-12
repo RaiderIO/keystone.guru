@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
      *
      * @throws Throwable
      */
-    public function run(CacheServiceInterface $cacheService, array $seederClasses = null): void
+    public function run(CacheServiceInterface $cacheService, ?array $seederClasses = null): void
     {
         foreach ($seederClasses ?? [] as $seederClass) {
             if (!class_exists($seederClass)) {
