@@ -1007,7 +1007,7 @@
                 },
                 "gridCoord": {
                     "x": 189.49,
-                    "y": -5.16,
+                    "y": -5.15,
                     "uiMapId": 2341
                 },
                 "gridCoordEnemy": {
@@ -1370,12 +1370,12 @@
                     "uiMapId": 2341
                 },
                 "gridCoord": {
-                    "x": -33.13,
+                    "x": -33.12,
                     "y": -27.1,
                     "uiMapId": 2341
                 },
                 "gridCoordEnemy": {
-                    "x": -33.13,
+                    "x": -33.12,
                     "y": -11.43,
                     "uiMapId": 2341
                 }
@@ -1401,7 +1401,7 @@
                     "uiMapId": 2341
                 },
                 "gridCoordEnemy": {
-                    "x": -33.13,
+                    "x": -33.12,
                     "y": -30.24,
                     "uiMapId": 2341
                 }
@@ -1448,7 +1448,7 @@
                     "uiMapId": 2341
                 },
                 "gridCoord": {
-                    "x": -33.13,
+                    "x": -33.12,
                     "y": -20.83,
                     "uiMapId": 2341
                 },
@@ -1948,7 +1948,7 @@
                 },
                 "gridCoordEnemy": {
                     "x": -149.14,
-                    "y": -161.93,
+                    "y": -161.92,
                     "uiMapId": 2341
                 }
             },
@@ -2489,7 +2489,7 @@
                 },
                 "gridCoord": {
                     "x": -4.91,
-                    "y": -161.93,
+                    "y": -161.92,
                     "uiMapId": 2341
                 },
                 "gridCoordEnemy": {
@@ -2515,7 +2515,7 @@
                 },
                 "gridCoord": {
                     "x": 1.36,
-                    "y": -161.93,
+                    "y": -161.92,
                     "uiMapId": 2341
                 },
                 "gridCoordEnemy": {
@@ -2541,7 +2541,7 @@
                 },
                 "gridCoord": {
                     "x": 7.64,
-                    "y": -161.93,
+                    "y": -161.92,
                     "uiMapId": 2341
                 },
                 "gridCoordEnemy": {

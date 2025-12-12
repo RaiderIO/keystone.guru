@@ -175,7 +175,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
                         // Rescale it
                         $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
-                        (new ImageManager(new ImagickDriver()))
+                        new ImageManager(new ImagickDriver())
                             ->read($tmpFile)
                             ->resize($imageWidth, $imageHeight)
                             ->save($tmpFileAfterResize, $quality);

@@ -46,7 +46,7 @@ class SetLocaleFixed
     public function setDefaultLocale(): void
     {
         if (config('language.auto')) {
-            $languages = (new Agent())->languages();
+            $languages = new Agent()->languages();
 
             $this->setLocale(empty($languages) ? config('app.locale') : reset($languages));
         } else {

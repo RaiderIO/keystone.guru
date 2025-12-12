@@ -456,8 +456,8 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
-     * @deprecated Use FloorRepository::findByUiMapId instead
      */
+    #[\Deprecated(message: 'Use FloorRepository::findByUiMapId instead')]
     public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)

@@ -27,8 +27,8 @@ trait ChecksForDuplicates
         // Round it like MySql does, otherwise we get strange rounding errors and it won't detect it as a duplicate
         /** @var Eloquent $modelClass */
         $modelClass = $candidate::class;
-        $query      = $modelClass::where('lat', round($candidate->lat, 2, PHP_ROUND_HALF_EVEN))
-            ->where('lng', round($candidate->lng, 2, PHP_ROUND_HALF_EVEN));
+        $query      = $modelClass::where('lat', round($candidate->lat, 2, \RoundingMode::HalfEven))
+            ->where('lng', round($candidate->lng, 2, \RoundingMode::HalfEven));
 
         foreach ($fields as $field) {
             if (isset($candidate[$field])) {

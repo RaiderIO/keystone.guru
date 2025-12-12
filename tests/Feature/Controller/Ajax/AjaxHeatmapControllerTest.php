@@ -115,12 +115,12 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         $combatLogEventService->method('getGridAggregation')
             ->willReturn(
-                (new CombatLogEventGridAggregationResult(
+                new CombatLogEventGridAggregationResult(
                     $coordinatesService,
                     $combatLogEventFilter,
                     $this->createGridAggregationResult($dungeon, $rowCountPerFloor),
                     $runCount,
-                ))->setUseFacade($useFacade),
+                )->setUseFacade($useFacade),
             );
         app()->bind(CombatLogEventServiceInterface::class, fn() => $combatLogEventService);
     }

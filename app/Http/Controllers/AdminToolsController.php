@@ -1013,7 +1013,7 @@ class AdminToolsController extends Controller
         // For each dungeon
         foreach (Dungeon::all() as $dungeon) {
             /** @var Dungeon $dungeon */
-            $mdtNpcs = (new MDTDungeon($cacheService, $coordinatesService, $dungeon))->getMDTNPCs();
+            $mdtNpcs = new MDTDungeon($cacheService, $coordinatesService, $dungeon)->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {

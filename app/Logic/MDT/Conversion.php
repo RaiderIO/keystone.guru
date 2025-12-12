@@ -259,15 +259,7 @@ class Conversion
 
     public static function getExpansionName(string $dungeonKey): ?string
     {
-        $result = null;
-        foreach (self::DUNGEON_NAME_MAPPING as $expansionShortName => $dungeons) {
-            if (isset($dungeons[$dungeonKey])) {
-                $result = $expansionShortName;
-                break;
-            }
-        }
-
-        return $result;
+        return array_find_key(self::DUNGEON_NAME_MAPPING, fn($dungeons) => isset($dungeons[$dungeonKey]));
     }
 
     /**

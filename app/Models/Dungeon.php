@@ -557,16 +557,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public static function findExpansionByKey(string $key): ?string
     {
-        $result = null;
-
-        foreach (array_merge_recursive(self::ALL, self::ALL_RAID) as $expansion => $dungeonKeys) {
-            if (in_array($key, $dungeonKeys)) {
-                $result = $expansion;
-                break;
-            }
-        }
-
-        return $result;
+        return array_find_key(array_merge_recursive(self::ALL, self::ALL_RAID), fn($dungeonKeys) => in_array($key, $dungeonKeys));
     }
 
     public function getDungeonId(): ?int

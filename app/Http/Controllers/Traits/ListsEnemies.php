@@ -46,7 +46,7 @@ trait ListsEnemies
         $mdtEnemies = collect();
         if ($showMdtEnemies && Conversion::hasMDTDungeonName($mappingVersion->dungeon)) {
             try {
-                $mdtEnemies = (new MDTDungeon($cacheService, $coordinatesService, $mappingVersion->dungeon))
+                $mdtEnemies = new MDTDungeon($cacheService, $coordinatesService, $mappingVersion->dungeon)
                     ->getClonesAsEnemies($mappingVersion, $mappingVersion->dungeon->floors()->with(['dungeon'])
                         ->get());
 

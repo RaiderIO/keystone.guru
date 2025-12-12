@@ -688,7 +688,7 @@ class DungeonRouteController extends Controller
         ]);
 
         // Refresh the enemy forces
-        (new RefreshEnemyForces($dungeonroute->id))->handle();
+        new RefreshEnemyForces($dungeonroute->id)->handle();
 
         DungeonRoute::dropCaches($dungeonroute->id);
 

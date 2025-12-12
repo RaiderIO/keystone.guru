@@ -111,7 +111,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // Store found enemy positions in the database for analyzing
             $this->saveChallengeModeRun($resultEvents, $dungeonRoute);
 
-            $dungeonRoute = (new ResultEventDungeonRouteBuilder(
+            $dungeonRoute = new ResultEventDungeonRouteBuilder(
                 $this->coordinatesService,
                 $this->dungeonRouteRepository,
                 $this->killZoneRepository,
@@ -121,7 +121,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 $this->npcRepository,
                 $dungeonRoute,
                 $resultEvents,
-            ))->build();
+            )->build();
 
             if (config('app.debug')) {
                 $this->generateMapIconsFromEvents(

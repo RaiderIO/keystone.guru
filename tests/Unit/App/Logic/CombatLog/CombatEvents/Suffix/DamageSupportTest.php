@@ -71,7 +71,7 @@ class DamageSupportTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $advancedCombatLogEvent */
-        $advancedCombatLogEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+        $advancedCombatLogEvent = new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
         /** @var DamageSupportV22 $suffix */
         $suffix = $advancedCombatLogEvent->getSuffix();
 

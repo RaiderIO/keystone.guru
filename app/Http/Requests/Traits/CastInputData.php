@@ -15,7 +15,7 @@ trait CastInputData
      * @param  string  $model
      * @return array
      */
-    protected function castInputData(Request $request, string $model, string $subModel = null): array
+    protected function castInputData(Request $request, string $model, ?string $subModel = null): array
     {
         // Ensure the class exists and is an instance of Model
         if (!class_exists($model) || !is_a($model, Model::class, true)) {

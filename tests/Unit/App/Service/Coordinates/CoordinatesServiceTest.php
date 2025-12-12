@@ -139,11 +139,11 @@ final class CoordinatesServiceTest extends PublicTestCase
             /** @var MappingVersion $mappingVersion */
             $enemies = $mappingVersion->enemies()->with('floor')->get();
 
-            $mdtNpcs = (new MDTDungeon(
+            $mdtNpcs = new MDTDungeon(
                 ServiceFixtures::getCacheServiceMock($this),
                 $coordinatesService,
                 $mappingVersion->dungeon,
-            ))->getMDTNPCs();
+            )->getMDTNPCs();
 
             /** @var Collection<array{x: float, y: float}> $result */
             $result = collect();

@@ -414,7 +414,7 @@ class HeatmapDataFilter implements Arrayable
      * @param  Season|null $mostRecentSeason
      * @return array
      */
-    public function toArray(Season $mostRecentSeason = null): array
+    public function toArray(?Season $mostRecentSeason = null): array
     {
         $result = [
             'challengeModeId'  => $this->dungeon->challenge_mode_id,

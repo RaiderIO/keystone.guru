@@ -130,7 +130,7 @@ class File extends Model
         UploadedFile $uploadedFile,
         Model        $model,
         string       $dir = '',
-        string       $disk = null,
+        ?string      $disk = null,
     ): File {
         // Use explicitly provided disk or fallback to default per environment
         $disk ??= config(

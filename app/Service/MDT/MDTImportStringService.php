@@ -238,7 +238,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $enemyForcesByNpcIds = NpcEnemyForces::where('mapping_version_id', $importStringPulls->getMappingVersion()->id)->get()->keyBy('npc_id');
 
         // Fetch all enemies of this dungeon
-        $mdtEnemies = (new MDTDungeon($this->cacheService, $this->coordinatesService, $importStringPulls->getDungeon()))
+        $mdtEnemies = new MDTDungeon($this->cacheService, $this->coordinatesService, $importStringPulls->getDungeon())
             ->getClonesAsEnemies($importStringPulls->getMappingVersion(), $floors);
         // Group so that we pre-process the list once and fetch a grouped list later to greatly improve performance
         $mdtEnemiesByMdtNpcIndex = $mdtEnemies->groupBy('mdt_npc_index');
@@ -709,7 +709,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         $lastPointLatLng = new LatLng($lastPoint[0], $lastPoint[1], $floor);
         // Create the left part of the arrow
-        $leftPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() + 5, $floor))->rotate(
+        $leftPartLatLng = new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() + 5, $floor)->rotate(
             $lastPointLatLng,
             rad2deg(-$rotationRad),
         );
@@ -723,7 +723,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ));
 
         // Create the right part of the arrow
-        $rightPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() - 5, $floor))->rotate(
+        $rightPartLatLng = new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() - 5, $floor)->rotate(
             $lastPointLatLng,
             rad2deg(-$rotationRad),
         );

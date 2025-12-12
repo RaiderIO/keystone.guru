@@ -115,9 +115,9 @@ class CombatLogEntry
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
                 elseif (count($parameters) > 23) {
-                    $this->parsedEvent = (new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
+                    $this->parsedEvent = new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent)->setParameters($parameters);
                 } else {
-                    $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
+                    $this->parsedEvent = new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent)->setParameters($parameters);
                 }
             } catch (Error|Exception $exception) {
                 echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);

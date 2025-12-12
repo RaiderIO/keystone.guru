@@ -69,7 +69,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             }
 
             return HeatmapDataResponse::fromArray(
-                (new RaiderIOHeatmapGridResponse(
+                new RaiderIOHeatmapGridResponse(
                     $this->coordinatesService,
                     CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
                     $json['gridsByFloor'],
@@ -77,7 +77,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $json['maxSamplesInGrid'],
                     $url,
                     $heatmapDataFilter->getFloorsAsArray(),
-                ))->toArray(),
+                )->toArray(),
             );
         } finally {
             $this->log->getHeatmapDataEnd();

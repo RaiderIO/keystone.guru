@@ -119,10 +119,10 @@ class ServiceFixtures
     }
 
     public static function getSeasonServiceMock(
-        PublicTestCase            $testCase,
-        SeasonRepositoryInterface $seasonRepository = null,
-        array                     $methodsToMock = [],
-        ?Collection               $seasons = null,
+        PublicTestCase             $testCase,
+        ?SeasonRepositoryInterface $seasonRepository = null,
+        array                      $methodsToMock = [],
+        ?Collection                $seasons = null,
     ): MockObject|SeasonServiceInterface {
         $methodsToMock[]          = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
@@ -159,9 +159,9 @@ class ServiceFixtures
      * @throws Exception
      */
     public static function getMetricServiceMock(
-        PublicTestCase        $testCase,
-        array                 $methodsToMock = [],
-        CacheServiceInterface $cacheService = null,
+        PublicTestCase         $testCase,
+        array                  $methodsToMock = [],
+        ?CacheServiceInterface $cacheService = null,
     ): MockObject|MetricService {
         return $testCase
             ->getMockBuilderPublic(MetricService::class)
@@ -176,10 +176,10 @@ class ServiceFixtures
      * @throws Exception
      */
     public static function getSpellServiceMock(
-        PublicTestCase               $testCase,
-        array                        $methodsToMock = [],
-        SpellRepositoryInterface     $spellRepository = null,
-        SpellServiceLoggingInterface $log = null,
+        PublicTestCase                $testCase,
+        array                         $methodsToMock = [],
+        ?SpellRepositoryInterface     $spellRepository = null,
+        ?SpellServiceLoggingInterface $log = null,
     ): MockObject|SpellService {
         return $testCase
             ->getMockBuilderPublic(SpellService::class)
@@ -195,10 +195,10 @@ class ServiceFixtures
      * @throws Exception
      */
     public static function getCombatLogEventServiceMock(
-        PublicTestCase                        $testCase,
-        array                                 $methodsToMock = [],
-        CoordinatesServiceInterface           $coordinatesService = null,
-        CombatLogEventServiceLoggingInterface $log = null,
+        PublicTestCase                         $testCase,
+        array                                  $methodsToMock = [],
+        ?CoordinatesServiceInterface           $coordinatesService = null,
+        ?CombatLogEventServiceLoggingInterface $log = null,
     ): MockObject|CombatLogEventService {
         return $testCase
             ->getMockBuilderPublic(CombatLogEventService::class)
