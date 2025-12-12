@@ -32,7 +32,6 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
-    #[\Override]
     public function redirectToProvider(
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,
