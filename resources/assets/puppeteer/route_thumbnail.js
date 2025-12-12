@@ -18,6 +18,7 @@ function delay(timeout) {
     let startTime = new Date().getTime();
     console.log('Creating browser');
     const browser = await puppeteer.launch({
+        headless: 'new',
         args: ['--no-sandbox'],
         userDataDir: '/dev/null'
     });
