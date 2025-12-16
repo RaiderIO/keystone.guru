@@ -251,7 +251,13 @@ class CacheService implements CacheServiceInterface
 
             do {
                 // Use SCAN to iterate keys. The SCAN command returns [cursor, keys...]
-                $result  = $redis->command('SCAN', [$nextKey]);
+                $result = $redis->command('SCAN', [$nextKey]);
+                if ($result === false) {
+                    $this->log->deleteKeysByPatternScanError();
+
+                    return 0;
+                }
+
                 $nextKey = (int)$result[0];
 
                 $toDelete = [];

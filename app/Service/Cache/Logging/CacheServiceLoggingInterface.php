@@ -12,6 +12,8 @@ interface CacheServiceLoggingInterface
 
     public function deleteKeysByPatternStart(string $connection, ?int $seconds): void;
 
+    public function deleteKeysByPatternScanError(): void;
+
     public function deleteKeysByPatternRegexError(string $regex, string $redisKey): void;
 
     public function deleteKeysByPatternFailedToDeleteAllKeys(int $amount, int $total): void;

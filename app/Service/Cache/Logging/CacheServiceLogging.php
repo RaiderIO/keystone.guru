@@ -22,6 +22,11 @@ class CacheServiceLogging extends RollbarStructuredLogging implements CacheServi
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function deleteKeysByPatternScanError(): void
+    {
+        $this->error(__METHOD__);
+    }
+
     public function deleteKeysByPatternRegexError(string $regex, string $redisKey): void
     {
         $this->error(__METHOD__, get_defined_vars());
