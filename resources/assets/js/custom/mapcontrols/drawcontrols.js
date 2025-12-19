@@ -63,7 +63,6 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
 
 // Add some new strings to the draw controls
 // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
-console.log(lang.messages[`${lang.locale}.leafletdraw`]);
 L.drawLocal = $.extend(L.drawLocal, lang.messages[`${lang.locale}.leafletdraw`]);
 
 class DrawControls extends MapControl {

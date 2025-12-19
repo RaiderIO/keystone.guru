@@ -8,8 +8,6 @@
 @endsection
 
 @section('content')
-    @include('common.general.messages')
-
     <p>
         {!!
             sprintf(
@@ -21,5 +19,5 @@
          !!}
     </p>
 
-    @include('common.tag.manager', ['category' => TagCategory::DUNGEON_ROUTE_PERSONAL])
+    @include('common.tag.manager', ['context' => Auth::user(), 'category' => TagCategory::DUNGEON_ROUTE_PERSONAL])
 @endsection
