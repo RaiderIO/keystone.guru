@@ -75,7 +75,7 @@ return [
     'placeholder_new_tag_label'                       => 'new tag',
     'no_tags_assigned_label'                          => 'No tags assigned',
     'current_tags_label'                              => 'Current tags',
-    'add_tag_with_enter_label'                        => 'Tip: press Enter to create a tag',
+    'add_tag_with_enter_label'                        => 'Tip: press Enter to create a non-existing tag',
     'selected_label'                                  => 'selected',
     'affixes_label'                                   => 'Affixes',
     'attributes_label'                                => 'Attributes',

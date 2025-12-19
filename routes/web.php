@@ -251,28 +251,29 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::patch('{user}/privacy', new ProfileController()->updatePrivacy(...))->name('profile.updateprivacy');
             Route::patch('/', new ProfileController()->changepassword(...))->name('profile.changepassword');
             Route::middleware('throttle:create-tag')->group(static function () {
-                Route::post('tag', new ProfileController()->createtag(...))->name('profile.tag.create');
+                Route::post('tag', new ProfileController()->createTag(...))->name('profile.tag.create');
             });
         });
         Route::get('teams', new TeamController()->get(...))->name('team.list');
         Route::prefix('team')->group(static function () {
             Route::get('new', new TeamController()->create(...))->name('team.new');
-            Route::get('{team}', new TeamController()->edit(...))->name('team.edit');
-            Route::delete('{team}', new TeamController()->delete(...))->name('team.delete');
-            Route::middleware('throttle:create-tag')->group(static function () {
-                Route::post('tag', new TeamController()->createtag(...))->name('team.tag.create');
-            });
             Route::middleware('throttle:create-team')->group(static function () {
                 Route::post('new', new TeamController()->savenew(...))->name('team.savenew');
             });
-            Route::patch('{team}', new TeamController()->update(...))->name('team.update');
+            Route::prefix('{team}')->group(static function () {
+                Route::get('/', new TeamController()->edit(...))->name('team.edit');
+                Route::delete('/', new TeamController()->delete(...))->name('team.delete');
+                Route::patch('/', new TeamController()->update(...))->name('team.update');
+                Route::middleware('throttle:create-tag')->group(static function () {
+                    Route::post('tag/new', new TeamController()->createTag(...))->name('team.tag.create');
+                });
+            });
             Route::get('invite/{invitecode}/accept', new TeamController()->inviteaccept(...))->name('team.invite.accept');
         });
     });
 
     Route::middleware(['auth', 'role:admin'])->group(static function () {
         // Only admins may view a list of profiles
-        Route::get('profiles', new ProfileController()->get(...))->name('profile.list');
         Route::get('phpinfo', new SiteController()->phpinfo(...))->name('misc.phpinfo');
         Route::prefix('admin')->group(static function () {
             // Dungeons
@@ -451,13 +452,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
         Route::prefix('tag')->group(static function () {
             Route::get('/', new AjaxTagController()->all(...))->name('ajax.tag.all');
-            Route::get('/{category}', new AjaxTagController()->get(...))->name('ajax.tag.list');
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('/', new AjaxTagController()->store(...))->name('ajax.tag.create');
             });
             Route::delete('/{tag}', new AjaxTagController()->delete(...))->name('ajax.tag.delete');
 
-            // Profile
             Route::put('/{tag}/all', new AjaxTagController()->updateAll(...))->name('ajax.tag.updateall');
             Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
         });

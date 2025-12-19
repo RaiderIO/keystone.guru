@@ -32,7 +32,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     $_COOKIE['routes_viewmode'] : 'biglist';
 
 if ($team !== null) {
-    $searchTags = $team->getAvailableTags();
+    $searchTags = $team->tags;
 } else if (Auth::check()) {
     $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
     $searchTags    = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
@@ -45,9 +45,9 @@ $autoCompleteTags = collect();
 
 if (Auth::check()) {
     if ($team === null) {
-        $autoCompleteTags = Auth::user()->tags()->unique(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
+        $autoCompleteTags = Auth::user()->getUniqueTagNames(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
     } else {
-        $autoCompleteTags = $team->getAvailableTags();
+        $autoCompleteTags = $team->getUniqueTagNames(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM]);
     }
 } else {
     $autoCompleteTags = collect();
@@ -56,9 +56,10 @@ if (Auth::check()) {
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
             'currentUserId' => Auth::check() ? Auth::id() : -1,
+            'currentUserPublicKey' => Auth::check() ? Auth::user()->public_key : '',
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
-            'teamPublicKey' => $team ? $team->public_key : '',
+            'teamPublicKey' => $team?->public_key ?? null,
             'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamUsers', function(Builder $teamUsersBuilder){
                 $teamUsersBuilder->isModerator(Auth::id());
             })->get() : [],

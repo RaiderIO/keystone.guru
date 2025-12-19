@@ -41,9 +41,9 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasMetrics;
-use App\Models\Traits\HasTags;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
+use App\Models\Traits\Taggable;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -154,7 +154,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     use GeneratesPublicKey;
     use HasFactory;
     use HasMetrics;
-    use HasTags;
+    use Taggable;
     use Reportable;
     use SerializesDates;
 

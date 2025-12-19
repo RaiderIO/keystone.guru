@@ -204,32 +204,25 @@ class ProfileController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function createtag(TagFormRequest $request): \Illuminate\View\View
+    public function createTag(TagFormRequest $request): RedirectResponse
     {
         $error = [];
 
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
 
         if (!Tag::where('name', $request->get('tag_name_new'))
-            ->where('user_id', Auth::id())
+            ->where('context_id', Auth::id())
+            ->where('context_class', User::class)
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {
-            Tag::saveFromRequest($request, $tagCategoryId);
+            Tag::saveFromRequest($request, Auth::user(), $tagCategoryId);
 
             Session::flash('status', __('controller.profile.flash.tag_created_successfully'));
         } else {
             $error = ['tag_name_new' => __('controller.profile.flash.tag_already_exists')];
         }
 
-        return view('profile.edit')->withErrors($error);
-    }
-
-    /**
-     * @return Application|Factory|View
-     */
-    public function get(Request $request): \Illuminate\View\View
-    {
-        return view('profile.list');
+        return redirect()->route('profile.tags')->withErrors($error);
     }
 
     /**

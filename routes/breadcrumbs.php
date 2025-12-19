@@ -212,7 +212,7 @@ Breadcrumbs::for('profile.routes', static function (Generator $trail) {
 });
 
 Breadcrumbs::for('profile.tags', static function (Generator $trail) {
-    $trail->parent('profile.edit');
+    $trail->parent('home');
     $trail->push(__('breadcrumbs.home.my_tags'), route('profile.tags'));
 });
 

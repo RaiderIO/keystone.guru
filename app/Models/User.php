@@ -12,6 +12,7 @@ use App\Models\Patreon\PatreonUserLink;
 use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -69,6 +70,7 @@ class User extends Authenticatable implements LaratrustUser
     use HasIconFile;
     use HasRolesAndPermissions;
     use Notifiable;
+    use HasTags;
 
     public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
     public const MAP_FACADE_STYLE_FACADE       = 'facade';
@@ -185,20 +187,6 @@ class User extends Authenticatable implements LaratrustUser
     public function ipAddresses(): HasMany
     {
         return $this->hasMany(UserIpAddress::class);
-    }
-
-    /**
-     * @return HasMany|Tag
-     */
-    public function tags(?int $categoryId = null): HasMany
-    {
-        $result = $this->hasMany(Tag::class);
-
-        if ($categoryId !== null) {
-            $result->where('tag_category_id', $categoryId);
-        }
-
-        return $result;
     }
 
     /**

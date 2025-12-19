@@ -24,9 +24,11 @@ class APITagFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category' => [Rule::in(TagCategory::all()->pluck(['name']))],
-            'model_id' => 'required|string',
-            'name'     => 'required|string',
+            'context'       => 'required|string',
+            'context_class' => 'required|in:team,user',
+            'category'      => [Rule::in(TagCategory::all()->pluck(['name']))],
+            'model_id'      => 'required|string',
+            'name'          => 'required|string',
         ];
     }
 }

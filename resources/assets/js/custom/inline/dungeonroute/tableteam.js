@@ -23,7 +23,7 @@ class DungeonRouteTableTeam {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
         let teamPublicKey = this._dungeonrouteTable.getTableView().getTeamPublicKey();
-        if (teamPublicKey !== '') {
+        if (teamPublicKey !== null) {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
@@ -50,7 +50,7 @@ class DungeonRouteTableTeam {
         console.assert(this instanceof DungeonRouteTableTeam, 'this is not a DungeonRouteTableTeam', this);
 
         let teamPublicKey = this._dungeonrouteTable.getTableView().getTeamPublicKey();
-        if (teamPublicKey !== '') {
+        if (teamPublicKey !== null) {
             let key = $(clickEvent.currentTarget).attr('data-publickey');
 
             $.ajax({
