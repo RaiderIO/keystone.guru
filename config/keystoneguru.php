@@ -444,7 +444,14 @@ return [
     ],
 
     'raider_io' => [
-        'team_id' => 2136,
+        'team_id'      => 2136,
+        'weekly_route' => [
+            'tags' => [
+                'pug_friendly' => env('WEEKLY_ROUTE_TAG_PUG_FRIENDLY', 'pug-friendly-route'),
+                'expert'       => env('WEEKLY_ROUTE_TAG_EXPERT', 'expert-route'),
+                'title'        => env('WEEKLY_ROUTE_TAG_TITLE', 'title-route'),
+            ],
+        ],
     ],
 
     'mdt' => [

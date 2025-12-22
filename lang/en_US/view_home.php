@@ -34,5 +34,14 @@ return [
     'loading'                                      => 'Loading...',
     'start_planning_today'                         => 'Start planning today',
     'join_other_users'                             => 'Join %d+ other users and plan your M+ routes online!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'pug_friendly' => 'Pug friendly route',
+                'expert'       => 'Expert route',
+                'title'        => 'Title route',
+            ],
+        ],
+    ],
 
 ];

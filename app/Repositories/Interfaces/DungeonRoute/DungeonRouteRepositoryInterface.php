@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
 
 /**
@@ -21,4 +22,7 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
     public function generateRandomPublicKey(): string;
 
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection;
+
+    /** @return Collection<string, Collection<WeeklyRoute>> */
+    public function getWeeklyRoutes(): Collection;
 }

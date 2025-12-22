@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Features\FrontPageRework;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
@@ -11,11 +12,13 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Release;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -28,7 +31,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
-use Predis\Response\Status;
+use Laravel\Pennant\Feature;
 use Teapot\StatusCode;
 
 class SiteController extends Controller
@@ -48,9 +51,19 @@ class SiteController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index(CoverageServiceInterface $coverageService, SeasonService $seasonService): View
-    {
-        if (Auth::check()) {
+    public function index(
+        CoverageServiceInterface        $coverageService,
+        SeasonServiceInterface          $seasonService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
+    ): View {
+        if (Feature::active(FrontPageRework::class)) {
+            $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
+
+            return view('home.layout', [
+                'weeklyRouteDungeons' => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
+                'weeklyRoutes'        => $weeklyRoutes,
+            ]);
+        } elseif (Auth::check()) {
             $season = null;
             if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
                 $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);

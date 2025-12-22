@@ -320,6 +320,16 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->dungeonRoutes()->where('demo', true);
     }
 
+    /**
+     * This relationship is a bit backwards but it's useful for finding routes in a current season.
+     *
+     * @return HasMany
+     */
+    public function seasonDungeons(): HasMany
+    {
+        return $this->hasMany(SeasonDungeon::class);
+    }
+
     public function npcs(): BelongsToMany
     {
         return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');

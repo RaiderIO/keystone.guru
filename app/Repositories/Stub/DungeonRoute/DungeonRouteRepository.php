@@ -24,4 +24,9 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         return $dungeonRoutes ?? collect();
     }
+
+    public function getWeeklyRoutes(): Collection
+    {
+        return collect();
+    }
 }

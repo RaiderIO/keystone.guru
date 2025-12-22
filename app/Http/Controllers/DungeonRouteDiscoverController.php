@@ -99,7 +99,7 @@ class DungeonRouteDiscoverController extends Controller
                 $gameVersion,
                 $season,
             ],
-            'gridDungeons'  => $season->dungeons()->active()->get(),
+            'gridDungeons'  => $season->dungeons()->active()->get()->sortBy('id')->values(),
             'gameVersion'   => $gameVersion,
             'season'        => $season,
             'dungeonroutes' => [
@@ -288,7 +288,7 @@ class DungeonRouteDiscoverController extends Controller
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.expansion',
             'breadcrumbsParams' => [$expansion],
-            'gridDungeons'      => $expansion->dungeonsAndRaids()->active()->get(),
+            'gridDungeons'      => $expansion->dungeonsAndRaids()->active()->get()->sortBy('id')->values(),
             'gameVersion'       => $gameVersion,
             'expansion'         => $expansion,
             'dungeonroutes'     => [
@@ -317,7 +317,7 @@ class DungeonRouteDiscoverController extends Controller
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.gameVersion',
             'breadcrumbsParams' => [$gameVersion],
-            'gridDungeons'      => $gameVersion->expansion->dungeonsAndRaids()->active()->get(),
+            'gridDungeons'      => $gameVersion->expansion->dungeonsAndRaids()->active()->get()->sortBy('id')->values(),
             'gameVersion'       => $gameVersion,
             'dungeonroutes'     => [
                 'thisweek' => collect(),

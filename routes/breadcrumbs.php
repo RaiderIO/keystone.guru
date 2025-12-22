@@ -22,7 +22,10 @@ use Diglactic\Breadcrumbs\Generator;
  * Home page
  */
 Breadcrumbs::for('home', static function (Generator $trail) {
-    $trail->push(__('breadcrumbs.home.keystone_guru'), route('home'));
+    $trail->push(__('breadcrumbs.home.front_page'), route('home'));
+});
+Breadcrumbs::for('home.layout', static function (Generator $trail) {
+    $trail->push(__('breadcrumbs.home.front_page'), route('home'));
 });
 
 /**
