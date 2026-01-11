@@ -22,6 +22,14 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
         'Ara-Kara: City of Echoes'               => 'Ara-Kara, City of Echoes',
         'Operation Mechagon: Workshop'           => 'Operation: Mechagon - Workshop',
+        'Gambit'                                 => 'Tazavesh: So\'leah\'s Gambit',
+        'Eco-Dome'                               => 'Eco-Dome Al\'dani',
+        'Streets'                                => 'Tazavesh: Streets of Wonder',
+        'Halls'                                  => 'Halls of Atonement',
+        'Dawnbreaker'                            => 'The Dawnbreaker',
+        'Ara-Kara'                               => 'Ara-Kara, City of Echoes',
+        'Floodgate'                              => 'Operation: Floodgate',
+        'Priory'                                 => 'Priory of the Sacred Flame',
     ];
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
 
