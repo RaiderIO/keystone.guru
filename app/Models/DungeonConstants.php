@@ -145,7 +145,7 @@ trait DungeonConstants
     public const DUNGEON_IRON_DOCKS                = 'irondocks';
     public const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
     public const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
-    public const DUNGEON_SKYREACH                  = 'skyreach';
+    public const DUNGEON_SKYREACH                  = 'skyreach'; // spiresofarakdungeon
     public const DUNGEON_THE_EVERBLOOM             = 'theeverbloom'; // overgrownoutpost
 
     // Legion
@@ -212,6 +212,16 @@ trait DungeonConstants
     public const DUNGEON_THE_STONEVAULT             = 'thestonevault'; // stonevault_foundry
     public const DUNGEON_OPERATION_FLOODGATE        = 'operationfloodgate';
     public const DUNGEON_ECO_DOME_AL_DANI           = 'ecodomealdani'; // ??
+
+    // Midnight
+    public const DUNGEON_DEN_OF_NALORAKK            = 'den_of_nalorakk'; // proveyourworth
+    public const DUNGEON_MAGISTERS_TERRACE_MIDNIGHT = 'magisters_terrace_midnight'; // 12_magistersterrace
+    public const DUNGEON_MAISARA_CAVERNS            = 'maisara_caverns'; // maisaracavernsdungeon
+    public const DUNGEON_MURDER_ROW                 = 'murder_row'; // murderrow
+    public const DUNGEON_NEXUS_POINT_XENAS          = 'nexus_point_xenas';
+    public const DUNGEON_THE_BLINDING_VALE          = 'the_blinding_vale'; // lightbloomdungeon
+    public const DUNGEON_VOIDSCAR_ARENA             = 'voidscar_arena'; // ???
+    public const DUNGEON_WINDRUNNER_SPIRE           = 'windrunner_spire'; // windrunnerspire
     // @formatter:on
 
     public const ALL = [
@@ -379,6 +389,16 @@ trait DungeonConstants
             self::DUNGEON_THE_STONEVAULT,
             self::DUNGEON_OPERATION_FLOODGATE,
             self::DUNGEON_ECO_DOME_AL_DANI,
+        ],
+        Expansion::EXPANSION_MIDNIGHT => [
+            self::DUNGEON_DEN_OF_NALORAKK,
+            self::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
+            self::DUNGEON_MAISARA_CAVERNS,
+            self::DUNGEON_MURDER_ROW,
+            self::DUNGEON_NEXUS_POINT_XENAS,
+            self::DUNGEON_THE_BLINDING_VALE,
+            self::DUNGEON_VOIDSCAR_ARENA,
+            self::DUNGEON_WINDRUNNER_SPIRE,
         ],
     ];
 

@@ -619,6 +619,14 @@ return [
                 'edge_of_reality'       => 'Edge of Reality',
             ],
         ],
+        'skyreach' => [
+            'name'   => 'Skyreach',
+            'floors' => [
+                'lower_quarter' => 'Lower Quarter',
+                'grand_spire'   => 'Grand Spire',
+                'skyreach'      => 'Skyreach',
+            ],
+        ],
         'the_everbloom' => [
             'name'   => 'The Everbloom',
             'floors' => [
@@ -1094,6 +1102,74 @@ return [
             'name'   => 'The Stonevault',
             'floors' => [
                 'the_stonevault' => 'The Stonevault',
+            ],
+        ],
+    ],
+    'midnight' => [
+        'den_of_nalorakk' => [
+            'name'   => 'Den of Nalorakk',
+            'floors' => [
+                'dreamers_passage'  => 'Dreamer\'s Passage',
+                'the_foraging'      => 'The Foraging',
+                'the_heart_of_rage' => 'The Heart of Rage',
+                'den_of_nalorakk'   => 'Den of Nalorakk',
+            ],
+        ],
+        'magisters_terrace_midnight' => [
+            'name'   => 'Magisters\' Terrace',
+            'floors' => [
+                'magisters_terrace'     => 'Magisters\' Terrace',
+                'arcane_atheneum'       => 'Arcane Atheneum',
+                'grand_magister_asylum' => 'Grand Magister Asylum',
+                'tower_of_theory'       => 'Tower of Theory',
+                'central_tower'         => 'Central Tower',
+                'upper_tower'           => 'Upper Tower',
+                'celestial_orrey'       => 'Celestial Orrey',
+            ],
+        ],
+        'maisara_caverns' => [
+            'name'   => 'Maisara Caverns',
+            'floors' => [
+                'maisara_caverns' => 'Maisara Caverns',
+            ],
+        ],
+        'murder_row' => [
+            'name'   => 'Murder Row',
+            'floors' => [
+                'murder_row'       => 'Murder Row',
+                'the_illicit_rain' => 'The Illicit Rain',
+                'augurs_terrace'   => 'Augurs\' Terrace',
+            ],
+        ],
+        'nexus_point_xenas' => [
+            'name'   => 'Nexus-Point Xenas',
+            'floors' => [
+                'nexus_point_xenas' => 'Nexus-Point Xenas',
+            ],
+        ],
+        'the_blinding_vale' => [
+            'name'   => 'The Blinding Vale',
+            'floors' => [
+                'the_blinding_vale' => 'The Blinding Vale',
+            ],
+        ],
+        'voidscar_arena' => [
+            'name'   => 'Voidscar Arena',
+            'floors' => [
+                'voidscar_arena' => 'Voidscar Arena',
+            ],
+        ],
+        'windrunner_spire' => [
+            'name'   => 'Windrunner Spire',
+            'floors' => [
+                'the_promenade'           => 'The Promenade',
+                'vereesas_repose_upper'   => 'Vereesa\'s Repose Upper',
+                'vereesas_repose_lower'   => 'Vereesa\'s Repose Lower',
+                'sylvanas_quarters_upper' => 'Sylvana\'s Quarters Upper',
+                'sylvanas_quarters_lower' => 'Sylvana\'s Quarters Lower',
+                'windrunner_vault'        => 'Windrunner Vault',
+                'the_pinnacle'            => 'The Pinnacle',
+                'windrunner_spire'        => 'Windrunner Spire',
             ],
         ],
     ],

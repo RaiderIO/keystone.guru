@@ -18,9 +18,10 @@ history -s 'php artisan wowhead:fetchhealth '
 history -s 'php artisan wowhead:fetchmissingspellicons'
 history -s 'php artisan wowhead:fetchspelldata '
 history -s 'php artisan wowhead:refreshdisplayids'
+history -s 'php artisan db:seed --database=migrate'
+history -s 'php artisan migrate --database=migrate'
 history -s 'php artisan l5-swagger:generate --all && php artisan vendor:publish --provider="L5Swagger\L5SwaggerServiceProvider"'
 history -s './vendor/bin/phpunit -c phpunit.xml'
-history -s './refresh_db_seed.sh'
 
 # Prevent composer complaining about this if you got it symlinked
 git config --global --add safe.directory /var/www/

@@ -57,7 +57,8 @@ class CreateMissingFloors extends Command
                 ];
 
                 $facade = '';
-                if (__($floorKey, [], 'en_US') === __($dungeon->name, [], 'en_US')) {
+                if (__($floorKey, [], 'en_US') === __($dungeon->name, [], 'en_US') &&
+                    $dungeon->floors->count() > 1) {
                     $floorAttributes['facade']        = 1;
                     $floorAttributes['mdt_sub_level'] = 1;
                     $floorAttributes['ui_map_id']     = 0;
@@ -65,7 +66,7 @@ class CreateMissingFloors extends Command
                 }
                 Floor::create($floorAttributes);
 
-                $this->comment(sprintf('-- Added new %s floor %s', $facade, __($floorKey, [], 'en_US')));
+                $this->comment(sprintf('-- Added new%s floor %s', $facade, __($floorKey, [], 'en_US')));
 
                 $index++;
             }
