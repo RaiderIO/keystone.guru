@@ -220,7 +220,7 @@ class DungeonHeatmapController extends Controller
 
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-        $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
+        $heatmapActive = Feature::active(Heatmap::class) && ($dungeon->heatmap_enabled || isset($validated['token']));
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 
@@ -280,7 +280,7 @@ class DungeonHeatmapController extends Controller
     ): ?RedirectResponse {
         if (
             !$dungeon->active ||
-            !$dungeon->heatmap_enabled ||
+//            !$dungeon->heatmap_enabled ||
             $currentMappingVersion === null ||
             !Feature::active(Heatmap::class)
         ) {
