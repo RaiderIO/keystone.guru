@@ -11,18 +11,20 @@ use Illuminate\Support\Collection;
  * @var Collection<Dungeon> $dungeons
  * @var string|null         $route
  * @var callable|null       $subtextFn
+ * @var boolean             $useAbbreviation
+ * @var int|null            $colCount
  */
 
-$dungeons ??= $expansion->dungeonsAndRaids()->active()->get();
-$colCount = 4;
-$rowCount = (int)ceil($dungeons->count() / $colCount);
-
-$test       ??= false;
-$names      ??= true;
-$links      ??= collect();
-$route      ??= null;
-$selectable ??= false;
-$subtextFn  ??= null;
+$dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
+$colCount        ??= 4;
+$rowCount        = (int)ceil($dungeons->count() / $colCount);
+$useAbbreviation ??= false;
+$test            ??= false;
+$names           ??= true;
+$links           ??= collect();
+$route           ??= null;
+$selectable      ??= false;
+$subtextFn       ??= null;
 
 // @formatter:off
 for( $i = 0; $i < $rowCount; ++$i ) { ?>
@@ -44,7 +46,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
                         @endisset
                         @if($names)
                             <h5 class="card-text text-white">
-                                {{ __($dungeon->name) }}
+                                {{ $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name) }}
                             </h5>
                         @endif
 

@@ -40,6 +40,10 @@ class DungeonFormRequest extends FormRequest
                 'required',
                 Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name'),
             ],
+            'abbreviation' => [
+                'required',
+                Rule::unique(Dungeon::class, 'abbreviation')->ignore($this->get('abbreviation'), 'abbreviation'),
+            ],
             'key' => [
                 'required',
                 Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),

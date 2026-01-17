@@ -40,13 +40,14 @@ use Mockery\Exception;
  * @property int      $mdt_id                             The ID that MDT has given this dungeon.
  * @property bool     $raid                               True if the dungeon is actually a raid, false if it is not.
  * @property string   $name                               The name of the dungeon.
+ * @property string   $abbreviation                       HOV for Halls of Valor, GAMBIT for Tazavesh: Gambit etc.
  * @property string   $slug                               The url friendly slug of the dungeon.
- * @property string   $key                                Shorthand key of the dungeon
+ * @property string   $key                                Shorthand key of the dungeon.
  * @property bool     $heatmap_enabled                    True if this dungeon has a heatmap enabled, false if it does not.
  * @property bool     $speedrun_enabled                   True if this dungeon has a speedrun enabled, false if it does not.
  * @property bool     $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
  * @property bool     $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
- * @property int      $views                              The amount of views this dungeon has had.
+ * @property int      $views                              The number of views this dungeon has had.
  * @property bool     $active                             True if this dungeon is active, false if it is not.
  * @property bool     $has_wallpaper                      True if this dungeon has a wallpaper to show as a background.
  * @property bool     $mdt_supported                      True if MDT is supported for this dungeon, false if it is not.
@@ -108,6 +109,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'challenge_mode_id',
         'mdt_id',
         'name',
+        'abbreviation',
         'key',
         'slug',
         'views',
