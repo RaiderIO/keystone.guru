@@ -16,3 +16,7 @@
 .pw-corner-ad-video {
     margin-bottom: 0 !important;
 }
+
+#in_content.pw-sticky {
+    top: 100px !important;
+}
