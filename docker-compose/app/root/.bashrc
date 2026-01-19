@@ -1,3 +1,7 @@
+# Import NPCs from MDT and write the new names in the translation files, then save the mapping
+history -s 'php artisan mdt:importnpcs retail --dungeon=somedungeon && php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan mapping:save'
+# Write NPC names from database to file, update database with file references (npcs.12345 etc), fetch translations from Wowhead, save mapping and re-import (to update translations table)
+history -s 'php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan localization:syncnpcnames retail && php artisan mapping:save && ./refresh_db_seed.sh'
 history -s 'php artisan combatlog:extractdata tmp'
 history -s 'php artisan combatlog:splitchallengemode tmp'
 history -s 'php artisan combatlog:splitzonechange tmp'
@@ -12,7 +16,6 @@ history -s 'php artisan localization:sync en_US '
 history -s 'php artisan mapicon:generateitemicons'
 history -s 'php artisan mapping:save'
 history -s 'php artisan mdt:importmapping '
-history -s 'php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan localization:syncnpcnames retail && php artisan mapping:save && ./refresh_db_seed.sh'
 history -s 'php artisan wowhead:fetchdisplayids '
 history -s 'php artisan wowhead:fetchhealth '
 history -s 'php artisan wowhead:fetchmissingspellicons'

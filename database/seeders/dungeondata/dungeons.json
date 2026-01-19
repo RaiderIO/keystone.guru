@@ -5454,7 +5454,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 121,
@@ -17564,7 +17564,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 396,
@@ -17857,7 +17857,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 403,
@@ -17927,7 +17927,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 404,
@@ -18210,7 +18210,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 410,
@@ -18533,7 +18533,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 417,

@@ -32,7 +32,9 @@ class Conversion
         Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
         // DF S1 has MoP/WoD dungeons under here
-        Expansion::EXPANSION_TWW => 'TheWarWithin',
+        Expansion::EXPANSION_TWW      => 'TheWarWithin',
+        Expansion::EXPANSION_MIDNIGHT => 'Midnight',
+        Expansion::EXPANSION_TLT      => 'TheLastTitan',
     ];
 
     // @formatter:off
@@ -107,17 +109,17 @@ class Conversion
         Expansion::EXPANSION_LEGION => [
             Dungeon::DUNGEON_ARCWAY => 'TheArcway',
             //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
-            Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
-            Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
-            Dungeon::DUNGEON_DARKHEART_THICKET           => 'DarkheartThicket',
-            Dungeon::DUNGEON_EYE_OF_AZSHARA              => 'EyeOfAzshara',
-            Dungeon::DUNGEON_HALLS_OF_VALOR              => 'HallsofValor',
-            Dungeon::DUNGEON_LOWER_KARAZHAN              => 'ReturntoKarazhanLower',
-            Dungeon::DUNGEON_MAW_OF_SOULS                => 'MawOfSouls',
-            Dungeon::DUNGEON_NELTHARIONS_LAIR            => 'NeltharionsLair',
-            Dungeon::DUNGEON_UPPER_KARAZHAN              => 'ReturntoKarazhanUpper',
-            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
-            Dungeon::DUNGEON_VAULT_OF_THE_WARDENS        => 'VaultoftheWardens',
+            Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT => 'CathedralOfEternalNight',
+            Dungeon::DUNGEON_COURT_OF_STARS             => 'CourtOfStars',
+            Dungeon::DUNGEON_DARKHEART_THICKET          => 'DarkheartThicket',
+            Dungeon::DUNGEON_EYE_OF_AZSHARA             => 'EyeOfAzshara',
+            Dungeon::DUNGEON_HALLS_OF_VALOR             => 'HallsofValor',
+            Dungeon::DUNGEON_LOWER_KARAZHAN             => 'ReturntoKarazhanLower',
+            Dungeon::DUNGEON_MAW_OF_SOULS               => 'MawOfSouls',
+            Dungeon::DUNGEON_NELTHARIONS_LAIR           => 'NeltharionsLair',
+            Dungeon::DUNGEON_UPPER_KARAZHAN             => 'ReturntoKarazhanUpper',
+            //            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
+            Dungeon::DUNGEON_VAULT_OF_THE_WARDENS => 'VaultoftheWardens',
         ],
 
         Expansion::EXPANSION_BFA => [
@@ -163,7 +165,7 @@ class Conversion
             // BFA
             //            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
             // DF
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
+            //            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
             Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
             Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
             Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
@@ -205,6 +207,26 @@ class Conversion
             Dungeon::DUNGEON_ECO_DOME_AL_DANI           => 'EcoDomeAldani',
 
         ],
+
+        Expansion::EXPANSION_MIDNIGHT => [
+            // Wrath of the Lich King
+            Dungeon::DUNGEON_PIT_OF_SARON => 'PitOfSaron',
+
+            // Warlords of Draenor
+            Dungeon::DUNGEON_SKYREACH => 'Skyreach',
+
+            // Legion
+            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
+
+            // Dragonflight
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY => 'AlgetharAcademy',
+
+            // Midnight
+            Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT => 'MagistersTerrace',
+            Dungeon::DUNGEON_MAISARA_CAVERNS            => 'MaisaraCaverns',
+            Dungeon::DUNGEON_MURDER_ROW                 => 'MurderRow',
+            Dungeon::DUNGEON_WINDRUNNER_SPIRE           => 'WindrunnerSpire',
+        ],
     ];
     // @formatter:on
 
@@ -220,33 +242,23 @@ class Conversion
         Dungeon::DUNGEON_STORMSTOUT_BREWERY,
         Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
 
-        // Cata
-        Dungeon::DUNGEON_GRIM_BATOL,
+        // Wrath of the Lich King
+        Dungeon::DUNGEON_PIT_OF_SARON,
 
-        // BFA
-        Dungeon::DUNGEON_SIEGE_OF_BORALUS,
-        Dungeon::DUNGEON_THE_MOTHERLODE,
-        Dungeon::DUNGEON_MECHAGON_WORKSHOP,
+        // Warlords of Draenor
+        Dungeon::DUNGEON_SKYREACH,
 
-        // Shadowlands
-        Dungeon::DUNGEON_HALLS_OF_ATONEMENT,
-        Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE,
-        Dungeon::DUNGEON_THE_NECROTIC_WAKE,
-        Dungeon::DUNGEON_THEATER_OF_PAIN,
-        Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
-        Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
+        // Legion
+        Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
 
-        // TWW
-        Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
-        Dungeon::DUNGEON_CITY_OF_THREADS,
-        Dungeon::DUNGEON_THE_DAWNBREAKER,
-        Dungeon::DUNGEON_THE_STONEVAULT,
-        Dungeon::DUNGEON_CINDERBREW_MEADERY,
-        Dungeon::DUNGEON_DARKFLAME_CLEFT,
-        Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
-        Dungeon::DUNGEON_THE_ROOKERY,
-        Dungeon::DUNGEON_OPERATION_FLOODGATE,
-        Dungeon::DUNGEON_ECO_DOME_AL_DANI,
+        // Dragonflight
+        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
+
+        // Midnight
+        Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
+        Dungeon::DUNGEON_MAISARA_CAVERNS,
+        Dungeon::DUNGEON_MURDER_ROW,
+        Dungeon::DUNGEON_WINDRUNNER_SPIRE,
     ];
 
     /**

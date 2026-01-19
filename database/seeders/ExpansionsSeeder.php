@@ -82,16 +82,16 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'released_at' => Carbon::make('2024-08-26 00:00:00'),
             ]),
             'expansions.midnight.name' => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_MIDNIGHT,
                 'color'       => '#4B0082',
-                'released_at' => Carbon::make('2028-08-26 00:00:00'),
+                'released_at' => Carbon::make('2026-03-02 00:00:00'),
             ]),
             'expansions.tlt.name' => new Expansion([
                 'active'      => 0,
                 'shortname'   => Expansion::EXPANSION_TLT,
                 'color'       => '#6D6E5C',
-                'released_at' => Carbon::make('2029-08-26 00:00:00'),
+                'released_at' => Carbon::make('2027-09-07 00:00:00'),
             ]),
         ];
 

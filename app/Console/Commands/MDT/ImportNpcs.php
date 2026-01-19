@@ -61,6 +61,7 @@ class ImportNpcs extends Command
         foreach ($dungeons as $dungeon) {
             /** @var Dungeon $dungeon */
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
+                $this->warn(sprintf('- Skipping dungeon %s (does not exist in MDT)', __($dungeon->name)));
                 continue;
             }
 
