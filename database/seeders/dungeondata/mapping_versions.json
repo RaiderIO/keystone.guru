@@ -7626,7 +7626,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:43.000000Z",
         "updated_at": "2026-01-10T21:20:43.000000Z",
         "merged": false
@@ -7642,7 +7642,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:54.000000Z",
         "updated_at": "2026-01-10T21:20:54.000000Z",
         "merged": false
@@ -7658,7 +7658,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:57.000000Z",
         "updated_at": "2026-01-10T21:20:57.000000Z",
         "merged": false
@@ -7674,7 +7674,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:58.000000Z",
         "updated_at": "2026-01-10T21:20:58.000000Z",
         "merged": false
@@ -7690,7 +7690,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:00.000000Z",
         "updated_at": "2026-01-10T21:21:00.000000Z",
         "merged": false
@@ -7706,7 +7706,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:02.000000Z",
         "updated_at": "2026-01-10T21:21:02.000000Z",
         "merged": false
@@ -7722,7 +7722,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:04.000000Z",
         "updated_at": "2026-01-10T21:21:04.000000Z",
         "merged": false
@@ -7738,7 +7738,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:19.000000Z",
         "updated_at": "2026-01-10T21:21:19.000000Z",
         "merged": false
@@ -7754,7 +7754,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-14T23:10:54.000000Z",
         "updated_at": "2026-01-14T23:10:54.000000Z",
         "merged": false
@@ -7770,7 +7770,7 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-14T23:18:14.000000Z",
         "updated_at": "2026-01-14T23:18:14.000000Z",
         "merged": false
@@ -7786,9 +7786,25 @@
         "enemy_forces_shrouded_zul_gamux": null,
         "timer_max_seconds": 0,
         "mdt_mapping_hash": null,
-        "facade_enabled": 0,
+        "facade_enabled": 1,
         "created_at": "2026-01-14T23:23:57.000000Z",
         "updated_at": "2026-01-14T23:23:57.000000Z",
+        "merged": false
+    },
+    {
+        "id": 652,
+        "game_version_id": 1,
+        "dungeon_id": 49,
+        "version": 2,
+        "enemy_forces_required": 611,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "07fa03d458d1ef5f5a13b5afc9808e5c",
+        "facade_enabled": 1,
+        "created_at": "2026-01-20T15:36:15.000000Z",
+        "updated_at": "2026-01-20T15:36:15.000000Z",
         "merged": false
     }
 ]

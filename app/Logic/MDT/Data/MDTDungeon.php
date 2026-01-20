@@ -60,8 +60,8 @@ class MDTDungeon
 
         return [
             'normal'         => (int)$dungeonTotalCount['normal'],
-            'teeming'        => (int)$dungeonTotalCount['teeming'],
-            'teemingEnabled' => $dungeonTotalCount['teemingEnabled'],
+            'teeming'        => (int)($dungeonTotalCount['teeming'] ?? 0),
+            'teemingEnabled' => $dungeonTotalCount['teemingEnabled'] ?? false,
         ];
     }
 
