@@ -225,6 +225,7 @@ class Conversion
             Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT => 'MagistersTerrace',
             Dungeon::DUNGEON_MAISARA_CAVERNS            => 'MaisaraCaverns',
             Dungeon::DUNGEON_MURDER_ROW                 => 'MurderRow',
+            Dungeon::DUNGEON_NEXUS_POINT_XENAS          => 'NexusPointXenas',
             Dungeon::DUNGEON_WINDRUNNER_SPIRE           => 'WindrunnerSpire',
         ],
     ];
@@ -258,6 +259,7 @@ class Conversion
         Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
         Dungeon::DUNGEON_MAISARA_CAVERNS,
         Dungeon::DUNGEON_MURDER_ROW,
+        Dungeon::DUNGEON_NEXUS_POINT_XENAS,
         Dungeon::DUNGEON_WINDRUNNER_SPIRE,
     ];
 

@@ -18072,7 +18072,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 407,
