@@ -372,7 +372,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_PIT_OF_SARON,
                         Dungeon::DUNGEON_SKYREACH,
                         Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
-                        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
+                        Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
                         Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
                         Dungeon::DUNGEON_MAISARA_CAVERNS,
                         Dungeon::DUNGEON_NEXUS_POINT_XENAS,

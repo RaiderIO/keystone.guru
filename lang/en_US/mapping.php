@@ -106,6 +106,17 @@ return [
                 'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.',
             ],
         ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => '+10% Healing Taken',
+                'versatility_increased'     => '+5% Versatility',
+                'critical_strike_increased' => '+5% Critical Strike',
+                'haste_increased'           => '+5% Haste',
+                'mastery_rating_increased'  => '+584 Mastery Rating',
+                'go_north'                  => 'Go north',
+                'go_south'                  => 'Go south',
+            ],
+        ],
     ],
 
 ];

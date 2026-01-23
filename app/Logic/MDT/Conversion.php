@@ -165,7 +165,7 @@ class Conversion
             // BFA
             //            Dungeon::DUNGEON_WAYCREST_MANOR => 'WaycrestManor',
             // DF
-            //            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
             Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
             Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
             Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
@@ -218,8 +218,8 @@ class Conversion
             // Legion
             Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
 
-            // Dragonflight
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY => 'AlgetharAcademy',
+            // Dragonflight (but Midnight version)
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT => 'AlgetharAcademy',
 
             // Midnight
             Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT => 'MagistersTerrace',
@@ -252,8 +252,8 @@ class Conversion
         // Legion
         Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
 
-        // Dragonflight
-        Dungeon::DUNGEON_ALGETH_AR_ACADEMY,
+        // Dragonflight (but Midnight version)
+        Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
 
         // Midnight
         Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,

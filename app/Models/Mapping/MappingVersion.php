@@ -315,10 +315,10 @@ class MappingVersion extends Model
 
         // Now that we know the floor union candidates, check which floor union we need to use
         $result = null;
-        // If we have more than 1 target we must make a choice based on the floor union areas attached to the floor union
+        // If we have more than 1 target, we must make a choice based on the floor union areas attached to the floor union
         if ($floorUnions->count() > 1) {
             foreach ($floorUnions as $floorUnion) {
-                // We need to translate the target point using this floor union first, prior to checking the floor union areas
+                // We need to translate the target point using this floor union first, before checking the floor union areas
                 // Only if the translated point falls in the floor union area, can we properly check if this floor union matches
                 $tmpConvertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation($this, $latLng, $floorUnion);
                 foreach ($floorUnion->floorUnionAreas as $floorUnionArea) {

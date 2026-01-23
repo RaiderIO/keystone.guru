@@ -1062,7 +1062,7 @@ return [
     ],
     'df' => [
         'algeth_ar_academy' => [
-            'name'         => 'Algeth\'ar Academy',
+            'name'         => 'Algeth\'ar Academy (Dragonflight)',
             'abbreviation' => 'AA',
             'floors'       => [
                 'algeth_ar_academy'        => 'Algeth\'ar Academy',

@@ -1062,7 +1062,7 @@ return [
     ],
     'df' => [
         'algeth_ar_academy' => [
-            'name'         => '알게타르 대학',
+            'name'         => '알게타르 대학 (용군단)',
             'abbreviation' => '',
             'floors'       => [
                 'algeth_ar_academy'        => '알게타르 대학',

@@ -1062,7 +1062,7 @@ return [
     ],
     'df' => [
         'algeth_ar_academy' => [
-            'name'         => 'Академия Алгет\'ар',
+            'name'         => 'Академия Алгет\'ар (Полёт драконов)',
             'abbreviation' => '',
             'floors'       => [
                 'algeth_ar_academy'        => 'Академия Алгет\'ар',

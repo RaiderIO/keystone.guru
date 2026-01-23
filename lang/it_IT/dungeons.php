@@ -1062,7 +1062,7 @@ return [
     ],
     'df' => [
         'algeth_ar_academy' => [
-            'name'         => 'Accademia di Algeth\'ar',
+            'name'         => 'Accademia di Algeth\'ar (Volo dei Draghi)',
             'abbreviation' => '',
             'floors'       => [
                 'algeth_ar_academy'        => 'Accademia di Algeth\'ar',

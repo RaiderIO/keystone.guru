@@ -1247,7 +1247,7 @@ return [
     ],
     'midnight' => [
         'algeth_ar_academy_midnight' => [
-            'name'         => 'Académie d’Algeth’ar',
+            'name'         => 'Académie d’Algeth’ar (Dragonflight)',
             'abbreviation' => '',
             'floors'       => [
                 'algeth_ar_academy'        => 'Académie d’Algeth’ar',

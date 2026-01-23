@@ -222,6 +222,7 @@ trait DungeonConstants
     public const DUNGEON_THE_BLINDING_VALE          = 'the_blinding_vale'; // lightbloomdungeon
     public const DUNGEON_VOIDSCAR_ARENA             = 'voidscar_arena'; // ???
     public const DUNGEON_WINDRUNNER_SPIRE           = 'windrunner_spire'; // windrunnerspire
+    public const DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT = 'algeth_ar_academy_midnight'; // dragonacademy
     // @formatter:on
 
     public const ALL = [
@@ -399,6 +400,7 @@ trait DungeonConstants
             self::DUNGEON_THE_BLINDING_VALE,
             self::DUNGEON_VOIDSCAR_ARENA,
             self::DUNGEON_WINDRUNNER_SPIRE,
+            self::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
         ],
     ];
 
