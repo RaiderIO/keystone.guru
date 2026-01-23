@@ -1247,12 +1247,12 @@ return [
     ],
     'midnight' => [
         'algeth_ar_academy_midnight' => [
-            'name'         => '',
+            'name'         => 'Академия Алгет\'ар',
             'abbreviation' => '',
             'floors'       => [
-                'algeth_ar_academy'        => '',
-                'the_pitch'                => '',
-                'the_headteachers_enclave' => '',
+                'algeth_ar_academy'        => 'Академия Алгет\'ар',
+                'the_pitch'                => 'Площадка',
+                'the_headteachers_enclave' => 'Анклав директора',
             ],
         ],
         'den_of_nalorakk'            => [

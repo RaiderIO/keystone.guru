@@ -1247,12 +1247,12 @@ return [
     ],
     'midnight' => [
         'algeth_ar_academy_midnight' => [
-            'name'         => '',
+            'name'         => '阿爾蓋薩學院',
             'abbreviation' => '',
             'floors'       => [
-                'algeth_ar_academy'        => '',
-                'the_pitch'                => '',
-                'the_headteachers_enclave' => '',
+                'algeth_ar_academy'        => '阿爾蓋薩學院',
+                'the_pitch'                => '運動場',
+                'the_headteachers_enclave' => '院長區',
             ],
         ],
         'den_of_nalorakk'            => [

@@ -1247,12 +1247,12 @@ return [
     ],
     'midnight' => [
         'algeth_ar_academy_midnight' => [
-            'name'         => '',
+            'name'         => '알게타르 대학',
             'abbreviation' => '',
             'floors'       => [
-                'algeth_ar_academy'        => '',
-                'the_pitch'                => '',
-                'the_headteachers_enclave' => '',
+                'algeth_ar_academy'        => '알게타르 대학',
+                'the_pitch'                => '경기장',
+                'the_headteachers_enclave' => '교장의 거주지',
             ],
         ],
         'den_of_nalorakk'            => [

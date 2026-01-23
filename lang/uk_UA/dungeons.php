@@ -1247,12 +1247,12 @@ return [
     ],
     'midnight' => [
         'algeth_ar_academy_midnight' => [
-            'name'         => '',
+            'name'         => 'Algeth\'ar Academy',
             'abbreviation' => '',
             'floors'       => [
-                'algeth_ar_academy'        => '',
-                'the_pitch'                => '',
-                'the_headteachers_enclave' => '',
+                'algeth_ar_academy'        => 'Algeth\'ar Academy',
+                'the_pitch'                => 'The Pitch',
+                'the_headteachers_enclave' => 'The Headteacher\'s Enclave',
             ],
         ],
         'den_of_nalorakk'            => [

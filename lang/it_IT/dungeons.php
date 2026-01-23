@@ -1247,12 +1247,12 @@ return [
     ],
     'midnight' => [
         'algeth_ar_academy_midnight' => [
-            'name'         => '',
+            'name'         => 'Accademia di Algeth\'ar',
             'abbreviation' => '',
             'floors'       => [
-                'algeth_ar_academy'        => '',
-                'the_pitch'                => '',
-                'the_headteachers_enclave' => '',
+                'algeth_ar_academy'        => 'Accademia di Algeth\'ar',
+                'the_pitch'                => 'Il Campo',
+                'the_headteachers_enclave' => 'Enclave della Preside',
             ],
         ],
         'den_of_nalorakk'            => [
