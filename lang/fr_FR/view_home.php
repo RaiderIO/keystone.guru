@@ -2,7 +2,7 @@
 
 return [
 
-    'ie_not_supported'                => 'Il semble que vous naviguez sur Keystone.guru en utilisant Internet Explorer. Malheureusement, Internet Explorer n\'est pas un navigateur pris en charge. Non vraiment, cela ne fonctionne vraiment pas du tout. Veuillez essayer soit Google Chrome, Mozilla Firefox ou Microsoft Edge.',
+    'ie_not_supported'          => 'Il semble que vous naviguez sur Keystone.guru en utilisant Internet Explorer. Malheureusement, Internet Explorer n\'est pas un navigateur pris en charge. Non vraiment, cela ne fonctionne vraiment pas du tout. Veuillez essayer soit Google Chrome, Mozilla Firefox ou Microsoft Edge.',
     'tagline'                         => 'Itinéraires M+ simplifiés',
     'tagline_description'             => 'Planifiez des itinéraires en ligne en coopération avec votre équipe ou découvrez des itinéraires adaptés à votre style de jeu et à votre niveau de compétence. Keystone.guru est l\'endroit unique pour gérer et partager vos itinéraires M+.',
     'discover_routes'                 => 'Découvrez des routes',
@@ -16,8 +16,8 @@ return [
     'create_your_own_routes_description' => 'Importez vos routes depuis Mythic Dungeon Tools ou :createANewRoute à partir de zéro. Keystone.guru offre divers outils pour rendre votre route mémorable,
                                     tels que le dessin libre, le traçage et le placement d\'icônes/commentaires. Les forces ennemies peuvent être affichées brut ou en pourcentage selon votre envie. Divers autres paramètres vous permettent
                                     de personnaliser votre expérience de création de routes à votre guise.',
-    'get_organized'                                => 'Organisez-vous',
-    'get_organized_description'                    => 'Organisez vos itinéraires depuis votre profil ou via des équipes. Keystone.guru vous offre une large gamme d\'outils pour garder tous vos itinéraires organisés et accessibles par tous les membres de votre équipe M+. Vous pouvez toujours exporter des itinéraires au format Mythic Dungeon Tools pour les partager avec d\'autres.',
+    'get_organized'             => 'Organisez-vous',
+    'get_organized_description' => 'Organisez vos itinéraires depuis votre profil ou via des équipes. Keystone.guru vous offre une large gamme d\'outils pour garder tous vos itinéraires organisés et accessibles par tous les membres de votre équipe M+. Vous pouvez toujours exporter des itinéraires au format Mythic Dungeon Tools pour les partager avec d\'autres.',
     'custom_dungeon_mapping'                       => 'Cartographie personnalisée des donjons',
     'custom_dungeon_mapping_description'           => 'Keystone.guru a sa propre cartographie de donjons sans dépendances à aucun outil externe. Voyez quels ennemis renforcent les autres, lâchent l\'ichor sanguin ou explosent votre groupe. La cartographie est open source et gratuite. Toujours.',
     'features'                                     => 'Fonctionnalités',

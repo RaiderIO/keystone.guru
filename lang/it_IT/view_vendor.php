@@ -6,5 +6,4 @@ return [
             'contribute_translations' => 'Contribuisci alle traduzioni',
         ],
     ],
-]
-;
+];

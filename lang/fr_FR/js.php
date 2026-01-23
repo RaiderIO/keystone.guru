@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => 'Nom',
     'enemy_forces_label'                              => 'Forces ennemies',
     'enemy_display_type_label'                        => 'Type d\'affichage de l\'ennemi',
@@ -477,5 +478,5 @@ return [
     'error_loading_data_label'                                             => 'Erreur de chargement des données - veuillez réessayer',
     'run_count_label'                                                      => 'Affichage des données de :count tirages',
     'refresh_thumbnails_label'                                             => 'Actualiser les vignettes',
-]
-;
+
+];
