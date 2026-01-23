@@ -1,0 +1,16 @@
+[
+    {
+        "id": 216,
+        "mapping_version_id": 657,
+        "floor_id": 428,
+        "speed": null,
+        "vertices_json": "[{\"lat\":-22.7357,\"lng\":91.3219},{\"lat\":-242.8936,\"lng\":115.9523},{\"lat\":-243.2725,\"lng\":266.7661},{\"lat\":-31.83,\"lng\":274.3447}]"
+    },
+    {
+        "id": 219,
+        "mapping_version_id": 658,
+        "floor_id": 428,
+        "speed": null,
+        "vertices_json": "[{\"lat\":-25.25,\"lng\":115},{\"lat\":-34.75,\"lng\":297.75},{\"lat\":-246.75,\"lng\":259.25},{\"lat\":-243,\"lng\":156}]"
+    }
+]

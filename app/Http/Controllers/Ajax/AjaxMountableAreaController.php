@@ -47,7 +47,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      *
      * @throws Throwable
      */
-    public function delete(Request $request, MountableArea $mountableArea)
+    public function delete(Request $request, MappingVersion $mappingVersion, MountableArea $mountableArea)
     {
         return DB::transaction(function () use ($mountableArea) {
             try {
