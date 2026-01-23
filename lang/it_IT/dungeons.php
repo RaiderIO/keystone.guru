@@ -1255,7 +1255,7 @@ return [
                 'the_headteachers_enclave' => 'Enclave della Preside',
             ],
         ],
-        'den_of_nalorakk'            => [
+        'den_of_nalorakk' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -1278,14 +1278,14 @@ return [
                 'celestial_orrey'       => '',
             ],
         ],
-        'maisara_caverns'            => [
+        'maisara_caverns' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'maisara_caverns' => '',
             ],
         ],
-        'murder_row'                 => [
+        'murder_row' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -1294,28 +1294,28 @@ return [
                 'augurs_terrace'   => '',
             ],
         ],
-        'nexus_point_xenas'          => [
+        'nexus_point_xenas' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'nexus_point_xenas' => '',
             ],
         ],
-        'the_blinding_vale'          => [
+        'the_blinding_vale' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'the_blinding_vale' => '',
             ],
         ],
-        'voidscar_arena'             => [
+        'voidscar_arena' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'voidscar_arena' => '',
             ],
         ],
-        'windrunner_spire'           => [
+        'windrunner_spire' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
