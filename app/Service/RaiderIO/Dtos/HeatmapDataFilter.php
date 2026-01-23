@@ -435,6 +435,7 @@ class HeatmapDataFilter implements Arrayable
             'excludePlayerDeathSpecIds'  => $this->getExcludePlayerDeathSpecIds(),
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
             'includePlayerSpellIds'      => $this->getIncludePlayerSpellIds(),
+            'token'                      => $this->getToken(),
         ];
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {

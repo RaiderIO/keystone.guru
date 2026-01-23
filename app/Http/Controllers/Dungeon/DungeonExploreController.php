@@ -161,6 +161,10 @@ class DungeonExploreController extends Controller
             $floorIndex = '1';
         }
 
+        // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
+        $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
+        User::forceMapFacadeStyle($mapFacadeStyle);
+
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->indexOrFacade($currentMappingVersion, $floorIndex)
@@ -193,15 +197,18 @@ class DungeonExploreController extends Controller
         $showEnemyInfo         = $request->get('showEnemyInfo', false);
         $showTitle             = $request->get('showTitle', true);
         $showSidebar           = $request->get('showSidebar', true);
+        $showHeader            = $request->get('showHeader', true);
         $defaultZoom           = $request->get('defaultZoom', 1);
 
         unset(
             $validated['style'],
             $validated['headerBackgroundColor'],
+            $validated['mapFacadeStyle'],
             $validated['mapBackgroundColor'],
             $validated['showEnemyInfo'],
             $validated['showTitle'],
             $validated['showSidebar'],
+            $validated['showHeader'],
             $validated['defaultZoom'],
         );
 
@@ -215,7 +222,8 @@ class DungeonExploreController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
+            'mapFacadeStyle'          => $mapFacadeStyle,
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
@@ -230,6 +238,7 @@ class DungeonExploreController extends Controller
                     // Default false - not available
                     'title'          => (bool)$showTitle,
                     'sidebar'        => (bool)$showSidebar,
+                    'header'         => (bool)$showHeader,
                     'floorSelection' => true,
                     // Always available, but can be overridden later if there's no floors to select
                 ],

@@ -11,12 +11,17 @@ All options from the [route embedding options](./embed.md) are also available fo
 
 https://keystone.guru/heatmap/retail/tazavesh-streets-of-wonder/embed/1?showPulls=1&pullsDefaultState=0 etc.
 
+To embed just the dungeon with the mapping, without any route displayed:
+
+https://keystone.guru/explore/retail/tazavesh-streets-of-wonder/embed/1?showPulls=1&pullsDefaultState=0 etc.
+
 ## Reference
 
 | Name                  | Type              | Default              | Description                                                                                                                                                                                                                                               |
 |-----------------------|-------------------|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | style                 | **string**        | `compact`            | `compact` aims to keep the header one row thick.                                                                                                                                                                                                          |
 | headerBackgroundColor | **string\|null**  | `null`               | Header background color (such as `#FF0000`). If not passed, a background image for the dungeon itself will be loaded instead.                                                                                                                             |
+| mapFacadeStyle        | **string\|null**  | `null`               | Map facade style. Can be `split_floors` (Blizzard floor style) or `facade` (for MDT-style combined floors, if the dungeon supports it).                                                                                                                   |
 | mapBackgroundColor    | **string\|null**  | Color based on theme | Map background color (such as `#FF0000`).                                                                                                                                                                                                                 |
 | showEnemyInfo         | **boolean**       | `0`                  | `0` or `1`. When `1`, when the user performs a mouseover on an enemy, the enemy info pane will be shown. When `0`, the enemy info pane will not be shown.                                                                                                 |
 | showTitle             | **boolean**       | `1`                  | `0` or `1`. When `1`, the dungeon name will be shown in the header. When `0` it will not be shown.                                                                                                                                                        |
