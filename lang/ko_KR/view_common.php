@@ -543,7 +543,7 @@ return [
             'copy_to_clipboard'                => '클립보드에 복사',
         ],
         'simulate' => [
-            'intro' => '시뮬레이션 기능을 사용하려면, 캐릭터에 대한 SimulationCraft 문자열을 생성하고 생성된 Keystone.guru 문자열을 캐릭터의 출력 문자열 아래에 붙여넣으세요. 그런 다음 평소처럼 시뮬레이션을 실행하세요! raidbots.com을 사용하는 경우, 애드온이나 사이트를 통해 캐릭터의 SimC 문자열을 생성하고, \'고급\'을 선택한 후 캐릭터의 SimC 문자열 아래에 Keystone.guru의 출력을 붙여넣으세요.',
+            'intro'                      => '시뮬레이션 기능을 사용하려면, 캐릭터에 대한 SimulationCraft 문자열을 생성하고 생성된 Keystone.guru 문자열을 캐릭터의 출력 문자열 아래에 붙여넣으세요. 그런 다음 평소처럼 시뮬레이션을 실행하세요! raidbots.com을 사용하는 경우, 애드온이나 사이트를 통해 캐릭터의 SimC 문자열을 생성하고, \'고급\'을 선택한 후 캐릭터의 SimC 문자열 아래에 Keystone.guru의 출력을 붙여넣으세요.',
             'title'                      => '경로 시뮬레이션',
             'get_simulationcraft_string' => 'SimulationCraft 문자열 가져오기',
             'simulationcraft_string'     => 'Simulationcraft 문자열',
@@ -594,12 +594,12 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '원거리 풀 보상 거리(야드)',
                 'ranged_pull_compensation_yards_title' => 'M+ 실행 시 팩에서 팩으로 몸으로 끌어당기지 않고 대부분 원거리 능력을 사용하여 당깁니다. 이 값은 원거리 능력을 보상하고 팩 간의 지연 시간을 줄입니다. 참고: 이는 걷는 거리를 이만큼 줄이므로, 능력의 최대 사정거리로 설정하는 것은 정확한 시뮬레이션 결과를 위해 권장되지 않습니다. 주문의 최대 사정거리의 50%~75% 사이로 설정하는 것이 좋습니다. 중간에 멈춤 없이 연속으로 당길 경우를 제외하고는.',
-                'use_mounts'        => '탈것 사용',
-                'use_mounts_title'  => '현재 풀과 다음 풀 사이의 거리를 줄이기 위해 더 빠르고 사용 가능한 경우 탈것을 사용하려고 시도합니다.',
-                'patreon_link_text' => 'Patreon',
-                'patreon_only'      => '고급 시뮬레이션 옵션은 Keystone.guru의 :patreon를 구독하면 사용할 수 있습니다.',
-                'advanced_options'  => '고급 옵션',
-                'description'       => '고급 옵션은 생성된 시뮬레이션 크래프트 문자열의 정확성을 더욱 높이고 실제 경험과 더 가까운 수치를 얻기 위해 설계되었습니다.',
+                'use_mounts'                           => '탈것 사용',
+                'use_mounts_title'                     => '현재 풀과 다음 풀 사이의 거리를 줄이기 위해 더 빠르고 사용 가능한 경우 탈것을 사용하려고 시도합니다.',
+                'patreon_link_text'                    => 'Patreon',
+                'patreon_only'                         => '고급 시뮬레이션 옵션은 Keystone.guru의 :patreon를 구독하면 사용할 수 있습니다.',
+                'advanced_options'                     => '고급 옵션',
+                'description'                          => '고급 옵션은 생성된 시뮬레이션 크래프트 문자열의 정확성을 더욱 높이고 실제 경험과 더 가까운 수치를 얻기 위해 설계되었습니다.',
             ],
         ],
         'uploadlogs' => [

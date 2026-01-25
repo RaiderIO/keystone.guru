@@ -14,9 +14,9 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_enemy_details'     => 'Ciò indica che il tuo percorso uccide un nemico il cui NPC è noto a MDT, ma Keystone.guru non ha ancora associato quel nemico a un equivalente MDT (o non esiste in MDT).',
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Questo pull è stato rimosso poiché tutti i nemici selezionati non sono stati trovati in MDT, risultando in un pull altrimenti vuoto.',
                 'route_title_contains_non_ascii_char_bug'           => 'Il titolo del tuo percorso contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il titolo del tuo percorso è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
-                'route_title_contains_non_ascii_char_bug_details' => 'Vecchio titolo: %s, nuovo titolo: %s',
-                'map_icon_contains_non_ascii_char_bug'            => 'Uno dei tuoi commenti su un\'icona della mappa contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il tuo commento sulla mappa è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
-                'map_icon_contains_non_ascii_char_bug_details'    => 'Vecchio commento: "%s", nuovo commento: "%s"',
+                'route_title_contains_non_ascii_char_bug_details'   => 'Vecchio titolo: %s, nuovo titolo: %s',
+                'map_icon_contains_non_ascii_char_bug'              => 'Uno dei tuoi commenti su un\'icona della mappa contiene caratteri non ASCII che sono noti per innescare un bug di codifica ancora irrisolto in Keystone.guru. Il tuo commento sulla mappa è stato privato di tutti i caratteri che causano problemi, ci scusiamo per l\'inconveniente e speriamo di risolvere presto questo problema.',
+                'map_icon_contains_non_ascii_char_bug_details'      => 'Vecchio commento: "%s", nuovo commento: "%s"',
             ],
             'import_string' => [
                 'category' => [

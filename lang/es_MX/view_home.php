@@ -2,7 +2,7 @@
 
 return [
 
-    'ie_not_supported'          => 'Parece que estás navegando en Keystone.guru usando Internet Explorer. Desafortunadamente, Internet Explorer no es un navegador compatible. No, en serio, realmente no funciona en absoluto. Por favor, prueba con Google Chrome, Mozilla Firefox o Microsoft Edge.',
+    'ie_not_supported'                => 'Parece que estás navegando en Keystone.guru usando Internet Explorer. Desafortunadamente, Internet Explorer no es un navegador compatible. No, en serio, realmente no funciona en absoluto. Por favor, prueba con Google Chrome, Mozilla Firefox o Microsoft Edge.',
     'tagline'                         => 'Rutas M+ fáciles',
     'tagline_description'             => 'Planifica rutas en línea cooperativamente con tu equipo o descubre rutas que se adapten a tu estilo de juego y nivel de habilidad. Keystone.guru es el lugar ideal para gestionar y compartir tus rutas M+.',
     'discover_routes'                 => 'Descubrir rutas',
@@ -16,8 +16,8 @@ return [
     'create_your_own_routes_description' => 'Importa tus rutas desde Mythic Dungeon Tools o :createANewRoute desde cero. Keystone.guru ofrece varias herramientas para hacer que tu ruta sea memorable,
                                     como dibujo libre, trazado y colocación de iconos/comentarios. Las fuerzas enemigas se pueden mostrar en bruto o en porcentaje a gusto. Varias otras configuraciones te permiten
                                     personalizar tu experiencia de creación de rutas a tu gusto.',
-    'get_organized'             => 'Organízate',
-    'get_organized_description' => 'Organiza tus rutas desde tu perfil o a través de equipos. Keystone.guru te ofrece una amplia gama de herramientas para mantener todas tus rutas organizadas y accesibles para todos los miembros de tu equipo M+. Siempre puedes exportar rutas al formato de Mythic Dungeon Tools para compartirlas con otros.',
+    'get_organized'                                => 'Organízate',
+    'get_organized_description'                    => 'Organiza tus rutas desde tu perfil o a través de equipos. Keystone.guru te ofrece una amplia gama de herramientas para mantener todas tus rutas organizadas y accesibles para todos los miembros de tu equipo M+. Siempre puedes exportar rutas al formato de Mythic Dungeon Tools para compartirlas con otros.',
     'custom_dungeon_mapping'                       => 'Mapeo personalizado de calabozos',
     'custom_dungeon_mapping_description'           => 'Keystone.guru tiene su propio mapeo de calabozos sin dependencias de ninguna herramienta externa. Ve qué enemigos refuerzan a otros, dejan icor sanguinolento o hacen estallar a tu grupo. El mapeo es de código abierto y gratuito. Siempre.',
     'features'                                     => 'Características',

@@ -1255,7 +1255,7 @@ return [
                 'the_headteachers_enclave' => 'Hodor',
             ],
         ],
-        'den_of_nalorakk'            => [
+        'den_of_nalorakk' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
@@ -1278,14 +1278,14 @@ return [
                 'celestial_orrey'       => 'Hodor',
             ],
         ],
-        'maisara_caverns'            => [
+        'maisara_caverns' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
                 'maisara_caverns' => 'Hodor',
             ],
         ],
-        'murder_row'                 => [
+        'murder_row' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
@@ -1294,28 +1294,28 @@ return [
                 'augurs_terrace'   => 'Hodor',
             ],
         ],
-        'nexus_point_xenas'          => [
+        'nexus_point_xenas' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
                 'nexus_point_xenas' => 'Hodor',
             ],
         ],
-        'the_blinding_vale'          => [
+        'the_blinding_vale' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
                 'the_blinding_vale' => 'Hodor',
             ],
         ],
-        'voidscar_arena'             => [
+        'voidscar_arena' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [
                 'voidscar_arena' => 'Hodor',
             ],
         ],
-        'windrunner_spire'           => [
+        'windrunner_spire' => [
             'name'         => 'Hodor',
             'abbreviation' => 'Hodor',
             'floors'       => [

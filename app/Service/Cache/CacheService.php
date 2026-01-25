@@ -251,7 +251,7 @@ class CacheService implements CacheServiceInterface
 
             do {
                 // Use SCAN to iterate keys. The SCAN command returns [cursor, keys...]
-                $result  = $redis->command('SCAN', [$nextKey]);
+                $result = $redis->command('SCAN', [$nextKey]);
                 if ($result === false) {
                     break;
                 }

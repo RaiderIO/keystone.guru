@@ -543,7 +543,7 @@ return [
             'copy_to_clipboard'                => 'Copier dans le presse-papiers',
         ],
         'simulate' => [
-            'intro' => 'Pour utiliser la fonction de simulation, générez une chaîne SimulationCraft pour votre personnage et collez la chaîne générée de Keystone.guru sous la chaîne de sortie de votre personnage. Ensuite, appuyez sur Simuler comme vous le feriez habituellement ! Si vous utilisez raidbots.com, créez la chaîne SimC de votre personnage soit via l\'addon soit sur le site, sélectionnez Avancé et collez la sortie de Keystone.guru sous la chaîne SimC de votre personnage.',
+            'intro'                      => 'Pour utiliser la fonction de simulation, générez une chaîne SimulationCraft pour votre personnage et collez la chaîne générée de Keystone.guru sous la chaîne de sortie de votre personnage. Ensuite, appuyez sur Simuler comme vous le feriez habituellement ! Si vous utilisez raidbots.com, créez la chaîne SimC de votre personnage soit via l\'addon soit sur le site, sélectionnez Avancé et collez la sortie de Keystone.guru sous la chaîne SimC de votre personnage.',
             'title'                      => 'Simuler l\'itinéraire',
             'get_simulationcraft_string' => 'Obtenir la chaîne SimulationCraft',
             'simulationcraft_string'     => 'Chaîne Simulationcraft',
