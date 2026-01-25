@@ -281,7 +281,8 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE => 106,
         self::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE      => 107,
 
-        self::MAP_ICON_TYPE_MAISARA_CAVERNS_HEARTY_VILEBRANCH_STEW => 108,
+        self::MAP_ICON_TYPE_SEAT_OF_THE_TRIUMVIRATE_VOID_INFUSION  => 108,
+        self::MAP_ICON_TYPE_MAISARA_CAVERNS_HEARTY_VILEBRANCH_STEW => 109,
     ];
 
     public function getIconUrlAttribute(): string

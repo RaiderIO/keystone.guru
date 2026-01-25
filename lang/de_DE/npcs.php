@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Stadtwache von Sturmwind',
