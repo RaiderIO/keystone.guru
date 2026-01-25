@@ -17567,51 +17567,8 @@
         "mdt_supported": true,
         "floors": [
             {
-                "id": 396,
-                "index": 1,
-                "mdt_sub_level": 1,
-                "ui_map_id": 2511,
-                "map_name": null,
-                "name": "dungeons.midnight.magisters_terrace_midnight.floors.magisters_terrace",
-                "default": 0,
-                "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "floorcouplings": [
-                    {
-                        "id": 1181,
-                        "floor1_id": 396,
-                        "floor2_id": 397,
-                        "direction": "left"
-                    },
-                    {
-                        "id": 1182,
-                        "floor1_id": 396,
-                        "floor2_id": 398,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 1183,
-                        "floor1_id": 396,
-                        "floor2_id": 399,
-                        "direction": "down"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
                 "id": 397,
-                "index": 2,
+                "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 2515,
                 "map_name": null,
@@ -17631,10 +17588,47 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1224,
+                        "id": 1232,
                         "floor1_id": 397,
                         "floor2_id": 396,
                         "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 396,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 2511,
+                "map_name": null,
+                "name": "dungeons.midnight.magisters_terrace_midnight.floors.magisters_terrace",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1233,
+                        "floor1_id": 396,
+                        "floor2_id": 397,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1234,
+                        "floor1_id": 396,
+                        "floor2_id": 398,
+                        "direction": "up"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -17662,9 +17656,89 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1184,
+                        "id": 1245,
                         "floor1_id": 398,
                         "floor2_id": 396,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1246,
+                        "floor1_id": 398,
+                        "floor2_id": 431,
+                        "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 431,
+                "index": 4,
+                "mdt_sub_level": null,
+                "ui_map_id": 2511,
+                "map_name": null,
+                "name": "dungeons.midnight.magisters_terrace_midnight.floors.grand_magister_asylum_void",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1247,
+                        "floor1_id": 431,
+                        "floor2_id": 398,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1248,
+                        "floor1_id": 431,
+                        "floor2_id": 432,
+                        "direction": "left"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 432,
+                "index": 5,
+                "mdt_sub_level": null,
+                "ui_map_id": 2515,
+                "map_name": null,
+                "name": "dungeons.midnight.magisters_terrace_midnight.floors.magisters_terrace_void",
+                "default": 1,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1251,
+                        "floor1_id": 432,
+                        "floor2_id": 431,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1252,
+                        "floor1_id": 432,
+                        "floor2_id": 399,
                         "direction": "left"
                     }
                 ],
@@ -17673,7 +17747,7 @@
             },
             {
                 "id": 399,
-                "index": 4,
+                "index": 6,
                 "mdt_sub_level": null,
                 "ui_map_id": 2517,
                 "map_name": null,
@@ -17693,13 +17767,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1187,
+                        "id": 1237,
                         "floor1_id": 399,
-                        "floor2_id": 396,
+                        "floor2_id": 432,
                         "direction": "up"
                     },
                     {
-                        "id": 1188,
+                        "id": 1238,
                         "floor1_id": 399,
                         "floor2_id": 400,
                         "direction": "up"
@@ -17710,7 +17784,7 @@
             },
             {
                 "id": 400,
-                "index": 5,
+                "index": 7,
                 "mdt_sub_level": null,
                 "ui_map_id": 2518,
                 "map_name": null,
@@ -17747,7 +17821,7 @@
             },
             {
                 "id": 401,
-                "index": 6,
+                "index": 8,
                 "mdt_sub_level": null,
                 "ui_map_id": 2519,
                 "map_name": null,
@@ -17784,7 +17858,7 @@
             },
             {
                 "id": 402,
-                "index": 7,
+                "index": 9,
                 "mdt_sub_level": null,
                 "ui_map_id": 2520,
                 "map_name": null,
@@ -17815,7 +17889,7 @@
             },
             {
                 "id": 420,
-                "index": 8,
+                "index": 10,
                 "mdt_sub_level": 1,
                 "ui_map_id": 0,
                 "map_name": null,
