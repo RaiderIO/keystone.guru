@@ -119,6 +119,9 @@ return [
             'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.',
             ],
+            'windrunner_spire' => [
+                'activates_after_killing_bosses' => 'One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.',
+            ],
         ],
     ],
 

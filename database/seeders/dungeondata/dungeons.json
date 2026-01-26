@@ -18308,15 +18308,27 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1199,
+                        "id": 1257,
                         "floor1_id": 410,
                         "floor2_id": 411,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1258,
+                        "floor1_id": 410,
+                        "floor2_id": 412,
                         "direction": "up"
                     },
                     {
-                        "id": 1200,
+                        "id": 1259,
                         "floor1_id": 410,
                         "floor2_id": 413,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1260,
+                        "floor1_id": 410,
+                        "floor2_id": 414,
                         "direction": "up"
                     }
                 ],
@@ -18345,22 +18357,22 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1201,
+                        "id": 1270,
                         "floor1_id": 411,
                         "floor2_id": 410,
-                        "direction": "down"
+                        "direction": "left"
                     },
                     {
-                        "id": 1202,
+                        "id": 1271,
                         "floor1_id": 411,
                         "floor2_id": 412,
                         "direction": "down"
                     },
                     {
-                        "id": 1203,
+                        "id": 1272,
                         "floor1_id": 411,
                         "floor2_id": 415,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -18425,19 +18437,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1206,
+                        "id": 1264,
                         "floor1_id": 413,
                         "floor2_id": 410,
-                        "direction": "down"
+                        "direction": "left"
                     },
                     {
-                        "id": 1207,
+                        "id": 1265,
                         "floor1_id": 413,
                         "floor2_id": 414,
                         "direction": "down"
                     },
                     {
-                        "id": 1208,
+                        "id": 1266,
                         "floor1_id": 413,
                         "floor2_id": 415,
                         "direction": "up"
@@ -18505,19 +18517,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1219,
+                        "id": 1267,
                         "floor1_id": 415,
                         "floor2_id": 411,
-                        "direction": "down"
+                        "direction": "up"
                     },
                     {
-                        "id": 1220,
+                        "id": 1268,
                         "floor1_id": 415,
                         "floor2_id": 413,
                         "direction": "down"
                     },
                     {
-                        "id": 1221,
+                        "id": 1269,
                         "floor1_id": 415,
                         "floor2_id": 416,
                         "direction": "up"
