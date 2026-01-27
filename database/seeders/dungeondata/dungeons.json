@@ -17715,7 +17715,7 @@
                 "ui_map_id": 2515,
                 "map_name": null,
                 "name": "dungeons.midnight.magisters_terrace_midnight.floors.magisters_terrace_void",
-                "default": 1,
+                "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
