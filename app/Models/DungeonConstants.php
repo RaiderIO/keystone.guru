@@ -141,7 +141,7 @@ trait DungeonConstants
 
     // Warlords of Draenor
     public const DUNGEON_AUCHINDOUN                = 'auchindoun';
-    public const DUNGEON_BLOODMAUL_SLAG_MINES      = 'bloodmaulslagmines';
+    public const DUNGEON_BLOODMAUL_SLAG_MINES      = 'bloodmaul_slag_mines';
     public const DUNGEON_IRON_DOCKS                = 'irondocks';
     public const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
     public const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';

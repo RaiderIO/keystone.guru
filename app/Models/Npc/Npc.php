@@ -126,7 +126,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getEnemyPortraitUrlAttribute(): string
     {
-        return ksgAssetImage(sprintf('enemyportraits/%d.png', $this->id));
+        return sprintf('images/enemyportraits/%d.png', $this->id);
     }
 
     /**
