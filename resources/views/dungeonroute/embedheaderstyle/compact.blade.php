@@ -11,7 +11,11 @@ use App\Models\Floor\Floor;
  * @var array        $embedOptions
  */
 
-$routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
+$routeParams     = [
+    'dungeon'      => $dungeonRoute->dungeon,
+    'dungeonroute' => $dungeonRoute,
+    'title'        => $dungeonRoute->getTitleSlug()
+];
 $presentRouteUrl = route('dungeonroute.present', $routeParams);
 $viewRouteUrl    = route('dungeonroute.view', $routeParams);
 ?>
@@ -23,17 +27,9 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif
         ">
-    <div class="row no-gutters py-2">
-        <div class="col-auto text-right pr-1">
-            <div class="row no-gutters align-items-center" style="height: 36px;">
-                <div class="col">
-                    <a href="{{ route('home') }}" target="_blank">
-                        <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" class="header_embed_compact_logo"
-                             alt="{{ config('app.name') }}">
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="row no-gutters py-2 flex-nowrap overflow-hidden">
+        @include('common.embed.header.compact.logo')
+
         @if($embedOptions['show']['enemyForces'])
             <div class="row no-gutters align-items-center" style="height: 36px;">
                 <div class="col-auto px-1">
