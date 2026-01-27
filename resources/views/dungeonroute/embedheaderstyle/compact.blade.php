@@ -62,28 +62,29 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                 {{ html()->select('map_floor_selection_dropdown', [__('view_dungeonroute.embed.select_floor')], 1)->id('map_floor_selection_dropdown')->class('form-control selectpicker') }}
             @endif
         </div>
+
+        <div class="col-auto px-1 ml-auto">
+            <a class="btn btn btn-primary h-100 text-nowrap"
+               href="{{ $viewRouteUrl }}"
+               target="_blank">
+                <i class="fas fa-external-link-alt"></i> {{ __('view_dungeonroute.embed.view_route') }}
+            </a>
+        </div>
         @if($embedOptions['show']['presenterButton'])
             <div class="col-auto px-1">
-                <a class="btn btn btn-warning float-right h-100 text-white"
+                <a class="btn btn btn-warning float-right h-100 text-white text-nowrap"
                    href="{{ $presentRouteUrl }}"
                    target="_blank">
                     <i class="fas fa-video"></i> {{ __('view_dungeonroute.embed.present_route') }}
                 </a>
             </div>
         @endif
-        <div class="col-auto px-1">
-            <a class="btn btn btn-primary float-right h-100"
-               href="{{ $viewRouteUrl }}"
-               target="_blank">
-                <i class="fas fa-external-link-alt"></i> {{ __('view_dungeonroute.embed.view_route') }}
-            </a>
-        </div>
         @if($dungeon->mdt_supported)
             <div class="col-auto pl-1">
-                <div id="embed_copy_mdt_string" class="btn btn btn-primary float-right h-100">
+                <div id="embed_copy_mdt_string" class="btn btn btn-primary h-100 text-nowrap">
                     <i class="fas fa-file-export"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>
-                <div id="embed_copy_mdt_string_loader" class="btn btn btn-primary float-right h-100" disabled
+                <div id="embed_copy_mdt_string_loader" class="btn btn btn-primary h-100 text-nowrap" disabled
                      style="display: none;">
                     <i class="fas fa-circle-notch fa-spin"></i> {{ __('view_dungeonroute.embed.copy_mdt_string') }}
                 </div>
