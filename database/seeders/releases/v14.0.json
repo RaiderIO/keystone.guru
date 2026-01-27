@@ -1,0 +1,85 @@
+{
+    "id": 336,
+    "release_changelog_id": 343,
+    "version": "v14.0",
+    "title": "Added Midnight S1 dungeons",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2026-01-27T20:39:38+00:00",
+    "updated_at": "2026-01-27T20:39:38+00:00",
+    "changelog": {
+        "id": 343,
+        "release_id": 336,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 2,
+                "ticket_id": 3056,
+                "change": "Generated thumbnails now have a unique name, always. As a result, refreshing a thumbnail no longer causes the old thumbnail to be cached still."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 2,
+                "ticket_id": 3080,
+                "change": "Embedding a route no longer malforms the header on very small resolutions (<700px)."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3063,
+                "change": "Added Pit of Saron (Midnight)."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3064,
+                "change": "Added Skyreach (Midnight)."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3065,
+                "change": "Added The Seat of the Triumvirate (Midnight)."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3066,
+                "change": "Added Algeth'ar Academy (Midnight, MDT updated the combined map so I added it as a new dungeon)."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3067,
+                "change": "Added Magisters' Terrace (Midnight)."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3068,
+                "change": "Added Nexus-Point Xenas."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3069,
+                "change": "Added Windrunner Spire."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3070,
+                "change": "Added Maisara Caverns."
+            },
+            {
+                "release_changelog_id": 343,
+                "release_changelog_category_id": 7,
+                "ticket_id": 3061,
+                "change": "Various issues with team tags have been resolved. As a team owner you can now manage tags created by other moderators, for example."
+            }
+        ]
+    }
+}
