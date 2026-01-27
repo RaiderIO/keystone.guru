@@ -6,7 +6,7 @@
     "backup_db": 0,
     "silent": 0,
     "spotlight": 0,
-    "released": 0,
+    "released": 1,
     "created_at": "2025-11-03T20:58:47+00:00",
     "updated_at": "2025-11-03T20:58:47+00:00",
     "changelog": {
