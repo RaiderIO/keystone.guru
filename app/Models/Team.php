@@ -7,6 +7,7 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,7 @@ use Illuminate\Support\Facades\Auth;
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
- * @property Collection<DungeonRoute> $dungeonroutes
+ * @property Collection<DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -37,6 +38,7 @@ class Team extends Model
 {
     use HasIconFile;
     use GeneratesPublicKey;
+    use HasTags;
 
     protected $visible = [
         'name',
@@ -67,7 +69,7 @@ class Team extends Model
         return $this->belongsToMany(User::class, 'team_users');
     }
 
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
@@ -77,7 +79,7 @@ class Team extends Model
      */
     public function getVisibleRouteCount(): int
     {
-        return $this->dungeonroutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
+        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
             PublishedState::TEAM,
             PublishedState::WORLD,
             PublishedState::WORLD_WITH_LINK,
@@ -341,7 +343,7 @@ class Team extends Model
                     $member->patreonAdFreeGiveaway->delete();
                 }
 
-                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
+                $this->dungeonRoutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
             } catch (Exception) {
                 logger()->error('Unable to remove member from team', [
@@ -402,13 +404,6 @@ class Team extends Model
         return $newOwner?->user;
     }
 
-    public function getAvailableTags(): Collection
-    {
-        return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-            ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
-            ->get();
-    }
-
     #[\Override]
     protected static function boot(): void
     {
@@ -429,7 +424,7 @@ class Team extends Model
             }
             // Delete all tags team tags belonging to our routes
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-                ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())
+                ->whereIn('model_id', $team->dungeonRoutes->pluck('id')->toArray())
                 ->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $team->id)->delete();

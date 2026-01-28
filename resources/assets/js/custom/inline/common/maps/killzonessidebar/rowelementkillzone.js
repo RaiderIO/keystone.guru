@@ -269,7 +269,7 @@ class RowElementKillZone extends RowElement {
                 'obsolete': npc.obsolete,
                 'boss': npc.enemy.isBossNpc(),
                 'dangerous': npc.enemy.npc.dangerous === 1,
-                'enemy_portrait_url': npc.enemy.npc.enemy_portrait_url,
+                'enemy_portrait_url': `${this.map.options.assetsBaseUrl}/${npc.enemy.npc.enemy_portrait_url}`,
             });
 
             let $enemy = $(template(data));

@@ -617,6 +617,20 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
                 'height'     => 32,
                 'admin_only' => true,
             ],
+
+            MapIconType::MAP_ICON_TYPE_SEAT_OF_THE_TRIUMVIRATE_VOID_INFUSION => [
+                'name'       => 'mapicontypes.seat_of_the_triumvirate_void_infusion',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
+
+            MapIconType::MAP_ICON_TYPE_MAISARA_CAVERNS_HEARTY_VILEBRANCH_STEW => [
+                'name'       => 'mapicontypes.maisara_caverns_hearty_vilebranch_stew',
+                'width'      => 32,
+                'height'     => 32,
+                'admin_only' => true,
+            ],
         ];
 
         $mapIconTypeAttributes = [];

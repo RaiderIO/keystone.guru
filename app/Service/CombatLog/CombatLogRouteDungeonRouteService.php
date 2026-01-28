@@ -105,7 +105,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      */
     public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestModel $combatLogRoute): DungeonRoute
     {
-        $dungeonRoute = (new CombatLogRouteDungeonRouteBuilder(
+        $dungeonRoute = new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
             $this->coordinatesService,
             $this->dungeonRouteRepository,
@@ -121,7 +121,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $this->dungeonRepository,
             $combatLogRoute,
             Auth::id() ?? -1,
-        ))->build();
+        )->build();
 
         $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
 

@@ -219,17 +219,18 @@ class TeamController extends Controller
     /**
      * Creates a tag from the tag manager
      */
-    public function createtag(TagFormRequest $request): RedirectResponse
+    public function createTag(TagFormRequest $request, Team $team): RedirectResponse
     {
         $error = [];
 
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
 
         if (!Tag::where('name', $request->get('tag_name_new'))
-            ->where('user_id', Auth::id())
+            ->where('context_id', $team->id)
+            ->where('context_class', Team::class)
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {
-            Tag::saveFromRequest($request, $tagCategoryId);
+            Tag::saveFromRequest($request, $team, $tagCategoryId);
 
             Session::flash('status', __('controller.team.flash.tag_created_successfully'));
         } else {

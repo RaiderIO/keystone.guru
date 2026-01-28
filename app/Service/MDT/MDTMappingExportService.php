@@ -227,7 +227,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 MDT.mapPOIs[dungeonIndex] = {};
 ';
         } else {
-            return (new PhpArray2LuaTable())->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
+            return new PhpArray2LuaTable()->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
         }
     }
 
@@ -411,7 +411,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             $dungeonEnemies[++$dungeonEnemyIndex] = $dungeonEnemy;
         }
 
-        return (new PhpArray2LuaTable())->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
+        return new PhpArray2LuaTable()->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
     }
 
     private function getTranslations(Collection $translations): string

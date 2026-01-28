@@ -53,7 +53,7 @@ class DungeonRouteTableTagsHandler {
             }
         }
 
-        this._refreshTagListeners();
+        this._refreshTagListeners(publicKey);
 
         refreshSelectPickers();
     }
@@ -107,10 +107,11 @@ class DungeonRouteTableTagsHandler {
     /**
      *
      * @param name string
+     * @param publicKey string
      * @param callback null|function
      * @private
      */
-    _createTag(name, callback = null) {
+    _createTag(name, publicKey, callback = null) {
         console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
         let self = this;
 
@@ -119,7 +120,9 @@ class DungeonRouteTableTagsHandler {
             url: `/ajax/tag`,
             dataType: 'json',
             data: {
-                category: this._dungeonrouteTable.options.teamPublicKey === '' ? 'dungeon_route_personal' : 'dungeon_route_team',
+                context: this._dungeonrouteTable.options.teamPublicKey ?? this._dungeonrouteTable.options.currentUserPublicKey,
+                context_class: this._dungeonrouteTable.options.teamPublicKey === null ? 'user' : 'team',
+                category: this._dungeonrouteTable.options.teamPublicKey === null ? 'dungeon_route_personal' : 'dungeon_route_team',
                 model_id: this._addTagPublicKey,
                 name: name,
             },
@@ -165,7 +168,7 @@ class DungeonRouteTableTagsHandler {
      *
      * @private
      */
-    _refreshTagListeners() {
+    _refreshTagListeners(publicKey) {
         console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
         let self = this;
 
@@ -176,9 +179,9 @@ class DungeonRouteTableTagsHandler {
 
         // New tags text field
         let sourceTags = {};
-        for (let i = 0; i < this._dungeonrouteTable.options.autoCompleteTags.length; i++) {
-            let tagName = this._dungeonrouteTable.options.autoCompleteTags[i].name;
-            sourceTags[`${tagName}`] = i;
+        for (let index in this._dungeonrouteTable.options.autoCompleteTags) {
+            let tagName = this._dungeonrouteTable.options.autoCompleteTags[index];
+            sourceTags[`${tagName}`] = index;
         }
 
         $('#new_tag_input').unbind('keyup').bind('keyup', function (keyEvent) {
@@ -186,7 +189,7 @@ class DungeonRouteTableTagsHandler {
 
             // Enter
             if (keyEvent.keyCode === 13 && $this.val() !== null && $this.val().length > 0) {
-                self._createTag($this.val(), function () {
+                self._createTag($this.val(), publicKey, function () {
                     $this.val('');
                 });
             }
@@ -194,9 +197,9 @@ class DungeonRouteTableTagsHandler {
             source: sourceTags,
             highlightClass: 'text-danger',
             // Typo intentional, it is part of the library
-            treshold: 2,
+            treshold: 1,
             // In case they fix it
-            threshold: 2,
+            threshold: 1,
             onSelectItem: function (item, element) {
                 // Refocus the input so people can quickly press enter
                 $('#new_tag_input').focus();
@@ -209,7 +212,7 @@ class DungeonRouteTableTagsHandler {
             let value = $newTagInput.val();
 
             if (value !== null && value.length > 0) {
-                self._createTag(value, function () {
+                self._createTag(value, publicKey, function () {
                     $newTagInput.val('');
                 });
             }

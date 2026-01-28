@@ -1,11 +1,13 @@
 # Route embedding options
 
-If you're embedding a route on your website, you have a few options available to customize the appearance/behaviour of
+If you're embedding a route on your website, you have a few options available to customize the appearance/behavior of
 Keystone.guru.
 
 ## Usage
 
 https://keystone.guru/abcd1234/embed?showPulls=1&pullsDefaultState=0 etc.
+
+You can also test out the embed options by visiting https://keystone.guru/embed/abcd1234, where `abcd1234` is the route's public key.
 
 ## Reference
 

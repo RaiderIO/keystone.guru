@@ -80,7 +80,7 @@ class MissedTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $missedEvent */
-        $missedEvent = (new CombatLogEntry($combatLogLine))->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
+        $missedEvent = new CombatLogEntry($combatLogLine)->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
 
         // Assert
         $this->assertInstanceOf(MissedV20::class, $missedEvent->getSuffix());
@@ -155,7 +155,7 @@ class MissedTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $missedEvent */
-        $missedEvent = (new CombatLogEntry($combatLogLine))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
+        $missedEvent = new CombatLogEntry($combatLogLine)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
 
         // Assert
         $this->assertInstanceOf(MissedV22::class, $missedEvent->getSuffix());
@@ -288,7 +288,7 @@ class MissedTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $missedEvent */
-        $missedEvent = (new CombatLogEntry($combatLogLine))->parseEvent([], CombatLogVersion::CLASSIC_SOD_1_15_5);
+        $missedEvent = new CombatLogEntry($combatLogLine)->parseEvent([], CombatLogVersion::CLASSIC_SOD_1_15_5);
 
         // Assert
         $this->assertInstanceOf(MissedV9SoD::class, $missedEvent->getSuffix());

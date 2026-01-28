@@ -22,6 +22,6 @@ class APICombatLogControllerCorrectEventsGrimBatolTest extends APICombatLogContr
     #[Test]
     public function create_givenGrimBatol6Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('Cata/tww_s1_grim_batol_6');
+        $this->executeTest('Cata/tww_s1_grim_batol_6', true);
     }
 }

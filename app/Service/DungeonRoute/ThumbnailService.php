@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
+use Random\RandomException;
 use Storage;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -175,7 +176,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
                         // Rescale it
                         $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
-                        (new ImageManager(new ImagickDriver()))
+                        new ImageManager(new ImagickDriver())
                             ->read($tmpFile)
                             ->resize($imageWidth, $imageHeight)
                             ->save($tmpFileAfterResize, $quality);
@@ -341,7 +342,22 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
-        return sprintf('%s.jpg', $floorIndex);
+        // Random hash
+        try {
+            return sprintf(
+                '%s_%s_%s.jpg',
+                $dungeonRoute->public_key,
+                $floorIndex,
+                bin2hex(random_bytes(4)),
+            );
+        } catch (RandomException) {
+            return sprintf(
+                '%s_%s_%d.jpg',
+                $dungeonRoute->public_key,
+                $floorIndex,
+                time(),
+            );
+        }
     }
 
     public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder): string

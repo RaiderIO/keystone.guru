@@ -15,5 +15,5 @@ use App\Models\Tags\TagCategory;
         {{ __('view_team.edittabs.tags.description') }}
     </p>
 
-    @include('common.tag.manager', ['category' => TagCategory::DUNGEON_ROUTE_TEAM])
+    @include('common.tag.manager', ['context' => $team, 'category' => TagCategory::DUNGEON_ROUTE_TEAM])
 </div>

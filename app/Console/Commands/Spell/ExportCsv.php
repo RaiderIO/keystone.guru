@@ -82,9 +82,9 @@ class ExportCsv extends Command
 
         try {
             $file = fopen($filePath, 'w');
-            fputcsv($file, $headers);
+            fputcsv($file, $headers, escape: '\\');
             foreach ($data as $row) {
-                fputcsv($file, $row);
+                fputcsv($file, $row, escape: '\\');
             }
         } finally {
             if ($file !== null) {

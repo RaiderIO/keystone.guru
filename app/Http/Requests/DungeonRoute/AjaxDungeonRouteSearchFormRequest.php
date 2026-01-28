@@ -26,7 +26,7 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
     #[\Override]
     protected function failedValidation(Validator $validator)
     {
-        $errors = (new ValidationException($validator))->errors();
+        $errors = new ValidationException($validator)->errors();
 
         throw new HttpResponseException(
             response()->json(['data' => $errors], 422),

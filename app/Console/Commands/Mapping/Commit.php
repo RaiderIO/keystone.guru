@@ -46,7 +46,7 @@ class Commit extends Command
         ]);
 
         // Does not have any real properties aside from a save date
-        (new MappingCommitLog())->save();
+        new MappingCommitLog()->save();
 
         return 0;
     }

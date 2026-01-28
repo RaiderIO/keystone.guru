@@ -1,3 +1,7 @@
+# Import NPCs from MDT and write the new names in the translation files, then save the mapping
+history -s 'php artisan mdt:importnpcs retail --dungeon=somedungeon && php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan mapping:save'
+# Write NPC names from database to file, update database with file references (npcs.12345 etc), fetch translations from Wowhead, save mapping and re-import (to update translations table)
+history -s 'php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan localization:syncnpcnames retail && php artisan mapping:save && php artisan db:seed --database=migrate'
 history -s 'php artisan combatlog:extractdata tmp'
 history -s 'php artisan combatlog:splitchallengemode tmp'
 history -s 'php artisan combatlog:splitzonechange tmp'
@@ -12,17 +16,18 @@ history -s 'php artisan localization:sync en_US '
 history -s 'php artisan mapicon:generateitemicons'
 history -s 'php artisan mapping:save'
 history -s 'php artisan mdt:importmapping '
-history -s 'php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan localization:syncnpcnames retail && php artisan mapping:save && ./refresh_db_seed.sh'
 history -s 'php artisan wowhead:fetchdisplayids '
 history -s 'php artisan wowhead:fetchhealth '
 history -s 'php artisan wowhead:fetchmissingspellicons'
 history -s 'php artisan wowhead:fetchspelldata '
 history -s 'php artisan wowhead:refreshdisplayids'
+history -s 'php artisan db:seed --database=migrate'
+history -s 'php artisan migrate --database=migrate'
 history -s 'php artisan l5-swagger:generate --all && php artisan vendor:publish --provider="L5Swagger\L5SwaggerServiceProvider"'
 history -s './vendor/bin/phpunit -c phpunit.xml'
-history -s './refresh_db_seed.sh'
 
 # Prevent composer complaining about this if you got it symlinked
+git config --global --add safe.directory /var/www/
 git config --global --add safe.directory /var/www/vendor/nnoggie/mythicdungeontools
 git config --global --add safe.directory /var/www/vendor/nnoggie/mdt-legacy
 git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.deployer

@@ -11,17 +11,13 @@ use InvalidArgumentException;
 
 class CoordinatesService implements CoordinatesServiceInterface
 {
-    /** @var int Y */
-    public const MAP_MAX_LAT = -256;
+    public const int MAP_MAX_LAT = -256;
 
-    /** @var int X */
-    public const MAP_MAX_LNG = 384;
+    public const int MAP_MAX_LNG = 384;
 
-    /** @var int */
-    public const MAP_SIZE = 256;
+    public const int MAP_SIZE = 256;
 
-    /** @var int */
-    public const MAP_ASPECT_RATIO = 1.5;
+    public const float MAP_ASPECT_RATIO = 1.5;
 
     /**
      * @see mapcontext.js

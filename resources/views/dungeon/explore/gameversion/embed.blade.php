@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                      $dungeon
  * @var Floor                        $floor
  * @var string                       $title
+ * @var string                       $mapFacadeStyle
  * @var MapContextBase               $mapContext
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
@@ -48,13 +49,15 @@ use Illuminate\Support\Collection;
 ]])
 
 @section('content')
-    @include(sprintf('dungeon.explore.gameversion.embedheaderstyle.%s', $embedOptions['style']), [
-        'gameVersion' => $gameVersion,
-        'dungeon' => $dungeon,
-        'floor' => $floor,
-        'embedOptions' => $embedOptions,
-        'parameters' => $parameters,
-    ])
+    @if(!isset($embedOptions['show']['header']) || $embedOptions['show']['header'])
+        @include(sprintf('dungeon.explore.gameversion.embedheaderstyle.%s', $embedOptions['style']), [
+            'gameVersion' => $gameVersion,
+            'dungeon' => $dungeon,
+            'floor' => $floor,
+            'embedOptions' => $embedOptions,
+            'parameters' => $parameters,
+        ])
+    @endif
 
     <div class="wrapper embed_wrapper {{ $embedOptions['style'] }}">
         @include('common.maps.map', [
@@ -69,6 +72,7 @@ use Illuminate\Support\Collection;
             'floor' => $floor,
             'showAttribution' => false,
             'parameters' => $parameters,
+            'mapFacadeStyle' => $mapFacadeStyle,
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',

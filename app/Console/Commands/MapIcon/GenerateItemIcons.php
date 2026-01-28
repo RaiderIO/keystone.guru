@@ -48,6 +48,8 @@ class GenerateItemIcons extends Command
             'inv_112_arcane_beam.jpg'               => 'eco_dome_al_dani_shatter_conduit.png',
             'spell_broker_nova.jpg'                 => 'eco_dome_al_dani_disruption_grenade.png',
             'inv_112_arcane_buff.jpg'               => 'eco_dome_al_dani_kareshi_surge.png',
+            'inv_cooking_10_heartystew.jpg'         => 'maisara_caverns_hearty_vilebranch_stew.png',
+            'inv_enchant_voidsphere.jpg'            => 'seat_of_the_triumvirate_void_infusion.png',
         ];
 
         foreach ($imagePaths as $sourceImage => $targetImage) {

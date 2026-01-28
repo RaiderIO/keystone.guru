@@ -28,6 +28,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -292,6 +293,12 @@ class DungeonRouteController extends Controller
             ->first();
 
         $mapFacadeStyle = $floor->facade ? User::MAP_FACADE_STYLE_FACADE : User::MAP_FACADE_STYLE_SPLIT_FLOORS;
+
+        // Override config value so puppeteer can access the assets
+        if (Auth::user() === null) {
+            Config::set('keystoneguru.assets_base_url', config('keystoneguru.assets_base_url_internal'));
+            Config::set('keystoneguru.tiles_base_url', config('keystoneguru.tiles_base_url_internal'));
+        }
 
         return view('dungeonroute.preview', [
             'dungeonroute'   => $dungeonroute,
@@ -688,7 +695,7 @@ class DungeonRouteController extends Controller
         ]);
 
         // Refresh the enemy forces
-        (new RefreshEnemyForces($dungeonroute->id))->handle();
+        new RefreshEnemyForces($dungeonroute->id)->handle();
 
         DungeonRoute::dropCaches($dungeonroute->id);
 

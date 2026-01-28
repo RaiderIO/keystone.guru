@@ -74,11 +74,11 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
             return null;
         }
 
-        $mdtNpcs = (new MDTDungeon(
+        $mdtNpcs = new MDTDungeon(
             $this->cacheService,
             $this->coordinatesService,
             $mappingVersion->dungeon,
-        ))->getMDTNPCs();
+        )->getMDTNPCs();
 
         $totalAccuracy = 0.0;
         $count         = 0;

@@ -6,7 +6,5 @@
 ])
 
 @section('content')
-    @include('common.general.messages')
-
     @include('common.dungeonroute.table', ['view' => 'favorites'])
 @endsection

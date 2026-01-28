@@ -21,7 +21,7 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
 
         let enemyPortraitUrl = this.enemyvisual.enemy.npc === null ?
             `${this.enemyvisual.map.options.assetsBaseUrl}/images/enemyportraits/unknown.png` :
-            this.enemyvisual.enemy.npc.enemy_portrait_url;
+            `${this.enemyvisual.map.options.assetsBaseUrl}/${this.enemyvisual.enemy.npc.enemy_portrait_url}`;
         let template = Handlebars.templates['map_enemy_visual_enemy_portrait_template'];
 
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {

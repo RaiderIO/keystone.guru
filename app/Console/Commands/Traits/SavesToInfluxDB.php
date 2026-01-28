@@ -13,7 +13,7 @@ trait SavesToInfluxDB
      * @throws Exception
      * @throws Database\Exception
      */
-    public function savePointToInfluxDB(string $measurement, array $tags, array $fields, int $timestamp = null): void
+    public function savePointToInfluxDB(string $measurement, array $tags, array $fields, ?int $timestamp = null): void
     {
         if (config('influxdb.enabled')) {
             $tags = array_merge($this->getTags(), $tags);

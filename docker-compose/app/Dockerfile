@@ -12,7 +12,7 @@ RUN cargo --version && rustc --version
 RUN cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git --locked
 
 ### ---- Runtime image ----
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -53,7 +53,7 @@ RUN npm i -g handlebars puppeteer@19.9.0
 RUN node /usr/lib/node_modules/puppeteer/install.js
 
 # Install PHP extensions
-RUN pecl install imagick swoole && docker-php-ext-enable imagick swoole
+RUN pecl install redis imagick swoole && docker-php-ext-enable redis imagick swoole
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer

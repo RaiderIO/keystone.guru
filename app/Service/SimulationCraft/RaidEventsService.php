@@ -17,7 +17,7 @@ class RaidEventsService implements RaidEventsServiceInterface
      */
     public function getRaidEvents(SimulationCraftRaidEventsOptions $options): RaidEventsCollection
     {
-        return (new RaidEventsCollection($this->coordinatesService, $options))
+        return new RaidEventsCollection($this->coordinatesService, $options)
             ->calculateRaidEvents();
     }
 }

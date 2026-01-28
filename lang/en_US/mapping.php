@@ -106,6 +106,23 @@ return [
                 'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.',
             ],
         ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => '+10% Healing Taken',
+                'versatility_increased'     => '+5% Versatility',
+                'critical_strike_increased' => '+5% Critical Strike',
+                'haste_increased'           => '+5% Haste',
+                'mastery_rating_increased'  => '+584 Mastery Rating',
+                'go_north'                  => 'Go north',
+                'go_south'                  => 'Go south',
+            ],
+            'maisara_caverns' => [
+                'hearty_vilebranch_stew' => 'Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.',
+            ],
+            'windrunner_spire' => [
+                'activates_after_killing_bosses' => 'One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.',
+            ],
+        ],
     ],
 
 ];

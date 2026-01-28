@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => 'Nombre',
     'enemy_forces_label'                              => 'Fuerzas enemigas',
     'enemy_display_type_label'                        => 'Tipo de visualización de enemigos',
@@ -477,5 +478,5 @@ en la línea en el mapa para cambiar su color o grosor.',
     'error_loading_data_label'                                             => 'Error al cargar datos - por favor intente de nuevo',
     'run_count_label'                                                      => 'Mostrando datos de :count ejecuciones',
     'refresh_thumbnails_label'                                             => 'Actualizar miniaturas',
-]
-;
+
+];

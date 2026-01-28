@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => 'Nome',
     'enemy_forces_label'                              => 'Forças inimigas',
     'enemy_display_type_label'                        => 'Tipo de exibição de inimigo',
@@ -477,5 +478,5 @@ return [
     'error_loading_data_label'                                             => 'Erro ao carregar dados - por favor, tente novamente',
     'run_count_label'                                                      => 'Mostrando dados de :count execuções',
     'refresh_thumbnails_label'                                             => 'Atualizar miniaturas',
-]
-;
+
+];

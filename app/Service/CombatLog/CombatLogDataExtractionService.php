@@ -55,7 +55,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         ]);
     }
 
-    public function extractData(string $filePath, callable $onProcessLine = null): ExtractedDataResult
+    public function extractData(string $filePath, ?callable $onProcessLine = null): ExtractedDataResult
     {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
@@ -198,7 +198,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 ) use (&$totalLines) {
                     $totalLines++;
 
-                    return (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+                    return new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
                 });
             } catch (Exception $e) {
                 $this->log->extractDataAsyncVerifyError($e);

@@ -354,6 +354,33 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                     ->orderBy('expansions.released_at')
                     ->get(),
             ],
+            [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_MIDNIGHT),
+                'seasonal_affix_id'       => null,
+                'index'                   => 3,
+                'start'                   => '2026-03-02 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 8,
+                'start_affix_group_index' => 3,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
+                'item_level_min'          => 240,
+                'item_level_max'          => 300,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_PIT_OF_SARON,
+                        Dungeon::DUNGEON_SKYREACH,
+                        Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE,
+                        Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT,
+                        Dungeon::DUNGEON_MAGISTERS_TERRACE_MIDNIGHT,
+                        Dungeon::DUNGEON_MAISARA_CAVERNS,
+                        Dungeon::DUNGEON_NEXUS_POINT_XENAS,
+                        Dungeon::DUNGEON_WINDRUNNER_SPIRE,
+                    ])
+                    ->orderBy('expansions.released_at')
+                    ->get(),
+            ],
         ];
 
         $seasonDungeonAttributes = [];

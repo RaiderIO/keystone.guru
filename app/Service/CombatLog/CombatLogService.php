@@ -55,7 +55,7 @@ class CombatLogService implements CombatLogServiceInterface
             bool   $advancedLoggingEnabled,
             string $rawEvent,
         ) use ($events) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+            $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
 
             if ($parsedEvent !== null) {
                 $events->push($parsedEvent);
@@ -80,7 +80,7 @@ class CombatLogService implements CombatLogServiceInterface
             string $rawEvent,
             int    $lineNr,
         ) use ($callable) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+            $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
 
             if ($parsedEvent !== null) {
                 $callable($parsedEvent, $lineNr);
@@ -106,7 +106,7 @@ class CombatLogService implements CombatLogServiceInterface
             bool   $advancedLoggingEnabled,
             string $rawEvent,
         ) use ($events) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent(
+            $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent(
                 [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START],
                 $combatLogVersion,
             );
@@ -146,7 +146,7 @@ class CombatLogService implements CombatLogServiceInterface
             bool   $advancedLoggingEnabled,
             string $rawEvent,
         ) use ($result) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
+            $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
             }
@@ -176,7 +176,7 @@ class CombatLogService implements CombatLogServiceInterface
             &$ingameMaxY,
             &$currentDungeon
         ) {
-            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+            $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
             if ($parsedEvent instanceof ZoneChange) {
                 $currentDungeon = $this->dungeonRepository->getByInstanceId($parsedEvent->getZoneId());
             }

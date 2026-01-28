@@ -123,10 +123,16 @@ use Illuminate\Support\Collection;
         </div>
 
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            {{ html()->label(__('view_admin.dungeon.edit.dungeon_name'), 'name') }}
+            {{ html()->label(__('view_admin.dungeon.edit.name'), 'name') }}
             {{ html()->text('name')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
+
+            <div class="form-group{{ $errors->has('abbreviation') ? ' has-error' : '' }}">
+                {{ html()->label(__('view_admin.dungeon.edit.abbreviation'), 'abbreviation') }}
+                {{ html()->text('abbreviation')->class('form-control') }}
+                @include('common.forms.form-error', ['key' => 'abbreviation'])
+            </div>
 
         <div class="form-group{{ $errors->has('slug') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.slug'), 'slug') }}

@@ -22,21 +22,30 @@ final class MapTilesExistenceTest extends PublicTestCase
 
         // Act & Assert
         foreach ($dungeons as $dungeon) {
-            if (in_array($dungeon->key, ['prioryofthesacredflame', 'therookery', // Missing MDT floor (but it's already created since I expect it to come)
-                'auchindoun', 'bloodmaul_slag_mines', 'onyxias_lair', 'onyxias_lair_classic',
-                'ruins_of_ahnqiraj_classic', 'temple_of_ahnqiraj_classic', 'naxxramas_classic',
+            if (in_array($dungeon->key, [
+                Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
+                Dungeon::DUNGEON_THE_ROOKERY, // Missing MDT floor (but it's already created since I expect it to come)
+                Dungeon::DUNGEON_AUCHINDOUN,
+                Dungeon::DUNGEON_BLOODMAUL_SLAG_MINES,
+                Dungeon::DUNGEON_BLOODMAUL_SLAG_MINES, // Not implemented
+                Dungeon::DUNGEON_DEN_OF_NALORAKK, // Missing first map
+                Dungeon::DUNGEON_VOIDSCAR_ARENA, // Not implemented
+                Dungeon::RAID_ONYXIAS_LAIR_WOTLK,
+                Dungeon::RAID_ONYXIAS_LAIR,
+                Dungeon::RAID_RUINS_OF_AHN_QIRAJ,
+                Dungeon::RAID_TEMPLE_OF_AHN_QIRAJ,
+                Dungeon::RAID_NAXXRAMAS,
                 // Prematurely created - no tiles exist for these yet
             ])) {
                 continue;
             }
 
             foreach ($dungeon->floors as $floor) {
-                $floorDirectory = realpath(
-                    base_path(
-                        sprintf('../keystone.guru.assets/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index),
-                    ),
+                $basePath = base_path(
+                    sprintf('../keystone.guru.assets/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index),
                 );
-                Assert::assertDirectoryExists($floorDirectory);
+                $floorDirectory = realpath($basePath);
+                Assert::assertDirectoryExists($floorDirectory, $basePath);
 
                 for ($zoomLevel = 1; $zoomLevel <= $zoomLevels; $zoomLevel++) {
                     $maxX = 2 ** $zoomLevel;

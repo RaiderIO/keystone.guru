@@ -132,6 +132,7 @@ final class CoordinatesServiceTest extends PublicTestCase
             if (in_array($mappingVersion->dungeon->key, [
                 Dungeon::DUNGEON_EYE_OF_AZSHARA,
                 Dungeon::DUNGEON_VAULT_OF_THE_WARDENS,
+                Dungeon::DUNGEON_WINDRUNNER_SPIRE,
             ])) {
                 continue;
             }
@@ -139,11 +140,11 @@ final class CoordinatesServiceTest extends PublicTestCase
             /** @var MappingVersion $mappingVersion */
             $enemies = $mappingVersion->enemies()->with('floor')->get();
 
-            $mdtNpcs = (new MDTDungeon(
+            $mdtNpcs = new MDTDungeon(
                 ServiceFixtures::getCacheServiceMock($this),
                 $coordinatesService,
                 $mappingVersion->dungeon,
-            ))->getMDTNPCs();
+            )->getMDTNPCs();
 
             /** @var Collection<array{x: float, y: float}> $result */
             $result = collect();

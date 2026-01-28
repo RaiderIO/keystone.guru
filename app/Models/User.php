@@ -12,6 +12,7 @@ use App\Models\Patreon\PatreonUserLink;
 use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -69,24 +70,30 @@ class User extends Authenticatable implements LaratrustUser
     use HasIconFile;
     use HasRolesAndPermissions;
     use Notifiable;
+    use HasTags;
 
-    public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
-    public const MAP_FACADE_STYLE_FACADE       = 'facade';
+    public const string MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
+    public const string MAP_FACADE_STYLE_FACADE       = 'facade';
 
-    public const MAP_FACADE_STYLE_ALL = [
+    public const array MAP_FACADE_STYLE_ALL = [
         self::MAP_FACADE_STYLE_SPLIT_FLOORS,
         self::MAP_FACADE_STYLE_FACADE,
     ];
 
-    public const DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
+    public const string DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
-    public const THEME_DARKLY = 'darkly';
-    public const THEME_LUX    = 'lux';
+    public const string THEME_DARKLY = 'darkly';
+    public const string THEME_LUX    = 'lux';
 
-    public const THEME_ALL = [
+    public const array THEME_ALL = [
         self::THEME_DARKLY,
         self::THEME_LUX,
     ];
+
+    /**
+     * Can be used in certain circumstances to override the map facade style for the current request
+     */
+    private static ?string $OVERRIDE_MAP_FACADE_STYLE = null;
 
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
@@ -185,20 +192,6 @@ class User extends Authenticatable implements LaratrustUser
     public function ipAddresses(): HasMany
     {
         return $this->hasMany(UserIpAddress::class);
-    }
-
-    /**
-     * @return HasMany|Tag
-     */
-    public function tags(?int $categoryId = null): HasMany
-    {
-        $result = $this->hasMany(Tag::class);
-
-        if ($categoryId !== null) {
-            $result->where('tag_category_id', $categoryId);
-        }
-
-        return $result;
     }
 
     /**
@@ -320,7 +313,15 @@ class User extends Authenticatable implements LaratrustUser
 
     public static function getCurrentUserMapFacadeStyle(): string
     {
-        return Auth::user()?->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
+        return self::$OVERRIDE_MAP_FACADE_STYLE ??
+            Auth::user()?->map_facade_style ??
+            $_COOKIE['map_facade_style'] ??
+            User::DEFAULT_MAP_FACADE_STYLE;
+    }
+
+    public static function forceMapFacadeStyle(string $mapFacadeStyle): void
+    {
+        self::$OVERRIDE_MAP_FACADE_STYLE = $mapFacadeStyle;
     }
 
     #[\Override]

@@ -30,7 +30,7 @@ abstract class OpensearchModel extends Model implements OpenSearchable
 
         foreach ($rows['hits']['hits'] as $hit) {
             $result->push(
-                (new static())->openSearchArrayToModel($hit['_source']),
+                new static()->openSearchArrayToModel($hit['_source']),
             );
         }
 

@@ -90,7 +90,7 @@ abstract class DatatablesHandler
                 // Only if not handled by a custom column handler already
                 if (!empty($columnName) && !isset($this->columnHandlers[$columnName])) {
                     // Handle filtering/sorting by this column
-                    (new SimpleColumnHandler($this, $columnName))->applyToBuilder($subBuilder, $this->builder);
+                    new SimpleColumnHandler($this, $columnName)->applyToBuilder($subBuilder, $this->builder);
                 }
             }
         });

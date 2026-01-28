@@ -16,7 +16,7 @@ class CustomPasswordResetEmail extends ResetPassword
     #[\Override]
     public function toMail($notifiable)
     {
-        return (new MailMessage())
+        return new MailMessage()
             ->subject('Password Reset Notification')
             ->line('We are sending this email because we received a forgot password request.')
             ->action('Reset Password', url(config('app.url') . route('password.reset', ['token' => $this->token], false)))

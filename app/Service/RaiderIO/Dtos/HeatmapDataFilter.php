@@ -414,7 +414,7 @@ class HeatmapDataFilter implements Arrayable
      * @param  Season|null $mostRecentSeason
      * @return array
      */
-    public function toArray(Season $mostRecentSeason = null): array
+    public function toArray(?Season $mostRecentSeason = null): array
     {
         $result = [
             'challengeModeId'  => $this->dungeon->challenge_mode_id,
@@ -435,6 +435,7 @@ class HeatmapDataFilter implements Arrayable
             'excludePlayerDeathSpecIds'  => $this->getExcludePlayerDeathSpecIds(),
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
             'includePlayerSpellIds'      => $this->getIncludePlayerSpellIds(),
+            'token'                      => $this->getToken(),
         ];
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {

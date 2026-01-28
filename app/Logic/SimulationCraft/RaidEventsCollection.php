@@ -40,7 +40,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             $previousKillLocation = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
 
             $this->raidEventPulls->push(
-                (new RaidEventPull($this->coordinatesService, $this->options))
+                new RaidEventPull($this->coordinatesService, $this->options)
                     ->calculateRaidEventPullEnemies($killZone, $previousKillLocation),
             );
 

@@ -268,7 +268,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $globalViewVariables = $viewService->getGlobalViewVariables();
 
         // All views
-        view()->share('isMobile', (new Agent())->isMobile());
+        view()->share('isMobile', new Agent()->isMobile());
         view()->share('isLocal', $globalViewVariables['isLocal']);
         view()->share('isMapping', $globalViewVariables['isMapping']);
         view()->share('isProduction', $globalViewVariables['isProduction']);
