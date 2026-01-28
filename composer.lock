@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eadff0b19af30a75bd51672559163233",
+    "content-hash": "c256cf52c5621ee68bb5d336c31eac3e",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -5804,15 +5804,15 @@
         },
         {
             "name": "nnoggie/mdt-legacy",
-            "version": "1.1.6",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Nnoggie/MDT_Legacy.git",
-                "reference": "894efd58fdfb803b892f34881d88d72cb331ffd9"
+                "reference": "5a3b61c46e46e0f4307bee28fd1b108e8262fcc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Nnoggie/MDT_Legacy/archive/894efd58fdfb803b892f34881d88d72cb331ffd9.zip"
+                "url": "https://github.com/Nnoggie/MDT_Legacy/archive/5a3b61c46e46e0f4307bee28fd1b108e8262fcc3.zip"
             },
             "type": "library"
         },

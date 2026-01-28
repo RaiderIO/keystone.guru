@@ -166,7 +166,7 @@ class ViewService implements ViewServiceInterface
                 'releaseChangelogCategories' => ReleaseChangelogCategory::all(),
 
                 // Map
-                'characterClassSpecializations' => CharacterClassSpecialization::with('class')->get(),
+                'characterClassSpecializations' => CharacterClassSpecialization::with('class')->orderBy('name')->get(),
                 'characterClasses'              => CharacterClass::with('specializations')->orderBy('name')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
                 'characterRacesClasses'      => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),

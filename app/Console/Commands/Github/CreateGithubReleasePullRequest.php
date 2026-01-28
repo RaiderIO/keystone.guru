@@ -42,7 +42,7 @@ class CreateGithubReleasePullRequest extends Command
         $version = $this->argument('version');
         $release = $releaseRepository->findReleaseByVersion($version);
 
-        $this->info(sprintf('>> Creating Github pull request for %s', $version));
+        $this->info(sprintf('>> Creating Github pull request for %s', $release->version ?? 'the latest release'));
 
         if ($release !== null) {
             $sourceBranch = 'development';

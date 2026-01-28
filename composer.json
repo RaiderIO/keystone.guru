@@ -42,14 +42,14 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mdt-legacy",
-                "version": "1.1.6",
+                "version": "2.0.0",
                 "source": {
                     "url": "https://github.com/Nnoggie/MDT_Legacy.git",
                     "type": "git",
-                    "reference": "894efd58fdfb803b892f34881d88d72cb331ffd9"
+                    "reference": "5a3b61c46e46e0f4307bee28fd1b108e8262fcc3"
                 },
                 "dist": {
-                    "url": "https://github.com/Nnoggie/MDT_Legacy/archive/894efd58fdfb803b892f34881d88d72cb331ffd9.zip",
+                    "url": "https://github.com/Nnoggie/MDT_Legacy/archive/5a3b61c46e46e0f4307bee28fd1b108e8262fcc3.zip",
                     "type": "zip"
                 }
             }
@@ -101,7 +101,7 @@
         "laravel/ui": "^4.6",
         "league/flysystem-aws-s3-v3": "^3.0",
         "marvinlabs/laravel-discord-logger": "^1.4",
-        "nnoggie/mdt-legacy": "^1.1",
+        "nnoggie/mdt-legacy": "^2.0",
         "nnoggie/mythicdungeontools": "^6.0",
         "paquettg/php-html-parser": "^3.1",
         "patreon/patreon": "^1.0.0",
