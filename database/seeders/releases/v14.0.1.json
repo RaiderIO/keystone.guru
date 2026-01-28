@@ -1,0 +1,25 @@
+{
+    "id": 337,
+    "release_changelog_id": 344,
+    "version": "v14.0.1",
+    "title": "Added Devourer Demon Hunter",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2026-01-28T16:27:17+00:00",
+    "updated_at": "2026-01-28T16:27:17+00:00",
+    "changelog": {
+        "id": 344,
+        "release_id": 337,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 344,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3083,
+                "change": "Added Devourer Demon Hunter."
+            }
+        ]
+    }
+}
