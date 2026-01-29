@@ -39,7 +39,7 @@ class JavascriptController
 
         $content = sprintf(
             'let mapContextMappingVersionData = %s;',
-            json_encode($mapContextMappingVersionData->toArray(), JSON_PRETTY_PRINT)
+            json_encode($mapContextMappingVersionData->toArray(), JSON_PRETTY_PRINT),
         );
 
         return response($content, 200)
@@ -61,7 +61,7 @@ class JavascriptController
 
         $content = sprintf(
             'let mapContextDungeonData = %s;',
-            json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT)
+            json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT),
         );
 
         return response($content, 200)
@@ -81,7 +81,7 @@ class JavascriptController
 
         $content = sprintf(
             'let mapContextStaticData = %s;',
-            json_encode($mapContextStaticData->toArray(), JSON_PRETTY_PRINT)
+            json_encode($mapContextStaticData->toArray(), JSON_PRETTY_PRINT),
         );
 
         return response($content, 200)

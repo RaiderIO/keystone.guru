@@ -580,7 +580,7 @@ class DungeonRouteController extends Controller
         $showHeader          = $validated['showHeader'] ?? true;
 
         return view('dungeonroute.embed', [
-            'dungeon'     => $dungeonroute->dungeon->load([
+            'dungeon' => $dungeonroute->dungeon->load([
                 'expansion',
                 'floors',
             ]),
