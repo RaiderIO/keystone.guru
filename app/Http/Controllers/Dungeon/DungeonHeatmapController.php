@@ -20,6 +20,7 @@ use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Laravel\Pennant\Feature;
 
 class DungeonHeatmapController extends Controller
@@ -203,6 +204,11 @@ class DungeonHeatmapController extends Controller
                 'floorIndex'  => $floor->index,
             ] + $validated);
         }
+
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
 
         $style                 = $request->get('style', 'compact');
         $headerBackgroundColor = $request->get('headerBackgroundColor');

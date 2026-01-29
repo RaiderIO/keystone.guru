@@ -7,6 +7,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\MapContext\MapContextServiceInterface;
 use Debugbar;
+use Illuminate\Http\Response;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class JavascriptController
@@ -29,14 +30,20 @@ class JavascriptController
         Dungeon                    $dungeon,
         MappingVersion             $mappingVersion,
         string                     $mapFacadeStyle,
-    ) {
+    ): Response {
         $mapContextMappingVersionData = $mapContextService->createMapContextMappingVersionData(
             $dungeon,
             $mappingVersion,
             $mapFacadeStyle,
         );
 
-        return sprintf('let mapContextMappingVersionData = %s;', json_encode($mapContextMappingVersionData->toArray(), JSON_PRETTY_PRINT));
+        $content = sprintf(
+            'let mapContextMappingVersionData = %s;',
+            json_encode($mapContextMappingVersionData->toArray(), JSON_PRETTY_PRINT)
+        );
+
+        return response($content, 200)
+            ->header('Content-Type', 'application/javascript; charset=UTF-8');
     }
 
     /**
@@ -46,13 +53,19 @@ class JavascriptController
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
         string                     $locale,
-    ) {
+    ): Response {
         $mapContextDungeonData = $mapContextService->createMapContextDungeonData(
             $dungeon,
             $locale,
         );
 
-        return sprintf('let mapContextDungeonData = %s;', json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT));
+        $content = sprintf(
+            'let mapContextDungeonData = %s;',
+            json_encode($mapContextDungeonData->toArray(), JSON_PRETTY_PRINT)
+        );
+
+        return response($content, 200)
+            ->header('Content-Type', 'application/javascript; charset=UTF-8');
     }
 
     /**
@@ -61,11 +74,17 @@ class JavascriptController
     public function mapContextStaticData(
         MapContextServiceInterface $mapContextService,
         string                     $locale,
-    ) {
+    ): Response {
         $mapContextStaticData = $mapContextService->createMapContextStaticData(
             $locale,
         );
 
-        return sprintf('let mapContextStaticData = %s;', json_encode($mapContextStaticData->toArray(), JSON_PRETTY_PRINT));
+        $content = sprintf(
+            'let mapContextStaticData = %s;',
+            json_encode($mapContextStaticData->toArray(), JSON_PRETTY_PRINT)
+        );
+
+        return response($content, 200)
+            ->header('Content-Type', 'application/javascript; charset=UTF-8');
     }
 }
