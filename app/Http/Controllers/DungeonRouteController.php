@@ -27,6 +27,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
@@ -548,35 +549,48 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_EMBED);
 
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
+
+        // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
+        $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
+        User::forceMapFacadeStyle($mapFacadeStyle);
+
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
-        $style                 = $request->get('style', 'regular');
-        $pullsDefaultState     = $request->get('pullsDefaultState');
-        $pullsHideOnMove       = $request->get('pullsHideOnMove');
-        $headerBackgroundColor = $request->get('headerBackgroundColor');
-        $mapBackgroundColor    = $request->get('mapBackgroundColor');
+        $validated = $request->validated();
 
-        $showEnemyInfo       = $request->get('showEnemyInfo', false);
-        $showPulls           = $request->get('showPulls', true);
-        $showEnemyForces     = $request->get('showEnemyForces', true);
-        $showAffixes         = $request->get('showAffixes', true);
-        $showTitle           = $request->get('showTitle', true);
-        $showPresenterButton = $request->get('showPresenterButton', false);
+        $style                 = $validated['style'] ?? 'regular';
+        $pullsDefaultState     = $validated['pullsDefaultState'] ?? null;
+        $pullsHideOnMove       = $validated['pullsHideOnMove'] ?? null;
+        $headerBackgroundColor = $validated['headerBackgroundColor'] ?? null;
+        $mapBackgroundColor    = $validated['mapBackgroundColor'] ?? null;
+
+        $showEnemyInfo       = $validated['showEnemyInfo'] ?? false;
+        $showPulls           = $validated['showPulls'] ?? true;
+        $showEnemyForces     = $validated['showEnemyForces'] ?? true;
+        $showAffixes         = $validated['showAffixes'] ?? true;
+        $showTitle           = $validated['showTitle'] ?? true;
+        $showPresenterButton = $validated['showPresenterButton'] ?? false;
+        $showHeader          = $validated['showHeader'] ?? true;
 
         return view('dungeonroute.embed', [
             'dungeon' => $dungeonroute->dungeon->load([
                 'expansion',
                 'floors',
             ]),
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
-            'parameters'   => $request->validated(),
-            'embedOptions' => [
+            'dungeonroute'   => $dungeonroute,
+            'title'          => $dungeonroute->getTitleSlug(),
+            'floor'          => $floor,
+            'mapFacadeStyle' => $mapFacadeStyle,
+            'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
+            'parameters'     => $validated,
+            'embedOptions'   => [
                 'style' => $style,
                 // Null if not set - but cast to a bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
                 'pullsDefaultState' => (int)$pullsDefaultState,
@@ -585,8 +599,9 @@ class DungeonRouteController extends Controller
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo' => (bool)$showEnemyInfo,
                     // Default false - not available
+                    'enemyInfo' => (bool)$showEnemyInfo,
+                    // Default true - available
                     'pulls' => (bool)$showPulls,
                     // Default true - available
                     'enemyForces' => (bool)$showEnemyForces,
@@ -594,11 +609,12 @@ class DungeonRouteController extends Controller
                     'affixes' => (bool)$showAffixes,
                     // Default true - available
                     'title' => (bool)$showTitle,
-                    // Default true - available
-                    'presenterButton' => (bool)$showPresenterButton,
                     // Default false, not available
-                    'floorSelection' => true,
+                    'presenterButton' => (bool)$showPresenterButton,
                     // Always available, but can be overridden later if there's no floors to select
+                    'floorSelection' => true,
+                    // Default false, not documented, hides the entire embed header when false
+                    'header' => (bool)$showHeader,
                 ],
             ],
         ]);

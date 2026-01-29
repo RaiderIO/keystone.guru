@@ -144,6 +144,20 @@ return [
         ['en_US', 'de_DE', 'es_ES', 'es_MX', 'fr_FR', 'ho_HO', 'it_IT', 'ko_KR', 'pt_BR', 'ru_RU', 'uk_UA'] :
         ['en_US', 'de_DE', 'es_ES', 'es_MX', 'fr_FR', 'it_IT', 'ko_KR', 'pt_BR', 'ru_RU', 'uk_UA'],
 
+    'short_to_long' => [
+        'en' => 'en_US',
+        'de' => 'de_DE',
+        'es' => 'es_ES',
+        'mx' => 'es_MX',
+        'fr' => 'fr_FR',
+        'ho' => 'ho_HO',
+        'it' => 'it_IT',
+        'ko' => 'ko_KR',
+        'pt' => 'pt_BR',
+        'ru' => 'ru_RU',
+        'uk' => 'uk_UA',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | All Languages

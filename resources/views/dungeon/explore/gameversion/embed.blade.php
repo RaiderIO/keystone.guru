@@ -13,7 +13,6 @@ use Illuminate\Support\Collection;
  * @var Dungeon                      $dungeon
  * @var Floor                        $floor
  * @var string                       $title
- * @var string                       $mapFacadeStyle
  * @var MapContextBase               $mapContext
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
@@ -72,7 +71,6 @@ use Illuminate\Support\Collection;
             'floor' => $floor,
             'showAttribution' => false,
             'parameters' => $parameters,
-            'mapFacadeStyle' => $mapFacadeStyle,
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',

@@ -19,6 +19,7 @@ use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class DungeonExploreController extends Controller
 {
@@ -160,6 +161,11 @@ class DungeonExploreController extends Controller
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
+
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
 
         // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());

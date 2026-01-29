@@ -3,6 +3,7 @@
 namespace App\Http\Requests\DungeonRoute;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DungeonRouteBaseUrlFormRequest extends FormRequest
 {
@@ -19,10 +20,20 @@ class DungeonRouteBaseUrlFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        $validLocales = [];
+        foreach (config('language.all') as $language) {
+            $validLocales[] = $language['short'];
+            $validLocales[] = $language['long'];
+        }
+
         return [
-            'lat' => 'numeric',
-            'lng' => 'numeric',
-            'z'   => 'numeric',
+            'lat'    => 'numeric',
+            'lng'    => 'numeric',
+            'z'      => 'numeric',
+            'locale' => [
+                'nullable',
+                Rule::in($validLocales),
+            ],
         ];
     }
 }
