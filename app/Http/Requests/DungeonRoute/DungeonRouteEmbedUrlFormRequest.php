@@ -45,6 +45,7 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'showAffixes'         => 'nullable|bool',
             'showTitle'           => 'nullable|bool',
             'showPresenterButton' => 'nullable|bool',
+            'showHeader'          => 'nullable|bool',
         ]);
     }
 }

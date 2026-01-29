@@ -565,6 +565,7 @@ class DungeonRouteController extends Controller
         $showAffixes         = $request->get('showAffixes', true);
         $showTitle           = $request->get('showTitle', true);
         $showPresenterButton = $request->get('showPresenterButton', false);
+        $showHeader          = $request->get('showHeader', true);
 
         return view('dungeonroute.embed', [
             'dungeon' => $dungeonroute->dungeon->load([
@@ -585,8 +586,9 @@ class DungeonRouteController extends Controller
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo' => (bool)$showEnemyInfo,
                     // Default false - not available
+                    'enemyInfo' => (bool)$showEnemyInfo,
+                    // Default true - available
                     'pulls' => (bool)$showPulls,
                     // Default true - available
                     'enemyForces' => (bool)$showEnemyForces,
@@ -594,11 +596,12 @@ class DungeonRouteController extends Controller
                     'affixes' => (bool)$showAffixes,
                     // Default true - available
                     'title' => (bool)$showTitle,
-                    // Default true - available
-                    'presenterButton' => (bool)$showPresenterButton,
                     // Default false, not available
-                    'floorSelection' => true,
+                    'presenterButton' => (bool)$showPresenterButton,
                     // Always available, but can be overridden later if there's no floors to select
+                    'floorSelection' => true,
+                    // Default false, not documented, hides the entire embed header when false
+                    'header' => (bool)$showHeader,
                 ],
             ],
         ]);

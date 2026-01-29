@@ -56,12 +56,14 @@ if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->act
 ]])
 
 @section('content')
-    @include(sprintf('dungeonroute.embedheaderstyle.%s', $embedOptions['style']), [
-        'dungeonRoute' => $dungeonroute,
-        'dungeon' => $dungeon,
-        'floor' => $floor,
-        'embedOptions' => $embedOptions,
-    ])
+    @if(!isset($embedOptions['show']['header']) || $embedOptions['show']['header'])
+        @include(sprintf('dungeonroute.embedheaderstyle.%s', $embedOptions['style']), [
+            'dungeonRoute' => $dungeonroute,
+            'dungeon' => $dungeon,
+            'floor' => $floor,
+            'embedOptions' => $embedOptions,
+        ])
+    @endif
 
     <div class="wrapper embed_wrapper {{ $embedOptions['style'] }}">
         @include('common.maps.map', [
