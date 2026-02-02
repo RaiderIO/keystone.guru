@@ -3555,7 +3555,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": true,
+        "mdt_supported": false,
         "floors": [
             {
                 "id": 80,

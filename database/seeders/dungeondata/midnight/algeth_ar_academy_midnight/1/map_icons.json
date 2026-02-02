@@ -154,5 +154,83 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 669,
+        "floor_id": 427,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -194.2018,
+        "lng": 161.5357,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 669,
+        "floor_id": 427,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 46,
+        "lat": -175.2483,
+        "lng": 163.187,
+        "comment": "mapping.map_icons.midnight.algeth_ar_academy.haste_increased",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 669,
+        "floor_id": 427,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 43,
+        "lat": -155.9374,
+        "lng": 162.0312,
+        "comment": "mapping.map_icons.midnight.algeth_ar_academy.mastery_rating_increased",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 669,
+        "floor_id": 427,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 45,
+        "lat": -143.4232,
+        "lng": 179.2246,
+        "comment": "mapping.map_icons.midnight.algeth_ar_academy.healing_taken_increased",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 669,
+        "floor_id": 427,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 49,
+        "lat": -151.5846,
+        "lng": 189.3447,
+        "comment": "mapping.map_icons.midnight.algeth_ar_academy.versatility_increased",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 669,
+        "floor_id": 427,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 53,
+        "lat": -183.0738,
+        "lng": 178.6226,
+        "comment": "mapping.map_icons.midnight.algeth_ar_academy.critical_strike_increased",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

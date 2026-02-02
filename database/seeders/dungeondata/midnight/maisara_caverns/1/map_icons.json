@@ -37,5 +37,31 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 670,
+        "floor_id": 403,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -87.5,
+        "lng": 141,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 670,
+        "floor_id": 403,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 109,
+        "lat": -150.9799,
+        "lng": 103.8161,
+        "comment": "mapping.map_icons.midnight.maisara_caverns.hearty_vilebranch_stew",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

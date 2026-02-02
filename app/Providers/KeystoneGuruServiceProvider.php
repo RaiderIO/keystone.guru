@@ -27,6 +27,8 @@ use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\Cache\Redis\PHPRedisService;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\Cloudflare\CloudflareService;
@@ -192,6 +194,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $this->app->bind(CacheServiceInterface::class, CacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         }
+        $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);

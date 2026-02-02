@@ -1,0 +1,31 @@
+{
+    "id": 339,
+    "release_changelog_id": 346,
+    "version": "v14.0.3",
+    "title": "Updated MDT to v6.0.3 and updated to the latest mapping versions for Midnight S1 dungeons",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2026-02-02T13:46:44+00:00",
+    "updated_at": "2026-02-02T13:46:44+00:00",
+    "changelog": {
+        "id": 346,
+        "release_id": 339,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 346,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3089,
+                "change": "Updated MDT to v6.0.3."
+            },
+            {
+                "release_changelog_id": 346,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3090,
+                "change": "Fixed a memory leak causing the cache service to run out of memory quickly."
+            }
+        ]
+    }
+}

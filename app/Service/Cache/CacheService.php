@@ -3,6 +3,7 @@
 namespace App\Service\Cache;
 
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Contracts\Cache\LockTimeoutException;
@@ -20,8 +21,10 @@ class CacheService implements CacheServiceInterface
     /** @var bool Bypassing the cache means that the closure is always called and the result is never cached */
     private bool $bypassCache = false;
 
-    public function __construct(private readonly CacheServiceLoggingInterface $log)
-    {
+    public function __construct(
+        private readonly RedisServiceInterface        $redisService,
+        private readonly CacheServiceLoggingInterface $log,
+    ) {
     }
 
     private function getTtl(string $key): ?DateInterval
@@ -250,13 +253,14 @@ class CacheService implements CacheServiceInterface
             $this->log->deleteKeysByPatternStart($redis->getName(), $idleTimeSeconds);
 
             do {
-                // Use SCAN to iterate keys. The SCAN command returns [cursor, keys...]
-                $result = $redis->command('SCAN', [$nextKey]);
+                $result = $this->redisService->rawCommand($redis, 'SCAN', (string)$nextKey);
+
                 if ($result === false) {
+                    $this->log->deleteKeysByPatternScanFailed($nextKey);
                     break;
                 }
-                $nextKey = (int)$result[0];
 
+                $nextKey  = (int)$result[0];
                 $toDelete = [];
 
                 // Iterate over the keys returned by SCAN
@@ -265,15 +269,13 @@ class CacheService implements CacheServiceInterface
                         if (preg_match($regex, (string)$redisKey)) {
                             // If an idle time is provided, check key's idle time.
                             if ($idleTimeSeconds !== null) {
-                                $keyIdleTimeSeconds = $redis->command('OBJECT', [
-                                    'idletime',
-                                    $redisKey,
-                                ]);
+                                $keyIdleTimeSeconds = $this->redisService->rawCommand($redis, 'OBJECT', 'idletime', (string)$redisKey);
+
                                 if ($keyIdleTimeSeconds > $idleTimeSeconds) {
-                                    $toDelete[] = $redisKey;
+                                    $toDelete[] = (string)$redisKey;
                                 }
                             } else {
-                                $toDelete[] = $redisKey;
+                                $toDelete[] = (string)$redisKey;
                             }
                             // Break once a match is found on a key for one regex.
                             break;
@@ -282,15 +284,13 @@ class CacheService implements CacheServiceInterface
                 }
 
                 if (!empty($toDelete)) {
-                    // Remove the prefix from each key if present.
-                    $toDeleteWithoutPrefix = array_map(fn($key) => str_replace($prefix, '', $key), $toDelete);
+                    // Delete the exact keys returned by SCAN (avoid prefix double-application differences).
+                    $nrOfDeletedKeys = $this->redisService->rawCommand($redis, 'DEL', ...$toDelete);
 
-                    // Delete the keys and sum up the count.
-                    $nrOfDeletedKeys = $redis->command('DEL', $toDeleteWithoutPrefix);
-                    $deletedKeysCount += $nrOfDeletedKeys;
+                    $deletedKeysCount += (int)$nrOfDeletedKeys;
 
-                    if ($nrOfDeletedKeys !== count($toDelete)) {
-                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys($nrOfDeletedKeys, count($toDelete));
+                    if ((int)$nrOfDeletedKeys !== count($toDelete)) {
+                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys((int)$nrOfDeletedKeys, count($toDelete));
                     }
                 }
 

@@ -381,10 +381,13 @@ class Conversion
         }
 
         // For each season this is different
-        if ($season->id === Season::SEASON_TWW_S1) {
-            $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + $mdtWeek) % $season->affixGroups->count());
-        } else {
-            $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixGroups->count());
+        $affixGroup = null;
+        if ($season->affixGroups->count() !== 0) {
+            if ($season->id === Season::SEASON_TWW_S1) {
+                $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + $mdtWeek) % $season->affixGroups->count());
+            } else {
+                $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixGroups->count());
+            }
         }
 
         // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));

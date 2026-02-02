@@ -25,7 +25,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
 
         // TWW S3
-        'Ara-Kara: City of Echoes'    => 'Ara-Kara',
+        'Ara-Kara, City of Echoes'    => 'Ara-Kara',
         'Halls of Atonement'          => 'Halls',
         'Operation: Floodgate'        => 'Floodgate',
         'Priory of the Sacred Flame'  => 'Priory',

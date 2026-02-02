@@ -12,5 +12,12 @@
         "floor_id": 428,
         "speed": null,
         "vertices_json": "[{\"lat\":-25.25,\"lng\":115},{\"lat\":-34.75,\"lng\":297.75},{\"lat\":-246.75,\"lng\":259.25},{\"lat\":-243,\"lng\":156}]"
+    },
+    {
+        "id": 221,
+        "mapping_version_id": 669,
+        "floor_id": 428,
+        "speed": null,
+        "vertices_json": "[{\"lat\":-25.25,\"lng\":115},{\"lat\":-34.75,\"lng\":297.75},{\"lat\":-246.75,\"lng\":259.25},{\"lat\":-243,\"lng\":156}]"
     }
 ]
