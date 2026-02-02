@@ -20,12 +20,18 @@ $navs = [];
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
-        $navs[route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $nextSeason->index])] = [
+        $navs[route('dungeonroutes.season', [
+            'gameVersion' => $currentUserGameVersion,
+            'season'      => $nextSeason->index,
+        ])] = [
             'text' => $nextSeason->expansion_id !== $currentSeason->expansion_id ? $nextSeason->name_long : $nextSeason->name,
         ];
     }
 
-    $navs[route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $currentSeason->index])] = [
+    $navs[route('dungeonroutes.season', [
+        'gameVersion' => $currentUserGameVersion,
+        'season'      => $currentSeason->index,
+    ])] = [
         'fa'   => 'fa fa-route',
         'text' => __('view_common.layout.header.browse_routes'),
     ];
@@ -65,6 +71,20 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
     'text' => __('view_common.layout.header.explore'),
 ];
 
+$isActiveRoute = function (string $route) {
+    // Check if the route that we're currently on is the same as the route in the nav
+    // If so, show it as active
+    $active    = '';
+    $parsedUrl = (parse_url((string)$route));
+    if (is_array($parsedUrl)) {
+        $routePath = trim($parsedUrl['path'], '/');
+        if (Str::startsWith(Request::path(), $routePath)) {
+            $active = 'active';
+        }
+    }
+
+    return $active;
+}
 ?>
 <div
     class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
@@ -73,7 +93,7 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
             @foreach ($allGameVersions as $gameVersion)
                 @include('common.gameversion.gameversionheader', [
                     'gameVersion' => $gameVersion,
-                    '$currentUserGameVersion' => $currentUserGameVersion
+                    '$currentUserGameVersion' => $currentUserGameVersion,
                 ])
             @endforeach
             <div class="col">
@@ -106,6 +126,7 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
                         <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}
                     </a>
                 </li>
+                @php($subItemActive = null)
                 @foreach($navs as $route => $opts)
                     @if($opts === 'divider')
                         <li class="nav-item nav-item-divider"></li>
@@ -113,10 +134,14 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
                             <?php
                             /** @noinspection PhpUndefinedVariableInspection */
                             $headerText = $route;
-                            $dropdownId = Str::slug($headerText)
+                            $dropdownId = Str::slug($headerText);
+                            // Determine if any of the sub-items are active
+                            foreach ($opts['items'] as $itemKey => $item) {
+                                $subItemActive = $subItemActive ?? $isActiveRoute($itemKey);
+                            }
                             ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="{{ $dropdownId }}" role="button"
+                            <a class="nav-link dropdown-toggle {{ $subItemActive }}" href="#" id="{{ $dropdownId }}" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>
@@ -125,25 +150,14 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
                             </a>
                             <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
                                 @foreach($opts['items'] as $itemKey => $item)
-                                    <a class="dropdown-item" href="{{ $itemKey }}">{!! $item !!}</a>
+                                    <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                                       href="{{ $itemKey }}">{!! $item !!}</a>
                                 @endforeach
                             </div>
                         </li>
                     @else
                         <li class="nav-item">
-                                <?php
-                                // Check if the route that we're currently on is the same as the route in the nav
-                                // If so, show it as active
-                                $active    = '';
-                                $parsedUrl = (parse_url((string) $route));
-                                if (is_array($parsedUrl)) {
-                                    $routePath = trim($parsedUrl['path'], '/');
-                                    if (Str::startsWith($routePath, Request::path())) {
-                                        $active = 'active';
-                                    }
-                                }
-                                ?>
-                            <a class="nav-link pr-3 {{ $active }}"
+                            <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
                                href="{{ $route }}">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>

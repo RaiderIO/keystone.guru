@@ -20,7 +20,6 @@ use Illuminate\Support\Collection;
  */
 
 $gameVersion           ??= $currentUserGameVersion;
-$selectedSeasonId      = $gameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
 $selectable            ??= true;
 $route                 ??= null;
 $routeParams           ??= [];
@@ -30,12 +29,24 @@ $linkMapFn             = static fn(Dungeon $dungeon) => [
 ];
 $subtextFn             ??= null;
 $filterFn              ??= fn(Dungeon $dungeon) => true;
+$nextSeasonDungeons    = $nextSeason?->dungeons->filter($filterFn)->values() ?? collect();
+$currentSeasonDungeons = $currentSeason?->dungeons->filter($filterFn)->values() ?? collect();
+
+$selectedSeasonId = null;
+if ($gameVersion->has_seasons) {
+    if ($nextSeason !== null && $nextSeasonDungeons->isNotEmpty()) {
+        $selectedSeasonId = $nextSeason->id;
+    } else if ($currentSeasonDungeons->isNotEmpty()) {
+        $selectedSeasonId = $currentSeason->id;
+    }
+}
+
 $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $currentSeason->expansion_id;
 ?>
 <div id="{{ $id }}">
     <ul id="{{ $tabsId }}" class="nav nav-tabs" role="tablist">
         @if($gameVersion->has_seasons)
-            @if($nextSeason !== null)
+            @if($nextSeason !== null && $nextSeasonDungeons->isNotEmpty())
                 <li class="nav-item">
                     <a id="season-{{ $nextSeason->id }}-grid-tab"
                        class="nav-link active"
@@ -48,17 +59,19 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                     >{{ $showFullExpansionName ? $nextSeason->name_long : $nextSeason->name }}</a>
                 </li>
             @endif
-            <li class="nav-item">
-                <a id="season-{{ $currentSeason->id }}-grid-tab"
-                   class="nav-link {{ $nextSeason === null ? 'active' : '' }}"
-                   href="#season-{{ $currentSeason->id }}-grid-content"
-                   role="tab"
-                   aria-controls="season-{{ $currentSeason->id }}-grid-content"
-                   aria-selected="{{ $selectedSeasonId === $currentSeason->id ? 'true' : 'false' }}"
-                   data-toggle="tab"
-                   data-season="{{ $currentSeason->id }}"
-                >{{ $currentSeason->name }}</a>
-            </li>
+            @if($currentSeasonDungeons->isNotEmpty())
+                <li class="nav-item">
+                    <a id="season-{{ $currentSeason->id }}-grid-tab"
+                       class="nav-link {{ $nextSeason === null || $nextSeasonDungeons->isEmpty() ? 'active' : '' }}"
+                       href="#season-{{ $currentSeason->id }}-grid-content"
+                       role="tab"
+                       aria-controls="season-{{ $currentSeason->id }}-grid-content"
+                       aria-selected="{{ $selectedSeasonId === $currentSeason->id ? 'true' : 'false' }}"
+                       data-toggle="tab"
+                       data-season="{{ $currentSeason->id }}"
+                    >{{ $currentSeason->name }}</a>
+                </li>
+            @endif
         @endif
         <?php
         $index = 0; ?>
@@ -99,36 +112,36 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
 
     <div class="tab-content">
         @if($gameVersion->has_seasons)
-            @if($nextSeason !== null)
+            @if($nextSeason !== null && $nextSeasonDungeons->isNotEmpty())
                 <div id="season-{{ $nextSeason->id }}-grid-content"
                      class="tab-pane fade show {{ $selectedSeasonId === $nextSeason->id ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="season-{{ $nextSeason->id }}-grid-content">
-                    @php($dungeons = $nextSeason->dungeons->filter($filterFn)->values())
                     @include('common.dungeon.grid', [
-                        'dungeons' => $dungeons,
+                        'dungeons' => $nextSeasonDungeons,
                         'names' => true,
                         'selectable' => true,
                         'route' => $route,
-                        'links' => $route === null ? collect() : $dungeons->map($linkMapFn),
+                        'links' => $route === null ? collect() : $nextSeasonDungeons->map($linkMapFn),
                         'subtextFn' => $subtextFn,
                     ])
                 </div>
             @endif
-            <div id="season-{{ $currentSeason->id }}-grid-content"
-                 class="tab-pane fade show {{ $selectedSeasonId === $currentSeason->id ? 'active' : '' }}"
-                 role="tabpanel"
-                 aria-labelledby="season-{{ $currentSeason->id }}-grid-content">
-                @php($dungeons = $currentSeason->dungeons->filter($filterFn)->values())
-                @include('common.dungeon.grid', [
-                    'dungeons' => $dungeons,
-                    'names' => true,
-                    'selectable' => true,
-                    'route' => $route,
-                    'links' => $route === null ? collect() : $dungeons->map($linkMapFn),
-                    'subtextFn' => $subtextFn,
-                ])
-            </div>
+            @if($currentSeasonDungeons->isNotEmpty())
+                <div id="season-{{ $currentSeason->id }}-grid-content"
+                     class="tab-pane fade show {{ $selectedSeasonId === $currentSeason->id ? 'active' : '' }}"
+                     role="tabpanel"
+                     aria-labelledby="season-{{ $currentSeason->id }}-grid-content">
+                    @include('common.dungeon.grid', [
+                        'dungeons' => $currentSeasonDungeons,
+                        'names' => true,
+                        'selectable' => true,
+                        'route' => $route,
+                        'links' => $route === null ? collect() : $currentSeasonDungeons->map($linkMapFn),
+                        'subtextFn' => $subtextFn,
+                    ])
+                </div>
+            @endif
         @endif
         <?php
         $index = 0; ?>
