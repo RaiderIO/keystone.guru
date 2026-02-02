@@ -11,6 +11,7 @@ use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use App\Service\Cloudflare\CloudflareService;
 use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -213,15 +214,32 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    public static function createRedisService(
+        PublicTestCase $testCase,
+        array          $methodsToMock = [],
+    ): MockObject|RedisServiceInterface {
+        return $testCase
+            ->getMockBuilderPublic(RedisServiceInterface::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+            ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
     public static function getCacheServiceMock(
         PublicTestCase                $testCase,
         array                         $methodsToMock = [],
+        ?RedisServiceInterface        $redisService = null,
         ?CacheServiceLoggingInterface $log = null,
     ): MockObject|CacheService {
         return $testCase
             ->getMockBuilderPublic(CacheService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
+                $redisService ?? ServiceFixtures::createRedisService($testCase),
                 $log ?? LoggingFixtures::createCacheServiceLogging($testCase),
             ])
             ->getMock();
