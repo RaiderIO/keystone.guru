@@ -341,7 +341,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 'layouts.app',
                 'layouts.sitepage',
                 'layouts.map',
-                'admin.dashboard.layouts.app',
             ],
             static function (View $view) use ($globalViewVariables, $messageBannerService, $readOnlyModeService) {
                 $view->with('version', $globalViewVariables['appVersion']);
@@ -369,7 +368,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             );
         });
 
-        view()->composer('common.layout.navgameversions', static function (View $view) use ($globalViewVariables) {
+        view()->composer('common.layout.nav.gameversions', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
@@ -405,7 +404,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'misc.affixes',
             'dungeonroute.discover.discover',
             'dungeonroute.discover.dungeon.overview',
-            'dungeonroute.discover.season.overview',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             /** @var GameVersion $gameVersion */
             $gameVersion = $view->getData()['gameVersion'];
