@@ -4,22 +4,22 @@ return [
 
     'commit' => [
         'added' => [
-            'added' => 'Hinzugefügt',
+            'added' => '',
         ],
         'modified' => [
-            'modified' => 'Geändert',
+            'modified' => '',
         ],
         'removed' => [
-            'removed' => 'Entfernt',
+            'removed' => '',
         ],
     ],
     'release' => [
         'discord_footer' => [
-            'home'        => 'Startseite',
-            'changelog'   => 'Änderungsprotokoll',
-            'affixes'     => 'Affixe',
-            'patreon'     => 'Patreon',
-            'get_started' => 'Erste Schritte',
+            'home'        => '',
+            'changelog'   => '',
+            'affixes'     => '',
+            'patreon'     => '',
+            'get_started' => '',
         ],
     ],
 

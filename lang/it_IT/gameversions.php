@@ -3,32 +3,32 @@
 return [
 
     'retail' => [
-        'name'        => 'Al dettaglio',
-        'description' => 'Al dettaglio',
+        'name'        => '',
+        'description' => '',
     ],
     'wotlk' => [
-        'name'        => 'Ira',
-        'description' => 'L\'Ira del Re dei Lich',
+        'name'        => '',
+        'description' => '',
     ],
     'classic' => [
-        'name'        => 'Era Classica',
-        'description' => 'Era Classica',
+        'name'        => '',
+        'description' => '',
     ],
     'beta' => [
-        'name'        => 'Beta al dettaglio',
-        'description' => 'Beta al dettaglio',
+        'name'        => '',
+        'description' => '',
     ],
     'cata' => [
-        'name'        => 'Cata',
-        'description' => 'Cataclisma',
+        'name'        => '',
+        'description' => '',
     ],
     'mop' => [
-        'name'        => 'Nebbie',
-        'description' => 'Nebbie di Pandaria',
+        'name'        => '',
+        'description' => '',
     ],
     'legion-remix' => [
-        'name'        => 'Remix di Legione',
-        'description' => 'Remix di Legione',
+        'name'        => '',
+        'description' => '',
     ],
 
 ];

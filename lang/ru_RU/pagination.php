@@ -2,7 +2,7 @@
 
 return [
 
-    'previous' => '&laquo; Предыдущая',
-    'next'     => 'Далее &raquo;',
+    'previous' => '',
+    'next'     => '',
 
 ];

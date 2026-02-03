@@ -106,6 +106,23 @@ return [
                 'miniboss_explanation' => 'Hodor',
             ],
         ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => 'Hodor',
+                'versatility_increased'     => 'Hodor',
+                'critical_strike_increased' => 'Hodor',
+                'haste_increased'           => 'Hodor',
+                'mastery_rating_increased'  => 'Hodor',
+                'go_north'                  => 'Hodor',
+                'go_south'                  => 'Hodor',
+            ],
+            'maisara_caverns'   => [
+                'hearty_vilebranch_stew' => 'Hodor',
+            ],
+            'windrunner_spire'  => [
+                'activates_after_killing_bosses' => 'Hodor',
+            ],
+        ],
     ],
 
 ];

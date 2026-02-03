@@ -123,8 +123,8 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         foreach (config('language.all') as $language) {
             $locale = $language['long'];
 
-            if ($locale === 'ho_HO') {
-                continue; // Skip Hodor language
+            if ($locale === 'ho_HO' || ($language['ai'] ?? false)) {
+                continue; // Skip Hodor language or AI languages
             }
 
             $parts = explode('_', (string)$locale);

@@ -2,14 +2,14 @@
 
 return [
 
-    'view_route_not_published'                => 'Cet itinéraire n\'est pas publié et ne peut pas être consulté. Veuillez demander à l\'auteur de publier cet itinéraire pour le visualiser.',
-    'present_route_not_published'             => 'Cet itinéraire n\'est pas publié et ne peut pas être présenté. Veuillez demander à l\'auteur de publier cet itinéraire pour le présenter.',
-    'embed_route_not_published'               => 'Cet itinéraire n\'est pas publié et ne peut pas être consulté. Veuillez demander à l\'auteur de publier cet itinéraire pour le visualiser.',
-    'embed_route_sandbox_not_allowed'         => 'Les itinéraires temporaires ne peuvent pas être intégrés.',
-    'publish_not_all_required_enemies_killed' => 'Impossible de modifier les paramètres de partage : tous les ennemis requis n\'ont pas été tués.',
-    'add_kill_zone_limit_reached'             => 'Impossible d\'ajouter plus de :limit zones de combat à un seul itinéraire.',
-    'add_brushline_limit_reached'             => 'Impossible d\'ajouter plus de :limit lignes dessinées à main levée à un seul itinéraire.',
-    'add_path_limit_reached'                  => 'Impossible d\'ajouter plus de :limit chemins à un seul itinéraire.',
-    'add_map_icon_limit_reached'              => 'Impossible d\'ajouter plus de :limit icônes de carte à un seul itinéraire.',
+    'view_route_not_published'                => '',
+    'present_route_not_published'             => '',
+    'embed_route_not_published'               => '',
+    'embed_route_sandbox_not_allowed'         => '',
+    'publish_not_all_required_enemies_killed' => '',
+    'add_kill_zone_limit_reached'             => '',
+    'add_brushline_limit_reached'             => '',
+    'add_path_limit_reached'                  => '',
+    'add_map_icon_limit_reached'              => '',
 
 ];

@@ -42,7 +42,8 @@ class DownloadLocalizations extends Command
         ];
 
         foreach (config('language.all') as $locale) {
-            if (in_array($locale['long'], ['ho_HO'])) {
+            if (in_array($locale['long'], ['ho_HO']) || ($locale['ai'] ?? false)) {
+                $this->info(sprintf('Skipping %s', $locale['long']));
                 continue;
             }
 

@@ -2,9 +2,9 @@
 
 return [
 
-    'member'       => 'Участник',
-    'collaborator' => 'Коллаборатор',
-    'moderator'    => 'Модератор',
-    'admin'        => 'Администратор',
+    'member'       => '',
+    'collaborator' => '',
+    'moderator'    => '',
+    'admin'        => '',
 
 ];

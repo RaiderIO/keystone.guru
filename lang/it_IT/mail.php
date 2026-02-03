@@ -2,7 +2,7 @@
 
 return [
 
-    'Custom Password Reset Email' => 'Notifica di Ripristino Password',
-    'Reset Password Notification' => 'Notifica di Ripristino Password',
+    'Custom Password Reset Email' => '',
+    'Reset Password Notification' => '',
 
 ];

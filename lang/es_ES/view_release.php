@@ -2,6 +2,6 @@
 
 return [
 
-    'header' => 'Lanzamiento %s',
+    'header' => '',
 
 ];

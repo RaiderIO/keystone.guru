@@ -3,16 +3,16 @@
 return [
 
     'category' => [
-        'class' => 'Classe',
-        'item'  => 'Oggetto',
-        'misc'  => 'Varie',
-        'meta'  => 'Meta',
+        'class' => '',
+        'item'  => '',
+        'misc'  => '',
+        'meta'  => '',
     ],
-    'no_attributes'       => 'Nessun attributo',
-    'rogue_shroud_skip'   => 'Salta Velo del Ladro',
-    'warlock_gate_skip'   => 'Salta Portale dello Stregone',
-    'mage_slow_fall_skip' => 'Salta Caduta Lenta del Mago',
-    'invisibility_potion' => 'Pozione di Invisibilità',
-    'death_skip'          => 'Salta Morte',
+    'no_attributes' => '',
+    'rogue_shroud_skip' => '',
+    'warlock_gate_skip' => '',
+    'mage_slow_fall_skip' => '',
+    'invisibility_potion' => '',
+    'death_skip' => '',
 
 ];

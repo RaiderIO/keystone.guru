@@ -106,6 +106,23 @@ return [
                 'miniboss_explanation' => 'Keystone.guru: Мінібоси не дають очок ворожих військ, коли помирають під час бою з босом. Однак якщо їх прикликає інший мінібос, очки зараховуються.',
             ],
         ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => '',
+                'versatility_increased'     => '',
+                'critical_strike_increased' => '',
+                'haste_increased'           => '',
+                'mastery_rating_increased'  => '',
+                'go_north'                  => '',
+                'go_south'                  => '',
+            ],
+            'maisara_caverns'   => [
+                'hearty_vilebranch_stew' => '',
+            ],
+            'windrunner_spire'  => [
+                'activates_after_killing_bosses' => '',
+            ],
+        ],
     ],
 
 ];
