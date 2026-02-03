@@ -113,6 +113,33 @@ Breadcrumbs::for('dungeonroute.discover.search', static function (Generator $tra
 });
 
 /**
+ * Season for expansion
+ */
+Breadcrumbs::for('dungeonroutes.expansion.season', static function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.expansion', $expansion);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.routes_season', ['season' => $season->index]), route('dungeonroutes.expansion.season', ['expansion' => $expansion, 'season' => $season->index]));
+});
+Breadcrumbs::for('dungeonroutes.expansion.season.popular', static function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.expansion.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.popular'), route('dungeonroutes.season.popular', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.expansion.season.nextweek', static function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.expansion.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.next_week_affixes'), route('dungeonroutes.season.nextweek', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.expansion.season.thisweek', static function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.expansion.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.this_week_affixes'), route('dungeonroutes.season.thisweek', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+Breadcrumbs::for('dungeonroutes.expansion.season.new', static function (Generator $trail, Expansion $expansion, Season $season) {
+    $trail->parent('dungeonroutes.expansion.season', $expansion, $season);
+    $trail->push(__('breadcrumbs.home.dungeonroutes.season.new'), route('dungeonroutes.season.new', ['expansion' => $expansion, 'season' => $season->index]));
+});
+
+/**
  * Season
  */
 Breadcrumbs::for('dungeonroutes.season', static function (Generator $trail, GameVersion $gameVersion, Season $season) {

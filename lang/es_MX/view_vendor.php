@@ -3,7 +3,7 @@
 return [
     'language' => [
         'flags' => [
-            'contribute_translations' => 'Contribuir traducciones',
+            'contribute_translations' => '',
         ],
     ],
 ];

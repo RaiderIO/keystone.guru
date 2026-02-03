@@ -49,6 +49,7 @@ use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
 use App\Http\Controllers\DungeonRouteDiscoverController;
+use App\Http\Controllers\DungeonRouteDiscoverExpansionSeasonController;
 use App\Http\Controllers\DungeonRouteLegacyController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\Floor\FloorController;
@@ -135,7 +136,18 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('routes')->group(static function () {
         Route::get('/', new DungeonRouteDiscoverController()->discover(...))->name('dungeonroutes');
         Route::get('/current', new DungeonRouteDiscoverController()->discoverCurrentGameVersion(...))->name('dungeonroutes.current');
-        Route::get('/expansion/{expansion}', new DungeonRouteDiscoverController()->discoverExpansion(...))->name('dungeonroutes.expansion');
+
+        Route::prefix('/expansion/{expansion}')->group(static function () {
+            Route::get('/', new DungeonRouteDiscoverController()->discoverExpansion(...))->name('dungeonroutes.expansion');
+            Route::prefix('season/{season}')->group(static function () {
+                Route::get('/', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeason(...))->name('dungeonroutes.expansion.season');
+                Route::get('popular', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonPopular(...))->name('dungeonroutes.expansion.season.popular');
+                Route::get('affixes/current', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonThisWeek(...))->name('dungeonroutes.expansion.season.thisweek');
+                Route::get('affixes/next', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonNextWeek(...))->name('dungeonroutes.expansion.season.nextweek');
+                Route::get('new', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonNew(...))->name('dungeonroutes.expansion.season.new');
+            });
+        });
+
         Route::prefix('{gameVersion}')->group(static function () {
             Route::get('/', new DungeonRouteDiscoverController()->discoverGameVersion(...))->name('dungeonroutes.gameVersion');
             Route::get('popular', new DungeonRouteDiscoverController()->discoverPopular(...))->name('dungeonroutes.popular');

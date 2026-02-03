@@ -1,0 +1,37 @@
+<?php
+
+return [
+
+    'asleep'        => 'Schlafend',
+    'banished'      => 'Verbannt',
+    'bleeding'      => 'Blutend',
+    'charmed'       => 'Bezaubert',
+    'gripped'       => 'Gepackt',
+    'dazed'         => 'Benommen',
+    'disarmed'      => 'Entwaffnet',
+    'discovery'     => 'Entdeckung',
+    'disoriented'   => 'Desorientiert',
+    'distracted'    => 'Abgelenkt',
+    'enraged'       => 'Wütend',
+    'snared'        => 'Gefangen',
+    'fleeing'       => 'Fliehend',
+    'frozen'        => 'Eingefroren',
+    'healing'       => 'Heilend',
+    'horrified'     => 'Entsetzt',
+    'incapacitated' => 'Handlungsunfähig',
+    'interrupted'   => 'Unterbrochen',
+    'invulnerable'  => 'Unverwundbar',
+    'mounted'       => 'Beritten',
+    'slowed'        => 'Verlangsamt',
+    'polymorphed'   => 'Verwandelt',
+    'rooted'        => 'Verwurzelt',
+    'sapped'        => 'Betäubt',
+    'infected'      => 'Infiziert',
+    'shackled'      => 'Gekettet',
+    'shielded'      => 'Geschützt',
+    'silenced'      => 'Zum Schweigen gebracht',
+    'stunned'       => 'Betäubt',
+    'turned'        => 'Verwandelt',
+    'wounded'       => 'Verwundet',
+
+];

@@ -1,0 +1,96 @@
+<?php
+
+return [
+
+    'edit'      => [
+        'title'                                            => 'Perfil',
+        'profile'                                          => 'Perfil',
+        'account'                                          => 'Conta',
+        'patreon'                                          => 'Patreon',
+        'change_password'                                  => 'Alterar senha',
+        'privacy'                                          => 'Privacidade',
+        'reports'                                          => 'Relatórios',
+        'menu_title'                                       => 'Perfil de %s',
+        'avatar'                                           => 'Avatar',
+        'avatar_alt'                                       => 'Avatar do usuário',
+        'username'                                         => 'Nome de usuário',
+        'username_title'                                   => 'Como você fez login usando um serviço de Autenticação externa, você pode alterar seu nome de usuário uma vez.',
+        'email'                                            => 'Email',
+        'region'                                           => 'Região',
+        'select_region'                                    => 'Selecionar região',
+        'show_as_anonymous'                                => 'Mostrar como Anônimo',
+        'show_as_anonymous_title'                          => 'Ativar esta opção mostrará você como \'Anônimo\' ao visualizar rotas que não fazem parte de nenhuma equipe da qual você faz parte.
+                                Para suas próprias rotas e para rotas de suas equipes, seu nome sempre será visível.',
+        'echo_color'                                       => 'Cor de edição de rota sincronizada',
+        'echo_color_title'                                 => 'Ao editar uma rota cooperativamente com um membro da equipe, esta cor o identificará de forma exclusiva.',
+        'save'                                             => 'Salvar',
+        'account_delete_consequences'                      => 'Se você excluir sua conta do Keystone.guru, o seguinte acontecerá',
+        'account_delete_consequence_routes'                => 'Rotas',
+        'account_delete_consequence_routes_delete'         => 'Sua(s) %s rota(s) será(ão) excluída(s).',
+        'account_delete_consequence_teams'                 => 'Equipes',
+        'account_delete_consequence_teams_you_are_removed' => 'Você será removido desta equipe.',
+        'account_delete_consequence_teams_new_admin'       => '%s será nomeado administrador desta equipe.',
+        'account_delete_consequence_teams_team_deleted'    => 'Esta equipe será excluída (você é o único usuário nesta equipe).',
+        'account_delete_consequence_patreon'               => 'A conexão entre o Patreon e o Keystone.guru será encerrada. Você não receberá mais recompensas do Patreon.',
+        'account_delete_consequence_reports'               => 'Relatórios',
+        'account_delete_consequence_reports_unresolved'    => 'Seu(s) %s relatório(s) não resolvido(s) será(ão) excluído(s)',
+        'account_delete_warning'                           => 'Sua conta será permanentemente excluída. Não há volta.',
+        'account_delete_confirm'                           => 'Excluir minha conta do Keystone.guru',
+        'unlink_from_patreon'                              => 'Desvincular do Patreon',
+        'patreon_status_granted_manually'                  => 'Sua conta recebeu todos os benefícios de :patreon porque você é especial e incrível, e não deixe ninguém dizer o contrário! Suas assinaturas ativas estão listadas abaixo. Algo faltando? Informe-me o mais rápido possível no Discord e eu investigarei.',
+        'link_to_patreon_success'                          => 'Sua conta está vinculada a :patreon. Suas assinaturas ativas estão listadas abaixo. Algo faltando? Se você se inscreveu após vincular seu Patreon, por favor, revincule seu Patreon ou aguarde até uma hora para que o script de sincronização alcance sua assinatura. Ainda não está recebendo seus benefícios? Informe-me o mais rápido possível no Discord e eu investigarei.',
+        'link_to_patreon'                                  => 'Vincular ao Patreon',
+        'link_to_patreon_description'                      => 'Para reivindicar suas recompensas do Patreon, você precisa vincular sua conta do Patreon',
+        'patreon_benefit_table'                            => [
+            'header_active'  => 'Ativo',
+            'header_benefit' => 'Benefício',
+        ],
+        'current_password'                                 => 'Senha atual',
+        'new_password'                                     => 'Nova senha',
+        'new_password_confirm'                             => 'Nova senha (confirmar)',
+        'submit'                                           => 'Enviar',
+        'ga_cookies_opt_out'                               => 'Desativação de cookies do Google Analytics',
+        'reports_description'                              => 'Todas as rotas, inimigos e outros relatórios que você fez no site serão listados aqui.',
+        'reports_table_header_id'                          => 'Id',
+        'reports_table_header_category'                    => 'Categoria',
+        'reports_table_header_message'                     => 'Mensagem',
+        'reports_table_header_created_at'                  => 'Criado em',
+        'reports_table_header_status'                      => 'Status',
+        'reports_table_action_handled'                     => 'Tratado',
+    ],
+    'favorites' => [
+        'title' => 'Meus favoritos',
+    ],
+    'overview'  => [
+        'title'                    => 'Visão geral',
+        'favorites'                => 'Favoritos',
+        'tags'                     => 'Tags',
+        'teams'                    => 'Equipes',
+        'profile'                  => 'Perfil',
+        'route_coverage'           => 'Cobertura de rota',
+        'route_overview'           => 'Visão geral da rota',
+        'welcome_text'             => 'Bem-vindo ao Keystone.guru! Comece criando uma rota ou uma nova equipe para criar rotas colaborativamente com seus amigos.',
+        'create_route'             => 'Criar rota',
+        'create_route_description' => 'Uma rota é um caminho através de uma masmorra para alcançar o objetivo final de 100% das forças inimigas enquanto mata todos os chefes.
+                                    Várias ferramentas ajudam você a organizar seu caminho pretendido para os membros do seu grupo. Você pode compartilhá-las com o mundo - ou mantê-las privadas e organizá-las como desejar.',
+        'create_team'              => 'Criar equipe',
+        'create_team_description'  => 'Uma equipe é usada para compartilhar suas rotas com amigos e ajudar todos a se manterem sincronizados com as últimas mudanças nas rotas que você faz com mais frequência.
+                                    A edição colaborativa torna o ajuste de uma rota existente muito mais fácil enquanto você disputa pela melhor rota para sua equipe.',
+    ],
+    'routes'    => [
+        'title' => 'Minhas rotas',
+    ],
+    'tags'      => [
+        'title'                             => 'Minhas tags',
+        'header'                            => 'Minhas tags',
+        'description'                       => 'A funcionalidade de marcação permite que você organize suas rotas da maneira que achar melhor. Você pode adicionar tags às rotas visualizando as Ações para cada rota em %s.
+                    Você pode gerenciar tags para suas próprias rotas aqui. Ninguém mais poderá ver suas tags - para rotas anexadas a uma equipe
+                    você pode gerenciar um conjunto separado de tags apenas para essa equipe visitando a seção Tags ao visualizar sua equipe.',
+        'link_your_personal_route_overview' => 'sua visão geral pessoal de rotas',
+    ],
+    'view'      => [
+        'title'  => 'Rotas de %s',
+        'header' => 'Rotas de %s',
+    ],
+
+];

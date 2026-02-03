@@ -2,10 +2,10 @@
 
 return [
 
-    'normal'    => 'Normal',
-    'elite'     => 'Elite',
-    'boss'      => 'Chefe',
-    'finalboss' => 'Chefe final',
-    'rare'      => 'Raro',
+    'normal'    => '',
+    'elite'     => '',
+    'boss'      => '',
+    'finalboss' => '',
+    'rare'      => '',
 
 ];

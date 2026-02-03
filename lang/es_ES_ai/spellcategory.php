@@ -1,0 +1,21 @@
+<?php
+
+return [
+
+    'general'      => 'General',
+    'death_knight' => 'Caballero de la muerte',
+    'demon_hunter' => 'Cazador de demonios',
+    'druid'        => 'Druida',
+    'evoker'       => 'Evocador',
+    'hunter'       => 'Cazador',
+    'mage'         => 'Mago',
+    'monk'         => 'Monje',
+    'paladin'      => 'Paladín',
+    'priest'       => 'Sacerdote',
+    'rogue'        => 'Pícaro',
+    'shaman'       => 'Chamán',
+    'warlock'      => 'Brujo',
+    'warrior'      => 'Guerrero',
+    'unknown'      => 'Desconocido',
+
+];

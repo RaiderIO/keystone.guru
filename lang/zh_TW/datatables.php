@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'aria' => [
+    'aria'              => [
         'paginate' => [
             'first'    => '首页',
             'last'     => '末页',
@@ -9,28 +9,28 @@ return [
             'previous' => '上页',
         ],
     ],
-    'autoFill' => [
+    'autoFill'          => [
         'cancel'         => '取消',
         'fill'           => '用 <i>%d</i> 填充所有单元格',
         'fillHorizontal' => '水平填充单元格',
         'fillVertical'   => '垂直填充单元格',
         'info'           => '',
     ],
-    'buttons' => [
-        'collection'    => '集合<span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'        => '列可见性',
-        'colvisRestore' => '重置可见性',
-        'copy'          => '复制',
-        'copyKeys'      => '按 Ctrl 或 u2318 + C 键将表中数据复制到系统剪贴板。<br /><br />要取消，请单击此消息或按 Escape 键。',
-        'copySuccess'   => [
+    'buttons'           => [
+        'collection'      => '集合<span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'          => '列可见性',
+        'colvisRestore'   => '重置可见性',
+        'copy'            => '复制',
+        'copyKeys'        => '按 Ctrl 或 u2318 + C 键将表中数据复制到系统剪贴板。<br /><br />要取消，请单击此消息或按 Escape 键。',
+        'copySuccess'     => [
             '_' => '已复制 %d 行到剪贴板',
             1   => '已复制 1 行到剪贴板',
         ],
-        'copyTitle'   => '复制到剪贴板',
-        'createState' => '创建状态',
-        'csv'         => 'CSV',
-        'excel'       => 'Excel',
-        'pageLength'  => [
+        'copyTitle'       => '复制到剪贴板',
+        'createState'     => '创建状态',
+        'csv'             => 'CSV',
+        'excel'           => 'Excel',
+        'pageLength'      => [
             '_' => '显示 %d 行',
             -1  => '显示所有行',
         ],
@@ -43,14 +43,14 @@ return [
         'stateRestore'    => '状态 %d',
         'updateState'     => '更新',
     ],
-    'datetime' => [
-        'amPm' => [
+    'datetime'          => [
+        'amPm'     => [
             0 => '上午',
             1 => '下午',
         ],
-        'hours'   => '时',
-        'minutes' => '分',
-        'months'  => [
+        'hours'    => '时',
+        'minutes'  => '分',
+        'months'   => [
             0  => '1月',
             1  => '2月',
             10 => '11月',
@@ -78,23 +78,23 @@ return [
             6 => '六',
         ],
     ],
-    'decimal' => '',
-    'editor'  => [
+    'decimal'           => '',
+    'editor'            => [
         'close'  => '关闭',
         'create' => [
             'button' => '新建',
             'submit' => '创建',
             'title'  => '创建新记录',
         ],
-        'edit' => [
+        'edit'   => [
             'button' => '编辑',
             'submit' => '更新',
             'title'  => '编辑记录',
         ],
-        'error' => [
+        'error'  => [
             'system' => '出现了系统错误 (<a target="\\" rel="\\ nofollow" href="\\">更多信息&lt;\\/a&gt;)。</a>',
         ],
-        'multi' => [
+        'multi'  => [
             'info'    => '选择的多条记录的此字段含有不同的值。要编辑并将所有记录的此字段都设为相同的值，请单击或点按这里，否则它们会保持各自的值不变。',
             'noMulti' => '此字段可以单独编辑，不可以组合编辑。',
             'restore' => '撤销更改',
@@ -106,30 +106,30 @@ return [
                 '_' => '确定要删除 %d 行？',
                 1   => '确定要删除 1 行？',
             ],
-            'submit' => '删除',
-            'title'  => '删除',
+            'submit'  => '删除',
+            'title'   => '删除',
         ],
     ],
-    'emptyTable'     => '表中没有数据',
-    'info'           => '正在显示第 _START_ 至 _END_ 条记录，共 _TOTAL_ 条',
-    'infoEmpty'      => '正在显示第 0 至 0 条记录，共 0 条',
-    'infoFiltered'   => '(筛选自全部 _MAX_ 条记录)',
-    'infoPostFix'    => '',
-    'infoThousands'  => ',',
-    'lengthMenu'     => '显示 _MENU_ 条记录',
-    'loadingRecords' => '正在加载...',
-    'processing'     => '正在处理...',
-    'search'         => '搜索:',
-    'searchBuilder'  => [
-        'add'    => '添加条件',
-        'button' => [
+    'emptyTable'        => '表中没有数据',
+    'info'              => '正在显示第 _START_ 至 _END_ 条记录，共 _TOTAL_ 条',
+    'infoEmpty'         => '正在显示第 0 至 0 条记录，共 0 条',
+    'infoFiltered'      => '(筛选自全部 _MAX_ 条记录)',
+    'infoPostFix'       => '',
+    'infoThousands'     => ',',
+    'lengthMenu'        => '显示 _MENU_ 条记录',
+    'loadingRecords'    => '正在加载...',
+    'processing'        => '正在处理...',
+    'search'            => '搜索:',
+    'searchBuilder'     => [
+        'add'         => '添加条件',
+        'button'      => [
             '_' => '搜索生成器 (%d)',
             0   => '搜索生成器',
         ],
-        'clearAll'   => '全部清除',
-        'condition'  => '条件',
-        'conditions' => [
-            'array' => [
+        'clearAll'    => '全部清除',
+        'condition'   => '条件',
+        'conditions'  => [
+            'array'  => [
                 'contains' => '含有',
                 'empty'    => '为空',
                 'equals'   => '等于',
@@ -137,7 +137,7 @@ return [
                 'notEmpty' => '非空',
                 'without'  => '无',
             ],
-            'date' => [
+            'date'   => [
                 'after'      => '早于',
                 'before'     => '晚于',
                 'between'    => '介于',
@@ -182,11 +182,11 @@ return [
             '_' => '搜索生成器 (%d)',
             0   => '搜索生成器',
         ],
-        'value' => '值',
+        'value'       => '值',
     ],
-    'searchPanes' => [
-        'clearMessage' => '全部清除',
-        'collapse'     => [
+    'searchPanes'       => [
+        'clearMessage'    => '全部清除',
+        'collapse'        => [
             '_' => '搜索面板 (%d)',
             0   => '搜索面板',
         ],
@@ -200,7 +200,7 @@ return [
     ],
     'searchPlaceholder' => '',
     'select'            => [
-        'cells' => [
+        'cells'   => [
             '_' => '已选择 %d 个单元格',
             0   => '',
             1   => '已选择 1 个单元格',
@@ -210,16 +210,16 @@ return [
             0   => '',
             1   => '已选择 1 列',
         ],
-        'rows' => [
+        'rows'    => [
             '_' => '已选择 %d 行',
             0   => '',
             1   => '已选择 1 行',
         ],
     ],
-    'stateRestore' => [
-        'creationModal' => [
-            'button'  => '创建',
-            'columns' => [
+    'stateRestore'      => [
+        'creationModal'  => [
+            'button'        => '创建',
+            'columns'       => [
                 'search'  => '列搜索',
                 'visible' => '列可见性',
             ],
@@ -245,6 +245,6 @@ return [
         'renameLabel'    => '%s 的新名称:',
         'renameTitle'    => '重命名状态',
     ],
-    'thousands'   => ',',
-    'zeroRecords' => '没有找到匹配的记录',
+    'thousands'         => ',',
+    'zeroRecords'       => '没有找到匹配的记录',
 ];

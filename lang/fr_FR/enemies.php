@@ -3,17 +3,17 @@
 return [
 
     'seasonal_type' => [
-        'beguiling'           => 'Séduisant',
-        'awakened'            => 'Éveillé',
-        'inspiring'           => 'Inspirant',
-        'prideful'            => 'Fier',
-        'tormented'           => 'Tourmenté',
-        'encrypted'           => 'Chiffré',
-        'mdt_placeholder'     => 'MDT Placeholder',
-        'requires_activation' => 'Nécessite une activation',
-        'shrouded'            => 'Voilé',
-        'shrouded_zul_gamux'  => 'Voilé (Zul\'gamux)',
-        'no_shrouded'         => 'Non Voilé',
+        'beguiling'           => '',
+        'awakened'            => '',
+        'inspiring'           => '',
+        'prideful'            => '',
+        'tormented'           => '',
+        'encrypted'           => '',
+        'mdt_placeholder'     => '',
+        'requires_activation' => '',
+        'shrouded'            => '',
+        'shrouded_zul_gamux'  => '',
+        'no_shrouded'         => '',
     ],
 
 ];

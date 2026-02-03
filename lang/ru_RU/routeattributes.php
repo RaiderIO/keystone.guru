@@ -3,16 +3,16 @@
 return [
 
     'category' => [
-        'class' => 'Класс',
-        'item'  => 'Предмет',
-        'misc'  => 'Разное',
-        'meta'  => 'Мета',
+        'class' => '',
+        'item'  => '',
+        'misc'  => '',
+        'meta'  => '',
     ],
-    'no_attributes'       => 'Нет атрибутов',
-    'rogue_shroud_skip'   => 'Пропуск покрова разбойника',
-    'warlock_gate_skip'   => 'Пропуск ворот чернокнижника',
-    'mage_slow_fall_skip' => 'Пропуск медленного падения мага',
-    'invisibility_potion' => 'Зелье невидимости',
-    'death_skip'          => 'Пропуск смерти',
+    'no_attributes' => '',
+    'rogue_shroud_skip' => '',
+    'warlock_gate_skip' => '',
+    'mage_slow_fall_skip' => '',
+    'invisibility_potion' => '',
+    'death_skip' => '',
 
 ];

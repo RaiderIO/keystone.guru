@@ -20,12 +20,21 @@ $navs = [];
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
-        $navs[route('dungeonroutes.season', [
-            'gameVersion' => $currentUserGameVersion,
-            'season'      => $nextSeason->index,
-        ])] = [
-            'text' => $nextSeason->expansion_id !== $currentSeason->expansion_id ? $nextSeason->name_long : $nextSeason->name,
-        ];
+        if ($nextSeason->expansion_id !== $currentSeason->expansion_id) {
+            $navs[route('dungeonroutes.expansion.season', [
+                'expansion' => $nextSeason->expansion,
+                'season'    => $nextSeason->index,
+            ])] = [
+                'text' => $nextSeason->name_long,
+            ];
+        } else {
+            $navs[route('dungeonroutes.season', [
+                'gameVersion' => $currentUserGameVersion,
+                'season'      => $nextSeason->index,
+            ])] = [
+                'text' => $nextSeason->name,
+            ];
+        }
     }
 
     $navs[route('dungeonroutes.season', [
@@ -60,7 +69,7 @@ $navs[__('view_common.layout.header.browse_by_expansion')] = [
 ];
 
 if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
-    $navs[route('dungeon.heatmaps.list')] = [
+    $navs[route('dungeon.heatmaps.gameversion.list', ['gameVersion' => $currentUserGameVersion])] = [
         'fa'   => 'fas fa-fire text-danger',
         'text' => __('view_common.layout.header.heatmaps'),
     ];
@@ -78,7 +87,7 @@ $isActiveRoute = function (string $route) {
     $parsedUrl = (parse_url((string)$route));
     if (is_array($parsedUrl)) {
         $routePath = trim($parsedUrl['path'], '/');
-        if (Str::startsWith(Request::path(), $routePath)) {
+        if (Request::path() === $routePath) {
             $active = 'active';
         }
     }

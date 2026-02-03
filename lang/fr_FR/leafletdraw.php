@@ -5,80 +5,80 @@ return [
     'draw' => [
         'toolbar' => [
             'actions' => [
-                'title' => 'Annuler le dessin',
-                'text'  => 'Annuler',
+                'title' => '',
+                'text'  => '',
             ],
             'finish' => [
-                'title' => 'Terminer le dessin',
-                'text'  => 'Terminer',
+                'title' => '',
+                'text'  => '',
             ],
             'undo' => [
-                'title' => 'Supprimer le dernier point dessiné',
-                'text'  => 'Supprimer le dernier point',
+                'title' => '',
+                'text'  => '',
             ],
             'buttons' => [
-                'polyline'     => 'Dessiner une polyligne',
-                'polygon'      => 'Dessiner un polygone',
-                'rectangle'    => 'Dessiner un rectangle',
-                'circle'       => 'Dessiner un cercle',
-                'marker'       => 'Dessiner un marqueur',
-                'circlemarker' => 'Dessiner un marqueur circulaire',
+                'polyline'     => '',
+                'polygon'      => '',
+                'rectangle'    => '',
+                'circle'       => '',
+                'marker'       => '',
+                'circlemarker' => '',
             ],
         ],
         'handlers' => [
             'circle' => [
                 'tooltip' => [
-                    'start' => 'Cliquez et faites glisser pour dessiner un cercle.',
+                    'start' => '',
                 ],
-                'radius' => 'Rayon',
+                'radius'  => '',
             ],
             'circlemarker' => [
                 'tooltip' => [
-                    'start' => 'Cliquez sur la carte pour placer un marqueur circulaire.',
+                    'start' => '',
                 ],
             ],
             'marker' => [
                 'tooltip' => [
-                    'start' => 'Cliquez sur la carte pour placer un marqueur.',
+                    'start' => '',
                 ],
             ],
             'polygon' => [
                 'tooltip' => [
-                    'start' => 'Cliquez pour commencer à dessiner la forme.',
-                    'cont'  => 'Cliquez pour continuer à dessiner la forme.',
-                    'end'   => 'Cliquez sur le premier point pour fermer cette forme.',
+                    'start' => '',
+                    'cont'  => '',
+                    'end'   => '',
                 ],
             ],
             'polyline' => [
-                'error'   => '<strong>Erreur:</strong> les bords de la forme ne peuvent pas se croiser !',
+                'error'   => '',
                 'tooltip' => [
-                    'start' => 'Cliquez pour commencer à dessiner la ligne.',
-                    'cont'  => 'Cliquez pour continuer à dessiner la ligne.',
-                    'end'   => 'Cliquez sur le dernier point pour terminer la ligne.',
+                    'start' => '',
+                    'cont'  => '',
+                    'end'   => '',
                 ],
             ],
             'rectangle' => [
                 'tooltip' => [
-                    'start' => 'Cliquez et faites glisser pour dessiner un rectangle.',
+                    'start' => '',
                 ],
             ],
             'simpleshape' => [
                 'tooltip' => [
-                    'end' => 'Relâchez la souris pour terminer le dessin.',
+                    'end' => '',
                 ],
             ],
             'path' => [
                 'tooltip' => [
-                    'start' => 'Cliquez pour commencer à dessiner le chemin.',
-                    'cont'  => 'Cliquez pour continuer à dessiner le chemin.',
-                    'end'   => 'Cliquez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre chemin.',
+                    'start' => '',
+                    'cont'  => '',
+                    'end'   => '',
                 ],
             ],
             'brushline' => [
                 'tooltip' => [
-                    'start' => 'Cliquez pour commencer à dessiner la ligne.',
-                    'cont'  => 'Cliquez et faites glisser pour continuer à dessiner la ligne.',
-                    'end'   => 'Continuez à cliquer/glisser, une fois terminé, appuyez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre ligne.',
+                    'start' => '',
+                    'cont'  => '',
+                    'end'   => '',
                 ],
             ],
         ],
@@ -87,35 +87,35 @@ return [
         'toolbar' => [
             'actions' => [
                 'save' => [
-                    'title' => 'Enregistrer les modifications',
-                    'text'  => 'Enregistrer',
+                    'title' => '',
+                    'text'  => '',
                 ],
                 'cancel' => [
-                    'title' => 'Annuler l\'édition, annule toutes les modifications',
-                    'text'  => 'Annuler',
+                    'title' => '',
+                    'text'  => '',
                 ],
                 'clearAll' => [
-                    'title' => 'Effacer toutes les couches',
-                    'text'  => 'Tout effacer',
+                    'title' => '',
+                    'text'  => '',
                 ],
             ],
             'buttons' => [
-                'edit'           => 'Modifier les couches',
-                'editDisabled'   => 'Pas de couches à éditer',
-                'remove'         => 'Supprimer les couches',
-                'removeDisabled' => 'Pas de couches à supprimer',
+                'edit'           => '',
+                'editDisabled'   => '',
+                'remove'         => '',
+                'removeDisabled' => '',
             ],
         ],
         'handlers' => [
             'edit' => [
                 'tooltip' => [
-                    'text'    => 'Faites glisser les poignées ou les marqueurs pour modifier les fonctionnalités.',
-                    'subtext' => 'Cliquez sur annuler pour annuler les modifications.',
+                    'text'    => '',
+                    'subtext' => '',
                 ],
             ],
             'remove' => [
                 'tooltip' => [
-                    'text' => 'Cliquez sur une fonctionnalité pour la supprimer.',
+                    'text' => '',
                 ],
             ],
         ],
