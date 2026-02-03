@@ -142,7 +142,7 @@ return [
     */
     'allowed' => env('APP_DEBUG') ?
         ['en_US', 'de_DE_ai', 'es_ES_ai', 'es_MX_ai', 'fr_FR_ai', 'ho_HO', 'it_IT_ai', 'ko_KR_ai', 'pt_BR_ai', 'ru_RU_ai', 'uk_UA'] :
-        ['en_US', 'de_DE', 'es_ES', 'es_MX', 'fr_FR', 'it_IT', 'ko_KR', 'pt_BR', 'ru_RU', 'uk_UA'],
+        ['en_US', 'de_DE_ai', 'es_ES_ai', 'es_MX_ai', 'fr_FR_ai', 'it_IT_ai', 'ko_KR_ai', 'pt_BR_ai', 'ru_RU_ai', 'uk_UA'],
 
     'short_to_long' => [
         'en'    => 'en_US',
