@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'aria'              => [
+    'aria' => [
         'paginate' => [
             'first'    => '처음',
             'last'     => '마지막',
@@ -9,28 +9,28 @@ return [
             'previous' => '이전',
         ],
     ],
-    'autoFill'          => [
+    'autoFill' => [
         'cancel'         => '취소',
         'fill'           => '모든 셀에서 <i>%d<i>을(를) 삽입</i></i>',
         'fillHorizontal' => '수평 셀에서 값을 삽입',
         'fillVertical'   => '수직 설에서 값을 삽입',
         'info'           => '',
     ],
-    'buttons'           => [
-        'collection'      => '집합 <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'          => '컬럼 보기',
-        'colvisRestore'   => '보기 복원',
-        'copy'            => '복사',
-        'copyKeys'        => 'ctrl키 나 u2318 + C키로 테이블 데이터를 시스텝 복사판에서 복사하고 취소하려면 이 메시지를 클릭하거나 ESC키를 누르면됩니다. to copy the table data to your system clipboard. To cancel, click this message or press escape.',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => '집합 <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'        => '컬럼 보기',
+        'colvisRestore' => '보기 복원',
+        'copy'          => '복사',
+        'copyKeys'      => 'ctrl키 나 u2318 + C키로 테이블 데이터를 시스텝 복사판에서 복사하고 취소하려면 이 메시지를 클릭하거나 ESC키를 누르면됩니다. to copy the table data to your system clipboard. To cancel, click this message or press escape.',
+        'copySuccess'   => [
             '_' => '%d행을 복사판에서 복사됨',
             1   => '1행을 복사판에서 복사됨',
         ],
-        'copyTitle'       => '복사판에서 복사',
-        'createState'     => '',
-        'csv'             => 'CSV',
-        'excel'           => '엑셀',
-        'pageLength'      => [
+        'copyTitle'   => '복사판에서 복사',
+        'createState' => '',
+        'csv'         => 'CSV',
+        'excel'       => '엑셀',
+        'pageLength'  => [
             '_' => '%d행 보기',
             -1  => '모든 행 보기',
         ],
@@ -43,14 +43,14 @@ return [
         'stateRestore'    => '',
         'updateState'     => '',
     ],
-    'datetime'          => [
-        'amPm'     => [
+    'datetime' => [
+        'amPm' => [
             0 => '오전',
             1 => '오후',
         ],
-        'hours'    => '시',
-        'minutes'  => '분',
-        'months'   => [
+        'hours'   => '시',
+        'minutes' => '분',
+        'months'  => [
             0  => '1월',
             1  => '2월',
             10 => '11월',
@@ -78,23 +78,23 @@ return [
             6 => '토',
         ],
     ],
-    'decimal'           => '',
-    'editor'            => [
+    'decimal' => '',
+    'editor'  => [
         'close'  => '닫기',
         'create' => [
             'button' => '추가',
             'submit' => '완료',
             'title'  => '항목 추가',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => '수정',
             'submit' => '완료',
             'title'  => '항목 수정',
         ],
-        'error'  => [
+        'error' => [
             'system' => '에러가 발생하였습니다 (&lt;a target="\\" rel="nofollow" href="\\"&gt;자세한 정보&lt;/a&gt;).',
         ],
-        'multi'  => [
+        'multi' => [
             'info'    => '',
             'noMulti' => '',
             'restore' => '',
@@ -106,30 +106,30 @@ return [
                 '_' => '',
                 1   => '',
             ],
-            'submit'  => '완료',
-            'title'   => '항목 삭제',
+            'submit' => '완료',
+            'title'  => '항목 삭제',
         ],
     ],
-    'emptyTable'        => '데이터가 없습니다',
-    'info'              => '_START_ - _END_ / _TOTAL_',
-    'infoEmpty'         => '0 - 0 / 0',
-    'infoFiltered'      => '(총 _MAX_ 개)',
-    'infoPostFix'       => '',
-    'infoThousands'     => ',',
-    'lengthMenu'        => '페이지당 줄수 _MENU_',
-    'loadingRecords'    => '읽는중...',
-    'processing'        => '처리중...',
-    'search'            => '검색:',
-    'searchBuilder'     => [
-        'add'         => '조건 추가',
-        'button'      => [
+    'emptyTable'     => '데이터가 없습니다',
+    'info'           => '_START_ - _END_ / _TOTAL_',
+    'infoEmpty'      => '0 - 0 / 0',
+    'infoFiltered'   => '(총 _MAX_ 개)',
+    'infoPostFix'    => '',
+    'infoThousands'  => ',',
+    'lengthMenu'     => '페이지당 줄수 _MENU_',
+    'loadingRecords' => '읽는중...',
+    'processing'     => '처리중...',
+    'search'         => '검색:',
+    'searchBuilder'  => [
+        'add'    => '조건 추가',
+        'button' => [
             '_' => '빌더 조회(%d)',
             0   => '빌더 조회',
         ],
-        'clearAll'    => '모두 지우기',
-        'condition'   => '조건',
-        'conditions'  => [
-            'array'  => [
+        'clearAll'   => '모두 지우기',
+        'condition'  => '조건',
+        'conditions' => [
+            'array' => [
                 'contains' => '',
                 'empty'    => '',
                 'equals'   => '',
@@ -137,7 +137,7 @@ return [
                 'notEmpty' => '',
                 'without'  => '',
             ],
-            'date'   => [
+            'date' => [
                 'after'      => '',
                 'before'     => '',
                 'between'    => '',
@@ -182,11 +182,11 @@ return [
             '_' => '빌더 조회(%d)',
             0   => '빌더 조회',
         ],
-        'value'       => '값',
+        'value' => '값',
     ],
-    'searchPanes'       => [
-        'clearMessage'    => '',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => '',
+        'collapse'     => [
             '_' => '',
             0   => '',
         ],
@@ -200,7 +200,7 @@ return [
     ],
     'searchPlaceholder' => '',
     'select'            => [
-        'cells'   => [
+        'cells' => [
             '_' => '',
             0   => '',
             1   => '',
@@ -210,16 +210,16 @@ return [
             0   => '',
             1   => '',
         ],
-        'rows'    => [
+        'rows' => [
             '_' => '',
             0   => '',
             1   => '',
         ],
     ],
-    'stateRestore'      => [
-        'creationModal'  => [
-            'button'        => '',
-            'columns'       => [
+    'stateRestore' => [
+        'creationModal' => [
+            'button'  => '',
+            'columns' => [
                 'search'  => '',
                 'visible' => '',
             ],
@@ -245,6 +245,6 @@ return [
         'renameLabel'    => '',
         'renameTitle'    => '',
     ],
-    'thousands'         => '',
-    'zeroRecords'       => '검색 결과가 없습니다',
+    'thousands'   => '',
+    'zeroRecords' => '검색 결과가 없습니다',
 ];

@@ -30,7 +30,7 @@ return [
                 'tooltip' => [
                     'start' => '',
                 ],
-                'radius'  => '',
+                'radius' => '',
             ],
             'circlemarker' => [
                 'tooltip' => [

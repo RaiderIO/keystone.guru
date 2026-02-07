@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Esplora',
                 'header'            => 'Esplora dungeon',
                 'description'       => 'Esplorare un dungeon ti permette di vedere la disposizione del dungeon e i nemici presenti. Ideale per visualizzare semplicemente il dungeon senza creare un percorso.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Mappe termiche',
                 'header'            => 'Mappe termiche del dungeon',
                 'raider_io'         => 'Raider.IO',

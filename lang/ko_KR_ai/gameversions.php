@@ -2,27 +2,27 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => '리테일',
         'description' => '리테일',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => '분노',
         'description' => '리치 왕의 분노',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => '클래식 시대',
         'description' => '클래식 시대',
     ],
-    'beta'         => [
+    'beta' => [
         'name'        => '리테일 베타',
         'description' => '리테일 베타',
     ],
-    'cata'         => [
+    'cata' => [
         'name'        => '대격변',
         'description' => '대격변',
     ],
-    'mop'          => [
+    'mop' => [
         'name'        => '안개',
         'description' => '판다리아의 안개',
     ],

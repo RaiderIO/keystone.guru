@@ -2,24 +2,24 @@
 
 return [
 
-    'edit'      => [
-        'title'                                            => 'Profilo',
-        'profile'                                          => 'Profilo',
-        'account'                                          => 'Account',
-        'patreon'                                          => 'Patreon',
-        'change_password'                                  => 'Cambia password',
-        'privacy'                                          => 'Privacy',
-        'reports'                                          => 'Segnalazioni',
-        'menu_title'                                       => 'Profilo di %s',
-        'avatar'                                           => 'Avatar',
-        'avatar_alt'                                       => 'Avatar utente',
-        'username'                                         => 'Nome utente',
-        'username_title'                                   => 'Poiché hai effettuato l\'accesso utilizzando un servizio di autenticazione esterno, puoi cambiare il tuo nome utente una volta.',
-        'email'                                            => 'Email',
-        'region'                                           => 'Regione',
-        'select_region'                                    => 'Seleziona regione',
-        'show_as_anonymous'                                => 'Mostra come Anonimo',
-        'show_as_anonymous_title'                          => 'Abilitando questa opzione ti verrà mostrato come \'Anonimo\' quando visualizzi percorsi che non fanno parte di alcun team di cui fai parte.
+    'edit' => [
+        'title'                   => 'Profilo',
+        'profile'                 => 'Profilo',
+        'account'                 => 'Account',
+        'patreon'                 => 'Patreon',
+        'change_password'         => 'Cambia password',
+        'privacy'                 => 'Privacy',
+        'reports'                 => 'Segnalazioni',
+        'menu_title'              => 'Profilo di %s',
+        'avatar'                  => 'Avatar',
+        'avatar_alt'              => 'Avatar utente',
+        'username'                => 'Nome utente',
+        'username_title'          => 'Poiché hai effettuato l\'accesso utilizzando un servizio di autenticazione esterno, puoi cambiare il tuo nome utente una volta.',
+        'email'                   => 'Email',
+        'region'                  => 'Regione',
+        'select_region'           => 'Seleziona regione',
+        'show_as_anonymous'       => 'Mostra come Anonimo',
+        'show_as_anonymous_title' => 'Abilitando questa opzione ti verrà mostrato come \'Anonimo\' quando visualizzi percorsi che non fanno parte di alcun team di cui fai parte.
                                 Per i tuoi percorsi e per i percorsi parte dei tuoi team, il tuo nome sarà sempre visibile.',
         'echo_color'                                       => 'Colore di modifica percorso sincronizzato',
         'echo_color_title'                                 => 'Quando modifichi un percorso in cooperazione con un membro del team, questo colore ti identificherà in modo univoco.',
@@ -45,23 +45,23 @@ return [
             'header_active'  => 'Attivo',
             'header_benefit' => 'Beneficio',
         ],
-        'current_password'                                 => 'Password attuale',
-        'new_password'                                     => 'Nuova password',
-        'new_password_confirm'                             => 'Nuova password (conferma)',
-        'submit'                                           => 'Invia',
-        'ga_cookies_opt_out'                               => 'Rifiuto dei cookie di Google Analytics',
-        'reports_description'                              => 'Tutti i percorsi, nemici e altre segnalazioni che hai fatto sul sito saranno elencati qui.',
-        'reports_table_header_id'                          => 'Id',
-        'reports_table_header_category'                    => 'Categoria',
-        'reports_table_header_message'                     => 'Messaggio',
-        'reports_table_header_created_at'                  => 'Creato il',
-        'reports_table_header_status'                      => 'Stato',
-        'reports_table_action_handled'                     => 'Gestito',
+        'current_password'                => 'Password attuale',
+        'new_password'                    => 'Nuova password',
+        'new_password_confirm'            => 'Nuova password (conferma)',
+        'submit'                          => 'Invia',
+        'ga_cookies_opt_out'              => 'Rifiuto dei cookie di Google Analytics',
+        'reports_description'             => 'Tutti i percorsi, nemici e altre segnalazioni che hai fatto sul sito saranno elencati qui.',
+        'reports_table_header_id'         => 'Id',
+        'reports_table_header_category'   => 'Categoria',
+        'reports_table_header_message'    => 'Messaggio',
+        'reports_table_header_created_at' => 'Creato il',
+        'reports_table_header_status'     => 'Stato',
+        'reports_table_action_handled'    => 'Gestito',
     ],
     'favorites' => [
         'title' => 'I miei preferiti',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => 'Panoramica',
         'favorites'                => 'Preferiti',
         'tags'                     => 'Tag',
@@ -73,22 +73,22 @@ return [
         'create_route'             => 'Crea percorso',
         'create_route_description' => 'Un percorso è un cammino attraverso un dungeon per raggiungere l\'obiettivo finale del 100% delle forze nemiche mentre si uccidono tutti i boss.
                                     Vari strumenti ti aiutano a organizzare il tuo percorso previsto per i membri del tuo gruppo. Puoi condividerli con il mondo - o tenerli privati e organizzarli come desideri.',
-        'create_team'              => 'Crea team',
-        'create_team_description'  => 'Un team è utilizzato per condividere i tuoi percorsi con gli amici e aiutare tutti a rimanere sincronizzati con gli ultimi cambiamenti ai percorsi che fai più spesso.
+        'create_team'             => 'Crea team',
+        'create_team_description' => 'Un team è utilizzato per condividere i tuoi percorsi con gli amici e aiutare tutti a rimanere sincronizzati con gli ultimi cambiamenti ai percorsi che fai più spesso.
                                     La modifica collaborativa rende più facile regolare un percorso esistente mentre gareggi per il miglior percorso per il tuo team.',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'I miei percorsi',
     ],
-    'tags'      => [
-        'title'                             => 'I miei tag',
-        'header'                            => 'I miei tag',
-        'description'                       => 'La funzione di etichettatura ti consente di organizzare i tuoi percorsi nel modo che ritieni più opportuno. Puoi aggiungere tag ai percorsi visualizzando le Azioni per ogni percorso in %s.
+    'tags' => [
+        'title'       => 'I miei tag',
+        'header'      => 'I miei tag',
+        'description' => 'La funzione di etichettatura ti consente di organizzare i tuoi percorsi nel modo che ritieni più opportuno. Puoi aggiungere tag ai percorsi visualizzando le Azioni per ogni percorso in %s.
                     Puoi gestire i tag per i tuoi percorsi qui. Nessun altro potrà visualizzare i tuoi tag - per i percorsi allegati a un team
                     puoi gestire un insieme separato di tag solo per quel team visitando la sezione Tag quando visualizzi il tuo team.',
         'link_your_personal_route_overview' => 'la tua panoramica personale dei percorsi',
     ],
-    'view'      => [
+    'view' => [
         'title'  => 'Percorsi di %s',
         'header' => 'Percorsi di %s',
     ],

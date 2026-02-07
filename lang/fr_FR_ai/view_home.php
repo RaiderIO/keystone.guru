@@ -2,18 +2,18 @@
 
 return [
 
-    'ie_not_supported'                             => 'Il semble que vous naviguez sur Keystone.guru en utilisant Internet Explorer. Malheureusement, Internet Explorer n\'est pas un navigateur pris en charge. Non vraiment, cela ne fonctionne vraiment pas du tout. Veuillez essayer soit Google Chrome, Mozilla Firefox ou Microsoft Edge.',
-    'tagline'                                      => 'Itinéraires M+ simplifiés',
-    'tagline_description'                          => 'Planifiez des itinéraires en ligne en coopération avec votre équipe ou découvrez des itinéraires adaptés à votre style de jeu et à votre niveau de compétence. Keystone.guru est l\'endroit unique pour gérer et partager vos itinéraires M+.',
-    'discover_routes'                              => 'Découvrez des routes',
-    'create_route'                                 => 'Créer une route',
-    'discover_new_routes'                          => 'Découvrez de nouvelles routes',
-    'discover_new_routes_description'              => 'Parcourez facilement des routes par donjon dans diverses catégories pour trouver une route qui convient parfaitement à votre groupe.
+    'ie_not_supported'                => 'Il semble que vous naviguez sur Keystone.guru en utilisant Internet Explorer. Malheureusement, Internet Explorer n\'est pas un navigateur pris en charge. Non vraiment, cela ne fonctionne vraiment pas du tout. Veuillez essayer soit Google Chrome, Mozilla Firefox ou Microsoft Edge.',
+    'tagline'                         => 'Itinéraires M+ simplifiés',
+    'tagline_description'             => 'Planifiez des itinéraires en ligne en coopération avec votre équipe ou découvrez des itinéraires adaptés à votre style de jeu et à votre niveau de compétence. Keystone.guru est l\'endroit unique pour gérer et partager vos itinéraires M+.',
+    'discover_routes'                 => 'Découvrez des routes',
+    'create_route'                    => 'Créer une route',
+    'discover_new_routes'             => 'Découvrez de nouvelles routes',
+    'discover_new_routes_description' => 'Parcourez facilement des routes par donjon dans diverses catégories pour trouver une route qui convient parfaitement à votre groupe.
                                     L\'intégration avec :archon_gg facilite la visualisation des donjons les plus faciles à chronométrer pour n\'importe quel affixe.
                                     Vous ne trouvez toujours pas de route qui répond à vos besoins ? La page :routesearch vous permet de cibler vos besoins exacts pour trouver une correspondance parfaite.',
-    'discover_new_routes_route_search'             => 'recherche de route',
-    'create_your_own_routes'                       => 'Créez vos propres routes',
-    'create_your_own_routes_description'           => 'Importez vos routes depuis Mythic Dungeon Tools ou :createANewRoute à partir de zéro. Keystone.guru offre divers outils pour rendre votre route mémorable,
+    'discover_new_routes_route_search'   => 'recherche de route',
+    'create_your_own_routes'             => 'Créez vos propres routes',
+    'create_your_own_routes_description' => 'Importez vos routes depuis Mythic Dungeon Tools ou :createANewRoute à partir de zéro. Keystone.guru offre divers outils pour rendre votre route mémorable,
                                     tels que le dessin libre, le traçage et le placement d\'icônes/commentaires. Les forces ennemies peuvent être affichées brut ou en pourcentage selon votre envie. Divers autres paramètres vous permettent
                                     de personnaliser votre expérience de création de routes à votre guise.',
     'get_organized'                                => 'Organisez-vous',

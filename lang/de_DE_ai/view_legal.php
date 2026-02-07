@@ -10,7 +10,7 @@ return [
         'title'  => 'Datenschutzrichtlinie',
         'header' => 'Datenschutzrichtlinie',
     ],
-    'terms'   => [
+    'terms' => [
         'title'  => 'Nutzungsbedingungen',
         'header' => 'Nutzungsbedingungen',
     ],

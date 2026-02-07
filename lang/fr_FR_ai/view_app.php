@@ -2,14 +2,14 @@
 
 return [
 
-    'commit'  => [
-        'added'    => [
+    'commit' => [
+        'added' => [
             'added' => 'Ajouté',
         ],
         'modified' => [
             'modified' => 'Modifié',
         ],
-        'removed'  => [
+        'removed' => [
             'removed' => 'Supprimé',
         ],
     ],

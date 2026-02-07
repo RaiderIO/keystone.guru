@@ -2,127 +2,127 @@
 
 return [
 
-    'bolstering'                  => [
+    'bolstering' => [
         'name'        => '',
         'description' => '',
     ],
-    'bursting'                    => [
+    'bursting' => [
         'name'        => '',
         'description' => '',
     ],
-    'explosive'                   => [
+    'explosive' => [
         'name'        => '',
         'description' => '',
     ],
-    'fortified'                   => [
+    'fortified' => [
         'name'        => '',
         'description' => '',
     ],
-    'grievous'                    => [
+    'grievous' => [
         'name'        => '',
         'description' => '',
     ],
-    'infested'                    => [
+    'infested' => [
         'name'        => '',
         'description' => '',
     ],
-    'necrotic'                    => [
+    'necrotic' => [
         'name'        => '',
         'description' => '',
     ],
-    'quaking'                     => [
+    'quaking' => [
         'name'        => '',
         'description' => '',
     ],
-    'raging'                      => [
+    'raging' => [
         'name'        => '',
         'description' => '',
     ],
-    'relentless'                  => [
+    'relentless' => [
         'name'        => '',
         'description' => '',
     ],
-    'sanguine'                    => [
+    'sanguine' => [
         'name'        => '',
         'description' => '',
     ],
-    'skittish'                    => [
+    'skittish' => [
         'name'        => '',
         'description' => '',
     ],
-    'teeming'                     => [
+    'teeming' => [
         'name'        => '',
         'description' => '',
     ],
-    'tyrannical'                  => [
+    'tyrannical' => [
         'name'        => '',
         'description' => '',
     ],
-    'volcanic'                    => [
+    'volcanic' => [
         'name'        => '',
         'description' => '',
     ],
-    'reaping'                     => [
+    'reaping' => [
         'name'        => '',
         'description' => '',
     ],
-    'beguiling'                   => [
+    'beguiling' => [
         'name'        => '',
         'description' => '',
     ],
-    'awakened'                    => [
+    'awakened' => [
         'name'        => '',
         'description' => '',
     ],
-    'inspiring'                   => [
+    'inspiring' => [
         'name'        => '',
         'description' => '',
     ],
-    'spiteful'                    => [
+    'spiteful' => [
         'name'        => '',
         'description' => '',
     ],
-    'storming'                    => [
+    'storming' => [
         'name'        => '',
         'description' => '',
     ],
-    'prideful'                    => [
+    'prideful' => [
         'name'        => '',
         'description' => '',
     ],
-    'tormented'                   => [
+    'tormented' => [
         'name'        => '',
         'description' => '',
     ],
-    'unknown'                     => [
+    'unknown' => [
         'name'        => '',
         'description' => '',
     ],
-    'infernal'                    => [
+    'infernal' => [
         'name'        => '',
         'description' => '',
     ],
-    'encrypted'                   => [
+    'encrypted' => [
         'name'        => '',
         'description' => '',
     ],
-    'shrouded'                    => [
+    'shrouded' => [
         'name'        => '',
         'description' => '',
     ],
-    'thundering'                  => [
+    'thundering' => [
         'name'        => '',
         'description' => '',
     ],
-    'afflicted'                   => [
+    'afflicted' => [
         'name'        => '',
         'description' => '',
     ],
-    'entangling'                  => [
+    'entangling' => [
         'name'        => '',
         'description' => '',
     ],
-    'incorporeal'                 => [
+    'incorporeal' => [
         'name'        => '',
         'description' => '',
     ],
@@ -130,7 +130,7 @@ return [
         'name'        => '',
         'description' => '',
     ],
-    'xalataths_bargain_devour'    => [
+    'xalataths_bargain_devour' => [
         'name'        => '',
         'description' => '',
     ],
@@ -138,26 +138,26 @@ return [
         'name'        => '',
         'description' => '',
     ],
-    'xalataths_bargain_oblivion'  => [
+    'xalataths_bargain_oblivion' => [
         'name'        => '',
         'description' => '',
     ],
-    'xalataths_bargain_frenzied'  => [
+    'xalataths_bargain_frenzied' => [
         'name'        => '',
         'description' => '',
     ],
-    'xalataths_guile'             => [
+    'xalataths_guile' => [
         'name'        => '',
         'description' => '',
     ],
-    'challengers_peril'           => [
+    'challengers_peril' => [
         'name'        => '',
         'description' => '',
     ],
-    'xalataths_bargain_pulsar'    => [
+    'xalataths_bargain_pulsar' => [
         'name'        => '',
         'description' => '',
     ],
-    'seasonal_index_preset'       => '',
+    'seasonal_index_preset' => '',
 
 ];

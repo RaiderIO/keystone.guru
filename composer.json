@@ -23,6 +23,10 @@
             "url": "https://github.com/Wotuu/laravel-auto-translation.git"
         },
         {
+            "type": "vcs",
+            "url": "https://github.com/Wotuu/php-html-parser.git"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
@@ -51,18 +55,6 @@
                 "dist": {
                     "url": "https://github.com/Nnoggie/MDT_Legacy/archive/5a3b61c46e46e0f4307bee28fd1b108e8262fcc3.zip",
                     "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "paquettg/php-html-parser",
-                "version": "3.1",
-                "source": {
-                    "url": "https://github.com/Wotuu/php-html-parser.git",
-                    "type": "git",
-                    "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
                 }
             }
         }
@@ -103,7 +95,7 @@
         "marvinlabs/laravel-discord-logger": "^1.4",
         "nnoggie/mdt-legacy": "^2.0",
         "nnoggie/mythicdungeontools": "^6.0",
-        "paquettg/php-html-parser": "^3.1",
+        "paquettg/php-html-parser": "dev-master#5d1c017c916f6ce8991442f1bead60729919ed8d",
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.1",
         "rollbar/rollbar-laravel": "^8.1",

@@ -7,8 +7,8 @@ return [
         3 => '',
         4 => '',
     ],
-    'classic'    => [
-        'blackfathom_deeps'           => [
+    'classic' => [
+        'blackfathom_deeps' => [
             'name'         => '黑澗深淵',
             'abbreviation' => '',
             'floors'       => [
@@ -17,7 +17,7 @@ return [
                 'the_forgotten_pool' => '遺忘之池',
             ],
         ],
-        'blackrock_depths'            => [
+        'blackrock_depths' => [
             'name'         => '黑石深淵',
             'abbreviation' => '',
             'floors'       => [
@@ -25,7 +25,7 @@ return [
                 'shadowforge_city' => '影爐城',
             ],
         ],
-        'blackwinglair'               => [
+        'blackwinglair' => [
             'name'         => '黑翼之巢',
             'abbreviation' => '',
             'floors'       => [
@@ -35,7 +35,7 @@ return [
                 'nefarians_lair'       => '奈法利安的巢穴',
             ],
         ],
-        'deadmines'                   => [
+        'deadmines' => [
             'name'         => '死亡礦坑',
             'abbreviation' => '',
             'floors'       => [
@@ -43,7 +43,7 @@ return [
                 'ironclad_cove' => '鐵甲灣',
             ],
         ],
-        'dire_maul_east'              => [
+        'dire_maul_east' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -51,14 +51,14 @@ return [
                 'the_shrine_of_eldretharr' => '',
             ],
         ],
-        'dire_maul_north'             => [
+        'dire_maul_north' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'gordok_commons' => '',
             ],
         ],
-        'dire_maul_west'              => [
+        'dire_maul_west' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -67,7 +67,7 @@ return [
                 'prison_of_immol_thar'   => '',
             ],
         ],
-        'gnomeregan'                  => [
+        'gnomeregan' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -77,7 +77,7 @@ return [
                 'tinkers_court'     => '',
             ],
         ],
-        'gnomeregan_sod'              => [
+        'gnomeregan_sod' => [
             'name'         => '諾姆瑞根',
             'abbreviation' => '',
             'floors'       => [
@@ -87,7 +87,7 @@ return [
                 'tinkers_court'     => '技工議會',
             ],
         ],
-        'karazhan_crypts'             => [
+        'karazhan_crypts' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -97,7 +97,7 @@ return [
                 'the_pit_of_criminals'    => '',
             ],
         ],
-        'lower_blackrock_spire'       => [
+        'lower_blackrock_spire' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -109,7 +109,7 @@ return [
                 'chamber_of_battle'  => '',
             ],
         ],
-        'maraudon'                    => [
+        'maraudon' => [
             'name'         => '瑪拉頓',
             'abbreviation' => '',
             'floors'       => [
@@ -117,14 +117,14 @@ return [
                 'zaetars_grave'       => '札爾塔之墓',
             ],
         ],
-        'moltencore'                  => [
+        'moltencore' => [
             'name'         => '熔火之心',
             'abbreviation' => '',
             'floors'       => [
                 'moltencore' => '熔火之心',
             ],
         ],
-        'naxxramas_classic'           => [
+        'naxxramas_classic' => [
             'name'         => '納克薩瑪斯',
             'abbreviation' => '',
             'floors'       => [
@@ -136,49 +136,49 @@ return [
                 'the_upper_necropolis'  => '亡域上層',
             ],
         ],
-        'onyxias_lair_classic'        => [
+        'onyxias_lair_classic' => [
             'name'         => '奧妮克希亞的巢穴',
             'abbreviation' => '',
             'floors'       => [
                 'onyxias_lair' => '奧妮克希亞的巢穴',
             ],
         ],
-        'ragefire_chasm'              => [
+        'ragefire_chasm' => [
             'name'         => '怒焰裂谷',
             'abbreviation' => '',
             'floors'       => [
                 'ragefire_chasm' => '怒焰裂谷',
             ],
         ],
-        'razorfen_downs'              => [
+        'razorfen_downs' => [
             'name'         => '剃刀高地',
             'abbreviation' => '',
             'floors'       => [
                 'razorfen_downs' => '剃刀高地',
             ],
         ],
-        'razorfen_kraul'              => [
+        'razorfen_kraul' => [
             'name'         => '剃刀沼澤',
             'abbreviation' => '',
             'floors'       => [
                 'razorfen_kraul' => '剃刀沼澤',
             ],
         ],
-        'ruins_of_ahnqiraj_classic'   => [
+        'ruins_of_ahnqiraj_classic' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'ruins_of_ahnqiraj' => '',
             ],
         ],
-        'ruins_of_ahnqiraj_sod'       => [
+        'ruins_of_ahnqiraj_sod' => [
             'name'         => '安其拉廢墟',
             'abbreviation' => '',
             'floors'       => [
                 'ruins_of_ahnqiraj' => '安其拉廢墟',
             ],
         ],
-        'scarlet_enclave'             => [
+        'scarlet_enclave' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -189,7 +189,7 @@ return [
                 'ashbringer_chapel'      => '',
             ],
         ],
-        'scarlet_monastery_armory'    => [
+        'scarlet_monastery_armory' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -210,14 +210,14 @@ return [
                 'graveyard' => '',
             ],
         ],
-        'scarlet_monastery_library'   => [
+        'scarlet_monastery_library' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'library' => '',
             ],
         ],
-        'scholomance'                 => [
+        'scholomance' => [
             'name'         => '通靈學院',
             'abbreviation' => '',
             'floors'       => [
@@ -227,7 +227,7 @@ return [
                 'headmasters_story'    => '院長的書房',
             ],
         ],
-        'shadowfang_keep'             => [
+        'shadowfang_keep' => [
             'name'         => '影牙城堡',
             'abbreviation' => '',
             'floors'       => [
@@ -240,7 +240,7 @@ return [
                 'the_wall_walk'         => '巨牆步道',
             ],
         ],
-        'stratholme'                  => [
+        'stratholme' => [
             'name'         => '斯坦索姆',
             'abbreviation' => '',
             'floors'       => [
@@ -248,7 +248,7 @@ return [
                 'the_gauntlet'     => '街巷',
             ],
         ],
-        'temple_of_ahnqiraj_classic'  => [
+        'temple_of_ahnqiraj_classic' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -257,7 +257,7 @@ return [
                 'vault_of_cthun'        => '',
             ],
         ],
-        'temple_of_ahnqiraj_sod'      => [
+        'temple_of_ahnqiraj_sod' => [
             'name'         => '安其拉',
             'abbreviation' => '',
             'floors'       => [
@@ -266,14 +266,14 @@ return [
                 'vault_of_cthun'        => '克蘇恩穹殿',
             ],
         ],
-        'the_stockade'                => [
+        'the_stockade' => [
             'name'         => '監獄',
             'abbreviation' => '',
             'floors'       => [
                 'the_stockade' => '監獄',
             ],
         ],
-        'the_temple_of_atal_hakkar'   => [
+        'the_temple_of_atal_hakkar' => [
             'name'         => '沉沒的神廟',
             'abbreviation' => '',
             'floors'       => [
@@ -284,7 +284,7 @@ return [
                 'hall_of_the_cursed'        => '',
             ],
         ],
-        'uldaman'                     => [
+        'uldaman' => [
             'name'         => '奧達曼',
             'abbreviation' => '',
             'floors'       => [
@@ -292,7 +292,7 @@ return [
                 'khaz_goroths_seat'   => '卡茲格羅斯的王座',
             ],
         ],
-        'upper_blackrock_spire'       => [
+        'upper_blackrock_spire' => [
             'name'         => '黑石塔',
             'abbreviation' => '',
             'floors'       => [
@@ -301,21 +301,21 @@ return [
                 'hall_of_blackhand' => '黑手大廳',
             ],
         ],
-        'wailing_caverns'             => [
+        'wailing_caverns' => [
             'name'         => '哀嚎洞穴',
             'abbreviation' => '',
             'floors'       => [
                 'wailing_caverns' => '哀嚎洞穴',
             ],
         ],
-        'zul_farrak'                  => [
+        'zul_farrak' => [
             'name'         => '祖爾法拉克',
             'abbreviation' => '',
             'floors'       => [
                 'zul_farrak' => '祖爾法拉克',
             ],
         ],
-        'zulgurub'                    => [
+        'zulgurub' => [
             'name'         => '祖爾格拉布',
             'abbreviation' => '',
             'floors'       => [
@@ -323,15 +323,15 @@ return [
             ],
         ],
     ],
-    'wotlk'      => [
-        'ahn_kahet_the_old_kingdom'                => [
+    'wotlk' => [
+        'ahn_kahet_the_old_kingdom' => [
             'name'         => '安卡罕特：古王國',
             'abbreviation' => '',
             'floors'       => [
                 'ahn_kahet_the_old_kingdom' => '安卡罕特：古王國',
             ],
         ],
-        'azjol_nerub'                              => [
+        'azjol_nerub' => [
             'name'         => '阿茲歐-奈幽',
             'abbreviation' => '',
             'floors'       => [
@@ -348,7 +348,7 @@ return [
                 'the_icy_depths'      => '冰結深淵',
             ],
         ],
-        'drak_tharon_keep'                         => [
+        'drak_tharon_keep' => [
             'name'         => '德拉克薩隆要塞',
             'abbreviation' => '',
             'floors'       => [
@@ -356,14 +356,14 @@ return [
                 'drak_tharon_overlook'          => '德拉克薩隆瞰臺',
             ],
         ],
-        'gundrak'                                  => [
+        'gundrak' => [
             'name'         => '剛德拉克',
             'abbreviation' => '',
             'floors'       => [
                 'gundrak' => '剛德拉克',
             ],
         ],
-        'halls_of_lightning'                       => [
+        'halls_of_lightning' => [
             'name'         => '雷光大廳',
             'abbreviation' => '',
             'floors'       => [
@@ -371,21 +371,21 @@ return [
                 'walk_of_the_makers'  => '造物者步道',
             ],
         ],
-        'halls_of_reflection'                      => [
+        'halls_of_reflection' => [
             'name'         => '倒影大廳',
             'abbreviation' => '',
             'floors'       => [
                 'halls_of_reflection' => '倒影大廳',
             ],
         ],
-        'halls_of_stone'                           => [
+        'halls_of_stone' => [
             'name'         => '石之大廳',
             'abbreviation' => '',
             'floors'       => [
                 'halls_of_stone' => '石之大廳',
             ],
         ],
-        'icecrown_citadel'                         => [
+        'icecrown_citadel' => [
             'name'         => '冰冠城塞',
             'abbreviation' => '',
             'floors'       => [
@@ -399,7 +399,7 @@ return [
                 'frostmourne'           => '霜之哀傷',
             ],
         ],
-        'naxxramas'                                => [
+        'naxxramas' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -411,21 +411,21 @@ return [
                 'the_upper_necropolis'  => '',
             ],
         ],
-        'onyxias_lair'                             => [
+        'onyxias_lair' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'onyxias_lair' => '',
             ],
         ],
-        'pit_of_saron'                             => [
+        'pit_of_saron' => [
             'name'         => '薩倫之淵',
             'abbreviation' => '',
             'floors'       => [
                 'pit_of_saron' => '薩倫之淵',
             ],
         ],
-        'the_culling_of_stratholme'                => [
+        'the_culling_of_stratholme' => [
             'name'         => '斯坦索姆的抉擇',
             'abbreviation' => '',
             'floors'       => [
@@ -433,35 +433,35 @@ return [
                 'stratholme_city'           => '斯坦索姆城',
             ],
         ],
-        'the_eye_of_eternity'                      => [
+        'the_eye_of_eternity' => [
             'name'         => '永恆之眼',
             'abbreviation' => '',
             'floors'       => [
                 'the_eye_of_eternity' => '永恆之眼',
             ],
         ],
-        'the_forge_of_souls'                       => [
+        'the_forge_of_souls' => [
             'name'         => '眾魂熔爐',
             'abbreviation' => '',
             'floors'       => [
                 'the_forge_of_souls' => '眾魂熔爐',
             ],
         ],
-        'the_nexus'                                => [
+        'the_nexus' => [
             'name'         => '奧核之心',
             'abbreviation' => '',
             'floors'       => [
                 'the_nexus' => '奧核之心',
             ],
         ],
-        'the_obsidian_sanctum'                     => [
+        'the_obsidian_sanctum' => [
             'name'         => '黑曜聖所',
             'abbreviation' => '',
             'floors'       => [
                 'the_obsidian_sanctum' => '黑曜聖所',
             ],
         ],
-        'the_oculus'                               => [
+        'the_oculus' => [
             'name'         => '奧核之眼',
             'abbreviation' => '',
             'floors'       => [
@@ -472,28 +472,28 @@ return [
                 'band_of_alignment'     => '化合之環',
             ],
         ],
-        'the_ruby_sanctum'                         => [
+        'the_ruby_sanctum' => [
             'name'         => '晶紅聖所',
             'abbreviation' => '',
             'floors'       => [
                 'the_ruby_sanctum' => '晶紅聖所',
             ],
         ],
-        'the_violet_hold'                          => [
+        'the_violet_hold' => [
             'name'         => '紫羅蘭堡',
             'abbreviation' => '',
             'floors'       => [
                 'the_violet_hold' => '紫羅蘭堡',
             ],
         ],
-        'trial_of_the_champion'                    => [
+        'trial_of_the_champion' => [
             'name'         => 'Crusaders\' Coliseum: 勇士試煉',
             'abbreviation' => '',
             'floors'       => [
                 'trial_of_the_champion' => 'Crusaders\' Coliseum: 勇士試煉',
             ],
         ],
-        'ulduar'                                   => [
+        'ulduar' => [
             'name'         => '奧杜亞',
             'abbreviation' => '',
             'floors'       => [
@@ -505,7 +505,7 @@ return [
                 'the_minds_eye'               => '心靈之眼',
             ],
         ],
-        'utgarde_keep'                             => [
+        'utgarde_keep' => [
             'name'         => '俄特加德要塞',
             'abbreviation' => '',
             'floors'       => [
@@ -514,7 +514,7 @@ return [
                 'tyrs_terrace'         => '提爾露臺',
             ],
         ],
-        'utgarde_pinnacle'                         => [
+        'utgarde_pinnacle' => [
             'name'         => '俄特加德之巔',
             'abbreviation' => '',
             'floors'       => [
@@ -522,7 +522,7 @@ return [
                 'upper_pinnacle' => '俄巔上層',
             ],
         ],
-        'vault_of_archavon'                        => [
+        'vault_of_archavon' => [
             'name'         => '亞夏梵穹殿',
             'abbreviation' => '',
             'floors'       => [
@@ -530,8 +530,8 @@ return [
             ],
         ],
     ],
-    'cata'       => [
-        'dragon_soul'         => [
+    'cata' => [
+        'dragon_soul' => [
             'name'         => '巨龍之魂',
             'abbreviation' => '',
             'floors'       => [
@@ -544,7 +544,7 @@ return [
                 'the_maelstrom'      => '大漩渦',
             ],
         ],
-        'firelands'           => [
+        'firelands' => [
             'name'         => '火源之界',
             'abbreviation' => '',
             'floors'       => [
@@ -553,7 +553,7 @@ return [
                 'sulfuron_keep'          => '薩弗隆要塞',
             ],
         ],
-        'grim_batol'          => [
+        'grim_batol' => [
             'name'         => '格瑞姆巴托',
             'abbreviation' => '',
             'floors'       => [
@@ -577,8 +577,8 @@ return [
             ],
         ],
     ],
-    'mop'        => [
-        'gate_of_the_setting_sun'    => [
+    'mop' => [
+        'gate_of_the_setting_sun' => [
             'name'         => '落陽關',
             'abbreviation' => '',
             'floors'       => [
@@ -586,7 +586,7 @@ return [
                 'gate_watch_tower'        => '城門哨塔',
             ],
         ],
-        'mogu_shan_palace'           => [
+        'mogu_shan_palace' => [
             'name'         => '魔古山宮',
             'abbreviation' => '',
             'floors'       => [
@@ -595,7 +595,7 @@ return [
                 'throne_of_ancient_conquerors' => '古代征服者王座',
             ],
         ],
-        'scarlet_halls_mop'          => [
+        'scarlet_halls_mop' => [
             'name'         => '血色大廳',
             'abbreviation' => '',
             'floors'       => [
@@ -603,7 +603,7 @@ return [
                 'athenaeum'        => '圖書館',
             ],
         ],
-        'scarlet_monastery_mop'      => [
+        'scarlet_monastery_mop' => [
             'name'         => '血色修道院',
             'abbreviation' => '',
             'floors'       => [
@@ -611,7 +611,7 @@ return [
                 'crusaders_chapel' => '十字軍禮拜堂',
             ],
         ],
-        'scholomance_mop'            => [
+        'scholomance_mop' => [
             'name'         => '通靈學院',
             'abbreviation' => '',
             'floors'       => [
@@ -621,7 +621,7 @@ return [
                 'headmasters_study'    => '院長的書房',
             ],
         ],
-        'shado_pan_monastery'        => [
+        'shado_pan_monastery' => [
             'name'         => '影潘僧院',
             'abbreviation' => '',
             'floors'       => [
@@ -631,7 +631,7 @@ return [
                 'sealed_chambers'     => '封印的房間',
             ],
         ],
-        'siege_of_niu_zao_temple'    => [
+        'siege_of_niu_zao_temple' => [
             'name'         => '圍攻怒兆寺',
             'abbreviation' => '',
             'floors'       => [
@@ -640,7 +640,7 @@ return [
                 'upper_tree_ring'         => '上樹圈',
             ],
         ],
-        'stormstout_brewery'         => [
+        'stormstout_brewery' => [
             'name'         => '風暴烈酒酒坊',
             'abbreviation' => '',
             'floors'       => [
@@ -659,22 +659,22 @@ return [
             ],
         ],
     ],
-    'wod'        => [
-        'auchindoun'                => [
+    'wod' => [
+        'auchindoun' => [
             'name'         => '奧齊頓',
             'abbreviation' => '',
             'floors'       => [
                 'auchindoun' => '奧齊頓',
             ],
         ],
-        'bloodmaul_slag_mines'      => [
+        'bloodmaul_slag_mines' => [
             'name'         => '血槌熔渣礦場',
             'abbreviation' => '',
             'floors'       => [
                 'bloodmaul_slag_mines' => '血槌熔渣礦場',
             ],
         ],
-        'grimrail_depot'            => [
+        'grimrail_depot' => [
             'name'         => '恐軌車站',
             'abbreviation' => '',
             'floors'       => [
@@ -684,7 +684,7 @@ return [
                 'forward_train_cars' => '前方的車廂',
             ],
         ],
-        'iron_docks'                => [
+        'iron_docks' => [
             'name'         => '鋼鐵碼頭',
             'abbreviation' => '',
             'floors'       => [
@@ -700,7 +700,7 @@ return [
                 'edge_of_reality'       => '真實之緣',
             ],
         ],
-        'skyreach'                  => [
+        'skyreach' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -709,7 +709,7 @@ return [
                 'skyreach'      => '',
             ],
         ],
-        'the_everbloom'             => [
+        'the_everbloom' => [
             'name'         => '永茂林',
             'abbreviation' => '',
             'floors'       => [
@@ -718,15 +718,15 @@ return [
             ],
         ],
     ],
-    'legion'     => [
-        'arcway'                      => [
+    'legion' => [
+        'arcway' => [
             'name'         => '幽暗地道',
             'abbreviation' => '',
             'floors'       => [
                 'arcway' => '幽暗地道',
             ],
         ],
-        'black_rook_hold'             => [
+        'black_rook_hold' => [
             'name'         => '玄鴉堡',
             'abbreviation' => '',
             'floors'       => [
@@ -739,7 +739,7 @@ return [
                 'black_rook_hold'          => '玄鴉堡',
             ],
         ],
-        'cathedral_of_eternal_night'  => [
+        'cathedral_of_eternal_night' => [
             'name'         => '永夜聖殿',
             'abbreviation' => '',
             'floors'       => [
@@ -751,28 +751,28 @@ return [
                 'cathedral_of_eternal_night' => '永夜聖殿',
             ],
         ],
-        'court_of_stars'              => [
+        'court_of_stars' => [
             'name'         => '眾星之廷',
             'abbreviation' => '',
             'floors'       => [
                 'court_of_stars' => '眾星之廷',
             ],
         ],
-        'darkheart_thicket'           => [
+        'darkheart_thicket' => [
             'name'         => '暗心灌木林',
             'abbreviation' => '',
             'floors'       => [
                 'darkheart_thicket' => '暗心灌木林',
             ],
         ],
-        'eye_of_azshara'              => [
+        'eye_of_azshara' => [
             'name'         => '艾薩拉之眼',
             'abbreviation' => '',
             'floors'       => [
                 'eye_of_azshara' => '艾薩拉之眼',
             ],
         ],
-        'halls_of_valor'              => [
+        'halls_of_valor' => [
             'name'         => '英靈殿',
             'abbreviation' => '',
             'floors'       => [
@@ -781,7 +781,7 @@ return [
                 'halls_of_valor'             => '英靈殿',
             ],
         ],
-        'lower_karazhan'              => [
+        'lower_karazhan' => [
             'name'         => '下卡拉赞',
             'abbreviation' => '',
             'floors'       => [
@@ -794,7 +794,7 @@ return [
                 'lower_karazhan'       => '下卡拉赞',
             ],
         ],
-        'maw_of_souls'                => [
+        'maw_of_souls' => [
             'name'         => '獄喉山崖',
             'abbreviation' => '',
             'floors'       => [
@@ -804,7 +804,7 @@ return [
                 'maw_of_souls'    => '獄喉山崖',
             ],
         ],
-        'neltharions_lair'            => [
+        'neltharions_lair' => [
             'name'         => '奈薩里奧巢穴',
             'abbreviation' => '',
             'floors'       => [
@@ -818,7 +818,7 @@ return [
                 'the_seat_of_the_triumvirate' => '三傑議會之座',
             ],
         ],
-        'upper_karazhan'              => [
+        'upper_karazhan' => [
             'name'         => '上卡拉赞',
             'abbreviation' => '',
             'floors'       => [
@@ -833,7 +833,7 @@ return [
                 'upper_karazhan'     => '上卡拉赞',
             ],
         ],
-        'vault_of_the_wardens'        => [
+        'vault_of_the_wardens' => [
             'name'         => '看守者鐵獄',
             'abbreviation' => '',
             'floors'       => [
@@ -843,8 +843,8 @@ return [
             ],
         ],
     ],
-    'bfa'        => [
-        'atal_dazar'                => [
+    'bfa' => [
+        'atal_dazar' => [
             'name'         => '阿塔達薩',
             'abbreviation' => '',
             'floors'       => [
@@ -852,21 +852,21 @@ return [
                 'sacrificial_pits' => '獻祭陵園',
             ],
         ],
-        'freehold'                  => [
+        'freehold' => [
             'name'         => '自由港',
             'abbreviation' => '',
             'floors'       => [
                 'freehold' => '自由港',
             ],
         ],
-        'kings_rest'                => [
+        'kings_rest' => [
             'name'         => '諸王之眠',
             'abbreviation' => '',
             'floors'       => [
                 'kings_rest' => '諸王之眠',
             ],
         ],
-        'mechagon_junkyard'         => [
+        'mechagon_junkyard' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -874,7 +874,7 @@ return [
                 'tunnels'         => '',
             ],
         ],
-        'mechagon_workshop'         => [
+        'mechagon_workshop' => [
             'name'         => '機械岡行動',
             'abbreviation' => '',
             'floors'       => [
@@ -893,7 +893,7 @@ return [
                 'the_drag'                  => '',
             ],
         ],
-        'shrine_of_the_storm'       => [
+        'shrine_of_the_storm' => [
             'name'         => '風暴聖壇',
             'abbreviation' => '',
             'floors'       => [
@@ -901,7 +901,7 @@ return [
                 'storms_end'          => '風暴之末',
             ],
         ],
-        'siege_of_boralus'          => [
+        'siege_of_boralus' => [
             'name'         => '波拉勒斯圍城戰',
             'abbreviation' => '',
             'floors'       => [
@@ -915,7 +915,7 @@ return [
                 'stormwind_horrific_vision' => '',
             ],
         ],
-        'temple_of_sethraliss'      => [
+        'temple_of_sethraliss' => [
             'name'         => '瑟沙利斯神廟',
             'abbreviation' => '',
             'floors'       => [
@@ -923,14 +923,14 @@ return [
                 'atrium_of_sethraliss' => '瑟沙利斯中庭',
             ],
         ],
-        'the_motherlode'            => [
+        'the_motherlode' => [
             'name'         => '晶喜鎮！',
             'abbreviation' => '',
             'floors'       => [
                 'the_motherlode' => '晶喜鎮！',
             ],
         ],
-        'the_underrot'              => [
+        'the_underrot' => [
             'name'         => '幽腐深窟',
             'abbreviation' => '',
             'floors'       => [
@@ -938,7 +938,7 @@ return [
                 'ruins_descent' => '荒滅之淪',
             ],
         ],
-        'tol_dagor'                 => [
+        'tol_dagor' => [
             'name'         => '托達戈爾',
             'abbreviation' => '',
             'floors'       => [
@@ -951,7 +951,7 @@ return [
                 'overseers_summit'  => '監督者瞭望台',
             ],
         ],
-        'waycrest_manor'            => [
+        'waycrest_manor' => [
             'name'         => '威奎斯特莊園',
             'abbreviation' => '',
             'floors'       => [
@@ -964,8 +964,8 @@ return [
             ],
         ],
     ],
-    'sl'         => [
-        'de_other_side'              => [
+    'sl' => [
+        'de_other_side' => [
             'name'         => '彼界境地',
             'abbreviation' => '',
             'floors'       => [
@@ -975,7 +975,7 @@ return [
                 'ardenweald'    => '亞登曠野',
             ],
         ],
-        'halls_of_atonement'         => [
+        'halls_of_atonement' => [
             'name'         => '贖罪之殿',
             'abbreviation' => '',
             'floors'       => [
@@ -984,14 +984,14 @@ return [
                 'the_sanctuary_of_souls' => '靈魂聖所',
             ],
         ],
-        'mists_of_tirna_scithe'      => [
+        'mists_of_tirna_scithe' => [
             'name'         => '特那希迷霧',
             'abbreviation' => '',
             'floors'       => [
                 'mists_of_tirna_scithe' => '特那希迷霧',
             ],
         ],
-        'plaguefall'                 => [
+        'plaguefall' => [
             'name'         => '瘟疫之臨',
             'abbreviation' => '',
             'floors'       => [
@@ -999,7 +999,7 @@ return [
                 'the_festering_sanctum' => '膿瘡聖所',
             ],
         ],
-        'sanguine_depths'            => [
+        'sanguine_depths' => [
             'name'         => '血紅深淵',
             'abbreviation' => '',
             'floors'       => [
@@ -1007,7 +1007,7 @@ return [
                 'amphitheater_of_sorrow' => '悲傷展演廳',
             ],
         ],
-        'spires_of_ascension'        => [
+        'spires_of_ascension' => [
             'name'         => '晉升之巔',
             'abbreviation' => '',
             'floors'       => [
@@ -1017,7 +1017,7 @@ return [
                 'seat_of_the_archon' => '御靈者之座',
             ],
         ],
-        'tazavesh_so_leahs_gambit'   => [
+        'tazavesh_so_leahs_gambit' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -1039,7 +1039,7 @@ return [
                 'tazavesh_streets_of_wonder' => '',
             ],
         ],
-        'the_necrotic_wake'          => [
+        'the_necrotic_wake' => [
             'name'         => '死靈戰地',
             'abbreviation' => '',
             'floors'       => [
@@ -1048,7 +1048,7 @@ return [
                 'zolramus'          => '佐拉慕斯',
             ],
         ],
-        'theater_of_pain'            => [
+        'theater_of_pain' => [
             'name'         => '苦痛劇場',
             'abbreviation' => '',
             'floors'       => [
@@ -1060,8 +1060,8 @@ return [
             ],
         ],
     ],
-    'df'         => [
-        'algeth_ar_academy'                    => [
+    'df' => [
+        'algeth_ar_academy' => [
             'name'         => '阿爾蓋薩學院',
             'abbreviation' => '',
             'floors'       => [
@@ -1070,7 +1070,7 @@ return [
                 'the_headteachers_enclave' => '院長區',
             ],
         ],
-        'brackenhide_hollow'                   => [
+        'brackenhide_hollow' => [
             'name'         => '蕨皮谷',
             'abbreviation' => '',
             'floors'       => [
@@ -1090,7 +1090,7 @@ return [
                 'crossroads_of_fate'      => '',
             ],
         ],
-        'dawn_of_the_infinite_murozonds_rise'  => [
+        'dawn_of_the_infinite_murozonds_rise' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -1104,7 +1104,7 @@ return [
                 'immemorial_battlefield' => '',
             ],
         ],
-        'halls_of_infusion'                    => [
+        'halls_of_infusion' => [
             'name'         => '灌注迴廊',
             'abbreviation' => '',
             'floors'       => [
@@ -1113,7 +1113,7 @@ return [
                 'halls_of_infusion' => '灌注迴廊',
             ],
         ],
-        'neltharus'                            => [
+        'neltharus' => [
             'name'         => '奈薩魯斯堡',
             'abbreviation' => '',
             'floors'       => [
@@ -1122,7 +1122,7 @@ return [
                 'neltharus'            => '奈薩魯斯堡',
             ],
         ],
-        'ruby_life_pools'                      => [
+        'ruby_life_pools' => [
             'name'         => '晶紅生命之池',
             'abbreviation' => '',
             'floors'       => [
@@ -1131,7 +1131,7 @@ return [
                 'ruby_life_pools'   => '晶紅生命之池',
             ],
         ],
-        'the_azure_vault'                      => [
+        'the_azure_vault' => [
             'name'         => '蒼藍密庫',
             'abbreviation' => '',
             'floors'       => [
@@ -1143,14 +1143,14 @@ return [
                 'the_azure_vault'         => '蒼藍密庫',
             ],
         ],
-        'the_nokhud_offensive'                 => [
+        'the_nokhud_offensive' => [
             'name'         => '諾庫德進攻據點',
             'abbreviation' => '',
             'floors'       => [
                 'the_nokhud_offensive' => '諾庫德進攻據點',
             ],
         ],
-        'uldaman_legacy_of_tyr'                => [
+        'uldaman_legacy_of_tyr' => [
             'name'         => '奧達曼',
             'abbreviation' => '',
             'floors'       => [
@@ -1160,8 +1160,8 @@ return [
             ],
         ],
     ],
-    'tww'        => [
-        'ara_kara_city_of_echoes'    => [
+    'tww' => [
+        'ara_kara_city_of_echoes' => [
             'name'         => '『回音之城』厄拉卡拉',
             'abbreviation' => '',
             'floors'       => [
@@ -1170,14 +1170,14 @@ return [
                 'ara_kara_city_of_echoes' => '『回音之城』厄拉卡拉',
             ],
         ],
-        'cinderbrew_meadery'         => [
+        'cinderbrew_meadery' => [
             'name'         => '燼釀酒莊',
             'abbreviation' => '',
             'floors'       => [
                 'cinderbrew_meadery' => '燼釀酒莊',
             ],
         ],
-        'city_of_threads'            => [
+        'city_of_threads' => [
             'name'         => '蛛絲城',
             'abbreviation' => '',
             'floors'       => [
@@ -1185,7 +1185,7 @@ return [
                 'the_transformatory' => '轉化場',
             ],
         ],
-        'darkflame_cleft'            => [
+        'darkflame_cleft' => [
             'name'         => '暗焰裂縫',
             'abbreviation' => '',
             'floors'       => [
@@ -1193,14 +1193,14 @@ return [
                 'shadow_realm'    => '',
             ],
         ],
-        'eco_dome_al_dani'           => [
+        'eco_dome_al_dani' => [
             'name'         => '埃達尼秘境',
             'abbreviation' => '',
             'floors'       => [
                 'eco_dome_al_dani' => '埃達尼秘境',
             ],
         ],
-        'operation_floodgate'        => [
+        'operation_floodgate' => [
             'name'         => '水閘行動',
             'abbreviation' => '',
             'floors'       => [
@@ -1217,14 +1217,14 @@ return [
                 'priory_of_the_sacred_flame' => '聖焰隱修院',
             ],
         ],
-        'the_dawnbreaker'            => [
+        'the_dawnbreaker' => [
             'name'         => '破曉者號',
             'abbreviation' => '',
             'floors'       => [
                 'the_dawnbreaker' => '破曉者號',
             ],
         ],
-        'the_rookery'                => [
+        'the_rookery' => [
             'name'         => '培育所',
             'abbreviation' => '',
             'floors'       => [
@@ -1237,7 +1237,7 @@ return [
                 'the_rookery'         => '培育所',
             ],
         ],
-        'the_stonevault'             => [
+        'the_stonevault' => [
             'name'         => '石庫',
             'abbreviation' => '',
             'floors'       => [
@@ -1245,7 +1245,7 @@ return [
             ],
         ],
     ],
-    'midnight'   => [
+    'midnight' => [
         'algeth_ar_academy_midnight' => [
             'name'         => '阿爾蓋薩學院',
             'abbreviation' => '',
@@ -1255,7 +1255,7 @@ return [
                 'the_headteachers_enclave' => '院長區',
             ],
         ],
-        'den_of_nalorakk'            => [
+        'den_of_nalorakk' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -1280,14 +1280,14 @@ return [
                 'celestial_orrey'            => '',
             ],
         ],
-        'maisara_caverns'            => [
+        'maisara_caverns' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'maisara_caverns' => '',
             ],
         ],
-        'murder_row'                 => [
+        'murder_row' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
@@ -1296,28 +1296,28 @@ return [
                 'augurs_terrace'   => '',
             ],
         ],
-        'nexus_point_xenas'          => [
+        'nexus_point_xenas' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'nexus_point_xenas' => '',
             ],
         ],
-        'the_blinding_vale'          => [
+        'the_blinding_vale' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'the_blinding_vale' => '',
             ],
         ],
-        'voidscar_arena'             => [
+        'voidscar_arena' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [
                 'voidscar_arena' => '',
             ],
         ],
-        'windrunner_spire'           => [
+        'windrunner_spire' => [
             'name'         => '',
             'abbreviation' => '',
             'floors'       => [

@@ -3,10 +3,10 @@
 return [
 
     'edittabs' => [
-        'details'         => [
+        'details' => [
             'title' => 'Dettagli del team',
         ],
-        'members'         => [
+        'members' => [
             'title'                                      => 'Membri',
             'invite_new_members'                         => 'Invita nuovi membri',
             'invite_code_share_warning'                  => 'Fai attenzione a chi condividi il link di invito, chiunque abbia il link può unirsi al tuo team!',
@@ -16,25 +16,25 @@ return [
             'ad_free_giveaway_description_not_available' => 'Iscrivendoti a :patreon puoi regalare fino a :max esperienze senza pubblicità a Keystone.guru a qualsiasi membro del team.',
             'ad_free_giveaway_description_available'     => 'Grazie per esserti iscritto a :patreon di Keystone.guru! Puoi regalare :current esperienze senza pubblicità a Keystone.guru a qualsiasi membro del team.',
         ],
-        'overview'        => [
+        'overview' => [
             'title' => 'Panoramica',
         ],
         'routepublishing' => [
             'title' => 'Pubblicazione percorsi',
         ],
-        'routes'          => [
+        'routes' => [
             'title'                  => 'Elenco percorsi',
             'add_route'              => 'Aggiungi percorso',
             'add_route_no_moderator' => 'Devi essere un Moderatore di questo team per aggiungere percorsi',
             'stop_adding_routes'     => 'Interrompi l\'aggiunta di percorsi',
         ],
-        'tags'            => [
+        'tags' => [
             'title'       => 'Tag',
             'description' => 'Qui puoi gestire i tag per i percorsi del team. Tutti i membri di questo team possono visualizzare i tag associati ai percorsi.
                                     I tag personali che potrebbero o meno essere stati associati dal proprietario del percorso non saranno visibili.',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => 'Team %s',
         'menu_title'     => 'Team',
         'to_team_list'   => 'Elenco dei team',
@@ -43,7 +43,7 @@ return [
         'routes'         => 'Percorsi',
         'members'        => 'Membri',
     ],
-    'invite'   => [
+    'invite' => [
         'linkpreview_title'           => 'Invito a unirsi al team %s',
         'linkpreview_description'     => 'Sei stato invitato a unirti al team %s. Accedi o registrati su Keystone.guru per unirti al team, è gratuito!',
         'title'                       => 'Invito a unirsi al team %s',
@@ -61,7 +61,7 @@ return [
         'invite_not_found'            => 'Questo team non è stato trovato. Forse il link di invito è stato modificato o il team è stato eliminato.',
         'back_to_homepage'            => 'Torna alla pagina principale',
     ],
-    'list'     => [
+    'list' => [
         'title'                => 'I miei team',
         'header'               => 'I miei team',
         'create_team'          => 'Crea team',
@@ -69,7 +69,7 @@ return [
         'table_header_members' => 'Membri',
         'table_header_routes'  => 'Percorsi',
     ],
-    'new'      => [
+    'new' => [
         'title'  => 'Nuovo team',
         'header' => 'Nuovo team',
     ],

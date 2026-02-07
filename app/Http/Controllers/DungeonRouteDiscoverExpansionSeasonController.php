@@ -28,7 +28,6 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     public function discoverSeason(
         Expansion                $expansion,
         string                   $seasonIndex,
-
         DiscoverServiceInterface $discoverService,
     ) {
         $gameVersion = GameVersion::firstWhere('expansion_id', $expansion->id) ?? GameVersion::getDefaultGameVersion();

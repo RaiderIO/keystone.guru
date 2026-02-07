@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => '',
                 'text'  => '',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => '',
                 'text'  => '',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => '',
                 'text'  => '',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => '',
                 ],
-                'radius'  => '',
+                'radius' => '',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => '',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => '',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => '',
                     'cont'  => '',
                     'end'   => '',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '',
                 'tooltip' => [
                     'start' => '',
@@ -57,24 +57,24 @@ return [
                     'end'   => '',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => '',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => '',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => '',
                     'cont'  => '',
                     'end'   => '',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => '',
                     'cont'  => '',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => '',
                     'text'  => '',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => '',
                     'text'  => '',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => '',
                     'subtext' => '',

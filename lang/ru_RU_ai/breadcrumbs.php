@@ -3,17 +3,17 @@
 return [
 
     'home' => [
-        'keystone_guru'       => 'Keystone.guru',
-        'affixes'             => 'Аффиксы',
-        'about'               => 'О нас',
-        'credits'             => 'Благодарности',
-        'changelog'           => [
+        'keystone_guru' => 'Keystone.guru',
+        'affixes'       => 'Аффиксы',
+        'about'         => 'О нас',
+        'credits'       => 'Благодарности',
+        'changelog'     => [
             'list'    => 'Список изменений',
             'release' => [
                 'view' => 'Релиз :version',
             ],
         ],
-        'legal'               => [
+        'legal' => [
             'cookies' => 'Куки',
             'privacy' => 'Конфиденциальность',
             'terms'   => 'Условия',
@@ -28,10 +28,10 @@ return [
                 'explore'  => 'Исследовать',
             ],
         ],
-        'dungeonroute'        => [
+        'dungeonroute' => [
             'new' => 'Новый маршрут',
         ],
-        'dungeonroutes'       => [
+        'dungeonroutes' => [
             'search'            => 'Поиск',
             'popular'           => 'Популярные',
             'next_week_affixes' => 'Аффиксы следующей недели',
@@ -44,24 +44,24 @@ return [
                 'this_week_affixes' => 'Аффиксы на эту неделю',
                 'new'               => 'Новый',
             ],
-            'discoverdungeon'   => [
+            'discoverdungeon' => [
                 'popular'           => 'Популярные',
                 'next_week_affixes' => 'Аффиксы следующей недели',
                 'this_week_affixes' => 'Текущие Аффиксы',
                 'new'               => 'Новые',
             ],
         ],
-        'my_profile'          => 'Мой профиль',
-        'my_routes'           => 'Мои маршруты',
-        'my_tags'             => 'Мои теги',
-        'my_teams'            => 'Моя команда',
-        'overview'            => 'Обзор',
-        'new_team'            => 'Новая команда',
-        'edit_team'           => 'Редактировать команду',
-        'join_team'           => 'Присоединиться к команде',
-        'admin'               => [
-            'admin'                      => 'Администратор',
-            'tools'                      => [
+        'my_profile' => 'Мой профиль',
+        'my_routes'  => 'Мои маршруты',
+        'my_tags'    => 'Мои теги',
+        'my_teams'   => 'Моя команда',
+        'overview'   => 'Обзор',
+        'new_team'   => 'Новая команда',
+        'edit_team'  => 'Редактировать команду',
+        'join_team'  => 'Присоединиться к команде',
+        'admin'      => [
+            'admin' => 'Администратор',
+            'tools' => [
                 'admin_tools'               => 'Инструменты администратора',
                 'view_exported_dungeondata' => 'Просмотреть экспортированные данные подземелий',
                 'view_exported_releases'    => 'Посмотреть экспортированные релизы',
@@ -70,20 +70,20 @@ return [
                 'view_mdt_string_contents'  => 'Просмотр содержимого строк MDT',
                 'import_npcs'               => 'Импортировать НПЦ',
             ],
-            'releases'                   => 'Релиз',
-            'new_release'                => 'Новый релиз',
-            'edit_release'               => 'Редактировать релиз',
-            'expansions'                 => [
+            'releases'     => 'Релиз',
+            'new_release'  => 'Новый релиз',
+            'edit_release' => 'Редактировать релиз',
+            'expansions'   => [
                 'expansions'     => 'Дополнение',
                 'new_expansion'  => 'Новое дополнение',
                 'edit_expansion' => 'Редактировать дополнение',
             ],
-            'dungeons'                   => [
+            'dungeons' => [
                 'dungeons'     => 'Подземелье',
                 'new_dungeon'  => 'Новое подземелье',
                 'edit_dungeon' => 'редактировать подземелье',
             ],
-            'floors'                     => [
+            'floors' => [
                 'new_floor'  => 'Этаж',
                 'edit_floor' => 'редактировать этаж',
             ],
@@ -91,28 +91,28 @@ return [
                 'new_dungeonspeedrunrequirednpc10man' => 'Новый 10-игроковый НПЦ для забега на скорость в подземелье',
                 'new_dungeonspeedrunrequirednpc25man' => 'Новый 25-игроковый НПЦ для забега на скорость в подземелье',
             ],
-            'npcs'                       => [
+            'npcs' => [
                 'npcs'     => 'НПЦ',
                 'new_npc'  => 'Новый НПЦ',
                 'edit_npc' => 'Редактировать НПЦ',
             ],
-            'npcenemyforces'             => [
+            'npcenemyforces' => [
                 'new_npc_enemy_forces'  => 'Новые силы врагов НПЦ',
                 'edit_npc_enemy_forces' => 'Редактировать силы врагов НПЦ',
             ],
-            'npchealth'                  => [
+            'npchealth' => [
                 'new_npc_health'  => 'Новое здоровье НПЦ',
                 'edit_npc_health' => 'Редактировать здоровье НПЦ',
             ],
-            'spells'                     => [
+            'spells' => [
                 'spells'     => 'Способность',
                 'new_spell'  => 'Новая способность',
                 'edit_spell' => 'Редактировать способность',
             ],
-            'users'                      => [
+            'users' => [
                 'users' => 'Пользователь',
             ],
-            'user_reports'               => [
+            'user_reports' => [
                 'user_reports' => 'Отчеты пользователей',
             ],
         ],

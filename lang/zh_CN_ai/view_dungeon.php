@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => '',
                 'header'            => '',
                 'description'       => '',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => '',
                 'header'            => '',
                 'raider_io'         => '',

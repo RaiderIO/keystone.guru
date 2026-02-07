@@ -2,27 +2,27 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => 'Al dettaglio',
         'description' => 'Al dettaglio',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => 'Ira',
         'description' => 'L\'Ira del Re dei Lich',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => 'Era Classica',
         'description' => 'Era Classica',
     ],
-    'beta'         => [
+    'beta' => [
         'name'        => 'Beta al dettaglio',
         'description' => 'Beta al dettaglio',
     ],
-    'cata'         => [
+    'cata' => [
         'name'        => 'Cata',
         'description' => 'Cataclisma',
     ],
-    'mop'          => [
+    'mop' => [
         'name'        => 'Nebbie',
         'description' => 'Nebbie di Pandaria',
     ],

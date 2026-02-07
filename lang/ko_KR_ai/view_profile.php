@@ -2,24 +2,24 @@
 
 return [
 
-    'edit'      => [
-        'title'                                            => '프로필',
-        'profile'                                          => '프로필',
-        'account'                                          => '계정',
-        'patreon'                                          => 'Patreon',
-        'change_password'                                  => '비밀번호 변경',
-        'privacy'                                          => '개인정보',
-        'reports'                                          => '보고서',
-        'menu_title'                                       => '%s의 프로필',
-        'avatar'                                           => '아바타',
-        'avatar_alt'                                       => '사용자 아바타',
-        'username'                                         => '사용자 이름',
-        'username_title'                                   => '외부 인증 서비스를 사용하여 로그인했으므로 사용자 이름을 한 번 변경할 수 있습니다.',
-        'email'                                            => '이메일',
-        'region'                                           => '지역',
-        'select_region'                                    => '지역 선택',
-        'show_as_anonymous'                                => '익명으로 표시',
-        'show_as_anonymous_title'                          => '이 옵션을 활성화하면 귀하가 속하지 않은 팀의 경로를 볼 때 \'익명\'으로 표시됩니다.
+    'edit' => [
+        'title'                   => '프로필',
+        'profile'                 => '프로필',
+        'account'                 => '계정',
+        'patreon'                 => 'Patreon',
+        'change_password'         => '비밀번호 변경',
+        'privacy'                 => '개인정보',
+        'reports'                 => '보고서',
+        'menu_title'              => '%s의 프로필',
+        'avatar'                  => '아바타',
+        'avatar_alt'              => '사용자 아바타',
+        'username'                => '사용자 이름',
+        'username_title'          => '외부 인증 서비스를 사용하여 로그인했으므로 사용자 이름을 한 번 변경할 수 있습니다.',
+        'email'                   => '이메일',
+        'region'                  => '지역',
+        'select_region'           => '지역 선택',
+        'show_as_anonymous'       => '익명으로 표시',
+        'show_as_anonymous_title' => '이 옵션을 활성화하면 귀하가 속하지 않은 팀의 경로를 볼 때 \'익명\'으로 표시됩니다.
                                 자신의 경로와 속한 팀의 경로에서는 항상 이름이 표시됩니다.',
         'echo_color'                                       => '동기화된 경로 편집 색상',
         'echo_color_title'                                 => '팀원과 협력하여 경로를 편집할 때, 이 색상이 당신을 고유하게 식별합니다.',
@@ -45,23 +45,23 @@ return [
             'header_active'  => '활성',
             'header_benefit' => '혜택',
         ],
-        'current_password'                                 => '현재 비밀번호',
-        'new_password'                                     => '새 비밀번호',
-        'new_password_confirm'                             => '새 비밀번호 (확인)',
-        'submit'                                           => '제출',
-        'ga_cookies_opt_out'                               => 'Google Analytics 쿠키 옵트아웃',
-        'reports_description'                              => '사이트에서 작성한 모든 경로, 적 및 기타 보고서가 여기에 나열됩니다.',
-        'reports_table_header_id'                          => 'ID',
-        'reports_table_header_category'                    => '카테고리',
-        'reports_table_header_message'                     => '메시지',
-        'reports_table_header_created_at'                  => '생성일',
-        'reports_table_header_status'                      => '상태',
-        'reports_table_action_handled'                     => '처리됨',
+        'current_password'                => '현재 비밀번호',
+        'new_password'                    => '새 비밀번호',
+        'new_password_confirm'            => '새 비밀번호 (확인)',
+        'submit'                          => '제출',
+        'ga_cookies_opt_out'              => 'Google Analytics 쿠키 옵트아웃',
+        'reports_description'             => '사이트에서 작성한 모든 경로, 적 및 기타 보고서가 여기에 나열됩니다.',
+        'reports_table_header_id'         => 'ID',
+        'reports_table_header_category'   => '카테고리',
+        'reports_table_header_message'    => '메시지',
+        'reports_table_header_created_at' => '생성일',
+        'reports_table_header_status'     => '상태',
+        'reports_table_action_handled'    => '처리됨',
     ],
     'favorites' => [
         'title' => '내 즐겨찾기',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => '개요',
         'favorites'                => '즐겨찾기',
         'tags'                     => '태그',
@@ -73,21 +73,21 @@ return [
         'create_route'             => '경로 생성',
         'create_route_description' => '경로는 던전을 통해 100% 적군을 물리치며 모든 보스를 처치하는 목표에 도달하는 경로입니다.
                                     다양한 도구가 파티 멤버에게 의도한 경로를 조직하는 데 도움을 줍니다. 세계와 공유하거나 비공개로 유지하고 원하는 대로 조직할 수 있습니다.',
-        'create_team'              => '팀 생성',
-        'create_team_description'  => '팀은 경로를 친구와 공유하고 자주 사용하는 경로의 최신 변경 사항을 모두가 동기화할 수 있도록 도와줍니다.
+        'create_team'             => '팀 생성',
+        'create_team_description' => '팀은 경로를 친구와 공유하고 자주 사용하는 경로의 최신 변경 사항을 모두가 동기화할 수 있도록 도와줍니다.
                                     협력 편집은 기존 경로를 조정할 때 팀을 위한 최적의 경로를 찾는 데 훨씬 더 쉽게 만듭니다.',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => '내 경로',
     ],
-    'tags'      => [
-        'title'                             => '내 태그',
-        'header'                            => '내 태그',
-        'description'                       => '태그 기능을 사용하면 경로를 원하는 방식으로 조직할 수 있습니다. %s에서 각 경로에 대한 작업을 보면서 경로에 태그를 추가할 수 있습니다.
+    'tags' => [
+        'title'       => '내 태그',
+        'header'      => '내 태그',
+        'description' => '태그 기능을 사용하면 경로를 원하는 방식으로 조직할 수 있습니다. %s에서 각 경로에 대한 작업을 보면서 경로에 태그를 추가할 수 있습니다.
                     여기에서 자신의 경로에 대한 태그를 관리할 수 있습니다. 다른 사람은 귀하의 태그를 볼 수 없으며, 팀에 속한 경로에 대해서는 팀을 볼 때 태그 섹션을 방문하여 별도의 태그 집합을 관리할 수 있습니다.',
         'link_your_personal_route_overview' => '개인 경로 개요',
     ],
-    'view'      => [
+    'view' => [
         'title'  => '%s의 경로',
         'header' => '%s의 경로',
     ],

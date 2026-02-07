@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Cancelar dibujo',
                 'text'  => 'Cancelar',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Terminar dibujo',
                 'text'  => 'Terminar',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Eliminar último punto dibujado',
                 'text'  => 'Eliminar último punto',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => 'Haz clic y arrastra para dibujar un círculo.',
                 ],
-                'radius'  => 'Radio',
+                'radius' => 'Radio',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => 'Haz clic en el mapa para colocar el marcador de círculo.',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => 'Haz clic en el mapa para colocar el marcador.',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => 'Haz clic para comenzar a dibujar la forma.',
                     'cont'  => 'Haz clic para continuar dibujando la forma.',
                     'end'   => 'Haz clic en el primer punto para cerrar esta forma.',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '<strong>Error:</strong> ¡los bordes de la forma no pueden cruzarse!',
                 'tooltip' => [
                     'start' => 'Haz clic para comenzar a dibujar la línea.',
@@ -57,24 +57,24 @@ return [
                     'end'   => 'Haz clic en el último punto para terminar la línea.',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => 'Haz clic y arrastra para dibujar un rectángulo.',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => 'Suelta el mouse para terminar de dibujar.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => 'Haz clic para comenzar a dibujar la ruta.',
                     'cont'  => 'Haz clic para continuar dibujando la ruta.',
                     'end'   => 'Haz clic en el botón \'Terminar\' en la barra de herramientas para completar tu ruta.',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => 'Haz clic para empezar a dibujar la línea.',
                     'cont'  => 'Haz clic y arrastra para continuar dibujando la línea.',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Guardar cambios',
                     'text'  => 'Guardar',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => 'Cancelar edición, descarta todos los cambios',
                     'text'  => 'Cancelar',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Arrastra los manejadores o marcadores para editar las características.',
                     'subtext' => 'Haz clic en cancelar para deshacer los cambios.',

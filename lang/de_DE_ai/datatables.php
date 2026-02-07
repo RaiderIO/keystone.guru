@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'aria'              => [
+    'aria' => [
         'paginate' => [
             'first'    => 'Erste',
             'last'     => 'Letzte',
@@ -9,28 +9,28 @@ return [
             'previous' => 'Vorherige',
         ],
     ],
-    'autoFill'          => [
+    'autoFill' => [
         'cancel'         => 'Abbrechen',
         'fill'           => 'Alle Zellen mit <i>%d<i> füllen</i></i>',
         'fillHorizontal' => 'Alle horizontalen Zellen füllen',
         'fillVertical'   => 'Alle vertikalen Zellen füllen',
         'info'           => '',
     ],
-    'buttons'           => [
-        'collection'      => 'Aktionen <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-        'colvis'          => 'Spaltensichtbarkeit',
-        'colvisRestore'   => 'Sichtbarkeit wiederherstellen',
-        'copy'            => 'Kopieren',
-        'copyKeys'        => 'Taste <i>STRG&lt;\\/i&gt; oder <i>⌘&lt;\\/i&gt; + <i>C&lt;\\/i&gt; drücken um die Tabelle<br />in den Zwischenspeicher zu kopieren.<br /><br />Um den Vorgang abzubrechen, Nachricht anklicken oder Escape-Taste drücken.</i></i></i>',
-        'copySuccess'     => [
+    'buttons' => [
+        'collection'    => 'Aktionen <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'        => 'Spaltensichtbarkeit',
+        'colvisRestore' => 'Sichtbarkeit wiederherstellen',
+        'copy'          => 'Kopieren',
+        'copyKeys'      => 'Taste <i>STRG&lt;\\/i&gt; oder <i>⌘&lt;\\/i&gt; + <i>C&lt;\\/i&gt; drücken um die Tabelle<br />in den Zwischenspeicher zu kopieren.<br /><br />Um den Vorgang abzubrechen, Nachricht anklicken oder Escape-Taste drücken.</i></i></i>',
+        'copySuccess'   => [
             '_' => '%d Zeilen kopiert',
             1   => '1 Zeile kopiert',
         ],
-        'copyTitle'       => 'In Zwischenablage kopieren',
-        'createState'     => 'Ansicht erstellen',
-        'csv'             => 'CSV',
-        'excel'           => 'Excel',
-        'pageLength'      => [
+        'copyTitle'   => 'In Zwischenablage kopieren',
+        'createState' => 'Ansicht erstellen',
+        'csv'         => 'CSV',
+        'excel'       => 'Excel',
+        'pageLength'  => [
             '_' => 'Zeige %d Zeilen',
             -1  => 'Alle Zeilen anzeigen',
         ],
@@ -43,14 +43,14 @@ return [
         'stateRestore'    => 'Ansicht %d',
         'updateState'     => 'Aktualisieren',
     ],
-    'datetime'          => [
-        'amPm'     => [
+    'datetime' => [
+        'amPm' => [
             0 => 'Vormittag',
             1 => 'Nachmittag',
         ],
-        'hours'    => 'Stunden',
-        'minutes'  => 'Minuten',
-        'months'   => [
+        'hours'   => 'Stunden',
+        'minutes' => 'Minuten',
+        'months'  => [
             0  => 'Januar',
             1  => 'Februar',
             10 => 'November',
@@ -78,23 +78,23 @@ return [
             6 => 'Samstag',
         ],
     ],
-    'decimal'           => '',
-    'editor'            => [
+    'decimal' => '',
+    'editor'  => [
         'close'  => 'Schließen',
         'create' => [
             'button' => 'Neu',
             'submit' => 'Erstellen',
             'title'  => 'Neuen Eintrag erstellen',
         ],
-        'edit'   => [
+        'edit' => [
             'button' => 'Bearbeiten',
             'submit' => 'Bearbeiten',
             'title'  => 'Eintrag bearbeiten',
         ],
-        'error'  => [
+        'error' => [
             'system' => 'Ein Systemfehler ist aufgetreten',
         ],
-        'multi'  => [
+        'multi' => [
             'info'    => 'Die ausgewählten Elemente enthalten mehrere Werte für dieses Feld. Um alle Elemente für dieses Feld zu bearbeiten und auf denselben Wert zu setzen, hier klicken oder tippen, andernfalls behalten diese ihre individuellen Werte bei.',
             'noMulti' => 'Dieses Feld kann nur einzeln bearbeitet werden, nicht als Teil einer Mengen-Änderung.',
             'restore' => 'Änderungen zurücksetzen',
@@ -106,30 +106,30 @@ return [
                 '_' => 'Sollen %d Zeilen gelöscht werden?',
                 1   => 'Soll diese Zeile gelöscht werden?',
             ],
-            'submit'  => 'Entfernen',
-            'title'   => 'Entfernen',
+            'submit' => 'Entfernen',
+            'title'  => 'Entfernen',
         ],
     ],
-    'emptyTable'        => 'Keine Daten in der Tabelle vorhanden',
-    'info'              => '_START_ bis _END_ von _TOTAL_ Einträgen',
-    'infoEmpty'         => 'Keine Daten vorhanden',
-    'infoFiltered'      => '(gefiltert von _MAX_ Einträgen)',
-    'infoPostFix'       => '',
-    'infoThousands'     => '.',
-    'lengthMenu'        => '_MENU_ Zeilen anzeigen',
-    'loadingRecords'    => 'Wird geladen ..',
-    'processing'        => 'Bitte warten ..',
-    'search'            => 'Suche:',
-    'searchBuilder'     => [
-        'add'         => 'Bedingung hinzufügen',
-        'button'      => [
+    'emptyTable'     => 'Keine Daten in der Tabelle vorhanden',
+    'info'           => '_START_ bis _END_ von _TOTAL_ Einträgen',
+    'infoEmpty'      => 'Keine Daten vorhanden',
+    'infoFiltered'   => '(gefiltert von _MAX_ Einträgen)',
+    'infoPostFix'    => '',
+    'infoThousands'  => '.',
+    'lengthMenu'     => '_MENU_ Zeilen anzeigen',
+    'loadingRecords' => 'Wird geladen ..',
+    'processing'     => 'Bitte warten ..',
+    'search'         => 'Suche:',
+    'searchBuilder'  => [
+        'add'    => 'Bedingung hinzufügen',
+        'button' => [
             '_' => 'Such-Baukasten (%d)',
             0   => 'Such-Baukasten',
         ],
-        'clearAll'    => 'Alle entfernen',
-        'condition'   => 'Bedingung',
-        'conditions'  => [
-            'array'  => [
+        'clearAll'   => 'Alle entfernen',
+        'condition'  => 'Bedingung',
+        'conditions' => [
+            'array' => [
                 'contains' => 'enthält',
                 'empty'    => 'ist leer',
                 'equals'   => 'ist gleich',
@@ -137,7 +137,7 @@ return [
                 'notEmpty' => 'ist nicht leer',
                 'without'  => 'aber nicht',
             ],
-            'date'   => [
+            'date' => [
                 'after'      => 'Nach',
                 'before'     => 'Vor',
                 'between'    => 'Zwischen',
@@ -182,11 +182,11 @@ return [
             '_' => 'Such-Baukasten (%d)',
             0   => 'Such-Baukasten',
         ],
-        'value'       => 'Wert',
+        'value' => 'Wert',
     ],
-    'searchPanes'       => [
-        'clearMessage'    => 'Leeren',
-        'collapse'        => [
+    'searchPanes' => [
+        'clearMessage' => 'Leeren',
+        'collapse'     => [
             '_' => 'Suchmasken (%d)',
             0   => 'Suchmasken',
         ],
@@ -200,7 +200,7 @@ return [
     ],
     'searchPlaceholder' => '',
     'select'            => [
-        'cells'   => [
+        'cells' => [
             '_' => '%d Zellen ausgewählt',
             0   => '',
             1   => '1 Zelle ausgewählt',
@@ -210,16 +210,16 @@ return [
             0   => '',
             1   => '1 Spalte ausgewählt',
         ],
-        'rows'    => [
+        'rows' => [
             '_' => '%d Zeilen ausgewählt',
             0   => '',
             1   => '1 Zeile ausgewählt',
         ],
     ],
-    'stateRestore'      => [
-        'creationModal'  => [
-            'button'        => 'Erstellen',
-            'columns'       => [
+    'stateRestore' => [
+        'creationModal' => [
+            'button'  => 'Erstellen',
+            'columns' => [
                 'search'  => 'Spalten Suche',
                 'visible' => 'Spalten Sichtbarkeit',
             ],
@@ -245,6 +245,6 @@ return [
         'renameLabel'    => 'Neuer Name für %s:',
         'renameTitle'    => 'Ansicht umbenennen',
     ],
-    'thousands'         => '.',
-    'zeroRecords'       => 'Keine passenden Einträge gefunden',
+    'thousands'   => '.',
+    'zeroRecords' => 'Keine passenden Einträge gefunden',
 ];

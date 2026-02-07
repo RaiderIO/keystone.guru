@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Annulla disegno',
                 'text'  => 'Annulla',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Termina disegno',
                 'text'  => 'Fine',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Elimina l\'ultimo punto disegnato',
                 'text'  => 'Elimina ultimo punto',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => 'Fai clic e trascina per disegnare il cerchio.',
                 ],
-                'radius'  => 'Raggio',
+                'radius' => 'Raggio',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => 'Fai clic sulla mappa per posizionare il marker circolare.',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => 'Fai clic sulla mappa per posizionare il marker.',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => 'Fai clic per iniziare a disegnare la forma.',
                     'cont'  => 'Fai clic per continuare a disegnare la forma.',
                     'end'   => 'Fai clic sul primo punto per chiudere questa forma.',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '<strong>Errore:</strong> i bordi della forma non possono incrociarsi!',
                 'tooltip' => [
                     'start' => 'Fai clic per iniziare a disegnare la linea.',
@@ -57,24 +57,24 @@ return [
                     'end'   => 'Fai clic sull\'ultimo punto per terminare la linea.',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => 'Fai clic e trascina per disegnare il rettangolo.',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => 'Rilascia il mouse per terminare il disegno.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => 'Fai clic per iniziare a disegnare il percorso.',
                     'cont'  => 'Fai clic per continuare a disegnare il percorso.',
                     'end'   => 'Fai clic sul pulsante \'Fine\' sulla barra degli strumenti per completare il tuo percorso.',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => 'Fai clic per iniziare a disegnare la linea.',
                     'cont'  => 'Fai clic e trascina per continuare a disegnare la linea.',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Salva modifiche',
                     'text'  => 'Salva',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => 'Annulla modifica, scarta tutte le modifiche',
                     'text'  => 'Annulla',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Trascina maniglie o marker per modificare le caratteristiche.',
                     'subtext' => 'Fai clic su annulla per annullare le modifiche.',

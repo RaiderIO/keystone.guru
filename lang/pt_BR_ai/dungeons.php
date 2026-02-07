@@ -7,8 +7,8 @@ return [
         3 => '',
         4 => '',
     ],
-    'classic'    => [
-        'blackfathom_deeps'           => [
+    'classic' => [
+        'blackfathom_deeps' => [
             'name'         => 'Profundezas Negras',
             'abbreviation' => '',
             'floors'       => [
@@ -17,7 +17,7 @@ return [
                 'the_forgotten_pool' => 'Charcos Esquecidos',
             ],
         ],
-        'blackrock_depths'            => [
+        'blackrock_depths' => [
             'name'         => 'Abismo Rocha Negra',
             'abbreviation' => '',
             'floors'       => [
@@ -25,7 +25,7 @@ return [
                 'shadowforge_city' => 'Cidade de Umbraforja',
             ],
         ],
-        'blackwinglair'               => [
+        'blackwinglair' => [
             'name'         => 'Covil Asa Negra',
             'abbreviation' => '',
             'floors'       => [
@@ -35,7 +35,7 @@ return [
                 'nefarians_lair'       => 'Covil de Nefarian',
             ],
         ],
-        'deadmines'                   => [
+        'deadmines' => [
             'name'         => 'Minas Mortas',
             'abbreviation' => '',
             'floors'       => [
@@ -43,7 +43,7 @@ return [
                 'ironclad_cove' => 'Covil Encouraçado',
             ],
         ],
-        'dire_maul_east'              => [
+        'dire_maul_east' => [
             'name'         => 'Gládio Cruel (Leste)',
             'abbreviation' => '',
             'floors'       => [
@@ -51,14 +51,14 @@ return [
                 'the_shrine_of_eldretharr' => 'Santuário de Eldretharr',
             ],
         ],
-        'dire_maul_north'             => [
+        'dire_maul_north' => [
             'name'         => 'Gládio Cruel (Norte)',
             'abbreviation' => '',
             'floors'       => [
                 'gordok_commons' => 'Átrio Gordok',
             ],
         ],
-        'dire_maul_west'              => [
+        'dire_maul_west' => [
             'name'         => 'Gládio Cruel (Oeste)',
             'abbreviation' => '',
             'floors'       => [
@@ -67,7 +67,7 @@ return [
                 'prison_of_immol_thar'   => 'Prisão de Immol\'thar',
             ],
         ],
-        'gnomeregan'                  => [
+        'gnomeregan' => [
             'name'         => 'Gnomeregan',
             'abbreviation' => '',
             'floors'       => [
@@ -77,7 +77,7 @@ return [
                 'tinkers_court'     => 'Pátio dos Engenhoqueiros',
             ],
         ],
-        'gnomeregan_sod'              => [
+        'gnomeregan_sod' => [
             'name'         => 'Gnomeregan',
             'abbreviation' => '',
             'floors'       => [
@@ -87,7 +87,7 @@ return [
                 'tinkers_court'     => 'Pátio dos Engenhoqueiros',
             ],
         ],
-        'karazhan_crypts'             => [
+        'karazhan_crypts' => [
             'name'         => 'Criptas de Karazhan',
             'abbreviation' => '',
             'floors'       => [
@@ -97,7 +97,7 @@ return [
                 'the_pit_of_criminals'    => 'Fosso dos Criminosos',
             ],
         ],
-        'lower_blackrock_spire'       => [
+        'lower_blackrock_spire' => [
             'name'         => 'Pico da Rocha Negra Inferior',
             'abbreviation' => '',
             'floors'       => [
@@ -109,7 +109,7 @@ return [
                 'chamber_of_battle'  => 'Chamber de Battle',
             ],
         ],
-        'maraudon'                    => [
+        'maraudon' => [
             'name'         => 'Maraudon',
             'abbreviation' => '',
             'floors'       => [
@@ -117,14 +117,14 @@ return [
                 'zaetars_grave'       => 'Túmulo de Zaetar',
             ],
         ],
-        'moltencore'                  => [
+        'moltencore' => [
             'name'         => 'Núcleo Derretido',
             'abbreviation' => '',
             'floors'       => [
                 'moltencore' => 'Núcleo Derretido',
             ],
         ],
-        'naxxramas_classic'           => [
+        'naxxramas_classic' => [
             'name'         => 'Naxxramas',
             'abbreviation' => '',
             'floors'       => [
@@ -136,49 +136,49 @@ return [
                 'the_upper_necropolis'  => 'Necrópole Superior',
             ],
         ],
-        'onyxias_lair_classic'        => [
+        'onyxias_lair_classic' => [
             'name'         => 'Covil da Onyxia',
             'abbreviation' => '',
             'floors'       => [
                 'onyxias_lair' => 'Covil da Onyxia',
             ],
         ],
-        'ragefire_chasm'              => [
+        'ragefire_chasm' => [
             'name'         => 'Cavernas Ígneas',
             'abbreviation' => '',
             'floors'       => [
                 'ragefire_chasm' => 'Cavernas Ígneas',
             ],
         ],
-        'razorfen_downs'              => [
+        'razorfen_downs' => [
             'name'         => 'Urzal dos Mortos',
             'abbreviation' => '',
             'floors'       => [
                 'razorfen_downs' => 'Urzal dos Mortos',
             ],
         ],
-        'razorfen_kraul'              => [
+        'razorfen_kraul' => [
             'name'         => 'Urzal dos Tuscos',
             'abbreviation' => '',
             'floors'       => [
                 'razorfen_kraul' => 'Urzal dos Tuscos',
             ],
         ],
-        'ruins_of_ahnqiraj_classic'   => [
+        'ruins_of_ahnqiraj_classic' => [
             'name'         => 'Ruínas de Ahn\'Qiraj',
             'abbreviation' => '',
             'floors'       => [
                 'ruins_of_ahnqiraj' => 'Ruínas de Ahn\'Qiraj',
             ],
         ],
-        'ruins_of_ahnqiraj_sod'       => [
+        'ruins_of_ahnqiraj_sod' => [
             'name'         => 'Ruínas de Ahn\'Qiraj',
             'abbreviation' => '',
             'floors'       => [
                 'ruins_of_ahnqiraj' => 'Ruínas de Ahn\'Qiraj',
             ],
         ],
-        'scarlet_enclave'             => [
+        'scarlet_enclave' => [
             'name'         => 'Enclave Escarlate',
             'abbreviation' => '',
             'floors'       => [
@@ -189,7 +189,7 @@ return [
                 'ashbringer_chapel'      => 'Capela do Ashbringer',
             ],
         ],
-        'scarlet_monastery_armory'    => [
+        'scarlet_monastery_armory' => [
             'name'         => 'Arsenal do Mosteiro Escarlate',
             'abbreviation' => '',
             'floors'       => [
@@ -210,14 +210,14 @@ return [
                 'graveyard' => 'Cemitério',
             ],
         ],
-        'scarlet_monastery_library'   => [
+        'scarlet_monastery_library' => [
             'name'         => 'Biblioteca do Mosteiro Escarlate',
             'abbreviation' => '',
             'floors'       => [
                 'library' => 'Biblioteca',
             ],
         ],
-        'scholomance'                 => [
+        'scholomance' => [
             'name'         => 'Scolomântia',
             'abbreviation' => '',
             'floors'       => [
@@ -227,7 +227,7 @@ return [
                 'headmasters_story'    => 'Gabinete do Diretor',
             ],
         ],
-        'shadowfang_keep'             => [
+        'shadowfang_keep' => [
             'name'         => 'Bastilha da Presa Negra',
             'abbreviation' => '',
             'floors'       => [
@@ -240,7 +240,7 @@ return [
                 'the_wall_walk'         => 'Caminho da Ronda',
             ],
         ],
-        'stratholme'                  => [
+        'stratholme' => [
             'name'         => 'Stratholme',
             'abbreviation' => '',
             'floors'       => [
@@ -248,7 +248,7 @@ return [
                 'the_gauntlet'     => 'Forquilha',
             ],
         ],
-        'temple_of_ahnqiraj_classic'  => [
+        'temple_of_ahnqiraj_classic' => [
             'name'         => 'Templo de Ahn\'Qiraj',
             'abbreviation' => '',
             'floors'       => [
@@ -257,7 +257,7 @@ return [
                 'vault_of_cthun'        => 'Abóbada de C\'Thun',
             ],
         ],
-        'temple_of_ahnqiraj_sod'      => [
+        'temple_of_ahnqiraj_sod' => [
             'name'         => 'Templo de Ahn\'Qiraj',
             'abbreviation' => '',
             'floors'       => [
@@ -266,14 +266,14 @@ return [
                 'vault_of_cthun'        => 'Abóbada de C\'Thun',
             ],
         ],
-        'the_stockade'                => [
+        'the_stockade' => [
             'name'         => 'O Cárcere',
             'abbreviation' => '',
             'floors'       => [
                 'the_stockade' => 'O Cárcere',
             ],
         ],
-        'the_temple_of_atal_hakkar'   => [
+        'the_temple_of_atal_hakkar' => [
             'name'         => 'Templo de Atal\'Hakkar',
             'abbreviation' => '',
             'floors'       => [
@@ -284,7 +284,7 @@ return [
                 'hall_of_the_cursed'        => 'Salão dos Amaldiçoados',
             ],
         ],
-        'uldaman'                     => [
+        'uldaman' => [
             'name'         => 'Uldaman',
             'abbreviation' => '',
             'floors'       => [
@@ -292,7 +292,7 @@ return [
                 'khaz_goroths_seat'   => 'Trono de Khaz\'Goroth',
             ],
         ],
-        'upper_blackrock_spire'       => [
+        'upper_blackrock_spire' => [
             'name'         => 'Pico da Rocha Negra',
             'abbreviation' => '',
             'floors'       => [
@@ -301,21 +301,21 @@ return [
                 'hall_of_blackhand' => 'Salão do Mão Negra',
             ],
         ],
-        'wailing_caverns'             => [
+        'wailing_caverns' => [
             'name'         => 'Caverna Ululante',
             'abbreviation' => '',
             'floors'       => [
                 'wailing_caverns' => 'Caverna Ululante',
             ],
         ],
-        'zul_farrak'                  => [
+        'zul_farrak' => [
             'name'         => 'Zul\'Farrak',
             'abbreviation' => '',
             'floors'       => [
                 'zul_farrak' => 'Zul\'Farrak',
             ],
         ],
-        'zulgurub'                    => [
+        'zulgurub' => [
             'name'         => 'Zul\'Gurub',
             'abbreviation' => '',
             'floors'       => [
@@ -323,15 +323,15 @@ return [
             ],
         ],
     ],
-    'wotlk'      => [
-        'ahn_kahet_the_old_kingdom'                => [
+    'wotlk' => [
+        'ahn_kahet_the_old_kingdom' => [
             'name'         => 'Ahn\'kahet: O Velho Reino',
             'abbreviation' => '',
             'floors'       => [
                 'ahn_kahet_the_old_kingdom' => 'Ahn\'kahet: O Velho Reino',
             ],
         ],
-        'azjol_nerub'                              => [
+        'azjol_nerub' => [
             'name'         => 'Azjol-Nerub',
             'abbreviation' => '',
             'floors'       => [
@@ -348,7 +348,7 @@ return [
                 'the_icy_depths'      => 'Profundezas Geladas',
             ],
         ],
-        'drak_tharon_keep'                         => [
+        'drak_tharon_keep' => [
             'name'         => 'Bastilha Drak\'Tharon',
             'abbreviation' => '',
             'floors'       => [
@@ -356,14 +356,14 @@ return [
                 'drak_tharon_overlook'          => 'Mirante Drak\'Tharon',
             ],
         ],
-        'gundrak'                                  => [
+        'gundrak' => [
             'name'         => 'Gundrak',
             'abbreviation' => '',
             'floors'       => [
                 'gundrak' => 'Gundrak',
             ],
         ],
-        'halls_of_lightning'                       => [
+        'halls_of_lightning' => [
             'name'         => 'Salões Relampejantes',
             'abbreviation' => '',
             'floors'       => [
@@ -371,21 +371,21 @@ return [
                 'walk_of_the_makers'  => 'Caminho dos Criadores',
             ],
         ],
-        'halls_of_reflection'                      => [
+        'halls_of_reflection' => [
             'name'         => 'Salões da Reflexão',
             'abbreviation' => '',
             'floors'       => [
                 'halls_of_reflection' => 'Salões da Reflexão',
             ],
         ],
-        'halls_of_stone'                           => [
+        'halls_of_stone' => [
             'name'         => 'Salões Rochosos',
             'abbreviation' => '',
             'floors'       => [
                 'halls_of_stone' => 'Salões Rochosos',
             ],
         ],
-        'icecrown_citadel'                         => [
+        'icecrown_citadel' => [
             'name'         => 'Cidadela da Coroa de Gelo',
             'abbreviation' => '',
             'floors'       => [
@@ -399,7 +399,7 @@ return [
                 'frostmourne'           => 'Gélido Lamento',
             ],
         ],
-        'naxxramas'                                => [
+        'naxxramas' => [
             'name'         => 'Naxxramas',
             'abbreviation' => '',
             'floors'       => [
@@ -411,21 +411,21 @@ return [
                 'the_upper_necropolis'  => 'Necrópole Superior',
             ],
         ],
-        'onyxias_lair'                             => [
+        'onyxias_lair' => [
             'name'         => 'Covil de Onyxia',
             'abbreviation' => '',
             'floors'       => [
                 'onyxias_lair' => 'Onyxias Covil',
             ],
         ],
-        'pit_of_saron'                             => [
+        'pit_of_saron' => [
             'name'         => 'Fosso de Saron',
             'abbreviation' => '',
             'floors'       => [
                 'pit_of_saron' => 'Fosso de Saron',
             ],
         ],
-        'the_culling_of_stratholme'                => [
+        'the_culling_of_stratholme' => [
             'name'         => 'Expurgo de Stratholme',
             'abbreviation' => '',
             'floors'       => [
@@ -433,35 +433,35 @@ return [
                 'stratholme_city'           => 'Stratholme',
             ],
         ],
-        'the_eye_of_eternity'                      => [
+        'the_eye_of_eternity' => [
             'name'         => 'Olho da Eternidade',
             'abbreviation' => '',
             'floors'       => [
                 'the_eye_of_eternity' => 'Olho da Eternidade',
             ],
         ],
-        'the_forge_of_souls'                       => [
+        'the_forge_of_souls' => [
             'name'         => 'Forja das Almas',
             'abbreviation' => '',
             'floors'       => [
                 'the_forge_of_souls' => 'Forja das Almas',
             ],
         ],
-        'the_nexus'                                => [
+        'the_nexus' => [
             'name'         => 'Nexus',
             'abbreviation' => '',
             'floors'       => [
                 'the_nexus' => 'Nexus',
             ],
         ],
-        'the_obsidian_sanctum'                     => [
+        'the_obsidian_sanctum' => [
             'name'         => 'Santuário Obsidiano',
             'abbreviation' => '',
             'floors'       => [
                 'the_obsidian_sanctum' => 'Santuário Obsidiano',
             ],
         ],
-        'the_oculus'                               => [
+        'the_oculus' => [
             'name'         => 'Óculus',
             'abbreviation' => '',
             'floors'       => [
@@ -472,28 +472,28 @@ return [
                 'band_of_alignment'     => 'Faixa de Alinhamento',
             ],
         ],
-        'the_ruby_sanctum'                         => [
+        'the_ruby_sanctum' => [
             'name'         => 'Santuário Rubi',
             'abbreviation' => '',
             'floors'       => [
                 'the_ruby_sanctum' => 'Santuário Rubi',
             ],
         ],
-        'the_violet_hold'                          => [
+        'the_violet_hold' => [
             'name'         => 'Castelo Violeta',
             'abbreviation' => '',
             'floors'       => [
                 'the_violet_hold' => 'Castelo Violeta',
             ],
         ],
-        'trial_of_the_champion'                    => [
+        'trial_of_the_champion' => [
             'name'         => 'Crusaders\' Coliseum: Prova do Campeão',
             'abbreviation' => '',
             'floors'       => [
                 'trial_of_the_champion' => 'Crusaders\' Coliseum: Prova do Campeão',
             ],
         ],
-        'ulduar'                                   => [
+        'ulduar' => [
             'name'         => 'Ulduar',
             'abbreviation' => '',
             'floors'       => [
@@ -505,7 +505,7 @@ return [
                 'the_minds_eye'               => 'Olho da Mente',
             ],
         ],
-        'utgarde_keep'                             => [
+        'utgarde_keep' => [
             'name'         => 'Bastilha Utgarde',
             'abbreviation' => '',
             'floors'       => [
@@ -514,7 +514,7 @@ return [
                 'tyrs_terrace'         => 'Terraço de Tyr',
             ],
         ],
-        'utgarde_pinnacle'                         => [
+        'utgarde_pinnacle' => [
             'name'         => 'Pináculo Utgarde',
             'abbreviation' => '',
             'floors'       => [
@@ -522,7 +522,7 @@ return [
                 'upper_pinnacle' => 'Pináculo Superior',
             ],
         ],
-        'vault_of_archavon'                        => [
+        'vault_of_archavon' => [
             'name'         => 'Abóbada de Arcavon',
             'abbreviation' => '',
             'floors'       => [
@@ -530,8 +530,8 @@ return [
             ],
         ],
     ],
-    'cata'       => [
-        'dragon_soul'         => [
+    'cata' => [
+        'dragon_soul' => [
             'name'         => 'Alma Dragônica',
             'abbreviation' => '',
             'floors'       => [
@@ -544,7 +544,7 @@ return [
                 'the_maelstrom'      => 'Voragem',
             ],
         ],
-        'firelands'           => [
+        'firelands' => [
             'name'         => 'Terras do Fogo',
             'abbreviation' => '',
             'floors'       => [
@@ -553,7 +553,7 @@ return [
                 'sulfuron_keep'          => 'Fortaleza de Sulfuron',
             ],
         ],
-        'grim_batol'          => [
+        'grim_batol' => [
             'name'         => 'Grim Batol',
             'abbreviation' => '',
             'floors'       => [
@@ -577,8 +577,8 @@ return [
             ],
         ],
     ],
-    'mop'        => [
-        'gate_of_the_setting_sun'    => [
+    'mop' => [
+        'gate_of_the_setting_sun' => [
             'name'         => 'Portal do Sol Poente',
             'abbreviation' => '',
             'floors'       => [
@@ -586,7 +586,7 @@ return [
                 'gate_watch_tower'        => 'Torre de Vigia dos Portões',
             ],
         ],
-        'mogu_shan_palace'           => [
+        'mogu_shan_palace' => [
             'name'         => 'Palácio Mogu\'shan',
             'abbreviation' => '',
             'floors'       => [
@@ -595,7 +595,7 @@ return [
                 'throne_of_ancient_conquerors' => 'Trono dos Conquistadores Antigos',
             ],
         ],
-        'scarlet_halls_mop'          => [
+        'scarlet_halls_mop' => [
             'name'         => 'Salões Escarlates',
             'abbreviation' => '',
             'floors'       => [
@@ -603,7 +603,7 @@ return [
                 'athenaeum'        => 'Ateneu',
             ],
         ],
-        'scarlet_monastery_mop'      => [
+        'scarlet_monastery_mop' => [
             'name'         => 'Monastério Escarlate',
             'abbreviation' => '',
             'floors'       => [
@@ -611,7 +611,7 @@ return [
                 'crusaders_chapel' => 'Capela do Cruzado',
             ],
         ],
-        'scholomance_mop'            => [
+        'scholomance_mop' => [
             'name'         => 'Scolomântia',
             'abbreviation' => '',
             'floors'       => [
@@ -621,7 +621,7 @@ return [
                 'headmasters_study'    => 'Gabinete do Diretor',
             ],
         ],
-        'shado_pan_monastery'        => [
+        'shado_pan_monastery' => [
             'name'         => 'Monastério Shado-pan',
             'abbreviation' => '',
             'floors'       => [
@@ -631,7 +631,7 @@ return [
                 'sealed_chambers'     => 'Câmaras Seladas',
             ],
         ],
-        'siege_of_niu_zao_temple'    => [
+        'siege_of_niu_zao_temple' => [
             'name'         => 'Cerco ao Templo Niuzao',
             'abbreviation' => '',
             'floors'       => [
@@ -640,7 +640,7 @@ return [
                 'upper_tree_ring'         => 'Ringue Superior da Árvore',
             ],
         ],
-        'stormstout_brewery'         => [
+        'stormstout_brewery' => [
             'name'         => 'Cervejaria Malte do Trovão',
             'abbreviation' => '',
             'floors'       => [
@@ -659,22 +659,22 @@ return [
             ],
         ],
     ],
-    'wod'        => [
-        'auchindoun'                => [
+    'wod' => [
+        'auchindoun' => [
             'name'         => 'Auchindoun',
             'abbreviation' => '',
             'floors'       => [
                 'auchindoun' => 'Auchindoun',
             ],
         ],
-        'bloodmaul_slag_mines'      => [
+        'bloodmaul_slag_mines' => [
             'name'         => 'Minas de Escória do Malho Sangrento',
             'abbreviation' => '',
             'floors'       => [
                 'bloodmaul_slag_mines' => 'Minas de Escória do Malho Sangrento',
             ],
         ],
-        'grimrail_depot'            => [
+        'grimrail_depot' => [
             'name'         => 'Central do Carrilcruel',
             'abbreviation' => '',
             'floors'       => [
@@ -684,7 +684,7 @@ return [
                 'forward_train_cars' => 'Vagões Dianteiros do Trem',
             ],
         ],
-        'iron_docks'                => [
+        'iron_docks' => [
             'name'         => 'Docas de Ferro',
             'abbreviation' => '',
             'floors'       => [
@@ -700,16 +700,16 @@ return [
                 'edge_of_reality'       => 'Gume da Realidade',
             ],
         ],
-        'skyreach'                  => [
-            'name'         => '',
+        'skyreach' => [
+            'name'         => 'Beira-céu',
             'abbreviation' => '',
             'floors'       => [
-                'lower_quarter' => '',
-                'grand_spire'   => '',
-                'skyreach'      => '',
+                'lower_quarter' => 'Quadrante Inferior',
+                'grand_spire'   => 'Grande Torre',
+                'skyreach'      => 'Beira-céu',
             ],
         ],
-        'the_everbloom'             => [
+        'the_everbloom' => [
             'name'         => 'Floretérnia',
             'abbreviation' => '',
             'floors'       => [
@@ -718,15 +718,15 @@ return [
             ],
         ],
     ],
-    'legion'     => [
-        'arcway'                      => [
+    'legion' => [
+        'arcway' => [
             'name'         => 'O Arcâneo',
             'abbreviation' => '',
             'floors'       => [
                 'arcway' => 'O Arcâneo',
             ],
         ],
-        'black_rook_hold'             => [
+        'black_rook_hold' => [
             'name'         => 'Castelo Corvo Negro',
             'abbreviation' => '',
             'floors'       => [
@@ -739,7 +739,7 @@ return [
                 'black_rook_hold'          => 'Castelo Corvo Negro',
             ],
         ],
-        'cathedral_of_eternal_night'  => [
+        'cathedral_of_eternal_night' => [
             'name'         => 'Catedral da Noite Eterna',
             'abbreviation' => '',
             'floors'       => [
@@ -751,28 +751,28 @@ return [
                 'cathedral_of_eternal_night' => 'Catedral da Noite Eterna',
             ],
         ],
-        'court_of_stars'              => [
+        'court_of_stars' => [
             'name'         => 'Pátio das Estrelas',
             'abbreviation' => '',
             'floors'       => [
                 'court_of_stars' => 'Pátio das Estrelas',
             ],
         ],
-        'darkheart_thicket'           => [
+        'darkheart_thicket' => [
             'name'         => 'Bosque Corenegro',
             'abbreviation' => '',
             'floors'       => [
                 'darkheart_thicket' => 'Bosque Corenegro',
             ],
         ],
-        'eye_of_azshara'              => [
+        'eye_of_azshara' => [
             'name'         => 'Olho de Azshara',
             'abbreviation' => '',
             'floors'       => [
                 'eye_of_azshara' => 'Olho de Azshara',
             ],
         ],
-        'halls_of_valor'              => [
+        'halls_of_valor' => [
             'name'         => 'Salões da Bravura',
             'abbreviation' => '',
             'floors'       => [
@@ -781,7 +781,7 @@ return [
                 'halls_of_valor'             => 'Salões da Bravura',
             ],
         ],
-        'lower_karazhan'              => [
+        'lower_karazhan' => [
             'name'         => 'Karazhan Inferior',
             'abbreviation' => '',
             'floors'       => [
@@ -794,7 +794,7 @@ return [
                 'lower_karazhan'       => 'Karazhan Inferior',
             ],
         ],
-        'maw_of_souls'                => [
+        'maw_of_souls' => [
             'name'         => 'Penhascos da Boca do Inferno',
             'abbreviation' => '',
             'floors'       => [
@@ -804,7 +804,7 @@ return [
                 'maw_of_souls'    => 'Penhascos da Boca do Inferno',
             ],
         ],
-        'neltharions_lair'            => [
+        'neltharions_lair' => [
             'name'         => 'Covil de Neltharian',
             'abbreviation' => '',
             'floors'       => [
@@ -818,7 +818,7 @@ return [
                 'the_seat_of_the_triumvirate' => 'Sede do Triunvirato',
             ],
         ],
-        'upper_karazhan'              => [
+        'upper_karazhan' => [
             'name'         => 'Karazhan Superior',
             'abbreviation' => '',
             'floors'       => [
@@ -833,7 +833,7 @@ return [
                 'upper_karazhan'     => 'Karazhan Superior',
             ],
         ],
-        'vault_of_the_wardens'        => [
+        'vault_of_the_wardens' => [
             'name'         => 'Câmara das Guardiãs',
             'abbreviation' => '',
             'floors'       => [
@@ -843,8 +843,8 @@ return [
             ],
         ],
     ],
-    'bfa'        => [
-        'atal_dazar'                => [
+    'bfa' => [
+        'atal_dazar' => [
             'name'         => 'Atal\'Dazar',
             'abbreviation' => '',
             'floors'       => [
@@ -852,21 +852,21 @@ return [
                 'sacrificial_pits' => 'Fossos Sacrificiais',
             ],
         ],
-        'freehold'                  => [
+        'freehold' => [
             'name'         => 'Angra do Facão',
             'abbreviation' => '',
             'floors'       => [
                 'freehold' => 'Angra do Facão',
             ],
         ],
-        'kings_rest'                => [
+        'kings_rest' => [
             'name'         => 'Repouso do Rei',
             'abbreviation' => '',
             'floors'       => [
                 'kings_rest' => 'Repouso do Rei',
             ],
         ],
-        'mechagon_junkyard'         => [
+        'mechagon_junkyard' => [
             'name'         => 'Ferro-velho de Gnomecan',
             'abbreviation' => '',
             'floors'       => [
@@ -874,7 +874,7 @@ return [
                 'tunnels'         => 'Túneis',
             ],
         ],
-        'mechagon_workshop'         => [
+        'mechagon_workshop' => [
             'name'         => 'Operação: Gnomecan',
             'abbreviation' => '',
             'floors'       => [
@@ -893,7 +893,7 @@ return [
                 'the_drag'                  => 'Drag',
             ],
         ],
-        'shrine_of_the_storm'       => [
+        'shrine_of_the_storm' => [
             'name'         => 'Santuário da Tempestade',
             'abbreviation' => '',
             'floors'       => [
@@ -901,7 +901,7 @@ return [
                 'storms_end'          => 'Fim da Tempestade',
             ],
         ],
-        'siege_of_boralus'          => [
+        'siege_of_boralus' => [
             'name'         => 'Cerco de Boralus',
             'abbreviation' => '',
             'floors'       => [
@@ -915,7 +915,7 @@ return [
                 'stormwind_horrific_vision' => 'Visão Horrenda de Ventobravo',
             ],
         ],
-        'temple_of_sethraliss'      => [
+        'temple_of_sethraliss' => [
             'name'         => 'Templo de Sethraliss',
             'abbreviation' => '',
             'floors'       => [
@@ -923,14 +923,14 @@ return [
                 'atrium_of_sethraliss' => 'Átrio de Sethraliss',
             ],
         ],
-        'the_motherlode'            => [
+        'the_motherlode' => [
             'name'         => 'MEGAMINA!!!',
             'abbreviation' => '',
             'floors'       => [
                 'the_motherlode' => 'MEGAMINA!!!',
             ],
         ],
-        'the_underrot'              => [
+        'the_underrot' => [
             'name'         => 'Terra Podre',
             'abbreviation' => '',
             'floors'       => [
@@ -938,7 +938,7 @@ return [
                 'ruins_descent' => 'Descenso da Ruína',
             ],
         ],
-        'tol_dagor'                 => [
+        'tol_dagor' => [
             'name'         => 'Tol Dagor',
             'abbreviation' => '',
             'floors'       => [
@@ -951,7 +951,7 @@ return [
                 'overseers_summit'  => 'Torre do Feitor',
             ],
         ],
-        'waycrest_manor'            => [
+        'waycrest_manor' => [
             'name'         => 'Mansão Capelo',
             'abbreviation' => '',
             'floors'       => [
@@ -964,8 +964,8 @@ return [
             ],
         ],
     ],
-    'sl'         => [
-        'de_other_side'              => [
+    'sl' => [
+        'de_other_side' => [
             'name'         => 'O Outro Lado',
             'abbreviation' => '',
             'floors'       => [
@@ -975,7 +975,7 @@ return [
                 'ardenweald'    => 'Ardena',
             ],
         ],
-        'halls_of_atonement'         => [
+        'halls_of_atonement' => [
             'name'         => 'Salões da Expiação',
             'abbreviation' => '',
             'floors'       => [
@@ -984,14 +984,14 @@ return [
                 'the_sanctuary_of_souls' => 'Santuário das Almas',
             ],
         ],
-        'mists_of_tirna_scithe'      => [
+        'mists_of_tirna_scithe' => [
             'name'         => 'Brumas de Tirna Scithe',
             'abbreviation' => '',
             'floors'       => [
                 'mists_of_tirna_scithe' => 'Brumas de Tirna Scithe',
             ],
         ],
-        'plaguefall'                 => [
+        'plaguefall' => [
             'name'         => 'Empéstia',
             'abbreviation' => '',
             'floors'       => [
@@ -999,7 +999,7 @@ return [
                 'the_festering_sanctum' => 'Santuário Supurado',
             ],
         ],
-        'sanguine_depths'            => [
+        'sanguine_depths' => [
             'name'         => 'Profundezas Sanguinárias',
             'abbreviation' => '',
             'floors'       => [
@@ -1007,7 +1007,7 @@ return [
                 'amphitheater_of_sorrow' => 'Anfiteatro do Pesar',
             ],
         ],
-        'spires_of_ascension'        => [
+        'spires_of_ascension' => [
             'name'         => 'Torres da Ascensão',
             'abbreviation' => '',
             'floors'       => [
@@ -1017,7 +1017,7 @@ return [
                 'seat_of_the_archon' => 'Trono da Arconte',
             ],
         ],
-        'tazavesh_so_leahs_gambit'   => [
+        'tazavesh_so_leahs_gambit' => [
             'name'         => 'Tazavesh: O Ardil de So\'leah',
             'abbreviation' => '',
             'floors'       => [
@@ -1039,7 +1039,7 @@ return [
                 'tazavesh_streets_of_wonder' => 'Tazavesh: Ruas das Maravilhas',
             ],
         ],
-        'the_necrotic_wake'          => [
+        'the_necrotic_wake' => [
             'name'         => 'A Chaga Necrótica',
             'abbreviation' => '',
             'floors'       => [
@@ -1048,7 +1048,7 @@ return [
                 'zolramus'          => 'Zolramus',
             ],
         ],
-        'theater_of_pain'            => [
+        'theater_of_pain' => [
             'name'         => 'Teatro da Dor',
             'abbreviation' => '',
             'floors'       => [
@@ -1060,8 +1060,8 @@ return [
             ],
         ],
     ],
-    'df'         => [
-        'algeth_ar_academy'                    => [
+    'df' => [
+        'algeth_ar_academy' => [
             'name'         => 'Academia Algeth\'ar (Dragonflight)',
             'abbreviation' => '',
             'floors'       => [
@@ -1070,7 +1070,7 @@ return [
                 'the_headteachers_enclave' => 'O Enclave do Diretor',
             ],
         ],
-        'brackenhide_hollow'                   => [
+        'brackenhide_hollow' => [
             'name'         => 'Clareira de Courambaia',
             'abbreviation' => '',
             'floors'       => [
@@ -1090,7 +1090,7 @@ return [
                 'crossroads_of_fate'      => 'Encruzilhada do Destino',
             ],
         ],
-        'dawn_of_the_infinite_murozonds_rise'  => [
+        'dawn_of_the_infinite_murozonds_rise' => [
             'name'         => 'Amanhecer do Infinito: Ascensão de Murozond',
             'abbreviation' => '',
             'floors'       => [
@@ -1104,7 +1104,7 @@ return [
                 'immemorial_battlefield' => 'Campo de Batalha Imemorial',
             ],
         ],
-        'halls_of_infusion'                    => [
+        'halls_of_infusion' => [
             'name'         => 'Salões da Infusão',
             'abbreviation' => '',
             'floors'       => [
@@ -1113,7 +1113,7 @@ return [
                 'halls_of_infusion' => 'Salões da Infusão',
             ],
         ],
-        'neltharus'                            => [
+        'neltharus' => [
             'name'         => 'Neltharus',
             'abbreviation' => '',
             'floors'       => [
@@ -1122,7 +1122,7 @@ return [
                 'neltharus'            => 'Neltharus',
             ],
         ],
-        'ruby_life_pools'                      => [
+        'ruby_life_pools' => [
             'name'         => 'Poços da Vida Rubi',
             'abbreviation' => '',
             'floors'       => [
@@ -1131,7 +1131,7 @@ return [
                 'ruby_life_pools'   => 'Poços da Vida Rubi',
             ],
         ],
-        'the_azure_vault'                      => [
+        'the_azure_vault' => [
             'name'         => 'Câmara Lazúli',
             'abbreviation' => '',
             'floors'       => [
@@ -1143,14 +1143,14 @@ return [
                 'the_azure_vault'         => 'Câmara Lazúli',
             ],
         ],
-        'the_nokhud_offensive'                 => [
+        'the_nokhud_offensive' => [
             'name'         => 'A Ofensiva Nokhid',
             'abbreviation' => '',
             'floors'       => [
                 'the_nokhud_offensive' => 'A Ofensiva Nokhid',
             ],
         ],
-        'uldaman_legacy_of_tyr'                => [
+        'uldaman_legacy_of_tyr' => [
             'name'         => 'Uldaman',
             'abbreviation' => '',
             'floors'       => [
@@ -1160,8 +1160,8 @@ return [
             ],
         ],
     ],
-    'tww'        => [
-        'ara_kara_city_of_echoes'    => [
+    'tww' => [
+        'ara_kara_city_of_echoes' => [
             'name'         => 'Ara-Kara, a Cidade dos Ecos',
             'abbreviation' => '',
             'floors'       => [
@@ -1170,14 +1170,14 @@ return [
                 'ara_kara_city_of_echoes' => 'Ara-Kara, a Cidade dos Ecos',
             ],
         ],
-        'cinderbrew_meadery'         => [
+        'cinderbrew_meadery' => [
             'name'         => 'Hidromelaria Cinzagris',
             'abbreviation' => '',
             'floors'       => [
                 'cinderbrew_meadery' => 'Hidromelaria Cinzagris',
             ],
         ],
-        'city_of_threads'            => [
+        'city_of_threads' => [
             'name'         => 'Cidade das Tramas',
             'abbreviation' => '',
             'floors'       => [
@@ -1185,7 +1185,7 @@ return [
                 'the_transformatory' => 'O Transformatório',
             ],
         ],
-        'darkflame_cleft'            => [
+        'darkflame_cleft' => [
             'name'         => 'Fenda Chamanegra',
             'abbreviation' => '',
             'floors'       => [
@@ -1193,14 +1193,14 @@ return [
                 'shadow_realm'    => 'Reino das Sombras',
             ],
         ],
-        'eco_dome_al_dani'           => [
+        'eco_dome_al_dani' => [
             'name'         => 'Ecodomo Al\'dani',
             'abbreviation' => '',
             'floors'       => [
                 'eco_dome_al_dani' => 'Ecodomo Al\'dani',
             ],
         ],
-        'operation_floodgate'        => [
+        'operation_floodgate' => [
             'name'         => 'Operação: Comporta',
             'abbreviation' => '',
             'floors'       => [
@@ -1217,14 +1217,14 @@ return [
                 'priory_of_the_sacred_flame' => 'Priorado da Chama Sagrada',
             ],
         ],
-        'the_dawnbreaker'            => [
+        'the_dawnbreaker' => [
             'name'         => 'Alvorada',
             'abbreviation' => '',
             'floors'       => [
                 'the_dawnbreaker' => 'Alvorada',
             ],
         ],
-        'the_rookery'                => [
+        'the_rookery' => [
             'name'         => 'O Viveiro',
             'abbreviation' => '',
             'floors'       => [
@@ -1237,7 +1237,7 @@ return [
                 'the_rookery'         => 'O Viveiro',
             ],
         ],
-        'the_stonevault'             => [
+        'the_stonevault' => [
             'name'         => 'Abóboda de Pedra',
             'abbreviation' => '',
             'floors'       => [
@@ -1245,7 +1245,7 @@ return [
             ],
         ],
     ],
-    'midnight'   => [
+    'midnight' => [
         'algeth_ar_academy_midnight' => [
             'name'         => 'Academia Algeth\'ar',
             'abbreviation' => '',
@@ -1255,80 +1255,78 @@ return [
                 'the_headteachers_enclave' => 'O Enclave do Diretor',
             ],
         ],
-        'den_of_nalorakk'            => [
-            'name'         => '',
+        'den_of_nalorakk' => [
+            'name'         => 'Caverna de Nalorakk',
             'abbreviation' => '',
             'floors'       => [
-                'dreamers_passage'  => '',
+                'dreamers_passage'  => 'Caverna de Nalorakk',
                 'the_foraging'      => '',
                 'the_heart_of_rage' => '',
                 'den_of_nalorakk'   => '',
             ],
         ],
         'magisters_terrace_midnight' => [
-            'name'         => '',
+            'name'         => 'Terraço dos Magísteres',
             'abbreviation' => '',
             'floors'       => [
-                'magisters_terrace'          => '',
-                'arcane_atheneum'            => '',
-                'grand_magister_asylum'      => '',
-                'grand_magister_asylum_void' => '',
-                'magisters_terrace_void'     => '',
-                'tower_of_theory'            => '',
-                'central_tower'              => '',
-                'upper_tower'                => '',
-                'celestial_orrey'            => '',
+                'magisters_terrace'     => 'Terraço dos Magísteres',
+                'arcane_atheneum'       => 'Terraço dos Magísteres',
+                'grand_magister_asylum' => '',
+                'tower_of_theory'       => '',
+                'central_tower'         => '',
+                'upper_tower'           => '',
+                'celestial_orrey'       => '',
             ],
         ],
-        'maisara_caverns'            => [
-            'name'         => '',
+        'maisara_caverns' => [
+            'name'         => 'Cavernas de Maisara',
             'abbreviation' => '',
             'floors'       => [
-                'maisara_caverns' => '',
+                'maisara_caverns' => 'Cavernas de Maisara',
             ],
         ],
-        'murder_row'                 => [
-            'name'         => '',
+        'murder_row' => [
+            'name'         => 'Travessa do Assassino',
             'abbreviation' => '',
             'floors'       => [
-                'murder_row'       => '',
-                'the_illicit_rain' => '',
-                'augurs_terrace'   => '',
+                'murder_row'       => 'Travessa do Assassino',
+                'the_illicit_rain' => 'Chuva Ilegal',
+                'augurs_terrace'   => 'Terraço dos Áugures',
             ],
         ],
-        'nexus_point_xenas'          => [
-            'name'         => '',
+        'nexus_point_xenas' => [
+            'name'         => 'Ponto de Nexus Xenas',
             'abbreviation' => '',
             'floors'       => [
-                'nexus_point_xenas' => '',
+                'nexus_point_xenas' => 'Ponto de Nexus Xenas',
             ],
         ],
-        'the_blinding_vale'          => [
-            'name'         => '',
+        'the_blinding_vale' => [
+            'name'         => 'O Vale Ofuscante',
             'abbreviation' => '',
             'floors'       => [
-                'the_blinding_vale' => '',
+                'the_blinding_vale' => 'O Vale Ofuscante',
             ],
         ],
-        'voidscar_arena'             => [
-            'name'         => '',
+        'voidscar_arena' => [
+            'name'         => 'Arena da Chaga do Caos',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => '',
+                'voidscar_arena' => 'Arena da Chaga do Caos',
             ],
         ],
-        'windrunner_spire'           => [
-            'name'         => '',
+        'windrunner_spire' => [
+            'name'         => 'Pico dos Correventos',
             'abbreviation' => '',
             'floors'       => [
-                'the_promenade'           => '',
+                'the_promenade'           => 'O Passeio',
                 'vereesas_repose_upper'   => '',
                 'vereesas_repose_lower'   => '',
                 'sylvanas_quarters_upper' => '',
                 'sylvanas_quarters_lower' => '',
-                'windrunner_vault'        => '',
-                'the_pinnacle'            => '',
-                'windrunner_spire'        => '',
+                'windrunner_vault'        => 'Câmara dos Correventos',
+                'the_pinnacle'            => 'O Pináculo',
+                'windrunner_spire'        => 'Pico dos Correventos',
             ],
         ],
     ],

@@ -26,6 +26,21 @@ class WowheadTranslationServiceLogging extends StructuredLogging implements Wowh
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function getDungeonNamesInvalidJson(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function getDungeonNamesMalformedHtml(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function getDungeonNamesElementNotFound(): void
+    {
+        $this->error(__METHOD__);
+    }
+
     public function getDungeonNamesLocaleEnd(): void
     {
         $this->end(__METHOD__, get_defined_vars());

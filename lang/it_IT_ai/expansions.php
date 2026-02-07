@@ -2,43 +2,43 @@
 
 return [
 
-    'classic'  => [
+    'classic' => [
         'name' => 'Classico',
     ],
-    'tbc'      => [
+    'tbc' => [
         'name' => 'La Crociata Infuocata',
     ],
-    'wotlk'    => [
+    'wotlk' => [
         'name' => 'L\'Ira del Re dei Lich',
     ],
-    'cata'     => [
+    'cata' => [
         'name' => 'Cataclisma',
     ],
-    'mop'      => [
+    'mop' => [
         'name' => 'Nebbie di Pandaria',
     ],
-    'wod'      => [
+    'wod' => [
         'name' => 'Signori della Guerra di Draenor',
     ],
-    'legion'   => [
+    'legion' => [
         'name' => 'Legione',
     ],
-    'bfa'      => [
+    'bfa' => [
         'name' => 'Battaglia per Azeroth',
     ],
-    'sl'       => [
+    'sl' => [
         'name' => 'Terre Ombrose',
     ],
-    'df'       => [
+    'df' => [
         'name' => 'Volo dei Draghi',
     ],
-    'tww'      => [
+    'tww' => [
         'name' => 'La Guerra Interna',
     ],
     'midnight' => [
         'name' => 'Mezzanotte',
     ],
-    'tlt'      => [
+    'tlt' => [
         'name' => 'L\'Ultimo Titano',
     ],
 

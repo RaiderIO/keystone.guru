@@ -18,10 +18,10 @@ return [
             'reset_password'   => 'Redefinir senha',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Entrar',
     ],
-    'register'  => [
+    'register' => [
         'title'  => 'Registrar',
         'header' => 'Registrar',
     ],

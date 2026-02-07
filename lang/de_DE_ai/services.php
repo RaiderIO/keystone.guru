@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => 'Zug %d',
                     'title'    => 'Titel',
                     'map_icon' => 'Kartensymbol',
@@ -15,12 +15,12 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Dieser Zug wurde entfernt, da alle ausgewählten Feinde in MDT nicht gefunden werden konnten, was zu einem ansonsten leeren Zug führte.',
                 'route_title_contains_non_ascii_char_bug'           => 'Ihr Routentitel enthält nicht-ASCII-Zeichen, die bekanntermaßen einen noch ungelösten Codierungsfehler in Keystone.guru auslösen.
                                                         Ihr Routentitel wurde von allen störenden Zeichen befreit, wir entschuldigen uns für die Unannehmlichkeiten und hoffen, dieses Problem bald zu lösen.',
-                'route_title_contains_non_ascii_char_bug_details'   => 'Alter Titel: %s, neuer Titel: %s',
-                'map_icon_contains_non_ascii_char_bug'              => 'Einer Ihrer Kommentare zu einem Kartensymbol enthält nicht-ASCII-Zeichen, die bekanntermaßen einen noch ungelösten Codierungsfehler in Keystone.guru auslösen. Ihr Kartenkommentar wurde von allen störenden Zeichen befreit, wir entschuldigen uns für die Unannehmlichkeiten und hoffen, dieses Problem bald zu lösen.',
-                'map_icon_contains_non_ascii_char_bug_details'      => 'Alter Kommentar: "%s", neuer Kommentar: "%s"',
+                'route_title_contains_non_ascii_char_bug_details' => 'Alter Titel: %s, neuer Titel: %s',
+                'map_icon_contains_non_ascii_char_bug'            => 'Einer Ihrer Kommentare zu einem Kartensymbol enthält nicht-ASCII-Zeichen, die bekanntermaßen einen noch ungelösten Codierungsfehler in Keystone.guru auslösen. Ihr Kartenkommentar wurde von allen störenden Zeichen befreit, wir entschuldigen uns für die Unannehmlichkeiten und hoffen, dieses Problem bald zu lösen.',
+                'map_icon_contains_non_ascii_char_bug_details'    => 'Alter Kommentar: "%s", neuer Kommentar: "%s"',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => 'Erweckte Obelisken',
                     'pulls'             => 'Züge',
                     'notes'             => 'Notizen',
@@ -49,7 +49,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => 'Alle Dungeons',
     ],
     'combatlogservice' => [

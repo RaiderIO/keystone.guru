@@ -2,7 +2,7 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'Analisi della stringa MDT fallita. Hai davvero incollato una stringa MDT?',
             'mdt_string_format_not_recognized'    => 'Il formato della stringa MDT non è stato riconosciuto.',
@@ -31,29 +31,29 @@ return [
             'read_only_mode_enabled'          => 'Modalità sola lettura attivata',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => 'Si è verificato un errore durante la generazione della tua stringa MDT: %s',
         'mdt_generate_no_lua' => 'L\'importatore MDT non è configurato correttamente. Si prega di contattare l\'amministratore per questo problema',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => 'Impossibile aggiornare il report utente',
             'unable_to_save_report'        => 'Impossibile salvare il report',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => 'Impossibile salvare la linea',
             'unable_to_delete_brushline' => 'Impossibile eliminare la linea',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon creato',
             'dungeon_updated' => 'Dungeon aggiornato',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => 'Impossibile salvare il percorso',
         'flash'          => [
             'route_cloned_successfully' => 'Percorso clonato con successo',
@@ -61,7 +61,7 @@ return [
             'route_created'             => 'Percorso creato',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => 'Percorsi popolari',
         'this_week_affixes' => 'Affissi di questa settimana',
         'next_week_affixes' => 'Affissi della prossima settimana',
@@ -72,7 +72,7 @@ return [
             'next_week_affixes' => '%s prossima settimana',
             'new'               => '%s nuovi percorsi',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '%s percorsi popolari',
             'this_week_affixes' => '%s questa settimana',
             'next_week_affixes' => '%s la prossima settimana',
@@ -86,20 +86,20 @@ return [
             'npc_deleted_successfully' => 'NPC rimosso con successo',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => 'Impossibile salvare l\'espansione',
             'expansion_updated'        => 'Espansione aggiornata',
             'expansion_created'        => 'Espansione creata',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => 'Piano non parte del dungeon',
             'not_found'                  => 'Non trovato',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registrazione avvenuta con successo. Goditi il sito!',
             'user_exists'             => 'Esiste già un utente con il nome utente %s. Ti sei già registrato in precedenza?',
@@ -108,14 +108,14 @@ return [
             'read_only_mode_enabled'  => 'La modalità di sola lettura è abilitata. Non puoi registrarti in questo momento.',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => 'Registrazione avvenuta con successo. Goditi il sito!',
         ],
         'legal_agreed_required' => 'Devi accettare i nostri termini legali per registrarti.',
         'legal_agreed_accepted' => 'Devi accettare i nostri termini legali per registrarti.',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => 'Impossibile salvare la release',
         ],
@@ -125,12 +125,12 @@ return [
             'github_exception' => 'Si è verificato un errore comunicando con Github: :message',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => 'Aggiunta nuova versione di mappatura!',
         'created_bare_successfully' => 'Aggiunta nuova versione di mappatura base!',
         'deleted_successfully'      => 'Versione di mappatura eliminata con successo',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => 'Dungeon sconosciuto',
         'error'           => [
             'mdt_string_parsing_failed'             => 'Parsing della stringa MDT fallito. Hai davvero incollato una stringa MDT?',
@@ -142,13 +142,13 @@ return [
             'cannot_create_route_must_be_logged_in' => 'Devi essere loggato per creare un percorso',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => 'Impossibile salvare il percorso',
             'unable_to_delete_path' => 'Impossibile eliminare il percorso',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => 'Il tuo account Patreon è stato scollegato con successo.',
             'link_successful'         => 'Il tuo Patreon è stato collegato con successo. Grazie!',
@@ -158,7 +158,7 @@ return [
             'internal_error_occurred' => 'Si è verificato un errore durante l\'elaborazione della risposta di Patreon - sembra essere malformata. L\'errore è stato registrato e verrà gestito. Si prega di riprovare più tardi.',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Quel nome utente è già in uso.',
             'username_already_in_use'          => 'Quel nome utente è già in uso.',
@@ -176,7 +176,7 @@ return [
             'error_deleting_account'           => 'Si è verificato un errore. Si prega di riprovare.',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => 'Impossibile salvare l\'incantesimo',
         ],
@@ -185,7 +185,7 @@ return [
             'spell_created' => 'Incantesimo creato',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => 'Team aggiornato',
             'team_created'                        => 'Team creato',
@@ -195,7 +195,7 @@ return [
             'tag_already_exists'                  => 'Questo tag esiste già',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => 'L\'utente :user è ora un amministratore',
             'user_is_no_longer_an_admin'        => 'L\'utente :user non è più un amministratore',

@@ -2,8 +2,8 @@
 
 return [
 
-    'discover'       => [
-        'dungeon'  => [
+    'discover' => [
+        'dungeon' => [
             'overview' => [
                 'popular'                    => '',
                 'popular_by_current_affixes' => '',
@@ -18,10 +18,10 @@ return [
             'popular_by_next_affixes'    => '',
             'newly_published_routes'     => '',
         ],
-        'panel'    => [
+        'panel' => [
             'show_more' => '',
         ],
-        'search'   => [
+        'search' => [
             'page_title'              => '',
             'header'                  => '',
             'title'                   => '',
@@ -39,18 +39,18 @@ return [
             'user_placeholder'        => '',
         ],
     ],
-    'livesession'    => [
+    'livesession' => [
         'view' => [
             'any' => '',
         ],
     ],
-    'edit'           => [
+    'edit' => [
         'title'                                   => '',
         'linkpreview_title'                       => '',
         'linkpreview_default_description'         => '',
         'linkpreview_default_description_sandbox' => '',
     ],
-    'embed'          => [
+    'embed' => [
         'title'            => '',
         'any'              => '',
         'select_floor'     => '',
@@ -60,16 +60,16 @@ return [
         'present_route'    => '',
         'copy_mdt_string'  => '',
     ],
-    'limitreached'   => [
+    'limitreached' => [
         'title'                     => '',
         'header'                    => '',
         'limit_reached_description' => '',
         'become_a_patreon'          => '',
     ],
-    'new'            => [
+    'new' => [
         'title' => '',
     ],
-    'newtemporary'   => [
+    'newtemporary' => [
         'title'  => '',
         'header' => '',
     ],
@@ -78,11 +78,11 @@ return [
         'header'              => '',
         'claimed_description' => '',
     ],
-    'unavailable'    => [
+    'unavailable' => [
         'title'                   => '',
         'unavailable_description' => '',
     ],
-    'view'           => [
+    'view' => [
         'any'                                     => '',
         'linkpreview_title'                       => '',
         'linkpreview_default_description'         => '',

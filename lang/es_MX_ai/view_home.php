@@ -2,18 +2,18 @@
 
 return [
 
-    'ie_not_supported'                             => 'Parece que estás navegando en Keystone.guru usando Internet Explorer. Desafortunadamente, Internet Explorer no es un navegador compatible. No, en serio, realmente no funciona en absoluto. Por favor, prueba con Google Chrome, Mozilla Firefox o Microsoft Edge.',
-    'tagline'                                      => 'Rutas M+ fáciles',
-    'tagline_description'                          => 'Planifica rutas en línea cooperativamente con tu equipo o descubre rutas que se adapten a tu estilo de juego y nivel de habilidad. Keystone.guru es el lugar ideal para gestionar y compartir tus rutas M+.',
-    'discover_routes'                              => 'Descubrir rutas',
-    'create_route'                                 => 'Crear ruta',
-    'discover_new_routes'                          => 'Descubrir nuevas rutas',
-    'discover_new_routes_description'              => 'Navega fácilmente por rutas por calabozo en varias categorías para encontrar una ruta que se adapte perfectamente a tu grupo.
+    'ie_not_supported'                => 'Parece que estás navegando en Keystone.guru usando Internet Explorer. Desafortunadamente, Internet Explorer no es un navegador compatible. No, en serio, realmente no funciona en absoluto. Por favor, prueba con Google Chrome, Mozilla Firefox o Microsoft Edge.',
+    'tagline'                         => 'Rutas M+ fáciles',
+    'tagline_description'             => 'Planifica rutas en línea cooperativamente con tu equipo o descubre rutas que se adapten a tu estilo de juego y nivel de habilidad. Keystone.guru es el lugar ideal para gestionar y compartir tus rutas M+.',
+    'discover_routes'                 => 'Descubrir rutas',
+    'create_route'                    => 'Crear ruta',
+    'discover_new_routes'             => 'Descubrir nuevas rutas',
+    'discover_new_routes_description' => 'Navega fácilmente por rutas por calabozo en varias categorías para encontrar una ruta que se adapte perfectamente a tu grupo.
                                     La integración con :archon_gg facilita ver qué calabozos son los más fáciles de cronometrar para cualquier afijo.
                                     ¿Aún no puedes encontrar una ruta que se adapte a tus necesidades? La página :routesearch te permite ajustar tus necesidades exactas para encontrar una coincidencia perfecta.',
-    'discover_new_routes_route_search'             => 'búsqueda de rutas',
-    'create_your_own_routes'                       => 'Crea tus propias rutas',
-    'create_your_own_routes_description'           => 'Importa tus rutas desde Mythic Dungeon Tools o :createANewRoute desde cero. Keystone.guru ofrece varias herramientas para hacer que tu ruta sea memorable,
+    'discover_new_routes_route_search'   => 'búsqueda de rutas',
+    'create_your_own_routes'             => 'Crea tus propias rutas',
+    'create_your_own_routes_description' => 'Importa tus rutas desde Mythic Dungeon Tools o :createANewRoute desde cero. Keystone.guru ofrece varias herramientas para hacer que tu ruta sea memorable,
                                     como dibujo libre, trazado y colocación de iconos/comentarios. Las fuerzas enemigas se pueden mostrar en bruto o en porcentaje a gusto. Varias otras configuraciones te permiten
                                     personalizar tu experiencia de creación de rutas a tu gusto.',
     'get_organized'                                => 'Organízate',

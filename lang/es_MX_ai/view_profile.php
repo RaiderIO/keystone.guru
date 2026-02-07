@@ -2,24 +2,24 @@
 
 return [
 
-    'edit'      => [
-        'title'                                            => 'Perfil',
-        'profile'                                          => 'Perfil',
-        'account'                                          => 'Cuenta',
-        'patreon'                                          => 'Patreon',
-        'change_password'                                  => 'Cambiar contraseña',
-        'privacy'                                          => 'Privacidad',
-        'reports'                                          => 'Reportes',
-        'menu_title'                                       => 'Perfil de %s',
-        'avatar'                                           => 'Avatar',
-        'avatar_alt'                                       => 'Avatar de usuario',
-        'username'                                         => 'Nombre de usuario',
-        'username_title'                                   => 'Dado que iniciaste sesión usando un servicio de Autenticación externo, puedes cambiar tu nombre de usuario una vez.',
-        'email'                                            => 'Correo electrónico',
-        'region'                                           => 'Región',
-        'select_region'                                    => 'Seleccionar región',
-        'show_as_anonymous'                                => 'Mostrar como Anónimo',
-        'show_as_anonymous_title'                          => 'Habilitar esta opción te mostrará como \'Anónimo\' al ver rutas que no forman parte de ningún equipo del que seas parte.
+    'edit' => [
+        'title'                   => 'Perfil',
+        'profile'                 => 'Perfil',
+        'account'                 => 'Cuenta',
+        'patreon'                 => 'Patreon',
+        'change_password'         => 'Cambiar contraseña',
+        'privacy'                 => 'Privacidad',
+        'reports'                 => 'Reportes',
+        'menu_title'              => 'Perfil de %s',
+        'avatar'                  => 'Avatar',
+        'avatar_alt'              => 'Avatar de usuario',
+        'username'                => 'Nombre de usuario',
+        'username_title'          => 'Dado que iniciaste sesión usando un servicio de Autenticación externo, puedes cambiar tu nombre de usuario una vez.',
+        'email'                   => 'Correo electrónico',
+        'region'                  => 'Región',
+        'select_region'           => 'Seleccionar región',
+        'show_as_anonymous'       => 'Mostrar como Anónimo',
+        'show_as_anonymous_title' => 'Habilitar esta opción te mostrará como \'Anónimo\' al ver rutas que no forman parte de ningún equipo del que seas parte.
                                 Para tus propias rutas y para rutas parte de tus equipos, tu nombre siempre será visible.',
         'echo_color'                                       => 'Color de edición de ruta sincronizada',
         'echo_color_title'                                 => 'Cuando edites una ruta cooperativamente con un miembro del equipo, este color te identificará de manera única.',
@@ -45,23 +45,23 @@ return [
             'header_active'  => 'Activo',
             'header_benefit' => 'Beneficio',
         ],
-        'current_password'                                 => 'Contraseña actual',
-        'new_password'                                     => 'Nueva contraseña',
-        'new_password_confirm'                             => 'Nueva contraseña (confirmar)',
-        'submit'                                           => 'Enviar',
-        'ga_cookies_opt_out'                               => 'Exclusión de cookies de Google Analytics',
-        'reports_description'                              => 'Todas las rutas, enemigos y otros reportes que hayas hecho en el sitio se enumerarán aquí.',
-        'reports_table_header_id'                          => 'Id',
-        'reports_table_header_category'                    => 'Categoría',
-        'reports_table_header_message'                     => 'Mensaje',
-        'reports_table_header_created_at'                  => 'Creado en',
-        'reports_table_header_status'                      => 'Estado',
-        'reports_table_action_handled'                     => 'Manejado',
+        'current_password'                => 'Contraseña actual',
+        'new_password'                    => 'Nueva contraseña',
+        'new_password_confirm'            => 'Nueva contraseña (confirmar)',
+        'submit'                          => 'Enviar',
+        'ga_cookies_opt_out'              => 'Exclusión de cookies de Google Analytics',
+        'reports_description'             => 'Todas las rutas, enemigos y otros reportes que hayas hecho en el sitio se enumerarán aquí.',
+        'reports_table_header_id'         => 'Id',
+        'reports_table_header_category'   => 'Categoría',
+        'reports_table_header_message'    => 'Mensaje',
+        'reports_table_header_created_at' => 'Creado en',
+        'reports_table_header_status'     => 'Estado',
+        'reports_table_action_handled'    => 'Manejado',
     ],
     'favorites' => [
         'title' => 'Mis favoritos',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => 'Resumen',
         'favorites'                => 'Favoritos',
         'tags'                     => 'Etiquetas',
@@ -73,22 +73,22 @@ return [
         'create_route'             => 'Crear ruta',
         'create_route_description' => 'Una ruta es un camino a través de una mazmorra para alcanzar el objetivo final del 100% de fuerzas enemigas mientras se eliminan todos los jefes.
                                     Varias herramientas te ayudan a organizar tu camino previsto para tus miembros del grupo. Puedes compartirlas con el mundo o mantenerlas privadas y organizarlas como desees.',
-        'create_team'              => 'Crear equipo',
-        'create_team_description'  => 'Un equipo se utiliza para compartir tus rutas con amigos y ayudar a todos a mantenerse sincronizados con los últimos cambios en las rutas que haces con más frecuencia.
+        'create_team'             => 'Crear equipo',
+        'create_team_description' => 'Un equipo se utiliza para compartir tus rutas con amigos y ayudar a todos a mantenerse sincronizados con los últimos cambios en las rutas que haces con más frecuencia.
                                     La edición colaborativa hace que ajustar una ruta existente sea mucho más fácil mientras compites por la mejor ruta para tu equipo.',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'Mis rutas',
     ],
-    'tags'      => [
-        'title'                             => 'Mis etiquetas',
-        'header'                            => 'Mis etiquetas',
-        'description'                       => 'La función de etiquetado te permite organizar tus rutas de la forma que consideres adecuada. Puedes agregar etiquetas a las rutas viendo las Acciones para cada ruta en %s.
+    'tags' => [
+        'title'       => 'Mis etiquetas',
+        'header'      => 'Mis etiquetas',
+        'description' => 'La función de etiquetado te permite organizar tus rutas de la forma que consideres adecuada. Puedes agregar etiquetas a las rutas viendo las Acciones para cada ruta en %s.
                     Puedes administrar etiquetas para tus propias rutas aquí. Nadie más podrá ver tus etiquetas; para rutas adjuntas a un equipo
                     puedes administrar un conjunto separado de etiquetas solo para ese equipo visitando la sección de Etiquetas al ver tu equipo.',
         'link_your_personal_route_overview' => 'tu resumen personal de ruta',
     ],
-    'view'      => [
+    'view' => [
         'title'  => 'Rutas de %s',
         'header' => 'Rutas de %s',
     ],

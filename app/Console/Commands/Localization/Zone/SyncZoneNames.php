@@ -13,7 +13,7 @@ class SyncZoneNames extends Command
 {
     use ExportsTranslations;
 
-    const EXCLUDE_DUNGEONS = [
+    const array EXCLUDE_DUNGEONS = [
         Dungeon::DUNGEON_SCARLET_MONASTERY_ARMORY,
         Dungeon::DUNGEON_SCARLET_MONASTERY_CATHEDRAL,
         Dungeon::DUNGEON_SCARLET_MONASTERY_GRAVEYARD,
@@ -275,6 +275,12 @@ class SyncZoneNames extends Command
     private function saveTranslationsToDisk(array $updatedTranslations): void
     {
         foreach ($updatedTranslations as $locale => $newTranslations) {
+            /** @var array $longToShort */
+            $longToShort = array_flip(config('language.short_to_long', ''));
+            $aiLocale    = sprintf('%s_ai', $locale);
+            if (isset($longToShort[$aiLocale])) {
+                $this->exportTranslations($aiLocale, 'dungeons.php', $newTranslations);
+            }
             $this->exportTranslations($locale, 'dungeons.php', $newTranslations);
         }
     }

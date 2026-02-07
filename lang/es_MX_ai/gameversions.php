@@ -2,27 +2,27 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => 'Comercial',
         'description' => 'Comercial',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => 'La Ira',
         'description' => 'La Ira del Rey Exánime',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => 'Era Clásica',
         'description' => 'Era Clásica',
     ],
-    'beta'         => [
+    'beta' => [
         'name'        => 'Beta Comercial',
         'description' => 'Beta Comercial',
     ],
-    'cata'         => [
+    'cata' => [
         'name'        => 'Cata',
         'description' => 'Cataclysm',
     ],
-    'mop'          => [
+    'mop' => [
         'name'        => 'Mists',
         'description' => 'Mists of Pandaria',
     ],

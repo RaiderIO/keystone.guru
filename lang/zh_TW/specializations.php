@@ -10,7 +10,7 @@ return [
     'demon_hunter' => [
         'havoc'     => '',
         'vengeance' => '',
-        'devourer' => '',
+        'devourer'  => '',
     ],
     'druid' => [
         'balance'     => '',

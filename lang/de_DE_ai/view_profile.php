@@ -2,24 +2,24 @@
 
 return [
 
-    'edit'      => [
-        'title'                                            => 'Profil',
-        'profile'                                          => 'Profil',
-        'account'                                          => 'Konto',
-        'patreon'                                          => 'Patreon',
-        'change_password'                                  => 'Passwort ändern',
-        'privacy'                                          => 'Datenschutz',
-        'reports'                                          => 'Berichte',
-        'menu_title'                                       => '%s\'s Profil',
-        'avatar'                                           => 'Avatar',
-        'avatar_alt'                                       => 'Benutzeravatar',
-        'username'                                         => 'Benutzername',
-        'username_title'                                   => 'Da Sie sich über einen externen Authentifizierungsdienst angemeldet haben, können Sie Ihren Benutzernamen einmal ändern.',
-        'email'                                            => 'E-Mail',
-        'region'                                           => 'Region',
-        'select_region'                                    => 'Region auswählen',
-        'show_as_anonymous'                                => 'Als anonym anzeigen',
-        'show_as_anonymous_title'                          => 'Wenn Sie diese Option aktivieren, werden Sie als \'Anonym\' angezeigt, wenn Sie Routen anzeigen, die nicht Teil eines Ihrer Teams sind.
+    'edit' => [
+        'title'                   => 'Profil',
+        'profile'                 => 'Profil',
+        'account'                 => 'Konto',
+        'patreon'                 => 'Patreon',
+        'change_password'         => 'Passwort ändern',
+        'privacy'                 => 'Datenschutz',
+        'reports'                 => 'Berichte',
+        'menu_title'              => '%s\'s Profil',
+        'avatar'                  => 'Avatar',
+        'avatar_alt'              => 'Benutzeravatar',
+        'username'                => 'Benutzername',
+        'username_title'          => 'Da Sie sich über einen externen Authentifizierungsdienst angemeldet haben, können Sie Ihren Benutzernamen einmal ändern.',
+        'email'                   => 'E-Mail',
+        'region'                  => 'Region',
+        'select_region'           => 'Region auswählen',
+        'show_as_anonymous'       => 'Als anonym anzeigen',
+        'show_as_anonymous_title' => 'Wenn Sie diese Option aktivieren, werden Sie als \'Anonym\' angezeigt, wenn Sie Routen anzeigen, die nicht Teil eines Ihrer Teams sind.
                                 Bei Ihren eigenen Routen und bei Routen, die Teil Ihrer Teams sind, wird Ihr Name immer sichtbar sein.',
         'echo_color'                                       => 'Synchronisierte Routenbearbeitungsfarbe',
         'echo_color_title'                                 => 'Beim kooperativen Bearbeiten einer Route mit einem Teammitglied wird diese Farbe Sie eindeutig identifizieren.',
@@ -45,23 +45,23 @@ return [
             'header_active'  => 'Aktiv',
             'header_benefit' => 'Vorteil',
         ],
-        'current_password'                                 => 'Aktuelles Passwort',
-        'new_password'                                     => 'Neues Passwort',
-        'new_password_confirm'                             => 'Neues Passwort (bestätigen)',
-        'submit'                                           => 'Absenden',
-        'ga_cookies_opt_out'                               => 'Google Analytics Cookies abmelden',
-        'reports_description'                              => 'Alle Routen, Feinde und andere Berichte, die Sie auf der Website erstellt haben, werden hier aufgelistet.',
-        'reports_table_header_id'                          => 'Id',
-        'reports_table_header_category'                    => 'Kategorie',
-        'reports_table_header_message'                     => 'Nachricht',
-        'reports_table_header_created_at'                  => 'Erstellt am',
-        'reports_table_header_status'                      => 'Status',
-        'reports_table_action_handled'                     => 'Bearbeitet',
+        'current_password'                => 'Aktuelles Passwort',
+        'new_password'                    => 'Neues Passwort',
+        'new_password_confirm'            => 'Neues Passwort (bestätigen)',
+        'submit'                          => 'Absenden',
+        'ga_cookies_opt_out'              => 'Google Analytics Cookies abmelden',
+        'reports_description'             => 'Alle Routen, Feinde und andere Berichte, die Sie auf der Website erstellt haben, werden hier aufgelistet.',
+        'reports_table_header_id'         => 'Id',
+        'reports_table_header_category'   => 'Kategorie',
+        'reports_table_header_message'    => 'Nachricht',
+        'reports_table_header_created_at' => 'Erstellt am',
+        'reports_table_header_status'     => 'Status',
+        'reports_table_action_handled'    => 'Bearbeitet',
     ],
     'favorites' => [
         'title' => 'Meine Favoriten',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => 'Übersicht',
         'favorites'                => 'Favoriten',
         'tags'                     => 'Tags',
@@ -73,22 +73,22 @@ return [
         'create_route'             => 'Route erstellen',
         'create_route_description' => 'Eine Route ist ein Pfad durch einen Dungeon, um das Endziel von 100% feindlichen Kräften zu erreichen und alle Bosse zu töten.
                                     Verschiedene Werkzeuge helfen Ihnen, Ihren beabsichtigten Weg für Ihre Gruppenmitglieder zu organisieren. Sie können sie mit der Welt teilen - oder privat halten und nach Belieben organisieren.',
-        'create_team'              => 'Team erstellen',
-        'create_team_description'  => 'Ein Team wird verwendet, um Ihre Routen mit Freunden zu teilen und allen zu helfen, mit den neuesten Änderungen an den Routen, die Sie häufiger machen, in Einklang zu bleiben.
+        'create_team'             => 'Team erstellen',
+        'create_team_description' => 'Ein Team wird verwendet, um Ihre Routen mit Freunden zu teilen und allen zu helfen, mit den neuesten Änderungen an den Routen, die Sie häufiger machen, in Einklang zu bleiben.
                                     Durch kollaborative Bearbeitung wird das Anpassen einer bestehenden Route viel einfacher, während Sie um die beste Route für Ihr Team kämpfen.',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'Meine Routen',
     ],
-    'tags'      => [
-        'title'                             => 'Meine Tags',
-        'header'                            => 'Meine Tags',
-        'description'                       => 'Mit der Tagging-Funktion können Sie Ihre Routen so organisieren, wie Sie es für richtig halten. Sie können Routen Tags hinzufügen, indem Sie die Aktionen für jede Route in %s ansehen.
+    'tags' => [
+        'title'       => 'Meine Tags',
+        'header'      => 'Meine Tags',
+        'description' => 'Mit der Tagging-Funktion können Sie Ihre Routen so organisieren, wie Sie es für richtig halten. Sie können Routen Tags hinzufügen, indem Sie die Aktionen für jede Route in %s ansehen.
                     Sie können Tags für Ihre eigenen Routen hier verwalten. Niemand anderes wird Ihre Tags sehen können - für Routen, die einem Team zugeordnet sind,
                     können Sie einen separaten Satz von Tags nur für dieses Team verwalten, indem Sie den Abschnitt Tags besuchen, wenn Sie Ihr Team ansehen.',
         'link_your_personal_route_overview' => 'Ihre persönliche Routenübersicht',
     ],
-    'view'      => [
+    'view' => [
         'title'  => '%s\'s Routen',
         'header' => '%s\'s Routen',
     ],

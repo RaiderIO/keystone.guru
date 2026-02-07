@@ -3,16 +3,16 @@
 return [
 
     'map_icons' => [
-        'mop'      => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik-Rekruten erscheinen nur nach dem Besiegen von Kommandant Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'Tür entsperrt nach dem Besiegen der Prüfung des Königs',
             ],
         ],
-        'legion'   => [
-            'court_of_stars'   => [
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => 'Entsperrt nach dem Töten von Patrouillenhauptmann Gerdo',
                 'arcane_beacon'                      => 'Arkanes Signalfeuer',
                 'flask_of_the_solemn_night'          => 'Fläschchen der feierlichen Nacht',
@@ -21,8 +21,8 @@ return [
                 'hidden_pack_in_cave' => 'Paket befindet sich in einer Höhle unter dem Wasser hinter dem Wasserfall.',
             ],
         ],
-        'sl'       => [
-            'de_other_side'              => [
+        'sl' => [
+            'de_other_side' => [
                 'start'                => 'Start',
                 'graveyard_ardenweald' => 'Aktiviert nach Eintritt in Ardenweald',
                 'graveyard_mechagon'   => 'Aktiviert nach Eintritt in Mechagon',
@@ -31,11 +31,11 @@ return [
                 'engineer_blob_button' => 'Ingenieure können den Fluss der fließenden Blobs für ein paar Minuten deaktivieren, indem sie den roten Knopf drücken',
                 'exit'                 => 'Ausgang',
             ],
-            'halls_of_atonement'         => [
+            'halls_of_atonement' => [
                 'start' => 'Start',
                 'exit'  => 'Ausgang',
             ],
-            'mists_of_tirna_scithe'      => [
+            'mists_of_tirna_scithe' => [
                 'start'                          => 'Start',
                 'brambles'                       => 'Nachtelfen, Tauren, Hochbergtauren, Druiden und Khaz Algar-Kräuterkundler mit mindestens 25 Fertigkeit: Abkürzung freischalten',
                 'overgrown_roots'                => 'Nachtelfen, Tauren, Hochbergtauren, Druiden und Khaz Algar-Kräuterkundler mit mindestens 25 Fertigkeit: Bereich mit Buffs freischalten',
@@ -46,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => 'Wird nach dem Töten von Ingra Maloch freigeschaltet',
                 'exit'                           => 'Ausgang',
             ],
-            'plaguefall'                 => [
+            'plaguefall' => [
                 'start'              => 'Start',
                 'graveyard_dr_ickus' => 'Wird nach dem Töten von Doktor Ickus aktiviert',
                 'gushing_slime'      => 'Nekrolord: AoE-Schadens-Proc-Aura - Die Verwendung von Fleischformung auf dem Leichnam des Sprudelnden Schleims gewährt die Aura Ätzender Schleim für 2 Minuten. Diese Aura wird jedem nahen Gruppenmitglied den Buff Ätzender Schleim verleihen, der eine 10% Chance hat, AoE-Schaden um deinen Charakter herum auszulösen.',
@@ -55,7 +55,7 @@ return [
                 'landing'            => 'Landung',
                 'exit'               => 'Ausgang',
             ],
-            'sanguine_depths'            => [
+            'sanguine_depths' => [
                 'start'                            => 'Start',
                 'anima_cage'                       => 'Venthyr: Aktiviere Animakäfige, um Feinde innerhalb von 40 Metern mit Animadrain zu schwächen. Nach 20 Sekunden wird es deaktiviert und gibt der gesamten Gruppe 1 Stapel von Sündenfall-Boon für jeden Feind, der im Wirkungsbereich mit aktivem Animadrain gestorben ist.',
                 'tick_bug'                         => 'Dieses Zeck scheint (manchmal) im Boden verbuggt zu sein - es wird jedoch gezogen, wenn der Boss gezogen wird.',
@@ -67,12 +67,12 @@ return [
                 'zrali_essence'                    => 'Z\'ralis Essenz: 65% Schadensreduktions-Blasenschild für alle, die darin stehen. Erzeugt das Schild um den Spieler, der es trägt/aktiviert.',
                 'exit'                             => 'Ausgang',
             ],
-            'spires_of_ascension'        => [
+            'spires_of_ascension' => [
                 'start'            => 'Start',
                 'spear_of_destiny' => 'Kyrianer: Speer des Schicksals - wirf den Speer des Schicksals an einen Ort, um alle Feinde innerhalb von 8 Metern zu treffen, sie zu betäuben und sie 10 Sekunden lang 20% mehr Schaden erleiden zu lassen.',
                 'exit'             => 'Ausgang',
             ],
-            'the_necrotic_wake'          => [
+            'the_necrotic_wake' => [
                 'start'                  => 'Start',
                 'bloody_javelin'         => 'Blutiger Speer: Wirft einen Kyrianischen Speer auf das Ziel, der physischen Schaden an allen Feinden verursacht, durch die er hindurchfliegt, und zusätzlichen physischen Schaden alle 2 Sek. für 16 Sek. Feinde, die getroffen werden, erleiden 16 Sekunden lang 20% mehr Schaden.',
                 'forgotten_forgehammer'  => 'Vergessener Schmiedehammer: Wirft einen mächtigen Kyrianischen Hammer auf das Ziel, der physischen Schaden verursacht und das Ziel für 8 Sekunden betäubt.',
@@ -83,7 +83,7 @@ return [
                 'grisly_curio'           => 'Gruselige Kuriosität',
                 'exit'                   => 'Ausgang',
             ],
-            'theater_of_pain'            => [
+            'theater_of_pain' => [
                 'start'                => 'Start',
                 'necrolord_banner'     => 'Nekrolord: Klicke auf Nekrolord-Banner, um allen Gruppenmitgliedern einen 5-minütigen 10% Geschwindigkeits- und Vielseitigkeitsbuff zu gewähren',
                 'graveyard_gorechop'   => 'Aktiviert nach dem Töten von Gorechop',
@@ -98,8 +98,8 @@ return [
                 'bazaar_event_wave_three' => 'Basar-Ereignis: Welle 3',
             ],
         ],
-        'tww'      => [
-            'the_stonevault'             => [
+        'tww' => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => 'Krieger, Zwerge, Schmiede (25): In der Imprägnierten Eisenstange eingeschlossene Energie wird freigesetzt und erhöht die Vielseitigkeit aller Spieler im Umkreis von 20 Metern um 10 % für 10 Minuten.',
             ],
             'priory_of_the_sacred_flame' => [
@@ -116,10 +116,10 @@ return [
                 'go_north'                  => '',
                 'go_south'                  => '',
             ],
-            'maisara_caverns'   => [
+            'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '',
             ],
-            'windrunner_spire'  => [
+            'windrunner_spire' => [
                 'activates_after_killing_bosses' => '',
             ],
         ],

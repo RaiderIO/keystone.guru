@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => '',
                     'title'    => '',
                     'map_icon' => '',
@@ -19,7 +19,7 @@ return [
                 'map_icon_contains_non_ascii_char_bug_details'      => '',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => '',
                     'pulls'             => '',
                     'notes'             => '',
@@ -48,7 +48,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => '',
     ],
     'combatlogservice' => [

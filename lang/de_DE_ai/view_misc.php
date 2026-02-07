@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '%s Zeitwanderung',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => 'Über',
         'header' => 'Über Keystone.guru',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => 'Affixe',
         'header'                            => 'Wöchentliche Affixe in %s',
         'start_date'                        => 'Startdatum (%s)',
@@ -28,26 +28,26 @@ return [
         'title'  => 'Änderungsprotokoll',
         'header' => 'Änderungsprotokoll',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => 'Credits',
         'header'           => 'Credits',
         'header_people'    => 'Personen',
         'header_libraries' => 'Bibliotheken',
         'header_images'    => 'Bilder',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => 'Demo-Routen',
         'header' => 'Demo-Routen',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => 'Route einbetten',
         'header' => 'Keystone.guru Einbettungstest auf Webseite',
     ],
-    'health'    => [
+    'health' => [
         'title'  => 'Gesundheitsberechnung',
         'header' => 'Gesundheit',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => 'Zuweisung',
         'header'                        => 'Zuweisungsfortschritt',
         'enemy_forces_mapping_progress' => 'Fortschritt der Zuweisung feindlicher Kräfte',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => 'Feindliche Kräfte',
         'npcs_assigned'                 => 'NPCs zugewiesen',
     ],
-    'status'    => [
+    'status' => [
         'title'       => 'Status',
         'header'      => 'Status',
         'description' => 'Wir sind in Betrieb, yay!',

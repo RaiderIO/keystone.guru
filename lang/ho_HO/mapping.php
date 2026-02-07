@@ -116,10 +116,10 @@ return [
                 'go_north'                  => 'Hodor',
                 'go_south'                  => 'Hodor',
             ],
-            'maisara_caverns'   => [
+            'maisara_caverns' => [
                 'hearty_vilebranch_stew' => 'Hodor',
             ],
-            'windrunner_spire'  => [
+            'windrunner_spire' => [
                 'activates_after_killing_bosses' => 'Hodor',
             ],
         ],

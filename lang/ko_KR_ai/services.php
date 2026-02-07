@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => '풀 %d',
                     'title'    => '제목',
                     'map_icon' => '지도 아이콘',
@@ -15,12 +15,12 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => '선택한 모든 적을 MDT에서 찾을 수 없어 비어 있는 풀로 인해 이 풀은 삭제되었습니다.',
                 'route_title_contains_non_ascii_char_bug'           => '경로 제목에 아직 해결되지 않은 Keystone.guru의 인코딩 버그를 유발하는 것으로 알려진 비 ASCII 문자가 포함되어 있습니다.
                                                         경로 제목에서 문제가 되는 모든 문자가 제거되었습니다. 불편을 끼쳐드려 죄송하며 이 문제를 조속히 해결할 수 있기를 바랍니다.',
-                'route_title_contains_non_ascii_char_bug_details'   => '기존 제목: %s, 새로운 제목: %s',
-                'map_icon_contains_non_ascii_char_bug'              => '지도 아이콘에 대한 주석 중 하나에 아직 해결되지 않은 Keystone.guru의 인코딩 버그를 유발하는 것으로 알려진 비 ASCII 문자가 포함되어 있습니다. 귀하의 지도 주석에서 문제가 되는 모든 문자가 제거되었습니다. 불편을 끼쳐드려 죄송하며 이 문제를 조속히 해결할 수 있기를 바랍니다.',
-                'map_icon_contains_non_ascii_char_bug_details'      => '기존 주석: "%s", 새로운 주석: "%s"',
+                'route_title_contains_non_ascii_char_bug_details' => '기존 제목: %s, 새로운 제목: %s',
+                'map_icon_contains_non_ascii_char_bug'            => '지도 아이콘에 대한 주석 중 하나에 아직 해결되지 않은 Keystone.guru의 인코딩 버그를 유발하는 것으로 알려진 비 ASCII 문자가 포함되어 있습니다. 귀하의 지도 주석에서 문제가 되는 모든 문자가 제거되었습니다. 불편을 끼쳐드려 죄송하며 이 문제를 조속히 해결할 수 있기를 바랍니다.',
+                'map_icon_contains_non_ascii_char_bug_details'    => '기존 주석: "%s", 새로운 주석: "%s"',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => '각성된 오벨리스크',
                     'pulls'             => '풀',
                     'notes'             => '노트',
@@ -49,7 +49,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => '모든 던전',
     ],
     'combatlogservice' => [

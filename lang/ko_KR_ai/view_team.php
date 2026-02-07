@@ -3,10 +3,10 @@
 return [
 
     'edittabs' => [
-        'details'         => [
+        'details' => [
             'title' => '팀 세부사항',
         ],
-        'members'         => [
+        'members' => [
             'title'                                      => '멤버',
             'invite_new_members'                         => '새 멤버 초대',
             'invite_code_share_warning'                  => '초대 링크를 공유할 때 주의하세요. 링크를 가진 모든 사람이 팀에 가입할 수 있습니다!',
@@ -16,25 +16,25 @@ return [
             'ad_free_giveaway_description_not_available' => ':patreon에 가입하면 Keystone.guru에 :max 이상의 광고 없는 경험을 팀 멤버에게 제공할 수 있습니다.',
             'ad_free_giveaway_description_available'     => 'Keystone.guru의 :patreon에 가입해 주셔서 감사합니다! Keystone.guru에 :current 이상의 광고 없는 경험을 팀 멤버에게 제공할 수 있습니다.',
         ],
-        'overview'        => [
+        'overview' => [
             'title' => '개요',
         ],
         'routepublishing' => [
             'title' => '경로 게시',
         ],
-        'routes'          => [
+        'routes' => [
             'title'                  => '경로 목록',
             'add_route'              => '경로 추가',
             'add_route_no_moderator' => '경로를 추가하려면 이 팀의 모더레이터여야 합니다',
             'stop_adding_routes'     => '경로 추가 중지',
         ],
-        'tags'            => [
+        'tags' => [
             'title'       => '태그',
             'description' => '여기에서 팀의 경로에 대한 태그를 관리할 수 있습니다. 이 팀의 멤버는 모두 경로에 첨부된 태그를 볼 수 있습니다.
                                     경로 소유자가 첨부했을 수도 있는 개인 태그는 보이지 않습니다.',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => '팀 %s',
         'menu_title'     => '팀',
         'to_team_list'   => '팀 목록',
@@ -43,7 +43,7 @@ return [
         'routes'         => '경로',
         'members'        => '멤버',
     ],
-    'invite'   => [
+    'invite' => [
         'linkpreview_title'           => '팀 %s에 초대',
         'linkpreview_description'     => '팀 %s에 가입하도록 초대받았습니다. 무료로 팀에 가입하려면 Keystone.guru에 로그인하거나 등록하세요!',
         'title'                       => '팀 %s에 초대',
@@ -61,7 +61,7 @@ return [
         'invite_not_found'            => '이 팀을 찾을 수 없습니다. 초대 링크가 변경되었거나 팀이 삭제되었을 수 있습니다.',
         'back_to_homepage'            => '홈 페이지로 돌아가기',
     ],
-    'list'     => [
+    'list' => [
         'title'                => '내 팀',
         'header'               => '내 팀',
         'create_team'          => '팀 생성',
@@ -69,7 +69,7 @@ return [
         'table_header_members' => '멤버',
         'table_header_routes'  => '경로',
     ],
-    'new'      => [
+    'new' => [
         'title'  => '새 팀',
         'header' => '새 팀',
     ],

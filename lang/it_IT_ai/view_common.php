@@ -2,17 +2,17 @@
 
 return [
 
-    'dungeon'        => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popolare',
             'this_week' => 'Questa settimana',
             'next_week' => 'La prossima settimana',
             'new'       => 'Nuovo',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => 'Incursione',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => 'Dungeon',
             'all'                      => 'Tutti',
             'all_dungeons'             => 'Tutti i dungeon',
@@ -22,8 +22,8 @@ return [
             'siege_of_boralus_warning' => 'A causa delle differenze tra la versione dell\'Orda e quella dell\'Alleanza dell\'Assedio di Boralus, è necessario selezionare una fazione nella composizione del gruppo.',
         ],
     ],
-    'dungeonroute'   => [
-        'search'     => [
+    'dungeonroute' => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Caricamento...',
             ],
@@ -35,7 +35,7 @@ return [
             'select_attributes'       => 'Seleziona attributi',
             'attributes_selected'     => '{0} attributi',
         ],
-        'card'       => [
+        'card' => [
             'thumbnail_alt'            => 'Miniatura',
             'thumbnail_dungeon_alt'    => 'Miniatura',
             'no_description'           => 'Nessuna descrizione',
@@ -47,13 +47,13 @@ return [
             'dominant_affix'           => 'Affisso dominante',
             'seasonal_affix'           => 'Affisso stagionale',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => 'Nessun percorso trovato',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '%s voto(i)',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => 'Squadra',
             'affixes'               => 'Affissi',
             'select_affixes'        => 'Seleziona affissi',
@@ -69,12 +69,12 @@ return [
             'tags_selected'         => '{0} tag selezionati',
             'filter'                => 'Filtro',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '%s - dati da https://www.archon.gg/wow',
         ],
     ],
-    'forms'          => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => 'Titolo',
             'title_title'                                    => 'Scegli un titolo che identificherà in modo univoco il percorso per te rispetto ad altri percorsi simili che potresti creare. Il titolo sarà visibile agli altri una volta che scegli di pubblicare il tuo percorso.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Dimensione del raid',
@@ -99,7 +99,7 @@ return [
             'registered_user_message'   => 'Un percorso temporaneo non apparirà nel tuo profilo e sarà eliminato automaticamente dopo %d ore a meno che non venga rivendicato prima di quel momento.',
             'create_route'              => 'Crea percorso',
         ],
-        'login'                => [
+        'login' => [
             'login'                => 'Accedi',
             'email_address'        => 'Indirizzo e-mail',
             'password'             => 'Password',
@@ -107,7 +107,7 @@ return [
             'forgot_your_password' => 'Hai dimenticato la password?',
             'login_through_oauth2' => 'Accedi tramite OAuth2',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => 'Generale',
             'map_facade_style'                              => 'Usa piani combinati',
             'map_facade_style_title'                        => 'Con l\'introduzione della Stagione 3 di Dragonflight, vari dungeon hanno avuto i loro piani combinati in una singola mappa. Usare questa nuova mappa è opzionale e puoi alternare tra la mappa combinata o lo stile tradizionale a piani separati qui.',
@@ -138,7 +138,7 @@ return [
             'default_line_color'                            => 'Colore linea predefinito',
             'default_line_color_title'                      => 'Questo controlla il colore predefinito di qualsiasi linea creata sulla mappa, come percorsi e linee disegnate liberamente.',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => 'Incolla la tua stringa di esportazione di Mythic Dungeon Tools',
             'reset_title'                            => 'Reimposta',
             'unregistered_user_all_routes_temporary' => 'Come utente non registrato, tutti i percorsi importati saranno percorsi temporanei che scadono dopo %s ore.',
@@ -149,10 +149,10 @@ return [
             'import_as_this_week'                    => 'Importa invece con gli affissi di questa settimana',
             'import_route'                           => 'Importa percorso',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => 'Se pubblichi percorsi, il tuo battletag/nome utente di discord sarà visibile fino a quando non modifichi il tuo nome utente nel tuo profilo.',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => 'Stile numero pull',
             'pull_number_style_title'           => 'Questo controlla come la barra laterale dei pull visualizza i numeri.',
             'pull_number_style_percentage'      => 'Percentuale',
@@ -166,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => 'Applica sempre quando cambio i pull',
             'always_apply_on_pull_change_title' => 'Abilitando questa impostazione, i colori dei tuoi pull verranno aggiornati mentre modifichi i pull in base al gradiente configurato sopra. Questa impostazione è unica per ogni percorso.',
         ],
-        'register'             => [
+        'register' => [
             'register'                => 'Registrati',
             'username'                => 'Nome utente',
             'username_title'          => 'Il tuo nome utente può essere visibile se scegli di pubblicare i percorsi che crei.',
@@ -183,7 +183,7 @@ return [
             'privacy_policy'          => 'politica sulla privacy',
             'cookie_policy'           => 'politica sui cookie',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => 'Africa',
             'america'    => 'America',
             'antarctica' => 'Antartide',
@@ -195,7 +195,7 @@ return [
             'timezone'   => 'Fuso orario',
         ],
     ],
-    'general'        => [
+    'general' => [
         'linkpreview' => [
             'title'               => ':title | Keystone.guru',
             'description'         => ':description Pianifica percorsi online in collaborazione con il tuo team o scopri percorsi che si adattano al tuo stile di gioco e livello di abilità. Keystone.guru è l\'unico posto per gestire e condividere i tuoi percorsi M+.',
@@ -203,8 +203,8 @@ return [
             'twitter_description' => ':description Keystone.guru è l\'unico posto per trovare, gestire e condividere i tuoi percorsi M+.',
         ],
     ],
-    'group'          => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => 'Preimpostazione :count',
             'awakened_enemy_set'       => 'Set nemico risvegliato',
             'awakened_enemy_set_title' => 'I nemici risvegliati (boss dei pilastri) per i livelli M+ 10 e superiori sono disponibili in due set. Ogni set di affissi è contrassegnato come A o B. Puoi allegare più affissi al tuo percorso che possono avere entrambi i set A e B. Scegli qui quale set sarà visualizzato sulla mappa. Puoi sempre modificare la tua selezione dal menu Impostazioni Percorso in seguito.',
@@ -217,7 +217,7 @@ return [
             'party_member_nr' => 'Membro del gruppo #%d',
         ],
     ],
-    'layout'         => [
+    'layout' => [
         'footer' => [
             'developer'                       => 'Sviluppatore',
             'api_documentation'               => 'Documentazione API',
@@ -252,8 +252,8 @@ return [
             'explore'                 => 'Esplora spedizioni',
             'new'                     => 'NUOVO',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => 'Accedi',
                 'register'          => 'Registrati',
                 'telescope'         => 'Telescopio',
@@ -278,21 +278,21 @@ return [
             ],
         ],
     ],
-    'maps'           => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => 'Admin',
                 'view_this_route' => 'Visualizza',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => 'Timer',
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Configurazione gruppo',
                     'affixes'          => 'Affissi',
                     'route_info_title' => 'Info',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => 'Ritratto',
                     'npc_class'               => 'Classe',
                     'npc_type'                => 'Tipo',
@@ -302,31 +302,31 @@ return [
                     'enemy_skippable'         => 'Saltabile',
                     'enemy_group'             => 'Gruppo',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => 'Piani',
                     'floors'        => 'Piani',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => 'Elementi',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => 'Nascondi',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'Mostra MDT',
                     'auto_solve' => 'Risolvi automaticamente',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => 'Valuta',
                     'unable_to_rate_own_route' => 'Non puoi valutare il tuo percorso',
                     'your_rating'              => 'La tua valutazione',
                 ],
             ],
-            'enemyinfo'      => [
+            'enemyinfo' => [
                 'enemy_info'      => 'Info nemico',
                 'report_an_issue' => 'Segnala un problema',
             ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => 'Impostazioni mappa',
                 'enabled'                => 'Abilitato',
                 'disabled'               => 'Disabilitato',
@@ -359,13 +359,13 @@ return [
                     'classes_player_deaths'               => 'Classi (morte)',
                     'classes_player_deaths_title'         => 'Mostra solo le morti di queste classi.',
                 ],
-                'advanced_options'       => 'Opzioni avanzate',
-                'advanced_option'        => [
+                'advanced_options' => 'Opzioni avanzate',
+                'advanced_option'  => [
                     'min_samples_required'       => 'Min. campioni richiesti',
                     'min_samples_required_title' => 'Diminuisce la soglia richiesta affinché i dati appaiano nella mappa di calore. Ridurre questo valore porterà alla visualizzazione di più punti dati.',
                 ],
-                'heat_options'           => 'Opzioni Leaflet.heat',
-                'heat_option'            => [
+                'heat_options' => 'Opzioni Leaflet.heat',
+                'heat_option'  => [
                     'min_opacity' => 'Opacità minima',
                     'max_zoom'    => 'Zoom massimo',
                     'max'         => 'Max',
@@ -375,7 +375,7 @@ return [
                     'pane'        => 'Riquadro',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => 'Attiva/disattiva navigazione',
                 'stop'                           => 'Ferma',
                 'start'                          => 'Inizia',
@@ -404,7 +404,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'Non puoi valutare il tuo stesso percorso - grazie per aver utilizzato le sessioni live!',
                 'review_live_session'            => 'Revisiona sessione live',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => 'Impostazioni mappa/pull',
                 'new_pull'                    => 'Nuovo pull',
                 'delete_all_pulls_title'      => 'Elimina tutti i pull',
@@ -414,8 +414,8 @@ return [
                 'no_pulls_created_view'       => 'Nessun pull creato.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => 'Descrizione',
                         'supported_html_tags' => 'Tag HTML supportati: ',
                         'save'                => 'Salva',
@@ -433,14 +433,14 @@ return [
                 'remove_kill_area' => 'Rimuovi area di uccisione',
                 'delete_killzone'  => 'Elimina pull',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => 'Modifica',
                 'clone_this_route_title'         => 'Clona',
                 'report_for_moderation'          => 'Segnala',
                 'report_for_moderation_finished' => 'Segnalato',
             ],
         ],
-        'map'      => [
+        'map' => [
             'no_teeming'                             => 'Sempre visibile',
             'visible_teeming'                        => 'Visibile solo quando Folto',
             'hidden_teeming'                         => 'Nascosto solo quando Folto',
@@ -452,7 +452,7 @@ return [
                             Ogni volta che Blizzard apporta una modifica alla mappatura o viene corretto un errore, viene creata una nuova versione di mappatura.
                             Le rotte create con versioni di mappatura precedenti non vengono aggiornate automaticamente all\'ultima versione.
                             Questo avviso indica che la versione di mappatura utilizzata da questa rotta è obsoleta e potrebbe non rappresentare la mappatura del gioco',
-            'route'                                  => 'Rotta',
+            'route' => 'Rotta',
         ],
     ],
     'mappingversion' => [
@@ -461,15 +461,15 @@ return [
             'mapping_version'          => 'versione :gameVersion :version',
         ],
     ],
-    'modal'          => [
-        'dungeonroute'       => [
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => 'Rotta rimossa',
                 'description'  => 'La tua rotta è stata rimossa e non può più essere visualizzata/modificata. Questo può accadere se la tua rotta era temporanea ed è stata automaticamente pulita o se hai eliminato la rotta in una scheda del browser diversa.',
                 'back_to_home' => 'Torna alla home',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => 'Segnala percorso',
                 'your_name'              => 'Il tuo nome',
@@ -478,7 +478,7 @@ return [
                 'contact_by_email_guest' => 'Contattami via e-mail se necessario per ulteriori indagini (aggiungi il tuo indirizzo e-mail nel corpo del report)',
                 'submit'                 => 'Invia',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => 'Segnala bug nemico',
                 'your_name'              => 'Il tuo nome',
                 'what_is_wrong'          => 'Per favore descrivi cosa c\'è di sbagliato con questo nemico',
@@ -487,19 +487,19 @@ return [
                 'submit'                 => 'Invia',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Crea rotta',
             'create_temporary_route' => 'Crea rotta temporanea',
             'import_from_mdt'        => 'Importa da MDT',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => 'Bentornato! Per procedere, devi accettare il nostro %s, %s e %s.',
             'terms_of_service'   => 'termini di servizio',
             'privacy_policy'     => 'politica sulla privacy',
             'cookie_policy'      => 'politica sui cookie',
             'i_agree'            => 'Accetto',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => 'Facciata abilitata',
             'enemy_forces_required'           => 'Forze nemiche richieste',
             'enemy_forces_required_teeming'   => 'Forze nemiche richieste (folto)',
@@ -509,7 +509,7 @@ return [
             'timer_max_minutes'               => 'Timer (minuti)',
             'save'                            => 'Salva',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => 'Impostazioni mappa',
             'pull_settings' => 'Impostazioni pull',
         ],
@@ -524,10 +524,10 @@ return [
             'route_not_created_from_combat_log' => 'La rotta non è stata generata da un combat log',
             'route_not_created_through_api'     => 'La rotta non è stata generata tramite API',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => 'Impostazioni rotta',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => 'Condividi',
             'publish'                          => 'Pubblica',
             'review_route_settings'            => 'Rivedi le tue %s prima di pubblicare la tua rotta',
@@ -542,8 +542,8 @@ return [
             'loading'                          => 'Caricamento in corso...',
             'copy_to_clipboard'                => 'Copia negli appunti',
         ],
-        'simulate'           => [
-            'intro'                      => 'Per utilizzare la funzione di simulazione, genera una stringa SimulationCraft per il tuo personaggio e incolla la
+        'simulate' => [
+            'intro' => 'Per utilizzare la funzione di simulazione, genera una stringa SimulationCraft per il tuo personaggio e incolla la
                             stringa generata di Keystone.guru sotto la stringa di output del tuo personaggio. Poi premi Simula come faresti di solito! Se usi raidbots.com, crea la stringa SimC del tuo personaggio tramite l\'addon o il sito, seleziona Avanzate e incolla l\'output di Keystone.guru sotto la stringa SimC del tuo personaggio.',
             'title'                      => 'Simula percorso',
             'get_simulationcraft_string' => 'Ottieni stringa SimulationCraft',
@@ -551,22 +551,22 @@ return [
             'loading'                    => 'Caricamento...',
             'copy_to_clipboard'          => 'Copia negli appunti',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-                'key_level'                               => 'Livello chiave',
-                'key_level_title'                         => 'Un livello chiave più alto aumenterà la salute dei nemici che il tuo personaggio sta affrontando, come farebbe in un vero dungeon M+.',
-                'shrouded_bounty_type'                    => 'Ricompensa velata',
-                'shrouded_bounty_type_title'              => 'La ricompensa velata che puoi selezionare all\'inizio del dungeon.',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => 'Livello chiave',
+                'key_level_title'            => 'Un livello chiave più alto aumenterà la salute dei nemici che il tuo personaggio sta affrontando, come farebbe in un vero dungeon M+.',
+                'shrouded_bounty_type'       => 'Ricompensa velata',
+                'shrouded_bounty_type_title' => 'La ricompensa velata che puoi selezionare all\'inizio del dungeon.',
+                'shrouded_bounty_types'      => [
                     'none'    => 'Nessuna ricompensa',
                     'crit'    => 'Critico',
                     'haste'   => 'Celerità',
                     'mastery' => 'Maestria',
                     'vers'    => 'Versatilità',
                 ],
-                'affixes'                                 => 'Modificatori',
-                'affixes_title'                           => 'Seleziona Fortificato per aumentare la salute di tutti i nemici non-boss del 20%, Tirannico per aumentare la salute dei boss del 30%. Puoi selezionare entrambi contemporaneamente.',
-                'affixes_map'                             => [
+                'affixes'       => 'Modificatori',
+                'affixes_title' => 'Seleziona Fortificato per aumentare la salute di tutti i nemici non-boss del 20%, Tirannico per aumentare la salute dei boss del 30%. Puoi selezionare entrambi contemporaneamente.',
+                'affixes_map'   => [
                     'fortified'  => 'Fortificato',
                     'tyrannical' => 'Tirannico',
                 ],
@@ -587,10 +587,10 @@ return [
                     'power_infusion'       => 'Infusione di Potere',
                     'bleeding'             => 'Sanguinamento',
                 ],
-                'hp_percent'                              => 'Percentuale di HP',
-                'hp_percent_title'                        => 'La percentuale che il tuo personaggio deve infliggere di danno a tutti i nemici prima che sia considerato \'ucciso\'. Questa sarà la tua parte del danno in un dungeon.',
-                'bloodlust_per_pull'                      => 'Brama di Sangue/Eroismo/ecc. per pull',
-                'bloodlust_per_pull_title'                => 'Ti consente di selezionare quali pull hanno Brama di Sangue/Eroismo/ecc. Assegnare questi incantesimi a un pull popola automaticamente questo menu a tendina.',
+                'hp_percent'               => 'Percentuale di HP',
+                'hp_percent_title'         => 'La percentuale che il tuo personaggio deve infliggere di danno a tutti i nemici prima che sia considerato \'ucciso\'. Questa sarà la tua parte del danno in un dungeon.',
+                'bloodlust_per_pull'       => 'Brama di Sangue/Eroismo/ecc. per pull',
+                'bloodlust_per_pull_title' => 'Ti consente di selezionare quali pull hanno Brama di Sangue/Eroismo/ecc. Assegnare questi incantesimi a un pull popola automaticamente questo menu a tendina.',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Compensazione del tiro a distanza in iarde',
@@ -599,24 +599,24 @@ return [
                                         e ridurre il ritardo tra i gruppi. Nota: questo ridurrà la distanza di camminata di questo importo, quindi impostarlo sulla
                                         gamma massima della tua abilità non è consigliato per risultati accurati. Tra il 50% e il 75% della gamma massima del tuo incantesimo dovrebbe andare bene,
                                         a meno che tu non stia letteralmente concatenando pull senza tempi morti tra di loro.',
-                'use_mounts'                           => 'Usa cavalcature',
-                'use_mounts_title'                     => 'Tenterà di usare la tua cavalcatura (se è più veloce e disponibile) per ridurre la distanza tra il pull corrente e il successivo.',
-                'patreon_link_text'                    => 'Patreon',
-                'patreon_only'                         => 'Le opzioni di simulazione avanzate sono disponibili se ti abboni a Keystone.guru\'s :patreon.',
-                'advanced_options'                     => 'Opzioni avanzate',
-                'description'                          => 'Le opzioni avanzate mirano a incrementare ulteriormente la precisione della stringa di simulazione generata e a far avvicinare i numeri a ciò che sperimenteresti nella realtà.',
+                'use_mounts'        => 'Usa cavalcature',
+                'use_mounts_title'  => 'Tenterà di usare la tua cavalcatura (se è più veloce e disponibile) per ridurre la distanza tra il pull corrente e il successivo.',
+                'patreon_link_text' => 'Patreon',
+                'patreon_only'      => 'Le opzioni di simulazione avanzate sono disponibili se ti abboni a Keystone.guru\'s :patreon.',
+                'advanced_options'  => 'Opzioni avanzate',
+                'description'       => 'Le opzioni avanzate mirano a incrementare ulteriormente la precisione della stringa di simulazione generata e a far avvicinare i numeri a ciò che sperimenteresti nella realtà.',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => 'Carica log',
         ],
     ],
-    'release'        => [
+    'release' => [
         'release' => [
             'new' => 'NUOVO',
         ],
     ],
-    'tag'            => [
+    'tag' => [
         'manager' => [
             'route_personal' => 'Percorso',
             'route_team'     => 'Percorso',
@@ -630,7 +630,7 @@ return [
             'create_new_tag' => 'Crea nuovo tag',
         ],
     ],
-    'team'           => [
+    'team' => [
         'details' => [
             'name'            => 'Nome',
             'description'     => 'Descrizione',
@@ -641,19 +641,19 @@ return [
             'submit'          => 'Invia',
             'disband_team'    => 'Sciogli squadra',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => 'Seleziona squadra...',
             'team'        => 'Squadra',
             'create_team' => 'Crea squadra',
         ],
     ],
-    'thirdparty'     => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => 'Rimuovi annunci',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => 'Patreon',
             ],
@@ -662,7 +662,7 @@ return [
             'learn_more' => 'Scopri di più',
         ],
     ],
-    'user'           => [
+    'user' => [
         'name' => [
             'avatar_alt' => 'Avatar',
             'raider_io'  => 'Raider.IO',

@@ -10,7 +10,7 @@ return [
         'title'  => 'Política de Privacidade',
         'header' => 'Política de Privacidade',
     ],
-    'terms'   => [
+    'terms' => [
         'title'  => 'Termos de Serviço',
         'header' => 'Termos de Serviço',
     ],

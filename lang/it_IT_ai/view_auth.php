@@ -18,10 +18,10 @@ return [
             'reset_password'   => 'Reimposta password',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Accesso',
     ],
-    'register'  => [
+    'register' => [
         'title'  => 'Registrati',
         'header' => 'Registrati',
     ],

@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Zeichnen abbrechen',
                 'text'  => 'Abbrechen',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Zeichnen beenden',
                 'text'  => 'Fertig',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Zuletzt gezeichneten Punkt löschen',
                 'text'  => 'Letzten Punkt löschen',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => 'Klicken und ziehen, um einen Kreis zu zeichnen.',
                 ],
-                'radius'  => 'Radius',
+                'radius' => 'Radius',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => 'Karte anklicken, um den Kreismarker zu platzieren.',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => 'Karte anklicken, um den Marker zu platzieren.',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen der Form zu beginnen.',
                     'cont'  => 'Klicken, um die Form weiter zu zeichnen.',
                     'end'   => 'Klicken Sie auf den ersten Punkt, um diese Form zu schließen.',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '<strong>Fehler:</strong> Formkanten dürfen sich nicht kreuzen!',
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen der Linie zu beginnen.',
@@ -57,24 +57,24 @@ return [
                     'end'   => 'Klicken Sie auf den letzten Punkt, um die Linie zu beenden.',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => 'Klicken und ziehen, um ein Rechteck zu zeichnen.',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => 'Maus loslassen, um das Zeichnen zu beenden.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen des Pfades zu beginnen.',
                     'cont'  => 'Klicken, um den Pfad weiter zu zeichnen.',
                     'end'   => 'Klicken Sie auf die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihren Pfad zu vervollständigen.',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => 'Klicken, um mit dem Zeichnen der Linie zu beginnen.',
                     'cont'  => 'Klicken und ziehen, um die Linie weiter zu zeichnen.',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Änderungen speichern',
                     'text'  => 'Speichern',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => 'Bearbeitung abbrechen, verwirft alle Änderungen',
                     'text'  => 'Abbrechen',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Ziehen Sie Griffe oder Marker, um Merkmale zu bearbeiten.',
                     'subtext' => 'Klicken Sie auf Abbrechen, um Änderungen rückgängig zu machen.',

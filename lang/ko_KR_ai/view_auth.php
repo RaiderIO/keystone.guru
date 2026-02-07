@@ -18,10 +18,10 @@ return [
             'reset_password'   => '비밀번호 재설정',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => '로그인',
     ],
-    'register'  => [
+    'register' => [
         'title'  => '가입',
         'header' => '가입',
     ],

@@ -12,58 +12,58 @@ return [
         'vengeance' => 'Vingança',
         'devourer'  => '',
     ],
-    'druid'        => [
+    'druid' => [
         'balance'     => 'Equilíbrio',
         'feral'       => 'Feral',
         'guardian'    => 'Guardião',
         'restoration' => 'Restauração',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => 'Devastação',
         'preservation' => 'Preservação',
         'augmentation' => 'Augmentação',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => 'Domínio das Feras',
         'marksmanship'  => 'Precisão',
         'survival'      => 'Sobrevivência',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => 'Arcano',
         'fire'   => 'Fogo',
         'frost'  => 'Gélido',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => 'Mestre Cervejeiro',
         'mistweaver' => 'Tecelão da Névoa',
         'windwalker' => 'Andarilho do Vento',
     ],
-    'paladin'      => [
+    'paladin' => [
         'holy'        => 'Sagrado',
         'protection'  => 'Proteção',
         'retribution' => 'Retribuição',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => 'Disciplina',
         'holy'       => 'Sagrado',
         'shadow'     => 'Sombra',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => 'Assassinato',
         'outlaw'        => 'Fora da Lei',
         'subtlety'      => 'Sutileza',
     ],
-    'shaman'       => [
+    'shaman' => [
         'elemental'   => 'Elemental',
         'enhancement' => 'Aperfeiçoamento',
         'restoration' => 'Restauração',
     ],
-    'warlock'      => [
+    'warlock' => [
         'affliction'  => 'Suplício',
         'demonology'  => 'Demonologia',
         'destruction' => 'Destruição',
     ],
-    'warrior'      => [
+    'warrior' => [
         'arms'       => 'Armas',
         'fury'       => 'Fúria',
         'protection' => 'Proteção',

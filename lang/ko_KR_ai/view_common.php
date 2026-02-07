@@ -2,17 +2,17 @@
 
 return [
 
-    'dungeon'        => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => '인기',
             'this_week' => '이번 주',
             'next_week' => '다음 주',
             'new'       => '새로운',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => '공격대',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => '던전',
             'all'                      => '전체',
             'all_dungeons'             => '모든 던전',
@@ -22,8 +22,8 @@ return [
             'siege_of_boralus_warning' => '보랄루스 공성전의 호드와 얼라이언스 버전 간 차이로 인해, 그룹 구성에서 진영을 선택해야 합니다.',
         ],
     ],
-    'dungeonroute'   => [
-        'search'     => [
+    'dungeonroute' => [
+        'search' => [
             'loadmore' => [
                 'loading' => '로딩 중...',
             ],
@@ -35,7 +35,7 @@ return [
             'select_attributes'       => '속성 선택',
             'attributes_selected'     => '{0} 속성 선택됨',
         ],
-        'card'       => [
+        'card' => [
             'thumbnail_alt'            => '썸네일',
             'thumbnail_dungeon_alt'    => '썸네일',
             'no_description'           => '설명 없음',
@@ -47,13 +47,13 @@ return [
             'dominant_affix'           => '주요 접미사',
             'seasonal_affix'           => '시즌 접미사',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => '경로가 없습니다',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '%s 투표',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => '팀',
             'affixes'               => '접미사',
             'select_affixes'        => '접미사 선택',
@@ -69,12 +69,12 @@ return [
             'tags_selected'         => '{0} 태그 선택됨',
             'filter'                => '필터',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '%s - 데이터 제공: https://www.archon.gg/wow',
         ],
     ],
-    'forms'          => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => '제목',
             'title_title'                                    => '다른 유사한 경로와 구분할 수 있는 제목을 선택하세요. 경로를 게시하기로 선택하면 다른 사람에게도 보입니다.',
             'dungeon_speedrun_required_npc_difficulty'       => '공격대 크기',
@@ -99,7 +99,7 @@ return [
             'registered_user_message'   => '임시 경로는 프로필에 표시되지 않으며, %d시간 후 자동으로 삭제됩니다. 이 시간 전에 클레임되지 않으면 삭제됩니다.',
             'create_route'              => '경로 생성',
         ],
-        'login'                => [
+        'login' => [
             'login'                => '로그인',
             'email_address'        => '이메일 주소',
             'password'             => '비밀번호',
@@ -107,7 +107,7 @@ return [
             'forgot_your_password' => '비밀번호를 잊으셨습니까?',
             'login_through_oauth2' => 'OAuth2를 통한 로그인',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => '일반',
             'map_facade_style'                              => '합쳐진 층 사용',
             'map_facade_style_title'                        => 'Dragonflight 시즌 3의 도입으로 여러 던전의 층이 단일 지도에 통합되었습니다. 이 새로운 지도를 사용하는 것은 선택 사항이며, 여기서 합쳐진 지도와 전통적인 분리된 층 스타일 사이를 전환할 수 있습니다.',
@@ -138,7 +138,7 @@ return [
             'default_line_color'                            => '기본 선 색상',
             'default_line_color_title'                      => '지도에서 생성한 모든 선의 기본 색상을 제어합니다. 경로 및 자유 그리기 선을 포함합니다.',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => '당신의 Mythic Dungeon Tools 내보내기 문자열을 붙여넣으세요',
             'reset_title'                            => '재설정',
             'unregistered_user_all_routes_temporary' => '등록되지 않은 사용자로서, 모든 가져온 경로는 %s시간 후 만료되는 임시 경로입니다.',
@@ -149,10 +149,10 @@ return [
             'import_as_this_week'                    => '이번 주의 부가 효과로 가져오기',
             'import_route'                           => '경로 가져오기',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => '경로를 게시하면 프로필에서 사용자 이름을 변경할 때까지 배틀태그/디스코드 사용자 이름이 보입니다.',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => '풀 번호 스타일',
             'pull_number_style_title'           => '이 설정은 풀 사이드바에 숫자가 표시되는 방식을 제어합니다.',
             'pull_number_style_percentage'      => '퍼센트',
@@ -166,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => '풀을 변경할 때 항상 적용',
             'always_apply_on_pull_change_title' => '이 설정을 활성화하면 위에서 구성한 풀 그라데이션을 기반으로 풀을 편집할 때 풀의 색상이 업데이트됩니다. 이 설정은 경로마다 고유합니다.',
         ],
-        'register'             => [
+        'register' => [
             'register'                => '등록',
             'username'                => '사용자 이름',
             'username_title'          => '제작한 경로를 게시하기로 선택한 경우 사용자 이름이 표시될 수 있습니다.',
@@ -183,7 +183,7 @@ return [
             'privacy_policy'          => '개인정보 보호정책',
             'cookie_policy'           => '쿠키 정책',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => '아프리카',
             'america'    => '아메리카',
             'antarctica' => '남극',
@@ -195,7 +195,7 @@ return [
             'timezone'   => '시간대',
         ],
     ],
-    'general'        => [
+    'general' => [
         'linkpreview' => [
             'title'               => ':title | Keystone.guru',
             'description'         => ':description 팀과 협력하여 온라인에서 경로를 계획하거나 플레이 스타일과 숙련도에 맞는 경로를 발견하세요. Keystone.guru는 M+ 경로를 관리하고 공유할 수 있는 유일한 장소입니다.',
@@ -203,8 +203,8 @@ return [
             'twitter_description' => ':description Keystone.guru는 M+ 경로를 찾고, 관리하고, 공유할 수 있는 유일한 장소입니다.',
         ],
     ],
-    'group'          => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => '사전 설정 :count',
             'awakened_enemy_set'       => '각성한 적 세트',
             'awakened_enemy_set_title' => 'M+ 레벨 10 이상에서는 각성한 적(기둥 보스)이 두 세트로 나옵니다. 각 세트의 수식어는 A 또는 B로 표시됩니다. 경로에 여러 수식어를 첨부하여 A와 B 세트 모두를 가질 수 있습니다. 여기에서 지도에 표시될 세트를 선택하세요. 나중에 경로 설정 메뉴에서 선택을 조정할 수 있습니다.',
@@ -217,7 +217,7 @@ return [
             'party_member_nr' => '파티원 #%d',
         ],
     ],
-    'layout'         => [
+    'layout' => [
         'footer' => [
             'developer'                       => '개발자',
             'api_documentation'               => 'API 문서',
@@ -252,8 +252,8 @@ return [
             'explore'                 => '던전 탐색',
             'new'                     => '신규',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => '로그인',
                 'register'          => '등록',
                 'telescope'         => '망원경',
@@ -278,21 +278,21 @@ return [
             ],
         ],
     ],
-    'maps'           => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => '관리',
                 'view_this_route' => '보기',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => '타이머',
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => '그룹 설정',
                     'affixes'          => '속성',
                     'route_info_title' => '정보',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => '초상화',
                     'npc_class'               => '클래스',
                     'npc_type'                => '타입',
@@ -302,31 +302,31 @@ return [
                     'enemy_skippable'         => '건너뛸 수 있음',
                     'enemy_group'             => '그룹',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => '층',
                     'floors'        => '층',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => '요소',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => '숨기기',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'MDT 보기',
                     'auto_solve' => '자동 해결',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => '평가하기',
                     'unable_to_rate_own_route' => '자신의 경로는 평가할 수 없습니다',
                     'your_rating'              => '내 평가',
                 ],
             ],
-            'enemyinfo'      => [
+            'enemyinfo' => [
                 'enemy_info'      => '적 정보',
                 'report_an_issue' => '문제 보고',
             ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => '지도 설정',
                 'enabled'                => '활성화됨',
                 'disabled'               => '비활성화됨',
@@ -359,13 +359,13 @@ return [
                     'classes_player_deaths'               => '직업 (사망)',
                     'classes_player_deaths_title'         => '이 직업의 사망만 표시합니다.',
                 ],
-                'advanced_options'       => '고급 옵션',
-                'advanced_option'        => [
+                'advanced_options' => '고급 옵션',
+                'advanced_option'  => [
                     'min_samples_required'       => '최소 샘플 필요',
                     'min_samples_required_title' => '히트맵에 데이터가 표시되기 위한 임계값을 낮춥니다. 이 값을 낮추면 더 많은 데이터 포인트가 렌더링됩니다.',
                 ],
-                'heat_options'           => 'Leaflet.heat 옵션',
-                'heat_option'            => [
+                'heat_options' => 'Leaflet.heat 옵션',
+                'heat_option'  => [
                     'min_opacity' => '최소 불투명도',
                     'max_zoom'    => '최대 줌',
                     'max'         => '최대',
@@ -375,7 +375,7 @@ return [
                     'pane'        => '패널',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => '내비게이션 전환',
                 'stop'                           => '중지',
                 'start'                          => '시작',
@@ -404,7 +404,7 @@ return [
                 'you_cannot_rate_your_own_route' => '자신의 경로를 평가할 수 없습니다 - 라이브 세션을 사용해 주셔서 감사합니다!',
                 'review_live_session'            => '라이브 세션 검토',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => '지도/풀 설정',
                 'new_pull'                    => '새 풀',
                 'delete_all_pulls_title'      => '모든 풀 삭제',
@@ -414,8 +414,8 @@ return [
                 'no_pulls_created_view'       => '생성된 풀이 없습니다.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => '설명',
                         'supported_html_tags' => '지원되는 HTML 태그: ',
                         'save'                => '저장',
@@ -433,14 +433,14 @@ return [
                 'remove_kill_area' => '처치 구역 제거',
                 'delete_killzone'  => '풀 삭제',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => '편집',
                 'clone_this_route_title'         => '복제',
                 'report_for_moderation'          => '신고',
                 'report_for_moderation_finished' => '신고됨',
             ],
         ],
-        'map'      => [
+        'map' => [
             'no_teeming'                             => '항상 표시',
             'visible_teeming'                        => '다수출몰 시에만 표시',
             'hidden_teeming'                         => '다수출몰 시에만 숨김',
@@ -452,7 +452,7 @@ return [
                             Blizzard가 매핑을 변경하거나 오류를 수정할 때마다 새로운 매핑 버전이 생성됩니다.
                             이전 매핑 버전으로 생성된 경로는 자동으로 최신 버전으로 업데이트되지 않습니다.
                             이 경고는 이 경로에 사용된 매핑 버전이 오래되어 게임 내 매핑을 적절히 나타내지 않을 수 있음을 나타냅니다.',
-            'route'                                  => '경로',
+            'route' => '경로',
         ],
     ],
     'mappingversion' => [
@@ -461,15 +461,15 @@ return [
             'mapping_version'          => ':gameVersion 버전 :version',
         ],
     ],
-    'modal'          => [
-        'dungeonroute'       => [
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => '경로 제거됨',
                 'description'  => '경로가 제거되어 더 이상 볼 수 없거나 편집할 수 없습니다. 이는 경로가 임시 경로였으며 자동으로 정리되었거나 다른 브라우저 탭에서 경로를 삭제한 경우 발생할 수 있습니다.',
                 'back_to_home' => '홈으로 돌아가기',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => '경로 신고',
                 'your_name'              => '당신의 이름',
@@ -478,7 +478,7 @@ return [
                 'contact_by_email_guest' => '추가 조사가 필요할 경우 이메일로 연락해 주세요 (보고서 본문에 이메일 주소를 추가하세요)',
                 'submit'                 => '제출',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => '적 버그 신고',
                 'your_name'              => '당신의 이름',
                 'what_is_wrong'          => '이 적과 관련된 문제를 설명해 주세요',
@@ -487,19 +487,19 @@ return [
                 'submit'                 => '제출',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => '경로 생성',
             'create_temporary_route' => '임시 경로 생성',
             'import_from_mdt'        => 'MDT에서 가져오기',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => '다시 오신 것을 환영합니다! 계속하려면 %s, %s 및 %s에 동의해야 합니다.',
             'terms_of_service'   => '서비스 약관',
             'privacy_policy'     => '개인정보 보호정책',
             'cookie_policy'      => '쿠키 정책',
             'i_agree'            => '동의합니다',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => '외관 사용',
             'enemy_forces_required'           => '필요한 적 병력',
             'enemy_forces_required_teeming'   => '필요한 적 병력 (다수출몰)',
@@ -509,7 +509,7 @@ return [
             'timer_max_minutes'               => '타이머 (분)',
             'save'                            => '저장',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => '지도 설정',
             'pull_settings' => '풀 설정',
         ],
@@ -524,10 +524,10 @@ return [
             'route_not_created_from_combat_log' => '경로가 전투 기록에서 생성되지 않았습니다',
             'route_not_created_through_api'     => '경로가 API를 통해 생성되지 않았습니다',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => '경로 설정',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => '공유',
             'publish'                          => '발행',
             'review_route_settings'            => '경로를 발행하기 전에 %s를 검토하세요',
@@ -542,7 +542,7 @@ return [
             'loading'                          => '로딩 중...',
             'copy_to_clipboard'                => '클립보드에 복사',
         ],
-        'simulate'           => [
+        'simulate' => [
             'intro'                      => '시뮬레이션 기능을 사용하려면, 캐릭터에 대한 SimulationCraft 문자열을 생성하고 생성된 Keystone.guru 문자열을 캐릭터의 출력 문자열 아래에 붙여넣으세요. 그런 다음 평소처럼 시뮬레이션을 실행하세요! raidbots.com을 사용하는 경우, 애드온이나 사이트를 통해 캐릭터의 SimC 문자열을 생성하고, \'고급\'을 선택한 후 캐릭터의 SimC 문자열 아래에 Keystone.guru의 출력을 붙여넣으세요.',
             'title'                      => '경로 시뮬레이션',
             'get_simulationcraft_string' => 'SimulationCraft 문자열 가져오기',
@@ -550,22 +550,22 @@ return [
             'loading'                    => '로딩 중...',
             'copy_to_clipboard'          => '클립보드에 복사',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-                'key_level'                               => '키 레벨',
-                'key_level_title'                         => '키 레벨이 높을수록 캐릭터가 직면하는 적의 체력이 실제 M+ 던전에서처럼 증가합니다.',
-                'shrouded_bounty_type'                    => '가려진 현상금',
-                'shrouded_bounty_type_title'              => '던전 시작 시 선택할 수 있는 가려진 현상금입니다.',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => '키 레벨',
+                'key_level_title'            => '키 레벨이 높을수록 캐릭터가 직면하는 적의 체력이 실제 M+ 던전에서처럼 증가합니다.',
+                'shrouded_bounty_type'       => '가려진 현상금',
+                'shrouded_bounty_type_title' => '던전 시작 시 선택할 수 있는 가려진 현상금입니다.',
+                'shrouded_bounty_types'      => [
                     'none'    => '현상금 없음',
                     'crit'    => '치명타',
                     'haste'   => '가속',
                     'mastery' => '숙련',
                     'vers'    => '유연성',
                 ],
-                'affixes'                                 => '어픽스',
-                'affixes_title'                           => '모든 비보스 적의 체력을 20% 증가시키려면 \'강화\'를, 보스의 체력을 30% 증가시키려면 \'폭군\'을 선택하세요. 두 가지를 동시에 선택할 수 있습니다.',
-                'affixes_map'                             => [
+                'affixes'       => '어픽스',
+                'affixes_title' => '모든 비보스 적의 체력을 20% 증가시키려면 \'강화\'를, 보스의 체력을 30% 증가시키려면 \'폭군\'을 선택하세요. 두 가지를 동시에 선택할 수 있습니다.',
+                'affixes_map'   => [
                     'fortified'  => '강화',
                     'tyrannical' => '폭군',
                 ],
@@ -586,10 +586,10 @@ return [
                     'power_infusion'       => '마력 주입',
                     'bleeding'             => '출혈',
                 ],
-                'hp_percent'                              => 'HP 비율',
-                'hp_percent_title'                        => '캐릭터가 모든 적에게 가해야 하는 피해량의 비율입니다. 던전에서의 당신의 피해 지분이 될 것입니다.',
-                'bloodlust_per_pull'                      => '풀당 피의 욕망/영웅심/기타',
-                'bloodlust_per_pull_title'                => '어떤 풀에 피의 욕망/영웅심/기타를 사용할지를 선택할 수 있습니다. 이 주문을 풀에 할당하면 자동으로 이 드롭다운이 채워집니다.',
+                'hp_percent'               => 'HP 비율',
+                'hp_percent_title'         => '캐릭터가 모든 적에게 가해야 하는 피해량의 비율입니다. 던전에서의 당신의 피해 지분이 될 것입니다.',
+                'bloodlust_per_pull'       => '풀당 피의 욕망/영웅심/기타',
+                'bloodlust_per_pull_title' => '어떤 풀에 피의 욕망/영웅심/기타를 사용할지를 선택할 수 있습니다. 이 주문을 풀에 할당하면 자동으로 이 드롭다운이 채워집니다.',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '원거리 풀 보상 거리(야드)',
@@ -602,16 +602,16 @@ return [
                 'description'                          => '고급 옵션은 생성된 시뮬레이션 크래프트 문자열의 정확성을 더욱 높이고 실제 경험과 더 가까운 수치를 얻기 위해 설계되었습니다.',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => '로그 업로드',
         ],
     ],
-    'release'        => [
+    'release' => [
         'release' => [
             'new' => '새로운',
         ],
     ],
-    'tag'            => [
+    'tag' => [
         'manager' => [
             'route_personal' => '경로',
             'route_team'     => '경로',
@@ -625,7 +625,7 @@ return [
             'create_new_tag' => '새 태그 만들기',
         ],
     ],
-    'team'           => [
+    'team' => [
         'details' => [
             'name'            => '이름',
             'description'     => '설명',
@@ -636,19 +636,19 @@ return [
             'submit'          => '제출',
             'disband_team'    => '팀 해산',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => '팀 선택...',
             'team'        => '팀',
             'create_team' => '팀 만들기',
         ],
     ],
-    'thirdparty'     => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => '광고 제거',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => 'Patreon',
             ],
@@ -657,7 +657,7 @@ return [
             'learn_more' => '자세히 알아보기',
         ],
     ],
-    'user'           => [
+    'user' => [
         'name' => [
             'avatar_alt' => '아바타',
             'raider_io'  => 'Raider.IO',

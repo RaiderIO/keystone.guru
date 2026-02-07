@@ -2,27 +2,27 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => '',
         'description' => '',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => '',
         'description' => '',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => '',
         'description' => '',
     ],
-    'beta'         => [
+    'beta' => [
         'name'        => '',
         'description' => '',
     ],
-    'cata'         => [
+    'cata' => [
         'name'        => '',
         'description' => '',
     ],
-    'mop'          => [
+    'mop' => [
         'name'        => '',
         'description' => '',
     ],
