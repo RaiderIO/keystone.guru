@@ -20,7 +20,7 @@ class CreateGithubRelease extends Command
      *
      * @var string
      */
-    protected $signature = 'make:githubrelease {version?}';
+    protected $signature = 'make:githubrelease {version?} {--hash=}';
 
     /**
      * The console command description.
@@ -40,6 +40,7 @@ class CreateGithubRelease extends Command
         ReleaseRepositoryInterface $releaseRepository,
     ): void {
         $version = $this->argument('version');
+        $hash    = $this->option('hash');
         $release = $releaseRepository->findReleaseByVersion($version);
 
         if ($release !== null) {
@@ -62,11 +63,12 @@ class CreateGithubRelease extends Command
             $body = $release->getGithubBodyAttribute();
 
             try {
-                $githubRepoClient->releases()->create($repositoryOwner, $repository, [
-                    'tag_name' => $release->version,
-                    'name'     => $release->version,
-                    'body'     => $body,
-                ]);
+                $githubRepoClient->releases()->create($repositoryOwner, $repository, array_filter([
+                    'tag_name'         => $release->version,
+                    'name'             => $release->version,
+                    'body'             => $body,
+                    'target_commitish' => $hash,
+                ]));
 
                 $this->info(sprintf('Successfully created GitHub release %s', $release->version));
             } catch (ValidationFailedException $exception) {
