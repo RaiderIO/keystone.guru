@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\Language;
 
 use Closure;
+use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
 class SetLocaleFixed
@@ -21,6 +22,9 @@ class SetLocaleFixed
 
         // Set app language
         \App::setLocale($locale);
+
+        // Remove AI suffix if it was there just for the Carbon/Date setLocale functions
+        $locale = Str::replace('_ai', '', $locale);
 
         // Set carbon language
         if (config('language.carbon')) {
