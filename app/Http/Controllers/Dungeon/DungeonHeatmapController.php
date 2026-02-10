@@ -127,7 +127,10 @@ class DungeonHeatmapController extends Controller
                 ] + $request->validated());
             }
 
-            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+            $seasonString = $request->get('season');
+
+            $mostRecentSeason = $seasonService->getSeasonFromShortString($seasonString) ??
+                $dungeon->getActiveSeason($seasonService);
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 

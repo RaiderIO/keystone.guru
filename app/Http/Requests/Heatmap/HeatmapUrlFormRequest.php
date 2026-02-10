@@ -60,6 +60,7 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'maxTimerFraction'   => ['nullable', 'numeric', ],
             'minSamplesRequired' => ['nullable', 'integer', ],
             'token'              => ['nullable', 'string', ],
+            'season'             => ['nullable', 'string', 'regex:/^season-[a-z]+-\d$/i', ],
         ]);
         // @formatter:on
     }
