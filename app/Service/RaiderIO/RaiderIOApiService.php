@@ -30,18 +30,20 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
     public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse
     {
-        $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
-        $parameters       = [];
-
-        if ($mostRecentSeason !== null) {
-            $parameters[] = sprintf(
-                'season=season-%s-%s',
-                $mostRecentSeason->expansion->shortname,
-                $mostRecentSeason->index,
-            );
+        // Ensure a season is set, even if it wasn't passed
+        if ($heatmapDataFilter->getSeason() === null) {
+            $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
+            if ($mostRecentSeason !== null) {
+                $heatmapDataFilter->setSeason(sprintf(
+                    'season-%s-%s',
+                    $mostRecentSeason->expansion->shortname,
+                    $mostRecentSeason->index,
+                ));
+            }
         }
 
-        foreach ($heatmapDataFilter->toArray($mostRecentSeason) as $key => $value) {
+        $parameters = [];
+        foreach ($heatmapDataFilter->toArray() as $key => $value) {
             $parameters[] = sprintf('%s=%s', Str::camel($key), $value);
         }
 

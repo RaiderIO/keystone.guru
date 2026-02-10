@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '%s 시간여행',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => '소개',
         'header' => 'Keystone.guru에 대하여',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => '속성',
         'header'                            => '주간 속성 %s',
         'start_date'                        => '시작일 (%s)',
@@ -28,26 +28,26 @@ return [
         'title'  => '변경 로그',
         'header' => '변경 로그',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => '크레딧',
         'header'           => '크레딧',
         'header_people'    => '사람들',
         'header_libraries' => '라이브러리',
         'header_images'    => '이미지',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => '데모 경로',
         'header' => '데모 경로',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => '경로 임베드',
         'header' => '웹페이지에서 Keystone.guru 임베드 테스트',
     ],
-    'health'    => [
+    'health' => [
         'title'  => '건강 계산',
         'header' => '건강',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => '매핑',
         'header'                        => '매핑 진행',
         'enemy_forces_mapping_progress' => '적군 전력 매핑 진행',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => '적군 전력',
         'npcs_assigned'                 => '할당된 NPC',
     ],
-    'status'    => [
+    'status' => [
         'title'       => '상태',
         'header'      => '상태',
         'description' => '시스템이 정상 작동 중입니다!',

@@ -12,58 +12,58 @@ return [
         'vengeance' => 'Vendetta',
         'devourer'  => '',
     ],
-    'druid'        => [
+    'druid' => [
         'balance'     => 'Equilibrio',
         'feral'       => 'Ferino',
         'guardian'    => 'Guardiano',
         'restoration' => 'Rigenerazione',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => 'Devastazione',
         'preservation' => 'Conservazione',
         'augmentation' => 'Incremento',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => 'Affinità Animale',
         'marksmanship'  => 'Precisione',
         'survival'      => 'Sopravvivenza',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => 'Arcano',
         'fire'   => 'Fuoco',
         'frost'  => 'Gelo',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => 'Mastro Birraio',
         'mistweaver' => 'Misticismo',
         'windwalker' => 'Camminavento',
     ],
-    'paladin'      => [
+    'paladin' => [
         'holy'        => 'Sacro',
         'protection'  => 'Protezione',
         'retribution' => 'Castigo',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => 'Disciplina',
         'holy'       => 'Sacro',
         'shadow'     => 'Ombra',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => 'Assassinio',
         'outlaw'        => 'Fuorilegge',
         'subtlety'      => 'Scaltrezza',
     ],
-    'shaman'       => [
+    'shaman' => [
         'elemental'   => 'Elementale',
         'enhancement' => 'Potenziamento',
         'restoration' => 'Rigenerazione',
     ],
-    'warlock'      => [
+    'warlock' => [
         'affliction'  => 'Afflizione',
         'demonology'  => 'Demonologia',
         'destruction' => 'Distruzione',
     ],
-    'warrior'      => [
+    'warrior' => [
         'arms'       => 'Armi',
         'fury'       => 'Furia',
         'protection' => 'Protezione',

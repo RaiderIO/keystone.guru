@@ -2,7 +2,7 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => '',
             'mdt_string_format_not_recognized'    => '',
@@ -31,29 +31,29 @@ return [
             'read_only_mode_enabled'          => '',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => '',
         'mdt_generate_no_lua' => '',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => '',
             'unable_to_save_report'        => '',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => '',
             'unable_to_delete_brushline' => '',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => '',
             'dungeon_updated' => '',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => '',
         'flash'          => [
             'route_cloned_successfully' => '',
@@ -61,7 +61,7 @@ return [
             'route_created'             => '',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => '',
         'this_week_affixes' => '',
         'next_week_affixes' => '',
@@ -72,7 +72,7 @@ return [
             'next_week_affixes' => '',
             'new'               => '',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '',
             'this_week_affixes' => '',
             'next_week_affixes' => '',
@@ -86,20 +86,20 @@ return [
             'npc_deleted_successfully' => '',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => '',
             'expansion_updated'        => '',
             'expansion_created'        => '',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => '',
             'not_found'                  => '',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => '',
             'user_exists'             => '',
@@ -108,14 +108,14 @@ return [
             'read_only_mode_enabled'  => '',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => '',
         ],
         'legal_agreed_required' => '',
         'legal_agreed_accepted' => '',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => '',
         ],
@@ -125,12 +125,12 @@ return [
             'github_exception' => '',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => '',
         'created_bare_successfully' => '',
         'deleted_successfully'      => '',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => '',
         'error'           => [
             'mdt_string_parsing_failed'             => '',
@@ -142,13 +142,13 @@ return [
             'cannot_create_route_must_be_logged_in' => '',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => '',
             'unable_to_delete_path' => '',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => '',
             'link_successful'         => '',
@@ -158,7 +158,7 @@ return [
             'internal_error_occurred' => '',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => '',
             'username_already_in_use'          => '',
@@ -176,7 +176,7 @@ return [
             'error_deleting_account'           => '',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => '',
         ],
@@ -185,7 +185,7 @@ return [
             'spell_created' => '',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => '',
             'team_created'                        => '',
@@ -195,7 +195,7 @@ return [
             'tag_already_exists'                  => '',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => '',
             'user_is_no_longer_an_admin'        => '',

@@ -18,10 +18,10 @@ return [
             'reset_password'   => 'Passwort zurücksetzen',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Login',
     ],
-    'register'  => [
+    'register' => [
         'title'  => 'Registrieren',
         'header' => 'Registrieren',
     ],

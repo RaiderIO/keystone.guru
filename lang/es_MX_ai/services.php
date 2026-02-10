@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => 'Jalar %d',
                     'title'    => 'Título',
                     'map_icon' => 'Ícono de mapa',
@@ -15,12 +15,12 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Este jalón ha sido eliminado ya que no se pudieron encontrar todos los enemigos seleccionados en MDT, resultando en un jalón vacío.',
                 'route_title_contains_non_ascii_char_bug'           => 'El título de tu ruta contiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru.
                                                         El título de tu ruta ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
-                'route_title_contains_non_ascii_char_bug_details'   => 'Título anterior: %s, nuevo título: %s',
-                'map_icon_contains_non_ascii_char_bug'              => 'Uno de tus comentarios sobre un ícono de mapa tiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru. Tu comentario de mapa ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
-                'map_icon_contains_non_ascii_char_bug_details'      => 'Comentario anterior: "%s", nuevo comentario: "%s"',
+                'route_title_contains_non_ascii_char_bug_details' => 'Título anterior: %s, nuevo título: %s',
+                'map_icon_contains_non_ascii_char_bug'            => 'Uno de tus comentarios sobre un ícono de mapa tiene caracteres no ASCII que se sabe desencadenan un error de codificación no resuelto en Keystone.guru. Tu comentario de mapa ha sido despojado de todos los caracteres problemáticos, nos disculpamos por el inconveniente y esperamos resolver este problema pronto.',
+                'map_icon_contains_non_ascii_char_bug_details'    => 'Comentario anterior: "%s", nuevo comentario: "%s"',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => 'Obeliscos Despertados',
                     'pulls'             => 'Jalones',
                     'notes'             => 'Notas',
@@ -49,7 +49,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => 'Todas las mazmorras',
     ],
     'combatlogservice' => [

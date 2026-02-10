@@ -12,58 +12,58 @@ return [
         'vengeance' => 'Месть',
         'devourer'  => '',
     ],
-    'druid'        => [
+    'druid' => [
         'balance'     => 'Баланс',
         'feral'       => 'Сила зверя',
         'guardian'    => 'Страж',
         'restoration' => 'Исцеление',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => 'Опустошение',
         'preservation' => 'Сохранение',
         'augmentation' => 'Увеличение',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => 'Повелитель зверей',
         'marksmanship'  => 'Стрельба',
         'survival'      => 'Выживание',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => 'Тайная магия',
         'fire'   => 'Огонь',
         'frost'  => 'Лед',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => 'Хмелевар',
         'mistweaver' => 'Ткач туманов',
         'windwalker' => 'Танцующий с ветром',
     ],
-    'paladin'      => [
+    'paladin' => [
         'holy'        => 'Свет',
         'protection'  => 'Защита',
         'retribution' => 'Воздаяние',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => 'Послушание',
         'holy'       => 'Свет',
         'shadow'     => 'Тьма',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => 'Ликвидация',
         'outlaw'        => 'Головорез',
         'subtlety'      => 'Скрытность',
     ],
-    'shaman'       => [
+    'shaman' => [
         'elemental'   => 'Стихии',
         'enhancement' => 'Совершествование',
         'restoration' => 'Исцеление',
     ],
-    'warlock'      => [
+    'warlock' => [
         'affliction'  => 'Колдовство',
         'demonology'  => 'Демонология',
         'destruction' => 'Разрушение',
     ],
-    'warrior'      => [
+    'warrior' => [
         'arms'       => 'Оружие',
         'fury'       => 'Неистовство',
         'protection' => 'Защита',

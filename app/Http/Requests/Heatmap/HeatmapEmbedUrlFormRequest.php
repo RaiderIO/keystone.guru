@@ -42,11 +42,12 @@ class HeatmapEmbedUrlFormRequest extends ExploreUrlFormRequest
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'showEnemyInfo' => 'nullable|bool',
-            'showTitle'     => 'nullable|bool',
-            'showSidebar'   => 'nullable|bool',
-            'showHeader'    => 'nullable|bool',
-            'defaultZoom'   => 'nullable|numeric',
+            'showEnemyInfo'          => 'nullable|bool',
+            'showTitle'              => 'nullable|bool',
+            'showSidebar'            => 'nullable|bool',
+            'showHeader'             => 'nullable|bool',
+            'showDataSourceSnackbar' => 'nullable|bool',
+            'defaultZoom'            => 'nullable|numeric',
         ]);
     }
 }

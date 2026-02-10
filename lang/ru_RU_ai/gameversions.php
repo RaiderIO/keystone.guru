@@ -2,27 +2,27 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => 'Розничная версия',
         'description' => 'Розничная версия',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => 'Гнев',
         'description' => 'Гнев Короля-лича',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => 'Эра классики',
         'description' => 'Эра классики',
     ],
-    'beta'         => [
+    'beta' => [
         'name'        => 'Розничная бета',
         'description' => 'Розничная бета',
     ],
-    'cata'         => [
+    'cata' => [
         'name'        => 'Катаклизм',
         'description' => 'Катаклизм',
     ],
-    'mop'          => [
+    'mop' => [
         'name'        => 'Туманы',
         'description' => 'Туманы Пандарии',
     ],

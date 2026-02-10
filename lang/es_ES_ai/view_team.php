@@ -3,10 +3,10 @@
 return [
 
     'edittabs' => [
-        'details'         => [
+        'details' => [
             'title' => 'Detalles del equipo',
         ],
-        'members'         => [
+        'members' => [
             'title'                                      => 'Miembros',
             'invite_new_members'                         => 'Invitar nuevos miembros',
             'invite_code_share_warning'                  => '¡Ten cuidado con quién compartes el enlace de invitación, cualquiera con el enlace puede unirse a tu equipo!',
@@ -16,25 +16,25 @@ return [
             'ad_free_giveaway_description_not_available' => 'Suscribirse a :patreon te permite regalar hasta :max experiencias sin anuncios a cualquier miembro del equipo.',
             'ad_free_giveaway_description_available'     => '¡Gracias por suscribirte a :patreon de Keystone.guru! Puedes regalar :current experiencias sin anuncios a cualquier miembro del equipo.',
         ],
-        'overview'        => [
+        'overview' => [
             'title' => 'Visión general',
         ],
         'routepublishing' => [
             'title' => 'Publicación de rutas',
         ],
-        'routes'          => [
+        'routes' => [
             'title'                  => 'Lista de rutas',
             'add_route'              => 'Agregar ruta',
             'add_route_no_moderator' => 'Debes ser un Moderador de este equipo para agregar rutas',
             'stop_adding_routes'     => 'Dejar de agregar rutas',
         ],
-        'tags'            => [
+        'tags' => [
             'title'       => 'Etiquetas',
             'description' => 'Puedes gestionar etiquetas para las rutas del equipo aquí. Todos los miembros de este equipo pueden ver las etiquetas adjuntas a las rutas.
                                     Las etiquetas personales que pueden o no haber sido adjuntadas por el propietario de la ruta no serán visibles.',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => 'Equipo %s',
         'menu_title'     => 'Equipos',
         'to_team_list'   => 'Lista de equipos',
@@ -43,7 +43,7 @@ return [
         'routes'         => 'Rutas',
         'members'        => 'Miembros',
     ],
-    'invite'   => [
+    'invite' => [
         'linkpreview_title'           => 'Invitación para unirse al equipo %s',
         'linkpreview_description'     => 'Has sido invitado a unirte al equipo %s. Inicia sesión o regístrate en Keystone.guru para unirte al equipo, ¡es gratis!',
         'title'                       => 'Invitación para unirse al equipo %s',
@@ -61,7 +61,7 @@ return [
         'invite_not_found'            => 'No se pudo encontrar este equipo. Quizás el enlace de invitación ha sido cambiado o el equipo ha sido eliminado.',
         'back_to_homepage'            => 'Volver a la página de inicio',
     ],
-    'list'     => [
+    'list' => [
         'title'                => 'Mis equipos',
         'header'               => 'Mis equipos',
         'create_team'          => 'Crear equipo',
@@ -69,7 +69,7 @@ return [
         'table_header_members' => 'Miembros',
         'table_header_routes'  => 'Rutas',
     ],
-    'new'      => [
+    'new' => [
         'title'  => 'Nuevo equipo',
         'header' => 'Nuevo equipo',
     ],

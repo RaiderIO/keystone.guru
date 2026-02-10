@@ -3,10 +3,10 @@
 return [
 
     'edittabs' => [
-        'details'         => [
+        'details' => [
             'title' => 'Teamdetails',
         ],
-        'members'         => [
+        'members' => [
             'title'                                      => 'Mitglieder',
             'invite_new_members'                         => 'Neue Mitglieder einladen',
             'invite_code_share_warning'                  => 'Seien Sie vorsichtig, mit wem Sie den Einladungscode teilen, jeder mit dem Link kann Ihrem Team beitreten!',
@@ -16,25 +16,25 @@ return [
             'ad_free_giveaway_description_not_available' => 'Das Abonnieren von :patreon ermöglicht es Ihnen, bis zu :max werbefreie Erlebnisse an Keystone.guru an jedes Teammitglied zu verschenken.',
             'ad_free_giveaway_description_available'     => 'Danke, dass Sie :patreon von Keystone.guru abonniert haben! Sie können :current weitere werbefreie Erlebnisse an Keystone.guru an jedes Teammitglied verschenken.',
         ],
-        'overview'        => [
+        'overview' => [
             'title' => 'Übersicht',
         ],
         'routepublishing' => [
             'title' => 'Routenveröffentlichung',
         ],
-        'routes'          => [
+        'routes' => [
             'title'                  => 'Routenliste',
             'add_route'              => 'Route hinzufügen',
             'add_route_no_moderator' => 'Sie müssen Moderator dieses Teams sein, um Routen hinzuzufügen',
             'stop_adding_routes'     => 'Hinzufügen von Routen beenden',
         ],
-        'tags'            => [
+        'tags' => [
             'title'       => 'Tags',
             'description' => 'Sie können hier Tags für die Routen des Teams verwalten. Jeder, der Mitglied dieses Teams ist, kann die an die Routen angehängten Tags anzeigen.
                                     Die persönlichen Tags, die möglicherweise vom Routeninhaber angehängt wurden, werden nicht sichtbar sein.',
         ],
     ],
-    'edit'     => [
+    'edit' => [
         'title'          => 'Team %s',
         'menu_title'     => 'Teams',
         'to_team_list'   => 'Teamliste',
@@ -43,7 +43,7 @@ return [
         'routes'         => 'Routen',
         'members'        => 'Mitglieder',
     ],
-    'invite'   => [
+    'invite' => [
         'linkpreview_title'           => 'Einladung, dem Team %s beizutreten',
         'linkpreview_description'     => 'Sie wurden eingeladen, dem Team %s beizutreten. Melden Sie sich bei Keystone.guru an oder registrieren Sie sich, um dem Team beizutreten, es ist kostenlos!',
         'title'                       => 'Einladung, dem Team %s beizutreten',
@@ -61,7 +61,7 @@ return [
         'invite_not_found'            => 'Dieses Team konnte nicht gefunden werden. Vielleicht wurde der Einladungslink geändert oder das Team wurde gelöscht.',
         'back_to_homepage'            => 'Zurück zur Startseite',
     ],
-    'list'     => [
+    'list' => [
         'title'                => 'Meine Teams',
         'header'               => 'Meine Teams',
         'create_team'          => 'Team erstellen',
@@ -69,7 +69,7 @@ return [
         'table_header_members' => 'Mitglieder',
         'table_header_routes'  => 'Routen',
     ],
-    'new'      => [
+    'new' => [
         'title'  => 'Neues Team',
         'header' => 'Neues Team',
     ],

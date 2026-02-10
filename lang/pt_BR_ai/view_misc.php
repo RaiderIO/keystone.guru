@@ -2,16 +2,16 @@
 
 return [
 
-    'table'     => [
+    'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '%s caminhada temporal',
         ],
     ],
-    'about'     => [
+    'about' => [
         'title'  => 'Sobre',
         'header' => 'Sobre o Keystone.guru',
     ],
-    'affixes'   => [
+    'affixes' => [
         'title'                             => 'Afixos',
         'header'                            => 'Afixos semanais em %s',
         'start_date'                        => 'Data de início (%s)',
@@ -28,26 +28,26 @@ return [
         'title'  => 'Registro de Alterações',
         'header' => 'Registro de Alterações',
     ],
-    'credits'   => [
+    'credits' => [
         'title'            => 'Créditos',
         'header'           => 'Créditos',
         'header_people'    => 'Pessoas',
         'header_libraries' => 'Bibliotecas',
         'header_images'    => 'Imagens',
     ],
-    'demo'      => [
+    'demo' => [
         'title'  => 'Rotas de demonstração',
         'header' => 'Rotas de demonstração',
     ],
-    'embed'     => [
+    'embed' => [
         'title'  => 'Incorporar uma rota',
         'header' => 'Teste de incorporação do Keystone.guru em página da web',
     ],
-    'health'    => [
+    'health' => [
         'title'  => 'Cálculo de saúde',
         'header' => 'Saúde',
     ],
-    'mapping'   => [
+    'mapping' => [
         'title'                         => 'Mapeamento',
         'header'                        => 'Progresso do mapeamento',
         'enemy_forces_mapping_progress' => 'Progresso do mapeamento de forças inimigas',
@@ -58,7 +58,7 @@ return [
         'enemy_forces'                  => 'Forças inimigas',
         'npcs_assigned'                 => 'NPCs atribuídos',
     ],
-    'status'    => [
+    'status' => [
         'title'       => 'Status',
         'header'      => 'Status',
         'description' => 'Estamos no ar, yay!',

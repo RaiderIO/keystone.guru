@@ -65,6 +65,7 @@ class ReleaseController extends Controller
         $release->backup_db = $request->get('backup_db', 0);
         $release->silent    = $request->get('silent', 0);
         $release->spotlight = $request->get('spotlight', 0);
+        $release->released  = 1;
 
         // Match the changelog to the release
         $release->release_changelog_id = $changelog->id;

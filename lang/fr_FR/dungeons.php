@@ -701,12 +701,12 @@ return [
             ],
         ],
         'skyreach' => [
-            'name'         => '',
+            'name'         => 'Orée-du-Ciel',
             'abbreviation' => '',
             'floors'       => [
-                'lower_quarter' => '',
-                'grand_spire'   => '',
-                'skyreach'      => '',
+                'lower_quarter' => 'Quartier inférieur',
+                'grand_spire'   => 'Grande Flèche',
+                'skyreach'      => 'Orée-du-Ciel',
             ],
         ],
         'the_everbloom' => [
@@ -1256,20 +1256,20 @@ return [
             ],
         ],
         'den_of_nalorakk' => [
-            'name'         => '',
+            'name'         => 'Antre de Nalorakk',
             'abbreviation' => '',
             'floors'       => [
-                'dreamers_passage'  => '',
+                'dreamers_passage'  => 'Antre de Nalorakk',
                 'the_foraging'      => '',
                 'the_heart_of_rage' => '',
                 'den_of_nalorakk'   => '',
             ],
         ],
         'magisters_terrace_midnight' => [
-            'name'         => '',
+            'name'         => 'Terrasse des Magistères',
             'abbreviation' => '',
             'floors'       => [
-                'magisters_terrace'     => '',
+                'magisters_terrace'     => 'Terrasse des Magistères',
                 'arcane_atheneum'       => '',
                 'grand_magister_asylum' => '',
                 'tower_of_theory'       => '',
@@ -1279,54 +1279,54 @@ return [
             ],
         ],
         'maisara_caverns' => [
-            'name'         => '',
+            'name'         => 'Cavernes de Maisara',
             'abbreviation' => '',
             'floors'       => [
-                'maisara_caverns' => '',
+                'maisara_caverns' => 'Cavernes de Maisara',
             ],
         ],
         'murder_row' => [
-            'name'         => '',
+            'name'         => 'Allée du meurtre',
             'abbreviation' => '',
             'floors'       => [
-                'murder_row'       => '',
-                'the_illicit_rain' => '',
-                'augurs_terrace'   => '',
+                'murder_row'       => 'Allée du meurtre',
+                'the_illicit_rain' => 'La Pluie clandestine',
+                'augurs_terrace'   => 'Terrasse des Augures',
             ],
         ],
         'nexus_point_xenas' => [
-            'name'         => '',
+            'name'         => 'Point-nexus Xenas',
             'abbreviation' => '',
             'floors'       => [
-                'nexus_point_xenas' => '',
+                'nexus_point_xenas' => 'Point-nexus Xenas',
             ],
         ],
         'the_blinding_vale' => [
-            'name'         => '',
+            'name'         => 'Le val Aveuglant',
             'abbreviation' => '',
             'floors'       => [
-                'the_blinding_vale' => '',
+                'the_blinding_vale' => 'Le val Aveuglant',
             ],
         ],
         'voidscar_arena' => [
-            'name'         => '',
+            'name'         => 'Arène de la Cicatrice du Vide',
             'abbreviation' => '',
             'floors'       => [
-                'voidscar_arena' => '',
+                'voidscar_arena' => 'Arène de la Cicatrice du Vide',
             ],
         ],
         'windrunner_spire' => [
-            'name'         => '',
+            'name'         => 'Flèche de Coursevent',
             'abbreviation' => '',
             'floors'       => [
-                'the_promenade'           => '',
+                'the_promenade'           => 'La Promenade',
                 'vereesas_repose_upper'   => '',
                 'vereesas_repose_lower'   => '',
                 'sylvanas_quarters_upper' => '',
                 'sylvanas_quarters_lower' => '',
-                'windrunner_vault'        => '',
-                'the_pinnacle'            => '',
-                'windrunner_spire'        => '',
+                'windrunner_vault'        => 'Caveau de Coursevent',
+                'the_pinnacle'            => 'La Cime',
+                'windrunner_spire'        => 'Flèche de Coursevent',
             ],
         ],
     ],

@@ -3,16 +3,16 @@
 return [
 
     'map_icons' => [
-        'mop'      => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik 징집병은 사령관 Ri\'mok을 처치한 후에만 생성됩니다',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => '왕의 시험을 클리어한 후 문이 열립니다',
             ],
         ],
-        'legion'   => [
-            'court_of_stars'   => [
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => '순찰대장 게르도를 처치한 후 해제',
                 'arcane_beacon'                      => '비전 신호',
                 'flask_of_the_solemn_night'          => '엄숙한 밤의 플라스크',
@@ -21,8 +21,8 @@ return [
                 'hidden_pack_in_cave' => '물 아래 폭포 뒤의 동굴에 묶음이 숨겨져 있습니다.',
             ],
         ],
-        'sl'       => [
-            'de_other_side'              => [
+        'sl' => [
+            'de_other_side' => [
                 'start'                => '시작',
                 'graveyard_ardenweald' => '아르덴웨일드에 들어간 후 활성화',
                 'graveyard_mechagon'   => '메카곤에 들어간 후 활성화',
@@ -31,11 +31,11 @@ return [
                 'engineer_blob_button' => '엔지니어는 빨간 버튼을 눌러 흐르는 블롭의 강을 몇 분 동안 비활성화할 수 있습니다',
                 'exit'                 => '출구',
             ],
-            'halls_of_atonement'         => [
+            'halls_of_atonement' => [
                 'start' => '시작',
                 'exit'  => '출구',
             ],
-            'mists_of_tirna_scithe'      => [
+            'mists_of_tirna_scithe' => [
                 'start'                          => '시작',
                 'brambles'                       => '나이트 엘프, 타우렌, 하이마운틴 타우렌, 드루이드, 카즈 알가 허브 전문가가 최소 25 기술: 지름길 잠금 해제',
                 'overgrown_roots'                => '나이트 엘프, 타우렌, 하이마운틴 타우렌, 드루이드, 카즈 알가 허브 전문가가 최소 25 기술: 강화 효과로 지역 잠금 해제',
@@ -46,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => '잉그라 말로흐 처치 후 해제',
                 'exit'                           => '출구',
             ],
-            'plaguefall'                 => [
+            'plaguefall' => [
                 'start'              => '시작',
                 'graveyard_dr_ickus' => '닥터 이쿠스 처치 후 활성화',
                 'gushing_slime'      => '강령군주: 광역 피해 발동 오라 - 흐르는 슬라임의 시체에 살점조형을 사용하면 2분 동안 부식성 점액 오라를 획득합니다. 이 오라는 근처 파티원에게 부식성 점액 버프를 적용하여 캐릭터 주변에서 광역 피해를 발동할 10% 확률을 제공합니다.',
@@ -55,7 +55,7 @@ return [
                 'landing'            => '착륙',
                 'exit'               => '출구',
             ],
-            'sanguine_depths'            => [
+            'sanguine_depths' => [
                 'start'                            => '시작',
                 'anima_cage'                       => '벤티르: 애니마 우리를 활성화하여 40야드 내의 적에게 애니마 흡수 디버프를 적용합니다. 20초 후 비활성화되며, 범위 내에서 애니마 흡수 활성 상태로 죽은 적마다 파티 전체에 죄악의 축복 1중첩을 부여합니다.',
                 'tick_bug'                         => '이 진드기는 (때때로) 땅에 버그가 있는 것처럼 보입니다 - 그러나 보스를 끌어오면 끌어옵니다.',
@@ -67,12 +67,12 @@ return [
                 'zrali_essence'                    => '즈랄리의 정수: 안에 서 있는 모든 사람에게 65% 피해 감소 보호막을 제공합니다. 활성화하거나 들고 있는 플레이어 주위를 보호막으로 만듭니다.',
                 'exit'                             => '출구',
             ],
-            'spires_of_ascension'        => [
+            'spires_of_ascension' => [
                 'start'            => '시작',
                 'spear_of_destiny' => '키리안: 운명의 창 - 운명의 창을 위치에 던져 8야드 내의 모든 적을 타격하여 기절시키고 10초 동안 추가 피해를 20% 받게 합니다.',
                 'exit'             => '출구',
             ],
-            'the_necrotic_wake'          => [
+            'the_necrotic_wake' => [
                 'start'                  => '시작',
                 'bloody_javelin'         => '피 묻은 창: 목표물에 키리안 창을 던져 지나가는 모든 적에게 물리 피해를 입히고 2초마다 추가 물리 피해를 16초 동안 입힙니다. 타격된 적은 16초 동안 받는 피해가 20% 증가합니다.',
                 'forgotten_forgehammer'  => '잊혀진 대장장이 망치: 목표물에 강력한 키리안 망치를 던져 물리 피해를 입히고 8초 동안 기절시킵니다.',
@@ -83,7 +83,7 @@ return [
                 'grisly_curio'           => '끔찍한 골동품',
                 'exit'                   => '출구',
             ],
-            'theater_of_pain'            => [
+            'theater_of_pain' => [
                 'start'                => '시작',
                 'necrolord_banner'     => '강령군주: 강령군주 깃발을 클릭하여 모든 파티원에게 5분 동안 10%의 속도와 유연성 버프를 부여합니다',
                 'graveyard_gorechop'   => '고어촙을 처치한 후 활성화됩니다',
@@ -98,8 +98,8 @@ return [
                 'bazaar_event_wave_three' => '바자 이벤트: 3단계',
             ],
         ],
-        'tww'      => [
-            'the_stonevault'             => [
+        'tww' => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => '전사, 드워프, 대장장이 (25): 주입된 철 바 안에 갇힌 에너지가 방출되어 20미터 내 모든 플레이어의 유연성을 10분 동안 10% 증가시킵니다.',
             ],
             'priory_of_the_sacred_flame' => [
@@ -116,10 +116,10 @@ return [
                 'go_north'                  => '',
                 'go_south'                  => '',
             ],
-            'maisara_caverns'   => [
+            'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '',
             ],
-            'windrunner_spire'  => [
+            'windrunner_spire' => [
                 'activates_after_killing_bosses' => '',
             ],
         ],

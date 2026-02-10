@@ -3,16 +3,16 @@
 return [
 
     'map_icons' => [
-        'mop'      => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru : Les Conscrits Krik\'thik n\'apparaissent qu\'après avoir vaincu le Commandant Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'La porte se déverrouille après avoir vaincu l\'Épreuve du Roi',
             ],
         ],
-        'legion'   => [
-            'court_of_stars'   => [
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => 'Déverrouille après avoir tué le Capitaine de Patrouille Gerdo',
                 'arcane_beacon'                      => 'Balise Arcanique',
                 'flask_of_the_solemn_night'          => 'Fiole de la Nuit Solennelle',
@@ -21,8 +21,8 @@ return [
                 'hidden_pack_in_cave' => 'Le paquet se trouve dans une grotte sous l\'eau derrière la cascade.',
             ],
         ],
-        'sl'       => [
-            'de_other_side'              => [
+        'sl' => [
+            'de_other_side' => [
                 'start'                => 'Début',
                 'graveyard_ardenweald' => 'S\'active après être entré à Sylvarden',
                 'graveyard_mechagon'   => 'S\'active après être entré à Mécagone',
@@ -31,11 +31,11 @@ return [
                 'engineer_blob_button' => 'Les ingénieurs peuvent désactiver la rivière de blobs pendant quelques minutes en appuyant sur le bouton rouge',
                 'exit'                 => 'Sortie',
             ],
-            'halls_of_atonement'         => [
+            'halls_of_atonement' => [
                 'start' => 'Début',
                 'exit'  => 'Sortie',
             ],
-            'mists_of_tirna_scithe'      => [
+            'mists_of_tirna_scithe' => [
                 'start'                          => 'Début',
                 'brambles'                       => 'Elfes de la nuit, Taurens, Taurens de Haut-Roc, Druides, et Herboristes de Khaz Algar avec au moins 25 Compétences : déverrouille un raccourci',
                 'overgrown_roots'                => 'Elfes de la nuit, Taurens, Taurens de Haut-Roc, Druides, et Herboristes de Khaz Algar avec au moins 25 Compétences : déverrouille une zone avec des buffs',
@@ -46,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => 'Se déverrouille après avoir tué Ingra Maloch',
                 'exit'                           => 'Sortie',
             ],
-            'plaguefall'                 => [
+            'plaguefall' => [
                 'start'              => 'Début',
                 'graveyard_dr_ickus' => 'S\'active après avoir tué le Docteur Ickus',
                 'gushing_slime'      => 'Nécro-seigneur : Aura de proc de dégâts de zone - Utiliser la chair sur le cadavre de la Gelée suintante conférera l\'aura de Boue corrosive pendant 2 minutes. Cette aura appliquera le buff de Boue corrosive à tout membre du groupe à proximité, donnant une chance de 10% de déclencher des dégâts de zone autour de votre personnage',
@@ -55,7 +55,7 @@ return [
                 'landing'            => 'Atterrissage',
                 'exit'               => 'Sortie',
             ],
-            'sanguine_depths'            => [
+            'sanguine_depths' => [
                 'start'                            => 'Début',
                 'anima_cage'                       => 'Venthyr : Activez les cages d\'anima pour affaiblir les ennemis dans un rayon de 40 mètres avec Drain d\'anima. Après 20 secondes, il se désactivera et donnera à tout le groupe 1 pile de Bénédiction de Chute-de-Péché pour chaque ennemi mort à portée avec Drain d\'anima actif',
                 'tick_bug'                         => 'Cette tique semble (parfois) être buggée dans le sol - elle se déclenchera cependant lorsque le boss est engagé',
@@ -67,12 +67,12 @@ return [
                 'zrali_essence'                    => 'Essence de Z\'rali : Bouclier de bulle de réduction de dégâts de 65% pour tous ceux qui se tiennent à l\'intérieur. Crée le bouclier autour du joueur qui le transporte/l\'active',
                 'exit'                             => 'Sortie',
             ],
-            'spires_of_ascension'        => [
+            'spires_of_ascension' => [
                 'start'            => 'Début',
                 'spear_of_destiny' => 'Kyrian : Lance du Destin - lancez la Lance du Destin à un emplacement, touchant tous les ennemis dans un rayon de 8 mètres, les étourdissant et leur infligeant 20% de dégâts supplémentaires pendant 10 secondes',
                 'exit'             => 'Sortie',
             ],
-            'the_necrotic_wake'          => [
+            'the_necrotic_wake' => [
                 'start'                  => 'Début',
                 'bloody_javelin'         => 'Javelot Sanglant : Lance un javelot kyrian sur la cible, infligeant des dégâts physiques à tous les ennemis qu\'il traverse et des dégâts physiques supplémentaires toutes les 2 secondes pendant 16 secondes. Les ennemis touchés subissent 20% de dégâts supplémentaires pendant 16 secondes.',
                 'forgotten_forgehammer'  => 'Marteau de Forge Oublié : Lance un puissant marteau kyrian sur la cible, infligeant des dégâts physiques et étourdissant la cible pendant 8 secondes.',
@@ -83,7 +83,7 @@ return [
                 'grisly_curio'           => 'Curiosité Macabre',
                 'exit'                   => 'Sortie',
             ],
-            'theater_of_pain'            => [
+            'theater_of_pain' => [
                 'start'                => 'Début',
                 'necrolord_banner'     => 'Nécro-seigneur : cliquez sur les bannières Nécro-seigneur pour accorder un buff de 10 % de vitesse et de polyvalence pendant 5 minutes à tous les membres du groupe',
                 'graveyard_gorechop'   => 'S\'active après avoir tué Gorechop',
@@ -98,8 +98,8 @@ return [
                 'bazaar_event_wave_three' => 'Événement du Bazar : Vague 3',
             ],
         ],
-        'tww'      => [
-            'the_stonevault'             => [
+        'tww' => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => 'Guerriers, Nains, Forgerons (25) : L\'énergie piégée à l\'intérieur de la barre de fer imprégnée se libère, augmentant la polyvalence de tous les joueurs dans un rayon de 20 mètres de 10 % pendant 10 minutes.',
             ],
             'priory_of_the_sacred_flame' => [
@@ -116,10 +116,10 @@ return [
                 'go_north'                  => '',
                 'go_south'                  => '',
             ],
-            'maisara_caverns'   => [
+            'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '',
             ],
-            'windrunner_spire'  => [
+            'windrunner_spire' => [
                 'activates_after_killing_bosses' => '',
             ],
         ],

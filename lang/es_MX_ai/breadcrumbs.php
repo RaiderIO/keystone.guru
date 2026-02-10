@@ -3,17 +3,17 @@
 return [
 
     'home' => [
-        'keystone_guru'       => 'Keystone.guru',
-        'affixes'             => 'Afijos',
-        'about'               => 'Acerca de',
-        'credits'             => 'Créditos',
-        'changelog'           => [
+        'keystone_guru' => 'Keystone.guru',
+        'affixes'       => 'Afijos',
+        'about'         => 'Acerca de',
+        'credits'       => 'Créditos',
+        'changelog'     => [
             'list'    => 'Registro de cambios',
             'release' => [
                 'view' => 'Lanzamiento :version',
             ],
         ],
-        'legal'               => [
+        'legal' => [
             'cookies' => 'Cookies',
             'privacy' => 'Privacidad',
             'terms'   => 'Términos',
@@ -28,10 +28,10 @@ return [
                 'explore'  => 'Explorar',
             ],
         ],
-        'dungeonroute'        => [
+        'dungeonroute' => [
             'new' => 'Nueva ruta',
         ],
-        'dungeonroutes'       => [
+        'dungeonroutes' => [
             'search'            => 'Buscar',
             'popular'           => 'Popular',
             'next_week_affixes' => 'Afijos de la próxima semana',
@@ -44,24 +44,24 @@ return [
                 'this_week_affixes' => 'Afijos de esta semana',
                 'new'               => 'Nuevo',
             ],
-            'discoverdungeon'   => [
+            'discoverdungeon' => [
                 'popular'           => 'Popular',
                 'next_week_affixes' => 'Afijos de la próxima semana',
                 'this_week_affixes' => 'Afijos de esta semana',
                 'new'               => 'Nuevo',
             ],
         ],
-        'my_profile'          => 'Mi perfil público',
-        'my_routes'           => 'Mis rutas',
-        'my_tags'             => 'Mis etiquetas',
-        'my_teams'            => 'Mis equipos',
-        'overview'            => 'Visión general',
-        'new_team'            => 'Nuevo equipo',
-        'edit_team'           => 'Editar equipo',
-        'join_team'           => 'Unirse al equipo',
-        'admin'               => [
-            'admin'                      => 'Admin',
-            'tools'                      => [
+        'my_profile' => 'Mi perfil público',
+        'my_routes'  => 'Mis rutas',
+        'my_tags'    => 'Mis etiquetas',
+        'my_teams'   => 'Mis equipos',
+        'overview'   => 'Visión general',
+        'new_team'   => 'Nuevo equipo',
+        'edit_team'  => 'Editar equipo',
+        'join_team'  => 'Unirse al equipo',
+        'admin'      => [
+            'admin' => 'Admin',
+            'tools' => [
                 'admin_tools'               => 'Herramientas de admin',
                 'view_exported_dungeondata' => 'Ver datos de mazmorra exportados',
                 'view_exported_releases'    => 'Ver lanzamientos exportados',
@@ -70,20 +70,20 @@ return [
                 'view_mdt_string_contents'  => 'Ver contenidos de cadena MDT',
                 'import_npcs'               => 'Importar NPCs',
             ],
-            'releases'                   => 'Lanzamientos',
-            'new_release'                => 'Nuevo lanzamiento',
-            'edit_release'               => 'Editar lanzamiento',
-            'expansions'                 => [
+            'releases'     => 'Lanzamientos',
+            'new_release'  => 'Nuevo lanzamiento',
+            'edit_release' => 'Editar lanzamiento',
+            'expansions'   => [
                 'expansions'     => 'Expansiones',
                 'new_expansion'  => 'Nueva expansión',
                 'edit_expansion' => 'Editar expansión',
             ],
-            'dungeons'                   => [
+            'dungeons' => [
                 'dungeons'     => 'Mazmorras',
                 'new_dungeon'  => 'Nueva mazmorra',
                 'edit_dungeon' => 'Editar :dungeon',
             ],
-            'floors'                     => [
+            'floors' => [
                 'new_floor'  => 'Nuevo piso',
                 'edit_floor' => 'Editar piso',
             ],
@@ -91,28 +91,28 @@ return [
                 'new_dungeonspeedrunrequirednpc10man' => 'Nuevo NPC requerido para carrera rápida de mazmorra de 10 personas',
                 'new_dungeonspeedrunrequirednpc25man' => 'Nuevo NPC requerido para carrera rápida de mazmorra de 25 personas',
             ],
-            'npcs'                       => [
+            'npcs' => [
                 'npcs'     => 'NPCs',
                 'new_npc'  => 'Nuevo NPC',
                 'edit_npc' => 'Editar :npc',
             ],
-            'npcenemyforces'             => [
+            'npcenemyforces' => [
                 'new_npc_enemy_forces'  => 'Nuevas fuerzas enemigas de NPC',
                 'edit_npc_enemy_forces' => 'Editar fuerzas enemigas de NPC',
             ],
-            'npchealth'                  => [
+            'npchealth' => [
                 'new_npc_health'  => 'Nueva salud de NPC',
                 'edit_npc_health' => 'Editar salud de NPC',
             ],
-            'spells'                     => [
+            'spells' => [
                 'spells'     => 'Hechizos',
                 'new_spell'  => 'Nuevo hechizo',
                 'edit_spell' => 'Editar hechizo',
             ],
-            'users'                      => [
+            'users' => [
                 'users' => 'Usuarios',
             ],
-            'user_reports'               => [
+            'user_reports' => [
                 'user_reports' => 'Informes de usuario',
             ],
         ],

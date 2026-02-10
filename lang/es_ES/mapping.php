@@ -116,10 +116,10 @@ return [
                 'go_north'                  => '',
                 'go_south'                  => '',
             ],
-            'maisara_caverns'   => [
+            'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '',
             ],
-            'windrunner_spire'  => [
+            'windrunner_spire' => [
                 'activates_after_killing_bosses' => '',
             ],
         ],

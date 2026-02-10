@@ -34,4 +34,6 @@ interface SeasonServiceInterface
      * @return Collection<WeeklyAffixGroup>
      */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection;
+
+    public function getSeasonFromShortString(string $season): ?Season;
 }

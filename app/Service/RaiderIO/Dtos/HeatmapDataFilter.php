@@ -49,6 +49,7 @@ class HeatmapDataFilter implements Arrayable
     private ?string $excludePlayerDeathClassIds = null;
     private ?string $includePlayerSpellIds      = null;
     private ?string $token                      = null;
+    private ?string $season                     = null;
 
     public function __construct(
         private readonly Dungeon                 $dungeon,
@@ -403,6 +404,18 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    public function getSeason(): ?string
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?string $season): HeatmapDataFilter
+    {
+        $this->season = $season;
+
+        return $this;
+    }
+
     public function getFloorsAsArray(): ?bool
     {
         return config('keystoneguru.heatmap.api.floors_as_array');
@@ -411,10 +424,9 @@ class HeatmapDataFilter implements Arrayable
     /**
      * Converts the filter into an array that will be passed to the Raider.io API in the URL
      *
-     * @param  Season|null $mostRecentSeason
      * @return array
      */
-    public function toArray(?Season $mostRecentSeason = null): array
+    public function toArray(): array
     {
         $result = [
             'challengeModeId'  => $this->dungeon->challenge_mode_id,
@@ -436,6 +448,7 @@ class HeatmapDataFilter implements Arrayable
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
             'includePlayerSpellIds'      => $this->getIncludePlayerSpellIds(),
             'token'                      => $this->getToken(),
+            'season'                     => $this->getSeason(),
         ];
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {
@@ -562,6 +575,7 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setExcludePlayerDeathClassIds($requestArray['excludePlayerDeathClassIds'] ?? null);
         $heatmapDataFilter->setIncludePlayerSpellIds($requestArray['includePlayerSpellIds'] ?? null);
         $heatmapDataFilter->setToken($requestArray['token'] ?? null);
+        $heatmapDataFilter->setSeason($requestArray['season'] ?? null);
 
         return $heatmapDataFilter;
     }

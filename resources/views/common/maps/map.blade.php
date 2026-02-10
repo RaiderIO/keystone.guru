@@ -12,6 +12,7 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Season;
 use App\Models\User;
 
 /**
@@ -19,6 +20,7 @@ use App\Models\User;
  * @var MapContextBase    $mapContext
  * @var Dungeon           $dungeon
  * @var Floor             $floor
+ * @var Season|null       $season Used for heatmap
  * @var MappingVersion    $mappingVersion
  * @var DungeonRoute|null $dungeonroute
  * @var LiveSession|null  $livesession
@@ -50,6 +52,7 @@ $user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
     'updated_at'
 ])));
 
+$season             ??= null;
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
 $embedStyle         ??= '';
@@ -325,6 +328,7 @@ if ($isAdmin) {
         @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
             'showSidebar' => $show['controls']['heatmapSearchSidebar'] ?? true,
+            'showDataSourceSnackbar' => $show['controls']['heatmapSearchShowDataSourceSnackbar'] ?? true,
             'defaultState' => $show['controls']['heatmapSearchDefaultState'] ?? null,
             'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null
         ]))

@@ -127,7 +127,10 @@ class DungeonHeatmapController extends Controller
                 ] + $request->validated());
             }
 
-            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+            $seasonString = $request->get('season');
+
+            $mostRecentSeason = $seasonService->getSeasonFromShortString($seasonString) ??
+                $dungeon->getActiveSeason($seasonService);
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
@@ -210,14 +213,15 @@ class DungeonHeatmapController extends Controller
             config('language.short_to_long')[$locale] ?? $locale,
         );
 
-        $style                 = $request->get('style', 'compact');
-        $headerBackgroundColor = $request->get('headerBackgroundColor');
-        $mapBackgroundColor    = $request->get('mapBackgroundColor');
-        $showEnemyInfo         = $request->get('showEnemyInfo', false);
-        $showTitle             = $request->get('showTitle', true);
-        $showSidebar           = $request->get('showSidebar', true);
-        $showHeader            = $request->get('showHeader', true);
-        $defaultZoom           = $request->get('defaultZoom', 1);
+        $style                  = $request->get('style', 'compact');
+        $headerBackgroundColor  = $request->get('headerBackgroundColor');
+        $mapBackgroundColor     = $request->get('mapBackgroundColor');
+        $showEnemyInfo          = $request->get('showEnemyInfo', false);
+        $showTitle              = $request->get('showTitle', true);
+        $showSidebar            = $request->get('showSidebar', true);
+        $showHeader             = $request->get('showHeader', true);
+        $showDataSourceSnackbar = $request->get('showDataSourceSnackbar', true);
+        $defaultZoom            = $request->get('defaultZoom', 1);
 
         unset(
             $validated['style'],
@@ -258,11 +262,12 @@ class DungeonHeatmapController extends Controller
                 'show'                  => [
                     'enemyInfo' => (bool)$showEnemyInfo,
                     // Default false - not available
-                    'title'          => (bool)$showTitle,
-                    'sidebar'        => (bool)$showSidebar,
-                    'header'         => (bool)$showHeader,
-                    'floorSelection' => true,
-                    // Always available, but can be overridden later if there's no floors to select
+                    'title'              => (bool)$showTitle,
+                    'sidebar'            => (bool)$showSidebar,
+                    'header'             => (bool)$showHeader,
+                    'floorSelection'     => true,
+                    'dataSourceSnackbar' => (bool)$showDataSourceSnackbar,
+                    // Always available but can be overridden later if there are no floors to select
                 ],
             ],
         ]));

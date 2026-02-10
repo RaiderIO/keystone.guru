@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Explorer',
                 'header'            => 'Explorer le donjon',
                 'description'       => 'Explorer un donjon vous permet de voir la disposition du donjon et les ennemis présents. Idéal pour simplement visualiser le donjon sans créer d\'itinéraire.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Cartes de chaleur',
                 'header'            => 'Cartes de chaleur du donjon',
                 'raider_io'         => 'Raider.IO',

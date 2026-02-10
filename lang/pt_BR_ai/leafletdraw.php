@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Cancelar desenho',
                 'text'  => 'Cancelar',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Concluir desenho',
                 'text'  => 'Concluir',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Excluir último ponto desenhado',
                 'text'  => 'Excluir último ponto',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => 'Clique e arraste para desenhar um círculo.',
                 ],
-                'radius'  => 'Raio',
+                'radius' => 'Raio',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => 'Clique no mapa para posicionar o marcador de círculo.',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => 'Clique no mapa para posicionar o marcador.',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => 'Clique para começar a desenhar a forma.',
                     'cont'  => 'Clique para continuar desenhando a forma.',
                     'end'   => 'Clique no primeiro ponto para fechar esta forma.',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '<strong>Erro:</strong> as arestas da forma não podem se cruzar!',
                 'tooltip' => [
                     'start' => 'Clique para começar a desenhar a linha.',
@@ -57,24 +57,24 @@ return [
                     'end'   => 'Clique no último ponto para finalizar a linha.',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => 'Clique e arraste para desenhar um retângulo.',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => 'Solte o mouse para terminar de desenhar.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => 'Clique para começar a desenhar o caminho.',
                     'cont'  => 'Clique para continuar desenhando o caminho.',
                     'end'   => 'Clique no botão \'Concluir\' na barra de ferramentas para completar seu caminho.',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => 'Clique para começar a desenhar a linha.',
                     'cont'  => 'Clique e arraste para continuar desenhando a linha.',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Salvar alterações',
                     'text'  => 'Salvar',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => 'Cancelar edição, descarta todas as alterações',
                     'text'  => 'Cancelar',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Arraste as alças ou marcadores para editar as funcionalidades.',
                     'subtext' => 'Clique em cancelar para desfazer as alterações.',

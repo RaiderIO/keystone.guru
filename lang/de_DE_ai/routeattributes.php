@@ -2,7 +2,7 @@
 
 return [
 
-    'category'            => [
+    'category' => [
         'class' => 'Klasse',
         'item'  => 'Gegenstand',
         'misc'  => 'Verschiedenes',

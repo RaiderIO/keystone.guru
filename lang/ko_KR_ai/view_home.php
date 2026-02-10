@@ -2,18 +2,18 @@
 
 return [
 
-    'ie_not_supported'                             => 'Internet Explorer를 사용하여 Keystone.guru를 검색 중인 것 같습니다. 불행히도 Internet Explorer는 지원되지 않는 브라우저입니다. 정말로 작동하지 않습니다. Google Chrome, Mozilla Firefox 또는 Microsoft Edge를 사용해 보십시오.',
-    'tagline'                                      => 'M+ 경로 쉽게 만들기',
-    'tagline_description'                          => '팀과 함께 온라인으로 협력하여 경로를 계획하거나 자신의 플레이 스타일과 실력 수준에 맞는 경로를 발견하세요. Keystone.guru는 M+ 경로를 관리하고 공유할 수 있는 유일한 장소입니다.',
-    'discover_routes'                              => '경로 발견',
-    'create_route'                                 => '경로 생성',
-    'discover_new_routes'                          => '새로운 경로 발견',
-    'discover_new_routes_description'              => '다양한 카테고리의 던전별로 경로를 쉽게 찾아서 그룹에 완벽하게 맞는 경로를 찾으세요.
+    'ie_not_supported'                => 'Internet Explorer를 사용하여 Keystone.guru를 검색 중인 것 같습니다. 불행히도 Internet Explorer는 지원되지 않는 브라우저입니다. 정말로 작동하지 않습니다. Google Chrome, Mozilla Firefox 또는 Microsoft Edge를 사용해 보십시오.',
+    'tagline'                         => 'M+ 경로 쉽게 만들기',
+    'tagline_description'             => '팀과 함께 온라인으로 협력하여 경로를 계획하거나 자신의 플레이 스타일과 실력 수준에 맞는 경로를 발견하세요. Keystone.guru는 M+ 경로를 관리하고 공유할 수 있는 유일한 장소입니다.',
+    'discover_routes'                 => '경로 발견',
+    'create_route'                    => '경로 생성',
+    'discover_new_routes'             => '새로운 경로 발견',
+    'discover_new_routes_description' => '다양한 카테고리의 던전별로 경로를 쉽게 찾아서 그룹에 완벽하게 맞는 경로를 찾으세요.
 :archon_gg와의 통합을 통해 어떤 던전이 어떤 어픽스에 가장 적합한지 쉽게 확인할 수 있습니다.
 여전히 필요에 맞는 경로를 찾을 수 없습니까? :routesearch 페이지를 통해 정확한 요구 사항에 맞는 경로를 찾을 수 있습니다.',
-    'discover_new_routes_route_search'             => '경로 검색',
-    'create_your_own_routes'                       => '자신만의 경로 생성',
-    'create_your_own_routes_description'           => 'Mythic Dungeon Tools에서 경로를 가져오거나 :createANewRoute에서 새로 시작하세요. Keystone.guru는 자유로운 그리기, 경로 설정 및 아이콘/댓글 배치와 같은 다양한 도구를 제공하여 경로를 기억에 남게 합니다.
+    'discover_new_routes_route_search'   => '경로 검색',
+    'create_your_own_routes'             => '자신만의 경로 생성',
+    'create_your_own_routes_description' => 'Mythic Dungeon Tools에서 경로를 가져오거나 :createANewRoute에서 새로 시작하세요. Keystone.guru는 자유로운 그리기, 경로 설정 및 아이콘/댓글 배치와 같은 다양한 도구를 제공하여 경로를 기억에 남게 합니다.
 적의 힘을 비율 또는 원시 형태로 표시할 수 있습니다. 다양한 설정을 통해 자신의 취향에 맞게 경로 생성 경험을 맞춤 설정할 수 있습니다.',
     'get_organized'                                => '정리하기',
     'get_organized_description'                    => '프로필이나 팀을 통해 경로를 정리하십시오. Keystone.guru는 모든 경로를 정리하고 M+ 팀 구성원이 모두 액세스할 수 있도록 다양한 도구를 제공합니다. 다른 사람과 공유할 수 있도록 항상 경로를 Mythic Dungeon Tools 형식으로 내보낼 수 있습니다.',

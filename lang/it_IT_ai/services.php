@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => 'Pull %d',
                     'title'    => 'Titolo',
                     'map_icon' => 'Icona mappa',
@@ -19,7 +19,7 @@ return [
                 'map_icon_contains_non_ascii_char_bug_details'      => 'Vecchio commento: "%s", nuovo commento: "%s"',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => 'Obelischi Risvegliati',
                     'pulls'             => 'Pulls',
                     'notes'             => 'Note',
@@ -48,7 +48,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => 'Tutti i dungeon',
     ],
     'combatlogservice' => [

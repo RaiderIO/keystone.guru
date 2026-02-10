@@ -2,7 +2,7 @@
 
 return [
 
-    'dungeon'                    => [
+    'dungeon' => [
         'edit' => [
             'title_new'                          => 'Новое подземелье',
             'title_edit'                         => 'Редактировать подземелье',
@@ -29,9 +29,9 @@ return [
             'slug'                               => 'Жетон',
             'submit'                             => 'Подтвердить',
             'floor_management'                   => [
-                'title'                   => '',
-                'add_floor'               => '',
-                'table_header'            => [
+                'title'        => '',
+                'add_floor'    => '',
+                'table_header' => [
                     'id'      => '',
                     'index'   => '',
                     'name'    => '',
@@ -42,7 +42,7 @@ return [
                 'floor_edit_edit'         => '',
                 'floor_edit_edit_mapping' => '',
             ],
-            'mapping_versions'                   => [
+            'mapping_versions' => [
                 'title'                    => '',
                 'add_bare_mapping_version' => '',
                 'add_mapping_version'      => '',
@@ -83,7 +83,7 @@ return [
             'submit'         => '',
         ],
     ],
-    'expansion'                  => [
+    'expansion' => [
         'edit' => [
             'title_new'     => 'Новое дополнение',
             'header_new'    => 'Новое дополнение',
@@ -111,14 +111,14 @@ return [
             'edit'                 => 'Редактировать',
         ],
     ],
-    'floor'                      => [
-        'flash'   => [
+    'floor' => [
+        'flash' => [
             'invalid_floor_id'           => 'Этаж %s не является частью подземелья %s',
             'invalid_mapping_version_id' => '',
             'floor_updated'              => 'Этаж обновлен',
             'floor_created'              => 'Этаж создан',
         ],
-        'edit'    => [
+        'edit' => [
             'title_new'                          => 'Новый этаж - %s',
             'header_new'                         => 'Новый этаж - %s',
             'title_edit'                         => 'Редактировать этаж - %s',
@@ -151,8 +151,8 @@ return [
                 'left'  => 'Левый',
                 'right' => 'Правый',
             ],
-            'submit'                             => 'Подтвердить',
-            'speedrun_required_npcs'             => [
+            'submit'                 => 'Подтвердить',
+            'speedrun_required_npcs' => [
                 'title_10_man'         => '',
                 'title_25_man'         => '',
                 'add_npc'              => '',
@@ -168,12 +168,12 @@ return [
             'header' => 'Редактировать отображение - %s',
         ],
     ],
-    'npc'                        => [
-        'flash'          => [
+    'npc' => [
+        'flash' => [
             'npc_updated' => 'NPC обновлены',
             'npc_created' => 'NPC %s создан',
         ],
-        'edit'           => [
+        'edit' => [
             'title_new'                      => 'Новый NPC',
             'header_new'                     => 'Новый NPC',
             'title_edit'                     => 'Редактировать NPC',
@@ -202,7 +202,7 @@ return [
             'all_npcs'                       => 'Все NPC',
             'all_dungeons'                   => 'Все подземелья',
         ],
-        'list'           => [
+        'list' => [
             'all_dungeons'                => 'Все',
             'title'                       => 'Список NPC',
             'header'                      => 'Показать NPC',
@@ -225,7 +225,7 @@ return [
             'table_header_enemy_forces'    => '',
             'table_header_actions'         => '',
         ],
-        'npchealth'      => [
+        'npchealth' => [
             'add_npc_health'    => '',
             'edit_npc_health'   => '',
             'delete_npc_health' => '',
@@ -238,7 +238,7 @@ return [
             ],
         ],
     ],
-    'npcenemyforces'             => [
+    'npcenemyforces' => [
         'flash' => [
             'enemy_forces_updated' => '',
             'enemy_forces_created' => '',
@@ -254,7 +254,7 @@ return [
             'submit'               => '',
         ],
     ],
-    'npchealth'                  => [
+    'npchealth' => [
         'flash' => [
             'npc_health_updated' => '',
             'npc_health_created' => '',
@@ -281,14 +281,14 @@ return [
                 'percentage'     => '',
                 'actions'        => '',
             ],
-            'apply_to_npc_health'                  => '',
-            'edit_npc_health'                      => '',
-            'percentage'                           => '',
-            'game_version'                         => '',
-            'submit'                               => '',
+            'apply_to_npc_health' => '',
+            'edit_npc_health'     => '',
+            'percentage'          => '',
+            'game_version'        => '',
+            'submit'              => '',
         ],
     ],
-    'release'                    => [
+    'release' => [
         'edit' => [
             'title_new'    => 'Новый релиз',
             'header_new'   => 'Новый релиз',
@@ -320,7 +320,7 @@ return [
             'edit'                 => 'Редактировать',
         ],
     ],
-    'spell'                      => [
+    'spell' => [
         'edit' => [
             'title_new'         => 'Новая способность',
             'header_new'        => 'Новая способность',
@@ -350,27 +350,27 @@ return [
             'edit'                 => 'Редактировать',
         ],
     ],
-    'tools'                      => [
-        'datadump'      => [
+    'tools' => [
+        'datadump' => [
             'viewexporteddungeondata' => [
                 'title'   => 'Экспортировано!',
                 'header'  => 'Данные подземелья сброшены',
                 'content' => 'Экспортировано!',
             ],
-            'viewexportedrelease'     => [
+            'viewexportedrelease' => [
                 'title'   => 'Экспортировано!',
                 'header'  => 'Данные подземелья сброшены',
                 'content' => 'Экспортировано!',
             ],
         ],
-        'dungeonroute'  => [
-            'view'            => [
+        'dungeonroute' => [
+            'view' => [
                 'title'      => 'Показать подземелье',
                 'header'     => 'Показать подземелье',
                 'public_key' => 'Публичный ключ маршрута подземелья',
                 'submit'     => 'Подтвердить',
             ],
-            'viewcontents'    => [
+            'viewcontents' => [
                 'title'  => 'Просмотреть содержимое для :dungeonRouteTitle',
                 'header' => 'Просмотреть содержимое для %s',
             ],
@@ -382,7 +382,7 @@ return [
                 'table_header_actions'              => '',
             ],
         ],
-        'enemyforces'   => [
+        'enemyforces' => [
             'title'                    => 'Импорт силы врага',
             'header'                   => 'Импорт силы врага',
             'paste_mennos_export_json' => 'Вставить Menno\'s экспортированный Json',
@@ -393,7 +393,7 @@ return [
                 'submit' => '',
             ],
         ],
-        'exception'     => [
+        'exception' => [
             'select' => [
                 'title'                     => 'Сброс исключений',
                 'header'                    => 'Сброс исключений',
@@ -401,7 +401,7 @@ return [
                 'submit'                    => 'Подтвердить',
             ],
         ],
-        'features'      => [
+        'features' => [
             'list' => [
                 'title'        => '',
                 'header'       => '',
@@ -410,7 +410,7 @@ return [
                     'feature' => '',
                     'actions' => '',
                 ],
-                'actions'      => [
+                'actions' => [
                     'toggle' => '',
                     'forget' => '',
                 ],
@@ -424,11 +424,11 @@ return [
                 'submit'  => '',
             ],
         ],
-        'mdt'           => [
-            'diff'                              => [
-                'title'                 => 'MDT Различия',
-                'header'                => 'MDT Различия',
-                'headers'               => [
+        'mdt' => [
+            'diff' => [
+                'title'   => 'MDT Различия',
+                'header'  => 'MDT Различия',
+                'headers' => [
                     'mismatched_health'               => 'Здоровье не соответствует',
                     'mismatched_enemy_count'          => 'Количества врагов не соответствует',
                     'mismatched_enemy_type'           => 'Тип врага не соответствует ',
@@ -445,19 +445,19 @@ return [
                 'npc_message'           => ':npcName (:npcId, :count использованы)',
                 'apply_mdt_kg'          => 'Применить (MDT -> KG)',
             ],
-            'dungeonroute'                      => [
+            'dungeonroute' => [
                 'title'      => 'Просмотреть маршрут подземелья как строку для MDT',
                 'header'     => 'Просмотреть маршрут подземелья как строку для MDT',
                 'public_key' => 'Публичный ключ',
                 'submit'     => 'Подтвердить',
             ],
-            'string'                            => [
+            'string' => [
                 'title'                        => 'Просмотр содержимое строки MDT',
                 'header'                       => 'Просмотр содержимое строки MDT',
                 'paste_your_mdt_export_string' => 'Вставьте строку экспорта Mythic Dungeon Tools',
                 'submit'                       => 'Подтвердить',
             ],
-            'list'                              => [
+            'list' => [
                 'title'           => '',
                 'header'          => '',
                 'copy_mdt_string' => '',
@@ -469,7 +469,7 @@ return [
                     'actions'       => '',
                 ],
             ],
-            'dungeonmappinghash'                => [
+            'dungeonmappinghash' => [
                 'title'  => '',
                 'header' => '',
                 'submit' => '',
@@ -479,13 +479,13 @@ return [
                 'header' => '',
                 'submit' => '',
             ],
-            'dungeonmappingversionaccuracy'     => [
+            'dungeonmappingversionaccuracy' => [
                 'title'  => '',
                 'header' => '',
             ],
         ],
-        'npc'           => [
-            'import'                => [
+        'npc' => [
+            'import' => [
                 'title'                   => '',
                 'header'                  => '',
                 'paste_npc_import_string' => '',
@@ -498,7 +498,7 @@ return [
                 'spell_not_found' => '',
             ],
         ],
-        'list'          => [
+        'list' => [
             'title'                                       => 'Инструменты администратора',
             'header'                                      => 'Инструменты администратора',
             'header_tools'                                => 'Инструменты',
@@ -540,7 +540,7 @@ return [
             'subheader_thumbnails'                        => '',
             'thumbnails_regenerate'                       => '',
         ],
-        'thumbnails'    => [
+        'thumbnails' => [
             'regenerate' => [
                 'title'        => '',
                 'header'       => '',
@@ -548,7 +548,7 @@ return [
                 'submit'       => '',
             ],
         ],
-        'wagogg'        => [
+        'wagogg' => [
             'importingamecoordinates' => [
                 'title'                       => '',
                 'header'                      => '',
@@ -556,7 +556,7 @@ return [
                 'submit'                      => '',
             ],
         ],
-        'wowtools'      => [
+        'wowtools' => [
             'importingamecoordinates' => [
                 'title'                                  => '',
                 'header'                                 => '',
@@ -567,7 +567,7 @@ return [
             ],
         ],
     ],
-    'user'                       => [
+    'user' => [
         'list' => [
             'title'                        => 'Список пользователей',
             'header'                       => 'Показать пользователя',
@@ -583,7 +583,7 @@ return [
             'ip_addresses_cloudflare_link' => '',
         ],
     ],
-    'userreport'                 => [
+    'userreport' => [
         'list' => [
             'title'                    => 'Отчеты пользователей',
             'header'                   => 'Просмотр отчетов пользователей',

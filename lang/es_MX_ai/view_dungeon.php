@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Explorar',
                 'header'            => 'Explorar mazmorra',
                 'description'       => 'Explorar una mazmorra te permite ver el diseño de la mazmorra y los enemigos que están presentes. Ideal para simplemente ver la mazmorra sin crear una ruta.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Mapas de calor',
                 'header'            => 'Mapas de calor de mazmorras',
                 'raider_io'         => 'Raider.IO',

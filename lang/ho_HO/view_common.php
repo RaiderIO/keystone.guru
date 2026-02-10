@@ -449,7 +449,7 @@ return [
             'horde'                                  => 'Hodor',
             'new_mapping_version_header_title'       => 'Hodor',
             'new_mapping_version_header_description' => 'Hodor',
-            'route' => 'Hodor',
+            'route'                                  => 'Hodor',
         ],
     ],
     'mappingversion' => [
@@ -540,7 +540,7 @@ return [
             'copy_to_clipboard'                => 'Hodor',
         ],
         'simulate' => [
-            'intro' => 'Hodor',
+            'intro'                      => 'Hodor',
             'title'                      => 'Hodor',
             'get_simulationcraft_string' => 'Hodor',
             'simulationcraft_string'     => 'Hodor',
@@ -591,12 +591,12 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Hodor',
                 'ranged_pull_compensation_yards_title' => 'Hodor',
-                'use_mounts'        => 'Hodor',
-                'use_mounts_title'  => 'Hodor',
-                'patreon_link_text' => 'Hodor',
-                'patreon_only'      => 'Hodor',
-                'advanced_options'  => 'Hodor',
-                'description'       => 'Hodor',
+                'use_mounts'                           => 'Hodor',
+                'use_mounts_title'                     => 'Hodor',
+                'patreon_link_text'                    => 'Hodor',
+                'patreon_only'                         => 'Hodor',
+                'advanced_options'                     => 'Hodor',
+                'description'                          => 'Hodor',
             ],
         ],
         'uploadlogs' => [

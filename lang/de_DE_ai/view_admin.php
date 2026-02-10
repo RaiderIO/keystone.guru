@@ -2,7 +2,7 @@
 
 return [
 
-    'dungeon'                    => [
+    'dungeon' => [
         'edit' => [
             'title_new'                          => '',
             'title_edit'                         => '',
@@ -29,9 +29,9 @@ return [
             'slug'                               => '',
             'submit'                             => '',
             'floor_management'                   => [
-                'title'                   => '',
-                'add_floor'               => '',
-                'table_header'            => [
+                'title'        => '',
+                'add_floor'    => '',
+                'table_header' => [
                     'id'      => '',
                     'index'   => '',
                     'name'    => '',
@@ -42,7 +42,7 @@ return [
                 'floor_edit_edit'         => '',
                 'floor_edit_edit_mapping' => '',
             ],
-            'mapping_versions'                   => [
+            'mapping_versions' => [
                 'title'                    => '',
                 'add_bare_mapping_version' => '',
                 'add_mapping_version'      => '',
@@ -83,7 +83,7 @@ return [
             'submit'         => '',
         ],
     ],
-    'expansion'                  => [
+    'expansion' => [
         'edit' => [
             'title_new'     => '',
             'header_new'    => '',
@@ -111,14 +111,14 @@ return [
             'edit'                 => '',
         ],
     ],
-    'floor'                      => [
-        'flash'   => [
+    'floor' => [
+        'flash' => [
             'invalid_floor_id'           => '',
             'invalid_mapping_version_id' => '',
             'floor_updated'              => '',
             'floor_created'              => '',
         ],
-        'edit'    => [
+        'edit' => [
             'title_new'                          => '',
             'header_new'                         => '',
             'title_edit'                         => '',
@@ -151,8 +151,8 @@ return [
                 'left'  => '',
                 'right' => '',
             ],
-            'submit'                             => '',
-            'speedrun_required_npcs'             => [
+            'submit'                 => '',
+            'speedrun_required_npcs' => [
                 'title_10_man'         => '',
                 'title_25_man'         => '',
                 'add_npc'              => '',
@@ -168,12 +168,12 @@ return [
             'header' => '',
         ],
     ],
-    'npc'                        => [
-        'flash'          => [
+    'npc' => [
+        'flash' => [
             'npc_updated' => '',
             'npc_created' => '',
         ],
-        'edit'           => [
+        'edit' => [
             'title_new'                      => '',
             'header_new'                     => '',
             'title_edit'                     => '',
@@ -202,7 +202,7 @@ return [
             'all_npcs'                       => '',
             'all_dungeons'                   => '',
         ],
-        'list'           => [
+        'list' => [
             'all_dungeons'                => '',
             'title'                       => '',
             'header'                      => '',
@@ -225,7 +225,7 @@ return [
             'table_header_enemy_forces'    => '',
             'table_header_actions'         => '',
         ],
-        'npchealth'      => [
+        'npchealth' => [
             'add_npc_health'    => '',
             'edit_npc_health'   => '',
             'delete_npc_health' => '',
@@ -238,7 +238,7 @@ return [
             ],
         ],
     ],
-    'npcenemyforces'             => [
+    'npcenemyforces' => [
         'flash' => [
             'enemy_forces_updated' => '',
             'enemy_forces_created' => '',
@@ -254,7 +254,7 @@ return [
             'submit'               => '',
         ],
     ],
-    'npchealth'                  => [
+    'npchealth' => [
         'flash' => [
             'npc_health_updated' => '',
             'npc_health_created' => '',
@@ -281,14 +281,14 @@ return [
                 'percentage'     => '',
                 'actions'        => '',
             ],
-            'apply_to_npc_health'                  => '',
-            'edit_npc_health'                      => '',
-            'percentage'                           => '',
-            'game_version'                         => '',
-            'submit'                               => '',
+            'apply_to_npc_health' => '',
+            'edit_npc_health'     => '',
+            'percentage'          => '',
+            'game_version'        => '',
+            'submit'              => '',
         ],
     ],
-    'release'                    => [
+    'release' => [
         'edit' => [
             'title_new'    => '',
             'header_new'   => '',
@@ -320,7 +320,7 @@ return [
             'edit'                 => '',
         ],
     ],
-    'spell'                      => [
+    'spell' => [
         'edit' => [
             'title_new'         => '',
             'header_new'        => '',
@@ -350,27 +350,27 @@ return [
             'edit'                 => '',
         ],
     ],
-    'tools'                      => [
-        'datadump'      => [
+    'tools' => [
+        'datadump' => [
             'viewexporteddungeondata' => [
                 'title'   => '',
                 'header'  => '',
                 'content' => '',
             ],
-            'viewexportedrelease'     => [
+            'viewexportedrelease' => [
                 'title'   => '',
                 'header'  => '',
                 'content' => '',
             ],
         ],
-        'dungeonroute'  => [
-            'view'            => [
+        'dungeonroute' => [
+            'view' => [
                 'title'      => '',
                 'header'     => '',
                 'public_key' => '',
                 'submit'     => '',
             ],
-            'viewcontents'    => [
+            'viewcontents' => [
                 'title'  => '',
                 'header' => '',
             ],
@@ -382,7 +382,7 @@ return [
                 'table_header_actions'              => '',
             ],
         ],
-        'enemyforces'   => [
+        'enemyforces' => [
             'title'                    => '',
             'header'                   => '',
             'paste_mennos_export_json' => '',
@@ -393,7 +393,7 @@ return [
                 'submit' => '',
             ],
         ],
-        'exception'     => [
+        'exception' => [
             'select' => [
                 'title'                     => '',
                 'header'                    => '',
@@ -401,7 +401,7 @@ return [
                 'submit'                    => '',
             ],
         ],
-        'features'      => [
+        'features' => [
             'list' => [
                 'title'        => '',
                 'header'       => '',
@@ -410,7 +410,7 @@ return [
                     'feature' => '',
                     'actions' => '',
                 ],
-                'actions'      => [
+                'actions' => [
                     'toggle' => '',
                     'forget' => '',
                 ],
@@ -424,11 +424,11 @@ return [
                 'submit'  => '',
             ],
         ],
-        'mdt'           => [
-            'diff'                              => [
-                'title'                 => '',
-                'header'                => '',
-                'headers'               => [
+        'mdt' => [
+            'diff' => [
+                'title'   => '',
+                'header'  => '',
+                'headers' => [
                     'mismatched_health'               => '',
                     'mismatched_enemy_count'          => '',
                     'mismatched_enemy_type'           => '',
@@ -445,19 +445,19 @@ return [
                 'npc_message'           => '',
                 'apply_mdt_kg'          => '',
             ],
-            'dungeonroute'                      => [
+            'dungeonroute' => [
                 'title'      => '',
                 'header'     => '',
                 'public_key' => '',
                 'submit'     => '',
             ],
-            'string'                            => [
+            'string' => [
                 'title'                        => '',
                 'header'                       => '',
                 'paste_your_mdt_export_string' => '',
                 'submit'                       => '',
             ],
-            'list'                              => [
+            'list' => [
                 'title'           => '',
                 'header'          => '',
                 'copy_mdt_string' => '',
@@ -469,7 +469,7 @@ return [
                     'actions'       => '',
                 ],
             ],
-            'dungeonmappinghash'                => [
+            'dungeonmappinghash' => [
                 'title'  => '',
                 'header' => '',
                 'submit' => '',
@@ -479,13 +479,13 @@ return [
                 'header' => '',
                 'submit' => '',
             ],
-            'dungeonmappingversionaccuracy'     => [
+            'dungeonmappingversionaccuracy' => [
                 'title'  => '',
                 'header' => '',
             ],
         ],
-        'npc'           => [
-            'import'                => [
+        'npc' => [
+            'import' => [
                 'title'                   => '',
                 'header'                  => '',
                 'paste_npc_import_string' => '',
@@ -498,7 +498,7 @@ return [
                 'spell_not_found' => '',
             ],
         ],
-        'list'          => [
+        'list' => [
             'title'                                       => '',
             'header'                                      => '',
             'header_tools'                                => '',
@@ -540,7 +540,7 @@ return [
             'subheader_thumbnails'                        => '',
             'thumbnails_regenerate'                       => '',
         ],
-        'thumbnails'    => [
+        'thumbnails' => [
             'regenerate' => [
                 'title'        => '',
                 'header'       => '',
@@ -548,7 +548,7 @@ return [
                 'submit'       => '',
             ],
         ],
-        'wagogg'        => [
+        'wagogg' => [
             'importingamecoordinates' => [
                 'title'                       => '',
                 'header'                      => '',
@@ -556,7 +556,7 @@ return [
                 'submit'                      => '',
             ],
         ],
-        'wowtools'      => [
+        'wowtools' => [
             'importingamecoordinates' => [
                 'title'                                  => '',
                 'header'                                 => '',
@@ -567,7 +567,7 @@ return [
             ],
         ],
     ],
-    'user'                       => [
+    'user' => [
         'list' => [
             'title'                        => '',
             'header'                       => '',
@@ -583,7 +583,7 @@ return [
             'ip_addresses_cloudflare_link' => '',
         ],
     ],
-    'userreport'                 => [
+    'userreport' => [
         'list' => [
             'title'                    => '',
             'header'                   => '',

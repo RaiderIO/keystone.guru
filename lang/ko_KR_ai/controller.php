@@ -2,7 +2,7 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'MDT 문자열 구문 분석에 실패했습니다. 정말로 MDT 문자열을 붙여넣었나요?',
             'mdt_string_format_not_recognized'    => 'MDT 문자열 형식이 인식되지 않았습니다.',
@@ -31,29 +31,29 @@ return [
             'read_only_mode_enabled'          => '읽기 전용 모드 활성화됨',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => 'MDT 문자열 생성 중 오류가 발생했습니다: %s',
         'mdt_generate_no_lua' => 'MDT 가져오기가 제대로 구성되지 않았습니다. 이 문제에 대해 관리자에게 문의하십시오',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => '사용자 보고서를 업데이트할 수 없습니다',
             'unable_to_save_report'        => '보고서를 저장할 수 없습니다',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => '선을 저장할 수 없습니다',
             'unable_to_delete_brushline' => '선을 삭제할 수 없습니다',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => '던전 생성',
             'dungeon_updated' => '던전 업데이트됨',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => '경로를 저장할 수 없습니다',
         'flash'          => [
             'route_cloned_successfully' => '경로가 성공적으로 복제되었습니다',
@@ -61,7 +61,7 @@ return [
             'route_created'             => '경로 생성됨',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => '인기 경로',
         'this_week_affixes' => '이번 주 속성',
         'next_week_affixes' => '다음 주 속성',
@@ -72,7 +72,7 @@ return [
             'next_week_affixes' => '%s 다음 주',
             'new'               => '%s개의 새로운 경로',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '%s 인기 있는 경로',
             'this_week_affixes' => '이번 주 %s',
             'next_week_affixes' => '다음 주 %s',
@@ -86,20 +86,20 @@ return [
             'npc_deleted_successfully' => 'NPC가 성공적으로 제거되었습니다',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => '확장팩을 저장할 수 없습니다',
             'expansion_updated'        => '확장팩이 업데이트되었습니다',
             'expansion_created'        => '확장팩이 생성되었습니다',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => '던전에 속하지 않는 층',
             'not_found'                  => '찾을 수 없음',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => '성공적으로 등록되었습니다. 웹사이트를 즐기세요!',
             'user_exists'             => '사용자 이름 %s를 가진 사용자가 이미 있습니다. 이미 등록하셨습니까?',
@@ -108,14 +108,14 @@ return [
             'read_only_mode_enabled'  => '읽기 전용 모드가 활성화되어 있습니다. 현재 등록할 수 없습니다.',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => '성공적으로 등록되었습니다. 웹사이트를 즐기세요!',
         ],
         'legal_agreed_required' => '등록하려면 법적 약관에 동의해야 합니다.',
         'legal_agreed_accepted' => '등록하려면 법적 약관에 동의해야 합니다.',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => '릴리스를 저장할 수 없습니다',
         ],
@@ -125,12 +125,12 @@ return [
             'github_exception' => 'Github와 통신하는 동안 오류가 발생했습니다: :message',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => '새로운 매핑 버전이 추가되었습니다!',
         'created_bare_successfully' => '새로운 기본 매핑 버전이 추가되었습니다!',
         'deleted_successfully'      => '매핑 버전이 성공적으로 삭제되었습니다',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => '알 수 없는 던전',
         'error'           => [
             'mdt_string_parsing_failed'             => 'MDT 문자열 구문 분석에 실패했습니다. 정말로 MDT 문자열을 붙여넣으셨습니까?',
@@ -142,13 +142,13 @@ return [
             'cannot_create_route_must_be_logged_in' => '경로를 생성하려면 로그인해야 합니다',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => '경로를 저장할 수 없습니다',
             'unable_to_delete_path' => '경로를 삭제할 수 없습니다',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => 'Patreon 계정이 성공적으로 연결 해제되었습니다.',
             'link_successful'         => 'Patreon이 성공적으로 연결되었습니다. 감사합니다!',
@@ -158,7 +158,7 @@ return [
             'internal_error_occurred' => 'Patreon의 응답을 처리하는 동안 오류가 발생했습니다 - 응답이 잘못된 것 같습니다. 오류가 기록되었으며 처리될 것입니다. 나중에 다시 시도하십시오.',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => '해당 사용자 이름은 이미 사용 중입니다.',
             'username_already_in_use'          => '해당 사용자 이름은 이미 사용 중입니다.',
@@ -176,7 +176,7 @@ return [
             'error_deleting_account'           => '오류가 발생했습니다. 다시 시도하십시오.',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => '주문을 저장할 수 없습니다',
         ],
@@ -185,7 +185,7 @@ return [
             'spell_created' => '주문이 생성되었습니다',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => '팀이 업데이트되었습니다',
             'team_created'                        => '팀이 생성되었습니다',
@@ -195,7 +195,7 @@ return [
             'tag_already_exists'                  => '이 태그는 이미 존재합니다',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => '사용자 :user는 이제 관리자입니다.',
             'user_is_no_longer_an_admin'        => '사용자 :user는 더 이상 관리자가 아닙니다',

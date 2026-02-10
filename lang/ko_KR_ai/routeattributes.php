@@ -2,7 +2,7 @@
 
 return [
 
-    'category'            => [
+    'category' => [
         'class' => '클래스',
         'item'  => '아이템',
         'misc'  => '기타',

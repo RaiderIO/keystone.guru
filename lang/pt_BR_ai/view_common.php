@@ -2,17 +2,17 @@
 
 return [
 
-    'dungeon'        => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popular',
             'this_week' => 'Esta semana',
             'next_week' => 'Próxima semana',
             'new'       => 'Novo',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => 'Incursão',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => 'Calabouço',
             'all'                      => 'Todos',
             'all_dungeons'             => 'Todos os calabouços',
@@ -22,8 +22,8 @@ return [
             'siege_of_boralus_warning' => 'Devido às diferenças entre a versão da Horda e da Aliança do Cerco de Boralus, você precisa selecionar uma facção na composição do grupo.',
         ],
     ],
-    'dungeonroute'   => [
-        'search'     => [
+    'dungeonroute' => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Carregando...',
             ],
@@ -35,7 +35,7 @@ return [
             'select_attributes'       => 'Selecionar atributos',
             'attributes_selected'     => '{0} atributos',
         ],
-        'card'       => [
+        'card' => [
             'thumbnail_alt'            => 'Miniatura',
             'thumbnail_dungeon_alt'    => 'Miniatura',
             'no_description'           => 'Sem descrição',
@@ -47,13 +47,13 @@ return [
             'dominant_affix'           => 'Afixo dominante',
             'seasonal_affix'           => 'Afixo sazonal',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => 'Nenhuma rota encontrada',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '%s voto(s)',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => 'Equipe',
             'affixes'               => 'Afixos',
             'select_affixes'        => 'Selecionar afixos',
@@ -69,12 +69,12 @@ return [
             'tags_selected'         => '{0} tags selecionadas',
             'filter'                => 'Filtro',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '%s - dados por https://www.archon.gg/wow',
         ],
     ],
-    'forms'          => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => 'Título',
             'title_title'                                    => 'Escolha um título que identifique exclusivamente a rota para você entre outras rotas semelhantes que você possa criar. O título será visível para outros quando você escolher publicar sua rota.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Tamanho da raide',
@@ -99,7 +99,7 @@ return [
             'registered_user_message'   => 'Uma rota temporária não aparecerá em seu perfil e será excluída automaticamente após %d horas, a menos que seja reivindicada antes desse tempo.',
             'create_route'              => 'Criar rota',
         ],
-        'login'                => [
+        'login' => [
             'login'                => 'Entrar',
             'email_address'        => 'Endereço de e-mail',
             'password'             => 'Senha',
@@ -107,7 +107,7 @@ return [
             'forgot_your_password' => 'Esqueceu sua senha?',
             'login_through_oauth2' => 'Entrar através do OAuth2',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => 'Geral',
             'map_facade_style'                              => 'Usar andares combinados',
             'map_facade_style_title'                        => 'Com a introdução da Temporada 3 do Dragonflight, vários calabouços tiveram seus andares combinados em um único mapa. Usar este novo mapa é opcional e você pode alternar entre o mapa combinado ou o estilo tradicional de andares divididos aqui.',
@@ -138,7 +138,7 @@ return [
             'default_line_color'                            => 'Cor padrão da linha',
             'default_line_color_title'                      => 'Isto controla a cor padrão de qualquer linha que você criar no mapa, como caminhos e linhas desenhadas livremente.',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => 'Cole sua string de exportação do Mythic Dungeon Tools',
             'reset_title'                            => 'Redefinir',
             'unregistered_user_all_routes_temporary' => 'Como um usuário não registrado, todas as rotas importadas serão rotas temporárias que expiram após %s horas.',
@@ -149,10 +149,10 @@ return [
             'import_as_this_week'                    => 'Importar com os afixos desta semana',
             'import_route'                           => 'Importar rota',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => 'Se você publicar rotas, seu battletag/nome de usuário do discord ficará visível até que você altere seu nome de usuário no seu perfil.',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => 'Estilo do número do pull',
             'pull_number_style_title'           => 'Isso controla como a barra lateral de pulls exibe números.',
             'pull_number_style_percentage'      => 'Porcentagem',
@@ -166,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => 'Sempre aplicar quando eu mudar os pulls',
             'always_apply_on_pull_change_title' => 'Ativar esta configuração atualizará as cores do seu pull à medida que você edita seus pulls com base no gradiente de pull configurado acima. Esta configuração é única por rota.',
         ],
-        'register'             => [
+        'register' => [
             'register'                => 'Registrar',
             'username'                => 'Nome de usuário',
             'username_title'          => 'Seu nome de usuário pode ser visível se você optar por publicar quaisquer rotas que criar.',
@@ -183,7 +183,7 @@ return [
             'privacy_policy'          => 'política de privacidade',
             'cookie_policy'           => 'política de cookies',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => 'África',
             'america'    => 'América',
             'antarctica' => 'Antártida',
@@ -195,7 +195,7 @@ return [
             'timezone'   => 'Fuso horário',
         ],
     ],
-    'general'        => [
+    'general' => [
         'linkpreview' => [
             'title'               => ':title | Keystone.guru',
             'description'         => ':description Planeje rotas online cooperativamente com sua equipe ou descubra rotas que se adequem ao seu estilo de jogo e nível de habilidade. Keystone.guru é o único lugar para gerenciar e compartilhar suas rotas M+.',
@@ -203,8 +203,8 @@ return [
             'twitter_description' => ':description Keystone.guru é o único lugar para encontrar, gerenciar e compartilhar suas rotas M+.',
         ],
     ],
-    'group'          => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => 'Pré-definição :count',
             'awakened_enemy_set'       => 'Conjunto de inimigos despertados',
             'awakened_enemy_set_title' => 'Inimigos despertados (chefes de pilares) para níveis de M+ 10 e superiores vêm em dois conjuntos. Cada conjunto de afixos é marcado como A ou B. Você pode anexar múltiplos afixos à sua rota que podem ter tanto conjuntos A quanto B. Escolha aqui qual conjunto será exibido no mapa. Você sempre pode ajustar sua seleção no menu Configurações de Rota mais tarde.',
@@ -217,7 +217,7 @@ return [
             'party_member_nr' => 'Membro do grupo #%d',
         ],
     ],
-    'layout'         => [
+    'layout' => [
         'footer' => [
             'developer'                       => 'Desenvolvedor',
             'api_documentation'               => 'Documentação da API',
@@ -252,8 +252,8 @@ return [
             'explore'                 => 'Explorar masmorras',
             'new'                     => 'NOVO',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => 'Entrar',
                 'register'          => 'Registrar',
                 'telescope'         => 'Telescópio',
@@ -278,21 +278,21 @@ return [
             ],
         ],
     ],
-    'maps'           => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => 'Admin',
                 'view_this_route' => 'Ver',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => 'Cronômetro',
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Configuração do grupo',
                     'affixes'          => 'Afixos',
                     'route_info_title' => 'Informações',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => 'Retrato',
                     'npc_class'               => 'Classe',
                     'npc_type'                => 'Tipo',
@@ -302,31 +302,31 @@ return [
                     'enemy_skippable'         => 'Ignorável',
                     'enemy_group'             => 'Grupo',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => 'Andares',
                     'floors'        => 'Andares',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => 'Elementos',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => 'Ocultar',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'Mostrar MDT',
                     'auto_solve' => 'Resolver automaticamente',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => 'Avaliar',
                     'unable_to_rate_own_route' => 'Você não pode avaliar sua própria rota',
                     'your_rating'              => 'Sua avaliação',
                 ],
             ],
-            'enemyinfo'      => [
+            'enemyinfo' => [
                 'enemy_info'      => 'Informações do inimigo',
                 'report_an_issue' => 'Reportar um problema',
             ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => 'Configurações do mapa',
                 'enabled'                => 'Ativado',
                 'disabled'               => 'Desativado',
@@ -359,13 +359,13 @@ return [
                     'classes_player_deaths'               => 'Classes (morte)',
                     'classes_player_deaths_title'         => 'Mostrar apenas mortes dessas classes.',
                 ],
-                'advanced_options'       => 'Opções avançadas',
-                'advanced_option'        => [
+                'advanced_options' => 'Opções avançadas',
+                'advanced_option'  => [
                     'min_samples_required'       => 'Mín. amostras necessárias',
                     'min_samples_required_title' => 'Diminui o limite necessário para que os dados apareçam no mapa de calor. Diminuir este valor resultará em mais pontos de dados sendo renderizados.',
                 ],
-                'heat_options'           => 'Opções de Leaflet.heat',
-                'heat_option'            => [
+                'heat_options' => 'Opções de Leaflet.heat',
+                'heat_option'  => [
                     'min_opacity' => 'Opacidade mínima',
                     'max_zoom'    => 'Zoom máximo',
                     'max'         => 'Máximo',
@@ -375,7 +375,7 @@ return [
                     'pane'        => 'Painel',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => 'Alternar navegação',
                 'stop'                           => 'Parar',
                 'start'                          => 'Iniciar',
@@ -404,7 +404,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'Você não pode avaliar sua própria rota - obrigado por usar as sessões ao vivo!',
                 'review_live_session'            => 'Revisar sessão ao vivo',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => 'Configurações de mapa/pull',
                 'new_pull'                    => 'Novo pull',
                 'delete_all_pulls_title'      => 'Excluir todos os pulls',
@@ -414,8 +414,8 @@ return [
                 'no_pulls_created_view'       => 'Nenhum pull criado.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => 'Descrição',
                         'supported_html_tags' => 'Tags HTML suportadas: ',
                         'save'                => 'Salvar',
@@ -433,14 +433,14 @@ return [
                 'remove_kill_area' => 'Remover área de eliminação',
                 'delete_killzone'  => 'Excluir puxada',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => 'Editar',
                 'clone_this_route_title'         => 'Clonar',
                 'report_for_moderation'          => 'Reportar',
                 'report_for_moderation_finished' => 'Reportado',
             ],
         ],
-        'map'      => [
+        'map' => [
             'no_teeming'                             => 'Sempre visível',
             'visible_teeming'                        => 'Visível apenas quando aglomerado',
             'hidden_teeming'                         => 'Oculto apenas quando aglomerado',
@@ -452,7 +452,7 @@ return [
                             Toda vez que a Blizzard faz uma alteração no mapeamento ou um erro é corrigido, uma nova versão de mapeamento é criada.
                             Rotas que são criadas com versões de mapeamento anteriores não são atualizadas automaticamente para a versão mais recente.
                             Este aviso indica que a versão de mapeamento usada por esta rota está desatualizada e pode não representar o mapeamento no jogo',
-            'route'                                  => 'Rota',
+            'route' => 'Rota',
         ],
     ],
     'mappingversion' => [
@@ -461,15 +461,15 @@ return [
             'mapping_version'          => ':gameVersion versão :version',
         ],
     ],
-    'modal'          => [
-        'dungeonroute'       => [
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => 'Rota removida',
                 'description'  => 'Sua rota foi removida e não pode mais ser visualizada/editada. Isso pode acontecer se sua rota era temporária e foi automaticamente limpa ou se você excluiu a rota em uma aba diferente do navegador.',
                 'back_to_home' => 'Voltar para a página inicial',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => 'Reportar rota',
                 'your_name'              => 'Seu nome',
@@ -478,7 +478,7 @@ return [
                 'contact_by_email_guest' => 'Entre em contato comigo por e-mail se necessário para investigação adicional (adicione seu endereço de e-mail no corpo do relatório)',
                 'submit'                 => 'Enviar',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => 'Reportar bug de inimigo',
                 'your_name'              => 'Seu nome',
                 'what_is_wrong'          => 'Por favor, descreva o que está errado com este inimigo',
@@ -487,19 +487,19 @@ return [
                 'submit'                 => 'Enviar',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => 'Criar rota',
             'create_temporary_route' => 'Criar rota temporária',
             'import_from_mdt'        => 'Importar do MDT',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => 'Bem-vindo de volta! Para prosseguir, você deve concordar com nossos %s, %s e %s.',
             'terms_of_service'   => 'termos de serviço',
             'privacy_policy'     => 'política de privacidade',
             'cookie_policy'      => 'política de cookies',
             'i_agree'            => 'Eu concordo',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => 'Fachada ativada',
             'enemy_forces_required'           => 'Forças inimigas necessárias',
             'enemy_forces_required_teeming'   => 'Forças inimigas necessárias (aglomerado)',
@@ -509,7 +509,7 @@ return [
             'timer_max_minutes'               => 'Temporizador (minutos)',
             'save'                            => 'Salvar',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => 'Configurações do mapa',
             'pull_settings' => 'Configurações de puxada',
         ],
@@ -524,10 +524,10 @@ return [
             'route_not_created_from_combat_log' => 'A rota não foi gerada a partir de um registro de combate',
             'route_not_created_through_api'     => 'A rota não foi gerada através da API',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => 'Configurações da rota',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => 'Compartilhar',
             'publish'                          => 'Publicar',
             'review_route_settings'            => 'Revise suas %s antes de publicar sua rota',
@@ -542,8 +542,8 @@ return [
             'loading'                          => 'Carregando...',
             'copy_to_clipboard'                => 'Copiar para a área de transferência',
         ],
-        'simulate'           => [
-            'intro'                      => 'Para usar o recurso de simulação, gere uma string do SimulationCraft para o seu personagem e cole a
+        'simulate' => [
+            'intro' => 'Para usar o recurso de simulação, gere uma string do SimulationCraft para o seu personagem e cole a
                             string gerada do Keystone.guru na saída do seu personagem. Em seguida, clique em Simular como você normalmente faria! Se você usar raidbots.com, crie a string SimC do seu personagem através do addon ou do site, selecione Avançado e cole a saída do Keystone.guru abaixo da string SimC do seu personagem.',
             'title'                      => 'Simular rota',
             'get_simulationcraft_string' => 'Obter string do SimulationCraft',
@@ -551,22 +551,22 @@ return [
             'loading'                    => 'Carregando...',
             'copy_to_clipboard'          => 'Copiar para a área de transferência',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-                'key_level'                               => 'Nível da chave',
-                'key_level_title'                         => 'Um nível de chave mais alto aumentará a saúde dos inimigos que seu personagem está enfrentando, como seria em uma masmorra M+ real.',
-                'shrouded_bounty_type'                    => 'Recompensa Encoberta',
-                'shrouded_bounty_type_title'              => 'A Recompensa Encoberta que você pode selecionar no início da masmorra.',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => 'Nível da chave',
+                'key_level_title'            => 'Um nível de chave mais alto aumentará a saúde dos inimigos que seu personagem está enfrentando, como seria em uma masmorra M+ real.',
+                'shrouded_bounty_type'       => 'Recompensa Encoberta',
+                'shrouded_bounty_type_title' => 'A Recompensa Encoberta que você pode selecionar no início da masmorra.',
+                'shrouded_bounty_types'      => [
                     'none'    => 'Sem recompensa',
                     'crit'    => 'Crítico',
                     'haste'   => 'Aceleração',
                     'mastery' => 'Maestria',
                     'vers'    => 'Versatilidade',
                 ],
-                'affixes'                                 => 'Afixos',
-                'affixes_title'                           => 'Selecione Fortificado para aumentar a saúde de todos os inimigos não-chefes em 20%, Tirânico para aumentar a saúde dos chefes em 30%. Você pode selecionar ambos ao mesmo tempo.',
-                'affixes_map'                             => [
+                'affixes'       => 'Afixos',
+                'affixes_title' => 'Selecione Fortificado para aumentar a saúde de todos os inimigos não-chefes em 20%, Tirânico para aumentar a saúde dos chefes em 30%. Você pode selecionar ambos ao mesmo tempo.',
+                'affixes_map'   => [
                     'fortified'  => 'Fortificado',
                     'tyrannical' => 'Tirânico',
                 ],
@@ -587,10 +587,10 @@ return [
                     'power_infusion'       => 'Infusão de Poder',
                     'bleeding'             => 'Sangramento',
                 ],
-                'hp_percent'                              => 'Porcentagem de HP',
-                'hp_percent_title'                        => 'A quantidade de porcentagem que seu personagem tem que causar de dano a todos os inimigos antes que seja considerado \'morto\'. Esta será sua parte do dano em uma masmorra.',
-                'bloodlust_per_pull'                      => 'Sede de Sangue/Heroísmo/etc. por puxada',
-                'bloodlust_per_pull_title'                => 'Permite selecionar quais puxadas têm Sede de Sangue/Heroísmo/etc. Atribuir esses feitiços a uma puxada preenche automaticamente este menu suspenso.',
+                'hp_percent'               => 'Porcentagem de HP',
+                'hp_percent_title'         => 'A quantidade de porcentagem que seu personagem tem que causar de dano a todos os inimigos antes que seja considerado \'morto\'. Esta será sua parte do dano em uma masmorra.',
+                'bloodlust_per_pull'       => 'Sede de Sangue/Heroísmo/etc. por puxada',
+                'bloodlust_per_pull_title' => 'Permite selecionar quais puxadas têm Sede de Sangue/Heroísmo/etc. Atribuir esses feitiços a uma puxada preenche automaticamente este menu suspenso.',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Compensação de puxada à distância em jardas',
@@ -599,24 +599,24 @@ return [
                                         e reduzir o atraso entre os grupos. Nota: isso reduzirá a distância de caminhada por essa quantidade, então definir isso para o
                                         alcance máximo da sua habilidade não é recomendado para resultados de simulação precisos. Entre 50%-75% do alcance máximo do seu feitiço deve ser bom,
                                         a menos que você esteja literalmente puxando em cadeia sem tempo de inatividade entre eles.',
-                'use_mounts'                           => 'Usar montarias',
-                'use_mounts_title'                     => 'Tentará usar sua montaria (se for mais rápida e estiver disponível) para reduzir a distância entre a puxada atual e a próxima puxada.',
-                'patreon_link_text'                    => 'Patreon',
-                'patreon_only'                         => 'Opções avançadas de simulação estão disponíveis se você assinar o :patreon do Keystone.guru.',
-                'advanced_options'                     => 'Opções avançadas',
-                'description'                          => 'As opções avançadas visam aumentar ainda mais a precisão da string de simulação gerada e aproximar os números do que você experimentaria na realidade.',
+                'use_mounts'        => 'Usar montarias',
+                'use_mounts_title'  => 'Tentará usar sua montaria (se for mais rápida e estiver disponível) para reduzir a distância entre a puxada atual e a próxima puxada.',
+                'patreon_link_text' => 'Patreon',
+                'patreon_only'      => 'Opções avançadas de simulação estão disponíveis se você assinar o :patreon do Keystone.guru.',
+                'advanced_options'  => 'Opções avançadas',
+                'description'       => 'As opções avançadas visam aumentar ainda mais a precisão da string de simulação gerada e aproximar os números do que você experimentaria na realidade.',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => 'Carregar registros',
         ],
     ],
-    'release'        => [
+    'release' => [
         'release' => [
             'new' => 'NOVO',
         ],
     ],
-    'tag'            => [
+    'tag' => [
         'manager' => [
             'route_personal' => 'Rota',
             'route_team'     => 'Rota',
@@ -630,7 +630,7 @@ return [
             'create_new_tag' => 'Criar nova tag',
         ],
     ],
-    'team'           => [
+    'team' => [
         'details' => [
             'name'            => 'Nome',
             'description'     => 'Descrição',
@@ -641,19 +641,19 @@ return [
             'submit'          => 'Enviar',
             'disband_team'    => 'Dissolver equipe',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => 'Selecionar equipe...',
             'team'        => 'Equipe',
             'create_team' => 'Criar equipe',
         ],
     ],
-    'thirdparty'     => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => 'Remover anúncios',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => 'Patreon',
             ],
@@ -662,7 +662,7 @@ return [
             'learn_more' => 'Saiba mais',
         ],
     ],
-    'user'           => [
+    'user' => [
         'name' => [
             'avatar_alt' => 'Avatar',
             'raider_io'  => 'Raider.IO',

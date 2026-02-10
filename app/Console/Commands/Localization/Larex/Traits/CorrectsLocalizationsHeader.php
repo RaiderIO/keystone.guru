@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
  */
 trait CorrectsLocalizationsHeader
 {
-    private const KSG_TO_CROWDIN_MAPPING = [
+    private const array KSG_TO_CROWDIN_MAPPING = [
         'de-DE' => 'de',
         'en-US' => 'en',
         'es-ES' => 'es-ES',

@@ -3,17 +3,17 @@
 return [
 
     'home' => [
-        'keystone_guru'       => 'Keystone.guru',
-        'affixes'             => 'Affixe',
-        'about'               => 'Über',
-        'credits'             => 'Credits',
-        'changelog'           => [
+        'keystone_guru' => 'Keystone.guru',
+        'affixes'       => 'Affixe',
+        'about'         => 'Über',
+        'credits'       => 'Credits',
+        'changelog'     => [
             'list'    => 'Änderungsprotokoll',
             'release' => [
                 'view' => 'Release :version',
             ],
         ],
-        'legal'               => [
+        'legal' => [
             'cookies' => 'Cookies',
             'privacy' => 'Datenschutz',
             'terms'   => 'Bedingungen',
@@ -28,10 +28,10 @@ return [
                 'explore'  => 'Erkunden',
             ],
         ],
-        'dungeonroute'        => [
+        'dungeonroute' => [
             'new' => 'Neue Route',
         ],
-        'dungeonroutes'       => [
+        'dungeonroutes' => [
             'search'            => 'Suche',
             'popular'           => 'Beliebt',
             'next_week_affixes' => 'Affixe der nächsten Woche',
@@ -44,24 +44,24 @@ return [
                 'this_week_affixes' => 'Affixe dieser Woche',
                 'new'               => 'Neu',
             ],
-            'discoverdungeon'   => [
+            'discoverdungeon' => [
                 'popular'           => 'Beliebt',
                 'next_week_affixes' => 'Affixe der nächsten Woche',
                 'this_week_affixes' => 'Affixe dieser Woche',
                 'new'               => 'Neu',
             ],
         ],
-        'my_profile'          => 'Mein öffentliches Profil',
-        'my_routes'           => 'Meine Routen',
-        'my_tags'             => 'Meine Tags',
-        'my_teams'            => 'Meine Teams',
-        'overview'            => 'Übersicht',
-        'new_team'            => 'Neues Team',
-        'edit_team'           => 'Team bearbeiten',
-        'join_team'           => 'Team beitreten',
-        'admin'               => [
-            'admin'                      => 'Admin',
-            'tools'                      => [
+        'my_profile' => 'Mein öffentliches Profil',
+        'my_routes'  => 'Meine Routen',
+        'my_tags'    => 'Meine Tags',
+        'my_teams'   => 'Meine Teams',
+        'overview'   => 'Übersicht',
+        'new_team'   => 'Neues Team',
+        'edit_team'  => 'Team bearbeiten',
+        'join_team'  => 'Team beitreten',
+        'admin'      => [
+            'admin' => 'Admin',
+            'tools' => [
                 'admin_tools'               => 'Admin-Tools',
                 'view_exported_dungeondata' => 'Exportierte Dungeondaten anzeigen',
                 'view_exported_releases'    => 'Exportierte Releases anzeigen',
@@ -70,20 +70,20 @@ return [
                 'view_mdt_string_contents'  => 'MDT-String-Inhalte anzeigen',
                 'import_npcs'               => 'NPCs importieren',
             ],
-            'releases'                   => 'Releases',
-            'new_release'                => 'Neues Release',
-            'edit_release'               => 'Release bearbeiten',
-            'expansions'                 => [
+            'releases'     => 'Releases',
+            'new_release'  => 'Neues Release',
+            'edit_release' => 'Release bearbeiten',
+            'expansions'   => [
                 'expansions'     => 'Erweiterungen',
                 'new_expansion'  => 'Neue Erweiterung',
                 'edit_expansion' => 'Erweiterung bearbeiten',
             ],
-            'dungeons'                   => [
+            'dungeons' => [
                 'dungeons'     => 'Dungeons',
                 'new_dungeon'  => 'Neuer Dungeon',
                 'edit_dungeon' => 'Bearbeite :dungeon',
             ],
-            'floors'                     => [
+            'floors' => [
                 'new_floor'  => 'Neue Etage',
                 'edit_floor' => 'Etage bearbeiten',
             ],
@@ -91,28 +91,28 @@ return [
                 'new_dungeonspeedrunrequirednpc10man' => 'Neuer 10-Mann-Dungeon-Geschwindigkeitslauf erforderlicher NPC',
                 'new_dungeonspeedrunrequirednpc25man' => 'Neuer 25-Mann-Dungeon-Geschwindigkeitslauf erforderlicher NPC',
             ],
-            'npcs'                       => [
+            'npcs' => [
                 'npcs'     => 'NPCs',
                 'new_npc'  => 'Neuer NPC',
                 'edit_npc' => 'Bearbeite :npc',
             ],
-            'npcenemyforces'             => [
+            'npcenemyforces' => [
                 'new_npc_enemy_forces'  => 'Neue NPC-Feindkräfte',
                 'edit_npc_enemy_forces' => 'NPC-Feindkräfte bearbeiten',
             ],
-            'npchealth'                  => [
+            'npchealth' => [
                 'new_npc_health'  => 'Neue NPC-Gesundheit',
                 'edit_npc_health' => 'NPC-Gesundheit bearbeiten',
             ],
-            'spells'                     => [
+            'spells' => [
                 'spells'     => 'Zauber',
                 'new_spell'  => 'Neuer Zauber',
                 'edit_spell' => 'Zauber bearbeiten',
             ],
-            'users'                      => [
+            'users' => [
                 'users' => 'Benutzer',
             ],
-            'user_reports'               => [
+            'user_reports' => [
                 'user_reports' => 'Benutzerberichte',
             ],
         ],

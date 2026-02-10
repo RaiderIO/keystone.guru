@@ -18,10 +18,10 @@ return [
             'reset_password'   => 'Réinitialiser le mot de passe',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => 'Connexion',
     ],
-    'register'  => [
+    'register' => [
         'title'  => 'S\'inscrire',
         'header' => 'S\'inscrire',
     ],

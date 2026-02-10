@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => '탐험',
                 'header'            => '던전 탐험',
                 'description'       => '던전을 탐험하면 던전의 레이아웃과 존재하는 적들을 볼 수 있습니다. 경로를 만들지 않고 던전을 간단히 보기에는 이상적입니다.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => '히트맵',
                 'header'            => '던전 히트맵',
                 'raider_io'         => 'Raider.IO',

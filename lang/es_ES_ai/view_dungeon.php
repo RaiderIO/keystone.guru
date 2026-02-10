@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Explorar',
                 'header'            => 'Explorar calabozo',
                 'description'       => 'Explorar un calabozo te permite ver la disposición del calabozo y los enemigos que están presentes. Ideal para simplemente ver el calabozo sin crear una ruta.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Mapas de calor',
                 'header'            => 'Mapas de calor del calabozo',
                 'raider_io'         => 'Raider.IO',

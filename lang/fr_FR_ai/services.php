@@ -2,10 +2,10 @@
 
 return [
 
-    'mdt'              => [
+    'mdt' => [
         'io' => [
             'export_string' => [
-                'category'                                          => [
+                'category' => [
                     'pull'     => 'Tirage %d',
                     'title'    => 'Titre',
                     'map_icon' => 'Icône de carte',
@@ -15,12 +15,12 @@ return [
                 'unable_to_find_mdt_enemy_for_kg_caused_empty_pull' => 'Ce tirage a été supprimé car tous les ennemis sélectionnés n\'ont pas pu être trouvés dans MDT, entraînant un tirage vide.',
                 'route_title_contains_non_ascii_char_bug'           => 'Le titre de votre route contient des caractères non-ASCII connus pour déclencher un bug d\'encodage encore non résolu dans Keystone.guru.
                                                         Le titre de votre route a été dépouillé de tous les caractères offensants, nous nous excusons pour le désagrément et espérons résoudre ce problème bientôt.',
-                'route_title_contains_non_ascii_char_bug_details'   => 'Ancien titre : %s, nouveau titre : %s',
-                'map_icon_contains_non_ascii_char_bug'              => 'Un de vos commentaires sur une icône de carte contient des caractères non-ASCII connus pour déclencher un bug d\'encodage encore non résolu dans Keystone.guru. Votre commentaire de carte a été dépouillé de tous les caractères offensants, nous nous excusons pour le désagrément et espérons résoudre ce problème bientôt.',
-                'map_icon_contains_non_ascii_char_bug_details'      => 'Ancien commentaire : "%s", nouveau commentaire : "%s"',
+                'route_title_contains_non_ascii_char_bug_details' => 'Ancien titre : %s, nouveau titre : %s',
+                'map_icon_contains_non_ascii_char_bug'            => 'Un de vos commentaires sur une icône de carte contient des caractères non-ASCII connus pour déclencher un bug d\'encodage encore non résolu dans Keystone.guru. Votre commentaire de carte a été dépouillé de tous les caractères offensants, nous nous excusons pour le désagrément et espérons résoudre ce problème bientôt.',
+                'map_icon_contains_non_ascii_char_bug_details'    => 'Ancien commentaire : "%s", nouveau commentaire : "%s"',
             ],
             'import_string' => [
-                'category'                                             => [
+                'category' => [
                     'awakened_obelisks' => 'Obélisques éveillés',
                     'pulls'             => 'Tirages',
                     'notes'             => 'Notes',
@@ -49,7 +49,7 @@ return [
             ],
         ],
     ],
-    'npcservice'       => [
+    'npcservice' => [
         'all_dungeons' => 'Tous les donjons',
     ],
     'combatlogservice' => [

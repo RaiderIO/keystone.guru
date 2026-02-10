@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Cancelar dibujo',
                 'text'  => 'Cancelar',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Terminar dibujo',
                 'text'  => 'Terminar',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Eliminar el último punto dibujado',
                 'text'  => 'Eliminar el último punto',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => 'Haga clic y arrastre para dibujar un círculo.',
                 ],
-                'radius'  => 'Radio',
+                'radius' => 'Radio',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => 'Haga clic en el mapa para colocar un marcador de círculo.',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => 'Haga clic en el mapa para colocar un marcador.',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => 'Haga clic para comenzar a dibujar la forma.',
                     'cont'  => 'Haga clic para continuar dibujando la forma.',
                     'end'   => 'Haga clic en el primer punto para cerrar esta forma.',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '<strong>Error:</strong> ¡los bordes de la forma no pueden cruzarse!',
                 'tooltip' => [
                     'start' => 'Haga clic para comenzar a dibujar la línea.',
@@ -57,24 +57,24 @@ return [
                     'end'   => 'Haga clic en el último punto para terminar la línea.',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => 'Haga clic y arrastre para dibujar un rectángulo.',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => 'Suelte el mouse para terminar de dibujar.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => 'Haga clic para comenzar a dibujar el camino.',
                     'cont'  => 'Haga clic para continuar dibujando el camino.',
                     'end'   => 'Haga clic en el botón \'Terminar\' en la barra de herramientas para completar su camino.',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => 'Haga clic para comenzar a dibujar la línea.',
                     'cont'  => 'Haga clic y arrastre para continuar dibujando la línea.',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Guardar cambios',
                     'text'  => 'Guardar',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => 'Cancelar la edición, descarta todos los cambios',
                     'text'  => 'Cancelar',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Arrastre los controladores o marcadores para editar las características.',
                     'subtext' => 'Haga clic en cancelar para deshacer los cambios.',

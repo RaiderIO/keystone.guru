@@ -2,14 +2,14 @@
 
 return [
 
-    'commit'  => [
-        'added'    => [
+    'commit' => [
+        'added' => [
             'added' => '추가됨',
         ],
         'modified' => [
             'modified' => '수정됨',
         ],
-        'removed'  => [
+        'removed' => [
             'removed' => '제거됨',
         ],
     ],

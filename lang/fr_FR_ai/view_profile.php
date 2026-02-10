@@ -2,24 +2,24 @@
 
 return [
 
-    'edit'      => [
-        'title'                                            => 'Profil',
-        'profile'                                          => 'Profil',
-        'account'                                          => 'Compte',
-        'patreon'                                          => 'Patreon',
-        'change_password'                                  => 'Changer le mot de passe',
-        'privacy'                                          => 'Confidentialité',
-        'reports'                                          => 'Rapports',
-        'menu_title'                                       => 'Profil de %s',
-        'avatar'                                           => 'Avatar',
-        'avatar_alt'                                       => 'Avatar de l\'utilisateur',
-        'username'                                         => 'Nom d\'utilisateur',
-        'username_title'                                   => 'Puisque vous vous êtes connecté en utilisant un service d\'authentification externe, vous pouvez changer votre nom d\'utilisateur une fois.',
-        'email'                                            => 'E-mail',
-        'region'                                           => 'Région',
-        'select_region'                                    => 'Sélectionner la région',
-        'show_as_anonymous'                                => 'Afficher en tant qu\'Anonyme',
-        'show_as_anonymous_title'                          => 'Activer cette option vous montrera comme \'Anonyme\' lors de la visualisation d\'itinéraires qui ne font pas partie d\'une équipe à laquelle vous appartenez.
+    'edit' => [
+        'title'                   => 'Profil',
+        'profile'                 => 'Profil',
+        'account'                 => 'Compte',
+        'patreon'                 => 'Patreon',
+        'change_password'         => 'Changer le mot de passe',
+        'privacy'                 => 'Confidentialité',
+        'reports'                 => 'Rapports',
+        'menu_title'              => 'Profil de %s',
+        'avatar'                  => 'Avatar',
+        'avatar_alt'              => 'Avatar de l\'utilisateur',
+        'username'                => 'Nom d\'utilisateur',
+        'username_title'          => 'Puisque vous vous êtes connecté en utilisant un service d\'authentification externe, vous pouvez changer votre nom d\'utilisateur une fois.',
+        'email'                   => 'E-mail',
+        'region'                  => 'Région',
+        'select_region'           => 'Sélectionner la région',
+        'show_as_anonymous'       => 'Afficher en tant qu\'Anonyme',
+        'show_as_anonymous_title' => 'Activer cette option vous montrera comme \'Anonyme\' lors de la visualisation d\'itinéraires qui ne font pas partie d\'une équipe à laquelle vous appartenez.
                                 Pour vos propres itinéraires et pour les itinéraires faisant partie de vos équipes, votre nom sera toujours visible.',
         'echo_color'                                       => 'Couleur de modification de l\'itinéraire synchronisé',
         'echo_color_title'                                 => 'Lors de la modification d\'un itinéraire en coopération avec un membre de l\'équipe, cette couleur vous identifiera de manière unique.',
@@ -45,23 +45,23 @@ return [
             'header_active'  => 'Actif',
             'header_benefit' => 'Avantage',
         ],
-        'current_password'                                 => 'Mot de passe actuel',
-        'new_password'                                     => 'Nouveau mot de passe',
-        'new_password_confirm'                             => 'Nouveau mot de passe (confirmation)',
-        'submit'                                           => 'Soumettre',
-        'ga_cookies_opt_out'                               => 'Désactivation des cookies Google Analytics',
-        'reports_description'                              => 'Tous les itinéraires, ennemis et autres rapports que vous avez faits sur le site seront listés ici.',
-        'reports_table_header_id'                          => 'Id',
-        'reports_table_header_category'                    => 'Catégorie',
-        'reports_table_header_message'                     => 'Message',
-        'reports_table_header_created_at'                  => 'Créé le',
-        'reports_table_header_status'                      => 'Statut',
-        'reports_table_action_handled'                     => 'Traitée',
+        'current_password'                => 'Mot de passe actuel',
+        'new_password'                    => 'Nouveau mot de passe',
+        'new_password_confirm'            => 'Nouveau mot de passe (confirmation)',
+        'submit'                          => 'Soumettre',
+        'ga_cookies_opt_out'              => 'Désactivation des cookies Google Analytics',
+        'reports_description'             => 'Tous les itinéraires, ennemis et autres rapports que vous avez faits sur le site seront listés ici.',
+        'reports_table_header_id'         => 'Id',
+        'reports_table_header_category'   => 'Catégorie',
+        'reports_table_header_message'    => 'Message',
+        'reports_table_header_created_at' => 'Créé le',
+        'reports_table_header_status'     => 'Statut',
+        'reports_table_action_handled'    => 'Traitée',
     ],
     'favorites' => [
         'title' => 'Mes favoris',
     ],
-    'overview'  => [
+    'overview' => [
         'title'                    => 'Aperçu',
         'favorites'                => 'Favoris',
         'tags'                     => 'Étiquettes',
@@ -73,22 +73,22 @@ return [
         'create_route'             => 'Créer un itinéraire',
         'create_route_description' => 'Un itinéraire est un chemin à travers un donjon pour atteindre l\'objectif final de 100% des forces ennemies tout en tuant tous les boss.
                                     Divers outils vous aident à organiser votre chemin prévu pour vos membres du groupe. Vous pouvez les partager avec le monde - ou les garder privés et les organiser comme vous le souhaitez.',
-        'create_team'              => 'Créer une équipe',
-        'create_team_description'  => 'Une équipe est utilisée pour partager vos itinéraires avec des amis et aider tout le monde à rester synchronisé avec les dernières modifications des itinéraires que vous effectuez plus souvent.
+        'create_team'             => 'Créer une équipe',
+        'create_team_description' => 'Une équipe est utilisée pour partager vos itinéraires avec des amis et aider tout le monde à rester synchronisé avec les dernières modifications des itinéraires que vous effectuez plus souvent.
                                     L\'édition collaborative facilite l\'ajustement d\'un itinéraire existant pendant que vous vous battez pour le meilleur itinéraire pour votre équipe.',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'Mes itinéraires',
     ],
-    'tags'      => [
-        'title'                             => 'Mes étiquettes',
-        'header'                            => 'Mes étiquettes',
-        'description'                       => 'La fonctionnalité de marquage vous permet d\'organiser vos itinéraires comme vous le souhaitez. Vous pouvez ajouter des étiquettes à des itinéraires en visualisant les actions pour chaque itinéraire dans %s.
+    'tags' => [
+        'title'       => 'Mes étiquettes',
+        'header'      => 'Mes étiquettes',
+        'description' => 'La fonctionnalité de marquage vous permet d\'organiser vos itinéraires comme vous le souhaitez. Vous pouvez ajouter des étiquettes à des itinéraires en visualisant les actions pour chaque itinéraire dans %s.
                     Vous pouvez gérer les étiquettes pour vos propres itinéraires ici. Personne d\'autre ne pourra voir vos étiquettes - pour les itinéraires attachés à une équipe
                     vous pouvez gérer un ensemble distinct d\'étiquettes pour cette équipe en visitant la section Étiquettes lors de la visualisation de votre équipe.',
         'link_your_personal_route_overview' => 'votre aperçu personnel des itinéraires',
     ],
-    'view'      => [
+    'view' => [
         'title'  => 'Itinéraires de %s',
         'header' => 'Itinéraires de %s',
     ],

@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 /**
  * @var bool                                     $showAds
  * @var bool                                     $showSidebar
+ * @var bool|null                                $showDataSourceSnackbar
  * @var Dungeon                                  $dungeon
  * @var MappingVersion                           $mappingVersion
  * @var Season                                   $season
@@ -83,6 +84,10 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(fn(CharacterClass 
     'currentFiltersSelector' => '#heatmap_search_options_current_filters',
     'loaderSelector' => '#heatmap_search_loader',
 
+    // If the sidebar is hidden from view, ignore all UI options and just show the map
+    'passThroughEverything' => !$showSidebar,
+    'showDataSourceSnackbar' => $showDataSourceSnackbar ?? true,
+
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
     'itemLevelMin' => $itemLevelMin,
@@ -134,9 +139,6 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(fn(CharacterClass 
     'sidebarScrollSelector' => '#heatmap_search_sidebar .data_container',
     'anchor' => 'right',
     'edit' => $edit,
-
-    // If the sidebar is hidden from view, ignore all UI options and just show the map
-    'passThroughEverything' => !$showSidebar
 ]])
 
 @section('scripts')

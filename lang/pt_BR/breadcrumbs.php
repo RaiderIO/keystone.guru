@@ -3,10 +3,10 @@
 return [
 
     'home' => [
-        'keystone_guru'       => '',
-        'affixes'             => '',
-        'about'               => '',
-        'credits'             => '',
+        'keystone_guru' => '',
+        'affixes'       => '',
+        'about'         => '',
+        'credits'       => '',
         'changelog'     => [
             'list'    => '',
             'release' => [
@@ -51,16 +51,16 @@ return [
                 'new'               => '',
             ],
         ],
-        'my_profile'          => '',
-        'my_routes'           => '',
-        'my_tags'             => '',
-        'my_teams'            => '',
-        'overview'            => '',
-        'new_team'            => '',
-        'edit_team'           => '',
-        'join_team'           => '',
+        'my_profile' => '',
+        'my_routes'  => '',
+        'my_tags'    => '',
+        'my_teams'   => '',
+        'overview'   => '',
+        'new_team'   => '',
+        'edit_team'  => '',
+        'join_team'  => '',
         'admin'      => [
-            'admin'                      => '',
+            'admin' => '',
             'tools' => [
                 'admin_tools'               => '',
                 'view_exported_dungeondata' => '',
@@ -70,9 +70,9 @@ return [
                 'view_mdt_string_contents'  => '',
                 'import_npcs'               => '',
             ],
-            'releases'                   => '',
-            'new_release'                => '',
-            'edit_release'               => '',
+            'releases'     => '',
+            'new_release'  => '',
+            'edit_release' => '',
             'expansions'   => [
                 'expansions'     => '',
                 'new_expansion'  => '',

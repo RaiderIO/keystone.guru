@@ -3,16 +3,16 @@
 return [
 
     'map_icons' => [
-        'mop'      => [
+        'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: I Coscritti Krik\'thik compaiono solo dopo aver sconfitto il Comandante Ri\'mok',
             ],
-            'mogu_shan_palace'        => [
+            'mogu_shan_palace' => [
                 'door_unlocks_after_trial_of_the_king' => 'La porta si sblocca dopo aver sconfitto la Prova del Re',
             ],
         ],
-        'legion'   => [
-            'court_of_stars'   => [
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => 'Si sblocca dopo aver sconfitto il Capitano di Pattuglia Gerdo',
                 'arcane_beacon'                      => 'Faro Arcano',
                 'flask_of_the_solemn_night'          => 'Fiala della Notte Solenne',
@@ -21,8 +21,8 @@ return [
                 'hidden_pack_in_cave' => 'Il pacchetto si trova in una caverna sotto l\'acqua dietro la cascata.',
             ],
         ],
-        'sl'       => [
-            'de_other_side'              => [
+        'sl' => [
+            'de_other_side' => [
                 'start'                => 'Inizio',
                 'graveyard_ardenweald' => 'Si attiva dopo essere entrato in Ardenweald',
                 'graveyard_mechagon'   => 'Si attiva dopo essere entrato in Meccagon',
@@ -31,11 +31,11 @@ return [
                 'engineer_blob_button' => 'Gli ingegneri possono disabilitare il fiume di bolle fluide per alcuni minuti premendo il pulsante rosso',
                 'exit'                 => 'Uscita',
             ],
-            'halls_of_atonement'         => [
+            'halls_of_atonement' => [
                 'start' => 'Inizio',
                 'exit'  => 'Uscita',
             ],
-            'mists_of_tirna_scithe'      => [
+            'mists_of_tirna_scithe' => [
                 'start'                          => 'Inizio',
                 'brambles'                       => 'Elfi della Notte, Tauren, Tauren di Alto Monte, Druidi e Erboristi Khaz Algar con almeno 25 abilità: sblocca scorciatoia',
                 'overgrown_roots'                => 'Elfi della Notte, Tauren, Tauren di Alto Monte, Druidi e Erboristi Khaz Algar con almeno 25 abilità: sblocca area con potenziamenti',
@@ -46,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => 'Si sblocca dopo aver ucciso Ingra Maloch',
                 'exit'                           => 'Uscita',
             ],
-            'plaguefall'                 => [
+            'plaguefall' => [
                 'start'              => 'Inizio',
                 'graveyard_dr_ickus' => 'Si attiva dopo aver ucciso il Dottor Ickus',
                 'gushing_slime'      => 'Necrosignore: Aura di Danno ad Area - Usare Scultura di Carne sul cadavere della Melma Traboccante conferirà l\'aura di Melma Corrosiva per 2 minuti. Questa aura applicherà il potenziamento di Melma Corrosiva a qualsiasi membro del gruppo nelle vicinanze, concedendo una probabilità del 10% di attivare danni ad area attorno al tuo personaggio',
@@ -55,7 +55,7 @@ return [
                 'landing'            => 'Atterraggio',
                 'exit'               => 'Uscita',
             ],
-            'sanguine_depths'            => [
+            'sanguine_depths' => [
                 'start'                            => 'Inizio',
                 'anima_cage'                       => 'Venthyr: Attiva le Gabbie dell\'Anima per indebolire i nemici entro 40 metri con Drenaggio dell\'Anima. Dopo 20 secondi, si disattiverà e darà all\'intero gruppo 1 accumulo di Dono di Peccamorte per ogni nemico che è morto entro il raggio con Drenaggio dell\'Anima attivo',
                 'tick_bug'                         => 'Questa zecca sembra (a volte) essere buggata nel terreno - tuttavia, si attirerà quando il boss viene attivato',
@@ -67,12 +67,12 @@ return [
                 'zrali_essence'                    => 'Essenza di Z\'rali: bolla di scudo con riduzione del danno del 65% per tutti coloro che si trovano al suo interno. Forma lo scudo attorno al giocatore che lo trasporta/attiva',
                 'exit'                             => 'Uscita',
             ],
-            'spires_of_ascension'        => [
+            'spires_of_ascension' => [
                 'start'            => 'Inizio',
                 'spear_of_destiny' => 'Kyrian: Lancia del Destino - lancia la Lancia del Destino in una posizione, colpendo tutti i nemici entro 8 metri, stordendoli e facendoli subire il 20% di danni aggiuntivi per 10 secondi',
                 'exit'             => 'Uscita',
             ],
-            'the_necrotic_wake'          => [
+            'the_necrotic_wake' => [
                 'start'                  => 'Inizio',
                 'bloody_javelin'         => 'Giavellotto Sanguinolento: Lancia un giavellotto Kyrian al bersaglio, infliggendo danni fisici a tutti i nemici che attraversa e danni fisici aggiuntivi ogni 2 sec per 16 sec. I nemici colpiti subiscono il 20% di danni aumentati per 16 sec.',
                 'forgotten_forgehammer'  => 'Martello della Forgia Dimenticato: Lancia un possente martello Kyrian al bersaglio, infliggendo danni fisici e stordendo il bersaglio per 8 sec.',
@@ -83,7 +83,7 @@ return [
                 'grisly_curio'           => 'Cimelio Macabro',
                 'exit'                   => 'Uscita',
             ],
-            'theater_of_pain'            => [
+            'theater_of_pain' => [
                 'start'                => 'Inizio',
                 'necrolord_banner'     => 'Necrolord: Clicca sui Vessilli dei Necrolord per ottenere un potenziamento di 10% alla velocità e versatilità per 5 minuti a tutti i membri del gruppo',
                 'graveyard_gorechop'   => 'Si attiva dopo aver ucciso Gorechop',
@@ -98,8 +98,8 @@ return [
                 'bazaar_event_wave_three' => 'Evento del Bazar: Onda 3',
             ],
         ],
-        'tww'      => [
-            'the_stonevault'             => [
+        'tww' => [
+            'the_stonevault' => [
                 'imbued_iron_energy' => 'Guerrieri, Nani, Fabbri (25): L\'energia intrappolata nella Barra di Ferro Imbevuta si libera, aumentando la versatilità di tutti i giocatori entro 20 metri del 10% per 10 minuti.',
             ],
             'priory_of_the_sacred_flame' => [
@@ -116,10 +116,10 @@ return [
                 'go_north'                  => '',
                 'go_south'                  => '',
             ],
-            'maisara_caverns'   => [
+            'maisara_caverns' => [
                 'hearty_vilebranch_stew' => '',
             ],
-            'windrunner_spire'  => [
+            'windrunner_spire' => [
                 'activates_after_killing_bosses' => '',
             ],
         ],

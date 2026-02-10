@@ -45,11 +45,18 @@ class WriteKsg extends Command
             'php artisan larex:lang:order de en',
         ]);
 
-        // We don't need the zh-TW and ho-HO languages in the CSV file
-        $this->shell([
-            'php artisan larex:lang:remove zh-TW',
-            'php artisan larex:lang:remove ho-HO',
-        ]);
+        $crowdinToKsgMapping = array_flip(self::KSG_TO_CROWDIN_MAPPING);
+        foreach (config('language.all') as $lang) {
+            if (!isset($lang['crowdin']) || $lang['crowdin']) {
+                continue;
+            }
+
+            $kebabLang = str_replace('_', '-', $lang['long']);
+
+            $this->shell([
+                sprintf('php artisan larex:lang:remove %s', $crowdinToKsgMapping[$kebabLang] ?? $kebabLang),
+            ]);
+        }
 
         return 0;
     }

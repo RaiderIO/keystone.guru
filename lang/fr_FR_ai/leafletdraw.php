@@ -3,16 +3,16 @@
 return [
 
     'draw' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
                 'title' => 'Annuler le dessin',
                 'text'  => 'Annuler',
             ],
-            'finish'  => [
+            'finish' => [
                 'title' => 'Terminer le dessin',
                 'text'  => 'Terminer',
             ],
-            'undo'    => [
+            'undo' => [
                 'title' => 'Supprimer le dernier point dessiné',
                 'text'  => 'Supprimer le dernier point',
             ],
@@ -26,30 +26,30 @@ return [
             ],
         ],
         'handlers' => [
-            'circle'       => [
+            'circle' => [
                 'tooltip' => [
                     'start' => 'Cliquez et faites glisser pour dessiner un cercle.',
                 ],
-                'radius'  => 'Rayon',
+                'radius' => 'Rayon',
             ],
             'circlemarker' => [
                 'tooltip' => [
                     'start' => 'Cliquez sur la carte pour placer un marqueur circulaire.',
                 ],
             ],
-            'marker'       => [
+            'marker' => [
                 'tooltip' => [
                     'start' => 'Cliquez sur la carte pour placer un marqueur.',
                 ],
             ],
-            'polygon'      => [
+            'polygon' => [
                 'tooltip' => [
                     'start' => 'Cliquez pour commencer à dessiner la forme.',
                     'cont'  => 'Cliquez pour continuer à dessiner la forme.',
                     'end'   => 'Cliquez sur le premier point pour fermer cette forme.',
                 ],
             ],
-            'polyline'     => [
+            'polyline' => [
                 'error'   => '<strong>Erreur:</strong> les bords de la forme ne peuvent pas se croiser !',
                 'tooltip' => [
                     'start' => 'Cliquez pour commencer à dessiner la ligne.',
@@ -57,24 +57,24 @@ return [
                     'end'   => 'Cliquez sur le dernier point pour terminer la ligne.',
                 ],
             ],
-            'rectangle'    => [
+            'rectangle' => [
                 'tooltip' => [
                     'start' => 'Cliquez et faites glisser pour dessiner un rectangle.',
                 ],
             ],
-            'simpleshape'  => [
+            'simpleshape' => [
                 'tooltip' => [
                     'end' => 'Relâchez la souris pour terminer le dessin.',
                 ],
             ],
-            'path'         => [
+            'path' => [
                 'tooltip' => [
                     'start' => 'Cliquez pour commencer à dessiner le chemin.',
                     'cont'  => 'Cliquez pour continuer à dessiner le chemin.',
                     'end'   => 'Cliquez sur le bouton \'Terminer\' dans la barre d\'outils pour compléter votre chemin.',
                 ],
             ],
-            'brushline'    => [
+            'brushline' => [
                 'tooltip' => [
                     'start' => 'Cliquez pour commencer à dessiner la ligne.',
                     'cont'  => 'Cliquez et faites glisser pour continuer à dessiner la ligne.',
@@ -84,13 +84,13 @@ return [
         ],
     ],
     'edit' => [
-        'toolbar'  => [
+        'toolbar' => [
             'actions' => [
-                'save'     => [
+                'save' => [
                     'title' => 'Enregistrer les modifications',
                     'text'  => 'Enregistrer',
                 ],
-                'cancel'   => [
+                'cancel' => [
                     'title' => 'Annuler l\'édition, annule toutes les modifications',
                     'text'  => 'Annuler',
                 ],
@@ -107,7 +107,7 @@ return [
             ],
         ],
         'handlers' => [
-            'edit'   => [
+            'edit' => [
                 'tooltip' => [
                     'text'    => 'Faites glisser les poignées ou les marqueurs pour modifier les fonctionnalités.',
                     'subtext' => 'Cliquez sur annuler pour annuler les modifications.',

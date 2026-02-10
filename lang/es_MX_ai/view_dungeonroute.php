@@ -2,8 +2,8 @@
 
 return [
 
-    'discover'       => [
-        'dungeon'  => [
+    'discover' => [
+        'dungeon' => [
             'overview' => [
                 'popular'                    => 'Rutas populares',
                 'popular_by_current_affixes' => 'Rutas populares por afijos actuales',
@@ -18,10 +18,10 @@ return [
             'popular_by_next_affixes'    => 'Rutas populares por próximos afijos',
             'newly_published_routes'     => 'Rutas recién publicadas',
         ],
-        'panel'    => [
+        'panel' => [
             'show_more' => 'Mostrar más',
         ],
-        'search'   => [
+        'search' => [
             'page_title'              => 'Buscar rutas',
             'header'                  => 'Buscar rutas',
             'title'                   => 'Título',
@@ -39,18 +39,18 @@ return [
             'user_placeholder'        => 'Filtrar por usuario',
         ],
     ],
-    'livesession'    => [
+    'livesession' => [
         'view' => [
             'any' => 'Cualquiera',
         ],
     ],
-    'edit'           => [
+    'edit' => [
         'title'                                   => 'Editar %s',
         'linkpreview_title'                       => '%s | Keystone.guru',
         'linkpreview_default_description'         => 'Editar ruta M+ para el calabozo %s por %s',
         'linkpreview_default_description_sandbox' => 'Editar ruta M+ para el calabozo %s',
     ],
-    'embed'          => [
+    'embed' => [
         'title'            => 'Incrustar :routeTitle',
         'any'              => 'Cualquiera',
         'select_floor'     => 'Seleccionar piso',
@@ -60,16 +60,16 @@ return [
         'present_route'    => 'Presentar ruta',
         'copy_mdt_string'  => 'Copiar cadena MDT',
     ],
-    'limitreached'   => [
+    'limitreached' => [
         'title'                     => 'Límite alcanzado',
         'header'                    => 'Límite alcanzado',
         'limit_reached_description' => 'Has alcanzado la cantidad máxima de rutas que puedes crear (%s). Considera convertirte en un Patrón para seguir creando más rutas, o elimina algunas de tus rutas existentes. ¡Gracias por usar el sitio!',
         'become_a_patreon'          => '¡Conviértete en un %s Patrón!',
     ],
-    'new'            => [
+    'new' => [
         'title' => 'Nueva ruta',
     ],
-    'newtemporary'   => [
+    'newtemporary' => [
         'title'  => 'Crear ruta temporal',
         'header' => 'Nueva ruta temporal',
     ],
@@ -78,11 +78,11 @@ return [
         'header'              => 'Ruta ya reclamada',
         'claimed_description' => 'Esta ruta ya ha sido reclamada por alguien (o usaste el botón de retroceso en tu navegador para navegar aquí).',
     ],
-    'unavailable'    => [
+    'unavailable' => [
         'title'                   => 'Ruta no publicada',
         'unavailable_description' => 'No estás autorizado para ver esta ruta. Pide al autor de la ruta que cambie la configuración de Compartir de la ruta para que puedas verla.',
     ],
-    'view'           => [
+    'view' => [
         'any'                                     => 'Cualquiera',
         'linkpreview_title'                       => '%s',
         'linkpreview_default_description'         => 'Ruta M+ para el calabozo %s por %s.',

@@ -3,17 +3,17 @@
 return [
 
     'home' => [
-        'keystone_guru'       => 'Keystone.guru',
-        'affixes'             => 'Affixes',
-        'about'               => 'À propos',
-        'credits'             => 'Crédits',
-        'changelog'           => [
+        'keystone_guru' => 'Keystone.guru',
+        'affixes'       => 'Affixes',
+        'about'         => 'À propos',
+        'credits'       => 'Crédits',
+        'changelog'     => [
             'list'    => 'Journal des modifications',
             'release' => [
                 'view' => 'Voir la version :version',
             ],
         ],
-        'legal'               => [
+        'legal' => [
             'cookies' => 'Cookies',
             'privacy' => 'Confidentialité',
             'terms'   => 'Conditions',
@@ -28,10 +28,10 @@ return [
                 'explore'  => 'Explorer',
             ],
         ],
-        'dungeonroute'        => [
+        'dungeonroute' => [
             'new' => 'Nouvelle route',
         ],
-        'dungeonroutes'       => [
+        'dungeonroutes' => [
             'search'            => 'Recherche',
             'popular'           => 'Populaire',
             'next_week_affixes' => 'Affixes de la semaine prochaine',
@@ -44,24 +44,24 @@ return [
                 'this_week_affixes' => 'Affixes de cette semaine',
                 'new'               => 'Nouveau',
             ],
-            'discoverdungeon'   => [
+            'discoverdungeon' => [
                 'popular'           => 'Populaire',
                 'next_week_affixes' => 'Affixes de la semaine prochaine',
                 'this_week_affixes' => 'Affixes de cette semaine',
                 'new'               => 'Nouveau',
             ],
         ],
-        'my_profile'          => 'Mon profil public',
-        'my_routes'           => 'Mes routes',
-        'my_tags'             => 'Mes tags',
-        'my_teams'            => 'Mes équipes',
-        'overview'            => 'Vue d\'ensemble',
-        'new_team'            => 'Nouvelle équipe',
-        'edit_team'           => 'Modifier l\'équipe',
-        'join_team'           => 'Rejoindre l\'équipe',
-        'admin'               => [
-            'admin'                      => 'Admin',
-            'tools'                      => [
+        'my_profile' => 'Mon profil public',
+        'my_routes'  => 'Mes routes',
+        'my_tags'    => 'Mes tags',
+        'my_teams'   => 'Mes équipes',
+        'overview'   => 'Vue d\'ensemble',
+        'new_team'   => 'Nouvelle équipe',
+        'edit_team'  => 'Modifier l\'équipe',
+        'join_team'  => 'Rejoindre l\'équipe',
+        'admin'      => [
+            'admin' => 'Admin',
+            'tools' => [
                 'admin_tools'               => 'Outils d\'administration',
                 'view_exported_dungeondata' => 'Voir les données de donjon exportées',
                 'view_exported_releases'    => 'Voir les versions exportées',
@@ -70,20 +70,20 @@ return [
                 'view_mdt_string_contents'  => 'Voir le contenu de la chaîne MDT',
                 'import_npcs'               => 'Importer des PNJ',
             ],
-            'releases'                   => 'Versions',
-            'new_release'                => 'Nouvelle version',
-            'edit_release'               => 'Modifier la version',
-            'expansions'                 => [
+            'releases'     => 'Versions',
+            'new_release'  => 'Nouvelle version',
+            'edit_release' => 'Modifier la version',
+            'expansions'   => [
                 'expansions'     => 'Extensions',
                 'new_expansion'  => 'Nouvelle extension',
                 'edit_expansion' => 'Modifier l\'extension',
             ],
-            'dungeons'                   => [
+            'dungeons' => [
                 'dungeons'     => 'Donjons',
                 'new_dungeon'  => 'Nouveau donjon',
                 'edit_dungeon' => 'Modifier :dungeon',
             ],
-            'floors'                     => [
+            'floors' => [
                 'new_floor'  => 'Nouvel étage',
                 'edit_floor' => 'Modifier l\'étage',
             ],
@@ -91,28 +91,28 @@ return [
                 'new_dungeonspeedrunrequirednpc10man' => 'Nouvel ennemi requis pour course de donjon à 10',
                 'new_dungeonspeedrunrequirednpc25man' => 'Nouvel ennemi requis pour course de donjon à 25',
             ],
-            'npcs'                       => [
+            'npcs' => [
                 'npcs'     => 'PNJ',
                 'new_npc'  => 'Nouveau PNJ',
                 'edit_npc' => 'Modifier :npc',
             ],
-            'npcenemyforces'             => [
+            'npcenemyforces' => [
                 'new_npc_enemy_forces'  => 'Nouvelles forces ennemies des PNJ',
                 'edit_npc_enemy_forces' => 'Modifier les forces ennemies des PNJ',
             ],
-            'npchealth'                  => [
+            'npchealth' => [
                 'new_npc_health'  => 'Nouvelle santé du PNJ',
                 'edit_npc_health' => 'Modifier la santé du PNJ',
             ],
-            'spells'                     => [
+            'spells' => [
                 'spells'     => 'Sorts',
                 'new_spell'  => 'Nouveau sort',
                 'edit_spell' => 'Modifier le sort',
             ],
-            'users'                      => [
+            'users' => [
                 'users' => 'Utilisateurs',
             ],
-            'user_reports'               => [
+            'user_reports' => [
                 'user_reports' => 'Rapports d\'utilisateur',
             ],
         ],

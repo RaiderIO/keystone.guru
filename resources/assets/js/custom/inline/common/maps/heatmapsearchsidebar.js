@@ -6,6 +6,7 @@
  * @property {String} currentFiltersSelector
  * @property {String} loaderSelector
  * @property {Boolean} passThroughEverything
+ * @property {Boolean} showDataSourceSnackbar
  *
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin
@@ -127,6 +128,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'includePlayerSpellIds': new SearchFilterPassThrough(),
             'showSidebar': new SearchFilterPassThrough(),
             'token': new SearchFilterPassThrough(),
+            'season': new SearchFilterPassThrough(),
         };
 
         // This will allow someone to bypass all UI elements and fully control the filters through parameters

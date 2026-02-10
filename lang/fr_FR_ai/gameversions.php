@@ -2,27 +2,27 @@
 
 return [
 
-    'retail'       => [
+    'retail' => [
         'name'        => 'Retail',
         'description' => 'Retail',
     ],
-    'wotlk'        => [
+    'wotlk' => [
         'name'        => 'Wrath',
         'description' => 'Wrath of the Lich King',
     ],
-    'classic'      => [
+    'classic' => [
         'name'        => 'Ère Classique',
         'description' => 'Ère Classique',
     ],
-    'beta'         => [
+    'beta' => [
         'name'        => 'Beta Retail',
         'description' => 'Beta Retail',
     ],
-    'cata'         => [
+    'cata' => [
         'name'        => 'Cata',
         'description' => 'Cataclysm',
     ],
-    'mop'          => [
+    'mop' => [
         'name'        => 'Mists',
         'description' => 'Mists of Pandaria',
     ],

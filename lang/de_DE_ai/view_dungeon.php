@@ -4,7 +4,7 @@ return [
 
     'explore' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Erkunden',
                 'header'            => 'Dungeon erkunden',
                 'description'       => 'Das Erkunden eines Dungeons ermöglicht es Ihnen, das Layout des Dungeons und die vorhandenen Feinde zu sehen. Ideal, um den Dungeon einfach anzusehen, ohne eine Route zu erstellen.',
@@ -20,7 +20,7 @@ return [
     ],
     'heatmap' => [
         'gameversion' => [
-            'list'  => [
+            'list' => [
                 'title'             => 'Heatmaps',
                 'header'            => 'Dungeon-Heatmaps',
                 'raider_io'         => 'Raider.IO',

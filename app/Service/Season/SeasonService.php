@@ -290,4 +290,28 @@ class SeasonService implements SeasonServiceInterface
 
         return $result;
     }
+
+    public function getSeasonFromShortString(?string $season): ?Season
+    {
+        if ($season === null) {
+            return null;
+        }
+
+        $result = null;
+
+        $split = explode('-', $season);
+        if (count($split) === 3) {
+            $expansionShortName = $split[1];
+            $seasonIndex        = (int)$split[2];
+
+            $expansion = Expansion::where('shortname', $expansionShortName)->first();
+            if ($expansion !== null) {
+                $result = Season::where('expansion_id', $expansion->id)
+                    ->where('index', $seasonIndex)
+                    ->first();
+            }
+        }
+
+        return $result;
+    }
 }

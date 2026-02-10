@@ -44,7 +44,7 @@ return [
         'updateState'     => 'Aggiorna',
     ],
     'columnControl' => [
-        'buttons'        => [
+        'buttons' => [
             'searchClear' => 'Cancella ricerca',
         ],
         'colVis'         => 'Visibilità colonne',
@@ -56,16 +56,16 @@ return [
             'none'   => 'Deseleziona tutto',
             'search' => 'Cerca...',
         ],
-        'orderAddAsc'    => 'Aggiungi ordinamento crescente',
-        'orderAddDesc'   => 'Aggiungi ordinamento decrescente',
-        'orderAsc'       => 'Ordina in modo crescente',
-        'orderClear'     => 'Cancella ordinamento',
-        'orderDesc'      => 'Ordina in modo decrescente',
-        'orderRemove'    => 'Rimuovi dall\'ordinamento',
-        'reorder'        => 'Riordina colonne',
-        'reorderLeft'    => 'Sposta la colonna a sinistra',
-        'reorderRight'   => 'Sposta la colonna a destra',
-        'search'         => [
+        'orderAddAsc'  => 'Aggiungi ordinamento crescente',
+        'orderAddDesc' => 'Aggiungi ordinamento decrescente',
+        'orderAsc'     => 'Ordina in modo crescente',
+        'orderClear'   => 'Cancella ordinamento',
+        'orderDesc'    => 'Ordina in modo decrescente',
+        'orderRemove'  => 'Rimuovi dall\'ordinamento',
+        'reorder'      => 'Riordina colonne',
+        'reorderLeft'  => 'Sposta la colonna a sinistra',
+        'reorderRight' => 'Sposta la colonna a destra',
+        'search'       => [
             'datetime' => [
                 'empty'    => 'Vuoto',
                 'equal'    => 'Uguale a',
@@ -74,7 +74,7 @@ return [
                 'notEmpty' => 'Non vuoto',
                 'notEqual' => 'Diverso da',
             ],
-            'number'   => [
+            'number' => [
                 'empty'          => 'Vuoto',
                 'equal'          => 'Uguale a',
                 'greater'        => 'Maggiore di',
@@ -84,7 +84,7 @@ return [
                 'notEmpty'       => 'Non vuoto',
                 'notEqual'       => 'Diverso da',
             ],
-            'text'     => [
+            'text' => [
                 'contains'    => 'Contiene',
                 'empty'       => 'Vuoto',
                 'ends'        => 'Termina con',

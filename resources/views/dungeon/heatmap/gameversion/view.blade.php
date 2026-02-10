@@ -3,12 +3,14 @@
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon                      $dungeon
+ * @var Season                       $season
  * @var Floor                        $floor
  * @var string                       $title
  * @var MapContextBase               $mapContext
@@ -37,6 +39,7 @@ use Illuminate\Support\Collection;
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
+            'season' => $season,
             'mappingVersion' => $dungeon->getCurrentMappingVersion(),
             'floor' => $floor,
             'edit' => false,
