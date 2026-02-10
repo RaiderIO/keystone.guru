@@ -6,6 +6,7 @@
  * @property {String} currentFiltersSelector
  * @property {String} loaderSelector
  * @property {Boolean} passThroughEverything
+ * @property {Boolean} showDataSourceSnackbar
  *
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin

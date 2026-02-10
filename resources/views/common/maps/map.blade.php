@@ -328,6 +328,7 @@ if ($isAdmin) {
         @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
             'showSidebar' => $show['controls']['heatmapSearchSidebar'] ?? true,
+            'showDataSourceSnackbar' => $show['controls']['heatmapSearchShowDataSourceSnackbar'] ?? true,
             'defaultState' => $show['controls']['heatmapSearchDefaultState'] ?? null,
             'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null
         ]))

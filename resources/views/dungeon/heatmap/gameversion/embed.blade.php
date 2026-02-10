@@ -102,6 +102,7 @@ use Illuminate\Support\Collection;
                     'heatmapSearch' => $showHeatmapSearch,
                     'heatmapSearchDefaultState' => false,
                     'heatmapSearchSidebar' => $embedOptions['show']['sidebar'],
+                    'heatmapSearchShowDataSourceSnackbar' => $embedOptions['show']['dataSourceSnackbar'],
                 ],
             ],
         ])

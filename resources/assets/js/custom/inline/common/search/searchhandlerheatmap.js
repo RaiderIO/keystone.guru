@@ -1,6 +1,5 @@
 class SearchHandlerHeatmap extends SearchHandler {
     constructor(options) {
-
         let currentSnackbarId = null;
         super($.extend({}, {
             loaderFn: function (isLoading, json) {
@@ -14,7 +13,7 @@ class SearchHandlerHeatmap extends SearchHandler {
                     template = Handlebars.templates['map_heatmapsearch_loader'];
                 } else if (json === null || json.hasOwnProperty('message')) {
                     template = Handlebars.templates['map_heatmapsearch_error_loading_data'];
-                    if( json !== null && json.hasOwnProperty('message') && json.message === 'Invalid response from Raider.IO API' ) {
+                    if (json !== null && json.hasOwnProperty('message') && json.message === 'Invalid response from Raider.IO API') {
                         data.error = lang.get('js.too_much_data_label');
                     } else {
                         data.error = lang.get('js.error_loading_data_label');
@@ -26,11 +25,14 @@ class SearchHandlerHeatmap extends SearchHandler {
                     });
                 }
 
-                currentSnackbarId = getState().addSnackbar(
-                    template(data), {
-                        compact: true
-                    }
-                );
+                if (typeof this.showDataSourceSnackbar === 'undefined' ||
+                    this.showDataSourceSnackbar) {
+                    currentSnackbarId = getState().addSnackbar(
+                        template(data), {
+                            compact: true
+                        }
+                    );
+                }
             }
         }, options));
     }
