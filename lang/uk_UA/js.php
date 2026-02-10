@@ -183,7 +183,7 @@ return [
     'cannot_change_sharing_settings_not_all_required_enemies_killed' => 'Не вдалося змінити налаштування поширення: убито не всіх обов\'язкових ворогів',
     'mapping_version_saved'                                          => 'Версію мапи успішно збережено',
     'vote'                                                           => 'голос',
-    'votes'                                                          => 'голоси(-ів)',
+    'votes'                                                          => 'гол.',
     'route_delete_confirm'                                           => 'Справді хочете видалити цей маршрут?',
     'route_delete_successful'                                        => 'Маршрут успішно видалено',
     'route_clone_successful'                                         => 'Маршрут успішно продубльовано',
@@ -478,6 +478,6 @@ return [
     'too_much_data_label'                                                  => 'Знайдено забагато забігів. Будь ласка, уточніть пошук.',
     'error_loading_data_label'                                             => 'Помилка завантаження даних. Спробуйте знову',
     'run_count_label'                                                      => 'Показано дані з :count забігів',
-    'refresh_thumbnails_label'                                             => '',
+    'refresh_thumbnails_label'                                             => 'Оновити мініатюри',
 
 ];

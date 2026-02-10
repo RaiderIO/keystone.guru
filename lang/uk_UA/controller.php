@@ -80,7 +80,7 @@ return [
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
-        'no_linked_npc' => 'Немає прив\'язаних НІПів',
+        'no_linked_npc' => 'Немає пов\'язаних НІПів',
         'flash'         => [
             'npc_added_successfully'   => 'НІПа успішно додано',
             'npc_deleted_successfully' => 'НІПа успішно прибрано',
