@@ -8,7 +8,7 @@ class SearchHandlerHeatmap extends SearchHandler {
                 state.removeSnackbar(currentSnackbarId);
 
                 let data = $.extend({}, getHandlebarsDefaultVariables());
-                let template;
+                let template = null;
                 if (isLoading) {
                     template = Handlebars.templates['map_heatmapsearch_loader'];
                 } else if (json === null || json.hasOwnProperty('message')) {
@@ -18,15 +18,14 @@ class SearchHandlerHeatmap extends SearchHandler {
                     } else {
                         data.error = lang.get('js.error_loading_data_label');
                     }
-                } else {
+                } else if (typeof this.showDataSourceSnackbar === 'undefined' || this.showDataSourceSnackbar) {
                     template = Handlebars.templates['map_heatmapsearch_run_count'];
                     data.run_count = lang.get('js.run_count_label', {
                         count: json.run_count
                     });
                 }
 
-                if (typeof this.showDataSourceSnackbar === 'undefined' ||
-                    this.showDataSourceSnackbar) {
+                if (typeof template === 'function') {
                     currentSnackbarId = getState().addSnackbar(
                         template(data), {
                             compact: true
