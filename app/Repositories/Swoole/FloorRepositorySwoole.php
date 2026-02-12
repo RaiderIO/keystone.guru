@@ -54,7 +54,7 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
 
         // Hotfix for Seat of the Triumvirate not having default floor set
         if ($dungeonId === 12) {
-            $this->defaultFloorByDungeonId->put(12, Floor::find('id', 37));
+            $this->defaultFloorByDungeonId->put(12, Floor::find(37));
         }
 
         return clone $this->defaultFloorByDungeonId->get($dungeonId);

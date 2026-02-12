@@ -2,10 +2,10 @@
 
 return [
 
-    'aggressive' => 'Agressif',
-    'unfriendly' => 'Inamical',
-    'neutral'    => 'Neutre',
-    'friendly'   => 'Amical',
-    'awakened'   => 'Éveillé',
+    'aggressive' => '',
+    'unfriendly' => '',
+    'neutral'    => '',
+    'friendly'   => '',
+    'awakened'   => '',
 
 ];

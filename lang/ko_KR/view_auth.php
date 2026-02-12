@@ -4,26 +4,26 @@ return [
 
     'passwords' => [
         'email' => [
-            'title'                    => '비밀번호 재설정',
-            'header'                   => '비밀번호 재설정',
-            'email_address'            => '이메일 주소',
-            'send_password_reset_link' => '비밀번호 재설정 링크 보내기',
+            'title'                    => '',
+            'header'                   => '',
+            'email_address'            => '',
+            'send_password_reset_link' => '',
         ],
         'reset' => [
-            'title'            => '비밀번호 재설정',
-            'header'           => '비밀번호 재설정',
-            'email_address'    => '이메일 주소',
-            'password'         => '비밀번호',
-            'confirm_password' => '비밀번호 확인',
-            'reset_password'   => '비밀번호 재설정',
+            'title'            => '',
+            'header'           => '',
+            'email_address'    => '',
+            'password'         => '',
+            'confirm_password' => '',
+            'reset_password'   => '',
         ],
     ],
     'login' => [
-        'title' => '로그인',
+        'title' => '',
     ],
     'register' => [
-        'title'  => '가입',
-        'header' => '가입',
+        'title'  => '',
+        'header' => '',
     ],
 
 ];

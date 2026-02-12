@@ -1408,8 +1408,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             Season::SEASON_TWW_S4,
         ])) {
             foreach ($this->affixes as $affixGroup) {
-                // Look at the 2nd affix - this is what people are going to be focussed on mostly!
-                // These affix groups have both fortified and tyrannical so just look at the one that comes first
+                // Look at the 2nd affix - this is what people are going to be focused on mostly!
+                // These affix groups have both fortified and tyrannical, so just look at the one that comes first
                 /** @var Affix $affix */
                 $affix = $affixGroup->affixes->get(1);
                 if ($affix->key === Affix::AFFIX_FORTIFIED) {

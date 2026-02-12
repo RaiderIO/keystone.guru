@@ -16,3 +16,19 @@
 .pw-corner-ad-video {
     margin-bottom: 0 !important;
 }
+
+#in_content.pw-sticky {
+    top: 100px !important;
+}
+
+#in_content2.pw-sticky {
+    top: 100px !important;
+}
+
+#in_content3.pw-sticky {
+    top: 100px !important;
+}
+
+#in_content4.pw-sticky {
+    top: 100px !important;
+}

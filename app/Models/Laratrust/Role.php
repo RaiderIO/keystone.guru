@@ -12,11 +12,11 @@ class Role extends LaratrustRole
 {
     protected $hidden = []; // <-- unhide 'pivot'
 
-    public const ROLE_USER          = 'user';
-    public const ROLE_INTERNAL_TEAM = 'internal_team';
-    public const ROLE_ADMIN         = 'admin';
+    public const string ROLE_USER          = 'user';
+    public const string ROLE_INTERNAL_TEAM = 'internal_team';
+    public const string ROLE_ADMIN         = 'admin';
 
-    public const ROLE_ALL = [
+    public const array ROLE_ALL = [
         self::ROLE_USER,
         self::ROLE_INTERNAL_TEAM,
         self::ROLE_ADMIN,

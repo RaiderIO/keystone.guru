@@ -7,47 +7,50 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class MDTMapPOI implements Arrayable
 {
-    public const TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
-    public const TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
+    public const string TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
+    public const string TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
     // Ny'alotha spires
-    public const TEMPLATE_VIGNETTE_PIN = 'VignettePinTemplate';
+    public const string TEMPLATE_VIGNETTE_PIN  = 'VignettePinTemplate';
+    public const string TEMPLATE_ANIMATED_LINE = 'MDTAnimatedLineTemplate';
 
     public const ALL_TEMPLATES = [
         self::TEMPLATE_MAP_LINK_PIN,
         self::TEMPLATE_DEATH_RELEASE_PIN,
         self::TEMPLATE_VIGNETTE_PIN,
+        self::TEMPLATE_ANIMATED_LINE,
     ];
 
-    public const TYPE_MAP_LINK                = 'mapLink';
-    public const TYPE_DUNGEON_ENTRANCE        = 'dungeonEntrance';
-    public const TYPE_GRAVEYARD               = 'graveyard';
-    public const TYPE_GENERAL_NOTE            = 'generalNote';
-    public const TYPE_ZOOM                    = 'zoom';
-    public const TYPE_IRON_DOCKS_IRON_STAR    = 'ironDocksIronStar';
-    public const TYPE_NYALOTHA_SPIRE          = 'nyalothaSpire';
-    public const TYPE_THE_UNDERROT_SKIP       = 'tuSkip';
-    public const TYPE_BRACKENHIDE_CAGE        = 'brackenhideCage';
-    public const TYPE_BRACKENHIDE_CAULDRON    = 'brackenhideCauldron';
-    public const TYPE_NELTHARUS_CHAIN         = 'neltharusChain';
-    public const TYPE_NELTHARUS_FOOD          = 'neltharusFood';
-    public const TYPE_NELTHARUS_SHIELD        = 'neltharusShield';
-    public const TYPE_NW_ITEM                 = 'nwItem';
-    public const TYPE_ARA_KARA_ITEM           = 'araKaraItem';
-    public const TYPE_MISTS_ITEM              = 'mistsItem';
-    public const TYPE_STONEVAULT_ITEM         = 'stonevaultItem';
-    public const TYPE_COT_ITEM                = 'cityOfThreadsItem';
-    public const TYPE_CINDERBREW_ITEM_A       = 'brewItemA';
-    public const TYPE_CINDERBREW_ITEM_B       = 'brewItemB';
-    public const TYPE_WORKSHOP_ITEM           = 'workshopItem';
-    public const TYPE_PRIORY_ITEM             = 'prioryItem';
-    public const TYPE_MOTHERLODE_ITEM         = 'motherlodeItem';
-    public const TYPE_FLOODGATE_ITEM          = 'floodgateItem';
-    public const TYPE_ECO_DOME_AL_DANI_ITEM_1 = 'EDAItem1';
-    public const TYPE_ECO_DOME_AL_DANI_ITEM_2 = 'EDAItem2';
-    public const TYPE_ECO_DOME_AL_DANI_ITEM_3 = 'EDAItem3';
-    public const TYPE_TEXT_FRAME              = 'textFrame';
+    public const string TYPE_MAP_LINK                = 'mapLink';
+    public const string TYPE_DUNGEON_ENTRANCE        = 'dungeonEntrance';
+    public const string TYPE_GRAVEYARD               = 'graveyard';
+    public const string TYPE_GENERAL_NOTE            = 'generalNote';
+    public const string TYPE_ZOOM                    = 'zoom';
+    public const string TYPE_IRON_DOCKS_IRON_STAR    = 'ironDocksIronStar';
+    public const string TYPE_NYALOTHA_SPIRE          = 'nyalothaSpire';
+    public const string TYPE_THE_UNDERROT_SKIP       = 'tuSkip';
+    public const string TYPE_BRACKENHIDE_CAGE        = 'brackenhideCage';
+    public const string TYPE_BRACKENHIDE_CAULDRON    = 'brackenhideCauldron';
+    public const string TYPE_NELTHARUS_CHAIN         = 'neltharusChain';
+    public const string TYPE_NELTHARUS_FOOD          = 'neltharusFood';
+    public const string TYPE_NELTHARUS_SHIELD        = 'neltharusShield';
+    public const string TYPE_NW_ITEM                 = 'nwItem';
+    public const string TYPE_ARA_KARA_ITEM           = 'araKaraItem';
+    public const string TYPE_MISTS_ITEM              = 'mistsItem';
+    public const string TYPE_STONEVAULT_ITEM         = 'stonevaultItem';
+    public const string TYPE_COT_ITEM                = 'cityOfThreadsItem';
+    public const string TYPE_CINDERBREW_ITEM_A       = 'brewItemA';
+    public const string TYPE_CINDERBREW_ITEM_B       = 'brewItemB';
+    public const string TYPE_WORKSHOP_ITEM           = 'workshopItem';
+    public const string TYPE_PRIORY_ITEM             = 'prioryItem';
+    public const string TYPE_MOTHERLODE_ITEM         = 'motherlodeItem';
+    public const string TYPE_FLOODGATE_ITEM          = 'floodgateItem';
+    public const string TYPE_ECO_DOME_AL_DANI_ITEM_1 = 'EDAItem1';
+    public const string TYPE_ECO_DOME_AL_DANI_ITEM_2 = 'EDAItem2';
+    public const string TYPE_ECO_DOME_AL_DANI_ITEM_3 = 'EDAItem3';
+    public const string TYPE_TEXT_FRAME              = 'textFrame';
+    public const string TYPE_GENERIC_ITEM            = 'genericItem';
 
-    public const ALL_TYPES = [
+    public const array ALL_TYPES = [
         self::TYPE_MAP_LINK,
         self::TYPE_DUNGEON_ENTRANCE,
         self::TYPE_GRAVEYARD,
@@ -76,6 +79,7 @@ class MDTMapPOI implements Arrayable
         self::TYPE_ECO_DOME_AL_DANI_ITEM_2,
         self::TYPE_ECO_DOME_AL_DANI_ITEM_3,
         self::TYPE_TEXT_FRAME,
+        self::TYPE_GENERIC_ITEM,
     ];
 
     private readonly string $template;
@@ -93,7 +97,7 @@ class MDTMapPOI implements Arrayable
      */
     public function __construct(private readonly int $subLevel, private readonly array $rawMapPOI)
     {
-        $this->template        = $this->rawMapPOI['template'];
+        $this->template        = $this->rawMapPOI['template'] ?? self::TEMPLATE_MAP_LINK_PIN;
         $this->type            = $this->rawMapPOI['type'];
         $this->itemType        = $this->rawMapPOI['itemType'] ?? null;
         $this->itemIndex       = $this->rawMapPOI['itemIndex'] ?? null;

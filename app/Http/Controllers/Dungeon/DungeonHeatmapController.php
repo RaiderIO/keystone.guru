@@ -20,6 +20,7 @@ use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Laravel\Pennant\Feature;
 
 class DungeonHeatmapController extends Controller
@@ -126,7 +127,10 @@ class DungeonHeatmapController extends Controller
                 ] + $request->validated());
             }
 
-            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+            $seasonString = $request->get('season');
+
+            $mostRecentSeason = $seasonService->getSeasonFromShortString($seasonString) ??
+                $dungeon->getActiveSeason($seasonService);
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
@@ -174,6 +178,10 @@ class DungeonHeatmapController extends Controller
             $floorIndex = '1';
         }
 
+        // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
+        $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
+        User::forceMapFacadeStyle($mapFacadeStyle);
+
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->indexOrFacade($currentMappingVersion, $floorIndex)
@@ -200,29 +208,38 @@ class DungeonHeatmapController extends Controller
             ] + $validated);
         }
 
-        $style                 = $request->get('style', 'compact');
-        $headerBackgroundColor = $request->get('headerBackgroundColor');
-        $mapBackgroundColor    = $request->get('mapBackgroundColor');
-        $showEnemyInfo         = $request->get('showEnemyInfo', false);
-        $showTitle             = $request->get('showTitle', true);
-        $showSidebar           = $request->get('showSidebar', true);
-        $defaultZoom           = $request->get('defaultZoom', 1);
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
+
+        $style                  = $request->get('style', 'compact');
+        $headerBackgroundColor  = $request->get('headerBackgroundColor');
+        $mapBackgroundColor     = $request->get('mapBackgroundColor');
+        $showEnemyInfo          = $request->get('showEnemyInfo', false);
+        $showTitle              = $request->get('showTitle', true);
+        $showSidebar            = $request->get('showSidebar', true);
+        $showHeader             = $request->get('showHeader', true);
+        $showDataSourceSnackbar = $request->get('showDataSourceSnackbar', true);
+        $defaultZoom            = $request->get('defaultZoom', 1);
 
         unset(
             $validated['style'],
             $validated['headerBackgroundColor'],
+            $validated['mapFacadeStyle'],
             $validated['mapBackgroundColor'],
             $validated['showEnemyInfo'],
             $validated['showTitle'],
             $validated['showSidebar'],
+            $validated['showHeader'],
             $validated['defaultZoom'],
         );
 
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-        $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
+        $heatmapActive = Feature::active(Heatmap::class) && ($dungeon->heatmap_enabled || isset($validated['token']));
 
-        $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
+        $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_HEATMAP_EMBED);
 
         return view('dungeon.heatmap.gameversion.embed', array_merge($this->getFilterSettings($mostRecentSeason), [
             'gameVersion'             => $gameVersion,
@@ -230,7 +247,8 @@ class DungeonHeatmapController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
+            'mapFacadeStyle'          => $mapFacadeStyle,
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
             'showHeatmapSearch'       => $heatmapActive,
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
@@ -244,10 +262,12 @@ class DungeonHeatmapController extends Controller
                 'show'                  => [
                     'enemyInfo' => (bool)$showEnemyInfo,
                     // Default false - not available
-                    'title'          => (bool)$showTitle,
-                    'sidebar'        => (bool)$showSidebar,
-                    'floorSelection' => true,
-                    // Always available, but can be overridden later if there's no floors to select
+                    'title'              => (bool)$showTitle,
+                    'sidebar'            => (bool)$showSidebar,
+                    'header'             => (bool)$showHeader,
+                    'floorSelection'     => true,
+                    'dataSourceSnackbar' => (bool)$showDataSourceSnackbar,
+                    // Always available but can be overridden later if there are no floors to select
                 ],
             ],
         ]));
@@ -280,7 +300,7 @@ class DungeonHeatmapController extends Controller
     ): ?RedirectResponse {
         if (
             !$dungeon->active ||
-            !$dungeon->heatmap_enabled ||
+//            !$dungeon->heatmap_enabled ||
             $currentMappingVersion === null ||
             !Feature::active(Heatmap::class)
         ) {

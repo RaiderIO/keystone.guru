@@ -255,6 +255,12 @@ class CharacterClassSpecializationsSeeder extends Seeder implements TableSeederI
                 'specialization_id'  => 73,
                 'character_class_id' => $characterClasses->get(CharacterClass::CHARACTER_CLASS_WARRIOR)->id,
             ],
+            [
+                'key'                => 'devourer',
+                'name'               => 'specializations.demon_hunter.devourer',
+                'specialization_id'  => 1480,
+                'character_class_id' => $characterClasses->get(CharacterClass::CHARACTER_CLASS_DEMON_HUNTER)->id,
+            ],
         ];
 
         CharacterClassSpecialization::from(DatabaseSeeder::getTempTableName(CharacterClassSpecialization::class))

@@ -21,7 +21,7 @@ class DiscoverService extends BaseDiscoverService
         $this->ensureGameVersion();
 
         if ($this->season !== null) {
-            return sprintf('discover:%s:season-%s:%s:%d', $this->gameVersion->key, $this->season->index, $key, $this->limit);
+            return sprintf('discover:%s:season-%d-%d:%s:%d', $this->gameVersion->key, $this->season->index, $this->season->id, $key, $this->limit);
         } elseif ($this->expansion !== null) {
             return sprintf('discover:expansion-%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
         } else {

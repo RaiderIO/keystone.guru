@@ -75,4 +75,9 @@ class SeasonServiceStub implements SeasonServiceInterface
     {
         return collect();
     }
+
+    public function getSeasonFromShortString(string $season): ?Season
+    {
+        return null;
+    }
 }

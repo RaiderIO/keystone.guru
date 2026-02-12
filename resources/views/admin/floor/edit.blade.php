@@ -17,11 +17,11 @@ $floor ??= null;
     'showAds' => false,
     'title' => sprintf(
         isset($floor) ? __('view_admin.floor.edit.title_edit') : __('view_admin.floor.edit.title_new'),
-        __($dungeon->name)
+        __($floor->name)
     )]
 )
 @section('header-title')
-    {{ sprintf(isset($floor) ? __('view_admin.floor.edit.header_edit') : __('view_admin.floor.edit.header_new'), __($dungeon->name)) }}
+    {{ sprintf(isset($floor) ? __('view_admin.floor.edit.header_edit') : __('view_admin.floor.edit.header_new'), __($floor->name)) }}
 @endsection
 
 @section('content')

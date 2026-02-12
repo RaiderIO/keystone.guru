@@ -3,32 +3,32 @@
 return [
 
     'retail' => [
-        'name'        => '리테일',
-        'description' => '리테일',
+        'name'        => '',
+        'description' => '',
     ],
     'wotlk' => [
-        'name'        => '분노',
-        'description' => '리치 왕의 분노',
+        'name'        => '',
+        'description' => '',
     ],
     'classic' => [
-        'name'        => '클래식 시대',
-        'description' => '클래식 시대',
+        'name'        => '',
+        'description' => '',
     ],
     'beta' => [
-        'name'        => '리테일 베타',
-        'description' => '리테일 베타',
+        'name'        => '',
+        'description' => '',
     ],
     'cata' => [
-        'name'        => '대격변',
-        'description' => '대격변',
+        'name'        => '',
+        'description' => '',
     ],
     'mop' => [
-        'name'        => '안개',
-        'description' => '판다리아의 안개',
+        'name'        => '',
+        'description' => '',
     ],
     'legion-remix' => [
-        'name'        => '군단 리믹스',
-        'description' => '군단 리믹스',
+        'name'        => '',
+        'description' => '',
     ],
 
 ];

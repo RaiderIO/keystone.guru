@@ -3,40 +3,40 @@
 return [
 
     '400' => [
-        'title'   => '400 Solicitud no válida',
-        'message' => 'Tu navegador envió una solicitud no válida, por favor intenta de nuevo.',
+        'title'   => '',
+        'message' => '',
     ],
     '401' => [
-        'title'   => '401 No autorizado',
-        'message' => 'Lo siento, no estás autorizado para acceder a esta página.',
+        'title'   => '',
+        'message' => '',
     ],
     '403' => [
-        'title'   => '403 Prohibido',
-        'message' => 'Lo siento, tienes prohibido el acceso a esta página.',
+        'title'   => '',
+        'message' => '',
     ],
     '404' => [
-        'title'   => '404 No encontrado',
-        'message' => 'Lo siento, la página que buscas no se pudo encontrar.',
+        'title'   => '',
+        'message' => '',
     ],
     '410' => [
-        'title'   => '410 Página expirada',
-        'message' => 'Lo siento, la página que buscas ha expirado.',
+        'title'   => '',
+        'message' => '',
     ],
     '419' => [
-        'title'   => '419 Página expirada',
-        'message' => 'Lo siento, tu sesión ha expirado. Por favor, actualiza y vuelve a intentar.',
+        'title'   => '',
+        'message' => '',
     ],
     '429' => [
-        'title'   => '429 Demasiadas solicitudes',
-        'message' => 'Lo siento, estás haciendo demasiadas solicitudes a nuestros servidores.',
+        'title'   => '',
+        'message' => '',
     ],
     '500' => [
-        'title'   => '500 Error interno del servidor',
-        'message' => 'Vaya, algo salió mal en nuestros servidores.',
+        'title'   => '',
+        'message' => '',
     ],
     '503' => [
-        'title'   => 'Servicio no disponible',
-        'message' => 'Keystone.guru está en mantenimiento. ¡Volveremos pronto!',
+        'title'   => '',
+        'message' => '',
     ],
 
 ];

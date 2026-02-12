@@ -12,6 +12,12 @@ interface WowheadTranslationServiceLoggingInterface
 
     public function getDungeonNamesSetDungeonName(string $dungeon, string $localizedName): void;
 
+    public function getDungeonNamesInvalidJson(): void;
+
+    public function getDungeonNamesMalformedHtml(): void;
+
+    public function getDungeonNamesElementNotFound(): void;
+
     public function getDungeonNamesLocaleEnd(): void;
 
     public function getDungeonNamesEnd(): void;

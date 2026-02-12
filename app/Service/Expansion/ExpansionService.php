@@ -44,7 +44,7 @@ class ExpansionService implements ExpansionServiceInterface
     public function getNextExpansion(?GameServerRegion $gameServerRegion = null): ?Expansion
     {
         $currentExpansion = $this->getCurrentExpansion($gameServerRegion);
-        $nextExpansion    = $this->getExpansionAt(Carbon::now()->addWeeks(4), $gameServerRegion);
+        $nextExpansion    = $this->getExpansionAt(Carbon::now()->addWeeks(12), $gameServerRegion);
 
         return $nextExpansion !== null && $nextExpansion->id !== $currentExpansion->id ? $nextExpansion : null;
     }

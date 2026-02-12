@@ -1,0 +1,110 @@
+[
+    {
+        "id": 18464,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 1,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 1",
+        "vertices_json": "[{\"lat\":-95.5781,\"lng\":249.4262},{\"lat\":-72.3957,\"lng\":249.4262},{\"lat\":-72.3957,\"lng\":265.1299},{\"lat\":-95.5781,\"lng\":265.1299}]"
+    },
+    {
+        "id": 18465,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 3,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 3",
+        "vertices_json": "[{\"lat\":-110.9464,\"lng\":211.5447},{\"lat\":-102.2496,\"lng\":211.5447},{\"lat\":-102.2496,\"lng\":220.1447},{\"lat\":-110.9464,\"lng\":220.1447}]"
+    },
+    {
+        "id": 18466,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 4,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 4",
+        "vertices_json": "[{\"lat\":-116.1604,\"lng\":161.7108},{\"lat\":-107.6068,\"lng\":161.7108},{\"lat\":-107.6068,\"lng\":170.3225},{\"lat\":-116.1604,\"lng\":170.3225}]"
+    },
+    {
+        "id": 18469,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 5,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 5",
+        "vertices_json": "[{\"lat\":-159.5087,\"lng\":218.4819},{\"lat\":-151.6773,\"lng\":218.4819},{\"lat\":-151.6773,\"lng\":225.789},{\"lat\":-159.5087,\"lng\":225.789}]"
+    },
+    {
+        "id": 18470,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 6,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 6",
+        "vertices_json": "[{\"lat\":-136.1411,\"lng\":157.9287},{\"lat\":-128.9847,\"lng\":157.9287},{\"lat\":-128.9847,\"lng\":166.293},{\"lat\":-136.1411,\"lng\":166.293}]"
+    },
+    {
+        "id": 18471,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 7,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 7",
+        "vertices_json": "[{\"lat\":-220.7749,\"lng\":146.3513},{\"lat\":-210.1473,\"lng\":146.3513},{\"lat\":-210.1473,\"lng\":156.6358},{\"lat\":-220.7749,\"lng\":156.6358}]"
+    },
+    {
+        "id": 18472,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 8,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 8",
+        "vertices_json": "[{\"lat\":-231.6248,\"lng\":173.536},{\"lat\":-224.1544,\"lng\":173.536},{\"lat\":-224.1544,\"lng\":181.9402},{\"lat\":-231.6248,\"lng\":181.9402}]"
+    },
+    {
+        "id": 18473,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 9,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 9",
+        "vertices_json": "[{\"lat\":-213.1377,\"lng\":201.6856},{\"lat\":-211.1377,\"lng\":201.6856},{\"lat\":-211.1377,\"lng\":203.6856},{\"lat\":-213.1377,\"lng\":203.6856}]"
+    },
+    {
+        "id": 18512,
+        "mapping_version_id": 661,
+        "floor_id": 397,
+        "group": 2,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 2",
+        "vertices_json": "[{\"lat\":-130.2738,\"lng\":228.7467},{\"lat\":-120.6867,\"lng\":228.7467},{\"lat\":-120.6867,\"lng\":237.7638},{\"lat\":-130.2738,\"lng\":237.7638}]"
+    }
+]

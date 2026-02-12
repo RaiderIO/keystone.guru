@@ -1,0 +1,37 @@
+<?php
+
+return [
+
+    'asleep'        => '수면',
+    'banished'      => '추방',
+    'bleeding'      => '출혈',
+    'charmed'       => '매혹',
+    'gripped'       => '붙잡힘',
+    'dazed'         => '현혹',
+    'disarmed'      => '무장 해제',
+    'discovery'     => '발견',
+    'disoriented'   => '혼란',
+    'distracted'    => '주의 산만',
+    'enraged'       => '격노',
+    'snared'        => '덫에 걸림',
+    'fleeing'       => '도망',
+    'frozen'        => '빙결',
+    'healing'       => '치유',
+    'horrified'     => '공포',
+    'incapacitated' => '무력화',
+    'interrupted'   => '방해됨',
+    'invulnerable'  => '무적',
+    'mounted'       => '탑승 중',
+    'slowed'        => '느려짐',
+    'polymorphed'   => '변이됨',
+    'rooted'        => '속박됨',
+    'sapped'        => '기절됨',
+    'infected'      => '감염',
+    'shackled'      => '속박됨',
+    'shielded'      => '보호막',
+    'silenced'      => '침묵',
+    'stunned'       => '기절',
+    'turned'        => '전향됨',
+    'wounded'       => '부상',
+
+];

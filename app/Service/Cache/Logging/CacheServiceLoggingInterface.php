@@ -12,7 +12,7 @@ interface CacheServiceLoggingInterface
 
     public function deleteKeysByPatternStart(string $connection, ?int $seconds): void;
 
-    public function deleteKeysByPatternScanError(): void;
+    public function deleteKeysByPatternScanFailed(int $nextKey): void;
 
     public function deleteKeysByPatternRegexError(string $regex, string $redisKey): void;
 

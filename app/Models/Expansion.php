@@ -183,7 +183,7 @@ class Expansion extends CacheModel
         }
 
         /** @var Season|null $season */
-        $season = $this->hasOne(Season::class)
+        $season = Season::query()
             ->where('expansion_id', $this->id)
             ->whereRaw(
                 'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',

@@ -4,26 +4,26 @@ return [
 
     'passwords' => [
         'email' => [
-            'title'                    => 'Reimposta password',
-            'header'                   => 'Reimposta password',
-            'email_address'            => 'Indirizzo e-mail',
-            'send_password_reset_link' => 'Invia link per reimpostare la password',
+            'title'                    => '',
+            'header'                   => '',
+            'email_address'            => '',
+            'send_password_reset_link' => '',
         ],
         'reset' => [
-            'title'            => 'Reimposta password',
-            'header'           => 'Reimposta password',
-            'email_address'    => 'Indirizzo e-mail',
-            'password'         => 'Password',
-            'confirm_password' => 'Conferma password',
-            'reset_password'   => 'Reimposta password',
+            'title'            => '',
+            'header'           => '',
+            'email_address'    => '',
+            'password'         => '',
+            'confirm_password' => '',
+            'reset_password'   => '',
         ],
     ],
     'login' => [
-        'title' => 'Accesso',
+        'title' => '',
     ],
     'register' => [
-        'title'  => 'Registrati',
-        'header' => 'Registrati',
+        'title'  => '',
+        'header' => '',
     ],
 
 ];

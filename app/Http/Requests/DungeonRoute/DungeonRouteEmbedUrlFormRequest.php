@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use App\Models\User;
 use Illuminate\Validation\Rule;
 
 class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
@@ -35,6 +36,10 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
+            'mapFacadeStyle' => [
+                'nullable',
+                Rule::in(User::MAP_FACADE_STYLE_ALL),
+            ],
             'mapBackgroundColor' => [
                 'nullable',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
@@ -45,6 +50,7 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'showAffixes'         => 'nullable|bool',
             'showTitle'           => 'nullable|bool',
             'showPresenterButton' => 'nullable|bool',
+            'showHeader'          => 'nullable|bool',
         ]);
     }
 }

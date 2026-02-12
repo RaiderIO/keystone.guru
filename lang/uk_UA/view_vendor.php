@@ -1,9 +1,11 @@
 <?php
 
 return [
+
     'language' => [
         'flags' => [
-            'contribute_translations' => '',
+            'contribute_translations' => 'Долучитися до перекладу',
         ],
     ],
+
 ];

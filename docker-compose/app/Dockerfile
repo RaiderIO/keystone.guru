@@ -18,9 +18,6 @@ FROM php:8.4-fpm
 ARG user
 ARG uid
 
-# Add nodejs
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -30,6 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     libmagickwand-dev \
     nodejs \
+    npm \
     sudo \
     libzip-dev \
     zip \
@@ -50,7 +48,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN npm i -g handlebars puppeteer@19.9.0
 
 # Have puppeteer download chromium (this really should be done when puppeteer is installed from npm..)
-RUN node /usr/lib/node_modules/puppeteer/install.js
+RUN node /usr/local/lib/node_modules/puppeteer/install.js
 
 # Install PHP extensions
 RUN pecl install redis imagick swoole && docker-php-ext-enable redis imagick swoole

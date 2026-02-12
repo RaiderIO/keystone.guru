@@ -1,0 +1,31 @@
+{
+    "id": 340,
+    "release_changelog_id": 347,
+    "version": "v14.0.4",
+    "title": "Midnight Season 1 now links to the correct overview",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2026-02-03T21:02:02+00:00",
+    "updated_at": "2026-02-03T21:02:02+00:00",
+    "changelog": {
+        "id": 347,
+        "release_id": 340,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 347,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3095,
+                "change": "Midnight Season 1 now links to the correct overview."
+            },
+            {
+                "release_changelog_id": 347,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3075,
+                "change": "Added more wallpapers for the new dungeons."
+            }
+        ]
+    }
+}

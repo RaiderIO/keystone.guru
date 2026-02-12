@@ -156,11 +156,25 @@ html, body, #map, #app, .wrapper {
 }
 
 .header_embed_compact_logo {
-    width: 164px;
+    height: 36px;
+    width: auto;
+}
+
+/*@media (max-width: 576px) { !* Bootstrap 'sm' breakpoint *!*/
+/*    .header_embed_compact_logo {*/
+/*        height: 100%;*/
+/*        width: 30px;*/
+/*    }*/
+/*}*/
+
+.header_embed_compact_logo_and_text {
+    height: 36px;
+    width: auto;
 }
 
 @media (max-width: 576px) { /* Bootstrap 'sm' breakpoint */
-    .header_embed_compact_logo {
+    .header_embed_compact_logo_and_text {
+        height: 100%;
         width: 120px;
     }
 }

@@ -24,16 +24,7 @@ $editHeatmapUrl = route('dungeon.heatmap.gameversion.view.floor', $routeParams);
         @endif
         ">
     <div class="row no-gutters py-2">
-        <div class="col-auto text-right pr-1">
-            <div class="row no-gutters align-items-center" style="height: 36px;">
-                <div class="col">
-                <a href="{{ route('home') }}" target="_blank">
-                    <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" class="header_embed_compact_logo"
-                         alt="{{ config('app.name') }}">
-                </a>
-                </div>
-            </div>
-        </div>
+        @include('common.embed.header.compact.logo')
 
         @if($embedOptions['show']['title'])
             <div class="col d-none d-md-block">

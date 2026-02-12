@@ -2,15 +2,15 @@
 
 return [
 
-    'melee'         => 'Ближний бой',
-    'ranged'        => 'Дальний бой',
-    'caster'        => 'Заклинатель',
-    'healer'        => 'Целитель',
-    'caster_melee'  => 'Заклинатель/Ближний бой',
-    'healer_caster' => 'Целитель/Заклинатель',
-    'healer_melee'  => 'Целитель/Ближний бой',
-    'ranged_caster' => 'Дальний бой/Заклинатель',
-    'ranged_healer' => 'Дальний бой/Целитель',
-    'ranged_melee'  => 'Дальний бой/Ближний бой',
+    'melee'         => '',
+    'ranged'        => '',
+    'caster'        => '',
+    'healer'        => '',
+    'caster_melee'  => '',
+    'healer_caster' => '',
+    'healer_melee'  => '',
+    'ranged_caster' => '',
+    'ranged_healer' => '',
+    'ranged_melee'  => '',
 
 ];

@@ -1,0 +1,31 @@
+{
+    "id": 341,
+    "release_changelog_id": 348,
+    "version": "v14.0.5",
+    "title": "Added ability to hide snackbar for heatmap embeds",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-02-10T15:43:41+00:00",
+    "updated_at": "2026-02-10T15:43:41+00:00",
+    "changelog": {
+        "id": 348,
+        "release_id": 341,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 348,
+                "release_changelog_category_id": 13,
+                "ticket_id": 3100,
+                "change": "Added ability to hide \"showing data from x runs\" in Heatmap embed."
+            },
+            {
+                "release_changelog_id": 348,
+                "release_changelog_category_id": 13,
+                "ticket_id": 3099,
+                "change": "Season parameter can now be passed through."
+            }
+        ]
+    }
+}

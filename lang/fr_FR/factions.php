@@ -2,8 +2,8 @@
 
 return [
 
-    'unspecified' => 'Non spécifié',
-    'horde'       => 'Horde',
-    'alliance'    => 'Alliance',
+    'unspecified' => '',
+    'horde'       => '',
+    'alliance'    => '',
 
 ];

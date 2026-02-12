@@ -1,7 +1,7 @@
 <?php
 $user = Auth::user();
 // Default local or user locale
-$currentUserLocale     = Auth::check() ? Auth::user()->locale : config('app.locale');
+$currentUserLocale     = Auth::check() ? $user->locale : config('app.locale');
 $currentUserLocaleName = language()->getName($currentUserLocale);
 $allLanguages = collect(config('language.all'))->keyBy('long');
 ?>
@@ -15,7 +15,7 @@ $allLanguages = collect(config('language.all'))->keyBy('long');
             <a class="dropdown-item {{ $currentUserLocale === $code ? 'active' : '' }}"
                href="{{ language()->back($code) }}">
                 @include('vendor.language.flag', ['code' => $code, 'name' => $name]) {{ $name }}
-                @if(isset($allLanguages[$code]['ai']) && $allLanguages[$code])
+                @if(isset($allLanguages[$code]['ai']) && $allLanguages[$code] && $allLanguages[$code]['ai'])
                     <sup class="text-warning">AI</sup>
                 @endif
             </a>

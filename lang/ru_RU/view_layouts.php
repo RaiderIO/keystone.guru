@@ -3,14 +3,13 @@
 return [
 
     'sitepage' => [
-        'staging_banner_description'        => 'Предупреждение! В настоящее время вы находитесь в промежуточной стринице Keystone.guru. Это НЕ основной сайт.',
-        'staging_banner_take_me_away'       => 'Переведите меня на главную страницу!',
-        'readonly_mode_enabled_description' => 'Режим только для чтения включен. Вы можете просматривать маршруты, но не можете вносить изменения или создавать новые маршруты.',
+        'staging_banner_description'        => '',
+        'staging_banner_take_me_away'       => '',
+        'readonly_mode_enabled_description' => '',
     ],
     'app' => [
-        'linkpreview_title'       => 'M+ маршруты с легкостью',
-        'linkpreview_description' => 'Планируйте маршруты онлайн совместно с вашей командой или находите маршруты, которые подходят вашему стилю игры и уровню навыков.
-            Keystone.guru - это одно место для управления и обмена вашими M+ маршрутами.',
+        'linkpreview_title'       => '',
+        'linkpreview_description' => '',
     ],
 
 ];

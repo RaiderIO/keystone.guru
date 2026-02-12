@@ -25,6 +25,8 @@ use Illuminate\Support\Collection;
  * @var array                        $parameters
  * @var float                        $defaultZoom
  */
+
+$showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['header'];
 ?>
 @extends('layouts.map', [
     'showAds' => false,
@@ -48,15 +50,17 @@ use Illuminate\Support\Collection;
 ]])
 
 @section('content')
-    @include(sprintf('dungeon.heatmap.gameversion.embedheaderstyle.%s', $embedOptions['style']), [
-        'gameVersion' => $gameVersion,
-        'dungeon' => $dungeon,
-        'floor' => $floor,
-        'embedOptions' => $embedOptions,
-        'parameters' => $parameters,
-    ])
+    @if($showHeader)
+        @include(sprintf('dungeon.heatmap.gameversion.embedheaderstyle.%s', $embedOptions['style']), [
+            'gameVersion' => $gameVersion,
+            'dungeon' => $dungeon,
+            'floor' => $floor,
+            'embedOptions' => $embedOptions,
+            'parameters' => $parameters,
+        ])
+    @endif
 
-    <div class="wrapper embed_wrapper {{ $embedOptions['style'] }}">
+    <div class="wrapper embed_wrapper {{ $showHeader ? $embedOptions['style'] : '' }}" style="border: 2px solid red;">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'mappingVersion' => $dungeon->getCurrentMappingVersion($gameVersion),
@@ -100,6 +104,7 @@ use Illuminate\Support\Collection;
                     'heatmapSearch' => $showHeatmapSearch,
                     'heatmapSearchDefaultState' => false,
                     'heatmapSearchSidebar' => $embedOptions['show']['sidebar'],
+                    'heatmapSearchShowDataSourceSnackbar' => $embedOptions['show']['dataSourceSnackbar'],
                 ],
             ],
         ])

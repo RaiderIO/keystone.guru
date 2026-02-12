@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Heatmap;
 
 /**
- * All options that a user can pass to the explore URL to generate a heatmap
+ * All options that a user can pass to the explore URL
  *
  * @deprecated
  */

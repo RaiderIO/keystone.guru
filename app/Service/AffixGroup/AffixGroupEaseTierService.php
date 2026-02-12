@@ -15,15 +15,24 @@ use Illuminate\Support\Collection;
 
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 {
-    public const DUNGEON_NAME_MAPPING = [
+    /**
+     * @var array<string, string> Keys are KSG names, values are Archon.gg names
+     */
+    public const array DUNGEON_NAME_MAPPING = [
         "Dawn of the Infinite: Galakrond's Fall" => "Galakrond's Fall",
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
-        'Ara-Kara: City of Echoes'               => 'Ara-Kara, City of Echoes',
-        'Operation Mechagon: Workshop'           => 'Operation: Mechagon - Workshop',
+
+        // TWW S3
+        'Ara-Kara, City of Echoes'    => 'Ara-Kara',
+        'Halls of Atonement'          => 'Halls',
+        'Operation: Floodgate'        => 'Floodgate',
+        'Priory of the Sacred Flame'  => 'Priory',
+        'Tazavesh: Streets of Wonder' => 'Streets',
+        "Tazavesh: So'leah's Gambit"  => 'Gambit',
     ];
-    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
+    public const string DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
@@ -117,11 +126,11 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                     foreach ($tierList['entries'] as $dungeon) {
                         /** @var array{id: int, name: string, url: string} $dungeon */
                         // If found
-                        $dungeonName = $dungeon['name'];
-                        $dungeon     = $dungeonList->get($dungeonName);
+                        $archonDungeonName = $dungeon['name'];
+                        $dungeon           = $dungeonList->get($archonDungeonName);
 
                         if ($dungeon === null) {
-                            $this->log->parseTierListUnknownDungeon($dungeonName);
+                            $this->log->parseTierListUnknownDungeon($archonDungeonName);
 
                             continue;
                         }
@@ -133,7 +142,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                             'tier'                          => $tier,
                         ];
 
-                        $this->log->parseTierListSavedDungeonTier($dungeonName, $tier);
+                        $this->log->parseTierListSavedDungeonTier($archonDungeonName, $tier);
                     }
                 } finally {
                     $this->log->parseTierListParseTierEnd();

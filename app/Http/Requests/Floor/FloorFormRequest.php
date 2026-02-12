@@ -15,6 +15,17 @@ class FloorFormRequest extends FormRequest
     {
         return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'active'  => $this->input('active', 0),
+            'default' => $this->input('default', 0),
+            'facade'  => $this->input('facade', 0),
+        ]);
+    }
 
     /**
      * Get the validation rules that apply to the request.

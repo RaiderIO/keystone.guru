@@ -8,13 +8,20 @@ use App\Models\GameVersion\GameVersion;
 use App\Service\Traits\Curl;
 use App\Service\Wowhead\Logging\WowheadTranslationServiceLoggingInterface;
 use Illuminate\Support\Collection;
+use PHPHtmlParser\Dom;
+use PHPHtmlParser\Exceptions\ChildNotFoundException;
+use PHPHtmlParser\Exceptions\CircularException;
+use PHPHtmlParser\Exceptions\ContentLengthException;
+use PHPHtmlParser\Exceptions\LogicalException;
+use PHPHtmlParser\Exceptions\NotLoadedException;
+use PHPHtmlParser\Exceptions\StrictException;
+use PHPHtmlParser\Options;
 
 class WowheadTranslationService implements WowheadTranslationServiceInterface
 {
     use Curl;
 
-    private const string IDENTIFYING_TOKEN_DUNGEON_NAMES = "new Listview({template: 'zone', id: 'zones', extraCols: ['popularity']";
-    private const string IDENTIFYING_TOKEN_ZONE_NAMES    = 'var g_zone_areas = ';
+    private const string IDENTIFYING_TOKEN_ZONE_NAMES = 'var g_zone_areas = ';
 
     private const array LOCALE_URL_MAPPING = [
         'en_US' => '',
@@ -97,7 +104,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
 
                     $result->put($locale, $result->get($locale, collect())
-                        ->put($npcId, $npcName));
+                        ->put($npcId, $npcName ?? ''));
                 }
             }
         }
@@ -123,8 +130,8 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         foreach (config('language.all') as $language) {
             $locale = $language['long'];
 
-            if ($locale === 'ho_HO') {
-                continue; // Skip Hodor language
+            if ($locale === 'ho_HO' || ($language['ai'] ?? false)) {
+                continue; // Skip Hodor language or AI languages
             }
 
             $parts = explode('_', (string)$locale);
@@ -183,25 +190,37 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
                     $response = $this->curlGet($url);
 
-                    $lines = explode(PHP_EOL, $response);
-                    foreach ($lines as $line) {
-                        if (str_contains($line, self::IDENTIFYING_TOKEN_DUNGEON_NAMES)) {
-                            $json = $this->correctMalformedJson($line);
-                            foreach ($json['data'] as $dungeonData) {
-                                /** @var Dungeon|null $dungeon */
-                                $dungeon = $dungeons->get($dungeonData['id']);
-                                if ($dungeon) {
-                                    $result[$locale][$dungeon->id] = $dungeonData['name'];
+                    $response = \Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
 
-                                    $this->log->getDungeonNamesSetDungeonName($dungeon->key, $dungeonData['name']);
-                                }
+                    $dom = new Dom();
+                    $dom->loadStr($response, new Options()->setRemoveScripts(false));
+
+//                    /** @var Dom\Node\AbstractNode $scriptElement */
+//                    $scriptElement = $dom->find('script');
+
+                    /** @var Dom\Node\AbstractNode $scriptElement */
+                    $scriptElement = $dom->getElementById('dataPageListPageListviews');
+
+                    $json = json_decode($scriptElement->innerhtml, true);
+                    if (is_array($json)) {
+                        foreach ($json[0]['data'] as $dungeonData) {
+                            /** @var Dungeon|null $dungeon */
+                            $dungeon = $dungeons->get($dungeonData['id']);
+                            if ($dungeon) {
+                                $result[$locale][$dungeon->id] = $dungeonData['name'];
+
+                                $this->log->getDungeonNamesSetDungeonName($dungeon->key, $dungeonData['name']);
                             }
-
-                            ksort($result[$locale]);
-
-                            break; // No need to continue looping lines
                         }
+
+                        ksort($result[$locale]);
+                    } else {
+                        $this->log->getDungeonNamesInvalidJson();
                     }
+                } catch (CircularException|ContentLengthException|LogicalException|StrictException $e) {
+                    $this->log->getDungeonNamesMalformedHtml();
+                } catch (ChildNotFoundException|NotLoadedException $e) {
+                    $this->log->getDungeonNamesElementNotFound();
                 } finally {
                     $this->log->getDungeonNamesLocaleEnd();
                 }
@@ -257,8 +276,8 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
      */
     private function correctMalformedJson(string $line): ?array
     {
-        $jsObject = substr($line, strlen('new Listview('));
-        $jsObject = rtrim($jsObject, ');');
+        $jsObject = substr($line, strlen('<script'));
+        $jsObject = rtrim($jsObject, '</script>');
 
         // This $jsObject contains some issues that we need to fix before we can decode it as JSON
         // 1) Unquoted keys

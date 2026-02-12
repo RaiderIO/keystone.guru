@@ -5,13 +5,16 @@ namespace App\Service\Cache;
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class DevCacheService extends CacheService
 {
-    public function __construct(CacheServiceLoggingInterface $log)
-    {
-        parent::__construct($log);
+    public function __construct(
+        RedisServiceInterface        $redisService,
+        CacheServiceLoggingInterface $log,
+    ) {
+        parent::__construct($redisService, $log);
 
         $this->setBypassCache(true);
     }

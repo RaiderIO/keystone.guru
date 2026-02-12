@@ -151,6 +151,49 @@ services:
     networks:
       - keystone.guru
 
+# PROD DATABASE
+#  db:
+#    image: mysql:5.7
+#    container_name: keystone.guru-db-prod
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_DATABASE: ${DB_DATABASE}
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_USER: ${DB_USERNAME}
+#      SERVICE_TAGS: dev
+#      SERVICE_NAME: mysql
+#    ports:
+#      - "34006:3306"
+#    command:
+#      - '--default-authentication-plugin=mysql_native_password'
+#    volumes:
+#      - ./docker-compose/mysql-prod:/var/lib/mysql
+#      - ./docker-compose/data:/tmp/data
+#    networks:
+#      - keystone.guru
+#
+#  db-combatlog:
+#    image: mysql:5.7
+#    container_name: keystone.guru-db-prod-combatlog
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_DATABASE: ${DB_COMBATLOG_DATABASE}
+#      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+#      MYSQL_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+#      MYSQL_USER: ${DB_COMBATLOG_USERNAME}
+#      SERVICE_TAGS: dev
+#      SERVICE_NAME: mysql
+#    ports:
+#      - "34007:3306"
+#    command:
+#      - '--default-authentication-plugin=mysql_native_password'
+#    volumes:
+#      - ./docker-compose/mysql-prod-combatlog:/var/lib/mysql
+#      - ./docker-compose/data:/tmp/data
+#    networks:
+#      - keystone.guru
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5.2.2
     restart: always

@@ -2,6 +2,6 @@
 
 return [
 
-    'header' => 'Version %s',
+    'header' => '',
 
 ];
