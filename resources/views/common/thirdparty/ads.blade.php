@@ -2,5 +2,6 @@
     {{--@include('common.thirdparty.nitropay.nitropay')--}}
     {{--@include('common.thirdparty.adsense')--}}
     @include('common.thirdparty.playwire.playwire')
+    @include('common.thirdparty.pubnation.pubnation')
 @else
 @endif
