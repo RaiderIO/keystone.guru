@@ -208,6 +208,7 @@ class Conversion
             Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
 
             // Dragonflight (but Midnight version)
+            Dungeon::DUNGEON_ALGETH_AR_ACADEMY          => 'AlgetharAcademy',
             Dungeon::DUNGEON_ALGETH_AR_ACADEMY_MIDNIGHT => 'AlgetharAcademy',
 
             // Midnight
