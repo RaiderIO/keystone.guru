@@ -7,6 +7,8 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
@@ -333,11 +335,12 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverDungeon(
-        GameVersion               $gameVersion,
-        Dungeon                   $dungeon,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService,
+        GameVersion                     $gameVersion,
+        Dungeon                         $dungeon,
+        DiscoverServiceInterface        $discoverService,
+        ExpansionServiceInterface       $expansionService,
+        SeasonServiceInterface          $seasonService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
     ): View {
         Gate::authorize('view', $gameVersion);
         Gate::authorize('view', $dungeon);
@@ -367,6 +370,9 @@ class DungeonRouteDiscoverController extends Controller
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup'    => $nextAffixGroup,
             'dungeonroutes'     => [
+                'weekly_route' => $dungeonRouteRepository->getWeeklyRoutes($dungeon)[$dungeon->key]->map(function (WeeklyRoute $weeklyRoute) {
+                    return $weeklyRoute->dungeonRoute;
+                }),
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
                 'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
                 'new'      => $discoverService->newByDungeon($dungeon),

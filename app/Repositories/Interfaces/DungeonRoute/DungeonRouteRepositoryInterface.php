@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\DungeonRoute;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\BaseRepositoryInterface;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
@@ -24,5 +25,5 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection;
 
     /** @return Collection<string, Collection<WeeklyRoute>> */
-    public function getWeeklyRoutes(): Collection;
+    public function getWeeklyRoutes(?Dungeon $dungeon = null): Collection;
 }

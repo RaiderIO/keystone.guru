@@ -37,6 +37,15 @@ use App\Models\GameVersion\GameVersion;
 
     @include('dungeonroute.discover.panel', [
         'gameVersion' => $gameVersion,
+        'link' => config('keystoneguru.raider_io.weekly_route.url'),
+        'title' => __('view_dungeonroute.discover.dungeon.overview.weekly_route'),
+        'dungeonroutes' => $dungeonroutes['weekly_route'],
+        'showMore' => false,
+        'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
+    ])
+
+    @include('dungeonroute.discover.panel', [
+        'gameVersion' => $gameVersion,
         'title' => __('view_dungeonroute.discover.dungeon.overview.popular'),
         'link' => route('dungeonroutes.discoverdungeon.popular', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon]),
         'currentAffixGroup' => $currentAffixGroup,

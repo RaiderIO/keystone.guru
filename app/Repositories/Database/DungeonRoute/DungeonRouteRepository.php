@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Database\DungeonRoute;
 
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\TagCategory;
 use App\Repositories\Database\DatabaseRepository;
@@ -67,7 +68,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     /**
      * @return Collection<string, Collection<WeeklyRoute>>
      */
-    public function getWeeklyRoutes(): Collection
+    public function getWeeklyRoutes(?Dungeon $dungeon = null): Collection
     {
         $currentSeason = $this->seasonService->getCurrentSeason();
 
@@ -86,9 +87,11 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
             ->with([
+                'author',
                 'dungeon',
                 'tags' => $tagsFilterFn,
             ])
+            ->when($dungeon, fn(Builder $query) => $query->where('dungeon_id', $dungeon->id))
             ->whereRelation(
                 'dungeon.seasonDungeons',
                 'season_id',
