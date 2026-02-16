@@ -35,14 +35,16 @@ use App\Models\GameVersion\GameVersion;
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['dungeon' => $dungeon])
 
-    @include('dungeonroute.discover.panel', [
-        'gameVersion' => $gameVersion,
-        'link' => config('keystoneguru.raider_io.weekly_route.url'),
-        'title' => __('view_dungeonroute.discover.dungeon.overview.weekly_route'),
-        'dungeonroutes' => $dungeonroutes['weekly_route'],
-        'showMore' => false,
-        'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
-    ])
+    @if($dungeonroutes['weekly_route']->isNotEmpty())
+        @include('dungeonroute.discover.panel', [
+            'gameVersion' => $gameVersion,
+            'link' => config('keystoneguru.raider_io.weekly_route.url'),
+            'title' => __('view_dungeonroute.discover.dungeon.overview.weekly_route'),
+            'dungeonroutes' => $dungeonroutes['weekly_route'],
+            'showMore' => false,
+            'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
+        ])
+    @endif
 
     @include('dungeonroute.discover.panel', [
         'gameVersion' => $gameVersion,

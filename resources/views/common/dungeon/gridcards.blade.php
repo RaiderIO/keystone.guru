@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @var Collection<string, Collection<array{href: string, text: string}>> $links
  * @var boolean                                                           $useAbbreviation
  * @var string|null                                                       $cardBodyClass
+ * @var array|null                                                        $imageLinks
  */
 
 $colCount ??= 4;
@@ -43,7 +44,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
         <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
             <div class="card">
                 <div class="card-img-caption">
-                    <a href="{{ $linksForDungeon->first()['href'] }}">
+                    <a href="{{ $imageLinks[$dungeon->key] ?? $linksForDungeon->first()['href'] }}">
                         <h5 class="card-text text-white dungeon_card_dungeon_name">
                             {{ $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name) }}
                         </h5>

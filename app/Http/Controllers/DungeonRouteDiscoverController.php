@@ -363,6 +363,8 @@ class DungeonRouteDiscoverController extends Controller
             $nextAffixGroup    = $expansionService->getNextAffixGroup($gameVersion->expansion, $userRegion);
         }
 
+        $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes($dungeon);
+
         return view('dungeonroute.discover.dungeon.overview', [
             'breadcrumbs'       => 'dungeonroutes.discoverdungeon',
             'gameVersion'       => $gameVersion,
@@ -370,7 +372,7 @@ class DungeonRouteDiscoverController extends Controller
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup'    => $nextAffixGroup,
             'dungeonroutes'     => [
-                'weekly_route' => $dungeonRouteRepository->getWeeklyRoutes($dungeon)[$dungeon->key]->map(function (WeeklyRoute $weeklyRoute) {
+                'weekly_route' => ($weeklyRoutes[$dungeon->key] ?? collect())->map(function (WeeklyRoute $weeklyRoute) {
                     return $weeklyRoute->dungeonRoute;
                 }),
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),

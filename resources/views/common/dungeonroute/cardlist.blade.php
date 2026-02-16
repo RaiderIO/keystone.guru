@@ -28,7 +28,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
     /** @var Collection<DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
-    <div class="row no-gutters mt-2">
+    <div class="row no-gutters">
         <h4 class="col text-center">
             {{ $header }}
         </h4>
@@ -47,7 +47,7 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
             @if($dungeonroute !== null)
                 @if($cardHeaders->isNotEmpty())
                     @php($cardHeader = $cardHeaders->get($dungeonroute->id))
-                    <a href="{{ $cardHeader['link'] }}" class="d-block mb-2">
+                    <a href="{{ $cardHeader['link'] }}" class="d-block mb-2 mt-3">
                         <h5>
                             {{ $cardHeader['text'] }}
                         </h5>

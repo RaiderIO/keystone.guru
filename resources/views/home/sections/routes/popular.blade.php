@@ -12,7 +12,10 @@ use App\Models\DungeonRoute\DungeonRoute;
     <div class="col-12">
         <h4>{{ __('view_home.sections.routes.popular.title') }}</h4>
     </div>
-    <div id="category_route_list">
+    <?php
+        // w-100 is required to make the cardlist show up properly - to limit the width of the container to just the screen
+    ?>
+    <div id="category_route_list" class="w-100">
         @include('common.dungeonroute.cardlist', [
             'cols' => 4,
             'currentAffixGroup' => null, // @TODO

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
 
@@ -18,6 +19,16 @@ use Illuminate\Support\Collection;
             'useAbbreviation' => true,
             'dungeons' => $weeklyRouteDungeons,
             'cardBodyClass' => 'p-0 py-2',
+            'imageLinks' => $weeklyRoutes->mapWithKeys(function(Collection $weeklyRoutes, string $dungeonKey) {
+                /** @var WeeklyRoute $weeklyRoute */
+                $weeklyRoute = $weeklyRoutes->first();
+                return [
+                    $dungeonKey => route('dungeonroutes.discoverdungeon', [
+                        'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+                        'dungeon' => $weeklyRoute->dungeonRoute->dungeon,
+                    ])
+                ];
+            }),
             'links' => $weeklyRoutes->mapWithKeys(function(Collection $weeklyRoutes, string $dungeonKey) {
                 return [
                     $dungeonKey => $weeklyRoutes->map(function(WeeklyRoute $weeklyRoute) {

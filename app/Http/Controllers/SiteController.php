@@ -63,7 +63,8 @@ class SiteController extends Controller
             // @TODO Add caching
             $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
 
-            $season = $seasonService->getCurrentSeason();
+            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+            $season                   = $seasonService->getCurrentSeason($userOrDefaultGameVersion->expansion);
 
             return view('home.layout', [
                 'currentSeason'                 => $season,
@@ -71,6 +72,7 @@ class SiteController extends Controller
                 'weeklyRoutes'                  => $weeklyRoutes,
                 'popularDungeonRoutesByDungeon' => $discoverService
                     ->withSeason($season)
+                    ->withGameVersion($userOrDefaultGameVersion)
                     ->excludeTeam(Team::getRaiderIOTeam())
                     ->popularGroupedByDungeon()
                     ->map(static fn(Collection $routes) => $routes->take(1))

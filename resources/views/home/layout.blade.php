@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
 
@@ -22,7 +23,9 @@ use Illuminate\Support\Collection;
 
 @section('content')
 
-    @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
+    @if(GameVersion::getUserOrDefaultGameVersion()->key === GameVersion::GAME_VERSION_RETAIL)
+        @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
+    @endif
 
     @include('home.sections.featured')
 
