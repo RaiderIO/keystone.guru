@@ -11,10 +11,13 @@ use Illuminate\Support\Collection;
 ?>
 <div class="row my-4">
     <div class="col-12">
-        <h4>Raider.IO weekly route</h4>
+        <h4>{{ __('view_home.sections.routes.weeklyroute.header') }}</h4>
 
         @include('common.dungeon.gridcards', [
+            'colCount' => 12,
+            'useAbbreviation' => true,
             'dungeons' => $weeklyRouteDungeons,
+            'cardBodyClass' => 'p-0 py-2',
             'links' => $weeklyRoutes->mapWithKeys(function(Collection $weeklyRoutes, string $dungeonKey) {
                 return [
                     $dungeonKey => $weeklyRoutes->map(function(WeeklyRoute $weeklyRoute) {

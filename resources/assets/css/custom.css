@@ -69,6 +69,10 @@ ul.light-slider {
     max-width: 100%;
 }
 
+.dungeon_card_dungeon_name {
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
+}
+
 /** Light Slider */
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */
@@ -158,10 +162,14 @@ ul.light-slider {
 
 .discover .card-img-caption .card-text {
     text-align: center;
-    width: calc(100% - 1rem); /* overcome the padding - this makes it fit exactly */
+    width: 100%;
     top: 15%;
     position: absolute;
     z-index: 1;
+}
+
+.discover .tab-content .card-img-caption .card-text {
+    width: calc(100% - 1rem); /* Search page - overcome the padding - this makes it fit exactly */
 }
 
 .discover .card-img-caption .card-text.subtext {

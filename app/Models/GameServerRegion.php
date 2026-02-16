@@ -33,24 +33,24 @@ class GameServerRegion extends CacheModel
     //
     // https://eu.forums.blizzard.com/en/wow/t/weekly-reset-time-changing-to-0500-cet-on-16-november/398498
     // the date at which the EU epoch change kicks in
-    const EU_EPOCH_CHANGE_STARTED_AT_DATE = '2022-11-16 04:00:00';
+    const string EU_EPOCH_CHANGE_STARTED_AT_DATE = '2022-11-16 04:00:00';
 
     // The base date we return when requesting a date using the new epoch
-    const EU_EPOCH_CHANGE_DATE = '2005-12-28 04:00:00';
+    const string EU_EPOCH_CHANGE_DATE = '2005-12-28 04:00:00';
 
     // The period that the EU epoch change started at
-    const EU_EPOCH_CHANGE_PERIOD = 881;
+    const int EU_EPOCH_CHANGE_PERIOD = 881;
 
-    public const AMERICAS = 'us';
-    public const EUROPE   = 'eu';
-    public const CHINA    = 'cn';
-    public const TAIWAN   = 'tw';
-    public const KOREA    = 'kr';
-    public const WORLD    = 'world';
+    public const string AMERICAS = 'us';
+    public const string EUROPE   = 'eu';
+    public const string CHINA    = 'cn';
+    public const string TAIWAN   = 'tw';
+    public const string KOREA    = 'kr';
+    public const string WORLD    = 'world';
 
-    public const DEFAULT_REGION = GameServerRegion::AMERICAS;
+    public const string DEFAULT_REGION = GameServerRegion::AMERICAS;
 
-    public const ALL = [
+    public const array ALL = [
         self::AMERICAS => 1,
         self::EUROPE   => 2,
         self::CHINA    => 3,

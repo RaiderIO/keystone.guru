@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 /**
  * @var Collection<Dungeon>                         $weeklyRouteDungeons
  * @var Collection<string, Collection<WeeklyRoute>> $weeklyRoutes
+ * @var Collection<DungeonRoute>                    $popularDungeonRoutesByDungeon
  */
 
 ?>
@@ -21,17 +22,17 @@ use Illuminate\Support\Collection;
 
 @section('content')
 
+    @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
+
     @include('home.sections.featured')
 
     @include('home.sections.about')
 
     @include('home.sections.features')
 
-    @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
+    @include('home.sections.routes.popular', ['dungeonRoutes' => $popularDungeonRoutesByDungeon])
 
-    @include('home.sections.routes.highestlevel')
+    {{--    @include('home.sections.routes.funny')--}}
 
-    @include('home.sections.routes.funny')
-
-    @include('home.sections.routes.new')
+    {{--    @include('home.sections.routes.new')--}}
 @endsection

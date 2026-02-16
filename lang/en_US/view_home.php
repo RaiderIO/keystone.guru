@@ -37,10 +37,17 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'pug_friendly' => 'Pug friendly route',
-                'expert'       => 'Expert route',
-                'title'        => 'Title route',
+                'header'       => 'Raider.IO weekly route',
+                'pug_friendly' => 'Pug friendly',
+                'expert'       => 'Expert',
+                'title'        => 'Title',
             ],
+            'popular' => [
+                'title' => 'Most popular community route by dungeon',
+            ],
+        ],
+        'featured' => [
+            'title' => 'Featured',
         ],
     ],
 

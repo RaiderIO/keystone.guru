@@ -313,6 +313,10 @@ body {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
   }
 
+  .border-accent {
+    border-color: var($--theme-border-accent) !important;
+  }
+
   .btn-accent {
     background-color: var($--theme-btn-accent) !important;
   }

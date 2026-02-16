@@ -67,10 +67,13 @@ return [
         'global_view_variables' => [
             'ttl' => '1 hour',
         ],
-        'default_region' => [
+        'default_game_region' => [
             'ttl' => '1 hour',
         ],
         'default_game_version' => [
+            'ttl' => '1 hour',
+        ],
+        'raider_io_team' => [
             'ttl' => '1 hour',
         ],
         'mdt_export_strings' => [

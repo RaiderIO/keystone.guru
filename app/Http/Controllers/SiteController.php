@@ -11,6 +11,7 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Release;
 use App\Models\Season;
+use App\Models\Team;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
@@ -27,6 +28,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -55,13 +57,24 @@ class SiteController extends Controller
         CoverageServiceInterface        $coverageService,
         SeasonServiceInterface          $seasonService,
         DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        DiscoverServiceInterface        $discoverService,
     ): View {
         if (Feature::active(FrontPageRework::class)) {
+            // @TODO Add caching
             $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
 
+            $season = $seasonService->getCurrentSeason();
+
             return view('home.layout', [
-                'weeklyRouteDungeons' => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
-                'weeklyRoutes'        => $weeklyRoutes,
+                'currentSeason'                 => $season,
+                'weeklyRouteDungeons'           => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
+                'weeklyRoutes'                  => $weeklyRoutes,
+                'popularDungeonRoutesByDungeon' => $discoverService
+                    ->withSeason($season)
+                    ->excludeTeam(Team::getRaiderIOTeam())
+                    ->popularGroupedByDungeon()
+                    ->map(static fn(Collection $routes) => $routes->take(1))
+                    ->flatten(),
             ]);
         } elseif (Auth::check()) {
             $season = null;

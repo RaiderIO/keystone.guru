@@ -1,23 +1,38 @@
 <?php
 
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
+
+/**
+ * @var Season|null $currentSeason
+ */
+
+$currentUserGameVersion = GameVersion::getUserOrDefaultGameVersion();
+$findRouteLink          = $currentUserGameVersion->has_seasons ?
+    route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $currentSeason->index]) :
+    route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion]);
 ?>
 <div class="row my-4">
-    <h4>Featured</h4>
+    <h4>{{ __('view_home.sections.featured.title') }}</h4>
 </div>
-<div class="row">
-    <div class="col-md-4 mb-3 mb-md-0">
-        <a href="https://raider.io/weekly-routes" class="d-block text-center">
-            <img src="{{ ksgAssetImage('home/featured_weekly_route_tww_s3.png') }}" alt="Weekly route" class="img-fluid rounded shadow-sm">
-        </a>
-    </div>
-    <div class="col-md-4 mb-3 mb-md-0">
+<div class="row no-gutters">
+    <div class="col-md-4 mb-3 mb-md-0 mt-4">
         <a href="{{ route('dungeon.heatmaps.list') }}" class="d-block text-center">
-            <img src="{{ ksgAssetImage('home/featured_heatmaps_text.png') }}" alt="Heatmaps" class="img-fluid rounded shadow-sm">
+            <img src="{{ ksgAssetImage('home/featured_heatmaps_text.png') }}" alt="Heatmaps"
+                 class="img-fluid rounded shadow-sm">
         </a>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3 mb-md-0">
+        <a href="{{ $findRouteLink }}"
+           class="d-block text-center">
+            <img src="{{ ksgAssetImage('home/featured_find_your_route.png') }}" alt="Weekly route"
+                 class="img-fluid rounded shadow-sm border border-accent" style="border-width: 3px !important;">
+        </a>
+    </div>
+    <div class="col-md-4 mt-4">
         <a href="https://www.patreon.com/c/keystoneguru" class="d-block text-center">
-            <img src="{{ ksgAssetImage('home/featured_patreon.png') }}" alt="Patreon" class="img-fluid rounded shadow-sm">
+            <img src="{{ ksgAssetImage('home/featured_patreon.png') }}" alt="Patreon"
+                 class="img-fluid rounded shadow-sm">
         </a>
     </div>
 

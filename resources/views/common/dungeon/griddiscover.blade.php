@@ -41,7 +41,7 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
         <div class="card">
             <div class="card-img-caption">
                 <a href="{{ $link }}">
-                    <h5 class="card-text text-white">
+                    <h5 class="card-text text-white dungeon_card_dungeon_name">
                         {{ __($dungeon->name) }}
                     </h5>
                     <img class="card-img-top"

@@ -15,13 +15,16 @@ use Illuminate\Support\Collection;
  * @var AffixGroup|null                                                   $currentAffixGroup
  * @var AffixGroup|null                                                   $nextAffixGroup
  * @var Collection<string, Collection<array{href: string, text: string}>> $links
+ * @var boolean                                                           $useAbbreviation
+ * @var string|null                                                       $cardBodyClass
  */
 
 $colCount ??= 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
-$names ??= true;
-$links ??= collect();
+$names           ??= true;
+$useAbbreviation ??= false;
+$links           ??= collect();
 
 $sideOffset = $colCount === 3 ? 1 : 0;
 
@@ -37,12 +40,12 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
             /** @var Collection<array{href: string, text: string}> $linksForDungeon */
             $linksForDungeon = $links->get($dungeon->key);
             ?>
-        <div class="p-2 col-lg-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
+        <div class="p-2 col-xl col-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
             <div class="card">
                 <div class="card-img-caption">
                     <a href="{{ $linksForDungeon->first()['href'] }}">
-                        <h5 class="card-text text-white">
-                            {{ __($dungeon->name) }}
+                        <h5 class="card-text text-white dungeon_card_dungeon_name">
+                            {{ $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name) }}
                         </h5>
                         <img class="card-img-top"
                              src="{{ $dungeon->getImageUrl() }}"
@@ -50,14 +53,12 @@ for ($i = 0; $i < $rowCount; ++$i) { ?>
                     </a>
                 </div>
                 @if($names)
-                    <div class="card-body">
+                    <div class="card-body {{ $cardBodyClass ?? '' }}">
                         <!-- Normal big screen view -->
                         <div class="d-lg-inline d-none">
                             <p class="card-text text-center">
                                 @foreach($linksForDungeon as $link)
-                                    <a href="{{ $link['href'] }}">
-                                        {{ $link['text'] }}
-                                    </a>
+                                    <a href="{{ $link['href'] }}">{{ $link['text'] }}</a>
                                     @if(!$loop->last)
                                         &middot;
                                     @endif
