@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
  * @var Collection<Dungeon>                         $weeklyRouteDungeons
  * @var Collection<string, Collection<WeeklyRoute>> $weeklyRoutes
  * @var Collection<DungeonRoute>                    $popularDungeonRoutesByDungeon
+ * @var bool                                        $adFree
+ * @var bool                                        $isMobile
  */
 
 ?>
@@ -22,20 +24,20 @@ use Illuminate\Support\Collection;
 
 
 @section('content')
+    @include('home.sections.featured')
 
     @if(GameVersion::getUserOrDefaultGameVersion()->key === GameVersion::GAME_VERSION_RETAIL)
         @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
     @endif
 
-    @include('home.sections.featured')
 
-    @include('home.sections.about')
-
-    @include('home.sections.features')
+    @if(!$adFree && !$isMobile)
+        <div align="center" class="mt-4">
+            @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header_middle', 'reportAdPosition' => 'top-right'])
+        </div>
+    @endif
 
     @include('home.sections.routes.popular', ['dungeonRoutes' => $popularDungeonRoutesByDungeon])
 
-    {{--    @include('home.sections.routes.funny')--}}
-
-    {{--    @include('home.sections.routes.new')--}}
+    @include('home.sections.about')
 @endsection

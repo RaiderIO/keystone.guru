@@ -38,6 +38,7 @@ return [
         'routes' => [
             'weeklyroute' => [
                 'header'       => 'Raider.IO weekly route',
+                'subheader'    => 'The <a href=":weekly_route_url">Raider.IO weekly routes <i class="fas fa-external-link-alt"></i></a> are updated each week according to pull patterns showing in <a href=":heatmaps_url">Mythic+ Heatmaps</a> and other observation/experience. Raider.IO eliminates the guesswork and gives you tried-and-true routes.',
                 'pug_friendly' => 'Pug friendly',
                 'expert'       => 'Expert',
                 'title'        => 'Title',
@@ -47,7 +48,19 @@ return [
             ],
         ],
         'featured' => [
-            'title' => 'Featured',
+            'title'            => 'Featured',
+            'heatmaps_alt'     => 'Heatmaps',
+            'weekly_route_alt' => 'Raider.IO weekly route',
+            'patreon_alt'      => 'Patreon',
+        ],
+        'about' => [
+            'title'               => 'About',
+            'tagline'             => 'M+ routes made easy',
+            'tagline_description' => 'Keystone.guru is a World of Warcraft (WoW) Mythic+ route planning tool, allow you to to build, manage,
+                and discover popular routes.
+                With full MDT import and export support, your routes will go where you go.
+                Explore community favorites and use Raider.IO–powered heatmaps to see how players actually tackle each
+                dungeon.',
         ],
     ],
 
