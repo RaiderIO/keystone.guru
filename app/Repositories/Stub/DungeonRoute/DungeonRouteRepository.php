@@ -30,4 +30,9 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         return collect();
     }
+
+    public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection
+    {
+        return collect();
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\Interfaces\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
 
@@ -26,4 +27,7 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 
     /** @return Collection<string, Collection<WeeklyRoute>> */
     public function getWeeklyRoutes(?Dungeon $dungeon = null): Collection;
+
+    /** @return Collection<SimilarDungeonRoute> */
+    public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection;
 }
