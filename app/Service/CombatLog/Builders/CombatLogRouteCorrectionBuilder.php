@@ -183,7 +183,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             foreach ($this->combatLogRoute->spells as $spell) {
                 $floor = $this->floorRepository->findByUiMapId($spell->coord->uiMapId);
                 if ($floor === null) {
-                    if (!in_array($spell->coord->uiMapId, Floor::UI_MAP_ID_OPEN_WORLD)) {
+                    if (!Floor::isUiMapIdOpenWorld($spell->coord->uiMapId)) {
                         $this->log->getCombatLogRouteSpellFloorNotFound($spell->coord->uiMapId);
                     }
                     continue;
@@ -223,7 +223,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
                 $floor = $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId);
                 if ($floor === null) {
-                    if (!in_array($playerDeath->coord->uiMapId, Floor::UI_MAP_ID_OPEN_WORLD)) {
+                    if (!Floor::isUiMapIdOpenWorld($playerDeath->coord->uiMapId)) {
                         $this->log->getCombatLogRoutePlayerDeathFloorNotFound($playerDeath->coord->uiMapId);
                     }
                     continue;

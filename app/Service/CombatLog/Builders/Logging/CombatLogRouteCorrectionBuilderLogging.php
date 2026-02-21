@@ -18,12 +18,12 @@ class CombatLogRouteCorrectionBuilderLogging extends StructuredLogging implement
 
     public function getCombatLogRouteSpellFloorNotFound(?int $uiMapId): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function getCombatLogRoutePlayerDeathFloorNotFound(?int $uiMapId): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function getCombatLogRouteEnd(): void
