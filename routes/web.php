@@ -45,6 +45,7 @@ use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
+use App\Http\Controllers\Dungeon\DungeonRouteSearchController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
@@ -167,6 +168,18 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('affixes/current', new DungeonRouteDiscoverController()->discoverDungeonThisWeek(...))->name('dungeonroutes.discoverdungeon.thisweek');
                 Route::get('affixes/next', new DungeonRouteDiscoverController()->discoverDungeonNextWeek(...))->name('dungeonroutes.discoverdungeon.nextweek');
                 Route::get('new', new DungeonRouteDiscoverController()->discoverDungeonNew(...))->name('dungeonroutes.discoverdungeon.new');
+            });
+        });
+    });
+
+    // Explore dungeons (just show me the mapping but don't allow me to create routes)
+    Route::middleware('throttle:search-dungeonroute')->group(static function () {
+        Route::prefix('search')->group(static function () {
+            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search.list');
+
+            Route::prefix('{gameVersion}')->group(static function () {
+                Route::get('/', new DungeonRouteSearchController()->searchByGameVersion(...))->name('dungeon.dungeonroute.search.gameversion');
+                Route::get('/{dungeon}', new DungeonRouteSearchController()->searchByDungeon(...))->name('dungeon.dungeonroute.search.gameversion.dungeon');
             });
         });
     });

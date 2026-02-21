@@ -32,5 +32,30 @@ return [
     'loading'                                      => 'Загрузка...',
     'start_planning_today'                         => 'Начните планировать сегодня',
     'join_other_users'                             => 'Присоединяйтесь к %d+ другим пользователям и начните планировать свои маршруты для M+ онлайн!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

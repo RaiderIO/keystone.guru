@@ -70,6 +70,8 @@ class StateManager extends Signalable {
             this._mapContext = new MapContextMappingVersionEdit(mapContext);
         } else if (mapContext.type === MAP_CONTEXT_TYPE_DUNGEON_EXPLORE) {
             this._mapContext = new MapContextDungeonExplore(mapContext);
+        } else if (mapContext.type === MAP_CONTEXT_TYPE_DUNGEON_ROUTE_SEARCH) {
+            this._mapContext = new MapContextDungeonRouteSearch(mapContext);
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }

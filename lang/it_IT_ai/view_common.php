@@ -389,8 +389,6 @@ return [
                 'simulate_route'                 => 'Simula',
                 'edit_route_settings'            => 'Impostazioni percorso',
                 'edit_mapping_version'           => 'Modifica versione mappa',
-                'admin_header_title'             => '%s (versione mappa %d)',
-                'explore_header_title'           => 'Esplora :dungeon',
                 'share'                          => 'Condividi',
                 'start_live_session'             => 'Inizia sessione live',
                 'start_live_session_paragraph_1' => 'Una volta che inizi a percorrere il tuo percorso nel gioco, puoi creare una sessione live dove Keystone.guru ti aiuterà a completare la tua chiave M+. Puoi seguire i movimenti sulla mappa di un altro utente selezionando l\'opzione quando fai clic sulla loro icona/iniziali nell\'intestazione superiore.',

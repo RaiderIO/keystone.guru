@@ -1,0 +1,3 @@
+class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
+
+}

@@ -3,6 +3,7 @@
 use App\Logic\MapContext\Map\MapContextMappingVersion;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
 
 /**
  * @var Floor                    $floor
@@ -22,6 +23,12 @@ use App\Models\Mapping\MappingVersion;
     {{ sprintf(__('view_admin.floor.mapping.header'), __($floor->dungeon->name)) }}
 @endsection
 
+@php(ob_start())
+<a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
+    {{ sprintf(__('view_admin.floor.mapping.header_title'), __($floor->dungeon->name), $mappingVersion->version) }}
+</a>
+@php($headerTitle = ob_get_clean())
+
 @section('content')
     <div class="wrapper">
         @include('common.maps.map', [
@@ -31,6 +38,7 @@ use App\Models\Mapping\MappingVersion;
             'admin' => true,
             'edit' => true,
             'mapContext' => $mapContext,
+            'headerTitle' => $headerTitle,
             // Always show split floors for admin mapping
             'mapFacadeStyle' => User::MAP_FACADE_STYLE_SPLIT_FLOORS,
             'floor' => $floor,

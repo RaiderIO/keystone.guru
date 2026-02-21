@@ -27,5 +27,30 @@ return [
     'loading'                                      => 'Hodor',
     'start_planning_today'                         => 'Hodor',
     'join_other_users'                             => 'Hodor',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => 'Hodor',
+                'subheader'    => 'Hodor',
+                'pug_friendly' => 'Hodor',
+                'expert'       => 'Hodor',
+                'title'        => 'Hodor',
+            ],
+            'popular' => [
+                'title' => 'Hodor',
+            ],
+        ],
+        'featured' => [
+            'title'            => 'Hodor',
+            'heatmaps_alt'     => 'Hodor',
+            'weekly_route_alt' => 'Hodor',
+            'patreon_alt'      => 'Hodor',
+        ],
+        'about' => [
+            'title'               => 'Hodor',
+            'tagline'             => 'Hodor',
+            'tagline_description' => 'Hodor',
+        ],
+    ],
 
 ];

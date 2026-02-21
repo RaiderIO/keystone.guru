@@ -31,5 +31,30 @@ return [
     'loading'                                      => 'Chargement...',
     'start_planning_today'                         => 'Commencez à planifier aujourd\'hui',
     'join_other_users'                             => 'Rejoignez %d+ autres utilisateurs et planifiez vos itinéraires M+ en ligne !',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

@@ -24,6 +24,7 @@ use App\Models\User;
  * @var MappingVersion    $mappingVersion
  * @var DungeonRoute|null $dungeonroute
  * @var LiveSession|null  $livesession
+ * @var string|null       $headerTitle
  * @var bool|null         $admin
  * @var bool|null         $embed
  * @var string|null       $embedStyle
@@ -52,6 +53,7 @@ $user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
     'updated_at'
 ])));
 
+$headerTitle        ??= null;
 $season             ??= null;
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
@@ -273,6 +275,7 @@ if ($isAdmin) {
             'mapContext' => $mapContext,
             'dungeon' => $dungeon,
             'floor' => $floor,
+            'headerTitle' => $headerTitle,
             'dungeonroute' => $dungeonroute,
             'livesession' => $livesession,
             'mappingVersion' => $mappingVersion,

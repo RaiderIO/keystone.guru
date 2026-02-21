@@ -164,8 +164,9 @@ return [
             ],
         ],
         'mapping' => [
-            'title'  => 'Hodor',
-            'header' => 'Hodor',
+            'title'        => 'Hodor',
+            'header'       => 'Hodor',
+            'header_title' => 'Hodor',
         ],
     ],
     'npc' => [

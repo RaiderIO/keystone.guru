@@ -5,6 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
+                'weekly_route'               => '',
                 'popular'                    => 'Поширені маршрути',
                 'popular_by_current_affixes' => 'Поширені маршрути за поточними модифікаторами',
                 'popular_by_next_affixes'    => 'Поширені маршрути за наступними модифікаторами',

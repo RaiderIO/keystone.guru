@@ -5,6 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
+                'weekly_route'               => 'Hodor',
                 'popular'                    => 'Hodor',
                 'popular_by_current_affixes' => 'Hodor',
                 'popular_by_next_affixes'    => 'Hodor',

@@ -389,8 +389,6 @@ return [
                 'simulate_route'                 => 'Simular',
                 'edit_route_settings'            => 'Configurações de rota',
                 'edit_mapping_version'           => 'Editar versão de mapeamento',
-                'admin_header_title'             => '%s (versão de mapeamento %d)',
-                'explore_header_title'           => 'Explorar :dungeon',
                 'share'                          => 'Compartilhar',
                 'start_live_session'             => 'Iniciar sessão ao vivo',
                 'start_live_session_paragraph_1' => 'Uma vez que você começar a rodar sua rota no jogo, poderá criar uma sessão ao vivo onde o Keystone.guru irá ajudá-lo a completar sua chave M+. Você pode seguir os movimentos do mapa de outro usuário selecionando a opção ao clicar no ícone/iniciais dele no cabeçalho superior.',

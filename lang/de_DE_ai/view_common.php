@@ -389,8 +389,6 @@ return [
                 'simulate_route'                 => 'Route simulieren',
                 'edit_route_settings'            => 'Routeneinstellungen',
                 'edit_mapping_version'           => 'Kartenversion bearbeiten',
-                'admin_header_title'             => '%s (Kartenversion %d)',
-                'explore_header_title'           => 'Erkunden :dungeon',
                 'share'                          => 'Teilen',
                 'start_live_session'             => 'Live-Sitzung starten',
                 'start_live_session_paragraph_1' => 'Sobald Sie Ihre Route im Spiel starten, können Sie eine Live-Sitzung erstellen, bei der Keystone.guru Ihnen hilft, Ihren M+ Schlüssel abzuschließen. Sie können den Kartenbewegungen eines anderen Benutzers folgen, indem Sie die Option auswählen, wenn Sie auf sein Symbol/Initialen in der oberen Kopfzeile klicken.',
