@@ -96,6 +96,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $shadowlands  = $expansions->get(Expansion::EXPANSION_SHADOWLANDS);
         $dragonflight = $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT);
         $tww          = $expansions->get(Expansion::EXPANSION_TWW);
+        $midnight     = $expansions->get(Expansion::EXPANSION_MIDNIGHT);
 
         $season1  = ['season_id' => Season::SEASON_BFA_S1, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
         $season2  = ['season_id' => Season::SEASON_BFA_S2, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
@@ -113,6 +114,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $season14 = ['season_id' => Season::SEASON_TWW_S1, 'expansion_id' => $tww, 'key_levels' => [2, 4, 7, 10, 12]];
         $season15 = ['season_id' => Season::SEASON_TWW_S2, 'expansion_id' => $tww, 'key_levels' => [4, 7, 10, 12]];
         $season16 = ['season_id' => Season::SEASON_TWW_S3, 'expansion_id' => $tww, 'key_levels' => [4, 7, 10, 12]];
+        $season18 = ['season_id' => Season::SEASON_MIDNIGHT_S1, 'expansion_id' => $midnight, 'key_levels' => [4, 7, 10, 12]];
 
         $groups = [
             array_merge($season1, ['seasonal_index' => 0, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_NECROTIC, Affix::AFFIX_INFESTED]]),
@@ -295,6 +297,15 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             array_merge($season16, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season16, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season16, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
+
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
+            array_merge($season18, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN]]),
         ];
         // @formatter:on
 
