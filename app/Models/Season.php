@@ -63,8 +63,7 @@ class Season extends CacheModel
     const int SEASON_TWW_S1       = 14;
     const int SEASON_TWW_S2       = 15;
     const int SEASON_TWW_S3       = 16;
-    const int SEASON_TWW_S4       = 17;
-    const int SEASON_MIDNIGHT_S1  = 18;
+    const int SEASON_MIDNIGHT_S1  = 17;
 
     const array ALL_SEASONS = [
         self::SEASON_BFA_S1,
@@ -83,7 +82,6 @@ class Season extends CacheModel
         self::SEASON_TWW_S1,
         self::SEASON_TWW_S2,
         self::SEASON_TWW_S3,
-        self::SEASON_TWW_S4,
         self::SEASON_MIDNIGHT_S1,
     ];
 

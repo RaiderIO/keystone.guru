@@ -1,0 +1,32 @@
+[
+    {
+        "id": 753,
+        "mapping_version_id": 651,
+        "floor_id": 425,
+        "target_floor_id": 37,
+        "lat": -124.41,
+        "lng": 195.89,
+        "size": 290,
+        "rotation": 0
+    },
+    {
+        "id": 765,
+        "mapping_version_id": 655,
+        "floor_id": 425,
+        "target_floor_id": 37,
+        "lat": -124.41,
+        "lng": 195.89,
+        "size": 290,
+        "rotation": 0
+    },
+    {
+        "id": 824,
+        "mapping_version_id": 668,
+        "floor_id": 425,
+        "target_floor_id": 37,
+        "lat": -124.41,
+        "lng": 195.89,
+        "size": 290,
+        "rotation": 0
+    }
+]

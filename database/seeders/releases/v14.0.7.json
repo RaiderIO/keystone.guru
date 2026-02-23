@@ -1,0 +1,31 @@
+{
+    "id": 343,
+    "release_changelog_id": 350,
+    "version": "v14.0.7",
+    "title": "Various bugfixes",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-02-23T13:30:42+00:00",
+    "updated_at": "2026-02-23T13:30:42+00:00",
+    "changelog": {
+        "id": 350,
+        "release_id": 343,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 350,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3104,
+                "change": "Fixed Pit of Saron and Magisters' Terrace (Midnight) not working properly in combined floor (MDT) mode."
+            },
+            {
+                "release_changelog_id": 350,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3109,
+                "change": "When creating a new route for Midnight Season 1, selecting a different dungeon now works properly again."
+            }
+        ]
+    }
+}

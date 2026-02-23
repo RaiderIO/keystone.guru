@@ -1405,7 +1405,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             Season::SEASON_TWW_S1,
             Season::SEASON_TWW_S2,
             Season::SEASON_TWW_S3,
-            Season::SEASON_TWW_S4,
         ])) {
             foreach ($this->affixes as $affixGroup) {
                 // Look at the 2nd affix - this is what people are going to be focused on mostly!
