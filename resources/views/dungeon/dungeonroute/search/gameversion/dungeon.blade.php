@@ -3,8 +3,6 @@
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Service\Season\Dtos\WeeklyAffixGroup;
-use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon        $dungeon
@@ -16,7 +14,7 @@ use Illuminate\Support\Collection;
 @section('linkpreview')
     <?php
     $defaultDescription = __('view_dungeon.dungeonroute.search.gameversion.dungeon.linkpreview_default_description_search', [
-        'dungeon' => __($dungeon->name)
+        'dungeon' => __($dungeon->name),
     ]);
     ?>
     @include('common.general.linkpreview', [
@@ -41,8 +39,14 @@ use Illuminate\Support\Collection;
                 'controls' => [
                     'view' => true,
                     'pulls' => false,
-                    'heatmapSearch' => false,
+                    'dungeonRouteSearch' => true,
                     'enemyInfo' => true,
+                ],
+            ],
+            'controlOptions' => [
+                'dungeonRouteSearch' => [
+                    'keyLevelMin' => $keyLevelMin,
+                    'keyLevelMax' => $keyLevelMax,
                 ],
             ],
             'hiddenMapObjectGroups' => [

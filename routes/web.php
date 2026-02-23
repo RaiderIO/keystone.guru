@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminToolsController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
+use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
 use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
@@ -43,15 +44,15 @@ use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
-use App\Http\Controllers\Dungeon\DungeonRouteSearchController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
-use App\Http\Controllers\DungeonController;
-use App\Http\Controllers\DungeonRouteController;
-use App\Http\Controllers\DungeonRouteDiscoverController;
-use App\Http\Controllers\DungeonRouteDiscoverExpansionSeasonController;
-use App\Http\Controllers\DungeonRouteLegacyController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteDiscoverController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteDiscoverExpansionSeasonController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteLegacyController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteSearchController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\Floor\FloorController;
 use App\Http\Controllers\GameVersionController;
@@ -501,6 +502,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
             Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
+
+            Route::get('/dungeonroute/search/{gameVersion}/{dungeon}', new AjaxDungeonRouteSearchController()->get(...));
         });
 
         Route::middleware('throttle:mdt-details')->group(static function () {

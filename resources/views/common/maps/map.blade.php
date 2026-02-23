@@ -337,6 +337,15 @@ if ($isAdmin) {
         ]))
     @endif
 
+    @if(isset($show['controls']['dungeonRouteSearch']) && $show['controls']['dungeonRouteSearch'])
+        @include('common.maps.controls.dungeonroutesearch', array_merge($controlOptions['dungeonRouteSearch'] ?? [], [
+            'showAds' => $showAds && !$adFree,
+            'showSidebar' => $show['controls']['dungeonRouteSearchSidebar'] ?? true,
+            'defaultState' => $show['controls']['dungeonRouteSearchDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['dungeonRouteSearchHideOnMove'] ?? null
+        ]))
+    @endif
+
     @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
         @include('common.maps.controls.enemyinfo')
     @endif

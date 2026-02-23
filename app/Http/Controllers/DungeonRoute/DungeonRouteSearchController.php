@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dungeon;
+namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
@@ -8,6 +8,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +24,7 @@ class DungeonRouteSearchController extends Controller
     public function search(
         Request $request,
     ): RedirectResponse {
-        return redirect()->route('dungeonroute.search.gameversion', [
+        return redirect()->route('dungeon.dungeonroute.search.gameversion', [
             'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
         ]);
     }
@@ -45,6 +46,7 @@ class DungeonRouteSearchController extends Controller
         GameVersion                $gameVersion,
         Dungeon                    $dungeon,
         MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
     ): View {
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -53,12 +55,16 @@ class DungeonRouteSearchController extends Controller
             ->defaultOrFacade($mappingVersion)
             ->first();
 
+        $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+
         return view('dungeon.dungeonroute.search.gameversion.dungeon', [
-            'dungeon'    => $dungeon,
-            'floor'      => $floor,
-            'parameters' => $request->validated(),
-            'title'      => __($dungeon->name),
-            'mapContext' => $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle()),
+            'dungeon'     => $dungeon,
+            'floor'       => $floor,
+            'parameters'  => $request->validated(),
+            'title'       => __($dungeon->name),
+            'mapContext'  => $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle()),
+            'keyLevelMin' => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+            'keyLevelMax' => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
         ]);
     }
 }
