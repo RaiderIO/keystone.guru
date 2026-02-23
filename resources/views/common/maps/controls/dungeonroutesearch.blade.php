@@ -16,7 +16,6 @@ use Illuminate\Support\Collection;
 
 /**
  * @var bool           $showAds
- * @var Dungeon        $dungeon
  * @var MappingVersion $mappingVersion
  * @var bool           $isMobile
  * @var int            $keyLevelMin
@@ -40,12 +39,17 @@ $showAds                                   ??= true;
     'currentFiltersSelector' => '#dungeonroute_search_options_current_filters',
     'loaderSelector' => '#dungeonroute_search_loader',
 
+    'gameVersion' => $mappingVersion->gameVersion->key,
+    'dungeon' => $mappingVersion->dungeon->slug,
+
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
 
     'enabledStateCookie' => 'dungeonroute_search_enabled',
     'enabledStateSelector' => '#dungeonroute_search_toggle',
     'filterKeyLevelSelector' => '#filter_key_level',
+    'filterTitleSelector' => '#filter_title',
+    'filterUsernameSelector' => '#filter_username',
 
     'filterCollapseNames' => ['keyLevel',],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
@@ -115,10 +119,17 @@ $showAds                                   ??= true;
                 @endcomponent
 
                 @component('common.forms.labelinput', [
+                    'name' => 'title',
+                    'label' => __('view_common.maps.controls.dungeonroutesearch.title')
+                ])
+                    <input id="filter_title" type="text" class="form-control" name="title" value="{{ old('title') }}"/>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
                     'name' => 'username',
                     'label' => __('view_common.maps.controls.dungeonroutesearch.username')
                 ])
-                    <input id="filter_username" type="text" name="username" value="{{ old('username') }}"/>
+                    <input id="filter_username" type="text" class="form-control" name="username" value="{{ old('username') }}"/>
                 @endcomponent
 
 

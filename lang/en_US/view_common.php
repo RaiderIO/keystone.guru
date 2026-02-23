@@ -289,6 +289,7 @@ return [
                 'enabled'        => 'Enabled',
                 'disabled'       => 'Disabled',
                 'key_level'      => 'Key level',
+                'title'          => 'Title',
                 'username'       => 'Username',
             ],
             'elements' => [

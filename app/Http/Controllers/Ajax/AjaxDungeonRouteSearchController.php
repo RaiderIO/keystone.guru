@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
-use App\Service\DungeonRoute\Dtos\DungeonRouteSearchFilter;
+use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +23,10 @@ class AjaxDungeonRouteSearchController extends Controller
         try {
             return \response()->json(
                 $dungeonRouteSearchService->search(
-                    DungeonRouteSearchFilter::fromArray($gameVersion, $dungeon, $request->validated()),
+                    DungeonRouteSearchFilter::fromArray(
+                        $dungeon->getCurrentMappingVersionForGameVersion($gameVersion),
+                        $request->validated(),
+                    ),
                 )->toArray(),
                 StatusCode::OK,
             );

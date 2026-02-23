@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use App\Models\Expansion;
-use App\Models\Season;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class AjaxDungeonRouteSearchFormRequest extends FormRequest
@@ -39,18 +36,10 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'offset'    => 'integer|required',
-            'limit'     => 'integer|required',
-            'title'     => 'string',
-            'season'    => Rule::exists(Season::class, 'id'),
-            'expansion' => [
-                Rule::in(
-                    Expansion::active()
-                        ->get()
-                        ->pluck('shortname')
-                        ->toArray(),
-                ),
-            ],
+            'offset'   => 'integer|nullable',
+            'limit'    => 'integer|nullable|max:10',
+            'title'    => 'string|nullable',
+            'username' => 'string|nullable',
         ];
     }
 }

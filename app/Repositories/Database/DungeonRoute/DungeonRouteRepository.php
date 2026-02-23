@@ -9,6 +9,7 @@ use App\Models\Tags\TagCategory;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -122,6 +123,11 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     {
         $limit = 5;
 
+        $candidateRoutesSql = $this->findRoutesBuilder(
+            new DungeonRouteSearchFilter($dungeonRoute->mappingVersion),
+            $dungeonRoute,
+        )->selectRaw('id, public_key, title, popularity');
+
         $sql = '
             SELECT
                 dr2.id,
@@ -149,14 +155,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                 ) originalRouteEnemies
                     JOIN
                 (
-                    SELECT id, public_key, title, popularity
-                    FROM dungeon_routes
-                    WHERE mapping_version_id = :mappingVersionId
-                      AND published_state_id = :publishedState
-                      AND id <> :routeIdExclude
-                      AND (clone_of IS NULL OR clone_of <> :publicKey)
-                      AND popularity > 0
-                    ORDER BY popularity DESC
+                    ' . $candidateRoutesSql->toSql() . '
                 ) dr2
                     JOIN kill_zones kz2 ON kz2.dungeon_route_id = dr2.id
                     JOIN kill_zone_enemies kze2
@@ -175,7 +174,6 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             'routeIdExclude'   => $dungeonRoute->id,
             'mappingVersionId' => $dungeonRoute->mapping_version_id,
             'publishedState'   => PublishedState::ALL[PublishedState::WORLD],
-            'publicKey'        => $dungeonRoute->public_key,
         ]))->keyBy('id');
 
         $ids = $rows->pluck('id')->map(fn($v) => (int)$v)->values();
@@ -191,5 +189,33 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
                 return new SimilarDungeonRoute($row->ratio, $dungeonRoute);
             });
+    }
+
+    public function findRoutes(DungeonRouteSearchFilter $filter): Collection
+    {
+        return $this->findRoutesBuilder($filter)
+            ->limit(5)
+            ->get();
+    }
+
+    private function findRoutesBuilder(
+        DungeonRouteSearchFilter $filter,
+        ?DungeonRoute            $excludeDungeonRoute = null,
+    ): Builder {
+        return DungeonRoute::query()
+            ->without(['setup', 'mappingVersion', 'dungeon', 'season', 'affixes'])
+            ->when(
+                $filter->username !== null,
+                fn(Builder $query) => $query->whereRelation('author', 'username', $filter->username),
+            )
+            ->when($excludeDungeonRoute !== null, fn(Builder $query) => $query->whereNot('id', $excludeDungeonRoute->id))
+            ->when($filter->title !== null, fn(Builder $query) => $query->where('title', 'like', '%' . $filter->title . '%'))
+            ->when($filter->minKeyLevel !== null, fn(Builder $query) => $query->where('level_min', '>=', $filter->minKeyLevel))
+            ->when($filter->maxKeyLevel !== null, fn(Builder $query) => $query->where('level_max', '<=', $filter->maxKeyLevel))
+            ->where('mapping_version_id', $filter->mappingVersion->id)
+            ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
+            ->where('popularity', '>', 0)
+            ->whereNull('clone_of')
+            ->orderByDesc('popularity');
     }
 }
