@@ -59,8 +59,8 @@ use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
-use App\Service\DungeonRoute\DungeonRouteComparisonService;
-use App\Service\DungeonRoute\DungeonRouteComparisonServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSearchService;
+use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
@@ -178,7 +178,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
-        $this->app->bind(DungeonRouteComparisonServiceInterface::class, DungeonRouteComparisonService::class);
+        $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
 
