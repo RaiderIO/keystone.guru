@@ -48,6 +48,8 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             'keyLevel': new SearchFilterMythicLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'title': new SearchFilterTitle(this.options.filterTitleSelector, this._search.bind(this)),
             'username': new SearchFilterUser(this.options.filterUsernameSelector, this._search.bind(this)),
+            'includedEnemies': new SearchFilterIncludedEnemies(this._search.bind(this)),
+            'excludedEnemies': new SearchFilterExcludedEnemies(this._search.bind(this)),
             // 'offset': new SearchFilterInputText(this.options.filterOffsetSelector, this._search.bind(this)),
             // 'offset': new SearchFilterInputText(this.options.filterOffsetSelector, this._search.bind(this)),
         };
@@ -86,6 +88,11 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
      *
      */
     activate() {
+        // Set the filter values prior to activating them (can't do this before since the map won't be initialized)
+        let enemyMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        this.filters.includedEnemies.enemyMapObjectGroup = enemyMapObjectGroup;
+        this.filters.excludedEnemies.enemyMapObjectGroup = enemyMapObjectGroup;
+
         super.activate();
         console.assert(this instanceof CommonMapsDungeonroutesearchsidebar, 'this is not a CommonMapsDungeonroutesearchsidebar', this);
 

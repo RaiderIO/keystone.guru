@@ -464,6 +464,8 @@ return [
     'filter_input_date_from_header'                                        => 'From date: :value',
     'filter_input_date_to_header'                                          => 'To date: :value',
     'filter_input_duration_header'                                         => 'Duration: :value min',
+    'filter_input_included_enemies_header'                                 => 'Included enemies: :value',
+    'filter_input_excluded_enemies_header'                                 => 'Excluded enemies: :value',
     'specialization_select'                                                => 'Specialization...',
     'class_select'                                                         => 'Class...',
     'race_select'                                                          => 'Race...',
