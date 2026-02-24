@@ -124,24 +124,35 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             return;
         }
 
+        let self = this;
+
         super._search({
-            success: function (json) {
-                // getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(
-                //     json.data,
-                //     json.data_type,
-                //     json.run_count,
-                //     json.weight_max,
-                //     json.grid_size_x ?? null,
-                //     json.grid_size_y ?? null,
-                // );
-                //
-                // if (json.hasOwnProperty('url')) {
-                //     console.log(json.url);
-                // }
+            success: function (response) {
+
+                let $searchResultsContainer = $(self.options.sidebarSearchResultSelector);
+
+                let template = Handlebars.templates['map_sidebar_dungeon_route_search_results'];
+
+                $searchResultsContainer.empty();
+                $searchResultsContainer.html(
+                    template($.extend({}, getHandlebarsDefaultVariables(), {
+                        search_results: response,
+                    }))
+                );
+
+                $searchResultsContainer.find('.search_results').children().each(function () {
+                    let $routeRow = $(this);
+                    $($routeRow.find('.route_title')).on('click', function (event) {
+
+                        self._loadDungeonRoute($(this).data('publickey'));
+
+                        event.preventDefault();
+                    });
+                });
+
+                (new ThumbnailRefresh()).refreshHandlers();
             },
-        }, {
-            dungeonId: getState().getMapContext().getDungeon().id
-        }, ['dungeonId']);
+        }, {}, ['dungeonId']);
     }
 
     /**
@@ -150,5 +161,20 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
     cleanup() {
         console.assert(this instanceof CommonMapsDungeonroutesearchsidebar, 'this is not a CommonMapsDungeonroutesearchsidebar', this);
 
+    }
+
+    /**
+     *
+     * @param publicKey {String}
+     * @private
+     */
+    _loadDungeonRoute(publicKey) {
+        $.ajax({
+            type: 'GET',
+            url: `/ajax/dungeonroute/${publicKey}/mapcontext`,
+            success: function (json) {
+                getState().setMapContext($.extend({}, mapContextStaticData, mapContextDungeonData, mapContextMappingVersionData, json));
+            }
+        });
     }
 }

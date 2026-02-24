@@ -1649,15 +1649,17 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         int    $dungeonRouteId,
         string $orientation,
         string $locale,
+        int    $showThumbnails,
         int    $showAffixes,
         int    $showDungeonImage,
         int    $isAdmin,
     ): string {
         return sprintf(
-            'view:dungeonroute_card:%s:%s_%d_%d_%d_%d',
+            'view:dungeonroute_card:%s:%s_%d_%d_%d_%d_%d',
             $orientation,
             $locale,
             $showAffixes,
+            $showThumbnails,
             $showDungeonImage,
             $isAdmin,
             $dungeonRouteId,

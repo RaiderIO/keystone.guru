@@ -503,6 +503,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
 
+            Route::get('/dungeonroute/{dungeonRoute}/mapcontext', new AjaxDungeonRouteSearchController()->getMapContext(...));
             Route::post('/dungeonroute/search/{gameVersion}/{dungeon}', new AjaxDungeonRouteSearchController()->get(...));
         });
 

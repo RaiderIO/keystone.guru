@@ -203,7 +203,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         ?DungeonRoute            $excludeDungeonRoute = null,
     ): Builder {
         return DungeonRoute::query()
-            ->without(['setup', 'mappingVersion', 'dungeon', 'season', 'affixes'])
+            ->with(['author'])
             ->when(
                 $filter->username !== null,
                 fn(Builder $query) => $query->whereRelation('author', 'username', $filter->username),

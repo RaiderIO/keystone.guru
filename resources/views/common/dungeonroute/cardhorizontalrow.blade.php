@@ -20,34 +20,7 @@ $showDungeonImage ??= false;
 $isAdmin           = Auth::user()?->hasRole(Role::ROLE_ADMIN) ?? false;
 // Generate a unique string so we can assign affixes properly - route key is not unique enough since multiple cards can be on one page
 $uniqueString     = uniqid();
-?>
 
-@section('scripts')
-    @parent
-
-    <script type="application/javascript">
-        $(function () {
-            // Set content right before it opens
-            $('#dungeonroute_card_horizontal_{{ $uniqueString }} .affix_toggle').on('show.bs.popover', function () {
-                // Wrap the rendered HTML in a container div and assign to data-content
-                const html = '<div>' + handlebarsAffixGroupsParse({!!
-                    $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {
-                        $affixGroup->setVisible([
-                            'affixes'
-                        ]);
-
-                        $affixGroup->affixes->setVisible([
-                            'name',
-                            'image_name',
-                        ]);
-                    }) !!}, false) + '</div>';
-                $(this).attr('data-content', html);
-            });
-        });
-    </script>
-@endsection
-
-<?php
 $cacheFn = static function ()
 
 use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
@@ -71,8 +44,9 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
     $owlClass              = $dungeonroute->has_thumbnail && $activeFloors->count() > 1 ? 'multiple' : 'single';
     ob_start();
     ?>
-<div id="dungeonroute_card_horizontal_{{ $uniqueString }}"
-        class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
+<div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
+        class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal border border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
+>
     @if($showThumbnails)
         <div class="col-xl-auto">
             <div class="{{ $owlClass }} light-slider-container">
@@ -102,11 +76,16 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
-                    <h4 class="mb-0">
-                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
+                    <h4 class="route_title mb-0" data-publickey="{{ $dungeonroute->public_key }}">
+                        <a href="#">
                             {{ $dungeonroute->title }}
                         </a>
                     </h4>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}" target="_blank">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
                 </div>
                 @if( !$dungeonroute->mappingVersion->isLatestForDungeon() )
                     <div class="col-auto">
@@ -116,15 +95,13 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
                     </div>
                 @endif
             </div>
-            <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
-                <div class="col d-flex d-xl-none">
-                    @if(empty($dungeonroute->description))
-                        &nbsp;
-                    @else
-                        {!! strip_tags($dungeonroute->description, config('keystoneguru.view.common.dungeonroute.card.allowed_tags')) !!}
-                    @endif
+            @if(!empty($dungeonroute->description))
+                <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
+                    <div class="col d-flex d-xl-none">
+                            {!! strip_tags($dungeonroute->description, config('keystoneguru.view.common.dungeonroute.card.allowed_tags')) !!}
+                    </div>
                 </div>
-            </div>
+            @endif
             <div class="row no-gutters p-2 enemy_forces">
                 <div class="col-auto">
                     @if( $enemyForcesWarning )
@@ -224,9 +201,8 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
 
 if ($cache) {
     $currentUserLocale = app()->getLocale();
-// Echo the result of this function
     echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal', $currentUserLocale, $showThumbnails, $showAffixes, $showDungeonImage, $isAdmin),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal_row', $currentUserLocale, $showThumbnails, $showAffixes, $showDungeonImage, $isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );
@@ -234,3 +210,24 @@ if ($cache) {
     echo $cacheFn();
 }
 ?>
+
+<script type="application/javascript">
+    $(function () {
+        // Set content right before it opens
+        $('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle').popover().on('show.bs.popover', function () {
+            // Wrap the rendered HTML in a container div and assign to data-content
+            const html = '<div>' + handlebarsAffixGroupsParse({!!
+                $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {
+                    $affixGroup->setVisible([
+                        'affixes'
+                    ]);
+
+                    $affixGroup->affixes->setVisible([
+                        'name',
+                        'image_name',
+                    ]);
+                }) !!}, false) + '</div>';
+            $(this).attr('data-content', html);
+        });
+    });
+</script>

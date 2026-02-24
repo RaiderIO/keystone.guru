@@ -1,6 +1,6 @@
 class ThumbnailRefresh {
 
-    constructor(selector = '.thumbnail_refresh') {
+    constructor(selector = '.refresh_thumbnail') {
         this.selector = selector;
     }
 

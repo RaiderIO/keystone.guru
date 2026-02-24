@@ -9,11 +9,15 @@ use Illuminate\Support\Collection;
  * @var AffixGroup|null                            $affixgroup
  * @var AffixGroup|null                            $currentAffixGroup
  * @var array                                      $__env
+ * @var bool                                       $showThumbnails
+ * @var bool|null                                  $showDungeonImage
+ * @var bool|null                                  $cache
  * @var string                                     $orientation
  * @var Collection<integer, array<string, string>> $headers
  */
 
 $cols             ??= 1;
+$showThumbnails   ??= true;
 $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
@@ -24,7 +28,7 @@ $renderedDungeonRouteCount = 0;
 $i                         = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders) {
+$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showThumbnails, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders) {
     /** @var Collection<DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
@@ -53,10 +57,19 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
                         </h5>
                     </a>
                 @endif
-                @include($orientation === 'horizontal' ? 'common.dungeonroute.cardhorizontal' : 'common.dungeonroute.cardvertical', [
+                <?php
+                    $view = match($orientation) {
+                        'horizontal_row' => 'common.dungeonroute.cardhorizontalrow',
+                        'vertical' => 'common.dungeonroute.cardvertical',
+                        'horizontal' => 'common.dungeonroute.cardhorizontal',
+                        default => throw new InvalidArgumentException("Invalid orientation: $orientation")
+                    }
+                ?>
+                @include($view, [
                     'dungeonroute' => $dungeonroute,
                     'currentAffixGroup' => $currentAffixGroup,
                     'tierAffixGroup' => $affixgroup,
+                    'showThumbnails' => $showThumbnails,
                     'showDungeonImage' => $showDungeonImage,
                     'cache' => $cache
                 ])

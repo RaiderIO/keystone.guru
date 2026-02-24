@@ -59,6 +59,7 @@ $showAds                                   ??= true;
     'sidebarSelector' => '#dungeonroute_search_sidebar',
     'sidebarToggleSelector' => '#dungeonroute_search_sidebar_trigger',
     'sidebarScrollSelector' => '#dungeonroute_search_sidebar .data_container',
+    'sidebarSearchResultSelector' => '#dungeonroute_search_routes_container',
     'anchor' => 'right',
     'edit' => $edit,
 ]])
@@ -132,7 +133,9 @@ $showAds                                   ??= true;
                     <input id="filter_username" type="text" class="form-control" name="username" value="{{ old('username') }}"/>
                 @endcomponent
 
+                <div id="dungeonroute_search_routes_container" class="form-group">
 
+                </div>
             </div>
         </div>
 

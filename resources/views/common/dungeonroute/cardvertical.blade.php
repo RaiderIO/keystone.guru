@@ -49,7 +49,7 @@ $uniqueString     = uniqid();
 <?php
 $cacheFn = static function ()
 
-use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
+use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
 
 {
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
@@ -75,27 +75,29 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
 <div id="dungeonroute_card_vertical_{{ $uniqueString }}"
      class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col">
-        <div class="row">
-            <div class="col">
-                <div class="{{ $owlClass }} light-slider-container">
-                    <ul class="light-slider {{ $owlClass }}">
-                        @if( $dungeonroute->has_thumbnail )
-                            @foreach($dungeonroute->thumbnails as $thumbnail)
-                                <li>
-                                    <img class="thumbnail"
-                                         src="{{ $thumbnail->getURL() }}"
-                                         style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
-                                         alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>
-                                </li>
-                            @endforeach
-                        @else
-                            <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"
-                                 alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>
-                        @endif
-                    </ul>
+        @if($showThumbnails)
+            <div class="row">
+                <div class="col">
+                    <div class="{{ $owlClass }} light-slider-container">
+                        <ul class="light-slider {{ $owlClass }}">
+                            @if( $dungeonroute->has_thumbnail )
+                                @foreach($dungeonroute->thumbnails as $thumbnail)
+                                    <li>
+                                        <img class="thumbnail"
+                                             src="{{ $thumbnail->getURL() }}"
+                                             style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
+                                             alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>
+                                    </li>
+                                @endforeach
+                            @else
+                                <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"
+                                     alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>
+                            @endif
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
         <div class="row">
             <div class="col">
                 <div class="d-flex flex-column h-100 bg-card"
@@ -237,14 +239,11 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
     return ob_get_clean();
 };
 
-// Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = true;
-
 if ($cache) {
     $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
 // Echo the result of this function
     echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showThumbnails, $showAffixes, $showDungeonImage, $isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

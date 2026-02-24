@@ -2,7 +2,7 @@ class SearchHandlerDungeonRouteSearch extends SearchHandler {
     constructor(options) {
         let currentSnackbarId = null;
         super($.extend({}, {
-            loaderFn: function (isLoading, json) {
+            loaderFn: function (isLoading, response) {
                 let state = getState();
 
                 state.removeSnackbar(currentSnackbarId);
@@ -11,13 +11,6 @@ class SearchHandlerDungeonRouteSearch extends SearchHandler {
                 let template = null;
                 if (isLoading) {
                     template = Handlebars.templates['map_heatmapsearch_loader'];
-                } else if (json === null || json.hasOwnProperty('message')) {
-                    template = Handlebars.templates['map_heatmapsearch_error_loading_data'];
-                    if (json !== null && json.hasOwnProperty('message') && json.message === 'Invalid response from Raider.IO API') {
-                        data.error = lang.get('js.too_much_data_label');
-                    } else {
-                        data.error = lang.get('js.error_loading_data_label');
-                    }
                 }
 
                 if (typeof template === 'function') {
@@ -39,7 +32,7 @@ class SearchHandlerDungeonRouteSearch extends SearchHandler {
     getAjaxOptions() {
         return {
             type: 'POST',
-            dataType: 'json'
+            dataType: 'html'
         };
     }
 }

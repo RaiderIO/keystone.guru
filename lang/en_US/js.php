@@ -478,5 +478,6 @@ return [
     'error_loading_data_label'                                             => 'Error loading data - please try again',
     'run_count_label'                                                      => 'Showing data from :count runs',
     'refresh_thumbnails_label'                                             => 'Refresh thumbnails',
+    'search_results_label'                                                 => 'Search results',
 
 ];
