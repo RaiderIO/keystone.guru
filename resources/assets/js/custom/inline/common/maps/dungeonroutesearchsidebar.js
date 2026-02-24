@@ -89,14 +89,12 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
         super.activate();
         console.assert(this instanceof CommonMapsDungeonroutesearchsidebar, 'this is not a CommonMapsDungeonroutesearchsidebar', this);
 
-        let self = this;
-
         this.map = getState().getDungeonMap();
 
         let $enabledState = $(this.options.enabledStateSelector);
         $enabledState.on('change', function () {
             let enabled = $(this).is(':checked');
-            self._toggleHeatmap(enabled);
+            // @TODO Implement
         });
 
 
@@ -108,6 +106,12 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
         this.initializing = false;
         this._search();
+
+        this.enemySelectionMapState = new DungeonRouteSearchEnemySelection(this.map, null);
+        this.map.setMapState(
+            this.enemySelectionMapState
+        );
+        this.enemySelectionMapState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
     }
 
     searchWithFilters(filters) {
@@ -117,6 +121,58 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
         // Make sure the select dropdowns are updated properly - external changes don't cause a UI refresh
         refreshSelectPickers();
+    }
+
+
+    /**
+     * Triggered when an enemy was selected by the user when edit mode was enabled.
+     * @param enemySelectedEvent {object} The event that was triggered when an enemy was selected (or de-selected).
+     * Will add/remove the enemy to the list to be redrawn.
+     */
+    _enemySelected(enemySelectedEvent) {
+        let enemy = enemySelectedEvent.data.enemy;
+        let ignorePackBuddies = enemySelectedEvent.data.ignorePackBuddies;
+        console.assert(enemy instanceof Enemy, 'enemy is not an Enemy', enemy);
+
+        // Only when we're saved
+        if (this.id === 0) {
+            console.warn('Not handling _enemySelected; killzone not (yet) saved!', this, enemy.id);
+            return;
+        }
+
+        // If the enemy was part of a pack..
+        if (enemy.enemy_pack_id !== 0 && !ignorePackBuddies) {
+            let packBuddies = enemy.getPackBuddies();
+            packBuddies.push(enemy);
+            // Add all enemies in the pack to this killzone as well
+            for (let i = 0; i < packBuddies.length; i++) {
+                let packBuddy = packBuddies[i];
+                // If we should couple the enemy in addition to our own..
+                if (packBuddy.enemy_pack_id === enemy.enemy_pack_id) {
+                    // Remove it too if we should
+                    this._toggleEnemy(packBuddy);
+                }
+            }
+        } else {
+            this._toggleEnemy(enemy);
+        }
+    }
+
+    /**
+     *
+     * @param {Enemy} enemy
+     * @private
+     */
+    _toggleEnemy(enemy) {
+        // 3 states - overpulled, obsolete, normal
+        if (enemy.getOverpulledKillZoneId() === null && !enemy.isObsolete()) {
+            enemy.setOverpulledKillZoneId(1);
+        } else if (!enemy.isObsolete()) {
+            enemy.setOverpulledKillZoneId(null);
+            enemy.setObsolete(true);
+        } else {
+            enemy.setObsolete(false);
+        }
     }
 
     _search() {
@@ -180,21 +236,29 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
      * @private
      */
     _loadDungeonRoute($card, publicKey) {
+        let mapContext = getState().getMapContext();
+        let unset = mapContext.getDungeonRoute()?.publicKey === publicKey;
+
         // Reset to empty circles
         $('.apply_route_radio').find('i').removeClass('fa-dot-circle').addClass('fa-circle');
-        // Apply the dot circle to this row
-        $card.find('.apply_route_radio i').removeClass('fa-circle').addClass('fa-dot-circle');
+        if (!unset) {
+            // Apply the dot circle to this row
+            $card.find('.apply_route_radio i').removeClass('fa-circle').addClass('fa-dot-circle');
+        }
 
         // Reset borders on card
         $('.card_dungeonroute.horizontal').removeClass('border-primary border-2').addClass('border-dark border-1');
-        // Apply borders to card
-        $card.removeClass('border-dark').addClass('border-primary border-2');
-
+        if (!unset) {
+            // Apply borders to card
+            $card.removeClass('border-dark').addClass('border-primary border-2');
+        }
 
         if (this.dungeonRouteCache[publicKey]) {
-            getState().getMapContext().setDungeonRoute(
-                this.dungeonRouteCache[publicKey]
-            );
+            if (unset) {
+                mapContext.setDungeonRoute(null)
+            } else {
+                mapContext.setDungeonRoute(this.dungeonRouteCache[publicKey]);
+            }
             return;
         }
 
@@ -203,7 +267,7 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             type: 'GET',
             url: `/ajax/dungeonroute/${publicKey}/mapcontext`,
             success: function (json) {
-                getState().getMapContext().setDungeonRoute(
+                mapContext.setDungeonRoute(
                     json
                 );
 
