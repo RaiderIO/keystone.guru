@@ -50,10 +50,6 @@ use App\Models\Floor\Floor;
                 ],
             ],
             'hiddenMapObjectGroups' => [
-                'brushline',
-                'path',
-                'killzone',
-                'killzonepath',
                 'floorunion',
                 'floorunionarea',
             ],

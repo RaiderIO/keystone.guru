@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
  * @var AffixGroup|null                            $affixgroup
  * @var AffixGroup|null                            $currentAffixGroup
  * @var array                                      $__env
- * @var bool                                       $showThumbnails
  * @var bool|null                                  $showDungeonImage
  * @var bool|null                                  $cache
  * @var string                                     $orientation
@@ -17,7 +16,6 @@ use Illuminate\Support\Collection;
  */
 
 $cols             ??= 1;
-$showThumbnails   ??= true;
 $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
@@ -28,7 +26,7 @@ $renderedDungeonRouteCount = 0;
 $i                         = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showThumbnails, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders) {
+$renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders) {
     /** @var Collection<DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
@@ -69,7 +67,6 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
                     'dungeonroute' => $dungeonroute,
                     'currentAffixGroup' => $currentAffixGroup,
                     'tierAffixGroup' => $affixgroup,
-                    'showThumbnails' => $showThumbnails,
                     'showDungeonImage' => $showDungeonImage,
                     'cache' => $cache
                 ])

@@ -40,7 +40,6 @@ class AjaxDungeonRouteSearchController extends Controller
                 return view('common.dungeonroute.cardlist', [
                     'currentAffixGroup' => null,
                     'dungeonroutes'     => $result,
-                    'showThumbnails'    => false,
                     'showAffixes'       => true,
                     'showDungeonImage'  => false,
                     'orientation'       => 'horizontal_row',

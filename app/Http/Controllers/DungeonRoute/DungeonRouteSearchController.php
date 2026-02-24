@@ -46,7 +46,6 @@ class DungeonRouteSearchController extends Controller
         GameVersion                $gameVersion,
         Dungeon                    $dungeon,
         MapContextServiceInterface $mapContextService,
-        SeasonServiceInterface     $seasonService,
     ): View {
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -55,14 +54,12 @@ class DungeonRouteSearchController extends Controller
             ->defaultOrFacade($mappingVersion)
             ->first();
 
-        $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
-
         return view('dungeon.dungeonroute.search.gameversion.dungeon', [
             'dungeon'     => $dungeon,
             'floor'       => $floor,
             'parameters'  => $request->validated(),
             'title'       => __($dungeon->name),
-            'mapContext'  => $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle()),
+            'mapContext'  => $mapContextService->createMapContextDungeonRouteSearch($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle()),
             'keyLevelMin' => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
             'keyLevelMax' => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
         ]);

@@ -23,7 +23,7 @@ $uniqueString     = uniqid();
 
 $cacheFn = static function ()
 
-use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
+use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
 {
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
 
@@ -45,30 +45,31 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
     ob_start();
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
-        class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal border border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
+        class="row no-gutters align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
 >
-    @if($showThumbnails)
-        <div class="col-xl-auto">
-            <div class="{{ $owlClass }} light-slider-container">
-                <ul class="light-slider {{ $owlClass }}">
-                    @if( $dungeonroute->has_thumbnail )
-                        @foreach($dungeonroute->thumbnails as $thumbnail)
-                            <li>
-                                <img class="thumbnail"
-                                     src="{{ $thumbnail->getURL() }}"
-                                     style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
-                                     alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>
-                            </li>
-                        @endforeach
-                    @else
-                        <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"
-                             alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    @endif
-    <div class="col">
+    <div class="col-auto cursor-pointer p-1 apply_route_radio" data-publickey="{{ $dungeonroute->public_key }}">
+        <i class="far fa-circle"></i>
+    </div>
+{{--    <div class="col-xl-auto">--}}
+{{--        <div class="{{ $owlClass }} light-slider-container">--}}
+{{--            <ul class="light-slider {{ $owlClass }}">--}}
+{{--                @if( $dungeonroute->has_thumbnail )--}}
+{{--                    @foreach($dungeonroute->thumbnails as $thumbnail)--}}
+{{--                        <li>--}}
+{{--                            <img class="thumbnail"--}}
+{{--                                 src="{{ $thumbnail->getURL() }}"--}}
+{{--                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"--}}
+{{--                                 alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>--}}
+{{--                        </li>--}}
+{{--                    @endforeach--}}
+{{--                @else--}}
+{{--                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"--}}
+{{--                         alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>--}}
+{{--                @endif--}}
+{{--            </ul>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+    <div class="col border-left border-dark ">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
@@ -76,7 +77,7 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
-                    <h4 class="route_title mb-0" data-publickey="{{ $dungeonroute->public_key }}">
+                    <h4 class="apply_route mb-0" data-publickey="{{ $dungeonroute->public_key }}">
                         <a href="#">
                             {{ $dungeonroute->title }}
                         </a>
@@ -202,7 +203,7 @@ use ($uniqueString, $showThumbnails, $showAffixes, $showDungeonImage, $dungeonro
 if ($cache) {
     $currentUserLocale = app()->getLocale();
     echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal_row', $currentUserLocale, $showThumbnails, $showAffixes, $showDungeonImage, $isAdmin),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal_row', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

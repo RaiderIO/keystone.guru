@@ -52,6 +52,8 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
             // 'offset': new SearchFilterInputText(this.options.filterOffsetSelector, this._search.bind(this)),
         };
 
+        this.dungeonRouteCache = {};
+
 
         this._setupFilterCollapseCookies();
     }
@@ -142,9 +144,17 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
                 $searchResultsContainer.find('.search_results').children().each(function () {
                     let $routeRow = $(this);
-                    $($routeRow.find('.route_title')).on('click', function (event) {
+                    // User clicked the radio button
+                    $($routeRow.find('.apply_route_radio')).on('click', function (event) {
+                        let $this = $(this);
+                        self._loadDungeonRoute($this.closest('.card_dungeonroute.horizontal'), $this.data('publickey'));
 
-                        self._loadDungeonRoute($(this).data('publickey'));
+                        event.preventDefault();
+                    });
+                    // User clicked the route title
+                    $($routeRow.find('.apply_route')).on('click', function (event) {
+                        let $this = $(this);
+                        self._loadDungeonRoute($this.closest('.card_dungeonroute.horizontal'), $this.data('publickey'));
 
                         event.preventDefault();
                     });
@@ -165,15 +175,39 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
 
     /**
      *
+     * @param $card {jQuery}
      * @param publicKey {String}
      * @private
      */
-    _loadDungeonRoute(publicKey) {
+    _loadDungeonRoute($card, publicKey) {
+        // Reset to empty circles
+        $('.apply_route_radio').find('i').removeClass('fa-dot-circle').addClass('fa-circle');
+        // Apply the dot circle to this row
+        $card.find('.apply_route_radio i').removeClass('fa-circle').addClass('fa-dot-circle');
+
+        // Reset borders on card
+        $('.card_dungeonroute.horizontal').removeClass('border-primary border-2').addClass('border-dark border-1');
+        // Apply borders to card
+        $card.removeClass('border-dark').addClass('border-primary border-2');
+
+
+        if (this.dungeonRouteCache[publicKey]) {
+            getState().getMapContext().setDungeonRoute(
+                this.dungeonRouteCache[publicKey]
+            );
+            return;
+        }
+
+        let self = this;
         $.ajax({
             type: 'GET',
             url: `/ajax/dungeonroute/${publicKey}/mapcontext`,
             success: function (json) {
-                getState().setMapContext($.extend({}, mapContextStaticData, mapContextDungeonData, mapContextMappingVersionData, json));
+                getState().getMapContext().setDungeonRoute(
+                    json
+                );
+
+                self.dungeonRouteCache[publicKey] = json;
             }
         });
     }
