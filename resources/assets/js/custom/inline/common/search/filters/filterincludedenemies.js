@@ -1,9 +1,13 @@
 class SearchFilterIncludedEnemies extends SearchFilter {
     constructor(onChange) {
-        super(null, onChange);
+        super(null, onChange, {
+            array: true
+        });
 
         /** @type {EnemyMapObjectGroup} */
         this.enemyMapObjectGroup = null;
+
+        this.onChangeTimeoutId = null;
     }
 
     activate() {
@@ -19,7 +23,15 @@ class SearchFilterIncludedEnemies extends SearchFilter {
     _overpulledChanged() {
         console.assert(this instanceof SearchFilterIncludedEnemies, 'this is not a SearchFilterIncludedEnemies', this);
 
-        this.onChange();
+        // Ensure that if this function is called multiple times in quick succession, only the last call triggers the onChange event
+        if (this.onChangeTimeoutId !== null) {
+            clearTimeout(this.onChangeTimeoutId);
+        }
+
+        let self = this;
+        this.onChangeTimeoutId = setTimeout(() => {
+            self.onChange();
+        }, 100);
     }
 
     getValue() {
@@ -35,6 +47,20 @@ class SearchFilterIncludedEnemies extends SearchFilter {
         }
 
         return overpulledEnemies.length === 0 ? null : overpulledEnemies;
+    }
+
+    /**
+     *
+     * @param value
+     */
+    setValue(value) {
+        let enemies = value.split(',').map(item => item.split(';'));
+        for (let index in enemies) {
+            let enemy = this.enemyMapObjectGroup.getEnemyByNpcIdAndMdtId(parseInt(enemies[index][0]), parseInt(enemies[index][1]));
+            if (enemy !== null) {
+                enemy.setOverpulledKillZoneId(1);
+            }
+        }
     }
 
     getFilterHeaderText() {
