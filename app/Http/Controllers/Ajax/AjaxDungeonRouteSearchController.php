@@ -15,7 +15,7 @@ use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
-use function response;
+use Symfony\Component\HttpFoundation\Response;
 use Teapot\StatusCode;
 
 class AjaxDungeonRouteSearchController extends Controller
@@ -25,7 +25,7 @@ class AjaxDungeonRouteSearchController extends Controller
         GameVersion                        $gameVersion,
         Dungeon                            $dungeon,
         DungeonRouteSearchServiceInterface $dungeonRouteSearchService,
-    ): string {
+    ): Response {
         try {
             $result = $dungeonRouteSearchService->search(
                 DungeonRouteSearchFilter::fromArray(
@@ -35,16 +35,18 @@ class AjaxDungeonRouteSearchController extends Controller
             );
 
             if ($result->isEmpty()) {
-                return response()->noContent();
-            } else {
-                return view('common.dungeonroute.cardlist', [
-                    'currentAffixGroup' => null,
-                    'dungeonroutes'     => $result,
-                    'showAffixes'       => true,
-                    'showDungeonImage'  => false,
-                    'orientation'       => 'horizontal_row',
-                ])->render();
+                return response()->noContent(); // 204, empty body
             }
+
+            $html = view('common.dungeonroute.cardlist', [
+                'currentAffixGroup' => null,
+                'dungeonroutes'     => $result,
+                'showAffixes'       => true,
+                'showDungeonImage'  => false,
+                'orientation'       => 'horizontal_row',
+            ])->render();
+
+            return response($html, StatusCode::OK);
         } catch (Exception $exception) {
             return response()->json(
                 ['message' => $exception->getMessage()],

@@ -126,7 +126,9 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         $candidateRoutesSql = $this->findRoutesBuilder(
             new DungeonRouteSearchFilter($dungeonRoute->mappingVersion),
             $dungeonRoute,
-        )->selectRaw('id, public_key, title, popularity');
+        )->selectRaw('id, public_key, title, popularity')
+            // Need to add a popularity check so that we don't get all garbage routes as suggestions
+            ->where('popularity', '>', 0);
 
         $sql = '
             SELECT
@@ -206,16 +208,70 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->with(['author'])
             ->when(
                 $filter->username !== null,
-                fn(Builder $query) => $query->whereRelation('author', 'username', $filter->username),
+                fn(Builder $query) => $query->whereRelation('author', 'name', 'LIKE', '%' . $filter->username . '%'),
             )
             ->when($excludeDungeonRoute !== null, fn(Builder $query) => $query->whereNot('id', $excludeDungeonRoute->id))
             ->when($filter->title !== null, fn(Builder $query) => $query->where('title', 'like', '%' . $filter->title . '%'))
             ->when($filter->minKeyLevel !== null, fn(Builder $query) => $query->where('level_min', '>=', $filter->minKeyLevel))
             ->when($filter->maxKeyLevel !== null, fn(Builder $query) => $query->where('level_max', '<=', $filter->maxKeyLevel))
+            // Excluded: route must NOT contain any of the excluded pairs
+            ->when($filter->excludedEnemies !== null, function (Builder $query) use ($filter) {
+                $pairs = $this->parseEnemyPairs($filter->excludedEnemies);
+
+                $query->whereDoesntHave('killZones.killZoneEnemies', function (Builder $q) use ($pairs) {
+                    $q->where(function (Builder $or) use ($pairs) {
+                        foreach ($pairs as [$npcId, $mdtId]) {
+                            $or->orWhere(function (Builder $and) use ($npcId, $mdtId) {
+                                $and->where('npc_id', $npcId)
+                                    ->where('mdt_id', $mdtId);
+                            });
+                        }
+                    });
+                });
+            })
+
+            // Included (ALL): route must contain every included pair at least once
+            ->when($filter->includedEnemies !== null, function (Builder $query) use ($filter) {
+                $pairs = $this->parseEnemyPairs($filter->includedEnemies);
+
+                foreach ($pairs as [$npcId, $mdtId]) {
+                    $query->whereHas('killZones.killZoneEnemies', function (Builder $q) use ($npcId, $mdtId) {
+                        $q->where('npc_id', $npcId)
+                            ->where('mdt_id', $mdtId);
+                    });
+                }
+            })
+
             ->where('mapping_version_id', $filter->mappingVersion->id)
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
-            ->where('popularity', '>', 0)
             ->whereNull('clone_of')
             ->orderByDesc('popularity');
+    }
+
+    /**
+     * @param  array<int, string>             $values like ["165529;5", ...]
+     * @return array<int, array{0:int,1:int}> like [[165529, 5], ...]
+     */
+    private function parseEnemyPairs(array $values): array
+    {
+        $result = [];
+
+        foreach ($values as $value) {
+            if (!is_string($value)) {
+                continue;
+            }
+
+            $parts = explode(';', $value, 2);
+            if (count($parts) !== 2) {
+                continue;
+            }
+
+            $npcId = (int)$parts[0];
+            $mdtId = (int)$parts[1];
+
+            $result[] = [$npcId, $mdtId];
+        }
+
+        return $result;
     }
 }

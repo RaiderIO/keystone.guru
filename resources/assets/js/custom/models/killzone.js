@@ -1285,7 +1285,9 @@ class KillZone extends MapObject {
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-            enemy.setSelectable(false);
+            // enemy.setSelectable(false);
+            enemy.unregister('obsolete:changed', self);
+            enemy.unregister('overpulled:changed', self);
             enemy.unregister('enemy:selected', self);
             enemy.unregister('killzone:detached', self);
         });

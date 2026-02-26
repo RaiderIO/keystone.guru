@@ -46,8 +46,9 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
         class="row no-gutters align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
+        data-publickey="{{ $dungeonroute->public_key }}"
 >
-    <div class="col-auto cursor-pointer p-1 apply_route_radio" data-publickey="{{ $dungeonroute->public_key }}">
+    <div class="col-auto cursor-pointer p-1 apply_route_radio">
         <i class="far fa-circle"></i>
     </div>
 {{--    <div class="col-xl-auto">--}}
@@ -77,7 +78,7 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
-                    <h4 class="apply_route mb-0" data-publickey="{{ $dungeonroute->public_key }}">
+                    <h4 class="apply_route mb-0">
                         <a href="#">
                             {{ $dungeonroute->title }}
                         </a>

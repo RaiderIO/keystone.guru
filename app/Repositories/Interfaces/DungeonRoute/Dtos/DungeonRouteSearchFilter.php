@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Interfaces\DungeonRoute\Dtos;
 
-use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 
 /**
@@ -18,6 +17,8 @@ readonly class DungeonRouteSearchFilter
         public ?string        $username = null,
         public ?int           $minKeyLevel = null,
         public ?int           $maxKeyLevel = null,
+        public ?array         $includedEnemies = null,
+        public ?array         $excludedEnemies = null,
     ) {
     }
 
@@ -31,8 +32,10 @@ readonly class DungeonRouteSearchFilter
             limit: $data['limit'] ?? 5,
             title: $data['title'] ?? null,
             username: $data['username'] ?? null,
-            minKeyLevel: $data['minKeyLevel'] ?? null,
-            maxKeyLevel: $data['maxKeyLevel'] ?? null,
+            minKeyLevel: $data['minMythicLevel'] ?? null,
+            maxKeyLevel: $data['maxMythicLevel'] ?? null,
+            includedEnemies: $data['includedEnemies'] ?? null,
+            excludedEnemies: $data['excludedEnemies'] ?? null,
         );
     }
 }

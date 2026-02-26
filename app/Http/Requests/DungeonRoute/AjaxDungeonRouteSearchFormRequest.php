@@ -57,6 +57,8 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
         return [
             'offset'            => 'integer|nullable',
             'limit'             => 'integer|nullable|max:10',
+            'minMythicLevel'    => 'integer|nullable',
+            'maxMythicLevel'    => 'integer|nullable',
             'title'             => 'string|nullable',
             'username'          => 'string|nullable',
             'includedEnemies'   => 'array|nullable',

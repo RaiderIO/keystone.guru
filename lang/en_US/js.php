@@ -481,5 +481,6 @@ return [
     'run_count_label'                                                      => 'Showing data from :count runs',
     'refresh_thumbnails_label'                                             => 'Refresh thumbnails',
     'search_results_label'                                                 => 'Search results',
+    'no_search_results_label'                                              => 'No search results found',
 
 ];
