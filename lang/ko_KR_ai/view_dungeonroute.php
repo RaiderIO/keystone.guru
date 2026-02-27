@@ -5,6 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
+                'weekly_route'               => '',
                 'popular'                    => '인기 있는 경로',
                 'popular_by_current_affixes' => '현재 보정에 따른 인기 있는 경로',
                 'popular_by_next_affixes'    => '다음 보정에 따른 인기 있는 경로',

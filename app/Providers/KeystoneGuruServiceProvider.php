@@ -59,6 +59,8 @@ use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSearchService;
+use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
@@ -176,6 +178,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
+        $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
 
@@ -186,7 +189,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
 
         // Model helpers
-        if (in_array(config('app.env'), ['local', 'testing'])) {
+        if (in_array(config('app.env'), [
+            'local',
+            'testing',
+        ])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         } else {
@@ -456,31 +462,25 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var Season $currentSeason */
             $currentSeason = $regionViewVariables['currentSeason'];
 
+            $seasonLoader = fn(?Season $season) => $season
+                ?->load([
+                    'seasonDungeons' => static function ($query) {
+                        $query->without([
+                            'season',
+                            'dungeon',
+                        ]);
+                    },
+                ])
+                ->makeHidden([
+                    'expansion',
+                    'dungeons',
+                ])
+                ->makeVisible(['seasonDungeons']);
+
             $view->with('routeKeyLevelFrom', $currentSeason->key_level_min);
             $view->with('routeKeyLevelTo', $currentSeason->key_level_max);
-            $view->with(
-                'currentSeason',
-                $regionViewVariables['currentSeason']
-                    ->load([
-                        'seasonDungeons' => static function ($query) {
-                            $query->without([
-                                'season',
-                                'dungeon',
-                            ]);
-                        },
-                    ])
-                    ->makeHidden([
-                        'affixGroups',
-                        'expansion',
-                        'dungeons',
-                    ])
-                    ->makeVisible(['seasonDungeons']),
-            );
-            $view->with('nextSeason', $regionViewVariables['nextSeason']?->without([
-                'affixGroups',
-                'expansion',
-                'dungeons',
-            ])->with(['seasonDungeons']));
+            $view->with('currentSeason', $seasonLoader($regionViewVariables['currentSeason']));
+            $view->with('nextSeason', $seasonLoader($regionViewVariables['nextSeason']));
         });
 
         // Displaying a release
@@ -683,7 +683,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
-            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(SimulationCraftRaidBuffs $raidBuff) => [
+            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(
+                SimulationCraftRaidBuffs $raidBuff,
+            ) => [
                 $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
             ])->toArray());
         });

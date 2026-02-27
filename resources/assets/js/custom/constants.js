@@ -53,6 +53,7 @@ const MAP_CONTEXT_TYPE_DUNGEON_ROUTE = 'dungeonroute';
 const MAP_CONTEXT_TYPE_LIVE_SESSION = 'livesession';
 const MAP_CONTEXT_TYPE_MAPPING_VERSION_EDIT = 'mappingVersionEdit';
 const MAP_CONTEXT_TYPE_DUNGEON_EXPLORE = 'dungeonExplore';
+const MAP_CONTEXT_TYPE_DUNGEON_ROUTE_SEARCH = 'dungeonRouteSearch';
 
 // Dungeons
 const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';

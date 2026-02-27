@@ -1,7 +1,23 @@
 <?php
 
 return [
-
+    'dungeonroute' => [
+        'search' => [
+            'gameversion' => [
+                'dungeon' => [
+                    'title'                                  => 'Search routes for :dungeon',
+                    'description'                            => 'Search for routes by title, key level, affixes, enemy forces, rating and more. Select a dungeon to get started.',
+                    'linkpreview_default_description_search' => 'Find M+ routes for :dungeon',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
+                ],
+            ],
+            'list' => [
+                'title'       => 'Search routes',
+                'header'      => 'Search routes',
+                'description' => 'Search for routes by title, key level, affixes, enemy forces, rating and more. Select a dungeon to get started.',
+            ],
+        ],
+    ],
     'explore' => [
         'gameversion' => [
             'list' => [
@@ -15,6 +31,9 @@ return [
                 'any'                     => 'Any',
                 'select_floor'            => 'Select floor',
                 'view_heatmap_fullscreen' => 'View fullscreen',
+            ],
+            'view' => [
+                'title' => 'Explore :dungeon',
             ],
         ],
     ],

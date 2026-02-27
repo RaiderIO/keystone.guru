@@ -14,6 +14,7 @@ use App\Models\Team;
 use App\Models\User;
 
 /**
+ * @var string|null         $headerTitle
  * @var string              $theme
  * @var bool                $isUserAdmin
  * @var MapContextBase      $mapContext
@@ -126,14 +127,12 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                 @endif
                                 <div class="col">
                                     <h5 id="route_title" class="mb-0 mr-2">
-                                        @isset($dungeonroute)
-                                            {{ $dungeonroute->title }}
-                                        @elseif($mapContext instanceof MapContextDungeonExplore)
-                                            {{ __('view_common.maps.controls.header.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
+                                        @isset($headerTitle)
+                                            {!! $headerTitle !!}
                                         @else
-                                            <a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
-                                                {{ sprintf(__('view_common.maps.controls.header.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
-                                            </a>
+                                            @isset($dungeonroute)
+                                                {{ $dungeonroute->title }}
+                                            @endisset
                                         @endisset
                                     </h5>
                                 </div>

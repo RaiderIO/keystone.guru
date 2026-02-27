@@ -34,5 +34,30 @@ e accessibili a tutti i membri del tuo team M+. Puoi sempre esportare i percorsi
     'loading'                                      => 'Caricamento...',
     'start_planning_today'                         => 'Inizia a pianificare oggi',
     'join_other_users'                             => 'Unisciti a %d+ altri utenti e pianifica i tuoi percorsi M+ online!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

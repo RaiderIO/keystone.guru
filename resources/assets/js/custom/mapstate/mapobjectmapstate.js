@@ -2,7 +2,11 @@ class MapObjectMapState extends MapState {
     constructor(map, sourceMapObject) {
         super(map);
 
-        console.assert(sourceMapObject instanceof MapObject, 'sourceMapObject is not a MapObject', sourceMapObject);
+        console.assert(
+            sourceMapObject instanceof MapObject || sourceMapObject === null,
+            'sourceMapObject is not a MapObject',
+            sourceMapObject
+        );
         this.sourceMapObject = sourceMapObject;
     }
 

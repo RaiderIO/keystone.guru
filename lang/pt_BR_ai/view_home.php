@@ -27,5 +27,30 @@ return [
     'loading'                                      => 'Carregando...',
     'start_planning_today'                         => 'Comece a planejar hoje',
     'join_other_users'                             => 'Junte-se a %d+ outros usuários e planeje suas rotas M+ online!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

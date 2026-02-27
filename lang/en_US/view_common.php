@@ -284,6 +284,14 @@ return [
                 'admin'           => 'Admin',
                 'view_this_route' => 'View',
             ],
+            'dungeonroutesearch' => [
+                'settings_title' => 'Map settings',
+                'enabled'        => 'Enabled',
+                'disabled'       => 'Disabled',
+                'key_level'      => 'Key level',
+                'title'          => 'Title',
+                'username'       => 'Username',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => 'Timer',
@@ -389,8 +397,6 @@ return [
                 'simulate_route'                 => 'Simulate',
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
-                'admin_header_title'             => '%s (mapping version %d)',
-                'explore_header_title'           => 'Explore :dungeon',
                 'share'                          => 'Share',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',

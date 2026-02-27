@@ -30,5 +30,30 @@ return [
     'loading'                                      => '로딩 중...',
     'start_planning_today'                         => '오늘 계획을 시작하세요',
     'join_other_users'                             => '%d+명의 다른 사용자와 함께 M+ 경로를 온라인으로 계획하세요!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

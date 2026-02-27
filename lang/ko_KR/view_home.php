@@ -27,5 +27,30 @@ return [
     'loading'                                      => '',
     'start_planning_today'                         => '',
     'join_other_users'                             => '',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

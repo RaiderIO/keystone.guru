@@ -389,8 +389,6 @@ return [
                 'simulate_route'                 => '경로 시뮬레이션',
                 'edit_route_settings'            => '경로 설정',
                 'edit_mapping_version'           => '매핑 버전 편집',
-                'admin_header_title'             => '%s (매핑 버전 %d)',
-                'explore_header_title'           => ':dungeon 탐색',
                 'share'                          => '공유',
                 'start_live_session'             => '라이브 세션 시작',
                 'start_live_session_paragraph_1' => '게임 내에서 경로를 시작하면 Keystone.guru가 M+ 키를 완료하는 데 도움을 줄 수 있는 라이브 세션을 생성할 수 있습니다. 다른 사용자의 지도를 따르려면 상단 헤더에서 아이콘/이니셜을 클릭하여 옵션을 선택하십시오.',

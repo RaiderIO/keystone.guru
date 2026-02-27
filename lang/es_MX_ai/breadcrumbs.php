@@ -3,11 +3,11 @@
 return [
 
     'home' => [
-        'keystone_guru' => 'Keystone.guru',
-        'affixes'       => 'Afijos',
-        'about'         => 'Acerca de',
-        'credits'       => 'Créditos',
-        'changelog'     => [
+        'front_page' => '',
+        'affixes'    => 'Afijos',
+        'about'      => 'Acerca de',
+        'credits'    => 'Créditos',
+        'changelog'  => [
             'list'    => 'Registro de cambios',
             'release' => [
                 'view' => 'Lanzamiento :version',

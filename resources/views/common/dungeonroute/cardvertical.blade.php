@@ -237,9 +237,6 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
     return ob_get_clean();
 };
 
-// Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = true;
-
 if ($cache) {
     $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
 // Echo the result of this function

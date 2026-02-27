@@ -27,5 +27,30 @@ return [
     'loading'                                      => 'Завантаження...',
     'start_planning_today'                         => 'Плануйте вже сьогодні',
     'join_other_users'                             => 'Долучіться до %d+ користувачів і прокладайте свої маршрути для М+ онлайн!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

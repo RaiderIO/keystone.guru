@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use App\Models\Expansion;
-use App\Models\Season;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class AjaxDungeonRouteSearchFormRequest extends FormRequest
@@ -38,19 +36,35 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
      */
     public function rules(): array
     {
+        $enemyPairRules = [
+            'bail',
+            'string',
+            'regex:/^\d+;\d+$/',
+            function (string $attribute, mixed $value, \Closure $fail) {
+                [$npcId, $mdtId] = explode(';', $value);
+
+                $exists = DB::table('enemies')
+                    ->where('npc_id', $npcId)
+                    ->where('mdt_id', $mdtId)
+                    ->exists();
+
+                if (!$exists) {
+                    $fail("Enemy pair '{$value}' does not exist.");
+                }
+            },
+        ];
+
         return [
-            'offset'    => 'integer|required',
-            'limit'     => 'integer|required',
-            'title'     => 'string',
-            'season'    => Rule::exists(Season::class, 'id'),
-            'expansion' => [
-                Rule::in(
-                    Expansion::active()
-                        ->get()
-                        ->pluck('shortname')
-                        ->toArray(),
-                ),
-            ],
+            'offset'            => 'integer|nullable',
+            'limit'             => 'integer|nullable|max:10',
+            'minMythicLevel'    => 'integer|nullable',
+            'maxMythicLevel'    => 'integer|nullable',
+            'title'             => 'string|nullable',
+            'username'          => 'string|nullable',
+            'includedEnemies'   => 'array|nullable',
+            'includedEnemies.*' => $enemyPairRules,
+            'excludedEnemies'   => 'array|nullable',
+            'excludedEnemies.*' => $enemyPairRules,
         ];
     }
 }

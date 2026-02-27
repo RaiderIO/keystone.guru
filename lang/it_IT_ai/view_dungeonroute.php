@@ -5,6 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
+                'weekly_route'               => '',
                 'popular'                    => 'Percorsi popolari',
                 'popular_by_current_affixes' => 'Percorsi popolari per affissi attuali',
                 'popular_by_next_affixes'    => 'Percorsi popolari per prossimi affissi',

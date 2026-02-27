@@ -3,11 +3,11 @@
 return [
 
     'home' => [
-        'keystone_guru' => 'Keystone.guru',
-        'affixes'       => '접두사',
-        'about'         => '정보',
-        'credits'       => '크레딧',
-        'changelog'     => [
+        'front_page' => '',
+        'affixes'    => '접두사',
+        'about'      => '정보',
+        'credits'    => '크레딧',
+        'changelog'  => [
             'list'    => '변경 내역',
             'release' => [
                 'view' => '릴리스 :version',

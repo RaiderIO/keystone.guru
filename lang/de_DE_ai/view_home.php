@@ -31,5 +31,30 @@ return [
     'loading'                                      => 'Wird geladen...',
     'start_planning_today'                         => 'Beginnen Sie heute mit der Planung',
     'join_other_users'                             => 'Schließen Sie sich %d+ anderen Nutzern an und planen Sie Ihre M+ Routen online!',
+    'sections'                                     => [
+        'routes' => [
+            'weeklyroute' => [
+                'header'       => '',
+                'subheader'    => '',
+                'pug_friendly' => '',
+                'expert'       => '',
+                'title'        => '',
+            ],
+            'popular' => [
+                'title' => '',
+            ],
+        ],
+        'featured' => [
+            'title'            => '',
+            'heatmaps_alt'     => '',
+            'weekly_route_alt' => '',
+            'patreon_alt'      => '',
+        ],
+        'about' => [
+            'title'               => '',
+            'tagline'             => '',
+            'tagline_description' => '',
+        ],
+    ],
 
 ];

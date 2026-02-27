@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminToolsController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
+use App\Http\Controllers\Ajax\AjaxDungeonRouteSearchController;
 use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
@@ -43,14 +44,15 @@ use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
-use App\Http\Controllers\DungeonController;
-use App\Http\Controllers\DungeonRouteController;
-use App\Http\Controllers\DungeonRouteDiscoverController;
-use App\Http\Controllers\DungeonRouteDiscoverExpansionSeasonController;
-use App\Http\Controllers\DungeonRouteLegacyController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteDiscoverController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteDiscoverExpansionSeasonController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteLegacyController;
+use App\Http\Controllers\DungeonRoute\DungeonRouteSearchController;
 use App\Http\Controllers\ExpansionController;
 use App\Http\Controllers\Floor\FloorController;
 use App\Http\Controllers\GameVersionController;
@@ -167,6 +169,18 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('affixes/current', new DungeonRouteDiscoverController()->discoverDungeonThisWeek(...))->name('dungeonroutes.discoverdungeon.thisweek');
                 Route::get('affixes/next', new DungeonRouteDiscoverController()->discoverDungeonNextWeek(...))->name('dungeonroutes.discoverdungeon.nextweek');
                 Route::get('new', new DungeonRouteDiscoverController()->discoverDungeonNew(...))->name('dungeonroutes.discoverdungeon.new');
+            });
+        });
+    });
+
+    // Explore dungeons (just show me the mapping but don't allow me to create routes)
+    Route::middleware('throttle:search-dungeonroute')->group(static function () {
+        Route::prefix('search')->group(static function () {
+            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search.list');
+
+            Route::prefix('{gameVersion}')->group(static function () {
+                Route::get('/', new DungeonRouteSearchController()->searchByGameVersion(...))->name('dungeon.dungeonroute.search.gameversion');
+                Route::get('/{dungeon}', new DungeonRouteSearchController()->searchByDungeon(...))->name('dungeon.dungeonroute.search.gameversion.dungeon');
             });
         });
     });
@@ -488,6 +502,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
             Route::get('/search', new AjaxDungeonRouteController()->htmlsearch(...));
             Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
+
+            Route::get('/dungeonroute/{dungeonRoute}/mapcontext', new AjaxDungeonRouteSearchController()->getMapContext(...));
+            Route::post('/dungeonroute/search/{gameVersion}/{dungeon}', new AjaxDungeonRouteSearchController()->get(...));
         });
 
         Route::middleware('throttle:mdt-details')->group(static function () {

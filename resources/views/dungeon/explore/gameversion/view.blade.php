@@ -41,6 +41,7 @@ use Illuminate\Support\Collection;
             'edit' => false,
             'echo' => false,
             'mapContext' => $mapContext,
+            'headerTitle' => __('view_dungeon.explore.gameversion.view.title', ['dungeon' => __($dungeon->name)]),
             'show' => [
                 'header' => true,
                 'controls' => [

@@ -9,7 +9,6 @@ use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
-use App\Models\Season;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 

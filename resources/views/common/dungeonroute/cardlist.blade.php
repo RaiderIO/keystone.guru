@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
  * @var AffixGroup|null                            $affixgroup
  * @var AffixGroup|null                            $currentAffixGroup
  * @var array                                      $__env
+ * @var bool|null                                  $showDungeonImage
+ * @var bool|null                                  $cache
  * @var string                                     $orientation
  * @var Collection<integer, array<string, string>> $headers
  */
@@ -53,7 +55,15 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
                         </h5>
                     </a>
                 @endif
-                @include($orientation === 'horizontal' ? 'common.dungeonroute.cardhorizontal' : 'common.dungeonroute.cardvertical', [
+                <?php
+                    $view = match($orientation) {
+                        'horizontal_row' => 'common.dungeonroute.cardhorizontalrow',
+                        'vertical' => 'common.dungeonroute.cardvertical',
+                        'horizontal' => 'common.dungeonroute.cardhorizontal',
+                        default => throw new InvalidArgumentException("Invalid orientation: $orientation")
+                    }
+                ?>
+                @include($view, [
                     'dungeonroute' => $dungeonroute,
                     'currentAffixGroup' => $currentAffixGroup,
                     'tierAffixGroup' => $affixgroup,

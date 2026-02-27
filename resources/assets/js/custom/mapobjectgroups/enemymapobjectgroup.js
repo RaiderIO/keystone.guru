@@ -215,6 +215,16 @@ class EnemyMapObjectGroup extends MapObjectGroup {
         }
     }
 
+    getEnemyByNpcIdAndMdtId(npcId, mdtId) {
+        for (let key in this.objects) {
+            let enemy = this.objects[key];
+            if (enemy.npc_id === npcId && enemy.mdt_id === mdtId) {
+                return enemy;
+            }
+        }
+        return null;
+    }
+
     /**
      * Helper function to fetch the final boss of this dungeon.
      *

@@ -23,15 +23,7 @@ class MapObjectGroup extends Signalable {
         this.names = names;
         this.editable = editable;
 
-        // False initially when not loaded anything in yet (from server). True after the initial loading.
-        this._initialized = false;
-        // May be set depending on which map object groups are hidden or not
-        this._visible = true;
-
-        this.objects = {};
-        this.layerGroup = new L.LayerGroup([], {
-            pane: this._getMapPane()
-        });
+        this.reset();
 
         let self = this;
 
@@ -47,30 +39,6 @@ class MapObjectGroup extends Signalable {
         if (!(this.manager.map instanceof AdminDungeonMap)) {
             getState().getMapContext().register('seasonalindex:changed', this, this._seasonalIndexChanged.bind(this));
         }
-
-        // @TODO Convert this to the new echo message system
-        // if (getState().isEchoEnabled()) {
-        //     let presenceChannel = window.LaravelEcho.join(getState().getMapContext().getEchoChannelName());
-        //
-        //     for (let index in this.names) {
-        //         if (this.names.hasOwnProperty(index)) {
-        //             presenceChannel.listen(`.${this.names[index]}-changed`, (e) => {
-        //                 if (self._shouldHandleChangedEchoEvent(e)) {
-        //                     let mapObject = self.loadMapObject(e.model, null, e.user);
-        //                     self.setMapObjectVisibility(mapObject, true);
-        //                 }
-        //             }).listen(`.${this.names[index]}-deleted`, (e) => {
-        //                 if (self._shouldHandleDeletedEchoEvent(e)) {
-        //                     let mapObject = self.findMapObjectById(e.model_id);
-        //                     if (mapObject !== null) {
-        //                         mapObject.localDelete();
-        //                         self._showDeletedFromEcho(mapObject, e.user);
-        //                     }
-        //                 }
-        //             });
-        //         }
-        //     }
-        // }
     }
 
     /**
@@ -623,7 +591,7 @@ class MapObjectGroup extends Signalable {
      */
     isShown() {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
-        return this.manager.map.leafletMap.hasLayer(this.layerGroup);
+        return typeof this.manager.map.leafletMap !== 'undefined' && this.manager.map.leafletMap.hasLayer(this.layerGroup);
     }
 
     /**
@@ -657,5 +625,35 @@ class MapObjectGroup extends Signalable {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
 
         return true;
+    }
+
+    clear() {
+        // Bring all layers we just created to the front
+        for (let key in this.objects) {
+            this.setLayerToMapObject(null, this.objects[key]);
+            this.objects[key].cleanup();
+            this.objects[key].localDelete();
+        }
+    }
+
+    /**
+     *
+     * @returns {MapObjectGroup}
+     */
+    reset() {
+        this.clear();
+
+        // False initially when not loaded anything in yet (from server). True after the initial loading.
+        this._initialized = false;
+
+        // May be set depending on which map object groups are hidden or not
+        this.setVisibility(true);
+
+        this.objects = {};
+        this.layerGroup = new L.LayerGroup([], {
+            pane: this._getMapPane()
+        });
+
+        return this;
     }
 }
