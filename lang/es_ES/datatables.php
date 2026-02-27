@@ -2,10 +2,7 @@
 
 return [
     'aria' => [
-        'orderable'        => 'Activar para ordenar',
-        'orderableRemove'  => 'Activar para quitar ordenación',
-        'orderableReverse' => 'Activar para ordenar de forma inversa',
-        'paginate'         => [
+        'paginate' => [
             'first'    => 'Primero',
             'last'     => 'Último',
             'next'     => 'Siguiente',
@@ -36,7 +33,6 @@ return [
         'pageLength'  => [
             '_' => 'Mostrar %d filas',
             -1  => 'Mostrar todas las filas',
-            1   => 'Mostrar 1 fila',
         ],
         'pdf'             => 'PDF',
         'print'           => 'Imprimir',
@@ -46,61 +42,6 @@ return [
         'savedStates'     => 'Estados Guardados',
         'stateRestore'    => 'Estado %d',
         'updateState'     => 'Actualizar',
-    ],
-    'columnControl' => [
-        'buttons' => [
-            'searchClear' => 'Borrar búsqueda',
-        ],
-        'colVis'         => 'Visibilidad',
-        'colVisDropdown' => 'Desplegable visibilidad',
-        'dropdown'       => 'Desplegable',
-        'list'           => [
-            'all'    => 'Añadir',
-            'empty'  => 'Vacío',
-            'none'   => 'Ninguno',
-            'search' => 'Buscar..',
-        ],
-        'orderAddAsc'  => 'Añadir a ordenación ascendente',
-        'orderAddDesc' => 'Añadir a ordenación descencente',
-        'orderAsc'     => 'Ordenar ascendentemente',
-        'orderClear'   => 'Borrar ordenación',
-        'orderDesc'    => 'Ordenar descendentemente',
-        'orderRemove'  => 'Borrar de ordenación',
-        'reorder'      => 'Reordenar',
-        'reorderLeft'  => 'Mover a la izquierda',
-        'reorderRight' => 'Mover a la derecha',
-        'search'       => [
-            'datetime' => [
-                'empty'    => 'Vacío',
-                'equal'    => 'Igual a',
-                'greater'  => 'Mayor que',
-                'less'     => 'Menor que',
-                'notEmpty' => 'No vacío',
-                'notEqual' => 'Diferente de',
-            ],
-            'number' => [
-                'empty'          => 'Vacío',
-                'equal'          => 'Igual a',
-                'greater'        => 'Mayor que',
-                'greaterOrEqual' => 'Mayor o igual a',
-                'less'           => 'Menor que',
-                'lessOrEqual'    => 'Menor o igual a',
-                'notEmpty'       => 'No vacío',
-                'notEqual'       => 'Diferente de',
-            ],
-            'text' => [
-                'contains'    => 'Contiene',
-                'empty'       => 'Vacío',
-                'ends'        => 'Finaliza con',
-                'equal'       => 'Igual a',
-                'notContains' => 'no contiene',
-                'notEmpty'    => 'No vacío',
-                'notEqual'    => 'Diferente de',
-                'starts'      => 'Empieza con',
-            ],
-        ],
-        'searchClear'    => 'Borrar búsqueda',
-        'searchDropdown' => 'Buscar',
     ],
     'datetime' => [
         'amPm' => [
@@ -169,18 +110,14 @@ return [
             'title'  => 'Eliminar Registro',
         ],
     ],
-    'emptyTable'    => 'Ningún dato disponible en esta tabla',
-    'info'          => 'Mostrando _START_ a _END_ de _TOTAL_ registros',
-    'infoEmpty'     => 'Mostrando registros del 0 al 0 de un total de 0 registros',
-    'infoFiltered'  => '(filtrado de un total de _MAX_ registros)',
-    'infoPostFix'   => '',
-    'infoThousands' => '.',
-    'lengthLabels'  => [
-        -1 => 'Todas',
-    ],
+    'emptyTable'     => 'Ningún dato disponible en esta tabla',
+    'info'           => 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+    'infoEmpty'      => 'Mostrando registros del 0 al 0 de un total de 0 registros',
+    'infoFiltered'   => '(filtrado de un total de _MAX_ registros)',
+    'infoPostFix'    => '',
+    'infoThousands'  => '.',
     'lengthMenu'     => 'Mostrar _MENU_ registros',
     'loadingRecords' => 'Cargando...',
-    'orderClear'     => 'Limpiar ordenación de toda la tabla',
     'processing'     => 'Procesando...',
     'search'         => 'Buscar:',
     'searchBuilder'  => [
@@ -241,7 +178,6 @@ return [
         'logicAnd'    => 'Y',
         'logicOr'     => 'O',
         'rightTitle'  => 'Criterios de sangría',
-        'search'      => 'Buscar',
         'title'       => [
             '_' => 'Constructor de búsqueda (%d)',
             0   => 'Constructor de búsqueda',
@@ -257,7 +193,6 @@ return [
         'collapseMessage' => 'Colapsar Todo',
         'count'           => '{total}',
         'countFiltered'   => '{shown} ({total})',
-        'emptyMessage'    => 'vacío',
         'emptyPanes'      => 'Sin paneles de búsqueda',
         'loadMessage'     => 'Cargando paneles de búsqueda',
         'showMessage'     => 'Mostrar Todo',

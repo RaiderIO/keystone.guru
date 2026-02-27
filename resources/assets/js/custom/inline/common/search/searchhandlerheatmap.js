@@ -2,11 +2,12 @@ class SearchHandlerHeatmap extends SearchHandler {
     constructor(options) {
         let currentSnackbarId = null;
         super($.extend({}, {
-            loaderFn: function (isLoading, json) {
+            loaderFn: function (isLoading, response) {
                 let state = getState();
 
                 state.removeSnackbar(currentSnackbarId);
 
+                let json = JSON.parse(response);
                 let data = $.extend({}, getHandlebarsDefaultVariables());
                 let template = null;
                 if (isLoading) {

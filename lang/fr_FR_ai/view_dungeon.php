@@ -1,7 +1,23 @@
 <?php
 
 return [
-
+    'dungeonroute' => [
+        'search' => [
+            'gameversion' => [
+                'dungeon' => [
+                    'title'                                  => '',
+                    'description'                            => '',
+                    'linkpreview_default_description_search' => '',
+                    'linkpreview_title'                      => '',
+                ],
+            ],
+            'list' => [
+                'title'       => '',
+                'header'      => '',
+                'description' => '',
+            ],
+        ],
+    ],
     'explore' => [
         'gameversion' => [
             'list' => [
@@ -15,6 +31,9 @@ return [
                 'any'                     => 'N\'importe lequel',
                 'select_floor'            => 'Sélectionner l\'étage',
                 'view_heatmap_fullscreen' => 'Voir en plein écran',
+            ],
+            'view' => [
+                'title' => '',
             ],
         ],
     ],

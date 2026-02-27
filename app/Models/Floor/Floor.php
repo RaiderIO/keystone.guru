@@ -90,7 +90,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     // Can map certain floors to others here, so that we can put enemies that are on their own floor (like some final
     // bosses) and put them on the main floor without introducing a 2nd floor.
-    public const UI_MAP_ID_MAPPING = [
+    public const array UI_MAP_ID_MAPPING = [
         // Court of Stars
         762 => 761,
         763 => 761,
@@ -141,7 +141,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * Some IDs which are open world, and we cannot resolve to a dungeon floor.
      */
-    public const UI_MAP_ID_OPEN_WORLD = [
+    public const array UI_MAP_ID_OPEN_WORLD = [
         // Unknown
         0,
         // Eastern Kingdoms
@@ -156,33 +156,85 @@ class Floor extends CacheModel implements MappingModelInterface
         650,
         // Suramar
         680,
-        // Maldraxxus
-        1536,
-        // The Shadowlands
-        1550,
         // Mechagon
         1490,
         // Mechagon
         1493,
         // Revendreth
         1525,
+        // Maldraxxus
+        1536,
+        // The Shadowlands
+        1550,
+        // Torghast
+        1804,
+        1896,
+        1914,
+        // Bastion
+        1533,
+        1813,
+        // Maldraxxus
+        1814,
+        // Fungal Terminus
+        1819,
+        // Pit of Anguish
+        1820,
+        // The Root Cellar
+        1825,
         // Tazavesh, the Veiled Market
         2016,
+        // Resonant Peaks
+        2059,
+        // Vault of the Incarnates
+        2119,
+        2120,
+        2121,
+        2122,
+        2123,
+        2124,
+        2125,
+        2126,
+        // Ohn'ahran Plains
+        2129,
+        // The Forbidden Reach
+        2151,
+        // Abberus
+        2170,
         // The Ringing Deeps
         2214,
+        // The Nighthold
+        2220,
         // Isle of Dorn
         2248,
         // Khaz Algar
         2274,
+        // Hall of Awakening
+        2322,
         // Dornogal
         2339,
         // Undermine
         2346,
+        // Slayer's Rise
+        2397,
         // Tazavesh
         2472,
+        // ???
+        1411,
+        1414,
+        1421,
+        1436,
+        1450,
+        1897,
+        1916,
+        1918,
+        2116,
+        2137,
+        2138,
+        2324,
+        2399,
     ];
 
-    public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;
+    public const int DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;
 
     protected $fillable = [
         'dungeon_id',
@@ -463,6 +515,11 @@ class Floor extends CacheModel implements MappingModelInterface
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->first();
+    }
+
+    public static function isUiMapIdOpenWorld(int $uiMapId): bool
+    {
+        return in_array($uiMapId, self::UI_MAP_ID_OPEN_WORLD);
     }
 
     public function ensureConnectionToFloor(Floor $targetFloor): bool

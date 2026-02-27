@@ -164,8 +164,9 @@ return [
             ],
         ],
         'mapping' => [
-            'title'  => 'Edit Mapping - %s',
-            'header' => 'Edit Mapping - %s',
+            'title'        => 'Edit Mapping - %s',
+            'header'       => 'Edit Mapping - %s',
+            'header_title' => '%s (mapping version %d)',
         ],
     ],
     'npc' => [

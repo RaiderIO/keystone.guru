@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dungeon;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;

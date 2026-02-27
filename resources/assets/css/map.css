@@ -401,15 +401,23 @@ html, body, #map, #app, .wrapper {
     max-height: calc(100vh - 163px);
 }
 
-/** Heatmap section of the sidebar, adblock */
+/** Heatmap section of the sidebar, no ads */
 #heatmap_search_sidebar .data_container.explore {
-    max-height: calc(100vh - 205px);
+    max-height: calc(100vh - 242px);
 }
 
 #heatmap_search_sidebar.ad_loaded .data_container.explore {
     max-height: calc(100vh - (250px + 198px));
 }
 
+/** Dungeonroute search section of the sidebar, no ads */
+#dungeonroute_search_sidebar .data_container.explore {
+    max-height: calc(100vh - 242px);
+}
+
+#dungeonroute_search_sidebar.ad_loaded .data_container.explore {
+    max-height: calc(100vh - (250px + 198px));
+}
 
 /** When embedding a route */
 .route_sidebar.right.embed.regular .data_container:not(.has_speedrun) {

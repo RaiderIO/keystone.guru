@@ -57,7 +57,7 @@ class SearchHandler {
             complete: function () {
                 self.loading = false;
                 if (typeof self.options.loaderFn === 'function') {
-                    self.options.loaderFn(false, JSON.parse(xhr.responseText));
+                    self.options.loaderFn(false, xhr.responseText);
                 } else if (typeof self.options.loaderSelector !== 'undefined') {
                     $(self.options.loaderSelector).hide();
                 }

@@ -105,12 +105,19 @@ class EnemyVisualMain extends EnemyVisualIcon {
         } else {
             width -= 10;
         }
+
+        // Obsolete enemies require additional addition to keep it looking nice
+        if (this.enemyvisual.enemy.isObsolete()) {
+            width += 4;
+        }
+
         // Dangerous = less space
         if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
             width -= 2;
+
             // Obsolete enemies require additional subtraction to keep it looking nice
             if (this.enemyvisual.enemy.isObsolete()) {
-                width -= 3;
+                width -= 1;
             }
         }
 

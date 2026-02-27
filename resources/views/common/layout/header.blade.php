@@ -183,8 +183,8 @@ $isActiveRoute = function (string $route) {
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
                 <li class="nav-item">
-                    <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeonroutes.search')) ? 'active' : '' }}"
-                       href="{{ route('dungeonroutes.search') }}">
+                    <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search.list')) ? 'active' : '' }}"
+                       href="{{ route('dungeon.dungeonroute.search.list') }}">
                         <i class="fas fa-search"></i>
                     </a>
                 </li>

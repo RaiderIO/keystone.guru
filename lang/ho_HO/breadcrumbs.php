@@ -3,11 +3,11 @@
 return [
 
     'home' => [
-        'keystone_guru' => 'Hodor',
-        'affixes'       => 'Hodor',
-        'about'         => 'Hodor',
-        'credits'       => 'Hodor',
-        'changelog'     => [
+        'front_page' => 'Hodor',
+        'affixes'    => 'Hodor',
+        'about'      => 'Hodor',
+        'credits'    => 'Hodor',
+        'changelog'  => [
             'list'    => 'Hodor',
             'release' => [
                 'view' => 'Hodor',

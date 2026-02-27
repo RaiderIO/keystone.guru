@@ -8,6 +8,7 @@ use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
+use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -402,6 +404,21 @@ class Team extends Model
             ->first();
 
         return $newOwner?->user;
+    }
+
+    /**
+     * @return Team Gets the team assigned to Raider.IO
+     */
+    public static function getRaiderIOTeam(): Team
+    {
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
+
+        return $cacheService->remember(
+            'raider_io_team',
+            static fn() => Team::where('id', config('keystoneguru.raider_io.team_id'))->first(),
+            config('keystoneguru.cache.raider_io_team.ttl'),
+        );
     }
 
     #[\Override]

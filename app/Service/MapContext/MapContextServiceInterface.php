@@ -4,6 +4,7 @@ namespace App\Service\MapContext;
 
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextDungeonRouteSearch;
 use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Logic\MapContext\MapContextDungeonData;
@@ -40,6 +41,12 @@ interface MapContextServiceInterface
         LiveSession $liveSession,
         string      $mapFacadeStyle,
     ): MapContextLiveSession;
+
+    public function createMapContextDungeonRouteSearch(
+        Dungeon        $dungeon,
+        MappingVersion $mappingVersion,
+        string         $mapFacadeStyle,
+    ): MapContextDungeonRouteSearch;
 
     public function createMapContextDungeonExplore(
         Dungeon        $dungeon,

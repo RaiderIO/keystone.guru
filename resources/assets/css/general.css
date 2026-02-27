@@ -21,6 +21,19 @@
     height: 46px;
 }
 
+/* Bootstrap additions */
+.border-1 {
+    border: 1px solid !important;
+}
+
+.border-2 {
+    border: 2px solid !important;
+}
+
+.border-3 {
+    border: 3px solid !important;
+}
+
 /* Modals */
 .modal .probootstrap-modal-flex .probootstrap-modal-content {
     width: 100%;

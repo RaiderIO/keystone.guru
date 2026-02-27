@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion              $gameVersion
  * @var string                   $title
+ * @var string|null              $link
  * @var int                      $cols
  * @var Collection<DungeonRoute> $dungeonroutes
  * @var AffixGroup               $currentAffixGroup
@@ -28,6 +29,9 @@ $cache            ??= true;
                 @isset($link)
                     <a href="{{ $link }}">
                         {{ $title }}
+                        @if((parse_url($link)['host'] ?? '') !== parse_url(config('app.url'))['host'])
+                            <i class="fas fa-external-link-alt"></i>
+                        @endif
                     </a>
                 @else
                     {{ $title }}

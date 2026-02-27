@@ -45,7 +45,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
                     <a href="{{ $link['link'] }}">
                         @endisset
                         @if($names)
-                            <h5 class="card-text text-white">
+                            <h5 class="card-text text-white dungeon_card_dungeon_name">
                                 {{ $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name) }}
                             </h5>
                         @endif

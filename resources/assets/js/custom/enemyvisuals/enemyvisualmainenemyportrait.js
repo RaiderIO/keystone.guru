@@ -24,11 +24,13 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
             `${this.enemyvisual.map.options.assetsBaseUrl}/${this.enemyvisual.enemy.npc.enemy_portrait_url}`;
         let template = Handlebars.templates['map_enemy_visual_enemy_portrait_template'];
 
+        let isObsoleteOrOverpulled = this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null;
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
             id: this.enemyvisual.enemy.id,
-            enemy_portrait_url: enemyPortraitUrl,
+            // Hide the portrait when obsolete or overpulled
+            enemy_portrait_url: isObsoleteOrOverpulled ? null : enemyPortraitUrl,
             // Expensive calculation - only do it when we're going to use it
-            width: this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null ? this._getTextWidth() : 0,
+            width: isObsoleteOrOverpulled ? this._getTextWidth(3) : 0,
             obsolete: this.enemyvisual.enemy.isObsolete(),
             overpulled: this.enemyvisual.enemy.getOverpulledKillZoneId() !== null
         });

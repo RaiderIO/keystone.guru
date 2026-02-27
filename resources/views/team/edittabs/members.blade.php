@@ -43,11 +43,13 @@ use App\Models\TeamUser;
                 </div>
             </div>
             <div class="col-xl-6">
+                @if($userIsModerator)
                 {{ html()->label(__('view_team.edittabs.members.default_role'), 'default_role') }}
                 <?php $keys = array_keys(TeamUser::ALL_ROLES); ?>
                 {{ html()->select('default_role', array_map(function ($role) {
-    return __(sprintf('teamroles.%s', $role));
-}, array_combine($keys, $keys)), $team->default_role)->class('form-control selectpicker') }}
+                    return __(sprintf('teamroles.%s', $role));
+                }, array_combine($keys, $keys)), $team->default_role)->class('form-control selectpicker') }}
+                @endif
             </div>
         </div>
     </div>

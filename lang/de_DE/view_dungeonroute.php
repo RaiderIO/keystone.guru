@@ -5,6 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
+                'weekly_route'               => '',
                 'popular'                    => '',
                 'popular_by_current_affixes' => '',
                 'popular_by_next_affixes'    => '',

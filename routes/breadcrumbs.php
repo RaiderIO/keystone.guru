@@ -22,7 +22,10 @@ use Diglactic\Breadcrumbs\Generator;
  * Home page
  */
 Breadcrumbs::for('home', static function (Generator $trail) {
-    $trail->push(__('breadcrumbs.home.keystone_guru'), route('home'));
+    $trail->push(__('breadcrumbs.home.front_page'), route('home'));
+});
+Breadcrumbs::for('home.layout', static function (Generator $trail) {
+    $trail->push(__('breadcrumbs.home.front_page'), route('home'));
 });
 
 /**
@@ -110,6 +113,10 @@ Breadcrumbs::for('dungeonroutes.gameVersion', static function (Generator $trail,
 Breadcrumbs::for('dungeonroute.discover.search', static function (Generator $trail) {
     $trail->parent('dungeonroutes');
     $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeonroutes.search'));
+});
+Breadcrumbs::for('dungeon.dungeonroute.search.list', static function (Generator $trail) {
+    $trail->parent('dungeonroutes');
+    $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeon.dungeonroute.search.list'));
 });
 
 /**

@@ -67,10 +67,13 @@ return [
         'global_view_variables' => [
             'ttl' => '1 hour',
         ],
-        'default_region' => [
+        'default_game_region' => [
             'ttl' => '1 hour',
         ],
         'default_game_version' => [
+            'ttl' => '1 hour',
+        ],
+        'raider_io_team' => [
             'ttl' => '1 hour',
         ],
         'mdt_export_strings' => [
@@ -444,7 +447,15 @@ return [
     ],
 
     'raider_io' => [
-        'team_id' => 2136,
+        'team_id'      => 2136,
+        'weekly_route' => [
+            'url'  => 'https://raider.io/weekly-routes',
+            'tags' => [
+                'pug_friendly' => env('WEEKLY_ROUTE_TAG_PUG_FRIENDLY', 'pug-friendly-route'),
+                'expert'       => env('WEEKLY_ROUTE_TAG_EXPERT', 'expert-route'),
+                'title'        => env('WEEKLY_ROUTE_TAG_TITLE', 'title-route'),
+            ],
+        ],
     ],
 
     'mdt' => [

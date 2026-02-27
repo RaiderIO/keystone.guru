@@ -5,6 +5,7 @@ namespace App\Service\DungeonRoute;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\Team;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -27,6 +28,8 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
 
     /** @var Expansion|null Only used when browsing by expansion explicitly - do not use otherwise */
     protected ?Expansion $expansion = null;
+
+    protected ?Team $excludeTeam = null;
 
     /**
      * DiscoverService constructor.
@@ -105,6 +108,16 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     public function withCache(bool $enabled): DiscoverServiceInterface
     {
         $this->cacheService->setCacheEnabled($enabled);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function excludeTeam(?Team $team): DiscoverServiceInterface
+    {
+        $this->excludeTeam = $team;
 
         return $this;
     }
