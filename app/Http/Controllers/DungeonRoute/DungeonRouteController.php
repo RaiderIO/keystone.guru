@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\DungeonRoute;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\DungeonRoute\DungeonRouteBaseUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteEmbedUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRoutePreviewUrlFormRequest;

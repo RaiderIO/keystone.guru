@@ -168,7 +168,7 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                         @if( $showAffixes )
                             <div class="col-auto pl-1 pr-0">
                                 @if($seasonalAffix !== null)
-                                    <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
+                                    <div class="row no-gutters affix_toggle" data-container="body" data-toggle="popover" data-placement="bottom"
                                          data-html="true"
                                          data-content="&nbsp;" style="cursor: pointer;">
                                             <div class="col ml-1">
@@ -219,8 +219,6 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
     return ob_get_clean();
 };
 
-// Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = true;
 
 if ($cache) {
     $currentUserLocale = app()->getLocale();

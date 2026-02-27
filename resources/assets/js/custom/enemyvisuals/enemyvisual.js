@@ -405,7 +405,7 @@ class EnemyVisual extends Signalable {
             //     border = `${borderThickness}px dashed red`;
             // }
 
-            if (this.isHighlighted() || hasKillZone || this.enemy.getOverpulledKillZoneId() !== null) {
+            if (this.isHighlighted() || hasKillZone || this.enemy.getOverpulledKillZoneId() !== null || this.enemy.isObsolete()) {
                 data.root_style = `opacity: 100%`;
             } else if (this.enemy.isImportant()) {
                 data.root_classes += ' important';

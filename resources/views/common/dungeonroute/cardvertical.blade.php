@@ -16,7 +16,7 @@ use App\Service\Cache\CacheServiceInterface;
  * @var boolean               $cache
  */
 
-$showAffixes      ??= true;
+$showAffixes      = !$dungeonroute->mappingVersion->gameVersion->has_seasons ? false : $showAffixes ?? true;
 $showDungeonImage ??= false;
 $isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so we can assign affixes properly - route key is not unique enough since multiple cards can be on one page
@@ -236,9 +236,6 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
     <?php
     return ob_get_clean();
 };
-
-// Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = true;
 
 if ($cache) {
     $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';

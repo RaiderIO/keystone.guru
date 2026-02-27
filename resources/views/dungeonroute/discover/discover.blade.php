@@ -48,8 +48,8 @@ $expansion ??= null;
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup' => $nextAffixGroup,
             'colCount' => 4,
-            'links' => $gridDungeons->map(function(Dungeon $dungeon) use($gameVersion) {
-                return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug])];
+            'links' => $gridDungeons->mapWithKeys(function(Dungeon $dungeon) use($gameVersion) {
+                return [$dungeon->key => route('dungeonroutes.discoverdungeon', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug])];
             }),
         ])
     </div>

@@ -89,7 +89,7 @@ $breadcrumbsParams ??= [];
                 @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
                 <div class="row">
-                    <div class="col-xl-3 bg-secondary p-3">
+                    <div class="col-xl-2 bg-secondary p-3">
                         <h4>{{ $menuTitle }}</h4>
                         <hr>
                         @isset($menuModels)
@@ -119,7 +119,7 @@ $breadcrumbsParams ??= [];
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-xl-9 bg-secondary ml-0 mt-xl-0 mt-3 p-3">
+                    <div class="col-xl-10 bg-secondary ml-0 mt-xl-0 mt-3 p-3">
                         @yield('content')
                     </div>
                 </div>

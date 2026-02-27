@@ -464,6 +464,8 @@ return [
     'filter_input_date_from_header'                                        => 'From date: :value',
     'filter_input_date_to_header'                                          => 'To date: :value',
     'filter_input_duration_header'                                         => 'Duration: :value min',
+    'filter_input_included_enemies_header'                                 => 'Included enemies: :value',
+    'filter_input_excluded_enemies_header'                                 => 'Excluded enemies: :value',
     'specialization_select'                                                => 'Specialization...',
     'class_select'                                                         => 'Class...',
     'race_select'                                                          => 'Race...',
@@ -478,5 +480,7 @@ return [
     'error_loading_data_label'                                             => 'Error loading data - please try again',
     'run_count_label'                                                      => 'Showing data from :count runs',
     'refresh_thumbnails_label'                                             => 'Refresh thumbnails',
+    'search_results_label'                                                 => 'Search results',
+    'no_search_results_label'                                              => 'No search results found',
 
 ];

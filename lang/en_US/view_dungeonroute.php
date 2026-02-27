@@ -5,6 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
+                'weekly_route'               => 'Raider.IO Weekly Route',
                 'popular'                    => 'Popular routes',
                 'popular_by_current_affixes' => 'Popular routes by current affixes',
                 'popular_by_next_affixes'    => 'Popular routes by next affixes',

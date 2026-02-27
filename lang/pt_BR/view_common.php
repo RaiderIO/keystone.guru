@@ -389,8 +389,6 @@ return [
                 'simulate_route'                 => '',
                 'edit_route_settings'            => '',
                 'edit_mapping_version'           => '',
-                'admin_header_title'             => '',
-                'explore_header_title'           => '',
                 'share'                          => '',
                 'start_live_session'             => '',
                 'start_live_session_paragraph_1' => '',

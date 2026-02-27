@@ -103,8 +103,9 @@ class MapContextDungeonRoute extends MapContextBase
             'uniqueAffixes' => $this->dungeonRoute->affixes
                 ->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)
                 ->collapse()
-                ->unique()
                 ->pluck(['name'])
+                ->unique()
+                ->values()
                 ->map(static fn(string $name) => __($name, [], 'en_US')),
             // Used for showing a modal when the route has been deleted while editing
             'dungeonRouteClass' => DungeonRoute::class,

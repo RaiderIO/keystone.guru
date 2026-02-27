@@ -389,8 +389,6 @@ return [
                 'simulate_route'                 => 'Hodor',
                 'edit_route_settings'            => 'Hodor',
                 'edit_mapping_version'           => 'Hodor',
-                'admin_header_title'             => 'Hodor',
-                'explore_header_title'           => 'Hodor',
                 'share'                          => 'Hodor',
                 'start_live_session'             => 'Hodor',
                 'start_live_session_paragraph_1' => 'Hodor',

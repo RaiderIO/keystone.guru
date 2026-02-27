@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\DungeonRoute;
 
+use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
@@ -99,7 +102,7 @@ class DungeonRouteDiscoverController extends Controller
                 $gameVersion,
                 $season,
             ],
-            'gridDungeons'  => $season->dungeons()->active()->get(),
+            'gridDungeons'  => $season->dungeons()->active()->get()->sortBy('id')->values(),
             'gameVersion'   => $gameVersion,
             'season'        => $season,
             'dungeonroutes' => [
@@ -288,7 +291,7 @@ class DungeonRouteDiscoverController extends Controller
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.expansion',
             'breadcrumbsParams' => [$expansion],
-            'gridDungeons'      => $expansion->dungeonsAndRaids()->active()->get(),
+            'gridDungeons'      => $expansion->dungeonsAndRaids()->active()->get()->sortBy('id')->values(),
             'gameVersion'       => $gameVersion,
             'expansion'         => $expansion,
             'dungeonroutes'     => [
@@ -317,7 +320,7 @@ class DungeonRouteDiscoverController extends Controller
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.gameVersion',
             'breadcrumbsParams' => [$gameVersion],
-            'gridDungeons'      => $gameVersion->expansion->dungeonsAndRaids()->active()->get(),
+            'gridDungeons'      => $gameVersion->expansion->dungeonsAndRaids()->active()->get()->sortBy('id')->values(),
             'gameVersion'       => $gameVersion,
             'dungeonroutes'     => [
                 'thisweek' => collect(),
@@ -333,11 +336,12 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverDungeon(
-        GameVersion               $gameVersion,
-        Dungeon                   $dungeon,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService,
+        GameVersion                     $gameVersion,
+        Dungeon                         $dungeon,
+        DiscoverServiceInterface        $discoverService,
+        ExpansionServiceInterface       $expansionService,
+        SeasonServiceInterface          $seasonService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
     ): View {
         Gate::authorize('view', $gameVersion);
         Gate::authorize('view', $dungeon);
@@ -360,6 +364,8 @@ class DungeonRouteDiscoverController extends Controller
             $nextAffixGroup    = $expansionService->getNextAffixGroup($gameVersion->expansion, $userRegion);
         }
 
+        $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes($dungeon);
+
         return view('dungeonroute.discover.dungeon.overview', [
             'breadcrumbs'       => 'dungeonroutes.discoverdungeon',
             'gameVersion'       => $gameVersion,
@@ -367,6 +373,9 @@ class DungeonRouteDiscoverController extends Controller
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup'    => $nextAffixGroup,
             'dungeonroutes'     => [
+                'weekly_route' => ($weeklyRoutes[$dungeon->key] ?? collect())->map(function (WeeklyRoute $weeklyRoute) {
+                    return $weeklyRoute->dungeonRoute;
+                }),
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $currentAffixGroup),
                 'nextweek' => $nextAffixGroup === null ? collect() : $discoverService->popularByDungeonAndAffixGroup($dungeon, $nextAffixGroup),
                 'new'      => $discoverService->newByDungeon($dungeon),

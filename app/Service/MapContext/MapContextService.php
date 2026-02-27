@@ -4,6 +4,7 @@ namespace App\Service\MapContext;
 
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextDungeonRouteSearch;
 use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Logic\MapContext\Map\MapContextMappingVersionEdit;
 use App\Logic\MapContext\MapContextDungeonData;
@@ -21,13 +22,13 @@ use App\Service\Season\SeasonServiceInterface;
 /**
  * @TODO Add caching layer here, instead of in the map context classes?
  */
-class MapContextService implements MapContextServiceInterface
+readonly class MapContextService implements MapContextServiceInterface
 {
     public function __construct(
-        private readonly CacheServiceInterface           $cacheService,
-        private readonly CoordinatesServiceInterface     $coordinatesService,
-        private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
-        private readonly SeasonServiceInterface          $seasonService,
+        private CacheServiceInterface           $cacheService,
+        private CoordinatesServiceInterface     $coordinatesService,
+        private OverpulledEnemyServiceInterface $overpulledEnemyService,
+        private SeasonServiceInterface          $seasonService,
     ) {
     }
 
@@ -83,6 +84,21 @@ class MapContextService implements MapContextServiceInterface
             $this->coordinatesService,
             $this->overpulledEnemyService,
             $liveSession,
+            $mapFacadeStyle,
+        );
+    }
+
+    public function createMapContextDungeonRouteSearch(
+        Dungeon        $dungeon,
+        MappingVersion $mappingVersion,
+        string         $mapFacadeStyle,
+    ): MapContextDungeonRouteSearch {
+        return new MapContextDungeonRouteSearch(
+            $this->cacheService,
+            $this->coordinatesService,
+            $this->seasonService,
+            $dungeon,
+            $mappingVersion,
             $mapFacadeStyle,
         );
     }

@@ -10,11 +10,12 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion $gameVersion
- * @var Season|null $season
- * @var Collection<Dungeon> $dungeons
- * @var AffixGroup|null $currentAffixGroup
- * @var AffixGroup|null $nextAffixGroup
+ * @var GameVersion                $gameVersion
+ * @var Season|null                $season
+ * @var Collection<Dungeon>        $dungeons
+ * @var AffixGroup|null            $currentAffixGroup
+ * @var AffixGroup|null            $nextAffixGroup
+ * @var Collection<string, string> $links
  */
 
 $colCount ??= 4;
@@ -25,26 +26,22 @@ $links ??= collect();
 
 $sideOffset = $colCount === 3 ? 1 : 0;
 
-for ($i = 0;
-     $i < $rowCount;
-     ++$i) { ?>
+for ($i = 0; $i < $rowCount; ++$i) { ?>
 <div class="row no-gutters">
         <?php
-    for ($j = 0;
-         $j < $colCount;
-         ++$j) {
+    for ($j = 0; $j < $colCount; ++$j) {
         $index = $i * $colCount + $j;
     if ($dungeons->has($index)){
         /** @var Dungeon $dungeon */
         $dungeon = $dungeons->get($index);
-        $link    = $links->where('dungeon', $dungeon->key)->first();
+        $link    = $links->get($dungeon->key);
         ?>
     <div
         class="p-2 col-lg-3 {{ $sideOffset && ($j === 0) ? 'ml-lg-auto' : (($j === $colCount - 1) ? 'mr-lg-auto' : '') }}">
         <div class="card">
             <div class="card-img-caption">
-                <a href="{{ route('dungeonroutes.discoverdungeon', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug]) }}">
-                    <h5 class="card-text text-white">
+                <a href="{{ $link }}">
+                    <h5 class="card-text text-white dungeon_card_dungeon_name">
                         {{ __($dungeon->name) }}
                     </h5>
                     <img class="card-img-top"

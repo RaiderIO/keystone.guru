@@ -775,7 +775,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.addLayer(this.editableLayers);
 
         // If we confirmed editing something..
-        this.signal('map:refresh', {dungeonmap: this});
+        this.redrawMapContents();
 
         // Show/hide the attribution
         if (!this.options.showAttribution) {
@@ -808,6 +808,12 @@ class DungeonMap extends Signalable {
 
 
         this._refreshingMap = false;
+    }
+
+    redrawMapContents() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        this.signal('map:refresh', {dungeonmap: this});
     }
 
     isRefreshingMap() {

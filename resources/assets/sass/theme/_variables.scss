@@ -9,6 +9,7 @@ $--theme-form-required: --theme-form-required;
 $--theme-header: --theme-header;
 $--theme-header-border: --theme-header-border;
 $--theme-header-height: --theme-header-height;
+$--theme-border-accent: --theme-border-accent;
 $--theme-btn-accent: --theme-btn-accent;
 $--theme-btn-accent-hover: --theme-btn-accent-hover;
 $--theme-bg-card: --theme-bg-card;
@@ -51,6 +52,7 @@ $theme-map-darkly: (
         $--theme-header: var($--theme-dark),
         $--theme-header-border: unset,
   /* The same as success button */
+        $--theme-border-accent: #00bc8c,
         $--theme-btn-accent: #00bc8c,
         $--theme-btn-accent-hover: #007053,
         $--theme-bg-card: #303030,
@@ -73,6 +75,7 @@ $theme-map-lux: (
         $--theme-header: var($--theme-light),
         $--theme-header-border: 1px solid #1a1a1a,
   /* The same as success button */
+        $--theme-border-accent: #1a1a1a,
         $--theme-btn-accent: #1a1a1a,
         $--theme-btn-accent-hover: black,
         $--theme-bg-card: #fff,

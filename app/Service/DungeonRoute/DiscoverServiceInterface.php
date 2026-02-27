@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\Team;
 use Closure;
 use Illuminate\Support\Collection;
 
@@ -41,6 +42,11 @@ interface DiscoverServiceInterface
      * @return $this
      */
     public function withCache(bool $enabled): self;
+
+    /**
+     * @return $this
+     */
+    public function excludeTeam(?Team $team): self;
 
     /*
     |--------------------------------------------------------------------------

@@ -164,8 +164,9 @@ return [
             ],
         ],
         'mapping' => [
-            'title'  => '',
-            'header' => '',
+            'title'        => '',
+            'header'       => '',
+            'header_title' => '',
         ],
     ],
     'npc' => [

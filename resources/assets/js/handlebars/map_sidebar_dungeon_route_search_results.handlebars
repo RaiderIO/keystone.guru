@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col">
+        {{#if search_results }}
+            <h5>{{ search_results_label }}</h5>
+        {{else}}
+            <h5>{{ no_search_results_label }}</h5>
+        {{/if}}
+    </div>
+</div>
+
+{{#if search_results }}
+    <div class="row">
+        <div class="col search_results">
+            {{{ search_results }}}
+        </div>
+    </div>
+{{/if}}
