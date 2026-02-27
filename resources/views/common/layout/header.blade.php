@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\Heatmap;
+use App\Features\SearchPageRework;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -150,7 +151,8 @@ $isActiveRoute = function (string $route) {
                             }
                             ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ $subItemActive }}" href="#" id="{{ $dropdownId }}" role="button"
+                            <a class="nav-link dropdown-toggle {{ $subItemActive }}" href="#" id="{{ $dropdownId }}"
+                               role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>
@@ -183,10 +185,17 @@ $isActiveRoute = function (string $route) {
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
                 <li class="nav-item">
-                    <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search.list')) ? 'active' : '' }}"
-                       href="{{ route('dungeon.dungeonroute.search.list') }}">
-                        <i class="fas fa-search"></i>
-                    </a>
+                    @if(Feature::active(SearchPageRework::class))
+                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search.list')) ? 'active' : '' }}"
+                           href="{{ route('dungeon.dungeonroute.search.list') }}">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    @else
+                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeonroutes.search')) ? 'active' : '' }}"
+                           href="{{ route('dungeonroutes.search') }}">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    @endif
                 </li>
                 @include('common.layout.nav.gameversions')
                 @include('vendor.language.flags')

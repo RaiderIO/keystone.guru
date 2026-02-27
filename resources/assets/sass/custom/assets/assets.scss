@@ -335,7 +335,7 @@ table.dataTable thead .sorting_desc_disabled {
 }
 
 /**
-  * Custom styles for the Darkly theme
+  * Custom styles for our themes
  */
 .darkly {
   .cid-s48MCQYojq {
@@ -349,9 +349,6 @@ table.dataTable thead .sorting_desc_disabled {
   }
 }
 
-/**
-  * Custom styles for the Lux theme
- */
 .darkly {
   .cid-s48MCQYojq {
     //noinspection CssUnknownTarget
@@ -383,5 +380,29 @@ table.dataTable thead .sorting_desc_disabled {
 
   .cid-soU9jtw47v {
     background-image: url('#{$asset-url}/images/home/superhero_footer.jpg');
+  }
+}
+
+.vapor {
+  .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_footer.jpg');
+  }
+}
+
+.vapor {
+  .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_footer.jpg');
   }
 }

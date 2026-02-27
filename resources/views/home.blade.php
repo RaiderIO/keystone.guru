@@ -81,7 +81,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <img class="darkly_image"
                              src="{{ ksgAssetImage('home/darkly_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
-                             style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
@@ -113,7 +113,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <img class="darkly_image"
                              src="{{ ksgAssetImage('home/darkly_feature_create_your_own_routes.jpg') }}"
                              alt="{{ __('view_home.create_your_own_routes') }}"
-                             style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
                         <img class="lux_image"
                              src="{{ ksgAssetImage('home/lux_feature_create_your_own_routes.jpg') }}"
                              alt="{{ __('view_home.create_your_own_routes') }}"
@@ -146,7 +146,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <img class="darkly_image"
                              src="{{ ksgAssetImage('home/darkly_feature_get_organized.jpg') }}"
                              alt="{{ __('view_home.get_organized') }}"
-                             style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_get_organized.jpg') }}"
                              alt="{{ __('view_home.get_organized') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
@@ -176,7 +176,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <img class="darkly_image"
                              src="{{ ksgAssetImage('home/darkly_feature_custom_dungeon_mapping.jpg') }}"
                              alt="{{ __('view_home.custom_dungeon_mapping') }}"
-                             style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
                         <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_custom_dungeon_mapping.jpg') }}"
                              alt="{{ __('view_home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">

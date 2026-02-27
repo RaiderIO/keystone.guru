@@ -318,7 +318,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             } elseif (!isset($view->getData()['viewName'])) {
                 $view->with('viewName', 'home');
             }
-            $view->with('theme', $_COOKIE['theme'] ?? User::THEME_DARKLY);
+            $view->with('theme', $_COOKIE['theme'] ?? User::DEFAULT_THEME);
             $view->with('isUserAdmin', $isUserAdmin);
             $view->with('adFree', $adFree);
             $view->with('userOrDefaultRegion', $userOrDefaultRegion);

@@ -18,7 +18,7 @@ $tagCategoryNameMapping = [
 ];
 
 $tags        = $context->tags(TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
-$isDarkTheme = $theme === User::THEME_DARKLY;
+$isDarkTheme = User::isThemeDark($theme);
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
 

@@ -59,13 +59,13 @@ use Illuminate\Support\Collection;
             <div class="col-auto">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-dark {{ $newRouteStyle === 'create' ? 'active' : '' }}">
-                        <input type="radio" id="new_route_style_create" class="new_route_style_switch_btn" name="theme"
+                        <input type="radio" id="new_route_style_create" class="new_route_style_switch_btn"
                                autocomplete="off"
                                data-new-route-style="create" {{ $newRouteStyle === 'create' ? 'checked' : '' }}>
                         <i class="fas fa-plus"></i>
                     </label>
                     <label class="btn btn-dark {{ $newRouteStyle === 'create' ? '' : 'active' }}">
-                        <input type="radio" id="new_route_style_search" class="new_route_style_switch_btn" name="theme"
+                        <input type="radio" id="new_route_style_search" class="new_route_style_switch_btn"
                                autocomplete="off"
                                data-new-route-style="search" {{ $newRouteStyle === 'create' ? '' : 'checked' }}>
                         <i class="fas fa-search"></i>

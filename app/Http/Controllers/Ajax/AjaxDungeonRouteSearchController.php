@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchNewFormRequest;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
@@ -21,10 +21,10 @@ use Teapot\StatusCode;
 class AjaxDungeonRouteSearchController extends Controller
 {
     public function get(
-        AjaxDungeonRouteSearchFormRequest  $request,
-        GameVersion                        $gameVersion,
-        Dungeon                            $dungeon,
-        DungeonRouteSearchServiceInterface $dungeonRouteSearchService,
+        AjaxDungeonRouteSearchNewFormRequest $request,
+        GameVersion                          $gameVersion,
+        Dungeon                              $dungeon,
+        DungeonRouteSearchServiceInterface   $dungeonRouteSearchService,
     ): Response {
         try {
             $result = $dungeonRouteSearchService->search(

@@ -36,13 +36,15 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
             let expansion = $(e.target).data('expansion');
 
             if (typeof expansion !== 'undefined') {
-                self._selectSeason(null);
-                self._selectExpansion(expansion);
+                self._selectSeason(null, false);
+                self._selectExpansion(expansion, false);
             } else {
                 let season = $(e.target).data('season');
-                self._selectSeason(season);
-                self._selectExpansion(null);
+                self._selectSeason(season, false);
+                self._selectExpansion(null, false);
             }
+            // Trigger the search manually (so we don't trigger it twice when changing filters above)
+            self._search();
         });
 
         // If we have seasons and should select one
@@ -75,9 +77,10 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
     /**
      *
      * @param expansion {String|null}
+     * @param triggerOnChange {boolean}
      * @private
      */
-    _selectExpansion(expansion) {
+    _selectExpansion(expansion, triggerOnChange = true) {
         if (expansion !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#${expansion}-grid-content .grid_dungeon`).addClass('selectable');
@@ -88,15 +91,16 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
 
             $(`.filter_affix`).hide().filter(`.${expansion}`).show();
         }
-        this.filters.expansion.setValue(expansion);
+        this.filters.expansion.setValue(expansion, triggerOnChange);
     }
 
     /**
      *
      * @param season {String|null}
+     * @param triggerOnChange {boolean}
      * @private
      */
-    _selectSeason(season) {
+    _selectSeason(season, triggerOnChange = true) {
         if (season !== null) {
             $(`#search_dungeon .grid_dungeon`).removeClass('selectable');
             $(`#season-${season}-grid-content .grid_dungeon`).addClass('selectable');
@@ -119,7 +123,7 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
             this.filters.level.setKeyLevel(this.options.defaultKeyLevelMin, this.options.defaultKeyLevelMax);
         }
 
-        this.filters.season.setValue(season);
+        this.filters.season.setValue(season, triggerOnChange);
     }
 
     _search(options = {}, queryParameters = {}) {

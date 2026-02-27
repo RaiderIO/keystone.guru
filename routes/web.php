@@ -175,7 +175,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
-        Route::prefix('search')->group(static function () {
+        Route::prefix('dungeonroute/search')->group(static function () {
             Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search.list');
 
             Route::prefix('{gameVersion}')->group(static function () {
