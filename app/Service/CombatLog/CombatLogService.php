@@ -223,8 +223,7 @@ class CombatLogService implements CombatLogServiceInterface
                     $combatLogFilePath,
                     function (BaseEvent $baseEvent, int $lineNr) use (
                         &$dungeonRouteFilter,
-                        &
-                        $combatLogDungeonRouteFilter
+                        &$combatLogDungeonRouteFilter
                     ) {
                         // If parsing was successful, it generated a dungeonroute, so then construct our filter
                         if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
@@ -259,18 +258,26 @@ class CombatLogService implements CombatLogServiceInterface
      * @throws Exception
      */
     public function getResultEventsForDungeonOrRaid(
-        string $combatLogFilePath,
+        string        $combatLogFilePath,
+        ?DungeonRoute & $dungeonRoute = null,
     ): Collection {
         try {
             $this->log->getResultEventsForDungeonOrRaidStart($combatLogFilePath);
+            $dungeonRouteFilter           = (new DungeonRouteFilter($this->seasonService));
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
             $this->parseCombatLogStreaming(
                 $combatLogFilePath,
-                static function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter) {
+                static function (BaseEvent $baseEvent, int $lineNr) use (&$combatLogDungeonOrRaidFilter, &$dungeonRouteFilter) {
                     $combatLogDungeonOrRaidFilter->parse($baseEvent, $lineNr);
+
+                    // If parsing was successful, it generated a dungeonroute, so then construct our filter
+                    $dungeonRouteFilter->parse($baseEvent, $lineNr, false);
                 },
             );
+
+            // Output the dungeon route as well
+            $dungeonRoute = $dungeonRouteFilter->getDungeonRoute();
 
             return $combatLogDungeonOrRaidFilter->getResultEvents();
         } finally {

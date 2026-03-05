@@ -19,5 +19,5 @@ interface CombatLogRouteDungeonRouteServiceInterface
         CombatLogRouteRequestModel $combatLogRoute,
     ): CombatLogRouteCorrectionRequestModel;
 
-    public function getCombatLogRoute(string $combatLogFilePath): ?CombatLogRouteRequestModel;
+    public function getCombatLogRoute(string $combatLogFilePath, bool $dungeonOrRaid = false): ?CombatLogRouteRequestModel;
 }

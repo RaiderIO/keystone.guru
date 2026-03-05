@@ -198,51 +198,81 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     /**
      * @throws Exception
      */
-    public function getCombatLogRoute(string $combatLogFilePath): ?CombatLogRouteRequestModel
-    {
+    public function getCombatLogRoute(
+        string $combatLogFilePath,
+        bool   $dungeonOrRaid = false,
+    ): ?CombatLogRouteRequestModel {
         ini_set('max_execution_time', 1800);
 
         try {
             $this->log->getCombatLogRouteStart($combatLogFilePath);
-
             $dungeonRoute = null;
-            $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
-            if (!($dungeonRoute instanceof DungeonRoute)) {
-                $this->log->getCombatLogRouteUnableToGenerateDungeonRoute();
 
-                return null;
+            if ($dungeonOrRaid) {
+                $resultEvents = $this->combatLogService->getResultEventsForDungeonOrRaid($combatLogFilePath, $dungeonRoute);
+                if (!($dungeonRoute instanceof DungeonRoute)) {
+                    $this->log->getCombatLogRouteUnableToGenerateDungeonRouteFromDungeonOrRaid();
+
+                    return null;
+                }
+
+                $seconds      = rand(1200, 2400);
+                $milliseconds = $seconds * 1000;
+
+                $challengeMode = new CombatLogRouteChallengeModeRequestModel(
+                    Carbon::now()->subSeconds($seconds)->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    Carbon::now()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    true,
+                    $milliseconds,
+                    $milliseconds,
+                    $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                        1 : $milliseconds / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
+                    $dungeonRoute->dungeon->challenge_mode_id,
+                    rand(2, 20),
+                    0,
+                    null,
+                );
+            } else {
+                $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
+
+                if (!($dungeonRoute instanceof DungeonRoute)) {
+                    $this->log->getCombatLogRouteUnableToGenerateDungeonRouteFromChallengeMode();
+
+                    return null;
+                }
+                /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
+                $challengeModeStartEvent = $resultEvents->filter(static fn(
+                    BaseResultEvent $resultEvent,
+                ) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
+
+                /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
+                $challengeModeEndEvent = $resultEvents->filter(static fn(
+                    BaseResultEvent $resultEvent,
+                ) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
+
+                $playerDeathEvents = $resultEvents->filter(static fn(
+                    BaseResultEvent $resultEvent,
+                ) => $resultEvent instanceof PlayerDiedResultEvent);
+
+                $challengeMode = new CombatLogRouteChallengeModeRequestModel(
+                    $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    $challengeModeEndEvent->getSuccess(),
+                    $challengeModeEndEvent->getTotalTimeMS(),
+                    $challengeModeEndEvent->getTotalTimeMS(),
+                    $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                        1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
+                    $challengeModeStartEvent->getChallengeModeID(),
+                    $challengeModeStartEvent->getKeystoneLevel(),
+                    $playerDeathEvents->count(),
+                    $challengeModeStartEvent->getAffixIDs(),
+                );
             }
 
             // #1818 Filter out any NPC ids that are invalid
             $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
 
-            /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(static fn(
-                BaseResultEvent $resultEvent,
-            ) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
-
-            /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(static fn(
-                BaseResultEvent $resultEvent,
-            ) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
-
-            $playerDeathEvents = $resultEvents->filter(static fn(
-                BaseResultEvent $resultEvent,
-            ) => $resultEvent instanceof PlayerDiedResultEvent);
-
-            $challengeMode = new CombatLogRouteChallengeModeRequestModel(
-                $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                $challengeModeEndEvent->getSuccess(),
-                $challengeModeEndEvent->getTotalTimeMS(),
-                $challengeModeEndEvent->getTotalTimeMS(),
-                $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
-                    1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
-                $challengeModeStartEvent->getChallengeModeID(),
-                $challengeModeStartEvent->getKeystoneLevel(),
-                $playerDeathEvents->count(),
-                $challengeModeStartEvent->getAffixIDs(),
-            );
+//            dd($validNpcIds->pluck('id')->toArray());
 
             $npcs             = collect();
             $npcEngagedEvents = collect();

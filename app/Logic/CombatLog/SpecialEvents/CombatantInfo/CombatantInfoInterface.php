@@ -26,6 +26,8 @@ interface CombatantInfoInterface
 
     public function getBlock(): int;
 
+    public function getUnknown1(): int;
+
     public function getCritMelee(): int;
 
     public function getCritRanged(): int;

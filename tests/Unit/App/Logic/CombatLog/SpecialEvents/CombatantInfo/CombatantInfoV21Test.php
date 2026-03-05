@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\CombatantInfo;
 
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V21\CombatantInfoV21;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -52,7 +53,7 @@ class CombatantInfoV21Test extends PublicTestCase
 
         // Act
         /** @var CombatantInfoV21 $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_11_2_0);
 
         // Assert
         Assert::assertInstanceOf(CombatantInfoV21::class, $combatLogEntry->getParsedEvent());
@@ -136,7 +137,7 @@ class CombatantInfoV21Test extends PublicTestCase
 
         // Act
         /** @var CombatantInfoV21 $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_11_2_0);
 
         // Assert
         Assert::assertInstanceOf(CombatantInfoV21::class, $combatLogEntry->getParsedEvent());
@@ -236,7 +237,7 @@ class CombatantInfoV21Test extends PublicTestCase
 
         // Act
         /** @var CombatantInfoV21 $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_11_2_0);
 
         // Assert
         Assert::assertInstanceOf(CombatantInfoV21::class, $combatLogEntry->getParsedEvent());
@@ -268,7 +269,7 @@ class CombatantInfoV21Test extends PublicTestCase
 
         // Act
         /** @var CombatantInfoV21 $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_11_2_0);
 
         // Assert
         Assert::assertInstanceOf(CombatantInfoV21::class, $combatLogEntry->getParsedEvent());
@@ -317,7 +318,7 @@ class CombatantInfoV21Test extends PublicTestCase
 
         // Act
         /** @var CombatantInfoV21 $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_11_2_0);
 
         // Assert
         Assert::assertInstanceOf(CombatantInfoV21::class, $combatLogEntry->getParsedEvent());

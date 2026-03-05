@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V21;
+namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V22;
 
 use App\Logic\CombatLog\CombatLogStringParser;
 use App\Logic\CombatLog\Guid\Guid;
@@ -8,7 +8,7 @@ use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoInterface;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 
-class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
+class CombatantInfoV22 extends SpecialEvent implements CombatantInfoInterface
 {
     private Player $playerGuid;
     private int $faction;
@@ -19,6 +19,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
     private int $dodge;
     private int $parry;
     private int $block;
+    private int $unknown1;
     private int $critMelee;
     private int $critRanged;
     private int $critSpell;
@@ -95,7 +96,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 
     public function getUnknown1(): int
     {
-        return 0;
+        return $this->unknown1;
     }
 
     public function getCritMelee(): int
@@ -232,29 +233,30 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
         $this->dodge                  = (int)$parameters[6];
         $this->parry                  = (int)$parameters[7];
         $this->block                  = (int)$parameters[8];
-        $this->critMelee              = (int)$parameters[9];
-        $this->critRanged             = (int)$parameters[10];
-        $this->critSpell              = (int)$parameters[11];
-        $this->speed                  = (int)$parameters[12];
-        $this->lifesteal              = (int)$parameters[13];
-        $this->hasteMelee             = (int)$parameters[14];
-        $this->hasteRanged            = (int)$parameters[15];
-        $this->hasteSpell             = (int)$parameters[16];
-        $this->avoidance              = (int)$parameters[17];
-        $this->mastery                = (int)$parameters[18];
-        $this->versatilityDamageDone  = (int)$parameters[19];
-        $this->versatilityHealingDone = (int)$parameters[20];
-        $this->versatilityDamageTaken = (int)$parameters[21];
-        $this->armor                  = (int)$parameters[22];
-        $this->currentSpecId          = (int)$parameters[23];
-        $this->talents                = CombatLogStringParser::parseBracketedString($parameters[24]);
-        $this->pvpTalents             = CombatLogStringParser::parseBracketedString($parameters[25]);
-        $this->equippedItems          = CombatLogStringParser::parseBracketedString($parameters[26]);
-        $this->interestingAuras       = CombatLogStringParser::parseBracketedString($parameters[27]);
-        $this->honorLevel             = (int)$parameters[28];
-        $this->season                 = (int)$parameters[29];
-        $this->rating                 = (int)$parameters[30];
-        $this->tier                   = (int)$parameters[31];
+        $this->unknown1               = (int)$parameters[9];
+        $this->critMelee              = (int)$parameters[10];
+        $this->critRanged             = (int)$parameters[11];
+        $this->critSpell              = (int)$parameters[12];
+        $this->speed                  = (int)$parameters[13];
+        $this->lifesteal              = (int)$parameters[14];
+        $this->hasteMelee             = (int)$parameters[15];
+        $this->hasteRanged            = (int)$parameters[16];
+        $this->hasteSpell             = (int)$parameters[17];
+        $this->avoidance              = (int)$parameters[18];
+        $this->mastery                = (int)$parameters[19];
+        $this->versatilityDamageDone  = (int)$parameters[20];
+        $this->versatilityHealingDone = (int)$parameters[21];
+        $this->versatilityDamageTaken = (int)$parameters[22];
+        $this->armor                  = (int)$parameters[23];
+        $this->currentSpecId          = (int)$parameters[24];
+        $this->talents                = CombatLogStringParser::parseBracketedString($parameters[25]);
+        $this->pvpTalents             = CombatLogStringParser::parseBracketedString($parameters[26]);
+        $this->equippedItems          = CombatLogStringParser::parseBracketedString($parameters[27]);
+        $this->interestingAuras       = CombatLogStringParser::parseBracketedString($parameters[28]);
+        $this->honorLevel             = (int)$parameters[29];
+        $this->season                 = (int)$parameters[30];
+        $this->rating                 = (int)$parameters[31];
+        $this->tier                   = (int)$parameters[32];
 
         return $this;
     }
@@ -277,6 +279,6 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 
     public function getParameterCount(): int
     {
-        return 32;
+        return 33;
     }
 }

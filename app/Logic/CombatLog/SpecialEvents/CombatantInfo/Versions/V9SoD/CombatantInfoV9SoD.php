@@ -92,6 +92,11 @@ class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
         return $this->block;
     }
 
+    public function getUnknown1(): int
+    {
+        return 0;
+    }
+
     public function getCritMelee(): int
     {
         return $this->critMelee;

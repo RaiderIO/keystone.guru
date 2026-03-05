@@ -12,7 +12,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputcombatlogroutejson {filePath}';
+    protected $signature = 'combatlog:outputcombatlogroutejson {filePath} {--dungeonOrRaid}';
 
     /**
      * The console command description.
@@ -31,10 +31,12 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
     {
         ini_set('memory_limit', '2G');
 
-        $filePath = $this->argument('filePath');
+        $filePath      = $this->argument('filePath');
+        $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
-            $combatLogRouteBodyDungeonRouteService
+            $combatLogRouteBodyDungeonRouteService,
+            $dungeonOrRaid,
         ) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('- Skipping file %s (not a .zip)', $filePath));
@@ -48,7 +50,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
                 return 0;
             }
 
-            return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath);
+            return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $dungeonOrRaid);
         });
     }
 
@@ -58,6 +60,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
     private function outputCombatLogRouteJson(
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
         string                                     $filePath,
+        bool                                       $dungeonOrRaid = false,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
@@ -66,7 +69,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
             '.zip',
         ], '.json', $filePath);
 
-        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath);
+        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath, $dungeonOrRaid);
         if ($combatLogRouteJson !== null) {
             $result = file_put_contents(
                 $resultingFile,
