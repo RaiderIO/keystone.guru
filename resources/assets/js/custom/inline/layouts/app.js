@@ -49,13 +49,13 @@ class LayoutsApp extends InlineCode {
                 $(`.${previousTheme}_image`).hide();
                 $(`.${theme}_image`).show();
 
-                if (theme === 'lux') {
+                if (theme === THEME_LUX) {
                     $('.navbar-dark').removeClass('navbar-dark').addClass('navbar-light');
-                } else {
+                } else if (theme === THEME_DARKLY || theme === THEME_XALATATH) {
                     $('.navbar-light').removeClass('navbar-light').addClass('navbar-dark');
                 }
 
-                $('html').removeClass('superhero darkly lux').addClass(theme);
+                $('html').removeClass(`${THEME_LUX} ${THEME_DARKLY} ${THEME_XALATATH}`).addClass(theme);
                 // Regenerate parallax effects (switches images around)
                 $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
 
@@ -69,7 +69,7 @@ class LayoutsApp extends InlineCode {
             }
         });
 
-        // Theme switch button
+        // Route coverage route switch btn
         $('.new_route_style_switch_btn').unbind('click').bind('click', function () {
             let newRouteStyle = $(this).data('new-route-style');
             let previousNewRouteStyle = Cookies.get('route_coverage_new_route_style');

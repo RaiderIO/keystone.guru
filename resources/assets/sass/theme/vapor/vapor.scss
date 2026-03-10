@@ -1,0 +1,124 @@
+// Bootstrap theme (bootstrap should be between these)
+.vapor {
+  @import "~bootswatch/dist/vapor/variables";
+  @import "~bootstrap/scss/bootstrap";
+  @import "dist/_bootswatch";
+  //@import "~bootswatch/dist/vapor/bootswatch";
+
+  body, .btn {
+    color: #fff;
+  }
+
+  body, .form-control, .dropdown-menu, .btn {
+    font-size: 0.9375rem;
+  }
+
+  .btn:hover {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .btn-light {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+  }
+
+  a.dropdown-item {
+    color: #fff;
+  }
+
+  a:hover.dropdown-item {
+    background-color: var(--theme-primary);
+  }
+
+  .dropdown-menu {
+    background-color: var(--theme-darker);
+  }
+
+  .navbar {
+    padding: 1rem 1rem !important;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: var(--theme-primary);
+  }
+
+  .form-control {
+    border: 1px solid #222;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--theme-darker);
+  }
+
+  tbody tr.odd {
+    background-color: var(--theme-darker);
+  }
+
+  /** Size of the stars in the "conclude live session" modal dialog */
+  .br-theme-fontawesome-stars .br-widget {
+    height: 42px;
+  }
+
+  .br-theme-fontawesome-stars .br-widget a {
+    font-size: 2.37em;
+  }
+
+  .card_dungeonroute.dungeon_image {
+    .menu_actions_btn {
+      font-size: 0.9rem;
+    }
+  }
+
+  .game_version_header {
+    a {
+      color: var(--theme-light)
+    }
+
+    a.active {
+      color: var(--theme-text-contrast)
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: var(--theme-text-contrast)
+    }
+  }
+
+  div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    color: var(--theme-light) !important;
+  }
+
+  .breadcrumb {
+    background-color: var(--theme-dark);
+    padding: 0.375rem 0.75rem;
+  }
+
+  .breadcrumb-item.active {
+    color: var(--theme-primary);
+  }
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--theme-primary);
+  }
+
+  .text-muted {
+    color: var(--theme-btn-accent-hover) !important;
+  }
+
+  .card-body {
+    background-color: var(--theme-darker);
+  }
+
+  /** Map sidebar buttons */
+  .bg-header .btn-info {
+    background-color: var(--theme-primary) !important;
+  }
+
+  .modal-dialog {
+    background-color: var(--theme-darker);
+  }
+
+  .modal-content {
+    background-color: var(--theme-dark);
+  }
+}

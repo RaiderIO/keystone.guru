@@ -4,6 +4,11 @@ let cookieDefaultAttributes = undefined;
 // Environments
 const ENVIRONMENT_LOCAL = 'local';
 
+// Themes
+const THEME_LUX = 'lux';
+const THEME_DARKLY = 'darkly';
+const THEME_XALATATH = 'vapor';
+
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';

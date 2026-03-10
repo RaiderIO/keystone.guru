@@ -82,12 +82,15 @@ class User extends Authenticatable implements LaratrustUser
 
     public const string DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
-    public const string THEME_DARKLY = 'darkly';
-    public const string THEME_LUX    = 'lux';
+    public const string THEME_DARKLY   = 'darkly';
+    public const string THEME_LUX      = 'lux';
+    public const string THEME_XALATATH = 'vapor';
+    public const string DEFAULT_THEME  = self::THEME_XALATATH;
 
     public const array THEME_ALL = [
         self::THEME_DARKLY,
         self::THEME_LUX,
+        self::THEME_XALATATH,
     ];
 
     /**
@@ -322,6 +325,11 @@ class User extends Authenticatable implements LaratrustUser
     public static function forceMapFacadeStyle(string $mapFacadeStyle): void
     {
         self::$OVERRIDE_MAP_FACADE_STYLE = $mapFacadeStyle;
+    }
+
+    public static function isThemeDark(string $theme): bool
+    {
+        return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
     }
 
     #[\Override]

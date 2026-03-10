@@ -15,6 +15,10 @@
   @include spread-map($theme-map-lux);
 }
 
+:root.vapor {
+  @include spread-map($theme-map-vapor);
+}
+
 body {
   font-family: Salesforce Sans, Arial, sans-serif;
   background-color: var($--theme-darker) !important;
@@ -296,6 +300,15 @@ body {
   }
 
   /* Fixed messages always on top */
+
+  a {
+    color: var($--theme-link);
+  }
+
+  a:hover {
+    color: var($--theme-link-hover);
+  }
+
   .fixed-bottom {
     z-index: 1000;
   }
