@@ -446,10 +446,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::get('dungeon/mappingversion/accuracy', new AdminToolsController()->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
                 });
 
-                // Wow.tools
-                Route::get('wowtools/importingamecoordinates', new AdminToolsController()->wowToolsImportIngameCoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
-                Route::post('wowtools/importingamecoordinates', new AdminToolsController()->wowToolsImportIngameCoordinatesSubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
-
                 // Wago.gg
                 Route::get('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
                 Route::post('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinatesSubmit(...))->name('admin.tools.wagogg.import_ingame_coordinates.submit');

@@ -63,6 +63,8 @@ use App\Service\DungeonRoute\DungeonRouteSearchService;
 use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
+use App\Service\DungeonRoute\MapDrawingService;
+use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionData;
@@ -181,6 +183,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
+        $this->app->bind(MapDrawingServiceInterface::class, MapDrawingService::class);
 
         // Depends on CookieService
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);

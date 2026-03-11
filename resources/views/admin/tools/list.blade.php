@@ -63,11 +63,6 @@
         <a href="{{ route('admin.tools.thumbnails.regenerate.view') }}">{{ __('view_admin.tools.list.thumbnails_regenerate') }}</a>
     </div>
 
-    <h4>{{ __('view_admin.tools.list.subheader_wowtools') }}</h4>
-    <div class="form-group">
-        <a href="{{ route('admin.tools.wowtools.import_ingame_coordinates') }}">{{ __('view_admin.tools.list.wowtools_import_ingame_coordinates') }}</a>
-    </div>
-
     <h4>{{ __('view_admin.tools.list.subheader_wagogg') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.wagogg.import_ingame_coordinates') }}">{{ __('view_admin.tools.list.wagogg_import_ingame_coordinates') }}</a>

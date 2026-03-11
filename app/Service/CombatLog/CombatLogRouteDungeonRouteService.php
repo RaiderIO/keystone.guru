@@ -21,6 +21,8 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -63,6 +65,7 @@ use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
 use Auth;
@@ -78,6 +81,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly CombatLogService                                  $combatLogService,
         protected readonly SeasonServiceInterface                            $seasonService,
         protected readonly CoordinatesServiceInterface                       $coordinatesService,
+        protected readonly MapDrawingServiceInterface                        $mapDrawingService,
         protected readonly DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
         protected readonly DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
         protected readonly AffixGroupRepositoryInterface                     $affixGroupRepository,
@@ -389,12 +393,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     98765,
                     87654,
                     99,
-                    'season-tww-1',
+                    'season-midnight-1',
                     2,
                     'live',
                     1,
                 ),
-                new CombatLogRouteSettingsRequestModel(true, true),
+                new CombatLogRouteSettingsRequestModel(true, true, $dungeonRoute->mapping_version_id),
                 $challengeMode,
                 new CombatLogRouteRosterRequestModel(
                     $mostRecentCombatantInfo->count(),
@@ -504,7 +508,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $npcs = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
         /** @var Collection<int> $validNpcIds */
         $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
-        $previousFloor = null;
+        /** @var Floor $previousFloor */
+        $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
+        $latLngs = [];
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor;
 
@@ -521,6 +527,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $currentFloor,
                 ),
             );
+            $latLngs[] = $latLng;
 
             /** @var Npc|null $npc */
             $npc     = $npcs->get($combatLogRouteNpc->npcId);
@@ -565,6 +572,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
         MapIcon::insert($mapIconAttributes);
         Brushline::insert($brushlineAttributes);
+
+        $this->mapDrawingService->drawConnections(
+            $dungeonRoute,
+            $latLngs,
+        );
 
         // Assign the paths to the polylines
         $dungeonRoute->load('brushlines');

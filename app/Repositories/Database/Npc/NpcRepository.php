@@ -112,6 +112,13 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     220003,
                 ]);
             })
+            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_WINDRUNNER_SPIRE, function (Builder $builder) {
+                $builder->whereNotIn('npcs.id', [
+                    // Haunting Grunt gives 0 enemy forces, they are summoned by Commander Kroluk but they are never actually summoned
+                    // As such they would be assigned to enemies in the mapping, this prevents Haunting Grunts from being assigned at all
+                    232446,
+                ]);
+            })
             ->get();
     }
 
