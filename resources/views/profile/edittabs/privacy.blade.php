@@ -12,6 +12,9 @@ use App\Models\UserReport;
     <h4>
         {{ __('view_profile.edit.privacy') }}
     </h4>
+
+    @include('common.general.messages')
+
     {{ html()->modelForm($user, 'PATCH', route('profile.updateprivacy', $user->id))->open() }}
     <div class="form-group{{ $errors->has('analytics_cookie_opt_out') ? ' has-error' : '' }}">
         {{ html()->label(__('view_profile.edit.ga_cookies_opt_out'), 'analytics_cookie_opt_out') }}

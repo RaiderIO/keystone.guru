@@ -26,7 +26,7 @@ use Illuminate\Support\Collection;
 @section('content')
     @include('home.sections.featured')
 
-    @if(GameVersion::getUserOrDefaultGameVersion()->key === GameVersion::GAME_VERSION_RETAIL)
+    @if(GameVersion::getUserOrDefaultGameVersion()->key === GameVersion::GAME_VERSION_RETAIL && $weeklyRoutes->isNotEmpty())
         @include('home.sections.routes.weeklyroute', ['dungeons' => $weeklyRouteDungeons, 'weeklyRoutes' => $weeklyRoutes])
     @endif
 

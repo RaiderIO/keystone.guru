@@ -12,6 +12,9 @@ $deleteConsequences = $user->getDeleteConsequences();
     <h4>
         {{ __('view_profile.edit.account') }}
     </h4>
+
+    @include('common.general.messages')
+
     <div class="form-group">
         {{ __('view_profile.edit.account_delete_consequences') }}:
     </div>

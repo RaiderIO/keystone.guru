@@ -12,6 +12,9 @@ use App\Models\User;
     <h4>
         {{ __('view_profile.edit.patreon') }}
     </h4>
+
+    @include('common.general.messages')
+
     @isset($user->patreonUserLink)
         @php(ob_start())
         @include('common.thirdparty.patreon.fancylink')

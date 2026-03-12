@@ -85,7 +85,7 @@ class ProfileController extends Controller
             }
         } // May not change e-mail when OAuth
         else {
-            $user->email = $validated['email'];
+            $user->email = $validated['email'] ?? $user->email;
         }
 
         $user->echo_color            = $validated['echo_color'] ?? randomHexColor();
