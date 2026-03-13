@@ -58,16 +58,9 @@ foreach ($activeExpansions as $expansion) {
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
             ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)),
             __($expansion->name),
-//            $expansion->hasTimewalkingEvent() ?
-//                __('view_common.layout.header.routes_timewalking', ['expansion' => __($expansion->name)]) :
             __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
-
-$navs[__('view_common.layout.header.browse_by_expansion')] = [
-    'fa'    => 'fas fa-stream',
-    'items' => $expansionRoutes,
-];
 
 if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     $navs[route('dungeon.heatmaps.gameversion.list', ['gameVersion' => $currentUserGameVersion])] = [
@@ -76,15 +69,10 @@ if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVers
     ];
 }
 
-$navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGameVersion])] = [
-    'fa'   => 'fas fa-compass',
-    'text' => __('view_common.layout.header.explore'),
-];
-
 $isActiveRoute = function (string $route) {
     // Check if the route that we're currently on is the same as the route in the nav
     // If so, show it as active
-    $active    = '';
+    $active    = null;
     $parsedUrl = (parse_url((string)$route));
     if (is_array($parsedUrl)) {
         $routePath = trim($parsedUrl['path'], '/');
@@ -136,36 +124,9 @@ $isActiveRoute = function (string $route) {
                         <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}
                     </a>
                 </li>
-                @php($subItemActive = null)
                 @foreach($navs as $route => $opts)
                     @if($opts === 'divider')
                         <li class="nav-item nav-item-divider"></li>
-                    @elseif(isset($opts['items']))
-                            <?php
-                            /** @noinspection PhpUndefinedVariableInspection */
-                            $headerText = $route;
-                            $dropdownId = Str::slug($headerText);
-                            // Determine if any of the sub-items are active
-                            foreach ($opts['items'] as $itemKey => $item) {
-                                $subItemActive = $subItemActive ?? $isActiveRoute($itemKey);
-                            }
-                            ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ $subItemActive }}" href="#" id="{{ $dropdownId }}"
-                               role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @isset($opts['fa'])
-                                    <i class="{{ $opts['fa'] }}"></i>
-                                @endisset
-                                {{ $headerText }}
-                            </a>
-                            <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
-                                @foreach($opts['items'] as $itemKey => $item)
-                                    <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
-                                       href="{{ $itemKey }}">{!! $item !!}</a>
-                                @endforeach
-                            </div>
-                        </li>
                     @else
                         <li class="nav-item">
                             <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
@@ -183,6 +144,37 @@ $isActiveRoute = function (string $route) {
                 @endforeach
             </ul>
             <ul class="navbar-nav">
+                    <?php
+                    /** @noinspection PhpUndefinedVariableInspection */
+                    $hasSubItemActive = null;
+                    $headerText = __('view_common.layout.header.browse_by_expansion');
+                    $dropdownId = Str::slug($headerText);
+                    // Determine if any of the sub-items are active
+                    foreach ($expansionRoutes as $itemKey => $item) {
+                        $hasSubItemActive = $hasSubItemActive ?? $isActiveRoute($itemKey);
+                    }
+                    ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
+                           role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-stream"></i>
+                            {{ $headerText }}
+                        </a>
+                        <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
+                            @foreach($expansionRoutes as $itemKey => $item)
+                                <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                                   href="{{ $itemKey }}">{!! $item !!}</a>
+                            @endforeach
+                        </div>
+                    </li>
+                @php($route = route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGameVersion]))
+                <li class="nav-item">
+                    <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
+                       href="{{ $route }}">
+                        <i class="fas fa-compass"></i> {{ __('view_common.layout.header.explore') }}
+                    </a>
+                </li>
                 <li class="nav-item nav-item-divider"></li>
                 <li class="nav-item">
                     @if(Feature::active(SearchPageRework::class))
