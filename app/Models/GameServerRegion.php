@@ -12,14 +12,15 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int        $id
- * @property string     $short
- * @property string     $name
- * @property Carbon     $epoch_start
- * @property string     $timezone
- * @property int        $reset_day_offset   ISO-8601 numeric representation of the day of the week
- * @property string     $reset_hours_offset
- * @property Collection $users
+ * @property int    $id
+ * @property string $short
+ * @property string $name
+ * @property Carbon $epoch_start
+ * @property string $timezone
+ * @property int    $reset_day_offset   ISO-8601 numeric representation of the day of the week
+ * @property string $reset_hours_offset
+ * 
+ * @property Collection<User> $users
  *
  * @mixin Eloquent
  */

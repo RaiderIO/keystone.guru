@@ -14,11 +14,11 @@ class CommonGeneralNavbarshrink extends InlineCode {
             let ele = $(this);
 
             $(window).on('scroll resize', function () {
-                self.toggleAffix(ele, $(this));
+                self.resizeShrinkElement(ele, $(this));
             });
 
             // init
-            self.toggleAffix(ele, $(window));
+            self.resizeShrinkElement(ele, $(window));
         });
     }
 
@@ -27,7 +27,7 @@ class CommonGeneralNavbarshrink extends InlineCode {
      * @param shrinkElement
      * @param scrollElement
      */
-    toggleAffix(shrinkElement, scrollElement) {
+    resizeShrinkElement(shrinkElement, scrollElement) {
         // The element that takes up the space that the fixed-top navbar leaves because it floats
         let spacer = $('.navbar-top-fixed-spacer');
         let top = spacer.offset().top;

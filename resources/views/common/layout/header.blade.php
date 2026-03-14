@@ -2,6 +2,7 @@
 
 use App\Features\Heatmap;
 use App\Features\SearchPageRework;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -13,8 +14,9 @@ use Illuminate\Support\Str;
  * @var GameVersion             $currentUserGameVersion
  * @var Collection<GameVersion> $allGameVersions
  * @var Collection<Expansion>   $activeExpansions
+ * @var Collection<Dungeon>     $gameVersionDungeons
  * @var Season                  $currentSeason
- * @var Season                  $nextSeason
+ * @var Season|null             $nextSeason
  */
 
 $navs = [];
@@ -85,8 +87,8 @@ $isActiveRoute = function (string $route) {
 }
 ?>
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
-    <div class="container">
+    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
+    <div class="container discover">
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
                 @include('common.gameversion.gameversionheader', [
@@ -98,13 +100,24 @@ $isActiveRoute = function (string $route) {
                 &nbsp;
             </div>
         </div>
+        <div class="row no-gutters dungeon_context_header" data-toggle="navbar-shrink" style="height: 99px;">
+            <div class="col">
+                @include('common.dungeon.list', [
+                    'dungeons' => $gameVersionDungeons,
+                    'colCount' => $gameVersionDungeons->count(),
+                    'useAbbreviation' => true,
+                    'selectable' => true,
+//                    'height' => '99px',
+                ])
+            </div>
+        </div>
     </div>
 </div>
-<div class="navbar-top-fixed-spacer"></div>
+<div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
 <nav
-    class="navbar navbar-second fixed-top navbar-expand-lg {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }} bg-header"
+    class="navbar navbar-second fixed-top navbar-expand-lg {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}"
     data-toggle="navbar-shrink">
-    <div class="container p-0">
+    <div class="container px-1 bg-header rounded">
         <a class="navbar-brand" href="/">
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
@@ -144,30 +157,30 @@ $isActiveRoute = function (string $route) {
                 @endforeach
             </ul>
             <ul class="navbar-nav">
-                    <?php
-                    /** @noinspection PhpUndefinedVariableInspection */
-                    $hasSubItemActive = null;
-                    $headerText = __('view_common.layout.header.browse_by_expansion');
-                    $dropdownId = Str::slug($headerText);
-                    // Determine if any of the sub-items are active
-                    foreach ($expansionRoutes as $itemKey => $item) {
-                        $hasSubItemActive = $hasSubItemActive ?? $isActiveRoute($itemKey);
-                    }
-                    ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
-                           role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-stream"></i>
-                            {{ $headerText }}
-                        </a>
-                        <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
-                            @foreach($expansionRoutes as $itemKey => $item)
-                                <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
-                                   href="{{ $itemKey }}">{!! $item !!}</a>
-                            @endforeach
-                        </div>
-                    </li>
+                <?php
+                /** @noinspection PhpUndefinedVariableInspection */
+                $hasSubItemActive = null;
+                $headerText       = __('view_common.layout.header.browse_by_expansion');
+                $dropdownId       = Str::slug($headerText);
+                // Determine if any of the sub-items are active
+                foreach ($expansionRoutes as $itemKey => $item) {
+                    $hasSubItemActive = $hasSubItemActive ?? $isActiveRoute($itemKey);
+                }
+                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
+                       role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-stream"></i>
+                        {{ $headerText }}
+                    </a>
+                    <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
+                        @foreach($expansionRoutes as $itemKey => $item)
+                            <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                               href="{{ $itemKey }}">{!! $item !!}</a>
+                        @endforeach
+                    </div>
+                </li>
                 @php($route = route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGameVersion]))
                 <li class="nav-item">
                     <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
