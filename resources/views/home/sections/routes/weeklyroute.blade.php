@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
  * @var Collection<string, Collection<WeeklyRoute>> $weeklyRoutes
  */
 ?>
-<div class="row no-gutters my-4">
+<div class="row no-gutters my-4 px-2">
     <div class="col">
         <h4>{{ __('view_home.sections.routes.weeklyroute.header') }}</h4>
         <p>

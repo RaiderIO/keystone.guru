@@ -87,8 +87,8 @@ $isActiveRoute = function (string $route) {
 }
 ?>
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
-    <div class="container discover">
+    class="game_version_header navbar-first d-none d-lg-block fixed-top {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
+    <div class="container discover bg-dark rounded">
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
                 @include('common.gameversion.gameversionheader', [
