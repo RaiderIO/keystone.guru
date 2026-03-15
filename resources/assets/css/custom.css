@@ -128,6 +128,17 @@ ul.light-slider {
 /*    max-height: 128px;*/
 /*}*/
 
+.list_dungeon.selectable.selected {
+    border: 0.125rem solid forestgreen;
+    border-radius: 5px;
+}
+
+/** Prevents the title from jumping when it gets selected */
+.list_dungeon.selectable.selected h5 {
+    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
+    top: calc(15% - 0.125rem); /* 0.125 for the border, but just one side since it's the top */
+}
+
 .discover .select_icon.class_icon.selectable,
 .discover .grid_dungeon.selectable {
     cursor: pointer;

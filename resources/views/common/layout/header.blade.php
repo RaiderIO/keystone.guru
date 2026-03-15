@@ -93,7 +93,7 @@ $isActiveRoute = function (string $route) {
             @foreach ($allGameVersions as $gameVersion)
                 @include('common.gameversion.gameversionheader', [
                     'gameVersion' => $gameVersion,
-                    '$currentUserGameVersion' => $currentUserGameVersion,
+                    'currentUserGameVersion' => $currentUserGameVersion,
                 ])
             @endforeach
             <div class="col">
@@ -107,7 +107,12 @@ $isActiveRoute = function (string $route) {
                     'colCount' => $gameVersionDungeons->count(),
                     'useAbbreviation' => true,
                     'selectable' => true,
-//                    'height' => '99px',
+                    'selected' => Dungeon::getUserOrDefaultDungeon()->key,
+                    'links' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                            $dungeon->key => route('dungeon.changecontext', [
+                                'dungeon' => $dungeon,
+                            ])
+                        ]),
                 ])
             </div>
         </div>

@@ -19,6 +19,7 @@ $useAbbreviation ??= false;
 $names           ??= true;
 $links           ??= collect();
 $selectable      ??= false;
+$selected        ??= null;
 $subtextFn       ??= null;
 $height          ??= null;
 
@@ -28,14 +29,14 @@ $height          ??= null;
     <?php
     foreach($dungeons as $dungeon) {
         /** @var Dungeon $dungeon */
-        $link = $links->firstWhere('dungeon', $dungeon->key);
+        $link = $links->get($dungeon->key);
         ?>
         <div
-            class="grid_dungeon col p-1 {{$selectable ? 'selectable' : ''}}"
+            class="list_dungeon col p-1 {{$selectable ? 'selectable' : ''}} {{ $selected === $dungeon->key ? 'selected border-accent' : '' }}"
             data-id="{{ $dungeon->id }}">
             <div class="card-img-caption">
                 @isset($link)
-                <a href="{{ $link['link'] }}">
+                <a href="{{ $link }}">
                     @endisset
                     @if($names)
                         <h5 class="card-text text-white dungeon_card_dungeon_name">

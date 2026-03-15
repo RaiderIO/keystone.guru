@@ -3,11 +3,19 @@
 namespace App\Service\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
+use App\Models\User;
+use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
+use App\Service\Season\SeasonServiceInterface;
 
 class DungeonService implements DungeonServiceInterface
 {
+    private const string DUNGEON_CONTEXT_COOKIE = 'dungeon_context';
+
     public function __construct(
+        private readonly CookieServiceInterface         $cookieService,
+        private readonly SeasonServiceInterface         $seasonService,
         private readonly DungeonServiceLoggingInterface $log,
     ) {
     }
@@ -62,5 +70,41 @@ class DungeonService implements DungeonServiceInterface
         }
 
         return true;
+    }
+
+    public function setDungeonContext(Dungeon $dungeon, ?User $user = null): void
+    {
+        $user?->update(['dungeon_id' => $dungeon->id]);
+
+        // Unit tests and artisan commands don't like this
+        // Nor do we want to keep setting the cookie if it hasn't changed
+        if (!app()->runningInConsole() && ($_COOKIE[self::DUNGEON_CONTEXT_COOKIE] ?? null) !== $dungeon->key) {
+            // Set the new cookie
+            $this->cookieService->setCookie(self::DUNGEON_CONTEXT_COOKIE, $dungeon->key);
+        }
+    }
+
+    public function getDungeonContext(?User $user = null): Dungeon
+    {
+        $dungeon = null;
+        if ($user === null) {
+            if (isset($_COOKIE[self::DUNGEON_CONTEXT_COOKIE])) {
+                $dungeon = Dungeon::firstWhere('key', $_COOKIE[self::DUNGEON_CONTEXT_COOKIE]) ?? null;
+            }
+        } else {
+            $dungeon = $user->dungeon;
+        }
+
+        if ($dungeon === null) {
+            // Resort to finding a default dungeon of sorts
+            $gameVersion   = GameVersion::getUserOrDefaultGameVersion();
+            $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
+
+            $dungeon = $currentSeason?->dungeons()->first() ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
+
+            $this->setDungeonContext($dungeon, $user);
+        }
+
+        return $dungeon;
     }
 }

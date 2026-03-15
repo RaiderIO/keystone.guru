@@ -7,10 +7,13 @@ use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\DungeonFormRequest;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Service\Dungeon\DungeonServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Session;
 
@@ -138,5 +141,26 @@ class DungeonController extends Controller
                 ->orderBy('dungeons.name')
                 ->get(),
         ]);
+    }
+
+    public function changeContext(
+        Request                 $request,
+        Dungeon                 $dungeon,
+        DungeonServiceInterface $dungeonService,
+    ): RedirectResponse {
+        $previousGameVersion = $dungeonService->getDungeonContext(Auth::user());
+        $dungeonService->setDungeonContext($dungeon, Auth::user());
+
+        // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
+        $referer = $request->headers->get('referer');
+        if ($referer) {
+            if (str_contains($referer, sprintf('/routes/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeonroutes.current');
+            } elseif (str_contains($referer, sprintf('/explore/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeon.explore.list');
+            }
+        }
+
+        return Redirect::back();
     }
 }

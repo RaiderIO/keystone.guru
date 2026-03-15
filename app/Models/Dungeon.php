@@ -15,6 +15,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Mockery\Exception;
 
 /**
@@ -589,6 +591,17 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         }
 
         return $result;
+    }
+
+    /**
+     * @return Dungeon Gets the current user's dungeon context or the default dungeon if none could be found
+     */
+    public static function getUserOrDefaultDungeon(): Dungeon
+    {
+        /** @var DungeonServiceInterface $dungeonService */
+        $dungeonService = App::make(DungeonServiceInterface::class);
+
+        return $dungeonService->getDungeonContext(Auth::user());
     }
 
     #[\Override]

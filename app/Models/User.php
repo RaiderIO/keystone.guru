@@ -32,6 +32,7 @@ use Laratrust\Traits\HasRolesAndPermissions;
  * @property int    $game_server_region_id
  * @property int    $patreon_user_link_id
  * @property int    $game_version_id
+ * @property int    $dungeon_id                The dungeon context this user is in.
  * @property string $name
  * @property string $initials                  The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string $email
@@ -51,6 +52,7 @@ use Laratrust\Traits\HasRolesAndPermissions;
  * @property PatreonUserLink       $patreonUserLink
  * @property GameServerRegion      $gameServerRegion
  * @property GameVersion           $gameVersion
+ * @property Dungeon               $dungeon
  * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
  *
  * @property bool $is_admin
@@ -113,6 +115,7 @@ class User extends Authenticatable implements LaratrustUser
         'game_server_region_id',
         'patreon_user_link_id',
         'game_version_id',
+        'dungeon_id',
         'public_key',
         'oauth_id',
         'name',
@@ -143,6 +146,7 @@ class User extends Authenticatable implements LaratrustUser
     protected $with = [
         'iconfile',
         'patreonUserLink',
+        'dungeon',
         'gameVersion',
         'roles',
     ];
@@ -175,6 +179,11 @@ class User extends Authenticatable implements LaratrustUser
     public function gameServerRegion(): BelongsTo
     {
         return $this->belongsTo(GameServerRegion::class);
+    }
+
+    public function dungeon(): BelongsTo
+    {
+        return $this->belongsTo(Dungeon::class);
     }
 
     public function gameVersion(): BelongsTo

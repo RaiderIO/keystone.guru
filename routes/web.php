@@ -134,6 +134,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('/{gameVersion}', new GameVersionController()->update(...))->name('gameversion.update');
     });
 
+    // Game version toggle
+    Route::prefix('dungeon')->group(static function () {
+        Route::get('/{dungeon}', new DungeonController()->changeContext(...))->name('dungeon.changecontext');
+    });
+
     // Discover routes
     Route::prefix('routes')->group(static function () {
         Route::get('/', new DungeonRouteDiscoverController()->discover(...))->name('dungeonroutes');
