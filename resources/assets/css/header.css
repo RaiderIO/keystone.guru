@@ -73,3 +73,44 @@
 .game_version_header .game_version {
     border-radius: 0.25rem;
 }
+
+
+/** HEADER */
+#map_header {
+    position: fixed;
+    z-index: 100000;
+}
+
+.map_fade_out {
+    opacity: 0.8;
+    transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -webkit-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+}
+
+.map_fade_out:hover {
+    opacity: 1;
+}
+
+/** Mobile fixes */
+@media (max-width: 992px) {
+    #map_header .navbar {
+        padding: 0 !important;
+    }
+    #map_header .navbar .container.rounded {
+        border-radius: 0 !important;
+    }
+}
+
+#map_header .game_version_header,
+#map_header .navbar-second {
+    width: 100%;
+    pointer-events: none;
+}
+
+#map_header .game_version_header > .container,
+#map_header .navbar-second > .container {
+    pointer-events: auto;
+    max-width: 1350px;
+}

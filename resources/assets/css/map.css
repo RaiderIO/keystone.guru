@@ -9,31 +9,6 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
-/** HEADER */
-#map_header {
-    position: fixed;
-    width: 100%;
-    z-index: 100000;
-}
-
-.map_fade_out {
-    opacity: 0.8;
-    transition: opacity .2s ease-out;
-    -moz-transition: opacity .2s ease-out;
-    -webkit-transition: opacity .2s ease-out;
-    -o-transition: opacity .2s ease-out;
-}
-
-.map_fade_out:hover {
-    opacity: 1;
-}
-
-@media (max-width: 1200px) {
-    #map_header {
-        padding: 0.5rem;
-    }
-}
-
 #map.leaflet-container {
     font: unset;
     font-size: 12px;
@@ -386,33 +361,33 @@ html, body, #map, #app, .wrapper {
 
 /** Pulls section of the sidebar, with ad loaded, when viewing, without a speedrun enabled */
 .route_sidebar.right.ad_loaded .data_container:not(.has_speedrun) {
-    max-height: calc(100vh - (250px + 163px));
+    max-height: calc(100vh - (250px + 226px));
 }
 
 @media (min-height: 1000px) {
     /** Pulls section of the sidebar, with a big ad loaded, when viewing, without a speedrun enabled */
     .route_sidebar.right.ad_loaded .data_container:not(.has_speedrun) {
-        max-height: calc(100vh - (280px + 163px));
+        max-height: calc(100vh - (280px + 226px));
     }
 }
 
 /** Pulls section of the sidebar, adblock, when viewing, without a speedrun enabled */
 .route_sidebar.right .data_container:not(.has_speedrun) {
-    max-height: calc(100vh - 163px);
+    max-height: calc(100vh - 226px);
 }
 
 /** Heatmap section of the sidebar, no ads */
 #heatmap_search_sidebar .data_container.explore {
-    max-height: calc(100vh - 242px);
+    max-height: calc(100vh - 306px);
 }
 
 #heatmap_search_sidebar.ad_loaded .data_container.explore {
-    max-height: calc(100vh - (250px + 198px));
+    max-height: calc(100vh - (314px + 198px));
 }
 
 /** Dungeonroute search section of the sidebar, no ads */
 #dungeonroute_search_sidebar .data_container.explore {
-    max-height: calc(100vh - 242px);
+    max-height: calc(100vh - 306px);
 }
 
 #dungeonroute_search_sidebar.ad_loaded .data_container.explore {
