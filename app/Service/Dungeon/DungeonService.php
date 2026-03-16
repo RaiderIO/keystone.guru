@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Collection;
 
 class DungeonService implements DungeonServiceInterface
 {
@@ -75,6 +76,7 @@ class DungeonService implements DungeonServiceInterface
     public function setDungeonContext(Dungeon $dungeon, ?User $user = null): void
     {
         $user?->update(['dungeon_id' => $dungeon->id]);
+        $user?->load('dungeon');
 
         // Unit tests and artisan commands don't like this
         // Nor do we want to keep setting the cookie if it hasn't changed
@@ -106,5 +108,16 @@ class DungeonService implements DungeonServiceInterface
         }
 
         return $dungeon;
+    }
+
+    public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection
+    {
+        // Resort to finding a default dungeon of sorts
+        $gameVersion = $gameVersion ?? GameVersion::getUserOrDefaultGameVersion();
+
+        $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
+        $nextSeason    = $this->seasonService->getNextSeason($currentSeason);
+
+        return ($nextSeason ?? $currentSeason)?->dungeons ?? $gameVersion->expansion->dungeons;
     }
 }

@@ -13,6 +13,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -38,7 +39,7 @@ class DungeonHeatmapController extends Controller
         Request                     $request,
         GameVersion                 $gameVersion,
         GameVersionServiceInterface $gameVersionService,
-    ): View|RedirectResponse {
+    ): RedirectResponse {
         $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
             return redirect()->route('dungeon.heatmaps.gameversion.list', [
@@ -46,8 +47,11 @@ class DungeonHeatmapController extends Controller
             ]);
         }
 
-        return view('dungeon.heatmap.gameversion.list', [
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+
+        return redirect()->route('dungeon.heatmap.gameversion.view', [
             'gameVersion' => $gameVersion,
+            'dungeon'     => $contextDungeon,
         ]);
     }
 
@@ -87,6 +91,7 @@ class DungeonHeatmapController extends Controller
         HeatmapUrlFormRequest      $request,
         MapContextServiceInterface $mapContextService,
         SeasonServiceInterface     $seasonService,
+        DungeonServiceInterface    $dungeonService,
         GameVersion                $gameVersion,
         Dungeon                    $dungeon,
         string                     $floorIndex = '1',
@@ -133,6 +138,8 @@ class DungeonHeatmapController extends Controller
                 $dungeon->getActiveSeason($seasonService);
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
+
+            $dungeonService->setDungeonContext($dungeon, Auth::user());
 
             return view('dungeon.heatmap.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,

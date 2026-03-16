@@ -11,15 +11,19 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
- * @var GameVersion             $currentUserGameVersion
- * @var Collection<GameVersion> $allGameVersions
- * @var Collection<Expansion>   $activeExpansions
- * @var Collection<Dungeon>     $gameVersionDungeons
- * @var Season                  $currentSeason
- * @var Season|null             $nextSeason
+ * @var GameVersion                $currentUserGameVersion
+ * @var Collection<GameVersion>    $allGameVersions
+ * @var Collection<Expansion>      $activeExpansions
+ * @var Collection<Dungeon>        $gameVersionDungeons
+ * @var Season                     $currentSeason
+ * @var Season|null                $nextSeason
+ * @var bool                       $forceShrink
+ * @var Collection<string, string> $dungeonContextLinks
  */
 
-$navs = [];
+$navs                = [];
+$forceShrink         ??= false;
+$dungeonContextLinks ??= null;
 
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
@@ -87,7 +91,8 @@ $isActiveRoute = function (string $route) {
 }
 ?>
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
+    class="game_version_header navbar-first d-none d-lg-block fixed-top
+     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
     <div class="container discover bg-dark rounded">
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
@@ -100,7 +105,8 @@ $isActiveRoute = function (string $route) {
                 &nbsp;
             </div>
         </div>
-        <div class="row no-gutters dungeon_context_header" data-toggle="navbar-shrink" style="height: 99px;">
+        <div class="row no-gutters dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
+             data-toggle="navbar-shrink" style="height: 99px;">
             <div class="col">
                 @include('common.dungeon.list', [
                     'dungeons' => $gameVersionDungeons,
@@ -108,7 +114,7 @@ $isActiveRoute = function (string $route) {
                     'useAbbreviation' => true,
                     'selectable' => true,
                     'selected' => Dungeon::getUserOrDefaultDungeon()->key,
-                    'links' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                    'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
                             $dungeon->key => route('dungeon.changecontext', [
                                 'dungeon' => $dungeon,
                             ])
@@ -120,7 +126,9 @@ $isActiveRoute = function (string $route) {
 </div>
 <div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
 <nav
-    class="navbar navbar-second fixed-top navbar-expand-lg {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}"
+    class="navbar navbar-second fixed-top navbar-expand-lg
+     {{ $forceShrink ? 'navbar-shrink' : '' }}
+     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}"
     data-toggle="navbar-shrink">
     <div class="container px-1 bg-header rounded">
         <a class="navbar-brand" href="/">

@@ -3,12 +3,14 @@
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
+ * @var GameVersion                  $gameVersion
  * @var Dungeon                      $dungeon
  * @var Season                       $season
  * @var Floor                        $floor
@@ -54,6 +56,12 @@ use Illuminate\Support\Collection;
                     'enemyInfo' => true,
                 ],
             ],
+            'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                $dungeon->key => route('dungeon.heatmap.gameversion.view', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon' => $dungeon,
+                ])
+            ]),
             'controlOptions' => [
                 'heatmapSearch' => [
                     'keyLevelMin' => $keyLevelMin,

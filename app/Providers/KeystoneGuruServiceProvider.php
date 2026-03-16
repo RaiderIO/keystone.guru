@@ -389,17 +389,27 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $globalViewVariables,
             &$userOrDefaultRegion
         ) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
+            $view->with('currentSeason', $regionViewVariables['currentSeason']);
+            $view->with('nextSeason', $regionViewVariables['nextSeason']);
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+
+        view()->composer(['common.layout.header', 'dungeon.heatmap.gameversion.view'], static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
 
             /** @var Season|null $activeSeason */
-            $activeSeason = $regionViewVariables['currentSeason'] ?? $regionViewVariables['nextSeason'];
-            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-            $view->with('gameVersionDungeons', ($activeSeason)?->dungeons ?? $userOrDefaultGameVersion->expansion->dungeons);
+            $activeSeason = $regionViewVariables['nextSeason'] ?? $regionViewVariables['currentSeason'];
+            $view->with('gameVersionDungeons', $activeSeason?->dungeons ?? $userOrDefaultGameVersion->expansion->dungeons);
         });
 
         view()->composer([

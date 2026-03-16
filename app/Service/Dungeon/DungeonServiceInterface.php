@@ -3,7 +3,9 @@
 namespace App\Service\Dungeon;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 interface DungeonServiceInterface
 {
@@ -15,4 +17,6 @@ interface DungeonServiceInterface
         Dungeon $dungeon,
         ?User   $user = null,
     ): void;
+
+    public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
 }
