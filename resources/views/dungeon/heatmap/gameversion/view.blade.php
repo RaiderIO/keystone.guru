@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
  * @var int                          $playerDeathsMin
  * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<Dungeon>          $gameVersionDungeons
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])

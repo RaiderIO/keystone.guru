@@ -398,7 +398,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
-        view()->composer(['common.layout.header', 'dungeon.heatmap.gameversion.view'], static function (View $view) use (
+        view()->composer(['common.layout.header', 'dungeon.heatmap.gameversion.view', 'dungeon.explore.gameversion.view'], static function (View $view) use (
             $viewService,
             $globalViewVariables,
             &$userOrDefaultRegion

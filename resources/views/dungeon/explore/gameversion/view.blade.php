@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @var int                          $playerDeathsMin
  * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<Dungeon>          $gameVersionDungeons
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -51,6 +52,12 @@ use Illuminate\Support\Collection;
                     'enemyInfo' => true,
                 ],
             ],
+            'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                $dungeon->key => route('dungeon.explore.gameversion.view', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon' => $dungeon,
+                ])
+            ]),
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',
