@@ -114,9 +114,9 @@ Breadcrumbs::for('dungeonroute.discover.search', static function (Generator $tra
     $trail->parent('dungeonroutes');
     $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeonroutes.search'));
 });
-Breadcrumbs::for('dungeon.dungeonroute.search.list', static function (Generator $trail) {
+Breadcrumbs::for('dungeon.dungeonroute.search', static function (Generator $trail) {
     $trail->parent('dungeonroutes');
-    $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeon.dungeonroute.search.list'));
+    $trail->push(__('breadcrumbs.home.dungeonroutes.search'), route('dungeon.dungeonroute.search'));
 });
 
 /**

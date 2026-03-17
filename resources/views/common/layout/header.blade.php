@@ -208,8 +208,8 @@ $isActiveRoute = function (string $route) {
                 <li class="nav-item nav-item-divider"></li>
                 <li class="nav-item">
                     @if(Feature::active(SearchPageRework::class))
-                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search.list')) ? 'active' : '' }}"
-                           href="{{ route('dungeon.dungeonroute.search.list') }}">
+                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search')) ? 'active' : '' }}"
+                           href="{{ route('dungeon.dungeonroute.search') }}">
                             <i class="fas fa-search"></i>
                         </a>
                     @else

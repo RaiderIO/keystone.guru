@@ -180,10 +180,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::prefix('dungeonroute/search')->group(static function () {
-            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search.list');
+            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search');
 
             Route::prefix('{gameVersion}')->group(static function () {
                 Route::get('/', new DungeonRouteSearchController()->searchByGameVersion(...))->name('dungeon.dungeonroute.search.gameversion');
+                Route::get('/select', new DungeonRouteSearchController()->select(...))->name('dungeon.dungeonroute.search.gameversion.select');
                 Route::get('/{dungeon}', new DungeonRouteSearchController()->searchByDungeon(...))->name('dungeon.dungeonroute.search.gameversion.dungeon');
             });
         });
