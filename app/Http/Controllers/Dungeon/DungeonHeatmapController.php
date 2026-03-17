@@ -30,8 +30,18 @@ class DungeonHeatmapController extends Controller
         Request                     $request,
         GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
-        return redirect()->route('dungeon.heatmaps.gameversion.list', [
+        return redirect()->route('dungeon.heatmap.gameversion', [
             'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
+        ]);
+    }
+
+    public function select(
+        Request                     $request,
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService,
+    ): View {
+        return view('dungeon.heatmap.gameversion.list', [
+            'gameVersion' => $gameVersion,
         ]);
     }
 
@@ -42,7 +52,7 @@ class DungeonHeatmapController extends Controller
     ): RedirectResponse {
         $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
-            return redirect()->route('dungeon.heatmaps.gameversion.list', [
+            return redirect()->route('dungeon.heatmap.gameversion.select', [
                 'gameVersion' => $userOrDefaultGameVersion,
             ]);
         }
@@ -59,7 +69,7 @@ class DungeonHeatmapController extends Controller
     {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -98,7 +108,7 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -151,6 +161,7 @@ class DungeonHeatmapController extends Controller
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion)->filter(fn(Dungeon $dungeon) => $dungeon->heatmap_enabled),
             ]));
         }
     }
@@ -176,7 +187,7 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -298,10 +309,12 @@ class DungeonHeatmapController extends Controller
      * Maybe this should go in a policy?
      *
      * @param  Dungeon               $dungeon
+     * @param  GameVersion           $gameVersion
      * @param  MappingVersion|null   $currentMappingVersion
      * @return RedirectResponse|null
      */
     private function guardAgainstInvalidAccess(
+        GameVersion     $gameVersion,
         Dungeon         $dungeon,
         ?MappingVersion $currentMappingVersion,
     ): ?RedirectResponse {
@@ -311,7 +324,9 @@ class DungeonHeatmapController extends Controller
             $currentMappingVersion === null ||
             !Feature::active(Heatmap::class)
         ) {
-            return redirect()->route('dungeon.heatmaps.list');
+            return redirect()->route('dungeon.heatmap.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
 
         return null;

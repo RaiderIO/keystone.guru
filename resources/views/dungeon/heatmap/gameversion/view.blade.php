@@ -62,7 +62,7 @@ use Illuminate\Support\Collection;
                     'gameVersion' => $gameVersion,
                     'dungeon' => $dungeon,
                 ])
-            ]),
+            ])->put('more', route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion])),
             'controlOptions' => [
                 'heatmapSearch' => [
                     'keyLevelMin' => $keyLevelMin,

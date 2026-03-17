@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
             {!!
                 __('view_home.sections.routes.weeklyroute.subheader', [
                     'weekly_route_url' => config('keystoneguru.raider_io.weekly_route.url'),
-                    'heatmaps_url' => route('dungeon.heatmaps.list'),
+                    'heatmaps_url' => route('dungeon.heatmap'),
                 ])
             !!}
         </p>

@@ -54,8 +54,7 @@ use Mockery\Exception;
  * @property bool     $has_wallpaper                      True if this dungeon has a wallpaper to show as a background.
  * @property bool     $mdt_supported                      True if MDT is supported for this dungeon, false if it is not.
  *
- * @property Expansion   $expansion
- * @property GameVersion $gameVersion
+ * @property Expansion $expansion
  *
  * @property Collection<MappingVersion>             $mappingVersions
  * @property Collection<Floor>                      $floors

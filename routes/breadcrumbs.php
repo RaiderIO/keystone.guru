@@ -80,19 +80,19 @@ Breadcrumbs::for('release.view', static function (Generator $trail, Release $rel
 /**
  * Heatmaps page
  */
-Breadcrumbs::for('dungeon.heatmap.gameversion.list', static function (Generator $trail, GameVersion $gameVersion) {
+Breadcrumbs::for('dungeon.heatmap.gameversion', static function (Generator $trail, GameVersion $gameVersion) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.gameversion.update', ['gameVersion' => __($gameVersion->description)]), route('gameversion.update', ['gameVersion' => $gameVersion]));
-    $trail->push(__('breadcrumbs.home.gameversion.dungeon.heatmaps'), route('dungeon.heatmaps.gameversion.list', ['gameVersion' => $gameVersion]));
+    $trail->push(__('breadcrumbs.home.gameversion.dungeon.heatmap'), route('dungeon.heatmap.gameversion', ['gameVersion' => $gameVersion]));
 });
 
 /**
  * Explore page
  */
-Breadcrumbs::for('dungeon.explore.gameversion.list', static function (Generator $trail, GameVersion $gameVersion) {
+Breadcrumbs::for('dungeon.explore.gameversion', static function (Generator $trail, GameVersion $gameVersion) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.gameversion.update', ['gameVersion' => __($gameVersion->description)]), route('gameversion.update', ['gameVersion' => $gameVersion]));
-    $trail->push(__('breadcrumbs.home.gameversion.dungeon.explore'), route('dungeon.explore.gameversion.list', ['gameVersion' => $gameVersion]));
+    $trail->push(__('breadcrumbs.home.gameversion.dungeon.explore'), route('dungeon.explore.gameversion', ['gameVersion' => $gameVersion]));
 });
 
 /**

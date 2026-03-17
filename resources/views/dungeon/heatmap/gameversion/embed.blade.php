@@ -60,7 +60,7 @@ $showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['
         ])
     @endif
 
-    <div class="wrapper embed_wrapper {{ $showHeader ? $embedOptions['style'] : '' }}" style="border: 2px solid red;">
+    <div class="wrapper embed_wrapper {{ $showHeader ? $embedOptions['style'] : '' }}">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'mappingVersion' => $dungeon->getCurrentMappingVersion($gameVersion),

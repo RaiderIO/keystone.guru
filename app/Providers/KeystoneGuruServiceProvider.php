@@ -254,6 +254,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         GameVersionServiceInterface        $gameVersionService,
         MessageBannerServiceInterface      $messageBannerService,
         ReadOnlyModeServiceInterface       $readOnlyModeService,
+        DungeonServiceInterface            $dungeonService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -398,18 +399,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
-        view()->composer(['common.layout.header', 'dungeon.heatmap.gameversion.view', 'dungeon.explore.gameversion.view'], static function (View $view) use (
+        view()->composer(['common.layout.header'], static function (View $view) use (
             $viewService,
+            $dungeonService,
             $globalViewVariables,
             &$userOrDefaultRegion
         ) {
             $userOrDefaultGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-
-            /** @var Season|null $activeSeason */
-            $activeSeason = $regionViewVariables['nextSeason'] ?? $regionViewVariables['currentSeason'];
-            $view->with('gameVersionDungeons', $activeSeason?->dungeons ?? $userOrDefaultGameVersion->expansion->dungeons);
+            $view->with('gameVersionDungeons', $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
         });
 
         view()->composer([

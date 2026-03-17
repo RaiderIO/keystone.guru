@@ -19,7 +19,7 @@ $findRouteLink          = $currentUserGameVersion->has_seasons ?
     <div class="col-12">
         <div class="row no-gutters">
             <div class="col-md-4 mb-3 mb-md-0 mt-4">
-                <a href="{{ route('dungeon.heatmaps.list') }}" class="d-block text-center">
+                <a href="{{ route('dungeon.heatmap') }}" class="d-block text-center">
                     <img src="{{ ksgAssetImage('home/featured_heatmaps_text.png') }}" alt="{{ __('view_home.sections.featured.heatmaps_alt') }}"
                          class="img-fluid rounded shadow-sm">
                 </a>

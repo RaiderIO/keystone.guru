@@ -151,15 +151,15 @@ class DungeonController extends Controller
         $previousGameVersion = $dungeonService->getDungeonContext(Auth::user());
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 
-        // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
-        $referer = $request->headers->get('referer');
-        if ($referer) {
-            if (str_contains($referer, sprintf('/routes/%s', $previousGameVersion->key))) {
-                return redirect()->route('dungeonroutes.current');
-            } elseif (str_contains($referer, sprintf('/explore/%s', $previousGameVersion->key))) {
-                return redirect()->route('dungeon.explore.list');
-            }
-        }
+//        // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
+//        $referer = $request->headers->get('referer');
+//        if ($referer) {
+//            if (str_contains($referer, sprintf('/routes/%s', $previousGameVersion->key))) {
+//                return redirect()->route('dungeonroutes.current');
+//            } elseif (str_contains($referer, sprintf('/explore/%s', $previousGameVersion->key))) {
+//                return redirect()->route('dungeon.explore.list');
+//            }
+//        }
 
         return Redirect::back();
     }

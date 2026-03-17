@@ -18,10 +18,12 @@ use Illuminate\Support\Str;
  * @var Season                     $currentSeason
  * @var Season|null                $nextSeason
  * @var bool                       $forceShrink
+ * @var bool                       $showMore
  * @var Collection<string, string> $dungeonContextLinks
  */
 
 $navs                = [];
+$showMore            ??= false;
 $forceShrink         ??= false;
 $dungeonContextLinks ??= null;
 
@@ -69,7 +71,7 @@ foreach ($activeExpansions as $expansion) {
 }
 
 if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
-    $navs[route('dungeon.heatmaps.gameversion.list', ['gameVersion' => $currentUserGameVersion])] = [
+    $navs[route('dungeon.heatmap.gameversion', ['gameVersion' => $currentUserGameVersion])] = [
         'fa'   => 'fas fa-fire text-danger',
         'text' => __('view_common.layout.header.heatmaps'),
     ];
@@ -109,10 +111,12 @@ $isActiveRoute = function (string $route) {
              data-toggle="navbar-shrink" style="height: 99px;">
             <div class="col">
                 @include('common.dungeon.list', [
+                    'gameVersion' => $currentUserGameVersion,
                     'dungeons' => $gameVersionDungeons,
                     'colCount' => $gameVersionDungeons->count(),
                     'useAbbreviation' => true,
                     'selectable' => true,
+                    'showMore' => $showMore,
                     'selected' => Dungeon::getUserOrDefaultDungeon()->key,
                     'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
                             $dungeon->key => route('dungeon.changecontext', [
@@ -194,7 +198,7 @@ $isActiveRoute = function (string $route) {
                         @endforeach
                     </div>
                 </li>
-                @php($route = route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGameVersion]))
+                @php($route = route('dungeon.explore.gameversion', ['gameVersion' => $currentUserGameVersion]))
                 <li class="nav-item">
                     <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
                        href="{{ $route }}">
