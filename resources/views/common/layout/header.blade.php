@@ -19,11 +19,13 @@ use Illuminate\Support\Str;
  * @var Season|null                $nextSeason
  * @var bool                       $forceShrink
  * @var bool                       $showMore
+ * @var bool                       $showDungeonContext
  * @var Collection<string, string> $dungeonContextLinks
  */
 
 $navs                = [];
 $showMore            ??= false;
+$showDungeonContext  ??= true;
 $forceShrink         ??= false;
 $dungeonContextLinks ??= null;
 
@@ -107,28 +109,32 @@ $isActiveRoute = function (string $route) {
                 &nbsp;
             </div>
         </div>
-        <div class="row no-gutters dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
-             data-toggle="navbar-shrink" style="height: 99px;">
-            <div class="col">
-                @include('common.dungeon.list', [
-                    'gameVersion' => $currentUserGameVersion,
-                    'dungeons' => $gameVersionDungeons,
-                    'colCount' => $gameVersionDungeons->count(),
-                    'useAbbreviation' => true,
-                    'selectable' => true,
-                    'showMore' => $showMore,
-                    'selected' => Dungeon::getUserOrDefaultDungeon()->key,
-                    'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
-                            $dungeon->key => route('dungeon.changecontext', [
-                                'dungeon' => $dungeon,
-                            ])
-                        ]),
-                ])
+        @if($showDungeonContext)
+            <div class="row no-gutters dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
+                 data-toggle="navbar-shrink" style="height: 99px;">
+                <div class="col">
+                    @include('common.dungeon.list', [
+                        'gameVersion' => $currentUserGameVersion,
+                        'dungeons' => $gameVersionDungeons,
+                        'colCount' => $gameVersionDungeons->count(),
+                        'useAbbreviation' => true,
+                        'selectable' => true,
+                        'showMore' => $showMore,
+                        'selected' => Dungeon::getUserOrDefaultDungeon()->key,
+                        'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                                $dungeon->key => route('dungeon.changecontext', [
+                                    'dungeon' => $dungeon,
+                                ])
+                            ]),
+                    ])
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
-<div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
+@if(!$forceShrink)
+    <div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
+@endif
 <nav
     class="navbar navbar-second fixed-top navbar-expand-lg
      {{ $forceShrink ? 'navbar-shrink' : '' }}

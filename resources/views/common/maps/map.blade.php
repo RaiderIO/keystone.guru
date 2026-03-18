@@ -275,8 +275,20 @@ if ($isAdmin) {
         <nav id="map_header" class="map_fade_out">
             @include('common.layout.header', [
                 'showMore' => true,
+                'showDungeonContext' => false,
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
+            ])
+            @include('common.maps.controls.header', [
+                'echo' => $echo,
+                'edit' => $edit,
+                'mapContext' => $mapContext,
+                'dungeon' => $dungeon,
+                'floor' => $floor,
+                'headerTitle' => $headerTitle,
+                'dungeonroute' => $dungeonroute,
+                'livesession' => $livesession,
+                'mappingVersion' => $mappingVersion,
             ])
         </nav>
         {{--        @include('common.maps.controls.header', [--}}
@@ -419,6 +431,12 @@ if ($isAdmin) {
             @include('common.modal.dungeonroute.removed', ['dungeonroute' => $dungeonroute])
         @endcomponent
     @endisset
+
+    @if(!$noUI)
+        @if(isset($show['header']) && $show['header'])
+            @include('common.general.modallazy', ['targetView' => 'common.modal.createroute', 'id' => 'create_route_modal', 'size' => 'xl'])
+        @endif
+    @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
         isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])

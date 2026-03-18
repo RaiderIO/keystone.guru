@@ -250,11 +250,11 @@ body {
   }
 
   .modal-backdrop {
-    z-index: 100010;
+    z-index: 100010 !important;
   }
 
   .modal {
-    z-index: 100011;
+    z-index: 100021 !important;
   }
 
   .modal-lg {
