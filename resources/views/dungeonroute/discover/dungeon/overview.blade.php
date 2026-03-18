@@ -3,22 +3,31 @@
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Collection;
 
 /**
- * @var AffixGroup  $currentAffixGroup
- * @var boolean     $showAds
- * @var boolean     $isMobile
- * @var Dungeon     $dungeon
- * @var array       $dungeonroutes
- * @var GameVersion $gameVersion
+ * @var AffixGroup          $currentAffixGroup
+ * @var boolean             $showAds
+ * @var boolean             $isMobile
+ * @var Dungeon             $dungeon
+ * @var array               $dungeonroutes
+ * @var GameVersion         $gameVersion
+ * @var Collection<Dungeon> $gameVersionDungeons
  */
 
+$showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'breadcrumbsParams' => [$gameVersion, $dungeon],
     'title' => sprintf('%s routes', __($dungeon->name)),
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route('dungeonroutes.discoverdungeon', [
+            'gameVersion' => $gameVersion,
+            'dungeon' => $dungeon,
+        ])
+    ]),
 ])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
@@ -62,7 +71,7 @@ use App\Models\GameVersion\GameVersion;
         </div>
     @endif
 
-    @if($gameVersion->has_seasons)
+    @if($showRoutesByAffixes)
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
@@ -81,7 +90,7 @@ use App\Models\GameVersion\GameVersion;
         </div>
     @endif
 
-    @if($gameVersion->has_seasons)
+    @if($showRoutesByAffixes)
         @include('dungeonroute.discover.panel', [
             'gameVersion' => $gameVersion,
             'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),

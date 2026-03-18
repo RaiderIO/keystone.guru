@@ -48,10 +48,7 @@ if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
         }
     }
 
-    $navs[route('dungeonroutes.season', [
-        'gameVersion' => $currentUserGameVersion,
-        'season'      => $currentSeason->index,
-    ])] = [
+    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion,])] = [
         'fa'   => 'fa fa-route',
         'text' => __('view_common.layout.header.browse_routes'),
     ];
@@ -86,7 +83,7 @@ $isActiveRoute = function (string $route) {
     $parsedUrl = (parse_url((string)$route));
     if (is_array($parsedUrl)) {
         $routePath = trim($parsedUrl['path'], '/');
-        if (Request::path() === $routePath) {
+        if (str_starts_with(Request::path(), $routePath)) {
             $active = 'active';
         }
     }

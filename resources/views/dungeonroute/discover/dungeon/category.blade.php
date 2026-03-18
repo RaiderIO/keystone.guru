@@ -4,6 +4,7 @@
  * @var GameVersion              $gameVersion
  * @var Dungeon                  $dungeon
  * @var Collection<DungeonRoute> $dungeonroutes
+ * @var string                   $category
  */
 
 use App\Models\AffixGroup\AffixGroup;
@@ -22,6 +23,12 @@ $affixgroup ??= null;
     'disableDefaultRootClasses' => true,
     'breadcrumbsParams' => [$gameVersion, $dungeon],
     'title' => $title,
+    'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+        $dungeon->key => route(sprintf('dungeonroutes.discoverdungeon.%s', $category), [
+            'gameVersion' => $gameVersion,
+            'dungeon' => $dungeon,
+        ])
+    ]),
 ])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
