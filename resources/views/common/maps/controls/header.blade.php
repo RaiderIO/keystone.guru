@@ -34,7 +34,7 @@ $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
 <nav class="navbar navbar-third navbar-expand-xl fixed-top {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
-    <div class="container bg-header text-center text-xl-left px-1">
+    <div class="container bg-header text-center text-xl-left px-1 rounded">
         <ul class="navbar-nav mr-auto">
             @component('common.maps.controls.buttons.headerbutton')
                 <div class="row no-gutters">

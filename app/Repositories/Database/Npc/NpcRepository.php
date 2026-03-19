@@ -119,6 +119,12 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     232446,
                 ]);
             })
+            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_SKYREACH, function (Builder $builder) {
+                $builder->whereNotIn('npcs.id', [
+                    // Solar Orb gives 0 enemy forces
+                    251880,
+                ]);
+            })
             ->get();
     }
 
