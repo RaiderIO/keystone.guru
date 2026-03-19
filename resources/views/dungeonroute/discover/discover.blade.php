@@ -41,7 +41,7 @@ $showRoutesByAffixes = $season !== null && $gameVersion->key !== GameVersion::GA
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion, 'gameVersion' => $gameVersion])
 
-    <div class="discover_panel">
+    <div class="discover_panel px-xl-2">
         @include('common.dungeon.griddiscover', [
             'gameVersion' => $gameVersion,
             'season' => $season,

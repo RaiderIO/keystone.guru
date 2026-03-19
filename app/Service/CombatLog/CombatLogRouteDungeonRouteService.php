@@ -21,8 +21,6 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemy;
-use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -507,10 +505,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         /** @var Collection<Npc> $validNpcIds */
         $npcs = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
         /** @var Collection<int> $validNpcIds */
-        $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
+        $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
         /** @var Floor $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
-        $latLngs = [];
+        $latLngs       = [];
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor;
 
