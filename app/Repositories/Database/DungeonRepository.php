@@ -21,7 +21,10 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
 
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon
     {
-        return Dungeon::where('challenge_mode_id', $challengeModeId)->firstOrFail();
+        // Order by descending id so we get the most recent dungeon in case challenge modes overlap
+        return Dungeon::where('challenge_mode_id', $challengeModeId)
+            ->orderByDesc('id')
+            ->firstOrFail();
     }
 
     public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion
