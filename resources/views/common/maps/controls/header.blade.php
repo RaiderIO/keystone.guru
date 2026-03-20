@@ -33,116 +33,56 @@ $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
-<nav id="map_header"
-     class="map_fade_out navbar navbar-expand-xl {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
-    <div class="container bg-header">
-        <a class="navbar-brand" href="/">
-            <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
-                 height="44px;" width="200px;">
-        </a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#mainNavbar"
-                aria-controls="mainNavbar" aria-expanded="false"
-                aria-label="{{ __('view_common.maps.controls.header.toggle_navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse text-center text-xl-left" id="mainNavbar">
-            <ul class="navbar-nav mr-auto">
-                @isset($dungeonroute)
-                    @component('common.maps.controls.buttons.headerbutton')
-                        @if( $mapContext instanceof MapContextLiveSession )
-                                <?php $stopped = $livesession->expires_at !== null; ?>
-                            @if(!$stopped)
-                                <button id="stop_live_session" class="btn btn-danger btn-sm"
-                                        data-toggle="modal" data-target="#stop_live_session_modal">
-                                    <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
-                                </button>
-                            @endif
-                            <div id="stopped_live_session_container" class="row no-gutters"
-                                 style="display: {{ $stopped ? 'inherit' : 'none' }}">
-                                <div class="row">
-                                    <div class="col">
-                                    <span id="stopped_live_session_countdown">
-                                        {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
-                                    </span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        @if($mayUserEdit)
-                                            <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
-                                               class="btn-sm btn-success w-100">
-                                                <i class="fas fa-edit"></i> {{ __('view_common.maps.controls.header.edit_route') }}
-                                            </a>
-                                        @else
-                                            <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
-                                               class="btn-sm btn-success w-100">
-                                                <i class="fas fa-eye"></i> {{ __('view_common.maps.controls.header.view_route') }}
-                                            </a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <button class="btn btn-success btn-sm w-100"
-                                    data-toggle="modal" data-target="#start_live_session_modal">
-                                <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
-                            </button>
-                        @endif
-                    @endcomponent
-                    <li class="nav-item nav-item-divider">
-
-                    </li>
-                @endisset
-                @component('common.maps.controls.buttons.headerbutton')
-                    <div class="row no-gutters">
-                        <div class="col my-1">
-                            <div class="row no-gutters">
-                                @auth
-                                    @isset($dungeonroute)
-                                            <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
-                                        <div class="col-auto">
-                                            <h5 class="mb-0 mr-2 pt-1">
-                                                <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                                   style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
-                                                <i id="route_not_favorited" class="far fa-star favorite_star"
-                                                   style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
-                                                {{ html()->hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0')->id('favorite') }}
-                                            </h5>
-                                        </div>
-                                    @endisset
-                                @endauth
-                                @if($seasonalAffix !== null)
-                                    @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
+<nav class="navbar navbar-third navbar-expand-xl fixed-top {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
+    <div class="container bg-header text-center text-xl-left px-1 rounded">
+        <ul class="navbar-nav mr-auto">
+            @component('common.maps.controls.buttons.headerbutton')
+                <div class="row no-gutters">
+                    <div class="col my-1">
+                        <div class="row no-gutters">
+                            @auth
+                                @isset($dungeonroute)
+                                        <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
                                     <div class="col-auto">
-                                        <img class="select_icon mr-1"
-                                             src="{{ ksgAssetImage(sprintf('affixes/%s.jpg', $seasonalAffixKey)) }}"
-                                             alt="{{ __('view_common.maps.controls.header.seasonal_affix') }}"
-                                             data-toggle="tooltip"
-                                             title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
-                                        />
+                                        <h5 class="mb-0 mr-2 pt-1">
+                                            <i id="route_favorited" class="fas fa-star favorite_star favorited"
+                                               style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
+                                            <i id="route_not_favorited" class="far fa-star favorite_star"
+                                               style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
+                                            {{ html()->hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0')->id('favorite') }}
+                                        </h5>
                                     </div>
-                                @endif
-                                <div class="col">
-                                    <h5 id="route_title" class="mb-0 mr-2">
-                                        @isset($headerTitle)
-                                            {!! $headerTitle !!}
-                                        @else
-                                            @isset($dungeonroute)
-                                                {{ $dungeonroute->title }}
-                                            @endisset
-                                        @endisset
-                                    </h5>
+                                @endisset
+                            @endauth
+                            @if($seasonalAffix !== null)
+                                @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
+                                <div class="col-auto">
+                                    <img class="select_icon mr-1"
+                                         src="{{ ksgAssetImage(sprintf('affixes/%s.jpg', $seasonalAffixKey)) }}"
+                                         alt="{{ __('view_common.maps.controls.header.seasonal_affix') }}"
+                                         data-toggle="tooltip"
+                                         title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
+                                    />
                                 </div>
+                            @endif
+                            <div class="col">
+                                <h5 id="route_title" class="mb-0 mr-2">
+                                    @isset($headerTitle)
+                                        {!! $headerTitle !!}
+                                    @else
+                                        @isset($dungeonroute)
+                                            {{ $dungeonroute->title }}
+                                        @endisset
+                                    @endisset
+                                </h5>
                             </div>
                         </div>
                     </div>
-                    @if(!($mapContext instanceof MapContextDungeonExplore))
-                        @if(isset($dungeonroute) && $dungeonroute->team instanceof Team)
-                            <div class="row no-gutters">
-                                <div class="col">
+                </div>
+                @if(!($mapContext instanceof MapContextDungeonExplore))
+                    @if(isset($dungeonroute) && $dungeonroute->team instanceof Team)
+                        <div class="row no-gutters">
+                            <div class="col">
                                 <span class="text-primary">
                                     @if($dungeonroute->team->isUserMember(Auth::user()))
                                         <a href="{{ route('team.edit', ['team' => $dungeonroute->team]) }}">
@@ -152,11 +92,11 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                         <i class="fas fa-users"></i> {{ $dungeonroute->team->name }}
                                     @endif
                                 </span>
-                                </div>
                             </div>
-                        @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
-                            <div class="row no-gutters">
-                                <div class="col">
+                        </div>
+                    @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
+                        <div class="row no-gutters">
+                            <div class="col">
                                     <span data-toggle="tooltip"
                                           title="{{ __('view_common.maps.map.new_mapping_version_header_description') }}">
                                             <span class="text-warning">
@@ -164,103 +104,143 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                             </span>
                                         {{ __('view_common.maps.map.new_mapping_version_header_title') }}
                                     </span>
-                                </div>
                             </div>
-                        @endif
+                        </div>
                     @endif
+                @endif
+            @endcomponent
+        </ul>
+        @if($echo)
+            <ul class="navbar-nav">
+                @component('common.maps.controls.buttons.headerbutton')
+                    @include('common.layout.nav.connectedusers')
                 @endcomponent
             </ul>
-            @if($echo)
-                <ul class="navbar-nav">
-                    @component('common.maps.controls.buttons.headerbutton')
-                        @include('common.layout.nav.connectedusers')
-                    @endcomponent
-                </ul>
-            @endif
-            <ul class="navbar-nav">
+        @endif
+        <ul class="navbar-nav">
+            <li class="nav-item nav-item-divider">
+
+            </li>
+            @isset($dungeonroute)
+                @component('common.maps.controls.buttons.headerbutton')
+                    @if( $mapContext instanceof MapContextLiveSession )
+                            <?php $stopped = $livesession->expires_at !== null; ?>
+                        @if(!$stopped)
+                            <button id="stop_live_session" class="btn btn-danger btn-sm"
+                                    data-toggle="modal" data-target="#stop_live_session_modal">
+                                <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
+                            </button>
+                        @endif
+                        <div id="stopped_live_session_container" class="row no-gutters"
+                             style="display: {{ $stopped ? 'inherit' : 'none' }}">
+                            <div class="row">
+                                <div class="col">
+                                    <span id="stopped_live_session_countdown">
+                                        {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @if($mayUserEdit)
+                                        <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                                           class="btn-sm btn-success w-100">
+                                            <i class="fas fa-edit"></i> {{ __('view_common.maps.controls.header.edit_route') }}
+                                        </a>
+                                    @else
+                                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                                           class="btn-sm btn-success w-100">
+                                            <i class="fas fa-eye"></i> {{ __('view_common.maps.controls.header.view_route') }}
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <button class="btn btn-success btn-sm w-100"
+                                data-toggle="modal" data-target="#start_live_session_modal">
+                            <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
+                        </button>
+                    @endif
+                @endcomponent
                 <li class="nav-item nav-item-divider">
 
                 </li>
-                @auth
-                    @if( $showCreateRouteBtn )
-                        @component('common.maps.controls.buttons.headerbutton')
-                            <a href="{{ route('dungeonroute.claim', [
+            @endisset
+            @auth
+                @if( $showCreateRouteBtn )
+                    @component('common.maps.controls.buttons.headerbutton')
+                        <a href="{{ route('dungeonroute.claim', [
                                     'dungeon' => $dungeonroute->dungeon,
                                     'title' => $dungeonroute->getTitleSlug(),
                                     'dungeonroute' => $dungeonroute]
                                 ) }}">
-                                <button class="btn btn-success btn-sm w-100">
-                                    <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
-                                </button>
-                            </a>
-                        @endcomponent
-                    @endif
-                @endauth
-
-                @isset($dungeonroute)
-                    @if($isUserAdmin)
-                        @component('common.maps.controls.buttons.headerbutton')
-                            <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm w-100"
-                                    data-toggle="modal" data-target="#edit_route_admin_settings_modal">
-                                <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
-                            </button>
-                        @endcomponent
-                    @endif
-
-                    @component('common.maps.controls.buttons.headerbutton')
-                        <button id="simulate_route_button" class="btn btn-info btn-sm w-100"
-                                data-toggle="modal" data-target="#simulate_modal">
-                            <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
-                        </button>
-                    @endcomponent
-
-                    @if(!$dungeonroute->isSandbox() && $edit)
-                        @component('common.maps.controls.buttons.headerbutton')
-                            <button id="edit_route_settings_button" class="btn btn-info btn-sm w-100"
-                                    data-toggle="modal" data-target="#edit_route_settings_modal">
-                                <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
-                            </button>
-                        @endcomponent
-                    @endif
-                @endisset
-                @if( $mapContext instanceof MapContextDungeonExplore && $isUserAdmin )
-                    @component('common.maps.controls.buttons.headerbutton')
-                        <a href="{{ route('admin.floor.edit.mapping', [
-                                    'dungeon' => $dungeon,
-                                    'floor' => $dungeon->floors()->first(),
-                                    'mapping_version' => $dungeon->getCurrentMappingVersion()
-                                ]) }}">
                             <button class="btn btn-success btn-sm w-100">
-                                <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                                <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
                             </button>
                         </a>
                     @endcomponent
                 @endif
-                @if( $mapContext instanceof MapContextMappingVersionEdit )
+            @endauth
+
+            @isset($dungeonroute)
+                @if($isUserAdmin)
                     @component('common.maps.controls.buttons.headerbutton')
-                        <button id="edit_mapping_version_button" class="btn btn-info btn-sm w-100"
-                                data-toggle="modal" data-target="#edit_mapping_version_modal">
+                        <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm w-100"
+                                data-toggle="modal" data-target="#edit_route_admin_settings_modal">
+                            <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
+                        </button>
+                    @endcomponent
+                @endif
+
+                @component('common.maps.controls.buttons.headerbutton')
+                    <button id="simulate_route_button" class="btn btn-info btn-sm w-100"
+                            data-toggle="modal" data-target="#simulate_modal">
+                        <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
+                    </button>
+                @endcomponent
+
+                @if(!$dungeonroute->isSandbox() && $edit)
+                    @component('common.maps.controls.buttons.headerbutton')
+                        <button id="edit_route_settings_button" class="btn btn-info btn-sm w-100"
+                                data-toggle="modal" data-target="#edit_route_settings_modal">
+                            <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
+                        </button>
+                    @endcomponent
+                @endif
+            @endisset
+            @if( $mapContext instanceof MapContextDungeonExplore && $isUserAdmin )
+                @component('common.maps.controls.buttons.headerbutton')
+                    <a href="{{ route('admin.floor.edit.mapping', [
+                                    'dungeon' => $dungeon,
+                                    'floor' => $dungeon->floors()->first(),
+                                    'mapping_version' => $dungeon->getCurrentMappingVersion()
+                                ]) }}">
+                        <button class="btn btn-success btn-sm w-100">
                             <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
                         </button>
-                    @endcomponent
-                @endif
+                    </a>
+                @endcomponent
+            @endif
+            @if( $mapContext instanceof MapContextMappingVersionEdit )
+                @component('common.maps.controls.buttons.headerbutton')
+                    <button id="edit_mapping_version_button" class="btn btn-info btn-sm w-100"
+                            data-toggle="modal" data-target="#edit_mapping_version_modal">
+                        <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                    </button>
+                @endcomponent
+            @endif
 
 
-                @if($showShare)
-                    @component('common.maps.controls.buttons.headerbutton')
-                        <button class="btn btn-info btn-sm w-100"
-                                data-toggle="modal" data-target="#share_modal">
-                            <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
-                        </button>
-                    @endcomponent
-                @endif
-                <li class="nav-item nav-item-divider">
-
-                </li>
-                @include('common.layout.nav.user')
-                {{--                @include('common.layout.nav.themeswitch')--}}
-            </ul>
-        </div>
+            @if($showShare)
+                @component('common.maps.controls.buttons.headerbutton')
+                    <button class="btn btn-info btn-sm w-100"
+                            data-toggle="modal" data-target="#share_modal">
+                        <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
+                    </button>
+                @endcomponent
+            @endif
+        </ul>
     </div>
 </nav>
 

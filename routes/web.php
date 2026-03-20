@@ -134,6 +134,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('/{gameVersion}', new GameVersionController()->update(...))->name('gameversion.update');
     });
 
+    // Game version toggle
+    Route::prefix('dungeon')->group(static function () {
+        Route::get('/{dungeon}', new DungeonController()->changeContext(...))->name('dungeon.changecontext');
+    });
+
     // Discover routes
     Route::prefix('routes')->group(static function () {
         Route::get('/', new DungeonRouteDiscoverController()->discover(...))->name('dungeonroutes');
@@ -173,43 +178,44 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
 
-    // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
-        Route::prefix('search')->group(static function () {
-            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search.list');
+        Route::prefix('dungeonroute/search')->group(static function () {
+            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search');
 
             Route::prefix('{gameVersion}')->group(static function () {
                 Route::get('/', new DungeonRouteSearchController()->searchByGameVersion(...))->name('dungeon.dungeonroute.search.gameversion');
+                Route::get('/select', new DungeonRouteSearchController()->select(...))->name('dungeon.dungeonroute.search.gameversion.select');
                 Route::get('/{dungeon}', new DungeonRouteSearchController()->searchByDungeon(...))->name('dungeon.dungeonroute.search.gameversion.dungeon');
             });
         });
     });
 
-    // Explore dungeons (just show me the mapping but don't allow me to create routes)
-    Route::prefix('heatmaps')->group(static function () {
-        Route::get('/', new DungeonHeatmapController()->get(...))->name('dungeon.heatmaps.list');
+    Route::prefix('heatmap')->group(static function () {
+        Route::get('/', new DungeonHeatmapController()->get(...))->name('dungeon.heatmap');
 
         Route::prefix('{gameVersion}')->group(static function () {
-            Route::get('/', new DungeonHeatmapController()->getByGameVersion(...))->name('dungeon.heatmaps.gameversion.list');
+            Route::get('/', new DungeonHeatmapController()->getByGameVersion(...))->name('dungeon.heatmap.gameversion');
+            Route::get('/select', new DungeonHeatmapController()->select(...))->name('dungeon.heatmap.gameversion.select');
+            Route::prefix('{dungeon}')->group(static function () {
+                Route::get('/', new DungeonHeatmapController()->viewDungeon(...))->name('dungeon.heatmap.gameversion.view');
+                Route::get('/embed', new DungeonHeatmapController()->embed(...))->name('dungeon.heatmap.gameversion.embed');
+                Route::get('/embed/{floorIndex}', new DungeonHeatmapController()->embed(...))->name('dungeon.heatmap.gameversion.embed.floor');
+                Route::get('/{floorIndex}', new DungeonHeatmapController()->viewDungeonFloor(...))->name('dungeon.heatmap.gameversion.view.floor');
+            });
         });
     });
 
-    Route::prefix('heatmap/{gameVersion}/{dungeon}')->group(static function () {
-        Route::get('/', new DungeonHeatmapController()->viewDungeon(...))->name('dungeon.heatmap.gameversion.view');
-        Route::get('/embed', new DungeonHeatmapController()->embed(...))->name('dungeon.heatmap.gameversion.embed');
-        Route::get('/embed/{floorIndex}', new DungeonHeatmapController()->embed(...))->name('dungeon.heatmap.gameversion.embed.floor');
-        Route::get('/{floorIndex}', new DungeonHeatmapController()->viewDungeonFloor(...))->name('dungeon.heatmap.gameversion.view.floor');
-    });
-
+    // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('explore')->group(static function () {
-        Route::get('/', new DungeonExploreController()->get(...))->name('dungeon.explore.list');
+        Route::get('/', new DungeonExploreController()->get(...))->name('dungeon.explore');
         Route::get('/retail/mechagon-workshop', new DungeonExploreController()->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection');
         Route::get('/retail/mechagon-workshop/{floorIndex}', new DungeonExploreController()->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection.floor');
         Route::get('/retail/mechagon-workshop/embed', new DungeonExploreController()->embedMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection');
         Route::get('/retail/mechagon-workshop/embed/{floorIndex}', new DungeonExploreController()->embedMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection.floor');
 
         Route::prefix('{gameVersion}')->group(static function () {
-            Route::get('/', new DungeonExploreController()->getByGameVersion(...))->name('dungeon.explore.gameversion.list');
+            Route::get('/', new DungeonExploreController()->getByGameVersion(...))->name('dungeon.explore.gameversion');
+            Route::get('/select', new DungeonExploreController()->select(...))->name('dungeon.explore.gameversion.select');
             Route::prefix('{dungeon}')->group(static function () {
                 Route::get('/', new DungeonExploreController()->viewDungeon(...))->name('dungeon.explore.gameversion.view');
                 Route::get('/embed', new DungeonExploreController()->embed(...))->name('dungeon.explore.gameversion.embed');
@@ -445,10 +451,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                     Route::get('dungeon/mappingversion/accuracy', new AdminToolsController()->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
                 });
-
-                // Wow.tools
-                Route::get('wowtools/importingamecoordinates', new AdminToolsController()->wowToolsImportIngameCoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
-                Route::post('wowtools/importingamecoordinates', new AdminToolsController()->wowToolsImportIngameCoordinatesSubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
 
                 // Wago.gg
                 Route::get('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');

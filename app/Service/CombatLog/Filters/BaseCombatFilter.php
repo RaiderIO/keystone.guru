@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\App;
 abstract class BaseCombatFilter implements CombatLogParserInterface
 {
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
-    private const DEFEATED_PERCENTAGE = [
+    private const array DEFEATED_PERCENTAGE = [
         // Grim Batol: Valiona is defeated at 50%
         40320 => 0.51,
 
@@ -92,10 +92,14 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         // Eco-Dome Al'Dani
         // Soul-Scribe becomes unattackable at 1hp
         234935 => 0.01,
+
+        // Windrunner Spire
+        // Emberdawn becomes unattackable at less than 5%
+        231606 => 0.05,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */
-    private const SUMMONED_NPC_ID_WHITELIST = [
+    private const array SUMMONED_NPC_ID_WHITELIST = [
         // Vexamus, Algeth'ar Academy is a boss that gets summoned
         194181,
     ];

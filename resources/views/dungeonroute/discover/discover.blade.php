@@ -28,6 +28,7 @@ use Illuminate\Support\Collection;
 
 $season ??= null;
 $expansion ??= null;
+$showRoutesByAffixes = $season !== null && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
@@ -40,13 +41,13 @@ $expansion ??= null;
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion, 'gameVersion' => $gameVersion])
 
-    <div class="discover_panel">
+    <div class="discover_panel px-xl-2">
         @include('common.dungeon.griddiscover', [
             'gameVersion' => $gameVersion,
             'season' => $season,
             'dungeons' => $gridDungeons,
-            'currentAffixGroup' => $currentAffixGroup,
-            'nextAffixGroup' => $nextAffixGroup,
+            'currentAffixGroup' => $showRoutesByAffixes ? $currentAffixGroup : null,
+            'nextAffixGroup' => $showRoutesByAffixes ? $nextAffixGroup : null,
             'colCount' => 4,
             'links' => $gridDungeons->mapWithKeys(function(Dungeon $dungeon) use($gameVersion) {
                 return [$dungeon->key => route('dungeonroutes.discoverdungeon', ['gameVersion' => $gameVersion, 'dungeon' => $dungeon->slug])];
@@ -72,7 +73,7 @@ $expansion ??= null;
         </div>
     @endif
 
-    @if($season !== null && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL)
+    @if($showRoutesByAffixes)
         @if($currentAffixGroup !== null)
             @include('dungeonroute.discover.panel', [
                 'gameVersion' => $gameVersion,

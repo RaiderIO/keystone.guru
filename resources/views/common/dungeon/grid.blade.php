@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
  * @var ExpansionService    $expansionService
  * @var Expansion           $expansion
  * @var Collection<Dungeon> $dungeons
- * @var string|null         $route
  * @var callable|null       $subtextFn
  * @var boolean             $useAbbreviation
  * @var int|null            $colCount
@@ -19,10 +18,8 @@ $dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
 $colCount        ??= 4;
 $rowCount        = (int)ceil($dungeons->count() / $colCount);
 $useAbbreviation ??= false;
-$test            ??= false;
 $names           ??= true;
 $links           ??= collect();
-$route           ??= null;
 $selectable      ??= false;
 $subtextFn       ??= null;
 

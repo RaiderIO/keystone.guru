@@ -56,7 +56,7 @@ try {
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
 
-    <div class="discover_panel">
+    <div class="discover_panel px-xl-2">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center">

@@ -84,12 +84,12 @@ $breadcrumbsParams ??= [];
         @endif
 
         @if(isset($menuItems))
-            <div class="container container_wide mb-4 {{$rootClass}}">
+            <div class="container mb-4 {{$rootClass}}">
 
                 @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
                 <div class="row">
-                    <div class="col-xl-2 bg-secondary p-3">
+                    <div class="col-xl-2 bg-secondary p-3 rounded-left">
                         <h4>{{ $menuTitle }}</h4>
                         <hr>
                         @isset($menuModels)
@@ -119,7 +119,7 @@ $breadcrumbsParams ??= [];
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-xl-10 bg-secondary ml-0 mt-xl-0 mt-3 p-3">
+                    <div class="col-xl-10 bg-secondary ml-0 mt-xl-0 mt-3 p-3 rounded-right">
                         @yield('content')
                     </div>
                 </div>
@@ -129,7 +129,7 @@ $breadcrumbsParams ??= [];
             <div
                 class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
-                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
+                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams, 'classes' => 'mx-2'])
 
                 @hasSection('header-title')
                     <div class="row my-4">

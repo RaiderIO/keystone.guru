@@ -4,6 +4,11 @@ let cookieDefaultAttributes = undefined;
 // Environments
 const ENVIRONMENT_LOCAL = 'local';
 
+// Themes
+const THEME_LUX = 'lux';
+const THEME_DARKLY = 'darkly';
+const THEME_XALATATH = 'vapor';
+
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
@@ -162,6 +167,7 @@ const EXPANSION_THE_LAST_TITAN = 'tlt';
 // Map icons
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+const MAP_ICON_TYPE_DOT_YELLOW = 'dot_yellow';
 const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
 
 // Spells @TODO This should probably be dictated by the backend through MapContext

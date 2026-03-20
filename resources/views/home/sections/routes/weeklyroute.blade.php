@@ -10,14 +10,14 @@ use Illuminate\Support\Collection;
  * @var Collection<string, Collection<WeeklyRoute>> $weeklyRoutes
  */
 ?>
-<div class="row no-gutters my-4">
+<div class="row no-gutters my-4 px-2">
     <div class="col">
         <h4>{{ __('view_home.sections.routes.weeklyroute.header') }}</h4>
         <p>
             {!!
                 __('view_home.sections.routes.weeklyroute.subheader', [
                     'weekly_route_url' => config('keystoneguru.raider_io.weekly_route.url'),
-                    'heatmaps_url' => route('dungeon.heatmaps.list'),
+                    'heatmaps_url' => route('dungeon.heatmap'),
                 ])
             !!}
         </p>

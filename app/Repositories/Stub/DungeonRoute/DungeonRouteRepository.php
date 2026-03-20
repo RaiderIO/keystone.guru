@@ -4,6 +4,7 @@ namespace App\Repositories\Stub\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Season;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
@@ -27,7 +28,7 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
         return $dungeonRoutes ?? collect();
     }
 
-    public function getWeeklyRoutes(?Dungeon $dungeon = null): Collection
+    public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
         return collect();
     }

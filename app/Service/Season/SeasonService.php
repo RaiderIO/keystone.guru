@@ -76,7 +76,7 @@ class SeasonService implements SeasonServiceInterface
         return $this->firstSeasonCache;
     }
 
-    public function getNextSeason(Season $season, ?GameServerRegion $region): ?Season
+    public function getNextSeason(Season $season, ?GameServerRegion $region = null): ?Season
     {
         $seasons = $this->getSeasons($season->expansion, $region);
 

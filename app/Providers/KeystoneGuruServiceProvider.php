@@ -63,6 +63,8 @@ use App\Service\DungeonRoute\DungeonRouteSearchService;
 use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
+use App\Service\DungeonRoute\MapDrawingService;
+use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionData;
@@ -181,6 +183,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
         $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
+        $this->app->bind(MapDrawingServiceInterface::class, MapDrawingService::class);
 
         // Depends on CookieService
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
@@ -251,6 +254,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         GameVersionServiceInterface        $gameVersionService,
         MessageBannerServiceInterface      $messageBannerService,
         ReadOnlyModeServiceInterface       $readOnlyModeService,
+        DungeonServiceInterface            $dungeonService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -318,7 +322,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             } elseif (!isset($view->getData()['viewName'])) {
                 $view->with('viewName', 'home');
             }
-            $view->with('theme', $_COOKIE['theme'] ?? User::THEME_DARKLY);
+            $view->with('theme', $_COOKIE['theme'] ?? User::DEFAULT_THEME);
             $view->with('isUserAdmin', $isUserAdmin);
             $view->with('adFree', $adFree);
             $view->with('userOrDefaultRegion', $userOrDefaultRegion);
@@ -384,15 +388,25 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.layout.header', static function (View $view) use (
             $viewService,
             $globalViewVariables,
-            &
-            $userOrDefaultRegion
+            &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+
+        view()->composer(['common.layout.header'], static function (View $view) use (
+            $viewService,
+            $dungeonService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
+            $userOrDefaultGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
+            $view->with('gameVersionDungeons', $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
         });
 
         view()->composer([

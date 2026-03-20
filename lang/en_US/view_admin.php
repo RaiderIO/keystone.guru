@@ -522,8 +522,6 @@ return [
             'view_dungeon_mapping_version_accuracy'       => 'View mapping version accuracy vs MDT mapping',
             'subheader_enemy_forces'                      => 'Enemy Forces',
             'enemy_forces_import'                         => 'Import enemy forces',
-            'subheader_wowtools'                          => 'WoW.tools',
-            'wowtools_import_ingame_coordinates'          => 'Import in-game coordinates',
             'subheader_wagogg'                            => 'Wago.gg',
             'wagogg_import_ingame_coordinates'            => 'Import in-game coordinates',
             'subheader_misc'                              => 'Misc',

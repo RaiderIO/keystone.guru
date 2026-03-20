@@ -10,6 +10,9 @@ use App\Models\User;
     <h4>
         {{ __('view_profile.edit.change_password') }}
     </h4>
+
+    @include('common.general.messages')
+
     {{--$user->email is intended, since that is the actual username--}}
     {{ html()->modelForm($user, 'PATCH', route('profile.changepassword', $user->name))->open() }}
     {{ html()->hidden('username', $user->email) }}

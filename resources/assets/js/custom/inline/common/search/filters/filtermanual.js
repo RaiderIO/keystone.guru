@@ -16,13 +16,16 @@ class SearchFilterManual extends SearchFilter {
     /**
      *
      * @param value {String}
+     * @param triggerOnChange {boolean}
      */
-    setValue(value) {
+    setValue(value, triggerOnChange = true) {
         if (this.value !== value) {
             this.value = value;
 
             // Call on change
-            this.onChange();
+            if (triggerOnChange) {
+                this.onChange();
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
 ?>
-<div class="discover_panel">
+<div class="discover_panel px-xl-2">
     <div class="row mt-4">
         <div class="col-xl">
             <h2 class="text-center">

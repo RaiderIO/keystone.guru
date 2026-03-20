@@ -3,12 +3,14 @@
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
+ * @var GameVersion                  $gameVersion
  * @var Dungeon                      $dungeon
  * @var Season                       $season
  * @var Floor                        $floor
@@ -21,6 +23,7 @@ use Illuminate\Support\Collection;
  * @var int                          $playerDeathsMin
  * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<Dungeon>          $gameVersionDungeons
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -54,6 +57,12 @@ use Illuminate\Support\Collection;
                     'enemyInfo' => true,
                 ],
             ],
+            'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                $dungeon->key => route('dungeon.heatmap.gameversion.view', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon' => $dungeon,
+                ])
+            ])->put('more', route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion])),
             'controlOptions' => [
                 'heatmapSearch' => [
                     'keyLevelMin' => $keyLevelMin,

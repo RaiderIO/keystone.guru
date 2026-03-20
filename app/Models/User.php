@@ -32,6 +32,7 @@ use Laratrust\Traits\HasRolesAndPermissions;
  * @property int    $game_server_region_id
  * @property int    $patreon_user_link_id
  * @property int    $game_version_id
+ * @property int    $dungeon_id                The dungeon context this user is in.
  * @property string $name
  * @property string $initials                  The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string $email
@@ -51,6 +52,7 @@ use Laratrust\Traits\HasRolesAndPermissions;
  * @property PatreonUserLink       $patreonUserLink
  * @property GameServerRegion      $gameServerRegion
  * @property GameVersion           $gameVersion
+ * @property Dungeon               $dungeon
  * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
  *
  * @property bool $is_admin
@@ -82,12 +84,15 @@ class User extends Authenticatable implements LaratrustUser
 
     public const string DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
-    public const string THEME_DARKLY = 'darkly';
-    public const string THEME_LUX    = 'lux';
+    public const string THEME_DARKLY   = 'darkly';
+    public const string THEME_LUX      = 'lux';
+    public const string THEME_XALATATH = 'vapor';
+    public const string DEFAULT_THEME  = self::THEME_XALATATH;
 
     public const array THEME_ALL = [
         self::THEME_DARKLY,
         self::THEME_LUX,
+        self::THEME_XALATATH,
     ];
 
     /**
@@ -110,6 +115,7 @@ class User extends Authenticatable implements LaratrustUser
         'game_server_region_id',
         'patreon_user_link_id',
         'game_version_id',
+        'dungeon_id',
         'public_key',
         'oauth_id',
         'name',
@@ -140,6 +146,7 @@ class User extends Authenticatable implements LaratrustUser
     protected $with = [
         'iconfile',
         'patreonUserLink',
+        'dungeon',
         'gameVersion',
         'roles',
     ];
@@ -172,6 +179,11 @@ class User extends Authenticatable implements LaratrustUser
     public function gameServerRegion(): BelongsTo
     {
         return $this->belongsTo(GameServerRegion::class);
+    }
+
+    public function dungeon(): BelongsTo
+    {
+        return $this->belongsTo(Dungeon::class);
     }
 
     public function gameVersion(): BelongsTo
@@ -322,6 +334,11 @@ class User extends Authenticatable implements LaratrustUser
     public static function forceMapFacadeStyle(string $mapFacadeStyle): void
     {
         self::$OVERRIDE_MAP_FACADE_STYLE = $mapFacadeStyle;
+    }
+
+    public static function isThemeDark(string $theme): bool
+    {
+        return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
     }
 
     #[\Override]

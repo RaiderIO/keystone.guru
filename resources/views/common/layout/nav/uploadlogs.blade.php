@@ -2,8 +2,6 @@
 /** @var string $theme */
 
 use App\Models\User;
-
-$isDarkMode = $theme === User::THEME_DARKLY;
 ?>
 <li class="nav-item">
     <div class="btn btn-success"

@@ -28,7 +28,7 @@ class SeasonServiceStub implements SeasonServiceInterface
         return new Season();
     }
 
-    public function getNextSeason(Season $season, ?GameServerRegion $region): ?Season
+    public function getNextSeason(Season $season, ?GameServerRegion $region = null): ?Season
     {
         return null;
     }

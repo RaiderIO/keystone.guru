@@ -14,29 +14,31 @@ use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 /**
- * @var User|null         $user
- * @var MapContextBase    $mapContext
- * @var Dungeon           $dungeon
- * @var Floor             $floor
- * @var Season|null       $season Used for heatmap
- * @var MappingVersion    $mappingVersion
- * @var DungeonRoute|null $dungeonroute
- * @var LiveSession|null  $livesession
- * @var string|null       $headerTitle
- * @var bool|null         $admin
- * @var bool|null         $embed
- * @var string|null       $embedStyle
- * @var bool|null         $edit
- * @var array             $show
- * @var array|null        $controlOptions
- * @var bool              $adFree
- * @var string|null       $mapBackgroundColor
- * @var string|null       $mapFacadeStyle
- * @var string            $assetsBaseUrl
- * @var string            $tilesBaseUrl
- * @var array|null        $parameters
+ * @var User|null                  $user
+ * @var MapContextBase             $mapContext
+ * @var Dungeon                    $dungeon
+ * @var Floor                      $floor
+ * @var Season|null                $season Used for heatmap
+ * @var MappingVersion             $mappingVersion
+ * @var DungeonRoute|null          $dungeonroute
+ * @var LiveSession|null           $livesession
+ * @var string|null                $headerTitle
+ * @var bool|null                  $admin
+ * @var bool|null                  $embed
+ * @var string|null                $embedStyle
+ * @var bool|null                  $edit
+ * @var array                      $show
+ * @var array|null                 $controlOptions
+ * @var bool                       $adFree
+ * @var string|null                $mapBackgroundColor
+ * @var string|null                $mapFacadeStyle
+ * @var string                     $assetsBaseUrl
+ * @var string                     $tilesBaseUrl
+ * @var array|null                 $parameters
+ * @var Collection<string, string> $dungeonContextLinks
  */
 
 $user = Auth::user();
@@ -53,18 +55,19 @@ $user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
     'updated_at'
 ])));
 
-$headerTitle        ??= null;
-$season             ??= null;
-$isAdmin            = isset($admin) && $admin;
-$embed              = isset($embed) && $embed;
-$embedStyle         ??= '';
-$edit               = isset($edit) && $edit;
-$mapClasses         ??= '';
-$dungeonroute       ??= null;
-$livesession        ??= null;
-$mapBackgroundColor ??= null;
-$controlOptions     ??= [];
-$parameters         ??= [];
+$headerTitle         ??= null;
+$season              ??= null;
+$isAdmin             = isset($admin) && $admin;
+$embed               = isset($embed) && $embed;
+$embedStyle          ??= '';
+$edit                = isset($edit) && $edit;
+$mapClasses          ??= '';
+$dungeonroute        ??= null;
+$livesession         ??= null;
+$mapBackgroundColor  ??= null;
+$controlOptions      ??= [];
+$parameters          ??= [];
+$dungeonContextLinks ??= null;
 
 // Ensure default values for showing/hiding certain elements
 $show['controls']              ??= [];
@@ -269,17 +272,36 @@ if ($isAdmin) {
 
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
-        @include('common.maps.controls.header', [
-            'echo' => $echo,
-            'edit' => $edit,
-            'mapContext' => $mapContext,
-            'dungeon' => $dungeon,
-            'floor' => $floor,
-            'headerTitle' => $headerTitle,
-            'dungeonroute' => $dungeonroute,
-            'livesession' => $livesession,
-            'mappingVersion' => $mappingVersion,
-        ])
+        <nav id="map_header" class="map_fade_out">
+            @include('common.layout.header', [
+                'showMore' => true,
+                'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
+                'forceShrink' => true,
+                'dungeonContextLinks' => $dungeonContextLinks,
+            ])
+            @include('common.maps.controls.header', [
+                'echo' => $echo,
+                'edit' => $edit,
+                'mapContext' => $mapContext,
+                'dungeon' => $dungeon,
+                'floor' => $floor,
+                'headerTitle' => $headerTitle,
+                'dungeonroute' => $dungeonroute,
+                'livesession' => $livesession,
+                'mappingVersion' => $mappingVersion,
+            ])
+        </nav>
+        {{--        @include('common.maps.controls.header', [--}}
+        {{--            'echo' => $echo,--}}
+        {{--            'edit' => $edit,--}}
+        {{--            'mapContext' => $mapContext,--}}
+        {{--            'dungeon' => $dungeon,--}}
+        {{--            'floor' => $floor,--}}
+        {{--            'headerTitle' => $headerTitle,--}}
+        {{--            'dungeonroute' => $dungeonroute,--}}
+        {{--            'livesession' => $livesession,--}}
+        {{--            'mappingVersion' => $mappingVersion,--}}
+        {{--        ])--}}
     @endif
 
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
@@ -409,6 +431,12 @@ if ($isAdmin) {
             @include('common.modal.dungeonroute.removed', ['dungeonroute' => $dungeonroute])
         @endcomponent
     @endisset
+
+    @if(!$noUI)
+        @if(isset($show['header']) && $show['header'])
+            @include('common.general.modallazy', ['targetView' => 'common.modal.createroute', 'id' => 'create_route_modal', 'size' => 'xl'])
+        @endif
+    @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
         isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])

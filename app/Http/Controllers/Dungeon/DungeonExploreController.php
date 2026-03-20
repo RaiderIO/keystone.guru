@@ -11,7 +11,7 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
-use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -27,16 +27,37 @@ class DungeonExploreController extends Controller
         Request                     $request,
         GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
-        return redirect()->route('dungeon.explore.gameversion.list', [
+        return redirect()->route('dungeon.explore.gameversion', [
             'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
         ]);
     }
 
-    public function getByGameVersion(
-        GameVersion $gameVersion,
-    ): View|RedirectResponse {
+    public function select(
+        Request                     $request,
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService,
+    ): View {
         return view('dungeon.explore.gameversion.list', [
             'gameVersion' => $gameVersion,
+        ]);
+    }
+
+    public function getByGameVersion(
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService,
+    ): View|RedirectResponse {
+        $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
+        if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $userOrDefaultGameVersion,
+            ]);
+        }
+
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+
+        return redirect()->route('dungeon.explore.gameversion.view', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $contextDungeon,
         ]);
     }
 
@@ -45,7 +66,9 @@ class DungeonExploreController extends Controller
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
 
         /** @var Floor $defaultFloor */
@@ -72,18 +95,20 @@ class DungeonExploreController extends Controller
     }
 
     public function viewDungeonFloor(
-        ExploreUrlFormRequest          $request,
-        MapContextServiceInterface     $mapContextService,
-        CombatLogEventServiceInterface $combatLogEventService,
-        SeasonServiceInterface         $seasonService,
-        GameVersion                    $gameVersion,
-        Dungeon                        $dungeon,
-        string                         $floorIndex = '1',
+        ExploreUrlFormRequest      $request,
+        MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
+        DungeonServiceInterface    $dungeonService,
+        GameVersion                $gameVersion,
+        Dungeon                    $dungeon,
+        string                     $floorIndex = '1',
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
 
         if (!is_numeric($floorIndex)) {
@@ -119,6 +144,8 @@ class DungeonExploreController extends Controller
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
+            $dungeonService->setDungeonContext($dungeon, Auth::user());
+
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
                 'season'                  => $mostRecentSeason,
@@ -129,6 +156,7 @@ class DungeonExploreController extends Controller
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
             ]));
         }
     }
@@ -155,7 +183,9 @@ class DungeonExploreController extends Controller
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
 
         if (!is_numeric($floorIndex)) {

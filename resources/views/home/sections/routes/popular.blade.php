@@ -8,7 +8,7 @@ use App\Models\DungeonRoute\DungeonRoute;
  * @var Collection<DungeonRoute> $dungeonRoutes
  */
 ?>
-<div class="row my-4">
+<div class="row my-4 px-2">
     <div class="col-12">
         <h4>{{ __('view_home.sections.routes.popular.title') }}</h4>
     </div>

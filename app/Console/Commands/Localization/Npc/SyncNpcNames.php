@@ -54,6 +54,21 @@ class SyncNpcNames extends Command
 
             ksort($newNpcNames);
             $this->exportTranslations($locale, 'npcs.php', $newNpcNames);
+
+            if ($this->hasAILanguage($locale)) {
+                $this->exportTranslations(sprintf('%s_ai', $locale), 'npcs.php', $newNpcNames);
+            }
         }
+    }
+
+    private function hasAILanguage(string $locale): bool
+    {
+        foreach (config('language.all') as $language) {
+            if ($language['long'] === sprintf('%s_ai', $locale)) {
+                return $language['ai'] ?? false;
+            }
+        }
+
+        return false;
     }
 }

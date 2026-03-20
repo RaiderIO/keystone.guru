@@ -15,7 +15,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
     {
         $gameVersionAttributes = [
             [
-                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_TWW],
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_MIDNIGHT],
                 'key'          => GameVersion::GAME_VERSION_RETAIL,
                 'name'         => 'gameversions.retail.name',
                 'description'  => 'gameversions.retail.description',

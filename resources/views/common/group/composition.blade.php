@@ -44,14 +44,10 @@ $factions ??= $allFactions;
     @parent
 
     <script>
-        let _oldFaction;
-        let _oldClasses;
-        let _oldSpecializations;
-        let _oldRaces;
-
         // Defined in groupcomposition.js
         $(function () {
-
+            /** @type {CommonGroupComposition} */
+            let inlineCode = _inlineManager.getInlineCode('common/group/composition');
 
             <?php
             // @formatter:off
@@ -62,10 +58,13 @@ $factions ??= $allFactions;
                 if(isset($dungeonroute) || !is_null($oldFactionId)) {
                 if( isset($dungeonroute) ){ ?>
 
-                _oldFaction = '{{ $dungeonroute->faction_id }}';
-            _oldClasses = {!! $dungeonroute->classes ?? collect() !!};
-            _oldSpecializations = {!! $dungeonroute->specializations ?? collect() !!};
-            _oldRaces = {!! $dungeonroute->races ?? collect() !!};
+            inlineCode.setDefaults(
+                '{{ $dungeonroute->faction_id }}',
+                {!! $dungeonroute->classes ?? collect() !!},
+                {!! $dungeonroute->specializations ?? collect() !!},
+                {!! $dungeonroute->races ?? collect() !!}
+            );
+
 
             <?php } else {
                 $newClasses = [];
@@ -85,11 +84,12 @@ $factions ??= $allFactions;
                 }
                 ?>
 
-                _oldFaction = '{{ old('faction_id', '') }}';
-            _oldClasses = {!! json_encode($newClasses)  !!};
-            _oldSpecializations = {!! json_encode($newSpecializations)  !!};
-            _oldRaces = {!! json_encode($newRaces)  !!};
-
+            inlineCode.setDefaults(
+                '{{ old('faction_id', '') }}',
+                {!! json_encode($newClasses)  !!},
+                {!! json_encode($newSpecializations)  !!},
+                {!! json_encode($newRaces)  !!}
+            );
 <?php }
                  ?>
 

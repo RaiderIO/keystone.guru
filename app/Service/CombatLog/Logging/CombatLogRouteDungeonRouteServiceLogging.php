@@ -11,7 +11,12 @@ class CombatLogRouteDungeonRouteServiceLogging extends RollbarStructuredLogging 
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function getCombatLogRouteUnableToGenerateDungeonRoute(): void
+    public function getCombatLogRouteUnableToGenerateDungeonRouteFromDungeonOrRaid(): void
+    {
+        $this->warning(__METHOD__);
+    }
+
+    public function getCombatLogRouteUnableToGenerateDungeonRouteFromChallengeMode(): void
     {
         $this->warning(__METHOD__);
     }

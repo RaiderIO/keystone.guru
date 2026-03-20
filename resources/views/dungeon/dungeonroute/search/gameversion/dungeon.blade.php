@@ -3,8 +3,10 @@
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 
 /**
+ * @var GameVersion    $gameVersion
  * @var Dungeon        $dungeon
  * @var Floor          $floor
  * @var MapContextBase $mapContext
@@ -34,6 +36,12 @@ use App\Models\Floor\Floor;
             'echo' => false,
             'mapContext' => $mapContext,
             'headerTitle' => __('view_dungeon.dungeonroute.search.gameversion.dungeon.title', ['dungeon' => __($dungeon->name)]),
+            'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                $dungeon->key => route('dungeon.dungeonroute.search.gameversion.dungeon', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon' => $dungeon,
+                ])
+            ])->put('more', route('dungeon.dungeonroute.search.gameversion.select', ['gameVersion' => $gameVersion])),
             'show' => [
                 'header' => true,
                 'controls' => [

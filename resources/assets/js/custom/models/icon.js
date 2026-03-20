@@ -23,6 +23,7 @@ let LeafletIconMarker = L.Marker.extend({
 });
 
 
+// let yellowDotCount = 0;
 /**
  * Get the Leaflet Marker that represents said mapIconType
  * @param mapIconType null|obj When null, default unknown marker type is returned
@@ -43,12 +44,18 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
 
         let isSelectable = editModeEnabled || deleteModeEnabled;
 
+        // let text = '';
+        // if(mapIconType.key === MAP_ICON_TYPE_DOT_YELLOW) {
+        //     text = ++yellowDotCount;
+        // }
+
         let handlebarsData = $.extend({}, mapIconType, {
             selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : (deleteModeEnabled ? ' leaflet-edit-marker-selected delete' : '')),
             outer_width: width + (isSelectable ? 8 : 0),
             outer_height: height + (isSelectable ? 8 : 0),
             inner_width: width,
             inner_height: height,
+            // text: text
         });
 
         icon = L.divIcon({
@@ -56,7 +63,7 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
             iconSize: [width, height],
             tooltipAnchor: [0, -(height / 2)],
             popupAnchor: [0, -(height / 2)],
-            className: 'map_icon map_icon_' + mapIconType.key
+            className: 'map_icon map_icon_' + mapIconType.key,
         });
     }
     return icon;

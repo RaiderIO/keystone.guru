@@ -45,10 +45,10 @@ class ProfileFormRequest extends FormRequest
                 'alpha_dash',
                 'min:3',
                 'max:24',
-                Rule::unique('users', 'id')->ignore($user, 'id'),
+                Rule::unique('users', 'name')->ignore($user, 'id'),
             ],
             'email' => [
-                'required',
+                'nullable',
                 'email',
                 Rule::unique('users', 'email')->ignore($user, 'id'),
             ],

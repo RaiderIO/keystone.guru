@@ -16,7 +16,8 @@ use Illuminate\Support\Collection;
         {{ $menuTitle }}
     </h4>
 
-    @csrf
+    @include('common.general.messages')
+
     @method('PATCH')
 
     <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">

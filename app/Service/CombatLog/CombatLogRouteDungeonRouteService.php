@@ -63,6 +63,7 @@ use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
 use Auth;
@@ -78,6 +79,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly CombatLogService                                  $combatLogService,
         protected readonly SeasonServiceInterface                            $seasonService,
         protected readonly CoordinatesServiceInterface                       $coordinatesService,
+        protected readonly MapDrawingServiceInterface                        $mapDrawingService,
         protected readonly DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
         protected readonly DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
         protected readonly AffixGroupRepositoryInterface                     $affixGroupRepository,
@@ -198,51 +200,81 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     /**
      * @throws Exception
      */
-    public function getCombatLogRoute(string $combatLogFilePath): ?CombatLogRouteRequestModel
-    {
+    public function getCombatLogRoute(
+        string $combatLogFilePath,
+        bool   $dungeonOrRaid = false,
+    ): ?CombatLogRouteRequestModel {
         ini_set('max_execution_time', 1800);
 
         try {
             $this->log->getCombatLogRouteStart($combatLogFilePath);
-
             $dungeonRoute = null;
-            $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
-            if (!($dungeonRoute instanceof DungeonRoute)) {
-                $this->log->getCombatLogRouteUnableToGenerateDungeonRoute();
 
-                return null;
+            if ($dungeonOrRaid) {
+                $resultEvents = $this->combatLogService->getResultEventsForDungeonOrRaid($combatLogFilePath, $dungeonRoute);
+                if (!($dungeonRoute instanceof DungeonRoute)) {
+                    $this->log->getCombatLogRouteUnableToGenerateDungeonRouteFromDungeonOrRaid();
+
+                    return null;
+                }
+
+                $seconds      = rand(1200, 2400);
+                $milliseconds = $seconds * 1000;
+
+                $challengeMode = new CombatLogRouteChallengeModeRequestModel(
+                    Carbon::now()->subSeconds($seconds)->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    Carbon::now()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    true,
+                    $milliseconds,
+                    $milliseconds,
+                    $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                        1 : $milliseconds / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
+                    $dungeonRoute->dungeon->challenge_mode_id,
+                    rand(2, 20),
+                    0,
+                    null,
+                );
+            } else {
+                $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
+
+                if (!($dungeonRoute instanceof DungeonRoute)) {
+                    $this->log->getCombatLogRouteUnableToGenerateDungeonRouteFromChallengeMode();
+
+                    return null;
+                }
+                /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
+                $challengeModeStartEvent = $resultEvents->filter(static fn(
+                    BaseResultEvent $resultEvent,
+                ) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
+
+                /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
+                $challengeModeEndEvent = $resultEvents->filter(static fn(
+                    BaseResultEvent $resultEvent,
+                ) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
+
+                $playerDeathEvents = $resultEvents->filter(static fn(
+                    BaseResultEvent $resultEvent,
+                ) => $resultEvent instanceof PlayerDiedResultEvent);
+
+                $challengeMode = new CombatLogRouteChallengeModeRequestModel(
+                    $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                    $challengeModeEndEvent->getSuccess(),
+                    $challengeModeEndEvent->getTotalTimeMS(),
+                    $challengeModeEndEvent->getTotalTimeMS(),
+                    $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                        1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
+                    $challengeModeStartEvent->getChallengeModeID(),
+                    $challengeModeStartEvent->getKeystoneLevel(),
+                    $playerDeathEvents->count(),
+                    $challengeModeStartEvent->getAffixIDs(),
+                );
             }
 
             // #1818 Filter out any NPC ids that are invalid
             $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
 
-            /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(static fn(
-                BaseResultEvent $resultEvent,
-            ) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
-
-            /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(static fn(
-                BaseResultEvent $resultEvent,
-            ) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
-
-            $playerDeathEvents = $resultEvents->filter(static fn(
-                BaseResultEvent $resultEvent,
-            ) => $resultEvent instanceof PlayerDiedResultEvent);
-
-            $challengeMode = new CombatLogRouteChallengeModeRequestModel(
-                $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                $challengeModeEndEvent->getSuccess(),
-                $challengeModeEndEvent->getTotalTimeMS(),
-                $challengeModeEndEvent->getTotalTimeMS(),
-                $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
-                    1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
-                $challengeModeStartEvent->getChallengeModeID(),
-                $challengeModeStartEvent->getKeystoneLevel(),
-                $playerDeathEvents->count(),
-                $challengeModeStartEvent->getAffixIDs(),
-            );
+//            dd($validNpcIds->pluck('id')->toArray());
 
             $npcs             = collect();
             $npcEngagedEvents = collect();
@@ -359,12 +391,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     98765,
                     87654,
                     99,
-                    'season-tww-1',
+                    'season-midnight-1',
                     2,
                     'live',
                     1,
                 ),
-                new CombatLogRouteSettingsRequestModel(true, true),
+                new CombatLogRouteSettingsRequestModel(true, true, $dungeonRoute->mappingVersion->version),
                 $challengeMode,
                 new CombatLogRouteRosterRequestModel(
                     $mostRecentCombatantInfo->count(),
@@ -473,8 +505,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         /** @var Collection<Npc> $validNpcIds */
         $npcs = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
         /** @var Collection<int> $validNpcIds */
-        $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
-        $previousFloor = null;
+        $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
+        /** @var Floor $previousFloor */
+        $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
+        $latLngs       = [];
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor;
 
@@ -491,6 +525,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $currentFloor,
                 ),
             );
+            $latLngs[] = $latLng;
 
             /** @var Npc|null $npc */
             $npc     = $npcs->get($combatLogRouteNpc->npcId);
@@ -535,6 +570,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
         MapIcon::insert($mapIconAttributes);
         Brushline::insert($brushlineAttributes);
+
+        $this->mapDrawingService->drawConnections(
+            $dungeonRoute,
+            $latLngs,
+        );
 
         // Assign the paths to the polylines
         $dungeonRoute->load('brushlines');

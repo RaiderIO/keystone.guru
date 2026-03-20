@@ -53,6 +53,8 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
             ->join('season_dungeons', 'seasons.id', 'season_dungeons.season_id')
             ->where('season_dungeons.dungeon_id', $dungeon->id)
             ->where('seasons.start', '>', now())
+            // Don't go overboard with trying to fetch seasons in the future
+            ->where('seasons.start', '<', now()->addYear())
             ->orderBy('seasons.start', 'desc')
             ->first();
 

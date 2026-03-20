@@ -4,6 +4,10 @@ class CommonGroupComposition extends InlineCode {
 
         let self = this;
         this._loadingDefaults = false;
+        this._oldFaction = null;
+        this._oldClasses = null;
+        this._oldSpecializations = null;
+        this._oldRaces = null;
 
         $('#faction_id').bind('change', function (changeEvent) {
             self._factionChanged(changeEvent);
@@ -41,6 +45,18 @@ class CommonGroupComposition extends InlineCode {
             e.preventDefault();
             self._loadDungeonRouteDefaults();
         });
+
+        // this._fillFactions();
+        // this._fillSpecializations();
+        // this._fillClasses();
+        // this._fillRaces();
+    }
+
+    setDefaults(oldFaction, oldRaces, oldClasses, oldSpecializations) {
+        this._oldFaction = oldFaction;
+        this._oldRaces = oldRaces;
+        this._oldClasses = oldClasses;
+        this._oldSpecializations = oldSpecializations;
 
         this._fillFactions();
         this._fillSpecializations();
@@ -289,7 +305,7 @@ class CommonGroupComposition extends InlineCode {
         let self = this;
 
         // For each race select there is ..
-        $.each($raceSelect.find('option').filter(function() {
+        $.each($raceSelect.find('option').filter(function () {
             // Hide the `Class...` option
             return parseInt($(this).val(), 10) > 0;
         }), function (index, value) {
@@ -527,10 +543,18 @@ class CommonGroupComposition extends InlineCode {
      * @private
      */
     _loadDungeonRouteDefaults() {
+        if (this._oldFaction === null ||
+            this._oldRaces === null ||
+            this._oldClasses === null ||
+            this._oldSpecializations === null) {
+            console.error('No defaults found - call setDefaults() first.');
+            return;
+        }
+
         this._loadingDefaults = true;
 
         let $faction = $("#faction_id");
-        $faction.val(_oldFaction);
+        $faction.val(this._oldFaction);
         // Have to manually trigger change..
         $faction.trigger('change');
 
@@ -539,8 +563,8 @@ class CommonGroupComposition extends InlineCode {
         let $classSelects = $(".classselect select");
 
         // For each specialization
-        for (let i = 0; i < _oldSpecializations.length; i++) {
-            let characterSpecialization = _oldSpecializations[i];
+        for (let i = 0; i < this._oldSpecializations.length; i++) {
+            let characterSpecialization = this._oldSpecializations[i];
             let $specializationSelect = $($specializationsSelects[i]);
             $specializationSelect.val(characterSpecialization.id);
             // Have to manually trigger change..
@@ -548,8 +572,8 @@ class CommonGroupComposition extends InlineCode {
         }
 
         // For each class
-        for (let i = 0; i < _oldClasses.length; i++) {
-            let characterClass = _oldClasses[i];
+        for (let i = 0; i < this._oldClasses.length; i++) {
+            let characterClass = this._oldClasses[i];
             let $classSelect = $($classSelects[i]);
             $classSelect.val(characterClass.id);
             // Have to manually trigger change..
@@ -557,8 +581,8 @@ class CommonGroupComposition extends InlineCode {
         }
 
         // For each race
-        for (let i = 0; i < _oldRaces.length; i++) {
-            let race = _oldRaces[i];
+        for (let i = 0; i < this._oldRaces.length; i++) {
+            let race = this._oldRaces[i];
             let $raceSelect = $($racesSelects[i]);
             $raceSelect.val(race.id);
             // Have to manually trigger change..
