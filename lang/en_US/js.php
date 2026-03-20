@@ -438,6 +438,7 @@ return [
     'overpull_select_enemy_label'                                          => 'Select one or more enemies that you overpulled',
     'overpull_selection_finished_label'                                    => 'Finished',
     'filters'                                                              => 'Filters',
+    'filter_no_filters_active'                                             => 'No filters active',
     'filter_enemy_forces_header_incomplete'                                => 'Enemy forces: incomplete',
     'filter_enemy_forces_header_complete'                                  => 'Enemy forces: complete',
     'filter_image_select_affixes_header'                                   => 'Affixes: :number selected',

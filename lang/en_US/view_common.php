@@ -285,6 +285,7 @@ return [
                 'view_this_route' => 'View',
             ],
             'dungeonroutesearch' => [
+                'description'    => 'Select enemies on the map to include or exclude them from search results.',
                 'settings_title' => 'Map settings',
                 'enabled'        => 'Enabled',
                 'disabled'       => 'Disabled',

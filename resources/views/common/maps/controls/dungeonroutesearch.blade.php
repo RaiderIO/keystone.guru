@@ -88,7 +88,8 @@ $showAds                                   ??= true;
                         <i class='fas fa-cog'></i>
                     </button>
                 </div>
-                <div class="col">
+                <div class="col px-2 text-center">
+                    {{ __('view_common.maps.controls.dungeonroutesearch.description') }}
                 </div>
                 <div class="col-auto">
                     <input id="dungeonroute_search_toggle" type="checkbox"
@@ -111,7 +112,6 @@ $showAds                                   ??= true;
 
         <div class="data_container explore p-2" data-simplebar>
             <div id="dungeonroute_search_options_container" class="px-1">
-
                 @component('common.forms.labelinput', [
                     'name' => 'key_level',
                     'label' => __('view_common.maps.controls.dungeonroutesearch.key_level')
