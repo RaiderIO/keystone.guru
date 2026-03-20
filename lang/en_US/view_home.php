@@ -48,10 +48,10 @@ return [
             ],
         ],
         'featured' => [
-            'title'            => 'Featured',
-            'heatmaps_alt'     => 'Heatmaps',
-            'weekly_route_alt' => 'Raider.IO weekly route',
-            'patreon_alt'      => 'Patreon',
+            'title'               => 'Featured',
+            'revamped_search_alt' => 'Revamped search',
+            'weekly_route_alt'    => 'Raider.IO weekly route',
+            'patreon_alt'         => 'Patreon',
         ],
         'about' => [
             'title'               => 'About',

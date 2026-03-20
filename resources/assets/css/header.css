@@ -78,11 +78,11 @@
         transition: top 0.2s ease;
     }
 
-    #map_header:not(:has(> .dungeon_context_header)) > .navbar-second {
+    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-second {
         top: 30px !important;
     }
 
-    #map_header:not(:has(> .dungeon_context_header)) > .navbar-third {
+    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-third {
         top: 71px !important;
     }
 }
@@ -100,6 +100,10 @@
 #map_header,
 #map_header > div {
     z-index: 100020 !important;
+}
+
+#map_header .rounded {
+    border-radius: 0 !important;
 }
 
 .map_fade_out {

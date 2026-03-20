@@ -275,7 +275,7 @@ if ($isAdmin) {
         <nav id="map_header" class="map_fade_out">
             @include('common.layout.header', [
                 'showMore' => true,
-                'showDungeonContext' => false,
+                'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
                 'forceShrink' => true,
                 'dungeonContextLinks' => $dungeonContextLinks,
             ])
