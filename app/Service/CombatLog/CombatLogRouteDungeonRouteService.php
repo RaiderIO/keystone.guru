@@ -396,7 +396,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     'live',
                     1,
                 ),
-                new CombatLogRouteSettingsRequestModel(true, true, $dungeonRoute->mapping_version_id),
+                new CombatLogRouteSettingsRequestModel(true, true, $dungeonRoute->mappingVersion->version),
                 $challengeMode,
                 new CombatLogRouteRosterRequestModel(
                     $mostRecentCombatantInfo->count(),
