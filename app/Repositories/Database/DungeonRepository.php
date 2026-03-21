@@ -39,4 +39,14 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
     {
         return Dungeon::where('instance_id', $instanceId)->first();
     }
+
+    public function getByMappingVersion(int $challengeModeId, ?int $mappingVersion): ?Dungeon
+    {
+        if ($mappingVersion === null) {
+            return null;
+        }
+
+        return Dungeon::where('challenge_mode_id', $challengeModeId)
+            ->whereRelation('mappingVersions', 'version', $mappingVersion)->first();
+    }
 }

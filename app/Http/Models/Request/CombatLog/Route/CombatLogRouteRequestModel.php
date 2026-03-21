@@ -58,7 +58,8 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         ?int                                      $userId = null,
     ): DungeonRoute {
         try {
-            $dungeon = $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
+            $dungeon = $dungeonRepository->getByMappingVersion($this->challengeMode->challengeModeId, $this->settings->mappingVersion) ??
+                $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
         } catch (Exception) {
             throw new DungeonNotSupportedException(
                 sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId),
