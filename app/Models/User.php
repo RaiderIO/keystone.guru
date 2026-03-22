@@ -87,7 +87,7 @@ class User extends Authenticatable implements LaratrustUser
     public const string THEME_DARKLY   = 'darkly';
     public const string THEME_LUX      = 'lux';
     public const string THEME_XALATATH = 'vapor';
-    public const string DEFAULT_THEME  = self::THEME_XALATATH;
+    public const string DEFAULT_THEME  = self::THEME_DARKLY;
 
     public const array THEME_ALL = [
         self::THEME_DARKLY,
