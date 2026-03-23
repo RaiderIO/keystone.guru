@@ -158,6 +158,10 @@ return [
         'name'        => 'Xal\'atath\'s Bargain: Pulsar',
         'description' => 'While in combat, Xal\'atath summons pulsars that orbit players.',
     ],
+    'lindormis_guidance' => [
+        'name'        => 'Lindormi\'s Guidance',
+        'description' => 'Lindormi guides players, weakening select non-boss enemies with Temporal Sands and preventing player deaths from reducing time remaining.',
+    ],
     'seasonal_index_preset' => '%s preset %d',
 
 ];

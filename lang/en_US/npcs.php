@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Stormwind City Guard',
@@ -5314,6 +5314,7 @@ return [
     234067    => 'Vigilant Librarian',
     234068    => 'Shadowrift Voidcaller',
     234069    => 'Voidling',
+    234089    => 'Animated Codex',
     234124    => 'Sunblade Enforcer',
     234193    => 'Gilded Scarab',
     234341    => 'Crispy Nerubian',

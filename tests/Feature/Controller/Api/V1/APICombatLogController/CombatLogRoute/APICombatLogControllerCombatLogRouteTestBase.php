@@ -67,14 +67,16 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     protected function validateAffixes(array $responseArr, string ...$affixes): void
     {
         // AffixGroups
-        $this->assertNotEmpty($responseArr['data']['affixGroups']);
-        $this->assertNotEmpty($responseArr['data']['affixGroups'][0]['affixes'][0]);
+        if (!empty($affixes)) {
+            $this->assertNotEmpty($responseArr['data']['affixGroups']);
+            $this->assertNotEmpty($responseArr['data']['affixGroups'][0]['affixes'][0]);
 
-        $validAffixIds = array_map(fn(array $affix) => $affix['id'], $responseArr['data']['affixGroups'][0]['affixes']);
+            $validAffixIds = array_map(fn(array $affix) => $affix['id'], $responseArr['data']['affixGroups'][0]['affixes']);
 
-        foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
-            /** @var Affix $affix */
-            $this->assertContains($affix->affix_id, $validAffixIds);
+            foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
+                /** @var Affix $affix */
+                $this->assertContains($affix->affix_id, $validAffixIds);
+            }
         }
     }
 }

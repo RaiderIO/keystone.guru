@@ -459,6 +459,6 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v5.6.3',
+        'version' => 'v6.0.8',
     ],
 ];

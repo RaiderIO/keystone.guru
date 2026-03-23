@@ -407,9 +407,9 @@ class Team extends Model
     }
 
     /**
-     * @return Team Gets the team assigned to Raider.IO
+     * @return Team|null Gets the team assigned to Raider.IO
      */
-    public static function getRaiderIOTeam(): Team
+    public static function getRaiderIOTeam(): ?Team
     {
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);

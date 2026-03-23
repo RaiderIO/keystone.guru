@@ -26,4 +26,6 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
     public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion;
 
     public function getByInstanceId(int $instanceId): ?Dungeon;
+
+    public function getByMappingVersion(int $challengeModeId, ?int $mappingVersion): ?Dungeon;
 }

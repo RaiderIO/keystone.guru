@@ -20,7 +20,7 @@ class APICombatLogControllerCombatLogRouteGrimBatolTest extends APICombatLogCont
     }
 
     #[Test]
-    public function create_givenTwwS1GrimBaytol2Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS1GrimBatol2Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('Cata/tww_s1_grim_batol_2', self::FIXTURES_ROOT_DIR);

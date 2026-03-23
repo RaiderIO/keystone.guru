@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Garde de Hurlevent',
@@ -5649,7 +5649,7 @@ return [
     251853    => 'Grand annulateur',
     251861    => 'Pyromancienne flamboyante',
     251878    => 'Implorateur du Vide',
-    251880    => '[Solar Orb]',
+    251880    => 'Orbe solaire',
     251917    => '[Animated Codex]',
     252551    => 'Nécrolyte Murmemort',
     252555    => 'Pestehorreur chancelant',
