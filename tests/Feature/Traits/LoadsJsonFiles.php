@@ -20,6 +20,13 @@ trait LoadsJsonFiles
         return json_decode(file_get_contents($filePath), true);
     }
 
+    protected function hasJsonData(string $fileName, string $fromRootPath = ''): bool
+    {
+        $filePath = sprintf('%s/%sFixtures/%s.json', $this->getImplementingClassDir(), $fromRootPath, $fileName);
+
+        return file_exists($filePath);
+    }
+
     private function getImplementingClassDir(): string
     {
         $reflector = new ReflectionClass($this);
