@@ -190,7 +190,7 @@ class Release extends CacheModel
                 // '#DF691A'
                 'title'       => $this->getFormattedTitle(),
                 'description' => substr($this->discord_body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT),
-                'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
+                'url'         => $this->publicRoute('release.view', ['release' => $this->version]),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
                     'icon_url' => ksgAssetImage('external/discord/footer_image.png'),
