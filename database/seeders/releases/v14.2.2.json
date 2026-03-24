@@ -1,0 +1,55 @@
+{
+    "id": 347,
+    "release_changelog_id": 354,
+    "version": "v14.2.2",
+    "title": "Varoius bugfixes and stability improvements",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-03-24T21:10:35+00:00",
+    "updated_at": "2026-03-24T21:10:35+00:00",
+    "changelog": {
+        "id": 354,
+        "release_id": 347,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 354,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3127,
+                "change": "You can now access your route overview from the user menu."
+            },
+            {
+                "release_changelog_id": 354,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3130,
+                "change": "Searching for routes performance has improved."
+            },
+            {
+                "release_changelog_id": 354,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3128,
+                "change": "Attempting to mark enemies as overpulled once again works."
+            },
+            {
+                "release_changelog_id": 354,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3129,
+                "change": "Editing a route on mobile no longer shows a big header that shouldn't be there (anymore)."
+            },
+            {
+                "release_changelog_id": 354,
+                "release_changelog_category_id": 8,
+                "ticket_id": 3126,
+                "change": "Algeth'ar Academy (Dragonflight) now can be exported through MDT again. HOWEVER - do not use this dungeon, use the Midnight version instead."
+            },
+            {
+                "release_changelog_id": 354,
+                "release_changelog_category_id": 13,
+                "ticket_id": 3131,
+                "change": "Pit of Saron now works again. The other dungeons experience some issues still, to be fixed later."
+            }
+        ]
+    }
+}
