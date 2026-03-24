@@ -60,8 +60,11 @@ $user = Auth::user();
                 </a>
                 <div class="dropdown-divider"></div>
             @endif
+            <a class="dropdown-item" href="{{ route('profile.routes') }}">
+                <i class="fa fa-route"></i> {{ __('view_common.layout.nav.user.my_routes') }}
+            </a>
             <a class="dropdown-item" href="{{ route('profile.view', ['user' => Auth::user()]) }}">
-                <i class="fa fa-route"></i> {{ __('view_common.layout.nav.user.my_profile') }}
+                <i class="fa fa-user"></i> {{ __('view_common.layout.nav.user.my_profile') }}
             </a>
             <a class="dropdown-item" href="{{ route('profile.favorites') }}">
                 <i class="fa fa-star"></i> {{ __('view_common.layout.nav.user.my_favorites') }}

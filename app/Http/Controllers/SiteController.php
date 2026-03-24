@@ -7,6 +7,7 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Release;
@@ -60,6 +61,17 @@ class SiteController extends Controller
         DiscoverServiceInterface        $discoverService,
     ): View {
         if (Feature::active(FrontPageRework::class)) {
+//            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+//            $expansion                = $userOrDefaultGameVersion->expansion;
+//            // @TODO Remove this!
+//            if ($userOrDefaultGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
+//                /** @var Expansion $expansion */
+//                $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_TWW);
+//            }
+//
+//            $season = $seasonService->getCurrentSeason($expansion);
+//            // @TODO Add caching
+//            $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes(null, $season);
             // @TODO Add caching
             $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
 
