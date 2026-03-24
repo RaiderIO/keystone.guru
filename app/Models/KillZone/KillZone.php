@@ -352,7 +352,7 @@ class KillZone extends Model
                  left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                  left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                  left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
-                 left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                 left join `enemies` on `enemies`.`npc_id` = `kill_zone_enemies`.`npc_id` AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
                     {$ifIsShroudedJoins}
             where kill_zones.id = :kill_zone_id
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
