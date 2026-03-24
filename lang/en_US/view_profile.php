@@ -62,9 +62,9 @@ return [
         'title' => 'My favorites',
     ],
     'overview' => [
-        'title'                    => 'Overview',
-        'route_coverage'           => 'Route coverage',
-        'route_overview'           => 'Route overview',
+        'title'          => 'Overview',
+        'route_coverage' => 'Route coverage',
+        'route_overview' => 'Route overview',
     ],
     'routes' => [
         'title' => 'My routes',
