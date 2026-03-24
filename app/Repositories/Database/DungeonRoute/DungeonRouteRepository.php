@@ -13,8 +13,9 @@ use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Random\RandomException;
@@ -41,23 +42,23 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         /** @var Collection<DungeonRoute> $routes */
         return DungeonRoute::where('author_id', '>', '0')
             // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
-            ->where(static function (Builder $builder) {
+            ->where(static function (EloquentBuilder $builder) {
                 $builder->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
-                    ->orWhere(static function (Builder $builder) {
+                    ->orWhere(static function (EloquentBuilder $builder) {
                         // If it is in the queue to be refreshed
                         $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
                             ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
                     });
             })
-            ->where(static function (Builder $builder) {
+            ->where(static function (EloquentBuilder $builder) {
                 // Only if it's not already queued!
                 $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
                     ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
             })
-            ->when($dungeonRoutes, function (Builder $builder) use ($dungeonRoutes) {
+            ->when($dungeonRoutes, function (EloquentBuilder $builder) use ($dungeonRoutes) {
                 // If we have a specific set of routes to refresh, only select those
                 $builder->whereIn('id', $dungeonRoutes->pluck('id'));
-            })->when(!$dungeonRoutes, function (Builder $builder) {
+            })->when(!$dungeonRoutes, function (EloquentBuilder $builder) {
                 // Otherwise, only select routes that have been recently updated/viewed/accessed
                 $builder->where('popularity', '>', 0);
             })
@@ -80,7 +81,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         $weeklyRouteTags = config('keystoneguru.raider_io.weekly_route.tags');
         $tagCategoryId   = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
         $raiderIOTeamId  = config('keystoneguru.raider_io.team_id');
-        $tagsFilterFn    = function (HasMany|Builder $query) use (
+        $tagsFilterFn    = function (HasMany|EloquentBuilder $query) use (
             $weeklyRouteTags,
             $tagCategoryId,
             $raiderIOTeamId
@@ -96,7 +97,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                 'dungeon',
                 'tags' => $tagsFilterFn,
             ])
-            ->when($dungeon, fn(Builder $query) => $query->where('dungeon_id', $dungeon->id))
+            ->when($dungeon, fn(EloquentBuilder $query) => $query->where('dungeon_id', $dungeon->id))
             ->whereRelation(
                 'dungeon.seasonDungeons',
                 'season_id',
@@ -204,49 +205,89 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     private function findRoutesBuilder(
         DungeonRouteSearchFilter $filter,
         ?DungeonRoute            $excludeDungeonRoute = null,
-    ): Builder {
-        return DungeonRoute::query()
+    ): EloquentBuilder {
+        $query = DungeonRoute::query()
             ->with(['author'])
             ->when(
                 $filter->username !== null,
-                fn(Builder $query) => $query->whereRelation('author', 'name', 'LIKE', '%' . $filter->username . '%'),
+                fn(EloquentBuilder $query) => $query->whereRelation('author', 'name', 'LIKE', '%' . $filter->username . '%'),
             )
-            ->when($excludeDungeonRoute !== null, fn(Builder $query) => $query->whereNot('id', $excludeDungeonRoute->id))
-            ->when($filter->title !== null, fn(Builder $query) => $query->where('title', 'like', '%' . $filter->title . '%'))
-            ->when($filter->minKeyLevel !== null, fn(Builder $query) => $query->where('level_min', '>=', $filter->minKeyLevel))
-            ->when($filter->maxKeyLevel !== null, fn(Builder $query) => $query->where('level_max', '<=', $filter->maxKeyLevel))
-            // Excluded: route must NOT contain any of the excluded pairs
-            ->when($filter->excludedEnemies !== null, function (Builder $query) use ($filter) {
-                $pairs = $this->parseEnemyPairs($filter->excludedEnemies);
-
-                $query->whereDoesntHave('killZones.killZoneEnemies', function (Builder $q) use ($pairs) {
-                    $q->where(function (Builder $or) use ($pairs) {
-                        foreach ($pairs as [$npcId, $mdtId]) {
-                            $or->orWhere(function (Builder $and) use ($npcId, $mdtId) {
-                                $and->where('npc_id', $npcId)
-                                    ->where('mdt_id', $mdtId);
-                            });
-                        }
-                    });
-                });
-            })
-
-            // Included (ALL): route must contain every included pair at least once
-            ->when($filter->includedEnemies !== null, function (Builder $query) use ($filter) {
-                $pairs = $this->parseEnemyPairs($filter->includedEnemies);
-
-                foreach ($pairs as [$npcId, $mdtId]) {
-                    $query->whereHas('killZones.killZoneEnemies', function (Builder $q) use ($npcId, $mdtId) {
-                        $q->where('npc_id', $npcId)
-                            ->where('mdt_id', $mdtId);
-                    });
-                }
-            })
-
+            ->when($excludeDungeonRoute !== null, fn(EloquentBuilder $query) => $query->where('id', '!=', $excludeDungeonRoute->id))
+            ->when($filter->title !== null, fn(EloquentBuilder $query) => $query->where('title', 'like', '%' . $filter->title . '%'))
+            ->when($filter->minKeyLevel !== null, fn(EloquentBuilder $query) => $query->where('level_min', '>=', $filter->minKeyLevel))
+            ->when($filter->maxKeyLevel !== null, fn(EloquentBuilder $query) => $query->where('level_max', '<=', $filter->maxKeyLevel))
             ->where('mapping_version_id', $filter->mappingVersion->id)
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('clone_of')
             ->orderByDesc('popularity');
+
+        if ($filter->includedEnemies !== null) {
+            $pairs = $this->parseEnemyPairs($filter->includedEnemies);
+
+            if (!empty($pairs)) {
+                $query->whereIn('id', $this->buildDungeonRouteEnemyPairsSubquery(
+                    pairs: $pairs,
+                    mappingVersionId: $filter->mappingVersion->id,
+                    requireAllPairs: true,
+                ));
+            }
+        }
+
+        if ($filter->excludedEnemies !== null) {
+            $pairs = $this->parseEnemyPairs($filter->excludedEnemies);
+
+            if (!empty($pairs)) {
+                $query->whereNotIn('id', $this->buildDungeonRouteEnemyPairsSubquery(
+                    pairs: $pairs,
+                    mappingVersionId: $filter->mappingVersion->id,
+                    requireAllPairs: false,
+                ));
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * AI function:
+     *
+     * Builds a subquery that returns dungeon_route_id values matching any of the given NPC/MDT pairs.
+     *
+     * If $requireAllPairs is true, the subquery only returns routes that contain every requested pair.
+     * If $requireAllPairs is false, the subquery returns routes that contain at least one requested pair.
+     *
+     * @param array<int, array{0:int,1:int}> $pairs
+     */
+    private function buildDungeonRouteEnemyPairsSubquery(
+        array $pairs,
+        int   $mappingVersionId,
+        bool  $requireAllPairs,
+    ): QueryBuilder {
+        $pairCount = count($pairs);
+
+        $subQuery = DB::table('kill_zones as kz')
+            ->select('kz.dungeon_route_id')
+            ->join('kill_zone_enemies as kze', 'kze.kill_zone_id', '=', 'kz.id')
+            ->join('dungeon_routes as dr', 'dr.id', '=', 'kz.dungeon_route_id')
+            ->where('dr.mapping_version_id', $mappingVersionId)
+            ->where(function ($query) use ($pairs) {
+                foreach ($pairs as [$npcId, $mdtId]) {
+                    $query->orWhere(function ($pairQuery) use ($npcId, $mdtId) {
+                        $pairQuery->where('kze.npc_id', $npcId)
+                            ->where('kze.mdt_id', $mdtId);
+                    });
+                }
+            })
+            ->groupBy('kz.dungeon_route_id');
+
+        if ($requireAllPairs) {
+            $subQuery->havingRaw(
+                'COUNT(DISTINCT CONCAT(kze.npc_id, ":", kze.mdt_id)) = ?',
+                [$pairCount],
+            );
+        }
+
+        return $subQuery;
     }
 
     /**
