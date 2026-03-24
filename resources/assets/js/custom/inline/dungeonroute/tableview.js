@@ -142,6 +142,13 @@ class UserProfileTableView extends TableView {
 }
 
 class FavoritesTableView extends UserProfileTableView {
+    constructor() {
+        super();
+
+        // I don't really like this solution but for now it works
+        $('#dungeonroute_search_dungeon_id').val(-1);
+    }
+
     getAjaxParameters() {
         return {favorites: 1};
     }

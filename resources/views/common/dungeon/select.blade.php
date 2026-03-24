@@ -153,7 +153,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
 
 <div class="form-group">
     @if($label !== false)
-        {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $name) }}
+        {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $id) }}
     @endif
     {{ html()->select($name, $dungeonsSelect, $selected)->attributes(array_merge(['id' => $id],
         $multiple ? ['multiple' => 'multiple'] : [], [

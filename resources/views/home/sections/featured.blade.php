@@ -8,9 +8,7 @@ use App\Models\Season;
  */
 
 $currentUserGameVersion = GameVersion::getUserOrDefaultGameVersion();
-$findRouteLink          = $currentUserGameVersion->has_seasons ?
-    route('dungeonroutes.season', ['gameVersion' => $currentUserGameVersion, 'season' => $currentSeason->index]) :
-    route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion]);
+$findRouteLink          = route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion]);
 ?>
 <div class="row my-4 px-2">
     <div class="col-12">
