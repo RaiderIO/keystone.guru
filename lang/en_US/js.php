@@ -161,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                    => 'Patreon benefits updated successfully',
     'mapping_version_readonly_label'                                 => 'This mapping version is read-only',
     'mapping_version_upgrade_label'                                  => 'A new mapping version is available for your route.',
+    'algethar_academy_dragonflight_warning_label'                    => 'You are viewing the Dragonflight version of Algeth\'ar Academy. Ensure you use the Midnight version for compatibility with MDT.',
     'upgrade_label'                                                  => 'Upgrade',
     'classification_label'                                           => 'Classification',
     'edit_label'                                                     => 'Edit',

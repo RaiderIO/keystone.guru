@@ -70,6 +70,12 @@ class DungeonMap extends Signalable {
                 });
 
                 state.addSnackbar(template(data));
+            } else if( mapContext.getDungeon().key === DUNGEON_ALGETHAR_ACADEMY ) {
+                let template = Handlebars.templates['map_controls_snackbar_algethar_dragonflight_warning'];
+
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {});
+
+                state.addSnackbar(template(data));
             }
         }
 
