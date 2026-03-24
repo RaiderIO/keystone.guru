@@ -18,6 +18,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 {
     private const string BASE_URL = 'https://raider.io/api/v1';
 
+    private const array EXPANSION_SHORTNAME_OVERRIDE = [
+        'midnight' => 'mn',
+    ];
+
     use Curl;
 
     public function __construct(
@@ -36,7 +40,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             if ($mostRecentSeason !== null) {
                 $heatmapDataFilter->setSeason(sprintf(
                     'season-%s-%s',
-                    $mostRecentSeason->expansion->shortname,
+                    self::EXPANSION_SHORTNAME_OVERRIDE[$mostRecentSeason->expansion->shortname] ?? $mostRecentSeason->expansion->shortname,
                     $mostRecentSeason->index,
                 ));
             }
@@ -67,7 +71,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $response,
                 );
 
-                throw new InvalidApiResponseException('Invalid response from Raider.IO API');
+                throw new InvalidApiResponseException('Invalid response from Raider.IO API', $url, $response);
             }
 
             return HeatmapDataResponse::fromArray(

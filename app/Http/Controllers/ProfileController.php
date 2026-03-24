@@ -8,10 +8,13 @@ use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
+use App\Models\Season;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
+use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -42,9 +45,23 @@ class ProfileController extends Controller
         return view('profile.view', ['user' => $user]);
     }
 
-    public function routes(Request $request): RedirectResponse
-    {
-        return redirect()->route('home');
+    public function routes(
+        CoverageServiceInterface $coverageService,
+        SeasonServiceInterface   $seasonService,
+    ): View {
+        $season = null;
+        if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
+            $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
+        }
+
+        $season ??= $seasonService->getCurrentSeason();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        return view('profile.overview', [
+            'dungeonRoutes' => $coverageService->getForUser($user, $season),
+        ]);
     }
 
     /**

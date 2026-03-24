@@ -37,7 +37,7 @@ class AjaxHeatmapController extends Controller
             );
         } catch (InvalidApiResponseException $exception) {
             return \response()->json(
-                ['message' => $exception->getMessage()],
+                $exception->toArray(),
                 StatusCode::INTERNAL_SERVER_ERROR,
             );
         }

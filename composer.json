@@ -46,14 +46,14 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mdt-legacy",
-                "version": "2.0.0",
+                "version": "2.0.1",
                 "source": {
-                    "url": "https://github.com/Nnoggie/MDT_Legacy.git",
+                    "url": "https://github.com/Wotuu/MDT_Legacy.git",
                     "type": "git",
-                    "reference": "5a3b61c46e46e0f4307bee28fd1b108e8262fcc3"
+                    "reference": "c617a034280b2d3967ae5537b25be792d9bac272"
                 },
                 "dist": {
-                    "url": "https://github.com/Nnoggie/MDT_Legacy/archive/5a3b61c46e46e0f4307bee28fd1b108e8262fcc3.zip",
+                    "url": "https://github.com/Wotuu/MDT_Legacy/archive/c617a034280b2d3967ae5537b25be792d9bac272.zip",
                     "type": "zip"
                 }
             }

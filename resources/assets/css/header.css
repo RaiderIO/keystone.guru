@@ -71,7 +71,7 @@
     }
 
     .navbar-third {
-        top: 135px !important;
+        top: 151px !important;
         -webkit-transition: top 0.2s ease;
         -moz-transition: top 0.2s ease;
         -o-transition: top 0.2s ease;
@@ -83,7 +83,7 @@
     }
 
     #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-third {
-        top: 71px !important;
+        top: 86px !important;
     }
 }
 

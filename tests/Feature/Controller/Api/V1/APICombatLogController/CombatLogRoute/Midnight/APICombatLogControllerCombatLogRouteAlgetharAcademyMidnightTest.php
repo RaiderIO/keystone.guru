@@ -2,7 +2,6 @@
 
 namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\Midnight;
 
-use App\Models\Affix;
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

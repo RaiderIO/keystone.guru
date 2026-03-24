@@ -63,6 +63,7 @@ const MAP_CONTEXT_TYPE_DUNGEON_ROUTE_SEARCH = 'dungeonRouteSearch';
 // Dungeons
 const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';
 const DUNGEON_THE_NEXUS = 'thenexus';
+const DUNGEON_ALGETHAR_ACADEMY = 'dragonacademy'; // Dragonflight version!!
 
 // Kill zones
 const NUMBER_STYLE_PERCENTAGE = 'percentage';
