@@ -437,7 +437,10 @@ class AjaxDungeonRouteController extends Controller
         };
 
         // Prime the discover service
-        $discoverService = $discoverService->withExpansion($expansion)->withBuilder($closure);
+        $discoverService = $discoverService
+            ->withExpansion($expansion)
+            ->excludeTeam(Team::getRaiderIOTeam())
+            ->withBuilder($closure);
 
         $region = GameServerRegion::getUserOrDefaultRegion();
 
