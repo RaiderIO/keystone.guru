@@ -1,0 +1,37 @@
+{
+    "id": 348,
+    "release_changelog_id": 355,
+    "version": "v14.2.3",
+    "title": "Live Sessions now functional and mapping fixes to various dungeons",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-03-29T08:41:14+00:00",
+    "updated_at": "2026-03-29T08:41:14+00:00",
+    "changelog": {
+        "id": 355,
+        "release_id": 348,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 355,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3063,
+                "change": "Re-imported Pit of Saron, there were a lot of inconsistencies with MDT. This should resolve those issues."
+            },
+            {
+                "release_changelog_id": 355,
+                "release_changelog_category_id": 4,
+                "ticket_id": 3070,
+                "change": "Various mapping fixes to improve compatibility with MDT."
+            },
+            {
+                "release_changelog_id": 355,
+                "release_changelog_category_id": 9,
+                "ticket_id": 3075,
+                "change": "Live Sessions now properly work for all Season 1 dungeons."
+            }
+        ]
+    }
+}
