@@ -114,7 +114,10 @@ class DiscoverService extends BaseDiscoverService
                     ->where('season_dungeons.season_id', $this->season->id);
             })
             ->when($this->excludeTeam !== null, function (Builder $builder) {
-                $builder->where('dungeon_routes.team_id', '!=', $this->excludeTeam->id);
+                $builder->where(function (Builder $builder) {
+                    $builder->where('dungeon_routes.team_id', '!=', $this->excludeTeam->id)
+                        ->orWhereNull('dungeon_routes.team_id');
+                });
             })
             ->where('dungeons.active', true)
             ->where('dungeon_routes.published_state_id', PublishedState::ALL[PublishedState::WORLD])

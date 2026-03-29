@@ -1,7 +1,5 @@
 <?php
 
-use App\Console\Commands\Scheduler\Metric\Aggregate;
-use App\Console\Commands\Scheduler\View\Cache;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -23,7 +21,6 @@ $commands = [];
 $commands[] = Schedule::command('dungeonroute:updatepopularity')->hourly();
 $commands[] = Schedule::command('dungeonroute:updaterating')->everyFifteenMinutes();
 
-$commands[] = Schedule::command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
 $commands[] = Schedule::command('dungeonroute:deleteexpired')->hourly();
 $commands[] = Schedule::command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
@@ -35,6 +32,9 @@ if (in_array($appType, [
 
     // Ensure display IDs are set
     $commands[] = Schedule::command('wowhead:refreshdisplayids')->hourly();
+} else {
+    // If thumbnails are needed locally, move this command
+    $commands[] = Schedule::command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
 }
 
 $commands[] = Schedule::command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours

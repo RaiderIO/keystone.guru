@@ -8,6 +8,7 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\Team;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -351,6 +352,7 @@ class DungeonRouteDiscoverController extends Controller
 
         $discoverService = $discoverService
             ->withGameVersion($gameVersion)
+            ->excludeTeam(Team::getRaiderIOTeam())
             ->withLimit(config('keystoneguru.discover.limits.overview'));
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
@@ -404,7 +406,11 @@ class DungeonRouteDiscoverController extends Controller
             'gameVersion'   => $gameVersion,
             'category'      => 'popular',
             'title'         => __('controller.dungeonroutediscover.popular'),
-            'dungeonroutes' => $discoverService->withGameVersion($gameVersion)->withLimit(config('keystoneguru.discover.limits.category'))->popular(),
+            'dungeonroutes' => $discoverService
+                ->withGameVersion($gameVersion)
+                ->excludeTeam(Team::getRaiderIOTeam())
+                ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->popular(),
         ]);
     }
 

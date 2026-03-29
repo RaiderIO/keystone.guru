@@ -17,7 +17,7 @@ $findRouteLink          = route('dungeonroutes.gameVersion', ['gameVersion' => $
     <div class="col-12">
         <div class="row no-gutters">
             <div class="col-md-4 mb-3 mb-md-0 mt-4">
-                <a href="{{ route('dungeon.heatmap') }}" class="d-block text-center">
+                <a href="{{ route('dungeon.dungeonroute.search') }}" class="d-block text-center">
                     <img src="{{ ksgAssetImage('home/featured/revamped_search.png') }}" alt="{{ __('view_home.sections.featured.revamped_search_alt') }}"
                          class="img-fluid rounded shadow-sm">
                 </a>

@@ -100,7 +100,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Heavy GET requests
-        RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 300)->by($this->userKey($request)));
+        RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 600)->by($this->userKey($request)));
 
         // This consumes the same resources as creating a route - so we limit it
         RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 1200)->by($this->userKey($request)));
