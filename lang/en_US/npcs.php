@@ -5699,6 +5699,7 @@ return [
     256424    => 'Void Tentacle',
     257190    => 'Iceborn Proto-Drake',
     257447    => 'Hollowsoul Shredder',
+    258868    => 'Haunting Grunt',
     259387    => 'Spellwoven Familiar',
     259569    => 'Mana Battery',
     555555    => 'Priory of the Sacred Flame',

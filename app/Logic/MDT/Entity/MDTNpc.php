@@ -39,7 +39,8 @@ class MDTNpc implements Arrayable
         $this->id = (int)$this->rawMdtNpc['id'];
 
         if (isset($this->rawMdtNpc['spells'])) {
-            $this->spells = $rawMdtNpc['spells'];
+            $this->recur_ksort($this->rawMdtNpc['spells']);
+            $this->spells = $this->rawMdtNpc['spells'];
         } else {
             $this->spells = [];
         }
