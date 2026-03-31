@@ -2733,7 +2733,7 @@ return [
     76149     => 'Corbeau de l\'effroi',
     76154     => 'Dompte-serre-soleil',
     76205     => 'Guerrier paria',
-    76227     => 'Eruption solaire',
+    76227     => 'Vol-Solaire',
     76253     => 'Jeune corbeau de l\'effroi',
     76266     => 'Grand sage Viryx',
     76267     => 'Zélote solaire',

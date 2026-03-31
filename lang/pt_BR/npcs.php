@@ -2733,7 +2733,7 @@ return [
     76149     => 'Corvo Medonho',
     76154     => 'Domador de Garrassol',
     76205     => 'Guerreiro Proscrito',
-    76227     => 'Mancha Solar',
+    76227     => 'Asassol',
     76253     => 'Filhote de Corvo Medonho',
     76266     => 'Alta Sábia Viryx',
     76267     => 'Zelote Solar',

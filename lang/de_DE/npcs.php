@@ -2733,7 +2733,7 @@ return [
     76149     => 'Schreckensrabe',
     76154     => 'Sonnenkrallenzähmer',
     76205     => 'Ausgestoßener Krieger',
-    76227     => 'Sonnenvogel',
+    76227     => 'Sonnenschwinge',
     76253     => 'Schreckensrabenküken',
     76266     => 'Oberste Weise Viryx',
     76267     => 'Sonnenzelot',

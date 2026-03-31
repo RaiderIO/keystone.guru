@@ -8238,5 +8238,21 @@
         "created_at": "2026-03-29T08:29:44.000000Z",
         "updated_at": "2026-03-29T08:29:44.000000Z",
         "merged": false
+    },
+    {
+        "id": 688,
+        "game_version_id": 1,
+        "dungeon_id": 144,
+        "version": 6,
+        "enemy_forces_required": 596,
+        "enemy_forces_required_teeming": 0,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1800,
+        "mdt_mapping_hash": "a5aa58b65920246dde2325f7c9380a0c",
+        "facade_enabled": 0,
+        "created_at": "2026-03-31T14:17:14.000000Z",
+        "updated_at": "2026-03-31T14:17:14.000000Z",
+        "merged": false
     }
 ]

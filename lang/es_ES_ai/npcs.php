@@ -2733,7 +2733,7 @@ return [
     76149     => 'Cuervo aterrador',
     76154     => 'Domador de garfasoles',
     76205     => 'Guerrero desterrado',
-    76227     => 'Erupción solar',
+    76227     => 'Aladía',
     76253     => 'Prole de cuervo aterrador',
     76266     => 'Suma sabia Viryx',
     76267     => 'Zelote solar',

@@ -2733,7 +2733,7 @@ return [
     76149     => 'Corvo del Terrore',
     76154     => 'Domatore di Artigli Solari',
     76205     => 'Guerriero Esiliato',
-    76227     => 'Fenice Infuocata',
+    76227     => 'Alasole',
     76253     => 'Cucciolo di Corvo del Terrore',
     76266     => 'Alta Saggia Viryx',
     76267     => 'Zelota del Sole',

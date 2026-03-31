@@ -2733,7 +2733,7 @@ return [
     76149     => 'Dread Raven',
     76154     => 'Suntalon Tamer',
     76205     => 'Outcast Warrior',
-    76227     => 'Solar Flare',
+    76227     => 'Sunwing',
     76253     => 'Dread Raven Hatchling',
     76266     => 'High Sage Viryx',
     76267     => 'Solar Zealot',
