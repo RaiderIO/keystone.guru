@@ -20,10 +20,10 @@ class APICombatLogControllerCombatLogRouteOperationFloodgateTest extends APIComb
     }
 
     #[Test]
-    public function create_givenTwwS2OperationFloodgate8Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2OperationFloodgate8Mv3Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('TWW/tww_s2_operation_floodgate_8', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('TWW/tww_s2_operation_floodgate_8_mv_3', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);

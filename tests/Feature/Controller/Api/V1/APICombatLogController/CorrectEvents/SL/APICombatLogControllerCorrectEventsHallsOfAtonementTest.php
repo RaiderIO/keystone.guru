@@ -20,8 +20,8 @@ class APICombatLogControllerCorrectEventsHallsOfAtonementTest extends APICombatL
     }
 
     #[Test]
-    public function create_givenHallsOfAtonement7Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenHallsOfAtonement7Mv4Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('SL/tww_s3_ptr_halls_of_atonement_7');
+        $this->executeTest('SL/tww_s3_ptr_halls_of_atonement_7_mv_4');
     }
 }

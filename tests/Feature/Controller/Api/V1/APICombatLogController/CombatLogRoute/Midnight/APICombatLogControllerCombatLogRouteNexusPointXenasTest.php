@@ -20,10 +20,10 @@ class APICombatLogControllerCombatLogRouteNexusPointXenasTest extends APICombatL
     }
 
     #[Test]
-    public function create_givenNexusPointXenasPreseasonJson_shouldReturnValidDungeonRoute(): void
+    public function create_givenNexusPointXenasPreseasonMv5Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('Midnight/midnight_s1_nexus_point_xenas_preseason', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('Midnight/midnight_s1_nexus_point_xenas_preseason_mv_5', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
