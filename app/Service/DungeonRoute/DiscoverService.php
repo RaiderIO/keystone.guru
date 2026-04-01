@@ -21,11 +21,11 @@ class DiscoverService extends BaseDiscoverService
         $this->ensureGameVersion();
 
         if ($this->season !== null) {
-            return sprintf('discover:%s:season-%d-%d:%s:%d', $this->gameVersion->key, $this->season->index, $this->season->id, $key, $this->limit);
+            return sprintf('discover:%s:season-%d-%d:t-%d:%s:%d', $this->gameVersion->key, $this->season->index, $this->season->id, $this->excludeTeam?->id ?? 0, $key, $this->limit);
         } elseif ($this->expansion !== null) {
-            return sprintf('discover:expansion-%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
+            return sprintf('discover:expansion-%s:t-%d:%s:%d', $this->expansion->shortname, $this->excludeTeam?->id ?? 0, $key, $this->limit);
         } else {
-            return sprintf('discover:%s:%s:%d', $this->gameVersion->key, $key, $this->limit);
+            return sprintf('discover:%s:t-%d:%s:%d', $this->gameVersion->key, $this->excludeTeam?->id ?? 0, $key, $this->limit);
         }
     }
 
