@@ -9084,5 +9084,159 @@
         "extracted_data": 1,
         "created_at": "2025-09-16T19:59:53+00:00",
         "updated_at": "2025-09-16T19:59:53+00:00"
+    },
+    {
+        "id": 1303,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T11:55:43+00:00",
+        "updated_at": "2026-04-01T11:55:43+00:00"
+    },
+    {
+        "id": 1304,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:26:38+00:00",
+        "updated_at": "2026-04-01T12:26:38+00:00"
+    },
+    {
+        "id": 1305,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:26:43+00:00",
+        "updated_at": "2026-04-01T12:26:43+00:00"
+    },
+    {
+        "id": 1306,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:26:50+00:00",
+        "updated_at": "2026-04-01T12:26:50+00:00"
+    },
+    {
+        "id": 1307,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:26:59+00:00",
+        "updated_at": "2026-04-01T12:26:59+00:00"
+    },
+    {
+        "id": 1308,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:11+00:00",
+        "updated_at": "2026-04-01T12:27:11+00:00"
+    },
+    {
+        "id": 1309,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:20+00:00",
+        "updated_at": "2026-04-01T12:27:20+00:00"
+    },
+    {
+        "id": 1310,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:31+00:00",
+        "updated_at": "2026-04-01T12:27:31+00:00"
+    },
+    {
+        "id": 1311,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:44+00:00",
+        "updated_at": "2026-04-01T12:27:44+00:00"
+    },
+    {
+        "id": 1312,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:48+00:00",
+        "updated_at": "2026-04-01T12:27:48+00:00"
+    },
+    {
+        "id": 1313,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_algethar-academy.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:54+00:00",
+        "updated_at": "2026-04-01T12:27:54+00:00"
+    },
+    {
+        "id": 1314,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:27:59+00:00",
+        "updated_at": "2026-04-01T12:27:59+00:00"
+    },
+    {
+        "id": 1315,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_8_algethar-academy.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:28:08+00:00",
+        "updated_at": "2026-04-01T12:28:08+00:00"
+    },
+    {
+        "id": 1316,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:28:17+00:00",
+        "updated_at": "2026-04-01T12:28:17+00:00"
+    },
+    {
+        "id": 1317,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:28:33+00:00",
+        "updated_at": "2026-04-01T12:28:33+00:00"
+    },
+    {
+        "id": 1318,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_9_magisters-terrace.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:28:46+00:00",
+        "updated_at": "2026-04-01T12:28:46+00:00"
+    },
+    {
+        "id": 1319,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_10_seat-of-the-triumvirate.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:28:56+00:00",
+        "updated_at": "2026-04-01T12:28:56+00:00"
+    },
+    {
+        "id": 1320,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_11_pit-of-saron.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:29:07+00:00",
+        "updated_at": "2026-04-01T12:29:07+00:00"
+    },
+    {
+        "id": 1321,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:29:12+00:00",
+        "updated_at": "2026-04-01T12:29:12+00:00"
+    },
+    {
+        "id": 1322,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:29:19+00:00",
+        "updated_at": "2026-04-01T12:29:19+00:00"
+    },
+    {
+        "id": 1323,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:29:28+00:00",
+        "updated_at": "2026-04-01T12:29:28+00:00"
+    },
+    {
+        "id": 1324,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
+        "extracted_data": 1,
+        "created_at": "2026-04-01T12:29:30+00:00",
+        "updated_at": "2026-04-01T12:29:30+00:00"
     }
 ]

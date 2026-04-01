@@ -9223,5 +9223,347 @@
         "raw_event": "9\/6\/2025 14:10:31.5401  SPELL_AURA_APPLIED,Creature-0-3771-2441-29065-180586-00003C32C7,\"Bolt of Silk\",0xa18,0x80000000,Creature-0-3771-2441-29065-180586-00003C32C7,\"Bolt of Silk\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
         "created_at": "2025-09-16T19:59:28+00:00",
         "updated_at": "2025-09-16T19:59:28+00:00"
+    },
+    {
+        "id": 1078,
+        "npc_id": 232071,
+        "spell_id": 1216133,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:13:40.7551  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-232071-00013C5864,\"Dutiful Groundskeeper\",0xa48,0x80000000,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x80000000,1216133,\"Shear Armor\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:54:58+00:00",
+        "updated_at": "2026-04-01T11:54:58+00:00"
+    },
+    {
+        "id": 1079,
+        "npc_id": 232063,
+        "spell_id": 1217004,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:16:38.8811  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-232063-00003C5864,\"Apex Lynx\",0x10a48,0x80000080,Player-1084-0A5FCDAB,\"Judoon-Dentarg-EU\",0x512,0x80000000,1217004,\"Ferocious Pounce\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:01+00:00",
+        "updated_at": "2026-04-01T11:55:01+00:00"
+    },
+    {
+        "id": 1080,
+        "npc_id": 238049,
+        "spell_id": 1219266,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:16:42.6121  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-238049-00003C5866,\"Scouting Trapper\",0xa48,0x80000000,Player-1084-0A5FCDAB,\"Judoon-Dentarg-EU\",0x512,0x80000000,1219266,\"Freezing Trap\",0x10,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:01+00:00",
+        "updated_at": "2026-04-01T11:55:01+00:00"
+    },
+    {
+        "id": 1081,
+        "npc_id": 232176,
+        "spell_id": 473784,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:21:37.0451  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-232176-00003C5864,\"Flesh Behemoth\",0x10a48,0x80000000,Player-1084-0B48C032,\"Illiblindish-TarrenMill-EU\",0x511,0x80000000,473784,\"Fetid Spew\",0x8,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:04+00:00",
+        "updated_at": "2026-04-01T11:55:04+00:00"
+    },
+    {
+        "id": 1082,
+        "npc_id": 231629,
+        "spell_id": 474129,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:22:40.5411  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-231629-00003C5864,\"Latch\",0xa48,0x80000000,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x80000000,474129,\"Splattering Spew\",0x8,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:05+00:00",
+        "updated_at": "2026-04-01T11:55:05+00:00"
+    },
+    {
+        "id": 1083,
+        "npc_id": 231626,
+        "spell_id": 1253834,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:22:55.2131  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-231626-00003C5864,\"Kalis\",0x10a48,0x80000000,Player-1084-0B3396E2,\"Savsy-TarrenMill-EU\",0x512,0x80000000,1253834,\"Curse of Darkness\",0x20,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:06+00:00",
+        "updated_at": "2026-04-01T11:55:06+00:00"
+    },
+    {
+        "id": 1084,
+        "npc_id": 231629,
+        "spell_id": 472793,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:23:20.5841  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-231629-00003C5864,\"Latch\",0xa48,0x80000000,Player-1084-0A5FCDAB,\"Judoon-Dentarg-EU\",0x512,0x80000000,472793,\"Heaving Yank\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:06+00:00",
+        "updated_at": "2026-04-01T11:55:06+00:00"
+    },
+    {
+        "id": 1085,
+        "npc_id": 258868,
+        "spell_id": 1277785,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:25:35.2191  SPELL_CAST_SUCCESS,Creature-0-3892-2805-103322-258868-00013C5864,\"Haunting Grunt\",0xa48,0x80000000,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x80000000,1277785,\"Intercepting Charge\",0x1,Creature-0-3892-2805-103322-258868-00013C5864,0000000000000000,1510025,1518847,0,0,1470,0,0,0,1,0,0,0,5216.93,-2982.73,2498,4.5472,90\r\n",
+        "created_at": "2026-04-01T11:55:08+00:00",
+        "updated_at": "2026-04-01T11:55:08+00:00"
+    },
+    {
+        "id": 1086,
+        "npc_id": 231631,
+        "spell_id": 1283247,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:27:39.4711  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-231631-00003C5864,\"Commander Kroluk\",0x10a48,0x80000000,Player-1084-0B48C032,\"Illiblindish-TarrenMill-EU\",0x511,0x80000000,1283247,\"Reckless Leap\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:10+00:00",
+        "updated_at": "2026-04-01T11:55:10+00:00"
+    },
+    {
+        "id": 1087,
+        "npc_id": 231636,
+        "spell_id": 1253979,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:30:52.3771  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-231636-00003C5864,\"Restless Heart\",0x10a48,0x80000000,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x80000000,1253979,\"Gust Shot\",0x8,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:12+00:00",
+        "updated_at": "2026-04-01T11:55:12+00:00"
+    },
+    {
+        "id": 1088,
+        "npc_id": 231636,
+        "spell_id": 1282911,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:31:06.6301  SPELL_AURA_APPLIED,Creature-0-3892-2805-103322-231636-00003C5864,\"Restless Heart\",0x10a48,0x80000000,Player-1084-0A5FCDAB,\"Judoon-Dentarg-EU\",0x512,0x80000000,1282911,\"Bolt Gale\",0x8,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:12+00:00",
+        "updated_at": "2026-04-01T11:55:12+00:00"
+    },
+    {
+        "id": 1089,
+        "npc_id": 252635,
+        "spell_id": 1261286,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:41:34.7401  SPELL_AURA_APPLIED,Creature-0-4242-658-142105-252635-00003C5DD5,\"Forgemaster Garfrost\",0x10a48,0x80000000,Player-1084-0B3396E2,\"Savsy-TarrenMill-EU\",0x512,0x80000000,1261286,\"Throw Saronite\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:17+00:00",
+        "updated_at": "2026-04-01T11:55:17+00:00"
+    },
+    {
+        "id": 1090,
+        "npc_id": 252635,
+        "spell_id": 1261540,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:41:47.7301  SPELL_AURA_APPLIED,Creature-0-4242-658-142105-252635-00003C5DD5,\"Forgemaster Garfrost\",0x10a48,0x80000000,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x80000000,1261540,\"Orebreaker\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:17+00:00",
+        "updated_at": "2026-04-01T11:55:17+00:00"
+    },
+    {
+        "id": 1091,
+        "npc_id": 252564,
+        "spell_id": 1259187,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:49:25.4831  SPELL_AURA_APPLIED,Creature-0-4242-658-142105-252564-00003C60EB,\"Glacieth\",0xa48,0x80000000,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x80000000,1259187,\"Cryoburst\",0x10,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:20+00:00",
+        "updated_at": "2026-04-01T11:55:20+00:00"
+    },
+    {
+        "id": 1092,
+        "npc_id": 254684,
+        "spell_id": 1262930,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:52:04.5951  SPELL_AURA_APPLIED,Creature-0-4242-658-142105-254684-0003BC61F2,\"Rotling\",0xa48,0x80000000,Player-1084-0B48C032,\"Illiblindish-TarrenMill-EU\",0x511,0x80000000,1262930,\"Rotting Strikes\",0x1,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:22+00:00",
+        "updated_at": "2026-04-01T11:55:22+00:00"
+    },
+    {
+        "id": 1093,
+        "npc_id": 196977,
+        "spell_id": 389512,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:55:55.1191  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196977-00003C62BC,\"Bronze Dragonflight Recruiter\",0xa18,0x80000000,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x80000020,389512,\"Bronze Dragonflight Pledge Pin\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:23+00:00",
+        "updated_at": "2026-04-01T11:55:23+00:00"
+    },
+    {
+        "id": 1094,
+        "npc_id": 196974,
+        "spell_id": 389516,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:55:59.8051  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196974-00003C62BD,\"Black Dragonflight Recruiter\",0xa18,0x80000000,Player-1084-0B3396E2,\"Savsy-TarrenMill-EU\",0x512,0x80000000,389516,\"Black Dragonflight Pledge Pin\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:23+00:00",
+        "updated_at": "2026-04-01T11:55:23+00:00"
+    },
+    {
+        "id": 1095,
+        "npc_id": 196979,
+        "spell_id": 389536,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:56:12.7951  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196979-00003C62BD,\"Green Dragonflight Recruiter\",0xa18,0x80000000,Player-1084-0B3396E2,\"Savsy-TarrenMill-EU\",0x512,0x80000000,389536,\"Green Dragonflight Pledge Pin\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:23+00:00",
+        "updated_at": "2026-04-01T11:55:23+00:00"
+    },
+    {
+        "id": 1096,
+        "npc_id": 196981,
+        "spell_id": 389501,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:56:17.0331  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196981-00003C62BD,\"Red Dragonflight Recruiter\",0xa18,0x80000000,Player-1084-0B3396E2,\"Savsy-TarrenMill-EU\",0x512,0x80000000,389501,\"Red Dragonflight Pledge Pin\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:23+00:00",
+        "updated_at": "2026-04-01T11:55:23+00:00"
+    },
+    {
+        "id": 1097,
+        "npc_id": 196978,
+        "spell_id": 389521,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:57:10.0021  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196978-00003C62BD,\"Blue Dragonflight Recruiter\",0xa28,0x80000000,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x80000000,389521,\"Blue Dragonflight Pledge Pin\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:25+00:00",
+        "updated_at": "2026-04-01T11:55:25+00:00"
+    },
+    {
+        "id": 1098,
+        "npc_id": 196548,
+        "spell_id": 396721,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:59:16.3861  SPELL_HEAL,Creature-0-4238-2526-68337-196548-00003C6394,\"Ancient Branch\",0xa48,0x80000080,Player-1084-0B48C032,\"Illiblindish-TarrenMill-EU\",0x511,0x80000000,396721,\"Abundance\",0x8,Player-1084-0B48C032,0000000000000000,329257,329257,1038,2361,699,455,293,0,17,44,140,0,1772.61,-3074.77,2097,4.4736,250,655457,655457,604688,0,nil\r\n",
+        "created_at": "2026-04-01T11:55:26+00:00",
+        "updated_at": "2026-04-01T11:55:26+00:00"
+    },
+    {
+        "id": 1099,
+        "npc_id": 196642,
+        "spell_id": 389032,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:59:27.9961  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196642-00013C63AD,\"Hungry Lasher\",0xa48,0x80000000,Creature-0-4238-2526-68337-196642-00013C63AD,\"Hungry Lasher\",0xa48,0x80000000,389032,\"Toxic\",0x8,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:26+00:00",
+        "updated_at": "2026-04-01T11:55:26+00:00"
+    },
+    {
+        "id": 1100,
+        "npc_id": 196642,
+        "spell_id": 389033,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 21:59:30.1541  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-196642-00013C63AE,\"Hungry Lasher\",0xa48,0x80000000,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x80000020,389033,\"Lasher Toxin\",0x8,DEBUFF\r\n",
+        "created_at": "2026-04-01T11:55:26+00:00",
+        "updated_at": "2026-04-01T11:55:26+00:00"
+    },
+    {
+        "id": 1101,
+        "npc_id": 191736,
+        "spell_id": 1276770,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:03:39.8421  SPELL_DAMAGE,Creature-0-4238-2526-68337-191736-00003C62BC,\"Crawth\",0x10a48,0x80000000,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x80000020,1276770,\"Ruinous Winds\",0x8,Player-633-0A64192A,0000000000000000,427942,499300,2302,421,4205,662,154,0,1,1180,1300,0,2379.23,-3045.38,2098,3.5905,246,71358,93707,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2026-04-01T11:55:28+00:00",
+        "updated_at": "2026-04-01T11:55:28+00:00"
+    },
+    {
+        "id": 1102,
+        "npc_id": 191610,
+        "spell_id": 181089,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:03:52.3281  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-191610-00003C62BC,\"Goal of the Searing Blaze\",0xa28,0x80000000,Creature-0-4238-2526-68337-191610-00003C62BC,\"Goal of the Searing Blaze\",0xa28,0x80000000,181089,\"Encounter Event\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:28+00:00",
+        "updated_at": "2026-04-01T11:55:28+00:00"
+    },
+    {
+        "id": 1103,
+        "npc_id": 189668,
+        "spell_id": 387453,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:08:16.3561  SPELL_AURA_APPLIED,Creature-0-4238-2526-68337-189668-00003C62BC,\"Professor Maxdormu\",0xa18,0x80000000,Creature-0-4238-2526-68337-189668-00003C62BC,\"Professor Maxdormu\",0xa18,0x80000000,387453,\"Recall History\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:30+00:00",
+        "updated_at": "2026-04-01T11:55:30+00:00"
+    },
+    {
+        "id": 1104,
+        "npc_id": 122412,
+        "spell_id": 1262522,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:23:17.0791  SPELL_MISSED,Creature-0-3771-1753-76347-122412-00013C68FB,\"Bound Voidcaller\",0x1248,0x80000000,Player-580-0AFA3FEC,\"Skybrew-Blackmoore-EU\",0x512,0x80000020,1262522,\"Pulsing Void\",0x20,ABSORB,nil,11253,15254,nil,AOE\r\n",
+        "created_at": "2026-04-01T11:55:32+00:00",
+        "updated_at": "2026-04-01T11:55:32+00:00"
+    },
+    {
+        "id": 1105,
+        "npc_id": 123187,
+        "spell_id": 1265996,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:36:01.1761  SPELL_AURA_APPLIED,Creature-0-3771-1753-76347-123187-00003C6C1D,\"Alleria Windrunner\",0xa18,0x80000000,Player-1084-0B48C032,\"Illiblindish-TarrenMill-EU\",0x511,0x80000000,1265996,\"Void Barrier\",0x20,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:41+00:00",
+        "updated_at": "2026-04-01T11:55:41+00:00"
+    },
+    {
+        "id": 1106,
+        "npc_id": 124729,
+        "spell_id": 1265997,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:36:02.6901  SPELL_AURA_APPLIED,Creature-0-3771-1753-76347-124729-00003C68F9,\"L'ura\",0x10a48,0x80000000,Creature-0-3771-1753-76347-123187-00003C6C1D,\"Alleria Windrunner\",0xa18,0x80000000,1265997,\"Dirge of Despair\",0x20,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:41+00:00",
+        "updated_at": "2026-04-01T11:55:41+00:00"
+    },
+    {
+        "id": 1107,
+        "npc_id": 124729,
+        "spell_id": 1265589,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:36:37.6841  SPELL_AURA_APPLIED,Creature-0-3771-1753-76347-124729-00003C68F9,\"L'ura\",0x10a48,0x80000000,Creature-0-3771-1753-76347-255535-00003C68F9,\"Note of Despair\",0xa18,0x80000000,1265589,\"Grim Chorus\",0x20,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:42+00:00",
+        "updated_at": "2026-04-01T11:55:42+00:00"
+    },
+    {
+        "id": 1108,
+        "npc_id": 123187,
+        "spell_id": 1265999,
+        "combat_log_path": "tmp\/WoWCombatLog-031926_211142.zip",
+        "raw_event": "3\/19\/2026 22:37:46.2071  SPELL_AURA_APPLIED,Creature-0-3771-1753-76347-123187-00003C6C1D,\"Alleria Windrunner\",0xa18,0x80000000,Creature-0-3771-1753-76347-124729-00003C68F9,\"L'ura\",0x10a48,0x80000000,1265999,\"Siphon Void\",0x20,BUFF\r\n",
+        "created_at": "2026-04-01T11:55:43+00:00",
+        "updated_at": "2026-04-01T11:55:43+00:00"
+    },
+    {
+        "id": 1109,
+        "npc_id": 234089,
+        "spell_id": 1244985,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "raw_event": "3\/25\/2026 11:47:52.0881  SPELL_DAMAGE,Creature-0-1465-2811-20818-234089-000343BCFC,\"Animated Codex\",0xa48,0x80000000,Player-3674-0AFCC88F,\"Legain-TwistingNether-EU\",0x512,0x80000000,1244985,\"Arcane Volley\",0x40,Player-3674-0AFCC88F,0000000000000000,283564,361980,2293,664,1966,253,372,0,0,250000,250000,0,11563.50,-4958.01,2515,4.8353,255,37478,45498,-1,64,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2026-04-01T12:06:02+00:00",
+        "updated_at": "2026-04-01T12:06:02+00:00"
+    },
+    {
+        "id": 1110,
+        "npc_id": 251861,
+        "spell_id": 427472,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "raw_event": "3\/25\/2026 11:50:35.9421  SPELL_MISSED,Creature-0-1465-2811-20818-251861-0000C3BCFC,\"Blazing Pyromancer\",0xa48,0x80000000,Player-3674-0AFCC88F,\"Legain-TwistingNether-EU\",0x512,0x80000000,427472,\"Flamestrike\",0x4,IMMUNE,nil,AOE\r\n",
+        "created_at": "2026-04-01T12:25:53+00:00",
+        "updated_at": "2026-04-01T12:25:53+00:00"
+    },
+    {
+        "id": 1111,
+        "npc_id": 251861,
+        "spell_id": 427473,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "raw_event": "3\/25\/2026 11:50:35.9891  SPELL_CAST_SUCCESS,Creature-0-1465-2811-20818-251861-0000C3BCFC,\"Blazing Pyromancer\",0xa48,0x80000000,Player-3674-0AFCC88F,\"Legain-TwistingNether-EU\",0x512,0x80000000,427473,\"Flamestrike\",0x4,Creature-0-1465-2811-20818-251861-0000C3BCFC,0000000000000000,4836594,5365775,0,0,1470,0,0,0,0,177002,177002,0,11538.62,-5057.81,2515,0.8563,91\r\n",
+        "created_at": "2026-04-01T12:25:53+00:00",
+        "updated_at": "2026-04-01T12:25:53+00:00"
+    },
+    {
+        "id": 1112,
+        "npc_id": 187287,
+        "spell_id": 397356,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "raw_event": "3\/25\/2026 10:38:29.9821  SPELL_AURA_APPLIED,Creature-0-4241-2526-8814-187287-000043ACE6,\"Professor Mystakria\",0xa18,0x80000000,Creature-0-4241-2526-8814-187287-000043ACE6,\"Professor Mystakria\",0xa18,0x80000000,397356,\"Nature Infusion\",0x8,BUFF\r\n",
+        "created_at": "2026-04-01T12:26:44+00:00",
+        "updated_at": "2026-04-01T12:26:44+00:00"
+    },
+    {
+        "id": 1113,
+        "npc_id": 236153,
+        "spell_id": 1215803,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "raw_event": "3\/26\/2026 23:11:34.0841  SPELL_AURA_APPLIED,Creature-0-4243-2805-129679-236153-000045AF16,\"Dark Entity\",0xa28,0x80000000,Player-1084-0B3396E2,\"Savsy-TarrenMill-EU\",0x512,0x80000000,1215803,\"Curse of Darkness\",0x20,DEBUFF\r\n",
+        "created_at": "2026-04-01T12:27:27+00:00",
+        "updated_at": "2026-04-01T12:27:27+00:00"
+    },
+    {
+        "id": 1114,
+        "npc_id": 189667,
+        "spell_id": 397354,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "raw_event": "3\/26\/2026 20:07:47.7451  SPELL_AURA_APPLIED,Creature-0-3890-2526-43876-189667-00004583D7,\"Professor Ichistrasz\",0xa18,0x80000000,Creature-0-3890-2526-43876-189667-00004583D7,\"Professor Ichistrasz\",0xa18,0x80000000,397354,\"Life Infusion\",0x8,BUFF\r\n",
+        "created_at": "2026-04-01T12:27:44+00:00",
+        "updated_at": "2026-04-01T12:27:44+00:00"
+    },
+    {
+        "id": 1115,
+        "npc_id": 196947,
+        "spell_id": 181089,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "raw_event": "3\/26\/2026 20:11:36.3041  SPELL_AURA_APPLIED,Creature-0-3890-2526-43876-196947-00004583D6,\"Goal of the Rushing Winds\",0xa28,0x80000000,Creature-0-3890-2526-43876-196947-00004583D6,\"Goal of the Rushing Winds\",0xa28,0x80000000,181089,\"Encounter Event\",0x1,BUFF\r\n",
+        "created_at": "2026-04-01T12:27:45+00:00",
+        "updated_at": "2026-04-01T12:27:45+00:00"
     }
 ]

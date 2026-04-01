@@ -499,6 +499,18 @@ return [
                 'spell_not_found' => 'Spell not found',
             ],
         ],
+        'spells' => [
+            'showmissingspellinfo' => [
+                'title'        => 'Spells with missing info',
+                'header'       => 'Spells with missing info',
+                'table_header' => [
+                    'id'      => 'Id',
+                    'name'    => 'Name',
+                    'actions' => 'Actions',
+                ],
+                'wowhead' => 'View on Wowhead',
+            ],
+        ],
         'list' => [
             'title'                                       => 'Admin tools',
             'header'                                      => 'Admin tools',
@@ -538,6 +550,8 @@ return [
             'enemy_forces_recalculate'                    => 'Mass recalculate enemy forces for routes',
             'subheader_thumbnails'                        => 'Thumbnails',
             'thumbnails_regenerate'                       => 'Mass regenerate thumbnails',
+            'subheader_spells'                            => 'Spells',
+            'show_missing_spell_info'                     => 'Show missing spell data',
         ],
         'thumbnails' => [
             'regenerate' => [

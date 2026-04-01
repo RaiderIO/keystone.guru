@@ -73,9 +73,17 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Middleware\WowheadCors;
 
 // Webhooks
-Route::post('webhook/github', new WebhookController()->github(...))->name('webhook.github');
+Route::prefix('webhook')->group(static function () {
+    Route::post('github', new WebhookController()->github(...))->name('webhook.github');
+    Route::middleware([WowheadCors::class])->group(static function () {
+        Route::options('wowhead/spell', new WebhookController()->wowheadSpellOptions(...));
+        Route::post('wowhead/spell', new WebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');
+    });
+});
+
 Route::middleware(['debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
     Route::get('benchmark', new SiteController()->benchmark(...));
 });
@@ -451,6 +459,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                     Route::get('dungeon/mappingversion/accuracy', new AdminToolsController()->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
                 });
+
+                // Spells
+                Route::get('spells/missingdata', new AdminToolsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
 
                 // Wago.gg
                 Route::get('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');

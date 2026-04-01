@@ -709,6 +709,16 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
+    public function spellsShowMissingSpellInfo(): View
+    {
+        return view('admin.tools.spells.showmissingspellinfo', [
+            'spells' => Spell::whereNull('fetched_data_at')->get(),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
     public function wagoggImportIngameCoordinates(): View
     {
         return view('admin.tools.wagogg.importingamecoordinates');
