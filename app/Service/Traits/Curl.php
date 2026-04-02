@@ -19,7 +19,7 @@ trait Curl
             // stop after 10 redirects
             CURLOPT_ENCODING => '',
             // handle compressed
-            CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+            CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
             // name of client
             CURLOPT_AUTOREFERER => true,
             // set referrer on redirect

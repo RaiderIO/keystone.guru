@@ -11,6 +11,7 @@ history -s 'php artisan combatlog:ingestcombatlogroutejson tmp/'
 history -s 'php artisan challengemoderundata:convert'
 history -s 'php artisan environment:update'
 history -s 'php artisan handlebars:refresh'
+history -s 'php artisan localization:exportspellnames'
 history -s 'php artisan localization:syncnpcnames'
 history -s 'php artisan localization:sync en_US '
 history -s 'php artisan mapicon:generateitemicons'
@@ -51,7 +52,7 @@ alias ignore_mysql_ssl='printf "[client]\nssl=0\nskip-ssl\n" > /root/.my.cnf'
 # # Fetch other translations from Wowhead
 # php artisan localization:syncnpcnames retail
 # # Now save and re-import the mapping so that translations are available in the database (optional)
-# php artisan mapping:save && ./refresh_db_seed.sh
+# php artisan mapping:save && php artisan db:seed --database=migrate
 
 # # One combat log can contain multiple runs, split them up
 # php artisan combatlog:splitchallengemode tmp

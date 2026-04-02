@@ -198,8 +198,9 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         $result = sprintf('%s/spell=%d', $wowheadBaseUrl, $spellId);
-        if ($name !== null) {
-            $result .= '/' . Str::slug($name);
+
+        if (!empty(__($name))) {
+            $result .= '/' . Str::slug(__($name));
         }
 
         return $result;

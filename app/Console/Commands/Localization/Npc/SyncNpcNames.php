@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands\Localization\Npc;
 
+use App\Console\Commands\Localization\BaseSyncCommand;
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
-use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
-class SyncNpcNames extends Command
+class SyncNpcNames extends BaseSyncCommand
 {
     use ExportsTranslations;
 
@@ -59,16 +59,5 @@ class SyncNpcNames extends Command
                 $this->exportTranslations(sprintf('%s_ai', $locale), 'npcs.php', $newNpcNames);
             }
         }
-    }
-
-    private function hasAILanguage(string $locale): bool
-    {
-        foreach (config('language.all') as $language) {
-            if ($language['long'] === sprintf('%s_ai', $locale)) {
-                return $language['ai'] ?? false;
-            }
-        }
-
-        return false;
     }
 }

@@ -20,10 +20,10 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
     }
 
     #[Test]
-    public function create_givenTwwS1AraKaraCityOfEchoesJah6Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS1AraKaraCityOfEchoesJah6Mv10Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_jah_6', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_jah_6_mv_10', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
@@ -40,10 +40,10 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
     }
 
     #[Test]
-    public function create_givenTwwS1AraKaraCityOfEchoes13Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS1AraKaraCityOfEchoes13Mv10Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_13', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_13_mv_10', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);

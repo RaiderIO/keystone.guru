@@ -20,10 +20,10 @@ class APICombatLogControllerCombatLogRouteHallsOfAtonementTest extends APICombat
     }
 
     #[Test]
-    public function create_givenTwwS3HallsOfAtonement7Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS3HallsOfAtonement7Mv4Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('SL/tww_s3_ptr_halls_of_atonement_7', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('SL/tww_s3_ptr_halls_of_atonement_7_mv_4', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);

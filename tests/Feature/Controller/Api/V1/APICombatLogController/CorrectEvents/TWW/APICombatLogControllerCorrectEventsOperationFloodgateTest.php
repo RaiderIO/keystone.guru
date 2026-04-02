@@ -22,7 +22,7 @@ class APICombatLogControllerCorrectEventsOperationFloodgateTest extends APIComba
     #[Test]
     public function create_givenTwwS2OperationFloodgate8Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('TWW/tww_s2_operation_floodgate_8');
+        $this->executeTest('TWW/tww_s2_operation_floodgate_8_mv_3');
     }
 
     #[Test]

@@ -7,7 +7,6 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Release;

@@ -20,8 +20,8 @@ class APICombatLogControllerCorrectEventsNexusPointXenasTest extends APICombatLo
     }
 
     #[Test]
-    public function create_givenNexusPointXenasPreseasonJson_shouldReturnCorrectedJsonData(): void
+    public function create_givenNexusPointXenasPreseasonMv5Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('Midnight/midnight_s1_nexus_point_xenas_preseason');
+        $this->executeTest('Midnight/midnight_s1_nexus_point_xenas_preseason_mv_5');
     }
 }

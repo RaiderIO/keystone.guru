@@ -27,9 +27,9 @@ class WowheadService implements WowheadServiceInterface
 
     private const string IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST    = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
     private const string IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
-    private const string IDENTIFYING_TOKEN_SPELL_ICON_NAME         = 'WeakAuraExport.setOptions(';
+    private const string IDENTIFYING_TOKEN_SPELL_ICON_NAME         = '#images/wow/icons/large/(.*)\.jpg#';
     private const string IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC = '/Icon\.create\("([^"]+)"/';
-    private const string IDENTIFYING_REGEX_SPELL_CATEGORY          = '/WH\.Gatherer\.addData\(13,\s*1,\s*\{[^}]*"name_enus":"([^"]+)"}/';
+    private const string IDENTIFYING_REGEX_SPELL_CATEGORY          = '/WH\.Gatherer\.addData\(6,\s*1,\s*\{[^}]*"name_enus":"([^"]+)"}/';
     private const string IDENTIFYING_TOKEN_SPELL_MECHANIC          = '<th>Mechanic</th>';
     private const string IDENTIFYING_TOKEN_SPELL_SCHOOL            = '<th>School</th>';
     private const string IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE       = '<th>Dispel type</th>';
@@ -154,9 +154,9 @@ class WowheadService implements WowheadServiceInterface
         return $displayId;
     }
 
-    public function getSpellData(GameVersion $gameVersion, int $spellId): ?SpellDataResult
+    public function getSpellData(GameVersion $gameVersion, int $spellId, ?string $html = null): ?SpellDataResult
     {
-        $response = $this->getSpellPageHtml($gameVersion, $spellId);
+        $response = $html ?? $this->getSpellPageHtml($gameVersion, $spellId);
 
         // More hacky shit to scrape data we need
         $mechanic      = null;
@@ -170,7 +170,7 @@ class WowheadService implements WowheadServiceInterface
         $duration      = null;
 
         // When set to true, the next line will contain the school.
-        $categoryFound = $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
+        $categoryFound = $spellIconFound = $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
         $mechanicSet   = $schoolSet = $dispelTypeSet = $castTimeSet = $durationSet = false;
 
         $lines = explode(PHP_EOL, $response);
@@ -184,25 +184,10 @@ class WowheadService implements WowheadServiceInterface
                 // Like, we're done, don't return anything
                 return null;
             } // Spell icon name
-            elseif (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
-                // WeakAuraExport.setOptions({"id":322486,"name":"Overgrowth","iconFilename":"inv_misc_herb_nightmarevine_stem","appliesABuff":true,"display":"progress-bar-medium","trigger":"player-has-debuff"});
-                if (preg_match('/{.*}/', $line, $matches)) {
-                    $jsonString = $matches[0];
-                    $json       = json_decode($jsonString, true);
-
-                    if (!is_array($json)) {
-                        $this->log->getSpellDataIconNameNotFound($line, $json);
-                        continue;
-                    }
-
-                    if ((int)$json['id'] !== $spellId) {
-                        $this->log->getSpellDataIconNameSpellIdDoesNotMatch($line, $json, $spellId);
-                        continue;
-                    }
-
-                    // I don't know the number of the first array key - convert it to 0 always
-                    $iconName = $json['iconFilename'];
-                }
+            elseif (!$spellIconFound && preg_match(self::IDENTIFYING_TOKEN_SPELL_ICON_NAME, $line, $matches)) {
+                // <meta property="twitter:image" content="https://wow.zamimg.com/images/wow/icons/large/inv_enchant_voidsphere.jpg">
+                $iconName       = $matches[1];
+                $spellIconFound = true;
             } elseif ($gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA &&
                 preg_match(self::IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC, $line, $matches)) {
                 $iconName = $matches[1];

@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Webhook\WowheadSpellRequest;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Spell\Spell;
 use App\Service\Discord\DiscordApiServiceInterface;
+use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Teapot\StatusCode;
 
 class WebhookController extends Controller
 {
@@ -141,5 +147,46 @@ class WebhookController extends Controller
         }
 
         return response()->noContent();
+    }
+
+    public function wowheadSpellOptions(Request $request): Response
+    {
+        return response()->noContent();
+    }
+
+    public function wowheadSpell(
+        WowheadSpellRequest     $request,
+        WowheadServiceInterface $wowheadService,
+    ): string {
+        if (!config('app.debug', true)) {
+            abort(StatusCode::FORBIDDEN);
+        }
+
+        $validated = $request->validated();
+
+        preg_match('/spell=(\d+)/', $validated['url'], $matches);
+
+        $spellId = $matches[1] ?? null;
+
+        $spell = Spell::findOrFail($spellId);
+
+        $spellDataResult = $wowheadService->getSpellData(
+            $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+            $spellId,
+            $validated['html'],
+        );
+
+        $spellAttributes                    = $spellDataResult->toArray();
+        $spellAttributes['game_version_id'] = $gameVersion->id;
+        $spellAttributes['fetched_data_at'] = Carbon::now();
+
+        // Prevent category updates when we change it manually
+        if (in_array($spell->id, Spell::BLOODLUSTY_SPELLS)) {
+            unset($spellAttributes['category']);
+        }
+
+        $spell->update($spellAttributes);
+
+        return json_encode($spellDataResult->toArray());
     }
 }

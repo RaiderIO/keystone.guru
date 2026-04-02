@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands\Localization\Spell;
 
+use App\Console\Commands\Localization\BaseSyncCommand;
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
-use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
-class SyncSpellNames extends Command
+class SyncSpellNames extends BaseSyncCommand
 {
     use ExportsTranslations;
 
@@ -57,6 +57,10 @@ class SyncSpellNames extends Command
 
             ksort($newSpellNames);
             $this->exportTranslations($locale, 'spells.php', $newSpellNames);
+
+            if ($this->hasAILanguage($locale)) {
+                $this->exportTranslations(sprintf('%s_ai', $locale), 'spells.php', $newSpellNames);
+            }
         }
     }
 }

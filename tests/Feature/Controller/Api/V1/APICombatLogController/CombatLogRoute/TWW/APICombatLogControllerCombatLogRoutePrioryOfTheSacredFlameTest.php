@@ -20,10 +20,10 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
     }
 
     #[Test]
-    public function create_givenTwwS2PtrPrioryOfTheSacredFlame13Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2PtrPrioryOfTheSacredFlame13Mv4Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('TWW/tww_s2_ptr_priory_of_the_sacred_flame_13', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('TWW/tww_s2_ptr_priory_of_the_sacred_flame_13_mv_4', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);

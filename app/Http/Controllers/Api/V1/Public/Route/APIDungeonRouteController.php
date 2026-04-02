@@ -82,7 +82,7 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @OA\Post(
-     *     operationId="getThumbnailsByRoute",
+     *     operationId="createThumbnailsByRoute",
      *     path="/api/v1/route/{route}/thumbnail",
      *     summary="Create a new thumbnail for a route you can view",
      *     tags={"Route"},
@@ -105,7 +105,9 @@ class APIDungeonRouteController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailRequest")
      *      ),
      *
-     *     @OA\Response(response=200, description="Successful operation")
+     *     @OA\Response(response=200, description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailJobEnvelope")
+     *     )
      * )
      */
     public function storeThumbnails(

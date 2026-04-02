@@ -86,6 +86,11 @@
         <a href="{{ route('admin.tools.exception.select') }}">{{ __('view_admin.tools.list.throw_an_exception') }}</a>
     </div>
 
+    <h4>{{ __('view_admin.tools.list.subheader_spells') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.spells.showmissingspellinfo') }}">{{ __('view_admin.tools.list.show_missing_spell_info') }}</a>
+    </div>
+
     <h3>{{ __('view_admin.tools.list.subheader_actions') }}</h3>
     <div class="form-group">
         <a class="btn btn-primary"
