@@ -8,11 +8,12 @@ use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessRouteFloorThumbnailCustom
+class ProcessRouteFloorThumbnailCustom implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
