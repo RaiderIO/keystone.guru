@@ -56,7 +56,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
     private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
     /** @var Collection<int> */
-    protected Collection $validSpellIds;
+    protected Collection $validSpellsById;
 
     /**
      * @throws DungeonNotSupportedException
@@ -100,7 +100,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $log,
         );
 
-        $this->validSpellIds = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
+        $this->validSpellsById = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
 
         /** @var CombatLogRouteDungeonRouteBuilderLoggingInterface $log */
         $this->log = $log;
@@ -298,7 +298,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->combatLogRoute->spells as $spell) {
             if ($lastDiedAt !== null) {
                 if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
-                    if (!$this->validSpellIds->has($spell->spellId)) {
+                    if (!$this->validSpellsById->has($spell->spellId)) {
                         $this->log->determineSpellsCastBetweenInvalidSpellIdBetween($spell->spellId);
 
                         continue;
@@ -307,7 +307,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     $assignedSpells++;
                 }
             } elseif ($firstEngagedAt !== null && $spell->getCastAt()->isAfter($firstEngagedAt)) {
-                if (!$this->validSpellIds->has($spell->spellId)) {
+                if (!$this->validSpellsById->has($spell->spellId)) {
                     $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
 
                     continue;
