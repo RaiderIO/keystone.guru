@@ -3,7 +3,6 @@
 namespace App\Http\Resources\DungeonRouteThumbnailJob;
 
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
-use App\Service\DungeonRoute\ThumbnailService;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,15 +29,7 @@ class DungeonRouteThumbnailJobLinksResource extends JsonResource
 
         return [
             'status' => route('api.v1.thumbnailjob.show', ['dungeonRouteThumbnailJob' => $this]),
-            'result' => $isCompleted
-                ? url(
-                    sprintf(
-                        '%s/%s',
-                        ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH,
-                        ThumbnailService::getFilename($this->dungeonRoute, $this->floor->index),
-                    ),
-                )
-                : null,
+            'result' => $isCompleted ? $this->file?->getURL() : null,
         ];
     }
 }

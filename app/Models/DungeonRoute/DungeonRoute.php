@@ -158,9 +158,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     use Reportable;
     use SerializesDates;
 
-    public const PAGE_VIEW_SOURCE_VIEW_ROUTE    = 1;
-    public const PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
-    public const PAGE_VIEW_SOURCE_PRESENT_ROUTE = 3;
+    public const int PAGE_VIEW_SOURCE_VIEW_ROUTE    = 1;
+    public const int PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
+    public const int PAGE_VIEW_SOURCE_PRESENT_ROUTE = 3;
 
     /**
      * The accessors to append to the model's array form.
@@ -435,7 +435,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function thumbnails(): BelongsToMany
     {
-        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails');
+        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
+            ->where('dungeon_route_thumbnails.custom', false);
     }
 
     public function mapicons(): HasMany
