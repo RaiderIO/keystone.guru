@@ -338,5 +338,95 @@
         "lng": 316.27,
         "size": 98,
         "rotation": 72.5
+    },
+    {
+        "id": 914,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 432,
+        "lat": -187.34,
+        "lng": 286.12,
+        "size": 188,
+        "rotation": 60
+    },
+    {
+        "id": 915,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 397,
+        "lat": -82.91,
+        "lng": 65.91,
+        "size": 125,
+        "rotation": -120
+    },
+    {
+        "id": 916,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 431,
+        "lat": -87.73,
+        "lng": 347.5,
+        "size": 111,
+        "rotation": -62
+    },
+    {
+        "id": 917,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 399,
+        "lat": -230.5,
+        "lng": 129.78,
+        "size": 103,
+        "rotation": 149.5
+    },
+    {
+        "id": 918,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 400,
+        "lat": -166.51,
+        "lng": 133.31,
+        "size": 73,
+        "rotation": 0
+    },
+    {
+        "id": 919,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 401,
+        "lat": -151.47,
+        "lng": 64.81,
+        "size": 64,
+        "rotation": 0
+    },
+    {
+        "id": 920,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 402,
+        "lat": -211.81,
+        "lng": 32.5,
+        "size": 58,
+        "rotation": 0
+    },
+    {
+        "id": 921,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 396,
+        "lat": -73.81,
+        "lng": 203.59,
+        "size": 183,
+        "rotation": 60
+    },
+    {
+        "id": 922,
+        "mapping_version_id": 698,
+        "floor_id": 420,
+        "target_floor_id": 398,
+        "lat": -65.79,
+        "lng": 316.27,
+        "size": 98,
+        "rotation": 72.5
     }
 ]
