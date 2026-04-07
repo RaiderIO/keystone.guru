@@ -5,16 +5,16 @@ return [
         'search' => [
             'gameversion' => [
                 'dungeon' => [
-                    'title'                                  => '',
-                    'description'                            => '',
-                    'linkpreview_default_description_search' => '',
-                    'linkpreview_title'                      => '',
+                    'title'                                  => 'Поиск маршрутов для :dungeon',
+                    'description'                            => 'Ищите маршруты по заголовку, уровню ключа, аффиксам, силам врагов, рейтингу и многим другим параметрам. Выберите подземелье, чтобы начать.',
+                    'linkpreview_default_description_search' => 'Найдите M+ маршруты для :dungeon',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
                 ],
             ],
             'list' => [
-                'title'       => '',
-                'header'      => '',
-                'description' => '',
+                'title'       => 'Поиск маршрутов',
+                'header'      => 'Поиск маршрутов',
+                'description' => 'Ищите маршруты по заголовку, уровню ключа, аффиксам, силам врагов, рейтингу и многим другим параметрам. Выберите подземелье, чтобы начать.',
             ],
         ],
     ],
@@ -33,7 +33,7 @@ return [
                 'view_heatmap_fullscreen' => 'Просмотр в полноэкранном режиме',
             ],
             'view' => [
-                'title' => '',
+                'title' => 'Исследовать :dungeon',
             ],
         ],
     ],
@@ -54,5 +54,4 @@ return [
             ],
         ],
     ],
-
 ];

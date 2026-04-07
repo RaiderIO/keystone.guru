@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popular',
@@ -437,6 +436,15 @@ return [
                 'report_for_moderation'          => 'Reportar',
                 'report_for_moderation_finished' => 'Reportado',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Selecciona enemigos en el mapa para incluirlos o excluirlos de los resultados de búsqueda.',
+                'disabled'       => 'Desactivado',
+                'enabled'        => 'Activado',
+                'key_level'      => 'Nivel de llave',
+                'settings_title' => 'Configuración del mapa',
+                'title'          => 'Título',
+                'username'       => 'Nombre de usuario',
+            ],
         ],
         'map' => [
             'no_teeming'                             => 'Siempre visible',
@@ -447,9 +455,9 @@ return [
             'horde'                                  => 'Horda',
             'new_mapping_version_header_title'       => 'Hay una nueva versión de mapeo para esta mazmorra',
             'new_mapping_version_header_description' => 'Keystone.guru trabaja con versiones de mapeo para cada mazmorra.
-                            Cada vez que Blizzard hace un cambio en el mapeo o se corrige un error, se crea una nueva versión de mapeo.
-                            Las rutas que se crean con versiones de mapeo anteriores no se actualizan automáticamente a la última versión.
-                            Esta advertencia indica que la versión de mapeo utilizada por esta ruta está desactualizada y puede no representar el mapeo del juego',
+                                        Cada vez que Blizzard hace un cambio en el mapeo o se corrige un error, se crea una nueva versión de mapeo.
+                                        Las rutas que se crean con versiones de mapeo anteriores no se actualizan automáticamente a la última versión.
+                                        Esta advertencia indica que la versión de mapeo utilizada por esta ruta está desactualizada y puede no representar el mapeo del juego',
             'route' => 'Ruta',
         ],
     ],
@@ -592,10 +600,10 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Compensación de atracción a distancia en yardas',
                 'ranged_pull_compensation_yards_title' => 'Cuando realizas una carrera M+, nunca corres de un grupo a otro y los atraes con el cuerpo -
-                                        usas una habilidad a distancia para atraerlos la mayor parte del tiempo. Este valor te permite compensar por tus habilidades a distancia
-                                        y reducir el retraso entre los grupos. Nota: esto reducirá la distancia de caminata en esta cantidad, por lo que no se aconseja establecer esto
-                                        al rango máximo de tu habilidad para obtener resultados de simulación precisos. Entre el 50% y el 75% del rango máximo de tu hechizo debería ser bueno,
-                                        a menos que literalmente estés encadenando atracciones sin tiempo de inactividad entre ellas.',
+                                                                usas una habilidad a distancia para atraerlos la mayor parte del tiempo. Este valor te permite compensar por tus habilidades a distancia
+                                                                y reducir el retraso entre los grupos. Nota: esto reducirá la distancia de caminata en esta cantidad, por lo que no se aconseja establecer esto
+                                                                al rango máximo de tu habilidad para obtener resultados de simulación precisos. Entre el 50% y el 75% del rango máximo de tu hechizo debería ser bueno,
+                                                                a menos que literalmente estés encadenando atracciones sin tiempo de inactividad entre ellas.',
                 'use_mounts'        => 'Usar monturas',
                 'use_mounts_title'  => 'Intentará usar tu montura (si es más rápida y está disponible) para reducir la distancia entre la atracción actual y la siguiente.',
                 'patreon_link_text' => 'Patreon',
@@ -665,5 +673,4 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-
 ];

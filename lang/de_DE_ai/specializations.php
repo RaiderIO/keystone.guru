@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'death_knight' => [
         'blood'  => 'Blut',
         'frost'  => 'Frost',
@@ -10,7 +9,7 @@ return [
     'demon_hunter' => [
         'havoc'     => 'Verwüstung',
         'vengeance' => 'Rachsucht',
-        'devourer'  => '',
+        'devourer'  => 'Verschlinger',
     ],
     'druid' => [
         'balance'     => 'Gleichgewicht',
@@ -68,5 +67,4 @@ return [
         'fury'       => 'Furor',
         'protection' => 'Schutz',
     ],
-
 ];

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,20 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% Soins reçus',
+                'versatility_increased'     => '+5% Polyvalence',
+                'critical_strike_increased' => '+5% Coup Critique',
+                'haste_increased'           => '+5% Hâte',
+                'mastery_rating_increased'  => '+584 Cote de maîtrise',
+                'go_north'                  => 'Aller au nord',
+                'go_south'                  => 'Aller au sud',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Ragoût de Vilebranche fortifiant : Prenez une portion de ragoût Vilebranche, augmentant votre Ponction de 3% et réduisant les dégâts reçus des attaques à effet de zone de 3% pendant 30 min.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'Un aller simple vers la Promenade s\'active après avoir tué le premier boss (l\'un des deux). La deuxième élimination vous emmènera au niveau supérieur respectif.',
             ],
         ],
     ],
-
 ];

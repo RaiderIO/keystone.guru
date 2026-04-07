@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'ie_not_supported' => 'Похоже, вы просматриваете Keystone.guru с помощью Internet Explorer. К сожалению, Internet Explorer
               не поддерживаемый браузер. Попробуйте Google Chrome, Mozilla Firefox или Microsoft Edge.',
     'tagline'                         => 'Маршруты M+ делают прохождение подземелья проще',
@@ -35,27 +34,27 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'       => '',
-                'subheader'    => '',
-                'pug_friendly' => '',
-                'expert'       => '',
-                'title'        => '',
+                'header'       => 'Еженедельный маршрут Raider.IO',
+                'subheader'    => '<a href=":weekly_route_url">Еженедельные маршруты Raider.IO <i class="fas fa-external-link-alt"></i></a> обновляются каждую неделю в соответствии с шаблонами вытягивания, отображаемыми в <a href=":heatmaps_url">Тепловых картах Mythic+</a> и другими наблюдениями/опытом. Raider.IO устраняет догадки и предлагает проверенные маршруты.',
+                'pug_friendly' => 'Подходит для случайных групп',
+                'expert'       => 'Эксперт',
+                'title'        => 'Заголовок',
             ],
             'popular' => [
-                'title' => '',
+                'title' => 'Самый популярный маршрут сообщества по подземельям',
             ],
         ],
         'featured' => [
-            'title'            => '',
-            'heatmaps_alt'     => '',
-            'weekly_route_alt' => '',
-            'patreon_alt'      => '',
+            'title'               => 'Рекомендуемое',
+            'heatmaps_alt'        => '',
+            'weekly_route_alt'    => 'Еженедельный маршрут Raider.IO',
+            'patreon_alt'         => 'Patreon',
+            'revamped_search_alt' => 'Обновленный поиск',
         ],
         'about' => [
-            'title'               => '',
-            'tagline'             => '',
-            'tagline_description' => '',
+            'title'               => 'О проекте',
+            'tagline'             => 'M+ маршруты сделаны легко',
+            'tagline_description' => 'Keystone.guru - это инструмент планирования маршрутов в World of Warcraft (WoW) Mythic+, позволяющий вам создавать, управлять и открывать популярные маршруты. С полной поддержкой импорта и экспорта MDT ваши маршруты будут следовать за вами. Исследуйте любимые маршруты сообщества и используйте тепловые карты от Raider.IO, чтобы увидеть, как игроки на самом деле проходят каждое подземелье.',
         ],
     ],
-
 ];

@@ -1,4 +1,10 @@
-@extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $dungeonroute->title, 'cookieConsent' => $dungeonroute->demo === 1 ? false : null ])
+@extends('layouts.map', [
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => __('view_dungeonroute.livesession.title', ['title' => $dungeonroute->title]),
+    'cookieConsent' => $dungeonroute->demo === 1 ? false : null
+])
 <?php
 
 use App\Models\Dungeon;

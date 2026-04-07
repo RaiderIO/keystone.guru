@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => '이름',
     'enemy_forces_label'                              => '적 병력',
     'enemy_display_type_label'                        => '적 표시 유형',
@@ -477,5 +476,11 @@ return [
     'error_loading_data_label'                                             => '데이터 로드 오류 - 다시 시도하세요',
     'run_count_label'                                                      => ':count 개의 실행 데이터 표시',
     'refresh_thumbnails_label'                                             => '썸네일 새로고침',
-
-];
+    'algethar_academy_dragonflight_warning_label'                          => '당신은 알게타르 아카데미의 드래곤플라이트 버전을 보고 있습니다. 호환성을 위해 미드나이트 버전을 사용해야 합니다.',
+    'filter_input_excluded_enemies_header'                                 => '제외된 적들: :value',
+    'filter_input_included_enemies_header'                                 => '포함된 적들: :value',
+    'filter_no_filters_active'                                             => '활성화된 필터 없음',
+    'no_search_results_label'                                              => '검색 결과 없음',
+    'search_results_label'                                                 => '검색 결과',
+]
+;

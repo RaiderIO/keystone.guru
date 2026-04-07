@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'unknown'                                => 'Sconosciuto',
     'comment'                                => 'Commento',
     'door'                                   => 'Porta',
@@ -109,7 +108,6 @@ return [
     'eco_dome_al_dani_shatter_conduit'       => 'Condotto Frantumato',
     'eco_dome_al_dani_disruption_grenade'    => 'Granata di Disgregazione',
     'eco_dome_al_dani_kareshi_surge'         => 'Impeto K\'areshi',
-    'seat_of_the_triumvirate_void_infusion'  => '',
-    'maisara_caverns_hearty_vilebranch_stew' => '',
-
+    'seat_of_the_triumvirate_void_infusion'  => 'Infusione del Vuoto',
+    'maisara_caverns_hearty_vilebranch_stew' => 'Stufato Vilebranch Sostanzioso',
 ];

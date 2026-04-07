@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => 'Nombre',
     'enemy_forces_label'                              => 'Fuerzas enemigas',
     'enemy_display_type_label'                        => 'Tipo de visualización de enemigos',
@@ -478,5 +477,10 @@ en la línea en el mapa para cambiar su color o grosor.',
     'error_loading_data_label'                                             => 'Error al cargar datos - por favor intente de nuevo',
     'run_count_label'                                                      => 'Mostrando datos de :count ejecuciones',
     'refresh_thumbnails_label'                                             => 'Actualizar miniaturas',
-
+    'algethar_academy_dragonflight_warning_label'                          => 'Estás viendo la versión Dragonflight de la Academia Algeth\'ar. Asegúrate de usar la versión Midnight para la compatibilidad con MDT.',
+    'filter_input_excluded_enemies_header'                                 => 'Enemigos excluidos: :value',
+    'filter_input_included_enemies_header'                                 => 'Enemigos incluidos: :value',
+    'filter_no_filters_active'                                             => 'No hay filtros activos',
+    'no_search_results_label'                                              => 'No se encontraron resultados de búsqueda',
+    'search_results_label'                                                 => 'Resultados de búsqueda',
 ];

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,20 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% Получаемого исцеления',
+                'versatility_increased'     => '+5% Универсальности',
+                'critical_strike_increased' => '+5% Критического удара',
+                'haste_increased'           => '+5% Скорости',
+                'mastery_rating_increased'  => '+584 Мастерства',
+                'go_north'                  => 'Идите на север',
+                'go_south'                  => 'Идите на юг',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Сытное рагу из ветвистых: Съешьте порцию рагу из ветвистых, увеличивая ваше Стягивание на 3% и уменьшая получаемый урон от атак по площади на 3% в течение 30 мин.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'Односторонняя поездка обратно на Променад активируется после убийства первого босса (любого из них). Второе убийство перенесет вас на соответствующий Верхний уровень.',
             ],
         ],
     ],
-
 ];

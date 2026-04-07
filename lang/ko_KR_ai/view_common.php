@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'dungeon' => [
         'griddiscover' => [
             'popular'   => '인기',
@@ -437,6 +436,15 @@ return [
                 'report_for_moderation'          => '신고',
                 'report_for_moderation_finished' => '신고됨',
             ],
+            'dungeonroutesearch' => [
+                'description'    => '지도에서 적을 선택하여 검색 결과에서 포함하거나 제외합니다.',
+                'disabled'       => '비활성화됨',
+                'enabled'        => '활성화됨',
+                'key_level'      => '키 레벨',
+                'settings_title' => '지도 설정',
+                'title'          => '제목',
+                'username'       => '사용자 이름',
+            ],
         ],
         'map' => [
             'no_teeming'                             => '항상 표시',
@@ -447,9 +455,9 @@ return [
             'horde'                                  => '호드',
             'new_mapping_version_header_title'       => '이 던전에 대한 새로운 매핑 버전이 있습니다',
             'new_mapping_version_header_description' => 'Keystone.guru는 각 던전마다 매핑 버전과 함께 작동합니다.
-                            Blizzard가 매핑을 변경하거나 오류를 수정할 때마다 새로운 매핑 버전이 생성됩니다.
-                            이전 매핑 버전으로 생성된 경로는 자동으로 최신 버전으로 업데이트되지 않습니다.
-                            이 경고는 이 경로에 사용된 매핑 버전이 오래되어 게임 내 매핑을 적절히 나타내지 않을 수 있음을 나타냅니다.',
+                                        Blizzard가 매핑을 변경하거나 오류를 수정할 때마다 새로운 매핑 버전이 생성됩니다.
+                                        이전 매핑 버전으로 생성된 경로는 자동으로 최신 버전으로 업데이트되지 않습니다.
+                                        이 경고는 이 경로에 사용된 매핑 버전이 오래되어 게임 내 매핑을 적절히 나타내지 않을 수 있음을 나타냅니다.',
             'route' => '경로',
         ],
     ],
@@ -661,5 +669,5 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-
-];
+]
+;

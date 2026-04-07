@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => 'Name',
     'enemy_forces_label'                              => 'Feindkräfte',
     'enemy_display_type_label'                        => 'Feindanzeigetyp',
@@ -478,5 +477,10 @@ return [
     'error_loading_data_label'                                             => 'Fehler beim Laden der Daten - bitte versuchen Sie es erneut',
     'run_count_label'                                                      => 'Daten von :count Läufen anzeigen',
     'refresh_thumbnails_label'                                             => 'Vorschaubilder aktualisieren',
-
+    'algethar_academy_dragonflight_warning_label'                          => 'Du siehst die Dragonflight-Version der Algeth\'ar Akademie. Stelle sicher, dass du die Mitternachtsversion für die Kompatibilität mit MDT verwendest.',
+    'filter_input_excluded_enemies_header'                                 => 'Ausgeschlossene Feinde: :value',
+    'filter_input_included_enemies_header'                                 => 'Eingeschlossene Feinde: :value',
+    'filter_no_filters_active'                                             => 'Keine Filter aktiv',
+    'no_search_results_label'                                              => 'Keine Suchergebnisse gefunden',
+    'search_results_label'                                                 => 'Suchergebnisse',
 ];

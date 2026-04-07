@@ -1,11 +1,10 @@
 <?php
 
 return [
-
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Raider.IO Wöchentliche Route',
                 'popular'                    => 'Beliebte Routen',
                 'popular_by_current_affixes' => 'Beliebte Routen nach aktuellen Affixen',
                 'popular_by_next_affixes'    => 'Beliebte Routen nach nächsten Affixen',
@@ -44,6 +43,7 @@ return [
         'view' => [
             'any' => 'Jeder',
         ],
+        'title' => 'Live-Sitzung - :title',
     ],
     'edit' => [
         'title'                                   => '%s bearbeiten',
@@ -90,5 +90,4 @@ return [
         'linkpreview_default_description_sandbox' => 'Temporäre M+-Route für Dungeon %s.',
         'linkpreview_default_description_explore' => '%s erkunden.',
     ],
-
 ];

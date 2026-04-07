@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'ie_not_supported'                => 'Parece que estás navegando por Keystone.guru usando Internet Explorer. Desafortunadamente, Internet Explorer no es un navegador compatible. No, en serio, realmente no funciona en absoluto. Por favor, prueba con Google Chrome, Mozilla Firefox o Microsoft Edge.',
     'tagline'                         => 'Rutas M+ hechas fáciles',
     'tagline_description'             => 'Planifica rutas en línea cooperativamente con tu equipo o descubre rutas que se adapten a tu estilo de juego y nivel de habilidad. Keystone.guru es el único lugar para gestionar y compartir tus rutas M+.',
@@ -34,27 +33,27 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'       => '',
-                'subheader'    => '',
-                'pug_friendly' => '',
-                'expert'       => '',
-                'title'        => '',
+                'header'       => 'Ruta semanal de Raider.IO',
+                'subheader'    => 'Las <a href=":weekly_route_url">rutas semanales de Raider.IO <i class="fas fa-external-link-alt"></i></a> se actualizan cada semana según los patrones de agrupamiento que se muestran en <a href=":heatmaps_url">Mapas de Calor de Míticas+</a> y otras observaciones/experiencias. Raider.IO elimina las conjeturas y te ofrece rutas comprobadas y verdaderas.',
+                'pug_friendly' => 'Amigable para grupos aleatorios',
+                'expert'       => 'Experto',
+                'title'        => 'Título',
             ],
             'popular' => [
-                'title' => '',
+                'title' => 'Ruta comunitaria más popular por mazmorra',
             ],
         ],
         'featured' => [
-            'title'            => '',
-            'heatmaps_alt'     => '',
-            'weekly_route_alt' => '',
-            'patreon_alt'      => '',
+            'title'               => 'Destacado',
+            'heatmaps_alt'        => '',
+            'weekly_route_alt'    => 'Ruta semanal de Raider.IO',
+            'patreon_alt'         => 'Patreon',
+            'revamped_search_alt' => 'Búsqueda renovada',
         ],
         'about' => [
-            'title'               => '',
-            'tagline'             => '',
-            'tagline_description' => '',
+            'title'               => 'Acerca de',
+            'tagline'             => 'Rutas M+ hechas fáciles',
+            'tagline_description' => 'Keystone.guru es una herramienta de planificación de rutas Míticas+ de World of Warcraft (WoW), que te permite construir, gestionar y descubrir rutas populares. Con soporte completo para importación y exportación de MDT, tus rutas irán a donde vayas. Explora los favoritos de la comunidad y usa mapas de calor impulsados por Raider.IO para ver cómo los jugadores realmente abordan cada mazmorra.',
         ],
     ],
-
 ];

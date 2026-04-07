@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'ie_not_supported'                => 'Internet Explorer를 사용하여 Keystone.guru를 검색 중인 것 같습니다. 불행히도 Internet Explorer는 지원되지 않는 브라우저입니다. 정말로 작동하지 않습니다. Google Chrome, Mozilla Firefox 또는 Microsoft Edge를 사용해 보십시오.',
     'tagline'                         => 'M+ 경로 쉽게 만들기',
     'tagline_description'             => '팀과 함께 온라인으로 협력하여 경로를 계획하거나 자신의 플레이 스타일과 실력 수준에 맞는 경로를 발견하세요. Keystone.guru는 M+ 경로를 관리하고 공유할 수 있는 유일한 장소입니다.',
@@ -33,27 +32,32 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'       => '',
-                'subheader'    => '',
-                'pug_friendly' => '',
-                'expert'       => '',
-                'title'        => '',
+                'header'       => 'Raider.IO 주간 경로',
+                'subheader'    => '<a href=":weekly_route_url">Raider.IO 주간 경로 <i class="fas fa-external-link-alt"></i></a>는 <a href=":heatmaps_url">신화+ 히트맵</a>과 기타 관찰/경험에 나타나는 풀 패턴에 따라 매주 업데이트됩니다. Raider.IO는 추측을 제거하고 입증된 경로를 제공합니다.',
+                'pug_friendly' => '쉽게 참여 가능',
+                'expert'       => '전문가',
+                'title'        => '제목',
             ],
             'popular' => [
-                'title' => '',
+                'title' => '던전별 가장 인기 있는 커뮤니티 경로',
             ],
         ],
         'featured' => [
-            'title'            => '',
-            'heatmaps_alt'     => '',
-            'weekly_route_alt' => '',
-            'patreon_alt'      => '',
+            'title'               => '특집',
+            'heatmaps_alt'        => '',
+            'weekly_route_alt'    => 'Raider.IO 주간 경로',
+            'patreon_alt'         => 'Patreon',
+            'revamped_search_alt' => '개선된 검색',
         ],
         'about' => [
-            'title'               => '',
-            'tagline'             => '',
-            'tagline_description' => '',
+            'title'               => '소개',
+            'tagline'             => '쉬운 M+ 경로',
+            'tagline_description' => 'Keystone.guru는 월드 오브 워크래프트 (WoW) 신화+ 경로 계획 도구로, 인기 있는 경로를 생성, 관리,
+                            발견할 수 있습니다.
+                            완전한 MDT 가져오기 및 내보내기 지원으로, 경로는 어디든지 갈 수 있습니다.
+                            커뮤니티의 인기 경로를 탐색하고 Raider.IO가 제공하는 히트맵을 사용하여 플레이어가 각
+                            던전을 실제로 어떻게 공략하는지 볼 수 있습니다.',
         ],
     ],
-
-];
+]
+;

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,20 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% de Cura Recebida',
+                'versatility_increased'     => '+5% de Versatilidade',
+                'critical_strike_increased' => '+5% de Acerto Crítico',
+                'haste_increased'           => '+5% de Aceleração',
+                'mastery_rating_increased'  => '+584 de Índice de Maestria',
+                'go_north'                  => 'Ir para o norte',
+                'go_south'                  => 'Ir para o sul',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Ensopado Forte de Vilebranch: Experimente uma porção do ensopado Vilebranch, aumentando sua Sugação em 3% e reduzindo o dano recebido de ataques em área em 3% por 30 min.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'Viagem só de ida de volta para o Promenade ativa após matar o primeiro chefe (qualquer um deles). A segunda morte o levará ao respectivo nível superior.',
             ],
         ],
     ],
-
 ];

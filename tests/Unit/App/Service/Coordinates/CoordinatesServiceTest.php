@@ -176,23 +176,23 @@ final class CoordinatesServiceTest extends PublicTestCase
                         $this->assertGreaterThan(
                             $clone['x'] - $margin,
                             $converted['x'],
-                            "X coordinate for NPC ID $npcId (index $index) is too low [XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
+                            "X coordinate for NPC ID $npcId (index $index) is too low [MDT XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
                         );
                         $this->assertLessThan(
                             $clone['x'] + $margin,
                             $converted['x'],
-                            "X coordinate for NPC ID $npcId (index $index) is too high [XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
+                            "X coordinate for NPC ID $npcId (index $index) is too high [MDT XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
                         );
 
                         $this->assertGreaterThan(
                             $clone['y'] - $margin,
                             $converted['y'],
-                            "Y coordinate for NPC ID $npcId (index $index) is too low [XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
+                            "Y coordinate for NPC ID $npcId (index $index) is too low [MDT XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
                         );
                         $this->assertLessThan(
                             $clone['y'] + $margin,
                             $converted['y'],
-                            "Y coordinate for NPC ID $npcId (index $index) is too high [XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
+                            "Y coordinate for NPC ID $npcId (index $index) is too high [MDT XY: [$cloneX, $cloneY], MappingVersion: $mvId, Dungeon: $dungeonName]",
                         );
 
                         break;

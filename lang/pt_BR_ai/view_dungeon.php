@@ -5,16 +5,16 @@ return [
         'search' => [
             'gameversion' => [
                 'dungeon' => [
-                    'title'                                  => '',
-                    'description'                            => '',
-                    'linkpreview_default_description_search' => '',
-                    'linkpreview_title'                      => '',
+                    'title'                                  => 'Pesquisar rotas para :dungeon',
+                    'description'                            => 'Procure rotas por título, nível de chave, afixos, forças inimigas, classificação e mais. Selecione uma masmorra para começar.',
+                    'linkpreview_default_description_search' => 'Encontre rotas M+ para :dungeon',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
                 ],
             ],
             'list' => [
-                'title'       => '',
-                'header'      => '',
-                'description' => '',
+                'title'       => 'Pesquisar rotas',
+                'header'      => 'Pesquisar rotas',
+                'description' => 'Procure rotas por título, nível de chave, afixos, forças inimigas, classificação e mais. Selecione uma masmorra para começar.',
             ],
         ],
     ],
@@ -33,7 +33,7 @@ return [
                 'view_heatmap_fullscreen' => 'Ver em tela cheia',
             ],
             'view' => [
-                'title' => '',
+                'title' => 'Explorar :dungeon',
             ],
         ],
     ],
@@ -54,5 +54,4 @@ return [
             ],
         ],
     ],
-
 ];

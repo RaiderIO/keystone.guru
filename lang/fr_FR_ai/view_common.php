@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Populaire',
@@ -437,6 +436,15 @@ return [
                 'report_for_moderation'          => 'Signaler',
                 'report_for_moderation_finished' => 'Signalé',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Sélectionnez des ennemis sur la carte pour les inclure ou les exclure des résultats de recherche.',
+                'disabled'       => 'Désactivé',
+                'enabled'        => 'Activé',
+                'key_level'      => 'Niveau de clé',
+                'settings_title' => 'Paramètres de la carte',
+                'title'          => 'Titre',
+                'username'       => 'Nom d\'utilisateur',
+            ],
         ],
         'map' => [
             'no_teeming'                             => 'Toujours visible',
@@ -447,9 +455,9 @@ return [
             'horde'                                  => 'Horde',
             'new_mapping_version_header_title'       => 'Il y a une nouvelle version de cartographie pour ce donjon',
             'new_mapping_version_header_description' => 'Keystone.guru fonctionne avec des versions de cartographie pour chaque donjon.
-                            Chaque fois que Blizzard effectue un changement de cartographie ou qu\'une erreur est corrigée, une nouvelle version de cartographie est créée.
-                            Les itinéraires créés avec des versions de cartographie précédentes ne sont pas automatiquement mis à jour vers la dernière version.
-                            Cet avertissement indique que la version de cartographie utilisée par cet itinéraire est obsolète et peut ne pas représenter la cartographie en jeu',
+                                        Chaque fois que Blizzard effectue un changement de cartographie ou qu\'une erreur est corrigée, une nouvelle version de cartographie est créée.
+                                        Les itinéraires créés avec des versions de cartographie précédentes ne sont pas automatiquement mis à jour vers la dernière version.
+                                        Cet avertissement indique que la version de cartographie utilisée par cet itinéraire est obsolète et peut ne pas représenter la cartographie en jeu',
             'route' => 'Itinéraire',
         ],
     ],
@@ -592,10 +600,10 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Compensation de tir à distance en yards',
                 'ranged_pull_compensation_yards_title' => 'Lors d\'une course M+, vous ne courez jamais de pack en pack pour les attirer -
-                                        vous utilisez la plupart du temps une capacité à distance pour les attirer. Cette valeur vous permet de compenser vos capacités à distance
-                                        et de réduire le délai entre les packs. Remarque : cela réduira la distance de marche de ce montant, donc le régler à la
-                                        portée maximale de votre capacité n\'est pas conseillé pour des résultats de simulation précis. Entre 50% et 75% de la portée maximale de votre sort devrait convenir,
-                                        sauf si vous enchaînez littéralement les pulls sans temps mort entre eux.',
+                                                                vous utilisez la plupart du temps une capacité à distance pour les attirer. Cette valeur vous permet de compenser vos capacités à distance
+                                                                et de réduire le délai entre les packs. Remarque : cela réduira la distance de marche de ce montant, donc le régler à la
+                                                                portée maximale de votre capacité n\'est pas conseillé pour des résultats de simulation précis. Entre 50% et 75% de la portée maximale de votre sort devrait convenir,
+                                                                sauf si vous enchaînez littéralement les pulls sans temps mort entre eux.',
                 'use_mounts'        => 'Utiliser les montures',
                 'use_mounts_title'  => 'Tentera d\'utiliser votre monture (si elle est plus rapide et disponible) pour réduire la distance entre le tirage actuel et le prochain tirage.',
                 'patreon_link_text' => 'Patreon',
@@ -665,5 +673,4 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-
 ];

@@ -1,11 +1,10 @@
 <?php
 
 return [
-
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Rota Semanal Raider.IO',
                 'popular'                    => 'Rotas populares',
                 'popular_by_current_affixes' => 'Rotas populares por afixos atuais',
                 'popular_by_next_affixes'    => 'Rotas populares por próximos afixos',
@@ -44,6 +43,7 @@ return [
         'view' => [
             'any' => 'Qualquer',
         ],
+        'title' => 'Sessão ao vivo - :title',
     ],
     'edit' => [
         'title'                                   => 'Editar %s',
@@ -90,5 +90,4 @@ return [
         'linkpreview_default_description_sandbox' => 'Rota M+ temporária para masmorra %s.',
         'linkpreview_default_description_explore' => 'Explore %s.',
     ],
-
 ];

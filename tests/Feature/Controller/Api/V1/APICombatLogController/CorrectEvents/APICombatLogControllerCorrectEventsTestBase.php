@@ -14,7 +14,7 @@ abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogC
     protected function executeTest(string $fixtureName, bool $rewriteFixtures = false): void
     {
         // Fill function
-        if (!$this->hasJsonData(sprintf('%s_corrected', $fixtureName))) {
+        if (!$this->hasJsonData(sprintf('%s_corrected', $fixtureName), '../../')) {
             $rewriteFixtures = true;
         }
 

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popular',
@@ -437,6 +436,15 @@ return [
                 'report_for_moderation'          => 'Reportar',
                 'report_for_moderation_finished' => 'Reportado',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Selecione inimigos no mapa para incluí-los ou excluí-los dos resultados da pesquisa.',
+                'disabled'       => 'Desativado',
+                'enabled'        => 'Ativado',
+                'key_level'      => 'Nível de chave',
+                'settings_title' => 'Configurações do mapa',
+                'title'          => 'Título',
+                'username'       => 'Nome de usuário',
+            ],
         ],
         'map' => [
             'no_teeming'                             => 'Sempre visível',
@@ -447,9 +455,9 @@ return [
             'horde'                                  => 'Horda',
             'new_mapping_version_header_title'       => 'Há uma nova versão de mapeamento para esta masmorra',
             'new_mapping_version_header_description' => 'Keystone.guru trabalha com versões de mapeamento para cada masmorra.
-                            Toda vez que a Blizzard faz uma alteração no mapeamento ou um erro é corrigido, uma nova versão de mapeamento é criada.
-                            Rotas que são criadas com versões de mapeamento anteriores não são atualizadas automaticamente para a versão mais recente.
-                            Este aviso indica que a versão de mapeamento usada por esta rota está desatualizada e pode não representar o mapeamento no jogo',
+                                        Toda vez que a Blizzard faz uma alteração no mapeamento ou um erro é corrigido, uma nova versão de mapeamento é criada.
+                                        Rotas que são criadas com versões de mapeamento anteriores não são atualizadas automaticamente para a versão mais recente.
+                                        Este aviso indica que a versão de mapeamento usada por esta rota está desatualizada e pode não representar o mapeamento no jogo',
             'route' => 'Rota',
         ],
     ],
@@ -542,7 +550,7 @@ return [
         ],
         'simulate' => [
             'intro' => 'Para usar o recurso de simulação, gere uma string do SimulationCraft para o seu personagem e cole a
-                            string gerada do Keystone.guru na saída do seu personagem. Em seguida, clique em Simular como você normalmente faria! Se você usar raidbots.com, crie a string SimC do seu personagem através do addon ou do site, selecione Avançado e cole a saída do Keystone.guru abaixo da string SimC do seu personagem.',
+                                        string gerada do Keystone.guru na saída do seu personagem. Em seguida, clique em Simular como você normalmente faria! Se você usar raidbots.com, crie a string SimC do seu personagem através do addon ou do site, selecione Avançado e cole a saída do Keystone.guru abaixo da string SimC do seu personagem.',
             'title'                      => 'Simular rota',
             'get_simulationcraft_string' => 'Obter string do SimulationCraft',
             'simulationcraft_string'     => 'String do Simulationcraft',
@@ -593,10 +601,10 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Compensação de puxada à distância em jardas',
                 'ranged_pull_compensation_yards_title' => 'Ao fazer uma corrida M+, você nunca corre de um grupo para outro e os puxa com o corpo -
-                                        você usa uma habilidade à distância para puxá-los na maioria das vezes. Este valor permite compensar suas habilidades à distância
-                                        e reduzir o atraso entre os grupos. Nota: isso reduzirá a distância de caminhada por essa quantidade, então definir isso para o
-                                        alcance máximo da sua habilidade não é recomendado para resultados de simulação precisos. Entre 50%-75% do alcance máximo do seu feitiço deve ser bom,
-                                        a menos que você esteja literalmente puxando em cadeia sem tempo de inatividade entre eles.',
+                                                                você usa uma habilidade à distância para puxá-los na maioria das vezes. Este valor permite compensar suas habilidades à distância
+                                                                e reduzir o atraso entre os grupos. Nota: isso reduzirá a distância de caminhada por essa quantidade, então definir isso para o
+                                                                alcance máximo da sua habilidade não é recomendado para resultados de simulação precisos. Entre 50%-75% do alcance máximo do seu feitiço deve ser bom,
+                                                                a menos que você esteja literalmente puxando em cadeia sem tempo de inatividade entre eles.',
                 'use_mounts'        => 'Usar montarias',
                 'use_mounts_title'  => 'Tentará usar sua montaria (se for mais rápida e estiver disponível) para reduzir a distância entre a puxada atual e a próxima puxada.',
                 'patreon_link_text' => 'Patreon',
@@ -666,5 +674,4 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-
 ];

@@ -5,16 +5,16 @@ return [
         'search' => [
             'gameversion' => [
                 'dungeon' => [
-                    'title'                                  => '',
-                    'description'                            => '',
-                    'linkpreview_default_description_search' => '',
-                    'linkpreview_title'                      => '',
+                    'title'                                  => 'Cerca percorsi per :dungeon',
+                    'description'                            => 'Cerca percorsi per titolo, livello chiave, affissi, forze nemiche, valutazione e altro. Seleziona un dungeon per iniziare.',
+                    'linkpreview_default_description_search' => 'Trova percorsi M+ per :dungeon',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
                 ],
             ],
             'list' => [
-                'title'       => '',
-                'header'      => '',
-                'description' => '',
+                'title'       => 'Cerca percorsi',
+                'header'      => 'Cerca percorsi',
+                'description' => 'Cerca percorsi per titolo, livello chiave, affissi, forze nemiche, valutazione e altro. Seleziona un dungeon per iniziare.',
             ],
         ],
     ],
@@ -33,7 +33,7 @@ return [
                 'view_heatmap_fullscreen' => 'Visualizza a schermo intero',
             ],
             'view' => [
-                'title' => '',
+                'title' => 'Esplora :dungeon',
             ],
         ],
     ],
@@ -54,5 +54,4 @@ return [
             ],
         ],
     ],
-
 ];

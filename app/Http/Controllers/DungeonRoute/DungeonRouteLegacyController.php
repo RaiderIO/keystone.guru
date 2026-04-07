@@ -17,91 +17,99 @@ use Illuminate\Http\RedirectResponse;
  */
 class DungeonRouteLegacyController extends Controller
 {
-    public function viewOld(DungeonRouteBaseUrlFormRequest $request, DungeonRoute $dungeonroute): RedirectResponse
-    {
+    public function viewOld(
+        DungeonRouteBaseUrlFormRequest $request,
+        DungeonRoute                   $dungeonRoute,
+    ): RedirectResponse {
         return redirect()->route('dungeonroute.view', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
         ] + $request->validated());
     }
 
-    public function edit(DungeonRouteBaseUrlFormRequest $request, DungeonRoute $dungeonroute): RedirectResponse
-    {
+    public function edit(
+        DungeonRouteBaseUrlFormRequest $request,
+        DungeonRoute                   $dungeonRoute,
+    ): RedirectResponse {
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
         ] + $request->validated());
     }
 
     public function editFloor(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonroute,
+        DungeonRoute                   $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
         return redirect()->route('dungeonroute.edit.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
             'floorIndex'   => $floorIndex,
         ] + $request->validated());
     }
 
     public function embedOld(
         DungeonRouteEmbedUrlFormRequest $request,
-        DungeonRoute                    $dungeonroute,
+        DungeonRoute                    $dungeonRoute,
         string                          $floorIndex = '1',
     ): RedirectResponse {
         return redirect()->route('dungeonroute.embed', array_merge([
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
             'floorIndex'   => $floorIndex,
         ], $request->validated()));
     }
 
     public function viewFloorOld(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonroute,
+        DungeonRoute                   $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
         return redirect()->route('dungeonroute.view.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
             'floorIndex'   => $floorIndex,
         ] + $request->validated());
     }
 
     public function previewOld(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonroute,
+        DungeonRoute                   $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
         return redirect()->route('dungeonroute.preview', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
             'floorIndex'   => $floorIndex,
         ] + $request->validated());
     }
 
-    public function cloneOld(DungeonRouteBaseUrlFormRequest $request, DungeonRoute $dungeonroute): RedirectResponse
-    {
+    public function cloneOld(
+        DungeonRouteBaseUrlFormRequest $request,
+        DungeonRoute                   $dungeonRoute,
+    ): RedirectResponse {
         return redirect()->route('dungeonroute.clone', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
         ] + $request->validated());
     }
 
-    public function claimOld(DungeonRouteBaseUrlFormRequest $request, DungeonRoute $dungeonroute): RedirectResponse
-    {
+    public function claimOld(
+        DungeonRouteBaseUrlFormRequest $request,
+        DungeonRoute                   $dungeonRoute,
+    ): RedirectResponse {
         return redirect()->route('dungeonroute.claim', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
         ] + $request->validated());
     }
 }

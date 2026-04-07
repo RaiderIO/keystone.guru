@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Beliebt',
@@ -437,6 +436,15 @@ return [
                 'report_for_moderation'          => 'Melden',
                 'report_for_moderation_finished' => 'Gemeldet',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Wähle Feinde auf der Karte aus, um sie in die Suchergebnisse einzuschließen oder auszuschließen.',
+                'disabled'       => 'Deaktiviert',
+                'enabled'        => 'Aktiviert',
+                'key_level'      => 'Schlüsselstufe',
+                'settings_title' => 'Karteneinstellungen',
+                'title'          => 'Titel',
+                'username'       => 'Benutzername',
+            ],
         ],
         'map' => [
             'no_teeming'                             => 'Immer sichtbar',
@@ -447,9 +455,9 @@ return [
             'horde'                                  => 'Horde',
             'new_mapping_version_header_title'       => 'Es gibt eine neue Mapping-Version für diesen Dungeon',
             'new_mapping_version_header_description' => 'Keystone.guru arbeitet mit Mapping-Versionen für jeden Dungeon.
-                            Jedes Mal, wenn Blizzard eine Änderung am Mapping vornimmt oder ein Fehler korrigiert wird, wird eine neue Mapping-Version erstellt.
-                            Routen, die mit vorherigen Mapping-Versionen erstellt wurden, werden nicht automatisch auf die neueste Version aktualisiert.
-                            Diese Warnung zeigt an, dass die von dieser Route verwendete Mapping-Version veraltet ist und möglicherweise nicht dem In-Game-Mapping entspricht',
+                                        Jedes Mal, wenn Blizzard eine Änderung am Mapping vornimmt oder ein Fehler korrigiert wird, wird eine neue Mapping-Version erstellt.
+                                        Routen, die mit vorherigen Mapping-Versionen erstellt wurden, werden nicht automatisch auf die neueste Version aktualisiert.
+                                        Diese Warnung zeigt an, dass die von dieser Route verwendete Mapping-Version veraltet ist und möglicherweise nicht dem In-Game-Mapping entspricht',
             'route' => 'Route',
         ],
     ],
@@ -542,7 +550,7 @@ return [
         ],
         'simulate' => [
             'intro' => 'Um die Simulationsfunktion zu nutzen, generiere eine SimulationCraft-String für deinen Charakter und füge den
-            generierten String von Keystone.guru unter dem Ausgabestring deines Charakters ein. Dann klicke auf Simulieren, wie du es normalerweise tun würdest! Wenn du raidbots.com verwendest, erstelle den SimC-String deines Charakters entweder über das Addon oder die Website, wähle Erweitert und füge den Ausgabestring von Keystone.guru unter dem SimC-String deines Charakters ein.',
+                        generierten String von Keystone.guru unter dem Ausgabestring deines Charakters ein. Dann klicke auf Simulieren, wie du es normalerweise tun würdest! Wenn du raidbots.com verwendest, erstelle den SimC-String deines Charakters entweder über das Addon oder die Website, wähle Erweitert und füge den Ausgabestring von Keystone.guru unter dem SimC-String deines Charakters ein.',
             'title'                      => 'Route simulieren',
             'get_simulationcraft_string' => 'SimulationCraft-String abrufen',
             'simulationcraft_string'     => 'Simulationcraft-String',
@@ -593,10 +601,10 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Kompensation für Fernkampf-Pull in Yards',
                 'ranged_pull_compensation_yards_title' => 'Bei einem M+-Lauf rennst du nie von Pack zu Pack und ziehst sie mit dem Körper an -
-                                        du benutzt meistens eine Fernkampffähigkeit, um sie zu ziehen. Dieser Wert ermöglicht es dir, deine Fernkampffähigkeiten zu kompensieren
-                                        und die Verzögerung zwischen den Packs zu reduzieren. Hinweis: Dies wird die Gehstrecke um diesen Betrag reduzieren, daher ist es nicht ratsam, dies auf die
-                                        maximale Reichweite deiner Fähigkeit einzustellen, um genaue Sim-Ergebnisse zu erzielen. Zwischen 50%-75% der maximalen Reichweite deines Zaubers sollten gut sein,
-                                        es sei denn, du ziehst buchstäblich ohne Pausen dazwischen.',
+                                                                du benutzt meistens eine Fernkampffähigkeit, um sie zu ziehen. Dieser Wert ermöglicht es dir, deine Fernkampffähigkeiten zu kompensieren
+                                                                und die Verzögerung zwischen den Packs zu reduzieren. Hinweis: Dies wird die Gehstrecke um diesen Betrag reduzieren, daher ist es nicht ratsam, dies auf die
+                                                                maximale Reichweite deiner Fähigkeit einzustellen, um genaue Sim-Ergebnisse zu erzielen. Zwischen 50%-75% der maximalen Reichweite deines Zaubers sollten gut sein,
+                                                                es sei denn, du ziehst buchstäblich ohne Pausen dazwischen.',
                 'use_mounts'        => 'Reittiere verwenden',
                 'use_mounts_title'  => 'Es wird versucht, dein Reittier zu benutzen (wenn es schneller und verfügbar ist), um die Entfernung zwischen dem aktuellen Pull und dem nächsten Pull zu verringern.',
                 'patreon_link_text' => 'Patreon',
@@ -666,5 +674,4 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-
 ];

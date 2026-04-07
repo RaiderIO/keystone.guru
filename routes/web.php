@@ -250,8 +250,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
                 Route::get('live', new LiveSessionController()->create(...))->name('dungeonroute.livesession.create');
-                Route::get('live/{livesession}', new LiveSessionController()->view(...))->name('dungeonroute.livesession.view');
-                Route::get('live/{livesession}/{floorIndex}', new LiveSessionController()->viewfloor(...))->name('dungeonroute.livesession.viewfloor');
+                Route::get('live/{liveSession}', new LiveSessionController()->view(...))->name('dungeonroute.livesession.view');
+                Route::get('live/{liveSession}/{floorIndex}', new LiveSessionController()->viewFloor(...))->name('dungeonroute.livesession.viewfloor');
                 // Clone a route
                 Route::get('clone', new DungeonRouteController()->copy(...))->name('dungeonroute.clone');
                 // Claiming a route that was made by /sandbox functionality
@@ -261,14 +261,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
 
-    Route::prefix('{dungeonroute}')->group(static function () {
+    Route::prefix('{dungeonRoute}')->group(static function () {
         // Edit your own dungeon routes
         Route::get('edit', new DungeonRouteLegacyController()->edit(...));
         Route::get('edit/{floorIndex}', new DungeonRouteLegacyController()->editFloor(...));
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
-            Route::get('live/{livesession}', new LiveSessionLegacyController()->view(...));
-            Route::get('live/{livesession}/{floorIndex}', new LiveSessionLegacyController()->viewfloor(...));
+            Route::get('live/{liveSession}', new LiveSessionLegacyController()->view(...));
+            Route::get('live/{liveSession}/{floorIndex}', new LiveSessionLegacyController()->viewFloor(...));
             // Clone a route
             Route::middleware('throttle:create-dungeonroute')->group(static function () {
                 Route::get('clone', new DungeonRouteLegacyController()->cloneOld(...));

@@ -41,7 +41,8 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Live session - :title',
+        'view'  => [
             'any' => 'Any',
         ],
     ],

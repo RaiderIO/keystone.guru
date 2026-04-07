@@ -24,9 +24,9 @@ use Throwable;
 
 class ThumbnailService implements ThumbnailServiceInterface
 {
-    public const THUMBNAIL_FOLDER_PATH = '/thumbnails';
+    public const string THUMBNAIL_FOLDER_PATH = '/thumbnails';
 
-    public const THUMBNAIL_CUSTOM_FOLDER_PATH = '/thumbnails_custom';
+    public const string THUMBNAIL_CUSTOM_FOLDER_PATH = '/thumbnails_custom';
 
     public function __construct(
         private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
@@ -310,7 +310,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         $result = collect();
 
         // Generate thumbnails for _all_ floors
-        foreach ($dungeonRoute->dungeon->floors as $floor) {
+        foreach ($dungeonRoute->dungeon->floors()->active()->get() as $floor) {
             /** @var Floor $floor */
             $dungeonRouteThumbnailJob = DungeonRouteThumbnailJob::create([
                 'dungeon_route_id' => $dungeonRoute->id,
@@ -445,7 +445,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
 
             /** @var Collection<DungeonRouteThumbnail> $existingThumbnailsToDelete */
-            $existingThumbnailsToDelete = DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)
+            $existingThumbnailsToDelete = $isCustom ? collect() : DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)
                 // When the target floor is NOT a facade, we want to keep just this floor's thumbnail
                 // Routes with a facade will have a thumbnail for the facade, and nothing else, so this query will
                 // in that case delete all thumbnails for the route before attaching the new one

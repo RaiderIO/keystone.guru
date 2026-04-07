@@ -101,7 +101,7 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
-    command: php /var/www/artisan reverb:start --debug
+    command: php /var/www/artisan reverb:start #--debug
     ports:
       - "6001:6001"
     volumes:

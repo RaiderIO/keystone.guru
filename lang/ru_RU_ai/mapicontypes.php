@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'unknown'                                => 'Неизвестно',
     'comment'                                => 'Комментарий',
     'door'                                   => 'Дверь',
@@ -109,7 +108,6 @@ return [
     'eco_dome_al_dani_shatter_conduit'       => 'Разрушитель каналов',
     'eco_dome_al_dani_disruption_grenade'    => 'Граната разрушения',
     'eco_dome_al_dani_kareshi_surge'         => 'Напор Кареши',
-    'seat_of_the_triumvirate_void_infusion'  => '',
-    'maisara_caverns_hearty_vilebranch_stew' => '',
-
+    'seat_of_the_triumvirate_void_infusion'  => 'Поглощение Пустоты',
+    'maisara_caverns_hearty_vilebranch_stew' => 'Сытное рагу из ветвистых',
 ];

@@ -5,6 +5,7 @@ namespace App\Console\Commands\Localization\AutoTranslation;
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use Arr;
 use Illuminate\Console\Command;
+use Str;
 use VildanBina\LaravelAutoTranslation\Services\TranslationEngineService;
 use VildanBina\LaravelAutoTranslation\TranslationWorkflowService;
 
@@ -39,7 +40,10 @@ class Translate extends Command
         }
 
         $targetLang = $this->argument('targetLang');
-        $driver     = $this->argument('driver');
+        // Ensure targetlang is AI
+        $targetLang = Str::endsWith($targetLang, '_ai') ? $targetLang : sprintf('%s_ai', $targetLang);
+
+        $driver = $this->argument('driver');
 
         $texts = json_decode(file_get_contents(base_path('lang/texts_to_translate.json')), true);
 

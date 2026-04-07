@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'bolstering' => [
         'name'        => 'Rinforzante',
         'description' => 'Quando un nemico non-boss muore, il suo grido di morte potenzia gli alleati vicini, aumentando la loro salute massima e i danni del 20%.',
@@ -159,5 +158,8 @@ return [
         'description' => 'Durante il combattimento, Xal\'atath evoca pulsar che orbitano attorno ai giocatori.',
     ],
     'seasonal_index_preset' => '%s preset %d',
-
+    'lindormis_guidance'    => [
+        'description' => 'Lindormi guida i giocatori, indebolendo selezionati nemici non boss con Sabbie Temporali e impedendo che le morti dei giocatori riducano il tempo rimanente.',
+        'name'        => 'Guida di Lindormi',
+    ],
 ];

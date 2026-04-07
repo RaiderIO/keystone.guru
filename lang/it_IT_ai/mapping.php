@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,20 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% Cure Ricevute',
+                'versatility_increased'     => '+5% Versatilità',
+                'critical_strike_increased' => '+5% Colpo Critico',
+                'haste_increased'           => '+5% Celerità',
+                'mastery_rating_increased'  => '+584 Indice di Maestria',
+                'go_north'                  => 'Vai a nord',
+                'go_south'                  => 'Vai a sud',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Stufato Vilebranch Sostanzioso: Prendi una porzione di stufato Vilebranch, aumentando il tuo Prosciugamento del 3% e riducendo i danni subiti da attacchi ad area del 3% per 30 minuti.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'Il viaggio di sola andata verso la Promenade si attiva dopo aver ucciso il primo boss (uno dei due). La seconda uccisione ti porterà invece al rispettivo livello superiore.',
             ],
         ],
     ],
-
 ];
