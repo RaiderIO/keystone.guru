@@ -340,8 +340,8 @@
         "rotation": 72.5
     },
     {
-        "id": 914,
-        "mapping_version_id": 698,
+        "id": 923,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 432,
         "lat": -187.34,
@@ -350,8 +350,8 @@
         "rotation": 60
     },
     {
-        "id": 915,
-        "mapping_version_id": 698,
+        "id": 924,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 397,
         "lat": -82.91,
@@ -360,8 +360,8 @@
         "rotation": -120
     },
     {
-        "id": 916,
-        "mapping_version_id": 698,
+        "id": 925,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 431,
         "lat": -87.73,
@@ -370,8 +370,8 @@
         "rotation": -62
     },
     {
-        "id": 917,
-        "mapping_version_id": 698,
+        "id": 926,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 399,
         "lat": -230.5,
@@ -380,8 +380,8 @@
         "rotation": 149.5
     },
     {
-        "id": 918,
-        "mapping_version_id": 698,
+        "id": 927,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 400,
         "lat": -166.51,
@@ -390,8 +390,8 @@
         "rotation": 0
     },
     {
-        "id": 919,
-        "mapping_version_id": 698,
+        "id": 928,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 401,
         "lat": -151.47,
@@ -400,8 +400,8 @@
         "rotation": 0
     },
     {
-        "id": 920,
-        "mapping_version_id": 698,
+        "id": 929,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 402,
         "lat": -211.81,
@@ -410,8 +410,8 @@
         "rotation": 0
     },
     {
-        "id": 921,
-        "mapping_version_id": 698,
+        "id": 930,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 396,
         "lat": -73.81,
@@ -420,8 +420,8 @@
         "rotation": 60
     },
     {
-        "id": 922,
-        "mapping_version_id": 698,
+        "id": 931,
+        "mapping_version_id": 699,
         "floor_id": 420,
         "target_floor_id": 398,
         "lat": -65.79,

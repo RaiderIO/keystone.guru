@@ -34,7 +34,7 @@ class APICombatLogControllerCombatLogRouteMagistersTerraceMidnightTest extends A
         $responseArr = json_decode($response->content(), true);
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 26, 581);
+        $this->validatePulls($responseArr, 26, 587);
         $this->validateAffixes($responseArr);
     }
 }

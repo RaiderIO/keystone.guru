@@ -180,8 +180,8 @@
         "vertices_json": "[{\"lat\":-90.0917,\"lng\":99.776},{\"lat\":-73.6707,\"lng\":99.776},{\"lat\":-73.6707,\"lng\":110.7898},{\"lat\":-90.0917,\"lng\":110.7898}]"
     },
     {
-        "id": 20755,
-        "mapping_version_id": 698,
+        "id": 20813,
+        "mapping_version_id": 699,
         "floor_id": 399,
         "group": 49,
         "teeming": null,
@@ -192,8 +192,8 @@
         "vertices_json": "[{\"lat\":-105.9223,\"lng\":116.0923},{\"lat\":-89.5981,\"lng\":116.0923},{\"lat\":-89.5981,\"lng\":133.4996},{\"lat\":-105.9223,\"lng\":133.4996}]"
     },
     {
-        "id": 20756,
-        "mapping_version_id": 698,
+        "id": 20814,
+        "mapping_version_id": 699,
         "floor_id": 399,
         "group": 52,
         "teeming": null,
@@ -204,8 +204,8 @@
         "vertices_json": "[{\"lat\":-142.7327,\"lng\":246.7372},{\"lat\":-124.1989,\"lng\":246.7372},{\"lat\":-124.1989,\"lng\":256.9099},{\"lat\":-142.7327,\"lng\":256.9099}]"
     },
     {
-        "id": 20767,
-        "mapping_version_id": 698,
+        "id": 20825,
+        "mapping_version_id": 699,
         "floor_id": 399,
         "group": 50,
         "teeming": null,
@@ -216,8 +216,8 @@
         "vertices_json": "[{\"lat\":-139.2884,\"lng\":170.661},{\"lat\":-121.0005,\"lng\":170.661},{\"lat\":-121.0005,\"lng\":182.7169},{\"lat\":-139.2884,\"lng\":182.7169}]"
     },
     {
-        "id": 20773,
-        "mapping_version_id": 698,
+        "id": 20831,
+        "mapping_version_id": 699,
         "floor_id": 399,
         "group": 51,
         "teeming": null,
@@ -228,8 +228,8 @@
         "vertices_json": "[{\"lat\":-190.778,\"lng\":240.0678},{\"lat\":-178.3778,\"lng\":240.0678},{\"lat\":-178.3778,\"lng\":250.8889},{\"lat\":-190.778,\"lng\":250.8889}]"
     },
     {
-        "id": 20787,
-        "mapping_version_id": 698,
+        "id": 20845,
+        "mapping_version_id": 699,
         "floor_id": 399,
         "group": 48,
         "teeming": null,

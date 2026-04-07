@@ -108,8 +108,8 @@
         "vertices_json": "[{\"lat\":-195.96,\"lng\":151.88},{\"lat\":-183.84,\"lng\":151.88},{\"lat\":-183.84,\"lng\":172.32},{\"lat\":-195.96,\"lng\":172.32}]"
     },
     {
-        "id": 20768,
-        "mapping_version_id": 698,
+        "id": 20826,
+        "mapping_version_id": 699,
         "floor_id": 401,
         "group": 57,
         "teeming": null,
@@ -120,8 +120,8 @@
         "vertices_json": "[{\"lat\":-90.52,\"lng\":153.08},{\"lat\":-57.88,\"lng\":153.08},{\"lat\":-57.88,\"lng\":174.48},{\"lat\":-90.52,\"lng\":174.48}]"
     },
     {
-        "id": 20769,
-        "mapping_version_id": 698,
+        "id": 20827,
+        "mapping_version_id": 699,
         "floor_id": 401,
         "group": 55,
         "teeming": null,
@@ -132,8 +132,8 @@
         "vertices_json": "[{\"lat\":-160.08,\"lng\":254.36},{\"lat\":-138.56,\"lng\":254.36},{\"lat\":-138.56,\"lng\":276.8},{\"lat\":-160.08,\"lng\":276.8}]"
     },
     {
-        "id": 20775,
-        "mapping_version_id": 698,
+        "id": 20833,
+        "mapping_version_id": 699,
         "floor_id": 401,
         "group": 56,
         "teeming": null,

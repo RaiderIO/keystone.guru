@@ -48,12 +48,12 @@
         "lng": 227.5
     },
     {
-        "id": 2655,
-        "mapping_version_id": 698,
+        "id": 2671,
+        "mapping_version_id": 699,
         "floor_id": 397,
         "source_floor_id": null,
         "target_floor_id": 396,
-        "linked_dungeon_floor_switch_marker_id": 2657,
+        "linked_dungeon_floor_switch_marker_id": 2673,
         "direction": null,
         "hidden_in_facade": false,
         "lat": -224.75,

@@ -144,8 +144,8 @@
         "vertices_json": "[{\"lat\":-174.6357,\"lng\":155.7937},{\"lat\":-162.28,\"lng\":155.7937},{\"lat\":-162.28,\"lng\":173.1474},{\"lat\":-174.6357,\"lng\":173.1474}]"
     },
     {
-        "id": 20750,
-        "mapping_version_id": 698,
+        "id": 20808,
+        "mapping_version_id": 699,
         "floor_id": 431,
         "group": 30,
         "teeming": null,
@@ -156,8 +156,8 @@
         "vertices_json": "[{\"lat\":-114.8697,\"lng\":197.5601},{\"lat\":-102.9754,\"lng\":197.5601},{\"lat\":-102.9754,\"lng\":210.3933},{\"lat\":-114.8697,\"lng\":210.3933}]"
     },
     {
-        "id": 20751,
-        "mapping_version_id": 698,
+        "id": 20809,
+        "mapping_version_id": 699,
         "floor_id": 431,
         "group": 33,
         "teeming": null,
@@ -168,8 +168,8 @@
         "vertices_json": "[{\"lat\":-219.6593,\"lng\":98.4275},{\"lat\":-205.1733,\"lng\":98.4275},{\"lat\":-205.1733,\"lng\":109.7686},{\"lat\":-219.6593,\"lng\":109.7686}]"
     },
     {
-        "id": 20758,
-        "mapping_version_id": 698,
+        "id": 20816,
+        "mapping_version_id": 699,
         "floor_id": 431,
         "group": 31,
         "teeming": null,
@@ -180,8 +180,8 @@
         "vertices_json": "[{\"lat\":-138.2555,\"lng\":176.5116},{\"lat\":-126.4756,\"lng\":176.5116},{\"lat\":-126.4756,\"lng\":195.4398},{\"lat\":-138.2555,\"lng\":195.4398}]"
     },
     {
-        "id": 20759,
-        "mapping_version_id": 698,
+        "id": 20817,
+        "mapping_version_id": 699,
         "floor_id": 431,
         "group": 32,
         "teeming": null,
