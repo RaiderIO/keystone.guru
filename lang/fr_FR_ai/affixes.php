@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'bolstering' => [
         'name'        => 'Renforcement',
         'description' => 'Lorsqu\'un ennemi non boss meurt, son cri de mort renforce les alliés proches, augmentant leur santé maximale et leurs dégâts de 20 %.',
@@ -159,5 +158,8 @@ return [
         'description' => 'Pendant le combat, Xal\'atath invoque des pulsars qui orbitent autour des joueurs.',
     ],
     'seasonal_index_preset' => '%s préréglage %d',
-
+    'lindormis_guidance'    => [
+        'description' => 'Lindormi guide les joueurs, affaiblissant certains ennemis non-boss avec les Sables Temporels et empêchant les morts des joueurs de réduire le temps restant.',
+        'name'        => 'Conseil de Lindormi',
+    ],
 ];

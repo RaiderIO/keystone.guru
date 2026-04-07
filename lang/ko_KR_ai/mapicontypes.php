@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'unknown'                                => '알 수 없음',
     'comment'                                => '댓글',
     'door'                                   => '문',
@@ -109,7 +108,7 @@ return [
     'eco_dome_al_dani_shatter_conduit'       => '샤터 도관',
     'eco_dome_al_dani_disruption_grenade'    => '붕괴 수류탄',
     'eco_dome_al_dani_kareshi_surge'         => '카레시 서지',
-    'seat_of_the_triumvirate_void_infusion'  => '',
-    'maisara_caverns_hearty_vilebranch_stew' => '',
-
-];
+    'seat_of_the_triumvirate_void_infusion'  => '공허 주입',
+    'maisara_caverns_hearty_vilebranch_stew' => '튼튼한 바일브랜치 스튜',
+]
+;

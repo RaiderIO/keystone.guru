@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'unknown'                                => 'Unbekannt',
     'comment'                                => 'Kommentar',
     'door'                                   => 'Tür',
@@ -109,7 +108,6 @@ return [
     'eco_dome_al_dani_shatter_conduit'       => 'Zertrümmerungsleitung',
     'eco_dome_al_dani_disruption_grenade'    => 'Störgranate',
     'eco_dome_al_dani_kareshi_surge'         => 'K\'areshi-Ansturm',
-    'seat_of_the_triumvirate_void_infusion'  => '',
-    'maisara_caverns_hearty_vilebranch_stew' => '',
-
+    'seat_of_the_triumvirate_void_infusion'  => 'Leereninfusion',
+    'maisara_caverns_hearty_vilebranch_stew' => 'Herzhafter Vilebranch-Eintopf',
 ];

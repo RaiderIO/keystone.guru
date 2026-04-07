@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => 'Имя',
     'enemy_forces_label'                              => 'Способности врага',
     'enemy_display_type_label'                        => 'Отображаймый тип врага',
@@ -478,5 +477,10 @@ return [
     'error_loading_data_label'                                             => 'Ошибка загрузки данных - пожалуйста, попробуйте снова',
     'run_count_label'                                                      => 'Отображение данных из :count запусков',
     'refresh_thumbnails_label'                                             => 'Обновить миниатюры',
-
+    'algethar_academy_dragonflight_warning_label'                          => 'Вы просматриваете версию Algeth\'ar Academy для Dragonflight. Убедитесь, что используете версию Midnight для совместимости с MDT.',
+    'filter_input_excluded_enemies_header'                                 => 'Исключенные враги: :value',
+    'filter_input_included_enemies_header'                                 => 'Включенные враги: :value',
+    'filter_no_filters_active'                                             => 'Фильтры не активны',
+    'no_search_results_label'                                              => 'Результаты поиска не найдены',
+    'search_results_label'                                                 => 'Результаты поиска',
 ];

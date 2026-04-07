@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,20 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% de Sanación Recibida',
+                'versatility_increased'     => '+5% de Versatilidad',
+                'critical_strike_increased' => '+5% de Golpe Crítico',
+                'haste_increased'           => '+5% de Celeridad',
+                'mastery_rating_increased'  => '+584 de Índice de Maestría',
+                'go_north'                  => 'Ve al norte',
+                'go_south'                  => 'Ve al sur',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Estofado de Vilebranch Sustancioso: Toma una porción de estofado de Vilebranch, aumentando tu Succión en un 3% y reduciendo el daño recibido de ataques de área de efecto en un 3% durante 30 min.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'El viaje de ida y vuelta hacia el Paseo Promenade se activa después de matar al primer jefe (cualquiera de ellos). La segunda muerte te llevará al nivel Superior respectivo.',
             ],
         ],
     ],
-
 ];

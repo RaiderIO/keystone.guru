@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popolare',
@@ -437,6 +436,15 @@ return [
                 'report_for_moderation'          => 'Segnala',
                 'report_for_moderation_finished' => 'Segnalato',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Seleziona i nemici sulla mappa per includerli o escluderli dai risultati di ricerca.',
+                'disabled'       => 'Disabilitato',
+                'enabled'        => 'Abilitato',
+                'key_level'      => 'Livello chiave',
+                'settings_title' => 'Impostazioni mappa',
+                'title'          => 'Titolo',
+                'username'       => 'Nome utente',
+            ],
         ],
         'map' => [
             'no_teeming'                             => 'Sempre visibile',
@@ -447,9 +455,9 @@ return [
             'horde'                                  => 'Orda',
             'new_mapping_version_header_title'       => 'C\'è una nuova versione di mappatura per questo dungeon',
             'new_mapping_version_header_description' => 'Keystone.guru funziona con versioni di mappatura per ogni dungeon.
-                            Ogni volta che Blizzard apporta una modifica alla mappatura o viene corretto un errore, viene creata una nuova versione di mappatura.
-                            Le rotte create con versioni di mappatura precedenti non vengono aggiornate automaticamente all\'ultima versione.
-                            Questo avviso indica che la versione di mappatura utilizzata da questa rotta è obsoleta e potrebbe non rappresentare la mappatura del gioco',
+                                        Ogni volta che Blizzard apporta una modifica alla mappatura o viene corretto un errore, viene creata una nuova versione di mappatura.
+                                        Le rotte create con versioni di mappatura precedenti non vengono aggiornate automaticamente all\'ultima versione.
+                                        Questo avviso indica che la versione di mappatura utilizzata da questa rotta è obsoleta e potrebbe non rappresentare la mappatura del gioco',
             'route' => 'Rotta',
         ],
     ],
@@ -542,7 +550,7 @@ return [
         ],
         'simulate' => [
             'intro' => 'Per utilizzare la funzione di simulazione, genera una stringa SimulationCraft per il tuo personaggio e incolla la
-                            stringa generata di Keystone.guru sotto la stringa di output del tuo personaggio. Poi premi Simula come faresti di solito! Se usi raidbots.com, crea la stringa SimC del tuo personaggio tramite l\'addon o il sito, seleziona Avanzate e incolla l\'output di Keystone.guru sotto la stringa SimC del tuo personaggio.',
+                                        stringa generata di Keystone.guru sotto la stringa di output del tuo personaggio. Poi premi Simula come faresti di solito! Se usi raidbots.com, crea la stringa SimC del tuo personaggio tramite l\'addon o il sito, seleziona Avanzate e incolla l\'output di Keystone.guru sotto la stringa SimC del tuo personaggio.',
             'title'                      => 'Simula percorso',
             'get_simulationcraft_string' => 'Ottieni stringa SimulationCraft',
             'simulationcraft_string'     => 'Stringa Simulationcraft',
@@ -593,10 +601,10 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Compensazione del tiro a distanza in iarde',
                 'ranged_pull_compensation_yards_title' => 'Durante una corsa M+ non corri mai da un gruppo all\'altro per attirare il loro aggro -
-                                        usi un\'abilità a distanza per attirarli la maggior parte delle volte. Questo valore ti consente di compensare le tue abilità a distanza
-                                        e ridurre il ritardo tra i gruppi. Nota: questo ridurrà la distanza di camminata di questo importo, quindi impostarlo sulla
-                                        gamma massima della tua abilità non è consigliato per risultati accurati. Tra il 50% e il 75% della gamma massima del tuo incantesimo dovrebbe andare bene,
-                                        a meno che tu non stia letteralmente concatenando pull senza tempi morti tra di loro.',
+                                                                usi un\'abilità a distanza per attirarli la maggior parte delle volte. Questo valore ti consente di compensare le tue abilità a distanza
+                                                                e ridurre il ritardo tra i gruppi. Nota: questo ridurrà la distanza di camminata di questo importo, quindi impostarlo sulla
+                                                                gamma massima della tua abilità non è consigliato per risultati accurati. Tra il 50% e il 75% della gamma massima del tuo incantesimo dovrebbe andare bene,
+                                                                a meno che tu non stia letteralmente concatenando pull senza tempi morti tra di loro.',
                 'use_mounts'        => 'Usa cavalcature',
                 'use_mounts_title'  => 'Tenterà di usare la tua cavalcatura (se è più veloce e disponibile) per ridurre la distanza tra il pull corrente e il successivo.',
                 'patreon_link_text' => 'Patreon',
@@ -666,5 +674,4 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-
 ];

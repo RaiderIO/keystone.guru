@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'npc_name_label'                                  => 'Nome',
     'enemy_forces_label'                              => 'Forze nemiche',
     'enemy_display_type_label'                        => 'Tipo di visualizzazione nemico',
@@ -478,5 +477,10 @@ return [
     'error_loading_data_label'                                             => 'Errore nel caricamento dei dati - per favore riprova',
     'run_count_label'                                                      => 'Mostrando dati da :count esecuzioni',
     'refresh_thumbnails_label'                                             => 'Aggiorna le miniature',
-
+    'algethar_academy_dragonflight_warning_label'                          => 'Stai visualizzando la versione Dragonflight dell\'Accademia di Algeth\'ar. Assicurati di utilizzare la versione Midnight per la compatibilità con MDT.',
+    'filter_input_excluded_enemies_header'                                 => 'Nemici esclusi: :value',
+    'filter_input_included_enemies_header'                                 => 'Nemici inclusi: :value',
+    'filter_no_filters_active'                                             => 'Nessun filtro attivo',
+    'no_search_results_label'                                              => 'Nessun risultato di ricerca trovato',
+    'search_results_label'                                                 => 'Risultati della ricerca',
 ];

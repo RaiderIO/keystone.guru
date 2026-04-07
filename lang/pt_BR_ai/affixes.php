@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'bolstering' => [
         'name'        => 'Fortalecedor',
         'description' => 'Quando qualquer inimigo não-chefe morre, seu grito de morte fortalece aliados próximos, aumentando sua vida máxima e dano em 20%.',
@@ -159,5 +158,8 @@ return [
         'description' => 'Enquanto em combate, Xal\'atath invoca pulsares que orbitam os jogadores.',
     ],
     'seasonal_index_preset' => '%s predefinido %d',
-
+    'lindormis_guidance'    => [
+        'description' => 'Lindormi guia os jogadores, enfraquecendo inimigos selecionados que não são chefes com Areias Temporais e impedindo que mortes de jogadores reduzam o tempo restante.',
+        'name'        => 'Orientação de Lindormi',
+    ],
 ];

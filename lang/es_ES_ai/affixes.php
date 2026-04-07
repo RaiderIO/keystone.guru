@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'bolstering' => [
         'name'        => 'Reforzante',
         'description' => 'Cuando muere cualquier enemigo que no sea un jefe, su grito de muerte empodera a los aliados cercanos, aumentando su salud máxima y daño en un 20%.',
@@ -159,5 +158,8 @@ return [
         'description' => 'Mientras estás en combate, Xal\'atath invoca púlsares que orbitan a los jugadores.',
     ],
     'seasonal_index_preset' => '%s preset %d',
-
+    'lindormis_guidance'    => [
+        'description' => 'Lindormi guía a los jugadores, debilitando a enemigos no jefes seleccionados con Arenas Temporales y evitando que las muertes de los jugadores reduzcan el tiempo restante.',
+        'name'        => 'Guía de Lindormi',
+    ],
 ];

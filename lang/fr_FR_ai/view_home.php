@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'ie_not_supported'                => 'Il semble que vous naviguez sur Keystone.guru en utilisant Internet Explorer. Malheureusement, Internet Explorer n\'est pas un navigateur pris en charge. Non vraiment, cela ne fonctionne vraiment pas du tout. Veuillez essayer soit Google Chrome, Mozilla Firefox ou Microsoft Edge.',
     'tagline'                         => 'Itinéraires M+ simplifiés',
     'tagline_description'             => 'Planifiez des itinéraires en ligne en coopération avec votre équipe ou découvrez des itinéraires adaptés à votre style de jeu et à votre niveau de compétence. Keystone.guru est l\'endroit unique pour gérer et partager vos itinéraires M+.',
@@ -34,27 +33,31 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'       => '',
-                'subheader'    => '',
-                'pug_friendly' => '',
-                'expert'       => '',
-                'title'        => '',
+                'header'       => 'Itinéraire hebdomadaire Raider.IO',
+                'subheader'    => 'Les <a href=":weekly_route_url">itinéraires hebdomadaires Raider.IO <i class="fas fa-external-link-alt"></i></a> sont mis à jour chaque semaine selon les schémas de tirage montrés dans les <a href=":heatmaps_url">Heatmaps Mythic+</a> et d\'autres observations/expériences. Raider.IO élimine les conjectures et vous offre des itinéraires éprouvés.',
+                'pug_friendly' => 'Amical pour les PUG',
+                'expert'       => 'Expert',
+                'title'        => 'Titre',
             ],
             'popular' => [
-                'title' => '',
+                'title' => 'Itinéraire communautaire le plus populaire par donjon',
             ],
         ],
         'featured' => [
-            'title'            => '',
-            'heatmaps_alt'     => '',
-            'weekly_route_alt' => '',
-            'patreon_alt'      => '',
+            'title'               => 'En vedette',
+            'heatmaps_alt'        => '',
+            'weekly_route_alt'    => 'Itinéraire hebdomadaire Raider.IO',
+            'patreon_alt'         => 'Patreon',
+            'revamped_search_alt' => 'Recherche remaniée',
         ],
         'about' => [
-            'title'               => '',
-            'tagline'             => '',
-            'tagline_description' => '',
+            'title'               => 'À propos',
+            'tagline'             => 'Itinéraires M+ simplifiés',
+            'tagline_description' => 'Keystone.guru est un outil de planification d\'itinéraires Mythic+ pour World of Warcraft (WoW), vous permettant de construire, gérer,
+                            et découvrir des itinéraires populaires.
+                            Avec un support complet d\'importation et d\'exportation MDT, vos itinéraires vous suivent partout.
+                            Explorez les favoris de la communauté et utilisez les heatmaps propulsés par Raider.IO pour voir comment les joueurs abordent réellement chaque
+                            donjon.',
         ],
     ],
-
 ];

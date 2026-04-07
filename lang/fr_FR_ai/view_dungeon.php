@@ -5,16 +5,16 @@ return [
         'search' => [
             'gameversion' => [
                 'dungeon' => [
-                    'title'                                  => '',
-                    'description'                            => '',
-                    'linkpreview_default_description_search' => '',
-                    'linkpreview_title'                      => '',
+                    'title'                                  => 'Recherchez des itinéraires pour :dungeon',
+                    'description'                            => 'Recherchez des itinéraires par titre, niveau de clé, affixes, forces ennemies, note et plus. Sélectionnez un donjon pour commencer.',
+                    'linkpreview_default_description_search' => 'Trouvez des itinéraires M+ pour :dungeon',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
                 ],
             ],
             'list' => [
-                'title'       => '',
-                'header'      => '',
-                'description' => '',
+                'title'       => 'Recherchez des itinéraires',
+                'header'      => 'Recherchez des itinéraires',
+                'description' => 'Recherchez des itinéraires par titre, niveau de clé, affixes, forces ennemies, note et plus. Sélectionnez un donjon pour commencer.',
             ],
         ],
     ],
@@ -33,7 +33,7 @@ return [
                 'view_heatmap_fullscreen' => 'Voir en plein écran',
             ],
             'view' => [
-                'title' => '',
+                'title' => 'Explorez :dungeon',
             ],
         ],
     ],
@@ -54,5 +54,4 @@ return [
             ],
         ],
     ],
-
 ];

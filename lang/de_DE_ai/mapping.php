@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,20 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% Erhaltene Heilung',
+                'versatility_increased'     => '+5% Vielseitigkeit',
+                'critical_strike_increased' => '+5% Kritischer Treffer',
+                'haste_increased'           => '+5% Tempowertung',
+                'mastery_rating_increased'  => '+584 Meisterschaftswertung',
+                'go_north'                  => 'Gehe nach Norden',
+                'go_south'                  => 'Gehe nach Süden',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Herzhafter Vilebranch-Eintopf: Genieße eine Portion Vilebranch-Eintopf, der deine Lebensraub um 3% erhöht und den erlittenen Schaden durch Flächenangriffe für 30 Minuten um 3% reduziert.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'Einwegfahrt zurück zur Promenade aktiviert sich nach dem Besiegen des ersten Bosses (entweder von ihnen). Der zweite Kill bringt dich stattdessen zur jeweiligen oberen Ebene.',
             ],
         ],
     ],
-
 ];

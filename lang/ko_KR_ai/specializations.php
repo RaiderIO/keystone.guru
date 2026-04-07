@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'death_knight' => [
         'blood'  => '혈기',
         'frost'  => '냉기',
@@ -10,7 +9,7 @@ return [
     'demon_hunter' => [
         'havoc'     => '파멸',
         'vengeance' => '복수',
-        'devourer'  => '',
+        'devourer'  => '포식자',
     ],
     'druid' => [
         'balance'     => '조화',
@@ -68,5 +67,5 @@ return [
         'fury'       => '분노',
         'protection' => '방어',
     ],
-
-];
+]
+;

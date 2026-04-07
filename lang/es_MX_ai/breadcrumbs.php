@@ -1,9 +1,8 @@
 <?php
 
 return [
-
     'home' => [
-        'front_page' => '',
+        'front_page' => 'Keystone.guru',
         'affixes'    => 'Afijos',
         'about'      => 'Acerca de',
         'credits'    => 'Créditos',
@@ -26,6 +25,7 @@ return [
             'dungeon' => [
                 'heatmaps' => 'Mapas de calor',
                 'explore'  => 'Explorar',
+                'heatmap'  => 'Mapa de calor',
             ],
         ],
         'dungeonroute' => [
@@ -117,5 +117,4 @@ return [
             ],
         ],
     ],
-
 ];

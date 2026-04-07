@@ -1,11 +1,10 @@
 <?php
 
 return [
-
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Ruta Semanal de Raider.IO',
                 'popular'                    => 'Rutas populares',
                 'popular_by_current_affixes' => 'Rutas populares por afijos actuales',
                 'popular_by_next_affixes'    => 'Rutas populares por próximos afijos',
@@ -44,6 +43,7 @@ return [
         'view' => [
             'any' => 'Cualquiera',
         ],
+        'title' => 'Sesión en vivo - :title',
     ],
     'edit' => [
         'title'                                   => 'Editar %s',
@@ -90,5 +90,4 @@ return [
         'linkpreview_default_description_sandbox' => 'Ruta temporal M+ para el calabozo %s.',
         'linkpreview_default_description_explore' => 'Explorar %s.',
     ],
-
 ];

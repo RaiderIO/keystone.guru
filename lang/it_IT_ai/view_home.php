@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'ie_not_supported' => 'Sembra che stai navigando su Keystone.guru utilizzando Internet Explorer. Purtroppo Internet Explorer non è
 un browser supportato. Davvero, non funziona affatto. Per favore prova con Google Chrome, Mozilla
 Firefox o Microsoft Edge.',
@@ -37,27 +36,27 @@ e accessibili a tutti i membri del tuo team M+. Puoi sempre esportare i percorsi
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'       => '',
-                'subheader'    => '',
-                'pug_friendly' => '',
-                'expert'       => '',
-                'title'        => '',
+                'header'       => 'Percorso settimanale Raider.IO',
+                'subheader'    => 'I <a href=":weekly_route_url">percorsi settimanali Raider.IO <i class="fas fa-external-link-alt"></i></a> sono aggiornati ogni settimana in base ai modelli di pull mostrati nelle <a href=":heatmaps_url">Heatmap Mythic+</a> e altre osservazioni/esperienze. Raider.IO elimina le supposizioni e ti fornisce percorsi provati e veri.',
+                'pug_friendly' => 'Amichevole per Pug',
+                'expert'       => 'Esperto',
+                'title'        => 'Titolo',
             ],
             'popular' => [
-                'title' => '',
+                'title' => 'Percorso comunitario più popolare per dungeon',
             ],
         ],
         'featured' => [
-            'title'            => '',
-            'heatmaps_alt'     => '',
-            'weekly_route_alt' => '',
-            'patreon_alt'      => '',
+            'title'               => 'In evidenza',
+            'heatmaps_alt'        => '',
+            'weekly_route_alt'    => 'Percorso settimanale Raider.IO',
+            'patreon_alt'         => 'Patreon',
+            'revamped_search_alt' => 'Ricerca rinnovata',
         ],
         'about' => [
-            'title'               => '',
-            'tagline'             => '',
-            'tagline_description' => '',
+            'title'               => 'Informazioni',
+            'tagline'             => 'Percorsi M+ resi facili',
+            'tagline_description' => 'Keystone.guru è uno strumento di pianificazione dei percorsi Mythic+ di World of Warcraft (WoW), che ti consente di costruire, gestire e scoprire percorsi popolari. Con il pieno supporto di importazione ed esportazione MDT, i tuoi percorsi ti seguiranno ovunque. Esplora i preferiti della comunità e utilizza le heatmap alimentate da Raider.IO per vedere come i giocatori affrontano effettivamente ogni dungeon.',
         ],
     ],
-
 ];

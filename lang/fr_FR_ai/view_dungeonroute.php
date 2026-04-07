@@ -1,11 +1,10 @@
 <?php
 
 return [
-
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Itinéraire hebdomadaire Raider.IO',
                 'popular'                    => 'Itinéraires populaires',
                 'popular_by_current_affixes' => 'Itinéraires populaires par affixes actuels',
                 'popular_by_next_affixes'    => 'Itinéraires populaires par affixes suivants',
@@ -44,6 +43,7 @@ return [
         'view' => [
             'any' => 'N\'importe lequel',
         ],
+        'title' => 'Session en direct - :title',
     ],
     'edit' => [
         'title'                                   => 'Modifier %s',
@@ -90,5 +90,4 @@ return [
         'linkpreview_default_description_sandbox' => 'Route M+ temporaire pour le donjon %s.',
         'linkpreview_default_description_explore' => 'Explorer %s.',
     ],
-
 ];

@@ -1,7 +1,5 @@
 <?php
 
 return [
-
-    'header' => '',
-
+    'header' => '发布 %s',
 ];

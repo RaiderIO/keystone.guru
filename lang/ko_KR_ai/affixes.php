@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'bolstering' => [
         'name'        => '강화',
         'description' => '비-보스 적이 죽을 때, 그들의 죽음의 외침이 근처의 아군을 강화하여 최대 생명력과 피해를 20% 증가시킵니다.',
@@ -159,5 +158,9 @@ return [
         'description' => '전투 중 Xal\'atath는 플레이어 주위를 도는 펄서를 소환합니다.',
     ],
     'seasonal_index_preset' => '%s 사전 설정 %d',
-
-];
+    'lindormis_guidance'    => [
+        'description' => '린도르미는 플레이어를 안내하며, 선택된 비-보스 적들을 시간의 모래로 약화시키고 플레이어의 죽음으로 인해 남은 시간이 줄어드는 것을 방지합니다.',
+        'name'        => '린도르미의 안내',
+    ],
+]
+;

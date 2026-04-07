@@ -5,16 +5,16 @@ return [
         'search' => [
             'gameversion' => [
                 'dungeon' => [
-                    'title'                                  => '',
-                    'description'                            => '',
-                    'linkpreview_default_description_search' => '',
-                    'linkpreview_title'                      => '',
+                    'title'                                  => ':dungeon에 대한 경로 검색',
+                    'description'                            => '제목, 키 레벨, 속성, 적의 힘, 평점 등을 기준으로 경로를 검색하세요. 시작하려면 던전을 선택하세요.',
+                    'linkpreview_default_description_search' => ':dungeon에 대한 M+ 경로 찾기',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
                 ],
             ],
             'list' => [
-                'title'       => '',
-                'header'      => '',
-                'description' => '',
+                'title'       => '경로 검색',
+                'header'      => '경로 검색',
+                'description' => '제목, 키 레벨, 속성, 적의 힘, 평점 등을 기준으로 경로를 검색하세요. 시작하려면 던전을 선택하세요.',
             ],
         ],
     ],
@@ -33,7 +33,7 @@ return [
                 'view_heatmap_fullscreen' => '전체 화면 보기',
             ],
             'view' => [
-                'title' => '',
+                'title' => ':dungeon 탐색',
             ],
         ],
     ],
@@ -54,5 +54,5 @@ return [
             ],
         ],
     ],
-
-];
+]
+;

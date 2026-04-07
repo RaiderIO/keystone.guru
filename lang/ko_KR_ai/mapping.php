@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'map_icons' => [
         'mop' => [
             'gate_of_the_setting_sun' => [
@@ -108,21 +107,21 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% 받는 치유량 증가',
+                'versatility_increased'     => '+5% 유연성',
+                'critical_strike_increased' => '+5% 치명타 적중',
+                'haste_increased'           => '+5% 가속',
+                'mastery_rating_increased'  => '+584 숙련도',
+                'go_north'                  => '북쪽으로 이동',
+                'go_south'                  => '남쪽으로 이동',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => '튼튼한 바일브랜치 스튜: 바일브랜치 스튜를 한 그릇 먹으면 30분 동안 흡혈이 3% 증가하고 광역 공격으로 받는 피해가 3% 감소합니다.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => '첫 번째 보스를 처치한 후 산책로로 돌아가는 한 방향 통행이 활성화됩니다. 두 번째 처치는 해당 상위 레벨로 이동시킵니다.',
             ],
         ],
     ],
-
-];
+]
+;

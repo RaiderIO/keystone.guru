@@ -1,11 +1,10 @@
 <?php
 
 return [
-
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Raider.IO 주간 경로',
                 'popular'                    => '인기 있는 경로',
                 'popular_by_current_affixes' => '현재 보정에 따른 인기 있는 경로',
                 'popular_by_next_affixes'    => '다음 보정에 따른 인기 있는 경로',
@@ -44,6 +43,7 @@ return [
         'view' => [
             'any' => '아무것이나',
         ],
+        'title' => '실시간 세션 - :title',
     ],
     'edit' => [
         'title'                                   => '%s 편집',
@@ -90,5 +90,5 @@ return [
         'linkpreview_default_description_sandbox' => '던전 %s의 임시 M+ 경로.',
         'linkpreview_default_description_explore' => '%s 탐색.',
     ],
-
-];
+]
+;

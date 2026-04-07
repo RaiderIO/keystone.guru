@@ -1,11 +1,10 @@
 <?php
 
 return [
-
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Raider.IO Еженедельный маршрут',
                 'popular'                    => 'Популярные маршруты',
                 'popular_by_current_affixes' => 'Популярные маршруты с текущими аффиксами',
                 'popular_by_next_affixes'    => 'Популярные маршруты с аффиксами следующей недели',
@@ -44,6 +43,7 @@ return [
         'view' => [
             'any' => 'Все',
         ],
+        'title' => 'Живая сессия - :title',
     ],
     'edit' => [
         'title'                                   => 'Редактировать %s',
@@ -90,5 +90,4 @@ return [
         'linkpreview_default_description_sandbox' => 'Временный маршрут М+ для подземелья %s.',
         'linkpreview_default_description_explore' => 'Исследовать %s.',
     ],
-
 ];
