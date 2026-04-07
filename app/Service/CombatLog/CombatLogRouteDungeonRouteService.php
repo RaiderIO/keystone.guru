@@ -440,7 +440,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             'dungeon_id'       => $dungeonRoute->dungeon_id,
             'dungeon_route_id' => $dungeonRoute->id,
             'level'            => $combatLogRoute->challengeMode->level,
-            'success'          => $combatLogRoute->challengeMode->success,
+            'success'          => $combatLogRoute->challengeMode->success ?? false,
             'total_time_ms'    => $combatLogRoute->challengeMode->durationMs,
             'created_at'       => $now,
         ]);

@@ -25,6 +25,7 @@ class StateManager extends Signalable {
         this._userData = null;
         // Whether we're currently in MDT select mode or not
         this._mdtMappingModeEnabled = false;
+        this._visibleFloorsByFloorId = null;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -566,18 +567,16 @@ class StateManager extends Signalable {
     getCurrentFloor() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        let self = this;
-        let result = false;
-        // Iterate over the found floors
-        $.each(this._mapContext.getVisibleFloors(), function (index, value) {
-            // Find the floor we're looking for
-            if (parseInt(value.id) === parseInt(self._floorId)) {
-                result = value;
-                return false;
-            }
-        });
+        if (this._visibleFloorsByFloorId === null) {
+            this._visibleFloorsByFloorId = new Map();
 
-        return result;
+            let floors = this._mapContext.getVisibleFloors();
+            for (let i = 0; i < floors.length; i++) {
+                this._visibleFloorsByFloorId.set(Number(floors[i].id), floors[i]);
+            }
+        }
+
+        return this._visibleFloorsByFloorId?.get(Number(this._floorId)) ?? false;
     }
 
     /**

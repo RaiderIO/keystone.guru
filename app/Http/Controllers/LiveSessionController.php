@@ -78,7 +78,7 @@ class LiveSessionController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'livesession'  => $liveSession,
+            'liveSession'  => $liveSession,
         ]);
     }
 
@@ -93,17 +93,17 @@ class LiveSessionController extends Controller
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
-        LiveSession                $livesession,
+        LiveSession                $liveSession,
     ) {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
 
-        return $this->viewfloor(
+        return $this->viewFloor(
             $request,
             $mapContextService,
             $dungeon,
             $dungeonroute,
             $title,
-            $livesession,
+            $liveSession,
             $defaultFloor?->index ?? '1',
         );
     }
@@ -113,45 +113,31 @@ class LiveSessionController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function viewfloor(
+    public function viewFloor(
         Request                    $request,
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
-        LiveSession                $livesession,
+        LiveSession                $liveSession,
         string                     $floorIndex,
     ) {
         Gate::authorize('view', $dungeonroute);
 
         try {
-            Gate::authorize('view', $livesession);
+            Gate::authorize('view', $liveSession);
         } catch (AuthorizationException) {
             abort(StatusCode::GONE);
         }
 
         // In case someone edits the url to something funky
-        if ($dungeonroute->id !== $livesession->dungeon_route_id) {
-            logger()->debug('Passed dungeonroute does not match dungeonroute attached to live sessions!', [
-                'dungeon_route_id'              => $dungeonroute->id,
-                'dungeon_route_public_key'      => $dungeonroute->public_key,
-                'live_session_id'               => $livesession->id,
-                'live_session_public_key'       => $livesession->public_key,
-                'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
-            ]);
-
+        if ($dungeonroute->id !== $liveSession->dungeon_route_id) {
             abort(404);
         }
 
         // It's broken - get rid of it
-        if ($livesession->dungeonRoute === null) {
-            logger()->debug('Live session is attached to a deleted dungeon route - deleting live session', [
-                'live_session_id'               => $livesession->id,
-                'live_session_public_key'       => $livesession->public_key,
-                'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
-            ]);
-
-            $livesession->delete();
+        if ($liveSession->dungeonRoute === null) {
+            $liveSession->delete();
             abort(404);
         }
 
@@ -160,23 +146,25 @@ class LiveSessionController extends Controller
         }
 
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->first();
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $livesession,
+                'liveSession'  => $liveSession,
             ]);
         } else {
             return view('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $livesession,
+                'livesession'  => $liveSession,
                 'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextLiveSession($livesession, User::getCurrentUserMapFacadeStyle()),
+                'mapContext'   => $mapContextService->createMapContextLiveSession($liveSession, User::getCurrentUserMapFacadeStyle()),
             ]);
         }
     }
