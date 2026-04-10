@@ -323,6 +323,31 @@ return [
             ],
         ],
     ],
+    'tbc' => [
+        'karazhan' => [
+            'name'         => 'Karazhan',
+            'abbreviation' => 'KARA',
+            'floors'       => [
+                'servants_quarters'    => 'Servant\'s Quarters',
+                'upper_livery_stables' => 'Upper Livery Stables',
+                'the_banquet_hall'     => 'The Banquet Hall',
+                'the_guest_chambers'   => 'The Guest Chambers',
+                'opera_hall_balcony'   => 'Opera Hall Balcony',
+                'masters_terrace'      => 'Master\'s Terrace',
+                'lower_broken_stair'   => 'Lower Broken Stair',
+                'upper_broken_stair'   => 'Upper Broken Stair',
+                'the_menagerie'        => 'The Menagerie',
+                'guardians_library'    => 'Guardian\'s Library',
+                'the_repository'       => 'The Repository',
+                'upper_library'        => 'Upper Library',
+                'the_celestial_watch'  => 'The Celestial Watch',
+                'gamesmans_hall'       => 'Gamesman\'s Hall',
+                'medivhs_chambers'     => 'Medivh\'s Chambers',
+                'the_power_station'    => 'The Power Station',
+                'netherspace'          => 'Netherspace',
+            ],
+        ],
+    ],
     'wotlk' => [
         'ahn_kahet_the_old_kingdom' => [
             'name'         => 'Ahn\'kahet: The Old Kingdom',

@@ -79,6 +79,16 @@ trait DungeonConstants
     public const string DUNGEON_THE_STEAMVAULT          = 'the_steamvault';
     public const string DUNGEON_THE_UNDERBOG            = 'the_underbog';
 
+    // The Burning Crusade Raid
+    public const string RAID_KARAZHAN                   = 'karazhan';
+    public const string RAID_GRUULS_LAIR                = 'gruuls_lair';
+    public const string RAID_SERPENTSHRINE_CAVERN       = 'serpentshrine_cavern';
+    public const string RAID_MAGTHERIDONS_LAIR          = 'magtheridons_lair';
+    public const string RAID_THE_EYE                    = 'the_eye';
+    public const string RAID_THE_BATTLE_FOR_MOUNT_HYJAL = 'the_battle_for_mount_hyjal';
+    public const string RAID_BLACK_TEMPLE               = 'black_temple';
+    public const string RAID_SUNWELL_PLATEAU            = 'sunwell_plateau';
+
     // Wrath of the Lich King
     public const string DUNGEON_AHN_KAHET_THE_OLD_KINGDOM = 'ahnkahet';
     public const string DUNGEON_AZJOL_NERUB               = 'azjolnerub';
@@ -417,6 +427,16 @@ trait DungeonConstants
             self::RAID_TEMPLE_OF_AHN_QIRAJ_SOD,
             self::RAID_NAXXRAMAS,
             self::RAID_SCARLET_ENCLAVE,
+        ],
+        Expansion::EXPANSION_TBC => [
+            self::RAID_KARAZHAN,
+            self::RAID_GRUULS_LAIR,
+            self::RAID_SERPENTSHRINE_CAVERN,
+            self::RAID_MAGTHERIDONS_LAIR,
+            self::RAID_THE_EYE,
+            self::RAID_THE_BATTLE_FOR_MOUNT_HYJAL,
+            self::RAID_BLACK_TEMPLE,
+            self::RAID_SUNWELL_PLATEAU,
         ],
         Expansion::EXPANSION_WOTLK => [
             self::RAID_ICECROWN_CITADEL,
