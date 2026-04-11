@@ -18,7 +18,7 @@ class DamageBuilder implements SuffixBuilderInterface
     public static function create(int $combatLogVersion): Suffix
     {
         return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC, CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new DamageV20($combatLogVersion),
+            CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_TBC_2_5_5, CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new DamageV20($combatLogVersion),
             // Includes CombatLogVersion::CLASSIC_SOD_1_15_5
             default => new DamageV22($combatLogVersion),
         };
