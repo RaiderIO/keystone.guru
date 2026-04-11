@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Suffix;
+namespace App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded;
 
-use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\DamageLandedSupportInterface;
-use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\V20\DamageLandedSupportV20;
-use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\V22\DamageLandedSupportV22;
+use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\V20\DamageLandedV20;
+use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\V22\DamageLandedV22;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use App\Logic\CombatLog\CombatLogVersion;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -12,12 +11,12 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
-class DamageLandedSupportTest extends PublicTestCase
+class DamageLandedTest extends PublicTestCase
 {
     #[Test]
     #[Group('CombatLog')]
     #[Group('Suffix')]
-    #[Group('DamageLandedSupport')]
+    #[Group('DamageLanded')]
     #[DataProvider('createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider')]
     public function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix(
         int    $combatLogVersion,
@@ -26,11 +25,11 @@ class DamageLandedSupportTest extends PublicTestCase
         // Arrange
 
         // Act
-        $suffix = Suffix::createFromEventName($combatLogVersion, 'DAMAGE_LANDED_SUPPORT');
+        $suffix = Suffix::createFromEventName($combatLogVersion, 'DAMAGE_LANDED');
 
         // Assert
         $this->assertInstanceOf($expectedClassName, $suffix);
-        $this->assertInstanceOf(DamageLandedSupportInterface::class, $suffix);
+        $this->assertInstanceOf(DamageLandedInterface::class, $suffix);
     }
 
     public static function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider(): array
@@ -38,19 +37,19 @@ class DamageLandedSupportTest extends PublicTestCase
         return [
             [
                 'combatLogVersion'  => CombatLogVersion::CLASSIC,
-                'expectedClassName' => DamageLandedSupportV20::class,
+                'expectedClassName' => DamageLandedV20::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_10_1_0,
-                'expectedClassName' => DamageLandedSupportV20::class,
+                'expectedClassName' => DamageLandedV20::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_11_0_2,
-                'expectedClassName' => DamageLandedSupportV20::class,
+                'expectedClassName' => DamageLandedV20::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_11_0_5,
-                'expectedClassName' => DamageLandedSupportV22::class,
+                'expectedClassName' => DamageLandedV22::class,
             ],
         ];
     }

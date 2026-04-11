@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Suffix;
+namespace App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
 
-use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedInterface;
-use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\V20\DamageLandedV20;
-use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\V22\DamageLandedV22;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V22\DamageV22;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use App\Logic\CombatLog\CombatLogVersion;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -12,12 +11,12 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
-class DamageLandedTest extends PublicTestCase
+class DamageTest extends PublicTestCase
 {
     #[Test]
     #[Group('CombatLog')]
     #[Group('Suffix')]
-    #[Group('DamageLanded')]
+    #[Group('Damage')]
     #[DataProvider('createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider')]
     public function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix(
         int    $combatLogVersion,
@@ -26,11 +25,11 @@ class DamageLandedTest extends PublicTestCase
         // Arrange
 
         // Act
-        $suffix = Suffix::createFromEventName($combatLogVersion, 'DAMAGE_LANDED');
+        $suffix = Suffix::createFromEventName($combatLogVersion, 'DAMAGE');
 
         // Assert
         $this->assertInstanceOf($expectedClassName, $suffix);
-        $this->assertInstanceOf(DamageLandedInterface::class, $suffix);
+        $this->assertInstanceOf(DamageInterface::class, $suffix);
     }
 
     public static function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider(): array
@@ -38,19 +37,19 @@ class DamageLandedTest extends PublicTestCase
         return [
             [
                 'combatLogVersion'  => CombatLogVersion::CLASSIC,
-                'expectedClassName' => DamageLandedV20::class,
+                'expectedClassName' => DamageV20::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_10_1_0,
-                'expectedClassName' => DamageLandedV20::class,
+                'expectedClassName' => DamageV20::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_11_0_2,
-                'expectedClassName' => DamageLandedV20::class,
+                'expectedClassName' => DamageV20::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_11_0_5,
-                'expectedClassName' => DamageLandedV22::class,
+                'expectedClassName' => DamageV22::class,
             ],
         ];
     }

@@ -205,10 +205,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         $mappingVersion->setRelation('dungeon', $dungeon);
                     }
 
-                    $npcs = Npc::whereIn('dungeon_id', [
-                        -1,
-                        $dungeon->id,
-                    ])->get()->keyBy('id');
+                    $dungeon->load('npcs');
+                    $npcs = $dungeon->npcs->keyBy('id');
 
                     // Assign the default floor in case there's no MapChange event coming (Ara-Kara is one such?)
                     /** @var Floor $currentFloor */

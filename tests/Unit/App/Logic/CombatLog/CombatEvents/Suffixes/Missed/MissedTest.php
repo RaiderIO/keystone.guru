@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Suffix;
+namespace App\Logic\CombatLog\CombatEvents\Suffixes\Missed;
 
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\V20\MissedV20;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\V22\MissedV22;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\V9SoD\MissedV9SoD;

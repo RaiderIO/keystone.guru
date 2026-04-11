@@ -60,13 +60,13 @@ class Npc extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
 
-    public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
-    public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
-    public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
-    public const AGGRESSIVENESS_FRIENDLY   = 'friendly';
-    public const AGGRESSIVENESS_AWAKENED   = 'awakened';
+    public const string AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
+    public const string AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
+    public const string AGGRESSIVENESS_NEUTRAL    = 'neutral';
+    public const string AGGRESSIVENESS_FRIENDLY   = 'friendly';
+    public const string AGGRESSIVENESS_AWAKENED   = 'awakened';
 
-    public const ALL_AGGRESSIVENESS = [
+    public const array ALL_AGGRESSIVENESS = [
         self::AGGRESSIVENESS_AGGRESSIVE,
         self::AGGRESSIVENESS_UNFRIENDLY,
         self::AGGRESSIVENESS_NEUTRAL,
