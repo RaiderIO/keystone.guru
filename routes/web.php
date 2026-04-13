@@ -79,8 +79,11 @@ use App\Http\Middleware\WowheadCors;
 Route::prefix('webhook')->group(static function () {
     Route::post('github', new WebhookController()->github(...))->name('webhook.github');
     Route::middleware([WowheadCors::class])->group(static function () {
-        Route::options('wowhead/spell', new WebhookController()->wowheadSpellOptions(...));
+        Route::options('wowhead/spell', new WebhookController()->wowheadOptions(...));
         Route::post('wowhead/spell', new WebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');
+
+        Route::options('wowhead/npc', new WebhookController()->wowheadOptions(...));
+        Route::post('wowhead/npc', new WebhookController()->wowheadNpc(...))->name('webhook.wowhead.npc');
     });
 });
 
@@ -462,6 +465,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 // Spells
                 Route::get('spells/missingdata', new AdminToolsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
+
+                // NPCs
+                Route::get('npcs/missingdisplayid', new AdminToolsController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
 
                 // Wago.gg
                 Route::get('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');

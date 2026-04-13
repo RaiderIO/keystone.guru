@@ -15,6 +15,9 @@
     <div class="form-group">
         <a href="{{ route('admin.tools.npc.managespellvisibility') }}">{{ __('view_admin.tools.list.manage_spell_visibility') }}</a>
     </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.npcs.showmissingdisplayid') }}">{{ __('view_admin.tools.list.show_missing_npc_display_id') }}</a>
+    </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_dungeonroute') }}</h4>
     <div class="form-group">

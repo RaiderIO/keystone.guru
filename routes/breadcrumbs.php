@@ -309,6 +309,14 @@ Breadcrumbs::for('admin.tools.npc.import', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.import_npcs'), route('admin.tools.npc.import'));
 });
+Breadcrumbs::for('admin.tools.spells.showmissingspellinfo', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.spells_missing_info'), route('admin.tools.spells.showmissingspellinfo'));
+});
+Breadcrumbs::for('admin.tools.npcs.showmissingdisplayid', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.npcs_missing_display_id'), route('admin.tools.npcs.showmissingdisplayid'));
+});
 
 // Releases
 Breadcrumbs::for('admin.release.list', static function (Generator $trail) {

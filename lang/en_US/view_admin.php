@@ -511,6 +511,18 @@ return [
                 'wowhead' => 'View on Wowhead',
             ],
         ],
+        'npcs'   => [
+            'showmissingdisplayid' => [
+                'title'        => 'NPCs with missing display ID',
+                'header'       => 'NPCs with missing display ID',
+                'table_header' => [
+                    'id'      => 'Id',
+                    'name'    => 'Name',
+                    'actions' => 'Actions',
+                ],
+                'wowhead' => 'View on Wowhead',
+            ],
+        ],
         'list' => [
             'title'                                       => 'Admin tools',
             'header'                                      => 'Admin tools',
@@ -520,6 +532,7 @@ return [
             'subheader_npcs'                              => 'NPCs',
             'mass_import_npcs'                            => 'Mass import NPCs',
             'manage_spell_visibility'                     => 'Manage NPC spell visibility',
+            'show_missing_npc_display_id'                 => 'Show NPCs with missing display ID',
             'subheader_dungeonroute'                      => 'Dungeonroute',
             'view_dungeonroute_details'                   => 'View Dungeonroute details',
             'view_dungeonroute_mapping_version_usage'     => 'View Dungeonroute Mapping Version usage',

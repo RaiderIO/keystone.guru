@@ -133,9 +133,9 @@ class WowheadService implements WowheadServiceInterface
         return $result;
     }
 
-    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc): ?int
+    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc, ?string $html = null): ?int
     {
-        $response = $this->getNpcPageHtml($gameVersion, $npc);
+        $response = $html ?? $this->getNpcPageHtml($gameVersion, $npc);
 
         // Hacky shit to scrape it
         $displayId = null;

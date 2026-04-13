@@ -4,7 +4,7 @@ namespace App\Http\Requests\Webhook;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class WowheadSpellRequest extends FormRequest
+class WowheadPageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
