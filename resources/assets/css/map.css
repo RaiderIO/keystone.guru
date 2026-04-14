@@ -948,6 +948,10 @@ html, body, #map, #app, .wrapper {
     border: 3px solid #ffd500;
 }
 
+.required_npc {
+    border: 3px solid #ffd500;
+}
+
 .awakened {
     border: 3px solid #810098;
 }

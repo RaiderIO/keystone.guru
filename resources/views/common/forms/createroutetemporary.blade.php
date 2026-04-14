@@ -61,7 +61,10 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
         </div>
     </div>
 
-    @include('common.dungeonroute.create.dungeondifficultyselect', ['id' => 'dungeon_difficulty_select_temporary', 'dungeonSelectId' => $dungeonSelectId])
+    @include('common.dungeonroute.create.dungeondifficultyselect', [
+        'id' => 'dungeon_difficulty_select_temporary',
+        'dungeonSelectId' => $dungeonSelectId
+    ])
 
     <div class="col-lg-12">
         <div class="form-group">

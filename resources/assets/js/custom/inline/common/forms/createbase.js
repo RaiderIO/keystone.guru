@@ -8,7 +8,7 @@ class CommonFormsCreatebase extends InlineCode {
         this.levelSliderInitializer = $(this.options.levelSelector).length > 0 ?
             (new LevelSliderInitializer(this.options)) : null;
 
-        $(`${this.options.dungeonSelector}`).on('change', this._dungeonChanged.bind(this));
+        $(`${this.options.dungeonSelector}`).bind('change', this._dungeonChanged.bind(this));
 
         // Init the slider properly
         this._dungeonChanged();

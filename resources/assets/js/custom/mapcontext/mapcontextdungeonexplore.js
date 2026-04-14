@@ -26,7 +26,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion {
 
     /**
      *
-     * @returns {Number}|null
+     * @returns {Number|null}
      */
     getDungeonDifficulty() {
         // @TODO Make this configurable?

@@ -836,6 +836,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->pull_gradient_apply_always = 0;
 
         $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
+        if ($this->dungeon_difficulty !== null && $dungeon->speedrun_enabled) {
+            $this->dungeon_difficulty = $dungeon->speedrun_difficulty_10_man_enabled ?
+                Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
+        }
 
         $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
 
@@ -888,11 +892,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $validated = $request->validated();
 
+        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
         $this->dungeon_id = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
         if ($new) {
             $this->author_id  = $user?->id ?? -1;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
-            $this->setRelation('dungeon', Dungeon::findOrFail($this->dungeon_id));
+            $this->setRelation('dungeon', $dungeon);
             $this->mapping_version_id = $this->dungeon->getCurrentMappingVersion()->id;
         }
 
@@ -947,6 +952,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
+        if ($this->dungeon_difficulty !== null && $dungeon->speedrun_enabled) {
+            $this->dungeon_difficulty = $dungeon->speedrun_difficulty_10_man_enabled ?
+                Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
+        }
 
         // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
         $this->unsetRelations();
