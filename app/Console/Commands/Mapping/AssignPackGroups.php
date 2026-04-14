@@ -36,15 +36,16 @@ class AssignPackGroups extends Command
         ])->get();
 
         $dungeonWhitelist = [
-            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
-            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
-            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
-            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
-            Dungeon::DUNGEON_SCHOLOMANCE_MOP,
-            Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
-            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
-            Dungeon::DUNGEON_STORMSTOUT_BREWERY,
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
+            Dungeon::RAID_KARAZHAN,
+//            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
+//            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
+//            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
+//            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
+//            Dungeon::DUNGEON_SCHOLOMANCE_MOP,
+//            Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
+//            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
+//            Dungeon::DUNGEON_STORMSTOUT_BREWERY,
+//            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ];
 
         foreach ($mappingVersions as $mappingVersion) {

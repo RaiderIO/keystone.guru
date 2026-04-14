@@ -6,6 +6,7 @@ use App\Models\Npc\NpcHealth;
 use Illuminate\Support\Collection;
 
 /**
+ * @var GameVersion             $currentUserGameVersion
  * @var Npc                     $npc
  * @var NpcHealth|null          $npcHealth
  * @var Collection<GameVersion> $allGameVersions
@@ -79,7 +80,7 @@ $gameVersionsSelect   = $allGameVersions
     <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npchealth.edit.game_version'), 'game_version_id') }}
         <span class="form-required">*</span>
-        {{ html()->select('game_version_id', $gameVersionsSelect, $npcHealth?->game_version_id)->class('form-control selectpicker') }}
+        {{ html()->select('game_version_id', $gameVersionsSelect, $npcHealth?->game_version_id ?? $currentUserGameVersion->id)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'game_version_id'])
     </div>
 

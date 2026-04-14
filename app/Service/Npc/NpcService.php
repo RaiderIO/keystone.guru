@@ -3,6 +3,7 @@
 namespace App\Service\Npc;
 
 use App\Models\Npc\Npc;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 class NpcService implements NpcServiceInterface
@@ -15,17 +16,22 @@ class NpcService implements NpcServiceInterface
         $npcIds = collect();
 
         foreach ($dungeons as $dungeon) {
-            $npcIds->push([
-                __($dungeon->name) => Npc::select('npcs.*')
+            $npcIds->put(
+                __($dungeon->name), Npc::selectRaw('npcs.id, npc_name_translations.translation as name')
+                    ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
+                        $clause->on('npc_name_translations.key', '=', 'npcs.name')
+                            ->where('npc_name_translations.locale', '=', 'en_US');
+                    })
                     ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
                     ->where('npc_dungeons.dungeon_id', $dungeon->id)
                     ->get([
                         'name',
                         'id',
                     ])
-                    ->pluck('name', 'id')
-                    ->mapWithKeys(static fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
-            ]);
+                    ->mapWithKeys(static fn(Npc $npc) => [
+                        $npc->id => sprintf('%s (%d)', $npc->translated_name ?? $npc->name, $npc->id),
+                    ]),
+            );
         }
 
         return $npcIds;

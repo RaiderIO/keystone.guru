@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents\Suffixes;
+namespace App\Logic\CombatLog\CombatEvents\Suffixes\Energize\V22;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Energize\EnergizeInterface;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 
-class Energize extends Suffix
+class EnergizeV22 extends Suffix implements EnergizeInterface
 {
     private float $amount;
 
@@ -34,9 +36,6 @@ class Energize extends Suffix
         return $this->maxPower;
     }
 
-    /**
-     * @return HasParameters|$this
-     */
     #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
