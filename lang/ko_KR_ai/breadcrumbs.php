@@ -23,9 +23,8 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => '히트맵',
-                'explore'  => '탐색',
-                'heatmap'  => '히트맵',
+                'heatmap' => '히트맵',
+                'explore' => '탐색',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +68,8 @@ return [
                 'mdt_diff'                  => 'MDT 차이',
                 'view_mdt_string_contents'  => 'MDT 문자열 내용 보기',
                 'import_npcs'               => 'NPC 가져오기',
+                'spells_missing_info'       => '정보가 누락된 주문',
+                'npcs_missing_display_id'   => '디스플레이 ID가 누락된 NPC',
             ],
             'releases'     => '릴리스',
             'new_release'  => '새 릴리스',

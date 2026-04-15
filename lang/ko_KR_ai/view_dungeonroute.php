@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => '실시간 세션 - :title',
+        'view'  => [
             'any' => '아무것이나',
         ],
-        'title' => '실시간 세션 - :title',
     ],
     'edit' => [
         'title'                                   => '%s 편집',
@@ -90,5 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => '던전 %s의 임시 M+ 경로.',
         'linkpreview_default_description_explore' => '%s 탐색.',
     ],
-]
-;
+
+];

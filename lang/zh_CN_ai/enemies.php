@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'seasonal_type' => [
         'beguiling'           => '迷惑',
         'awakened'            => '觉醒',
@@ -14,5 +15,5 @@ return [
         'shrouded_zul_gamux'  => '笼罩（祖尔伽穆克斯）',
         'no_shrouded'         => '无笼罩',
     ],
-]
-;
+
+];

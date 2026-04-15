@@ -499,6 +499,30 @@ return [
                 'spell_not_found' => 'Hodor',
             ],
         ],
+        'spells' => [
+            'showmissingspellinfo' => [
+                'title'        => 'Hodor',
+                'header'       => 'Hodor',
+                'table_header' => [
+                    'id'      => 'Hodor',
+                    'name'    => 'Hodor',
+                    'actions' => 'Hodor',
+                ],
+                'wowhead' => 'Hodor',
+            ],
+        ],
+        'npcs' => [
+            'showmissingdisplayid' => [
+                'title'        => 'Hodor',
+                'header'       => 'Hodor',
+                'table_header' => [
+                    'id'      => 'Hodor',
+                    'name'    => 'Hodor',
+                    'actions' => 'Hodor',
+                ],
+                'wowhead' => 'Hodor',
+            ],
+        ],
         'list' => [
             'title'                                       => 'Hodor',
             'header'                                      => 'Hodor',
@@ -508,6 +532,7 @@ return [
             'subheader_npcs'                              => 'Hodor',
             'mass_import_npcs'                            => 'Hodor',
             'manage_spell_visibility'                     => 'Hodor',
+            'show_missing_npc_display_id'                 => 'Hodor',
             'subheader_dungeonroute'                      => 'Hodor',
             'view_dungeonroute_details'                   => 'Hodor',
             'view_dungeonroute_mapping_version_usage'     => 'Hodor',
@@ -522,8 +547,6 @@ return [
             'view_dungeon_mapping_version_accuracy'       => 'Hodor',
             'subheader_enemy_forces'                      => 'Hodor',
             'enemy_forces_import'                         => 'Hodor',
-            'subheader_wowtools'                          => 'Hodor',
-            'wowtools_import_ingame_coordinates'          => 'Hodor',
             'subheader_wagogg'                            => 'Hodor',
             'wagogg_import_ingame_coordinates'            => 'Hodor',
             'subheader_misc'                              => 'Hodor',
@@ -540,6 +563,8 @@ return [
             'enemy_forces_recalculate'                    => 'Hodor',
             'subheader_thumbnails'                        => 'Hodor',
             'thumbnails_regenerate'                       => 'Hodor',
+            'subheader_spells'                            => 'Hodor',
+            'show_missing_spell_info'                     => 'Hodor',
         ],
         'thumbnails' => [
             'regenerate' => [

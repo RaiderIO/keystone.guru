@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon' => [
         'griddiscover' => [
             'popular'   => '인기',
@@ -283,6 +284,15 @@ return [
                 'admin'           => '관리',
                 'view_this_route' => '보기',
             ],
+            'dungeonroutesearch' => [
+                'description'    => '지도에서 적을 선택하여 검색 결과에서 포함하거나 제외합니다.',
+                'settings_title' => '지도 설정',
+                'enabled'        => '활성화됨',
+                'disabled'       => '비활성화됨',
+                'key_level'      => '키 레벨',
+                'title'          => '제목',
+                'username'       => '사용자 이름',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => '타이머',
@@ -435,15 +445,6 @@ return [
                 'clone_this_route_title'         => '복제',
                 'report_for_moderation'          => '신고',
                 'report_for_moderation_finished' => '신고됨',
-            ],
-            'dungeonroutesearch' => [
-                'description'    => '지도에서 적을 선택하여 검색 결과에서 포함하거나 제외합니다.',
-                'disabled'       => '비활성화됨',
-                'enabled'        => '활성화됨',
-                'key_level'      => '키 레벨',
-                'settings_title' => '지도 설정',
-                'title'          => '제목',
-                'username'       => '사용자 이름',
             ],
         ],
         'map' => [
@@ -669,5 +670,5 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
-]
-;
+
+];

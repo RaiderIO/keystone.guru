@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'category' => [
         'class' => '职业',
         'item'  => '物品',
@@ -13,4 +14,5 @@ return [
     'mage_slow_fall_skip' => '法师缓落跳跃',
     'invisibility_potion' => '隐形药水',
     'death_skip'          => '死亡跳跃',
+
 ];

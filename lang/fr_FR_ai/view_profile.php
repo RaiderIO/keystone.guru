@@ -62,20 +62,9 @@ return [
         'title' => 'Mes favoris',
     ],
     'overview' => [
-        'title'                    => 'Aperçu',
-        'favorites'                => 'Favoris',
-        'tags'                     => 'Étiquettes',
-        'teams'                    => 'Équipes',
-        'profile'                  => 'Profil',
-        'route_coverage'           => 'Couverture de l\'itinéraire',
-        'route_overview'           => 'Aperçu de l\'itinéraire',
-        'welcome_text'             => 'Bienvenue sur Keystone.guru ! Commencez par créer un itinéraire ou une nouvelle équipe pour créer des itinéraires en collaboration avec vos amis.',
-        'create_route'             => 'Créer un itinéraire',
-        'create_route_description' => 'Un itinéraire est un chemin à travers un donjon pour atteindre l\'objectif final de 100% des forces ennemies tout en tuant tous les boss.
-                                    Divers outils vous aident à organiser votre chemin prévu pour vos membres du groupe. Vous pouvez les partager avec le monde - ou les garder privés et les organiser comme vous le souhaitez.',
-        'create_team'             => 'Créer une équipe',
-        'create_team_description' => 'Une équipe est utilisée pour partager vos itinéraires avec des amis et aider tout le monde à rester synchronisé avec les dernières modifications des itinéraires que vous effectuez plus souvent.
-                                    L\'édition collaborative facilite l\'ajustement d\'un itinéraire existant pendant que vous vous battez pour le meilleur itinéraire pour votre équipe.',
+        'title'          => 'Aperçu',
+        'route_coverage' => 'Couverture de l\'itinéraire',
+        'route_overview' => 'Aperçu de l\'itinéraire',
     ],
     'routes' => [
         'title' => 'Mes itinéraires',

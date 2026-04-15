@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Sesión en vivo - :title',
+        'view'  => [
             'any' => 'Cualquiera',
         ],
-        'title' => 'Sesión en vivo - :title',
     ],
     'edit' => [
         'title'                                   => 'Editar %s',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Ruta temporal M+ para el calabozo %s.',
         'linkpreview_default_description_explore' => 'Explorar %s.',
     ],
+
 ];

@@ -1,45 +1,43 @@
 <?php
 
 return [
-
     'classic' => [
-        'name' => '',
+        'name' => '經典',
     ],
     'tbc' => [
-        'name' => '',
+        'name' => '燃燒的遠征',
     ],
     'wotlk' => [
-        'name' => '',
+        'name' => '巫妖王之怒',
     ],
     'cata' => [
-        'name' => '',
+        'name' => '大災變',
     ],
     'mop' => [
-        'name' => '',
+        'name' => '潘達利亞之謎',
     ],
     'wod' => [
-        'name' => '',
+        'name' => '德拉諾之霸',
     ],
     'legion' => [
-        'name' => '',
+        'name' => '軍團再臨',
     ],
     'bfa' => [
-        'name' => '',
+        'name' => '艾澤拉斯之戰',
     ],
     'sl' => [
-        'name' => '',
+        'name' => '暗影國度',
     ],
     'df' => [
-        'name' => '',
+        'name' => '巨龍崛起',
     ],
     'tww' => [
-        'name' => '',
+        'name' => '內戰',
     ],
     'midnight' => [
-        'name' => '',
+        'name' => '午夜',
     ],
     'tlt' => [
-        'name' => '',
+        'name' => '最後的泰坦',
     ],
-
 ];

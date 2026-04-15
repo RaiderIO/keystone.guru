@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon' => [
         'griddiscover' => [
             'popular'   => '热门',
@@ -283,6 +284,15 @@ return [
                 'admin'           => '管理员',
                 'view_this_route' => '查看',
             ],
+            'dungeonroutesearch' => [
+                'description'    => '在地图上选择敌人以将其包含或排除在搜索结果中。',
+                'settings_title' => '地图设置',
+                'enabled'        => '启用',
+                'disabled'       => '禁用',
+                'key_level'      => '钥匙等级',
+                'title'          => '标题',
+                'username'       => '用户名',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => '计时器',
@@ -435,15 +445,6 @@ return [
                 'clone_this_route_title'         => '克隆',
                 'report_for_moderation'          => '举报',
                 'report_for_moderation_finished' => '已举报',
-            ],
-            'dungeonroutesearch' => [
-                'description'    => '在地图上选择敌人以将其包含或排除在搜索结果中。',
-                'disabled'       => '禁用',
-                'enabled'        => '启用',
-                'key_level'      => '钥匙等级',
-                'settings_title' => '地图设置',
-                'title'          => '标题',
-                'username'       => '用户名',
             ],
         ],
         'map' => [
@@ -666,4 +667,5 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
+
 ];

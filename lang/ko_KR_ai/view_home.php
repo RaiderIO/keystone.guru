@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported'                => 'Internet Explorer를 사용하여 Keystone.guru를 검색 중인 것 같습니다. 불행히도 Internet Explorer는 지원되지 않는 브라우저입니다. 정말로 작동하지 않습니다. Google Chrome, Mozilla Firefox 또는 Microsoft Edge를 사용해 보십시오.',
     'tagline'                         => 'M+ 경로 쉽게 만들기',
     'tagline_description'             => '팀과 함께 온라인으로 협력하여 경로를 계획하거나 자신의 플레이 스타일과 실력 수준에 맞는 경로를 발견하세요. Keystone.guru는 M+ 경로를 관리하고 공유할 수 있는 유일한 장소입니다.',
@@ -44,10 +45,9 @@ return [
         ],
         'featured' => [
             'title'               => '특집',
-            'heatmaps_alt'        => '',
+            'revamped_search_alt' => '개선된 검색',
             'weekly_route_alt'    => 'Raider.IO 주간 경로',
             'patreon_alt'         => 'Patreon',
-            'revamped_search_alt' => '개선된 검색',
         ],
         'about' => [
             'title'               => '소개',
@@ -59,5 +59,5 @@ return [
                             던전을 실제로 어떻게 공략하는지 볼 수 있습니다.',
         ],
     ],
-]
-;
+
+];

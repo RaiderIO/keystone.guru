@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'passwords' => [
         'email' => [
             'title'                    => '重置密码',
@@ -24,4 +25,5 @@ return [
         'title'  => '注册',
         'header' => '注册',
     ],
+
 ];

@@ -23,9 +23,8 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => 'Cartes de chaleur',
-                'explore'  => 'Explorer',
-                'heatmap'  => 'Heatmap',
+                'heatmap' => 'Heatmap',
+                'explore' => 'Explorer',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +68,8 @@ return [
                 'mdt_diff'                  => 'Différence MDT',
                 'view_mdt_string_contents'  => 'Voir le contenu de la chaîne MDT',
                 'import_npcs'               => 'Importer des PNJ',
+                'spells_missing_info'       => 'Sorts manquant d\'informations',
+                'npcs_missing_display_id'   => 'PNJs manquant d\'ID d\'affichage',
             ],
             'releases'     => 'Versions',
             'new_release'  => 'Nouvelle version',

@@ -161,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                          => '',
     'mapping_version_readonly_label'                                       => '',
     'mapping_version_upgrade_label'                                        => '',
+    'algethar_academy_dragonflight_warning_label'                          => '',
     'upgrade_label'                                                        => '',
     'classification_label'                                                 => '',
     'edit_label'                                                           => '',
@@ -431,6 +432,7 @@ return [
     'overpull_select_enemy_label'                                          => '',
     'overpull_selection_finished_label'                                    => '',
     'filters'                                                              => '',
+    'filter_no_filters_active'                                             => '',
     'filter_enemy_forces_header_incomplete'                                => '',
     'filter_enemy_forces_header_complete'                                  => '',
     'filter_image_select_affixes_header'                                   => '',
@@ -457,6 +459,8 @@ return [
     'filter_input_date_from_header'                                        => '',
     'filter_input_date_to_header'                                          => '',
     'filter_input_duration_header'                                         => '',
+    'filter_input_included_enemies_header'                                 => '',
+    'filter_input_excluded_enemies_header'                                 => '',
     'specialization_select'                                                => '',
     'class_select'                                                         => '',
     'race_select'                                                          => '',
@@ -471,5 +475,7 @@ return [
     'error_loading_data_label'                                             => '',
     'run_count_label'                                                      => '',
     'refresh_thumbnails_label'                                             => '',
+    'search_results_label'                                                 => '',
+    'no_search_results_label'                                              => '',
 
 ];

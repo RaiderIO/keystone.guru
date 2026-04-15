@@ -23,9 +23,8 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => '',
-                'explore'  => '探索',
-                'heatmap'  => '热图',
+                'heatmap' => '热图',
+                'explore' => '探索',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +68,8 @@ return [
                 'mdt_diff'                  => 'MDT差异',
                 'view_mdt_string_contents'  => '查看MDT字符串内容',
                 'import_npcs'               => '导入NPC',
+                'spells_missing_info'       => '法术缺少信息',
+                'npcs_missing_display_id'   => 'NPC缺少显示ID',
             ],
             'releases'     => '版本发布',
             'new_release'  => '新版本',

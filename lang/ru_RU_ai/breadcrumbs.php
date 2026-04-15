@@ -23,9 +23,8 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => 'Тепловые карты',
-                'explore'  => 'Исследовать',
-                'heatmap'  => 'Тепловая карта',
+                'heatmap' => 'Тепловая карта',
+                'explore' => 'Исследовать',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +68,8 @@ return [
                 'mdt_diff'                  => 'Отличия MDT',
                 'view_mdt_string_contents'  => 'Просмотр содержимого строк MDT',
                 'import_npcs'               => 'Импортировать НПЦ',
+                'spells_missing_info'       => 'Заклинания с отсутствующей информацией',
+                'npcs_missing_display_id'   => 'НПЦ с отсутствующим ID отображения',
             ],
             'releases'     => 'Релиз',
             'new_release'  => 'Новый релиз',

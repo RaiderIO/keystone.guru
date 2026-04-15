@@ -24,8 +24,8 @@ return [
         'gameversion'         => [
             'update'  => 'Hodor',
             'dungeon' => [
-                'heatmaps' => 'Hodor',
-                'explore'  => 'Hodor',
+                'heatmap' => 'Hodor',
+                'explore' => 'Hodor',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +69,8 @@ return [
                 'mdt_diff'                  => 'Hodor',
                 'view_mdt_string_contents'  => 'Hodor',
                 'import_npcs'               => 'Hodor',
+                'spells_missing_info'       => 'Hodor',
+                'npcs_missing_display_id'   => 'Hodor',
             ],
             'releases'     => 'Hodor',
             'new_release'  => 'Hodor',

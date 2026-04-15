@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'asleep'        => '睡着',
     'banished'      => '放逐',
     'bleeding'      => '流血',
@@ -32,4 +33,5 @@ return [
     'stunned'       => '昏迷',
     'turned'        => '驱逐',
     'wounded'       => '受伤',
+
 ];

@@ -284,6 +284,15 @@ return [
                 'admin'           => 'Hodor',
                 'view_this_route' => 'Hodor',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Hodor',
+                'settings_title' => 'Hodor',
+                'enabled'        => 'Hodor',
+                'disabled'       => 'Hodor',
+                'key_level'      => 'Hodor',
+                'title'          => 'Hodor',
+                'username'       => 'Hodor',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => 'Hodor',

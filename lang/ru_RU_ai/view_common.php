@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Популярные',
@@ -283,6 +284,15 @@ return [
                 'admin'           => 'Админ',
                 'view_this_route' => 'Просмотр',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Выберите врагов на карте, чтобы включить или исключить их из результатов поиска.',
+                'settings_title' => 'Настройки карты',
+                'enabled'        => 'Включено',
+                'disabled'       => 'Отключено',
+                'key_level'      => 'Уровень ключа',
+                'title'          => 'Заголовок',
+                'username'       => 'Имя пользователя',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => 'Таймер',
@@ -435,15 +445,6 @@ return [
                 'clone_this_route_title'         => 'Клонировать',
                 'report_for_moderation'          => 'Сообщить',
                 'report_for_moderation_finished' => 'Отправлено',
-            ],
-            'dungeonroutesearch' => [
-                'description'    => 'Выберите врагов на карте, чтобы включить или исключить их из результатов поиска.',
-                'disabled'       => 'Отключено',
-                'enabled'        => 'Включено',
-                'key_level'      => 'Уровень ключа',
-                'settings_title' => 'Настройки карты',
-                'title'          => 'Заголовок',
-                'username'       => 'Имя пользователя',
             ],
         ],
         'map' => [
@@ -674,4 +675,5 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
+
 ];

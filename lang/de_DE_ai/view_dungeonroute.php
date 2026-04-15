@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Live-Sitzung - :title',
+        'view'  => [
             'any' => 'Jeder',
         ],
-        'title' => 'Live-Sitzung - :title',
     ],
     'edit' => [
         'title'                                   => '%s bearbeiten',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Temporäre M+-Route für Dungeon %s.',
         'linkpreview_default_description_explore' => '%s erkunden.',
     ],
+
 ];

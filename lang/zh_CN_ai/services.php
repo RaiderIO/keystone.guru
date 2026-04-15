@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'mdt' => [
         'io' => [
             'export_string' => [
@@ -57,4 +58,5 @@ return [
             'processing_error' => '无法处理战斗日志：错误。',
         ],
     ],
+
 ];

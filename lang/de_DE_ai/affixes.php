@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'bolstering' => [
         'name'        => 'Stärkend',
         'description' => 'Wenn ein Nicht-Boss-Gegner stirbt, stärkt sein Todesruf nahe Verbündete, indem er ihre maximale Gesundheit und ihren Schaden um 20% erhöht.',
@@ -157,9 +158,10 @@ return [
         'name'        => 'Xal\'ataths Handel: Pulsar',
         'description' => 'Während des Kampfes beschwört Xal\'atath Pulsare, die Spieler umkreisen.',
     ],
-    'seasonal_index_preset' => '%s Voreinstellung %d',
-    'lindormis_guidance'    => [
-        'description' => 'Lindormi führt die Spieler, schwächt ausgewählte Nicht-Boss-Gegner mit Temporalsand und verhindert, dass der Tod von Spielern die verbleibende Zeit reduziert.',
+    'lindormis_guidance' => [
         'name'        => 'Lindormis\' Führung',
+        'description' => 'Lindormi führt die Spieler, schwächt ausgewählte Nicht-Boss-Gegner mit Temporalsand und verhindert, dass der Tod von Spielern die verbleibende Zeit reduziert.',
     ],
+    'seasonal_index_preset' => '%s Voreinstellung %d',
+
 ];

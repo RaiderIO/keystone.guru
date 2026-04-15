@@ -41,10 +41,10 @@ return [
             ],
         ],
         'featured' => [
-            'title'            => 'Hodor',
-            'heatmaps_alt'     => 'Hodor',
-            'weekly_route_alt' => 'Hodor',
-            'patreon_alt'      => 'Hodor',
+            'title'               => 'Hodor',
+            'revamped_search_alt' => 'Hodor',
+            'weekly_route_alt'    => 'Hodor',
+            'patreon_alt'         => 'Hodor',
         ],
         'about' => [
             'title'               => 'Hodor',

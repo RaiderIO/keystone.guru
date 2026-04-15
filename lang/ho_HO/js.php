@@ -161,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                          => 'Hodor',
     'mapping_version_readonly_label'                                       => 'Hodor',
     'mapping_version_upgrade_label'                                        => 'Hodor',
+    'algethar_academy_dragonflight_warning_label'                          => 'Hodor',
     'upgrade_label'                                                        => 'Hodor',
     'classification_label'                                                 => 'Hodor',
     'edit_label'                                                           => 'Hodor',
@@ -431,6 +432,7 @@ return [
     'overpull_select_enemy_label'                                          => 'Hodor',
     'overpull_selection_finished_label'                                    => 'Hodor',
     'filters'                                                              => 'Hodor',
+    'filter_no_filters_active'                                             => 'Hodor',
     'filter_enemy_forces_header_incomplete'                                => 'Hodor',
     'filter_enemy_forces_header_complete'                                  => 'Hodor',
     'filter_image_select_affixes_header'                                   => 'Hodor',
@@ -457,6 +459,8 @@ return [
     'filter_input_date_from_header'                                        => 'Hodor',
     'filter_input_date_to_header'                                          => 'Hodor',
     'filter_input_duration_header'                                         => 'Hodor',
+    'filter_input_included_enemies_header'                                 => 'Hodor',
+    'filter_input_excluded_enemies_header'                                 => 'Hodor',
     'specialization_select'                                                => 'Hodor',
     'class_select'                                                         => 'Hodor',
     'race_select'                                                          => 'Hodor',
@@ -471,5 +475,7 @@ return [
     'error_loading_data_label'                                             => 'Hodor',
     'run_count_label'                                                      => 'Hodor',
     'refresh_thumbnails_label'                                             => 'Hodor',
+    'search_results_label'                                                 => 'Hodor',
+    'no_search_results_label'                                              => 'Hodor',
 
 ];

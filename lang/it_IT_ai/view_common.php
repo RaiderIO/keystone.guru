@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popolare',
@@ -283,6 +284,15 @@ return [
                 'admin'           => 'Admin',
                 'view_this_route' => 'Visualizza',
             ],
+            'dungeonroutesearch' => [
+                'description'    => 'Seleziona i nemici sulla mappa per includerli o escluderli dai risultati di ricerca.',
+                'settings_title' => 'Impostazioni mappa',
+                'enabled'        => 'Abilitato',
+                'disabled'       => 'Disabilitato',
+                'key_level'      => 'Livello chiave',
+                'title'          => 'Titolo',
+                'username'       => 'Nome utente',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => 'Timer',
@@ -435,15 +445,6 @@ return [
                 'clone_this_route_title'         => 'Clona',
                 'report_for_moderation'          => 'Segnala',
                 'report_for_moderation_finished' => 'Segnalato',
-            ],
-            'dungeonroutesearch' => [
-                'description'    => 'Seleziona i nemici sulla mappa per includerli o escluderli dai risultati di ricerca.',
-                'disabled'       => 'Disabilitato',
-                'enabled'        => 'Abilitato',
-                'key_level'      => 'Livello chiave',
-                'settings_title' => 'Impostazioni mappa',
-                'title'          => 'Titolo',
-                'username'       => 'Nome utente',
             ],
         ],
         'map' => [
@@ -674,4 +675,5 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
+
 ];

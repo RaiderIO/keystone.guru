@@ -892,7 +892,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $validated = $request->validated();
 
-        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
+        $dungeon          = Dungeon::findOrFail($this->dungeon_id);
         $this->dungeon_id = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
         if ($new) {
             $this->author_id  = $user?->id ?? -1;

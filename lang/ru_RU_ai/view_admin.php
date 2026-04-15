@@ -499,6 +499,30 @@ return [
                 'spell_not_found' => '',
             ],
         ],
+        'spells' => [
+            'showmissingspellinfo' => [
+                'title'        => '',
+                'header'       => '',
+                'table_header' => [
+                    'id'      => '',
+                    'name'    => '',
+                    'actions' => '',
+                ],
+                'wowhead' => '',
+            ],
+        ],
+        'npcs' => [
+            'showmissingdisplayid' => [
+                'title'        => '',
+                'header'       => '',
+                'table_header' => [
+                    'id'      => '',
+                    'name'    => '',
+                    'actions' => '',
+                ],
+                'wowhead' => '',
+            ],
+        ],
         'list' => [
             'title'                                       => 'Инструменты администратора',
             'header'                                      => 'Инструменты администратора',
@@ -508,6 +532,7 @@ return [
             'subheader_npcs'                              => '',
             'mass_import_npcs'                            => 'Массовый импорт NPC',
             'manage_spell_visibility'                     => '',
+            'show_missing_npc_display_id'                 => '',
             'subheader_dungeonroute'                      => 'Маршрут подземелья',
             'view_dungeonroute_details'                   => 'Показать детали маршрута подземелья',
             'view_dungeonroute_mapping_version_usage'     => '',
@@ -522,8 +547,6 @@ return [
             'view_dungeon_mapping_version_accuracy'       => '',
             'subheader_enemy_forces'                      => 'Силы врага',
             'enemy_forces_import'                         => 'Импорт силы врага',
-            'subheader_wowtools'                          => '',
-            'wowtools_import_ingame_coordinates'          => '',
             'subheader_wagogg'                            => '',
             'wagogg_import_ingame_coordinates'            => '',
             'subheader_misc'                              => 'Разное',
@@ -540,6 +563,8 @@ return [
             'enemy_forces_recalculate'                    => '',
             'subheader_thumbnails'                        => '',
             'thumbnails_regenerate'                       => '',
+            'subheader_spells'                            => '',
+            'show_missing_spell_info'                     => '',
         ],
         'thumbnails' => [
             'regenerate' => [

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Session en direct - :title',
+        'view'  => [
             'any' => 'N\'importe lequel',
         ],
-        'title' => 'Session en direct - :title',
     ],
     'edit' => [
         'title'                                   => 'Modifier %s',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Route M+ temporaire pour le donjon %s.',
         'linkpreview_default_description_explore' => 'Explorer %s.',
     ],
+
 ];

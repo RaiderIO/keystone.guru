@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'melee'         => '近战',
     'ranged'        => '远程',
     'caster'        => '施法者',
@@ -11,4 +12,5 @@ return [
     'ranged_caster' => '远程/施法者',
     'ranged_healer' => '远程/治疗者',
     'ranged_melee'  => '远程/近战',
+
 ];

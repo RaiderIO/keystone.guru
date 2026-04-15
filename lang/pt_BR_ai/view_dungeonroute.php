@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Sessão ao vivo - :title',
+        'view'  => [
             'any' => 'Qualquer',
         ],
-        'title' => 'Sessão ao vivo - :title',
     ],
     'edit' => [
         'title'                                   => 'Editar %s',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Rota M+ temporária para masmorra %s.',
         'linkpreview_default_description_explore' => 'Explore %s.',
     ],
+
 ];

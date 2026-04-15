@@ -41,7 +41,8 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Hodor',
+        'view'  => [
             'any' => 'Hodor',
         ],
     ],

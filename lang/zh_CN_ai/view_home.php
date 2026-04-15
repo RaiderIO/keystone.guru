@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported' => '看起来您正在使用 Internet Explorer 浏览 Keystone.guru。不幸的是，Internet Explorer 是
              不支持的浏览器。真的，它完全无法工作。请尝试使用 Google Chrome、Mozilla
              Firefox 或 Microsoft Edge。',
@@ -49,10 +50,9 @@ return [
         ],
         'featured' => [
             'title'               => '特色',
-            'heatmaps_alt'        => '',
+            'revamped_search_alt' => '改进的搜索',
             'weekly_route_alt'    => 'Raider.IO 每周路线',
             'patreon_alt'         => 'Patreon',
-            'revamped_search_alt' => '改进的搜索',
         ],
         'about' => [
             'title'               => '关于',
@@ -64,4 +64,5 @@ return [
                             地下城。',
         ],
     ],
+
 ];

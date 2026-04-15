@@ -17,7 +17,8 @@ class NpcService implements NpcServiceInterface
 
         foreach ($dungeons as $dungeon) {
             $npcIds->put(
-                __($dungeon->name), Npc::selectRaw('npcs.id, npc_name_translations.translation as name')
+                __($dungeon->name),
+                Npc::selectRaw('npcs.id, npc_name_translations.translation as name')
                     ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
                         $clause->on('npc_name_translations.key', '=', 'npcs.name')
                             ->where('npc_name_translations.locale', '=', 'en_US');

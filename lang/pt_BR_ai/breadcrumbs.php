@@ -23,9 +23,8 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => 'Mapas de calor',
-                'explore'  => 'Explorar',
-                'heatmap'  => 'Mapa de Calor',
+                'heatmap' => 'Mapa de Calor',
+                'explore' => 'Explorar',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +68,8 @@ return [
                 'mdt_diff'                  => 'Diferença MDT',
                 'view_mdt_string_contents'  => 'Ver conteúdo da string MDT',
                 'import_npcs'               => 'Importar NPCs',
+                'spells_missing_info'       => 'Feitiços sem informações',
+                'npcs_missing_display_id'   => 'NPCs sem ID de exibição',
             ],
             'releases'     => 'Lançamentos',
             'new_release'  => 'Novo lançamento',

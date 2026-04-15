@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'bolstering' => [
         'name'        => '激励',
         'description' => '当任何非首领敌人死亡时，其死亡呼声会增强附近的盟友，使其最大生命值和伤害提高20%。',
@@ -157,10 +158,10 @@ return [
         'name'        => '扎拉塔斯的交易：脉冲星',
         'description' => '战斗中，扎拉塔斯召唤脉冲星围绕玩家旋转。',
     ],
-    'seasonal_index_preset' => '%s 预设 %d',
-    'lindormis_guidance'    => [
-        'description' => 'Lindormi引导玩家，用时间之砂削弱特定的非首领敌人，并防止玩家死亡减少剩余时间。',
+    'lindormis_guidance' => [
         'name'        => 'Lindormi的指引',
+        'description' => 'Lindormi引导玩家，用时间之砂削弱特定的非首领敌人，并防止玩家死亡减少剩余时间。',
     ],
-]
-;
+    'seasonal_index_preset' => '%s 预设 %d',
+
+];

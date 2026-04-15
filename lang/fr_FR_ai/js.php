@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => 'Nom',
     'enemy_forces_label'                              => 'Forces ennemies',
     'enemy_display_type_label'                        => 'Type d\'affichage de l\'ennemi',
@@ -160,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                    => 'Avantages Patreon mis à jour avec succès',
     'mapping_version_readonly_label'                                 => 'Cette version de cartographie est en lecture seule',
     'mapping_version_upgrade_label'                                  => 'Une nouvelle version de cartographie est disponible pour votre route.',
+    'algethar_academy_dragonflight_warning_label'                    => 'Vous consultez la version Dragonflight de l\'Académie Algeth\'ar. Assurez-vous d\'utiliser la version Midnight pour la compatibilité avec MDT.',
     'upgrade_label'                                                  => 'Améliorer',
     'classification_label'                                           => 'Classification',
     'edit_label'                                                     => 'Éditer',
@@ -437,6 +439,7 @@ return [
     'overpull_select_enemy_label'                                          => 'Sélectionnez un ou plusieurs ennemis que vous avez sur-attaqués',
     'overpull_selection_finished_label'                                    => 'Terminé',
     'filters'                                                              => 'Filtres',
+    'filter_no_filters_active'                                             => 'Aucun filtre actif',
     'filter_enemy_forces_header_incomplete'                                => 'Forces ennemies : incomplètes',
     'filter_enemy_forces_header_complete'                                  => 'Forces ennemies : complètes',
     'filter_image_select_affixes_header'                                   => 'Affixes : :number sélectionné',
@@ -463,6 +466,8 @@ return [
     'filter_input_date_from_header'                                        => 'À partir de la date : :value',
     'filter_input_date_to_header'                                          => 'À la date : :value',
     'filter_input_duration_header'                                         => 'Durée : :value min',
+    'filter_input_included_enemies_header'                                 => 'Ennemis inclus : :value',
+    'filter_input_excluded_enemies_header'                                 => 'Ennemis exclus : :value',
     'specialization_select'                                                => 'Spécialisation...',
     'class_select'                                                         => 'Classe...',
     'race_select'                                                          => 'Race...',
@@ -477,10 +482,7 @@ return [
     'error_loading_data_label'                                             => 'Erreur de chargement des données - veuillez réessayer',
     'run_count_label'                                                      => 'Affichage des données de :count tirages',
     'refresh_thumbnails_label'                                             => 'Actualiser les vignettes',
-    'algethar_academy_dragonflight_warning_label'                          => 'Vous consultez la version Dragonflight de l\'Académie Algeth\'ar. Assurez-vous d\'utiliser la version Midnight pour la compatibilité avec MDT.',
-    'filter_input_excluded_enemies_header'                                 => 'Ennemis exclus : :value',
-    'filter_input_included_enemies_header'                                 => 'Ennemis inclus : :value',
-    'filter_no_filters_active'                                             => 'Aucun filtre actif',
-    'no_search_results_label'                                              => 'Aucun résultat de recherche trouvé',
     'search_results_label'                                                 => 'Résultats de recherche',
+    'no_search_results_label'                                              => 'Aucun résultat de recherche trouvé',
+
 ];

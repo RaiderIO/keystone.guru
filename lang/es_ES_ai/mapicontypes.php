@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'unknown'                                => 'Desconocido',
     'comment'                                => 'Comentario',
     'door'                                   => 'Puerta',
@@ -110,4 +111,5 @@ return [
     'eco_dome_al_dani_kareshi_surge'         => 'Oleada de K\'areshi',
     'seat_of_the_triumvirate_void_infusion'  => 'Infusión del Vacío',
     'maisara_caverns_hearty_vilebranch_stew' => 'Guiso Vilebranch Sustancioso',
+
 ];

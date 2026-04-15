@@ -511,7 +511,7 @@ return [
                 'wowhead' => 'View on Wowhead',
             ],
         ],
-        'npcs'   => [
+        'npcs' => [
             'showmissingdisplayid' => [
                 'title'        => 'NPCs with missing display ID',
                 'header'       => 'NPCs with missing display ID',

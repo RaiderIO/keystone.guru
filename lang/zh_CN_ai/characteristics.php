@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'taunt'           => '嘲讽',
     'incapacitate'    => '瘫痪',
     'subjugate_demon' => '征服恶魔',
@@ -25,5 +26,5 @@ return [
     'hibernate'       => '休眠',
     'turn_evil'       => '驱散邪恶',
     'mind_soothe'     => '心灵抚慰',
-]
-;
+
+];

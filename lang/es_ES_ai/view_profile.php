@@ -62,20 +62,9 @@ return [
         'title' => 'Mis favoritos',
     ],
     'overview' => [
-        'title'                    => 'Visión general',
-        'favorites'                => 'Favoritos',
-        'tags'                     => 'Etiquetas',
-        'teams'                    => 'Equipos',
-        'profile'                  => 'Perfil',
-        'route_coverage'           => 'Cobertura de ruta',
-        'route_overview'           => 'Descripción general de la ruta',
-        'welcome_text'             => '¡Bienvenido a Keystone.guru! Comienza creando una ruta o un nuevo equipo para crear rutas colaborativamente con tus amigos.',
-        'create_route'             => 'Crear ruta',
-        'create_route_description' => 'Una ruta es un camino a través de una mazmorra para alcanzar el objetivo final del 100% de fuerzas enemigas mientras matas a todos los jefes.
-                                    Varias herramientas te ayudan a organizar tu camino previsto para los miembros de tu grupo. Puedes compartirlas con el mundo o mantenerlas privadas y organizarlas como desees.',
-        'create_team'             => 'Crear equipo',
-        'create_team_description' => 'Un equipo se utiliza para compartir tus rutas con amigos y ayudar a todos a mantenerse sincronizados con los últimos cambios en las rutas que haces más a menudo.
-                                    La edición colaborativa facilita ajustar una ruta existente mientras compites por la mejor ruta para tu equipo.',
+        'title'          => 'Visión general',
+        'route_coverage' => 'Cobertura de ruta',
+        'route_overview' => 'Descripción general de la ruta',
     ],
     'routes' => [
         'title' => 'Mis rutas',

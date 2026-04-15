@@ -323,6 +323,89 @@ return [
             ],
         ],
     ],
+    'tbc' => [
+        'black_temple' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'karabor_sewers'            => 'Hodor',
+                'illidari_training_grounds' => 'Hodor',
+                'sanctuary_of_shadows'      => 'Hodor',
+                'halls_of_anguish'          => 'Hodor',
+                'gorefiends_vigil'          => 'Hodor',
+                'den_of_mortal_delights'    => 'Hodor',
+                'chamber_of_command'        => 'Hodor',
+                'temple_summit'             => 'Hodor',
+                'black_temple'              => 'Hodor',
+            ],
+        ],
+        'gruuls_lair' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'gruuls_lair' => 'Hodor',
+            ],
+        ],
+        'karazhan' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'servants_quarters'    => 'Hodor',
+                'upper_livery_stables' => 'Hodor',
+                'the_banquet_hall'     => 'Hodor',
+                'the_guest_chambers'   => 'Hodor',
+                'opera_hall_balcony'   => 'Hodor',
+                'masters_terrace'      => 'Hodor',
+                'lower_broken_stair'   => 'Hodor',
+                'upper_broken_stair'   => 'Hodor',
+                'the_menagerie'        => 'Hodor',
+                'guardians_library'    => 'Hodor',
+                'the_repository'       => 'Hodor',
+                'upper_library'        => 'Hodor',
+                'the_celestial_watch'  => 'Hodor',
+                'gamesmans_hall'       => 'Hodor',
+                'medivhs_chambers'     => 'Hodor',
+                'the_power_station'    => 'Hodor',
+                'netherspace'          => 'Hodor',
+            ],
+        ],
+        'magtheridons_lair' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'magtheridons_lair' => 'Hodor',
+            ],
+        ],
+        'serpentshrine_cavern' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'serpentshrine_caverns' => 'Hodor',
+            ],
+        ],
+        'sunwell_plateau' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'sunwell_plateau'       => 'Hodor',
+                'shrine_of_the_eclipse' => 'Hodor',
+            ],
+        ],
+        'the_battle_for_mount_hyjal' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'the_battle_for_mount_hyjal' => 'Hodor',
+            ],
+        ],
+        'the_eye' => [
+            'name'         => 'Hodor',
+            'abbreviation' => 'Hodor',
+            'floors'       => [
+                'the_eye' => 'Hodor',
+            ],
+        ],
+    ],
     'wotlk' => [
         'ahn_kahet_the_old_kingdom' => [
             'name'         => 'Hodor',
