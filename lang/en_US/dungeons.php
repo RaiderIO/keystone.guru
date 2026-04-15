@@ -324,6 +324,28 @@ return [
         ],
     ],
     'tbc' => [
+        'black_temple' => [
+            'name'         => 'Black Temple',
+            'abbreviation' => 'BT',
+            'floors'       => [
+                'karabor_sewers'            => 'Karabor Sewers',
+                'illidari_training_grounds' => 'Illidari Training Grounds',
+                'sanctuary_of_shadows'      => 'Sanctuary of Shadows',
+                'halls_of_anguish'          => 'Halls of Anguish',
+                'gorefiends_vigil'          => 'Gorefiend\'s Vigil',
+                'den_of_mortal_delights'    => 'Den of Mortal Delights',
+                'chamber_of_command'        => 'Chamber of Command',
+                'temple_summit'             => 'Temple Summit',
+                'black_temple'              => 'Black Temple',
+            ],
+        ],
+        'gruuls_lair' => [
+            'name'         => 'Gruul\'s Lair',
+            'abbreviation' => 'GL',
+            'floors'       => [
+                'gruuls_lair' => 'Gruul\'s Lair',
+            ],
+        ],
         'karazhan' => [
             'name'         => 'Karazhan',
             'abbreviation' => 'KARA',
@@ -345,6 +367,42 @@ return [
                 'medivhs_chambers'     => 'Medivh\'s Chambers',
                 'the_power_station'    => 'The Power Station',
                 'netherspace'          => 'Netherspace',
+            ],
+        ],
+        'magtheridons_lair' => [
+            'name'         => 'Magtheridon\'s Lair',
+            'abbreviation' => 'ML',
+            'floors'       => [
+                'magtheridons_lair' => 'Magtheridon\'s Lair',
+            ],
+        ],
+        'serpentshrine_cavern' => [
+            'name'         => 'Serpentshrine Cavern',
+            'abbreviation' => 'SSC',
+            'floors'       => [
+                'serpentshrine_caverns' => 'Serpentshrine Cavern',
+            ],
+        ],
+        'sunwell_plateau' => [
+            'name'         => 'Sunwell Plateau',
+            'abbreviation' => 'SWP',
+            'floors'       => [
+                'sunwell_plateau'       => 'Sunwell Plateau',
+                'shrine_of_the_eclipse' => 'Shrine of the Eclipse',
+            ],
+        ],
+        'the_battle_for_mount_hyjal' => [
+            'name'         => 'The Battle for Mount Hyjal',
+            'abbreviation' => 'MH',
+            'floors'       => [
+                'the_battle_for_mount_hyjal' => 'The Battle for Mount Hyjal',
+            ],
+        ],
+        'the_eye' => [
+            'name'         => 'Tempest Keep (The Eye)',
+            'abbreviation' => 'TK',
+            'floors'       => [
+                'the_eye' => 'The Eye',
             ],
         ],
     ],
