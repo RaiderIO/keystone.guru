@@ -19,7 +19,7 @@ class DungeonRouteLegacyController extends Controller
 {
     public function viewOld(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
             abort(404);
@@ -34,7 +34,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function edit(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
             abort(404);
@@ -49,7 +49,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function editFloor(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        ?DungeonRoute                  $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
@@ -66,7 +66,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function embedOld(
         DungeonRouteEmbedUrlFormRequest $request,
-        ?DungeonRoute                   $dungeonRoute = null,
+        ?DungeonRoute                   $dungeonRoute,
         string                          $floorIndex = '1',
     ): RedirectResponse {
         if ($dungeonRoute === null) {
@@ -83,7 +83,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function viewFloorOld(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        DungeonRoute                   $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
@@ -100,7 +100,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function previewOld(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        ?DungeonRoute                  $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
@@ -117,7 +117,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function cloneOld(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
             abort(404);
@@ -132,7 +132,7 @@ class DungeonRouteLegacyController extends Controller
 
     public function claimOld(
         DungeonRouteBaseUrlFormRequest $request,
-        ?DungeonRoute                  $dungeonRoute = null,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
         if ($dungeonRoute === null) {
             abort(404);

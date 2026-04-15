@@ -264,23 +264,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
 
-    Route::prefix('{dungeonRoute}')->group(static function () {
-        // Edit your own dungeon routes
-        Route::get('edit', new DungeonRouteLegacyController()->edit(...));
-        Route::get('edit/{floorIndex}', new DungeonRouteLegacyController()->editFloor(...));
-        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
-            // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
-            Route::get('live/{liveSession}', new LiveSessionLegacyController()->view(...));
-            Route::get('live/{liveSession}/{floorIndex}', new LiveSessionLegacyController()->viewFloor(...));
-            // Clone a route
-            Route::middleware('throttle:create-dungeonroute')->group(static function () {
-                Route::get('clone', new DungeonRouteLegacyController()->cloneOld(...));
-            });
-            // Claiming a route that was made by /sandbox functionality
-            Route::get('claim', new DungeonRouteLegacyController()->claimOld(...));
-        });
-    });
-
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
         Route::get('patreon-unlink', new PatreonController()->unlink(...))->name('patreon.unlink');
         // Profile routes
@@ -688,18 +671,41 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
 
-    Route::prefix('{dungeonroute}')->group(static function () {
+    Route::prefix('{dungeonRoute}')->group(static function () {
+        // Edit your own dungeon routes
+        Route::get('edit', new DungeonRouteLegacyController()->edit(...))->name('dungeonroute.editold');
+        // Legacy edit floor route
+        Route::get('edit/{floorIndex}', new DungeonRouteLegacyController()->editFloor(...))
+            ->name('dungeonroute.editold.floor')
+            ->where('floorIndex', '[0-9]+');
+        Route::middleware(['auth', 'role:user|admin'])->group(static function () {
+            // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
+            Route::get('live/{liveSession}', new LiveSessionLegacyController()->view(...))->name('dungeonroute.livesession.viewold');
+            Route::get('live/{liveSession}/{floorIndex}', new LiveSessionLegacyController()->viewFloor(...))->name('dungeonroute.livesession.viewfloorold');
+            // Clone a route
+            Route::middleware('throttle:create-dungeonroute')->group(static function () {
+                Route::get('clone', new DungeonRouteLegacyController()->cloneOld(...))->name('dungeonroute.cloneold');
+            });
+            // Claiming a route that was made by /sandbox functionality
+            Route::get('claim', new DungeonRouteLegacyController()->claimOld(...))->name('dungeonroute.claimold');
+        });
+
         Route::get('/', new DungeonRouteLegacyController()->viewOld(...))->name('dungeonroute.viewold');
-        Route::get('embed/', new DungeonRouteLegacyController()->embedOld(...));
-        Route::get('embed/{floorIndex}', new DungeonRouteLegacyController()->embedOld(...));
-        Route::get('{floorIndex}', new DungeonRouteLegacyController()->viewFloorOld(...));
+        Route::get('embed/', new DungeonRouteLegacyController()->embedOld(...))->name('dungeonroute.embedold');
+        Route::get('embed/{floorIndex}', new DungeonRouteLegacyController()->embedOld(...))
+            ->name('dungeonroute.embedold.floor')
+            ->where('floorIndex', '[0-9]+');
+        Route::get('{floorIndex}', new DungeonRouteLegacyController()->viewFloorOld(...))
+            ->name('dungeonroute.viewold.floor')
+            ->where('floorIndex', '[0-9]+');
         // Preview of a route for image capturing library
-        Route::get('preview/{floorIndex}', new DungeonRouteLegacyController()->previewOld(...));
+        Route::get('preview/{floorIndex}', new DungeonRouteLegacyController()->previewOld(...))
+            ->name('dungeonroute.previewold')
+            ->where('floorIndex', '[0-9]+');
     });
 });
 
 Route::fallback(
     // Render your 404 page, but now with web middleware (sessions) active
-
-    fn() => response()->view('errors.404', [], 404),
+    fn() => response()->view('errors.404', [], 500),
 )->middleware('web');
