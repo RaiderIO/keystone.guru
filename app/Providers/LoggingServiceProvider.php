@@ -10,6 +10,8 @@ use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
+use App\Jobs\Logging\RegenerateCombatLogRouteLogging;
+use App\Jobs\Logging\RegenerateCombatLogRouteLoggingInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLogging;
@@ -155,6 +157,7 @@ class LoggingServiceProvider extends ServiceProvider
         // Jobs
         $this->app->bind(ProcessRouteFloorThumbnailLoggingInterface::class, ProcessRouteFloorThumbnailLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailCustomLoggingInterface::class, ProcessRouteFloorThumbnailCustomLogging::class);
+        $this->app->bind(RegenerateCombatLogRouteLoggingInterface::class, RegenerateCombatLogRouteLogging::class);
 
         // MDT
         $this->app->bind(MDTImportStringServiceLoggingInterface::class, MDTImportStringServiceLogging::class);

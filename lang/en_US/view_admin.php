@@ -563,6 +563,8 @@ return [
             'enemy_forces_recalculate'                    => 'Mass recalculate enemy forces for routes',
             'subheader_thumbnails'                        => 'Thumbnails',
             'thumbnails_regenerate'                       => 'Mass regenerate thumbnails',
+            'subheader_combatlog'                         => 'Combat Log',
+            'combatlog_regenerate'                        => 'Mass regenerate ARC routes',
             'subheader_spells'                            => 'Spells',
             'show_missing_spell_info'                     => 'Show missing spell data',
         ],
@@ -572,6 +574,13 @@ return [
                 'header'       => 'Mass regenerate thumbnails',
                 'only_missing' => 'Only queue routes with missing thumbnails',
                 'submit'       => 'Submit',
+            ],
+        ],
+        'combatlog' => [
+            'regenerate' => [
+                'title'  => 'Mass regenerate ARC routes',
+                'header' => 'Mass regenerate ARC routes',
+                'submit' => 'Submit',
             ],
         ],
         'wagogg' => [

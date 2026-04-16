@@ -419,6 +419,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Thumbnails
                 Route::get('thumbnails/regenerate', new AdminToolsController()->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
                 Route::post('thumbnails/regenerate', new AdminToolsController()->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
+
+                // Combat log
+                Route::get('combatlog/regenerate', new AdminToolsController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
+                Route::post('combatlog/regenerate', new AdminToolsController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
                     Route::get('string', new AdminToolsController()->mdtview(...))->name('admin.tools.mdt.string.view');

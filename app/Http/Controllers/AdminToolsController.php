@@ -7,9 +7,11 @@ namespace App\Http\Controllers;
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Jobs\RefreshEnemyForces;
+use App\Jobs\RegenerateCombatLogRoute;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
+use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -49,6 +51,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
@@ -484,6 +487,49 @@ class AdminToolsController extends Controller
         ]));
 
         return view('admin.tools.thumbnails.regenerate');
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function combatlogregenerate(): View
+    {
+        return view('admin.tools.combatlog.regenerate');
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function combatlogregeneratesubmit(Request $request): View
+    {
+        set_time_limit(3600);
+
+        $dungeonId = (int)$request->get('dungeon_id');
+
+        $count = 0;
+
+        // Cannot use joins since the other table lives in a different database
+        DungeonRoute::query()
+            ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count) {
+                $dungeonRoutes = $dungeonRoutes->keyBy('id');
+                /** @var Collection<ChallengeModeRun> $challengeModes */
+                $challengeModes = ChallengeModeRun::whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
+                    ->get();
+
+                foreach ($challengeModes as $challengeMode) {
+                    RegenerateCombatLogRoute::dispatch(
+                        $dungeonRoutes->get($challengeMode->dungeon_route_id)->id,
+                    );
+                    $count++;
+                }
+            });
+
+        Session::flash('status', __('controller.admintools.flash.combatlog_route_regenerate_result', [
+            'count' => $count,
+        ]));
+
+        return view('admin.tools.combatlog.regenerate');
     }
 
     /**

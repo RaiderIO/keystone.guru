@@ -34,4 +34,6 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection;
 
     public function findRoutes(DungeonRouteSearchFilter $filter): Collection;
+
+    public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute;
 }
