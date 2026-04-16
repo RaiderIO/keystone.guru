@@ -33,7 +33,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Tazavesh: So'leah's Gambit"  => 'Gambit',
 
         // Midnight S1
-        'Magister\'s Terrace'         => 'Magister\'s',
+        "Magisters' Terrace"          => "Magisters'",
         'The Seat of the Triumvirate' => 'Seat',
     ];
     public const string DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';

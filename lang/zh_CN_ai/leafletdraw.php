@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'draw' => [
         'toolbar' => [
             'actions' => [
@@ -119,5 +120,5 @@ return [
             ],
         ],
     ],
-]
-;
+
+];

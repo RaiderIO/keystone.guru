@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'all'            => '全部',
     'cd_external'    => '外部冷却',
     'cd_group'       => '组冷却',
@@ -16,4 +17,5 @@ return [
     'personal_cd'    => '个人冷却',
     'utility'        => '实用',
     'unknown'        => '未知',
+
 ];

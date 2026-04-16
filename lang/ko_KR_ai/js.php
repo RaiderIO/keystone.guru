@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => '이름',
     'enemy_forces_label'                              => '적 병력',
     'enemy_display_type_label'                        => '적 표시 유형',
@@ -160,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                    => 'Patreon 혜택이 성공적으로 업데이트되었습니다',
     'mapping_version_readonly_label'                                 => '이 매핑 버전은 읽기 전용입니다',
     'mapping_version_upgrade_label'                                  => '경로에 대한 새로운 매핑 버전이 사용 가능합니다.',
+    'algethar_academy_dragonflight_warning_label'                    => '당신은 알게타르 아카데미의 드래곤플라이트 버전을 보고 있습니다. 호환성을 위해 미드나이트 버전을 사용해야 합니다.',
     'upgrade_label'                                                  => '업그레이드',
     'classification_label'                                           => '분류',
     'edit_label'                                                     => '편집',
@@ -436,6 +438,7 @@ return [
     'overpull_select_enemy_label'                                          => '초과 풀링한 적 하나 이상 선택',
     'overpull_selection_finished_label'                                    => '완료',
     'filters'                                                              => '필터',
+    'filter_no_filters_active'                                             => '활성화된 필터 없음',
     'filter_enemy_forces_header_incomplete'                                => '적 병력: 미완료',
     'filter_enemy_forces_header_complete'                                  => '적 병력: 완료',
     'filter_image_select_affixes_header'                                   => '속성: :number 선택됨',
@@ -462,6 +465,8 @@ return [
     'filter_input_date_from_header'                                        => '날짜부터: :value',
     'filter_input_date_to_header'                                          => '날짜까지: :value',
     'filter_input_duration_header'                                         => '지속 시간: :value 분',
+    'filter_input_included_enemies_header'                                 => '포함된 적들: :value',
+    'filter_input_excluded_enemies_header'                                 => '제외된 적들: :value',
     'specialization_select'                                                => '전문화...',
     'class_select'                                                         => '클래스...',
     'race_select'                                                          => '종족...',
@@ -476,11 +481,7 @@ return [
     'error_loading_data_label'                                             => '데이터 로드 오류 - 다시 시도하세요',
     'run_count_label'                                                      => ':count 개의 실행 데이터 표시',
     'refresh_thumbnails_label'                                             => '썸네일 새로고침',
-    'algethar_academy_dragonflight_warning_label'                          => '당신은 알게타르 아카데미의 드래곤플라이트 버전을 보고 있습니다. 호환성을 위해 미드나이트 버전을 사용해야 합니다.',
-    'filter_input_excluded_enemies_header'                                 => '제외된 적들: :value',
-    'filter_input_included_enemies_header'                                 => '포함된 적들: :value',
-    'filter_no_filters_active'                                             => '활성화된 필터 없음',
-    'no_search_results_label'                                              => '검색 결과 없음',
     'search_results_label'                                                 => '검색 결과',
-]
-;
+    'no_search_results_label'                                              => '검색 결과 없음',
+
+];

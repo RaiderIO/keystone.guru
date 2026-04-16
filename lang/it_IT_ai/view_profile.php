@@ -62,20 +62,9 @@ return [
         'title' => 'I miei preferiti',
     ],
     'overview' => [
-        'title'                    => 'Panoramica',
-        'favorites'                => 'Preferiti',
-        'tags'                     => 'Tag',
-        'teams'                    => 'Team',
-        'profile'                  => 'Profilo',
-        'route_coverage'           => 'Copertura del percorso',
-        'route_overview'           => 'Panoramica del percorso',
-        'welcome_text'             => 'Benvenuto su Keystone.guru! Inizia creando un percorso o un nuovo team per creare percorsi collaborativi con i tuoi amici.',
-        'create_route'             => 'Crea percorso',
-        'create_route_description' => 'Un percorso è un cammino attraverso un dungeon per raggiungere l\'obiettivo finale del 100% delle forze nemiche mentre si uccidono tutti i boss.
-                                    Vari strumenti ti aiutano a organizzare il tuo percorso previsto per i membri del tuo gruppo. Puoi condividerli con il mondo - o tenerli privati e organizzarli come desideri.',
-        'create_team'             => 'Crea team',
-        'create_team_description' => 'Un team è utilizzato per condividere i tuoi percorsi con gli amici e aiutare tutti a rimanere sincronizzati con gli ultimi cambiamenti ai percorsi che fai più spesso.
-                                    La modifica collaborativa rende più facile regolare un percorso esistente mentre gareggi per il miglior percorso per il tuo team.',
+        'title'          => 'Panoramica',
+        'route_coverage' => 'Copertura del percorso',
+        'route_overview' => 'Panoramica del percorso',
     ],
     'routes' => [
         'title' => 'I miei percorsi',

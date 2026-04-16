@@ -719,6 +719,16 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
+    public function npcsShowMissingDisplayId(): View
+    {
+        return view('admin.tools.npc.showmissingdisplayid', [
+            'npcs' => Npc::whereNull('display_id')->get(),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
     public function wagoggImportIngameCoordinates(): View
     {
         return view('admin.tools.wagogg.importingamecoordinates');

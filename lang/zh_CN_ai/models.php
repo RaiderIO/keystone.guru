@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeonroute' => [
         'title_temporary_route'    => ':dungeonName 临时路线',
         'title_clone'              => ':routeTitle (克隆)',
@@ -10,4 +11,5 @@ return [
         'subtitle_temporary_route' => '临时路线',
         'subtitle_author'          => '由 %s',
     ],
+
 ];

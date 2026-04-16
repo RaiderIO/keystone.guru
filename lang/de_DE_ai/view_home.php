@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported'                => 'Es scheint, dass Sie Keystone.guru mit dem Internet Explorer durchsuchen. Leider wird der Internet Explorer nicht unterstützt. Wirklich, es funktioniert überhaupt nicht. Bitte versuchen Sie es mit Google Chrome, Mozilla Firefox oder Microsoft Edge.',
     'tagline'                         => 'M+ Routen leicht gemacht',
     'tagline_description'             => 'Planen Sie Routen online kooperativ mit Ihrem Team oder entdecken Sie Routen, die zu Ihrem Spielstil und Ihrem Fähigkeitsniveau passen. Keystone.guru ist der eine Ort, um Ihre M+ Routen zu verwalten und zu teilen.',
@@ -45,10 +46,9 @@ return [
         ],
         'featured' => [
             'title'               => 'Empfohlen',
-            'heatmaps_alt'        => '',
+            'revamped_search_alt' => 'Überarbeitete Suche',
             'weekly_route_alt'    => 'Raider.IO Wöchentliche Route',
             'patreon_alt'         => 'Patreon',
-            'revamped_search_alt' => 'Überarbeitete Suche',
         ],
         'about' => [
             'title'               => 'Über',
@@ -56,4 +56,5 @@ return [
             'tagline_description' => 'Keystone.guru ist ein Planungswerkzeug für World of Warcraft (WoW) Mythic+ Routen, das dir ermöglicht, beliebte Routen zu erstellen, zu verwalten und zu entdecken. Mit voller MDT-Import- und Exportunterstützung gehen deine Routen dorthin, wo du gehst. Erkunde die Favoriten der Community und nutze die von Raider.IO unterstützten Heatmaps, um zu sehen, wie Spieler tatsächlich jeden Dungeon angehen.',
         ],
     ],
+
 ];

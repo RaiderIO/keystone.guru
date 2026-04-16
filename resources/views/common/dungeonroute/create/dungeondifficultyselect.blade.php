@@ -27,19 +27,20 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) =>
     @parent
 
     <script>
-        var _speedrunDungeonIds = {!! $allSpeedrunDungeons->pluck(['id']) !!};
-        var _difficultySelect = {!! $difficultySelect !!};
-        var _difficultyByDungeon = {!! $difficultyByDungeon !!};
 
         $(function () {
+            let speedrunDungeonIds = {!! $allSpeedrunDungeons->pluck(['id']) !!};
+            let difficultySelect = {!! $difficultySelect !!};
+            let difficultyByDungeon = {!! $difficultyByDungeon !!};
+
             let $dungeonSelect = $('#{{ $dungeonSelectId }}');
-            $dungeonSelect.bind('change', function () {
+            let dungeonSelectionChanged = function () {
                 let $dungeonDifficultySelect = $('#{{ $id }}');
                 let $dungeonDifficultySelectContainer = $('#{{ $id }}_container');
 
                 let selectedDungeonId = parseInt($dungeonSelect.val());
-                if (_speedrunDungeonIds.includes(selectedDungeonId)) {
-                    let enabledDifficultyForDungeon = _difficultyByDungeon[selectedDungeonId];
+                if (speedrunDungeonIds.includes(selectedDungeonId)) {
+                    let enabledDifficultyForDungeon = difficultyByDungeon[selectedDungeonId];
                     $dungeonDifficultySelect.find('option').remove();
 
                     for (let difficultyId in enabledDifficultyForDungeon) {
@@ -57,7 +58,11 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) =>
                 } else {
                     $dungeonDifficultySelectContainer.hide();
                 }
-            });
+            };
+
+            $dungeonSelect.bind('change', dungeonSelectionChanged);
+
+            dungeonSelectionChanged();
         })
     </script>
 @endsection

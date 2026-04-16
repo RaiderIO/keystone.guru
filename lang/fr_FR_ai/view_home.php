@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported'                => 'Il semble que vous naviguez sur Keystone.guru en utilisant Internet Explorer. Malheureusement, Internet Explorer n\'est pas un navigateur pris en charge. Non vraiment, cela ne fonctionne vraiment pas du tout. Veuillez essayer soit Google Chrome, Mozilla Firefox ou Microsoft Edge.',
     'tagline'                         => 'Itinéraires M+ simplifiés',
     'tagline_description'             => 'Planifiez des itinéraires en ligne en coopération avec votre équipe ou découvrez des itinéraires adaptés à votre style de jeu et à votre niveau de compétence. Keystone.guru est l\'endroit unique pour gérer et partager vos itinéraires M+.',
@@ -45,10 +46,9 @@ return [
         ],
         'featured' => [
             'title'               => 'En vedette',
-            'heatmaps_alt'        => '',
+            'revamped_search_alt' => 'Recherche remaniée',
             'weekly_route_alt'    => 'Itinéraire hebdomadaire Raider.IO',
             'patreon_alt'         => 'Patreon',
-            'revamped_search_alt' => 'Recherche remaniée',
         ],
         'about' => [
             'title'               => 'À propos',
@@ -60,4 +60,5 @@ return [
                             donjon.',
         ],
     ],
+
 ];

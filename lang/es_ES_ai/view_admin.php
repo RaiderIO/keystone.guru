@@ -499,6 +499,30 @@ return [
                 'spell_not_found' => '',
             ],
         ],
+        'spells' => [
+            'showmissingspellinfo' => [
+                'title'        => '',
+                'header'       => '',
+                'table_header' => [
+                    'id'      => '',
+                    'name'    => '',
+                    'actions' => '',
+                ],
+                'wowhead' => '',
+            ],
+        ],
+        'npcs' => [
+            'showmissingdisplayid' => [
+                'title'        => '',
+                'header'       => '',
+                'table_header' => [
+                    'id'      => '',
+                    'name'    => '',
+                    'actions' => '',
+                ],
+                'wowhead' => '',
+            ],
+        ],
         'list' => [
             'title'                                       => '',
             'header'                                      => '',
@@ -508,6 +532,7 @@ return [
             'subheader_npcs'                              => '',
             'mass_import_npcs'                            => '',
             'manage_spell_visibility'                     => '',
+            'show_missing_npc_display_id'                 => '',
             'subheader_dungeonroute'                      => '',
             'view_dungeonroute_details'                   => '',
             'view_dungeonroute_mapping_version_usage'     => '',
@@ -522,8 +547,6 @@ return [
             'view_dungeon_mapping_version_accuracy'       => '',
             'subheader_enemy_forces'                      => '',
             'enemy_forces_import'                         => '',
-            'subheader_wowtools'                          => '',
-            'wowtools_import_ingame_coordinates'          => '',
             'subheader_wagogg'                            => '',
             'wagogg_import_ingame_coordinates'            => '',
             'subheader_misc'                              => '',
@@ -540,6 +563,8 @@ return [
             'enemy_forces_recalculate'                    => '',
             'subheader_thumbnails'                        => '',
             'thumbnails_regenerate'                       => '',
+            'subheader_spells'                            => '',
+            'show_missing_spell_info'                     => '',
         ],
         'thumbnails' => [
             'regenerate' => [

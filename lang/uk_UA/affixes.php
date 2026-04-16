@@ -158,6 +158,10 @@ return [
         'name'        => 'Xal\'atath\'s Bargain: Pulsar',
         'description' => 'У бою Зал\'атат прикликає пульсари, що кружляють навколо гравців.',
     ],
+    'lindormis_guidance' => [
+        'name'        => '',
+        'description' => '',
+    ],
     'seasonal_index_preset' => '%s набір %d',
 
 ];

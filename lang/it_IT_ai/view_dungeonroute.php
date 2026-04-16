@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Sessione live - :title',
+        'view'  => [
             'any' => 'Qualsiasi',
         ],
-        'title' => 'Sessione live - :title',
     ],
     'edit' => [
         'title'                                   => 'Modifica %s',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Percorso M+ temporaneo per il dungeon %s.',
         'linkpreview_default_description_explore' => 'Esplora %s.',
     ],
+
 ];

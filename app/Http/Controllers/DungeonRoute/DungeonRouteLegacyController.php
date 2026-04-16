@@ -19,8 +19,12 @@ class DungeonRouteLegacyController extends Controller
 {
     public function viewOld(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonRoute,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.view', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -30,8 +34,12 @@ class DungeonRouteLegacyController extends Controller
 
     public function edit(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonRoute,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -41,9 +49,13 @@ class DungeonRouteLegacyController extends Controller
 
     public function editFloor(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonRoute,
+        ?DungeonRoute                  $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.edit.floor', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -54,9 +66,13 @@ class DungeonRouteLegacyController extends Controller
 
     public function embedOld(
         DungeonRouteEmbedUrlFormRequest $request,
-        DungeonRoute                    $dungeonRoute,
+        ?DungeonRoute                   $dungeonRoute,
         string                          $floorIndex = '1',
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.embed', array_merge([
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -70,6 +86,10 @@ class DungeonRouteLegacyController extends Controller
         DungeonRoute                   $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -80,9 +100,13 @@ class DungeonRouteLegacyController extends Controller
 
     public function previewOld(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonRoute,
+        ?DungeonRoute                  $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.preview', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -93,8 +117,12 @@ class DungeonRouteLegacyController extends Controller
 
     public function cloneOld(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonRoute,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.clone', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
@@ -104,8 +132,12 @@ class DungeonRouteLegacyController extends Controller
 
     public function claimOld(
         DungeonRouteBaseUrlFormRequest $request,
-        DungeonRoute                   $dungeonRoute,
+        ?DungeonRoute                  $dungeonRoute,
     ): RedirectResponse {
+        if ($dungeonRoute === null) {
+            abort(404);
+        }
+
         return redirect()->route('dungeonroute.claim', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,

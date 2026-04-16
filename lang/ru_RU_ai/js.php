@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => 'Имя',
     'enemy_forces_label'                              => 'Способности врага',
     'enemy_display_type_label'                        => 'Отображаймый тип врага',
@@ -160,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                    => 'Преимущества Patreon успешно обновлены',
     'mapping_version_readonly_label'                                 => 'Эта версия карты только для чтения',
     'mapping_version_upgrade_label'                                  => 'Для вашего маршрута доступна новая версия карты.',
+    'algethar_academy_dragonflight_warning_label'                    => 'Вы просматриваете версию Algeth\'ar Academy для Dragonflight. Убедитесь, что используете версию Midnight для совместимости с MDT.',
     'upgrade_label'                                                  => 'Обновить',
     'classification_label'                                           => 'Классификация',
     'edit_label'                                                     => 'Редактировать',
@@ -437,6 +439,7 @@ return [
     'overpull_select_enemy_label'                                          => 'Выберите одного или нескольких врагов, которых вы будете пулить',
     'overpull_selection_finished_label'                                    => 'Завершить',
     'filters'                                                              => 'Фильтры',
+    'filter_no_filters_active'                                             => 'Фильтры не активны',
     'filter_enemy_forces_header_incomplete'                                => 'Отряд противника: Неполный',
     'filter_enemy_forces_header_complete'                                  => 'Отряд противника: Завершенный',
     'filter_image_select_affixes_header'                                   => 'Аффиксы: :number выбрано',
@@ -463,6 +466,8 @@ return [
     'filter_input_date_from_header'                                        => 'С даты: :value',
     'filter_input_date_to_header'                                          => 'По дату: :value',
     'filter_input_duration_header'                                         => 'Продолжительность: :value мин',
+    'filter_input_included_enemies_header'                                 => 'Включенные враги: :value',
+    'filter_input_excluded_enemies_header'                                 => 'Исключенные враги: :value',
     'specialization_select'                                                => 'Специализация ...',
     'class_select'                                                         => 'Класс...',
     'race_select'                                                          => 'Раса...',
@@ -477,10 +482,7 @@ return [
     'error_loading_data_label'                                             => 'Ошибка загрузки данных - пожалуйста, попробуйте снова',
     'run_count_label'                                                      => 'Отображение данных из :count запусков',
     'refresh_thumbnails_label'                                             => 'Обновить миниатюры',
-    'algethar_academy_dragonflight_warning_label'                          => 'Вы просматриваете версию Algeth\'ar Academy для Dragonflight. Убедитесь, что используете версию Midnight для совместимости с MDT.',
-    'filter_input_excluded_enemies_header'                                 => 'Исключенные враги: :value',
-    'filter_input_included_enemies_header'                                 => 'Включенные враги: :value',
-    'filter_no_filters_active'                                             => 'Фильтры не активны',
-    'no_search_results_label'                                              => 'Результаты поиска не найдены',
     'search_results_label'                                                 => 'Результаты поиска',
+    'no_search_results_label'                                              => 'Результаты поиска не найдены',
+
 ];

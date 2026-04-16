@@ -323,6 +323,89 @@ return [
             ],
         ],
     ],
+    'tbc' => [
+        'black_temple' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'karabor_sewers'            => '',
+                'illidari_training_grounds' => '',
+                'sanctuary_of_shadows'      => '',
+                'halls_of_anguish'          => '',
+                'gorefiends_vigil'          => '',
+                'den_of_mortal_delights'    => '',
+                'chamber_of_command'        => '',
+                'temple_summit'             => '',
+                'black_temple'              => '',
+            ],
+        ],
+        'gruuls_lair' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'gruuls_lair' => '',
+            ],
+        ],
+        'karazhan' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'servants_quarters'    => '',
+                'upper_livery_stables' => '',
+                'the_banquet_hall'     => '',
+                'the_guest_chambers'   => '',
+                'opera_hall_balcony'   => '',
+                'masters_terrace'      => '',
+                'lower_broken_stair'   => '',
+                'upper_broken_stair'   => '',
+                'the_menagerie'        => '',
+                'guardians_library'    => '',
+                'the_repository'       => '',
+                'upper_library'        => '',
+                'the_celestial_watch'  => '',
+                'gamesmans_hall'       => '',
+                'medivhs_chambers'     => '',
+                'the_power_station'    => '',
+                'netherspace'          => '',
+            ],
+        ],
+        'magtheridons_lair' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'magtheridons_lair' => '',
+            ],
+        ],
+        'serpentshrine_cavern' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'serpentshrine_caverns' => '',
+            ],
+        ],
+        'sunwell_plateau' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'sunwell_plateau'       => '',
+                'shrine_of_the_eclipse' => '',
+            ],
+        ],
+        'the_battle_for_mount_hyjal' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_battle_for_mount_hyjal' => '',
+            ],
+        ],
+        'the_eye' => [
+            'name'         => '',
+            'abbreviation' => '',
+            'floors'       => [
+                'the_eye' => '',
+            ],
+        ],
+    ],
     'wotlk' => [
         'ahn_kahet_the_old_kingdom' => [
             'name'         => '安卡赫特：古代王国',

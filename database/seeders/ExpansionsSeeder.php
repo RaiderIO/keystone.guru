@@ -40,7 +40,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'released_at' => Carbon::make('2004-11-23 00:00:00'),
             ]),
             'expansions.tbc.name' => new Expansion([
-                'active'      => 0,
+                'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_TBC,
                 'color'       => '#198033',
                 'released_at' => Carbon::make('2007-01-16 00:00:00'),

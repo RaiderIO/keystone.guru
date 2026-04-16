@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'edit' => [
         'title'                   => '个人资料',
         'profile'                 => '个人资料',
@@ -61,18 +62,9 @@ return [
         'title' => '我的收藏',
     ],
     'overview' => [
-        'title'                    => '概览',
-        'favorites'                => '',
-        'tags'                     => '',
-        'teams'                    => '',
-        'profile'                  => '',
-        'route_coverage'           => '路线覆盖',
-        'route_overview'           => '路线概览',
-        'welcome_text'             => '',
-        'create_route'             => '',
-        'create_route_description' => '',
-        'create_team'              => '',
-        'create_team_description'  => '',
+        'title'          => '概览',
+        'route_coverage' => '路线覆盖',
+        'route_overview' => '路线概览',
     ],
     'routes' => [
         'title' => '我的路线',
@@ -89,4 +81,5 @@ return [
         'title'  => '%s的路线',
         'header' => '%s的路线',
     ],
+
 ];

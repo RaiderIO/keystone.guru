@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => '实时会话 - :title',
+        'view'  => [
             'any' => '任何',
         ],
-        'title' => '实时会话 - :title',
     ],
     'edit' => [
         'title'                                   => '编辑 %s',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => '地下城%s的临时M+路线。',
         'linkpreview_default_description_explore' => '探索%s。',
     ],
+
 ];

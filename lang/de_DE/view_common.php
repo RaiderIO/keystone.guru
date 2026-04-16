@@ -284,6 +284,15 @@ return [
                 'admin'           => '',
                 'view_this_route' => '',
             ],
+            'dungeonroutesearch' => [
+                'description'    => '',
+                'settings_title' => '',
+                'enabled'        => '',
+                'disabled'       => '',
+                'key_level'      => '',
+                'title'          => '',
+                'username'       => '',
+            ],
             'elements' => [
                 'dungeonrouteinfo' => [
                     'timer'            => '',

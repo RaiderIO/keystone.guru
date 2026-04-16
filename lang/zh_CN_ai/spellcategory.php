@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'general'      => '通用',
     'death_knight' => '死亡骑士',
     'demon_hunter' => '恶魔猎手',
@@ -16,4 +17,5 @@ return [
     'warlock'      => '术士',
     'warrior'      => '战士',
     'unknown'      => '未知',
+
 ];

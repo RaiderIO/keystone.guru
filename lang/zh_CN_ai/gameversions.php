@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'retail' => [
         'name'        => '零售版',
         'description' => '零售版',
@@ -29,5 +30,5 @@ return [
         'name'        => '军团再临混音版',
         'description' => '军团再临混音版',
     ],
-]
-;
+
+];

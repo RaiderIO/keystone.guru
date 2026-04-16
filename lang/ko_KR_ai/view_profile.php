@@ -62,20 +62,9 @@ return [
         'title' => '내 즐겨찾기',
     ],
     'overview' => [
-        'title'                    => '개요',
-        'favorites'                => '즐겨찾기',
-        'tags'                     => '태그',
-        'teams'                    => '팀',
-        'profile'                  => '프로필',
-        'route_coverage'           => '경로 커버리지',
-        'route_overview'           => '경로 개요',
-        'welcome_text'             => 'Keystone.guru에 오신 것을 환영합니다! 경로를 생성하거나 새로운 팀을 만들어 친구들과 협력하여 경로를 생성하세요.',
-        'create_route'             => '경로 생성',
-        'create_route_description' => '경로는 던전을 통해 100% 적군을 물리치며 모든 보스를 처치하는 목표에 도달하는 경로입니다.
-                                    다양한 도구가 파티 멤버에게 의도한 경로를 조직하는 데 도움을 줍니다. 세계와 공유하거나 비공개로 유지하고 원하는 대로 조직할 수 있습니다.',
-        'create_team'             => '팀 생성',
-        'create_team_description' => '팀은 경로를 친구와 공유하고 자주 사용하는 경로의 최신 변경 사항을 모두가 동기화할 수 있도록 도와줍니다.
-                                    협력 편집은 기존 경로를 조정할 때 팀을 위한 최적의 경로를 찾는 데 훨씬 더 쉽게 만듭니다.',
+        'title'          => '개요',
+        'route_coverage' => '경로 커버리지',
+        'route_overview' => '경로 개요',
     ],
     'routes' => [
         'title' => '내 경로',

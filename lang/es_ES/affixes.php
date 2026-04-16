@@ -158,6 +158,10 @@ return [
         'name'        => '',
         'description' => '',
     ],
+    'lindormis_guidance' => [
+        'name'        => '',
+        'description' => '',
+    ],
     'seasonal_index_preset' => '',
 
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -40,10 +41,10 @@ return [
         ],
     ],
     'livesession' => [
-        'view' => [
+        'title' => 'Живая сессия - :title',
+        'view'  => [
             'any' => 'Все',
         ],
-        'title' => 'Живая сессия - :title',
     ],
     'edit' => [
         'title'                                   => 'Редактировать %s',
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Временный маршрут М+ для подземелья %s.',
         'linkpreview_default_description_explore' => 'Исследовать %s.',
     ],
+
 ];

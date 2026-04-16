@@ -69,6 +69,8 @@ return [
                 'mdt_diff'                  => 'MDT diff',
                 'view_mdt_string_contents'  => 'View MDT string contents',
                 'import_npcs'               => 'Import NPCs',
+                'spells_missing_info'       => 'Spells missing info',
+                'npcs_missing_display_id'   => 'NPCs missing display ID',
             ],
             'releases'     => 'Releases',
             'new_release'  => 'New release',

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'table' => [
         'affixrowtable' => [
             'expansion_timewalking' => '%s 时光漫游',
@@ -62,4 +63,5 @@ return [
         'header'      => '状态',
         'description' => '我们上线了，耶！',
     ],
+
 ];

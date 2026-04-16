@@ -161,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                    => 'Бонуси Patreon успішно оновлено',
     'mapping_version_readonly_label'                                 => 'Ця версія мапи доступна лише для перегляду.',
     'mapping_version_upgrade_label'                                  => 'Доступна нова версія мапи для вашого маршруту.',
+    'algethar_academy_dragonflight_warning_label'                    => '',
     'upgrade_label'                                                  => 'Оновити',
     'classification_label'                                           => 'Класифікація',
     'edit_label'                                                     => 'Змінити',
@@ -439,6 +440,7 @@ return [
     'overpull_select_enemy_label'                                          => 'Виберіть одного або кількох надлишкових ворогів',
     'overpull_selection_finished_label'                                    => 'Завершити',
     'filters'                                                              => 'Фільтри',
+    'filter_no_filters_active'                                             => '',
     'filter_enemy_forces_header_incomplete'                                => 'Ворожі війська: незавершено',
     'filter_enemy_forces_header_complete'                                  => 'Ворожі війська: завершено',
     'filter_image_select_affixes_header'                                   => 'Модифікаторів: :numbers',
@@ -465,6 +467,8 @@ return [
     'filter_input_date_from_header'                                        => 'Від: :value',
     'filter_input_date_to_header'                                          => 'До: :value',
     'filter_input_duration_header'                                         => 'Тривалість: :value хв',
+    'filter_input_included_enemies_header'                                 => '',
+    'filter_input_excluded_enemies_header'                                 => '',
     'specialization_select'                                                => 'Спеціалізація...',
     'class_select'                                                         => 'Клас...',
     'race_select'                                                          => 'Раса...',
@@ -479,5 +483,7 @@ return [
     'error_loading_data_label'                                             => 'Помилка завантаження даних. Спробуйте знову',
     'run_count_label'                                                      => 'Показано дані з :count забігів',
     'refresh_thumbnails_label'                                             => 'Оновити мініатюри',
+    'search_results_label'                                                 => '',
+    'no_search_results_label'                                              => '',
 
 ];

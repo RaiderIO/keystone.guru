@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog;
 class CombatLogVersion
 {
     public const int CLASSIC            = 9;
+    public const int CLASSIC_TBC_2_5_5  = 9_002_005_005;
     public const int CLASSIC_SOD_1_15_5 = 9_001_015_005; // Same version - yet there's changes compared to classic, zzzzzzzz
     public const int CLASSIC_SOD_1_15_6 = 9_001_015_006;
     public const int CLASSIC_SOD_1_15_7 = 9_001_015_007;
@@ -30,5 +31,6 @@ class CombatLogVersion
         self::RETAIL_11_1_7      => 10,
         self::RETAIL_11_2_0      => 11,
         self::RETAIL_12_0_1      => 12,
+        self::CLASSIC_TBC_2_5_5  => 13,
     ];
 }

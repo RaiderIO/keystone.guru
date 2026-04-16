@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported'                             => 'Parece que você está navegando no Keystone.guru usando o Internet Explorer. Infelizmente, o Internet Explorer não é um navegador suportado. Sério, ele realmente não funciona. Por favor, tente usar o Google Chrome, Mozilla Firefox ou Microsoft Edge.',
     'tagline'                                      => 'Rotas M+ facilitadas',
     'tagline_description'                          => 'Planeje rotas online cooperativamente com sua equipe ou descubra rotas que se adequem ao seu estilo de jogo e nível de habilidade. Keystone.guru é o único lugar para gerenciar e compartilhar suas rotas M+.',
@@ -41,10 +42,9 @@ return [
         ],
         'featured' => [
             'title'               => 'Destaques',
-            'heatmaps_alt'        => '',
+            'revamped_search_alt' => 'Pesquisa reformulada',
             'weekly_route_alt'    => 'Rota semanal Raider.IO',
             'patreon_alt'         => 'Patreon',
-            'revamped_search_alt' => 'Pesquisa reformulada',
         ],
         'about' => [
             'title'               => 'Sobre',
@@ -52,4 +52,5 @@ return [
             'tagline_description' => 'Keystone.guru é uma ferramenta de planejamento de rotas Mythic+ para World of Warcraft (WoW), permitindo que você construa, gerencie e descubra rotas populares. Com suporte completo para importação e exportação MDT, suas rotas irão aonde você for. Explore os favoritos da comunidade e use mapas de calor alimentados por Raider.IO para ver como os jogadores realmente enfrentam cada masmorra.',
         ],
     ],
+
 ];

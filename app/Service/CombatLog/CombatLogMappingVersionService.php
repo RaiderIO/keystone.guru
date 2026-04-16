@@ -15,6 +15,7 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcType;
@@ -40,8 +41,10 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     /**
      * {@inheritDoc}
      */
-    public function createMappingVersionFromChallengeMode(string $filePath): ?MappingVersion
-    {
+    public function createMappingVersionFromChallengeMode(
+        string      $filePath,
+        GameVersion $gameVersion,
+    ): ?MappingVersion {
         $this->log->createMappingVersionFromChallengeModeStart($filePath);
 
         try {
@@ -71,7 +74,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 }
 
                 return $dungeon;
-            });
+            }, $gameVersion);
         } finally {
             $this->log->createMappingVersionFromChallengeModeEnd();
         }
@@ -81,6 +84,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
     public function createMappingVersionFromDungeonOrRaid(
         string          $filePath,
+        GameVersion     $gameVersion,
         ?MappingVersion $mappingVersion = null,
         bool            $enemyConnections = false,
     ): ?MappingVersion {
@@ -97,7 +101,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 }
 
                 return $dungeon;
-            }, $mappingVersion, $enemyConnections);
+            }, $gameVersion, $mappingVersion, $enemyConnections);
         } finally {
             $this->log->createMappingVersionFromDungeonOrRaidEnd();
         }
@@ -108,6 +112,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     private function createMappingVersionFromCombatLog(
         string          $filePath,
         callable        $extractDungeonCallable,
+        GameVersion     $gameVersion,
         ?MappingVersion $mappingVersion = null,
         bool            $enemyConnections = false,
     ): ?MappingVersion {
@@ -118,6 +123,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $now = Carbon::now();
         $mappingVersion ??= MappingVersion::create([
             'dungeon_id'            => -1,
+            'game_version_id'       => $gameVersion->id,
             'version'               => 1,
             'enemy_forces_required' => 0,
             'timer_max_seconds'     => 0,
@@ -205,10 +211,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         $mappingVersion->setRelation('dungeon', $dungeon);
                     }
 
-                    $npcs = Npc::whereIn('dungeon_id', [
-                        -1,
-                        $dungeon->id,
-                    ])->get()->keyBy('id');
+                    $dungeon->load('npcs');
+                    $npcs = $dungeon->npcs->keyBy('id');
 
                     // Assign the default floor in case there's no MapChange event coming (Ara-Kara is one such?)
                     /** @var Floor $currentFloor */

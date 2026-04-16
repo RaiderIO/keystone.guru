@@ -24,8 +24,8 @@ return [
         'gameversion'         => [
             'update'  => '',
             'dungeon' => [
-                'heatmaps' => '',
-                'explore'  => '',
+                'heatmap' => '',
+                'explore' => '',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +69,8 @@ return [
                 'mdt_diff'                  => '',
                 'view_mdt_string_contents'  => '',
                 'import_npcs'               => '',
+                'spells_missing_info'       => '',
+                'npcs_missing_display_id'   => '',
             ],
             'releases'     => '',
             'new_release'  => '',

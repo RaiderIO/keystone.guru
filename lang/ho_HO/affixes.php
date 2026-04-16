@@ -158,6 +158,10 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
+    'lindormis_guidance' => [
+        'name'        => 'Hodor',
+        'description' => 'Hodor',
+    ],
     'seasonal_index_preset' => 'Hodor',
 
 ];

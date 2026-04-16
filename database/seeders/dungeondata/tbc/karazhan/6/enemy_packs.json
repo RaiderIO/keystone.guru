@@ -1,0 +1,62 @@
+[
+    {
+        "id": 20934,
+        "mapping_version_id": 707,
+        "floor_id": 438,
+        "group": 89,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-89.3849,\"lng\":149.6756},{\"lat\":-93.4211,\"lng\":151.021},{\"lat\":-93.1268,\"lng\":155.6458},{\"lat\":-88.3759,\"lng\":154.0482}]"
+    },
+    {
+        "id": 20935,
+        "mapping_version_id": 707,
+        "floor_id": 438,
+        "group": 90,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-38.5541,\"lng\":127.8129},{\"lat\":-41.8335,\"lng\":127.4345},{\"lat\":-43.0948,\"lng\":134.9183},{\"lat\":-40.5301,\"lng\":135.2546}]"
+    },
+    {
+        "id": 20936,
+        "mapping_version_id": 707,
+        "floor_id": 438,
+        "group": 91,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-49.8639,\"lng\":154.1323},{\"lat\":-57.3476,\"lng\":156.9912},{\"lat\":-55.6659,\"lng\":160.8593},{\"lat\":-48.8548,\"lng\":156.5708}]"
+    },
+    {
+        "id": 20937,
+        "mapping_version_id": 707,
+        "floor_id": 438,
+        "group": 92,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-78.2434,\"lng\":150.8108},{\"lat\":-80.6819,\"lng\":152.4926},{\"lat\":-77.4445,\"lng\":158.0423},{\"lat\":-75.2162,\"lng\":154.5948}]"
+    },
+    {
+        "id": 20938,
+        "mapping_version_id": 707,
+        "floor_id": 438,
+        "group": 93,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-83.9193,\"lng\":122.2631},{\"lat\":-87.2407,\"lng\":122.3052},{\"lat\":-88.6702,\"lng\":130.3355},{\"lat\":-84.4658,\"lng\":129.7049}]"
+    }
+]

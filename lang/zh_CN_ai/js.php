@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => '名称',
     'enemy_forces_label'                              => '敌方部队',
     'enemy_display_type_label'                        => '敌人显示类型',
@@ -160,6 +161,7 @@ return [
     'updated_patreon_benefits_successfully_label'                    => 'Patreon 福利更新成功',
     'mapping_version_readonly_label'                                 => '此映射版本为只读',
     'mapping_version_upgrade_label'                                  => '您的路径有一个新的映射版本可用。',
+    'algethar_academy_dragonflight_warning_label'                    => '您正在查看巨龙时代版的阿尔盖萨学院。确保使用午夜版以与 MDT 兼容。',
     'upgrade_label'                                                  => '升级',
     'classification_label'                                           => '分类',
     'edit_label'                                                     => '编辑',
@@ -436,6 +438,7 @@ return [
     'overpull_select_enemy_label'                                          => '选择一个或多个您多拉的敌人',
     'overpull_selection_finished_label'                                    => '完成',
     'filters'                                                              => '过滤器',
+    'filter_no_filters_active'                                             => '没有激活的筛选器',
     'filter_enemy_forces_header_incomplete'                                => '敌方部队：未完成',
     'filter_enemy_forces_header_complete'                                  => '敌方部队：完成',
     'filter_image_select_affixes_header'                                   => '词缀：:number 已选择',
@@ -462,6 +465,8 @@ return [
     'filter_input_date_from_header'                                        => '起始日期：:value',
     'filter_input_date_to_header'                                          => '结束日期：:value',
     'filter_input_duration_header'                                         => '持续时间：:value 分钟',
+    'filter_input_included_enemies_header'                                 => '包含的敌人：:value',
+    'filter_input_excluded_enemies_header'                                 => '排除的敌人：:value',
     'specialization_select'                                                => '选择专精...',
     'class_select'                                                         => '类别...',
     'race_select'                                                          => '选择种族...',
@@ -476,11 +481,7 @@ return [
     'error_loading_data_label'                                             => '加载数据错误 - 请重试',
     'run_count_label'                                                      => '显示来自 :count 次运行的数据',
     'refresh_thumbnails_label'                                             => '刷新缩略图',
-    'algethar_academy_dragonflight_warning_label'                          => '您正在查看巨龙时代版的阿尔盖萨学院。确保使用午夜版以与 MDT 兼容。',
-    'filter_input_excluded_enemies_header'                                 => '排除的敌人：:value',
-    'filter_input_included_enemies_header'                                 => '包含的敌人：:value',
-    'filter_no_filters_active'                                             => '没有激活的筛选器',
-    'no_search_results_label'                                              => '未找到搜索结果',
     'search_results_label'                                                 => '搜索结果',
-]
-;
+    'no_search_results_label'                                              => '未找到搜索结果',
+
+];

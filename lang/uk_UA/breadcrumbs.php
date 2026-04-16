@@ -24,8 +24,8 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmaps' => 'Тепломапи',
-                'explore'  => 'Огляд',
+                'heatmap' => '',
+                'explore' => 'Огляд',
             ],
         ],
         'dungeonroute' => [
@@ -69,6 +69,8 @@ return [
                 'mdt_diff'                  => 'Різниця з MDT',
                 'view_mdt_string_contents'  => 'Показати вміст рядка MDT',
                 'import_npcs'               => 'Імпортувати НІПів',
+                'spells_missing_info'       => '',
+                'npcs_missing_display_id'   => '',
             ],
             'releases'     => 'Версії',
             'new_release'  => 'Нова версія',

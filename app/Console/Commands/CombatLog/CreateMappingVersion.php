@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
 
@@ -12,7 +13,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:createmappingversion {filePath} {--enemyConnections} {--mappingVersion=} ';
+    protected $signature = 'combatlog:createmappingversion {filePath} {gameVersion} {--enemyConnections} {--mappingVersion=} ';
 
     /**
      * The console command description.
@@ -27,9 +28,11 @@ class CreateMappingVersion extends BaseCombatLogCommand
     public function handle(CombatLogMappingVersionServiceInterface $combatLogMappingVersionService): int
     {
         $filePath         = $this->argument('filePath');
+        $gameVersionKey   = $this->argument('gameVersion');
         $mappingVersionId = $this->option('mappingVersion');
         $enemyConnections = (bool)$this->option('enemyConnections');
 
+        $gameVersion    = GameVersion::firstWhere('key', $gameVersionKey);
         $mappingVersion = null;
         if (is_numeric($mappingVersionId)) {
             $mappingVersion = MappingVersion::findOrFail($mappingVersionId);
@@ -40,6 +43,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
             fn(string $filePath) => $this->createMappingVersionFromCombatLog(
                 $combatLogMappingVersionService,
                 $filePath,
+                $gameVersion,
                 $mappingVersion,
                 $enemyConnections,
             ),
@@ -49,6 +53,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
     private function createMappingVersionFromCombatLog(
         CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
         string                                  $filePath,
+        GameVersion                             $gameVersion,
         ?MappingVersion                         $mappingVersion = null,
         bool                                    $enemyConnections = false,
     ): int {
@@ -62,7 +67,12 @@ class CreateMappingVersion extends BaseCombatLogCommand
 
         $hasMappingVersion = $mappingVersion !== null;
 
-        $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid($filePath, $mappingVersion, $enemyConnections);
+        $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid(
+            $filePath,
+            $gameVersion,
+            $mappingVersion,
+            $enemyConnections,
+        );
 
         if ($mappingVersion === null) {
             $this->error(sprintf('Failed to create mapping version: %s', $filePath));

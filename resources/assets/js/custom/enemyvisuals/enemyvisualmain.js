@@ -22,6 +22,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             let state = getState();
+            let mapContext = state.getMapContext();
             if (state.hasEnemyAggressivenessBorder()) {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
@@ -38,9 +39,26 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 if (this.enemyvisual.enemy.enemyPatrol instanceof EnemyPatrol) {
                     mainVisualInnerStyle.push(`border-color: ${this.enemyvisual.enemy.enemyPatrol.polyline.color};`)
                 }
+            } else if (this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
+                let requiredNpcs = mapContext.getDungeonDifficulty() === DUNGEON_DIFFICULTY_10_MAN ?
+                    mapContext.getDungeonSpeedrunRequiredNpcs10Man() :
+                    mapContext.getDungeonSpeedrunRequiredNpcs25Man();
+
+                for (let index in requiredNpcs) {
+                    let requiredNpc = requiredNpcs[index];
+                    if ([
+                        requiredNpc.npc_id,
+                        requiredNpc.npc2_id,
+                        requiredNpc.npc3_id,
+                        requiredNpc.npc4_id,
+                        requiredNpc.npc5_id,
+                    ].includes(this.enemyvisual.enemy.npc_id)) {
+                        mainVisualInnerClasses.push('required_npc');
+                        break;
+                    }
+                }
             }
 
-            let mapContext = state.getMapContext();
             let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
             if (this.enemyvisual.enemy.isShrouded() && hasShroudedAffix) {
                 mainVisualInnerClasses.push('shrouded');

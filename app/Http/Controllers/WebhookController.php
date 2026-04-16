@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Webhook\WowheadSpellRequest;
+use App\Http\Requests\Webhook\WowheadPageRequest;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
@@ -149,13 +150,13 @@ class WebhookController extends Controller
         return response()->noContent();
     }
 
-    public function wowheadSpellOptions(Request $request): Response
+    public function wowheadOptions(Request $request): Response
     {
         return response()->noContent();
     }
 
     public function wowheadSpell(
-        WowheadSpellRequest     $request,
+        WowheadPageRequest      $request,
         WowheadServiceInterface $wowheadService,
     ): string {
         if (!config('app.debug', true)) {
@@ -188,5 +189,34 @@ class WebhookController extends Controller
         $spell->update($spellAttributes);
 
         return json_encode($spellDataResult->toArray());
+    }
+
+    public function wowheadNpc(
+        WowheadPageRequest      $request,
+        WowheadServiceInterface $wowheadService,
+    ): string {
+        if (!config('app.debug', true)) {
+            abort(StatusCode::FORBIDDEN);
+        }
+
+        $validated = $request->validated();
+
+        preg_match('/npc=(\d+)/', $validated['url'], $matches);
+
+        $npcId = $matches[1] ?? null;
+
+        $npc = Npc::findOrFail($npcId);
+
+        $displayId = $wowheadService->getNpcDisplayId(
+            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+            $npc,
+            $validated['html'],
+        );
+
+        $npc->update([
+            'display_id' => $displayId,
+        ]);
+
+        return json_encode($npc->toArray());
     }
 }

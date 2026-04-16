@@ -19,6 +19,7 @@ class AuraAppliedBuilder implements SuffixBuilderInterface
     {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC,
+            CombatLogVersion::CLASSIC_TBC_2_5_5,
             CombatLogVersion::CLASSIC_SOD_1_15_5,
             CombatLogVersion::CLASSIC_SOD_1_15_6,
             CombatLogVersion::CLASSIC_SOD_1_15_7,

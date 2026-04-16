@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'MDT 字符串解析失败。您是否真的粘贴了 MDT 字符串？',
@@ -207,5 +208,5 @@ return [
             'error_granting_all_benefits'       => '尝试授予所有福利时发生错误。',
         ],
     ],
-]
-;
+
+];

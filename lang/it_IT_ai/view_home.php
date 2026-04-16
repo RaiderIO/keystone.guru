@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported' => 'Sembra che stai navigando su Keystone.guru utilizzando Internet Explorer. Purtroppo Internet Explorer non è
 un browser supportato. Davvero, non funziona affatto. Per favore prova con Google Chrome, Mozilla
 Firefox o Microsoft Edge.',
@@ -48,10 +49,9 @@ e accessibili a tutti i membri del tuo team M+. Puoi sempre esportare i percorsi
         ],
         'featured' => [
             'title'               => 'In evidenza',
-            'heatmaps_alt'        => '',
+            'revamped_search_alt' => 'Ricerca rinnovata',
             'weekly_route_alt'    => 'Percorso settimanale Raider.IO',
             'patreon_alt'         => 'Patreon',
-            'revamped_search_alt' => 'Ricerca rinnovata',
         ],
         'about' => [
             'title'               => 'Informazioni',
@@ -59,4 +59,5 @@ e accessibili a tutti i membri del tuo team M+. Puoi sempre esportare i percorsi
             'tagline_description' => 'Keystone.guru è uno strumento di pianificazione dei percorsi Mythic+ di World of Warcraft (WoW), che ti consente di costruire, gestire e scoprire percorsi popolari. Con il pieno supporto di importazione ed esportazione MDT, i tuoi percorsi ti seguiranno ovunque. Esplora i preferiti della comunità e utilizza le heatmap alimentate da Raider.IO per vedere come i giocatori affrontano effettivamente ogni dungeon.',
         ],
     ],
+
 ];

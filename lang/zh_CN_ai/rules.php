@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'create_route_npc_chronological_rule' => [
         'message' => 'Npc(s) :npcs 的 diedAt 必须在 engagedAt 之前！',
     ],
@@ -16,4 +17,5 @@ return [
     'map_icon_type_role_check_rule' => [
         'message' => '该地图图标类型不适用于您的访问级别。',
     ],
+
 ];

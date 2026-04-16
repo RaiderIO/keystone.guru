@@ -41,10 +41,10 @@ return [
             ],
         ],
         'featured' => [
-            'title'            => '',
-            'heatmaps_alt'     => '',
-            'weekly_route_alt' => '',
-            'patreon_alt'      => '',
+            'title'               => '',
+            'revamped_search_alt' => '',
+            'weekly_route_alt'    => '',
+            'patreon_alt'         => '',
         ],
         'about' => [
             'title'               => '',
