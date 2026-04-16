@@ -144,13 +144,17 @@ class ProfileController extends Controller
                     // Only if we could find a route
                     if ($context instanceof Model) {
                         // Check if the user is in this channel..
-                        foreach ($reverbHttpApiService->getChannelUsers($name) as $reverbChannelUser) {
-                            if ((int)$reverbChannelUser['id'] === $user->id) {
-                                // Broadcast that channel that our user's color has changed
-                                broadcast(new UserColorChangedEvent($context, $user));
+                        try {
+                            foreach ($reverbHttpApiService->getChannelUsers($name) as $reverbChannelUser) {
+                                if ((int)$reverbChannelUser['id'] === $user->id) {
+                                    // Broadcast that channel that our user's color has changed
+                                    broadcast(new UserColorChangedEvent($context, $user));
 
-                                break;
+                                    break;
+                                }
                             }
+                        } catch (Exception $exception) {
+                            Log::warning(sprintf('Unable to find users for channel %s', $name));
                         }
                     }
                 }
