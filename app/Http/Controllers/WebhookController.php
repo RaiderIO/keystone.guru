@@ -169,10 +169,15 @@ class WebhookController extends Controller
 
         $spellId = $matches[1] ?? null;
 
-        $spell = Spell::findOrFail($spellId);
+        $retail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
+        $spell = Spell::find($spellId) ?? Spell::create([
+            'id'              => $spellId,
+            'game_version_id' => $retail->id,
+        ]);
 
         $spellDataResult = $wowheadService->getSpellData(
-            $gameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+            $gameVersion = $retail,
             $spellId,
             $validated['html'],
         );

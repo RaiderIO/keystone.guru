@@ -23,6 +23,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
 use App\Models\User;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -709,10 +710,15 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function spellsShowMissingSpellInfo(): View
-    {
+    public function spellsShowMissingSpellInfo(
+        SpellRepositoryInterface $spellRepository,
+    ): View {
+        $missingSpells = $spellRepository->getMissingSpellIds();
+
         return view('admin.tools.spells.showmissingspellinfo', [
-            'spells' => Spell::whereNull('fetched_data_at')->get(),
+            'spells' => Spell::whereNull('fetched_data_at')->get()->merge(
+                collect($missingSpells)->map(fn($spellId) => new Spell(['id' => $spellId, 'name' => 'Unknown'])),
+            ),
         ]);
     }
 
