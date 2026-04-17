@@ -71,6 +71,8 @@ return [
                 'import_npcs'               => 'Import NPCs',
                 'spells_missing_info'       => 'Spells missing info',
                 'npcs_missing_display_id'   => 'NPCs missing display ID',
+                'thumbnails_regenerate'     => 'Regenerate thumbnails',
+                'combat_log_regenerate'     => 'Regenerate ARC routes',
             ],
             'releases'     => 'Releases',
             'new_release'  => 'New release',

@@ -83,6 +83,10 @@ class CombatLogRouteRequest extends APIFormRequest
                 'nullable',
                 'numeric',
             ],
+            'settings.publicKey' => [
+                'nullable',
+                'string',
+            ],
             'roster.numMembers' => [
                 'nullable',
                 'int',

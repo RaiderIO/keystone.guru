@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Database\DungeonRoute;
 
+use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
@@ -202,6 +203,27 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->get();
     }
 
+    public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute
+    {
+        if ($publicKey === null) {
+            return null;
+        }
+
+        $dungeonRoute = DungeonRoute::where('public_key', $publicKey)->first();
+        if ($dungeonRoute === null) {
+            return null;
+        }
+
+        // ChallengeModeRun lives in a different connection, so we need to use the model directly
+        $challengeModeRun = ChallengeModeRun::where('dungeon_route_id', $dungeonRoute->id)->first();
+
+        if ($challengeModeRun === null) {
+            return null;
+        }
+
+        return $dungeonRoute;
+    }
+
     private function findRoutesBuilder(
         DungeonRouteSearchFilter $filter,
         ?DungeonRoute            $excludeDungeonRoute = null,
@@ -311,7 +333,10 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             $npcId = (int)$parts[0];
             $mdtId = (int)$parts[1];
 
-            $result[] = [$npcId, $mdtId];
+            $result[] = [
+                $npcId,
+                $mdtId,
+            ];
         }
 
         return $result;

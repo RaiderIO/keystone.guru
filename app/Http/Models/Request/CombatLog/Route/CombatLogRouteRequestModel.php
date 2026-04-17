@@ -79,8 +79,14 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
+        // Fully get rid of it when regenerating. It won't be available for a sec but that's okay
+        $existingDungeonRoute = $dungeonRouteRepository->findCombatLogRouteByPublicKey($this->settings->publicKey);
+        if ($existingDungeonRoute !== null) {
+            $existingDungeonRoute->delete();
+        }
+
         $dungeonRoute = $dungeonRouteRepository->create([
-            'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
+            'public_key'         => $existingDungeonRoute?->public_key ?? $dungeonRouteRepository->generateRandomPublicKey(),
             'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,

@@ -16,7 +16,7 @@ $showPublish   = $show['publish'] ?? true;
 $modalId       ??= null;
 
 $shareLink      = route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]);
-$shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute]);
+$shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute]);
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/share', 'options' => [

@@ -42,4 +42,9 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         return collect();
     }
+
+    public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute
+    {
+        return null;
+    }
 }

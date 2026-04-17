@@ -317,6 +317,14 @@ Breadcrumbs::for('admin.tools.npcs.showmissingdisplayid', static function (Gener
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.npcs_missing_display_id'), route('admin.tools.npcs.showmissingdisplayid'));
 });
+Breadcrumbs::for('admin.tools.thumbnails.regenerate', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.thumbnails_regenerate'), route('admin.tools.thumbnails.regenerate.view'));
+});
+Breadcrumbs::for('admin.tools.combatlog.regenerate', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.combat_log_regenerate'), route('admin.tools.combatlog.regenerate.view'));
+});
 
 // Releases
 Breadcrumbs::for('admin.release.list', static function (Generator $trail) {

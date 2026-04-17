@@ -461,4 +461,9 @@ return [
     'mdt' => [
         'version' => 'v6.0.11',
     ],
+
+    'combat_log_route_regeneration' => [
+        'user'     => env('COMBAT_LOG_ROUTE_REGENERATION_USER'),
+        'password' => env('COMBAT_LOG_ROUTE_REGENERATION_PASSWORD'),
+    ],
 ];
