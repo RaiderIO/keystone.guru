@@ -19,7 +19,6 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
-use App\Models\CombatLog\EnemyPosition;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
@@ -432,7 +431,23 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
     private function saveChallengeModeRun(CombatLogRouteRequestModel $combatLogRoute, DungeonRoute $dungeonRoute): void
     {
-        // Insert a run
+        // The dungeon route ID was changed, so we need to update the challenge mode run
+        // but don't store this info twice, not necessary
+        if ($combatLogRoute->settings->publicKey !== null) {
+            /** @var ChallengeModeRunData|null $oldChallengeModeRunData */
+            $oldChallengeModeRunData = ChallengeModeRunData::with('challengeModeRun')
+                ->firstWhere('run_id', $combatLogRoute->metadata->runId);
+
+            if ($oldChallengeModeRunData !== null && $oldChallengeModeRunData->challengeModeRun !== null) {
+                $oldChallengeModeRunData->challengeModeRun->update([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                ]);
+
+                return;
+            }
+        }
+
+        // Insert a new run
         $now = Carbon::now();
 
         /** @var ChallengeModeRun $challengeModeRun */
@@ -445,51 +460,51 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             'created_at'       => $now,
         ]);
 
-        $floorByUiMapId = Floor::where('dungeon_id', $dungeonRoute->dungeon_id)
-            ->get()
-            ->keyBy('ui_map_id');
-
-        $invalidUiMapIds         = [];
-        $enemyPositionAttributes = [];
-        foreach ($combatLogRoute->npcs as $npc) {
-            /** @var Floor $floor */
-            $floor = $floorByUiMapId->get($npc->coord->uiMapId);
-
-            if ($floor === null) {
-                if (!in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
-                    $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
-                    $invalidUiMapIds[] = $npc->coord->uiMapId;
-                }
-
-                continue;
-            }
-
-            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                new IngameXY($npc->coord->x, $npc->coord->y, $floor),
-            );
-
-            $enemyPositionAttributes[] = array_merge([
-                'challenge_mode_run_id' => $challengeModeRun->id,
-                'floor_id'              => $floor->id,
-                'npc_id'                => $npc->npcId,
-                'guid'                  => $npc->getUniqueId(),
-                'created_at'            => $now,
-            ], $latLng->toArray());
-        }
-
-        if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
-            // Then we don't want duplicates - get rid of the challenge mode run
-            $challengeModeRun->update([
-                'duplicate' => 1,
-            ]);
-        }
-
         ChallengeModeRunData::create([
             'challenge_mode_run_id' => $challengeModeRun->id,
             'run_id'                => $combatLogRoute->metadata->runId,
             'correlation_id'        => correlationId(),
             'post_body'             => json_encode($combatLogRoute),
         ]);
+
+//        $floorByUiMapId = Floor::where('dungeon_id', $dungeonRoute->dungeon_id)
+//            ->get()
+//            ->keyBy('ui_map_id');
+
+//        $invalidUiMapIds         = [];
+//        $enemyPositionAttributes = [];
+//        foreach ($combatLogRoute->npcs as $npc) {
+//            /** @var Floor $floor */
+//            $floor = $floorByUiMapId->get($npc->coord->uiMapId);
+//
+//            if ($floor === null) {
+//                if (!in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
+//                    $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
+//                    $invalidUiMapIds[] = $npc->coord->uiMapId;
+//                }
+//
+//                continue;
+//            }
+//
+//            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+//                new IngameXY($npc->coord->x, $npc->coord->y, $floor),
+//            );
+//
+//            $enemyPositionAttributes[] = array_merge([
+//                'challenge_mode_run_id' => $challengeModeRun->id,
+//                'floor_id'              => $floor->id,
+//                'npc_id'                => $npc->npcId,
+//                'guid'                  => $npc->getUniqueId(),
+//                'created_at'            => $now,
+//            ], $latLng->toArray());
+//        }
+
+//        if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
+//            // Then we don't want duplicates - get rid of the challenge mode run
+//            $challengeModeRun->update([
+//                'duplicate' => 1,
+//            ]);
+//        }
     }
 
     private function generateMapIcons(
