@@ -10,10 +10,12 @@ class EnemyVisualManager extends Signalable {
         // The last time we checked moving the mouse and triggering mouse out/in events
         this._lastMouseMoveDistanceCheckTime = 0
         this._lastMapMoveDistanceCheckTime = 0;
-        // Keep track of some data between mouse and enemy for each enemy
-        this._enemyMouseMoveDistanceData = [];
         // Used for storing previous visibility states so we know when to refresh the enemy or not
         this._enemyVisibilityMap = [];
+        this._allEnemies = [];
+        this._visibleEnemies = [];
+        /** @type Enemy|null */
+        this._hoveredEnemy = null;
 
         // There is no mousemoveend function. Every time the mouse of moved a timeout is set for X MS to trigger the mouse
         // move function one last time to properly wrap everything up. If mouse of moved before the timeout, the timeout
@@ -25,15 +27,24 @@ class EnemyVisualManager extends Signalable {
         enemyMapObjectGroup.register(['object:add', 'save:success'], this, function (objectAddEvent) {
             /** @type Enemy addedEnemy */
             let addedEnemy = objectAddEvent.data.object;
-            if (addedEnemy.id > 0 && !self._enemyVisibilityMap.hasOwnProperty(addedEnemy.id)) {
+            let isMdt = (getState().getMdtMappingModeEnabled() && addedEnemy.is_mdt);
+            if ((addedEnemy.id > 0 || isMdt) && !self._enemyVisibilityMap.hasOwnProperty(addedEnemy.id)) {
                 self._enemyVisibilityMap[addedEnemy.id] = {
                     wasVisible: objectAddEvent.data.object.isVisibleOnScreen(),
                     lastRefreshedZoomLevel: parseInt(getState().getMapZoomLevel())
                 };
-                self._enemyMouseMoveDistanceData[addedEnemy.id] = {
-                    lastCheckTime: 0,
-                    lastDistanceSquared: 99999
-                };
+                self._allEnemies.push(addedEnemy);
+            }
+        });
+        enemyMapObjectGroup.register('object:remove', this, function (objectRemoveEvent) {
+            let removedEnemy = objectRemoveEvent.data.object;
+            let index = self._allEnemies.indexOf(removedEnemy);
+            if (index > -1) {
+                self._allEnemies.splice(index, 1);
+            }
+            index = self._visibleEnemies.indexOf(removedEnemy);
+            if (index > -1) {
+                self._visibleEnemies.splice(index, 1);
             }
         });
 
@@ -92,6 +103,8 @@ class EnemyVisualManager extends Signalable {
             self.map.leafletMap.on('movestart', self._onLeafletMapMoveStart.bind(self));
             self.map.leafletMap.on('move', self._onLeafletMapMove.bind(self));
             self.map.leafletMap.on('moveend', self._onLeafletMapMoveEnd.bind(self));
+
+            self._onLeafletMapMove();
         });
         this.map.register('map:beforerefresh', this, function () {
             self.map.leafletMap.off('mousemove', self._onLeafletMapMouseMove.bind(self));
@@ -111,15 +124,21 @@ class EnemyVisualManager extends Signalable {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
         let isMdtMappingModeEnabled = getState().getMdtMappingModeEnabled();
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-        for (let key in enemyMapObjectGroup.objects) {
-            let enemy = enemyMapObjectGroup.objects[key];
+        let bounds = this.map.leafletMap.getBounds();
+        this._visibleEnemies = [];
+
+        for (let i = 0; i < this._allEnemies.length; i++) {
+            let enemy = this._allEnemies[i];
 
             // Only refresh what we can see
             let isMdt = (isMdtMappingModeEnabled && enemy.is_mdt);
             if (enemy.id > 0 || isMdt) {
                 let shouldAlwaysRebuild = enemy.visual.shouldAlwaysRebuild();
-                if (shouldAlwaysRebuild || enemy.isVisibleOnScreen()) {
+                let isVisible = enemy.isVisibleOnScreen(bounds);
+                if (shouldAlwaysRebuild || isVisible) {
+                    if (isVisible) {
+                        this._visibleEnemies.push(enemy);
+                    }
                     // If we're mouse hovering the visual, just rebuild it entirely. There are a few things which need
                     // reworking to support a full refresh of the visual
                     if (shouldAlwaysRebuild || enemy.visual.isHighlighted() || isMdt) {
@@ -247,14 +266,43 @@ class EnemyVisualManager extends Signalable {
             // Once every 50 ms, calculation is expensive
             if (currTime - this._lastMouseMoveDistanceCheckTime > 50 || !organic) {
                 let mouseLayerPoint = this.map.leafletMap.mouseEventToLayerPoint(mouseMoveEvent.originalEvent);
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                for (let key in enemyMapObjectGroup.objects) {
-                    let enemy = enemyMapObjectGroup.objects[key];
 
-                    if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
-                        this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
-                            enemy.visual.checkMouseOver(mouseLayerPoint);
+                let hoveredEnemy = null;
+                let minDistance = 1000000;
+
+                let isMdtMappingModeEnabled = getState().getMdtMappingModeEnabled();
+                for (let i = 0; i < this._visibleEnemies.length; i++) {
+                    let enemy = this._visibleEnemies[i];
+                    let isMdt = (isMdtMappingModeEnabled && enemy.is_mdt);
+
+                    if (enemy.id > 0 || isMdt) {
+                        let distance = enemy.visual.checkMouseOver(mouseLayerPoint, false);
+                        if (distance < enemy.visual.cachedRadius * enemy.visual.cachedRadius) {
+                            if (distance < minDistance) {
+                                hoveredEnemy = enemy;
+                                minDistance = distance;
+                            }
+                        }
                     }
+                }
+
+                if (hoveredEnemy !== this._hoveredEnemy) {
+                    let oldManagerId = this._hoveredEnemy ? this._hoveredEnemy.visual._managedBy : -1;
+                    let newManagerId = hoveredEnemy ? (hoveredEnemy.visual.isHighlighted() ? hoveredEnemy.visual._managedBy : hoveredEnemy.id) : -1;
+
+                    if (oldManagerId !== newManagerId) {
+                        // We moved to a different pack or out of a pack
+                        // We need to find the old manager enemy to call _mouseOut on it
+                        let oldManager = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY).findMapObjectById(oldManagerId);
+                        if (oldManager) oldManager.visual._mouseOut();
+
+                        // And call _mouseOver on the new enemy
+                        if (hoveredEnemy) hoveredEnemy.visual._mouseOver();
+                    } else if (hoveredEnemy) {
+                        // Same manager (same pack), just update focus
+                        getState().setFocusedEnemy(hoveredEnemy);
+                    }
+                    this._hoveredEnemy = hoveredEnemy;
                 }
 
                 this._lastMouseMoveDistanceCheckTime = currTime;
@@ -288,26 +336,36 @@ class EnemyVisualManager extends Signalable {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
         let currentZoomLevel = parseInt(getState().getMapZoomLevel());
+        let isMdtMappingModeEnabled = getState().getMdtMappingModeEnabled();
 
         let currTime = (new Date()).getTime();
         // Once every 100 ms, calculation is expensive
         if (currTime - this._lastMapMoveDistanceCheckTime > 50) {
-            let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-            for (let key in enemyMapObjectGroup.objects) {
-                let enemy = enemyMapObjectGroup.objects[key];
+            let bounds = this.map.leafletMap.getBounds();
+            this._visibleEnemies = [];
 
-                if (enemy.id > 0) {
-                    let isVisible = enemy.isVisibleOnScreen();
+            for (let i = 0; i < this._allEnemies.length; i++) {
+                let enemy = this._allEnemies[i];
+                let isMdt = (isMdtMappingModeEnabled && enemy.is_mdt);
 
-                    // If panned into view AND we didn't already refresh the zoom earlier
-                    if (this._enemyVisibilityMap[enemy.id].wasVisible === false && isVisible &&
-                        this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel !== currentZoomLevel) {
-                        window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
-                        this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
+                if (enemy.id > 0 || isMdt) {
+                    let isVisible = enemy.isVisibleOnScreen(bounds);
+
+                    if (isVisible) {
+                        this._visibleEnemies.push(enemy);
+
+                        // If panned into view AND we didn't already refresh the zoom earlier
+                        if (enemy.id > 0 && this._enemyVisibilityMap[enemy.id].wasVisible === false &&
+                            this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel !== currentZoomLevel) {
+                            window.requestAnimationFrame(enemy.visual.refreshSize.bind(enemy.visual));
+                            this._enemyVisibilityMap[enemy.id].lastRefreshedZoomLevel = currentZoomLevel;
+                        }
                     }
 
                     // Write new visible state
-                    this._enemyVisibilityMap[enemy.id].wasVisible = isVisible;
+                    if (enemy.id > 0) {
+                        this._enemyVisibilityMap[enemy.id].wasVisible = isVisible;
+                    }
                 }
             }
 

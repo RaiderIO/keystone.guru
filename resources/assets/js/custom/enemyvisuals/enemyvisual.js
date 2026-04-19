@@ -113,15 +113,21 @@ class EnemyVisual extends Signalable {
             let packBuddies = this.enemy.getPackBuddies();
             packBuddies.push(this.enemy);
             $.each(packBuddies, function (index, enemy) {
-                if (enemy.visual !== null) {
+                if (enemy !== null && enemy.visual !== null) {
                     visuals.push(enemy.visual);
                 }
             });
 
             for (let i = 0; i < visuals.length; i++) {
-                visuals[i]._managedBy = this.enemy.id;
-                visuals[i]._highlighted = true;
-                visuals[i].setVisualType('enemy_forces', true);
+                let visual = visuals[i];
+                let wasHighlighted = visual.isHighlighted();
+
+                visual._managedBy = this.enemy.id;
+                visual._highlighted = true;
+
+                if (!wasHighlighted) {
+                    visual.setVisualType('enemy_forces', true);
+                }
             }
 
             getState().setFocusedEnemy(this.enemy);
@@ -628,22 +634,25 @@ class EnemyVisual extends Signalable {
     /**
      * Checks if we should be showing our mouse over state or not
      * @param mouseLayerPoint {L.Point}
+     * @param triggerEvents {Boolean}
      *
      * @return float Squared distance from the enemy to the mouse
      */
-    checkMouseOver(mouseLayerPoint) {
+    checkMouseOver(mouseLayerPoint, triggerEvents = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // Sensible default for distance (approx 75% of the full map distance)
         let result = 1000000;
 
-        if (this.cachedLayerPoint !== null && this._managedBy === this.enemy.id) {
+        if (this.cachedLayerPoint !== null) {
             result = getDistanceSquared([this.cachedLayerPoint.x, this.cachedLayerPoint.y], [mouseLayerPoint.x, mouseLayerPoint.y]);
 
-            if (result < this.cachedRadius * this.cachedRadius) {
-                this._mouseOver();
-            } else {
-                this._mouseOut();
+            if (triggerEvents && this._managedBy === this.enemy.id) {
+                if (result < this.cachedRadius * this.cachedRadius) {
+                    this._mouseOver();
+                } else {
+                    this._mouseOut();
+                }
             }
         }
 
