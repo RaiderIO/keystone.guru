@@ -246,19 +246,14 @@ class EnemyVisualManager extends Signalable {
 
             // Once every 50 ms, calculation is expensive
             if (currTime - this._lastMouseMoveDistanceCheckTime > 50 || !organic) {
+                let mouseLayerPoint = this.map.leafletMap.mouseEventToLayerPoint(mouseMoveEvent.originalEvent);
                 let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
                 for (let key in enemyMapObjectGroup.objects) {
                     let enemy = enemyMapObjectGroup.objects[key];
 
                     if (enemy.id > 0 && enemy.isVisibleOnScreen()) {
-                        let lastCheckData = this._enemyMouseMoveDistanceData[enemy.id];
-                        if (currTime - lastCheckData.lastCheckTime > 500 * (lastCheckData.lastDistanceSquared / 1000000)) {
-                            this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
-                                enemy.visual.checkMouseOver(mouseMoveEvent.originalEvent.pageX, mouseMoveEvent.originalEvent.pageY);
-
-                            // Direct manipulation
-                            this._enemyMouseMoveDistanceData[enemy.id].lastCheckTime = currTime;
-                        }
+                        this._enemyMouseMoveDistanceData[enemy.id].lastDistanceSquared =
+                            enemy.visual.checkMouseOver(mouseLayerPoint);
                     }
                 }
 
