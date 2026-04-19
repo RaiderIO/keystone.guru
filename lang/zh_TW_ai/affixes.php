@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'bolstering' => [
         'name'        => '增強',
         'description' => '當任何非首領敵人死亡時，其死亡呼喊會強化附近的盟友，使其最大生命值和傷害提高20%。',
@@ -162,4 +163,5 @@ return [
         'description' => '林多米指引玩家，使用時光之沙削弱選定的非首領敵人並防止玩家死亡減少剩餘時間。',
     ],
     'seasonal_index_preset' => '%s 預設 %d',
+
 ];

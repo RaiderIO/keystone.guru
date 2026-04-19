@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'general_changes'          => '一般變更',
     'route_changes'            => '路徑變更',
     'map_changes'              => '地圖變更',
@@ -14,4 +15,5 @@ return [
     'auto_route_changes'       => '自動路徑變更',
     'api_changes'              => 'API 變更',
     'heatmap_changes'          => '熱圖變更',
+
 ];

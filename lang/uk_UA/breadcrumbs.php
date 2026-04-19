@@ -71,6 +71,8 @@ return [
                 'import_npcs'               => 'Імпортувати НІПів',
                 'spells_missing_info'       => '',
                 'npcs_missing_display_id'   => '',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => 'Версії',
             'new_release'  => 'Нова версія',

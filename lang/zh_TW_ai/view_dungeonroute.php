@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover' => [
         'dungeon' => [
             'overview' => [
@@ -90,4 +91,5 @@ return [
         'linkpreview_default_description_sandbox' => '地城 %s 的臨時 M+ 路線。',
         'linkpreview_default_description_explore' => '探索 %s。',
     ],
+
 ];

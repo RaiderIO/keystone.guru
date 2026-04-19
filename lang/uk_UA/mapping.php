@@ -108,19 +108,19 @@ return [
         ],
         'midnight' => [
             'algeth_ar_academy' => [
-                'healing_taken_increased'   => '',
-                'versatility_increased'     => '',
-                'critical_strike_increased' => '',
-                'haste_increased'           => '',
-                'mastery_rating_increased'  => '',
-                'go_north'                  => '',
-                'go_south'                  => '',
+                'healing_taken_increased'   => '+10% отримуваного зцілення',
+                'versatility_increased'     => '+5% універсальності',
+                'critical_strike_increased' => '+5% крит. удару',
+                'haste_increased'           => '+5% швидкості',
+                'mastery_rating_increased'  => '+584 оч. майстерності',
+                'go_north'                  => 'Іти на північ',
+                'go_south'                  => 'Іти на південь',
             ],
             'maisara_caverns' => [
-                'hearty_vilebranch_stew' => '',
+                'hearty_vilebranch_stew' => 'Ситне рагу Злісної Гілки (Hearty Vilebranch Stew): з\'їжте порцію рагу, щоб збільшити самозцілення на 3% і зменшити отримувану шкоду від атак по площі на 3%. Ефект триває 30 хв.',
             ],
             'windrunner_spire' => [
-                'activates_after_killing_bosses' => '',
+                'activates_after_killing_bosses' => 'Телепорт до початкової розвилки активовується після вбивства першого будь-якого боса. Після другого вбивства портал перенесе вас на відповідний поверх вище.',
             ],
         ],
     ],

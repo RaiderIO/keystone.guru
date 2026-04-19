@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'edittabs' => [
         'details' => [
             'title' => '團隊詳情',
@@ -71,4 +72,5 @@ return [
         'title'  => '新團隊',
         'header' => '新團隊',
     ],
+
 ];

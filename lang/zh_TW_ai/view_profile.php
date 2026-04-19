@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'edit' => [
         'title'                                            => '個人資料',
         'profile'                                          => '個人資料',
@@ -77,4 +78,5 @@ return [
         'title'  => '%s 的路線',
         'header' => '%s 的路線',
     ],
+
 ];

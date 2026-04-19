@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'home' => [
         'front_page' => 'Keystone.guru',
         'affixes'    => 'Affixes',
@@ -70,6 +71,8 @@ return [
                 'import_npcs'               => 'Importer des PNJ',
                 'spells_missing_info'       => 'Sorts manquant d\'informations',
                 'npcs_missing_display_id'   => 'PNJs manquant d\'ID d\'affichage',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => 'Versions',
             'new_release'  => 'Nouvelle version',
@@ -118,4 +121,5 @@ return [
             ],
         ],
     ],
+
 ];

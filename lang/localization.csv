@@ -1,4 +1,4 @@
-group,key,en,de,es-ES,es-MX,fr,it,ko,pt-BR,ru,uk
+group,key,en-US,de-DE,es-ES,es-MX,fr-FR,it-IT,ko-KR,pt-BR,ru-RU,uk-UA
 affixes,bolstering.name,Bolstering,,,,,,,,,Bolstering
 affixes,bolstering.description,"When any non-boss enemy dies, its death cry empowers nearby allies, increasing their maximum health and damage by 20%.",,,,,,,,,"Коли помирає будь-який ворог, що не є босом, його передсмертний крик посилює союзників поблизу, збільшуючи їхнє максимальне здоров’я й шкоду на 20%."
 affixes,bursting.name,Bursting,,,,,,,,,Bursting
@@ -47,7 +47,7 @@ affixes,tormented.name,Tormented,,,,,,,,,Tormented
 affixes,tormented.description,"Servants of the Jailer can be found throughout the dungeon and grant powerful boons when defeated. If a servant is not dealt with, they empower the final boss.",,,,,,,,,"У підземеллі можна зустріти слуг Тюремника, які надають могутні дари після смерті. Якщо їх не вбити, слуги посилять останнього боса."
 affixes,unknown.name,Unknown,,,,,,,,,Невідомий
 affixes,unknown.description,The affixes for this week are not known yet.,,,,,,,,,Модифікатори цього тижня ще невідомі.
-affixes,infernal.name,Infernal,,,,,,,,,Infernal
+affixes,infernal.name,Infernal,,,,Infernal,,,,,Infernal
 affixes,infernal.description,Infernal Beacons can be found near some bosses. Activating a Beacon or engaging a nearby boss will trigger a Legion invasion.,,,,,,,,,Поблизу деяких босів розташовані пекельні маяки (Infernal Beacons). Активація маяка або бій з босом спричиняє вторгнення Легіону.
 affixes,encrypted.name,Encrypted,,,,,,,,,Encrypted
 affixes,encrypted.description,"Enemies throughout the dungeon possess relics of the First Ones. Destroy the relics to summon the First Ones' Automa and gain powerful bonuses, based on the order in which they were destroyed.",,,,,,,,,"Вороги в підземеллі володіють реліквіями Передвічних. Знищте реліквії, щоб прикликати автомів Передвічних і здобути могутні посилення залежно від порядку знищення."
@@ -175,24 +175,24 @@ characteristics,scare_beast,Scare Beast,,,,,,,,,Scare Beast
 characteristics,hibernate,Hibernate,,,,,,,,,Hibernate
 characteristics,turn_evil,Turn Evil,,,,,,,,,Turn Evil
 characteristics,mind_soothe,Mind Soothe,,,,,,,,,Mind Soothe
-classes,death_knight,Death Knight,,,,,,,,,Лицар смерті
-classes,demon_hunter,Demon Hunter,,,,,,,,,Мисливець на демонів
-classes,druid,Druid,,,,,,,,,Друїд
-classes,evoker,Evoker,,,,,,,,,Пробудник
-classes,hunter,Hunter,,,,,,,,,Мисливець
-classes,mage,Mage,,,,,,,,,Маг
-classes,monk,Monk,,,,,,,,,Монах
-classes,paladin,Paladin,,,,,,,,,Паладин
-classes,priest,Priest,,,,,,,,,Жрець
-classes,rogue,Rogue,,,,,,,,,Пройдисвіт
-classes,shaman,Shaman,,,,,,,,,Шаман
-classes,warlock,Warlock,,,,,,,,,Чорнокнижник
-classes,warrior,Warrior,,,,,,,,,Воїн
+classes,death_knight,Death Knight,,,,Chevalier de la Mort,,,,,Лицар смерті
+classes,demon_hunter,Demon Hunter,,,,Chasseur de Démons,,,,,Мисливець на демонів
+classes,druid,Druid,,,,Druide,,,,,Друїд
+classes,evoker,Evoker,,,,Évocateur,,,,,Пробудник
+classes,hunter,Hunter,,,,Chasseur,,,,,Мисливець
+classes,mage,Mage,,,,Mage,,,,,Маг
+classes,monk,Monk,,,,Moine,,,,,Монах
+classes,paladin,Paladin,,,,Paladin,,,,,Паладин
+classes,priest,Priest,,,,Prêtre,,,,,Жрець
+classes,rogue,Rogue,,,,Voleur,,,,,Пройдисвіт
+classes,shaman,Shaman,,,,Chaman,,,,,Шаман
+classes,warlock,Warlock,,,,Démoniste,,,,,Чорнокнижник
+classes,warrior,Warrior,,,,Guerrier,,,,,Воїн
 combatlogdatatypes,player_position,Player position,,,,,,,,,Розташування гравця
-combatlogdatatypes,enemy_position,Enemy position,,,,,,,,,Розташування ворога
+combatlogdatatypes,enemy_position,Enemy position,,,,Position de l'ennemi,,,,,Розташування ворога
 combatlogeventtypes,npc_death,Enemy death,,,,,,,,,Смерть ворога
 combatlogeventtypes,player_death,Player death,,,,,,,,,Смерть гравця
-combatlogeventtypes,player_spell,Bloodlust casts,,,,,,,,,Застосування Жаги крові
+combatlogeventtypes,player_spell,Bloodlust casts,,,,Lancement de Furie Sanguinaire,,,,,Застосування Жаги крові
 controller,admintools.error.mdt_string_parsing_failed,MDT string parsing failed. Did you really paste an MDT string?,,,,,,,,,Не вдалося проаналізувати рядок MDT. Ви справді вставили рядок з MDT?
 controller,admintools.error.mdt_string_format_not_recognized,The MDT string format was not recognized.,,,,,,,,,Не розпізнано формат рядка MDT.
 controller,admintools.error.cli_weakauras_parser_not_found,cli_weakauras_parser not installed.,,,,,,,,,Не встановлено cli_weakauras_parser.
@@ -363,7 +363,6 @@ gameversions,mop.name,Mists,,,,,,,,,Mists
 gameversions,mop.description,Mists of Pandaria,,,,,,,,,Mists of Pandaria
 gameversions,legion-remix.name,Legion Remix,,,,,,,,,Legion Remix
 gameversions,legion-remix.description,Legion Remix,,,,,,,,,Legion Remix
-html,selectpicker.none_selected_text,Nothing selected zzz,,,,,,,,,Не вибрано
 js,npc_name_label,Name,,,,,,,,,Ім'я
 js,enemy_forces_label,Enemy forces,,,,,,,,,Ворожі війська
 js,enemy_display_type_label,Enemy display type,,,,,,,,,Тип показу ворога
@@ -846,52 +845,6 @@ js,too_much_data_label,Too much runs found - please further refine your search,,
 js,error_loading_data_label,Error loading data - please try again,,,,,,,,,Помилка завантаження даних. Спробуйте знову
 js,run_count_label,Showing data from :count runs,,,,,,,,,Показано дані з :count забігів
 js,refresh_thumbnails_label,Refresh thumbnails,,,,,,,,,Оновити мініатюри
-leafletdraw,draw.toolbar.actions.title,Cancel drawing,,,,,,,,,Припинити малювати
-leafletdraw,draw.toolbar.actions.text,Cancel,,,,,,,,,Скасувати
-leafletdraw,draw.toolbar.finish.title,Finish drawing,,,,,,,,,Завершити малювати
-leafletdraw,draw.toolbar.finish.text,Finish,,,,,,,,,Завершити
-leafletdraw,draw.toolbar.undo.title,Delete last point drawn,,,,,,,,,Видалити останню намальовану точку
-leafletdraw,draw.toolbar.undo.text,Delete last point,,,,,,,,,Видалити останню точку
-leafletdraw,draw.toolbar.buttons.polyline,Draw a polyline,,,,,,,,,Намалювати ламану
-leafletdraw,draw.toolbar.buttons.polygon,Draw a polygon,,,,,,,,,Намалювати багатокутник
-leafletdraw,draw.toolbar.buttons.rectangle,Draw a rectangle,,,,,,,,,Намалювати прямокутник
-leafletdraw,draw.toolbar.buttons.circle,Draw a circle,,,,,,,,,Намалювати коло
-leafletdraw,draw.toolbar.buttons.marker,Draw a marker,,,,,,,,,Намалювати позначку
-leafletdraw,draw.toolbar.buttons.circlemarker,Draw a circlemarker,,,,,,,,,Намалювати коло
-leafletdraw,draw.handlers.circle.tooltip.start,Click and drag to draw circle.,,,,,,,,,"Клацніть і потягніть, щоб намалювати коло."
-leafletdraw,draw.handlers.circle.radius,Radius,,,,,,,,,Радіус
-leafletdraw,draw.handlers.circlemarker.tooltip.start,Click map to place circle marker.,,,,,,,,,"Клацніть, щоб розмістити коло."
-leafletdraw,draw.handlers.marker.tooltip.start,Click map to place marker.,,,,,,,,,"Клацніть на мапі, щоб розмістити позначку."
-leafletdraw,draw.handlers.polygon.tooltip.start,Click to start drawing shape.,,,,,,,,,"Клацніть, щоб почати малювати фігуру."
-leafletdraw,draw.handlers.polygon.tooltip.cont,Click to continue drawing shape.,,,,,,,,,"Клацніть, щоб продовжити малювати фігуру."
-leafletdraw,draw.handlers.polygon.tooltip.end,Click first point to close this shape.,,,,,,,,,"Клацніть на першу точку, щоб закрити фігуру."
-leafletdraw,draw.handlers.polyline.error,<strong>Error:</strong> shape edges cannot cross!,,,,,,,,,<strong>Помилка:</strong> краї фігури не можуть перетинатися!
-leafletdraw,draw.handlers.polyline.tooltip.start,Click to start drawing line.,,,,,,,,,"Клацніть, щоб почати малювати лінію."
-leafletdraw,draw.handlers.polyline.tooltip.cont,Click to continue drawing line.,,,,,,,,,"Клацніть, щоб продовжити малювати лінію."
-leafletdraw,draw.handlers.polyline.tooltip.end,Click last point to finish line.,,,,,,,,,"Клацніть на останню точку, щоб завершити лінію."
-leafletdraw,draw.handlers.rectangle.tooltip.start,Click and drag to draw rectangle.,,,,,,,,,"Клацніть і потягніть, щоб намалювати прямокутник."
-leafletdraw,draw.handlers.simpleshape.tooltip.end,Release mouse to finish drawing.,,,,,,,,,"Відпустіть кнопку миші, щоб завершити малювати."
-leafletdraw,draw.handlers.path.tooltip.start,Click to start drawing path.,,,,,,,,,"Клацніть, щоб почати малювати шлях."
-leafletdraw,draw.handlers.path.tooltip.cont,Click to continue drawing path.,,,,,,,,,"Клацніть, щоб продовжити малювати шлях."
-leafletdraw,draw.handlers.path.tooltip.end,Click the 'Finish' button on the toolbar to complete your path.,,,,,,,,,"Клацніть «Завершити» на панелі, щоб закінчити шлях."
-leafletdraw,draw.handlers.brushline.tooltip.start,Click to start drawing line.,,,,,,,,,"Клацніть, щоб почати малювати лінію."
-leafletdraw,draw.handlers.brushline.tooltip.cont,Click and drag to continue drawing line.,,,,,,,,,"Клацніть і потягніть, щоб продовжити малювати лінію. "
-leafletdraw,draw.handlers.brushline.tooltip.end,"Continue clicking/dragging, when done, press the 'Finish' button on the toolbar to complete your line.",,,,,,,,,"Продовжуйте клацати й тягнути вказівник. Натисніть «Завершити» на панелі інструментів, щоб закінчити лінію."
-leafletdraw,edit.toolbar.actions.save.title,Save changes,,,,,,,,,Зберегти зміни
-leafletdraw,edit.toolbar.actions.save.text,Save,,,,,,,,,Зберегти
-leafletdraw,edit.toolbar.actions.cancel.title,"Cancel editing, discards all changes",,,,,,,,,Зупинити редагування (скасовує всі зміни)
-leafletdraw,edit.toolbar.actions.cancel.text,Cancel,,,,,,,,,Скасувати
-leafletdraw,edit.toolbar.actions.clearAll.title,Clear all layers,,,,,,,,,Очистити всі шари
-leafletdraw,edit.toolbar.actions.clearAll.text,Clear All,,,,,,,,,Очистити все
-leafletdraw,edit.toolbar.buttons.edit,Edit layers,,,,,,,,,Змінити шари
-leafletdraw,edit.toolbar.buttons.editDisabled,No layers to edit,,,,,,,,,Немає шарів для редагування
-leafletdraw,edit.toolbar.buttons.remove,Delete layers,,,,,,,,,Видалити шари
-leafletdraw,edit.toolbar.buttons.removeDisabled,No layers to delete,,,,,,,,,Немає шарів для видалення
-leafletdraw,edit.handlers.edit.tooltip.text,Drag handles or markers to edit features.,,,,,,,,,"Тягніть елементи або позначки, щоб змінити об'єкти."
-leafletdraw,edit.handlers.edit.tooltip.subtext,Click cancel to undo changes.,,,,,,,,,"Клацніть «Скасувати», щоб скасувати зміни."
-leafletdraw,edit.handlers.remove.tooltip.text,Click on a feature to remove.,,,,,,,,,"Клацніть на об'єкт, щоб видалити його."
-mail,Custom Password Reset Email,Reset Password Notification,,,,,,,,,Сповіщення про скидання пароля
-mail,Reset Password Notification,Reset Password Notification,,,,,,,,,Сповіщення про скидання пароля
 mapicontypes,unknown,Unknown,,,,,,,,,Невідомо
 mapicontypes,comment,Comment,,,,,,,,,Коментар
 mapicontypes,door,Door,,,,,,,,,Двері
@@ -999,8 +952,8 @@ mapicontypes,gate_of_the_setting_sun_brazier,Signal Brazier,,,,,,,,,Сигнал
 mapicontypes,eco_dome_al_dani_shatter_conduit,Shatter Conduit,,,,,,,,,Shatter Conduit
 mapicontypes,eco_dome_al_dani_disruption_grenade,Disruption Grenade,,,,,,,,,Disruption Grenade
 mapicontypes,eco_dome_al_dani_kareshi_surge,K'areshi Surge,,,,,,,,,K'areshi Surge
-mapicontypes,seat_of_the_triumvirate_void_infusion,Void Infusion,,,,,,,,,
-mapicontypes,maisara_caverns_hearty_vilebranch_stew,Hearty Vilebranch Stew,,,,,,,,,
+mapicontypes,seat_of_the_triumvirate_void_infusion,Void Infusion,,,,,,,,,Void Infusion
+mapicontypes,maisara_caverns_hearty_vilebranch_stew,Hearty Vilebranch Stew,,,,,,,,,Hearty Vilebranch Stew
 mapping,map_icons.mop.gate_of_the_setting_sun.krik_thik_spawn_note,Keystone.guru: Krik'thik Conscripts only spawn after defeating Commander Ri'mok,,,,,,,,,Keystone.guru: Новобранці Крік'тіка (Krik'thik Conscript) з'являються лише після подолання Командувача Рі'мока (Commander Ri'mok).
 mapping,map_icons.mop.mogu_shan_palace.door_unlocks_after_trial_of_the_king,Door unlocks after defeating the Trial of the King,,,,,,,,,Двері розблоковуються після Королівського випробування (Trial of the King)
 mapping,map_icons.legion.court_of_stars.unlocks_after_patrol_captain_gerdo,Unlocks after killing Patrol Captain Gerdo,,,,,,,,,Розблоковується після подолання капітана патруля Ґердо (Patrol Captain Gerdo)
@@ -1066,15 +1019,15 @@ mapping,map_icons.sl.tazavesh_streets_of_wonder.bazaar_event_wave_two,Bazaar Eve
 mapping,map_icons.sl.tazavesh_streets_of_wonder.bazaar_event_wave_three,Bazaar Event: Wave 3,,,,,,,,,Подія на ринку: хвиля 3
 mapping,map_icons.tww.the_stonevault.imbued_iron_energy,"Warriors, Dwarves, Blacksmiths (25): Energy trapped inside the Imbued Iron Bar releases, increasing the Versatility of all players within 20 yards by 10% for 10 mins.",,,,,,,,,"Випускає на волю енергію із зарядженого залізного зливка, збільшуючи універсальність усіх гравців у радіусі 20 метрів на 10% на 10 хв (доступно для воїнів, дворфів і ковалів з рівнем навички не менше 25)."
 mapping,map_icons.tww.priory_of_the_sacred_flame.miniboss_explanation,"Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.",,,,,,,,,"Keystone.guru: Мінібоси не дають очок ворожих військ, коли помирають під час бою з босом. Однак якщо їх прикликає інший мінібос, очки зараховуються."
-mapping,map_icons.midnight.algeth_ar_academy.healing_taken_increased,+10% Healing Taken,,,,,,,,,
-mapping,map_icons.midnight.algeth_ar_academy.versatility_increased,+5% Versatility,,,,,,,,,
-mapping,map_icons.midnight.algeth_ar_academy.critical_strike_increased,+5% Critical Strike,,,,,,,,,
-mapping,map_icons.midnight.algeth_ar_academy.haste_increased,+5% Haste,,,,,,,,,
-mapping,map_icons.midnight.algeth_ar_academy.mastery_rating_increased,+584 Mastery Rating,,,,,,,,,
-mapping,map_icons.midnight.algeth_ar_academy.go_north,Go north,,,,,,,,,
-mapping,map_icons.midnight.algeth_ar_academy.go_south,Go south,,,,,,,,,
-mapping,map_icons.midnight.maisara_caverns.hearty_vilebranch_stew,"Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.",,,,,,,,,
-mapping,map_icons.midnight.windrunner_spire.activates_after_killing_bosses,One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.,,,,,,,,,
+mapping,map_icons.midnight.algeth_ar_academy.healing_taken_increased,+10% Healing Taken,,,,,,,,,+10% отримуваного зцілення
+mapping,map_icons.midnight.algeth_ar_academy.versatility_increased,+5% Versatility,,,,,,,,,+5% універсальності
+mapping,map_icons.midnight.algeth_ar_academy.critical_strike_increased,+5% Critical Strike,,,,,,,,,+5% крит. удару
+mapping,map_icons.midnight.algeth_ar_academy.haste_increased,+5% Haste,,,,,,,,,+5% швидкості
+mapping,map_icons.midnight.algeth_ar_academy.mastery_rating_increased,+584 Mastery Rating,,,,,,,,,+584 оч. майстерності
+mapping,map_icons.midnight.algeth_ar_academy.go_north,Go north,,,,,,,,,Іти на північ
+mapping,map_icons.midnight.algeth_ar_academy.go_south,Go south,,,,,,,,,Іти на південь
+mapping,map_icons.midnight.maisara_caverns.hearty_vilebranch_stew,"Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.",,,,,,,,,"Ситне рагу Злісної Гілки (Hearty Vilebranch Stew): з'їжте порцію рагу, щоб збільшити самозцілення на 3% і зменшити отримувану шкоду від атак по площі на 3%. Ефект триває 30 хв."
+mapping,map_icons.midnight.windrunner_spire.activates_after_killing_bosses,One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.,,,,,,,,,Телепорт до початкової розвилки активовується після вбивства першого будь-якого боса. Після другого вбивства портал перенесе вас на відповідний поверх вище.
 models,dungeonroute.title_temporary_route,:dungeonName Temporary Route,,,,,,,,,Тимчасовий маршрут :dungeonName
 models,dungeonroute.title_clone,:routeTitle (clone),,,,,,,,,:routeTitle (копія)
 models,dungeonroute.subtitle_clone_of,Clone of :routeLink,,,,,,,,,Копія :routeLink
@@ -2123,4 +2076,51 @@ view_team,list.table_header_members,Members,,,,,,,,,Учасники
 view_team,list.table_header_routes,Routes,,,,,,,,,Маршрути
 view_team,new.title,New team,,,,,,,,,Нова команда
 view_team,new.header,New team,,,,,,,,,Нова команда
+mail,Custom Password Reset Email,Reset Password Notification,,,,,,,,,Сповіщення про скидання пароля
+mail,Reset Password Notification,Reset Password Notification,,,,,,,,,Сповіщення про скидання пароля
+html,selectpicker.none_selected_text,Nothing selected zzz,,,,,,,,,Не вибрано
+leafletdraw,draw.toolbar.actions.title,Cancel drawing,,,,,,,,,Припинити малювати
+leafletdraw,draw.toolbar.actions.text,Cancel,,,,,,,,,Скасувати
+leafletdraw,draw.toolbar.finish.title,Finish drawing,,,,,,,,,Завершити малювати
+leafletdraw,draw.toolbar.finish.text,Finish,,,,,,,,,Завершити
+leafletdraw,draw.toolbar.undo.title,Delete last point drawn,,,,,,,,,Видалити останню намальовану точку
+leafletdraw,draw.toolbar.undo.text,Delete last point,,,,,,,,,Видалити останню точку
+leafletdraw,draw.toolbar.buttons.polyline,Draw a polyline,,,,,,,,,Намалювати ламану
+leafletdraw,draw.toolbar.buttons.polygon,Draw a polygon,,,,,,,,,Намалювати багатокутник
+leafletdraw,draw.toolbar.buttons.rectangle,Draw a rectangle,,,,,,,,,Намалювати прямокутник
+leafletdraw,draw.toolbar.buttons.circle,Draw a circle,,,,,,,,,Намалювати коло
+leafletdraw,draw.toolbar.buttons.marker,Draw a marker,,,,,,,,,Намалювати позначку
+leafletdraw,draw.toolbar.buttons.circlemarker,Draw a circlemarker,,,,,,,,,Намалювати коло
+leafletdraw,draw.handlers.circle.tooltip.start,Click and drag to draw circle.,,,,,,,,,"Клацніть і потягніть, щоб намалювати коло."
+leafletdraw,draw.handlers.circle.radius,Radius,,,,,,,,,Радіус
+leafletdraw,draw.handlers.circlemarker.tooltip.start,Click map to place circle marker.,,,,,,,,,"Клацніть, щоб розмістити коло."
+leafletdraw,draw.handlers.marker.tooltip.start,Click map to place marker.,,,,,,,,,"Клацніть на мапі, щоб розмістити позначку."
+leafletdraw,draw.handlers.polygon.tooltip.start,Click to start drawing shape.,,,,,,,,,"Клацніть, щоб почати малювати фігуру."
+leafletdraw,draw.handlers.polygon.tooltip.cont,Click to continue drawing shape.,,,,,,,,,"Клацніть, щоб продовжити малювати фігуру."
+leafletdraw,draw.handlers.polygon.tooltip.end,Click first point to close this shape.,,,,,,,,,"Клацніть на першу точку, щоб закрити фігуру."
+leafletdraw,draw.handlers.polyline.error,<strong>Error:</strong> shape edges cannot cross!,,,,,,,,,<strong>Помилка:</strong> краї фігури не можуть перетинатися!
+leafletdraw,draw.handlers.polyline.tooltip.start,Click to start drawing line.,,,,,,,,,"Клацніть, щоб почати малювати лінію."
+leafletdraw,draw.handlers.polyline.tooltip.cont,Click to continue drawing line.,,,,,,,,,"Клацніть, щоб продовжити малювати лінію."
+leafletdraw,draw.handlers.polyline.tooltip.end,Click last point to finish line.,,,,,,,,,"Клацніть на останню точку, щоб завершити лінію."
+leafletdraw,draw.handlers.rectangle.tooltip.start,Click and drag to draw rectangle.,,,,,,,,,"Клацніть і потягніть, щоб намалювати прямокутник."
+leafletdraw,draw.handlers.simpleshape.tooltip.end,Release mouse to finish drawing.,,,,,,,,,"Відпустіть кнопку миші, щоб завершити малювати."
+leafletdraw,draw.handlers.path.tooltip.start,Click to start drawing path.,,,,,,,,,"Клацніть, щоб почати малювати шлях."
+leafletdraw,draw.handlers.path.tooltip.cont,Click to continue drawing path.,,,,,,,,,"Клацніть, щоб продовжити малювати шлях."
+leafletdraw,draw.handlers.path.tooltip.end,Click the 'Finish' button on the toolbar to complete your path.,,,,,,,,,"Клацніть «Завершити» на панелі, щоб закінчити шлях."
+leafletdraw,draw.handlers.brushline.tooltip.start,Click to start drawing line.,,,,,,,,,"Клацніть, щоб почати малювати лінію."
+leafletdraw,draw.handlers.brushline.tooltip.cont,Click and drag to continue drawing line.,,,,,,,,,"Клацніть і потягніть, щоб продовжити малювати лінію. "
+leafletdraw,draw.handlers.brushline.tooltip.end,"Continue clicking/dragging, when done, press the 'Finish' button on the toolbar to complete your line.",,,,,,,,,"Продовжуйте клацати й тягнути вказівник. Натисніть «Завершити» на панелі інструментів, щоб закінчити лінію."
+leafletdraw,edit.toolbar.actions.save.title,Save changes,,,,,,,,,Зберегти зміни
+leafletdraw,edit.toolbar.actions.save.text,Save,,,,,,,,,Зберегти
+leafletdraw,edit.toolbar.actions.cancel.title,"Cancel editing, discards all changes",,,,,,,,,Зупинити редагування (скасовує всі зміни)
+leafletdraw,edit.toolbar.actions.cancel.text,Cancel,,,,,,,,,Скасувати
+leafletdraw,edit.toolbar.actions.clearAll.title,Clear all layers,,,,,,,,,Очистити всі шари
+leafletdraw,edit.toolbar.actions.clearAll.text,Clear All,,,,,,,,,Очистити все
+leafletdraw,edit.toolbar.buttons.edit,Edit layers,,,,,,,,,Змінити шари
+leafletdraw,edit.toolbar.buttons.editDisabled,No layers to edit,,,,,,,,,Немає шарів для редагування
+leafletdraw,edit.toolbar.buttons.remove,Delete layers,,,,,,,,,Видалити шари
+leafletdraw,edit.toolbar.buttons.removeDisabled,No layers to delete,,,,,,,,,Немає шарів для видалення
+leafletdraw,edit.handlers.edit.tooltip.text,Drag handles or markers to edit features.,,,,,,,,,"Тягніть елементи або позначки, щоб змінити об'єкти."
+leafletdraw,edit.handlers.edit.tooltip.subtext,Click cancel to undo changes.,,,,,,,,,"Клацніть «Скасувати», щоб скасувати зміни."
+leafletdraw,edit.handlers.remove.tooltip.text,Click on a feature to remove.,,,,,,,,,"Клацніть на об'єкт, щоб видалити його."
 view_vendor,language.flags.contribute_translations,Contribute translations,,,,,,,,,Долучитися до перекладу

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'home' => [
         'front_page' => 'Keystone.guru',
         'affixes'    => 'Afixos',
@@ -70,6 +71,8 @@ return [
                 'import_npcs'               => 'Importar NPCs',
                 'spells_missing_info'       => 'Feitiços sem informações',
                 'npcs_missing_display_id'   => 'NPCs sem ID de exibição',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => 'Lançamentos',
             'new_release'  => 'Novo lançamento',
@@ -118,4 +121,5 @@ return [
             ],
         ],
     ],
+
 ];

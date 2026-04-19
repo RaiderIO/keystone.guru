@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'ie_not_supported'                             => '看來您正在使用 Internet Explorer 瀏覽 Keystone.guru。不幸的是，Internet Explorer 不被支持。真的，它完全不工作。請嘗試使用 Google Chrome、Mozilla Firefox 或 Microsoft Edge。',
     'tagline'                                      => 'M+ 路線輕鬆製作',
     'tagline_description'                          => '與您的團隊一起在線協作規劃路線，或發現適合您的遊戲風格和技能水平的路線。Keystone.guru 是管理和分享您的 M+ 路線的唯一地方。',
@@ -51,4 +52,5 @@ return [
             'tagline_description' => 'Keystone.guru 是一個《魔獸世界》(WoW) 的 Mythic+ 路線規劃工具，允許您建立、管理和發現熱門路線。支持完整的 MDT 導入和導出，您的路線將隨您而行。探索社區最愛，使用 Raider.IO 提供的熱圖查看玩家實際挑戰各個地下城的方式。',
         ],
     ],
+
 ];

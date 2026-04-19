@@ -71,6 +71,8 @@ return [
                 'import_npcs'               => '',
                 'spells_missing_info'       => '',
                 'npcs_missing_display_id'   => '',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => '',
             'new_release'  => '',
