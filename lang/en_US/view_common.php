@@ -331,10 +331,6 @@ return [
                     'your_rating'              => 'Your rating',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => 'Enemy info',
-                'report_an_issue' => 'Report an issue',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => 'Map settings',
                 'enabled'                => 'Enabled',
@@ -469,12 +465,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => 'Create route',
+            'create_temporary_route' => 'Create temporary route',
+            'import_from_mdt'        => 'Import from MDT',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => 'Route removed',
                 'description'  => 'Your route has been removed and can no longer be viewed/edited. This can happen if your route was a temporary route and it has been automatically cleaned up or you deleted the route in a different browser tab.',
                 'back_to_home' => 'Back to home',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => 'Report an issue',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +497,6 @@ return [
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
                 'submit'                 => 'Submit',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => 'Create route',
-            'create_temporary_route' => 'Create temporary route',
-            'import_from_mdt'        => 'Import from MDT',
         ],
         'legal' => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',

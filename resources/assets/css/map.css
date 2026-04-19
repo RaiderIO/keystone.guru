@@ -572,21 +572,6 @@ html, body, #map, #app, .wrapper {
     font-size: 1rem;
 }
 
-@media (min-width: 1200px) {
-    #enemy_info_container {
-        margin: 0.5rem !important;
-    }
-}
-
-#enemy_info_container {
-    width: 300px;
-    margin: 0 !important;
-    z-index: 100000;
-}
-
-#enemy_info_container .card {
-    border-radius: 0 !important;
-}
 
 #attribution_container {
     width: 300px;

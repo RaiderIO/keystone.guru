@@ -1,8 +1,8 @@
-## Test execution
+## Command execution
 
 This project must never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
 
-Always run Laravel and test commands inside Docker.
+Always run Laravel, test commands and any other file system commands inside Docker.
 
 Use these commands only:
 
@@ -14,3 +14,12 @@ Never use these commands on the host machine, always prefix with `docker compose
 - `vendor/bin/phpunit`
 - `vendor/bin/pest`
 - `php ...`
+
+Do not run Powershell Commands on the host machine. Use Linux commands in Docker only.
+
+
+## Project details
+The project is run in Docker. All files should have LF line endings.
+
+## Localization
+Only ever edit localization files in the `resources/lang/en_US` directory. All other languages are handled externally.

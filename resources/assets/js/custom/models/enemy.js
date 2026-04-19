@@ -779,11 +779,13 @@ class Enemy extends VersionableMapObject {
         if (this.layer !== null) {
             let text;
             if (this.npc !== null) {
-                let group = this.getPackGroup();
-                text = this.npc.name;
-                if (group !== null) {
-                    text += ` (G ${group})`;
-                }
+                let visualData = this.getVisualData();
+                let template = Handlebars.templates['enemy_tooltip_template'];
+
+                text = template($.extend({}, visualData, {
+                    name: lang.get(this.npc.name),
+                    right_click_to_open_details: lang.get('js.right_click_to_open_details')
+                }));
             } else {
                 text = lang.get('js.no_npc_found_label');
             }
@@ -993,6 +995,11 @@ class Enemy extends VersionableMapObject {
             } else {
                 self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
+        });
+
+        this.layer.on('contextmenu', function (contextMenuEvent) {
+            L.DomEvent.preventDefault(contextMenuEvent);
+            self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
         });
     }
 

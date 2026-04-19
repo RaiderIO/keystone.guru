@@ -107,13 +107,23 @@ class CommonMapsMap extends InlineCode {
                 refreshTooltips($('#view_dungeonroute_affixes .select_icon'));
             });
 
-            // Enemy info should be set on mouseover
-            getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
+            // Enemy info should be set on right click
+            let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let registerEnemyContextMenuFn = function (addEvent) {
+                addEvent.data.object.register('enemy:contextmenu', self, self._onEnemyContextMenu.bind(self));
+            };
+            enemyMapObjectGroup.register('object:add', this, registerEnemyContextMenuFn);
+
+            // Register it for any enemies that were already added
+            for (let index in enemyMapObjectGroup.objects) {
+                if (enemyMapObjectGroup.objects.hasOwnProperty(index)) {
+                    registerEnemyContextMenuFn({data: {object: enemyMapObjectGroup.objects[index]}});
+                }
+            }
 
             $('#userreport_enemy_modal_submit').unbind('click').bind('click', this._submitEnemyUserReport.bind(this));
 
             this._dungeonMap.leafletMap.on('move', function () {
-                $('#enemy_info_container').hide();
             });
 
             // Live sessions
@@ -491,33 +501,37 @@ class CommonMapsMap extends InlineCode {
 
 
     /**
-     * Called when the focused enemy was changed
-     * @param focusedEnemyChangedEvent
+     * Called when the enemy context menu was triggered
+     * @param enemyContextMenuEvent
      * @private
      */
-    _onFocusedEnemyChanged(focusedEnemyChangedEvent) {
-        let focusedEnemy = focusedEnemyChangedEvent.data.focusedenemy;
-        let isNull = focusedEnemy === null;
-        // Show/hide based on being set or not
-        // $('#enemy_info_container').toggle(!isNull);
-        if (!isNull) {
-            let visualData = focusedEnemy.getVisualData();
-            if (visualData !== null) {
-                $('#enemy_info_container').show().find('.card-title').html(lang.get(focusedEnemy.npc.name));
+    _onEnemyContextMenu(enemyContextMenuEvent) {
+        let enemy = enemyContextMenuEvent.context;
+        let visualData = enemy.getVisualData();
 
-                // Update the focused enemy in the sidebar
-                let template = Handlebars.templates['map_sidebar_enemy_info_template'];
-
-                $('#enemy_info_key_value_container').html(
-                    template(visualData)
+        if (visualData !== null) {
+            let $title = $('#enemy_details_modal_title_text').html(lang.get(enemy.npc.name));
+            if (getState().isMapAdmin()) {
+                $title.empty().append(
+                    $('<a />').attr('href', `/admin/npc/${enemy.npc.id}`).text(lang.get(enemy.npc.name))
                 );
-
-                refreshTooltips($('#enemy_info_container [data-toggle="tooltip"]'));
-                $('#enemy_report_enemy_id').val(focusedEnemy.id);
             }
+
+            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+            $('#enemy_details_modal_body').html(template(visualData));
+
+            refreshTooltips($('#enemy_details_modal_body [data-toggle="tooltip"]'));
+
+            // Reset report form
+            $('#enemy_report_enemy_id').val(enemy.id);
+            $('#enemy_report_username').val('');
+            $('#enemy_report_message').val('');
+            $('#enemy_report_contact_ok').prop('checked', false);
+            $('#enemy_report_collapse').collapse('hide');
+
+            $('#enemy_details_modal').modal('show');
         }
     }
-
 
     /**
      *
@@ -541,7 +555,7 @@ class CommonMapsMap extends InlineCode {
                 $('#userreport_enemy_modal_saving').show();
             },
             success: function () {
-                $('#userreport_enemy_modal').modal('hide');
+                $('#enemy_report_collapse').collapse('hide');
                 showSuccessNotification(lang.get('js.user_report_enemy_success'));
             },
             complete: function () {
@@ -845,7 +859,11 @@ class CommonMapsMap extends InlineCode {
     cleanup() {
         super.cleanup();
 
-        getState().unregister('focusedenemy:changed', this);
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let index in enemyMapObjectGroup.objects) {
+            enemyMapObjectGroup.objects[index].unregister('enemy:contextmenu', this);
+        }
+
         getState().unregister('snackbar:add', this);
         getState().unregister('snackbar:remove', this);
     }

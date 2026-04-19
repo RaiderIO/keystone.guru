@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property int    $id
  * @property int    $model_id
- * @property int    $model_class
+ * @property string $model_class
  * @property int    $user_id
  * @property string $username    For anonymous users
  * @property string $category
@@ -29,6 +29,18 @@ use Illuminate\Support\Carbon;
 class UserReport extends Model
 {
     use HasGenericModelRelation;
+
+    protected $fillable = [
+        'id',
+        'model_id',
+        'model_class',
+        'user_id',
+        'username',
+        'category',
+        'message',
+        'contact_ok',
+        'status',
+    ];
 
     public function user(): BelongsTo
     {

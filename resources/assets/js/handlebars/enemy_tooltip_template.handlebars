@@ -1,0 +1,30 @@
+<div class="enemy_tooltip">
+    <div class="row no-gutters">
+        <div class="col font-weight-bold">
+            {{name}}
+        </div>
+    </div>
+    {{#each info}}
+        <div class="row no-gutters">
+            <div class="col-7 pr-1">
+                {{key}}:
+            </div>
+            <div class="col-5">
+                {{#ifCond value '===' 1}}
+                    <span class="text-success"><i class="fas fa-check-circle"></i></span>
+                {{else}}
+                    {{#ifCond value '===' 0}}
+                        <span class="text-danger"><i class="fas fa-times-circle"></i></span>
+                    {{else}}
+                        {{{value}}}
+                    {{/ifCond}}
+                {{/ifCond}}
+            </div>
+        </div>
+    {{/each}}
+    <div class="row no-gutters mt-1">
+        <div class="col-12 italic">
+            {{right_click_to_open_details}}
+        </div>
+    </div>
+</div>
