@@ -5,7 +5,7 @@ return [
     'discover' => [
         'dungeon' => [
             'overview' => [
-                'weekly_route'               => '',
+                'weekly_route'               => 'Тижневий маршрут Raider.IO',
                 'popular'                    => 'Поширені маршрути',
                 'popular_by_current_affixes' => 'Поширені маршрути за поточними модифікаторами',
                 'popular_by_next_affixes'    => 'Поширені маршрути за наступними модифікаторами',
@@ -41,7 +41,7 @@ return [
         ],
     ],
     'livesession' => [
-        'title' => '',
+        'title' => 'Презентація «:title»',
         'view'  => [
             'any' => 'Будь-яке',
         ],

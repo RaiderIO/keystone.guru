@@ -77,10 +77,12 @@ affixes,challengers_peril.name,Challenger's Peril,,,,,,,,,Challenger's Peril
 affixes,challengers_peril.description,"The timer is increased by 90 seconds, but dying subtracts 15 seconds from time remaining.",,,,,,,,,"Час збільшується на 90 секунд, але смерть віднімає 15 секунд."
 affixes,xalataths_bargain_pulsar.name,Xal'atath's Bargain: Pulsar,,,,,,,,,Xal'atath's Bargain: Pulsar
 affixes,xalataths_bargain_pulsar.description,"While in combat, Xal'atath summons pulsars that orbit players.",,,,,,,,,"У бою Зал'атат прикликає пульсари, що кружляють навколо гравців."
+affixes,lindormis_guidance.name,Lindormi's Guidance,,,,,,,,,Lindormi's Guidance
+affixes,lindormis_guidance.description,"Lindormi guides players, weakening select non-boss enemies with Temporal Sands and preventing player deaths from reducing time remaining.",,,,,,,,,"Ліндормі направляє гравців, послаблюючи деяких ворогів, що не є босами, ефектом «Часових пісків». Смерті гравців більше не скорочують доступний час на проходження ключа."
 affixes,seasonal_index_preset,%s preset %d,,,,,,,,,%s набір %d
 auth,failed,These credentials do not match our records.,,,,,,,,,Уведені дані не збігаються з нашими записами.
 auth,throttle,Too many login attempts. Please try again in :seconds seconds.,,,,,,,,,Забагато спроб входу. Спробуйте знову через :seconds сек.
-breadcrumbs,home.keystone_guru,Keystone.guru,,,,,,,,,Keystone.guru
+breadcrumbs,home.front_page,Keystone.guru,,,,,,,,,Keystone.guru
 breadcrumbs,home.affixes,Affixes,,,,,,,,,Модифікатори
 breadcrumbs,home.about,About,,,,,,,,,Про нас
 breadcrumbs,home.credits,Credits,,,,,,,,,Подяки
@@ -93,7 +95,7 @@ breadcrumbs,home.routes,Routes,,,,,,,,,Маршрути
 breadcrumbs,home.routes_expansion,:expansion routes,,,,,,,,,Маршрути :expansion
 breadcrumbs,home.routes_game_version,:gameVersion routes,,,,,,,,,Маршрути :gameVersion
 breadcrumbs,home.gameversion.update,:gameVersion,,,,,,,,,:gameVersion
-breadcrumbs,home.gameversion.dungeon.heatmaps,Heatmaps,,,,,,,,,Тепломапи
+breadcrumbs,home.gameversion.dungeon.heatmap,Heatmap,,,,,,,,,Тепломапа
 breadcrumbs,home.gameversion.dungeon.explore,Explore,,,,,,,,,Огляд
 breadcrumbs,home.dungeonroute.new,New route,,,,,,,,,Новий маршрут
 breadcrumbs,home.dungeonroutes.search,Search,,,,,,,,,Пошук
@@ -126,6 +128,10 @@ breadcrumbs,home.admin.tools.select_exception,Select exception,,,,,,,,,Вибр�
 breadcrumbs,home.admin.tools.mdt_diff,MDT diff,,,,,,,,,Різниця з MDT
 breadcrumbs,home.admin.tools.view_mdt_string_contents,View MDT string contents,,,,,,,,,Показати вміст рядка MDT
 breadcrumbs,home.admin.tools.import_npcs,Import NPCs,,,,,,,,,Імпортувати НІПів
+breadcrumbs,home.admin.tools.spells_missing_info,Spells missing info,,,,,,,,,Відсутні дані заклять
+breadcrumbs,home.admin.tools.npcs_missing_display_id,NPCs missing display ID,,,,,,,,,Відсутні ID для показу НІПів
+breadcrumbs,home.admin.tools.thumbnails_regenerate,Regenerate thumbnails,,,,,,,,,Оновити мініатюри
+breadcrumbs,home.admin.tools.combat_log_regenerate,Regenerate ARC routes,,,,,,,,,Оновити маршрути ARC
 breadcrumbs,home.admin.releases,Releases,,,,,,,,,Версії
 breadcrumbs,home.admin.new_release,New release,,,,,,,,,Нова версія
 breadcrumbs,home.admin.edit_release,Edit release,,,,,,,,,Змінити версію
@@ -208,6 +214,7 @@ controller,admintools.error.mdt_mismatched_enemy_type,"NPC %s has mismatched ene
 controller,admintools.error.mdt_invalid_category,Invalid category,,,,,,,,,Неправильна категорія
 controller,admintools.flash.message_banner_set_successfully,Message banner set successfully,,,,,,,,,Банер повідомлення успішно встановлено
 controller,admintools.flash.thumbnail_regenerate_result,Dispatched :success jobs for :total routes. :failed failed.,,,,,,,,,Надіслано :success завдань для :total маршруту(-ів). Невдалих — :failed.
+controller,admintools.flash.combatlog_route_regenerate_result,Dispatched :count jobs,,,,,,,,,Надіслано :count завдань
 controller,admintools.flash.caches_dropped_successfully,Caches dropped successfully,,,,,,,,,Кеш успішно очищено
 controller,admintools.flash.releases_exported,Releases exported,,,,,,,,,Версії експортовано
 controller,admintools.flash.exception,Exception thrown in admin panel,,,,,,,,, У панелі адміністратора сталася халепа
@@ -241,8 +248,8 @@ controller,dungeonroutediscover.dungeon.this_week_affixes,%s this week,,,,,,,,,%
 controller,dungeonroutediscover.dungeon.next_week_affixes,%s next week,,,,,,,,,%s наступного тижня
 controller,dungeonroutediscover.dungeon.new,%s new routes,,,,,,,,,Нові маршрути %s
 controller,dungeonspeedrunrequirednpcs.no_linked_npc,No linked NPC,,,,,,,,,Немає пов'язаних НІПів
-controller,dungeonspeedrunrequirednpcs.flash.npc_added_successfully,Successfully added NPC,,,,,,,,,НІПа успішно додано
-controller,dungeonspeedrunrequirednpcs.flash.npc_deleted_successfully,Successfully removed NPC,,,,,,,,,НІПа успішно прибрано
+controller,dungeonspeedrunrequirednpcs.flash.npc_added_successfully,Successfully added required speedrun NPC,,,,,,,,,НІПа успішно додано
+controller,dungeonspeedrunrequirednpcs.flash.npc_deleted_successfully,Successfully removed required speedrun NPC,,,,,,,,,НІПа успішно прибрано
 controller,expansion.flash.unable_to_save_expansion,Unable to save expansion,,,,,,,,,Не вдалося зберегти розширення
 controller,expansion.flash.expansion_updated,Expansion updated,,,,,,,,,Розширення оновлено
 controller,expansion.flash.expansion_created,Expansion created,,,,,,,,,Розширення створено
@@ -520,6 +527,7 @@ js,dungeonroute_refresh_thumbnail_success,Thumbnail refresh queued successfully,
 js,updated_patreon_benefits_successfully_label,Patreon benefits updated successfully,,,,,,,,,Бонуси Patreon успішно оновлено
 js,mapping_version_readonly_label,This mapping version is read-only,,,,,,,,,Ця версія мапи доступна лише для перегляду.
 js,mapping_version_upgrade_label,A new mapping version is available for your route.,,,,,,,,,Доступна нова версія мапи для вашого маршруту.
+js,algethar_academy_dragonflight_warning_label,You are viewing the Dragonflight version of Algeth'ar Academy. Ensure you use the Midnight version for compatibility with MDT.,,,,,,,,,"Ви переглядаєте версію підземелля, яка була доступна в розширенні Dragonflight. Упевніться, що використовуєте версію Midnight для сумісності з MDT."
 js,upgrade_label,Upgrade,,,,,,,,,Оновити
 js,classification_label,Classification,,,,,,,,,Класифікація
 js,edit_label,Edit,,,,,,,,,Змінити
@@ -805,6 +813,7 @@ js,echo_refollow_user_stop_label,Stop,,,,,,,,,Перестати
 js,overpull_select_enemy_label,Select one or more enemies that you overpulled,,,,,,,,,Виберіть одного або кількох надлишкових ворогів
 js,overpull_selection_finished_label,Finished,,,,,,,,,Завершити
 js,filters,Filters,,,,,,,,,Фільтри
+js,filter_no_filters_active,No filters active,,,,,,,,,Немає фільтрів
 js,filter_enemy_forces_header_incomplete,Enemy forces: incomplete,,,,,,,,,Ворожі війська: незавершено
 js,filter_enemy_forces_header_complete,Enemy forces: complete,,,,,,,,,Ворожі війська: завершено
 js,filter_image_select_affixes_header,Affixes: :number selected,,,,,,,,,Модифікаторів: :numbers
@@ -831,6 +840,8 @@ js,filter_input_date_header,Date: :value,,,,,,,,,Дата: :value
 js,filter_input_date_from_header,From date: :value,,,,,,,,,Від: :value
 js,filter_input_date_to_header,To date: :value,,,,,,,,,До: :value
 js,filter_input_duration_header,Duration: :value min,,,,,,,,,Тривалість: :value хв
+js,filter_input_included_enemies_header,Included enemies: :value,,,,,,,,,Враховані вороги: :value
+js,filter_input_excluded_enemies_header,Excluded enemies: :value,,,,,,,,,Ігноровані вороги: :value
 js,specialization_select,Specialization...,,,,,,,,,Спеціалізація...
 js,class_select,Class...,,,,,,,,,Клас...
 js,race_select,Race...,,,,,,,,,Раса...
@@ -845,6 +856,8 @@ js,too_much_data_label,Too much runs found - please further refine your search,,
 js,error_loading_data_label,Error loading data - please try again,,,,,,,,,Помилка завантаження даних. Спробуйте знову
 js,run_count_label,Showing data from :count runs,,,,,,,,,Показано дані з :count забігів
 js,refresh_thumbnails_label,Refresh thumbnails,,,,,,,,,Оновити мініатюри
+js,search_results_label,Search results,,,,,,,,,Результати пошуку
+js,no_search_results_label,No search results found,,,,,,,,,Нічого не знайдено
 mapicontypes,unknown,Unknown,,,,,,,,,Невідомо
 mapicontypes,comment,Comment,,,,,,,,,Коментар
 mapicontypes,door,Door,,,,,,,,,Двері
@@ -1179,7 +1192,7 @@ specializations,death_knight.frost,Frost,,,,,,,,,Лід
 specializations,death_knight.unholy,Unholy,,,,,,,,,Нечестивість
 specializations,demon_hunter.havoc,Havoc,,,,,,,,,Хаос
 specializations,demon_hunter.vengeance,Vengeance,,,,,,,,,Помста
-specializations,demon_hunter.devourer,Devourer,,,,,,,,,
+specializations,demon_hunter.devourer,Devourer,,,,,,,,,Пожирач
 specializations,druid.balance,Balance,,,,,,,,,Баланс
 specializations,druid.feral,Feral,,,,,,,,,Хижак
 specializations,druid.guardian,Guardian,,,,,,,,,Захисник
@@ -1510,6 +1523,13 @@ view_common,layout.nav.user.logout,Logout,,,,,,,,,Вийти
 view_common,layout.nav.uploadlogs.upload_logs,Upload logs to improve Keystone.guru,,,,,,,,,"Завантажувати журнали, щоб покращити Keystone.guru"
 view_common,maps.controls.draw.admin,Admin,,,,,,,,,Адмін
 view_common,maps.controls.draw.view_this_route,View,,,,,,,,,Переглянути
+view_common,maps.controls.dungeonroutesearch.description,Select enemies on the map to include or exclude them from search results.,,,,,,,,,"Виберіть на мапі ворогів, яких бажаєте врахувати чи проігнорувати під час пошуку."
+view_common,maps.controls.dungeonroutesearch.settings_title,Map settings,,,,,,,,,Налаштування мапи
+view_common,maps.controls.dungeonroutesearch.enabled,Enabled,,,,,,,,,Увімкнено
+view_common,maps.controls.dungeonroutesearch.disabled,Disabled,,,,,,,,,Вимкнено
+view_common,maps.controls.dungeonroutesearch.key_level,Key level,,,,,,,,,Рівень ключа
+view_common,maps.controls.dungeonroutesearch.title,Title,,,,,,,,,Назва
+view_common,maps.controls.dungeonroutesearch.username,Username,,,,,,,,,Ім'я користувача
 view_common,maps.controls.elements.dungeonrouteinfo.timer,Timer,,,,,,,,,Час
 view_common,maps.controls.elements.dungeonrouteinfo.timer_title,"+2: %s, +3: %s",,,,,,,,,"+2: %s, +3: %s"
 view_common,maps.controls.elements.dungeonrouteinfo.group_setup,Group setup,,,,,,,,,Склад групи
@@ -1590,8 +1610,6 @@ view_common,maps.controls.header.edit_route_admin_settings,Admin settings,,,,,,,
 view_common,maps.controls.header.simulate_route,Simulate,,,,,,,,,Симуляція
 view_common,maps.controls.header.edit_route_settings,Route settings,,,,,,,,,Налаштування маршруту
 view_common,maps.controls.header.edit_mapping_version,Edit mapping version,,,,,,,,,Змінити версію мапи
-view_common,maps.controls.header.admin_header_title,%s (mapping version %d),,,,,,,,,%s (версія мапи: %d)
-view_common,maps.controls.header.explore_header_title,Explore :dungeon,,,,,,,,,Огляд :dungeon
 view_common,maps.controls.header.share,Share,,,,,,,,,Поділитися
 view_common,maps.controls.header.start_live_session,Start live session,,,,,,,,,Презентація
 view_common,maps.controls.header.start_live_session_paragraph_1,Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user's map movements by selecting the option when clicking their icon/initials in the top header.,,,,,,,,,"Коли розпочнете проходити маршрут у грі, можна ввімкнути презентацію, під час якої Keystone.guru допомагатиме із завершенням ключа. Ви також можете слідувати за іншим гравцем на мапі, натиснувши на його значок або ініціали у верхній панелі."
@@ -1698,7 +1716,7 @@ view_common,modal.share.mdt_string,MDT String,,,,,,,,,Рядок MDT
 view_common,modal.share.loading,Loading...,,,,,,,,,Завантаження...
 view_common,modal.share.copy_to_clipboard,Copy to clipboard,,,,,,,,,Скопіювати в буфер обміну
 view_common,modal.simulate.intro,"To use the simulation feature, generate a SimulationCraft string for your character and paste the
-                generated string of Keystone.guru under your character's output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character's SimC string through either the addon or the site, select Advanced and paste Keystone.guru's output below your character's SimC string.",,,,,,,,,"Щоб скористатися функцією симуляції, згенеруйте рядок SimulationCraft для свого персонажа й вставте під ним вихідний текст від Keystone.guru. Потім натисніть «Simulate» як зазвичай! 
+                generated string of Keystone.guru under your character's output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character's SimC string through either the addon or the site, select Advanced and paste Keystone.guru's output below your character's SimC string.",,,,,,,,,"Щоб скористатися функцією симуляції, згенеруйте рядок SimulationCraft для свого персонажа й вставте під ним вихідний текст від Keystone.guru. Потім натисніть «Simulate» як зазвичай!
 Для Raidbots.com створіть рядок SimC через додаток або сайт, виберіть вкладку «Advanced» та вставте під ним підготовані дані від Keystone.guru."
 view_common,modal.simulate.title,Simulate route,,,,,,,,,Симуляція маршруту
 view_common,modal.simulate.get_simulationcraft_string,Get SimulationCraft string,,,,,,,,,Згенерувати рядок для SimulationCraft
@@ -1777,6 +1795,13 @@ view_common,thirdparty.patreon.fancylink.patreon,Patreon,,,,,,,,,Patreon
 view_common,thirdparty.cookieconsent.learn_more,Learn more,,,,,,,,,Дізнатися більше
 view_common,user.name.avatar_alt,Avatar,,,,,,,,,Аватар
 view_common,user.name.raider_io,Raider.IO,,,,,,,,,Raider.IO
+view_dungeon,dungeonroute.search.gameversion.dungeon.title,Search routes for :dungeon,,,,,,,,,Пошук маршрутів для підземелля :dungeon
+view_dungeon,dungeonroute.search.gameversion.dungeon.description,"Search for routes by title, key level, affixes, enemy forces, rating and more. Select a dungeon to get started.",,,,,,,,,"Шукайте маршрути за назвами, рівнями ключа, модифікаторами, показником ворожих сил, рейтингом тощо. Виберіть підземелля, щоб розпочати."
+view_dungeon,dungeonroute.search.gameversion.dungeon.linkpreview_default_description_search,Find M+ routes for :dungeon,,,,,,,,,Пошук маршрутів для підземелля :dungeon
+view_dungeon,dungeonroute.search.gameversion.dungeon.linkpreview_title,:title | Keystone.guru,,,,,,,,,:title | Keystone.guru
+view_dungeon,dungeonroute.search.list.title,Search routes,,,,,,,,,Пошук маршрутів
+view_dungeon,dungeonroute.search.list.header,Search routes,,,,,,,,,Пошук маршрутів
+view_dungeon,dungeonroute.search.list.description,"Search for routes by title, key level, affixes, enemy forces, rating and more. Select a dungeon to get started.",,,,,,,,,"Шукайте маршрути за назвами, рівнями ключа, модифікаторами, показником ворожих сил, рейтингом тощо. Виберіть підземелля, щоб розпочати."
 view_dungeon,explore.gameversion.list.title,Explore,,,,,,,,,Огляд
 view_dungeon,explore.gameversion.list.header,Explore dungeon,,,,,,,,,Огляд підземелля
 view_dungeon,explore.gameversion.list.description,Exploring a dungeon allows you to see the layout of the dungeon and the enemies that are present. Ideal for simply viewing the dungeon without creating a route.,,,,,,,,,"За допомогою огляду можна дослідити планування підземелля й наявних ворогів. Ідеальний варіант, коли ви просто хочете ознайомитися з місцевістю без створення маршруту."
@@ -1785,6 +1810,7 @@ view_dungeon,explore.gameversion.embed.title,:dungeon,,,,,,,,,:dungeon
 view_dungeon,explore.gameversion.embed.any,Any,,,,,,,,,Будь-яке
 view_dungeon,explore.gameversion.embed.select_floor,Select floor,,,,,,,,,Вибрати поверх
 view_dungeon,explore.gameversion.embed.view_heatmap_fullscreen,View fullscreen,,,,,,,,,На весь екран
+view_dungeon,explore.gameversion.view.title,Explore :dungeon,,,,,,,,,Огляд підземелля :dungeon
 view_dungeon,heatmap.gameversion.list.title,Heatmaps,,,,,,,,,Тепломапи
 view_dungeon,heatmap.gameversion.list.header,Dungeon heatmaps,,,,,,,,,Тепломапи підземель
 view_dungeon,heatmap.gameversion.list.raider_io,Raider.IO,,,,,,,,,Raider.IO
@@ -1794,6 +1820,7 @@ view_dungeon,heatmap.gameversion.embed.title,:dungeon,,,,,,,,,:dungeon
 view_dungeon,heatmap.gameversion.embed.any,Any,,,,,,,,,Будь-яке
 view_dungeon,heatmap.gameversion.embed.select_floor,Select floor,,,,,,,,,Вибрати поверх
 view_dungeon,heatmap.gameversion.embed.view_heatmap_fullscreen,View fullscreen,,,,,,,,,На весь екран
+view_dungeonroute,discover.dungeon.overview.weekly_route,Raider.IO Weekly Route,,,,,,,,,Тижневий маршрут Raider.IO
 view_dungeonroute,discover.dungeon.overview.popular,Popular routes,,,,,,,,,Поширені маршрути
 view_dungeonroute,discover.dungeon.overview.popular_by_current_affixes,Popular routes by current affixes,,,,,,,,,Поширені маршрути за поточними модифікаторами
 view_dungeonroute,discover.dungeon.overview.popular_by_next_affixes,Popular routes by next affixes,,,,,,,,,Поширені маршрути за наступними модифікаторами
@@ -1819,6 +1846,7 @@ view_dungeonroute,discover.search.enemy_forces_incomplete,Incomplete,,,,,,,,,Н�
 view_dungeonroute,discover.search.rating,Rating,,,,,,,,,Оцінка
 view_dungeonroute,discover.search.user,User,,,,,,,,,Користувач
 view_dungeonroute,discover.search.user_placeholder,Filter by user,,,,,,,,,Фільтрувати за користувачем
+view_dungeonroute,livesession.title,Live session - :title,,,,,,,,,Презентація «:title»
 view_dungeonroute,livesession.view.any,Any,,,,,,,,,Будь-яке
 view_dungeonroute,edit.title,Edit %s,,,,,,,,,Змінити %s
 view_dungeonroute,edit.linkpreview_title,%s | Keystone.guru,,,,,,,,,%s | Keystone.guru
@@ -1899,6 +1927,23 @@ view_home,live_demo,Live demo,,,,,,,,,Демонстрація
 view_home,loading,Loading...,,,,,,,,,Завантаження...
 view_home,start_planning_today,Start planning today,,,,,,,,,Плануйте вже сьогодні
 view_home,join_other_users,Join %d+ other users and plan your M+ routes online!,,,,,,,,,Долучіться до %d+ користувачів і прокладайте свої маршрути для М+ онлайн!
+view_home,sections.routes.weeklyroute.header,Raider.IO weekly route,,,,,,,,,Тижневі маршрути Raider.IO
+view_home,sections.routes.weeklyroute.subheader,"The <a href="":weekly_route_url"">Raider.IO weekly routes <i class=""fas fa-external-link-alt""></i></a> are updated each week according to pull patterns showing in <a href="":heatmaps_url"">Mythic+ Heatmaps</a> and other observation/experience. Raider.IO eliminates the guesswork and gives you tried-and-true routes.",,,,,,,,,"<a href="":weekly_route_url"">Тижневі маршрути Raider.IO<i class=""fas fa-external-link-alt""></i></a> оновлюються щотижня на підставі патернів боїв на <a href="":heatmaps_url"">тепломапах М+</a>, інших спостережень і досвіду. Raider.IO мінімізує ризики й надає перевірені маршрути."
+view_home,sections.routes.weeklyroute.pug_friendly,Pug friendly,,,,,,,,,Для пугів
+view_home,sections.routes.weeklyroute.expert,Expert,,,,,,,,,Для досвідчених
+view_home,sections.routes.weeklyroute.title,Title,,,,,,,,,Назва
+view_home,sections.routes.popular.title,Most popular community route by dungeon,,,,,,,,,Найпоширеніші маршрути спільноти за підземеллями
+view_home,sections.featured.title,Featured,,,,,,,,,Актуальне
+view_home,sections.featured.revamped_search_alt,Revamped search,,,,,,,,,Оновлений пошук
+view_home,sections.featured.weekly_route_alt,Raider.IO weekly route,,,,,,,,,Тижневий маршрут Raider.IO
+view_home,sections.featured.patreon_alt,Patreon,,,,,,,,,Patreon
+view_home,sections.about.title,About,,,,,,,,,Про нас
+view_home,sections.about.tagline,M+ routes made easy,,,,,,,,,Маршрути М+ без клопотів
+view_home,sections.about.tagline_description,"Keystone.guru is a World of Warcraft (WoW) Mythic+ route planning tool, allow you to to build, manage,
+                and discover popular routes.
+                With full MDT import and export support, your routes will go where you go.
+                Explore community favorites and use Raider.IO–powered heatmaps to see how players actually tackle each
+                dungeon.",,,,,,,,,"Keystone.guru — це інструмент планування маршрутів М+ для World of Warcraft. Створюйте власні маршрути, редагуйте або знаходьте найпоширеніші. Завдяки підтримці імпорту й експорту в MDT ваші доробки завжди будуть під рукою. Переглядайте добірки спільноти та використовуйте тепломапи Raider.IO, щоб дізнатися, як гравці проходять підземелля."
 view_layouts,sitepage.staging_banner_description,Warning! You are currently on the staging environment of Keystone.guru. This is NOT the main site.,,,,,,,,,Увага! Ви зараз перебуваєте в тестовому середовищі Keystone.guru. Це НЕ основний сайт.
 view_layouts,sitepage.staging_banner_take_me_away,Take me to the main site!,,,,,,,,,Заберіть мене на основний сайт!
 view_layouts,sitepage.readonly_mode_enabled_description,"Read-only mode is enabled. You can view routes, but not make any changes or create new routes.",,,,,,,,,"Увімкнено режим для читання. Ви можете переглядати маршрути, але не можете змінювати їх або створювати нові."
@@ -2004,19 +2049,8 @@ view_profile,edit.reports_table_header_status,Status,,,,,,,,,Стан
 view_profile,edit.reports_table_action_handled,Handled,,,,,,,,,Вирішено
 view_profile,favorites.title,My favorites,,,,,,,,,Улюблене
 view_profile,overview.title,Overview,,,,,,,,,Огляд
-view_profile,overview.favorites,Favorites,,,,,,,,,Улюблене
-view_profile,overview.tags,Tags,,,,,,,,,Мітки
-view_profile,overview.teams,Teams,,,,,,,,,Команди
-view_profile,overview.profile,Profile,,,,,,,,,Профіль
 view_profile,overview.route_coverage,Route coverage,,,,,,,,,Підсумок маршрутів
 view_profile,overview.route_overview,Route overview,,,,,,,,,Огляд маршрутів
-view_profile,overview.welcome_text,Welcome to Keystone.guru! Get started by creating a route or a new team to collaboratively create routes with your friends.,,,,,,,,,"Вітаємо на Keystone.guru! Розпочніть зі створення маршруту або нової команди, щоб працювати над маршрутом разом з друзями."
-view_profile,overview.create_route,Create route,,,,,,,,,Створити маршрут
-view_profile,overview.create_route_description,"A route is a path through a dungeon to reach the end goal of 100% enemy forces while killing all bosses.
-                                Various tools help you organize your intended path for your party members. You can share them with the world - or keep them private and organize them as you wish.",,,,,,,,,Маршрут — це шлях через підземелля з метою набрати 100% очок ворожих військ і вбити всіх босів. Різноманітні функції допомагають прокласти бажаний маршрут для вашої групи. Ви можете опублікувати його або залишити приватним.
-view_profile,overview.create_team,Create team,,,,,,,,,Створити команду
-view_profile,overview.create_team_description,"A team is used to share your routes with friends and help everyone stay in-sync with the latest changes to the routes you do more often.
-                                Collaborative editing make adjusting an existing route much easier while you spar for the best route for your team.",,,,,,,,,"Команда дозволяє ділитися маршрутами з друзями й допомагає повідомляти всіх про останні зміни. Спільне редагування значно полегшує коригування наявного маршруту, поки ви домовляєтеся з командою про найкращий шлях."
 view_profile,routes.title,My routes,,,,,,,,,Мої маршрути
 view_profile,tags.title,My tags,,,,,,,,,Мої мітки
 view_profile,tags.header,My tags,,,,,,,,,Мої мітки
@@ -2078,7 +2112,7 @@ view_team,new.title,New team,,,,,,,,,Нова команда
 view_team,new.header,New team,,,,,,,,,Нова команда
 mail,Custom Password Reset Email,Reset Password Notification,,,,,,,,,Сповіщення про скидання пароля
 mail,Reset Password Notification,Reset Password Notification,,,,,,,,,Сповіщення про скидання пароля
-html,selectpicker.none_selected_text,Nothing selected zzz,,,,,,,,,Не вибрано
+html,selectpicker.none_selected_text,Nothing selected,,,,,,,,,Не вибрано
 leafletdraw,draw.toolbar.actions.title,Cancel drawing,,,,,,,,,Припинити малювати
 leafletdraw,draw.toolbar.actions.text,Cancel,,,,,,,,,Скасувати
 leafletdraw,draw.toolbar.finish.title,Finish drawing,,,,,,,,,Завершити малювати

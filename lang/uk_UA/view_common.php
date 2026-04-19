@@ -285,13 +285,13 @@ return [
                 'view_this_route' => 'Переглянути',
             ],
             'dungeonroutesearch' => [
-                'description'    => '',
-                'settings_title' => '',
-                'enabled'        => '',
-                'disabled'       => '',
-                'key_level'      => '',
-                'title'          => '',
-                'username'       => '',
+                'description'    => 'Виберіть на мапі ворогів, яких бажаєте врахувати чи проігнорувати під час пошуку.',
+                'settings_title' => 'Налаштування мапи',
+                'enabled'        => 'Увімкнено',
+                'disabled'       => 'Вимкнено',
+                'key_level'      => 'Рівень ключа',
+                'title'          => 'Назва',
+                'username'       => 'Ім\'я користувача',
             ],
             'elements' => [
                 'dungeonrouteinfo' => [
@@ -549,7 +549,7 @@ return [
             'copy_to_clipboard'                => 'Скопіювати в буфер обміну',
         ],
         'simulate' => [
-            'intro' => 'Щоб скористатися функцією симуляції, згенеруйте рядок SimulationCraft для свого персонажа й вставте під ним вихідний текст від Keystone.guru. Потім натисніть «Simulate» як зазвичай! 
+            'intro' => 'Щоб скористатися функцією симуляції, згенеруйте рядок SimulationCraft для свого персонажа й вставте під ним вихідний текст від Keystone.guru. Потім натисніть «Simulate» як зазвичай!
 Для Raidbots.com створіть рядок SimC через додаток або сайт, виберіть вкладку «Advanced» та вставте під ним підготовані дані від Keystone.guru.',
             'title'                      => 'Симуляція маршруту',
             'get_simulationcraft_string' => 'Згенерувати рядок для SimulationCraft',

@@ -21,7 +21,7 @@ return [
         'flash' => [
             'message_banner_set_successfully'   => 'Банер повідомлення успішно встановлено',
             'thumbnail_regenerate_result'       => 'Надіслано :success завдань для :total маршруту(-ів). Невдалих — :failed.',
-            'combatlog_route_regenerate_result' => '',
+            'combatlog_route_regenerate_result' => 'Надіслано :count завдань',
             'caches_dropped_successfully'       => 'Кеш успішно очищено',
             'releases_exported'                 => 'Версії експортовано',
             'exception'                         => ' У панелі адміністратора сталася халепа',
