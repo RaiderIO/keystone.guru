@@ -45,7 +45,7 @@ class ExportCsv extends Command
                 'name'         => __($spell->name, [], 'en_US'),
                 'dispel_type'  => $spell->dispel_type,
                 'schools'      => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask),
-                'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask),
+                'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes'),
                 'aura'         => $spell->aura ? 1 : 0,
                 'debuff'       => $spell->debuff ? 1 : 0,
                 'cast_time'    => $spell->cast_time,

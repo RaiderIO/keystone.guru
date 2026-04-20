@@ -35,20 +35,38 @@ class Spell {
     /**
      * @param mapping {Object}
      * @param mask {Number}
+     * @param translationPrefix {string|null}
      * @returns {string[]}
      * @private
      */
-    _maskToReadableArray(mapping, mask) {
+    _maskToReadableArray(mapping, mask, translationPrefix = null) {
         let result = [];
 
         if (typeof mapping === 'undefined' || mapping === null) {
             return result;
         }
 
-        for (let name in mapping) {
-            let bitmask = mapping[name];
+        for (let key in mapping) {
+            let value = mapping[key];
+            let bitmask, name;
+
+            // bitmask => name
+            if (!isNaN(key)) {
+                bitmask = parseInt(key);
+                name = value;
+            }
+            // name => bitmask
+            else {
+                bitmask = value;
+                name = key;
+            }
+
             if ((mask & bitmask) !== 0) {
-                result.push(name);
+                if (translationPrefix !== null) {
+                    result.push(lang.get(`${translationPrefix}.${name}`));
+                } else {
+                    result.push(name);
+                }
             }
         }
 
@@ -71,7 +89,8 @@ class Spell {
     getMissTypes() {
         return this._maskToReadableArray(
             getState().getMapContext().getStaticSpellMissTypes(),
-            this.miss_types_mask
+            this.miss_types_mask,
+            'spellmisstypes'
         );
     }
 }

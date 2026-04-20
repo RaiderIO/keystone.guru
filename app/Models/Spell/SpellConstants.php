@@ -45,16 +45,16 @@ trait SpellConstants
     public const int MISS_TYPE_RESIST  = 512;
 
     public const array ALL_MISS_TYPES = [
-        'Absorb'  => self::MISS_TYPE_ABSORB,
-        'Block'   => self::MISS_TYPE_BLOCK,
-        'Deflect' => self::MISS_TYPE_DEFLECT,
-        'Dodge'   => self::MISS_TYPE_DODGE,
-        'Evade'   => self::MISS_TYPE_EVADE,
-        'Immune'  => self::MISS_TYPE_IMMUNE,
-        'Miss'    => self::MISS_TYPE_MISS,
-        'Parry'   => self::MISS_TYPE_PARRY,
-        'Reflect' => self::MISS_TYPE_REFLECT,
-        'Resist'  => self::MISS_TYPE_RESIST,
+        self::MISS_TYPE_ABSORB  => 'absorb',
+        self::MISS_TYPE_BLOCK   => 'block',
+        self::MISS_TYPE_DEFLECT => 'deflect',
+        self::MISS_TYPE_DODGE   => 'dodge',
+        self::MISS_TYPE_EVADE   => 'evade',
+        self::MISS_TYPE_IMMUNE  => 'immune',
+        self::MISS_TYPE_MISS    => 'miss',
+        self::MISS_TYPE_PARRY   => 'parry',
+        self::MISS_TYPE_REFLECT => 'reflect',
+        self::MISS_TYPE_RESIST  => 'resist',
     ];
 
     public const array GUID_MISS_TYPE_MAPPING = [

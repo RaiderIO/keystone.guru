@@ -1,7 +1,7 @@
 <div id="enemy_details_modal_title" class="card-header">
     <div class="row">
-        <div class="col">
-            <h4 id="enemy_details_modal_title_text">
+        <div class="col d-flex align-items-center">
+            <h4 id="enemy_details_modal_title_text" class="mb-0">
                 {{-- Filled by JS --}}
             </h4>
         </div>
