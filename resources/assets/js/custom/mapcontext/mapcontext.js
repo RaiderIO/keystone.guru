@@ -189,6 +189,13 @@ class MapContext extends Signalable {
     }
 
     /**
+     * @returns {Object}
+     */
+    getStaticSpellDispelTypes() {
+        return this._options.static.spellDispelTypes;
+    }
+
+    /**
      *
      * @returns {string}
      */

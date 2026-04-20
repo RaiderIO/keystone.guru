@@ -66,6 +66,7 @@ class MapContextStaticData implements Arrayable
                 'selectableSpells'                  => $selectableSpells,
                 'spellSchools'                      => Spell::ALL_SCHOOLS,
                 'spellMissTypes'                    => Spell::ALL_MISS_TYPES,
+                'spellDispelTypes'                  => Spell::ALL_DISPEL_TYPES,
             ], config('keystoneguru.cache.static_data.ttl'));
         });
 

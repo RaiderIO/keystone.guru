@@ -70,13 +70,14 @@ trait SpellConstants
         Resist::class  => self::MISS_TYPE_RESIST,
     ];
 
-    public const string DISPEL_TYPE_MAGIC         = 'Magic';
-    public const string DISPEL_TYPE_DISEASE       = 'Disease';
-    public const string DISPEL_TYPE_POISON        = 'Poison';
-    public const string DISPEL_TYPE_CURSE         = 'Curse';
-    public const string DISPEL_TYPE_ENRAGE        = 'Enrage';
-    public const string DISPEL_TYPE_NOT_AVAILABLE = 'N/A';
-    public const string DISPEL_TYPE_UNKNOWN       = 'Unknown';
+    public const string DISPEL_TYPE_MAGIC         = 'magic';
+    public const string DISPEL_TYPE_DISEASE       = 'disease';
+    public const string DISPEL_TYPE_POISON        = 'poison';
+    public const string DISPEL_TYPE_CURSE         = 'curse';
+    public const string DISPEL_TYPE_ENRAGE        = 'enrage';
+    public const string DISPEL_TYPE_NONE          = 'none';
+    public const string DISPEL_TYPE_NOT_AVAILABLE = 'n_a';
+    public const string DISPEL_TYPE_UNKNOWN       = 'unknown';
 
     public const array ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
@@ -84,6 +85,7 @@ trait SpellConstants
         self::DISPEL_TYPE_POISON,
         self::DISPEL_TYPE_CURSE,
         self::DISPEL_TYPE_ENRAGE,
+        self::DISPEL_TYPE_NONE,
         self::DISPEL_TYPE_NOT_AVAILABLE,
         self::DISPEL_TYPE_UNKNOWN,
     ];

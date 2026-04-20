@@ -593,6 +593,7 @@ class Enemy extends VersionableMapObject {
                         spellData.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
                         spellData.schools = spell.getSchools().join(', ');
                         spellData.miss_types = spell.getMissTypes().join(', ');
+                        spellData.dispel_type = spell.getDispelType();
                         spellData.cast_time = (spell.cast_time === 0 ? '' : (spell.cast_time / 1000));
                         spellData.duration = (spell.duration === 0 ? '' : (spell.duration / 1000));
                         spells.push(spellData);

@@ -65,8 +65,7 @@ $gameVersionsSelect = $allGameVersions
 
     <div class="form-group{{ $errors->has('dispel_type') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.spell.edit.dispel_type') . '<span class="form-required">*</span>', 'dispel_type') }}
-        <?php $dispelTypes = array_merge(['None'], $dispelTypes); ?>
-        {{ html()->select('dispel_type', array_combine($dispelTypes, $dispelTypes))->class('form-control selectpicker') }}
+        {{ html()->select('dispel_type', $dispelTypes)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'dispel_type'])
     </div>
 

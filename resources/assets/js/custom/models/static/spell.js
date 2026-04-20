@@ -94,4 +94,11 @@ class Spell {
             'spellmisstypes'
         );
     }
+
+    /**
+     * @returns {string}
+     */
+    getDispelType() {
+        return lang.get(this.dispel_type);
+    }
 }

@@ -251,9 +251,12 @@ class WowheadService implements WowheadServiceInterface
                     '<td>',
                     '</td>',
                 ], '', $line);
-                if (str_contains($dispelType, 'n/a')) {
+                $dispelTypeLower = strtolower($dispelType);
+                if (str_contains($dispelTypeLower, 'n/a')) {
                     $dispelType = Spell::DISPEL_TYPE_NOT_AVAILABLE;
-                } elseif (!in_array($dispelType, Spell::ALL_DISPEL_TYPES)) {
+                } elseif (in_array($dispelTypeLower, Spell::ALL_DISPEL_TYPES)) {
+                    $dispelType = $dispelTypeLower;
+                } else {
                     $this->log->getSpellDataSpellDispelTypeNotFound($dispelType);
 
                     $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
