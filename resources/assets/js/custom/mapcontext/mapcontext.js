@@ -175,6 +175,20 @@ class MapContext extends Signalable {
     }
 
     /**
+     * @returns {Object}
+     */
+    getStaticSpellSchools() {
+        return this._options.static.spellSchools;
+    }
+
+    /**
+     * @returns {Object}
+     */
+    getStaticSpellMissTypes() {
+        return this._options.static.spellMissTypes;
+    }
+
+    /**
      *
      * @returns {string}
      */

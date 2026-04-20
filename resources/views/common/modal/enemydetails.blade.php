@@ -1,7 +1,21 @@
 <div id="enemy_details_modal_title" class="card-header">
-    <h4 id="enemy_details_modal_title_text">
-        {{-- Filled by JS --}}
-    </h4>
+    <div class="row">
+        <div class="col">
+            <h4 id="enemy_details_modal_title_text">
+                {{-- Filled by JS --}}
+            </h4>
+        </div>
+        <div class="col-auto">
+            <div class="card-header p-0 border-0" id="enemy_report_heading">
+                <button class="btn btn-warning w-100 collapsed" type="button" data-toggle="collapse"
+                        data-target="#enemy_report_collapse" aria-expanded="false"
+                        aria-controls="enemy_report_collapse">
+                    <i class="fa fa-bug" data-toggle="tooltip"
+                       title="{{ __('view_common.modal.enemydetails.report_an_issue') }}"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="card-body">
     <div id="enemy_details_modal_body">
@@ -10,13 +24,6 @@
 
     <div class="accordion mt-3" id="enemy_details_accordion">
         <div class="card">
-            <div class="card-header p-0 border-0" id="enemy_report_heading">
-                <button class="btn btn-warning w-100 collapsed" type="button" data-toggle="collapse"
-                        data-target="#enemy_report_collapse" aria-expanded="false" aria-controls="enemy_report_collapse">
-                    <i class="fa fa-bug"></i> {{ __('view_common.modal.enemydetails.report_an_issue') }}
-                </button>
-            </div>
-
             <div id="enemy_report_collapse" class="collapse" aria-labelledby="enemy_report_heading"
                  data-parent="#enemy_details_accordion">
                 <div class="card-body p-0 mt-3">

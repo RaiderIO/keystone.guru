@@ -419,7 +419,7 @@ if ($isAdmin) {
             @include('common.modal.userreport.dungeonroute', ['dungeonroute' => $dungeonroute])
         @endcomponent
 
-        @component('common.general.modal', ['id' => 'enemy_details_modal'])
+        @component('common.general.modal', ['id' => 'enemy_details_modal', 'size' => 'xl'])
             @include('common.modal.enemydetails')
         @endcomponent
     @endisset

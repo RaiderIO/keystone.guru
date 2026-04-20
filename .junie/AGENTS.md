@@ -21,5 +21,7 @@ Do not run Powershell Commands on the host machine. Use Linux commands in Docker
 ## Project details
 The project is run in Docker. All files should have LF line endings.
 
+The language folder exists in the root of the project.
+
 ## Localization
 Only ever edit localization files in the `resources/lang/en_US` directory. All other languages are handled externally.
