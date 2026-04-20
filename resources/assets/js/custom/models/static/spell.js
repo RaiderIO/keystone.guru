@@ -79,7 +79,8 @@ class Spell {
     getSchools() {
         return this._maskToReadableArray(
             getState().getMapContext().getStaticSpellSchools(),
-            this.schools_mask
+            this.schools_mask,
+            'spellschools'
         );
     }
 

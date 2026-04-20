@@ -24,13 +24,13 @@ trait SpellConstants
     public const int SCHOOL_ARCANE   = 64;
 
     public const array ALL_SCHOOLS = [
-        'Physical' => self::SCHOOL_PHYSICAL,
-        'Holy'     => self::SCHOOL_HOLY,
-        'Fire'     => self::SCHOOL_FIRE,
-        'Nature'   => self::SCHOOL_NATURE,
-        'Frost'    => self::SCHOOL_FROST,
-        'Shadow'   => self::SCHOOL_SHADOW,
-        'Arcane'   => self::SCHOOL_ARCANE,
+        self::SCHOOL_PHYSICAL => 'physical',
+        self::SCHOOL_HOLY     => 'holy',
+        self::SCHOOL_FIRE     => 'fire',
+        self::SCHOOL_NATURE   => 'nature',
+        self::SCHOOL_FROST    => 'frost',
+        self::SCHOOL_SHADOW   => 'shadow',
+        self::SCHOOL_ARCANE   => 'arcane',
     ];
 
     public const int MISS_TYPE_ABSORB  = 1;

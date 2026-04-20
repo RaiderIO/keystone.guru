@@ -125,7 +125,7 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         $result = [];
 
-        foreach (self::ALL_SCHOOLS as $school) {
+        foreach (self::ALL_SCHOOLS as $school => $value) {
             $result[$school] = $this->schools_mask & $school;
         }
 

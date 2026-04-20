@@ -231,9 +231,11 @@ class WowheadService implements WowheadServiceInterface
                 ], '', $line);
                 $schools = explode(', ', $schoolsStr);
 
+                $allSchoolsFlipped = array_flip(Spell::ALL_SCHOOLS);
                 foreach ($schools as $school) {
-                    if (isset(Spell::ALL_SCHOOLS[$school])) {
-                        $schoolsMask |= Spell::ALL_SCHOOLS[$school];
+                    $schoolLower = strtolower($school);
+                    if (isset($allSchoolsFlipped[$schoolLower])) {
+                        $schoolsMask |= $allSchoolsFlipped[$schoolLower];
                     } else {
                         $this->log->getSpellDataSpellSchoolNotFound($schoolsStr, $school);
                     }

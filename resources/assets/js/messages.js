@@ -25,6 +25,7 @@ export default {
     'en_US.routeattributes': require('../../../lang/en_US/routeattributes.php'),
     'en_US.specializations': require('../../../lang/en_US/specializations.php'),
     'en_US.spellmisstypes': require('../../../lang/en_US/spellmisstypes.php'),
+    'en_US.spellschools': require('../../../lang/en_US/spellschools.php'),
     'en_US.teamroles': require('../../../lang/en_US/teamroles.php'),
 
     'de_DE.affixes': require('../../../lang/de_DE/affixes.php'),

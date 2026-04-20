@@ -25,3 +25,6 @@ The language folder exists in the root of the project.
 
 ## Localization
 Only ever edit localization files in the `resources/lang/en_US` directory. All other languages are handled externally.
+
+## Project preferences
+- `sprintf` should always be used over direct concatenation for dynamic strings.

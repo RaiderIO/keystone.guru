@@ -145,7 +145,9 @@ class SpellController extends Controller
                 $category => __(sprintf('spellcategory.%s', $category)),
             ])->toArray(),
             'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
-            'schools'        => Spell::ALL_SCHOOLS,
+            'schools'        => collect(Spell::ALL_SCHOOLS)->mapWithKeys(fn(string $name, int $school) => [
+                __(sprintf('spellschools.%s', $name)) => $school,
+            ])->toArray(),
             'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(fn(string $cooldownGroupKey) => [
                 $cooldownGroupKey => __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
             ])->toArray(),
