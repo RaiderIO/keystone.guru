@@ -92,6 +92,15 @@ class StateManager extends Signalable {
 
     /**
      * Gets the currently focused enemy.
+     * @returns {Enemy}
+     */
+    getFocusedEnemy() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._focusedEnemy;
+    }
+
+    /**
+     * Sets the enemy that is focused by the user (mouse overed).
      * @param enemy {Enemy}
      */
     setFocusedEnemy(enemy) {

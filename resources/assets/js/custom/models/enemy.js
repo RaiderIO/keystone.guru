@@ -81,6 +81,7 @@ class Enemy extends VersionableMapObject {
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
             self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
+            self.setTooltipEnabled(!(mapStateChangedEvent.data.newMapState instanceof EditMapState));
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -775,10 +776,25 @@ class Enemy extends VersionableMapObject {
         return result;
     }
 
+    /**
+     * Sets the tooltip to be enabled or not.
+     * @param enabled {Boolean} True to enable, false to disable.
+     */
+    setTooltipEnabled(enabled) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (enabled) {
+            this.bindTooltip();
+        } else {
+            this.unbindTooltip();
+            this.tooltipText = '';
+        }
+    }
+
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        if (this.layer !== null) {
+        if (this.layer !== null && !(this.map.getMapState() instanceof EditMapState)) {
             let text;
             if (this.npc !== null) {
                 let visualData = this.getVisualData();

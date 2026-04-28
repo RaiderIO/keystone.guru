@@ -59,7 +59,7 @@ class EnemyVisualManager extends Signalable {
                 let addedEnemyPatrol = objectAddEvent.data.object;
                 if (addedEnemyPatrol.id > 0) {
                     let mouseOverFn = function (e) {
-                        if (addedEnemyPatrol.enemies.length > 0) {
+                        if (!(self.map.getMapState() instanceof EditMapState) && addedEnemyPatrol.enemies.length > 0) {
                             for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {
                                 addedEnemyPatrol.enemies[i].visual.forceMouseOver();
                             }
@@ -67,7 +67,7 @@ class EnemyVisualManager extends Signalable {
                     }
 
                     let mouseOutFn = function (e) {
-                        if (addedEnemyPatrol.enemies.length > 0) {
+                        if (!(self.map.getMapState() instanceof EditMapState) && addedEnemyPatrol.enemies.length > 0) {
                             for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {
                                 addedEnemyPatrol.enemies[i].visual.forceMouseOut();
                             }
@@ -105,6 +105,20 @@ class EnemyVisualManager extends Signalable {
             self.map.leafletMap.on('moveend', self._onLeafletMapMoveEnd.bind(self));
 
             self._onLeafletMapMove();
+        });
+
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.newMapState instanceof EditMapState) {
+                let focusedEnemy = getState().getFocusedEnemy();
+                if (focusedEnemy !== null) {
+                    focusedEnemy.visual._mouseOut();
+                }
+
+                if (self._hoveredEnemy !== null) {
+                    self._hoveredEnemy.visual._mouseOut();
+                    self._hoveredEnemy = null;
+                }
+            }
         });
         this.map.register('map:beforerefresh', this, function () {
             self.map.leafletMap.off('mousemove', self._onLeafletMapMouseMove.bind(self));
@@ -260,7 +274,9 @@ class EnemyVisualManager extends Signalable {
     _onLeafletMapMouseMove(mouseMoveEvent, organic = true) {
         console.assert(this instanceof EnemyVisualManager, 'this is not an EnemyVisualManager!', this);
 
-        if (!this._isMapBeingDragged && typeof mouseMoveEvent.originalEvent !== 'undefined') {
+        if (!this._isMapBeingDragged &&
+            !(this.map.getMapState() instanceof EditMapState) &&
+            typeof mouseMoveEvent.originalEvent !== 'undefined') {
             let currTime = (new Date()).getTime();
 
             // Once every 50 ms, calculation is expensive
