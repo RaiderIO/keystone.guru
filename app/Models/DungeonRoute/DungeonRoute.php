@@ -617,7 +617,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {
                 /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-                $dungeon->active();
+                $dungeon->active6();
             });
     }
 
@@ -892,8 +892,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $validated = $request->validated();
 
-        $dungeon          = Dungeon::findOrFail($this->dungeon_id);
         $this->dungeon_id = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
+        $dungeon          = Dungeon::findOrFail($this->dungeon_id);
         if ($new) {
             $this->author_id  = $user?->id ?? -1;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
