@@ -31,3 +31,6 @@ Mapping refinement
 
 Raider.io
 - [ ] Ensure the dungeon slugs match with Raider.io
+
+Auto-route creator
+- [ ] Ensure all bosses are killable

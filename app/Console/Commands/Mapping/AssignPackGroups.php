@@ -36,7 +36,8 @@ class AssignPackGroups extends Command
         ])->get();
 
         $dungeonWhitelist = [
-            Dungeon::RAID_KARAZHAN,
+            Dungeon::RAID_THE_EYE,
+            Dungeon::RAID_SERPENTSHRINE_CAVERN,
             //            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
             //            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
             //            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
@@ -48,6 +49,7 @@ class AssignPackGroups extends Command
             //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ];
 
+        $count = 0;
         foreach ($mappingVersions as $mappingVersion) {
             if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) {
                 /** @var Collection<EnemyPack> $enemyPacks */
@@ -59,9 +61,12 @@ class AssignPackGroups extends Command
                 foreach ($enemyPacks as $enemyPack) {
                     // Increment first, then write
                     $enemyPack->update(['group' => ++$index]);
+                    $count++;
                 }
             }
         }
+
+        $this->info(sprintf('Assigned groups to %d packs', $count));
 
         return 0;
     }

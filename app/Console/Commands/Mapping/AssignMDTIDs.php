@@ -36,7 +36,8 @@ class AssignMDTIDs extends Command
         ])->get();
 
         $dungeonWhitelist = [
-            Dungeon::RAID_KARAZHAN,
+            Dungeon::RAID_THE_EYE,
+            Dungeon::RAID_SERPENTSHRINE_CAVERN,
             //            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
             //            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
             //            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
@@ -47,6 +48,7 @@ class AssignMDTIDs extends Command
             //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ];
 
+        $count = 0;
         foreach ($mappingVersions as $mappingVersion) {
             if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) {
                 $enemies = $mappingVersion->enemies()
@@ -74,11 +76,14 @@ class AssignMDTIDs extends Command
                         if (empty($enemy->mdt_id)) {
                             // Increment first, then write
                             $enemy->update(['mdt_id' => ++$maxId]);
+                            $count++;
                         }
                     }
                 }
             }
         }
+
+        $this->info(sprintf('Assigned MDT IDs to %d enemies', $count));
 
         return 0;
     }
