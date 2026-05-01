@@ -28,7 +28,8 @@ class DeleteExpiredJobs extends SchedulerCommand
         return $this->trackTime(function () {
             $count = 0;
 
-            DungeonRouteThumbnailJob::where('status', '<>', DungeonRouteThumbnailJob::STATUS_EXPIRED)
+            DungeonRouteThumbnailJob::with('file')
+                ->where('status', '<>', DungeonRouteThumbnailJob::STATUS_EXPIRED)
                 ->where('created_at', '<', Carbon::now()->subSeconds(
                     config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds'),
                 ))->chunk(100, static function (Collection $rows) use (&$count) {

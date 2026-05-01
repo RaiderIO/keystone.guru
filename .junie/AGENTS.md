@@ -2,11 +2,10 @@
 
 This project must never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
 
-Always run Laravel, test commands and any other file system commands inside Docker.
+Always run Laravel, test commands, and any other file system commands inside Docker.
 
 Use these commands only:
 
-- `./bin/artisan-test --filter=...`
 - `docker compose exec -T app php artisan ...`
 
 Never use these commands on the host machine, always prefix with `docker compose exec` as stated above:
@@ -28,3 +27,8 @@ Only ever edit localization files in the `resources/lang/en_US` directory. All o
 
 ## Project preferences
 - `sprintf` should always be used over direct concatenation for dynamic strings.
+
+## Git
+The project is under Git version control.
+
+- Any newly created files should be added to the repository

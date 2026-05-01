@@ -34,6 +34,8 @@ class StateManager extends Signalable {
 
         this.snackbarIds = [];
         this.snackbarsAdded = 0;
+
+        this._sanitizeAllowedDomains = [];
     }
 
     /**
@@ -76,6 +78,22 @@ class StateManager extends Signalable {
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }
+    }
+
+    /**
+     * @returns {String[]}
+     */
+    getSanitizeAllowedDomains() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._sanitizeAllowedDomains;
+    }
+
+    /**
+     * @param {String[]} allowedDomains
+     */
+    setSanitizeAllowedDomains(allowedDomains) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        this._sanitizeAllowedDomains = allowedDomains;
     }
 
     setDebug(debug) {

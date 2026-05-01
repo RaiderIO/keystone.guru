@@ -1,6 +1,7 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
 <?php
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -20,7 +21,7 @@ $showAffixes      = !$dungeonroute->mappingVersion->gameVersion->has_seasons ? f
 $showDungeonImage ??= false;
 $isAdmin          = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Generate a unique string so we can assign affixes properly - route key is not unique enough since multiple cards can be on one page
-$uniqueString     = uniqid();
+$uniqueString = uniqid();
 ?>
 @section('scripts')
     @parent
@@ -49,7 +50,16 @@ $uniqueString     = uniqid();
 <?php
 $cacheFn = static function ()
 
-use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
+use (
+    $uniqueString,
+    $showAffixes,
+    $showDungeonImage,
+    $dungeonroute,
+    $currentAffixGroup,
+    $tierAffixGroup,
+    $isAdmin,
+    $__env
+)
 
 {
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
@@ -60,7 +70,8 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
             $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(
-                static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null
+                static fn(AffixGroup $affixGroup
+                ) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null
             );
         }
     }
@@ -124,7 +135,7 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                             @if(empty($dungeonroute->description))
                                 &nbsp;
                             @else
-                                {!! strip_tags($dungeonroute->description, config('keystoneguru.view.common.dungeonroute.card.allowed_tags')) !!}
+                                {!! (new HtmlSanitizer())->sanitize($dungeonroute->description, false) !!}
                             @endif
                         </div>
                     </div>

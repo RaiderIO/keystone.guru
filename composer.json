@@ -62,11 +62,13 @@
     "require": {
         "php": ">=8.4",
         "ext-curl": "*",
+        "ext-dom": "*",
         "ext-exif": "*",
         "ext-imagick": "*",
         "ext-json": "*",
         "ext-lua": "*",
         "ext-redis": "*",
+        "ext-libxml": "*",
         "ext-zip": "*",
         "akaunting/laravel-language": "^1.0",
         "aws/aws-sdk-php": "~3.0",

@@ -666,21 +666,6 @@ let c = {
             userOverflowCount: 1
         },
         sanitizeTextDefaultAllowedTags: ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
-        sanitizeTextDefaultAllowedDomains: [
-            'keystone.guru',
-            'raider.io',
-            'twitch.tv',
-            'youtube.com',
-            'wowhead.com',
-            'icy-veins.com',
-            'worldofwarcraft.blizzard.com',
-            'wowpedia.fandom.com',
-            'wowwiki-archive.fandom.com',
-            'wago.io',
-            'curseforge.com',
-            'warcraftlogs.com',
-            'archon.gg',
-        ],
         sanitizeText: function (text, convertLineEnding = true) {
             if (text === null || typeof text !== 'string') {
                 return text;
@@ -696,7 +681,7 @@ let c = {
                 }
             }
 
-            return filterHTML(text, allowedTags, c.map.sanitizeTextDefaultAllowedDomains);
+            return filterHTML(text, allowedTags, getState().getSanitizeAllowedDomains());
         }
     }
 };
