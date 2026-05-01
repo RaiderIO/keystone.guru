@@ -110,7 +110,15 @@ class DevDiscoverService extends BaseDiscoverService
      */
     public function popularGroupedByDungeon(): Collection
     {
-        return $this->popularBuilder()->get();
+        return $this->popularBuilder()
+            ->get()
+            ->groupBy('dungeon_id')
+            ->mapWithKeys(function (Collection $routes, int $dungeonId) {
+                /** @var DungeonRoute $firstRoute */
+                $firstRoute = $routes->first();
+
+                return [__($firstRoute->dungeon->name) => $routes->take(4)];
+            });
     }
 
     /**
