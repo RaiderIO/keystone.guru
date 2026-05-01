@@ -1,20 +1,21 @@
 <?php
 
 return [
+
     'dungeonroute' => [
         'search' => [
             'gameversion' => [
                 'dungeon' => [
-                    'title'                                  => '',
-                    'description'                            => '',
-                    'linkpreview_default_description_search' => '',
-                    'linkpreview_title'                      => '',
+                    'title'                                  => 'Пошук маршрутів для підземелля :dungeon',
+                    'description'                            => 'Шукайте маршрути за назвами, рівнями ключа, модифікаторами, показником ворожих сил, рейтингом тощо. Виберіть підземелля, щоб розпочати.',
+                    'linkpreview_default_description_search' => 'Пошук маршрутів для підземелля :dungeon',
+                    'linkpreview_title'                      => ':title | Keystone.guru',
                 ],
             ],
             'list' => [
-                'title'       => '',
-                'header'      => '',
-                'description' => '',
+                'title'       => 'Пошук маршрутів',
+                'header'      => 'Пошук маршрутів',
+                'description' => 'Шукайте маршрути за назвами, рівнями ключа, модифікаторами, показником ворожих сил, рейтингом тощо. Виберіть підземелля, щоб розпочати.',
             ],
         ],
     ],
@@ -33,7 +34,7 @@ return [
                 'view_heatmap_fullscreen' => 'На весь екран',
             ],
             'view' => [
-                'title' => '',
+                'title' => 'Огляд підземелля :dungeon',
             ],
         ],
     ],

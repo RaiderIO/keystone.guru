@@ -71,6 +71,8 @@ return [
                 'import_npcs'               => 'Hodor',
                 'spells_missing_info'       => 'Hodor',
                 'npcs_missing_display_id'   => 'Hodor',
+                'thumbnails_regenerate'     => 'Hodor',
+                'combat_log_regenerate'     => 'Hodor',
             ],
             'releases'     => 'Hodor',
             'new_release'  => 'Hodor',

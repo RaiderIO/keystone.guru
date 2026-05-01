@@ -827,12 +827,16 @@ class MapObject extends Signalable {
 
     /**
      * Checks if this map object is visible and if it's layer's bounds are actually on the map.
+     * @param bounds {L.LatLngBounds|null}
      * @returns {*}
      */
-    isVisibleOnScreen() {
+    isVisibleOnScreen(bounds = null) {
         let result = false;
         if (this.layer !== null && this.isVisible()) {
-            result = this.map.leafletMap.getBounds().contains(this.layer.getLatLng())
+            if (bounds === null) {
+                bounds = this.map.leafletMap.getBounds();
+            }
+            result = bounds.contains(this.layer.getLatLng())
         }
         return result;
     }

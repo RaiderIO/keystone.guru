@@ -109,7 +109,7 @@ return [
     'eco_dome_al_dani_shatter_conduit'       => 'Shatter Conduit',
     'eco_dome_al_dani_disruption_grenade'    => 'Disruption Grenade',
     'eco_dome_al_dani_kareshi_surge'         => 'K\'areshi Surge',
-    'seat_of_the_triumvirate_void_infusion'  => '',
-    'maisara_caverns_hearty_vilebranch_stew' => '',
+    'seat_of_the_triumvirate_void_infusion'  => 'Void Infusion',
+    'maisara_caverns_hearty_vilebranch_stew' => 'Hearty Vilebranch Stew',
 
 ];

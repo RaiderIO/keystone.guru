@@ -18,6 +18,12 @@ class EnemyPatrol extends Polyline {
 
         let self = this;
 
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.newMapState instanceof EditMapState && self.highlighted) {
+                self._onAttachedEnemyMouseOut();
+            }
+        });
+
         this.weight = c.map.enemypatrol.defaultWeight;
 
         this.label = 'EnemyPatrol';
@@ -27,6 +33,9 @@ class EnemyPatrol extends Polyline {
         this.enemies = [];
         getState().register('focusedenemy:changed', this, function (focusedEnemyChangedEvent) {
             let enemy = focusedEnemyChangedEvent.data.focusedenemy;
+            if (enemy !== null && self.map.getMapState() instanceof EditMapState) {
+                return;
+            }
             // console.log('focusedenemy:changed', enemy, self.enemies, self.enemies.includes(enemy));
             if (enemy === null && self.highlighted) {
                 self._onAttachedEnemyMouseOut();

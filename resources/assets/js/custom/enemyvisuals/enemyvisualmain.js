@@ -39,7 +39,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 if (this.enemyvisual.enemy.enemyPatrol instanceof EnemyPatrol) {
                     mainVisualInnerStyle.push(`border-color: ${this.enemyvisual.enemy.enemyPatrol.polyline.color};`)
                 }
-            } else if (this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
+            } else if (mapContext instanceof MapContextDungeonRoute &&
+                this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
                 let requiredNpcs = mapContext.getDungeonDifficulty() === DUNGEON_DIFFICULTY_10_MAN ?
                     mapContext.getDungeonSpeedrunRequiredNpcs10Man() :
                     mapContext.getDungeonSpeedrunRequiredNpcs25Man();

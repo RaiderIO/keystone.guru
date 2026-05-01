@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'npc_name_label'                                  => '名稱',
     'enemy_forces_label'                              => '敵人部隊',
     'enemy_display_type_label'                        => '敵人顯示類型',
@@ -482,4 +483,5 @@ return [
     'refresh_thumbnails_label'                                             => '刷新縮圖',
     'search_results_label'                                                 => '搜尋結果',
     'no_search_results_label'                                              => '未找到搜索結果',
+
 ];

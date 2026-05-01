@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'commit' => [
         'added' => [
             'added' => '新增',
@@ -21,4 +22,5 @@ return [
             'get_started' => '開始使用',
         ],
     ],
+
 ];

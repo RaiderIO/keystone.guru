@@ -44,14 +44,7 @@ class MapContextStaticData implements Arrayable
                 })
                 ->get()
                 ->makeHidden([
-                    'cooldown_group',
-                    'dispel_type',
-                    'mechanic',
-                    'schools_mask',
-                    'miss_types_mask',
                     'debuff',
-                    'cast_time',
-                    'duration',
                     'selectable',
                     'fetched_data_at',
                 ]);
@@ -71,6 +64,9 @@ class MapContextStaticData implements Arrayable
                 'publishStates'                     => PublishedState::all(),
                 'gameVersions'                      => GameVersion::all(),
                 'selectableSpells'                  => $selectableSpells,
+                'spellSchools'                      => Spell::ALL_SCHOOLS,
+                'spellMissTypes'                    => Spell::ALL_MISS_TYPES,
+                'spellDispelTypes'                  => Spell::ALL_DISPEL_TYPES,
             ], config('keystoneguru.cache.static_data.ttl'));
         });
 

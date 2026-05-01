@@ -368,9 +368,6 @@ if ($isAdmin) {
         ]))
     @endif
 
-    @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
-        @include('common.maps.controls.enemyinfo')
-    @endif
 
     @if(isset($show['controls']['raiderioKsgAttribution']) && $show['controls']['raiderioKsgAttribution'])
         @include('common.maps.controls.attribution')
@@ -422,8 +419,8 @@ if ($isAdmin) {
             @include('common.modal.userreport.dungeonroute', ['dungeonroute' => $dungeonroute])
         @endcomponent
 
-        @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
-            @include('common.modal.userreport.enemy')
+        @component('common.general.modal', ['id' => 'enemy_details_modal', 'size' => 'xl'])
+            @include('common.modal.enemydetails')
         @endcomponent
     @endisset
     @if($mapContext instanceof MapContextDungeonRoute)

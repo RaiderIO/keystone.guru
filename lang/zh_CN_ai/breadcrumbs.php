@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'home' => [
         'front_page' => 'Keystone.guru',
         'affixes'    => '词缀',
@@ -70,6 +71,8 @@ return [
                 'import_npcs'               => '导入NPC',
                 'spells_missing_info'       => '法术缺少信息',
                 'npcs_missing_display_id'   => 'NPC缺少显示ID',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => '版本发布',
             'new_release'  => '新版本',
@@ -118,5 +121,5 @@ return [
             ],
         ],
     ],
-]
-;
+
+];

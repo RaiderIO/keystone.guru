@@ -563,6 +563,8 @@ return [
             'enemy_forces_recalculate'                    => '',
             'subheader_thumbnails'                        => '',
             'thumbnails_regenerate'                       => '',
+            'subheader_combatlog'                         => '',
+            'combatlog_regenerate'                        => '',
             'subheader_spells'                            => '',
             'show_missing_spell_info'                     => '',
         ],
@@ -572,6 +574,13 @@ return [
                 'header'       => '',
                 'only_missing' => '',
                 'submit'       => '',
+            ],
+        ],
+        'combatlog' => [
+            'regenerate' => [
+                'title'  => '',
+                'header' => '',
+                'submit' => '',
             ],
         ],
         'wagogg' => [

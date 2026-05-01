@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'retail' => [
         'name'        => '零售版',
         'description' => '零售版',
@@ -29,4 +30,5 @@ return [
         'name'        => '軍團再臨重混版',
         'description' => '軍團再臨重混版',
     ],
+
 ];

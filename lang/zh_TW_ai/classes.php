@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'death_knight' => '死亡騎士',
     'demon_hunter' => '惡魔獵人',
     'druid'        => '德魯伊',
@@ -14,4 +15,5 @@ return [
     'shaman'       => '薩滿',
     'warlock'      => '術士',
     'warrior'      => '戰士',
+
 ];

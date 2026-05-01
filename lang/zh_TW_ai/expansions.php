@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'classic' => [
         'name' => '經典',
     ],
@@ -40,4 +41,5 @@ return [
     'tlt' => [
         'name' => '最後的泰坦',
     ],
+
 ];

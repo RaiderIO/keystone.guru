@@ -3,7 +3,7 @@
 return [
 
     'home' => [
-        'front_page' => '',
+        'front_page' => 'Keystone.guru',
         'affixes'    => 'Модифікатори',
         'about'      => 'Про нас',
         'credits'    => 'Подяки',
@@ -24,7 +24,7 @@ return [
         'gameversion'         => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'heatmap' => '',
+                'heatmap' => 'Тепломапа',
                 'explore' => 'Огляд',
             ],
         ],
@@ -69,8 +69,10 @@ return [
                 'mdt_diff'                  => 'Різниця з MDT',
                 'view_mdt_string_contents'  => 'Показати вміст рядка MDT',
                 'import_npcs'               => 'Імпортувати НІПів',
-                'spells_missing_info'       => '',
-                'npcs_missing_display_id'   => '',
+                'spells_missing_info'       => 'Відсутні дані заклять',
+                'npcs_missing_display_id'   => 'Відсутні ID для показу НІПів',
+                'thumbnails_regenerate'     => 'Оновити мініатюри',
+                'combat_log_regenerate'     => 'Оновити маршрути ARC',
             ],
             'releases'     => 'Версії',
             'new_release'  => 'Нова версія',

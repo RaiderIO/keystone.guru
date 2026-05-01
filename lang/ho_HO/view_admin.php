@@ -563,6 +563,8 @@ return [
             'enemy_forces_recalculate'                    => 'Hodor',
             'subheader_thumbnails'                        => 'Hodor',
             'thumbnails_regenerate'                       => 'Hodor',
+            'subheader_combatlog'                         => 'Hodor',
+            'combatlog_regenerate'                        => 'Hodor',
             'subheader_spells'                            => 'Hodor',
             'show_missing_spell_info'                     => 'Hodor',
         ],
@@ -572,6 +574,13 @@ return [
                 'header'       => 'Hodor',
                 'only_missing' => 'Hodor',
                 'submit'       => 'Hodor',
+            ],
+        ],
+        'combatlog' => [
+            'regenerate' => [
+                'title'  => 'Hodor',
+                'header' => 'Hodor',
+                'submit' => 'Hodor',
             ],
         ],
         'wagogg' => [

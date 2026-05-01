@@ -125,7 +125,7 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         $result = [];
 
-        foreach (self::ALL_SCHOOLS as $school) {
+        foreach (self::ALL_SCHOOLS as $school => $value) {
             $result[$school] = $this->schools_mask & $school;
         }
 
@@ -206,13 +206,23 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public static function maskToReadableString(array $mapping, int $mask): string
+    public static function maskToReadableString(array $mapping, int $mask, ?string $translationPrefix = null): string
     {
         $result = [];
 
-        foreach ($mapping as $name => $bit) {
-            if ($mask & $bit) {
-                $result[] = $name;
+        foreach ($mapping as $key => $value) {
+            // New format: bitmask => name
+            if (is_int($key)) {
+                $bitmask = $key;
+                $name    = $value;
+            } // Old format: name => bitmask
+            else {
+                $bitmask = $value;
+                $name    = $key;
+            }
+
+            if (($mask & $bitmask) !== 0) {
+                $result[] = $translationPrefix === null ? $name : __($translationPrefix . '.' . $name);
             }
         }
 

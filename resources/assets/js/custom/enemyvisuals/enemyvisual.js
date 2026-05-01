@@ -26,6 +26,9 @@ class EnemyVisual extends Signalable {
         /** @type EnemyVisualMain */
         this.mainVisual = null;
 
+        this.cachedLayerPoint = null;
+        this.cachedRadius = 0;
+
         this._circleMenu = null;
 
         // Can be set to force the building of a visual when it's shown again
@@ -110,15 +113,21 @@ class EnemyVisual extends Signalable {
             let packBuddies = this.enemy.getPackBuddies();
             packBuddies.push(this.enemy);
             $.each(packBuddies, function (index, enemy) {
-                if (enemy.visual !== null) {
+                if (enemy !== null && enemy.visual !== null) {
                     visuals.push(enemy.visual);
                 }
             });
 
             for (let i = 0; i < visuals.length; i++) {
-                visuals[i]._managedBy = this.enemy.id;
-                visuals[i]._highlighted = true;
-                visuals[i].setVisualType('enemy_forces', true);
+                let visual = visuals[i];
+                let wasHighlighted = visual.isHighlighted();
+
+                visual._managedBy = this.enemy.id;
+                visual._highlighted = true;
+
+                if (!wasHighlighted) {
+                    visual.setVisualType('enemy_forces', true);
+                }
             }
 
             getState().setFocusedEnemy(this.enemy);
@@ -614,37 +623,36 @@ class EnemyVisual extends Signalable {
 
         this.mainVisual.refreshSize();
 
+        // Cache the layer point and radius for performance
+        this.cachedLayerPoint = this.map.leafletMap.latLngToLayerPoint(this.layer.getLatLng());
+        this.cachedRadius = (width / 2) + margin;
+
         // Hide/show modifiers based on zoom level
         this._refreshModifierVisibility(outerWidth, outerHeight, margin);
     }
 
     /**
      * Checks if we should be showing our mouse over state or not
-     * @param mouseX {int}
-     * @param mouseY {int}
+     * @param mouseLayerPoint {L.Point}
+     * @param triggerEvents {Boolean}
      *
      * @return float Squared distance from the enemy to the mouse
      */
-    checkMouseOver(mouseX, mouseY) {
+    checkMouseOver(mouseLayerPoint, triggerEvents = true) {
         console.assert(this instanceof EnemyVisual, 'this is not an EnemyVisual', this);
 
         // Sensible default for distance (approx 75% of the full map distance)
         let result = 1000000;
 
-        if (this._$mainVisual !== null && this._$mainVisual.length > 0 && this._managedBy === this.enemy.id) {
+        if (this.cachedLayerPoint !== null) {
+            result = getDistanceSquared([this.cachedLayerPoint.x, this.cachedLayerPoint.y], [mouseLayerPoint.x, mouseLayerPoint.y]);
 
-            let offset = this._$mainVisual.offset();
-            let iconSize = this.mainVisual.getSize();
-            let size = iconSize.iconSize[0];
-            let margin = c.map.enemy.calculateMargin(size);
-            let halfSize = (size / 2) + margin;
-
-            result = getDistanceSquared([offset.left + halfSize, offset.top + halfSize], [mouseX, mouseY]);
-
-            if (result < halfSize * halfSize) {
-                this._mouseOver();
-            } else {
-                this._mouseOut();
+            if (triggerEvents && this._managedBy === this.enemy.id) {
+                if (result < this.cachedRadius * this.cachedRadius) {
+                    this._mouseOver();
+                } else {
+                    this._mouseOut();
+                }
             }
         }
 

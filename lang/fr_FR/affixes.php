@@ -99,7 +99,7 @@ return [
         'description' => '',
     ],
     'infernal' => [
-        'name'        => '',
+        'name'        => 'Infernal',
         'description' => '',
     ],
     'encrypted' => [

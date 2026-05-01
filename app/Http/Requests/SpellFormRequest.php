@@ -31,7 +31,7 @@ class SpellFormRequest extends FormRequest
             'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
             'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
             'schools'        => 'array',
-            'schools.*'      => Rule::in(Spell::ALL_SCHOOLS),
+            'schools.*'      => Rule::in(array_keys(Spell::ALL_SCHOOLS)),
             'aura'           => 'boolean',
             'selectable'     => 'boolean',
             'hidden_on_map'  => 'boolean',

@@ -20,6 +20,25 @@ return [
 
     'reddit_subreddit' => 'KeystoneGuru',
 
+    'sanitize_text' => [
+        'allowed_tags'    => ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
+        'allowed_domains' => [
+            'keystone.guru',
+            'raider.io',
+            'twitch.tv',
+            'youtube.com',
+            'wowhead.com',
+            'icy-veins.com',
+            'worldofwarcraft.blizzard.com',
+            'wowpedia.fandom.com',
+            'wowwiki-archive.fandom.com',
+            'wago.io',
+            'curseforge.com',
+            'warcraftlogs.com',
+            'archon.gg',
+        ],
+    ],
+
     'character' => [
         /** // https://wowpedia.fandom.com/wiki/Movement */
         'default_movement_speed_yards_second' => 7,
@@ -315,9 +334,7 @@ return [
                     'cache' => [
                         'ttl' => '1 hour',
                     ],
-                    'allowed_tags' => [
-                        'a', 'h4', 'h5', 'h6', 'b', 'i', 'br',
-                    ],
+                    'allowed_tags' => config('keystoneguru.sanitize_text.allowed_tags'),
                 ],
             ],
         ],

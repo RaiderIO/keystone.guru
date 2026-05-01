@@ -1,6 +1,7 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
 <?php
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
@@ -17,13 +18,23 @@ use App\Service\Cache\CacheServiceInterface;
 
 $showAffixes      ??= true;
 $showDungeonImage ??= false;
-$isAdmin           = Auth::user()?->hasRole(Role::ROLE_ADMIN) ?? false;
+$isAdmin          = Auth::user()?->hasRole(Role::ROLE_ADMIN) ?? false;
 // Generate a unique string so we can assign affixes properly - route key is not unique enough since multiple cards can be on one page
-$uniqueString     = uniqid();
+$uniqueString = uniqid();
 
 $cacheFn = static function ()
 
-use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
+use (
+    $uniqueString,
+    $showAffixes,
+    $showDungeonImage,
+    $dungeonroute,
+    $currentAffixGroup,
+    $tierAffixGroup,
+    $isAdmin,
+    $__env
+)
+
 {
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
 
@@ -33,7 +44,9 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
+            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(
+                AffixGroup $affixGroup
+            ) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
         }
     }
     // Attempt a default value if there's only one affix set
@@ -45,36 +58,36 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
     ob_start();
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
-        class="row no-gutters align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
-        data-publickey="{{ $dungeonroute->public_key }}"
+     class="row no-gutters align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
+     data-publickey="{{ $dungeonroute->public_key }}"
 >
     <div class="col-auto cursor-pointer p-1 apply_route_radio">
         <i class="far fa-circle"></i>
     </div>
-{{--    <div class="col-xl-auto">--}}
-{{--        <div class="{{ $owlClass }} light-slider-container">--}}
-{{--            <ul class="light-slider {{ $owlClass }}">--}}
-{{--                @if( $dungeonroute->has_thumbnail )--}}
-{{--                    @foreach($dungeonroute->thumbnails as $thumbnail)--}}
-{{--                        <li>--}}
-{{--                            <img class="thumbnail"--}}
-{{--                                 src="{{ $thumbnail->getURL() }}"--}}
-{{--                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"--}}
-{{--                                 alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>--}}
-{{--                        </li>--}}
-{{--                    @endforeach--}}
-{{--                @else--}}
-{{--                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"--}}
-{{--                         alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>--}}
-{{--                @endif--}}
-{{--            </ul>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    {{--    <div class="col-xl-auto">--}}
+    {{--        <div class="{{ $owlClass }} light-slider-container">--}}
+    {{--            <ul class="light-slider {{ $owlClass }}">--}}
+    {{--                @if( $dungeonroute->has_thumbnail )--}}
+    {{--                    @foreach($dungeonroute->thumbnails as $thumbnail)--}}
+    {{--                        <li>--}}
+    {{--                            <img class="thumbnail"--}}
+    {{--                                 src="{{ $thumbnail->getURL() }}"--}}
+    {{--                                 style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"--}}
+    {{--                                 alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>--}}
+    {{--                        </li>--}}
+    {{--                    @endforeach--}}
+    {{--                @else--}}
+    {{--                    <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"--}}
+    {{--                         alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>--}}
+    {{--                @endif--}}
+    {{--            </ul>--}}
+    {{--        </div>--}}
+    {{--    </div>--}}
     <div class="col border-left border-dark ">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
-                @endif
+            @endif
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
@@ -85,7 +98,8 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                     </h4>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}" target="_blank">
+                    <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                       target="_blank">
                         <i class="fas fa-external-link-alt"></i>
                     </a>
                 </div>
@@ -100,7 +114,7 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
             @if(!empty($dungeonroute->description))
                 <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                     <div class="col d-flex d-xl-none">
-                            {!! strip_tags($dungeonroute->description, config('keystoneguru.view.common.dungeonroute.card.allowed_tags')) !!}
+                        {!! (new HtmlSanitizer())->sanitize($dungeonroute->description, false) !!}
                     </div>
                 </div>
             @endif
@@ -133,14 +147,15 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                     <div class="row">
                         <div class="col">
                             <small class="text-muted">
-                                    {{ __('view_common.dungeonroute.card.by_author') }}
-                                    @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
-                                    {{--                        @if( $dungeonroute->rating > 1 )--}}
-                                    {{--                            ---}}
-                                    {{--                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
-                                    {{--                        @endif--}}
-                                    -
-                                <span data-toggle="tooltip" title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
+                                {{ __('view_common.dungeonroute.card.by_author') }}
+                                @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
+                                {{--                        @if( $dungeonroute->rating > 1 )--}}
+                                {{--                            ---}}
+                                {{--                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
+                                {{--                        @endif--}}
+                                -
+                                <span data-toggle="tooltip"
+                                      title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
                                     {{ sprintf(__('view_common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
                                 </span>
                             </small>
@@ -149,14 +164,15 @@ use ($uniqueString, $showAffixes, $showDungeonImage, $dungeonroute, $currentAffi
                         @if( $showAffixes )
                             <div class="col-auto pl-1 pr-0">
                                 @if($seasonalAffix !== null)
-                                    <div class="row no-gutters affix_toggle" data-container="body" data-toggle="popover" data-placement="bottom"
+                                    <div class="row no-gutters affix_toggle" data-container="body" data-toggle="popover"
+                                         data-placement="bottom"
                                          data-html="true"
                                          data-content="&nbsp;" style="cursor: pointer;">
-                                            <div class="col ml-1">
-                                                <img class="select_icon"
-                                                     src="{{ url($seasonalAffix->image_url) }}"
-                                                     alt="{{ __($seasonalAffix->name) }}"/>
-                                            </div>
+                                        <div class="col ml-1">
+                                            <img class="select_icon"
+                                                 src="{{ url($seasonalAffix->image_url) }}"
+                                                 alt="{{ __($seasonalAffix->name) }}"/>
+                                        </div>
                                     </div>
                                 @endif
                             </div>

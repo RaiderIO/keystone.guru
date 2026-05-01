@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'unknown'                                => '未知',
     'comment'                                => '評論',
     'door'                                   => '門',
@@ -110,4 +111,5 @@ return [
     'eco_dome_al_dani_kareshi_surge'         => '卡萊希衝擊',
     'seat_of_the_triumvirate_void_infusion'  => '虛空注入',
     'maisara_caverns_hearty_vilebranch_stew' => '豐盛的邪枝燉肉',
+
 ];

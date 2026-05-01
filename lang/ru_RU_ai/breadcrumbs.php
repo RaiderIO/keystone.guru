@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'home' => [
         'front_page' => 'Keystone.guru',
         'affixes'    => 'Аффиксы',
@@ -70,6 +71,8 @@ return [
                 'import_npcs'               => 'Импортировать НПЦ',
                 'spells_missing_info'       => 'Заклинания с отсутствующей информацией',
                 'npcs_missing_display_id'   => 'НПЦ с отсутствующим ID отображения',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => 'Релиз',
             'new_release'  => 'Новый релиз',
@@ -118,4 +121,5 @@ return [
             ],
         ],
     ],
+
 ];

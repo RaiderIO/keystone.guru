@@ -331,10 +331,6 @@ return [
                     'your_rating'              => '',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => '',
-                'report_an_issue' => '',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => '',
                 'enabled'                => '',

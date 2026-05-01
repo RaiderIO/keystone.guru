@@ -30,26 +30,26 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'       => '',
-                'subheader'    => '',
-                'pug_friendly' => '',
-                'expert'       => '',
-                'title'        => '',
+                'header'       => 'Тижневі маршрути Raider.IO',
+                'subheader'    => '<a href=":weekly_route_url">Тижневі маршрути Raider.IO<i class="fas fa-external-link-alt"></i></a> оновлюються щотижня на підставі патернів боїв на <a href=":heatmaps_url">тепломапах М+</a>, інших спостережень і досвіду. Raider.IO мінімізує ризики й надає перевірені маршрути.',
+                'pug_friendly' => 'Для пугів',
+                'expert'       => 'Для досвідчених',
+                'title'        => 'Назва',
             ],
             'popular' => [
-                'title' => '',
+                'title' => 'Найпоширеніші маршрути спільноти за підземеллями',
             ],
         ],
         'featured' => [
-            'title'               => '',
-            'revamped_search_alt' => '',
-            'weekly_route_alt'    => '',
-            'patreon_alt'         => '',
+            'title'               => 'Актуальне',
+            'revamped_search_alt' => 'Оновлений пошук',
+            'weekly_route_alt'    => 'Тижневий маршрут Raider.IO',
+            'patreon_alt'         => 'Patreon',
         ],
         'about' => [
-            'title'               => '',
-            'tagline'             => '',
-            'tagline_description' => '',
+            'title'               => 'Про нас',
+            'tagline'             => 'Маршрути М+ без клопотів',
+            'tagline_description' => 'Keystone.guru — це інструмент планування маршрутів М+ для World of Warcraft. Створюйте власні маршрути, редагуйте або знаходьте найпоширеніші. Завдяки підтримці імпорту й експорту в MDT ваші доробки завжди будуть під рукою. Переглядайте добірки спільноти та використовуйте тепломапи Raider.IO, щоб дізнатися, як гравці проходять підземелля.',
         ],
     ],
 

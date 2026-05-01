@@ -57,6 +57,7 @@ use App\Service\Dungeon\DungeonService;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
+use App\Service\DungeonRoute\DevDiscoverService;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSearchService;
@@ -197,7 +198,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'testing',
         ])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
-            $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
+            $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
         } else {
             $this->app->bind(CacheServiceInterface::class, CacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
@@ -327,6 +328,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('adFree', $adFree);
             $view->with('userOrDefaultRegion', $userOrDefaultRegion);
             $view->with('currentUserGameVersion', $currentUserGameVersion);
+            $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 2);
         });
 
         // Home page
@@ -379,10 +381,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.layout.nav.gameversions', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
-
-        view()->composer('common.layout.nav.user', static function (View $view) use ($isUserAdmin) {
-            $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 0);
         });
 
         view()->composer('common.layout.header', static function (View $view) use (

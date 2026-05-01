@@ -285,13 +285,13 @@ return [
                 'view_this_route' => 'Переглянути',
             ],
             'dungeonroutesearch' => [
-                'description'    => '',
-                'settings_title' => '',
-                'enabled'        => '',
-                'disabled'       => '',
-                'key_level'      => '',
-                'title'          => '',
-                'username'       => '',
+                'description'    => 'Виберіть на мапі ворогів, яких бажаєте врахувати чи проігнорувати під час пошуку.',
+                'settings_title' => 'Налаштування мапи',
+                'enabled'        => 'Увімкнено',
+                'disabled'       => 'Вимкнено',
+                'key_level'      => 'Рівень ключа',
+                'title'          => 'Назва',
+                'username'       => 'Ім\'я користувача',
             ],
             'elements' => [
                 'dungeonrouteinfo' => [

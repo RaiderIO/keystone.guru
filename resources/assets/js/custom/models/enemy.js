@@ -81,6 +81,7 @@ class Enemy extends VersionableMapObject {
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
             self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
+            self.setTooltipEnabled(!(mapStateChangedEvent.data.newMapState instanceof EditMapState));
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -582,36 +583,38 @@ class Enemy extends VersionableMapObject {
             }
 
             if (typeof this.npc.spell_ids !== 'undefined' && this.npc.spell_ids.length > 0) {
-                let spellHtml = '';
-                let count = 0;
-                let spellTemplate = Handlebars.templates['spell_template'];
                 let gameVersion = mapContext.getMappingVersion().game_version;
 
                 let spells = [];
                 for (let index in this.npc.spell_ids) {
-                    spells.push(
-                        mapContext.findSpellById(this.npc.spell_ids[index])
-                    );
-                }
-
-                for (let index in spells) {
-                    let spell = spells[index];
-
-                    spell.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
-
-                    spellHtml += spellTemplate(spell);
-                    // Stop before the end
-                    if (count < spells.length - 1) {
-                        spellHtml += '<br>';
+                    let spell = mapContext.findSpellById(this.npc.spell_ids[index]);
+                    if (spell !== null) {
+                        // Create a copy so we don't taint the original spells
+                        let spellData = $.extend({}, spell);
+                        spellData.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
+                        spellData.schools = spell.getSchools().join(', ');
+                        spellData.miss_types = spell.getMissTypes().join(', ');
+                        spellData.dispel_type = spell.getDispelType();
+                        spellData.cast_time = (spell.cast_time === 0 ? '' : (spell.cast_time / 1000));
+                        spellData.duration = (spell.duration === 0 ? '' : (spell.duration / 1000));
+                        spells.push(spellData);
                     }
-                    count++;
                 }
 
-                let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
+                let spellTableTemplate = Handlebars.templates['spell_table_template'];
 
                 result.custom.push({
-                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('js.sidebar_enemy_spell_label')}:</span>`}) +
-                        customTemplate({html: spellHtml})
+                    html: `<div class="mt-3"><span class="font-weight-bold">${lang.get('js.sidebar_enemy_spell_label')}:</span></div>` +
+                        spellTableTemplate({
+                            spells: spells,
+                            spell_header_name: lang.get('js.npc_name_label'),
+                            spell_header_schools: lang.get('js.spell_schools_label'),
+                            spell_header_miss_types: lang.get('js.spell_miss_types_label'),
+                            spell_header_dispel_type: lang.get('js.spell_dispel_type_label'),
+                            spell_header_mechanic: lang.get('js.spell_mechanic_label'),
+                            spell_header_cast_time: lang.get('js.spell_cast_time_label'),
+                            spell_header_duration: lang.get('js.spell_duration_label'),
+                        })
                 });
             }
         }
@@ -773,17 +776,34 @@ class Enemy extends VersionableMapObject {
         return result;
     }
 
+    /**
+     * Sets the tooltip to be enabled or not.
+     * @param enabled {Boolean} True to enable, false to disable.
+     */
+    setTooltipEnabled(enabled) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (enabled) {
+            this.bindTooltip();
+        } else {
+            this.unbindTooltip();
+            this.tooltipText = '';
+        }
+    }
+
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        if (this.layer !== null) {
+        if (this.layer !== null && !(this.map.getMapState() instanceof EditMapState)) {
             let text;
             if (this.npc !== null) {
-                let group = this.getPackGroup();
-                text = this.npc.name;
-                if (group !== null) {
-                    text += ` (G ${group})`;
-                }
+                let visualData = this.getVisualData();
+                let template = Handlebars.templates['enemy_tooltip_template'];
+
+                text = template($.extend({}, visualData, {
+                    name: lang.get(this.npc.name),
+                    right_click_to_open_details: lang.get('js.right_click_to_open_details')
+                }));
             } else {
                 text = lang.get('js.no_npc_found_label');
             }
@@ -993,6 +1013,11 @@ class Enemy extends VersionableMapObject {
             } else {
                 self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
+        });
+
+        this.layer.on('contextmenu', function (contextMenuEvent) {
+            L.DomEvent.preventDefault(contextMenuEvent);
+            self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
         });
     }
 

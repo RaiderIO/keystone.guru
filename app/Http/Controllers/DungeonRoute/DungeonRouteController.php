@@ -658,15 +658,15 @@ class DungeonRouteController extends Controller
         ThumbnailServiceInterface     $thumbnailService,
     ): RedirectResponse {
         // Store it and show the edit page
-        $dungeonroute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
+        $dungeonRoute = $this->store($request, $seasonService, $expansionService, $thumbnailService);
 
         // Message to the user
         Session::flash('status', __('controller.dungeonroute.flash.route_created'));
 
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
+            'dungeon'      => $dungeonRoute->dungeon,
+            'dungeonroute' => $dungeonRoute,
+            'title'        => $dungeonRoute->getTitleSlug(),
         ]);
     }
 

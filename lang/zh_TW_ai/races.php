@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'human'               => '人類',
     'dwarf'               => '矮人',
     'night_elf'           => '夜精靈',
@@ -29,4 +30,5 @@ return [
     'vulpera'             => '狐人',
     'earthenalliance'     => '土靈',
     'earthenhorde'        => '土靈',
+
 ];

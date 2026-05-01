@@ -144,8 +144,12 @@ class SpellController extends Controller
             'categories' => collect(Spell::ALL_CATEGORIES)->mapWithKeys(fn(string $category) => [
                 $category => __(sprintf('spellcategory.%s', $category)),
             ])->toArray(),
-            'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
-            'schools'        => Spell::ALL_SCHOOLS,
+            'dispelTypes' => collect(Spell::ALL_DISPEL_TYPES)->mapWithKeys(fn(string $dispelType) => [
+                $dispelType => __(sprintf('spelldispeltype.%s', $dispelType)),
+            ])->toArray(),
+            'schools' => collect(Spell::ALL_SCHOOLS)->mapWithKeys(fn(string $name, int $school) => [
+                __(sprintf('spellschools.%s', $name)) => $school,
+            ])->toArray(),
             'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(fn(string $cooldownGroupKey) => [
                 $cooldownGroupKey => __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
             ])->toArray(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -19,6 +20,15 @@ class DungeonRouteSubmitFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true; // Auth::user()->hasRole(["user", "admin"]);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('dungeon_route_description')) {
+            $this->merge([
+                'dungeon_route_description' => new HtmlSanitizer()->sanitize($this->get('dungeon_route_description')),
+            ]);
+        }
     }
 
     /**

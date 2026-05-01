@@ -92,14 +92,7 @@ class MapContextDungeonData implements Arrayable
                     ->whereIn('spells.id', $spellIds)
                     ->get()
                     ->makeHidden([
-                        'cooldown_group',
-                        'dispel_type',
-                        'mechanic',
-                        'schools_mask',
-                        'miss_types_mask',
                         'debuff',
-                        'cast_time',
-                        'duration',
                         'selectable',
                         'fetched_data_at',
                     ])

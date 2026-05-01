@@ -4,6 +4,6 @@ return [
 
     'npc_death'    => '',
     'player_death' => '',
-    'player_spell' => '',
+    'player_spell' => 'Lancement de Furie Sanguinaire',
 
 ];

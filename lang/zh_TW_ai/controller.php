@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'MDT 字串解析失敗。你確定貼上的是 MDT 字串嗎？',
@@ -18,16 +19,17 @@ return [
             'mdt_invalid_category'                => '無效的類別',
         ],
         'flash' => [
-            'message_banner_set_successfully' => '消息橫幅設置成功',
-            'thumbnail_regenerate_result'     => '為 :total 路線派發了 :success 項任務。 :failed 失敗。',
-            'caches_dropped_successfully'     => '快取成功清除',
-            'releases_exported'               => '版本已匯出',
-            'exception'                       => '管理面板中拋出了例外',
-            'feature_toggle_activated'        => '功能 :feature 現已啟動',
-            'feature_toggle_deactivated'      => '功能 :feature 現已停用',
-            'feature_forgotten'               => '功能 :feature 成功被忘記',
-            'read_only_mode_disabled'         => '唯讀模式已停用',
-            'read_only_mode_enabled'          => '唯讀模式已啟用',
+            'message_banner_set_successfully'   => '消息橫幅設置成功',
+            'thumbnail_regenerate_result'       => '為 :total 路線派發了 :success 項任務。 :failed 失敗。',
+            'combatlog_route_regenerate_result' => '',
+            'caches_dropped_successfully'       => '快取成功清除',
+            'releases_exported'                 => '版本已匯出',
+            'exception'                         => '管理面板中拋出了例外',
+            'feature_toggle_activated'          => '功能 :feature 現已啟動',
+            'feature_toggle_deactivated'        => '功能 :feature 現已停用',
+            'feature_forgotten'                 => '功能 :feature 成功被忘記',
+            'read_only_mode_disabled'           => '唯讀模式已停用',
+            'read_only_mode_enabled'            => '唯讀模式已啟用',
         ],
     ],
     'apidungeonroute' => [
@@ -207,4 +209,5 @@ return [
             'error_granting_all_benefits'       => '嘗試授予所有福利時發生錯誤。',
         ],
     ],
+
 ];

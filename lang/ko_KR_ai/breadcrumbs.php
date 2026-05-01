@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'home' => [
         'front_page' => 'Keystone.guru',
         'affixes'    => '접두사',
@@ -70,6 +71,8 @@ return [
                 'import_npcs'               => 'NPC 가져오기',
                 'spells_missing_info'       => '정보가 누락된 주문',
                 'npcs_missing_display_id'   => '디스플레이 ID가 누락된 NPC',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
             'releases'     => '릴리스',
             'new_release'  => '새 릴리스',
@@ -118,5 +121,5 @@ return [
             ],
         ],
     ],
-]
-;
+
+];

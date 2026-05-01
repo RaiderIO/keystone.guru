@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeonroute' => [
         'search' => [
             'gameversion' => [
@@ -54,4 +55,5 @@ return [
             ],
         ],
     ],
+
 ];

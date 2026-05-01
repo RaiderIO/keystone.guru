@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon' => [
         'griddiscover' => [
             'popular'   => '熱門',
@@ -669,4 +670,5 @@ return [
             'raider_io'  => 'Raider.IO',
         ],
     ],
+
 ];
