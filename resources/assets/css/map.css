@@ -307,10 +307,11 @@ html, body, #map, #app, .wrapper {
 
 /** Pulls section of the sidebar, adblock, when editing, without a speedrun enabled */
 .route_sidebar.right:not(.mobile,.embed) .edit .data_container:not(.has_speedrun) {
-    /** 250px is the height of the ad in the corner */
-    /** 24 px is the height of the report buttons */
+    /** 150px is the "top" value of the sidebar (space from the top) */
     /** 55 px is the height of the buttons at the top in the edit scenario */
-    max-height: calc(100vh - (142px + 55px));
+    /** 32 px is the height of the enemy forces indicator */
+    /** 21 px is the height of the leaflet banner at the bottom */
+    max-height: calc(100vh - (150px + 55px + 32px + 21px));
 }
 
 /** Pulls section of the sidebar, when editing, WITH a speedrun enabled */
