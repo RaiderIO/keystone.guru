@@ -499,6 +499,10 @@ class CombatLogEventFilter implements Arrayable
 
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
             $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
+            if ($timerSeconds === null) {
+                throw new \InvalidArgumentException('Mapping version does not have a timer max seconds value');
+            }
+
             $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);
             $combatLogEventFilter->setDurationMax(($heatmapDataFilter->getTimerFractionMax() * 60) / $timerSeconds);
         }
