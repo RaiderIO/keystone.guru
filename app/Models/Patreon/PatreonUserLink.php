@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
  * @property int    $id
  * @property int    $user_id
  * @property string $email
- * @property string                         scope
+ * @property string $scope
  * @property string $access_token
  * @property string $refresh_token
  * @property string $version
@@ -29,7 +29,7 @@ use Illuminate\Support\Collection;
  */
 class PatreonUserLink extends Model
 {
-    public const PERMANENT_TOKEN = 'grantedthroughadminpages';
+    public const string PERMANENT_TOKEN = 'grantedthroughadminpages';
 
     protected $fillable = [
         'user_id',
