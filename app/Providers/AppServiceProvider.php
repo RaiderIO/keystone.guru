@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Model::automaticallyEagerLoadRelationships();
         Model::preventLazyLoading(!app()->isProduction());
 
         // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer
