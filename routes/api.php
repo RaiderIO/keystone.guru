@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
@@ -35,6 +36,10 @@ Route::prefix('v1')->group(static function () {
             });
         });
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
+    });
+
+    Route::middleware(['role:admin'])->prefix('cache')->group(static function () {
+        Route::post('drop', new APICacheController()->drop(...))->name('api.v1.cache.drop');
     });
 
     // Static data
