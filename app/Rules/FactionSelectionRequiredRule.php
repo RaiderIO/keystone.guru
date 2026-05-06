@@ -12,22 +12,20 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class FactionSelectionRequiredRule implements ValidationRule
 {
     /**
-     * The request control provider instance.
-     */
-    public ParameterBag $request;
-
-    /**
      * Create a new rule instance.
      */
-    public function __construct(ParameterBag $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        /**
+         * The request control provider instance.
+         */
+        public ParameterBag $request,
+    ) {
     }
 
     /**
-     * @param string  $attribute
-     * @param mixed   $value
-     * @param Closure $fail
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  Closure $fail
      * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
@@ -40,13 +38,14 @@ class FactionSelectionRequiredRule implements ValidationRule
         $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
         if (in_array(intval($dungeonId), $factionSelectionRequired->pluck('id')->toArray())) {
-            $result = in_array(intval($factionId), [Faction::ALL[Faction::FACTION_ALLIANCE], Faction::ALL[Faction::FACTION_HORDE]]);
+            $result = in_array(intval($factionId), [
+                Faction::ALL[Faction::FACTION_ALLIANCE],
+                Faction::ALL[Faction::FACTION_HORDE],
+            ]);
         }
 
         if (!$result) {
             $fail(__('rules.faction_selection_required_rule.message'));
         }
     }
-
-
 }

@@ -16,8 +16,8 @@ use Illuminate\Support\Carbon;
  * @property string      $before_model
  * @property string|null $after_model
  *
- * @property Carbon      $updated_at
- * @property Carbon      $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @mixin Eloquent
  */
@@ -31,7 +31,7 @@ class MappingChangeLog extends Model
         'model_id',
         'model_class',
         'before_model',
-        'after_model'
+        'after_model',
     ];
 
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool

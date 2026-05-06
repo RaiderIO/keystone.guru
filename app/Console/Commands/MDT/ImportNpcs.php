@@ -5,6 +5,7 @@ namespace App\Console\Commands\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
@@ -18,7 +19,7 @@ class ImportNpcs extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importnpcs {--dungeon=}';
+    protected $signature = 'mdt:importnpcs {gameVersion} {--dungeon=}';
 
     /**
      * The console command description.
@@ -36,15 +37,20 @@ class ImportNpcs extends Command
     public function handle(
         CacheServiceInterface            $cacheService,
         CoordinatesServiceInterface      $coordinatesService,
-        MDTMappingImportServiceInterface $mappingImportService): void
-    {
-        $dungeonKey = $this->option('dungeon');
+        MDTMappingImportServiceInterface $mappingImportService,
+    ): void {
+        $gameVersionKey = $this->argument('gameVersion');
 
-        $dungeons = collect();
+        $gameVersion = GameVersion::firstWhere('key', $gameVersionKey);
+        if ($gameVersion === null) {
+            throw new Exception(sprintf('Game version %s not found', $gameVersionKey));
+        }
+
+        $dungeonKey = $this->option('dungeon');
+        $dungeons   = collect();
 
         if ($dungeonKey !== null) {
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
-            $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
             $dungeons->push($dungeon);
@@ -55,16 +61,16 @@ class ImportNpcs extends Command
         foreach ($dungeons as $dungeon) {
             /** @var Dungeon $dungeon */
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
+                $this->warn(sprintf('- Skipping dungeon %s (does not exist in MDT)', __($dungeon->name)));
                 continue;
             }
 
             // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
-            $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
             $mdtDungeon = new MDTDungeon($cacheService, $coordinatesService, $dungeon);
 
-            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon);
+            $mappingImportService->importNpcsDataFromMDT($mdtDungeon, $dungeon, $gameVersion);
         }
     }
 }

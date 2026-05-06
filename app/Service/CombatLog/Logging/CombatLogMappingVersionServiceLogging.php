@@ -56,20 +56,21 @@ class CombatLogMappingVersionServiceLogging extends RollbarStructuredLogging imp
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void
     {
         $this->debug(__METHOD__);
     }
 
-    public function createMappingVersionFromCombatLogAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void
-    {
+    public function createMappingVersionFromCombatLogAddedNewFloorConnection(
+        int $previousFloorId,
+        int $currentFloorId,
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound(): void
+    public function createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound(int $uiMapId, int $dungeonId): void
     {
-        $this->warning(__METHOD__);
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function createMappingVersionFromCombatLogSkipEntryNoFloor(): void

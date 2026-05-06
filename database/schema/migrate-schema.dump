@@ -1,3 +1,4 @@
+/*M!999999\- enable the sandbox mode */
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -6,43 +7,56 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 DROP TABLE IF EXISTS `affix_group_couplings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `affix_group_couplings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `affix_id` int(11) NOT NULL,
   `affix_group_id` int(11) NOT NULL,
+  `key_level` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `affix_group_couplings_affix_id_index` (`affix_id`),
   KEY `affix_group_couplings_affix_group_id_index` (`affix_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `affix_group_ease_tiers`;
+DROP TABLE IF EXISTS `affix_group_ease_tier_pulls`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `affix_group_ease_tiers` (
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `affix_group_ease_tier_pulls` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `subcreation_ease_tier_pull_id` int(11) NOT NULL,
   `affix_group_id` int(11) NOT NULL,
-  `dungeon_id` int(11) NOT NULL,
-  `tier` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tiers_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_updated_at` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `affix_group_ease_tiers_affix_group_id_index` (`affix_group_id`),
+  KEY `affix_group_ease_tier_pulls_tiers_hash_index` (`tiers_hash`),
+  KEY `affix_group_ease_tier_pulls_affix_group_id_index` (`affix_group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `affix_group_ease_tiers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `affix_group_ease_tiers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `affix_group_ease_tier_pull_id` int(11) NOT NULL,
+  `affix_group_id` int(11) NOT NULL,
+  `dungeon_id` int(11) NOT NULL,
+  `tier` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `affix_group_ease_tiers_dungeon_id_index` (`dungeon_id`),
   KEY `affix_group_ease_tiers_affix_group_id_dungeon_id_index` (`affix_group_id`,`dungeon_id`),
-  KEY `affix_group_ease_tiers_subcreation_ease_tier_pull_id_index` (`subcreation_ease_tier_pull_id`),
-  KEY `compound` (`subcreation_ease_tier_pull_id`,`affix_group_id`,`dungeon_id`)
+  KEY `compound` (`affix_group_ease_tier_pull_id`,`affix_group_id`,`dungeon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `affix_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `affix_groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `season_id` int(11) NOT NULL,
   `expansion_id` int(11) NOT NULL,
   `seasonal_index` int(11) DEFAULT NULL,
+  `confirmed` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `affix_groups_season_id_index` (`season_id`),
   KEY `affix_groups_expansion_id_index` (`expansion_id`)
@@ -50,21 +64,23 @@ CREATE TABLE `affix_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `affixes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `affixes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `icon_file_id` int(11) NOT NULL,
+  `affix_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `affixes_icon_file_id_index` (`icon_file_id`),
-  KEY `affixes_key_index` (`key`)
+  KEY `affixes_key_index` (`key`),
+  KEY `affixes_affix_id_index` (`affix_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `brushlines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `brushlines` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -80,34 +96,38 @@ CREATE TABLE `brushlines` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `character_class_specializations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `character_class_specializations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `specialization_id` int(11) NOT NULL,
   `character_class_id` int(11) NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `icon_file_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `character_class_specializations_character_class_id_index` (`character_class_id`),
-  KEY `character_class_specializations_icon_file_id_index` (`icon_file_id`)
+  KEY `character_class_specializations_icon_file_id_index` (`icon_file_id`),
+  KEY `character_class_specializations_specialization_id_index` (`specialization_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `character_classes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `character_classes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int(11) NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `icon_file_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `character_classes_icon_file_id_index` (`icon_file_id`)
+  KEY `character_classes_icon_file_id_index` (`icon_file_id`),
+  KEY `character_classes_class_id_index` (`class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `character_race_class_couplings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `character_race_class_couplings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `character_race_id` int(11) NOT NULL,
@@ -119,33 +139,53 @@ CREATE TABLE `character_race_class_couplings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `character_races`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `character_races` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `race_id` int(11) NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `faction_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `character_races_faction_id_index` (`faction_id`)
+  KEY `character_races_faction_id_index` (`faction_id`),
+  KEY `character_races_race_id_index` (`race_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `characteristics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `characteristics` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `characteristics_key_index` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_floor_switch_markers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_floor_switch_markers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL DEFAULT '0',
   `floor_id` int(11) NOT NULL,
-  `target_floor_id` int(11) NOT NULL DEFAULT '-1',
+  `source_floor_id` int(11) DEFAULT NULL,
+  `target_floor_id` int(11) DEFAULT NULL,
+  `linked_dungeon_floor_switch_marker_id` int(11) DEFAULT NULL,
+  `direction` enum('none','up','down','left','right') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hidden_in_facade` tinyint(1) NOT NULL DEFAULT '0',
   `lat` double(8,2) NOT NULL,
   `lng` double(8,2) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `dungeon_floor_switch_markers_floor_id_index` (`floor_id`),
-  KEY `dungeon_floor_switch_markers_target_floor_id_index` (`target_floor_id`)
+  KEY `dungeon_floor_switch_markers_target_floor_id_index` (`target_floor_id`),
+  KEY `dungeon_floor_switch_markers_floor_id_mapping_version_id_index` (`floor_id`,`mapping_version_id`),
+  KEY `dungeon_floor_switch_markers_source_floor_id_index` (`source_floor_id`),
+  KEY `linked_floor_switch_index` (`linked_dungeon_floor_switch_marker_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_affix_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_affix_groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -157,7 +197,7 @@ CREATE TABLE `dungeon_route_affix_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_attributes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -167,9 +207,32 @@ CREATE TABLE `dungeon_route_attributes` (
   KEY `dungeon_route_attributes_route_attribute_id_index` (`route_attribute_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `dungeon_route_changes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dungeon_route_changes` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `dungeon_route_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `team_id` int(11) DEFAULT NULL,
+  `team_role` int(11) DEFAULT NULL,
+  `model_id` int(11) NOT NULL,
+  `model_class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `before` json DEFAULT NULL,
+  `after` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dungeon_route_changes_dungeon_route_id_model_class_index` (`dungeon_route_id`,`model_class`),
+  KEY `dungeon_route_changes_dungeon_route_id_user_id_index` (`dungeon_route_id`,`user_id`),
+  KEY `dungeon_route_changes_user_id_dungeon_route_id_index` (`user_id`,`dungeon_route_id`),
+  KEY `dungeon_route_changes_model_id_model_class_index` (`model_id`,`model_class`),
+  KEY `dungeon_route_changes_team_id_index` (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_enemy_raid_markers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_enemy_raid_markers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -183,7 +246,7 @@ CREATE TABLE `dungeon_route_enemy_raid_markers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_favorites`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_favorites` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -197,7 +260,7 @@ CREATE TABLE `dungeon_route_favorites` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_player_classes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_player_classes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -209,7 +272,7 @@ CREATE TABLE `dungeon_route_player_classes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_player_races`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_player_races` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -221,7 +284,7 @@ CREATE TABLE `dungeon_route_player_races` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_player_specializations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_player_specializations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -233,7 +296,7 @@ CREATE TABLE `dungeon_route_player_specializations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_route_ratings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_route_ratings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -245,31 +308,79 @@ CREATE TABLE `dungeon_route_ratings` (
   KEY `dungeon_route_ratings_dungeon_route_id_user_id_index` (`dungeon_route_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `dungeon_route_thumbnail_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dungeon_route_thumbnail_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `dungeon_route_id` int(11) NOT NULL,
+  `floor_id` int(11) NOT NULL,
+  `file_id` int(11) DEFAULT NULL,
+  `status` enum('queued','completed','expired') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'queued',
+  `viewport_width` int(11) DEFAULT NULL,
+  `viewport_height` int(11) DEFAULT NULL,
+  `image_width` int(11) DEFAULT NULL,
+  `image_height` int(11) DEFAULT NULL,
+  `zoom_level` double(8,2) DEFAULT NULL,
+  `quality` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dungeon_route_thumbnail_jobs_status_index` (`status`),
+  KEY `dungeon_route_thumbnail_jobs_dungeon_route_id_index` (`dungeon_route_id`),
+  KEY `dungeon_route_thumbnail_jobs_floor_id_index` (`floor_id`),
+  KEY `dungeon_route_thumbnail_jobs_file_id_index` (`file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `dungeon_route_thumbnails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dungeon_route_thumbnails` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `dungeon_route_id` int(11) NOT NULL,
+  `floor_id` int(11) NOT NULL,
+  `file_id` int(11) NOT NULL,
+  `custom` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dungeon_route_thumbnails_dungeon_route_id_index` (`dungeon_route_id`),
+  KEY `dungeon_route_thumbnails_floor_id_index` (`floor_id`),
+  KEY `dungeon_route_thumbnails_file_id_index` (`file_id`),
+  KEY `dungeon_route_thumbnails_custom_index` (`custom`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeon_routes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeon_routes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `public_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `clone_of` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `author_id` int(11) NOT NULL,
   `dungeon_id` int(11) NOT NULL,
+  `mapping_version_id` int(11) DEFAULT NULL,
+  `season_id` int(11) DEFAULT NULL,
   `faction_id` int(11) NOT NULL,
-  `team_id` int(11) NOT NULL DEFAULT '-1',
+  `team_id` int(11) DEFAULT NULL,
   `published_state_id` int(11) NOT NULL DEFAULT '1',
   `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `level_min` int(11) NOT NULL DEFAULT '2',
-  `level_max` int(11) NOT NULL DEFAULT '28',
+  `level_min` int(11) DEFAULT NULL,
+  `level_max` int(11) DEFAULT NULL,
   `difficulty` enum('Casual','Dedicated','Hardcore') COLLATE utf8mb4_unicode_ci NOT NULL,
   `seasonal_index` int(11) NOT NULL DEFAULT '0',
-  `enemy_forces` int(11) NOT NULL,
+  `enemy_forces` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `teeming` tinyint(1) NOT NULL,
   `demo` tinyint(1) NOT NULL DEFAULT '0',
   `pull_gradient` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `pull_gradient_apply_always` tinyint(1) NOT NULL,
+  `dungeon_difficulty` int(11) DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
+  `views_embed` int(11) NOT NULL DEFAULT '0',
   `popularity` int(11) NOT NULL DEFAULT '0',
+  `rating` double(8,2) DEFAULT NULL,
+  `rating_count` int(11) NOT NULL DEFAULT '0',
   `thumbnail_refresh_queued_at` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   `thumbnail_updated_at` timestamp NOT NULL DEFAULT '1970-01-01 12:00:00',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -291,65 +402,113 @@ CREATE TABLE `dungeon_routes` (
   KEY `dungeon_routes_thumbnail_updated_at_index` (`thumbnail_updated_at`),
   KEY `dungeon_routes_published_state_id_expires_at_index` (`published_state_id`,`expires_at`),
   KEY `dungeon_routes_views_index` (`views`),
-  KEY `dungeon_routes_popularity_index` (`popularity`)
+  KEY `dungeon_routes_popularity_index` (`popularity`),
+  KEY `dungeon_routes_mapping_version_id_index` (`mapping_version_id`),
+  KEY `dungeon_routes_rating_index` (`rating`),
+  KEY `dungeon_routes_season_id_index` (`season_id`),
+  KEY `dungeon_routes_published_state_id_clone_of_index` (`published_state_id`,`clone_of`),
+  KEY `dungeon_routes_dungeon_pub_exp` (`dungeon_id`,`published_state_id`,`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `dungeon_speedrun_required_npcs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dungeon_speedrun_required_npcs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `floor_id` int(11) NOT NULL,
+  `npc_id` int(11) NOT NULL,
+  `npc2_id` int(11) DEFAULT NULL,
+  `npc3_id` int(11) DEFAULT NULL,
+  `npc4_id` int(11) DEFAULT NULL,
+  `npc5_id` int(11) DEFAULT NULL,
+  `difficulty` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dungeon_speedrun_required_npcs_floor_id_mode_index` (`floor_id`,`difficulty`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dungeons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dungeons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `expansion_id` int(11) NOT NULL,
   `zone_id` int(11) NOT NULL,
+  `map_id` int(11) NOT NULL DEFAULT '0',
+  `instance_id` int(11) DEFAULT NULL,
+  `challenge_mode_id` int(11) DEFAULT NULL,
   `mdt_id` int(11) NOT NULL DEFAULT '0',
+  `raid` tinyint(1) NOT NULL DEFAULT '0',
   `key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `enemy_forces_required` int(11) NOT NULL,
-  `enemy_forces_required_teeming` int(11) NOT NULL,
-  `timer_max_seconds` int(11) NOT NULL,
+  `heatmap_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `speedrun_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `speedrun_difficulty_10_man_enabled` tinyint(1) NOT NULL,
+  `speedrun_difficulty_25_man_enabled` tinyint(1) NOT NULL,
+  `views` int(11) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '1',
+  `has_wallpaper` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `dungeons_expansion_id_index` (`expansion_id`),
   KEY `dungeons_slug_index` (`slug`),
   KEY `dungeons_active_index` (`active`),
-  KEY `dungeons_enemy_forces_required_index` (`enemy_forces_required`),
-  KEY `dungeons_enemy_forces_required_teeming_index` (`enemy_forces_required_teeming`)
+  KEY `dungeons_speedrun_enabled_index` (`speedrun_enabled`),
+  KEY `dungeons_challenge_mode_id_index` (`challenge_mode_id`),
+  KEY `dungeons_zone_id_index` (`zone_id`),
+  KEY `dungeons_map_id_index` (`map_id`),
+  KEY `dungeons_mdt_id_index` (`mdt_id`),
+  KEY `dungeons_key_index` (`key`),
+  KEY `dungeons_instance_id_index` (`instance_id`),
+  KEY `dungeons_raid_index` (`raid`),
+  KEY `dungeons_name_index` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `enemies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enemies` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `enemy_pack_id` int(11) NOT NULL,
-  `npc_id` int(11) NOT NULL DEFAULT '-1',
+  `mapping_version_id` int(11) NOT NULL DEFAULT '0',
+  `enemy_pack_id` int(11) DEFAULT NULL,
+  `enemy_patrol_id` int(11) DEFAULT NULL,
+  `npc_id` int(11) DEFAULT NULL,
   `floor_id` int(11) NOT NULL,
-  `mdt_id` int(11) NOT NULL DEFAULT '-1',
+  `mdt_id` int(11) DEFAULT NULL,
   `mdt_npc_id` int(11) DEFAULT NULL,
-  `seasonal_type` enum('awakened','inspiring','prideful','tormented') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exclusive_enemy_id` int(11) DEFAULT NULL,
+  `mdt_scale` double(8,2) DEFAULT NULL,
+  `mdt_x` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mdt_y` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seasonal_type` enum('beguiling','awakened','inspiring','prideful','tormented','encrypted','mdt_placeholder','requires_activation','shrouded','shrouded_zul_gamux','no_shrouded') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `seasonal_index` int(11) DEFAULT NULL,
   `teeming` enum('visible','hidden') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `faction` enum('any','alliance','horde') COLLATE utf8mb4_unicode_ci NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `skippable` tinyint(1) NOT NULL DEFAULT '0',
-  `enemy_forces_override` int(11) NOT NULL DEFAULT '-1',
-  `enemy_forces_override_teeming` int(11) NOT NULL DEFAULT '-1',
+  `hyper_respawn` tinyint(1) NOT NULL DEFAULT '0',
+  `enemy_forces_override` int(11) DEFAULT NULL,
+  `enemy_forces_override_teeming` int(11) DEFAULT NULL,
+  `dungeon_difficulty` int(11) DEFAULT NULL,
   `lat` double NOT NULL,
   `lng` double NOT NULL,
+  `kill_priority` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `enemies_enemy_pack_id_index` (`enemy_pack_id`),
   KEY `enemies_npc_id_index` (`npc_id`),
-  KEY `enemies_floor_id_index` (`floor_id`),
   KEY `enemies_seasonal_index_index` (`seasonal_index`),
   KEY `enemies_mdt_id_index` (`mdt_id`),
   KEY `enemies_enemy_forces_override_index` (`enemy_forces_override`),
-  KEY `enemies_enemy_forces_override_teeming_index` (`enemy_forces_override_teeming`)
+  KEY `enemies_enemy_forces_override_teeming_index` (`enemy_forces_override_teeming`),
+  KEY `enemies_enemy_patrol_id_index` (`enemy_patrol_id`),
+  KEY `enemies_floor_id_index` (`floor_id`),
+  KEY `enemies_mapping_version_id_floor_id_index` (`mapping_version_id`,`floor_id`),
+  KEY `enemies_exclusive_enemy_id_index` (`exclusive_enemy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `enemy_active_auras`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enemy_active_auras` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `enemy_id` int(11) NOT NULL,
@@ -361,7 +520,7 @@ CREATE TABLE `enemy_active_auras` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `enemy_infested_votes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enemy_infested_votes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -380,39 +539,50 @@ CREATE TABLE `enemy_infested_votes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `enemy_packs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enemy_packs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL DEFAULT '0',
   `floor_id` int(11) NOT NULL,
+  `group` int(11) DEFAULT NULL,
   `teeming` enum('visible','hidden') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `faction` enum('any','alliance','horde') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `color_animated` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `label` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `vertices_json` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `enemy_packs_floor_id_index` (`floor_id`)
+  KEY `enemy_packs_floor_id_index` (`floor_id`),
+  KEY `enemy_packs_mapping_version_id_floor_id_index` (`mapping_version_id`,`floor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `enemy_patrols`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `enemy_patrols` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL DEFAULT '0',
   `floor_id` int(11) NOT NULL,
-  `polyline_id` int(11) NOT NULL,
+  `polyline_id` int(11) DEFAULT NULL,
+  `mdt_polyline_id` int(11) DEFAULT NULL,
+  `mdt_npc_id` int(11) DEFAULT NULL,
+  `mdt_id` int(11) DEFAULT NULL,
   `teeming` enum('visible','hidden') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `faction` enum('any','alliance','horde') COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `enemy_patrols_polyline_id_index` (`polyline_id`),
   KEY `enemy_patrols_floor_id_index` (`floor_id`),
-  KEY `enemy_patrols_polyline_id_index` (`polyline_id`)
+  KEY `enemy_patrols_mapping_version_id_floor_id_index` (`mapping_version_id`,`floor_id`),
+  KEY `enemy_patrols_mdt_polyline_id_index` (`mdt_polyline_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `expansions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `expansions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `icon_file_id` int(11) NOT NULL,
-  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `shortname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `color` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `released_at` timestamp NULL DEFAULT NULL,
@@ -423,12 +593,13 @@ CREATE TABLE `expansions` (
   KEY `expansions_icon_file_id_index` (`icon_file_id`),
   KEY `expansions_shortname_index` (`shortname`),
   KEY `expansions_released_at_index` (`released_at`),
-  KEY `expansions_active_index` (`active`)
+  KEY `expansions_active_index` (`active`),
+  KEY `expansions_name_index` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `factions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `factions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `icon_file_id` int(11) NOT NULL,
@@ -440,9 +611,23 @@ CREATE TABLE `factions` (
   KEY `factions_key_index` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `features`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `features` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `scope` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `features_name_scope_unique` (`name`,`scope`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `files` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `model_id` int(11) NOT NULL,
@@ -457,7 +642,7 @@ CREATE TABLE `files` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `floor_couplings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `floor_couplings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `floor1_id` int(11) NOT NULL,
@@ -468,25 +653,73 @@ CREATE TABLE `floor_couplings` (
   KEY `floor_couplings_floor2_id_index` (`floor2_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `floor_union_areas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `floor_union_areas` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL,
+  `floor_id` int(11) NOT NULL,
+  `floor_union_id` int(11) NOT NULL,
+  `vertices_json` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `floor_union_areas_floor_union_id_index` (`floor_union_id`),
+  KEY `floor_union_areas_floor_id_index` (`floor_id`),
+  KEY `floor_union_areas_mapping_version_id_floor_id_index` (`mapping_version_id`,`floor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `floor_unions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `floor_unions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL,
+  `floor_id` int(11) NOT NULL,
+  `target_floor_id` int(11) DEFAULT NULL,
+  `lat` double(8,2) NOT NULL,
+  `lng` double(8,2) NOT NULL,
+  `size` double(8,2) NOT NULL,
+  `rotation` double(8,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `floor_unions_floor_id_target_floor_id_index` (`floor_id`,`target_floor_id`),
+  KEY `floor_unions_mapping_version_id_floor_id_index` (`mapping_version_id`,`floor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `floors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `floors` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_id` int(11) NOT NULL,
   `index` int(11) NOT NULL,
+  `mdt_sub_level` int(11) DEFAULT NULL,
+  `ui_map_id` int(11) DEFAULT NULL,
+  `map_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `default` tinyint(1) NOT NULL DEFAULT '0',
+  `facade` tinyint(1) NOT NULL DEFAULT '0',
   `min_enemy_size` int(11) DEFAULT NULL,
   `max_enemy_size` int(11) DEFAULT NULL,
+  `enemy_engagement_max_range` int(11) DEFAULT NULL,
+  `enemy_engagement_max_range_patrols` int(11) DEFAULT NULL,
+  `ingame_min_x` double NOT NULL DEFAULT '0',
+  `ingame_min_y` double NOT NULL DEFAULT '0',
+  `ingame_max_x` double NOT NULL DEFAULT '0',
+  `ingame_max_y` double NOT NULL DEFAULT '0',
+  `percentage_display_zoom` int(11) DEFAULT NULL,
+  `zoom_max` int(11) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `floors_dungeon_id_index_index` (`dungeon_id`,`index`),
-  KEY `floors_default_index` (`default`)
+  KEY `floors_default_index` (`default`),
+  KEY `floors_ui_map_id_index` (`ui_map_id`),
+  KEY `floors_facade_index` (`facade`),
+  KEY `floors_index_index` (`index`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `game_icon`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `game_icon` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `file_id` int(11) NOT NULL,
@@ -501,11 +734,12 @@ CREATE TABLE `game_icon` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `game_server_regions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `game_server_regions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `short` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `epoch_start` datetime DEFAULT NULL,
   `timezone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reset_day_offset` int(11) NOT NULL,
   `reset_hours_offset` int(11) NOT NULL,
@@ -513,9 +747,25 @@ CREATE TABLE `game_server_regions` (
   KEY `game_server_regions_short_index` (`short`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `game_versions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `game_versions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `expansion_id` int(11) NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `has_seasons` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `game_versions_active_index` (`active`),
+  KEY `game_versions_expansion_id_index` (`expansion_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -530,38 +780,56 @@ CREATE TABLE `jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `jobs_failed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs_failed` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `jobs_failed_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `kill_zone_enemies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kill_zone_enemies` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `kill_zone_id` int(11) NOT NULL,
-  `enemy_id` int(11) NOT NULL,
+  `npc_id` int(11) DEFAULT NULL,
+  `mdt_id` int(11) DEFAULT NULL,
+  `enemy_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `kill_zone_enemies_kill_zone_id_index` (`kill_zone_id`),
   KEY `kill_zone_enemies_enemy_id_index` (`enemy_id`),
-  KEY `kill_zone_enemies_kill_zone_id_enemy_id_index` (`kill_zone_id`,`enemy_id`)
+  KEY `kill_zone_enemies_kill_zone_id_enemy_id_index` (`kill_zone_id`,`enemy_id`),
+  KEY `kill_zone_enemies_npc_id_mdt_id_index` (`npc_id`,`mdt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `kill_zone_spells`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `kill_zone_spells` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `kill_zone_id` int(11) NOT NULL,
+  `spell_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kill_zone_spells_kill_zone_id_index` (`kill_zone_id`),
+  KEY `kill_zone_spells_spell_id_index` (`spell_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `kill_zones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kill_zones` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
-  `floor_id` int(11) NOT NULL,
+  `floor_id` int(11) DEFAULT NULL,
   `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lat` double DEFAULT NULL,
   `lng` double DEFAULT NULL,
   `index` int(11) NOT NULL DEFAULT '-1',
@@ -570,13 +838,12 @@ CREATE TABLE `kill_zones` (
   PRIMARY KEY (`id`),
   KEY `kill_zones_floor_id_index` (`floor_id`),
   KEY `kill_zones_dungeon_route_id_floor_id_index` (`dungeon_route_id`,`floor_id`),
-  KEY `kill_zones_dungeon_route_id_lat_lng_index` (`dungeon_route_id`,`lat`,`lng`),
   KEY `kill_zones_dungeon_route_id_index_index` (`dungeon_route_id`,`index`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `live_sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `live_sessions` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -593,7 +860,7 @@ CREATE TABLE `live_sessions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `map_icon_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `map_icon_types` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -607,31 +874,33 @@ CREATE TABLE `map_icon_types` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `map_icons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `map_icons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) DEFAULT NULL,
   `floor_id` int(11) NOT NULL,
-  `dungeon_route_id` int(11) NOT NULL DEFAULT '-1',
+  `dungeon_route_id` int(11) DEFAULT NULL,
   `team_id` int(11) DEFAULT NULL,
   `map_icon_type_id` int(11) DEFAULT NULL,
   `lat` double NOT NULL,
   `lng` double NOT NULL,
-  `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci,
   `permanent_tooltip` tinyint(1) NOT NULL DEFAULT '0',
   `seasonal_index` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `map_comments_dungeon_route_id_index` (`dungeon_route_id`),
-  KEY `map_comments_floor_id_dungeon_route_id_index` (`floor_id`,`dungeon_route_id`),
   KEY `map_icons_team_id_index` (`team_id`),
   KEY `map_icons_map_icon_type_id_index` (`map_icon_type_id`),
-  KEY `map_icons_seasonal_index_index` (`seasonal_index`)
+  KEY `map_icons_seasonal_index_index` (`seasonal_index`),
+  KEY `map_icons_dungeon_route_id_index` (`dungeon_route_id`),
+  KEY `map_icons_floor_id_index` (`floor_id`),
+  KEY `map_icons_mapping_version_id_floor_id_index` (`mapping_version_id`,`floor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `map_object_to_awakened_obelisk_links`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `map_object_to_awakened_obelisk_links` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `source_map_object_id` int(11) NOT NULL,
@@ -647,9 +916,10 @@ CREATE TABLE `map_object_to_awakened_obelisk_links` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mapping_change_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mapping_change_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `dungeon_id` int(11) DEFAULT NULL,
   `model_id` int(11) NOT NULL,
   `model_class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `before_model` longtext COLLATE utf8mb4_unicode_ci,
@@ -657,12 +927,13 @@ CREATE TABLE `mapping_change_logs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `mapping_change_logs_model_id_model_class_index` (`model_id`,`model_class`)
+  KEY `mapping_change_logs_model_id_model_class_index` (`model_id`,`model_class`),
+  KEY `mapping_change_logs_dungeon_id_index` (`dungeon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mapping_commit_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mapping_commit_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `merged` tinyint(1) NOT NULL DEFAULT '0',
@@ -671,12 +942,37 @@ CREATE TABLE `mapping_commit_logs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `mapping_versions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mapping_versions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `game_version_id` int(11) NOT NULL,
+  `dungeon_id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `enemy_forces_required` int(11) NOT NULL DEFAULT '0',
+  `enemy_forces_required_teeming` int(11) DEFAULT NULL,
+  `enemy_forces_shrouded` int(11) DEFAULT NULL,
+  `enemy_forces_shrouded_zul_gamux` int(11) DEFAULT NULL,
+  `timer_max_seconds` int(11) NOT NULL DEFAULT '0',
+  `mdt_mapping_hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `facade_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mapping_versions_dungeon_id_version_index` (`dungeon_id`,`version`),
+  KEY `mapping_versions_mdt_mapping_hash_index` (`mdt_mapping_hash`),
+  KEY `mapping_versions_facade_enabled_index` (`facade_enabled`),
+  KEY `mapping_versions_game_version_id_index` (`game_version_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mdt_imports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mdt_imports` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `dungeon_route_id` int(11) NOT NULL,
+  `dungeon_route_id` int(11) DEFAULT NULL,
+  `error` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `import_string` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -684,9 +980,42 @@ CREATE TABLE `mdt_imports` (
   KEY `mdt_imports_dungeon_route_id_index` (`dungeon_route_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `metric_aggregations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `metric_aggregations` (
+  `model_id` int(11) NOT NULL,
+  `model_class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` int(11) NOT NULL,
+  `tag` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`model_id`,`model_class`,`category`,`tag`),
+  KEY `metric_aggregations_model_id_model_class_index` (`model_id`,`model_class`),
+  KEY `metric_aggregations_category_tag_index` (`category`,`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `metrics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `metrics` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `model_id` int(11) DEFAULT NULL,
+  `model_class` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category` int(11) NOT NULL,
+  `tag` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `value` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `compound` (`model_id`,`model_class`,`category`,`tag`),
+  KEY `metrics_category_tag_index` (`category`,`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -694,9 +1023,22 @@ CREATE TABLE `migrations` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `mountable_areas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mountable_areas` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL DEFAULT '0',
+  `floor_id` int(11) NOT NULL,
+  `speed` int(11) DEFAULT NULL,
+  `vertices_json` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mountable_areas_floor_id_mapping_version_id_index` (`floor_id`,`mapping_version_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `npc_bolstering_whitelists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `npc_bolstering_whitelists` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `npc_id` int(11) NOT NULL,
@@ -706,31 +1048,82 @@ CREATE TABLE `npc_bolstering_whitelists` (
   KEY `npc_bolstering_whitelists_whitelist_npc_id_index` (`whitelist_npc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `npc_characteristics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `npc_characteristics` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `npc_id` int(11) NOT NULL,
+  `characteristic_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `npc_characteristics_npc_id_index` (`npc_id`),
+  KEY `npc_characteristics_characteristic_id_index` (`characteristic_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `npc_classes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `npc_classes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `npc_classes_key_index` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `npc_classifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `npc_classifications` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `shortname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `color` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `npc_dungeons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `npc_dungeons` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `npc_id` int(11) NOT NULL,
+  `dungeon_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `npc_dungeons_npc_id_dungeon_id_index` (`npc_id`,`dungeon_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `npc_enemy_forces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `npc_enemy_forces` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `mapping_version_id` int(11) NOT NULL,
+  `npc_id` int(11) NOT NULL,
+  `enemy_forces` int(11) NOT NULL DEFAULT '0',
+  `enemy_forces_teeming` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `npc_enemy_forces_mapping_version_id_npc_id_index` (`mapping_version_id`,`npc_id`),
+  KEY `npc_enemy_forces_npc_id_index` (`npc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `npc_healths`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `npc_healths` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `npc_id` int(11) NOT NULL,
+  `game_version_id` int(11) NOT NULL,
+  `health` int(11) NOT NULL,
+  `percentage` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `npc_healths_npc_id_game_version_id_unique` (`npc_id`,`game_version_id`),
+  KEY `npc_healths_npc_id_game_version_id_index` (`npc_id`,`game_version_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `npc_spells`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `npc_spells` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `npc_id` int(11) NOT NULL,
@@ -742,7 +1135,7 @@ CREATE TABLE `npc_spells` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `npc_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `npc_types` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -751,35 +1144,36 @@ CREATE TABLE `npc_types` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `npcs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `npcs` (
   `id` int(11) NOT NULL,
-  `dungeon_id` int(11) NOT NULL,
   `classification_id` int(11) NOT NULL,
   `npc_type_id` int(11) NOT NULL DEFAULT '8',
   `npc_class_id` int(11) NOT NULL DEFAULT '1',
-  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `base_health` int(11) NOT NULL,
-  `enemy_forces` int(11) NOT NULL DEFAULT '-1',
-  `enemy_forces_teeming` int(11) NOT NULL DEFAULT '-1',
+  `display_id` int(11) DEFAULT NULL,
+  `encounter_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level` int(11) DEFAULT NULL,
+  `mdt_scale` double(8,2) DEFAULT NULL,
   `aggressiveness` enum('neutral','unfriendly','aggressive','friendly','awakened') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'aggressive',
   `dangerous` tinyint(1) NOT NULL,
   `truesight` tinyint(1) NOT NULL,
   `bursting` tinyint(1) NOT NULL DEFAULT '1',
   `bolstering` tinyint(1) NOT NULL DEFAULT '1',
   `sanguine` tinyint(1) NOT NULL DEFAULT '1',
+  `runs_away_in_fear` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `npcs_dungeon_id_index` (`dungeon_id`),
   KEY `npcs_classification_id_index` (`classification_id`),
   KEY `npcs_npc_type_id_index` (`npc_type_id`),
   KEY `npcs_npc_class_id_index` (`npc_class_id`),
-  KEY `npcs_enemy_forces_index` (`enemy_forces`),
-  KEY `npcs_enemy_forces_teeming_index` (`enemy_forces_teeming`)
+  KEY `npcs_display_id_index` (`display_id`),
+  KEY `npcs_encounter_id_index` (`encounter_id`),
+  KEY `npcs_name_index` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `oauth_tokens` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -794,51 +1188,44 @@ CREATE TABLE `oauth_tokens` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `overpulled_enemies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `overpulled_enemies` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `live_session_id` int(11) NOT NULL,
   `kill_zone_id` int(11) NOT NULL,
+  `npc_id` int(11) DEFAULT NULL,
+  `mdt_id` int(11) DEFAULT NULL,
   `enemy_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `overpulled_enemies_live_session_id_index` (`live_session_id`),
   KEY `overpulled_enemies_kill_zone_id_index` (`kill_zone_id`),
   KEY `overpulled_enemies_enemy_id_index` (`enemy_id`),
-  KEY `overpulled_enemies_live_session_id_kill_zone_id_enemy_id_index` (`live_session_id`,`kill_zone_id`,`enemy_id`)
+  KEY `overpulled_enemies_live_session_id_kill_zone_id_enemy_id_index` (`live_session_id`,`kill_zone_id`,`enemy_id`),
+  KEY `overpulled_enemies_npc_id_mdt_id_index` (`npc_id`,`mdt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `page_views`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `page_views` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `model_id` int(11) NOT NULL,
   `model_class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `session_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `source` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `page_views_user_id_index` (`user_id`),
-  KEY `page_views_model_id_index` (`model_id`),
-  KEY `page_views_model_class_index` (`model_class`),
   KEY `page_views_model_id_model_class_index` (`model_id`,`model_class`),
   KEY `page_views_user_id_model_id_model_class_session_id_index` (`user_id`,`model_id`,`model_class`,`session_id`),
-  KEY `page_views_created_at_index` (`created_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `paid_tiers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `paid_tiers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  KEY `page_views_created_at_index` (`created_at`),
+  KEY `page_views_popularity_index` (`model_class`,`created_at`,`model_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_resets` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -849,7 +1236,7 @@ CREATE TABLE `password_resets` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `paths`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `paths` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -863,38 +1250,67 @@ CREATE TABLE `paths` (
   KEY `paths_polyline_id_index` (`polyline_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `patreon_data`;
+DROP TABLE IF EXISTS `patreon_ad_free_giveaways`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `patreon_data` (
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patreon_ad_free_giveaways` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `giver_user_id` int(11) NOT NULL,
+  `receiver_user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `patreon_ad_free_giveaways_giver_user_id_index` (`giver_user_id`),
+  KEY `patreon_ad_free_giveaways_receiver_user_id_index` (`receiver_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `patreon_benefits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patreon_benefits` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `paid_tiers_key_index` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `patreon_user_benefits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patreon_user_benefits` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `patreon_user_link_id` int(11) NOT NULL,
+  `patreon_benefit_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `patreon_user_benefits_patreon_user_link_id_index` (`patreon_user_link_id`),
+  KEY `patreon_user_benefits_patreon_benefit_id_index` (`patreon_benefit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `patreon_user_links`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patreon_user_links` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `scope` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `access_token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `refresh_token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expires_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `patreon_data_user_id_index` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `patreon_tiers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `patreon_tiers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `patreon_data_id` int(11) NOT NULL,
-  `paid_tier_id` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `patreon_tiers_patreon_data_id_index` (`patreon_data_id`),
-  KEY `patreon_tiers_paid_tier_id_index` (`paid_tier_id`)
+  KEY `patreon_data_user_id_index` (`user_id`),
+  KEY `patreon_data_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permission_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission_role` (
   `permission_id` int(10) unsigned NOT NULL,
   `role_id` int(10) unsigned NOT NULL,
@@ -906,7 +1322,7 @@ CREATE TABLE `permission_role` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permission_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission_user` (
   `permission_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -918,7 +1334,7 @@ CREATE TABLE `permission_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -932,7 +1348,7 @@ CREATE TABLE `permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `polylines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `polylines` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `model_id` int(11) NOT NULL,
@@ -942,12 +1358,13 @@ CREATE TABLE `polylines` (
   `weight` int(11) NOT NULL DEFAULT '3',
   `vertices_json` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `polylines_model_id_model_class_index` (`model_id`,`model_class`)
+  KEY `polylines_model_id_model_class_index` (`model_id`,`model_class`),
+  KEY `polylines_model_class_index` (`model_class`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `prideful_enemies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `prideful_enemies` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `dungeon_route_id` int(11) NOT NULL,
@@ -965,7 +1382,7 @@ CREATE TABLE `prideful_enemies` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `published_states`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `published_states` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -975,7 +1392,7 @@ CREATE TABLE `published_states` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `raid_markers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `raid_markers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -985,16 +1402,18 @@ CREATE TABLE `raid_markers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `release_changelog_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `release_changelog_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `release_changelog_categories_key_index` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `release_changelog_changes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `release_changelog_changes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `release_changelog_id` int(11) NOT NULL,
@@ -1008,7 +1427,7 @@ CREATE TABLE `release_changelog_changes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `release_changelogs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `release_changelogs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `release_id` int(11) NOT NULL,
@@ -1019,7 +1438,7 @@ CREATE TABLE `release_changelogs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `release_report_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `release_report_logs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `release_id` int(11) NOT NULL,
@@ -1032,23 +1451,28 @@ CREATE TABLE `release_report_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `releases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `releases` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `release_changelog_id` int(11) NOT NULL,
   `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `backup_db` tinyint(1) NOT NULL DEFAULT '1',
   `silent` tinyint(1) NOT NULL DEFAULT '0',
   `spotlight` tinyint(1) NOT NULL DEFAULT '0',
+  `released` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `releases_release_changelog_id_index` (`release_changelog_id`)
+  KEY `releases_release_changelog_id_index` (`release_changelog_id`),
+  KEY `releases_spotlight_created_at_index` (`spotlight`,`created_at`),
+  KEY `releases_created_at_index` (`created_at`),
+  KEY `releases_released_index` (`released`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `role_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_user` (
   `role_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -1060,7 +1484,7 @@ CREATE TABLE `role_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1074,59 +1498,120 @@ CREATE TABLE `roles` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `route_attributes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `route_attributes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `route_attributes_category_index` (`category`),
+  KEY `route_attributes_key_index` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `season_dungeons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `season_dungeons` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `season_id` int(11) NOT NULL,
+  `dungeon_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `season_dungeons_season_id_dungeon_id_index` (`season_id`,`dungeon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `seasons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seasons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `expansion_id` int(11) NOT NULL,
-  `seasonal_affix_id` int(11) NOT NULL,
+  `seasonal_affix_id` int(11) DEFAULT NULL,
+  `index` int(11) NOT NULL,
   `start` datetime NOT NULL,
   `presets` int(11) NOT NULL DEFAULT '0',
+  `affix_group_count` int(11) NOT NULL,
+  `start_affix_group_index` int(11) NOT NULL DEFAULT '0',
+  `key_level_min` int(11) NOT NULL DEFAULT '2',
+  `key_level_max` int(11) NOT NULL DEFAULT '30',
+  `item_level_min` int(11) DEFAULT NULL,
+  `item_level_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `seasons_seasonal_affix_id_index` (`seasonal_affix_id`),
   KEY `seasons_expansion_id_index` (`expansion_id`),
   KEY `seasons_start_index` (`start`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `simulation_craft_raid_events_options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `simulation_craft_raid_events_options` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `public_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dungeon_route_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `key_level` int(11) NOT NULL,
+  `shrouded_bounty_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `affix` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thundering_clear_seconds` int(11) DEFAULT NULL,
+  `raid_buffs_mask` int(11) NOT NULL DEFAULT '0',
+  `hp_percent` double(8,2) NOT NULL,
+  `simulate_bloodlust_per_pull` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ranged_pull_compensation_yards` double(8,2) NOT NULL,
+  `use_mounts` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `simulation_craft_raid_events_options_public_key_index` (`public_key`),
+  KEY `simulation_craft_raid_events_options_dungeon_route_id_index` (`dungeon_route_id`),
+  KEY `simulation_craft_raid_events_options_user_id_index` (`user_id`),
+  KEY `simulation_craft_raid_events_options_raid_buffs_mask_index` (`raid_buffs_mask`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `spell_dungeons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `spell_dungeons` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `spell_id` int(11) NOT NULL,
+  `dungeon_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `spell_dungeons_spell_id_index` (`spell_id`),
+  KEY `spell_dungeons_dungeon_id_index` (`dungeon_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `spells`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `spells` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `dispel_type` enum('Magic','Disease','Poison','Curse') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `game_version_id` int(11) NOT NULL DEFAULT '1',
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cooldown_group` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dispel_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mechanic` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `icon_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `schools_mask` int(11) NOT NULL,
+  `miss_types_mask` int(11) NOT NULL DEFAULT '0',
   `aura` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `subcreation_ease_tier_pulls`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `subcreation_ease_tier_pulls` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `source_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `current_affixes` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_updated_at` datetime NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `debuff` tinyint(1) DEFAULT NULL,
+  `cast_time` int(11) DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `selectable` tinyint(1) NOT NULL DEFAULT '0',
+  `hidden_on_map` tinyint(1) NOT NULL DEFAULT '0',
+  `fetched_data_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `spells_selectable_index` (`selectable`),
+  KEY `spells_hidden_on_map_index` (`hidden_on_map`),
+  KEY `spells_fetched_data_at_index` (`fetched_data_at`),
+  KEY `spells_game_version_id_index` (`game_version_id`),
+  KEY `spells_name_index` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tag_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tag_categories` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1137,7 +1622,7 @@ CREATE TABLE `tag_categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tags` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -1157,7 +1642,7 @@ CREATE TABLE `tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `team_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `team_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `team_id` int(11) NOT NULL,
@@ -1167,12 +1652,13 @@ CREATE TABLE `team_users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `team_users_team_id_user_id_index` (`team_id`,`user_id`),
-  KEY `team_users_user_id_index` (`user_id`)
+  KEY `team_users_user_id_role_index` (`user_id`,`role`),
+  KEY `team_users_role_index` (`role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `teams`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teams` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `public_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1180,6 +1666,7 @@ CREATE TABLE `teams` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `invite_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `default_role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'member',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -1190,7 +1677,7 @@ CREATE TABLE `teams` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `telescope_entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `telescope_entries` (
   `sequence` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1210,7 +1697,7 @@ CREATE TABLE `telescope_entries` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `telescope_entries_tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `telescope_entries_tags` (
   `entry_uuid` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tag` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1221,14 +1708,14 @@ CREATE TABLE `telescope_entries_tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `telescope_monitoring`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `telescope_monitoring` (
   `tag` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `timewalking_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `timewalking_events` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `expansion_id` int(11) NOT NULL,
@@ -1242,9 +1729,37 @@ CREATE TABLE `timewalking_events` (
   KEY `timewalking_events_key_index` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `translations` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `translation` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `translations_locale_key_index` (`locale`,`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_ip_addresses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_ip_addresses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  `ip_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_ip_addresses_user_id_ip_address_unique` (`user_id`,`ip_address`),
+  KEY `user_ip_addresses_user_id_ip_address_index` (`user_id`,`ip_address`),
+  KEY `user_ip_addresses_ip_address_index` (`ip_address`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_reports` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `model_id` int(11) NOT NULL,
@@ -1265,22 +1780,24 @@ CREATE TABLE `user_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `public_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `icon_file_id` int(11) DEFAULT NULL,
   `oauth_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `game_server_region_id` int(11) NOT NULL DEFAULT '-1',
-  `patreon_data_id` int(11) DEFAULT NULL,
+  `patreon_user_link_id` int(11) DEFAULT NULL,
+  `game_version_id` int(11) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'en',
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'en_US',
   `theme` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'darkly',
   `echo_color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `echo_anonymous` tinyint(1) NOT NULL DEFAULT '1',
   `changed_username` tinyint(1) NOT NULL,
   `timezone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `map_facade_style` enum('split_floors','facade') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'facade',
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `raw_patreon_response_data` longtext COLLATE utf8mb4_unicode_ci,
@@ -1291,12 +1808,12 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
-  KEY `users_patreon_data_id_index` (`patreon_data_id`),
   KEY `users_game_server_region_id_index` (`game_server_region_id`),
   KEY `users_name_index` (`name`),
   KEY `users_email_index` (`email`),
   KEY `users_oauth_id_index` (`oauth_id`),
-  KEY `users_icon_file_id_index` (`icon_file_id`)
+  KEY `users_icon_file_id_index` (`icon_file_id`),
+  KEY `users_patreon_user_link_id_index` (`patreon_user_link_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1306,327 +1823,583 @@ CREATE TABLE `users` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1);
-INSERT INTO `migrations` VALUES (2,'2014_10_12_100000_create_password_resets_table',1);
-INSERT INTO `migrations` VALUES (3,'2015_03_07_311070_create_tracker_paths_table',2);
-INSERT INTO `migrations` VALUES (4,'2015_03_07_311071_create_tracker_queries_table',2);
-INSERT INTO `migrations` VALUES (5,'2015_03_07_311072_create_tracker_queries_arguments_table',2);
-INSERT INTO `migrations` VALUES (6,'2015_03_07_311073_create_tracker_routes_table',2);
-INSERT INTO `migrations` VALUES (7,'2015_03_07_311074_create_tracker_routes_paths_table',2);
-INSERT INTO `migrations` VALUES (8,'2015_03_07_311075_create_tracker_route_path_parameters_table',2);
-INSERT INTO `migrations` VALUES (9,'2015_03_07_311076_create_tracker_agents_table',2);
-INSERT INTO `migrations` VALUES (10,'2015_03_07_311077_create_tracker_cookies_table',2);
-INSERT INTO `migrations` VALUES (11,'2015_03_07_311078_create_tracker_devices_table',2);
-INSERT INTO `migrations` VALUES (12,'2015_03_07_311079_create_tracker_domains_table',2);
-INSERT INTO `migrations` VALUES (13,'2015_03_07_311080_create_tracker_referers_table',2);
-INSERT INTO `migrations` VALUES (14,'2015_03_07_311081_create_tracker_geoip_table',2);
-INSERT INTO `migrations` VALUES (15,'2015_03_07_311082_create_tracker_sessions_table',2);
-INSERT INTO `migrations` VALUES (16,'2015_03_07_311083_create_tracker_errors_table',2);
-INSERT INTO `migrations` VALUES (17,'2015_03_07_311084_create_tracker_system_classes_table',2);
-INSERT INTO `migrations` VALUES (18,'2015_03_07_311085_create_tracker_log_table',2);
-INSERT INTO `migrations` VALUES (19,'2015_03_07_311086_create_tracker_events_table',2);
-INSERT INTO `migrations` VALUES (20,'2015_03_07_311087_create_tracker_events_log_table',2);
-INSERT INTO `migrations` VALUES (21,'2015_03_07_311088_create_tracker_sql_queries_table',2);
-INSERT INTO `migrations` VALUES (22,'2015_03_07_311089_create_tracker_sql_query_bindings_table',2);
-INSERT INTO `migrations` VALUES (23,'2015_03_07_311090_create_tracker_sql_query_bindings_parameters_table',2);
-INSERT INTO `migrations` VALUES (24,'2015_03_07_311091_create_tracker_sql_queries_log_table',2);
-INSERT INTO `migrations` VALUES (25,'2015_03_07_311092_create_tracker_connections_table',2);
-INSERT INTO `migrations` VALUES (26,'2015_03_07_311093_create_tracker_tables_relations',2);
-INSERT INTO `migrations` VALUES (27,'2015_03_13_311094_create_tracker_referer_search_term_table',2);
-INSERT INTO `migrations` VALUES (28,'2015_03_13_311095_add_tracker_referer_columns',2);
-INSERT INTO `migrations` VALUES (29,'2015_11_23_311096_add_tracker_referer_column_to_log',2);
-INSERT INTO `migrations` VALUES (30,'2015_11_23_311097_create_tracker_languages_table',2);
-INSERT INTO `migrations` VALUES (31,'2015_11_23_311098_add_language_id_column_to_sessions',2);
-INSERT INTO `migrations` VALUES (32,'2015_11_23_311099_add_tracker_language_foreign_key_to_sessions',2);
-INSERT INTO `migrations` VALUES (33,'2015_11_23_311100_add_nullable_to_tracker_error',2);
-INSERT INTO `migrations` VALUES (34,'2017_01_31_311101_fix_agent_name',2);
-INSERT INTO `migrations` VALUES (35,'2017_06_20_311102_add_agent_name_hash',2);
-INSERT INTO `migrations` VALUES (36,'2017_12_13_150000_fix_query_arguments',2);
-INSERT INTO `migrations` VALUES (37,'2018_05_02_114339_create_dungeons_table',3);
-INSERT INTO `migrations` VALUES (38,'2018_05_03_083513_laratrust_setup_tables',3);
-INSERT INTO `migrations` VALUES (39,'2018_05_07_103337_create_expansions_table',3);
-INSERT INTO `migrations` VALUES (40,'2018_05_18_153107_create_files_table',3);
-INSERT INTO `migrations` VALUES (41,'2018_05_18_154530_update_expansions_icon_column',3);
-INSERT INTO `migrations` VALUES (42,'2018_05_29_113037_create_dungeon_route_table',3);
-INSERT INTO `migrations` VALUES (43,'2018_06_04_103257_create_floor_table',3);
-INSERT INTO `migrations` VALUES (44,'2018_06_04_103405_create_floor_coupling_table',3);
-INSERT INTO `migrations` VALUES (45,'2018_06_12_131936_create_enemy_pack_table',3);
-INSERT INTO `migrations` VALUES (46,'2018_06_24_101623_create_enemies_table',3);
-INSERT INTO `migrations` VALUES (47,'2018_06_24_102134_create_npc_table',3);
-INSERT INTO `migrations` VALUES (48,'2018_06_25_114025_create_npc_classification_table',3);
-INSERT INTO `migrations` VALUES (49,'2018_07_02_162558_create_character_classes_table',3);
-INSERT INTO `migrations` VALUES (50,'2018_07_02_162719_create_character_class_specializations_table',3);
-INSERT INTO `migrations` VALUES (51,'2018_07_03_194459_create_character_races_table',3);
-INSERT INTO `migrations` VALUES (52,'2018_07_03_200558_create_character_race_class_couplings_table',3);
-INSERT INTO `migrations` VALUES (53,'2018_07_13_150842_create_dungeon_route_player_classes_table',3);
-INSERT INTO `migrations` VALUES (54,'2018_07_13_150919_create_dungeon_route_player_races_table',3);
-INSERT INTO `migrations` VALUES (55,'2018_07_21_073251_create_factions_table',3);
-INSERT INTO `migrations` VALUES (56,'2018_07_22_145145_create_affixes_table',3);
-INSERT INTO `migrations` VALUES (57,'2018_07_22_145707_create_affix_groups_table',3);
-INSERT INTO `migrations` VALUES (58,'2018_07_22_150826_create_affix_group_couplings_table',3);
-INSERT INTO `migrations` VALUES (59,'2018_07_24_143109_create_dungeon_route_affix_groups_table',3);
-INSERT INTO `migrations` VALUES (60,'2018_07_30_205413_create_route_nodes_table',3);
-INSERT INTO `migrations` VALUES (61,'2018_07_30_210445_create_route_node_connections_table',3);
-INSERT INTO `migrations` VALUES (62,'2018_07_31_105519_create_routes_table',3);
-INSERT INTO `migrations` VALUES (63,'2018_08_02_192004_create_dungeon_start_markers_table',3);
-INSERT INTO `migrations` VALUES (64,'2018_08_03_175906_create_dungeon_floor_switch_markers_table',3);
-INSERT INTO `migrations` VALUES (65,'2018_08_16_084237_add_shortname_to_expansion',3);
-INSERT INTO `migrations` VALUES (66,'2018_08_16_220036_add_unlisted_column_to_dungeon_route',3);
-INSERT INTO `migrations` VALUES (67,'2018_08_16_222126_add_public_key_column_to_dungeon_routes',3);
-INSERT INTO `migrations` VALUES (68,'2018_08_18_153818_add_direction_to_floor_couplings',3);
-INSERT INTO `migrations` VALUES (69,'2018_08_18_195153_add_active_to_dungeons',3);
-INSERT INTO `migrations` VALUES (70,'2018_08_19_181409_add_aggressiveness_to_npcs',3);
-INSERT INTO `migrations` VALUES (71,'2018_08_20_101630_add_dungeon_to_npcs',3);
-INSERT INTO `migrations` VALUES (72,'2018_08_20_104543_remove_game_id_from_npcs',3);
-INSERT INTO `migrations` VALUES (73,'2018_08_22_142255_add_teeming_to_enemies',3);
-INSERT INTO `migrations` VALUES (74,'2018_08_22_205828_create_enemy_patrol_table',3);
-INSERT INTO `migrations` VALUES (75,'2018_08_23_074104_create_enemy_patrol_vertices_table',3);
-INSERT INTO `migrations` VALUES (76,'2018_08_23_080026_rename_enemy_pack_vertices_x_y_lat_lng',3);
-INSERT INTO `migrations` VALUES (77,'2018_08_24_183558_set_object_reference_defaults',3);
-INSERT INTO `migrations` VALUES (78,'2018_08_25_073209_add_demo_to_dungeon_routes',3);
-INSERT INTO `migrations` VALUES (79,'2018_08_27_104843_remake_routes_table',3);
-INSERT INTO `migrations` VALUES (80,'2018_08_27_105202_create_route_vertices_table',3);
-INSERT INTO `migrations` VALUES (81,'2018_08_30_121711_add_friendly_aggressiveness_to_npcs',3);
-INSERT INTO `migrations` VALUES (82,'2018_08_31_144155_create_dungeon_route_rating_table',3);
-INSERT INTO `migrations` VALUES (83,'2018_09_03_140340_add_enemy_forces_to_npcs',3);
-INSERT INTO `migrations` VALUES (84,'2018_09_03_145002_add_enemy_forces_to_dungeons',3);
-INSERT INTO `migrations` VALUES (85,'2018_09_03_145412_remove_timestamps_from_dungeons',3);
-INSERT INTO `migrations` VALUES (86,'2018_09_03_191336_add_difficulty_to_dungeon_routes',3);
-INSERT INTO `migrations` VALUES (87,'2018_09_04_072104_create_kill_zones_table',3);
-INSERT INTO `migrations` VALUES (88,'2018_09_04_072117_create_kill_zone_enemies_table',3);
-INSERT INTO `migrations` VALUES (89,'2018_09_04_181547_create_dungeon_route_favorites_table',3);
-INSERT INTO `migrations` VALUES (90,'2018_09_07_173139_add_teeming_to_dungeon_routes',3);
-INSERT INTO `migrations` VALUES (91,'2018_09_09_094051_change_enemy_forces_default_on_npcs',3);
-INSERT INTO `migrations` VALUES (92,'2018_09_11_110937_add_enemy_forces_override_to_enemies',3);
-INSERT INTO `migrations` VALUES (93,'2018_09_14_075248_add_faction_to_enemies',3);
-INSERT INTO `migrations` VALUES (94,'2018_09_14_114907_add_faction_to_packs_and_patrols',3);
-INSERT INTO `migrations` VALUES (95,'2018_09_16_191357_change_unspecified_faction_color',3);
-INSERT INTO `migrations` VALUES (96,'2018_09_18_095415_rebuild_character_specialization_table',3);
-INSERT INTO `migrations` VALUES (97,'2018_09_18_102034_create_dungeon_route_player_specializations_table',3);
-INSERT INTO `migrations` VALUES (98,'2018_09_21_191133_create_raid_markers_table',3);
-INSERT INTO `migrations` VALUES (99,'2018_09_21_191240_create_dungeon_route_enemy_raid_markers_table',3);
-INSERT INTO `migrations` VALUES (100,'2018_09_23_171542_create_map_comments_table',3);
-INSERT INTO `migrations` VALUES (101,'2018_09_23_174913_create_game_icon_table',3);
-INSERT INTO `migrations` VALUES (102,'2018_09_25_105649_create_user_reports_table',3);
-INSERT INTO `migrations` VALUES (103,'2018_09_28_103452_create_patreon_data_table',3);
-INSERT INTO `migrations` VALUES (104,'2018_09_28_103859_create_patreon_tiers_table',3);
-INSERT INTO `migrations` VALUES (105,'2018_09_28_104016_create_paid_tiers_table',3);
-INSERT INTO `migrations` VALUES (106,'2018_10_05_090613_truncate_dungeon_route_affix_groups_table',3);
-INSERT INTO `migrations` VALUES (107,'2018_10_07_194910_truncate_dungeon_route_player_races_table',3);
-INSERT INTO `migrations` VALUES (108,'2018_10_08_204125_add_raw_patreon_response_data_column_to_user',3);
-INSERT INTO `migrations` VALUES (109,'2018_10_09_135401_add_published_column_to_dungeon_routes_table',3);
-INSERT INTO `migrations` VALUES (110,'2018_10_12_214701_remove_duplicate_killzones',3);
-INSERT INTO `migrations` VALUES (111,'2018_10_13_065653_remove_duplicate_killzone_enemies',3);
-INSERT INTO `migrations` VALUES (112,'2018_10_16_082014_add_clone_of_column_to_dungeon_routes_table',3);
-INSERT INTO `migrations` VALUES (113,'2018_10_17_184014_add_indexes_to_foreign_keys',3);
-INSERT INTO `migrations` VALUES (114,'2018_10_19_134402_create_enemy_infested_votes_table',3);
-INSERT INTO `migrations` VALUES (115,'2018_10_24_143250_add_game_server_region_to_users_table',3);
-INSERT INTO `migrations` VALUES (116,'2018_10_24_143536_create_game_server_regions_table',3);
-INSERT INTO `migrations` VALUES (117,'2018_10_25_112337_add_timezone_to_users_table',3);
-INSERT INTO `migrations` VALUES (118,'2018_10_27_125106_add_vote_weight_to_enemy_infested_votes_table',3);
-INSERT INTO `migrations` VALUES (119,'2018_10_28_152904_add_legal_agreed_column_to_users_table',3);
-INSERT INTO `migrations` VALUES (120,'2018_10_28_173417_add_analytics_cookie_opt_out_column_to_users_table',3);
-INSERT INTO `migrations` VALUES (121,'2018_10_28_175044_add_adsense_no_personalized_ads_column_to_users_table',3);
-INSERT INTO `migrations` VALUES (122,'2018_11_23_133231_create_route_attributes_table',3);
-INSERT INTO `migrations` VALUES (123,'2018_11_23_134212_drop_route_nodes_table',3);
-INSERT INTO `migrations` VALUES (124,'2018_11_23_141000_create_dungeon_route_attributes_table',3);
-INSERT INTO `migrations` VALUES (125,'2018_11_29_125414_create_page_views_table',3);
-INSERT INTO `migrations` VALUES (126,'2018_12_03_224442_create_jobs_table',3);
-INSERT INTO `migrations` VALUES (127,'2018_12_03_224443_create_failed_jobs_table',3);
-INSERT INTO `migrations` VALUES (128,'2018_12_03_230454_add_thumbnail_updated_at_column_to_dungeon_routes',3);
-INSERT INTO `migrations` VALUES (129,'2018_12_04_213900_upgrade_laravel_from56_to57',3);
-INSERT INTO `migrations` VALUES (130,'2018_12_05_113341_fix_logs_permissions',3);
-INSERT INTO `migrations` VALUES (131,'2018_12_17_125702_add_published_unlisted_demo_dungeon_route_index',3);
-INSERT INTO `migrations` VALUES (132,'2019_01_03_083634_add_color_column_to_kill_zones',3);
-INSERT INTO `migrations` VALUES (133,'2019_01_11_220930_add_mdt_id_column_to_enemies_table',3);
-INSERT INTO `migrations` VALUES (134,'2019_01_17_164049_create_mdt_imports_table',3);
-INSERT INTO `migrations` VALUES (135,'2019_01_19_232350_move_tol_dagor_enemies_to_different_floor',3);
-INSERT INTO `migrations` VALUES (136,'2019_01_20_000753_fix_waycrest_manor_floor_order',3);
-INSERT INTO `migrations` VALUES (137,'2019_01_22_212350_move_waycrest_manor_enemies_to_different_floor',3);
-INSERT INTO `migrations` VALUES (138,'2019_01_25_233307_create_polylines_table',3);
-INSERT INTO `migrations` VALUES (139,'2019_02_01_202940_add_active_column_to_affix_groups_table',3);
-INSERT INTO `migrations` VALUES (140,'2019_02_06_151749_add_user_role_to_admin_user',3);
-INSERT INTO `migrations` VALUES (141,'2019_02_08_215221_rename_route_to_path',3);
-INSERT INTO `migrations` VALUES (142,'2019_02_08_231211_rename_path_vertex_route_id_to_path_id',3);
-INSERT INTO `migrations` VALUES (143,'2019_02_12_102903_install_handlebars_global',3);
-INSERT INTO `migrations` VALUES (144,'2019_02_14_123208_delete_unused_thumbnails',3);
-INSERT INTO `migrations` VALUES (145,'2019_02_14_160847_add_vertices_json_to_paths_table',3);
-INSERT INTO `migrations` VALUES (146,'2019_02_14_161632_convert_path_vertices_to_vertices_json',3);
-INSERT INTO `migrations` VALUES (147,'2019_02_14_175849_remove_path_vertices_table',3);
-INSERT INTO `migrations` VALUES (148,'2019_02_14_190847_add_vertices_json_to_enemy_patrols_table',3);
-INSERT INTO `migrations` VALUES (149,'2019_02_14_191632_convert_enemy_patrol_vertices_to_vertices_json',3);
-INSERT INTO `migrations` VALUES (150,'2019_02_14_195849_remove_enemy_patrols_vertices_table',3);
-INSERT INTO `migrations` VALUES (151,'2019_02_14_200847_add_vertices_json_to_enemy_packs_table',3);
-INSERT INTO `migrations` VALUES (152,'2019_02_14_201632_convert_enemy_pack_vertices_to_vertices_json',3);
-INSERT INTO `migrations` VALUES (153,'2019_02_14_205849_remove_enemy_pack_vertices_table',3);
-INSERT INTO `migrations` VALUES (154,'2019_02_15_113828_create_brushlines_table',3);
-INSERT INTO `migrations` VALUES (155,'2019_02_15_113839_convert_polyline_to_brushline',3);
-INSERT INTO `migrations` VALUES (156,'2019_02_15_213803_add_indices_to_brushlines_table',3);
-INSERT INTO `migrations` VALUES (157,'2019_02_16_170615_convert_enemy_patrols_to_polylines',3);
-INSERT INTO `migrations` VALUES (158,'2019_02_16_234229_convert_paths_to_polylines',3);
-INSERT INTO `migrations` VALUES (159,'2019_02_16_234729_add_indices_to_paths_table',3);
-INSERT INTO `migrations` VALUES (160,'2019_02_18_213621_add_indices_to_tables',3);
-INSERT INTO `migrations` VALUES (161,'2019_02_20_130647_remove_node_modules_folder',3);
-INSERT INTO `migrations` VALUES (162,'2019_03_08_105109_add_expires_at_column_to_dungeon_routes_table',3);
-INSERT INTO `migrations` VALUES (163,'2019_04_10_155616_create_teams_table',3);
-INSERT INTO `migrations` VALUES (164,'2019_04_10_155656_create_team_users_table',3);
-INSERT INTO `migrations` VALUES (165,'2019_04_10_155838_add_team_id_to_dungeon_routes_table',3);
-INSERT INTO `migrations` VALUES (166,'2019_04_19_085009_create_o_auth_tokens_table',3);
-INSERT INTO `migrations` VALUES (167,'2019_04_19_095133_add_has_changed_username_to_users_table',3);
-INSERT INTO `migrations` VALUES (168,'2019_04_20_204038_change_americas_region_short',3);
-INSERT INTO `migrations` VALUES (169,'2019_04_20_210544_add_o_auth_id_to_users_table',3);
-INSERT INTO `migrations` VALUES (170,'2019_05_29_220728_add_echo_color_to_users_table',3);
-INSERT INTO `migrations` VALUES (171,'2019_06_16_155836_add_teeming_column_to_enemy_packs_table',3);
-INSERT INTO `migrations` VALUES (172,'2019_06_16_155957_add_teeming_column_to_enemy_patrols_table',3);
-INSERT INTO `migrations` VALUES (173,'2019_06_17_141544_create_seasons_table',3);
-INSERT INTO `migrations` VALUES (174,'2019_06_17_141728_add_season_to_affix_groups_table',3);
-INSERT INTO `migrations` VALUES (175,'2019_06_17_205510_rename_columns_on_game_server_regions_table',3);
-INSERT INTO `migrations` VALUES (176,'2019_06_29_205126_add_beguiling_preset_column_to_dungeon_routes_table',3);
-INSERT INTO `migrations` VALUES (177,'2019_06_29_222133_add_beguiling_preset_to_enemies_table',3);
-INSERT INTO `migrations` VALUES (178,'2019_07_07_142418_create_releases_table',3);
-INSERT INTO `migrations` VALUES (179,'2019_07_07_142721_create_release_changelog_categories_table',3);
-INSERT INTO `migrations` VALUES (180,'2019_07_07_143120_create_release_changelog_changes_table',3);
-INSERT INTO `migrations` VALUES (181,'2019_07_07_144052_create_release_changelogs_table',3);
-INSERT INTO `migrations` VALUES (182,'2019_07_14_214237_create_npc_types_table',3);
-INSERT INTO `migrations` VALUES (183,'2019_07_15_204744_add_npc_type_to_npcs_table',3);
-INSERT INTO `migrations` VALUES (184,'2019_07_28_153718_create_npc_classes_table',3);
-INSERT INTO `migrations` VALUES (185,'2019_07_28_154309_add_npc_class_to_npcs_table',3);
-INSERT INTO `migrations` VALUES (186,'2019_08_01_115111_add_dangerous_column_to_npcs_table',3);
-INSERT INTO `migrations` VALUES (187,'2019_08_06_144650_add_truesight_column_to_npcs_table',3);
-INSERT INTO `migrations` VALUES (188,'2019_08_26_084618_add_presets_column_to_seasons_table',3);
-INSERT INTO `migrations` VALUES (189,'2020_02_12_160541_change_floor_directions_on_floor_couplings_table',3);
-INSERT INTO `migrations` VALUES (190,'2020_02_26_214234_remove_beguiling_preset_from_enemies_table',4);
-INSERT INTO `migrations` VALUES (191,'2020_02_26_214255_remove_beguiling_preset_from_dungeon_routes_table',4);
-INSERT INTO `migrations` VALUES (192,'2020_03_01_184027_remove_always_visible_from_map_comments_table',5);
-INSERT INTO `migrations` VALUES (193,'2020_03_01_184148_rename_map_comments_table',5);
-INSERT INTO `migrations` VALUES (194,'2020_03_01_194640_rename_game_icon_id_to_icon_type_column_map_icons_table',5);
-INSERT INTO `migrations` VALUES (195,'2020_03_04_224929_create_map_icon_types_table',6);
-INSERT INTO `migrations` VALUES (196,'2020_05_03_212519_make_lat_lng_nullable_on_kill_zones_table',7);
-INSERT INTO `migrations` VALUES (197,'2020_05_08_161900_add_awakened_aggressiveness_to_npcs',8);
-INSERT INTO `migrations` VALUES (198,'2020_05_15_164832_drop_dungeon_start_markers_table',9);
-INSERT INTO `migrations` VALUES (199,'2020_05_24_102849_update_echo_colors_for_new_users',10);
-INSERT INTO `migrations` VALUES (200,'2020_05_24_143632_make_description_nullable_in_teams_table',11);
-INSERT INTO `migrations` VALUES (201,'2020_05_25_115345_ensure_color_is_set_in_kill_zones_table',12);
-INSERT INTO `migrations` VALUES (202,'2020_05_25_144051_add_permanent_tooltip_column_to_map_icons_table',12);
-INSERT INTO `migrations` VALUES (203,'2020_05_27_152742_reverse_lat_lng_for_vertices',13);
-INSERT INTO `migrations` VALUES (204,'2020_05_29_160556_add_enemy_forces_teeming_to_npcs_table',14);
-INSERT INTO `migrations` VALUES (205,'2020_05_30_131139_add_seasonal_index_to_affix_groups_table',15);
-INSERT INTO `migrations` VALUES (206,'2020_05_30_133632_add_seasonal_index_to_enemies_table',16);
-INSERT INTO `migrations` VALUES (207,'2020_05_31_105521_add_seasonal_index_to_dungeon_routes_table',17);
-INSERT INTO `migrations` VALUES (208,'2020_06_09_103058_add_seasonal_index_to_map_icons_table',18);
-INSERT INTO `migrations` VALUES (209,'2020_06_18_165727_add_enemy_forces_override_teeming_to_enemies_table',19);
-INSERT INTO `migrations` VALUES (210,'2020_06_20_013647_add_linked_map_icon_id_to_map_icons_table',20);
-INSERT INTO `migrations` VALUES (211,'2020_06_22_175133_create_map_object_to_awakened_obelisk_links_table',21);
-INSERT INTO `migrations` VALUES (212,'2020_06_23_134424_remove_linked_map_icon_id_column_from_map_icons_table',22);
-INSERT INTO `migrations` VALUES (213,'2020_06_23_133643_migrate_linked_map_icon_id_to_new_system',23);
-INSERT INTO `migrations` VALUES (214,'2020_06_25_111327_add_color_animated_to_polylines_table',23);
-INSERT INTO `migrations` VALUES (215,'2020_06_28_134859_add_index_to_kill_zones_table',24);
-INSERT INTO `migrations` VALUES (216,'2020_06_29_112534_make_target_map_icon_seasonal_index_nullable',24);
-INSERT INTO `migrations` VALUES (217,'2020_07_08_094044_remove_enemy_id_column_from_enemy_patrols_table',25);
-INSERT INTO `migrations` VALUES (218,'2020_07_12_195450_adjust_kill_zones_enemies_last_boss_awakened_enemies',26);
-INSERT INTO `migrations` VALUES (219,'2020_07_17_204803_add_team_id_to_map_icons_table',26);
-INSERT INTO `migrations` VALUES (220,'2020_07_18_120658_add_bursting_to_npcs_table',27);
-INSERT INTO `migrations` VALUES (221,'2020_07_18_190107_add_bolstering_to_npcs_table',28);
-INSERT INTO `migrations` VALUES (222,'2020_07_19_194743_create_npc_bolstering_whitelists_table',29);
-INSERT INTO `migrations` VALUES (223,'2020_07_24_123707_add_pull_gradient_column_to_dungeon_routes_table',30);
-INSERT INTO `migrations` VALUES (224,'2020_07_24_211935_add_sanguine_to_npcs_table',31);
-INSERT INTO `migrations` VALUES (226,'2020_07_25_115757_rebuild_user_reports_table',32);
-INSERT INTO `migrations` VALUES (227,'2020_07_28_104503_add_default_column_to_floors_table',33);
-INSERT INTO `migrations` VALUES (228,'2020_07_31_140226_create_report_logs_table',34);
-INSERT INTO `migrations` VALUES (229,'2020_08_01_124625_add_key_to_dungeons_table',35);
-INSERT INTO `migrations` VALUES (233,'2020_08_23_194343_add_released_at_to_expansions_table',36);
-INSERT INTO `migrations` VALUES (234,'2020_08_26_121615_rename_report_logs_table_to_release_report_logs_table',37);
-INSERT INTO `migrations` VALUES (235,'2020_08_28_150407_create_mapping_change_logs_table',37);
-INSERT INTO `migrations` VALUES (236,'2020_08_28_150420_create_mapping_commit_logs_table',37);
-INSERT INTO `migrations` VALUES (237,'2020_09_03_190407_add_anonymous_echo_column_to_users_table',38);
-INSERT INTO `migrations` VALUES (238,'2020_09_05_200056_add_default_sanguine_column_in_npcs_table',39);
-INSERT INTO `migrations` VALUES (239,'2020_09_05_203133_add_zone_id_to_dungeons_table',40);
-INSERT INTO `migrations` VALUES (241,'2020_09_06_070919_add_seasonal_type_column_to_enemies_table',41);
-INSERT INTO `migrations` VALUES (242,'2020_09_06_201915_make_before_model_nullable_in_mapping_change_logs_table',42);
-INSERT INTO `migrations` VALUES (243,'2020_09_06_203001_add_prideful_to_seasonal_type_in_enemies_table',43);
-INSERT INTO `migrations` VALUES (245,'2020_09_06_203844_create_prideful_enemies_table',44);
-INSERT INTO `migrations` VALUES (246,'2020_09_11_212538_change_default_column_on_floors_table',45);
-INSERT INTO `migrations` VALUES (247,'2020_09_13_120903_add_unskippable_column_to_enemies_table',46);
-INSERT INTO `migrations` VALUES (248,'2020_09_20_092326_add_timer_information_to_dungeons_table',47);
-INSERT INTO `migrations` VALUES (250,'2020_09_20_112742_create_spells_table',48);
-INSERT INTO `migrations` VALUES (251,'2020_09_21_151511_create_npc_spells_table',49);
-INSERT INTO `migrations` VALUES (252,'2020_09_28_180026_add_silent_column_to_releases_table',50);
-INSERT INTO `migrations` VALUES (253,'2020_09_30_212231_remove_timestamps_from_floor_couplings_table',51);
-INSERT INTO `migrations` VALUES (254,'2020_09_30_220550_remove_timestamps_from_floors_table',52);
-INSERT INTO `migrations` VALUES (255,'2020_10_07_201752_add_min_and_max_enemy_size_to_floors_table',53);
-INSERT INTO `migrations` VALUES (256,'2020_10_09_093839_create_enemy_active_auras_table',54);
-INSERT INTO `migrations` VALUES (257,'2020_10_30_155554_create_tags_table',55);
-INSERT INTO `migrations` VALUES (258,'2020_10_31_130205_create_tag_models_table',55);
-INSERT INTO `migrations` VALUES (259,'2020_10_31_220638_create_tag_categories_table',56);
-INSERT INTO `migrations` VALUES (260,'2020_12_27_141959_remove_teeming_from_shadowlands_dungeon_routes',57);
-INSERT INTO `migrations` VALUES (261,'2020_12_27_144031_unpublish_non_shadowlands_dungeon_routes',58);
-INSERT INTO `migrations` VALUES (262,'2020_12_30_230559_convert_model_fields_to_long_text_in_mapping_change_logs_table',59);
-INSERT INTO `migrations` VALUES (263,'2021_01_01_134856_update_echo_colors_for_new_users_from_o_auth_providers',60);
-INSERT INTO `migrations` VALUES (264,'2021_01_03_072349_create_dungeon_route_lat_lng_index_on_kill_zones_table',61);
-INSERT INTO `migrations` VALUES (266,'2021_01_03_195600_create_published_states_table',62);
-INSERT INTO `migrations` VALUES (267,'2021_01_03_200051_add_published_state_id_column_to_dungeon_routes_table',62);
-INSERT INTO `migrations` VALUES (268,'2021_01_06_224118_add_indexes_to_various_tables',63);
-INSERT INTO `migrations` VALUES (269,'2021_01_11_225644_add_mdt_id_column_to_dungeons_table',64);
-INSERT INTO `migrations` VALUES (270,'2021_01_17_131414_add_enemy_forces_column_to_dungeon_routes_table',65);
-INSERT INTO `migrations` VALUES (271,'2021_01_17_222625_remove_unlisted_and_published_columns_from_dungeon_routes_table',66);
-INSERT INTO `migrations` VALUES (274,'2021_01_21_152933_rebuild_tags_tables',67);
-INSERT INTO `migrations` VALUES (275,'2021_01_27_135945_add_public_key_column_to_teams_table',68);
-INSERT INTO `migrations` VALUES (276,'2021_01_27_140807_add_public_key_indices',68);
-INSERT INTO `migrations` VALUES (277,'2021_02_05_153211_remove_adsense_no_personalized_ads_from_users_table',69);
-INSERT INTO `migrations` VALUES (278,'2021_02_12_211841_add_theme_column_to_users_table',69);
-INSERT INTO `migrations` VALUES (279,'2021_02_26_162440_add_icon_file_id_to_users_table',70);
-INSERT INTO `migrations` VALUES (280,'2021_02_28_220233_add_slug_column_to_dungeons_table',71);
-INSERT INTO `migrations` VALUES (281,'2021_03_01_122319_add_indices_to_dungeon_routes_table',72);
-INSERT INTO `migrations` VALUES (283,'2021_03_06_141919_add_redesign_column_to_users_table',73);
-INSERT INTO `migrations` VALUES (284,'2021_03_07_213415_add_published_at_column_to_dungeon_routes_table',74);
-INSERT INTO `migrations` VALUES (285,'2021_03_14_132223_add_indices_to_users_table',75);
-INSERT INTO `migrations` VALUES (286,'2021_03_18_204734_add_title_index_to_dungeon_routes_table',76);
-INSERT INTO `migrations` VALUES (287,'2021_03_20_142305_add_description_column_to_dungeon_routes_table',77);
-INSERT INTO `migrations` VALUES (290,'2021_03_21_123353_add_key_level_columns_to_dungeon_routes_table',78);
-INSERT INTO `migrations` VALUES (292,'2021_04_08_201133_create_affix_group_ease_tiers_table',79);
-INSERT INTO `migrations` VALUES (293,'2021_04_09_201638_create_subcreation_ease_tier_pulls_table',80);
-INSERT INTO `migrations` VALUES (294,'2021_04_09_201749_add_subcreation_ease_tier_pull_id_column_to_affix_group_ease_tiers_table',80);
-INSERT INTO `migrations` VALUES (295,'2021_04_16_094936_add_thumbnail_refresh_queued_at_to_dungeon_routes_table',81);
-INSERT INTO `migrations` VALUES (296,'2021_04_16_214637_add_spotlight_column_to_releases_table',81);
-INSERT INTO `migrations` VALUES (297,'2021_04_18_115530_add_title_column_to_releases_table',82);
-INSERT INTO `migrations` VALUES (298,'2021_04_18_213438_add_o_auth_id_index_to_users_table',82);
-INSERT INTO `migrations` VALUES (299,'2018_08_08_100000_create_telescope_entries_table',83);
-INSERT INTO `migrations` VALUES (300,'2021_05_02_121857_add_indices_to_various_tables',84);
-INSERT INTO `migrations` VALUES (301,'2021_05_03_072544_add_composite_indices_to_dungeon_routes_table',85);
-INSERT INTO `migrations` VALUES (309,'2021_05_03_190803_fix_unassigned_polylines',86);
-INSERT INTO `migrations` VALUES (310,'2021_05_03_190828_fix_missing_polylines',86);
-INSERT INTO `migrations` VALUES (311,'2021_05_08_123257_add_views_column_to_dungeon_routes_table',86);
-INSERT INTO `migrations` VALUES (312,'2021_05_08_125407_add_popularity_column_to_dungeon_routes_table',86);
-INSERT INTO `migrations` VALUES (313,'2021_05_11_213805_create_live_sessions_table',87);
-INSERT INTO `migrations` VALUES (314,'2021_05_12_153040_make_user_id_nullable_on_live_sessions_table',87);
-INSERT INTO `migrations` VALUES (315,'2021_06_15_213354_add_expires_at_column_to_live_sessions_table',88);
-INSERT INTO `migrations` VALUES (316,'2021_06_25_092011_add_skippable_column_to_enemies_table',89);
-INSERT INTO `migrations` VALUES (318,'2021_06_28_075713_create_overpulled_enemies_table',90);
-INSERT INTO `migrations` VALUES (319,'2021_07_08_154137_add_tormented_to_seasonal_type_in_enemies_table',91);
-INSERT INTO `migrations` VALUES (320,'2021_07_17_115747_add_merged_column_to_mapping_commit_logs_table',92);
-INSERT INTO `migrations` VALUES (321,'2021_07_19_190740_rename_unskippable_to_required_on_enemies_table',93);
-INSERT INTO `migrations` VALUES (322,'2020_01_01_000000_add_locale_column',94);
-INSERT INTO `migrations` VALUES (323,'2021_08_13_090026_add_public_key_to_users_table',95);
-INSERT INTO `migrations` VALUES (324,'2021_08_18_115312_add_key_to_affixes_table',96);
-INSERT INTO `migrations` VALUES (325,'2021_09_10_092914_add_key_to_factions_table',97);
-INSERT INTO `migrations` VALUES (326,'2021_09_19_115814_add_key_to_character_class_specializations_table',97);
-INSERT INTO `migrations` VALUES (327,'2021_09_19_115825_add_key_to_character_classes_table',97);
-INSERT INTO `migrations` VALUES (328,'2021_09_19_115836_add_key_to_character_races_table',97);
-INSERT INTO `migrations` VALUES (329,'2021_09_21_114915_add_active_to_expansions_table',98);
-INSERT INTO `migrations` VALUES (330,'2021_10_03_121203_add_mdt_npc_id_to_enemies_table',99);
-INSERT INTO `migrations` VALUES (331,'2021_10_10_103826_fix_public_key_for_oauth_users',100);
-INSERT INTO `migrations` VALUES (332,'2021_11_20_142420_add_timezone_column_to_game_server_regions_table',101);
-INSERT INTO `migrations` VALUES (334,'2021_12_04_141744_add_shortname_column_to_npc_classifications_table',102);
-INSERT INTO `migrations` VALUES (339,'2021_12_09_222521_create_timewalking_events_table',103);
-INSERT INTO `migrations` VALUES (340,'2021_12_09_222542_create_timewalking_event_affix_groups_table',103);
-INSERT INTO `migrations` VALUES (341,'2021_12_09_222559_create_timewalking_event_affix_group_couplings_table',103);
-INSERT INTO `migrations` VALUES (342,'2021_12_12_100417_create_dungeon_route_timewalking_event_affix_groups_table',104);
-INSERT INTO `migrations` VALUES (343,'2021_12_14_215201_drop_timewalking_event_affix_groups_table',105);
-INSERT INTO `migrations` VALUES (344,'2021_12_14_215245_drop_timewalking_event_affix_group_couplings_table',105);
-INSERT INTO `migrations` VALUES (345,'2021_12_14_215356_drop_dungeon_route_timewalking_event_affix_groups_table',105);
-INSERT INTO `migrations` VALUES (346,'2021_12_14_220304_add_expansion_id_to_affix_groups_table',106);
-INSERT INTO `migrations` VALUES (347,'2021_12_14_230701_add_expansion_id_to_seasons_table',107);
-INSERT INTO `migrations` VALUES (348,'2021_12_16_214130_add_season_id_to_timewalking_events_table',108);
-INSERT INTO `migrations` VALUES (350,'2021_12_19_145637_update_affix_groups_for_existing_legion_dungeons',109);
-INSERT INTO `migrations` VALUES (351,'2021_12_20_214422_adjust_indices',110);
-INSERT INTO `migrations` VALUES (352,'2021_12_25_141958_adjust_more_indices',111);
+/*M!999999\- enable the sandbox mode */
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (1,'2014_10_12_000000_create_users_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (2,'2014_10_12_100000_create_password_resets_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (3,'2015_03_07_311070_create_tracker_paths_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (4,'2015_03_07_311071_create_tracker_queries_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (5,'2015_03_07_311072_create_tracker_queries_arguments_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2015_03_07_311073_create_tracker_routes_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2015_03_07_311074_create_tracker_routes_paths_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2015_03_07_311075_create_tracker_route_path_parameters_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2015_03_07_311076_create_tracker_agents_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2015_03_07_311077_create_tracker_cookies_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2015_03_07_311078_create_tracker_devices_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2015_03_07_311079_create_tracker_domains_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2015_03_07_311080_create_tracker_referers_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2015_03_07_311081_create_tracker_geoip_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2015_03_07_311082_create_tracker_sessions_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (16,'2015_03_07_311083_create_tracker_errors_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (17,'2015_03_07_311084_create_tracker_system_classes_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (18,'2015_03_07_311085_create_tracker_log_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (19,'2015_03_07_311086_create_tracker_events_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (20,'2015_03_07_311087_create_tracker_events_log_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (21,'2015_03_07_311088_create_tracker_sql_queries_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (22,'2015_03_07_311089_create_tracker_sql_query_bindings_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (23,'2015_03_07_311090_create_tracker_sql_query_bindings_parameters_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (24,'2015_03_07_311091_create_tracker_sql_queries_log_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (25,'2015_03_07_311092_create_tracker_connections_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (26,'2015_03_07_311093_create_tracker_tables_relations',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (27,'2015_03_13_311094_create_tracker_referer_search_term_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (28,'2015_03_13_311095_add_tracker_referer_columns',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (29,'2015_11_23_311096_add_tracker_referer_column_to_log',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (30,'2015_11_23_311097_create_tracker_languages_table',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (31,'2015_11_23_311098_add_language_id_column_to_sessions',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (32,'2015_11_23_311099_add_tracker_language_foreign_key_to_sessions',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (33,'2015_11_23_311100_add_nullable_to_tracker_error',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (34,'2017_01_31_311101_fix_agent_name',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (35,'2017_06_20_311102_add_agent_name_hash',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (36,'2017_12_13_150000_fix_query_arguments',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (37,'2018_05_02_114339_create_dungeons_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (38,'2018_05_03_083513_laratrust_setup_tables',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (39,'2018_05_07_103337_create_expansions_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (40,'2018_05_18_153107_create_files_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (41,'2018_05_18_154530_update_expansions_icon_column',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (42,'2018_05_29_113037_create_dungeon_route_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (43,'2018_06_04_103257_create_floor_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (44,'2018_06_04_103405_create_floor_coupling_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (45,'2018_06_12_131936_create_enemy_pack_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (46,'2018_06_24_101623_create_enemies_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (47,'2018_06_24_102134_create_npc_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (48,'2018_06_25_114025_create_npc_classification_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (49,'2018_07_02_162558_create_character_classes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (50,'2018_07_02_162719_create_character_class_specializations_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (51,'2018_07_03_194459_create_character_races_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (52,'2018_07_03_200558_create_character_race_class_couplings_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (53,'2018_07_13_150842_create_dungeon_route_player_classes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (54,'2018_07_13_150919_create_dungeon_route_player_races_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (55,'2018_07_21_073251_create_factions_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (56,'2018_07_22_145145_create_affixes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (57,'2018_07_22_145707_create_affix_groups_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (58,'2018_07_22_150826_create_affix_group_couplings_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (59,'2018_07_24_143109_create_dungeon_route_affix_groups_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (60,'2018_07_30_205413_create_route_nodes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (61,'2018_07_30_210445_create_route_node_connections_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (62,'2018_07_31_105519_create_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (63,'2018_08_02_192004_create_dungeon_start_markers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (64,'2018_08_03_175906_create_dungeon_floor_switch_markers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (65,'2018_08_16_084237_add_shortname_to_expansion',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (66,'2018_08_16_220036_add_unlisted_column_to_dungeon_route',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (67,'2018_08_16_222126_add_public_key_column_to_dungeon_routes',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (68,'2018_08_18_153818_add_direction_to_floor_couplings',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (69,'2018_08_18_195153_add_active_to_dungeons',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (70,'2018_08_19_181409_add_aggressiveness_to_npcs',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (71,'2018_08_20_101630_add_dungeon_to_npcs',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (72,'2018_08_20_104543_remove_game_id_from_npcs',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (73,'2018_08_22_142255_add_teeming_to_enemies',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (74,'2018_08_22_205828_create_enemy_patrol_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (75,'2018_08_23_074104_create_enemy_patrol_vertices_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (76,'2018_08_23_080026_rename_enemy_pack_vertices_x_y_lat_lng',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (77,'2018_08_24_183558_set_object_reference_defaults',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (78,'2018_08_25_073209_add_demo_to_dungeon_routes',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (79,'2018_08_27_104843_remake_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (80,'2018_08_27_105202_create_route_vertices_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (81,'2018_08_30_121711_add_friendly_aggressiveness_to_npcs',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (82,'2018_08_31_144155_create_dungeon_route_rating_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (83,'2018_09_03_140340_add_enemy_forces_to_npcs',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (84,'2018_09_03_145002_add_enemy_forces_to_dungeons',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (85,'2018_09_03_145412_remove_timestamps_from_dungeons',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (86,'2018_09_03_191336_add_difficulty_to_dungeon_routes',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (87,'2018_09_04_072104_create_kill_zones_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (88,'2018_09_04_072117_create_kill_zone_enemies_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (89,'2018_09_04_181547_create_dungeon_route_favorites_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (90,'2018_09_07_173139_add_teeming_to_dungeon_routes',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (91,'2018_09_09_094051_change_enemy_forces_default_on_npcs',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (92,'2018_09_11_110937_add_enemy_forces_override_to_enemies',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (93,'2018_09_14_075248_add_faction_to_enemies',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (94,'2018_09_14_114907_add_faction_to_packs_and_patrols',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (95,'2018_09_16_191357_change_unspecified_faction_color',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (96,'2018_09_18_095415_rebuild_character_specialization_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (97,'2018_09_18_102034_create_dungeon_route_player_specializations_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (98,'2018_09_21_191133_create_raid_markers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (99,'2018_09_21_191240_create_dungeon_route_enemy_raid_markers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (100,'2018_09_23_171542_create_map_comments_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (101,'2018_09_23_174913_create_game_icon_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (102,'2018_09_25_105649_create_user_reports_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (103,'2018_09_28_103452_create_patreon_data_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (104,'2018_09_28_103859_create_patreon_tiers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (105,'2018_09_28_104016_create_paid_tiers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (106,'2018_10_05_090613_truncate_dungeon_route_affix_groups_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (107,'2018_10_07_194910_truncate_dungeon_route_player_races_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (108,'2018_10_08_204125_add_raw_patreon_response_data_column_to_user',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (109,'2018_10_09_135401_add_published_column_to_dungeon_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (110,'2018_10_12_214701_remove_duplicate_killzones',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (111,'2018_10_13_065653_remove_duplicate_killzone_enemies',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (112,'2018_10_16_082014_add_clone_of_column_to_dungeon_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (113,'2018_10_17_184014_add_indexes_to_foreign_keys',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (114,'2018_10_19_134402_create_enemy_infested_votes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (115,'2018_10_24_143250_add_game_server_region_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (116,'2018_10_24_143536_create_game_server_regions_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (117,'2018_10_25_112337_add_timezone_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (118,'2018_10_27_125106_add_vote_weight_to_enemy_infested_votes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (119,'2018_10_28_152904_add_legal_agreed_column_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (120,'2018_10_28_173417_add_analytics_cookie_opt_out_column_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (121,'2018_10_28_175044_add_adsense_no_personalized_ads_column_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (122,'2018_11_23_133231_create_route_attributes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (123,'2018_11_23_134212_drop_route_nodes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (124,'2018_11_23_141000_create_dungeon_route_attributes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (125,'2018_11_29_125414_create_page_views_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (126,'2018_12_03_224442_create_jobs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (127,'2018_12_03_224443_create_failed_jobs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (128,'2018_12_03_230454_add_thumbnail_updated_at_column_to_dungeon_routes',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (129,'2018_12_04_213900_upgrade_laravel_from56_to57',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (130,'2018_12_05_113341_fix_logs_permissions',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (131,'2018_12_17_125702_add_published_unlisted_demo_dungeon_route_index',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (132,'2019_01_03_083634_add_color_column_to_kill_zones',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (133,'2019_01_11_220930_add_mdt_id_column_to_enemies_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (134,'2019_01_17_164049_create_mdt_imports_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (135,'2019_01_19_232350_move_tol_dagor_enemies_to_different_floor',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (136,'2019_01_20_000753_fix_waycrest_manor_floor_order',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (137,'2019_01_22_212350_move_waycrest_manor_enemies_to_different_floor',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (138,'2019_01_25_233307_create_polylines_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (139,'2019_02_01_202940_add_active_column_to_affix_groups_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (140,'2019_02_06_151749_add_user_role_to_admin_user',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (141,'2019_02_08_215221_rename_route_to_path',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (142,'2019_02_08_231211_rename_path_vertex_route_id_to_path_id',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (143,'2019_02_12_102903_install_handlebars_global',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (144,'2019_02_14_123208_delete_unused_thumbnails',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (145,'2019_02_14_160847_add_vertices_json_to_paths_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (146,'2019_02_14_161632_convert_path_vertices_to_vertices_json',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (147,'2019_02_14_175849_remove_path_vertices_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (148,'2019_02_14_190847_add_vertices_json_to_enemy_patrols_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (149,'2019_02_14_191632_convert_enemy_patrol_vertices_to_vertices_json',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (150,'2019_02_14_195849_remove_enemy_patrols_vertices_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (151,'2019_02_14_200847_add_vertices_json_to_enemy_packs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (152,'2019_02_14_201632_convert_enemy_pack_vertices_to_vertices_json',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (153,'2019_02_14_205849_remove_enemy_pack_vertices_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (154,'2019_02_15_113828_create_brushlines_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (155,'2019_02_15_113839_convert_polyline_to_brushline',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (156,'2019_02_15_213803_add_indices_to_brushlines_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (157,'2019_02_16_170615_convert_enemy_patrols_to_polylines',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (158,'2019_02_16_234229_convert_paths_to_polylines',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (159,'2019_02_16_234729_add_indices_to_paths_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (160,'2019_02_18_213621_add_indices_to_tables',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (161,'2019_02_20_130647_remove_node_modules_folder',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (162,'2019_03_08_105109_add_expires_at_column_to_dungeon_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (163,'2019_04_10_155616_create_teams_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (164,'2019_04_10_155656_create_team_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (165,'2019_04_10_155838_add_team_id_to_dungeon_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (166,'2019_04_19_085009_create_o_auth_tokens_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (167,'2019_04_19_095133_add_has_changed_username_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (168,'2019_04_20_204038_change_americas_region_short',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (169,'2019_04_20_210544_add_o_auth_id_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (170,'2019_05_29_220728_add_echo_color_to_users_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (171,'2019_06_16_155836_add_teeming_column_to_enemy_packs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (172,'2019_06_16_155957_add_teeming_column_to_enemy_patrols_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (173,'2019_06_17_141544_create_seasons_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (174,'2019_06_17_141728_add_season_to_affix_groups_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (175,'2019_06_17_205510_rename_columns_on_game_server_regions_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (176,'2019_06_29_205126_add_beguiling_preset_column_to_dungeon_routes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (177,'2019_06_29_222133_add_beguiling_preset_to_enemies_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (178,'2019_07_07_142418_create_releases_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (179,'2019_07_07_142721_create_release_changelog_categories_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (180,'2019_07_07_143120_create_release_changelog_changes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (181,'2019_07_07_144052_create_release_changelogs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (182,'2019_07_14_214237_create_npc_types_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (183,'2019_07_15_204744_add_npc_type_to_npcs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (184,'2019_07_28_153718_create_npc_classes_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (185,'2019_07_28_154309_add_npc_class_to_npcs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (186,'2019_08_01_115111_add_dangerous_column_to_npcs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (187,'2019_08_06_144650_add_truesight_column_to_npcs_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (188,'2019_08_26_084618_add_presets_column_to_seasons_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (189,'2020_02_12_160541_change_floor_directions_on_floor_couplings_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (190,'2020_02_26_214234_remove_beguiling_preset_from_enemies_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (191,'2020_02_26_214255_remove_beguiling_preset_from_dungeon_routes_table',4);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (192,'2020_03_01_184027_remove_always_visible_from_map_comments_table',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (193,'2020_03_01_184148_rename_map_comments_table',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (194,'2020_03_01_194640_rename_game_icon_id_to_icon_type_column_map_icons_table',5);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (195,'2020_03_04_224929_create_map_icon_types_table',6);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (196,'2020_05_03_212519_make_lat_lng_nullable_on_kill_zones_table',7);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (197,'2020_05_08_161900_add_awakened_aggressiveness_to_npcs',8);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (198,'2020_05_15_164832_drop_dungeon_start_markers_table',9);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (199,'2020_05_24_102849_update_echo_colors_for_new_users',10);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (200,'2020_05_24_143632_make_description_nullable_in_teams_table',11);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (201,'2020_05_25_115345_ensure_color_is_set_in_kill_zones_table',12);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (202,'2020_05_25_144051_add_permanent_tooltip_column_to_map_icons_table',12);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (203,'2020_05_27_152742_reverse_lat_lng_for_vertices',13);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (204,'2020_05_29_160556_add_enemy_forces_teeming_to_npcs_table',14);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (205,'2020_05_30_131139_add_seasonal_index_to_affix_groups_table',15);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (206,'2020_05_30_133632_add_seasonal_index_to_enemies_table',16);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (207,'2020_05_31_105521_add_seasonal_index_to_dungeon_routes_table',17);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (208,'2020_06_09_103058_add_seasonal_index_to_map_icons_table',18);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (209,'2020_06_18_165727_add_enemy_forces_override_teeming_to_enemies_table',19);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (210,'2020_06_20_013647_add_linked_map_icon_id_to_map_icons_table',20);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (211,'2020_06_22_175133_create_map_object_to_awakened_obelisk_links_table',21);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (212,'2020_06_23_134424_remove_linked_map_icon_id_column_from_map_icons_table',22);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (213,'2020_06_23_133643_migrate_linked_map_icon_id_to_new_system',23);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (214,'2020_06_25_111327_add_color_animated_to_polylines_table',23);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (215,'2020_06_28_134859_add_index_to_kill_zones_table',24);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (216,'2020_06_29_112534_make_target_map_icon_seasonal_index_nullable',24);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (217,'2020_07_08_094044_remove_enemy_id_column_from_enemy_patrols_table',25);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (218,'2020_07_12_195450_adjust_kill_zones_enemies_last_boss_awakened_enemies',26);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (219,'2020_07_17_204803_add_team_id_to_map_icons_table',26);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (220,'2020_07_18_120658_add_bursting_to_npcs_table',27);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (221,'2020_07_18_190107_add_bolstering_to_npcs_table',28);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (222,'2020_07_19_194743_create_npc_bolstering_whitelists_table',29);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (223,'2020_07_24_123707_add_pull_gradient_column_to_dungeon_routes_table',30);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (224,'2020_07_24_211935_add_sanguine_to_npcs_table',31);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (226,'2020_07_25_115757_rebuild_user_reports_table',32);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (227,'2020_07_28_104503_add_default_column_to_floors_table',33);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (228,'2020_07_31_140226_create_report_logs_table',34);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (229,'2020_08_01_124625_add_key_to_dungeons_table',35);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (233,'2020_08_23_194343_add_released_at_to_expansions_table',36);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (234,'2020_08_26_121615_rename_report_logs_table_to_release_report_logs_table',37);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (235,'2020_08_28_150407_create_mapping_change_logs_table',37);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (236,'2020_08_28_150420_create_mapping_commit_logs_table',37);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (237,'2020_09_03_190407_add_anonymous_echo_column_to_users_table',38);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (238,'2020_09_05_200056_add_default_sanguine_column_in_npcs_table',39);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (239,'2020_09_05_203133_add_zone_id_to_dungeons_table',40);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (241,'2020_09_06_070919_add_seasonal_type_column_to_enemies_table',41);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (242,'2020_09_06_201915_make_before_model_nullable_in_mapping_change_logs_table',42);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (243,'2020_09_06_203001_add_prideful_to_seasonal_type_in_enemies_table',43);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (245,'2020_09_06_203844_create_prideful_enemies_table',44);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (246,'2020_09_11_212538_change_default_column_on_floors_table',45);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (247,'2020_09_13_120903_add_unskippable_column_to_enemies_table',46);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (248,'2020_09_20_092326_add_timer_information_to_dungeons_table',47);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (250,'2020_09_20_112742_create_spells_table',48);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (251,'2020_09_21_151511_create_npc_spells_table',49);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (252,'2020_09_28_180026_add_silent_column_to_releases_table',50);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (253,'2020_09_30_212231_remove_timestamps_from_floor_couplings_table',51);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (254,'2020_09_30_220550_remove_timestamps_from_floors_table',52);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (255,'2020_10_07_201752_add_min_and_max_enemy_size_to_floors_table',53);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (256,'2020_10_09_093839_create_enemy_active_auras_table',54);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (257,'2020_10_30_155554_create_tags_table',55);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (258,'2020_10_31_130205_create_tag_models_table',55);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (259,'2020_10_31_220638_create_tag_categories_table',56);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (260,'2020_12_27_141959_remove_teeming_from_shadowlands_dungeon_routes',57);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (261,'2020_12_27_144031_unpublish_non_shadowlands_dungeon_routes',58);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (262,'2020_12_30_230559_convert_model_fields_to_long_text_in_mapping_change_logs_table',59);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (263,'2021_01_01_134856_update_echo_colors_for_new_users_from_o_auth_providers',60);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (264,'2021_01_03_072349_create_dungeon_route_lat_lng_index_on_kill_zones_table',61);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (266,'2021_01_03_195600_create_published_states_table',62);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (267,'2021_01_03_200051_add_published_state_id_column_to_dungeon_routes_table',62);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (268,'2021_01_06_224118_add_indexes_to_various_tables',63);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (269,'2021_01_11_225644_add_mdt_id_column_to_dungeons_table',64);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (270,'2021_01_17_131414_add_enemy_forces_column_to_dungeon_routes_table',65);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (271,'2021_01_17_222625_remove_unlisted_and_published_columns_from_dungeon_routes_table',66);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (274,'2021_01_21_152933_rebuild_tags_tables',67);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (275,'2021_01_27_135945_add_public_key_column_to_teams_table',68);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (276,'2021_01_27_140807_add_public_key_indices',68);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (277,'2021_02_05_153211_remove_adsense_no_personalized_ads_from_users_table',69);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (278,'2021_02_12_211841_add_theme_column_to_users_table',69);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (279,'2021_02_26_162440_add_icon_file_id_to_users_table',70);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (280,'2021_02_28_220233_add_slug_column_to_dungeons_table',71);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (281,'2021_03_01_122319_add_indices_to_dungeon_routes_table',72);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (283,'2021_03_06_141919_add_redesign_column_to_users_table',73);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (284,'2021_03_07_213415_add_published_at_column_to_dungeon_routes_table',74);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (285,'2021_03_14_132223_add_indices_to_users_table',75);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (286,'2021_03_18_204734_add_title_index_to_dungeon_routes_table',76);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (287,'2021_03_20_142305_add_description_column_to_dungeon_routes_table',77);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (290,'2021_03_21_123353_add_key_level_columns_to_dungeon_routes_table',78);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (292,'2021_04_08_201133_create_affix_group_ease_tiers_table',79);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (293,'2021_04_09_201638_create_subcreation_ease_tier_pulls_table',80);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (294,'2021_04_09_201749_add_subcreation_ease_tier_pull_id_column_to_affix_group_ease_tiers_table',80);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (295,'2021_04_16_094936_add_thumbnail_refresh_queued_at_to_dungeon_routes_table',81);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (296,'2021_04_16_214637_add_spotlight_column_to_releases_table',81);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (297,'2021_04_18_115530_add_title_column_to_releases_table',82);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (298,'2021_04_18_213438_add_o_auth_id_index_to_users_table',82);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (299,'2018_08_08_100000_create_telescope_entries_table',83);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (300,'2021_05_02_121857_add_indices_to_various_tables',84);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (301,'2021_05_03_072544_add_composite_indices_to_dungeon_routes_table',85);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (309,'2021_05_03_190803_fix_unassigned_polylines',86);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (310,'2021_05_03_190828_fix_missing_polylines',86);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (311,'2021_05_08_123257_add_views_column_to_dungeon_routes_table',86);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (312,'2021_05_08_125407_add_popularity_column_to_dungeon_routes_table',86);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (313,'2021_05_11_213805_create_live_sessions_table',87);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (314,'2021_05_12_153040_make_user_id_nullable_on_live_sessions_table',87);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (315,'2021_06_15_213354_add_expires_at_column_to_live_sessions_table',88);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (316,'2021_06_25_092011_add_skippable_column_to_enemies_table',89);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (318,'2021_06_28_075713_create_overpulled_enemies_table',90);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (319,'2021_07_08_154137_add_tormented_to_seasonal_type_in_enemies_table',91);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (320,'2021_07_17_115747_add_merged_column_to_mapping_commit_logs_table',92);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (321,'2021_07_19_190740_rename_unskippable_to_required_on_enemies_table',93);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (322,'2020_01_01_000000_add_locale_column',94);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (323,'2021_08_13_090026_add_public_key_to_users_table',95);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (324,'2021_08_18_115312_add_key_to_affixes_table',96);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (325,'2021_09_10_092914_add_key_to_factions_table',97);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (326,'2021_09_19_115814_add_key_to_character_class_specializations_table',97);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (327,'2021_09_19_115825_add_key_to_character_classes_table',97);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (328,'2021_09_19_115836_add_key_to_character_races_table',97);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (329,'2021_09_21_114915_add_active_to_expansions_table',98);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (330,'2021_10_03_121203_add_mdt_npc_id_to_enemies_table',99);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (331,'2021_10_10_103826_fix_public_key_for_oauth_users',100);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (332,'2021_11_20_142420_add_timezone_column_to_game_server_regions_table',101);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (334,'2021_12_04_141744_add_shortname_column_to_npc_classifications_table',102);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (339,'2021_12_09_222521_create_timewalking_events_table',103);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (340,'2021_12_09_222542_create_timewalking_event_affix_groups_table',103);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (341,'2021_12_09_222559_create_timewalking_event_affix_group_couplings_table',103);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (342,'2021_12_12_100417_create_dungeon_route_timewalking_event_affix_groups_table',104);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (343,'2021_12_14_215201_drop_timewalking_event_affix_groups_table',105);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (344,'2021_12_14_215245_drop_timewalking_event_affix_group_couplings_table',105);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (345,'2021_12_14_215356_drop_dungeon_route_timewalking_event_affix_groups_table',105);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (346,'2021_12_14_220304_add_expansion_id_to_affix_groups_table',106);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (347,'2021_12_14_230701_add_expansion_id_to_seasons_table',107);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (348,'2021_12_16_214130_add_season_id_to_timewalking_events_table',108);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (350,'2021_12_19_145637_update_affix_groups_for_existing_legion_dungeons',109);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (351,'2021_12_20_214422_adjust_indices',110);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (352,'2021_12_25_141958_adjust_more_indices',111);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (353,'2022_01_31_201140_fix_team_id_on_dungeon_route_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (354,'2022_01_31_211256_add_default_role_to_teams_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (355,'2022_02_18_204508_add_encrypted_to_seasonal_type_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (356,'2022_02_27_133732_add_mdt_sub_level_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (357,'2022_03_07_103200_add_mdt_placeholder_to_seasonal_type_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (358,'2022_03_07_124046_add_percentage_display_zoom_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (359,'2022_03_24_162450_add_confirmed_column_to_affix_groups_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (360,'2022_07_14_210746_create_season_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (361,'2022_07_15_194052_add_index_to_seasons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (362,'2022_07_17_193834_add_shrouded_to_seasonal_type_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (363,'2022_08_01_143434_add_shrouded_zul_gamux_to_seasonal_type_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (364,'2022_08_05_080536_add_enemy_forces_shrouded_column_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (365,'2022_08_28_155437_add_ingame_coordinates_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (366,'2022_08_28_200331_add_map_id_column_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (367,'2022_09_03_212613_add_paid_tier_key_to_paid_tiers_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (368,'2022_09_05_153811_add_email_column_to_patreon_data_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (369,'2022_09_05_154619_add_scope_and_version_columns_to_patreon_data_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (370,'2022_09_07_201237_rename_and_truncate_patreon_tables',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (371,'2022_09_11_091211_create_mountable_areas_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (372,'2022_09_19_101014_create_simulation_craft_raid_events_options_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (373,'2022_09_19_142954_add_nullable_to_user_id_column_in_simulation_craft_raid_events_options_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (374,'2022_10_18_193028_create_dungeon_speedrun_required_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (375,'2022_10_18_193632_add_speedrun_enabled_column_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (376,'2022_10_22_124817_add_additional_npc_columns_to_dungeon_speedrun_required_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (377,'2022_10_24_111837_add_floor_id_column_to_dungeon_speedrun_required_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (378,'2022_10_25_191712_create_mapping_versions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (379,'2022_10_25_192537_add_mapping_version_id_column_to_various_tables',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (380,'2022_10_28_204236_add_dungeon_id_column_to_mapping_change_logs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (381,'2022_10_30_132833_add_mapping_version_id_to_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (382,'2022_11_04_213916_add_color_column_to_enemy_packs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (383,'2022_11_05_143003_make_enemy_pack_id_column_nullable_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (384,'2022_11_06_143346_make_npc_id_column_nullable_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (385,'2022_11_06_144144_make_mdt_id_column_nullable_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (386,'2022_11_06_150657_make_enemy_forces_override_column_nullable_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (387,'2022_11_06_150705_make_enemy_forces_override_teeming_column_nullable_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (388,'2022_11_06_160733_make_polyline_id_column_nullable_in_enemy_patrols_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (389,'2022_11_06_202026_make_target_floor_id_column_nullable_in_dungeon_floor_switch_markers_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (390,'2022_11_06_205812_make_dungeon_route_id_column_nullable_in_map_icons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (391,'2022_11_06_210829_make_map_icon_type_id_column_nullable_in_map_icons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (392,'2022_11_06_215320_make_comment_column_nullable_in_map_icons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (393,'2022_11_06_225320_delete_orphaned_entities_from_database',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (394,'2022_11_06_225321_delete_orphans_from_kill_zones_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (395,'2022_11_12_220635_add_display_id_column_to_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (396,'2022_11_15_100451_add_group_column_to_enemy_packs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (397,'2022_11_15_155648_add_enemy_patrol_id_column_to_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (398,'2022_11_16_115505_add_mdt_mapping_hash_column_to_mapping_versions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (399,'2022_11_16_122850_add_npc_id_and_mdt_id_to_kill_zone_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (400,'2022_11_16_123850_make_enemy_id_column_nullable_in_kill_zone_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (401,'2022_11_16_124645_convert_enemy_id_into_npc_id_and_mdt_id_in_kill_zone_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (402,'2022_11_17_223120_add_no_shrouded_to_seasonal_type_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (403,'2022_11_19_195109_make_floor_id_column_nullable_on_kill_zones_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (404,'2022_11_20_152246_add_npc_id_and_mdt_id_to_overpulled_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (405,'2022_11_20_152934_convert_enemy_id_into_npc_id_and_mdt_id_in_overpulled_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (406,'2022_11_24_161918_set_default_mapping_version_id_in_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (407,'2022_11_26_162256_add_affix_group_count_to_seasons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (408,'2023_01_10_183223_update_locale_from_short_to_long_notation_in_users_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (409,'2023_02_12_104508_add_start_affix_group_index_column_to_seasons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (410,'2023_02_12_132500_delete_unknown_affix_groups_for_dragonflight_s1',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (411,'2023_02_12_133558_update_affix_group_id_for_dragonflight_s1_affix_groups',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (412,'2023_02_14_204709_remove_unnecessary_indices_from_page_views_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (413,'2023_02_14_205017_add_source_column_to_page_views_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (414,'2023_02_14_210952_add_views_embed_to_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (415,'2023_02_14_213524_create_metrics_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (416,'2023_02_14_213525_create_metric_aggregations_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (417,'2023_02_19_151236_add_mode_column_to_dungeon_speedrun_required_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (418,'2023_02_19_161254_add_dungeon_speedrun_required_npc_mode_to_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (419,'2023_02_19_203548_make_team_id_default_null_in_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (420,'2023_02_20_204209_rename_mode_column_to_difficulty_column_in_dungeon_speedrun_required_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (421,'2023_02_20_205656_rename_dungeon_speedrun_required_npcs_mode_column_to_dungeon_difficulty_column_in_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (422,'2023_02_20_211830_add_dungeon_difficulty_column_to_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (423,'2023_02_26_204315_add_thundering_column_to_simulation_craft_raid_events_options_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (424,'2023_03_02_194054_remove_thundering_column_from_simulation_craft_raid_events_options_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (425,'2023_03_02_194107_add_thundering_clear_seconds_column_to_simulation_craft_raid_events_options_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (426,'2023_03_10_154210_add_speed_column_to_mountable_areas_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (427,'2023_03_11_203538_add_key_and_name_columns_to_release_changelog_categories_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (428,'2023_03_13_210906_update_locale_column_default_in_users_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (429,'2023_03_13_211006_fix_incorrect_locale_column_in_users_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (430,'2023_03_14_221618_update_mapping_version_id_in_map_icons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (431,'2023_03_18_211546_make_seasonal_affix_id_column_nullable_in_seasons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (432,'2023_05_01_200702_add_beguiling_seasonal_type_to_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (433,'2023_05_12_162439_create_patreon_ad_free_giveaways_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (434,'2023_05_17_111227_add_health_percentage_column_to_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (435,'2023_05_20_114256_add_dungeon_data_columns_to_mapping_versions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (436,'2023_05_20_114818_migrate_dungeons_to_dungeon_data_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (437,'2023_05_20_114838_drop_data_columns_from_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (438,'2023_05_21_142020_create_npc_enemy_forces_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (439,'2023_05_21_145706_migrate_npcs_to_npc_enemy_forces_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (440,'2023_05_22_213258_drop_enemy_forces_columns_from_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (441,'2023_05_23_213421_fix_incorrect_titles_in_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (442,'2023_05_28_125222_add_ui_map_id_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (443,'2023_06_02_210138_add_affix_id_to_affixes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (444,'2023_06_14_104632_add_rating_column_to_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (445,'2023_06_14_142437_add_kill_priority_column_to_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (446,'2023_06_16_090431_add_description_column_to_kill_zones_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (447,'2023_06_25_203959_create_kill_zone_spells_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (448,'2023_06_26_192658_add_selectable_to_spells_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (449,'2023_06_26_200459_add_category_to_spells_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (450,'2023_07_22_122747_add_enemy_engagement_max_range_column_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (451,'2023_07_22_123934_add_enemy_engagement_max_range_patrols_column_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (452,'2023_07_27_202319_add_active_column_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (453,'2023_08_23_201626_create_game_versions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (454,'2023_08_24_091801_add_game_version_id_to_users_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (455,'2023_08_24_115613_add_game_version_id_column_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (456,'2023_08_24_205019_add_has_seasons_to_game_versions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (457,'2023_09_28_140536_create_floor_unions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (458,'2023_09_28_140606_create_floor_union_areas_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (459,'2023_10_12_100515_add_runs_away_in_fear_column_to_npcs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (460,'2023_10_13_074549_add_hyper_respawn_column_to_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (461,'2023_10_19_100941_add_mapping_version_id_column_to_floor_unions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (462,'2023_10_19_191113_make_target_floor_id_column_nullable_in_floor_unions_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (463,'2023_10_19_202326_add_floor_id_column_to_floor_union_areas_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (464,'2023_10_19_202333_add_mapping_version_id_column_to_floor_union_areas_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (465,'2023_10_23_193836_add_direction_column_to_dungeon_floor_switch_markers_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (466,'2023_10_23_193851_add_source_floor_id_column_to_dungeon_floor_switch_markers_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (467,'2023_10_29_141320_add_facade_column_to_floors_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (468,'2023_11_02_140451_change_vertices_json_column_to_text_in_floor_union_areas_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (469,'2023_11_07_204238_add_challenge_mode_id_column_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (470,'2023_11_07_204513_add_missing_indices_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (471,'2023_11_13_101419_add_facade_enabled_column_to_dungeons_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (472,'2023_11_17_211623_add_map_facade_style_column_to_users_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (473,'2023_11_20_221552_update_indices_in_enemies_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (474,'2023_11_24_210020_update_mapping_version_indices_on_various_tables',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (475,'2023_11_26_210137_add_linked_dungeon_floor_switch_marker_id_column_to_dungeon_floor_switch_markers_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (476,'2023_12_01_202224_queue_thumbnail_refresh_for_facade_dungeon_routes',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (477,'2023_12_10_205053_fix_incorrect_titles_again_in_dungeon_routes_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (478,'2024_01_20_214202_create_dungeon_route_thumbnail_jobs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (479,'2024_01_20_215544_update_dungeon_route_namespace_in_page_views_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (480,'2024_01_20_220449_update_dungeon_route_namespace_in_user_reports_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (481,'2024_01_20_220559_update_dungeon_route_namespace_in_tags_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (482,'2024_01_20_221107_update_dungeon_route_thumbnail_jobs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (483,'2024_01_25_123306_add_zoom_level_column_to_dungeon_route_thumbnail_jobs_table',112);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (484,'2024_02_06_204549_add_viewport_size_columns_to_dungeon_route_thumbnail_jobs_table',113);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (485,'2024_02_06_204609_rename_width_and_height_columns_on_dungeon_route_thumbnail_jobs_table',113);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (486,'2024_02_16_211748_add_key_column_to_npc_classes_table',114);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (487,'2024_02_16_212347_add_key_column_to_npc_classifications_table',115);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (488,'2024_02_16_214210_rename_name_and_description_columns_in_route_attributes_table',115);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (489,'2024_02_17_215250_add_indices_to_route_attributes_table',116);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (490,'2024_02_21_205131_rename_subcreation_ease_tier_pulls_table',117);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (491,'2024_02_21_210659_drop_source_url_column_on_affix_group_ease_tier_pulls_table',117);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (492,'2024_02_21_210945_add_tiers_hash_column_to_affix_group_ease_tier_pulls_table',118);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (493,'2024_02_21_214055_add_affix_group_ease_tier_pull_id_column_to_affix_group_ease_tiers_table',118);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (494,'2024_02_22_104337_add_affix_group_id_column_to_affix_group_ease_tier_pulls_table',119);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (495,'2024_02_22_104800_fill_affix_group_id_column_in_affix_group_ease_tier_pulls_table',120);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (496,'2024_02_22_105341_drop_current_affixes_column_in_affix_group_ease_tier_pulls_table',121);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (497,'2024_02_22_151036_remove_timestamp_columns_from_affix_group_ease_tiers_table',122);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (498,'2024_02_29_102229_update_user_type_in_role_user_table',123);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (499,'2024_03_06_202345_add_speedrun_difficulty_columns_to_dungeons_table',124);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (500,'2024_03_11_140731_add_uuid_column_to_jobs_failed_table',125);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (501,'2024_03_13_220451_change_dashes_to_underscores_for_locale_column_in_users_table',125);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (503,'2024_03_14_103759_change_locales_in_locale_column_in_users_table',126);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (504,'2024_03_14_224301_revert_locales_in_locale_column_in_users_table',127);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (505,'2024_03_24_213825_reverse_wrath_and_classic_era_in_game_versions_table',127);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (506,'2024_03_27_112359_add_cooldown_group_column_to_spells_table',128);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (507,'2024_04_06_191058_add_facade_enabled_column_to_mapping_versions_table',129);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (508,'2024_04_06_200651_update_facade_enabled_column_on_mapping_versions_table',130);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (509,'2024_04_06_214302_drop_facade_enabled_column_from_dungeons_table',131);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (510,'2022_11_01_000001_create_features_table',132);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (511,'2024_05_08_101554_add_internal_team_role_to_roles_table',133);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (512,'2024_05_28_192426_add_key_levels_to_seasons_table',134);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (513,'2024_05_28_115803_make_enemy_engagement_max_range_nullable_on_floors_table',135);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (514,'2024_05_29_095512_make_level_min_and_level_max_column_nullable_on_dungeon_routes_table',135);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (515,'2024_05_29_141427_add_season_id_column_to_dungeon_routes_table',135);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (518,'2024_05_29_141625_update_season_id_column_in_dungeon_routes_table',136);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (519,'2024_06_04_144348_reset_enemy_max_engagement_range_to_null_in_floors_table',137);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (520,'2024_06_10_203320_add_default_value_to_description_column_in_dungeon_routes_table',138);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (521,'2024_06_10_203320_add_default_value_to_enemy_forces_column_in_dungeon_routes_table',139);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (522,'2024_06_15_212005_add_zoom_max_column_to_floors_table',140);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (523,'2024_07_07_202207_add_active_column_to_game_versions_table',141);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (524,'2024_07_15_203945_add_map_name_to_floors_table',142);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (525,'2024_07_16_135346_create_npc_characteristics_table',143);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (526,'2024_07_16_141503_drop_timestamps_from_npc_classifications_table',143);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (527,'2024_07_16_151410_create_characteristics_table',143);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (528,'2024_07_17_101448_add_level_column_to_npcs_table',144);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (529,'2024_07_18_152113_convert_spells_dispel_type_to_string',145);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (530,'2024_07_19_102819_add_mdt_scale_column_to_enemies_table',146);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (531,'2024_07_19_102826_add_mdt_x_y_columns_to_enemies_table',146);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (532,'2024_07_19_204800_add_mdt_npc_id_and_mdt_id_columns_to_enemy_patrols_table',147);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (533,'2024_07_19_211511_add_mdt_scale_to_npcs_table',148);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (534,'2024_07_19_213121_add_instance_id_to_dungeons_table',149);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (535,'2024_07_19_213132_add_encounter_id_to_npcs_table',149);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (536,'2024_07_27_212320_add_hidden_column_to_spells_table',150);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (537,'2024_07_29_131609_rename_hidden_column_to_hidden_on_map_on_spells_table',151);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (538,'2024_08_05_091734_add_mechanic_to_spells_table',152);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (539,'2024_08_05_091743_add_cast_time_to_spells_table',152);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (540,'2024_08_05_091758_add_duration_to_spells_table',152);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (541,'2024_08_05_101805_create_spell_dungeons_table',152);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (542,'2024_08_05_205211_add_debuff_to_spells_table',153);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (543,'2024_08_06_151029_add_model_class_index_to_polylines_table',154);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (544,'2024_08_07_133553_add_fetched_data_at_column_to_spells_table',155);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (545,'2024_08_07_201717_add_miss_types_mask_to_spells_table',156);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (546,'2024_09_17_150403_add_key_level_to_affix_group_couplings_table',157);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (547,'2024_09_18_083530_remove_deleted_affix_groups_from_dungeon_route_affix_groups_table',158);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (548,'2024_09_18_083606_assign_missing_affix_group_to_dungeon_routes',159);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (549,'2024_09_18_200905_change_default_locale_column_in_users_table',159);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (550,'2024_09_18_204619_add_indices_to_team_users_table',159);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (551,'2024_09_18_204906_add_indices_to_releases_table',159);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (552,'2024_09_18_205343_add_indices_to_floors_table',159);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (553,'2024_09_18_210656_add_indices_to_metrics_table',159);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (554,'2024_09_25_192209_make_dungeon_route_column_nullable_on_mdt_imports_table',160);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (555,'2024_09_25_193640_add_error_column_to_mdt_imports_table',161);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (556,'2024_09_29_191525_add_backup_db_column_to_releases_table',162);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (557,'2024_09_29_191824_add_released_column_to_releases_table',163);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (558,'2024_09_30_090405_add_index_to_released_column_in_releases_table',164);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (559,'2024_10_02_132437_update_page_views_indices',165);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (560,'2024_10_02_133143_update_dungeon_routes_indices',165);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (561,'2024_10_07_215544_update_dungeon_route_namespace_in_page_views_table',166);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (562,'2024_10_23_074052_correct_affix_groups_after_season_affix_count_update',167);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (563,'2024_10_24_144603_create_translations_table',167);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (564,'2024_10_25_102144_update_description_column_to_text_in_dungeon_routes_table',168);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (565,'2024_10_28_105305_create_dungeon_route_changes_table',168);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (566,'2024_11_11_212057_add_views_column_to_dungeons_table',169);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (567,'2024_11_12_122024_add_raid_buffs_mask_column_to_simulation_craft_raid_events_options_table',170);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (568,'2024_11_12_122042_migrate_to_raid_buffs_mask_column_in_simulation_craft_raid_events_options_table',170);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (569,'2024_11_12_151810_drop_raid_buffs_columns_from_simulation_craft_raid_events_options_table',170);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (570,'2024_11_20_151928_create_user_ip_addresses_table',170);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (571,'2024_12_05_110445_add_class_id_to_character_classes_table',171);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (572,'2024_12_05_110505_add_specialization_id_to_character_class_specializations_table',171);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (573,'2024_12_05_110554_add_race_id_to_character_races_table',171);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (574,'2025_01_22_092900_add_npc_id_index_to_npc_enemy_forces_table',172);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (575,'2025_01_23_124249_add_raid_column_to_dungeons_table',172);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (576,'2025_01_26_213608_add_epoch_start_column_to_game_server_regions_table',173);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (577,'2025_01_27_160050_add_heatmap_enabled_to_dungeons_table',174);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (578,'2025_01_30_134240_add_item_level_columns_to_seasons_table',175);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (579,'2025_02_03_094812_set_dungeon_page_views_to_one_on_page_views_table',176);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (580,'2025_02_05_154354_add_exclusive_enemy_id_to_enemies_table',177);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (581,'2025_02_31_213002_add_requires_activation_seasonal_type_to_enemies_table',178);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (586,'2025_03_06_113207_update_indices_in_metrics_table',179);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (595,'2025_03_07_132955_aggregate_api_calls_in_metrics_table',180);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (599,'2025_03_25_205540_remove_html_from_description_in_dungeon_routes_table',181);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (600,'2025_04_19_205226_add_game_version_id_column_to_spells_table',182);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (601,'2025_03_07_132954_alter_varchar_length_in_metrics_table',183);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (602,'2025_05_09_154500_make_team_id_nullable_on_dungeon_route_table',183);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (607,'2025_05_23_091016_migrate_uploaded_files_to_s3',184);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (612,'2025_05_26_125947_create_dungeon_route_thumbnails_table',185);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (613,'2025_05_26_143711_add_file_id_column_to_dungeon_route_thumbnail_jobs_table',185);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (614,'2025_05_26_204417_reset_thumbnail_status_on_dungeon_routes_table',186);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (615,'2025_06_18_211211_add_has_wallpaper_column_to_dungeons_table',187);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (616,'2025_06_29_202237_create_npc_dungeons_table',188);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (617,'2025_06_29_202900_migrate_to_npc_dungeons_table',189);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (619,'2025_06_30_150752_drop_dungeon_id_column_from_npcs_table',190);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (620,'2025_06_30_203541_create_missing_npc_dungeons_based_on_enemy_npc_assignments',191);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (621,'2025_07_04_140127_create_npc_healths_table',192);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (622,'2025_07_04_141309_migrate_to_npc_healths_table',192);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (623,'2025_07_04_142407_drop_health_and_percentage_columns_from_npcs_table',193);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (624,'2025_07_08_195716_add_game_version_id_column_to_mapping_versions_table',194);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (625,'2025_07_08_200345_migrate_game_version_id_on_mapping_versions_table',194);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (626,'2025_07_08_200658_drop_game_version_id_column_from_dungeons_table',195);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (627,'2025_07_18_142445_add_expansion_id_to_game_versions_table',195);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (628,'2025_07_29_123841_add_mdt_polyline_id_to_enemy_patrols_table',196);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (631,'2025_08_11_083502_change_name_columns_to_varchar',197);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (632,'2025_08_11_083503_change_name_column_to_varchar_on_expansions_table',197);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (633,'2025_08_11_084847_add_indices_to_name_columns',198);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (634,'2025_08_25_095849_update_default_map_style_to_facade_in_users_table',199);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (635,'2025_09_01_205527_add_discover_service_index_to_dungeon_routes_table',200);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (636,'2025_10_05_192807_add_hidden_in_facade_column_to_dungeon_floor_switch_markers_table',201);

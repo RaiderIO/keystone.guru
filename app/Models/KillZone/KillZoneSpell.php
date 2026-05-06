@@ -18,7 +18,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class KillZoneSpell extends Model
 {
-    public $hidden = ['id', 'kill_zone_id'];
+    public $hidden = [
+        'id',
+        'kill_zone_id',
+    ];
 
     public $timestamps = false;
 

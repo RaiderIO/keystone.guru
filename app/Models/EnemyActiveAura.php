@@ -20,7 +20,11 @@ class EnemyActiveAura extends CacheModel
 {
     use SeederModel;
 
-    public $visible = ['id', 'enemy_id', 'spell_id'];
+    public $visible = [
+        'id',
+        'enemy_id',
+        'spell_id',
+    ];
 
     public $timestamps = false;
 

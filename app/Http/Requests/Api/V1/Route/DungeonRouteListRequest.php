@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\V1\Route;
 
 use App\Http\Requests\Api\V1\APIFormRequest;
-use Illuminate\Validation\Rule;
 
 class DungeonRouteListRequest extends APIFormRequest
 {
@@ -26,7 +25,7 @@ class DungeonRouteListRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'dungeon_id' => ['nullable', Rule::exists('dungeons', 'id')],
+
         ];
     }
 }

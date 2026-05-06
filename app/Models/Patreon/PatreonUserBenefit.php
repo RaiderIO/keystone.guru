@@ -15,7 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PatreonUserBenefit extends Model
 {
-    protected $fillable = ['patreon_user_link_id', 'patreon_benefit_id'];
+    protected $fillable = [
+        'patreon_user_link_id',
+        'patreon_benefit_id',
+    ];
 
     public function patreonuserlink(): BelongsTo
     {

@@ -8,6 +8,7 @@ use App\Models\CombatLog\ParsedCombatLog;
 use FilesystemIterator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Str;
 
 class CombatLogSeeder extends Seeder implements TableSeederInterface
@@ -48,21 +49,28 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
 
             if (str_contains($combatLogSeederDataFilePath, 'combat_log_npc_spell_assignments')) {
                 $combatLogNpcSpellAssignmentAttributes = $modelsData;
-            } else if (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_updates')) {
+            } elseif (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_updates')) {
                 $combatLogSpellUpdateAttributes = $modelsData;
-            } else if (str_contains($combatLogSeederDataFilePath, 'parsed_combat_logs')) {
+            } elseif (str_contains($combatLogSeederDataFilePath, 'parsed_combat_logs')) {
                 $parsedCombatLogAttributes = $modelsData;
             } else {
                 throw new \Exception(sprintf('Unknown .json file found in combatlogs directory: %s', $combatLogSeederDataFilePath));
             }
         }
 
-        CombatLogNpcSpellAssignment::from(DatabaseSeeder::getTempTableName(CombatLogNpcSpellAssignment::class))
-            ->insert($combatLogNpcSpellAssignmentAttributes) &&
-        CombatLogSpellUpdate::from(DatabaseSeeder::getTempTableName(CombatLogSpellUpdate::class))
-            ->insert($combatLogSpellUpdateAttributes) &&
-        ParsedCombatLog::from(DatabaseSeeder::getTempTableName(ParsedCombatLog::class))
-            ->insert($parsedCombatLogAttributes);
+        // Insert the data into the database
+        collect($combatLogNpcSpellAssignmentAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            CombatLogNpcSpellAssignment::from(DatabaseSeeder::getTempTableName(CombatLogNpcSpellAssignment::class))
+                ->insert($chunk->toArray());
+        });
+        collect($combatLogSpellUpdateAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            CombatLogSpellUpdate::from(DatabaseSeeder::getTempTableName(CombatLogSpellUpdate::class))
+                ->insert($chunk->toArray());
+        });
+        collect($parsedCombatLogAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            ParsedCombatLog::from(DatabaseSeeder::getTempTableName(ParsedCombatLog::class))
+                ->insert($chunk->toArray());
+        });
     }
 
     public static function getAffectedModelClasses(): array

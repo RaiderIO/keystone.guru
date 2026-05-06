@@ -30,7 +30,7 @@ class CombatLogEvent extends BaseEvent
 
         $this->suffix = Suffix::createFromEventName($this->getCombatLogVersion(), $this->getEventName());
         $this->suffix->setParameters(
-            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount())
+            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount()),
         );
 
         return $this;

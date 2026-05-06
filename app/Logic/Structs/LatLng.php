@@ -26,7 +26,7 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    public function getLng(int $precision = null): float
+    public function getLng(?int $precision = null): float
     {
         return $precision === null ? $this->lng : round($this->lng, $precision);
     }
@@ -50,8 +50,12 @@ class LatLng implements Arrayable
         return $this;
     }
 
-    public function scale(LatLng $currentMapCenter, int $currentMapSize, LatLng $targetMapCenter, int $targetMapSize): self
-    {
+    public function scale(
+        LatLng $currentMapCenter,
+        float  $currentMapSize,
+        LatLng $targetMapCenter,
+        float  $targetMapSize,
+    ): self {
         $currentMapSizeLat = $currentMapSize;
         $currentMapSizeLng = $currentMapSize * CoordinatesService::MAP_ASPECT_RATIO;
         // Lat is inverted. The dead center is top left, not bottom left
@@ -96,12 +100,19 @@ class LatLng implements Arrayable
      */
     public function toArray(): array
     {
-        return ['lat' => $this->lat, 'lng' => $this->lng];
+        return [
+            'lat' => $this->lat,
+            'lng' => $this->lng,
+        ];
     }
 
     public function toArrayWithFloor(): array
     {
-        return ['lat' => $this->lat, 'lng' => $this->lng, 'floor_id' => optional($this->floor)->id];
+        return [
+            'lat'      => $this->lat,
+            'lng'      => $this->lng,
+            'floor_id' => $this->floor?->id,
+        ];
     }
 
     public function __clone()
@@ -109,7 +120,7 @@ class LatLng implements Arrayable
         return new LatLng(
             $this->lat,
             $this->lng,
-            $this->floor
+            $this->floor,
         );
     }
 

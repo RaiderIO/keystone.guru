@@ -70,7 +70,7 @@ use App\Models\Floor\Floor;
                 </div>
             </div>
             <div class="col-lg-2">
-                {!! Form::checkbox($dungeon->key . '_teeming', 1, $hasTeemingEnemy, ['disabled' => 'disabled']) !!}
+                {{ html()->checkbox($dungeon->key . '_teeming', $hasTeemingEnemy, 1)->disabled() }}
             </div>
         </div>
     @endforeach

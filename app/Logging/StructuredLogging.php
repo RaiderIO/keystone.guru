@@ -45,8 +45,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
      */
     private array $cachedConvertedFunctionNames = [];
 
-    private ?string $channel = null;
-
     /** @var LogManager[] */
     private array $loggers = [];
 
@@ -56,7 +54,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $app = app();
 
         if ($app->runningInConsole() && !$app->runningUnitTests() && config('app.type') === 'local') {
-            $this->setChannel('stderr');
+            static::setChannel('stderr');
         }
 
         foreach ($this->getDefaultLoggers() as $defaultLogger) {
@@ -98,7 +96,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             $this->log(
                 Level::Error,
                 sprintf('%s: Unable to start a structured log that was already started!', __METHOD__),
-                array_merge(['targetKey' => $targetKey], $context)
+                array_merge(['targetKey' => $targetKey], $context),
             );
         }
 
@@ -127,7 +125,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             $this->log(
                 Level::Error,
                 sprintf("%s: Unable to end a structured log that wasn't started!", __METHOD__),
-                array_merge(['targetKey' => $targetKey], $context)
+                array_merge(['targetKey' => $targetKey], $context),
             );
         }
 
@@ -202,7 +200,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         if (!isset($this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT])) {
             // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
             $this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT] = trim(
-                sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0])
+                sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0]),
             );
         }
         $messageWithContextCounts = $this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT];
@@ -215,7 +213,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             $logger->log(
                 $levelName,
                 sprintf('%s%s', self::$START_PADDING[$level->value], $messageWithContextCounts),
-                empty($context) ? $this->cachedContext : array_merge($this->cachedContext, $context)
+                empty($context) ? $this->cachedContext : array_merge($this->cachedContext, $context),
             );
         }
     }

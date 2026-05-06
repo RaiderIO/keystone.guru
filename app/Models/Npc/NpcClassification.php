@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int             $id
- * @property string          $name
- * @property string          $key
- * @property string          $color
+ * @property int    $id
+ * @property string $name
+ * @property string $key
+ * @property string $color
  *
  * @property Collection<Npc> $npcs
  *
@@ -22,7 +22,12 @@ class NpcClassification extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['id', 'name', 'key', 'color'];
+    protected $fillable = [
+        'id',
+        'name',
+        'key',
+        'color',
+    ];
 
     public const NPC_CLASSIFICATION_NORMAL     = 'normal';
     public const NPC_CLASSIFICATION_ELITE      = 'elite';

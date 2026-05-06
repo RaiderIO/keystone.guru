@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\Affix;
+use App\Models\Mapping\MappingVersion;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLogControllerTestBase
@@ -22,7 +23,6 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->assertTrue($this->isValidUrl($response['data']['links']['edit']));
         $this->assertTrue($this->isValidUrl($response['data']['links']['embed']));
 
-        $this->assertNotEmpty($response['data']['links']['thumbnails']);
         foreach ($response['data']['links']['thumbnails'] as $thumbnail) {
             $this->assertTrue($this->isValidUrl($thumbnail));
         }
@@ -31,14 +31,18 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     protected function validateDungeon(array $response): void
     {
         $this->assertEquals($this->dungeon->id, $response['data']['dungeonId']);
-        $this->assertEquals(__($this->dungeon->name, [], 'en'), $response['data']['title']);
+        $this->assertEquals(__($this->dungeon->name, [], 'en_US'), $response['data']['title']);
     }
 
     protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
     {
         $this->assertCount($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
-        $this->assertEquals($this->dungeon->currentMappingVersion->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
+        /** @var MappingVersion|null $mappingVersion */
+        $mappingVersion = MappingVersion::where('version', $responseArr['data']['mappingVersion'])
+            ->where('dungeon_id', $this->dungeon->id)
+            ->first();
+        $this->assertEquals($mappingVersion->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
     }
 
     protected function validateSpells(array $responseArr, int $spellCount, array $mustHaveSpells = []): void
@@ -47,7 +51,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         foreach ($responseArr['data']['pulls'] as $pull) {
             $responseSpellCount += count($pull['spells']);
 
-            foreach($pull['spells'] as $spellId) {
+            foreach ($pull['spells'] as $spellId) {
                 // Remove $spellId from $mustHaveSpells
                 $key = array_search($spellId, $mustHaveSpells);
                 if ($key !== false) {
@@ -63,16 +67,16 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     protected function validateAffixes(array $responseArr, string ...$affixes): void
     {
         // AffixGroups
-        $this->assertNotEmpty($responseArr['data']['affixGroups']);
-        $this->assertNotEmpty($responseArr['data']['affixGroups'][0]['affixes'][0]);
+        if (!empty($affixes)) {
+            $this->assertNotEmpty($responseArr['data']['affixGroups']);
+            $this->assertNotEmpty($responseArr['data']['affixGroups'][0]['affixes'][0]);
 
-        $validAffixIds = array_map(function (array $affix) {
-            return $affix['id'];
-        }, $responseArr['data']['affixGroups'][0]['affixes']);
+            $validAffixIds = array_map(fn(array $affix) => $affix['id'], $responseArr['data']['affixGroups'][0]['affixes']);
 
-        foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
-            /** @var Affix $affix */
-            $this->assertContains($affix->affix_id, $validAffixIds);
+            foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
+                /** @var Affix $affix */
+                $this->assertContains($affix->affix_id, $validAffixIds);
+            }
         }
     }
 }

@@ -3,26 +3,40 @@
 return [
 
     'home' => [
-        'keystone_guru'    => 'Keystone.guru',
-        'affixes'          => 'Аффиксы',
-        'changelog'        => 'История изменений',
-        'routes'           => 'Маршруты',
-        'routes_expansion' => ':expansion маршруты',
-        'gameversion' => [
-            'update' => '',
-            'dungeon'          => [
+        'front_page' => '',
+        'affixes'    => '',
+        'about'      => '',
+        'credits'    => '',
+        'changelog'  => [
+            'list'    => '',
+            'release' => [
+                'view' => '',
+            ],
+        ],
+        'legal' => [
+            'cookies' => '',
+            'privacy' => '',
+            'terms'   => '',
+        ],
+        'routes'              => '',
+        'routes_expansion'    => '',
+        'routes_game_version' => '',
+        'gameversion'         => [
+            'update'  => '',
+            'dungeon' => [
+                'heatmap' => '',
                 'explore' => '',
             ],
         ],
-        'dungeonroute'     => [
+        'dungeonroute' => [
             'new' => '',
         ],
-        'dungeonroutes'    => [
-            'search'            => 'Поиск',
-            'popular'           => 'Популярные',
-            'next_week_affixes' => 'Аффиксы следующей недели',
-            'this_week_affixes' => 'Текущие Аффиксы',
-            'new'               => 'Новые',
+        'dungeonroutes' => [
+            'search'            => '',
+            'popular'           => '',
+            'next_week_affixes' => '',
+            'this_week_affixes' => '',
+            'new'               => '',
             'routes_season'     => '',
             'season'            => [
                 'popular'           => '',
@@ -30,71 +44,80 @@ return [
                 'this_week_affixes' => '',
                 'new'               => '',
             ],
-            'discoverdungeon'   => [
-                'popular'           => 'Популярные',
-                'next_week_affixes' => 'Аффиксы следующей недели',
-                'this_week_affixes' => 'Текущие Аффиксы',
-                'new'               => 'Новые',
+            'discoverdungeon' => [
+                'popular'           => '',
+                'next_week_affixes' => '',
+                'this_week_affixes' => '',
+                'new'               => '',
             ],
         ],
-        'my_profile'       => 'Мой профиль',
-        'my_routes'        => 'Мои маршруты',
-        'my_tags'          => 'Мои теги',
-        'my_teams'         => 'Моя команда',
-        'overview'         => 'Обзор',
-        'new_team'         => 'Новая команда',
-        'edit_team'        => 'Редактировать команду',
-        'join_team'        => 'Присоединиться к команде',
-        'admin'            => [
-            'admin'                      => 'Администратор',
-            'tools'                      => [
-                'admin_tools'               => 'Инструменты администратора',
-                'view_exported_dungeondata' => 'Просмотреть экспортированные данные подземелий',
-                'view_exported_releases'    => 'Посмотреть экспортированные релизы',
-                'select_exception'          => 'Выбрать исключения',
-                'mdt_diff'                  => 'Отличия MDT',
-                'view_mdt_string_contents'  => 'Просмотр содержимого строк MDT',
-                'import_npcs'               => 'Импортировать НПЦ',
+        'my_profile' => '',
+        'my_routes'  => '',
+        'my_tags'    => '',
+        'my_teams'   => '',
+        'overview'   => '',
+        'new_team'   => '',
+        'edit_team'  => '',
+        'join_team'  => '',
+        'admin'      => [
+            'admin' => '',
+            'tools' => [
+                'admin_tools'               => '',
+                'view_exported_dungeondata' => '',
+                'view_exported_releases'    => '',
+                'select_exception'          => '',
+                'mdt_diff'                  => '',
+                'view_mdt_string_contents'  => '',
+                'import_npcs'               => '',
+                'spells_missing_info'       => '',
+                'npcs_missing_display_id'   => '',
+                'thumbnails_regenerate'     => '',
+                'combat_log_regenerate'     => '',
             ],
-            'releases'                   => 'Релиз',
-            'new_release'                => 'Новый релиз',
-            'edit_release'               => 'Редактировать релиз',
-            'expansions'                 => [
-                'expansions'     => 'Дополнение',
-                'new_expansion'  => 'Новое дополнение',
-                'edit_expansion' => 'Редактировать дополнение',
+            'releases'     => '',
+            'new_release'  => '',
+            'edit_release' => '',
+            'expansions'   => [
+                'expansions'     => '',
+                'new_expansion'  => '',
+                'edit_expansion' => '',
             ],
-            'dungeons'                   => [
-                'dungeons'     => 'Подземелье',
-                'new_dungeon'  => 'Новое подземелье',
-                'edit_dungeon' => 'редактировать подземелье',
+            'dungeons' => [
+                'dungeons'     => '',
+                'new_dungeon'  => '',
+                'edit_dungeon' => '',
             ],
-            'floors'                     => [
-                'new_floor'  => 'Этаж',
-                'edit_floor' => 'редактировать этаж',
+            'floors' => [
+                'new_floor'  => '',
+                'edit_floor' => '',
             ],
             'dungeonspeedrunrequirednpc' => [
                 'new_dungeonspeedrunrequirednpc10man' => '',
                 'new_dungeonspeedrunrequirednpc25man' => '',
             ],
-            'npcs'                       => [
-                'npcs'     => 'НПЦ',
-                'new_npc'  => 'Новый НПЦ',
-                'edit_npc' => 'Редактировать НПЦ',
+            'npcs' => [
+                'npcs'     => '',
+                'new_npc'  => '',
+                'edit_npc' => '',
             ],
-            'npcenemyforces'             => [
+            'npcenemyforces' => [
+                'new_npc_enemy_forces'  => '',
                 'edit_npc_enemy_forces' => '',
             ],
-            'spells'                     => [
-                'spells'     => 'Способность',
-                'new_spell'  => 'Новая способность',
-                'edit_spell' => 'Редактировать способность',
+            'npchealth' => [
+                'new_npc_health'  => '',
+                'edit_npc_health' => '',
             ],
-            'users'                      => [
-                'users' => 'Пользователь',
+            'spells' => [
+                'spells'     => '',
+                'new_spell'  => '',
+                'edit_spell' => '',
             ],
-            'user_reports'               => [
-                'user_reports' => 'Отчеты пользователей',
+            'users' => [
+                'users' => '',
+            ],
+            'user_reports' => [
+                'user_reports' => '',
             ],
         ],
     ],

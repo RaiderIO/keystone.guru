@@ -20,6 +20,7 @@ use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,29 +30,29 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                    $id
- * @property int                                    $dungeon_id
- * @property int                                    $index
- * @property int|null                               $mdt_sub_level
- * @property int|null                               $ui_map_id
- * @property string|null                            $map_name The map name that Blizzard gives to this floor
- * @property string                                 $name
- * @property bool                                   $default
- * @property bool                                   $facade
- * @property int                                    $min_enemy_size
- * @property int                                    $max_enemy_size
- * @property int|null                               $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
- * @property int|null                               $enemy_engagement_max_range_patrols The max range after which we're considering patrols
- * @property float                                  $ingame_min_x
- * @property float                                  $ingame_min_y
- * @property float                                  $ingame_max_x
- * @property float                                  $ingame_max_y
- * @property int|null                               $percentage_display_zoom
- * @property int|null                               $zoom_max
- * @property bool                                   $active
+ * @property int         $id
+ * @property int         $dungeon_id
+ * @property int         $index
+ * @property int|null    $mdt_sub_level
+ * @property int|null    $ui_map_id
+ * @property string|null $map_name                           The map name that Blizzard gives to this floor
+ * @property string      $name
+ * @property bool        $default
+ * @property bool        $facade
+ * @property int         $min_enemy_size
+ * @property int         $max_enemy_size
+ * @property int|null    $enemy_engagement_max_range         When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int|null    $enemy_engagement_max_range_patrols The max range after which we're considering patrols
+ * @property float       $ingame_min_x
+ * @property float       $ingame_min_y
+ * @property float       $ingame_max_x
+ * @property float       $ingame_max_y
+ * @property int|null    $percentage_display_zoom
+ * @property int|null    $zoom_max
+ * @property bool        $active
  *
- * @property Dungeon                                $dungeon
- * @property FloorUnion|null                        $floorUnion
+ * @property Dungeon         $dungeon
+ * @property FloorUnion|null $floorUnion
  *
  * @property Collection<Enemy>                      $enemies
  * @property Collection<EnemyPack>                  $enemypacks
@@ -89,20 +90,23 @@ class Floor extends CacheModel implements MappingModelInterface
 
     // Can map certain floors to others here, so that we can put enemies that are on their own floor (like some final
     // bosses) and put them on the main floor without introducing a 2nd floor.
-    public const UI_MAP_ID_MAPPING = [
+    public const array UI_MAP_ID_MAPPING = [
         // Court of Stars
-        762  => 761,
-        763  => 761,
+        762 => 761,
+        763 => 761,
         // Siege of Boralus
-        876  => 1162, // Kul Tiras -> Siege of Boralus
-        895  => 1162, // Tiragarde Sound -> Siege of Boralus
+        876 => 1162,
+        // Kul Tiras -> Siege of Boralus
+        895 => 1162,
+        // Tiragarde Sound -> Siege of Boralus
         //        1533 => 1162, // Bastion -> Siege of Boralus ????
         // Brackenhide Hollow
         2106 => 2096,
         // Mists of Tirna Scithe
-        1565 => 1669, // Ardenweald -> Mists of Tirna Scithe
+        1565 => 1669,
+        // Ardenweald -> Mists of Tirna Scithe
         // Temple of the Jade Serpent
-        430  => 429,
+        430 => 429,
         // Algeth'ar Academy
         2099 => 2097,
         // Ruby Life Pools (Dragon Isles zone)
@@ -110,27 +114,127 @@ class Floor extends CacheModel implements MappingModelInterface
         // Nokhud Offensive
         2023 => 2093,
         // City of Threads,
-        2216 => 2357, // City of Threads (Lower) -> City of Echoes
+        2216 => 2357,
+        // City of Threads (Lower) -> City of Echoes
         // The Dawnbreaker
-        2215 => 2359, // Harrowfall -> The Dawnbreaker
-        // Grim Batol
-        241  => 293, // Twilight Highlands -> Grim Batol
+        2215 => 2359,
+        // Harrowfall -> The Dawnbreaker
+        // Twilight Highlands -> Grim Batol
+        241 => 293,
+        // Karazhan
+        809 => 350, // Servant's Quarters
+        810 => 351, // Upper Livery Stables
+        811 => 352, // The Banquet Hall
+        812 => 353, // The Guest Chambers
+        813 => 354, // Opera Hall Balcony
+        814 => 355, // Master's Terrace
+        815 => 356, // Lower Broken Stair
+        816 => 357, // Upper Broken Stair
+        817 => 358, // The Menagerie
+        818 => 359, // Guardian's Library
+        819 => 360, // Library Floor
+        820 => 361, // Upper Library
+        821 => 362, // Gamesman's Hall
+        822 => 363, // Netherspace
     ];
 
     /**
      * Some IDs which are open world, and we cannot resolve to a dungeon floor.
      */
-    public const UI_MAP_ID_OPEN_WORLD = [
-        1550, // The Shadowlands
-        1490, // Mechagon
-        1493, // Mechagon
-        2214, // The Ringing Deeps
-        2248, // Isle of Dorn
-        2274, // Khaz Algar
-        2339, // Dornogal
+    public const array UI_MAP_ID_OPEN_WORLD = [
+        // Unknown
+        0,
+        // Eastern Kingdoms
+        13,
+        // Deadwind Pass
+        42,
+        // Broken Isles
+        619,
+        // Azsuna
+        630,
+        // Highmountain
+        650,
+        // Suramar
+        680,
+        // Mechagon
+        1490,
+        // Mechagon
+        1493,
+        // Revendreth
+        1525,
+        // Maldraxxus
+        1536,
+        // The Shadowlands
+        1550,
+        // Torghast
+        1804,
+        1896,
+        1914,
+        // Bastion
+        1533,
+        1813,
+        // Maldraxxus
+        1814,
+        // Fungal Terminus
+        1819,
+        // Pit of Anguish
+        1820,
+        // The Root Cellar
+        1825,
+        // Tazavesh, the Veiled Market
+        2016,
+        // Resonant Peaks
+        2059,
+        // Vault of the Incarnates
+        2119,
+        2120,
+        2121,
+        2122,
+        2123,
+        2124,
+        2125,
+        2126,
+        // Ohn'ahran Plains
+        2129,
+        // The Forbidden Reach
+        2151,
+        // Abberus
+        2170,
+        // The Ringing Deeps
+        2214,
+        // The Nighthold
+        2220,
+        // Isle of Dorn
+        2248,
+        // Khaz Algar
+        2274,
+        // Hall of Awakening
+        2322,
+        // Dornogal
+        2339,
+        // Undermine
+        2346,
+        // Slayer's Rise
+        2397,
+        // Tazavesh
+        2472,
+        // ???
+        1411,
+        1414,
+        1421,
+        1436,
+        1450,
+        1897,
+        1916,
+        1918,
+        2116,
+        2137,
+        2138,
+        2324,
+        2399,
     ];
 
-    public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;
+    public const int DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;
 
     protected $fillable = [
         'dungeon_id',
@@ -173,37 +277,37 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function mapIcons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function mountableAreas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function dungeonFloorSwitchMarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function enemiesForExport(): HasMany
@@ -218,7 +322,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public function enemyPatrolsForExport(): HasMany
     {
-        return $this->hasMany(EnemyPatrol::class)->orderBy('id');
+        return $this->hasMany(EnemyPatrol::class)->with('mdtPolyline')->orderBy('id');
     }
 
     public function mapIconsForExport(): HasMany
@@ -302,13 +406,19 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * Scope a query to only include active floors.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('floors.active', 1);
     }
 
-    public function scopeIndexOrFacade(Builder $builder, MappingVersion $mappingVersion, int $floorIndex, ?string $mapFacadeStyle = null): Builder
-    {
+    #[Scope]
+    protected function indexOrFacade(
+        Builder        $builder,
+        MappingVersion $mappingVersion,
+        int            $floorIndex,
+        ?string        $mapFacadeStyle = null,
+    ): Builder {
         $useFacade = (($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
         // Facade should be FORCED to use floor index 1
@@ -320,20 +430,28 @@ class Floor extends CacheModel implements MappingModelInterface
         return $builder->where(
             static fn(Builder $builder) => $builder->when(
                 $useFacade,
-                static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1)
+                static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1),
             )->when(
                 !$useFacade,
-                static fn(Builder $builder) => $builder->where('facade', 0)->where(static function (Builder $builder) use ($floorIndex) {
-                    // Either try to resolve the actual floor, or revert to the default if not found
-                    $builder->where('index', $floorIndex)
-                        ->orWhere('default', 1);
-                })
+                static fn(Builder $builder) => $builder->where('facade', 0)
+                    ->where(static function (Builder $builder) use ($floorIndex) {
+                        // Either try to resolve the actual floor, or revert to the default if not found
+                        $builder->where('index', $floorIndex)
+                            ->orWhere('default', 1);
+                    }),
+            ),
+        )->when($useFacade, static fn(Builder $builder) => $builder->orderByDesc('facade'))
+            ->when(
+                !$useFacade,
+                static fn(Builder $builder) => $builder
+                    ->orderByRaw('(`index` = ?) DESC', [$floorIndex]) // preferred match first
+                    ->orderByDesc('default'), // fallback if index not found
             )
-        )->orderByDesc($useFacade ? 'facade' : 'index')
             ->limit(1);
     }
 
-    public function scopeDefaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
+    #[Scope]
+    protected function defaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
     {
         $useFacade = (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
@@ -347,8 +465,8 @@ class Floor extends CacheModel implements MappingModelInterface
     public function findClosestFloorSwitchMarker(
         CoordinatesServiceInterface $coordinatesService,
         LatLng                      $latLng,
-        int                         $targetFloorId): ?DungeonFloorSwitchMarker
-    {
+        int                         $targetFloorId,
+    ): ?DungeonFloorSwitchMarker {
         $result = null;
 
         /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
@@ -360,8 +478,10 @@ class Floor extends CacheModel implements MappingModelInterface
             $distanceToClosestFloorSwitchMarker = 99999999999;
             foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
                 $distanceToFloorSwitchMarker = $coordinatesService->distanceBetweenPoints(
-                    $latLng->getLng(), $dungeonFloorSwitchMarker->lng,
-                    $latLng->getLat(), $dungeonFloorSwitchMarker->lat
+                    $latLng->getLng(),
+                    $dungeonFloorSwitchMarker->lng,
+                    $latLng->getLat(),
+                    $dungeonFloorSwitchMarker->lat,
                 );
 
                 if ($distanceToClosestFloorSwitchMarker > $distanceToFloorSwitchMarker) {
@@ -388,13 +508,18 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
-     * @deprecated Use FloorRepository::findByUiMapId instead
      */
+    #[\Deprecated(message: 'Use FloorRepository::findByUiMapId instead')]
     public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->first();
+    }
+
+    public static function isUiMapIdOpenWorld(int $uiMapId): bool
+    {
+        return in_array($uiMapId, self::UI_MAP_ID_OPEN_WORLD);
     }
 
     public function ensureConnectionToFloor(Floor $targetFloor): bool

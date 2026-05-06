@@ -14,6 +14,7 @@ use App\Logic\CombatLog\SpecialEvents\SpellAbsorbedSupport\SpellAbsorbedSupportI
  */
 class SpellAbsorbedSupportV9 extends SpecialEvent implements SpellAbsorbedSupportInterface
 {
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

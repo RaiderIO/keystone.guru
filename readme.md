@@ -1,14 +1,14 @@
-![alt text](https://keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
+![alt text](https://assets.keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
 
 # About Keystone.guru
-Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Shadowlands™.
+Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®.
 This repository contains the source code of (most parts of) the website. It is built with [Laravel 8.0](https://github.com/laravel/laravel) using [jQuery](https://github.com/jquery/jquery), [PHP](http://www.php.net/) and [MySQL](https://www.mysql.com/).
-It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer for thumbnail generation, REDIS for cache, Laravel Echo Server for real-time communication and much, much more.
+It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer for thumbnail generation, REDIS for cache, Laravel Reverb for real-time communication and much, much more.
 
 The website is free to use, now and forever. You may support the development of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
 
 # Features
-* Full interactive Leaflet map of all Classic™, Wrath of the Lich King Classic™, Battle for Azeroth™, Shadowlands™ and Dragonflight™ dungeons
+* Full interactive Leaflet map of all Classic™, Wrath of the Lich King Classic™, Mists of Pandaria™, Legion™, Battle for Azeroth™, Shadowlands™, Dragonflight™ and The War Within™ dungeons
 * Enhanced dungeon map images to allow for 5 zoom levels
   * Dungeon mapping shared with Mythic Dungeon Tools for a seamless integration (thanks to Nnoggie for collaborating)
 * Full import/export support for Mythic Dungeon Tools strings
@@ -21,7 +21,9 @@ The website is free to use, now and forever. You may support the development of 
 * View dungeon mapping without creating a route through the Explore section
 * Temporary routes available in which you can try out a quick route or the website at large with no strings attached
 * Mobile friendly!
-* In collaboration with Raider.io, the Auto Route Creator keeps track of your routes as you do them in-game. For more info see the [Raider.io article](https://raider.io/news/538-introducing-the-auto-route-creator) on the Auto Route Creator
+* In collaboration with Raider.IO
+  * The Auto Route Creator keeps track of your routes as you do them in-game. For more info see the [Raider.IO article](https://raider.io/news/538-introducing-the-auto-route-creator) on the Auto Route Creator
+  * Heatmaps based on the runs done through the Raider.IO Client. For more info see the [Raider.IO article](https://raider.io/news/694-new-mythic-plus-heatmaps) on the Heatmaps
 
 # Registered user features
 * Register through Google, Discord or Battle.net if you don't want to create a Keystone.guru account

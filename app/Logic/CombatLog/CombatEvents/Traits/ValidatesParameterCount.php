@@ -26,12 +26,12 @@ trait ValidatesParameterCount
                     $this::class,
                     $this->getParameterCount() - $this->getOptionalParameterCount(),
                     $this->getParameterCount(),
-                    $parameterCount
-                )
+                    $parameterCount,
+                ),
             );
-        } else if ($parameterCount > $this->getParameterCount()) {
+        } elseif ($parameterCount > $this->getParameterCount()) {
             throw new InvalidArgumentException(
-                sprintf('Invalid parameter count for %s - wanted %d, got %d', $this::class, $this->getParameterCount(), $parameterCount)
+                sprintf('Invalid parameter count for %s - wanted %d, got %d', $this::class, $this->getParameterCount(), $parameterCount),
             );
         }
     }

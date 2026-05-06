@@ -27,8 +27,10 @@ abstract class AjaxMappingModelBaseController extends Controller
 {
     use ChangesMapping;
 
-    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
-    {
+    protected function shouldCallMappingChanged(
+        ?MappingModelInterface $beforeModel,
+        ?MappingModelInterface $afterModel,
+    ): bool {
         return true;
     }
 
@@ -42,7 +44,7 @@ abstract class AjaxMappingModelBaseController extends Controller
         string                      $modelClass,
         ?MappingModelInterface      $model = null,
         ?Closure                    $onSaveSuccess = null,
-        ?Model                      $echoContext = null
+        ?Model                      $echoContext = null,
     ): Model {
         $validated['mapping_version_id'] = $mappingVersion?->id;
 
@@ -51,7 +53,14 @@ abstract class AjaxMappingModelBaseController extends Controller
         }
 
         /** @var Model $modelClass */
-        return DB::transaction(function () use ($coordinatesService, $validated, $modelClass, $model, $onSaveSuccess, $echoContext) {
+        return DB::transaction(function () use (
+            $coordinatesService,
+            $validated,
+            $modelClass,
+            $model,
+            $onSaveSuccess,
+            $echoContext
+        ) {
             /** @var Model|null $beforeModel */
             $beforeModel = $model === null ? null : clone $model;
 
@@ -63,7 +72,11 @@ abstract class AjaxMappingModelBaseController extends Controller
             }
 
             if ($success) {
-                $model->load(['mappingVersion', 'floor', 'floor.dungeon']);
+                $model->load([
+                    'mappingVersion',
+                    'floor',
+                    'floor.dungeon',
+                ]);
 
                 if ($onSaveSuccess != null) {
                     $onSaveSuccess($model);
@@ -75,7 +88,7 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-                    $echoContext = $echoContext ?? $model->floor->dungeon;
+                    $echoContext ??= $model->floor->dungeon;
                     broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));
                 }
 
@@ -86,5 +99,10 @@ abstract class AjaxMappingModelBaseController extends Controller
         });
     }
 
-    protected abstract function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent;
+    abstract protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent;
 }

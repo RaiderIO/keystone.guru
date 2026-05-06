@@ -12,21 +12,21 @@ use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 
 /**
- * @property int              $id
- * @property int              $release_changelog_id
- * @property string           $version
- * @property string           $title
- * @property bool             $backup_db
- * @property bool             $silent
- * @property bool             $spotlight
- * @property bool             $released A per-environment flag to indicate if the release has been released to the public
+ * @property int    $id
+ * @property int    $release_changelog_id
+ * @property string $version
+ * @property string $title
+ * @property bool   $backup_db
+ * @property bool   $silent
+ * @property bool   $spotlight
+ * @property bool   $released             A per-environment flag to indicate if the release has been released to the public
  *
- * @property Carbon           $updated_at
- * @property Carbon           $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
- * @property string           $github_body
- * @property string           $discord_body
- * @property string           $reddit_body
+ * @property string $github_body
+ * @property string $discord_body
+ * @property string $reddit_body
  *
  * @property ReleaseChangelog $changelog
  *
@@ -52,20 +52,29 @@ class Release extends CacheModel
 
     protected $with = ['changelog'];
 
-    protected $appends = ['github_body', 'discord_body', 'reddit_body'];
+    protected $appends = [
+        'github_body',
+        'discord_body',
+        'reddit_body',
+    ];
 
-    protected $hidden = ['reddit_body', 'discord_body', 'github_body'];
+    protected $hidden = [
+        'reddit_body',
+        'discord_body',
+        'github_body',
+    ];
 
     /**
      * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
      */
-    private const DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
+    private const int DISCORD_EMBED_DESCRIPTION_LIMIT = 4096;
 
     private function getPreviousRelease(): ?Release
     {
         return Release::where('id', '<', $this->id)->orderBy('id', 'desc')->first();
     }
 
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'version';
@@ -89,17 +98,17 @@ class Release extends CacheModel
      */
     public function getDiscordBodyAttribute(): string
     {
-        $body       = trim(view('app.release.discord', [
+        $body = trim(view('app.release.discord', [
             'model'   => $this,
             'mention' => !$this->silent && $this->isMajorUpgrade(),
         ])->render());
         $bodyLength = strlen($body);
 
-        $footer       = trim(view('app.release.discord_footer', [
-            'homeUrl'      => route('home'),
-            'changelogUrl' => route('misc.changelog'),
-            'affixesUrl'   => route('misc.affixes'),
-            'newRouteUrl'  => route('dungeonroute.new'),
+        $footer = trim(view('app.release.discord_footer', [
+            'homeUrl'      => $this->publicRoute('home'),
+            'changelogUrl' => $this->publicRoute('misc.changelog'),
+            'affixesUrl'   => $this->publicRoute('misc.affixes'),
+            'newRouteUrl'  => $this->publicRoute('dungeonroute.new'),
             'patreonUrl'   => 'https://www.patreon.com/keystoneguru',
         ])->render());
         $footerLength = strlen($footer);
@@ -130,9 +139,12 @@ class Release extends CacheModel
      */
     public function getFormattedTitle(): string
     {
-        return sprintf('Release %s (%s)%s',
-            $this->version, now()->format('Y/m/d'),
-            empty($this->title) ? '' : sprintf(' - %s', $this->title));
+        return sprintf(
+            'Release %s (%s)%s',
+            $this->version,
+            $this->created_at->format('Y/m/d'),
+            empty($this->title) ? '' : sprintf(' - %s', $this->title),
+        );
     }
 
     public function getDiscordEmbeds(): array
@@ -174,13 +186,14 @@ class Release extends CacheModel
 
         return [
             [
-                'color'       => 14641434, // '#DF691A'
+                'color' => 14641434,
+                // '#DF691A'
                 'title'       => $this->getFormattedTitle(),
                 'description' => substr($this->discord_body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT),
-                'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
+                'url'         => $this->publicRoute('release.view', ['release' => $this->version]),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
-                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                    'icon_url' => ksgAssetImage('external/discord/footer_image.png'),
                     'text'     => 'Keystone.guru Discord Bot',
                 ],
             ],
@@ -223,5 +236,10 @@ class Release extends CacheModel
     public function isBugfixUpgrade(): bool
     {
         return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+    }
+
+    private function publicRoute(string $name, array $params = [], string $host = 'https://keystone.guru'): string
+    {
+        return rtrim($host, '/') . route($name, $params, false);
     }
 }

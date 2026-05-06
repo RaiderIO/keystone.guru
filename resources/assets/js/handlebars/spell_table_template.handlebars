@@ -1,0 +1,32 @@
+<div class="table-responsive">
+    <table class="table table-sm mt-2">
+        <thead>
+        <tr>
+            <th>{{spell_header_name}}</th>
+            <th>{{spell_header_schools}}</th>
+            <th>{{spell_header_miss_types}}</th>
+            <th>{{spell_header_dispel_type}}</th>
+            <th>{{spell_header_mechanic}}</th>
+            <th>{{spell_header_cast_time}}</th>
+            <th>{{spell_header_duration}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each spells}}
+            <tr>
+                <td>
+                    <a href="{{wowhead_url}}">
+                        <img src="{{icon_url}}" width="24px"/> {{name}}
+                    </a>
+                </td>
+                <td>{{schools}}</td>
+                <td>{{miss_types}}</td>
+                <td>{{dispel_type}}</td>
+                <td>{{mechanic}}</td>
+                <td>{{#if cast_time}}{{cast_time}}s{{else}}-{{/if}}</td>
+                <td>{{#if duration}}{{duration}}s{{else}}-{{/if}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

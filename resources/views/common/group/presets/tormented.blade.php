@@ -19,12 +19,11 @@ $shortname = $expansion->shortname;
 ?>
 
 <div class="form-group {{ $shortname }} presets">
-    {!! Form::label('seasonal_index', __('view_common.group.affixes.tormented_preset')) !!}
+    {{ html()->label(__('view_common.group.affixes.tormented_preset'), 'seasonal_index') }}
     <span class="form-required">*</span>
     <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
             sprintf(__('view_common.group.affixes.tormented_preset_title'), $season->presets)
              }}"></i>
-    {!! Form::select('seasonal_index[]', $presets, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0,
-        ['class' => 'form-control selectpicker']) !!}
+    {{ html()->select('seasonal_index[]', $presets, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0)->class('form-control selectpicker') }}
 
 </div>

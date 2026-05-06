@@ -1,7 +1,9 @@
 <?php
 
 return [
-    'player_death' => '',
-    'enemy_killed' => '',
-    'spell_cast'   => '',
+
+    'npc_death'    => 'Смерть ворога',
+    'player_death' => 'Смерть гравця',
+    'player_spell' => 'Застосування Жаги крові',
+
 ];

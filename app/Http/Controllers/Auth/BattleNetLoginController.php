@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\GameServerRegion;
 use App\Models\User;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use SocialiteProviders\Battlenet\Provider;
@@ -13,10 +14,10 @@ class BattleNetLoginController extends OAuthLoginController
     protected function getUser($oauthUser, $oAuthId)
     {
         return new User([
-            'public_key'      => User::generateRandomPublicKey(),
-            'oauth_id'        => $oAuthId,
+            'public_key' => User::generateRandomPublicKey(),
+            'oauth_id'   => $oAuthId,
             // Prefer nickname over full name
-            'name'            => $oauthUser->nickname,
+            'name' => $oauthUser->nickname,
             // Email is likely null in Battle.net's case, so make up one to make the database happy
             'email'           => sprintf('%s@battle.net', $oauthUser->id),
             'echo_color'      => randomHexColor(),
@@ -31,8 +32,10 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
-    public function redirectToProvider(Request $request): RedirectResponse
-    {
+    public function redirectToProvider(
+        Request                      $request,
+        ReadOnlyModeServiceInterface $readOnlyModeService,
+    ): RedirectResponse {
         $this->redirectTo = $request->get('redirect', '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);
@@ -42,6 +45,6 @@ class BattleNetLoginController extends OAuthLoginController
 
         Provider::setRegion($region);
 
-        return parent::redirectToProvider($request);
+        return parent::redirectToProvider($request, $readOnlyModeService);
     }
 }

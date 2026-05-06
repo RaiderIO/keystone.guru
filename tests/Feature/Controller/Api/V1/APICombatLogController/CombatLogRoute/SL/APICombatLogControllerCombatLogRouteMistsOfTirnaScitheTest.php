@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
         $postBody = $this->getJsonData('SL/tww_s1_mists_of_tirna_scithe_2', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -46,7 +46,7 @@ class APICombatLogControllerCombatLogRouteMistsOfTirnaScitheTest extends APIComb
         $postBody = $this->getJsonData('SL/tww_s1_mists_of_tirna_scithe_4', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

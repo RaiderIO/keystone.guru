@@ -18,6 +18,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
 class AjaxOverpulledEnemyController extends Controller
@@ -31,10 +32,10 @@ class AjaxOverpulledEnemyController extends Controller
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonRoute,
-        LiveSession                     $liveSession)
-    {
-        $this->authorize('view', $dungeonRoute);
-        $this->authorize('view', $liveSession);
+        LiveSession                     $liveSession,
+    ) {
+        Gate::authorize('view', $dungeonRoute);
+        Gate::authorize('view', $liveSession);
 
         $validated = $request->validated();
 
@@ -76,10 +77,10 @@ class AjaxOverpulledEnemyController extends Controller
         OverpulledEnemyServiceInterface $overpulledEnemyService,
         OverpulledEnemyFormRequest      $request,
         DungeonRoute                    $dungeonroute,
-        LiveSession                     $livesession)
-    {
-        $this->authorize('view', $dungeonroute);
-        $this->authorize('view', $livesession);
+        LiveSession                     $livesession,
+    ) {
+        Gate::authorize('view', $dungeonroute);
+        Gate::authorize('view', $livesession);
 
         $result = response()->noContent();
 

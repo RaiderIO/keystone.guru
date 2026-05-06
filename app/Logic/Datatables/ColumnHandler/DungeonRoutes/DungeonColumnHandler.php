@@ -20,11 +20,16 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'dungeon_id');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
-    {
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch,
+    ): void {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
-            $searchValue = $columnData['search']['value'];
+            $searchValue = $columnData['search']['value'] ?? null;
             // -1 = all dungeons = no filter
             if ((int)$searchValue !== -1 && !empty($searchValue)) {
                 $explode = explode('-', (string)$searchValue);
@@ -32,7 +37,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
                     if ($explode[0] === 'season') {
                         // Joins need to be added to the main builder
                         $subBuilder->where('dungeon_routes.season_id', (int)$explode[1]);
-                    } else if ($explode[0] === 'expansion') {
+                    } elseif ($explode[0] === 'expansion') {
                         $subBuilder->where('dungeons.expansion_id', (int)$explode[1]);
                     } else {
                         throw new Exception(sprintf('Unable to find prefix %s', $explode[0]));

@@ -89,7 +89,7 @@ class EnemyPack extends VersionableMapObject {
                 name: 'mark_as_skippable',
                 type: 'button',
                 buttonType: 'info',
-                buttonText: lang.get('messages.enemypack_mark_as_skippable_button_text_label'),
+                buttonText: lang.get('js.enemypack_mark_as_skippable_button_text_label'),
                 clicked: function (e) {
                     self.map.leafletMap.closePopup();
 
@@ -168,6 +168,8 @@ class EnemyPack extends VersionableMapObject {
             if (enemy !== null) {
                 // We're not unregging this since this will never change when in view/edit mode, only in admin mode when this code isn't triggered
                 enemy.register(['shown', 'hidden'], this, this._onEnemyVisibilityToggled.bind(this));
+                // Ensure that the tooltip now shows the group number
+                enemy.bindTooltip();
             } else {
                 console.warn(`Unable to find enemy with id ${rawEnemy.id} for enemy pack ${this.id}`);
             }
@@ -188,6 +190,7 @@ class EnemyPack extends VersionableMapObject {
         let latLngs = [];
         for (let i = 0; i < this.rawEnemies.length; i++) {
             let rawEnemy = this.rawEnemies[i];
+            /** @type {Enemy} */
             let enemy = enemyMapObjectGroup.findMapObjectById(rawEnemy.id);
 
             if (enemy !== null && enemy.layer !== null && enemy.shouldBeVisible()) {
@@ -202,15 +205,16 @@ class EnemyPack extends VersionableMapObject {
             // Only if we can actually make an offset
             if (hullPoints.length > 1) {
                 try {
-                    hullPoints = (new Offset()).data(hullPoints).arcSegments(c.map.enemypack.arcSegments(hullPoints.length)).margin(c.map.enemypack.margin);
+                    let offsetLatLngs = createOffsetPolygon(
+                        hullPoints.map(point => ({lat: point[0], lng: point[1]})),
+                        c.map.enemypack.margin,
+                        c.map.enemypack.arcSegments(hullPoints.length)
+                    );
 
-                    result = L.polygon(hullPoints, c.map.enemypack.polygonOptions);
-                    result.off('click').on('click', function () {
-
-                    });
+                    result = L.polygon([offsetLatLngs], c.map.enemypack.polygonOptions);
                 } catch (error) {
                     // Not particularly interesting to spam the console with
-                    // console.error('Unable to create offset for pack', remoteMapObject.id, error);
+                    console.error('Unable to create offset for pack', this.id, error);
                 }
             }
         }

@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
@@ -39,7 +40,7 @@ class AjaxKillZoneController extends Controller
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonroute,
         array                       $data,
-        bool                        $recalculateEnemyForces = true
+        bool                        $recalculateEnemyForces = true,
     ): KillZone {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
@@ -53,10 +54,10 @@ class AjaxKillZoneController extends Controller
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
         // Prevent someone from updating different killzones than they are allowed to
         if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-            $this->authorize('edit', $killZone->dungeonRoute);
+            Gate::authorize('edit', $killZone->dungeonRoute);
         }
 
-        $this->authorize('addKillZone', $dungeonroute);
+        Gate::authorize('addKillZone', $dungeonroute);
 
         /** @var KillZone|null $beforeModel */
         $beforeModel = $killZone === null ? null : clone $killZone;
@@ -95,7 +96,7 @@ class AjaxKillZoneController extends Controller
                         'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                         'mdt_id'       => $enemy->mdt_id,
                     ];
-                    $validEnemyIds[]   = (int)$enemyId;
+                    $validEnemyIds[] = (int)$enemyId;
                 }
 
                 // Bulk insert
@@ -124,7 +125,10 @@ class AjaxKillZoneController extends Controller
                 RefreshEnemyForces::dispatch($dungeonroute->id);
             }
 
-            $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (array &$beforeAttributes, array &$afterAttributes) use ($beforeModel, $killZone) {
+            $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (
+                array & $beforeAttributes,
+                array & $afterAttributes,
+            ) use ($beforeModel, $killZone) {
                 $beforeAttributes['enemies'] = $beforeModel?->getEnemiesAttribute() ?? [];
                 $afterAttributes['enemies']  = $killZone->getEnemiesAttribute();
             });
@@ -141,7 +145,7 @@ class AjaxKillZoneController extends Controller
                 if ($useFacade && $originalLatLng->getFloor() !== null) {
                     $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
                         $dungeonroute->mappingVersion,
-                        $originalLatLng
+                        $originalLatLng,
                     );
 
                     // Save the killzone with converted lat/lngs in the database
@@ -180,7 +184,7 @@ class AjaxKillZoneController extends Controller
         CoordinatesServiceInterface $coordinatesService,
         APIKillZoneFormRequest      $request,
         DungeonRoute                $dungeonRoute,
-        ?KillZone                   $killZone = null
+        ?KillZone                   $killZone = null,
     ): KillZone {
         $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
 
@@ -214,9 +218,9 @@ class AjaxKillZoneController extends Controller
     public function storeAll(
         CoordinatesServiceInterface $coordinatesService,
         APIKillZoneMassFormRequest  $request,
-        DungeonRoute                $dungeonRoute
+        DungeonRoute                $dungeonRoute,
     ) {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -244,7 +248,9 @@ class AjaxKillZoneController extends Controller
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item) => in_array($item, $validEnemyIds));
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn(
+                        $item,
+                    ) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
@@ -289,11 +295,10 @@ class AjaxKillZoneController extends Controller
 
         if (!$dungeonRoute->isSandbox()) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonRoute);
+            Gate::authorize('edit', $dungeonRoute);
         }
 
         try {
-
             if ($killZone->delete()) {
                 if (Auth::check()) {
                     /** @var User $user */
@@ -313,7 +318,6 @@ class AjaxKillZoneController extends Controller
             } else {
                 $result = response('Unable to delete pull', Http::INTERNAL_SERVER_ERROR);
             }
-
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -328,7 +332,7 @@ class AjaxKillZoneController extends Controller
      */
     public function deleteAll(APIDeleteAllFormRequest $request, DungeonRoute $dungeonRoute)
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
 

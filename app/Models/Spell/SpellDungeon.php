@@ -8,9 +8,9 @@ use App\Models\Traits\SeederModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int     $id
- * @property int     $spell_id
- * @property int     $dungeon_id
+ * @property int $id
+ * @property int $spell_id
+ * @property int $dungeon_id
  *
  * @property Spell   $spell
  * @property Dungeon $dungeon

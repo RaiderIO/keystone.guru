@@ -39,25 +39,40 @@ class ExportCsv extends Command
             $npc = Npc::with('npcSpells')->whereRelation('npcSpells', 'spell_id', $spell->id)->first();
 
             return [
-                'id'           => $spell->id,
-                'npc_id'       => optional($npc)->id ?? 'UNKNOWN',
-                'mechanic'     => __($spell->mechanic, [], 'en_US'),
-                'name'         => $spell->name,
-                'dispel_type'  => $spell->dispel_type,
-                'schools'      => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask),
-                'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask),
+                'id'          => $spell->id,
+                'npc_id'      => $npc?->id ?? 'UNKNOWN',
+                'mechanic'    => __($spell->mechanic, [], 'en_US'),
+                'name'        => __($spell->name, [], 'en_US'),
+                'dispel_type' => in_array($spell->dispel_type, Spell::ALL_DISPEL_TYPES) ?
+                    __(sprintf('spelldispeltype.%s', $spell->dispel_type), [], 'en_US') :
+                    $spell->dispel_type,
+                'schools'      => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools'),
+                'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes'),
                 'aura'         => $spell->aura ? 1 : 0,
                 'debuff'       => $spell->debuff ? 1 : 0,
                 'cast_time'    => $spell->cast_time,
                 'duration'     => $spell->duration,
-                'wowhead_link' => $spell->getWowheadLink(),
+                'wowhead_link' => Spell::getWowheadLink($spell->game_version_id, $spell->id),
             ];
         })->toArray();
 
         $this->outputToCsv(
             sprintf('%s_spells.csv', Str::slug(__($dungeon->name, [], 'en_US'))),
-            ['id', 'npc_id', 'mechanic', 'name', 'dispel_type', 'schools', 'miss_types', 'aura', 'debuff', 'cast_time', 'duration', 'wowhead_link'],
-            $csvData
+            [
+                'id',
+                'npc_id',
+                'mechanic',
+                'name',
+                'dispel_type',
+                'schools',
+                'miss_types',
+                'aura',
+                'debuff',
+                'cast_time',
+                'duration',
+                'wowhead_link',
+            ],
+            $csvData,
         );
 
         return 0;
@@ -66,11 +81,12 @@ class ExportCsv extends Command
     private function outputToCsv(string $filePath, array $headers, array $data): bool
     {
         $file = null;
+
         try {
             $file = fopen($filePath, 'w');
-            fputcsv($file, $headers);
+            fputcsv($file, $headers, escape: '\\');
             foreach ($data as $row) {
-                fputcsv($file, $row);
+                fputcsv($file, $row, escape: '\\');
             }
         } finally {
             if ($file !== null) {

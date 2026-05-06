@@ -21,7 +21,7 @@ class SearchFilterMinSamplesRequired extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_min_samples_required_header')
+        return lang.get('js.filter_input_min_samples_required_header')
             .replace(':value', this.getValue());
     }
 

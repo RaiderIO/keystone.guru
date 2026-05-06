@@ -21,9 +21,16 @@ class NpcCharacteristic extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'npc_id', 'characteristic_id'];
+    protected $fillable = [
+        'id',
+        'npc_id',
+        'characteristic_id',
+    ];
 
-    protected $hidden = ['id', 'npc_id'];
+    protected $hidden = [
+        'id',
+        'npc_id',
+    ];
 
     public function npc(): BelongsTo
     {

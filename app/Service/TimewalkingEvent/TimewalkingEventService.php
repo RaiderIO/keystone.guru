@@ -32,7 +32,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
             $targetTime = Carbon::create($date->year, $date->month, $date->day, $date->hour, null, null, $date->timezone);
 
             if ($targetTime->gt($start)) {
-                $diffInWeeks = $start->diffInWeeks($targetTime);
+                $diffInWeeks = (int)$start->diffInWeeks($targetTime, true);
 
                 if ($diffInWeeks < $timewalkingEvent->start_duration_weeks ||
                     $diffInWeeks % $timewalkingEvent->week_interval === 0) {
@@ -63,17 +63,19 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
             $targetTime = Carbon::create($date->year, $date->month, $date->day, $date->hour, null, null, $date->timezone);
 
             if ($targetTime->gt($start)) {
-                $diffInWeeks = $start->diffInWeeks($targetTime);
+                $diffInWeeks = (int)$start->diffInWeeks($targetTime, true);
 
                 if ($diffInWeeks < $timewalkingEvent->start_duration_weeks ||
                     $diffInWeeks % $timewalkingEvent->week_interval === 0) {
                     $affixGroups = $this->seasonService->getCurrentSeason($expansion)->affixGroups;
-                    $result      = $affixGroups->get(($diffInWeeks % $timewalkingEvent->week_interval) % $affixGroups->count());
+                    /** @var AffixGroup $result */
+                    $result = $affixGroups->get(($diffInWeeks % $timewalkingEvent->week_interval) % $affixGroups->count());
                 }
             }
         } else {
             logger()->error('Overlapping timewalking events found?', [
-                $timewalkingEvent, $expansion,
+                $timewalkingEvent,
+                $expansion,
             ]);
         }
 

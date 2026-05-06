@@ -1,27 +1,29 @@
 <?php
 
 return [
+
     'passwords' => [
         'email' => [
-            'title'                    => 'Сбросить пароль',
-            'header'                   => 'Сбросить пароль',
-            'email_address'            => 'Электронный адрес',
-            'send_password_reset_link' => 'Отправить ссылку для сброса пароля',
+            'title'                    => '',
+            'header'                   => '',
+            'email_address'            => '',
+            'send_password_reset_link' => '',
         ],
         'reset' => [
-            'title'            => 'Сбросить пароль',
-            'header'           => 'Сбросить пароль',
-            'email_address'    => 'Электронный адрес',
-            'password'         => 'Пароль',
-            'confirm_password' => 'Подтвердить пароль',
-            'reset_password'   => 'Сбросить пароль',
+            'title'            => '',
+            'header'           => '',
+            'email_address'    => '',
+            'password'         => '',
+            'confirm_password' => '',
+            'reset_password'   => '',
         ],
     ],
-    'login'     => [
-        'title' => 'Войти',
+    'login' => [
+        'title' => '',
     ],
-    'register'  => [
-        'title'  => 'Регистрация',
-        'header' => 'Регистрация',
+    'register' => [
+        'title'  => '',
+        'header' => '',
     ],
+
 ];

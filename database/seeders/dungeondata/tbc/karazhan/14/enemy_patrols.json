@@ -1,0 +1,16 @@
+[
+    {
+        "id": 21834,
+        "mapping_version_id": 707,
+        "floor_id": 446,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-48.8527,\"lng\":152.6862},{\"lat\":-30.2956,\"lng\":186.5205},{\"lat\":-147.5018,\"lng\":289.9108},{\"lat\":-144.6725,\"lng\":293.8718},{\"lat\":-25.98,\"lng\":187.5563},{\"lat\":-45.4002,\"lng\":150.0968},{\"lat\":-48.8529,\"lng\":152.5946}]"
+        },
+        "mdt_polyline": null
+    }
+]

@@ -21,7 +21,11 @@ class ReleaseChangelog extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['id', 'release_id', 'description'];
+    protected $fillable = [
+        'id',
+        'release_id',
+        'description',
+    ];
 
     protected $with = ['changes'];
 

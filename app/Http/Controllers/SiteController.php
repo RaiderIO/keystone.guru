@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Features\FrontPageRework;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
@@ -10,21 +11,30 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Release;
 use App\Models\Season;
+use App\Models\Team;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
+use Teapot\StatusCode;
 
 class SiteController extends Controller
 {
@@ -43,9 +53,43 @@ class SiteController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index(CoverageServiceInterface $coverageService, SeasonService $seasonService): View
-    {
-        if (Auth::check()) {
+    public function index(
+        CoverageServiceInterface        $coverageService,
+        SeasonServiceInterface          $seasonService,
+        DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        DiscoverServiceInterface        $discoverService,
+    ): View {
+        if (Feature::active(FrontPageRework::class)) {
+//            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+//            $expansion                = $userOrDefaultGameVersion->expansion;
+//            // @TODO Remove this!
+//            if ($userOrDefaultGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
+//                /** @var Expansion $expansion */
+//                $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_TWW);
+//            }
+//
+//            $season = $seasonService->getCurrentSeason($expansion);
+//            // @TODO Add caching
+//            $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes(null, $season);
+            // @TODO Add caching
+            $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
+
+            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+            $season                   = $seasonService->getCurrentSeason($userOrDefaultGameVersion->expansion);
+
+            return view('home.layout', [
+                'currentSeason'                 => $season,
+                'weeklyRouteDungeons'           => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
+                'weeklyRoutes'                  => $weeklyRoutes,
+                'popularDungeonRoutesByDungeon' => $discoverService
+                    ->withSeason($season)
+                    ->withGameVersion($userOrDefaultGameVersion)
+                    ->excludeTeam(Team::getRaiderIOTeam())
+                    ->popularGroupedByDungeon()
+                    ->map(static fn(Collection $routes) => $routes->take(1))
+                    ->flatten(),
+            ]);
+        } elseif (Auth::check()) {
             $season = null;
             if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
                 $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
@@ -65,11 +109,11 @@ class SiteController extends Controller
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return string
      */
     public function benchmark(
         Request                                    $request,
-        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
     ) {
         $validated = json_decode(file_get_contents(app()->basePath('tmp/combatlog.json')), true);
 
@@ -77,7 +121,7 @@ class SiteController extends Controller
 
         Stopwatch::start('SiteController::benchmark');
         $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
-            CombatLogRouteRequestModel::createFromArray($validated)
+            CombatLogRouteRequestModel::createFromArray($validated),
         );
         Stopwatch::stop('SiteController::benchmark');
 
@@ -180,15 +224,23 @@ class SiteController extends Controller
         DiscoverServiceInterface         $discoverService,
         SeasonService                    $seasonService,
         ExpansionService                 $expansionService,
-        TimewalkingEventServiceInterface $timewalkingEventService
+        TimewalkingEventServiceInterface $timewalkingEventService,
     ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+
+        $minOffset = -50;
+        $maxOffset = 10;
+        $offset    = (int)$request->get('offset', 0);
+        $offset    = max(min($offset, $maxOffset), $minOffset);
 
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
+            'gameVersion'             => GameVersion::getDefaultGameVersion(),
             'seasonService'           => $seasonService,
-            'offset'                  => min((int)$request->get('offset', 0), 10),
+            'offset'                  => $offset,
+            'showPrevious'            => $offset > $minOffset,
+            'showNext'                => $offset < $maxOffset,
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
@@ -201,11 +253,62 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return Response
      */
-    public function status(Request $request): View
+    public function status(Request $request): Response
     {
-        return view('misc.status');
+        $checks = [
+            'database' => [
+                'ok'    => false,
+                'error' => null,
+            ],
+            'redis' => [
+                'ok'    => false,
+                'error' => null,
+            ],
+            'disk' => [
+                'ok'    => false,
+                'error' => null,
+            ],
+        ];
+
+        // Database check: simple query
+        try {
+            DB::connection()->getPdo(); // ensure PDO established
+            DB::select('SELECT 1');     // trivial round trip
+            $checks['database']['ok'] = true;
+        } catch (\Throwable $e) {
+            $checks['database']['error'] = $e->getMessage();
+        }
+
+        // Redis check: PING
+        try {
+            /** @var Status $pong */
+            $pong = Redis::connection()->client()->ping();
+
+            // Some clients return "PONG" or true
+            $checks['redis']['ok'] = $pong->getPayload() === 'PONG';
+            if (!$checks['redis']['ok']) {
+                $checks['redis']['error'] = 'Unexpected PING response';
+            }
+        } catch (\Throwable $e) {
+            $checks['redis']['error'] = $e->getMessage();
+        }
+
+        // Check if the disk is writable
+        $checks['disk']['ok'] = is_writable(storage_path());
+        if (!$checks['disk']['ok']) {
+            $checks['disk']['error'] = 'Storage path is not writable';
+        }
+
+        $success = true;
+        foreach ($checks as $check) {
+            $success = $success && $check['ok'];
+        }
+
+        return response()
+            ->view('misc.status', ['checks' => $checks])
+            ->setStatusCode($success ? StatusCode::OK : StatusCode::SERVICE_UNAVAILABLE);
     }
 
     /**
@@ -235,9 +338,30 @@ class SiteController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function embedExplore(Request $request, GameVersion $gameVersion, Dungeon $dungeon, string $floorIndex = '1'): View
-    {
+    public function embedExplore(
+        Request     $request,
+        GameVersion $gameVersion,
+        Dungeon     $dungeon,
+        string      $floorIndex = '1',
+    ): View {
         return view('misc.embedexplore', [
+            'gameVersion' => $gameVersion,
+            'model'       => $dungeon,
+            'floorIndex'  => $floorIndex,
+            'parameters'  => $request->all(),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function embedHeatmap(
+        Request     $request,
+        GameVersion $gameVersion,
+        Dungeon     $dungeon,
+        string      $floorIndex = '1',
+    ): View {
+        return view('misc.embedheatmap', [
             'gameVersion' => $gameVersion,
             'model'       => $dungeon,
             'floorIndex'  => $floorIndex,

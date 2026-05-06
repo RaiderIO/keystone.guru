@@ -36,7 +36,7 @@ class DungeonrouteEdit extends InlineCode {
     //
     //     $('#map_route_publish_container')
     //         .attr('data-toggle', 'tooltip')
-    //         .attr('title', hasKilledAllRequiredEnemies ? '' : lang.get('messages.cannot_change_sharing_settings_not_all_required_enemies_killed'))
+    //         .attr('title', hasKilledAllRequiredEnemies ? '' : lang.get('js.cannot_change_sharing_settings_not_all_required_enemies_killed'))
     //         .refreshTooltips();
     // }
 

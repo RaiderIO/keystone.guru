@@ -30,7 +30,7 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
         FloorUnionAreaFormRequest   $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        ?FloorUnionArea             $floorUnionArea = null
+        ?FloorUnionArea             $floorUnionArea = null,
     ): FloorUnionArea|Model {
         $validated = $request->validated();
 
@@ -69,10 +69,12 @@ class AjaxFloorUnionAreaController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent {
         return new FloorUnionAreaChangedEvent($context, $user, $model);
     }
-
-
 }

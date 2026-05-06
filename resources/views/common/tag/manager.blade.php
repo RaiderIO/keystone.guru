@@ -1,18 +1,24 @@
 <?php
 
-/** @var string $category */
+/**
+ * @var HasTags $context
+ * @var string  $category
+ * @var string  $theme
+ */
 
-/** @var string $theme */
-
+use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
+use App\Models\Traits\HasTags;
+use App\Models\User;
 
 $tagCategoryNameMapping = [
     1 => __('view_common.tag.manager.route_personal'),
     2 => __('view_common.tag.manager.route_team')
 ];
 
-$tags        = Auth::user()->tags(TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
-$isDarkTheme = $theme === 'darkly';
+$tags        = $context->tags(TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
+$isDarkTheme = User::isThemeDark($theme);
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
 
@@ -36,15 +42,16 @@ $isDarkTheme = $theme === 'darkly';
             </div>
         </div>
         @foreach($categoryTags as $categoryTag)
+                <?php /** @var Tag $categoryTag */ ?>
             <div id="tag_row_{{ $categoryTag->id }}" class="row mt-1">
                 <div class="col-6 col-lg-3">
-                    {!! Form::text('tag_name', $categoryTag->name, ['id' => sprintf('tag_name_%d', $categoryTag->id), 'class' => 'form-control']) !!}
+                    {{ html()->text('tag_name', $categoryTag->name)->id(sprintf('tag_name_%d', $categoryTag->id))->class('form-control') }}
                 </div>
                 <div class="col-4 col-lg-3 ">
-                    {!! Form::color('tag_color', $categoryTag->color ?? ($isDarkTheme ? '#375a7f' : '#ebebeb'), ['id' => sprintf('tag_color_%d', $categoryTag->id), 'class' => 'form-control']) !!}
+                    {{ html()->input('color', 'tag_color', $categoryTag->color ?? ($isDarkTheme ? '#375a7f' : '#ebebeb'))->id(sprintf('tag_color_%d', $categoryTag->id))->class('form-control') }}
                 </div>
                 <div class="col-lg-3 d-none d-lg-block">
-                    {{ sprintf('%s %s(s)', $categoryTag->getUsage()->count(), strtolower($tagCategoryNameMapping[$categoryId])) }}
+                    {{ sprintf('%s %s(s)', $context->getUsageCountByName($categoryTag->name), strtolower($tagCategoryNameMapping[$categoryId])) }}
                 </div>
                 <div class="col-2 col-lg-3">
                     <div class="btn btn-primary tag_save" data-id="{{ $categoryTag->id }}">
@@ -60,11 +67,31 @@ $isDarkTheme = $theme === 'darkly';
         @endforeach
     </div>
 @endforeach
-{{ Form::model(Auth::user(), ['route' => $category === TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
+
+
+@if($context instanceof Team)
+    {{ html()
+        ->modelForm($context, 'POST',
+            route('team.tag.create', [
+                'team' => $context
+            ]))
+            ->open()
+    }}
+@elseif($context instanceof User)
+    {{ html()
+        ->modelForm($context, 'POST',
+            route('profile.tag.create', [
+                'user' => $context
+            ]))
+        ->open()
+    }}
+@endif
+
+
 <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
-    {!! Form::label('tag_name_new', __('view_common.tag.manager.create_tag')) !!}
-    {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.tag.manager.create_tag'), 'tag_name_new') }}
+    {{ html()->text('tag_name_new')->class('form-control') }}
     @include('common.forms.form-error', ['key' => 'tag_name_new'])
 </div>
-{!! Form::submit(__('view_common.tag.manager.create_new_tag'), ['class' => 'btn btn-info']) !!}
-{!! Form::close() !!}
+{{ html()->input('submit')->value(__('view_common.tag.manager.create_new_tag'))->class('btn btn-info') }}
+{{ html()->closeModelForm() }}

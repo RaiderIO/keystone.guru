@@ -9,16 +9,15 @@ class SpellDataResult implements Arrayable
     public function __construct(
         private readonly int     $spellId,
         private readonly ?string $mechanic,
-        private readonly string  $category,
+        private readonly string  $category,  // SpellCategory::Category
         private readonly string  $cooldownGroup,
-        private readonly string  $dispelType,
-        private readonly string  $iconName,
+        private readonly string  $dispelType, // SpellDispelType::DispelType
+        private readonly string  $iconName, // SpellMisc::SpellIconFileDataID https://wago.tools/files?search=1391678
         private readonly string  $name,
-        private readonly int     $schoolsMask,
+        private readonly int     $schoolsMask, // SpellMisc::SchoolMask
         private readonly ?int    $castTime,
         private readonly ?int    $duration,
     ) {
-
     }
 
     public function getSpellId(): int

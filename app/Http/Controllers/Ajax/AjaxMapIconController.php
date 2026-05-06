@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
@@ -30,19 +31,22 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use ChangesDungeonRoute;
 
-    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
-    {
+    #[\Override]
+    protected function shouldCallMappingChanged(
+        ?MappingModelInterface $beforeModel,
+        ?MappingModelInterface $afterModel,
+    ): bool {
         /** @var MapIcon $beforeModel */
         /** @var MapIcon $afterModel */
         return $beforeModel?->dungeon_route_id === null || $afterModel?->dungeon_route_id === null;
     }
 
     /**
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MapIconFormRequest          $request
-     * @param MappingVersion|null         $mappingVersion Set -> admin endpoint,
-     * @param DungeonRoute|null           $dungeonRoute Set -> route edit endpoint
-     * @param MapIcon|null                $mapIcon
+     * @param  CoordinatesServiceInterface $coordinatesService
+     * @param  MapIconFormRequest          $request
+     * @param  MappingVersion|null         $mappingVersion     Set -> admin endpoint,
+     * @param  DungeonRoute|null           $dungeonRoute       Set -> route edit endpoint
+     * @param  MapIcon|null                $mapIcon
      * @return MapIcon|Model
      *
      * @throws AuthorizationException
@@ -53,7 +57,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         MapIconFormRequest          $request,
         ?MappingVersion             $mappingVersion,
         ?DungeonRoute               $dungeonRoute,
-        ?MapIcon                    $mapIcon = null
+        ?MapIcon                    $mapIcon = null,
     ): MapIcon {
         $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute;
         $validated                     = $request->validated();
@@ -70,13 +74,18 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             }
         } // We're editing a map comment for the user, carry on
         else {
-            $this->authorize('edit', $dungeonRoute);
-            $this->authorize('addMapIcon', $dungeonRoute);
+            Gate::authorize('edit', $dungeonRoute);
+            Gate::authorize('addMapIcon', $dungeonRoute);
         }
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;
 
-        return $this->storeModel($coordinatesService, $mappingVersion, $validated, MapIcon::class, $mapIcon,
+        return $this->storeModel(
+            $coordinatesService,
+            $mappingVersion,
+            $validated,
+            MapIcon::class,
+            $mapIcon,
             function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute, &$beforeModel) {
                 // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
                 $updateAttributes = [];
@@ -106,7 +115,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 if ($useFacade) {
                     $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
                         $dungeonRoute->mappingVersion,
-                        $originalLatLng
+                        $originalLatLng,
                     );
 
                     $updateAttributes = array_merge($updateAttributes, [
@@ -145,7 +154,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 }
             },
             // Can be null, it will then default to the dungeon internally
-            $dungeonRoute);
+            $dungeonRoute,
+        );
     }
 
     /**
@@ -162,9 +172,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
             return response(null, StatusCode::FORBIDDEN);
         } // We're editing a map icon for the user, carry on
-        else if ($dungeonRoute !== null) {
+        elseif ($dungeonRoute !== null) {
             // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            $this->authorize('edit', $dungeonRoute);
+            Gate::authorize('edit', $dungeonRoute);
         }
 
         try {
@@ -202,8 +212,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         MapIconFormRequest          $request,
         DungeonRoute                $dungeonRoute,
-        ?MapIcon                    $mapIcon = null): MapIcon
-    {
+        ?MapIcon                    $mapIcon = null,
+    ): MapIcon {
         return $this->store($coordinatesService, $request, null, $dungeonRoute, $mapIcon);
     }
 
@@ -215,8 +225,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         MapIconFormRequest          $request,
         MappingVersion              $mappingVersion,
-        ?MapIcon                    $mapIcon = null): MapIcon
-    {
+        ?MapIcon                    $mapIcon = null,
+    ): MapIcon {
         return $this->store($coordinatesService, $request, $mappingVersion, null, $mapIcon);
     }
 
@@ -230,8 +240,12 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         return $this->delete($request, null, $mapIcon);
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, MapIcon|Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        MapIcon|Model               $model,
+    ): ModelChangedEvent {
         return new MapIconChangedEvent($coordinatesService, $context, Auth::getUser(), $model);
     }
 }

@@ -32,8 +32,8 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
         MountableAreaFormRequest    $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        ?MountableArea              $mountableArea = null): MountableArea
-    {
+        ?MountableArea              $mountableArea = null,
+    ): MountableArea {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
@@ -47,7 +47,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      *
      * @throws Throwable
      */
-    public function delete(Request $request, MountableArea $mountableArea)
+    public function delete(Request $request, MappingVersion $mappingVersion, MountableArea $mountableArea)
     {
         return DB::transaction(function () use ($mountableArea) {
             try {
@@ -71,8 +71,12 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent {
         return new MountableAreaChangedEvent($context, $user, $model);
     }
 }

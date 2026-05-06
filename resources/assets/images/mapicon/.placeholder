@@ -1,0 +1,1 @@
+Used for putting generated map icons in after running `php artisan mapicon:generateitemicons`. The icons are read from mapicon_gen

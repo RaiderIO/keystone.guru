@@ -1,0 +1,31 @@
+{
+    "id": 349,
+    "release_changelog_id": 356,
+    "version": "v14.2.4",
+    "title": "Update MDT to v6.0.10",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-03-31T20:19:50+00:00",
+    "updated_at": "2026-03-31T20:19:50+00:00",
+    "changelog": {
+        "id": 356,
+        "release_id": 349,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 356,
+                "release_changelog_category_id": 6,
+                "ticket_id": 3139,
+                "change": "Update MDT to v6.0.10"
+            },
+            {
+                "release_changelog_id": 356,
+                "release_changelog_category_id": 11,
+                "ticket_id": 3138,
+                "change": "Improved Auto-Route Creator for Nexus-Point Xenas."
+            }
+        ]
+    }
+}

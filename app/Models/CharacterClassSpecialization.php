@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Str;
 
 /**
- * @property int            $id
- * @property int            $character_class_id Internal ID - not a blizzard ID!
- * @property int            $specialization_id Blizzard ID
- * @property int            $icon_file_id
- * @property string         $key
- * @property string         $name
+ * @property int    $id
+ * @property int    $character_class_id Internal ID - not a blizzard ID!
+ * @property int    $specialization_id  Blizzard ID
+ * @property int    $icon_file_id
+ * @property string $key
+ * @property string $name
  *
  * @property string         $icon_url Appended
  *
@@ -29,9 +29,18 @@ class CharacterClassSpecialization extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['character_class_id', 'specialization_id', 'key', 'name', 'icon_file_id'];
+    public $fillable = [
+        'character_class_id',
+        'specialization_id',
+        'key',
+        'name',
+        'icon_file_id',
+    ];
 
     /**
      * @return string

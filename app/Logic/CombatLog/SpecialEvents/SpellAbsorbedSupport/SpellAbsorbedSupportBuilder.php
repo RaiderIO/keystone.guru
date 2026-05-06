@@ -19,10 +19,10 @@ class SpellAbsorbedSupportBuilder implements SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6 => new SpellAbsorbedSupportV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7, CombatLogVersion::CLASSIC_TBC_2_5_5 => new SpellAbsorbedSupportV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             default => new SpellAbsorbedSupportV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
     }

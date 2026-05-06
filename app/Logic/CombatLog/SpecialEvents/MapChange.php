@@ -46,6 +46,7 @@ class MapChange extends SpecialEvent
         return $this->yMin;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

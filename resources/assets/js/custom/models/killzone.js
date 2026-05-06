@@ -563,12 +563,12 @@ class KillZone extends MapObject {
 
             // If live session, we should still do this - we want to know when we've selected an enemy to be overpulled
             if (this.map.options.edit || getState().getMapContext() instanceof MapContextLiveSession) {
-                if (previousState instanceof EnemySelection && previousState.getMapObject().id === this.id) {
+                if (previousState instanceof EnemySelection && previousState.getMapObject()?.id === this.id) {
                     // Unreg if we were listening
                     previousState.unregister('enemyselection:enemyselected', this);
                 }
 
-                if (newState instanceof EnemySelection && newState.getMapObject().id === this.id) {
+                if (newState instanceof EnemySelection && newState.getMapObject()?.id === this.id) {
                     // Reg for changes to our killzone if necessary
                     newState.register('enemyselection:enemyselected', this, this._enemySelected.bind(this));
                 }
@@ -891,7 +891,7 @@ class KillZone extends MapObject {
             let spellId = parseInt(spellIds[i]);
 
             this.spellIds.push(spellId);
-            this.spells.push(mapContext.getSpell(spellId));
+            this.spells.push(mapContext.findSpellById(spellId));
         }
 
         this.signal('killzone:spellschanged');
@@ -998,13 +998,17 @@ class KillZone extends MapObject {
         // Only if we can actually make an offset
         if (latLngs.length > 1 && p.length > 1) {
             try {
-                p = (new Offset()).data(p).arcSegments(c.map.killzone.arcSegments(p.length)).margin(c.map.killzone.margin);
+                p = createOffsetPolygon(
+                    p.map(point => ({lat: point[0], lng: point[1]})),
+                    c.map.killzone.margin,
+                    c.map.killzone.arcSegments(p.length)
+                );
             } catch (error) {
                 // May be thrown if 'vertices overlap'
                 console.warn(`Vertices overlap!`, p);
             }
 
-            if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id) {
+            if (this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject()?.id === this.id) {
                 opts = $.extend(opts, c.map.killzone.polygonOptionsSelected);
                 // Change the pulse color to be dark or light depending on the KZ color
                 opts.pulseColor = isColorDark(this.color) ? opts.pulseColorLight : opts.pulseColorDark;
@@ -1032,7 +1036,7 @@ class KillZone extends MapObject {
                     !(currentMapState instanceof DeleteMapState) &&
                     !(currentMapState instanceof RaidMarkerSelectMapState)) {
                     // If we're already being selected..
-                    if (currentMapState instanceof EnemySelection && currentMapState.getMapObject().id === self.id) {
+                    if (currentMapState instanceof EnemySelection && currentMapState.getMapObject()?.id === self.id) {
                         newMapState = null;
                     } else if (getState().getMapContext() instanceof MapContextLiveSession) {
                         newMapState = new SelectKillZoneEnemySelectionOverpull(self.map, self);
@@ -1153,7 +1157,7 @@ class KillZone extends MapObject {
             this.enemiesLayer.unbindTooltip();
 
             // Only when NOT currently editing the layer
-            if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
+            if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject()?.id === this.id)) {
                 let tooltipText = this.index + '';
                 let state = getState();
 
@@ -1281,7 +1285,9 @@ class KillZone extends MapObject {
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
         $.each(enemyMapObjectGroup.objects, function (i, enemy) {
-            enemy.setSelectable(false);
+            // enemy.setSelectable(false);
+            enemy.unregister('obsolete:changed', self);
+            enemy.unregister('overpulled:changed', self);
             enemy.unregister('enemy:selected', self);
             enemy.unregister('killzone:detached', self);
         });

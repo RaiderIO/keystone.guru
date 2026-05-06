@@ -17,7 +17,7 @@ class Stopwatch
     /**
      * Start a timer.
      *
-     * @param  $timerName  string The name of the timer
+     * @param $timerName string The name of the timer
      */
     public static function start(string $timerName = 'default'): void
     {
@@ -34,10 +34,13 @@ class Stopwatch
             unset(self::$timers[$timerName]['end']);
         } // Create a new timer instead; user wants to discard what was there
         else {
-            self::$timers[$timerName] = ['start' => self::_getTime(), 'count' => 1];
+            self::$timers[$timerName] = [
+                'start' => self::_getTime(),
+                'count' => 1,
+            ];
         }
 
-        if (config('debugbar.enabled')) {
+        if (config('debugbar.enabled') && class_exists('Debugbar')) {
             \Debugbar::startMeasure($timerName);
         }
     }
@@ -45,7 +48,7 @@ class Stopwatch
     /**
      * Pause a timer.
      *
-     * @param  $timerName  string The name of the timer.
+     * @param $timerName string The name of the timer.
      */
     public static function pause(string $timerName = 'default'): void
     {
@@ -57,7 +60,7 @@ class Stopwatch
             self::$timers[$timerName]['end'] = $now;
         }
 
-        if (config('debugbar.enabled')) {
+        if (config('debugbar.enabled') && class_exists('Debugbar')) {
             \Debugbar::stopMeasure($timerName);
         }
     }
@@ -65,7 +68,7 @@ class Stopwatch
     /**
      * Get the elapsed time in seconds
      *
-     * @param  $timerName  string The name of the timer to start
+     * @param        $timerName string The name of the timer to start
      * @return float The elapsed time since start() was called
      */
     public static function elapsed(string $timerName = 'default'): float
@@ -105,7 +108,7 @@ class Stopwatch
         $elapsed = self::elapsed($timerName);
 
         unset(self::$timers[$timerName]);
-        if (config('debugbar.enabled')) {
+        if (config('debugbar.enabled') && class_exists('Debugbar')) {
             \Debugbar::stopMeasure($timerName);
         }
 

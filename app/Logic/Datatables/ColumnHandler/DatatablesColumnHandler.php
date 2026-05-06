@@ -18,22 +18,28 @@ abstract class DatatablesColumnHandler
 
     public function __construct(
         private readonly DatatablesHandler $dtHandler,
-        private readonly string $columnName,
-        ?string $columnData = null)
-    {
+        private readonly string            $columnName,
+        ?string                            $columnData = null,
+    ) {
         // If not set, just copy the column name
         $this->columnData = $columnData ?? $this->columnName;
     }
 
     /**
-     * @param Builder $subBuilder
-     * @param Builder $orderBuilder
-     * @param         $columnData
-     * @param         $order
-     * @param         $generalSearch
+     * @param  Builder $subBuilder
+     * @param  Builder $orderBuilder
+     * @param          $columnData
+     * @param          $order
+     * @param          $generalSearch
      * @return void
      */
-    abstract protected function applyFilter(Builder $subBuilder, Builder $orderBuilder, $columnData, $order, $generalSearch): void;
+    abstract protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch,
+    ): void;
 
     public function getDtHandler(): DatatablesHandler
     {
@@ -69,8 +75,11 @@ abstract class DatatablesColumnHandler
             throw new Exception('Unable to find columns parameter in Request parameters');
         }
 
-        $columns       = $request->get('columns');
-        $order         = ($request->get('order', []))[0];
+        $columns = $request->get('columns');
+        $order   = $request->get('order');
+        if (is_array($order)) {
+            $order = $order[0] ?? null;
+        }
         $generalSearch = ($request->get('search'))['value'];
 
         // Find the column we should handle
@@ -85,10 +94,10 @@ abstract class DatatablesColumnHandler
             }
         }
 
-        // If the column we're supposed to represent is not found
+        // If the column we're supposed to represent is found
         if ($column !== null) {
             // == intended
-            $order = $order['column'] == $columnIndex ? $order : null;
+            $order = is_null($order) ? null : ($order['column'] == $columnIndex ? $order : null);
 
             // Handle the filtering of this column
             $this->applyFilter($subBuilder, $orderBuilder, $column, $order, $generalSearch);

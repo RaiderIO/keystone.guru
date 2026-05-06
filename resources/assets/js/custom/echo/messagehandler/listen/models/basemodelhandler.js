@@ -3,7 +3,7 @@ class BaseModelHandler extends MessageHandler {
     /**
      * @protected
      *
-     * @param echo {Echo}
+     * @param echo {EchoHandler}
      * @param message {String}
      */
     constructor(echo, message) {

@@ -24,7 +24,7 @@ class BrushlineChangedEvent extends ModelChangedEvent
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected Brushline|Model                    $model
+        protected Brushline|Model                    $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -34,16 +34,18 @@ class BrushlineChangedEvent extends ModelChangedEvent
         return 'brushline-changed';
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(
-            parent::broadcastWith(), [
+            parent::broadcastWith(),
+            [
                 'model_data' => $this->model->polyline->getCoordinatesData(
                     $this->coordinatesService,
                     $this->model->dungeonRoute->mappingVersion,
-                    $this->model->floor
+                    $this->model->floor,
                 ),
-            ]
+            ],
         );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
@@ -12,8 +13,7 @@ use Illuminate\Support\Collection;
  * @var Dungeon                      $dungeon
  * @var Floor                        $floor
  * @var string                       $title
- * @var MapContext                   $mapContext
- * @var boolean                      $showHeatmapSearch
+ * @var MapContextBase               $mapContext
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
  * @var int                          $itemLevelMin
@@ -48,18 +48,20 @@ use Illuminate\Support\Collection;
 ]])
 
 @section('content')
-    @include(sprintf('dungeon.explore.gameversion.embedheaderstyle.%s', $embedOptions['style']), [
-        'gameVersion' => $gameVersion,
-        'dungeon' => $dungeon,
-        'floor' => $floor,
-        'embedOptions' => $embedOptions,
-        'parameters' => $parameters,
-    ])
+    @if(!isset($embedOptions['show']['header']) || $embedOptions['show']['header'])
+        @include(sprintf('dungeon.explore.gameversion.embedheaderstyle.%s', $embedOptions['style']), [
+            'gameVersion' => $gameVersion,
+            'dungeon' => $dungeon,
+            'floor' => $floor,
+            'embedOptions' => $embedOptions,
+            'parameters' => $parameters,
+        ])
+    @endif
 
     <div class="wrapper embed_wrapper {{ $embedOptions['style'] }}">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->currentMappingVersion,
+            'mappingVersion' => $dungeon->getCurrentMappingVersion($gameVersion),
             'mapBackgroundColor' => $embedOptions['mapBackgroundColor'],
             'embed' => true,
 //            'embedStyle' => $embedOptions['style'],
@@ -72,7 +74,6 @@ use Illuminate\Support\Collection;
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',
-                'enemypack',
                 'floorunion',
                 'floorunionarea',
                 'killzone',
@@ -98,8 +99,9 @@ use Illuminate\Support\Collection;
                     'pulls' => false,
                     'enemyInfo' => $embedOptions['show']['enemyInfo'],
                     'title' => $embedOptions['show']['enemyInfo'],
-                    'heatmapSearch' => $showHeatmapSearch,
+                    'heatmapSearch' => false,
                     'heatmapSearchDefaultState' => false,
+                    'heatmapSearchSidebar' => $embedOptions['show']['sidebar'],
                 ],
             ],
         ])

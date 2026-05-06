@@ -3,8 +3,16 @@
 return [
 
     'map_icons' => [
-        'legion'      => [
-            'court_of_stars'   => [
+        'mop' => [
+            'gate_of_the_setting_sun' => [
+                'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik Conscripts only spawn after defeating Commander Ri\'mok',
+            ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => 'Door unlocks after defeating the Trial of the King',
+            ],
+        ],
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => 'Unlocks after killing Patrol Captain Gerdo',
                 'arcane_beacon'                      => 'Arcane Beacon',
                 'flask_of_the_solemn_night'          => 'Flask of the Solemn Night',
@@ -14,7 +22,7 @@ return [
             ],
         ],
         'sl' => [
-            'de_other_side'         => [
+            'de_other_side' => [
                 'start'                => 'Start',
                 'graveyard_ardenweald' => 'Activates after entering Ardenweald',
                 'graveyard_mechagon'   => 'Activates after entering Mechagon',
@@ -23,7 +31,7 @@ return [
                 'engineer_blob_button' => 'Engineers can disable the river of flowing blobs for a few minutes by pressing the red button',
                 'exit'                 => 'Exit',
             ],
-            'halls_of_atonement'    => [
+            'halls_of_atonement' => [
                 'start' => 'Start',
                 'exit'  => 'Exit',
             ],
@@ -38,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => 'Unlocks after killing Ingra Maloch',
                 'exit'                           => 'Exit',
             ],
-            'plaguefall'            => [
+            'plaguefall' => [
                 'start'              => 'Start',
                 'graveyard_dr_ickus' => 'Activates after killing Doctor Ickus',
                 'gushing_slime'      => 'Necrolord: AoE Damage Proc Aura - Using Fleshcraft on the Gushing Slime\'s corpse will grant the Corrosive Gunk aura for 2 minutes. This aura will apply the Corrosive Gunk buff to any nearby party member, giving a 10% chance to proc AoE damage around your character',
@@ -47,7 +55,7 @@ return [
                 'landing'            => 'Landing',
                 'exit'               => 'Exit',
             ],
-            'sanguine_depths'       => [
+            'sanguine_depths' => [
                 'start'                            => 'Start',
                 'anima_cage'                       => 'Venthyr: Activate Anima Cages to debuff enemies within 40 yds with Anima Drain. After 20 seconds, it will deactivate and give entire party 1 stack of Sinfall Boon for every enemy that died within range with Anima Drain active',
                 'tick_bug'                         => 'This tick seems to (sometimes) be bugged in the ground - it will however pull when the boss is pulled',
@@ -59,12 +67,12 @@ return [
                 'zrali_essence'                    => 'Z\'rali\'s Essence: 65% damage reduction bubble shield for all who stand inside it. Makes the shield around the player who is carrying/activating it',
                 'exit'                             => 'Exit',
             ],
-            'spires_of_ascension'   => [
+            'spires_of_ascension' => [
                 'start'            => 'Start',
                 'spear_of_destiny' => 'Kyrian: Spear of Destiny - throw the Spear of Destiny at a location, hitting all enemies within 8 yards, stunning them and making them take 20% additional damage for 10 seconds',
                 'exit'             => 'Exit',
             ],
-            'the_necrotic_wake'     => [
+            'the_necrotic_wake' => [
                 'start'                  => 'Start',
                 'bloody_javelin'         => 'Bloody Javelin: Throws a Kyrian javelin at the target, inflicting Physical damage to all enemies it passes through and additional Physical damage every 2 sec for 16 sec. Enemies hit take 20% increased damage for 16 sec.',
                 'forgotten_forgehammer'  => 'Forgotten Forgehammer: Hurls a mighty Kyrian hammer at the target, inflicting Physical damage and stunning the target for 8 sec.',
@@ -75,7 +83,7 @@ return [
                 'grisly_curio'           => 'Grisly Curio',
                 'exit'                   => 'Exit',
             ],
-            'theater_of_pain'       => [
+            'theater_of_pain' => [
                 'start'                => 'Start',
                 'necrolord_banner'     => 'Necrolord: Click Necrolord Banners to grant a 5-minute 10% speed and versatility buff to all party members',
                 'graveyard_gorechop'   => 'Activates after killing Gorechop',
@@ -84,15 +92,37 @@ return [
                 'teleporter'           => 'Teleporter',
                 'exit'                 => 'Exit',
             ],
+            'tazavesh_streets_of_wonder' => [
+                'bazaar_event_wave_one'   => 'Bazaar Event: Wave 1',
+                'bazaar_event_wave_two'   => 'Bazaar Event: Wave 2',
+                'bazaar_event_wave_three' => 'Bazaar Event: Wave 3',
+            ],
         ],
         'tww' => [
             'the_stonevault' => [
                 'imbued_iron_energy' => 'Warriors, Dwarves, Blacksmiths (25): Energy trapped inside the Imbued Iron Bar releases, increasing the Versatility of all players within 20 yards by 10% for 10 mins.',
             ],
             'priory_of_the_sacred_flame' => [
-                'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.'
-            ]
-        ]
+                'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.',
+            ],
+        ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => '+10% Healing Taken',
+                'versatility_increased'     => '+5% Versatility',
+                'critical_strike_increased' => '+5% Critical Strike',
+                'haste_increased'           => '+5% Haste',
+                'mastery_rating_increased'  => '+584 Mastery Rating',
+                'go_north'                  => 'Go north',
+                'go_south'                  => 'Go south',
+            ],
+            'maisara_caverns' => [
+                'hearty_vilebranch_stew' => 'Hearty Vilebranch Stew: Have a serving of Vilebranch stew, increasing your Leech by 3% and reducing the damage taken from area of effect attacks by 3% for 30 min.',
+            ],
+            'windrunner_spire' => [
+                'activates_after_killing_bosses' => 'One way trip back to the Promenade activates after killing the first boss (either of them). The second kill will take you to the respective Upper level instead.',
+            ],
+        ],
     ],
 
 ];

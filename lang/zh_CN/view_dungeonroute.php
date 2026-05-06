@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'discover'       => [
-        'dungeon'  => [
+
+    'discover' => [
+        'dungeon' => [
             'overview' => [
+                'weekly_route'               => '',
                 'popular'                    => '',
                 'popular_by_current_affixes' => '',
                 'popular_by_next_affixes'    => '',
@@ -17,10 +19,10 @@ return [
             'popular_by_next_affixes'    => '',
             'newly_published_routes'     => '',
         ],
-        'panel'    => [
+        'panel' => [
             'show_more' => '',
         ],
-        'search'   => [
+        'search' => [
             'page_title'              => '',
             'header'                  => '',
             'title'                   => '',
@@ -28,6 +30,7 @@ return [
             'key_level'               => '',
             'affixes'                 => '',
             'affixes_title'           => '',
+            'select_affixes'          => '',
             'affixes_selected'        => '',
             'enemy_forces'            => '',
             'enemy_forces_complete'   => '',
@@ -37,18 +40,19 @@ return [
             'user_placeholder'        => '',
         ],
     ],
-    'livesession'    => [
-        'view' => [
+    'livesession' => [
+        'title' => '',
+        'view'  => [
             'any' => '',
         ],
     ],
-    'edit'           => [
+    'edit' => [
         'title'                                   => '',
         'linkpreview_title'                       => '',
         'linkpreview_default_description'         => '',
         'linkpreview_default_description_sandbox' => '',
     ],
-    'embed'          => [
+    'embed' => [
         'title'            => '',
         'any'              => '',
         'select_floor'     => '',
@@ -58,16 +62,16 @@ return [
         'present_route'    => '',
         'copy_mdt_string'  => '',
     ],
-    'limitreached'   => [
+    'limitreached' => [
         'title'                     => '',
         'header'                    => '',
         'limit_reached_description' => '',
         'become_a_patreon'          => '',
     ],
-    'new'            => [
+    'new' => [
         'title' => '',
     ],
-    'newtemporary'   => [
+    'newtemporary' => [
         'title'  => '',
         'header' => '',
     ],
@@ -76,15 +80,16 @@ return [
         'header'              => '',
         'claimed_description' => '',
     ],
-    'unavailable'    => [
+    'unavailable' => [
         'title'                   => '',
         'unavailable_description' => '',
     ],
-    'view'           => [
+    'view' => [
         'any'                                     => '',
         'linkpreview_title'                       => '',
         'linkpreview_default_description'         => '',
         'linkpreview_default_description_sandbox' => '',
         'linkpreview_default_description_explore' => '',
     ],
+
 ];

@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class MapIconTypeRoleCheckRule implements ValidationRule
 {
     /**
-     * @param string  $attribute
-     * @param mixed   $value
-     * @param Closure $fail
+     * @param  string  $attribute
+     * @param  mixed   $value
+     * @param  Closure $fail
      * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
@@ -28,6 +28,4 @@ class MapIconTypeRoleCheckRule implements ValidationRule
             }
         }
     }
-
-
 }

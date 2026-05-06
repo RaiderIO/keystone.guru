@@ -6,22 +6,22 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class MDTNpc implements Arrayable
 {
-    private array         $clones;
-    private int           $id              = 0;
-    private array         $spells          = [];
-    private float         $scale           = 0.0;
-    private bool          $stealthDetect   = false;
-    private int           $countTeeming    = 0;
-    private int           $count           = 0;
-    private string        $name;
-    private int           $displayId       = 0;
-    private ?int          $encounterId     = null;
-    private ?int          $instanceId      = null;
-    private string        $creatureType;
-    private int           $level           = 0;
-    private int           $health          = 0;
+    private array $clones;
+    private int $id             = 0;
+    private array $spells       = [];
+    private float $scale        = 0.0;
+    private bool $stealthDetect = false;
+    private int $countTeeming   = 0;
+    private int $count          = 0;
+    private string $name;
+    private int $displayId    = 0;
+    private ?int $encounterId = null;
+    private ?int $instanceId  = null;
+    private string $creatureType;
+    private int $level  = 0;
+    private int $health = 0;
     private readonly ?int $healthPercentage;
-    private array         $characteristics = [];
+    private array $characteristics = [];
 
     public function __construct(private readonly int $index, private array $rawMdtNpc)
     {
@@ -39,7 +39,8 @@ class MDTNpc implements Arrayable
         $this->id = (int)$this->rawMdtNpc['id'];
 
         if (isset($this->rawMdtNpc['spells'])) {
-            $this->spells = $rawMdtNpc['spells'];
+            $this->recur_ksort($this->rawMdtNpc['spells']);
+            $this->spells = $this->rawMdtNpc['spells'];
         } else {
             $this->spells = [];
         }
@@ -54,7 +55,7 @@ class MDTNpc implements Arrayable
             $this->name = $this->rawMdtNpc['name'];
         }
 
-        $this->displayId   = (int)$this->rawMdtNpc['displayId'];
+        $this->displayId   = (int)($this->rawMdtNpc['displayId'] ?? 0);
         $this->encounterId = $this->rawMdtNpc['encounterID'] ?? null;
         $this->instanceId  = $this->rawMdtNpc['instanceID'] ?? null;
         // May not always be set?
@@ -62,7 +63,7 @@ class MDTNpc implements Arrayable
             $this->creatureType = $this->rawMdtNpc['creatureType'];
         }
 
-        $this->level            = (int)$this->rawMdtNpc['level'];
+        $this->level            = (int)($this->rawMdtNpc['level'] ?? 0);
         $this->health           = (int)$this->rawMdtNpc['health'];
         $this->healthPercentage = $this->rawMdtNpc['health_percentage'] ?? null;
 
@@ -88,17 +89,30 @@ class MDTNpc implements Arrayable
 
     public function isEmissary(): bool
     {
-        return in_array($this->id, [155432, 155433, 155434]);
+        return in_array($this->id, [
+            155432,
+            155433,
+            155434,
+        ]);
     }
 
     public function isAwakened(): bool
     {
-        return in_array($this->id, [161244, 161243, 161124, 161241]);
+        return in_array($this->id, [
+            161244,
+            161243,
+            161124,
+            161241,
+        ]);
     }
 
     public function isEncrypted(): bool
     {
-        return in_array($this->id, [185680, 185683, 185685]);
+        return in_array($this->id, [
+            185680,
+            185683,
+            185685,
+        ]);
     }
 
     public function isValid(): bool

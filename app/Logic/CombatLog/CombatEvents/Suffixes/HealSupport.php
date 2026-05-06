@@ -14,6 +14,7 @@ class HealSupport extends Heal
         return $this->supportGuid;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -23,6 +24,7 @@ class HealSupport extends Heal
         return $this;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 6;

@@ -4,6 +4,15 @@ class MapContext extends Signalable {
 
         this._options = options;
 
+        // Init npcs (ensure the enemy forces are inserted properly)
+        for (let i = 0; i < this._options.dungeonNpcs.length; i++) {
+            for (let j = 0; j < this._options.npcEnemyForces.length; j++) {
+                if (this._options.dungeonNpcs[i].id === this._options.npcEnemyForces[j].id) {
+                    this._options.dungeonNpcs[i].enemy_forces = this._options.npcEnemyForces[j].enemy_forces;
+                }
+            }
+        }
+
         // Init class colors
         c.map.colorPickerDefaultOptions.swatches = this.getStaticClassColors();
 
@@ -17,12 +26,10 @@ class MapContext extends Signalable {
         }
 
         // Init spells
-        let spells = this._options.static.selectableSpells;
+        let spells = this._options.static.selectableSpells.concat(this._options.dungeonSpells);
         this.spells = [];
         for (let i = 0; i < spells.length; i++) {
-            this.spells.push(
-                new Spell(spells[i])
-            )
+            this.spells[spells[i].id] = new Spell(spells[i]);
         }
 
         this.unknownMapIconType = this.getMapIconType(this._options.static.unknownMapIconType.id);
@@ -115,15 +122,8 @@ class MapContext extends Signalable {
      * @param spellId {Number}
      * @returns {Spell}
      */
-    getSpell(spellId) {
-        let spell = null;
-        for (let i = 0; i < this.spells.length; i++) {
-            if (this.spells[i].id === spellId) {
-                spell = this.spells[i];
-                break;
-            }
-        }
-        return spell;
+    findSpellById(spellId) {
+        return this.spells[spellId] ?? null;
     }
 
     /**
@@ -175,6 +175,27 @@ class MapContext extends Signalable {
     }
 
     /**
+     * @returns {Object}
+     */
+    getStaticSpellSchools() {
+        return this._options.static.spellSchools;
+    }
+
+    /**
+     * @returns {Object}
+     */
+    getStaticSpellMissTypes() {
+        return this._options.static.spellMissTypes;
+    }
+
+    /**
+     * @returns {Object}
+     */
+    getStaticSpellDispelTypes() {
+        return this._options.static.spellDispelTypes;
+    }
+
+    /**
      *
      * @returns {string}
      */
@@ -218,14 +239,6 @@ class MapContext extends Signalable {
     }
 
     /**
-     *
-     * @returns {null}
-     */
-    getInitialFloorId() {
-        return this._options.floorId;
-    }
-
-    /**
      * Finds a floor by id.
      * @param index {Number}
      * @returns {*}|bool
@@ -234,8 +247,8 @@ class MapContext extends Signalable {
         console.assert(this instanceof MapContext, 'this is not a MapContext', this);
         let result = false;
 
-        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
-            let floor = this._options.dungeon.floors[i];
+        for (let i = 0; i < this._options.visibleFloors.length; i++) {
+            let floor = this._options.visibleFloors[i];
             if (floor.index === index) {
                 result = floor;
                 break;
@@ -254,8 +267,8 @@ class MapContext extends Signalable {
         console.assert(this instanceof MapContext, 'this is not a MapContext', this);
         let result = false;
 
-        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
-            let floor = this._options.dungeon.floors[i];
+        for (let i = 0; i < this._options.visibleFloors.length; i++) {
+            let floor = this._options.visibleFloors[i];
             if (floor.id === floorId) {
                 result = floor;
                 break;
@@ -275,12 +288,12 @@ class MapContext extends Signalable {
         }
 
         // Fill it with all floors except our current floor, we can't switch to our own floor, that'd be silly
-        let dungeonData = this.getDungeon();
         let selectFloors = [];
+        let visibleFloors = this.getVisibleFloors();
 
-        for (let i in dungeonData.floors) {
-            if (dungeonData.floors.hasOwnProperty(i)) {
-                let floor = dungeonData.floors[i];
+        for (let i in visibleFloors) {
+            if (visibleFloors.hasOwnProperty(i)) {
+                let floor = visibleFloors[i];
                 if (floor.id !== excludeFloorId) {
                     selectFloors.push({
                         id: floor.id,
@@ -298,10 +311,10 @@ class MapContext extends Signalable {
      * @returns {*}|bool
      */
     getDefaultFloor() {
-        let result = this._options.dungeon.floors[0];
+        let result = this._options.visibleFloors[0];
 
-        for (let i = 0; i < this._options.dungeon.floors.length; i++) {
-            let floor = this._options.dungeon.floors[i];
+        for (let i = 0; i < this._options.visibleFloors.length; i++) {
+            let floor = this._options.visibleFloors[i];
             if (floor.default) {
                 result = floor;
                 break;
@@ -343,6 +356,14 @@ class MapContext extends Signalable {
 
     /**
      *
+     * @returns {*}
+     */
+    getVisibleFloors() {
+        return this._options.visibleFloors;
+    }
+
+    /**
+     *
      * @returns {{}}
      */
     getDungeon() {
@@ -354,7 +375,7 @@ class MapContext extends Signalable {
      * @returns {{}}
      */
     getGameVersion() {
-        return this._options.dungeon.game_version;
+        return this._options.mappingVersion.game_version;
     }
 
     /**
@@ -426,7 +447,7 @@ class MapContext extends Signalable {
      * @returns {[]}
      */
     getNpcs() {
-        return this._options.npcs;
+        return this._options.dungeonNpcs;
     }
 
     /**
@@ -436,11 +457,74 @@ class MapContext extends Signalable {
     findNpcById(npcId) {
         let result = null;
 
-        for (let i = 0; i < this._options.dungeon.npcs.length; i++) {
-            if (this._options.dungeon.npcs[i].id === npcId) {
-                result = this._options.dungeon.npcs[i];
+        for (let i = 0; i < this._options.dungeonNpcs.length; i++) {
+            if (this._options.dungeonNpcs[i].id === npcId) {
+                result = this._options.dungeonNpcs[i];
                 break;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param npc {Object}
+     * @param gameVersionId {Number}
+     * @returns {Object}
+     */
+    _getNpcHealthObj(npc, gameVersionId = null) {
+        let mapContext = getState().getMapContext();
+        // @TODO #2879 Use mapping version's game version ID instead of the dungeon's game version ID
+        gameVersionId = gameVersionId ?? mapContext.getMappingVersion().game_version.id;
+
+        let result = null;
+        for (let index in npc.npc_healths) {
+            let health = npc.npc_healths[index];
+            if (health.game_version_id === gameVersionId) {
+                result = health;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param npc {Object}
+     * @param usePercentage {Boolean}
+     * @param gameVersionId {Number}
+     * @returns {Number}
+     */
+    getNpcHealth(npc, usePercentage = true, gameVersionId = null) {
+
+        let npcHealthObj = this._getNpcHealthObj(npc, gameVersionId);
+
+        let result = -1;
+        if (npcHealthObj !== null) {
+            let healthValue = npcHealthObj.health;
+            if (usePercentage && typeof npc.percentage !== 'undefined') {
+                healthValue = (healthValue * npc.percentage) / 100;
+            }
+
+            result = healthValue;
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the health percentage of an NPC. Some NPCs start with low health, this allows you to account for that.
+     * @param npc {Object}
+     * @returns {Number}
+     */
+    getNpcHealthPercentage(npc) {
+        let npcHealthObj = this._getNpcHealthObj(npc);
+
+        let result = 100;
+        if (npcHealthObj !== null) {
+            result = npcHealthObj.percentage ?? 100;
         }
 
         return result;
@@ -460,14 +544,6 @@ class MapContext extends Signalable {
      */
     getMaxEnemySizeDefault() {
         return this._options.maxEnemySizeDefault;
-    }
-
-    /**
-     *
-     * @returns {Number}
-     */
-    getKeystoneScalingFactor() {
-        return this._options.keystoneScalingFactor;
     }
 
     /**
@@ -501,14 +577,6 @@ class MapContext extends Signalable {
      */
     getEchoChannelName() {
         return this._options.echoChannelName;
-    }
-
-    /**
-     *
-     * @returns {Number|null}
-     */
-    getUserPublicKey() {
-        return this._options.userPublicKey;
     }
 
     /**
@@ -605,5 +673,20 @@ class MapContext extends Signalable {
      */
     getNpcsMaxHealth() {
         return this._options.npcsMaxHealth;
+    }
+
+    /**
+     *
+     * @param gameVersionId {Number}
+     * @returns {Object|null}
+     */
+    getGameVersionById(gameVersionId) {
+        let gameVersions = this._options.static.gameVersions;
+        for (let i = 0; i < gameVersions.length; i++) {
+            if (gameVersions[i].id === gameVersionId) {
+                return gameVersions[i];
+            }
+        }
+        return null;
     }
 }

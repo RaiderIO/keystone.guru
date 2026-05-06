@@ -49,6 +49,7 @@ class Enemy extends VersionableMapObject {
         super(map, layer, options);
 
         this.label = 'Enemy';
+        this.tooltipText = '';
         // Used for keeping track of what kill zone this enemy is attached to
         /** @type KillZone */
         this.kill_zone = null;
@@ -68,16 +69,19 @@ class Enemy extends VersionableMapObject {
         this.is_mdt = false;
 
         // The visual display of this enemy
+        /** @type {EnemyVisual} */
         this.visual = null;
         this.isPopupEnabled = false;
         this.overpulledKillZoneId = null;
         this.obsolete = false;
         this.selectNpcs = [];
+        this.selectable = false;
 
         let self = this;
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             // Remove/enable the popup
             self.setPopupEnabled(!(mapStateChangedEvent.data.newMapState instanceof MapState));
+            self.setTooltipEnabled(!(mapStateChangedEvent.data.newMapState instanceof EditMapState));
         });
 
         // Make sure all tooltips are closed to prevent having tooltips remain open after having zoomed (bug)
@@ -263,7 +267,10 @@ class Enemy extends VersionableMapObject {
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: lang.get('enemies.seasonal_type.tormented')},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: lang.get('enemies.seasonal_type.encrypted')},
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: lang.get('enemies.seasonal_type.mdt_placeholder')},
-                    {id: ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION, name: lang.get('enemies.seasonal_type.requires_activation')},
+                    {
+                        id: ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION,
+                        name: lang.get('enemies.seasonal_type.requires_activation')
+                    },
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: lang.get('enemies.seasonal_type.shrouded')},
                     {
                         id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
@@ -466,13 +473,13 @@ class Enemy extends VersionableMapObject {
         let result = null;
 
         if (this.npc !== null) {
-            let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
-
             let mapContext = getState().getMapContext();
+            let scaledHealth = mapContext.getNpcHealth(this.npc);
+
             let keyLevelLabel = '';
             let affixes = [];
 
-            if (mapContext instanceof MapContextDungeonRoute && mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+            if (mapContext instanceof MapContextDungeonRoute && mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // noinspection JSAssignmentUsedAsCondition
                 if ((mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id))) {
                     affixes.push(AFFIX_FORTIFIED);
@@ -491,16 +498,25 @@ class Enemy extends VersionableMapObject {
                 scaledHealth = Math.round(scaledHealth);
             }
 
-            let percentageString = this.npc.health_percentage !== null && this.npc.health_percentage !== 100 ? ` (${this.npc.health_percentage}%)` : ``;
+            let healthPercentage = mapContext.getNpcHealthPercentage(this.npc);
+            let percentageString = healthPercentage !== 100 ? ` (${healthPercentage}%)` : ``;
 
             result = {info: [], custom: []};
             // @formatter:off
+            let group = this.getPackGroup();
+            if (group !== null) {
+                result.info.push({
+                    key: lang.get('js.sidebar_enemy_group_label'),
+                    value: this.getPackGroup()
+                });
+            }
+
             result.info.push({
-                key: lang.get('messages.sidebar_enemy_health_label') + keyLevelLabel,
+                key: lang.get('js.sidebar_enemy_health_label') + keyLevelLabel,
                 value: scaledHealth.toLocaleString() + percentageString,
-                info: affixes.length === 0 ? false : lang.get('messages.sidebar_enemy_health_affixes_label', {
+                info: affixes.length === 0 ? false : lang.get('js.sidebar_enemy_health_affixes_label', {
                     affixes: affixes.join(', '),
-                    baseHealth: this.npc.base_health.toLocaleString(),
+                    baseHealth: mapContext.getNpcHealth(this.npc).toLocaleString(),
                     factor: Math.round(c.map.enemy.getKeyScalingFactor(mapContext.getLevelMin(), affixes) * 100)
                 })
             });
@@ -509,36 +525,36 @@ class Enemy extends VersionableMapObject {
             // noinspection JSUnresolvedReference
             if (isUserAdmin) {
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_id_label'),
+                    key: lang.get('js.sidebar_enemy_id_label'),
                     value: this.id
                 });
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_npc_id_label'),
+                    key: lang.get('js.sidebar_enemy_npc_id_label'),
                     value: `<a href="/admin/npc/${this.npc.id}">${this.npc.id}</a>`
                 });
             }
 
-            if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+            if (mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // These affixes have been removed
-                // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
-                // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
-                // result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+                // result.info.push({key: lang.get('js.sidebar_enemy_bursting_label'), value: this.npc.bursting});
+                // result.info.push({key: lang.get('js.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
+                // result.info.push({key: lang.get('js.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
 
 
                 // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
                 // result.info.push({
-                //     key: lang.get('messages.sidebar_enemy_skippable_label'),
+                //     key: lang.get('js.sidebar_enemy_skippable_label'),
                 //     value: this.required ? 0 : 1
                 // });
                 // Skippable means that you CAN walk past this enemy without shroud - in theory, and may be excluded by the overpull feature
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_skippable_label'),
+                    key: lang.get('js.sidebar_enemy_skippable_label'),
                     value: this.skippable ? 1 : 0,
-                    info: lang.get('messages.sidebar_enemy_skippable_info_label')
+                    info: lang.get('js.sidebar_enemy_skippable_info_label')
                 });
             } else {
-                result.info.push({key: lang.get('messages.sidebar_enemy_runs_away_in_fear_label'), value: this.npc.runs_away_in_fear});
-                result.info.push({key: lang.get('messages.sidebar_hyper_respawns_label'), value: this.hyper_respawn ? 1 : 0});
+                result.info.push({key: lang.get('js.sidebar_enemy_runs_away_in_fear_label'), value: this.npc.runs_away_in_fear});
+                result.info.push({key: lang.get('js.sidebar_hyper_respawns_label'), value: this.hyper_respawn ? 1 : 0});
             }
             // @formatter:on
 
@@ -548,7 +564,7 @@ class Enemy extends VersionableMapObject {
                 for (let index in this.npc.npcbolsteringwhitelists) {
                     if (this.npc.npcbolsteringwhitelists.hasOwnProperty(index)) {
                         let whitelistedNpc = this.npc.npcbolsteringwhitelists[index];
-                        npcBolsteringWhitelistHtml += whitelistedNpc.whitelistnpc.name;
+                        npcBolsteringWhitelistHtml += lang.get(whitelistedNpc.whitelistnpc.name);
                         // Stop before the end
                         if (count < this.npc.npcbolsteringwhitelists.length - 1) {
                             npcBolsteringWhitelistHtml += '<br>';
@@ -561,39 +577,69 @@ class Enemy extends VersionableMapObject {
                 let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
 
                 result.custom.push({
-                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('messages.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
+                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('js.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
                         customTemplate({html: npcBolsteringWhitelistHtml})
                 });
             }
 
-            if (typeof this.npc.spells !== 'undefined' && this.npc.spells.length > 0) {
-                let spellHtml = '';
-                let count = 0;
-                let spellTemplate = Handlebars.templates['spell_template'];
+            if (typeof this.npc.spell_ids !== 'undefined' && this.npc.spell_ids.length > 0) {
+                let gameVersion = mapContext.getMappingVersion().game_version;
 
-                for (let index in this.npc.spells) {
-                    if (this.npc.spells.hasOwnProperty(index)) {
-                        let spell = this.npc.spells[index];
-
-                        spellHtml += spellTemplate(spell);
-                        // Stop before the end
-                        if (count < this.npc.spells.length - 1) {
-                            spellHtml += '<br>';
-                        }
+                let spells = [];
+                for (let index in this.npc.spell_ids) {
+                    let spell = mapContext.findSpellById(this.npc.spell_ids[index]);
+                    if (spell !== null) {
+                        // Create a copy so we don't taint the original spells
+                        let spellData = $.extend({}, spell);
+                        spellData.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
+                        spellData.schools = spell.getSchools().join(', ');
+                        spellData.miss_types = spell.getMissTypes().join(', ');
+                        spellData.dispel_type = spell.getDispelType();
+                        spellData.cast_time = (spell.cast_time === 0 ? '' : (spell.cast_time / 1000));
+                        spellData.duration = (spell.duration === 0 ? '' : (spell.duration / 1000));
+                        spells.push(spellData);
                     }
-                    count++;
                 }
 
-                let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
+                let spellTableTemplate = Handlebars.templates['spell_table_template'];
 
                 result.custom.push({
-                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('messages.sidebar_enemy_spell_label')}:</span>`}) +
-                        customTemplate({html: spellHtml})
+                    html: `<div class="mt-3"><span class="font-weight-bold">${lang.get('js.sidebar_enemy_spell_label')}:</span></div>` +
+                        spellTableTemplate({
+                            spells: spells,
+                            spell_header_name: lang.get('js.npc_name_label'),
+                            spell_header_schools: lang.get('js.spell_schools_label'),
+                            spell_header_miss_types: lang.get('js.spell_miss_types_label'),
+                            spell_header_dispel_type: lang.get('js.spell_dispel_type_label'),
+                            spell_header_mechanic: lang.get('js.spell_mechanic_label'),
+                            spell_header_cast_time: lang.get('js.spell_cast_time_label'),
+                            spell_header_duration: lang.get('js.spell_duration_label'),
+                        })
                 });
             }
         }
 
         return result;
+    }
+
+    getWowheadLinkForGameVersion(gameVersion, spell) {
+        let wowheadBaseUrl = 'https://www.wowhead.com';
+
+        switch (gameVersion.key) {
+            case GAME_VERSION_WOTLK:
+                wowheadBaseUrl += '/wrath';
+                break;
+            case GAME_VERSION_CLASSIC_ERA:
+                wowheadBaseUrl += '/classic';
+                break;
+        }
+
+        const slug = (spell.name ?? 'missing spell name')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')   // Replace non-alphanumeric with dashes
+            .replace(/^-+|-+$/g, '');      // Trim leading/trailing dashes
+
+        return `${wowheadBaseUrl}/spell=${spell.id}/${slug}`;
     }
 
     /**
@@ -653,6 +699,33 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
+     *
+     * @returns {Number|null}
+     */
+    getPackGroup() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let result = null;
+
+        // Only if we're part of a pack
+        if (this.enemy_pack_id !== null) {
+            // Add all the enemies in said pack to the toggle display
+            let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+
+            // May be null in certain view modes
+            if (enemyPackMapObjectGroup !== null) {
+                /** @type {EnemyPack|null} */
+                let enemyPack = enemyPackMapObjectGroup.findMapObjectById(this.enemy_pack_id);
+                if (enemyPack !== null) {
+                    result = enemyPack.group;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Sets the click popup to be enabled or not.
      * @param enabled {Boolean} True to enable, false to disable.
      */
@@ -703,22 +776,48 @@ class Enemy extends VersionableMapObject {
         return result;
     }
 
+    /**
+     * Sets the tooltip to be enabled or not.
+     * @param enabled {Boolean} True to enable, false to disable.
+     */
+    setTooltipEnabled(enabled) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        if (enabled) {
+            this.bindTooltip();
+        } else {
+            this.unbindTooltip();
+            this.tooltipText = '';
+        }
+    }
+
     bindTooltip() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
 
-        if (this.layer !== null) {
+        if (this.layer !== null && !(this.map.getMapState() instanceof EditMapState)) {
             let text;
             if (this.npc !== null) {
-                text = this.npc.name;
+                let visualData = this.getVisualData();
+                let template = Handlebars.templates['enemy_tooltip_template'];
+
+                text = template($.extend({}, visualData, {
+                    name: lang.get(this.npc.name),
+                    right_click_to_open_details: lang.get('js.right_click_to_open_details')
+                }));
             } else {
-                text = lang.get('messages.no_npc_found_label');
+                text = lang.get('js.no_npc_found_label');
             }
 
-            // Remove any previous tooltip
-            this.unbindTooltip();
-            this.layer.bindTooltip(text, {
-                direction: 'top'
-            });
+            // Only rebind if the text has changed
+            if (this.tooltipText !== text) {
+                this.tooltipText = text;
+
+                // Remove any previous tooltip
+                this.unbindTooltip();
+                this.layer.bindTooltip(text, {
+                    direction: 'top'
+                });
+            }
         }
     }
 
@@ -825,17 +924,44 @@ class Enemy extends VersionableMapObject {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
                 let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
+
                 if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_BEGUILING && !mapContext.hasAffix(AFFIX_BEGUILING)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
-                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && !hasShroudedAffix) ||
                     // Special case for enemies marked as non-shrouded which replace the enemies that are marked as shrouded
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED && hasShroudedAffix) ||
                     // MDT placeholders are only to suppress warnings when importing - don't show these on the map
                     this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
                     return true;
+                }
+
+                /**
+                 * Shrouded gets a bit tricky here. The way it used to work on KSG side is that I'd put the Nathrezim Infiltrator
+                 * in the mapping and tag it as shrouded. When the route had shrouded enabled, the enemy would show up. Then,
+                 * the enemy that was replaced by the Infiltrator (e.g. a normal trash mob) would be tagged as "no shrouded".
+                 * The no shrouded enemies would be removed when Shrouded was not active, and the Shrouded enemies would only show
+                 * up when Shrouded was active.
+                 *
+                 * Now - later when we started using the MDT mapping, they simply marked the original enemy as shrouded, and
+                 * never mentioned the Nathrezim Infiltrator at all. This means that when we would import the MDT mapping,
+                 * the regular mob was now marked with Shrouded, and when the Shrouded affix was not active
+                 * (recyling Tazavesh in TWW S3 for example), the mob would disappear, leaving no enemy at all.
+                 *
+                 * To resolve this, check if the enemy is the Nathrezim Infiltrator specifically, and if so, only show it when
+                 * Shrouded is active, regardless of whether the replaced enemy is marked as shrouded or not.
+                 */
+                if (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED) {
+                    if (this.npc !== null) {
+                        if (this.npc.id === NPC_ID_NATHREZIM_INFILTRATOR || this.npc.id === NPC_ID_ZUL_GAMUX) {
+                            if (!hasShroudedAffix) {
+                                // Hide the Nathrezim Infiltrator/Zul'Gamux when Shrouded is not active
+                                return true;
+                            }
+                        }
+                        // Otherwise, this is a regular enemy marked as shrouded - we should always show it
+                    }
                 }
             }
 
@@ -887,6 +1013,11 @@ class Enemy extends VersionableMapObject {
             } else {
                 self.signal('enemy:clicked', {clickEvent: clickEvent});
             }
+        });
+
+        this.layer.on('contextmenu', function (contextMenuEvent) {
+            L.DomEvent.preventDefault(contextMenuEvent);
+            self.signal('enemy:contextmenu', {contextMenuEvent: contextMenuEvent});
         });
     }
 

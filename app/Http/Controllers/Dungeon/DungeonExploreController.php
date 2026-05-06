@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dungeon;
 
-use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
 use App\Http\Requests\Heatmap\ExploreUrlFormRequest;
@@ -11,50 +10,70 @@ use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
-use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Models\User;
+use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Laravel\Pennant\Feature;
+use Illuminate\Support\Facades\App;
 
 class DungeonExploreController extends Controller
 {
-    public function get(Request $request): RedirectResponse
-    {
-        return redirect()->route('dungeon.explore.gameversion.list', [
-            'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+    public function get(
+        Request                     $request,
+        GameVersionServiceInterface $gameVersionService,
+    ): RedirectResponse {
+        return redirect()->route('dungeon.explore.gameversion', [
+            'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
         ]);
     }
 
-    public function getByGameVersion(Request $request, GameVersion $gameVersion, CombatLogEventServiceInterface $combatLogEventService): View|RedirectResponse
-    {
-        if ($gameVersion->id !== GameVersion::getUserOrDefaultGameVersion()->id) {
-            return redirect()->route('dungeon.explore.gameversion.list', [
-                'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+    public function select(
+        Request                     $request,
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService,
+    ): View {
+        return view('dungeon.explore.gameversion.list', [
+            'gameVersion' => $gameVersion,
+        ]);
+    }
+
+    public function getByGameVersion(
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService,
+    ): View|RedirectResponse {
+        $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
+        if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $userOrDefaultGameVersion,
             ]);
         }
 
-        return view('dungeon.explore.gameversion.list', [
-            'showRunCountPerDungeon' => Feature::active(Heatmap::class),
-            'gameVersion'            => $gameVersion,
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+
+        return redirect()->route('dungeon.explore.gameversion.view', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $contextDungeon,
         ]);
     }
 
     public function viewDungeon(Request $request, GameVersion $gameVersion, Dungeon $dungeon): RedirectResponse
     {
-        $dungeon->load(['currentMappingVersion']);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+        if (!$dungeon->active || $currentMappingVersion === null) {
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
-
-        $dungeon->load(['currentMappingVersion']);
 
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade($dungeon->currentMappingVersion)
+            ->defaultOrFacade($currentMappingVersion)
             ->first();
 
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
@@ -66,28 +85,30 @@ class DungeonExploreController extends Controller
 
     public function viewDungeonFloorMechagonWorkshopCorrection(
         ExploreUrlFormRequest $request,
-        string                $floorIndex = '1'
+        string                $floorIndex = '1',
     ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
-                'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-                'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
-                'floorIndex'  => $floorIndex,
-            ] + $request->validated());
+            'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
+            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'floorIndex'  => $floorIndex,
+        ] + $request->validated());
     }
 
     public function viewDungeonFloor(
-        ExploreUrlFormRequest          $request,
-        MapContextServiceInterface     $mapContextService,
-        CombatLogEventServiceInterface $combatLogEventService,
-        SeasonServiceInterface         $seasonService,
-        GameVersion                    $gameVersion,
-        Dungeon                        $dungeon,
-        string                         $floorIndex = '1'
+        ExploreUrlFormRequest      $request,
+        MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
+        DungeonServiceInterface    $dungeonService,
+        GameVersion                $gameVersion,
+        Dungeon                    $dungeon,
+        string                     $floorIndex = '1',
     ): View|RedirectResponse {
-        $dungeon->load(['currentMappingVersion']);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+        if (!$dungeon->active || $currentMappingVersion === null) {
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
 
         if (!is_numeric($floorIndex)) {
@@ -96,34 +117,34 @@ class DungeonExploreController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($dungeon->currentMappingVersion)
+                ->defaultOrFacade($currentMappingVersion)
                 ->first();
 
             return redirect()->route('dungeon.explore.gameversion.view.floor', [
-                    'gameVersion' => $gameVersion,
-                    'dungeon'     => $dungeon,
-                    'floorIndex'  => $defaultFloor?->index ?? '1',
-                ] + $request->validated());
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $defaultFloor?->index ?? '1',
+            ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
                 return redirect()->route('dungeon.explore.gameversion.view.floor', [
-                        'gameVersion' => $gameVersion,
-                        'dungeon'     => $dungeon,
-                        'floorIndex'  => $floor->index,
-                    ] + $request->validated());
+                    'gameVersion' => $gameVersion,
+                    'dungeon'     => $dungeon,
+                    'floorIndex'  => $floor->index,
+                ] + $request->validated());
             }
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
-
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
+
+            $dungeonService->setDungeonContext($dungeon, Auth::user());
 
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
@@ -131,24 +152,24 @@ class DungeonExploreController extends Controller
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-                'showHeatmapSearch'       => $heatmapActive,
-                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons && $mostRecentSeason !== null ?
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
+                'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
             ]));
         }
     }
 
     public function embedMechagonWorkshopCorrection(
         ExploreUrlFormRequest $request,
-        string                $floorIndex = '1'
+        string                $floorIndex = '1',
     ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.embed.floor', [
-                'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
-                'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
-                'floorIndex'  => $floorIndex,
-            ] + $request->validated());
+            'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
+            'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+            'floorIndex'  => $floorIndex,
+        ] + $request->validated());
     }
 
     public function embed(
@@ -157,21 +178,32 @@ class DungeonExploreController extends Controller
         SeasonServiceInterface     $seasonService,
         GameVersion                $gameVersion,
         Dungeon                    $dungeon,
-        string                     $floorIndex = '1'
+        string                     $floorIndex = '1',
     ): View|RedirectResponse {
-        $dungeon->load(['currentMappingVersion']);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+        if (!$dungeon->active || $currentMappingVersion === null) {
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
         }
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
 
+        $locale = $request->get('locale', App::getLocale());
+        App::setLocale(
+            config('language.short_to_long')[$locale] ?? $locale,
+        );
+
+        // Ensure that User::getCurrentUserMapFacadeStyle() returns the wanted map facade style
+        $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
+        User::forceMapFacadeStyle($mapFacadeStyle);
+
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
 
         $validated = $request->validated();
@@ -179,42 +211,44 @@ class DungeonExploreController extends Controller
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($dungeon->currentMappingVersion)
+                ->defaultOrFacade($currentMappingVersion)
                 ->first();
 
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
-                    'gameVersion' => $gameVersion,
-                    'dungeon'     => $dungeon,
-                    'floorIndex'  => $defaultFloor?->index ?? '1',
-                ] + $validated);
-        } else if ($floor->index !== (int)$floorIndex) {
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $defaultFloor?->index ?? '1',
+            ] + $validated);
+        } elseif ($floor->index !== (int)$floorIndex) {
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
-                    'gameVersion' => $gameVersion,
-                    'dungeon'     => $dungeon,
-                    'floorIndex'  => $floor->index,
-                ] + $validated);
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $floor->index,
+            ] + $validated);
         }
-
 
         $style                 = $request->get('style', 'compact');
         $headerBackgroundColor = $request->get('headerBackgroundColor');
         $mapBackgroundColor    = $request->get('mapBackgroundColor');
         $showEnemyInfo         = $request->get('showEnemyInfo', false);
         $showTitle             = $request->get('showTitle', true);
+        $showSidebar           = $request->get('showSidebar', true);
+        $showHeader            = $request->get('showHeader', true);
         $defaultZoom           = $request->get('defaultZoom', 1);
 
         unset(
             $validated['style'],
             $validated['headerBackgroundColor'],
+            $validated['mapFacadeStyle'],
             $validated['mapBackgroundColor'],
             $validated['showEnemyInfo'],
             $validated['showTitle'],
-            $validated['defaultZoom']
+            $validated['showSidebar'],
+            $validated['showHeader'],
+            $validated['defaultZoom'],
         );
 
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
-
-        $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 
@@ -224,21 +258,25 @@ class DungeonExploreController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-            'showHeatmapSearch'       => $heatmapActive,
-            'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
+            'mapFacadeStyle'          => $mapFacadeStyle,
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
+            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
-            'parameters'              => $validated,
-            'defaultZoom'             => $defaultZoom,
-            'embedOptions'            => [
+            'parameters'   => $validated,
+            'defaultZoom'  => $defaultZoom,
+            'embedOptions' => [
                 'style'                 => $style,
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo'      => (bool)$showEnemyInfo, // Default false - not available
-                    'title'          => $showTitle,
-                    'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
+                    'enemyInfo' => (bool)$showEnemyInfo,
+                    // Default false - not available
+                    'title'          => (bool)$showTitle,
+                    'sidebar'        => (bool)$showSidebar,
+                    'header'         => (bool)$showHeader,
+                    'floorSelection' => true,
+                    // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
         ]));

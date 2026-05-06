@@ -3,8 +3,10 @@
 namespace App\Http\Requests\Npc;
 
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NpcEnemyForcesFormRequest extends FormRequest
 {
@@ -22,6 +24,7 @@ class NpcEnemyForcesFormRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'mapping_version_id'   => Rule::exists(MappingVersion::class, 'id'),
             'enemy_forces'         => 'required|int',
             'enemy_forces_teeming' => 'nullable|int',
         ];

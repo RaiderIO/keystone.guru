@@ -18,6 +18,7 @@ class DamageShieldMissedV20 extends SpecialEvent implements DamageShieldInterfac
     /**
      * @return HasParameters|$this
      */
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

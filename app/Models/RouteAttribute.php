@@ -20,9 +20,17 @@ class RouteAttribute extends Model
 
     public $timestamps = false;
 
-    public $hidden = ['id', 'pivot'];
+    public $hidden = [
+        'id',
+        'pivot',
+    ];
 
-    protected $fillable = ['id', 'category', 'key', 'name'];
+    protected $fillable = [
+        'id',
+        'category',
+        'key',
+        'name',
+    ];
 
     public const ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP = 'rogue_shroud_skip';
 

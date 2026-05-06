@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $enemy_id
- * @property int          $floor_id
- * @property float        $lat
- * @property float        $lng
+ * @property int   $id
+ * @property int   $dungeon_route_id
+ * @property int   $enemy_id
+ * @property int   $floor_id
+ * @property float $lat
+ * @property float $lng
  *
  * @property DungeonRoute $dungeonRoute
  * @property Enemy        $enemy
@@ -30,9 +30,20 @@ class PridefulEnemy extends Model
     use HasLatLng;
     use Reportable;
 
-    protected $fillable = ['dungeon_route_id', 'enemy_id', 'floor_id', 'lat', 'lng'];
+    protected $fillable = [
+        'dungeon_route_id',
+        'enemy_id',
+        'floor_id',
+        'lat',
+        'lng',
+    ];
 
-    protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
+    protected $visible = [
+        'enemy_id',
+        'floor_id',
+        'lat',
+        'lng',
+    ];
 
     public function dungeonRoute(): BelongsTo
     {

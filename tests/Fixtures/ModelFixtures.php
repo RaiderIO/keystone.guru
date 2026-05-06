@@ -3,12 +3,13 @@
 namespace Tests\Fixtures;
 
 use App\Models\Season;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCases\PublicTestCase;
 
 class ModelFixtures
 {
-    public static function getSeasonMock(PublicTestCase $testCase): Season
+    public static function getSeasonMock(PublicTestCase $testCase): Season|MockObject
     {
-        return $testCase->createMock(Season::class);
+        return $testCase->createMockPublic(Season::class);
     }
 }

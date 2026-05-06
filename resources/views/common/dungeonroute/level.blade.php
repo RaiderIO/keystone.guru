@@ -10,9 +10,9 @@ use App\Models\Season;
  */
 $min                    = $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min');
 $max                    = $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max');
-$levelMin               = $levelMin ?? $min;
-$levelMax               = $levelMax ?? $max;
-$minAnchorKeyLevelWidth = $minAnchorKeyLevelWidth ?? 1;
+$levelMin               ??= $min;
+$levelMax               ??= $max;
+$minAnchorKeyLevelWidth ??= 1;
 ?>
 <div class="row no-gutters h-100 px-2">
     <div class="col progress h-100" style="border-radius: 0">

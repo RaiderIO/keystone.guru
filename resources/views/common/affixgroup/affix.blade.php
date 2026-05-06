@@ -8,7 +8,7 @@ $showText ??= true;
 $dungeon  ??= null;
 ?>
 
-<div class="row no-gutters mt-2 ">
+<div class="row no-gutters">
     <div
         class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }} {{ $showText ? '' : 'mx-1' }} m-auto"
         data-toggle="tooltip"

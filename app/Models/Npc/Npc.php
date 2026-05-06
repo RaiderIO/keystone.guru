@@ -7,6 +7,7 @@ use App\Models\CacheModel;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Spell\Spell;
@@ -17,34 +18,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 /**
- * @property int                                $id
- * @property int                                $dungeon_id
- * @property int                                $classification_id
- * @property int                                $npc_type_id
- * @property int                                $npc_class_id
- * @property int|null                           $display_id
- * @property int|null                           $encounter_id
- * @property string                             $name
- * @property int                                $base_health
- * @property int|null                           $health_percentage Null = 100% health
- * @property int|null                           $level
- * @property float|null                         $mdt_scale
- * @property string                             $aggressiveness
- * @property bool                               $dangerous
- * @property bool                               $truesight
- * @property bool                               $bursting
- * @property bool                               $bolstering
- * @property bool                               $sanguine
- * @property bool                               $runs_away_in_fear
- * @property bool                               $hyper_respawn
+ * @property int        $id
+ * @property int        $classification_id
+ * @property int        $npc_type_id
+ * @property int        $npc_class_id
+ * @property int|null   $display_id
+ * @property int|null   $encounter_id
+ * @property string     $name
+ * @property int|null   $level
+ * @property float|null $mdt_scale
+ * @property string     $aggressiveness
+ * @property bool       $dangerous
+ * @property bool       $truesight
+ * @property bool       $bursting
+ * @property bool       $bolstering
+ * @property bool       $sanguine
+ * @property bool       $runs_away_in_fear
+ * @property bool       $hyper_respawn
  *
- * @property Dungeon                            $dungeon
- * @property NpcClassification                  $classification
- * @property NpcType                            $type
- * @property NpcClass                           $class
+ * @property NpcClassification $classification
+ * @property NpcType           $type
+ * @property NpcClass          $class
  *
  * @property NpcEnemyForces|null                $enemyForces
  * @property Collection<NpcEnemyForces>         $npcEnemyForces
@@ -54,6 +50,9 @@ use InvalidArgumentException;
  * @property Collection<Spell>                  $spells
  * @property Collection<NpcSpell>               $npcSpells
  * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
+ * @property Collection<Dungeon>                $dungeons
+ * @property Collection<NpcDungeon>             $npcDungeons
+ * @property Collection<NpcHealth>              $npcHealths
  *
  * @mixin Eloquent
  */
@@ -61,13 +60,13 @@ class Npc extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
 
-    public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
-    public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
-    public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
-    public const AGGRESSIVENESS_FRIENDLY   = 'friendly';
-    public const AGGRESSIVENESS_AWAKENED   = 'awakened';
+    public const string AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
+    public const string AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
+    public const string AGGRESSIVENESS_NEUTRAL    = 'neutral';
+    public const string AGGRESSIVENESS_FRIENDLY   = 'friendly';
+    public const string AGGRESSIVENESS_AWAKENED   = 'awakened';
 
-    public const ALL_AGGRESSIVENESS = [
+    public const array ALL_AGGRESSIVENESS = [
         self::AGGRESSIVENESS_AGGRESSIVE,
         self::AGGRESSIVENESS_UNFRIENDLY,
         self::AGGRESSIVENESS_NEUTRAL,
@@ -79,7 +78,14 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'characteristics', 'spells'];
+    protected $with = [
+        'type',
+        'class',
+        'npcbolsteringwhitelists',
+        'npcHealths',
+        'characteristics',
+        'spells',
+    ];
 
     protected $fillable = [
         'id',
@@ -89,8 +95,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'npc_class_id',
         'display_id',
         'name',
-        'base_health',
-        'health_percentage',
         'level',
         'mdt_scale',
         'aggressiveness',
@@ -102,18 +106,28 @@ class Npc extends CacheModel implements MappingModelInterface
         'runs_away_in_fear',
     ];
 
-    protected $casts = [
-        'id'                => 'integer',
-        'dungeon_id'        => 'integer',
-        'classification_id' => 'integer',
-        'npc_type_id'       => 'integer',
-        'npc_class_id'      => 'integer',
-        'display_id'        => 'integer',
-        'base_health'       => 'integer',
-        'health_percentage' => 'integer',
-        'level'             => 'integer',
-        'mdt_scale'         => 'float',
+    protected $appends = [
+        'enemy_portrait_url',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'id'                => 'integer',
+            'dungeon_id'        => 'integer',
+            'classification_id' => 'integer',
+            'npc_type_id'       => 'integer',
+            'npc_class_id'      => 'integer',
+            'display_id'        => 'integer',
+            'level'             => 'integer',
+            'mdt_scale'         => 'float',
+        ];
+    }
+
+    public function getEnemyPortraitUrlAttribute(): string
+    {
+        return sprintf('images/enemyportraits/%d.png', $this->id);
+    }
 
     /**
      * Gets all derived enemies from this Npc.
@@ -128,9 +142,14 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->hasMany(NpcBolsteringWhitelist::class);
     }
 
-    public function dungeon(): BelongsTo
+    public function dungeons(): BelongsToMany
     {
-        return $this->belongsTo(Dungeon::class);
+        return $this->belongsToMany(Dungeon::class, 'npc_dungeons');
+    }
+
+    public function npcDungeons(): HasMany
+    {
+        return $this->hasMany(NpcDungeon::class);
     }
 
     public function classification(): BelongsTo
@@ -182,17 +201,18 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
     }
 
-    public function setEnemyForces(int $enemyForces, ?MappingVersion $mappingVersion = null): NpcEnemyForces
+    public function npcHealths(): HasMany
     {
-        if ($this->dungeon_id === -1 && $mappingVersion === null) {
-            throw new InvalidArgumentException('Unable to set enemy forces for global npc without a mapping version!');
-        }
+        return $this->hasMany(NpcHealth::class);
+    }
 
-        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion)->first();
+    public function setEnemyForces(int $enemyForces, MappingVersion $mappingVersion): NpcEnemyForces
+    {
+        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion->id);
 
         if ($npcEnemyForces === null) {
             $npcEnemyForces = NpcEnemyForces::create([
-                'mapping_version_id' => ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id,
+                'mapping_version_id' => $mappingVersion->id,
                 'npc_id'             => $this->id,
                 'enemy_forces'       => $enemyForces,
             ]);
@@ -205,33 +225,38 @@ class Npc extends CacheModel implements MappingModelInterface
         return $npcEnemyForces;
     }
 
-    public function enemyForcesByMappingVersion(?int $mappingVersionId = null): HasOne
+    public function enemyForcesByMappingVersion(?int $mappingVersionId = null): ?NpcEnemyForces
     {
-        $belongsTo = $this->hasOne(NpcEnemyForces::class);
-
-        // Most recent
-        if ($mappingVersionId === null) {
-            $belongsTo->orderByDesc('mapping_version_id')->limit(1);
-        } else {
-            $belongsTo->where('mapping_version_id', $mappingVersionId);
-        }
-
-        return $belongsTo;
+        return $this->npcEnemyForces->when($mappingVersionId !== null, fn(Collection $collection) => $collection->filter(fn(NpcEnemyForces $npcEnemyForces) => $npcEnemyForces->mapping_version_id === $mappingVersionId))->sortByDesc('mapping_version_id')
+            ->first();
     }
 
     public function isEmissary(): bool
     {
-        return in_array($this->id, [155432, 155433, 155434]);
+        return in_array($this->id, [
+            155432,
+            155433,
+            155434,
+        ]);
     }
 
     public function isAwakened(): bool
     {
-        return in_array($this->id, [161244, 161243, 161124, 161241]);
+        return in_array($this->id, [
+            161244,
+            161243,
+            161124,
+            161241,
+        ]);
     }
 
     public function isEncrypted(): bool
     {
-        return in_array($this->id, [185680, 185683, 185685]);
+        return in_array($this->id, [
+            185680,
+            185683,
+            185685,
+        ]);
     }
 
     public function isPrideful(): bool
@@ -251,12 +276,18 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function isAffectedByFortified(): bool
     {
-        return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE]]);
+        return in_array($this->classification_id, [
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+        ]);
     }
 
     public function isAffectedByTyrannical(): bool
     {
-        return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]);
+        return in_array($this->classification_id, [
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+        ]);
     }
 
     public function getScalingFactor(int $keyLevel, array $affixes = []): float
@@ -285,14 +316,24 @@ class Npc extends CacheModel implements MappingModelInterface
         return round($keyLevelFactor * 100) / 100;
     }
 
+    public function getHealthByGameVersion(GameVersion $gameVersion): ?NpcHealth
+    {
+        return $this->npcHealths->keyBy('game_version_id')->get($gameVersion->id);
+    }
+
     /**
-     * @param int   $keyLevel
-     * @param array $affixes A list of Affix:: constants
+     * @param  int   $keyLevel
+     * @param  array $affixes  A list of Affix:: constants
      * @return float
      */
-    public function calculateHealthForKey(int $keyLevel, array $affixes = []): float
+    public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = []): float
     {
-        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes));
+        $health = $this->getHealthByGameVersion($gameVersion);
+        if ($health === null) {
+            return 123456; // This is a placeholder value, should never happen
+        }
+
+        return round($health->health * (($health->percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes));
     }
 
     /**
@@ -303,17 +344,23 @@ class Npc extends CacheModel implements MappingModelInterface
         $result = true;
 
         if ($existingEnemyForces > 0) {
-            $this->load('dungeon');
+            $this->load('dungeons');
+
             // Create new enemy forces for this enemy for each relevant mapping version
             // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
-            $mappingVersions = $this->dungeon?->mappingVersions ?? MappingVersion::all();
-            foreach ($mappingVersions as $mappingVersion) {
-                $result = $result && NpcEnemyForces::create([
+            $this->dungeons->load([
+                'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+            ]);
+
+            foreach ($this->dungeons as $dungeon) {
+                foreach ($dungeon->mappingVersions as $mappingVersion) {
+                    $result = $result && NpcEnemyForces::create([
                         'npc_id'               => $this->id,
                         'mapping_version_id'   => $mappingVersion->id,
-                        'enemy_forces'         => $existingEnemyForces ?? 0,
+                        'enemy_forces'         => $existingEnemyForces,
                         'enemy_forces_teeming' => null,
                     ]);
+                }
             }
         }
 
@@ -322,9 +369,13 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getDungeonId(): ?int
     {
-        return $this->dungeon_id ?? null;
+        /** @var Dungeon|null $dungeon */
+        $dungeon = $this->dungeons->first();
+
+        return $dungeon?->id ?? null;
     }
 
+    #[\Override]
     protected static function booted(): void
     {
         parent::booted();
@@ -335,6 +386,7 @@ class Npc extends CacheModel implements MappingModelInterface
             $npc->npcCharacteristics()->delete();
             $npc->npcSpells()->delete();
             $npc->npcEnemyForces()->delete();
+            $npc->npcDungeons()->delete();
         });
     }
 }

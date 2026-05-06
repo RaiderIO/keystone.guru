@@ -1,28 +1,28 @@
 <?php
 
 return [
-    'edit'      => [
-        'title'                   => '',
-        'profile'                 => '',
-        'account'                 => '',
-        'patreon'                 => '',
-        'change_password'         => '',
-        'privacy'                 => '',
-        'reports'                 => '',
-        'menu_title'              => '',
-        'avatar'                  => '',
-        'avatar_title'            => '',
-        'username'                => '',
-        'username_title'          => '',
-        'email'                   => '',
-        'region'                  => '',
-        'select_region'           => '',
-        'show_as_anonymous'       => '',
-        'show_as_anonymous_title' => '',
-        'echo_color'              => '',
-        'echo_color_title'        => '',
-        'save'                    => '',
 
+    'edit' => [
+        'title'                                            => '',
+        'profile'                                          => '',
+        'account'                                          => '',
+        'patreon'                                          => '',
+        'change_password'                                  => '',
+        'privacy'                                          => '',
+        'reports'                                          => '',
+        'menu_title'                                       => '',
+        'avatar'                                           => '',
+        'avatar_alt'                                       => '',
+        'username'                                         => '',
+        'username_title'                                   => '',
+        'email'                                            => '',
+        'region'                                           => '',
+        'select_region'                                    => '',
+        'show_as_anonymous'                                => '',
+        'show_as_anonymous_title'                          => '',
+        'echo_color'                                       => '',
+        'echo_color_title'                                 => '',
+        'save'                                             => '',
         'account_delete_consequences'                      => '',
         'account_delete_consequence_routes'                => '',
         'account_delete_consequence_routes_delete'         => '',
@@ -35,25 +35,21 @@ return [
         'account_delete_consequence_reports_unresolved'    => '',
         'account_delete_warning'                           => '',
         'account_delete_confirm'                           => '',
-
-        'unlink_from_patreon'             => '',
-        'patreon_status_granted_manually' => '',
-        'link_to_patreon_success'         => '',
-        'link_to_patreon'                 => '',
-        'link_to_patreon_description'     => '',
-        'patreon_benefit_table'           => [
+        'unlink_from_patreon'                              => '',
+        'patreon_status_granted_manually'                  => '',
+        'link_to_patreon_success'                          => '',
+        'link_to_patreon'                                  => '',
+        'link_to_patreon_description'                      => '',
+        'patreon_benefit_table'                            => [
             'header_active'  => '',
             'header_benefit' => '',
         ],
-
-        'current_password'     => '',
-        'new_password'         => '',
-        'new_password_confirm' => '',
-        'submit'               => '',
-
-        'ga_cookies_opt_out'  => '',
-        'reports_description' => '',
-
+        'current_password'                => '',
+        'new_password'                    => '',
+        'new_password_confirm'            => '',
+        'submit'                          => '',
+        'ga_cookies_opt_out'              => '',
+        'reports_description'             => '',
         'reports_table_header_id'         => '',
         'reports_table_header_category'   => '',
         'reports_table_header_message'    => '',
@@ -64,32 +60,23 @@ return [
     'favorites' => [
         'title' => '',
     ],
-    'overview'  => [
-        'title'                    => '',
-        'favorites'                => '',
-        'tags'                     => '',
-        'teams'                    => '',
-        'profile'                  => '',
-        'route_coverage'           => '',
-        'route_overview'           => '',
-        'welcome_text'             => '',
-        'create_route'             => '',
-        'create_route_description' => '',
-        'create_team'              => '',
-        'create_team_description'  => '',
-
+    'overview' => [
+        'title'          => '',
+        'route_coverage' => '',
+        'route_overview' => '',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => '',
     ],
-    'tags'      => [
+    'tags' => [
         'title'                             => '',
         'header'                            => '',
         'description'                       => '',
         'link_your_personal_route_overview' => '',
     ],
-    'view'      => [
+    'view' => [
         'title'  => '',
         'header' => '',
     ],
+
 ];

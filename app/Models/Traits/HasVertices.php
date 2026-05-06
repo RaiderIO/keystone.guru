@@ -35,7 +35,7 @@ trait HasVertices
     public function getCoordinatesData(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        Floor                       $floor
+        Floor                       $floor,
     ): array {
         $latLngs = $this->getDecodedLatLngs($floor);
 
@@ -46,27 +46,22 @@ trait HasVertices
             foreach ($latLngs as $latLng) {
                 $facadeLatLngs->push($latLng);
                 $splitFloorsLatLngs->push(
-                    $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng)
+                    $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng),
                 );
             }
-
         } else {
             foreach ($latLngs as $latLng) {
                 $splitFloorsLatLngs->push($latLng);
                 $facadeLatLngs->push(
-                    $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng)
+                    $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng),
                 );
             }
         }
 
         return [
             'coordinates' => [
-                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLngs->map(function (LatLng $latLng) {
-                    return $latLng->toArrayWithFloor();
-                })->toArray(),
-                User::MAP_FACADE_STYLE_FACADE       => $facadeLatLngs->map(function (LatLng $latLng) {
-                    return $latLng->toArrayWithFloor();
-                })->toArray(),
+                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLngs->map(fn(LatLng $latLng) => $latLng->toArrayWithFloor())->toArray(),
+                User::MAP_FACADE_STYLE_FACADE       => $facadeLatLngs->map(fn(LatLng $latLng) => $latLng->toArrayWithFloor())->toArray(),
             ],
         ];
     }

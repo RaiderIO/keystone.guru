@@ -24,7 +24,7 @@ trait SavesPolylines
     use ChangesDungeonRoute;
 
     /**
-     * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
+     * @param  array{color: string, color_animated: string, weight: int, vertices_json: string} $data
      * @throws \Exception
      */
     private function savePolylineToModel(
@@ -34,7 +34,7 @@ trait SavesPolylines
         Polyline                    $polyline,
         ?Model                      $beforeModel,
         Model                       $ownerModel,
-        array                       $data
+        array                       $data,
     ): Polyline {
         $beforePolyline = clone $polyline;
 
@@ -52,7 +52,7 @@ trait SavesPolylines
                 $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
                     $mappingVersion,
                     new LatLng($vertex['lat'], $vertex['lng'], $ownerModel->floor),
-                    $changedFloor
+                    $changedFloor,
                 );
 
                 $realVertices[] = $latLng->toArray();
@@ -71,18 +71,16 @@ trait SavesPolylines
             'model_id'       => $ownerModel->id,
             'model_class'    => $ownerModel::class,
             'color'          => $data['color'] ?? '#f00',
-            'color_animated' =>
-                Auth::check() &&
+            'color_animated' => Auth::check() &&
                 Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ?
                     $data['color_animated'] : null,
-            'weight'         => (int)($data['weight'] ?? 2),
-            'vertices_json'  => $data['vertices_json'] ?? '{}',
+            'weight'        => (int)($data['weight'] ?? 2),
+            'vertices_json' => $data['vertices_json'] ?? '{}',
         ]);
 
         if ($dungeonRoute !== null) {
             $this->dungeonRouteChanged($dungeonRoute, $beforePolyline->exists ? $beforePolyline : null, $polyline);
         }
-
 
         // Couple the model to the newly created/updated polyline
         $ownerModel->update([

@@ -13,11 +13,11 @@ use Illuminate\Support\Collection;
 use Str;
 
 /**
- * @property int                                      $id
- * @property int                                      $class_id Blizzard class ID
- * @property string                                   $key
- * @property string                                   $name
- * @property string                                   $color
+ * @property int    $id
+ * @property int    $class_id Blizzard class ID
+ * @property string $key
+ * @property string $name
+ * @property string $color
  *
  * @property string                                   $icon_url Appended
  *
@@ -34,9 +34,18 @@ class CharacterClass extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['class_id', 'key', 'name', 'color', 'icon_file_id'];
+    public $fillable = [
+        'class_id',
+        'key',
+        'name',
+        'color',
+        'icon_file_id',
+    ];
 
     protected $appends = ['icon_url'];
 

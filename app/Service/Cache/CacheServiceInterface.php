@@ -2,10 +2,10 @@
 
 namespace App\Service\Cache;
 
-use Illuminate\Contracts\Cache\Lock;
-
 interface CacheServiceInterface
 {
+    public function isCacheEnabled(): bool;
+
     public function setCacheEnabled(bool $cacheEnabled): self;
 
     public function rememberWhen(bool $condition, string $key, mixed $value, mixed $ttl = null): mixed;

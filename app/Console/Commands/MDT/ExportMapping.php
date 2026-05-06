@@ -4,6 +4,7 @@ namespace App\Console\Commands\MDT;
 
 use App\Logic\MDT\Conversion;
 use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
@@ -15,7 +16,7 @@ class ExportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:exportmapping {expansion} {targetFolder} {--excludeTranslations}';
+    protected $signature = 'mdt:exportmapping {expansion} {gameVersion} {targetFolder} {--excludeTranslations} {--forceEnemyPatrols}';
 
     /**
      * The console command description.
@@ -32,8 +33,10 @@ class ExportMapping extends Command
     public function handle(MDTMappingExportServiceInterface $mappingExportService): int
     {
         $expansion           = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
+        $gameVersion         = GameVersion::firstWhere('key', $this->argument('gameVersion'));
         $targetFolder        = $this->argument('targetFolder');
         $excludeTranslations = $this->option('excludeTranslations');
+        $forceEnemyPatrols   = $this->option('forceEnemyPatrols');
 
         foreach ($expansion->dungeonsAndRaids as $dungeon) {
             if (!$dungeon->enemies()->exists()) {
@@ -42,14 +45,14 @@ class ExportMapping extends Command
                 continue;
             }
 
-            $dungeon->load('currentMappingVersion');
-            if ($dungeon->currentMappingVersion === null) {
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+            if ($currentMappingVersion === null) {
                 $this->comment(sprintf('Skipping %s, no current mapping version found', __($dungeon->name)));
 
                 continue;
             }
 
-            $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->currentMappingVersion, $excludeTranslations);
+            $luaString = $mappingExportService->getMDTMappingAsLuaString($currentMappingVersion, $excludeTranslations, $forceEnemyPatrols);
 
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));

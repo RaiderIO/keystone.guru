@@ -3,8 +3,8 @@
 namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Logic\Structs\IngameXY;
-use App\Logic\Utils\Stopwatch;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Contracts\Support\Arrayable;
@@ -17,12 +17,14 @@ class CombatLogEventGridAggregationResult implements Arrayable
 {
     private bool $useFacade;
 
+    private ?MappingVersion $currentMappingVersion = null;
+
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventFilter        $combatLogEventFilter,
         private readonly array                       $results,
         private readonly int                         $runCount,
-        private readonly bool                        $floorsAsArray = false
+        private readonly bool                        $floorsAsArray = false,
     ) {
         $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
     }
@@ -43,7 +45,11 @@ class CombatLogEventGridAggregationResult implements Arrayable
             if ($this->floorsAsArray) {
                 $rowCount = count($rows);
                 for ($i = 0; $i < $rowCount; $i += 3) {
-                    $rawData[] = [$rows[$i], $rows[$i + 1], $rows[$i + 2]];
+                    $rawData[] = [
+                        $rows[$i],
+                        $rows[$i + 1],
+                        $rows[$i + 2],
+                    ];
                 }
             } else {
                 foreach ($rows as $xy => $count) {
@@ -60,7 +66,11 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
             $latLngs = [];
             foreach ($rawData as $row) {
-                [$x, $y, $count] = $row;
+                [
+                    $x,
+                    $y,
+                    $count,
+                ] = $row;
 
                 $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
                 $latLngArray['weight'] = $count;
@@ -97,7 +107,6 @@ class CombatLogEventGridAggregationResult implements Arrayable
                     }
 
                     $latLngsToCombine[] = $floorData['lat_lngs'];
-
                 }
 
                 $facadeData[$facadeFloor->id]['lat_lngs'] = array_merge(...$latLngsToCombine);
@@ -113,7 +122,6 @@ class CombatLogEventGridAggregationResult implements Arrayable
             'grid_size_x' => config('keystoneguru.heatmap.service.data.player.size_x'),
             'grid_size_y' => config('keystoneguru.heatmap.service.data.player.size_y'),
         ];
-
 
 //        $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 //
@@ -141,10 +149,13 @@ class CombatLogEventGridAggregationResult implements Arrayable
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();
 
+        // Just a little cache to avoid recalculating the mapping version every time
+        $this->currentMappingVersion ??= $dungeon->getCurrentMappingVersion();
+
         $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation($ingameXY);
 
         $latLngArray = ($this->useFacade ?
-            $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
+            $this->coordinatesService->convertMapLocationToFacadeMapLocation($this->currentMappingVersion, $latLng) :
             $latLng)->toArray();
 
         // Just limit the amount of data going out
@@ -157,7 +168,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
     /**
      * Only for unit tests really.
      *
-     * @param bool $useFacade
+     * @param  bool $useFacade
      * @return self
      */
     public function setUseFacade(bool $useFacade): self

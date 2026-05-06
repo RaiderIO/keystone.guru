@@ -14,9 +14,9 @@ use App\Repositories\Swoole\NpcRepositorySwoole;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use Illuminate\Support\ServiceProvider;
 
-
 class OctaneServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         parent::register();

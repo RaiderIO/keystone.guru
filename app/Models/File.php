@@ -22,20 +22,39 @@ class File extends Model
     /**
      * @var array None of this really matters for externals
      */
-    public $hidden = ['id', 'disk', 'path', 'model_id', 'model_class', 'created_at', 'updated_at'];
+    public $hidden = [
+        'id',
+        'disk',
+        'path',
+        'model_id',
+        'model_class',
+        'created_at',
+        'updated_at',
+        'pivot',
+    ];
 
     /**
      * @var array Only this really matters when we're echoing the file.
      */
-    public $appends = ['url', 'icon_url'];
+    public $appends = [
+        'url',
+        // @TODO remove this? Find usages in .js files though
+        'icon_url',
+    ];
 
-    protected $fillable = ['model_id', 'model_class', 'disk', 'path'];
+    protected $fillable = [
+        'model_id',
+        'model_class',
+        'disk',
+        'path',
+    ];
 
     /**
      * @return bool|null|void
      *
      * @throws Exception
      */
+    #[\Override]
     public function delete(): void
     {
         if (parent::delete()) {
@@ -57,14 +76,6 @@ class File extends Model
     public function getIconUrlAttribute(): string
     {
         return $this->getURL();
-        // Unavailable since switching to different Image library - but we don't use it anyways
-        //        $iconUrl = '';
-        //        // Only if it's an image!
-        //        if(Image::format($this->getUrl()) !== null){
-        //            // Send as little data as possible, fetch the url, but strip it off the full path
-        //            $iconUrl = @parse_url(Image::url($this->getUrl(), 32, 32))['path'];
-        //        }
-        //        return $iconUrl;
     }
 
     /**
@@ -86,8 +97,13 @@ class File extends Model
      */
     public function getFullPath(): string
     {
-        // @TODO May need to do something with $this->disk here?
-        return public_path($this->path);
+        $driver = config(sprintf('filesystems.disks.%s.driver', $this->disk));
+
+        if ($driver !== 'local') {
+            throw new \RuntimeException('getFullPath() is only available for local disks.');
+        }
+
+        return Storage::disk($this->disk)->path($this->path);
     }
 
     /**
@@ -97,49 +113,59 @@ class File extends Model
      */
     public function getURL(): string
     {
-        // @TODO May need to do something with $this->disk here?
-        if (config('app.env') === 'local') {
-            return url($this->path);
-        } else {
-            return url('storage/' . $this->path);
-        }
+        return Storage::disk($this->disk)->url($this->path);
     }
 
     /**
      * Saves a file to the database
      *
-     * @param UploadedFile $uploadedFile The uploaded file element.
-     * @param Model        $model The model that wants to save this file.
-     * @param string       $dir The directory to save this file in.
-     * @return File The newly saved file in the database.
+     * @param  UploadedFile $uploadedFile The uploaded file element.
+     * @param  Model        $model        The model that wants to save this file.
+     * @param  string       $dir          The directory to save this file in.
+     * @return File         The newly saved file in the database.
      *
      * @throws Exception
      */
-    public static function saveFileToDB(UploadedFile $uploadedFile, Model $model, string $dir = 'upload'): File
-    {
-        $disk = config('app.env') === 'local' ? 'public_local' : 'public';
+    public static function saveFileToDB(
+        UploadedFile $uploadedFile,
+        Model        $model,
+        string       $dir = '',
+        ?string      $disk = null,
+    ): File {
+        // Use explicitly provided disk or fallback to default per environment
+        $disk ??= config(
+            'filesystems.default',
+            'public',
+        );
 
-        // Ensure the path exists
-        $rootDir    = config(sprintf('filesystems.disks.%s.root', $disk));
-        $storageDir = sprintf('%s/%s', $rootDir, $dir);
-        if (!is_dir($storageDir)) {
-            mkdir($storageDir, 755, true);
-        }
+        // Store the file using Laravel's Storage facade
+        $path = $uploadedFile->store($dir, $disk);
 
-        $newFile              = new File();
-        $newFile->model_id    = $model->id;
-        $newFile->model_class = $model::class;
-        $newFile->disk        = $disk;
-        $newFile->path        = $uploadedFile->store($dir, $disk);
-        $saveResult           = $newFile->save();
+        $file = File::create([
+            'model_id'    => $model->id,
+            'model_class' => $model::class,
+            'disk'        => $disk,
+            'path'        => $path,
+        ]);
 
-        if (!$saveResult) {
-            // Remove the uploaded file from disk
-            $newFile->deleteFromDisk();
+        if (!$file->exists()) {
+            // Delete uploaded file only if it was saved and DB insert fails
+            Storage::disk($disk)->delete($path);
 
             throw new Exception('Unable to save file to DB!');
         }
 
-        return $newFile;
+        return $file;
+    }
+
+    #[\Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function (File $file) {
+            // Delete the file from disk when the model is deleted
+            $file->deleteFromDisk();
+        });
     }
 }

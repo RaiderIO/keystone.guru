@@ -2,79 +2,82 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => '',
-            'mdt_string_format_not_recognized'    => 'Формат строки MDT не распознан.',
-            'invalid_mdt_string'                  => 'Неверная строка MDT',
-            'invalid_mdt_string_exception'        => 'Неверная строка MDT: %s',
-            'mdt_importer_not_configured'         => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',
-            'mdt_unable_to_find_npc_for_id'       => 'Невозможно найти NPC по ID %d',
-            'mdt_mismatched_health'               => 'Не совпадает здоровье NPC %s, MDT: %s, KG: %s',
-            'mdt_mismatched_enemy_forces'         => 'Не соответствующая способность NPC %s, MDT: %s, KG: %s',
-            'mdt_mismatched_enemy_forces_teeming' => 'Таймеры NPC %s не соответствуют, MDT: %s, KG: %s',
-            'mdt_mismatched_enemy_count'          => 'Несоответствующее количество NPC %s, MDT: %s, KG: %s',
-            'mdt_mismatched_enemy_type'           => 'Несоответствующее тип NPC %s, MDT: %s, KG: %s',
-            'mdt_invalid_category'                => 'Неверная категория',
+            'mdt_string_format_not_recognized'    => '',
+            'cli_weakauras_parser_not_found'      => '',
+            'invalid_mdt_string'                  => '',
+            'invalid_mdt_string_exception'        => '',
+            'mdt_importer_not_configured'         => '',
+            'mdt_unable_to_find_npc_for_id'       => '',
+            'mdt_mismatched_health'               => '',
+            'mdt_mismatched_enemy_forces'         => '',
+            'mdt_mismatched_enemy_forces_teeming' => '',
+            'mdt_mismatched_enemy_count'          => '',
+            'mdt_mismatched_enemy_type'           => '',
+            'mdt_invalid_category'                => '',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => '',
-            'caches_dropped_successfully' => 'Кеш сброшен успешно',
-            'releases_exported'           => 'Релизы экспортированы',
-            'exception'                   => [
-                'internal_server_error' => 'Дополнение добавлено в админ панель',
-            ],
-            'feature_toggle_activated'    => '',
-            'feature_toggle_deactivated'  => '',
-            'feature_forgotten'           => '',
+            'message_banner_set_successfully'   => '',
+            'thumbnail_regenerate_result'       => '',
+            'combatlog_route_regenerate_result' => '',
+            'caches_dropped_successfully'       => '',
+            'releases_exported'                 => '',
+            'exception'                         => '',
+            'feature_toggle_activated'          => '',
+            'feature_toggle_deactivated'        => '',
+            'feature_forgotten'                 => '',
+            'read_only_mode_disabled'           => '',
+            'read_only_mode_enabled'            => '',
         ],
     ],
-    'apidungeonroute'             => [
-        'mdt_generate_error'  => 'Произошла ошибка при создании строки MDT: %s',
-        'mdt_generate_no_lua' => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы',
+    'apidungeonroute' => [
+        'mdt_generate_error'  => '',
+        'mdt_generate_no_lua' => '',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
-            'unable_to_update_user_report' => 'Невозможно обновить отчет пользователя',
-            'unable_to_save_report'        => 'Невозможно сохранить отчет',
+            'unable_to_update_user_report' => '',
+            'unable_to_save_report'        => '',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => '',
             'unable_to_delete_brushline' => '',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
-            'dungeon_created' => 'Подземелье создано',
-            'dungeon_updated' => 'Подземелье обновлено',
+            'dungeon_created' => '',
+            'dungeon_updated' => '',
         ],
     ],
-    'dungeonroute'                => [
-        'unable_to_save' => 'Невозможно сохранить маршрут',
+    'dungeonroute' => [
+        'unable_to_save' => '',
         'flash'          => [
-            'route_cloned_successfully' => 'Маршрут успешно клонирован',
-            'route_updated'             => 'Маршрут обновлен',
-            'route_created'             => 'Маршрут создан',
+            'route_cloned_successfully' => '',
+            'route_updated'             => '',
+            'route_created'             => '',
         ],
     ],
-    'dungeonroutediscover'        => [
-        'popular'           => 'Популярные маршруты',
-        'this_week_affixes' => 'Текущие аффиксы',
-        'next_week_affixes' => 'Аффиксы следующей неделе',
-        'new'               => 'Новые',
+    'dungeonroutediscover' => [
+        'popular'           => '',
+        'this_week_affixes' => '',
+        'next_week_affixes' => '',
+        'new'               => '',
         'season'            => [
             'popular'           => '',
             'this_week_affixes' => '',
             'next_week_affixes' => '',
             'new'               => '',
         ],
-        'dungeon'           => [
-            'popular'           => '%s популярные маршруты',
-            'this_week_affixes' => '%s текущие аффиксы',
-            'next_week_affixes' => '%s аффиксы следующей неделе',
-            'new'               => '%s Новые',
+        'dungeon' => [
+            'popular'           => '',
+            'this_week_affixes' => '',
+            'next_week_affixes' => '',
+            'new'               => '',
         ],
     ],
     'dungeonspeedrunrequirednpcs' => [
@@ -84,67 +87,69 @@ return [
             'npc_deleted_successfully' => '',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
-            'unable_to_save_expansion' => 'Не удалось сохранить дополнение',
-            'expansion_updated'        => 'Дополнение обновлено',
-            'expansion_created'        => 'Дополнение создано',
+            'unable_to_save_expansion' => '',
+            'expansion_updated'        => '',
+            'expansion_created'        => '',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => '',
             'not_found'                  => '',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
-            'registered_successfully' => 'Регистрация прошла успешно.',
-            'user_exists'             => 'Пользователь с таким именем уже существует %s. Может быть вы уже зарегистрированы?',
-            'email_exists'            => 'Пользователь с таким электронным адресом уже существует %s. Может быть вы уже зарегистрированы?',
+            'registered_successfully' => '',
+            'user_exists'             => '',
+            'email_exists'            => '',
             'permission_denied'       => '',
+            'read_only_mode_enabled'  => '',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
-            'registered_successfully' => 'Регистрация прошла успешно.',
+    'register' => [
+        'flash' => [
+            'registered_successfully' => '',
         ],
-        'legal_agreed_required' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
-        'legal_agreed_accepted' => 'Вы должны согласиться с пользовательским соглашением и политикой конфиденциальности для регистрации',
+        'legal_agreed_required' => '',
+        'legal_agreed_accepted' => '',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
-            'unable_to_save_release' => 'Невозможно сохранить релиз',
+            'unable_to_save_release' => '',
         ],
         'flash' => [
-            'release_updated'  => 'Релиз обновлен',
-            'release_created'  => 'Релиз создан',
-            'github_exception' => 'Произошла ошибка связи с Github: :message',
+            'release_updated'  => '',
+            'release_created'  => '',
+            'github_exception' => '',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => '',
         'created_bare_successfully' => '',
         'deleted_successfully'      => '',
     ],
-    'mdtimport'                   => [
-        'unknown_dungeon' => 'Неизвестное подземелье',
+    'mdtimport' => [
+        'unknown_dungeon' => '',
         'error'           => [
             'mdt_string_parsing_failed'             => '',
-            'mdt_string_format_not_recognized'      => 'Формат строки MDT не распознан.',
-            'invalid_mdt_string_exception'          => 'Недействительная строка MDT: %s',
-            'invalid_mdt_string'                    => 'Недействительная строка MDT',
-            'mdt_importer_not_configured_properly'  => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',
-            'cannot_create_route_must_be_logged_in' => 'Вы должны авторизоваться, чтобы создать маршрут',
+            'mdt_string_format_not_recognized'      => '',
+            'cli_weakauras_parser_not_found'        => '',
+            'invalid_mdt_string_exception'          => '',
+            'invalid_mdt_string'                    => '',
+            'mdt_importer_not_configured_properly'  => '',
+            'cannot_create_route_must_be_logged_in' => '',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => '',
             'unable_to_delete_path' => '',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => '',
             'link_successful'         => '',
@@ -154,52 +159,52 @@ return [
             'internal_error_occurred' => '',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
-            'email_already_in_use'             => 'Пользователь с таким электронным адресом уже существует',
-            'username_already_in_use'          => 'Пользователь с таким именем уже существует',
-            'profile_updated'                  => 'Профиль обновлен',
-            'unexpected_error_when_saving'     => 'Произошла непредвиденная ошибка при попытке сохранить ваш профиль.',
-            'privacy_settings_updated'         => 'Настройки конфиденциальности обновлены',
-            'password_changed'                 => 'Пароль изменен',
-            'new_password_equals_old_password' => 'Новый пароль совпадает со старым паролем',
-            'new_passwords_do_not_match'       => 'Новый пароль не совпадает',
-            'current_password_is_incorrect'    => 'Текущий пароль неверен',
-            'tag_created_successfully'         => 'Тег создан успешно',
-            'tag_already_exists'               => 'Этот тег уже существует',
-            'admins_cannot_delete_themselves'  => 'Админ не может удалить сам себя!',
-            'account_deleted_successfully'     => 'Аккаунт успешно удален.',
-            'error_deleting_account'           => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
+            'email_already_in_use'             => '',
+            'username_already_in_use'          => '',
+            'profile_updated'                  => '',
+            'unexpected_error_when_saving'     => '',
+            'privacy_settings_updated'         => '',
+            'password_changed'                 => '',
+            'new_password_equals_old_password' => '',
+            'new_passwords_do_not_match'       => '',
+            'current_password_is_incorrect'    => '',
+            'tag_created_successfully'         => '',
+            'tag_already_exists'               => '',
+            'admins_cannot_delete_themselves'  => '',
+            'account_deleted_successfully'     => '',
+            'error_deleting_account'           => '',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
-            'unable_to_save_spell' => 'Невозможно сохранить способность',
+            'unable_to_save_spell' => '',
         ],
         'flash' => [
-            'spell_updated' => 'Способность обновлена',
-            'spell_created' => 'Способность создана',
-        ],
-    ],
-    'team'                        => [
-        'flash' => [
-            'team_updated'                        => 'Команда обновлена',
-            'team_created'                        => 'Команда создана',
-            'unable_to_find_team_for_invite_code' => 'Невозможно найти команду, связанную с этим кодом приглашения',
-            'invite_accept_success'               => 'Теперь ты член команды %s.',
-            'tag_created_successfully'            => 'Тег успешно создан',
-            'tag_already_exists'                  => 'Этот тег уже существует',
+            'spell_updated' => '',
+            'spell_created' => '',
         ],
     ],
-    'user'                        => [
+    'team' => [
         'flash' => [
-            'user_is_now_an_admin'              => 'Пользователь %s теперь администратор',
-            'user_is_no_longer_an_admin'        => 'Пользователь %s больше не администратор',
-            'user_is_now_a_user'                => 'Пользователь %s теперь пользователь',
+            'team_updated'                        => '',
+            'team_created'                        => '',
+            'unable_to_find_team_for_invite_code' => '',
+            'invite_accept_success'               => '',
+            'tag_created_successfully'            => '',
+            'tag_already_exists'                  => '',
+        ],
+    ],
+    'user' => [
+        'flash' => [
+            'user_is_now_an_admin'              => '',
+            'user_is_no_longer_an_admin'        => '',
+            'user_is_now_a_user'                => '',
             'user_is_now_a_role'                => '',
-            'account_deleted_successfully'      => 'Аккаунт успешно удален.',
-            'account_deletion_error'            => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
-            'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',
+            'account_deleted_successfully'      => '',
+            'account_deletion_error'            => '',
+            'user_is_not_a_patron'              => '',
             'all_benefits_granted_successfully' => '',
             'error_granting_all_benefits'       => '',
         ],

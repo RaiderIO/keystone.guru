@@ -16,32 +16,31 @@ $difficultySelect    = collect([
     Dungeon::DIFFICULTY_10_MAN => __('dungeons.difficulty.1'),
     Dungeon::DIFFICULTY_25_MAN => __('dungeons.difficulty.2'),
 ]);
-$difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(function (Dungeon $dungeon) {
-    return [
-        $dungeon->id => [
-            Dungeon::DIFFICULTY_10_MAN => $dungeon->speedrun_difficulty_10_man_enabled,
-            Dungeon::DIFFICULTY_25_MAN => $dungeon->speedrun_difficulty_25_man_enabled,
-        ],
-    ];
-});
+$difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
+    $dungeon->id => [
+        Dungeon::DIFFICULTY_10_MAN => $dungeon->speedrun_difficulty_10_man_enabled,
+        Dungeon::DIFFICULTY_25_MAN => $dungeon->speedrun_difficulty_25_man_enabled,
+    ],
+]);
 ?>
 @section('scripts')
     @parent
 
     <script>
-        var _speedrunDungeonIds = {!! $allSpeedrunDungeons->pluck(['id']) !!};
-        var _difficultySelect = {!! $difficultySelect !!};
-        var _difficultyByDungeon = {!! $difficultyByDungeon !!};
 
         $(function () {
+            let speedrunDungeonIds = {!! $allSpeedrunDungeons->pluck(['id']) !!};
+            let difficultySelect = {!! $difficultySelect !!};
+            let difficultyByDungeon = {!! $difficultyByDungeon !!};
+
             let $dungeonSelect = $('#{{ $dungeonSelectId }}');
-            $dungeonSelect.bind('change', function () {
+            let dungeonSelectionChanged = function () {
                 let $dungeonDifficultySelect = $('#{{ $id }}');
                 let $dungeonDifficultySelectContainer = $('#{{ $id }}_container');
 
                 let selectedDungeonId = parseInt($dungeonSelect.val());
-                if (_speedrunDungeonIds.includes(selectedDungeonId)) {
-                    let enabledDifficultyForDungeon = _difficultyByDungeon[selectedDungeonId];
+                if (speedrunDungeonIds.includes(selectedDungeonId)) {
+                    let enabledDifficultyForDungeon = difficultyByDungeon[selectedDungeonId];
                     $dungeonDifficultySelect.find('option').remove();
 
                     for (let difficultyId in enabledDifficultyForDungeon) {
@@ -59,7 +58,11 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(function (Dungeon $dung
                 } else {
                     $dungeonDifficultySelectContainer.hide();
                 }
-            });
+            };
+
+            $dungeonSelect.bind('change', dungeonSelectionChanged);
+
+            dungeonSelectionChanged();
         })
     </script>
 @endsection
@@ -73,9 +76,5 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(function (Dungeon $dung
             __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty_title')
              }}"></i>
     </label>
-    {!! Form::select(
-         'dungeon_difficulty', [],
-         $dungeonroute?->difficulty ?? Dungeon::DIFFICULTY_25_MAN,
-         ['id' => $id, 'class' => 'form-control selectpicker'])
-     !!}
+    {{ html()->select('dungeon_difficulty', [], $dungeonroute?->difficulty ?? Dungeon::DIFFICULTY_25_MAN)->id($id)->class('form-control selectpicker') }}
 </div>

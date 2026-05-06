@@ -3,7 +3,6 @@
 namespace App\Http\Models\Request\CombatLog\Route;
 
 use App\Models\Enemy;
-use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @OA\Schema(schema="CombatLogRoutePlayerDeathCorrection")
@@ -26,7 +25,7 @@ class CombatLogRoutePlayerDeathCorrectionRequestModel extends CombatLogRoutePlay
         ?float                                  $itemLevel = null,
         ?string                                 $diedAt = null,
         ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null
+        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
     ) {
         parent::__construct($characterId, $classId, $specId, $itemLevel, $diedAt, $coord);
     }

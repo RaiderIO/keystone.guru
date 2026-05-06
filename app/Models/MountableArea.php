@@ -62,8 +62,11 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
     /**
      * @return LatLng[]
      */
-    public function getIntersections(CoordinatesServiceInterface $coordinatesService, LatLng $latLngA, LatLng $latLngB): array
-    {
+    public function getIntersections(
+        CoordinatesServiceInterface $coordinatesService,
+        LatLng                      $latLngA,
+        LatLng                      $latLngB,
+    ): array {
         $vertices = json_decode($this->vertices_json, true);
 
         $result = [];
@@ -75,7 +78,7 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
                 $latLngA,
                 $latLngB,
                 LatLng::fromArray($vertex),
-                LatLng::fromArray($nextVertex)
+                LatLng::fromArray($nextVertex),
             );
 
             if ($intersection !== null) {

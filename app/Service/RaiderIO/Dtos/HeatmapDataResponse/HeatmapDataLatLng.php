@@ -8,7 +8,7 @@ class HeatmapDataLatLng implements Arrayable
 {
     private float $lat;
     private float $lng;
-    private int   $weight;
+    private int $weight;
 
     private function __construct()
     {

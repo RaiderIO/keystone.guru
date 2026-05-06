@@ -22,6 +22,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         let npc = this.enemyvisual.enemy.npc;
         if (npc !== null) {
             let state = getState();
+            let mapContext = state.getMapContext();
             if (state.hasEnemyAggressivenessBorder()) {
                 mainVisualOuterClasses.push(npc.aggressiveness);
             }
@@ -38,9 +39,27 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 if (this.enemyvisual.enemy.enemyPatrol instanceof EnemyPatrol) {
                     mainVisualInnerStyle.push(`border-color: ${this.enemyvisual.enemy.enemyPatrol.polyline.color};`)
                 }
+            } else if (mapContext instanceof MapContextDungeonRoute &&
+                this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
+                let requiredNpcs = mapContext.getDungeonDifficulty() === DUNGEON_DIFFICULTY_10_MAN ?
+                    mapContext.getDungeonSpeedrunRequiredNpcs10Man() :
+                    mapContext.getDungeonSpeedrunRequiredNpcs25Man();
+
+                for (let index in requiredNpcs) {
+                    let requiredNpc = requiredNpcs[index];
+                    if ([
+                        requiredNpc.npc_id,
+                        requiredNpc.npc2_id,
+                        requiredNpc.npc3_id,
+                        requiredNpc.npc4_id,
+                        requiredNpc.npc5_id,
+                    ].includes(this.enemyvisual.enemy.npc_id)) {
+                        mainVisualInnerClasses.push('required_npc');
+                        break;
+                    }
+                }
             }
 
-            let mapContext = state.getMapContext();
             let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
             if (this.enemyvisual.enemy.isShrouded() && hasShroudedAffix) {
                 mainVisualInnerClasses.push('shrouded');
@@ -105,12 +124,19 @@ class EnemyVisualMain extends EnemyVisualIcon {
         } else {
             width -= 10;
         }
+
+        // Obsolete enemies require additional addition to keep it looking nice
+        if (this.enemyvisual.enemy.isObsolete()) {
+            width += 4;
+        }
+
         // Dangerous = less space
         if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
             width -= 2;
+
             // Obsolete enemies require additional subtraction to keep it looking nice
             if (this.enemyvisual.enemy.isObsolete()) {
-                width -= 3;
+                width -= 1;
             }
         }
 
@@ -133,7 +159,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         }
 
         let mapContext = state.getMapContext();
-        let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health * ((this.enemyvisual.enemy.npc.health_percentage ?? 100) / 100);
+        let health = this.enemyvisual.enemy.npc === null ?
+            0 :
+            mapContext.getNpcHealth(this.enemyvisual.enemy.npc);
         if (this.enemyvisual.enemy.npc === null) {
             if (!state.isMapAdmin()) {
                 console.warn('Enemy has no NPC!', this.enemyvisual.enemy);

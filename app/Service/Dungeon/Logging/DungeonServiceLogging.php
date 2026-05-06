@@ -30,5 +30,4 @@ class DungeonServiceLogging extends RollbarStructuredLogging implements DungeonS
     {
         $this->end(__METHOD__);
     }
-
 }

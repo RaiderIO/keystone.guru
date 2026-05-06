@@ -22,7 +22,9 @@ class RowElementFloorSwitch extends RowElement {
             'target_floor_id': this.targetFloor.id,
             'name': lang.get(this.targetFloor.name),
             'edit': state.getMapContext() instanceof MapContextDungeonRoute && state.getDungeonMap().options.edit,
-            'start': this.start
+            'start': this.start,
+            'dungeon_start_image_url': `${this.map.options.assetsBaseUrl}/images/mapicon/dungeon_start.png`,
+            'door_down_image_url': `${this.map.options.assetsBaseUrl}/images/mapicon/door_down.png`,
         };
     }
 

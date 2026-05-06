@@ -4,12 +4,19 @@
 
 @section('content')
     <h3>{{ __('view_admin.tools.list.header_tools') }}</h3>
+    <h4>{{ __('view_admin.tools.list.subheader_message_banner') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.messagebanner.set') }}">{{ __('view_admin.tools.list.set_message_banner') }}</a>
+    </div>
     <h4>{{ __('view_admin.tools.list.subheader_npcs') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.npc.import') }}">{{ __('view_admin.tools.list.mass_import_npcs') }}</a>
     </div>
     <div class="form-group">
         <a href="{{ route('admin.tools.npc.managespellvisibility') }}">{{ __('view_admin.tools.list.manage_spell_visibility') }}</a>
+    </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.npcs.showmissingdisplayid') }}">{{ __('view_admin.tools.list.show_missing_npc_display_id') }}</a>
     </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_dungeonroute') }}</h4>
@@ -42,6 +49,9 @@
     <div class="form-group">
         <a href="{{ route('admin.tools.mdt.dungeonmappingversiontomdtmapping') }}">{{ __('view_admin.tools.list.view_dungeon_mapping_version_to_mdt_mapping') }}</a>
     </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.mdt.dungeon_mapping_version_accuracy') }}">{{ __('view_admin.tools.list.view_dungeon_mapping_version_accuracy') }}</a>
+    </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_enemy_forces') }}</h4>
     <div class="form-group">
@@ -56,9 +66,14 @@
         <a href="{{ route('admin.tools.thumbnails.regenerate.view') }}">{{ __('view_admin.tools.list.thumbnails_regenerate') }}</a>
     </div>
 
-    <h4>{{ __('view_admin.tools.list.subheader_wowtools') }}</h4>
+    <h4>{{ __('view_admin.tools.list.subheader_combatlog') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.wowtools.import_ingame_coordinates') }}">{{ __('view_admin.tools.list.wowtools_import_ingame_coordinates') }}</a>
+        <a href="{{ route('admin.tools.combatlog.regenerate.view') }}">{{ __('view_admin.tools.list.combatlog_regenerate') }}</a>
+    </div>
+
+    <h4>{{ __('view_admin.tools.list.subheader_wagogg') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.wagogg.import_ingame_coordinates') }}">{{ __('view_admin.tools.list.wagogg_import_ingame_coordinates') }}</a>
     </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_features') }}</h4>
@@ -79,6 +94,11 @@
         <a href="{{ route('admin.tools.exception.select') }}">{{ __('view_admin.tools.list.throw_an_exception') }}</a>
     </div>
 
+    <h4>{{ __('view_admin.tools.list.subheader_spells') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.spells.showmissingspellinfo') }}">{{ __('view_admin.tools.list.show_missing_spell_info') }}</a>
+    </div>
+
     <h3>{{ __('view_admin.tools.list.subheader_actions') }}</h3>
     <div class="form-group">
         <a class="btn btn-primary"
@@ -91,5 +111,9 @@
     <div class="form-group">
         <a class="btn btn-primary"
            href="{{ route('admin.tools.datadump.exportreleases') }}">{{ __('view_admin.tools.list.export_releases') }}</a>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary"
+           href="{{ route('admin.tools.readonly.toggle') }}">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</a>
     </div>
 @endsection

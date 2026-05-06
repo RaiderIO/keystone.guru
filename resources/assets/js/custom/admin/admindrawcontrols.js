@@ -66,14 +66,14 @@ class AdminDrawControls extends DrawControls {
                         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
                     },
                     faClass: 'fa-draw-polygon',
-                    title: lang.get('messages.enemypack_title', {hotkey: hotkeys.enemypack}),
+                    title: lang.get('js.enemypack_title', {hotkey: hotkeys.enemypack}),
                     hotkey: hotkeys.enemypack
                 },
                 enemy: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-user',
-                    title: lang.get('messages.enemy_title', {hotkey: hotkeys.enemy}),
+                    title: lang.get('js.enemy_title', {hotkey: hotkeys.enemy}),
                     hotkey: hotkeys.enemy
                 },
                 enemypatrol: {
@@ -83,14 +83,14 @@ class AdminDrawControls extends DrawControls {
                     },
                     zIndexOffset: 1000,
                     faClass: 'fa-exchange-alt',
-                    title: lang.get('messages.enemypatrol_title', {hotkey: hotkeys.enemypatrol}),
+                    title: lang.get('js.enemypatrol_title', {hotkey: hotkeys.enemypatrol}),
                     hotkey: hotkeys.enemypatrol
                 },
                 dungeonfloorswitchmarker: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-door-open',
-                    title: lang.get('messages.dungeonfloorswitchmarker_title', {hotkey: hotkeys.dungeonfloorswitchmarker}),
+                    title: lang.get('js.dungeonfloorswitchmarker_title', {hotkey: hotkeys.dungeonfloorswitchmarker}),
                     hotkey: hotkeys.dungeonfloorswitchmarker
                 },
                 mountablearea: {
@@ -103,14 +103,14 @@ class AdminDrawControls extends DrawControls {
                         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
                     },
                     faClass: 'fa-horse-head',
-                    title: lang.get('messages.mountablearea_title', {hotkey: hotkeys.mountablearea}),
+                    title: lang.get('js.mountablearea_title', {hotkey: hotkeys.mountablearea}),
                     hotkey: hotkeys.mountablearea
                 },
                 floorunion: {
                     repeatMode: false,
                     zIndexOffset: 1000,
                     faClass: 'fa-vector-square',
-                    title: lang.get('messages.floorunion_title', {hotkey: hotkeys.floorunion}),
+                    title: lang.get('js.floorunion_title', {hotkey: hotkeys.floorunion}),
                     hotkey: hotkeys.floorunion
                 },
                 floorunionarea: {
@@ -123,7 +123,7 @@ class AdminDrawControls extends DrawControls {
                         message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
                     },
                     faClass: 'fa-chart-pie',
-                    title: lang.get('messages.floorunionarea_title', {hotkey: hotkeys.floorunionarea}),
+                    title: lang.get('js.floorunionarea_title', {hotkey: hotkeys.floorunionarea}),
                     hotkey: hotkeys.floorunionarea
                 },
             }

@@ -28,7 +28,7 @@ class SeasonServiceStub implements SeasonServiceInterface
         return new Season();
     }
 
-    public function getNextSeason(Season $season, ?GameServerRegion $region): ?Season
+    public function getNextSeason(Season $season, ?GameServerRegion $region = null): ?Season
     {
         return null;
     }
@@ -58,8 +58,11 @@ class SeasonServiceStub implements SeasonServiceInterface
         return null;
     }
 
-    public function getAffixGroupIndexAt(Carbon $date, ?GameServerRegion $region = null, ?Expansion $expansion = null): ?int
-    {
+    public function getAffixGroupIndexAt(
+        Carbon            $date,
+        ?GameServerRegion $region = null,
+        ?Expansion        $expansion = null,
+    ): ?int {
         return null;
     }
 
@@ -71,5 +74,10 @@ class SeasonServiceStub implements SeasonServiceInterface
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection
     {
         return collect();
+    }
+
+    public function getSeasonFromShortString(string $season): ?Season
+    {
+        return null;
     }
 }

@@ -13,6 +13,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
  */
 class StaggerPrevented extends StaggerBase
 {
+    #[\Override]
     public function getParameterCount(): int
     {
         return 3;

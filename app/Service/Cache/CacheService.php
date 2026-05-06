@@ -3,30 +3,40 @@
 namespace App\Service\Cache;
 
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
-    private const LOCK_BLOCK_TIMEOUT = 20;
+    private const int LOCK_BLOCK_TIMEOUT = 20;
 
     private bool $cacheEnabled = true;
 
-    public function __construct(private readonly CacheServiceLoggingInterface $log)
-    {
+    /** @var bool Bypassing the cache means that the closure is always called and the result is never cached */
+    private bool $bypassCache = false;
 
+    public function __construct(
+        private readonly RedisServiceInterface        $redisService,
+        private readonly CacheServiceLoggingInterface $log,
+    ) {
     }
-
 
     private function getTtl(string $key): ?DateInterval
     {
         $cacheConfig = config('keystoneguru.cache');
 
         return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
+    }
+
+    public function isCacheEnabled(): bool
+    {
+        return $this->cacheEnabled;
     }
 
     public function setCacheEnabled(bool $cacheEnabled): CacheService
@@ -36,10 +46,22 @@ class CacheService implements CacheServiceInterface
         return $this;
     }
 
+    public function isBypassCache(): bool
+    {
+        return $this->bypassCache;
+    }
+
+    public function setBypassCache(bool $bypassCache): CacheService
+    {
+        $this->bypassCache = $bypassCache;
+
+        return $this;
+    }
+
     /**
      * Remembers a value with a specific key if a condition is met
      *
-     * @param Closure|mixed $value
+     * @param  Closure|mixed      $value
      * @return Closure|mixed|null
      *
      */
@@ -47,7 +69,7 @@ class CacheService implements CacheServiceInterface
     {
         if ($condition) {
             $value = $this->remember($key, $value, $ttl);
-        } else if ($value instanceof Closure) {
+        } elseif ($value instanceof Closure) {
             $value = $value();
         }
 
@@ -55,53 +77,57 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param Closure|mixed $value
+     * @param  Closure|mixed $value
      * @return mixed
      */
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
-        $result = null;
+        // So if we're caching something, do not populate the model cache for the queries inside $value()
+        // Otherwise we're caching things twice, and that's not what we want
+        // The results will likely explode the model cache (and redis usage as a result) so don't use it
+        return app('model-cache')->runDisabled(function () use ($key, $value, $ttl) {
+            $result = null;
 
-//        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
-        try {
-            // Wait up to 20 seconds to acquire the lock...
-//            $lock->block(self::LOCK_BLOCK_TIMEOUT);
+            //        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
+            try {
+                // Wait up to 20 seconds to acquire the lock...
+                //            $lock->block(self::LOCK_BLOCK_TIMEOUT);
 
-            // If we should ignore the cache, or if it's not found
-            if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
-
-                // Get the result by calling the closure
-                if ($value instanceof Closure) {
-                    $value = $value();
-                }
-
-                // Only write it to cache when we're not local
-                if (config('app.env') !== 'local') {
-                    if (is_string($ttl)) {
-                        $ttl = DateInterval::createFromDateString($ttl);
+                // If we should ignore the cache, or if it's not found
+                if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+                    // Get the result by calling the closure
+                    if ($value instanceof Closure) {
+                        $value = $value();
                     }
 
-                    // If not overridden, get the TTL from config, if it's set anyway
-                    try {
-                        if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
+                    // Only write it to cache when we're not local
+                    if (!$this->isBypassCache()) {
+                        if (is_string($ttl)) {
+                            $ttl = DateInterval::createFromDateString($ttl);
+                        }
+
+                        // If not overridden, get the TTL from config, if it's set anyway
+                        try {
+                            if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
+                                $result = $value;
+                            }
+                        } catch (InvalidArgumentException $e) {
+                            $this->log->rememberFailedToSetCache($key, $e);
+
                             $result = $value;
                         }
-                    } catch (InvalidArgumentException $e) {
-                        $this->log->rememberFailedToSetCache($key, $e);
-
+                    } else {
                         $result = $value;
                     }
-                } else {
-                    $result = $value;
                 }
+            } catch (LockTimeoutException $e) {
+                $this->log->rememberFailedToAcquireLock($key, $e);
+            } finally {
+                //            $lock->release();
             }
-        } catch (LockTimeoutException $e) {
-            $this->log->rememberFailedToAcquireLock($key, $e);
-        } finally {
-//            $lock->release();
-        }
 
-        return $result;
+            return $result;
+        });
     }
 
     public function get(string $key): mixed
@@ -146,6 +172,9 @@ class CacheService implements CacheServiceInterface
         // Clear all view caches for dungeonroutes - go through redis to drop all cards
         $prefix = config('database.redis.options.prefix');
         $this->deleteKeysByPattern([
+            // MDT
+            sprintf('/%smdt_npcs_[a-z_]+/', $prefix),
+            sprintf('/%smdt_enemies_[a-z_]+/', $prefix),
             // Cards
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
             // Dungeon data used in MapContext
@@ -160,11 +189,17 @@ class CacheService implements CacheServiceInterface
         // Only keys starting with this prefix may be cleaned up by this task, ex.
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
         // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
-        $prefix = config('database.redis.options.prefix');
+        $prefix = config('database.redis.options.prefix') . config('cache.prefix');
 
         return $this->deleteKeysByPattern([
             sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
-        ], $seconds);
+        ], $seconds) +
+            $this->deleteKeysByPattern([
+                // publicKeys are 7 characters long
+                sprintf('/%spresence-%s-route-edit\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
+                sprintf('/%spresence-%s-live-session\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
+                // Special - these keys should be cleared after 24 hours, regardless of what $seconds say
+            ], 86400);
     }
 
     public function lock(string $key, callable $callable, int $waitFor = 10): mixed
@@ -178,72 +213,102 @@ class CacheService implements CacheServiceInterface
             return 0;
         }
 
-        // Only keys starting with this prefix may be cleaned up by this task, ex.
+        // List of Redis connection names to operate on.
+        $connections = [
+            'default',
+            // App logic
+            'model_cache',
+            // Model cache
+            'cache',
+            // Used by Laravel cache
+        ];
+
+        // Get the key prefix (if any)
         $prefix = config('database.redis.options.prefix');
 
-        $deletedKeysCountTotal = $deletedKeysCount = 0;
+        $totalDeletedCount = 0;
+
+        foreach ($connections as $connection) {
+            // Get the Redis connection once.
+            $redis                         = Redis::connection($connection);
+            $deletedCountForThisConnection = $this->deleteKeysByPatternOnConnection($redis, $regexes, $idleTimeSeconds, $prefix);
+            $totalDeletedCount += $deletedCountForThisConnection;
+        }
+
+        return $totalDeletedCount;
+    }
+
+    private function deleteKeysByPatternOnConnection(
+        Connection $redis,
+        array      $regexes,
+        ?int       $idleTimeSeconds,
+        string     $prefix,
+    ): int {
+        $deletedKeysCountTotal = 0;
+        $deletedKeysCount      = 0;
+        $i                     = 0;
+        $nextKey               = 0;
+
         try {
-            $this->log->deleteKeysByPatternStart($idleTimeSeconds);
-            $i       = 0;
-            $nextKey = 0;
+            $this->log->deleteKeysByPatternStart($redis->getName(), $idleTimeSeconds);
 
             do {
-                $result = Redis::command('SCAN', [$nextKey]);
+                $result = $this->redisService->rawCommand($redis, 'SCAN', (string)$nextKey);
 
-                $nextKey = (int)$result[0];
+                if ($result === false) {
+                    $this->log->deleteKeysByPatternScanFailed($nextKey);
+                    break;
+                }
 
+                $nextKey  = (int)$result[0];
                 $toDelete = [];
+
+                // Iterate over the keys returned by SCAN
                 foreach ($result[1] as $redisKey) {
-                    $output = [];
                     foreach ($regexes as $regex) {
-                        $matchResult = preg_match($regex, (string)$redisKey, $output);
-                        if ($matchResult === false) {
-                            $this->log->deleteKeysByPatternRegexError($regex, $redisKey);
-                            break;
-                        } else if ($matchResult > 0) {
-                            // If we only want to delete keys that have a certain idle time, check that first
+                        if (preg_match($regex, (string)$redisKey)) {
+                            // If an idle time is provided, check key's idle time.
                             if ($idleTimeSeconds !== null) {
-                                $keyIdleTimeSeconds = Redis::command('OBJECT', ['idletime', $redisKey]);
+                                $keyIdleTimeSeconds = $this->redisService->rawCommand($redis, 'OBJECT', 'idletime', (string)$redisKey);
+
                                 if ($keyIdleTimeSeconds > $idleTimeSeconds) {
-                                    $toDelete[] = $redisKey;
+                                    $toDelete[] = (string)$redisKey;
                                 }
                             } else {
-                                // We don't, just delete it
-                                $toDelete[] = $redisKey;
+                                $toDelete[] = (string)$redisKey;
                             }
-
+                            // Break once a match is found on a key for one regex.
                             break;
                         }
                     }
                 }
 
                 if (!empty($toDelete)) {
-                    $toDeleteCount = count($toDelete);
+                    // Delete the exact keys returned by SCAN (avoid prefix double-application differences).
+                    $nrOfDeletedKeys = $this->redisService->rawCommand($redis, 'DEL', ...$toDelete);
 
-                    // https://redis.io/commands/del/
-                    $toDeleteWithoutPrefix = [];
-                    foreach ($toDelete as $key) {
-                        $toDeleteWithoutPrefix[] = str_replace($prefix, '', $key);
-                    }
+                    $deletedKeysCount += (int)$nrOfDeletedKeys;
 
-                    $nrOfDeletedKeys  = Redis::command('DEL', $toDeleteWithoutPrefix);
-                    $deletedKeysCount += $nrOfDeletedKeys;
-                    if ($nrOfDeletedKeys !== $toDeleteCount) {
-                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys($nrOfDeletedKeys, $toDeleteCount);
+                    if ((int)$nrOfDeletedKeys !== count($toDelete)) {
+                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys((int)$nrOfDeletedKeys, count($toDelete));
                     }
                 }
 
                 $i++;
+
                 if ($i % 1000 === 0) {
                     $deletedKeysCountTotal += $deletedKeysCount;
                     $this->log->deleteKeysByPatternProgress($i, $deletedKeysCount);
                     $deletedKeysCount = 0;
                 }
             } while ($nextKey > 0);
+
+            // Final progress update
+            $deletedKeysCountTotal += $deletedKeysCount;
         } finally {
             $this->log->deleteKeysByPatternEnd($deletedKeysCountTotal);
         }
 
-        return $deletedKeysCount;
+        return $deletedKeysCountTotal;
     }
 }

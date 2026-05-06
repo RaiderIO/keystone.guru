@@ -19,9 +19,15 @@ class SeasonDungeon extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['season_id', 'dungeon_id'];
+    protected $fillable = [
+        'season_id',
+        'dungeon_id',
+    ];
 
-    public $with = ['season', 'dungeon'];
+    public $with = [
+        'season',
+        'dungeon',
+    ];
 
     public $timestamps = false;
 

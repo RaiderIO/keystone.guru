@@ -8,11 +8,12 @@ use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessRouteFloorThumbnailCustom
+class ProcessRouteFloorThumbnailCustom implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -26,10 +27,10 @@ class ProcessRouteFloorThumbnailCustom
         private readonly DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
         protected DungeonRoute                    $dungeonRoute,
         protected int                             $floorIndex,
-        protected int                             $attempts = 0
+        protected int                             $attempts = 0,
     ) {
         // Not passed as a constructor parameter since it's not serializable
-        $this->queue            = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
     }
 
     /**
@@ -52,7 +53,7 @@ class ProcessRouteFloorThumbnailCustom
                 $this->dungeonRouteThumbnailJob->image_width,
                 $this->dungeonRouteThumbnailJob->image_height,
                 $this->dungeonRouteThumbnailJob->zoom_level,
-                $this->dungeonRouteThumbnailJob->quality
+                $this->dungeonRouteThumbnailJob->quality,
             );
 
             if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
@@ -65,7 +66,7 @@ class ProcessRouteFloorThumbnailCustom
                     $this->dungeonRouteThumbnailJob->image_width,
                     $this->dungeonRouteThumbnailJob->image_height,
                     $this->dungeonRouteThumbnailJob->zoom_level,
-                    $this->dungeonRouteThumbnailJob->quality
+                    $this->dungeonRouteThumbnailJob->quality,
                 );
 
                 if (!$result) {
@@ -76,19 +77,21 @@ class ProcessRouteFloorThumbnailCustom
                         $this->dungeonRouteThumbnailJob,
                         $this->dungeonRoute,
                         $this->floorIndex,
-                        ++$this->attempts
+                        ++$this->attempts,
                     );
                 } else {
                     $log->handleFinishedProcessing();
 
-                    $this->dungeonRouteThumbnailJob->update(['status' => DungeonRouteThumbnailJob::STATUS_COMPLETED]);
+                    $this->dungeonRouteThumbnailJob->update([
+                        'file_id' => $result->file_id,
+                        'status'  => DungeonRouteThumbnailJob::STATUS_COMPLETED,
+                    ]);
                 }
             } else {
                 $log->handleMaxAttemptsReached();
 
                 $this->dungeonRouteThumbnailJob->update(['status' => DungeonRouteThumbnailJob::STATUS_ERROR]);
             }
-
         } finally {
             $log->handleEnd();
         }

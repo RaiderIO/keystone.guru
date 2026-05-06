@@ -1,36 +1,38 @@
 class SearchHandlerHeatmap extends SearchHandler {
     constructor(options) {
-
         let currentSnackbarId = null;
         super($.extend({}, {
-            loaderFn: function (isLoading, json) {
+            loaderFn: function (isLoading, response) {
                 let state = getState();
 
                 state.removeSnackbar(currentSnackbarId);
 
+                let json = JSON.parse(response);
                 let data = $.extend({}, getHandlebarsDefaultVariables());
-                let template;
+                let template = null;
                 if (isLoading) {
                     template = Handlebars.templates['map_heatmapsearch_loader'];
                 } else if (json === null || json.hasOwnProperty('message')) {
                     template = Handlebars.templates['map_heatmapsearch_error_loading_data'];
-                    if( json !== null && json.hasOwnProperty('message') && json.message === 'Invalid response from Raider.IO API' ) {
-                        data.error = lang.get('messages.too_much_data_label');
+                    if (json !== null && json.hasOwnProperty('message') && json.message === 'Invalid response from Raider.IO API') {
+                        data.error = lang.get('js.too_much_data_label');
                     } else {
-                        data.error = lang.get('messages.error_loading_data_label');
+                        data.error = lang.get('js.error_loading_data_label');
                     }
-                } else {
+                } else if (typeof this.showDataSourceSnackbar === 'undefined' || this.showDataSourceSnackbar) {
                     template = Handlebars.templates['map_heatmapsearch_run_count'];
-                    data.run_count = lang.get('messages.run_count_label', {
+                    data.run_count = lang.get('js.run_count_label', {
                         count: json.run_count
                     });
                 }
 
-                currentSnackbarId = getState().addSnackbar(
-                    template(data), {
-                        compact: true
-                    }
-                );
+                if (typeof template === 'function') {
+                    currentSnackbarId = getState().addSnackbar(
+                        template(data), {
+                            compact: true
+                        }
+                    );
+                }
             }
         }, options));
     }

@@ -3,7 +3,6 @@
 namespace App\Service\Spell;
 
 use App\Models\CharacterClass;
-use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
@@ -12,10 +11,9 @@ use Illuminate\Support\Str;
 class SpellService implements SpellServiceInterface
 {
     public function __construct(
-        private readonly SpellRepositoryInterface $spellRepository,
-        private readonly SpellServiceLoggingInterface $log
-    )
-    {
+        private readonly SpellRepositoryInterface     $spellRepository,
+        private readonly SpellServiceLoggingInterface $log,
+    ) {
     }
 
     public function importFromCsv(string $filePath): bool
@@ -43,7 +41,6 @@ class SpellService implements SpellServiceInterface
         $spellsAttributes = [];
 
         foreach ($csv as $index => $row) {
-
             $spellId = $row[$indexClassSpellId];
 
             if (empty($spellId)) {
@@ -125,7 +122,7 @@ class SpellService implements SpellServiceInterface
             }
         }
 
-        return sprintf('spells.category.%s', $categorySlug);
+        return sprintf('spellcategory.%s', $categorySlug);
     }
 
     public function getCharacterClassFromClassName(string $csvClass): ?CharacterClass
@@ -155,7 +152,7 @@ class SpellService implements SpellServiceInterface
             return null;
         }
 
-        return sprintf('spells.cooldown_group.%s', $cooldownGroupSlug);
+        return sprintf('spellcooldowngroup.%s', $cooldownGroupSlug);
     }
 
     /**

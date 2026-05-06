@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -17,20 +19,21 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                   $id
- * @property int                   $icon_file_id
- * @property bool                  $active
- * @property string                $name
- * @property string                $shortname
- * @property string                $color
+ * @property int    $id
+ * @property int    $icon_file_id
+ * @property bool   $active
+ * @property bool   $has_wallpaper
+ * @property string $name
+ * @property string $shortname
+ * @property string $color
  *
- * @property Carbon                $released_at
- * @property Carbon                $created_at
- * @property Carbon                $updated_at
+ * @property Carbon $released_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
- * @property Collection<Dungeon>   $dungeons
- * @property Collection<Dungeon>   $raids
- * @property Collection<Dungeon>   $dungeonsAndRaids
+ * @property Collection<Dungeon> $dungeons
+ * @property Collection<Dungeon> $raids
+ * @property Collection<Dungeon> $dungeonsAndRaids
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
@@ -44,17 +47,23 @@ class Expansion extends CacheModel
     use SeederModel;
     use UserCurrentTime;
 
-    public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
+    public $fillable = [
+        'active',
+        'icon_file_id',
+        'name',
+        'shortname',
+        'color',
+        'released_at',
+    ];
 
-    public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
-
-    public $with = ['timewalkingEvent'];
-
-    protected $dates = [
-        // 'released_at',
+    public $hidden = [
+        'id',
+        'icon_file_id',
         'created_at',
         'updated_at',
     ];
+
+    public $with = ['timewalkingEvent'];
 
 //    protected $casts = [
 //        'released_at' => 'datetime',
@@ -77,19 +86,19 @@ class Expansion extends CacheModel
     public const EXPANSION_TLT          = 'tlt';
 
     public const ALL = [
-        self::EXPANSION_CLASSIC      => 'Classic',
-        self::EXPANSION_TBC          => 'The Burning Crusade',
-        self::EXPANSION_WOTLK        => 'Wrath of the Lich King',
-        self::EXPANSION_CATACLYSM    => 'Cataclysm',
-        self::EXPANSION_MOP          => 'Mists of Pandaria',
-        self::EXPANSION_WOD          => 'Warlords of Draenor',
-        self::EXPANSION_LEGION       => 'Legion',
-        self::EXPANSION_BFA          => 'Battle for Azeroth',
-        self::EXPANSION_SHADOWLANDS  => 'Shadowlands',
-        self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
-        self::EXPANSION_TWW          => 'The War Within',
-        self::EXPANSION_MIDNIGHT     => 'Midnight',
-        self::EXPANSION_TLT          => 'The Last Titan',
+        self::EXPANSION_CLASSIC      => 4,
+        self::EXPANSION_TBC          => 5,
+        self::EXPANSION_WOTLK        => 6,
+        self::EXPANSION_CATACLYSM    => 7,
+        self::EXPANSION_MOP          => 8,
+        self::EXPANSION_WOD          => 9,
+        self::EXPANSION_LEGION       => 1,
+        self::EXPANSION_BFA          => 2,
+        self::EXPANSION_SHADOWLANDS  => 3,
+        self::EXPANSION_DRAGONFLIGHT => 10,
+        self::EXPANSION_TWW          => 11,
+        self::EXPANSION_MIDNIGHT     => 12,
+        self::EXPANSION_TLT          => 13,
     ];
 
     private ?Collection $currentSeasonCache = null;
@@ -99,6 +108,7 @@ class Expansion extends CacheModel
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'shortname';
@@ -143,8 +153,13 @@ class Expansion extends CacheModel
 
         /** @var Season|null $season */
         $season = $this->hasOne(Season::class)
-            ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
-                [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
+            ->whereRaw(
+                'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
+                [
+                    $gameServerRegion->reset_day_offset,
+                    $gameServerRegion->reset_hours_offset,
+                    Carbon::now(),
+                ],
             )
             ->orderBy('start', 'desc')
             ->limit(1)
@@ -168,10 +183,15 @@ class Expansion extends CacheModel
         }
 
         /** @var Season|null $season */
-        $season = $this->hasOne(Season::class)
+        $season = Season::query()
             ->where('expansion_id', $this->id)
-            ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
-                [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
+            ->whereRaw(
+                'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
+                [
+                    $gameServerRegion->reset_day_offset,
+                    $gameServerRegion->reset_hours_offset,
+                    Carbon::now(),
+                ],
             )
             ->orderBy('start')
             ->limit(1)
@@ -185,7 +205,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('expansions.active', 1);
     }
@@ -193,7 +214,8 @@ class Expansion extends CacheModel
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
     }
@@ -203,46 +225,51 @@ class Expansion extends CacheModel
         return $this->timewalkingEvent instanceof TimewalkingEvent;
     }
 
-    public function hasRaidForGameVersion(GameVersion $gameVersion): bool
+    public function hasRaidForGameVersion(GameVersion $gameVersion, callable $filterFn): bool
     {
         $result = false;
 
-        foreach ($this->raids as $dungeon) {
-            if ($dungeon->game_version_id === $gameVersion->id) {
-                $result = true;
-                break;
+        $this->raids->load([
+            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        ]);
+
+        foreach ($this->raids->filter($filterFn) as $raid) {
+            foreach ($raid->mappingVersions as $mappingVersion) {
+                if ($mappingVersion->game_version_id === $gameVersion->id) {
+                    $result = true;
+                    break 2;
+                }
             }
         }
 
         return $result;
     }
 
-    public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
+    public function hasDungeonForGameVersion(GameVersion $gameVersion, ?callable $filterFn = null): bool
     {
+        $filterFn ??= fn(Dungeon $dungeon) => true;
         $result = false;
 
-        foreach ($this->dungeons as $dungeon) {
-            if ($dungeon->game_version_id === $gameVersion->id) {
-                $result = true;
-                break;
+        $this->dungeons->load([
+            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        ]);
+
+        foreach ($this->dungeons->filter($filterFn) as $dungeon) {
+            foreach ($dungeon->mappingVersions as $mappingVersion) {
+                /** @var MappingVersion $mappingVersion */
+                if ($mappingVersion->game_version_id === $gameVersion->id) {
+                    $result = true;
+                    break 2;
+                }
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Returns if we should display individual dungeon images
-     */
-    public function showDiscoverRoutesCardDungeonImage(): bool
-    {
-        // So far we only have dungeon wallpapers for Shadowlands :(
-        return !in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
     }
 
     public function getWallpaperUrl(): string
     {
-        return url(sprintf('/images/dungeons/%s/wallpaper.jpg', $this->shortname));
+        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));
     }
 
     /**
@@ -268,7 +295,7 @@ class Expansion extends CacheModel
             // Save was successful, now do any file handling that may be necessary
             if ($file !== null) {
                 try {
-                    $icon = File::saveFileToDB($file, $this, $fileUploadDirectory);
+                    $icon = File::saveFileToDB($file, $this, $fileUploadDirectory, 'local_public');
 
                     // Update the expansion to reflect the new file ID
                     $this->icon_file_id = $icon->id;
@@ -287,5 +314,12 @@ class Expansion extends CacheModel
         }
 
         return false;
+    }
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Dungeon;
-use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
@@ -34,12 +34,12 @@ use Illuminate\Support\Collection;
                     },
                     dataType: 'json',
                     success: function () {
-                        showSuccessNotification(lang.get('messages.toggle_spell_visibility_success'));
+                        showSuccessNotification(lang.get('js.toggle_spell_visibility_success'));
 
                         $(`.spell-${spellId}`).prop('checked', hiddenOnMap);
                     },
                     error: function () {
-                        showErrorNotification(lang.get('messages.toggle_spell_visibility_error'));
+                        showErrorNotification(lang.get('js.toggle_spell_visibility_error'));
                     }
                 });
             });
@@ -49,12 +49,12 @@ use Illuminate\Support\Collection;
 
 @section('content')
 
-    {{ Form::open(['route' => ['admin.tools.npc.managespellvisibility.submit']]) }}
+    {{ html()->form('POST', route('admin.tools.npc.managespellvisibility.submit', ))->open() }}
     @include('common.dungeon.select', [
         'id' => 'spell_visibility_dungeon_select',
         'activeOnly' => false,
         'ignoreGameVersion' => true,
-        'selected' => isset($dungeon) ? optional($dungeon)->id : null,
+        'selected' => isset($dungeon) ? $dungeon?->id : null,
     ])
 
     <div class="form-group">
@@ -63,7 +63,7 @@ use Illuminate\Support\Collection;
         </button>
     </div>
 
-    {{ Form::close() }}
+    {{ html()->form()->close() }}
 
     {{ $npcs->links() }}
 
@@ -72,7 +72,14 @@ use Illuminate\Support\Collection;
             <h4>
                 {{ __($npc->name) }} ({{ __($npc->id) }})
             </h4>
-            @foreach($npc->npcSpells as $npcSpell)
+            <?php
+                $sortedNpcSpells = $npc->npcSpells->sortBy(function(NpcSpell $npcSpell) use($spells) {
+                    /** @var Spell $spell */
+                    $spell = $spells->get($npcSpell->spell_id);
+                    return __($spell?->name) ?? '';
+                })->values();
+                ?>
+            @foreach($sortedNpcSpells as $npcSpell)
                     <?php
                     /** @var Spell $spell */
                     $spell = $spells->get($npcSpell->spell_id);
@@ -81,7 +88,8 @@ use Illuminate\Support\Collection;
                     @if($spell === null)
                         <div class="col">
                             <div class="form-element">
-                                {{ __('view_admin.tools.npc.managespellvisibility.spell_not_found') }} ({{ $npcSpell->spell_id }})
+                                {{ __('view_admin.tools.npc.managespellvisibility.spell_not_found') }}
+                                ({{ $npcSpell->spell_id }})
                             </div>
                         </div>
                     @else
@@ -94,7 +102,8 @@ use Illuminate\Support\Collection;
                         </div>
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
-                                <a href="https://www.wowhead.com/{{ $dungeon?->gameVersion?->key === GameVersion::GAME_VERSION_CLASSIC_ERA ? 'classic/' : '' }}spell={{$npcSpell->spell_id}}"
+                                <a class="spell_wowhead_url-{{ $spell->id }}"
+                                   href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, __($spell->name, [], 'en_US')) }}"
                                    data-wh-icon-size="medium"
                                 >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>

@@ -20,13 +20,15 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'affixes.id');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
-    {
-
-        $affixes = $columnData['search']['value'];
-        if (!empty($affixes)) {
-            $affixIds = explode(',', (string)$affixes);
-
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch,
+    ): void {
+        $affixIds = $columnData['search']['value'] ?? [];
+        if (!empty($affixIds)) {
             $subBuilder->whereHas('affixes', static function ($query) use (&$affixIds) {
                 /** @var $query Builder */
                 $query->whereIn('affix_groups.id', $affixIds);
@@ -43,14 +45,16 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
             // $builder->leftJoin('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id');
             // Then sort by current affix ID on top, THEN sort by ID ascending
             if ($order['dir'] === 'asc') {
-                $orderBuilder->orderByRaw(sprintf('(select if(MIN(ag.affix_group_id) is null, 10000, if(ag.affix_group_id = %s, -1, MIN(ag.affix_group_id)))
+                $orderBuilder->orderByRaw(sprintf(
+                    '(select if(MIN(ag.affix_group_id) is null, 10000, if(ag.affix_group_id = %s, -1, MIN(ag.affix_group_id)))
                     from dungeon_route_affix_groups ag where ag.dungeon_route_id = dungeon_routes.id)',
-                    $currentAffixId
+                    $currentAffixId,
                 ));
             } else {
-                $orderBuilder->orderByRaw(sprintf('(select if(MIN(ag.affix_group_id) is null, -1, if(ag.affix_group_id = %s, 10000, MAX(ag.affix_group_id)))
+                $orderBuilder->orderByRaw(sprintf(
+                    '(select if(MIN(ag.affix_group_id) is null, -1, if(ag.affix_group_id = %s, 10000, MAX(ag.affix_group_id)))
                     from dungeon_route_affix_groups ag where ag.dungeon_route_id = dungeon_routes.id)',
-                    $currentAffixId
+                    $currentAffixId,
                 ));
             }
         }

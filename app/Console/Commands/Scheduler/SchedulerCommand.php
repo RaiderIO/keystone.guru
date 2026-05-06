@@ -16,6 +16,7 @@ abstract class SchedulerCommand extends Command
 
         // Prevent long tasks from inserting the point very late
         $startTime = time();
+
         try {
             $callable();
         } catch (\Exception $ex) {
@@ -28,7 +29,7 @@ abstract class SchedulerCommand extends Command
             'scheduler',
             $this->getTags(),
             [$this->getName() => Stopwatch::stop(__METHOD__)],
-            $startTime
+            $startTime,
         );
 
         return 0;

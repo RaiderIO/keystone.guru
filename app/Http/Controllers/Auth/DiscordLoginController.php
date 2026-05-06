@@ -9,8 +9,8 @@ class DiscordLoginController extends OAuthLoginController
     protected function getUser($oauthUser, $oAuthId): User
     {
         return new User([
-            'public_key'      => User::generateRandomPublicKey(),
-            'oauth_id'        => $oAuthId,
+            'public_key' => User::generateRandomPublicKey(),
+            'oauth_id'   => $oAuthId,
             // Prefer nickname over full name
             'name'            => $oauthUser->nickname,
             'email'           => $oauthUser->email ?? sprintf('%s@discordapp.com', $oauthUser->id),

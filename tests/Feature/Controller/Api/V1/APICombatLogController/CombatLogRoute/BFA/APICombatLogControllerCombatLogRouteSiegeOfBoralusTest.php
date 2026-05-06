@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteSiegeOfBoralusTest extends APICombatLo
         $postBody = $this->getJsonData('BFA/tww_s1_siege_of_boralus_4', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

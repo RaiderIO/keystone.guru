@@ -72,11 +72,9 @@ $errors   ??= collect();
 
 
                 <div class="col-md-{{ $width }}">
-                    {!! Form::select('region', array_merge(
-                    ['-1' => __('view_common.forms.register.select_region')],
-                    $allRegions->mapWithKeys(function (GameServerRegion $region){
-                        return [$region->id => __($region->name)];
-                    })->toArray()), null, ['class' => 'form-control']) !!}
+                    {{ html()->select('region', array_merge(['-1' => __('view_common.forms.register.select_region')], $allRegions->mapWithKeys(function (GameServerRegion $region) {
+    return [$region->id => __($region->name)];
+})->toArray()))->class('form-control') }}
                 </div>
             </div>
 
@@ -111,8 +109,8 @@ $errors   ??= collect();
                      '<a href="' . route('legal.cookies') . '">' . __('view_common.forms.register.cookie_policy') . '</a>')
                      !!}
                 </label>
-                {!! Form::checkbox('legal_agreed', 1, 0, ['id' => $modalClass . 'legal_agreed', 'class' => 'form-control left_checkbox']) !!}
-                {!! Form::hidden('legal_agreed_ms', -1, ['id' => $modalClass . 'legal_agreed_ms']) !!}
+                {{ html()->checkbox('legal_agreed', null, 1)->id($modalClass . 'legal_agreed')->class('form-control left_checkbox') }}
+                {{ html()->hidden('legal_agreed_ms', -1)->id($modalClass . 'legal_agreed_ms') }}
             </div>
 
             <div class="form-group">

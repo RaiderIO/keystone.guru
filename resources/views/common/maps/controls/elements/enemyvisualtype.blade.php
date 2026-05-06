@@ -5,6 +5,7 @@ $enemyVisualTypes = [
     'npc_class'       => __('view_common.maps.controls.elements.enemyvisualtype.npc_class'),
     'npc_type'        => __('view_common.maps.controls.elements.enemyvisualtype.npc_type'),
     'enemy_forces'    => __('view_common.maps.controls.elements.enemyvisualtype.enemy_forces'),
+    'enemy_group'     => __('view_common.maps.controls.elements.enemyvisualtype.enemy_group'),
     'enemy_skippable' => __('view_common.maps.controls.elements.enemyvisualtype.enemy_skippable'),
 ];
 ?>

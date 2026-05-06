@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                            $id
- * @property int                            $season_id
- * @property int                            $expansion_id
- * @property int|null                       $seasonal_index
- * @property bool                           $confirmed
+ * @property int      $id
+ * @property int      $season_id
+ * @property int      $expansion_id
+ * @property int|null $seasonal_index
+ * @property bool     $confirmed
  *
  * @property Season                         $season
  * @property Expansion                      $expansion
@@ -27,7 +27,11 @@ class AffixGroup extends AffixGroupBase
 {
     use SeederModel;
 
-    public $fillable = ['season_id', 'seasonal_index', 'confirmed'];
+    public $fillable = [
+        'season_id',
+        'seasonal_index',
+        'confirmed',
+    ];
 
     protected function getAffixGroupCouplingsTableName(): string
     {

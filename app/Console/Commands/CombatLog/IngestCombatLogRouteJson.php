@@ -44,7 +44,11 @@ class IngestCombatLogRouteJson extends Command
         // We are the admin
         Auth::loginUsingId(1);
 
-        return $this->parseCreateRouteCombatLogJsonRecursively($filePath, function (string $filePath) use ($combatLogRouteBodyDungeonRouteService, $temp, $log) {
+        return $this->parseCreateRouteCombatLogJsonRecursively($filePath, function (string $filePath) use (
+            $combatLogRouteBodyDungeonRouteService,
+            $temp,
+            $log
+        ) {
             if (!Str::endsWith($filePath, '.json')) {
                 $this->comment(sprintf('- Skipping file %s', $filePath));
 
@@ -73,8 +77,8 @@ class IngestCombatLogRouteJson extends Command
 
             $dungeonRoute = $combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
                 CombatLogRouteRequestModel::createFromArray(
-                    json_decode(file_get_contents($filePath), true)
-                )
+                    json_decode(file_get_contents($filePath), true),
+                ),
             );
 
             if (!$temp) {
@@ -94,8 +98,8 @@ class IngestCombatLogRouteJson extends Command
                     __($dungeonRoute->dungeon->name, [], 'en_US'),
                     $dungeonRoute->getEnemyForces(),
                     $dungeonRoute->mappingVersion->enemy_forces_required,
-                    $dungeonRoute->killZones->count()
-                )
+                    $dungeonRoute->killZones->count(),
+                ),
             );
         } catch (Exception $e) {
             $this->error(sprintf('Failed to ingest combat log route: %s', $e->getMessage()));

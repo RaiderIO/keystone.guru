@@ -7,6 +7,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40.4,
         "lng": 107.76
     },
@@ -18,6 +19,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -29,6 +31,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -40,6 +43,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -51,6 +55,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -62,6 +67,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -73,6 +79,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": null,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -84,6 +91,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": 1610,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -95,6 +103,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": 1612,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     },
@@ -106,6 +115,7 @@
         "target_floor_id": 162,
         "linked_dungeon_floor_switch_marker_id": 1668,
         "direction": null,
+        "hidden_in_facade": false,
         "lat": -40,
         "lng": 107
     }

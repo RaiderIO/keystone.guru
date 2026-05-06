@@ -4,7 +4,6 @@ namespace App\Service\CombatLog\DataExtractors\Logging;
 
 interface CreateMissingNpcDataExtractorLoggingInterface
 {
-
     public function extractDataNpcNotFound(int $npcId): void;
 
     public function extractDataNpcNameNotFound(?string $sourceGuid, ?string $destGuid): void;

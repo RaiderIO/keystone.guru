@@ -22,9 +22,20 @@ class ReleaseChangelogChange extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['id', 'release_changelog_id', 'release_changelog_category_id', 'ticket_id', 'change'];
+    protected $fillable = [
+        'id',
+        'release_changelog_id',
+        'release_changelog_category_id',
+        'ticket_id',
+        'change',
+    ];
 
-    protected $visible = ['ticket_id', 'change', 'release_changelog_category_id', 'release_changelog_id'];
+    protected $visible = [
+        'ticket_id',
+        'change',
+        'release_changelog_category_id',
+        'release_changelog_id',
+    ];
 
     protected $with = ['category'];
 

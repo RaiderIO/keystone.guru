@@ -14,12 +14,11 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
  */
 class EncounterEndV9 extends SpecialEvent implements EncounterEndInterface
 {
-
-    private int    $encounterId;
+    private int $encounterId;
     private string $encounterName;
-    private int    $difficultyId;
-    private int    $groupSize;
-    private int    $success;
+    private int $difficultyId;
+    private int $groupSize;
+    private int $success;
 
     public function getEncounterId(): int
     {
@@ -51,6 +50,7 @@ class EncounterEndV9 extends SpecialEvent implements EncounterEndInterface
         return 0;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

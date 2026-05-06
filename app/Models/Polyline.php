@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string      $color
  * @property string|null $color_animated
  * @property int         $weight
- * @property string      $vertices_json JSON encoded vertices
+ * @property string      $vertices_json  JSON encoded vertices
  *
- * @property Model       $model
+ * @property Model $model
  *
  * @mixin Eloquent
  */
@@ -31,19 +31,37 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
 
     public $timestamps = false;
 
-    public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
-
-    protected $casts = [
-        'id'            => 'int',
-        'model_id'      => 'int',
-        'weight'        => 'int',
-        'vertices_json' => 'string',
+    public $visible = [
+        'color',
+        'color_animated',
+        'weight',
+        'vertices_json',
     ];
 
-    public $fillable = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+    public $fillable = [
+        'id',
+        'model_id',
+        'model_class',
+        'color',
+        'color_animated',
+        'weight',
+        'vertices_json',
+    ];
 
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Polyline
+    protected function casts(): array
     {
+        return [
+            'id'            => 'int',
+            'model_id'      => 'int',
+            'weight'        => 'int',
+            'vertices_json' => 'string',
+        ];
+    }
+
+    public function cloneForNewMappingVersion(
+        MappingVersion         $mappingVersion,
+        ?MappingModelInterface $newParent = null,
+    ): Polyline {
         /** @var Polyline|MappingModelInterface $clone */
         $clone           = clone $this;
         $clone->exists   = false;

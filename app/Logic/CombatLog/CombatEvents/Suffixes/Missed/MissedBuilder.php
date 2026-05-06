@@ -12,14 +12,14 @@ use App\Logic\CombatLog\CombatLogVersion;
 class MissedBuilder implements SuffixBuilderInterface
 {
     public function __construct(
-        public int $combatLogVersion
+        public int $combatLogVersion,
     ) {
     }
 
     public static function create(int $combatLogVersion): Suffix
     {
         return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6 => new MissedV9SoD($combatLogVersion),
+            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7, CombatLogVersion::CLASSIC_TBC_2_5_5 => new MissedV9SoD($combatLogVersion),
             CombatLogVersion::CLASSIC, CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new MissedV20($combatLogVersion),
             // This includes
             default => new MissedV22($combatLogVersion),

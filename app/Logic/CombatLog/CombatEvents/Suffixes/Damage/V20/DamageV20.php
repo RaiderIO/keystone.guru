@@ -78,6 +78,7 @@ class DamageV20 extends Suffix implements DamageInterface
         return $this->crushing;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

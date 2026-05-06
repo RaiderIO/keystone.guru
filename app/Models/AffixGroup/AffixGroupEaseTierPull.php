@@ -10,13 +10,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                            $id
- * @property int                            $affix_group_id
- * @property string                         $tiers_hash
+ * @property int    $id
+ * @property int    $affix_group_id
+ * @property string $tiers_hash
  *
- * @property Carbon                         $last_updated_at
- * @property Carbon                         $created_at
- * @property Carbon                         $updated_at
+ * @property Carbon $last_updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
  * @property AffixGroup                     $affixGroup
  * @property Collection<AffixGroupEaseTier> $affixGroupEaseTiers
@@ -25,7 +25,10 @@ use Illuminate\Support\Collection;
  **/
 class AffixGroupEaseTierPull extends CacheModel
 {
-    protected $with = ['affixGroup', 'affixGroupEaseTiers'];
+    protected $with = [
+        'affixGroup',
+        'affixGroupEaseTiers',
+    ];
 
     protected $fillable = [
         'affix_group_id',
@@ -33,9 +36,12 @@ class AffixGroupEaseTierPull extends CacheModel
         'last_updated_at',
     ];
 
-    protected $casts = [
-        'last_updated_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'last_updated_at' => 'datetime',
+        ];
+    }
 
     public function affixGroup(): BelongsTo
     {
@@ -47,6 +53,7 @@ class AffixGroupEaseTierPull extends CacheModel
         return $this->hasMany(AffixGroupEaseTier::class);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

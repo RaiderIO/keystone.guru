@@ -24,12 +24,13 @@ class APIDungeonController extends Controller
      *    )
      * )
      */
-    public function get(Request $request): DungeonEnvelopeResource
+    public function index(Request $request): DungeonEnvelopeResource
     {
         return new DungeonEnvelopeResource(
-            Dungeon::active()->get()
+            Dungeon::active()->get(),
         );
     }
+
     /**
      * @OA\Get(
      *     operationId="getDungeon",
@@ -50,14 +51,14 @@ class APIDungeonController extends Controller
      *
      *
      *    @OA\Response(response=200, description="Successful operation",
-     *        @OA\JsonContent(ref="#/components/schemas/Dungeon")
+     *        @OA\JsonContent(ref="#/components/schemas/DungeonWrap")
      *    )
      * )
      */
-    public function getDungeon(Dungeon $dungeon): DungeonResource
+    public function show(Dungeon $dungeon): DungeonResource
     {
         return new DungeonResource(
-            $dungeon
+            $dungeon,
         );
     }
 }

@@ -32,7 +32,10 @@ class ReleaseFormRequest extends FormRequest
         }
 
         $rules = [
-            'version' => ['required', $rule],
+            'version' => [
+                'required',
+                $rule,
+            ],
         ];
 
         return $rules;

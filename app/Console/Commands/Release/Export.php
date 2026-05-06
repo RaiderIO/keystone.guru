@@ -43,7 +43,7 @@ class Export extends Command
         Release::each(function (Release $release) {
             file_put_contents(
                 database_path(sprintf('seeders/releases/%s.json', $release->version)),
-                json_encode($release->toArray(), JSON_PRETTY_PRINT)
+                json_encode($release->toArray(), JSON_PRETTY_PRINT),
             );
         }, 10);
     }

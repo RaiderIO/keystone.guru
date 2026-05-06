@@ -5,6 +5,8 @@
  * @property {Boolean} hideOnMove
  * @property {String} currentFiltersSelector
  * @property {String} loaderSelector
+ * @property {Boolean} passThroughEverything
+ * @property {Boolean} showDataSourceSnackbar
  *
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin
@@ -103,7 +105,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'includePlayerSpellIds':new SearchFilterPlayerSpells(this.options.filterPlayerSpellsSelector, this._search.bind(this)),
             'region': new SearchFilterRadioRegion(this.options.filterRegionContainerSelector, this.options.filterRegionSelector, this._search.bind(this)),
-            'keyLevel': new SearchFilterKeyLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
+            'keyLevel': new SearchFilterMythicLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax),
             'playerDeaths': new SearchFilterPlayerDeaths(this.options.filterPlayerDeathsSelector, this._search.bind(this), this.options.playerDeathsMin, this.options.playerDeathsMax),
             'includeAffixIds': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
@@ -131,8 +133,24 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'excludeAffixIds': new SearchFilterPassThrough(),
             'excludePlayerDeathSpecIds': new SearchFilterPassThrough(),
             'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
+<<<<<<< HEAD
+=======
+            'includePlayerSpellIds': new SearchFilterPassThrough(),
+            'showSidebar': new SearchFilterPassThrough(),
+>>>>>>> development
             'token': new SearchFilterPassThrough(),
+            'season': new SearchFilterPassThrough(),
         };
+
+        // This will allow someone to bypass all UI elements and fully control the filters through parameters
+        if (this.options.passThroughEverything) {
+            for (let key in this.filters) {
+                // If the filter uses the DOM, tell it to not to and just pass through everything - save values internally
+                if (typeof this.filters[key].setPassThrough === 'function') {
+                    this.filters[key].setPassThrough(true);
+                }
+            }
+        }
 
         let state = getState();
         if (state.userHasRole(USER_ROLE_ADMIN) || state.userHasRole(USER_ROLE_INTERNAL_TEAM)) {
@@ -242,6 +260,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._restoreFiltersFromQueryParams(filters);
 
         this._search();
+
+        // Make sure the select dropdowns are updated properly - external changes don't cause a UI refresh
+        refreshSelectPickers();
     }
 
     _toggleHeatmap(enabled) {

@@ -46,6 +46,7 @@ class ChallengeModeStart extends SpecialEvent
         return $this->affixIDs;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);
@@ -57,7 +58,10 @@ class ChallengeModeStart extends SpecialEvent
 
         $affixIds = array_slice($parameters, 4);
         foreach ($affixIds as $affixId) {
-            $this->affixIDs[] = (int)str_replace(['[', ']'], '', (string)$affixId);
+            $this->affixIDs[] = (int)str_replace([
+                '[',
+                ']',
+            ], '', (string)$affixId);
         }
 
         return $this;

@@ -16,7 +16,7 @@ class CombatLogRouteCoordRequestModel extends RequestModel implements Arrayable
     public function __construct(
         public ?float $x = null,
         public ?float $y = null,
-        public ?int   $uiMapId = null
+        public ?int   $uiMapId = null,
     ) {
     }
 }

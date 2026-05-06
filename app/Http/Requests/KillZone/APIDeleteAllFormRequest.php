@@ -20,7 +20,10 @@ class APIDeleteAllFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'confirm' => ['required', 'in:yes'],
+            'confirm' => [
+                'required',
+                'in:yes',
+            ],
         ];
     }
 }

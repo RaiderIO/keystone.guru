@@ -36,7 +36,11 @@ class OutputResultEvents extends BaseCombatLogCommand
         $force         = (bool)$this->option('force');
         $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
+            $combatLogService,
+            $force,
+            $dungeonOrRaid
+        ) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('Skipping file %s (not a .zip file)', $filePath));
 
@@ -51,11 +55,14 @@ class OutputResultEvents extends BaseCombatLogCommand
         CombatLogServiceInterface $combatLogService,
         string                    $filePath,
         bool                      $force = false,
-        bool                      $dungeonOrRaid = false
+        bool                      $dungeonOrRaid = false,
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
+        $resultingFile = str_replace([
+            '.txt',
+            '.zip',
+        ], '_events.txt', $filePath);
 
         if (!$force && file_exists($resultingFile)) {
             $this->warn(sprintf('- Skipping %s (events already generated)', $filePath));
@@ -69,8 +76,8 @@ class OutputResultEvents extends BaseCombatLogCommand
             }
 
             $result = file_put_contents($resultingFile, $resultEvents->map(
-            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
-                fn(BaseResultEvent $resultEvent) => trim($resultEvent->getBaseEvent()->getRawEvent())
+                // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+                fn(BaseResultEvent $resultEvent) => trim($resultEvent->getBaseEvent()->getRawEvent()),
             )->implode(PHP_EOL));
 
             if ($result) {

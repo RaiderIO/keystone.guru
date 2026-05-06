@@ -1,3 +1,7 @@
+# Import NPCs from MDT and write the new names in the translation files, then save the mapping
+history -s 'php artisan mdt:importnpcs retail --dungeon=somedungeon && php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan mapping:save'
+# Write NPC names from database to file, update database with file references (npcs.12345 etc), fetch translations from Wowhead, save mapping and re-import (to update translations table)
+history -s 'php artisan localization:exportnpcnames && php artisan localization:importnpcnames && php artisan localization:syncnpcnames retail && php artisan mapping:save && php artisan db:seed --database=migrate'
 history -s 'php artisan combatlog:extractdata tmp'
 history -s 'php artisan combatlog:splitchallengemode tmp'
 history -s 'php artisan combatlog:splitzonechange tmp'
@@ -7,6 +11,7 @@ history -s 'php artisan combatlog:ingestcombatlogroutejson tmp/'
 history -s 'php artisan challengemoderundata:convert'
 history -s 'php artisan environment:update'
 history -s 'php artisan handlebars:refresh'
+history -s 'php artisan localization:exportspellnames && php artisan localization:importspellnames && php artisan localization:syncspellnames retail'
 history -s 'php artisan localization:sync en_US '
 history -s 'php artisan mapicon:generateitemicons'
 history -s 'php artisan mapping:save'
@@ -16,17 +21,38 @@ history -s 'php artisan wowhead:fetchhealth '
 history -s 'php artisan wowhead:fetchmissingspellicons'
 history -s 'php artisan wowhead:fetchspelldata '
 history -s 'php artisan wowhead:refreshdisplayids'
+history -s 'php artisan db:seed --database=migrate'
+history -s 'php artisan migrate --database=migrate'
 history -s 'php artisan l5-swagger:generate --all && php artisan vendor:publish --provider="L5Swagger\L5SwaggerServiceProvider"'
 history -s './vendor/bin/phpunit -c phpunit.xml'
-history -s './refresh_db_seed.sh'
 
 # Prevent composer complaining about this if you got it symlinked
+git config --global --add safe.directory /var/www/
 git config --global --add safe.directory /var/www/vendor/nnoggie/mythicdungeontools
 git config --global --add safe.directory /var/www/vendor/nnoggie/mdt-legacy
 git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.deployer
 
+alias ignore_mysql_ssl='printf "[client]\nssl=0\nskip-ssl\n" > /root/.my.cnf'
+
 # # Take combat logs, extract their data, ingest them in the database and then in Opensearch:
 # php artisan combatlog:extractdata tmp
+# # Fetch any spells that may have been fetched from the combat log
+# php artisan wowhead:fetchmissingspells && php artisan wowhead:fetchmissingspellicons
+# # Save the spell names to the localization files
+# php artisan localization:exportspellnames
+# # Write translation keys back into the Spells table in the database
+# php artisan localization:importspellnames
+# # Fetch other translations from Wowhead
+# php artisan localization:syncspellnames retail
+# # Save the npc names to the localization files
+# php artisan localization:exportnpcnames
+# # Write translation keys back into the Npcs table in the database
+# php artisan localization:importnpcnames
+# # Fetch other translations from Wowhead
+# php artisan localization:syncnpcnames retail
+# # Now save and re-import the mapping so that translations are available in the database (optional)
+# php artisan mapping:save && php artisan db:seed --database=migrate
+
 # # One combat log can contain multiple runs, split them up
 # php artisan combatlog:splitchallengemode tmp
 # # Convert to ARC-able .json bodies
@@ -65,3 +91,16 @@ git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.dep
 # # or to populate Opensearch while converting
 # php artisan challengemoderundata:convert --saveToOpensearch
 
+# cd de_DE && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd es_ES && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd es_MX && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd fr_FR && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd ho_HO && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd it_IT && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd ko_KR && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd pt_BR && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd ru_RU && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd uk_UA && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd zh_CN && sudo chown wouterkoppenol:wouterkoppenol *.php && cd ..
+
+# docker exec -it keystone.guru-app-swoole php artisan octane:reload

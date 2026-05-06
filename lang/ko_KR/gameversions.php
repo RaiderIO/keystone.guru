@@ -1,11 +1,12 @@
 <?php
 
 return [
-    'retail'  => [
+
+    'retail' => [
         'name'        => '',
         'description' => '',
     ],
-    'wotlk'   => [
+    'wotlk' => [
         'name'        => '',
         'description' => '',
     ],
@@ -13,8 +14,21 @@ return [
         'name'        => '',
         'description' => '',
     ],
-    'beta'    => [
+    'beta' => [
         'name'        => '',
         'description' => '',
     ],
+    'cata' => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'mop' => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'legion-remix' => [
+        'name'        => '',
+        'description' => '',
+    ],
+
 ];

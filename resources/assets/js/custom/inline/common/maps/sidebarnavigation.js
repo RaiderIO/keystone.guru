@@ -41,7 +41,7 @@ class SidebarNavigation extends Sidebar {
             // Clear of all options
             $switchDungeonFloorSelect.find('option').remove();
             // Add each new floor to the select
-            $.each(getState().getMapContext().getDungeon().floors, function (index, floor) {
+            $.each(getState().getMapContext().getVisibleFloors(), function (index, floor) {
                 // Reconstruct the dungeon floor select
                 $switchDungeonFloorSelect.append($('<option>', {
                     text: lang.get(floor.name),

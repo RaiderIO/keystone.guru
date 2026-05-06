@@ -8,9 +8,9 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class DungeonRouteLevelRule implements ValidationRule
 {
     /**
-     * @param string  $attribute
-     * @param         $value
-     * @param Closure $fail
+     * @param  string  $attribute
+     * @param          $value
+     * @param  Closure $fail
      * @return void
      */
     public function validate(string $attribute, $value, Closure $fail): void

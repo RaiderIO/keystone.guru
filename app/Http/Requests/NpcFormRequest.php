@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
 use App\Models\Npc\Npc;
 use Auth;
@@ -25,17 +24,17 @@ class NpcFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                        => 'required',
-            'name'                      => 'required',
-            'dungeon_id'                => [Rule::in(array_merge([-1], Dungeon::all('id')->pluck('id')->toArray()))],
-            'npc_type_id'               => Rule::exists('npc_types', 'id'),
-            'npc_class_id'              => Rule::exists('npc_classes', 'id'),
-            'classification_id'         => [Rule::exists('npc_classifications', 'id'), 'required'],
-            'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
-            'base_health'               => [
+            'id'                => 'required',
+            'name'              => 'required',
+            'dungeon_ids'       => 'array',
+            'dungeon_ids.*'     => Rule::exists('dungeons', 'id'),
+            'npc_type_id'       => Rule::exists('npc_types', 'id'),
+            'npc_class_id'      => Rule::exists('npc_classes', 'id'),
+            'classification_id' => [
+                Rule::exists('npc_classifications', 'id'),
                 'required',
-                'regex:/^[\d\s,]*$/',
             ],
+            'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
             'health_percentage'         => 'int|nullable',
             'level'                     => 'int|nullable',
             'dangerous'                 => 'bool',

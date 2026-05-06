@@ -11,21 +11,22 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int                 $id
- * @property int|null            $mapping_version_id
- * @property int                 $floor_id
- * @property int|null            $dungeon_route_id
- * @property int|null            $team_id
- * @property int                 $map_icon_type_id
- * @property float               $lat
- * @property float               $lng
- * @property string              $comment
- * @property bool                $permanent_tooltip
- * @property int                 $seasonal_index
+ * @property int      $id
+ * @property int|null $mapping_version_id
+ * @property int      $floor_id
+ * @property int|null $dungeon_route_id
+ * @property int|null $team_id
+ * @property int      $map_icon_type_id
+ * @property float    $lat
+ * @property float    $lng
+ * @property string   $comment
+ * @property bool     $permanent_tooltip
+ * @property int      $seasonal_index
  *
  * @property MappingVersion|null $mappingVersion
  * @property Floor               $floor
@@ -40,6 +41,7 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
     use HasLinkedAwakenedObelisk;
+    use HasFactory;
 
     protected $visible = [
         'id',
@@ -70,22 +72,36 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
         'seasonal_index',
     ];
 
-    protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
-
-    protected $casts = [
-        'mapping_version_id'         => 'integer',
-        'floor_id'                   => 'integer',
-        'dungeon_route_id'           => 'integer',
-        'team_id'                    => 'integer',
-        'map_icon_type_id'           => 'integer',
-        'lat'                        => 'float',
-        'lng'                        => 'float',
-        'permanent_tooltip'          => 'integer',
-        'seasonal_index'             => 'integer',
-        'linked_awakened_obelisk_id' => 'integer',
+    protected $appends = [
+        'linked_awakened_obelisk_id',
+        'is_admin',
     ];
 
-    protected $with = ['mapIconType', 'linkedawakenedobelisks'];
+    protected $with = [
+        'mapIconType',
+        'linkedawakenedobelisks',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id'         => 'integer',
+            'floor_id'                   => 'integer',
+            'dungeon_route_id'           => 'integer',
+            'team_id'                    => 'integer',
+            'map_icon_type_id'           => 'integer',
+            'lat'                        => 'float',
+            'lng'                        => 'float',
+            'permanent_tooltip'          => 'integer',
+            'seasonal_index'             => 'integer',
+            'linked_awakened_obelisk_id' => 'integer',
+        ];
+    }
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->mapping_version_id !== null;
+    }
 
     public function floor(): BelongsTo
     {
@@ -110,11 +126,6 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
-    }
-
-    public function getIsAdminAttribute(): bool
-    {
-        return $this->mapping_version_id !== null;
     }
 
     public function isAwakenedObelisk(): bool

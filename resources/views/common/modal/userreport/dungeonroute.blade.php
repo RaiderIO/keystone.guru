@@ -21,27 +21,27 @@ $publicKey    = $dungeonroute?->public_key ?? 'auto';
         </h4>
     </div>
     <div class="card-body">
-        {!! Form::hidden('dungeonroute_report_category', 'enemy', ['class' => 'form-control dungeonroute_report_category']) !!}
-        {!! Form::hidden('dungeonroute_report_enemy_id', -1, ['class' => 'form-control dungeonroute_report_enemy_id']) !!}
+        {{ html()->hidden('dungeonroute_report_category', 'enemy')->class('form-control dungeonroute_report_category') }}
+        {{ html()->hidden('dungeonroute_report_enemy_id', -1)->class('form-control dungeonroute_report_enemy_id') }}
         @guest
             <div class="form-group">
-                {!! Form::label('dungeonroute_report_username', __('view_common.modal.userreport.dungeonroute.your_name')) !!}
-                {!! Form::text('dungeonroute_report_username', null, ['class' => 'form-control dungeonroute_report_username']) !!}
+                {{ html()->label(__('view_common.modal.userreport.dungeonroute.your_name'), 'dungeonroute_report_username') }}
+                {{ html()->text('dungeonroute_report_username')->class('form-control dungeonroute_report_username') }}
             </div>
         @endguest
         <div class="form-group">
-            {!! Form::label('dungeonroute_report_message', __('view_common.modal.userreport.dungeonroute.why_report_this_route')) !!}
-            {!! Form::textarea('dungeonroute_report_message', null, ['class' => 'form-control dungeonroute_report_message', 'cols' => '50', 'rows' => '10']) !!}
+            {{ html()->label(__('view_common.modal.userreport.dungeonroute.why_report_this_route'), 'dungeonroute_report_message') }}
+            {{ html()->textarea('dungeonroute_report_message')->class('form-control dungeonroute_report_message')->cols('50')->rows('10') }}
         </div>
 
         <div class="form-group">
 
             @guest
-                {!! Form::label('dungeonroute_report_contact_ok', __('view_common.modal.userreport.dungeonroute.contact_by_email_guest')) !!}
+                {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email_guest'), 'dungeonroute_report_contact_ok') }}
             @else
-                {!! Form::label('dungeonroute_report_contact_ok', __('view_common.modal.userreport.dungeonroute.contact_by_email')) !!}
+                {{ html()->label(__('view_common.modal.userreport.dungeonroute.contact_by_email'), 'dungeonroute_report_contact_ok') }}
             @endguest
-            {!! Form::checkbox('dungeonroute_report_contact_ok', 1, false, ['class' => 'form-control left_checkbox dungeonroute_report_contact_ok']) !!}
+            {{ html()->checkbox('dungeonroute_report_contact_ok', false, 1)->class('form-control left_checkbox dungeonroute_report_contact_ok') }}
         </div>
 
         <button class="btn btn-info dungeonroute_report_submit">

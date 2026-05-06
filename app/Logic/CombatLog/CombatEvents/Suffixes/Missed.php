@@ -41,6 +41,7 @@ class Missed extends Suffix
         return $this->critical;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

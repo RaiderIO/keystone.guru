@@ -17,7 +17,7 @@ final class LatLngTest extends PublicTestCase
     #[DataProvider('scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider')]
     public function scale_givenPositiveMapCoordinates_shouldScaleLatLng(
         LatLng $latLng,
-        LatLng $expected
+        LatLng $expected,
     ): void {
         // Arrange
         $currentCenter  = new LatLng(50, 50);
@@ -52,7 +52,7 @@ final class LatLngTest extends PublicTestCase
     #[DataProvider('scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider')]
     public function scale_givenRealisticMapCoordinates_shouldScaleLatLng(
         LatLng $latLng,
-        LatLng $expected
+        LatLng $expected,
     ): void {
         // Arrange
         $currentCenter  = new LatLng(-181.69, 273.31);
@@ -84,7 +84,7 @@ final class LatLngTest extends PublicTestCase
     public function rotate_givenPositiveMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
         int    $rotation,
-        LatLng $expected
+        LatLng $expected,
     ): void {
         // Arrange
         $currentCenter = new LatLng(50, 50);
@@ -121,7 +121,7 @@ final class LatLngTest extends PublicTestCase
     public function rotate_givenScaledMapCoordinates_shouldRotateLatLng(
         LatLng $latLng,
         int    $rotation,
-        LatLng $expected
+        LatLng $expected,
     ): void {
         // Arrange
         $currentCenter  = new LatLng(50, 50);

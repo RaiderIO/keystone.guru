@@ -10,9 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * @property string $source_floor_id
- * @property string $linked_dungeon_floor_switch_marker_id
- * @property string $direction
+ * @mixin DungeonFloorSwitchMarker
  */
 class DungeonFloorSwitchMarkerFormRequest extends FormRequest
 {
@@ -39,15 +37,41 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'                                    => 'int',
-            'mapping_version_id'                    => ['required', Rule::exists(MappingVersion::class, 'id')],
-            'floor_id'                              => ['required', Rule::exists(Floor::class, 'id')],
-            'source_floor_id'                       => ['nullable', Rule::in(array_merge([-1], Floor::all('id')->pluck('id')->toArray()))],
-            'target_floor_id'                       => ['nullable', Rule::exists(Floor::class, 'id')],
-            'linked_dungeon_floor_switch_marker_id' => ['nullable', Rule::exists(DungeonFloorSwitchMarker::class, 'id')],
-            'direction'                             => ['nullable', Rule::in(array_merge(FloorCoupling::ALL, ['-1', '', null]))],
-            'lat'                                   => 'numeric',
-            'lng'                                   => 'numeric',
+            'id'                 => 'int',
+            'mapping_version_id' => [
+                'required',
+                Rule::exists(MappingVersion::class, 'id'),
+            ],
+            'floor_id' => [
+                'required',
+                Rule::exists(Floor::class, 'id'),
+            ],
+            'source_floor_id' => [
+                'nullable',
+                Rule::in(array_merge([-1], Floor::all('id')->pluck('id')->toArray())),
+            ],
+            'target_floor_id' => [
+                'nullable',
+                Rule::exists(Floor::class, 'id'),
+            ],
+            'linked_dungeon_floor_switch_marker_id' => [
+                'nullable',
+                Rule::exists(DungeonFloorSwitchMarker::class, 'id'),
+            ],
+            'direction' => [
+                'nullable',
+                Rule::in(array_merge(FloorCoupling::ALL, [
+                    '-1',
+                    '',
+                    null,
+                ])),
+            ],
+            'hidden_in_facade' => [
+                'nullable',
+                'boolean',
+            ],
+            'lat' => 'numeric',
+            'lng' => 'numeric',
         ];
     }
 }

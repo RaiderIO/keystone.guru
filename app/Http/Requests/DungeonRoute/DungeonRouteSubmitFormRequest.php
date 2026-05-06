@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -21,6 +22,15 @@ class DungeonRouteSubmitFormRequest extends FormRequest
         return true; // Auth::user()->hasRole(["user", "admin"]);
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('dungeon_route_description')) {
+            $this->merge([
+                'dungeon_route_description' => new HtmlSanitizer()->sanitize($this->get('dungeon_route_description')),
+            ]);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      */
@@ -35,27 +45,38 @@ class DungeonRouteSubmitFormRequest extends FormRequest
             'dungeon_route_sandbox'     => 'int',
             'dungeon_route_level'       => new DungeonRouteLevelRule(),
             // Only active dungeons are allowed
-            'dungeon_id'                => ['required', Rule::in(
-                Dungeon::select('dungeons.id')
-                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                    ->where('expansions.active', true)
-                    ->where('dungeons.active', true)
-                    ->get()
-                    ->pluck('id')
-                    ->toArray()
-            )],
+            'dungeon_id' => [
+                'required',
+                Rule::in(
+                    Dungeon::select('dungeons.id')
+                        ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+                        ->where('expansions.active', true)
+                        ->where('dungeons.active', true)
+                        ->get()
+                        ->pluck('id')
+                        ->toArray(),
+                ),
+            ],
             // May be -1 (unset) or must be part of the user's teams
-            'team_id'                   => [Rule::in(
-                array_merge($user?->teams->pluck('id')->toArray() ?? [], [null, -1])
-            )],
-            'teeming'                   => 'nullable|int',
-            'template'                  => 'nullable|int',
+            'team_id' => [
+                Rule::in(
+                    array_merge($user?->teams->pluck('id')->toArray() ?? [], [
+                        null,
+                        -1,
+                    ]),
+                ),
+            ],
+            'teeming'  => 'nullable|int',
+            'template' => 'nullable|int',
 
             // Array since there's potentially a seasonal index per expansion
-            'seasonal_index'            => 'nullable|array',
-            'seasonal_index.*'          => 'nullable|numeric',
+            'seasonal_index'   => 'nullable|array',
+            'seasonal_index.*' => 'nullable|numeric',
 
-            'faction_id' => [Rule::exists('factions', 'id'), new FactionSelectionRequiredRule($this->request)],
+            'faction_id' => [
+                Rule::exists('factions', 'id'),
+                new FactionSelectionRequiredRule($this->request),
+            ],
 
             'race'  => 'nullable|array',
             'class' => 'nullable|array',

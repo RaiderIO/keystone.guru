@@ -9,19 +9,19 @@ use Illuminate\Support\Collection;
  * @var ExpansionService    $expansionService
  * @var Expansion           $expansion
  * @var Collection<Dungeon> $dungeons
- * @var string|null         $route
  * @var callable|null       $subtextFn
+ * @var boolean             $useAbbreviation
+ * @var int|null            $colCount
  */
 
-$dungeons ??= $expansion->dungeonsAndRaids()->active()->get();
-$colCount = 4;
-$rowCount = (int)ceil($dungeons->count() / $colCount);
-
-$names      ??= true;
-$links      ??= collect();
-$route      ??= null;
-$selectable ??= false;
-$subtextFn  ??= null;
+$dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
+$colCount        ??= 4;
+$rowCount        = (int)ceil($dungeons->count() / $colCount);
+$useAbbreviation ??= false;
+$names           ??= true;
+$links           ??= collect();
+$selectable      ??= false;
+$subtextFn       ??= null;
 
 // @formatter:off
 for( $i = 0; $i < $rowCount; ++$i ) { ?>
@@ -32,7 +32,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
         if( $dungeons->has($index) ){
             /** @var Dungeon $dungeon */
             $dungeon = $dungeons->get($index);
-            $link = $links->where('dungeon', $dungeon->key)->first();
+            $link = $links->firstWhere('dungeon', $dungeon->key);
             ?>
             <div
                 class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}"
@@ -42,8 +42,8 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
                     <a href="{{ $link['link'] }}">
                         @endisset
                         @if($names)
-                            <h5 class="card-text text-white">
-                                {{ __($dungeon->name) }}
+                            <h5 class="card-text text-white dungeon_card_dungeon_name">
+                                {{ $useAbbreviation ? __($dungeon->abbreviation) : __($dungeon->name) }}
                             </h5>
                         @endif
 

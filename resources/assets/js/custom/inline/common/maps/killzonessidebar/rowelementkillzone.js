@@ -32,7 +32,13 @@ class RowElementKillZone extends RowElement {
         return {
             'id': this.killZone.id,
             'color': this.killZone.color, // For viewing
-            'has_kill_area': this.killZone.hasKillArea() ? '1' : '0'
+            'has_kill_area': this.killZone.hasKillArea() ? '1' : '0',
+            'icon_boss_url': `${this.map.options.assetsBaseUrl}/images/mapicon/raid_marker_skull.png`,
+            'icon_modifier_awakened_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/awakened.png`,
+            'icon_modifier_prideful_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/prideful.png`,
+            'icon_modifier_shrouded_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/shrouded.png`,
+            'icon_modifier_shrouded_zul_gamux_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/shrouded_zul_gamux.png`,
+            'icon_modifier_inspiring_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/inspiring.png`,
         };
     }
 
@@ -149,7 +155,7 @@ class RowElementKillZone extends RowElement {
                 let enemy = enemyMapObjectGroup.objects[enemyKey];
                 if (enemy.id === enemyId) {
                     if (enemy.isBossNpc()) {
-                        bossNames.push(enemy.npc.name);
+                        bossNames.push(lang.get(enemy.npc.name));
                     } else if (!hasAwakened && enemy.isAwakenedNpc()) {
                         hasAwakened = true;
                     } else if (!hasPrideful && enemy.isPridefulNpc()) {
@@ -172,7 +178,7 @@ class RowElementKillZone extends RowElement {
         // Reset any previous states
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_placeholder:not(.draggable--original)`).toggle(!hasAnything);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`)
-            .attr('title', lang.get(`messages.kill_zone_has_boss_label`, {bosses: bossNames.join(', ')}))
+            .attr('title', lang.get(`js.kill_zone_has_boss_label`, {bosses: bossNames.join(', ')}))
             .toggle(bossNames.length > 0)
             .refreshTooltips();
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);
@@ -216,7 +222,7 @@ class RowElementKillZone extends RowElement {
                 // If not in our array, add it
                 if (!npcArr.hasOwnProperty(enemy.npc.id)) {
                     npcArr[enemy.npc.id] = {
-                        name: enemy.npc.name,
+                        name: lang.get(enemy.npc.name),
                         awakened: enemy.isAwakenedNpc(),
                         prideful: enemy.isPridefulNpc(),
                         inspiring: false, // Will be set below
@@ -255,14 +261,15 @@ class RowElementKillZone extends RowElement {
                 'enemy_forces': npc.enemy_forces,
                 'enemy_forces_percent': getFormattedPercentage(npc.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
                 'count': npc.count,
-                'name': npc.name,
+                'name': lang.get(npc.name),
                 'awakened': npc.awakened,
                 'prideful': npc.prideful,
                 'inspiring': npc.inspiring,
                 'overpulled': npc.overpulled,
                 'obsolete': npc.obsolete,
                 'boss': npc.enemy.isBossNpc(),
-                'dangerous': npc.enemy.npc.dangerous === 1
+                'dangerous': npc.enemy.npc.dangerous === 1,
+                'enemy_portrait_url': `${this.map.options.assetsBaseUrl}/${npc.enemy.npc.enemy_portrait_url}`,
             });
 
             let $enemy = $(template(data));

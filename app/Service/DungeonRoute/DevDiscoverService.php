@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 class DevDiscoverService extends BaseDiscoverService
@@ -16,16 +17,33 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function popularBuilder(): Builder
     {
-        $this->ensureExpansion();
+        $this->ensureGameVersion();
 
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon', 'dungeon.activeFloors'])
-            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->with([
+                'author',
+                'affixes',
+                'ratings',
+                'mappingVersion',
+                'thumbnails',
+                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
+                'season'  => fn(BelongsTo $query) => $query->without([
+                    'affixGroups',
+                    'dungeons',
+                ]),
+            ])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+            ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('dungeons.expansion_id', $this->expansion->id);
+                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
@@ -41,16 +59,33 @@ class DevDiscoverService extends BaseDiscoverService
      */
     private function newBuilder(): Builder
     {
-        $this->ensureExpansion();
+        $this->ensureGameVersion();
 
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon', 'dungeon.activeFloors'])
-            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->with([
+                'author',
+                'affixes',
+                'ratings',
+                'mappingVersion',
+                'thumbnails',
+                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
+                'season'  => fn(BelongsTo $query) => $query->without([
+                    'affixGroups',
+                    'dungeons',
+                ]),
+            ])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+            ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
+            ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             ->when($this->season === null, function (Builder $builder) {
-                $builder->where('dungeons.expansion_id', $this->expansion->id);
+                $builder->where('mapping_versions.game_version_id', $this->gameVersion->id);
             })
             ->when($this->season !== null, function (Builder $builder) {
                 $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeons.id')
@@ -75,7 +110,15 @@ class DevDiscoverService extends BaseDiscoverService
      */
     public function popularGroupedByDungeon(): Collection
     {
-        return $this->popularBuilder()->get();
+        return $this->popularBuilder()
+            ->get()
+            ->groupBy('dungeon_id')
+            ->mapWithKeys(function (Collection $routes, int $dungeonId) {
+                /** @var DungeonRoute $firstRoute */
+                $firstRoute = $routes->first();
+
+                return [__($firstRoute->dungeon->name) => $routes->take(4)];
+            });
     }
 
     /**

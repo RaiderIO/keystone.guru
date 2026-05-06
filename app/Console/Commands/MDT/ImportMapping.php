@@ -3,6 +3,7 @@
 namespace App\Console\Commands\MDT;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
@@ -16,7 +17,7 @@ class ImportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importmapping {dungeon} {--force}';
+    protected $signature = 'mdt:importmapping {dungeon} {gameVersion} {--force}';
 
     /**
      * The console command description.
@@ -31,10 +32,18 @@ class ImportMapping extends Command
      *
      * @throws Exception
      */
-    public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService): void
-    {
-        $dungeonKey = $this->argument('dungeon');
-        $force      = (bool)$this->option('force');
+    public function handle(
+        MappingServiceInterface          $mappingService,
+        MDTMappingImportServiceInterface $mappingImportService,
+    ): void {
+        $dungeonKey     = $this->argument('dungeon');
+        $gameVersionKey = $this->argument('gameVersion');
+        $force          = (bool)$this->option('force');
+
+        $gameVersion = GameVersion::firstWhere('key', $gameVersionKey);
+        if ($gameVersion === null) {
+            throw new Exception(sprintf('Game version %s not found', $gameVersionKey));
+        }
 
         if (is_numeric($dungeonKey)) {
             // If it's an ID we should treat it as a season instead
@@ -43,9 +52,8 @@ class ImportMapping extends Command
             // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
             foreach ($season->dungeons as $dungeon) {
                 try {
-                    $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
                     $dungeon->setRelation('npcs', $dungeon->npcs()->get());
-                    $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
+                    $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, $force);
                 } catch (Exception $exception) {
                     $this->error($exception->getMessage());
                 }
@@ -55,10 +63,9 @@ class ImportMapping extends Command
             /** @var Dungeon $dungeon */
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
 
-            $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
-            $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $force);
+            $mappingImportService->importMappingVersionFromMDT($mappingService, $dungeon, $gameVersion, $force);
         }
     }
 }

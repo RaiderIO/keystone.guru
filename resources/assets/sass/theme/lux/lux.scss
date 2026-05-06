@@ -17,16 +17,6 @@
     border: 1px solid #222;
   }
 
-  .cid-s48MCQYojq {
-    //noinspection CssUnknownTarget
-    background-image: url('/images/home/lux_header.jpg');
-  }
-
-  .cid-soU9jtw47v {
-    //noinspection CssUnknownTarget
-    background-image: url('/images/home/lux_footer.jpg');
-  }
-
   .btn {
     padding: 0.55rem 0.75rem;
   }
@@ -103,7 +93,7 @@
   }
 
   .game_version_header {
-    img {
+    .game_version img {
       filter: invert(1);
     }
 
@@ -119,5 +109,9 @@
       text-decoration: none;
       color: var(--theme-text-contrast)
     }
+  }
+
+  div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    color: var(--theme-text-contrast) !important;
   }
 }

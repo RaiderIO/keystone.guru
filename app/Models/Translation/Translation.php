@@ -20,5 +20,10 @@ class Translation extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'locale', 'key', 'translation'];
+    protected $fillable = [
+        'id',
+        'locale',
+        'key',
+        'translation',
+    ];
 }

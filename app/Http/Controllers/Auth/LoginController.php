@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LogLevel;
 use RuntimeException;
 
-class LoginController extends Controller
+class LoginController extends Controller implements HasMiddleware
 {
     /*
     |--------------------------------------------------------------------------
@@ -29,21 +31,19 @@ class LoginController extends Controller
      */
     protected string $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('guest', ['except' => 'logout']);
+        return [
+            new Middleware('guest', except: ['logout']),
+        ];
     }
 
     protected function attemptLogin(Request $request): bool
     {
         try {
             return $this->guard()->attempt(
-                $this->credentials($request), $request->boolean('remember')
+                $this->credentials($request),
+                $request->boolean('remember'),
             );
         } catch (RuntimeException $exception) {
             // #2344 People trying to login with their OAuth account through normal methods (they don't have a password)
@@ -59,7 +59,6 @@ class LoginController extends Controller
             }
         }
     }
-
 
     /**
      * The user has been authenticated.

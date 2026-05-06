@@ -19,7 +19,9 @@ use App\Models\MountableArea;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcBolsteringWhitelist;
 use App\Models\Npc\NpcCharacteristic;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
@@ -268,7 +270,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     $prefix . 'Imported %s (%s from %s)',
                     str_replace($rootDir, '', $fileName),
                     $count,
-                    $fileName
+                    $fileName,
                 ));
 
                 $found = true;
@@ -339,7 +341,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     if (is_array($value) &&
                         $relationParser->canParseModel($mapping->getClass()) &&
                         $relationParser->canParseRelation($key, $value)) {
-
                         $modelData = $relationParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
                     }
                 }
@@ -365,9 +366,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 $createdModel->setRawAttributes($modelData);
                 $createdModel->setTable(DatabaseSeeder::getTempTableName($mapping->getClass()))->save();
                 $updatedModels++;
-
             } // If we should do some post-processing, create & save it now so that we can do just that
-            else if ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
+            elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 /** @var \Eloquent $mappingClass */
                 $mappingClass = $mapping->getClass();
                 $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
@@ -397,7 +397,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     if (is_array($value) &&
                         $attributeParser->canParseModel($mapping->getClass()) &&
                         $attributeParser->canParseRelation($key, $value)) {
-
                         // Ignore return value, use preModelSaveAttributeParser if you want the parser to have effect on the
                         // model that's about to be saved. It's already saved at this point
                         $attributeParser->parseRelation($mapping->getClass(), $modelData, $key, $value);
@@ -410,8 +409,9 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         if ($modelsToSave->isNotEmpty()) {
             /** @var Collection $importedModels */
             $importedModels = $this->importedModels->get($mapping->getClass());
-            $this->importedModels->put($mapping->getClass(),
-                $importedModels->merge($modelsToSave)
+            $this->importedModels->put(
+                $mapping->getClass(),
+                $importedModels->merge($modelsToSave),
             );
         }
 
@@ -425,7 +425,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
         /** @var Collection<DungeonRoute> $demoRoutes */
-        $demoRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
+        $demoRoutes = DungeonRoute::with([
+            'brushlines',
+            'paths',
+            'killZones',
+            'livesessions',
+        ])
             ->where('demo', true)
             ->get();
 
@@ -454,7 +459,9 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
+            NpcDungeon::class,
             NpcCharacteristic::class,
+            NpcHealth::class,
             NpcSpell::class,
             Enemy::class,
             EnemyPack::class,

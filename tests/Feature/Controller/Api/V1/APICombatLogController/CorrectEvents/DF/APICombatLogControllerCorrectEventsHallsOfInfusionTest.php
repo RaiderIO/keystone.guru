@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents\DF;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\DF;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;

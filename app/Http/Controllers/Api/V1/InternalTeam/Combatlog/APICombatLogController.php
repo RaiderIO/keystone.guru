@@ -30,17 +30,16 @@ class APICombatLogController extends Controller
      *     )
      * )
      */
-    public function createRoute(
+    public function store(
         CombatLogRouteRequest                      $request,
-        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
     ): DungeonRouteResource {
         $validated = $request->validated();
 
         return new DungeonRouteResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
-            CombatLogRouteRequestModel::createFromArray($validated)
+            CombatLogRouteRequestModel::createFromArray($validated),
         ));
     }
-
 
     /**
      * @OA\Post(
@@ -62,12 +61,12 @@ class APICombatLogController extends Controller
      */
     public function correctEvents(
         CombatLogRouteRequest                      $request,
-        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
     ): CombatLogRouteCorrectionRequestResource {
         $validated = $request->validated();
 
         return new CombatLogRouteCorrectionRequestResource($combatLogRouteDungeonRouteService->correctCombatLogRoute(
-            CombatLogRouteRequestModel::createFromArray($validated)
+            CombatLogRouteRequestModel::createFromArray($validated),
         ));
     }
 }

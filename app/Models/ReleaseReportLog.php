@@ -16,7 +16,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ReleaseReportLog extends CacheModel
 {
-    protected $fillable = ['release_id', 'platform'];
+    protected $fillable = [
+        'release_id',
+        'platform',
+    ];
 
     public function release(): BelongsTo
     {

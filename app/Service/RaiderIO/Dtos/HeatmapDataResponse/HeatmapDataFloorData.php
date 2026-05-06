@@ -14,7 +14,6 @@ class HeatmapDataFloorData implements Arrayable
 
     private function __construct()
     {
-
     }
 
     /**
@@ -49,7 +48,7 @@ class HeatmapDataFloorData implements Arrayable
         $model->latLngs = collect();
         foreach ($data['lat_lngs'] as $latLng) {
             $model->latLngs->push(
-                HeatmapDataLatLng::fromArray($latLng)
+                HeatmapDataLatLng::fromArray($latLng),
             );
         }
 

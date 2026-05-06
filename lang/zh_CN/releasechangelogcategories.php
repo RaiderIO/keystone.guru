@@ -14,5 +14,6 @@ return [
     'simulation_craft_changes' => '',
     'auto_route_changes'       => '',
     'api_changes'              => '',
+    'heatmap_changes'          => '',
 
 ];

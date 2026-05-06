@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,13 +40,21 @@ class TeamUser extends Model
         self::ROLE_ADMIN        => 4,
     ];
 
-    protected $fillable = ['team_id', 'user_id', 'role'];
+    protected $fillable = [
+        'team_id',
+        'user_id',
+        'role',
+    ];
 
     protected $with = ['user'];
 
-    public function scopeIsModerator(Builder $query, int $userId): Builder
+    #[Scope]
+    protected function isModerator(Builder $query, int $userId): Builder
     {
-        return $query->where('user_id', $userId)->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MODERATOR]);
+        return $query->where('user_id', $userId)->whereIn('role', [
+            self::ROLE_ADMIN,
+            self::ROLE_MODERATOR,
+        ]);
     }
 
     public function team(): BelongsTo

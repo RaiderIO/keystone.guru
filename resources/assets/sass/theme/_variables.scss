@@ -9,6 +9,9 @@ $--theme-form-required: --theme-form-required;
 $--theme-header: --theme-header;
 $--theme-header-border: --theme-header-border;
 $--theme-header-height: --theme-header-height;
+$--theme-link: --theme-link;
+$--theme-link-hover: --theme-link-hover;
+$--theme-border-accent: --theme-border-accent;
 $--theme-btn-accent: --theme-btn-accent;
 $--theme-btn-accent-hover: --theme-btn-accent-hover;
 $--theme-bg-card: --theme-bg-card;
@@ -51,6 +54,9 @@ $theme-map-darkly: (
         $--theme-header: var($--theme-dark),
         $--theme-header-border: unset,
   /* The same as success button */
+        $--theme-link: #00bc8c,
+        $--theme-link-hover: #007053,
+        $--theme-border-accent: #00bc8c,
         $--theme-btn-accent: #00bc8c,
         $--theme-btn-accent-hover: #007053,
         $--theme-bg-card: #303030,
@@ -73,6 +79,9 @@ $theme-map-lux: (
         $--theme-header: var($--theme-light),
         $--theme-header-border: 1px solid #1a1a1a,
   /* The same as success button */
+        $--theme-link: #1a1a1a,
+        $--theme-link-hover: black,
+        $--theme-border-accent: #1a1a1a,
         $--theme-btn-accent: #1a1a1a,
         $--theme-btn-accent-hover: black,
         $--theme-bg-card: #fff,
@@ -80,4 +89,32 @@ $theme-map-lux: (
         $--theme-affix-page-seasonal-color: #df691a,
         $--theme-affix-page-seasonal-background-color: #df691abb,
         $--theme-affix-page-current-week-border-color: var($--theme-primary)
+);
+
+// Xal'atath - Midnight variant (Vapor based)
+$theme-map-vapor: (
+  // Primary: WoW gold (replaces blue)
+        $--theme-primary: #d4af37,
+        $--theme-primary-hover: #e6c65a,
+  // Neutral structure (unchanged Darkly)
+        $--theme-light: #adb5bd,
+        $--theme-dark: #303030,
+        $--theme-darker: #202020,
+        $--theme-text-contrast: #ebebeb,
+        $--theme-header-height: 114px,
+        $--theme-form-required: #c40000,
+        $--theme-header: var($--theme-dark),
+        $--theme-header-border: unset,
+  // Accent: Void purple (replaces green)
+        $--theme-link: #6a2dbd,
+        $--theme-link-hover: #4b1f87,
+        $--theme-border-accent: #6a2dbd,
+        $--theme-btn-accent: #6a2dbd,
+        $--theme-btn-accent-hover: #4b1f87,
+        $--theme-bg-card: #303030,
+        $--theme-bg-card-footer: #252525,
+  // Seasonal / highlight colors (purple glow feel)
+        $--theme-affix-page-seasonal-color: #6a2dbd,
+        $--theme-affix-page-seasonal-background-color: #6a2dbdbb,
+        $--theme-affix-page-current-week-border-color: rgb(235, 235, 235)
 );

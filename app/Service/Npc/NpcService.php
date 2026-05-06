@@ -2,8 +2,8 @@
 
 namespace App\Service\Npc;
 
-use App\Models\Dungeon;
 use App\Models\Npc\Npc;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 class NpcService implements NpcServiceInterface
@@ -11,24 +11,28 @@ class NpcService implements NpcServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getNpcsForDropdown(Dungeon $dungeon, bool $includeAllDungeonsNpcs = false): Collection
+    public function getNpcsForDropdown(Collection $dungeons): Collection
     {
-        $npcIds = collect([
-            __($dungeon->name) => Npc::whereIn('dungeon_id', [$dungeon->id])
-                ->get(['name', 'id'])
-                ->pluck('name', 'id')
-                ->mapWithKeys(static fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
-        ]);
+        $npcIds = collect();
 
-        if ($includeAllDungeonsNpcs) {
-            $allDungeonNpcs = collect([
-                __('services.npcservice.all_dungeons') => Npc::whereIn('dungeon_id', [-1])
-                    ->get(['name', 'id'])
-                    ->pluck('name', 'id')
-                    ->mapWithKeys(static fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
-            ]);
-
-            $npcIds = $npcIds->merge($allDungeonNpcs);
+        foreach ($dungeons as $dungeon) {
+            $npcIds->put(
+                __($dungeon->name),
+                Npc::selectRaw('npcs.id, npc_name_translations.translation as name')
+                    ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
+                        $clause->on('npc_name_translations.key', '=', 'npcs.name')
+                            ->where('npc_name_translations.locale', '=', 'en_US');
+                    })
+                    ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                    ->where('npc_dungeons.dungeon_id', $dungeon->id)
+                    ->get([
+                        'name',
+                        'id',
+                    ])
+                    ->mapWithKeys(static fn(Npc $npc) => [
+                        $npc->id => sprintf('%s (%d)', $npc->translated_name ?? $npc->name, $npc->id),
+                    ]),
+            );
         }
 
         return $npcIds;

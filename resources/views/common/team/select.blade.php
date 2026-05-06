@@ -20,12 +20,12 @@ if (!$required) {
 ?>
 <div class="form-group">
     @if($label !== false)
-        {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
+        {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $name) }}
     @endif
     <div class="row">
         @if(!$teams->isEmpty())
             <div class="col">
-                {!! Form::select($name, $teamsSelect, $selectedId, array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) !!}
+                {{ html()->select($name, $teamsSelect, $selectedId)->attributes(array_merge(['id' => $id], ['class' => 'form-control selectpicker'])) }}
             </div>
         @endif
         <div class="col-auto">

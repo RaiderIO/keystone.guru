@@ -3,13 +3,13 @@
 return [
 
     'dungeonroute' => [
-        'title_temporary_route'    => '',
-        'title_clone'              => '',
-        'subtitle_clone_of'        => '',
-        'permission_dratnos'       => '',
-        'permission_petko'         => '',
-        'subtitle_temporary_route' => '',
-        'subtitle_author'          => '',
+        'title_temporary_route'    => 'Тимчасовий маршрут :dungeonName',
+        'title_clone'              => ':routeTitle (копія)',
+        'subtitle_clone_of'        => 'Копія :routeLink',
+        'permission_dratnos'       => 'Використано з дозволу Dratnos',
+        'permission_petko'         => 'Використано з дозволу Petko',
+        'subtitle_temporary_route' => 'Тимчасовий маршрут',
+        'subtitle_author'          => 'Автор(-ка): %s',
     ],
 
 ];

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Wowhead;
 
-use App\Models\GameVersion\GameVersion;
+use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Console\Command;
@@ -30,25 +30,27 @@ class RefreshDisplayIds extends Command
     public function handle(WowheadServiceInterface $wowheadService): void
     {
         /** @var Collection<Npc> $npcsToRefresh */
-        $npcsToRefresh = Npc::with('dungeon')->whereNull('display_id')->get();
+        $npcsToRefresh = Npc::with('dungeons')->whereNull('display_id')->get();
 
         $this->info(sprintf('Refreshing display_ids for %d npcs..', $npcsToRefresh->count()));
 
-        /** @var GameVersion $retail */
-        $retail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
-
         foreach ($npcsToRefresh as $npc) {
-            $gameVersion = $npc->dungeon?->gameVersion ?? $retail;
-            $displayId   = $wowheadService->getNpcDisplayId($gameVersion, $npc);
+            /** @var Dungeon $dungeon */
+            foreach ($npc->dungeons as $dungeon) {
+                foreach ($dungeon->getMappingVersionGameVersions() as $gameVersion) {
+                    $displayId = $wowheadService->getNpcDisplayId($gameVersion, $npc);
 
-            if ($displayId !== null && $npc->update(['display_id' => $displayId])) {
-                $this->info(sprintf('- %s (%d): %d', $npc->name, $npc->id, $displayId));
-            } else {
-                $this->error(sprintf('- Failed to update %s (%d): %d', $npc->name, $npc->id, $displayId));
+                    // Sleep half a second, don't DDOS wowhead
+                    usleep(500000);
+
+                    if ($displayId !== null && $npc->update(['display_id' => $displayId])) {
+                        $this->info(sprintf('- %s (%d): %d', __($npc->name), $npc->id, $displayId));
+                        break 2;
+                    } else {
+                        $this->error(sprintf('- Failed to update %s (%d): %d', __($npc->name), $npc->id, $displayId));
+                    }
+                }
             }
-
-            // Sleep half a second, don't DDOS wowhead
-            usleep(500000);
         }
     }
 }

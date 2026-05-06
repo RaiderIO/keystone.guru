@@ -16,11 +16,11 @@ class DamageShieldMissedBuilder implements SpecialEventBuilderInterface
         Carbon $timestamp,
         string $eventName,
         array  $parameters,
-        string $rawEvent
+        string $rawEvent,
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC => new DamageShieldMissedV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-            default => new DamageShieldMissedV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            default                   => new DamageShieldMissedV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
     }
 }

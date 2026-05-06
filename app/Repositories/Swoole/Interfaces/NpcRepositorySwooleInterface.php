@@ -6,5 +6,4 @@ use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 
 interface NpcRepositorySwooleInterface extends NpcRepositoryInterface
 {
-
 }

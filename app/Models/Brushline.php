@@ -17,13 +17,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $floor_id
- * @property int          $polyline_id
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $floor_id
+ * @property int $polyline_id
  *
- * @property Carbon       $updated_at
- * @property Carbon       $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline
@@ -33,18 +33,31 @@ use Illuminate\Support\Carbon;
  */
 class Brushline extends Model
 {
-    protected $visible = ['id', 'floor_id', 'polyline'];
+    protected $visible = [
+        'id',
+        'floor_id',
+        'polyline',
+    ];
 
-    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
-
-    protected $casts = [
-        'id'               => 'int',
-        'dungeon_route_id' => 'int',
-        'floor_id'         => 'int',
-        'polyline_id'      => 'int',
+    protected $fillable = [
+        'dungeon_route_id',
+        'floor_id',
+        'polyline_id',
+        'created_at',
+        'updated_at',
     ];
 
     protected $with = ['polyline'];
+
+    protected function casts(): array
+    {
+        return [
+            'id'               => 'int',
+            'dungeon_route_id' => 'int',
+            'floor_id'         => 'int',
+            'polyline_id'      => 'int',
+        ];
+    }
 
     /**
      * Get the dungeon route that this brushline is attached to.
@@ -70,6 +83,7 @@ class Brushline extends Model
         return $this->belongsTo(Floor::class);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

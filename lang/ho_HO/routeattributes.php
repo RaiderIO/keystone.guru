@@ -2,6 +2,12 @@
 
 return [
 
+    'category' => [
+        'class' => 'Hodor',
+        'item'  => 'Hodor',
+        'misc'  => 'Hodor',
+        'meta'  => 'Hodor',
+    ],
     'no_attributes'       => 'Hodor',
     'rogue_shroud_skip'   => 'Hodor',
     'warlock_gate_skip'   => 'Hodor',

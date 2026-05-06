@@ -12,6 +12,9 @@ $deleteConsequences = $user->getDeleteConsequences();
     <h4>
         {{ __('view_profile.edit.account') }}
     </h4>
+
+    @include('common.general.messages')
+
     <div class="form-group">
         {{ __('view_profile.edit.account_delete_consequences') }}:
     </div>
@@ -82,8 +85,8 @@ $deleteConsequences = $user->getDeleteConsequences();
     <div class="text-danger font-weight-bold">
         {{ __('view_profile.edit.account_delete_warning') }}
     </div>
-    {{ Form::open(['route' => 'profile.delete']) }}
-    {!! Form::hidden('_method', 'delete') !!}
-    {!! Form::submit(__('view_profile.edit.account_delete_confirm'), ['class' => 'btn btn-danger', 'name' => 'submit']) !!}
-    {!! Form::close() !!}
+    {{ html()->form('POST', route('profile.delete'))->open() }}
+    {{ html()->hidden('_method', 'delete') }}
+    {{ html()->input('submit')->value(__('view_profile.edit.account_delete_confirm'))->class('btn btn-danger')->name('submit') }}
+    {{ html()->form()->close() }}
 </div>

@@ -9,8 +9,8 @@ use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Team;
 use App\Models\User;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -19,6 +19,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Teapot\StatusCode;
 
@@ -27,9 +28,14 @@ class LiveSessionController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
-    {
-        $this->authorize('view', $dungeonroute);
+    public function create(
+        Request                       $request,
+        Dungeon                       $dungeon,
+        DungeonRoute                  $dungeonroute,
+        ?string                       $title,
+        ReverbHttpApiServiceInterface $reverbHttpApiService,
+    ): RedirectResponse {
+        Gate::authorize('view', $dungeonroute);
 
         $liveSession = LiveSession::create([
             'dungeon_route_id' => $dungeonroute->id,
@@ -46,15 +52,14 @@ class LiveSessionController extends Controller
 
                 $invitees = collect();
                 // Check if the user is in this channel..
-                foreach ($echoServerHttpApiService->getChannelUsers($channelName) as $channelUser) {
-                    $publicKey = $channelUser['public_key'] ?? $channelUser['user_info']['public_key'];
-                    /** @var array $channelUser */
+                foreach ($reverbHttpApiService->getChannelUsers($channelName) as $reverbChannelUser) {
+                    /** @var array{id: string} $reverbChannelUser */
                     // Ignore the current user!
-                    if (!isset($publicKey)) {
-                        logger()->notice('Echo user public_key not set', $channelUser);
-                    } else if ($publicKey !== $user->public_key &&
-                        $dungeonroute->team->isUserMember(new User($channelUser))) {
-                        $invitees->push($publicKey);
+                    $channelUser = User::find($reverbChannelUser['id']);
+                    if ($channelUser !== null &&
+                        $channelUser->id !== $user->id &&
+                        $dungeonroute->team->isUserMember($channelUser)) {
+                        $invitees->push($channelUser->public_key);
                     }
                 }
 
@@ -65,7 +70,7 @@ class LiveSessionController extends Controller
             } catch (Exception $exception) {
                 report($exception);
 
-                Log::error('Echo server is probably not running!');
+                Log::error('Reverb server is probably not running!');
             }
         }
 
@@ -73,7 +78,7 @@ class LiveSessionController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'livesession'  => $liveSession,
+            'liveSession'  => $liveSession,
         ]);
     }
 
@@ -88,18 +93,18 @@ class LiveSessionController extends Controller
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
-        LiveSession                $livesession)
-    {
+        LiveSession                $liveSession,
+    ) {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
 
-        return $this->viewfloor(
+        return $this->viewFloor(
             $request,
             $mapContextService,
             $dungeon,
             $dungeonroute,
             $title,
-            $livesession,
-            $defaultFloor?->index ?? '1'
+            $liveSession,
+            $defaultFloor?->index ?? '1',
         );
     }
 
@@ -108,44 +113,31 @@ class LiveSessionController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function viewfloor(
+    public function viewFloor(
         Request                    $request,
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
-        LiveSession                $livesession,
-        string                     $floorIndex)
-    {
-        $this->authorize('view', $dungeonroute);
+        LiveSession                $liveSession,
+        string                     $floorIndex,
+    ) {
+        Gate::authorize('view', $dungeonroute);
+
         try {
-            $this->authorize('view', $livesession);
+            Gate::authorize('view', $liveSession);
         } catch (AuthorizationException) {
             abort(StatusCode::GONE);
         }
 
         // In case someone edits the url to something funky
-        if ($dungeonroute->id !== $livesession->dungeon_route_id) {
-            logger()->debug('Passed dungeonroute does not match dungeonroute attached to live sessions!', [
-                'dungeon_route_id'              => $dungeonroute->id,
-                'dungeon_route_public_key'      => $dungeonroute->public_key,
-                'live_session_id'               => $livesession->id,
-                'live_session_public_key'       => $livesession->public_key,
-                'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
-            ]);
-
+        if ($dungeonroute->id !== $liveSession->dungeon_route_id) {
             abort(404);
         }
 
         // It's broken - get rid of it
-        if ($livesession->dungeonroute === null) {
-            logger()->debug('Live session is attached to a deleted dungeon route - deleting live session', [
-                'live_session_id'               => $livesession->id,
-                'live_session_public_key'       => $livesession->public_key,
-                'live_session_dungeon_route_id' => $livesession->dungeon_route_id,
-            ]);
-
-            $livesession->delete();
+        if ($liveSession->dungeonRoute === null) {
+            $liveSession->delete();
             abort(404);
         }
 
@@ -154,23 +146,25 @@ class LiveSessionController extends Controller
         }
 
         /** @var Floor $floor */
-        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)->where('index', $floorIndex)->first();
+        $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
+            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->first();
 
         if ($floor === null) {
             return redirect()->route('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $livesession,
+                'liveSession'  => $liveSession,
             ]);
         } else {
             return view('dungeonroute.livesession.view', [
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $livesession,
+                'livesession'  => $liveSession,
                 'floor'        => $floor,
-                'mapContext'   => $mapContextService->createMapContextLiveSession($livesession, $floor),
+                'mapContext'   => $mapContextService->createMapContextLiveSession($liveSession, User::getCurrentUserMapFacadeStyle()),
             ]);
         }
     }

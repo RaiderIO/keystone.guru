@@ -4,23 +4,24 @@ namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DungeonRouteService implements DungeonRouteServiceInterface
 {
     public function __construct(
+        private readonly DungeonRouteRepositoryInterface     $dungeonRouteRepository,
         private readonly ThumbnailServiceInterface           $thumbnailService,
-        private readonly DungeonRouteServiceLoggingInterface $log
+        private readonly DungeonRouteServiceLoggingInterface $log,
     ) {
     }
 
     public function updatePopularity(): int
     {
         $updatedRouteCount = 0;
+
         try {
             $this->log->updatePopularityStart();
 
@@ -36,6 +37,9 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                 SELECT MAX(id) as ids
                 FROM mapping_versions
                 GROUP BY mapping_versions.dungeon_id
+                /**
+                  @TODO #2933 Where game version is the same as the dungeon route\'s mapping version?
+                 */
             ) as latest_mapping_version_ids
             SET dungeon_routes.popularity = page_views.views
             /*
@@ -74,6 +78,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function updateRating(): int
     {
         $updatedRouteCount = 0;
+
         try {
             $this->log->updateRatingStart();
 
@@ -97,39 +102,19 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     {
         $routes = collect();
 
+        $sendResult = true;
+
         try {
             $this->log->refreshOutdatedThumbnailsStart();
 
-            /** @var Collection<DungeonRoute> $routes */
-            $routes = DungeonRoute::where('author_id', '>', '0')
-                // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
-                ->where(static function (Builder $builder) {
-                    $builder->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
-                        ->orWhere(static function (Builder $builder) {
-                            // If it is in the queue to be refreshed
-                            $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
-                                ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
-                        });
-                })
-                ->where(static function (Builder $builder) {
-                    // Only if it's not already queued!
-                    $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
-                        ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
-                })
-                // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
-                ->orderBy('published_state_id', 'desc')
-                // Newest first
-                ->orderBy('id', 'desc')
-                // Limit the amount of routes at a time, do not overflow the queue since we cannot process more anyway
-                ->limit(config('keystoneguru.thumbnail.refresh_outdated_count'))
-                ->get();
+            $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails();
 
             // All routes that come from the above will need their thumbnails regenerated, loop over them and queue the jobs at once
-            foreach ($routes as $dungeonRoute) {
-                $this->thumbnailService->queueThumbnailRefresh($dungeonRoute);
+            foreach ($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
+                $sendResult = $this->thumbnailService->queueThumbnailRefresh($dungeonRoute) && $sendResult;
             }
         } finally {
-            $this->log->refreshOutdatedThumbnailsEnd($routes->count());
+            $this->log->refreshOutdatedThumbnailsEnd($routes->count(), $sendResult);
         }
 
         return 0;
@@ -138,10 +123,16 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function deleteExpiredDungeonRoutes(): int
     {
         $deletedRouteCount = 0;
+
         try {
             $this->log->deleteOutdatedDungeonRoutesStart();
 
-            $dungeonRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
+            $dungeonRoutes = DungeonRoute::with([
+                'brushlines',
+                'paths',
+                'killZones',
+                'livesessions',
+            ])
                 ->whereRaw('expires_at < NOW()')
                 ->where('expires_at', '!=', 0)
                 ->whereNotNull('expires_at')
@@ -157,7 +148,6 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                     $this->log->deleteOutdatedDungeonRouteException($dungeonRoute->id, $ex);
                 }
             }
-
         } finally {
             $this->log->deleteOutdatedDungeonRoutesEnd($deletedRouteCount);
         }
@@ -168,6 +158,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
     public function touchRoutesForTeam(int $teamId): int
     {
         $updatedRouteCount = 0;
+
         try {
             $this->log->touchRoutesForTeamStart($teamId);
 
@@ -178,5 +169,4 @@ class DungeonRouteService implements DungeonRouteServiceInterface
 
         return $updatedRouteCount;
     }
-
 }

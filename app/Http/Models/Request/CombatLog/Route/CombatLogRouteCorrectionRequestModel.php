@@ -22,14 +22,14 @@ class CombatLogRouteCorrectionRequestModel extends CombatLogRouteRequestModel
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
+    #[\Override]
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs' => CombatLogRouteNpcCorrectionRequestModel::class,
-            'spells' => CombatLogRouteSpellCorrectionRequestModel::class,
+            'npcs'         => CombatLogRouteNpcCorrectionRequestModel::class,
+            'spells'       => CombatLogRouteSpellCorrectionRequestModel::class,
             'playerDeaths' => CombatLogRoutePlayerDeathCorrectionRequestModel::class,
-            default => null,
+            default        => null,
         };
     }
-
 }

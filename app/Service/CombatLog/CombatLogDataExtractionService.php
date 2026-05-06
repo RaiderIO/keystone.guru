@@ -31,19 +31,21 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
      */
     public const SUMMONED_NPC_IDS = [
         // Storm, Earth and Fire talent (Monk)
-        69791, // Fire Spirit
-        69792, // Earth Spirit
+        69791,
+        // Fire Spirit
+        69792,
+        // Earth Spirit
     ];
 
     /** @var Collection<DataExtractorInterface> */
-    private Collection $dataExtractors;
+    private readonly Collection $dataExtractors;
 
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,
         private readonly SeasonServiceInterface                         $seasonService,
         private readonly WowheadServiceInterface                        $wowheadService,
         private readonly FloorRepositoryInterface                       $floorRepository,
-        private readonly CombatLogDataExtractionServiceLoggingInterface $log
+        private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
         $this->dataExtractors = collect([
             new CreateMissingNpcDataExtractor(),
@@ -53,7 +55,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         ]);
     }
 
-    public function extractData(string $filePath, callable $onProcessLine = null): ExtractedDataResult
+    public function extractData(string $filePath, ?callable $onProcessLine = null): ExtractedDataResult
     {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
@@ -65,14 +67,22 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $dataExtractor->beforeExtract($result, $filePath);
         }
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
-        use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
+        $this->combatLogService->parseCombatLog($targetFilePath, function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent,
+            int    $lineNr,
+        ) use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
             // We don't care if there's no advanced logging enabled!
             if (!$advancedLoggingEnabled) {
                 return null;
             }
 
-            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', [
+                'combatLogVersion' => $combatLogVersion,
+                'rawEvent'         => trim($rawEvent),
+                'lineNr'           => $lineNr,
+            ]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
 
@@ -115,8 +125,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         return $result;
     }
 
-    private function extractDungeon(?DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): ?DataExtractionCurrentDungeon
-    {
+    private function extractDungeon(
+        ?DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                     $parsedEvent,
+    ): ?DataExtractionCurrentDungeon {
         $result = null;
 
         // One way or another, enforce we extract the dungeon from the combat log
@@ -131,7 +143,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             if ($currentSeasonForDungeon !== null) {
                 $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
                     $currentSeasonForDungeon,
-                    collect($parsedEvent->getAffixIDs())
+                    collect($parsedEvent->getAffixIDs()),
                 );
 
                 /** @var AffixGroup|null $currentKeyAffixGroup */
@@ -143,9 +155,9 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $this->log->extractDataSetChallengeMode(
                 __($dungeon->name, [], 'en_US'),
                 $currentKeyLevel,
-                optional($currentKeyAffixGroup)->getTextAttribute()
+                $currentKeyAffixGroup?->getTextAttribute(),
             );
-        } else if ($parsedEvent instanceof ZoneChange) {
+        } elseif ($parsedEvent instanceof ZoneChange) {
             if ($currentDungeon?->keyLevel !== null) {
                 $this->log->extractDataSetZoneFailedChallengeModeActive();
             } else {
@@ -167,6 +179,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function extractDataAsync(string $filePath, CombatLogAnalyze $combatLogAnalyze): ?ExtractedDataResult
     {
         $result = null;
+
         try {
             $this->log->extractDataAsyncStart($filePath, $combatLogAnalyze->id);
 
@@ -176,11 +189,16 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             ]);
 
             $totalLines = 0;
+
             try {
-                $this->combatLogService->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (&$totalLines) {
+                $this->combatLogService->parseCombatLog($filePath, function (
+                    int    $combatLogVersion,
+                    bool   $advancedLoggingEnabled,
+                    string $rawEvent,
+                ) use (&$totalLines) {
                     $totalLines++;
 
-                    return (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+                    return new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
                 });
             } catch (Exception $e) {
                 $this->log->extractDataAsyncVerifyError($e);
@@ -233,8 +251,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     'status' => CombatLogAnalyzeStatus::Completed,
                 ]);
             }
-
-
         } finally {
             $this->log->extractDataAsyncEnd();
         }

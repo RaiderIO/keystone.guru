@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents\TWW;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\TWW;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
@@ -20,8 +20,14 @@ class APICombatLogControllerCorrectEventsOperationFloodgateTest extends APIComba
     }
 
     #[Test]
-    public function create_givenOperationFloodgate8Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenTwwS2OperationFloodgate8Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('TWW/tww_s2_operation_floodgate_8');
+        $this->executeTest('TWW/tww_s2_operation_floodgate_8_mv_3');
+    }
+
+    #[Test]
+    public function create_givenTwwS3PtrOperationFloodgate7Json_shouldReturnCorrectedJsonData(): void
+    {
+        $this->executeTest('TWW/tww_s3_ptr_operation_floodgate_7');
     }
 }

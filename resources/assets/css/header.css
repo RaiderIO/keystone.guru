@@ -1,18 +1,51 @@
-.navbar {
+.navbar,
+.navbar-first,
+.navbar-second,
+.navbar-third {
     -webkit-transition: padding 0.2s ease;
     -moz-transition: padding 0.2s ease;
     -o-transition: padding 0.2s ease;
     transition: padding 0.2s ease;
+
+    -webkit-transition: height 0.2s ease;
+    -moz-transition: height 0.2s ease;
+    -o-transition: height 0.2s ease;
+    transition: height 0.2s ease;
 }
 
 .navbar-shrink {
     padding-top: 0.2em !important;
     padding-bottom: 0.2em !important;
+}
 
-    -webkit-transition: padding 0.2s ease;
-    -moz-transition: padding 0.2s ease;
-    -o-transition: padding 0.2s ease;
-    transition: padding 0.2s ease;
+
+.dungeon_context_header  {
+    -webkit-transition: height 0.2s ease;
+    -moz-transition: height 0.2s ease;
+    -o-transition: height 0.2s ease;
+    transition: height 0.2s ease;
+}
+
+.dungeon_context_header .row,
+.dungeon_context_header .col,
+.dungeon_context_header .grid_dungeon,
+.dungeon_context_header .card-img-caption {
+    height: 100%;
+}
+
+.dungeon_context_header .card-img-top {
+    height: 100%;
+    width: 100%;
+    object-fit: fill; /* or cover */
+    transition: height 0.2s ease;
+}
+
+/*.dungeon_context_header.navbar-shrink img,*/
+.dungeon_context_header.navbar-shrink {
+    padding-top: inherit !important;
+    padding-bottom: inherit !important;
+
+    height: 64px !important;
 }
 
 /* This takes up the space that the fixed-top navbar leaves because it floats */
@@ -26,10 +59,85 @@
 
 @media (min-width: 992px) {
     .navbar-second {
-        top: 32px !important;
+        top: 126px !important;
+        -webkit-transition: top 0.2s ease;
+        -moz-transition: top 0.2s ease;
+        -o-transition: top 0.2s ease;
+        transition: top 0.2s ease;
+    }
+
+    .navbar-second.navbar-shrink {
+        top: 94px !important;
+    }
+
+    .navbar-third {
+        top: 151px !important;
+        -webkit-transition: top 0.2s ease;
+        -moz-transition: top 0.2s ease;
+        -o-transition: top 0.2s ease;
+        transition: top 0.2s ease;
+    }
+
+    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-second {
+        top: 30px !important;
+    }
+
+    #map_header:not(:has(> .has_dungeon_context_header)) > .navbar-third {
+        top: 86px !important;
     }
 }
 
 .game_version_header .game_version {
     border-radius: 0.25rem;
+}
+
+
+/** HEADER */
+#map_header {
+    position: fixed;
+}
+
+#map_header,
+#map_header > div {
+    z-index: 100020 !important;
+}
+
+#map_header .rounded {
+    border-radius: 0 !important;
+}
+
+.map_fade_out {
+    opacity: 0.8;
+    transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -webkit-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+}
+
+.map_fade_out:hover {
+    opacity: 1;
+}
+
+/** Mobile fixes */
+@media (max-width: 992px) {
+    #map_header .navbar {
+        padding: 0 !important;
+    }
+    #map_header .navbar .container.rounded {
+        border-radius: 0 !important;
+    }
+}
+
+#map_header .game_version_header,
+#map_header .navbar-second,
+#map_header .navbar-third {
+    width: 100%;
+    pointer-events: none;
+}
+
+#map_header .game_version_header > .container,
+#map_header .navbar-second > .container,
+#map_header .navbar-third > .container {
+    pointer-events: auto;
+    max-width: 1400px;
 }

@@ -1,91 +1,146 @@
 <?php
 
+use App\Features\Heatmap;
+use App\Features\SearchPageRework;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
- * @var GameVersion             $currentUserGameVersion
- * @var Collection<GameVersion> $allGameVersions
- * @var Collection<Expansion>   $activeExpansions
- * @var Season                  $currentSeason
- * @var Season                  $nextSeason
+ * @var GameVersion                $currentUserGameVersion
+ * @var Collection<GameVersion>    $allGameVersions
+ * @var Collection<Expansion>      $activeExpansions
+ * @var Collection<Dungeon>        $gameVersionDungeons
+ * @var Season                     $currentSeason
+ * @var Season|null                $nextSeason
+ * @var bool                       $forceShrink
+ * @var bool                       $showMore
+ * @var bool                       $showDungeonContext
+ * @var Collection<string, string> $dungeonContextLinks
  */
 
-$navs = [
-    route('dungeonroutes.search') => [
-        'fa'   => 'fas fa-search',
-        'text' => __('view_common.layout.header.search')
-    ],
-    route('dungeon.explore.list') => [
-        'fa'   => 'fas fa-compass',
-        'text' => __('view_common.layout.header.explore')
-    ]
-];
+$navs                = [];
+$showMore            ??= false;
+$showDungeonContext  ??= true;
+$forceShrink         ??= false;
+$dungeonContextLinks ??= null;
+
+if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
+    if ($nextSeason !== null) {
+        if ($nextSeason->expansion_id !== $currentSeason->expansion_id) {
+            $navs[route('dungeonroutes.expansion.season', [
+                'expansion' => $nextSeason->expansion,
+                'season'    => $nextSeason->index,
+            ])] = [
+                'text' => $nextSeason->name_long,
+            ];
+        } else {
+            $navs[route('dungeonroutes.season', [
+                'gameVersion' => $currentUserGameVersion,
+                'season'      => $nextSeason->index,
+            ])] = [
+                'text' => $nextSeason->name,
+            ];
+        }
+    }
+
+    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion,])] = [
+        'fa'   => 'fa fa-route',
+        'text' => __('view_common.layout.header.browse_routes'),
+    ];
+} else {
+    $navs[route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion])] = [
+        'fa'   => 'fa fa-route',
+        'text' => __('view_common.layout.header.browse_routes'),
+    ];
+}
 
 $expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
     $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
-            url(sprintf('images/expansions/%s.png', $expansion->shortname),
-            ),
+            ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)),
             __($expansion->name),
-//            $expansion->hasTimewalkingEvent() ?
-//                __('view_common.layout.header.routes_timewalking', ['expansion' => __($expansion->name)]) :
             __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
         );
 }
 
-if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
-    if ($nextSeason !== null) {
-        $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
-            'text' => $nextSeason->expansion_id !== $currentSeason->expansion_id ? $nextSeason->name_long : $nextSeason->name,
-        ];
-    }
-
-    $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
-        'text' => $currentSeason->name
+if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
+    $navs[route('dungeon.heatmap.gameversion', ['gameVersion' => $currentUserGameVersion])] = [
+        'fa'   => 'fas fa-fire text-danger',
+        'text' => __('view_common.layout.header.heatmaps'),
     ];
 }
 
-$navs[__('view_common.layout.header.expansion_routes')] = $expansionRoutes;
+$isActiveRoute = function (string $route) {
+    // Check if the route that we're currently on is the same as the route in the nav
+    // If so, show it as active
+    $active    = null;
+    $parsedUrl = (parse_url((string)$route));
+    if (is_array($parsedUrl)) {
+        $routePath = trim($parsedUrl['path'], '/');
+        if (str_starts_with(Request::path(), $routePath)) {
+            $active = 'active';
+        }
+    }
 
-$navs[route('misc.affixes')] = [
-    'text' => __('view_common.layout.header.affixes')
-];
-
+    return $active;
+}
 ?>
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
-    <div class="container">
+    class="game_version_header navbar-first d-none d-lg-block fixed-top
+    {{ $showDungeonContext ? 'has_dungeon_context_header' : '' }}
+     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}">
+    <div class="container discover bg-dark rounded ">
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
-                @php($isSelectedGameVersion = $currentUserGameVersion->id === $gameVersion->id)
-                <div class="game_version col-auto px-2 m-1  {{ $isSelectedGameVersion ? 'bg-primary' : '' }}">
-                    <a class="{{ $isSelectedGameVersion ? 'active' : '' }}"
-                       href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
-                        @include('common.gameversion.gameversionheader', [
-                            'gameVersion' => $gameVersion,
-                            'iconType' => $isSelectedGameVersion ? 'black' : 'white'
-                        ])
-                    </a>
-                </div>
+                @include('common.gameversion.gameversionheader', [
+                    'gameVersion' => $gameVersion,
+                    'currentUserGameVersion' => $currentUserGameVersion,
+                ])
             @endforeach
             <div class="col">
                 &nbsp;
             </div>
         </div>
+        @if($showDungeonContext)
+            <div class="row no-gutters dungeon_context_header {{ $forceShrink ? 'navbar-shrink' : '' }}"
+                 data-toggle="navbar-shrink" style="height: 99px;">
+                <div class="col">
+                    @include('common.dungeon.list', [
+                        'gameVersion' => $currentUserGameVersion,
+                        'dungeons' => $gameVersionDungeons,
+                        'colCount' => $gameVersionDungeons->count(),
+                        'useAbbreviation' => true,
+                        'selectable' => true,
+                        'showMore' => $showMore,
+                        'selected' => Dungeon::getUserOrDefaultDungeon()->key,
+                        'links' => $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                                $dungeon->key => route('dungeon.changecontext', [
+                                    'dungeon' => $dungeon,
+                                ])
+                            ]),
+                    ])
+                </div>
+            </div>
+        @endif
     </div>
 </div>
-<div class="navbar-top-fixed-spacer"></div>
+@if(!$forceShrink)
+    <div class="navbar-top-fixed-spacer" style="height: 190px;"></div>
+@endif
 <nav
-    class="navbar navbar-second fixed-top navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }} bg-header"
+    class="navbar navbar-second fixed-top navbar-expand-lg
+     {{ $forceShrink ? 'navbar-shrink' : '' }}
+     {{ User::isThemeDark($theme) ? 'navbar-dark' : 'navbar-light' }}"
     data-toggle="navbar-shrink">
-    <div class="container">
+    <div class="container px-1 bg-header rounded">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
+            <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -106,9 +161,9 @@ $navs[route('misc.affixes')] = [
                 @foreach($navs as $route => $opts)
                     @if($opts === 'divider')
                         <li class="nav-item nav-item-divider"></li>
-                    @elseif(filter_var($route, FILTER_VALIDATE_URL) !== false)
+                    @else
                         <li class="nav-item">
-                            <a class="nav-link pr-3 {{ str_starts_with(Request::url(), $route) ? 'active' : '' }}"
+                            <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
                                href="{{ $route }}">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>
@@ -119,34 +174,61 @@ $navs[route('misc.affixes')] = [
                                 @endif
                             </a>
                         </li>
-                    @else
-                            <?php
-                            /** @noinspection PhpUndefinedVariableInspection */
-                            $headerText = $route;
-                            $dropdownId = Str::slug($headerText)
-                            ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="{{ $dropdownId }}" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ $headerText }}
-                            </a>
-                            <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
-                                @foreach($opts as $optsKey => $text)
-                                    <a class="dropdown-item" href="{{ $optsKey }}">{!! $text !!}</a>
-                                @endforeach
-                            </div>
-                        </li>
                     @endif
                 @endforeach
             </ul>
             <ul class="navbar-nav">
+                <?php
+                /** @noinspection PhpUndefinedVariableInspection */
+                $hasSubItemActive = null;
+                $headerText       = __('view_common.layout.header.browse_by_expansion');
+                $dropdownId       = Str::slug($headerText);
+                // Determine if any of the sub-items are active
+                foreach ($expansionRoutes as $itemKey => $item) {
+                    $hasSubItemActive = $hasSubItemActive ?? $isActiveRoute($itemKey);
+                }
+                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
+                       role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-stream"></i>
+                        {{ $headerText }}
+                    </a>
+                    <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
+                        @foreach($expansionRoutes as $itemKey => $item)
+                            <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                               href="{{ $itemKey }}">{!! $item !!}</a>
+                        @endforeach
+                    </div>
+                </li>
+                @php($route = route('dungeon.explore.gameversion', ['gameVersion' => $currentUserGameVersion]))
+                <li class="nav-item">
+                    <a class="nav-link pr-3 {{ $isActiveRoute($route) }}"
+                       href="{{ $route }}">
+                        <i class="fas fa-compass"></i> {{ __('view_common.layout.header.explore') }}
+                    </a>
+                </li>
                 <li class="nav-item nav-item-divider"></li>
+                <li class="nav-item">
+                    @if(Feature::active(SearchPageRework::class))
+                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeon.dungeonroute.search')) ? 'active' : '' }}"
+                           href="{{ route('dungeon.dungeonroute.search') }}">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    @else
+                        <a class="nav-link pr-3 {{ str_starts_with(Request::url(), route('dungeonroutes.search')) ? 'active' : '' }}"
+                           href="{{ route('dungeonroutes.search') }}">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    @endif
+                </li>
                 @include('common.layout.nav.gameversions')
                 @include('vendor.language.flags')
                 @include('common.layout.nav.user')
                 @include('common.layout.nav.themeswitch')
-{{--                <li class="nav-item nav-item-divider"></li>--}}
-{{--                @include('common.layout.nav.uploadlogs')--}}
+                {{--                <li class="nav-item nav-item-divider"></li>--}}
+                {{--                @include('common.layout.nav.uploadlogs')--}}
             </ul>
         </div>
     </div>

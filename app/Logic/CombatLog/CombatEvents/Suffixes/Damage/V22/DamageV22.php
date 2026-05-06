@@ -10,13 +10,14 @@ class DamageV22 extends DamageV20
     /**
      * @var string|null "AOE" or "ST"
      */
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getDamageType(): ?string
     {
         return $this->damageType;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -26,6 +27,7 @@ class DamageV22 extends DamageV20
         return $this;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 11;

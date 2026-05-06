@@ -16,7 +16,7 @@ class ActivePullEnemy
         private readonly float   $x,
         private readonly float   $y,
         private readonly Carbon  $engagedAt,
-        private readonly ?Carbon $diedAt
+        private readonly ?Carbon $diedAt,
     ) {
     }
 
@@ -78,8 +78,8 @@ class ActivePullEnemy
             return 0;
         }
 
-        $timeAliveMS  = $this->getEngagedAt()->diffInMilliseconds($this->getDiedAt());
-        $snapshotAtMS = $this->getEngagedAt()->diffInMilliseconds($carbon);
+        $timeAliveMS  = (int)$this->getEngagedAt()->diffInMilliseconds($this->getDiedAt(), true);
+        $snapshotAtMS = (int)$this->getEngagedAt()->diffInMilliseconds($carbon, true);
 
         // timeAliveMS = 30000
         // snapShotAtMS = 15000

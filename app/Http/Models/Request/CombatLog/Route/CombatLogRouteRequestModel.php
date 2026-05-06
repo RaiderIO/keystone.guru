@@ -42,10 +42,9 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         public ?CombatLogRouteRosterRequestModel        $roster = null,
         public ?Collection                              $npcs = null,
         public ?Collection                              $spells = null,
-        public ?Collection                              $playerDeaths = null
+        public ?Collection                              $playerDeaths = null,
     ) {
     }
-
 
     /**
      * @throws DungeonNotSupportedException
@@ -56,25 +55,41 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         AffixGroupRepositoryInterface             $affixGroupRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
         DungeonRepositoryInterface                $dungeonRepository,
-        ?int $userId = null
+        ?int                                      $userId = null,
     ): DungeonRoute {
         try {
-            $dungeon = $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
+            $dungeon = $dungeonRepository->getByMappingVersion($this->challengeMode->challengeModeId, $this->settings->mappingVersion) ??
+                $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
         } catch (Exception) {
             throw new DungeonNotSupportedException(
-                sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId)
+                sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId),
             );
         }
 
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        // In case there was a mapping version override, we need to find the correct mapping version
+        if ($this->settings->mappingVersion !== null) {
+            $mappingVersion = $dungeonRepository->getMappingVersionByVersion(
+                $dungeon,
+                $this->settings->mappingVersion,
+            );
+        }
+
+        // Fallback if not set or not found
+        $mappingVersion ??= $dungeon->getCurrentMappingVersion();
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
+        // Fully get rid of it when regenerating. It won't be available for a sec but that's okay
+        $existingDungeonRoute = $dungeonRouteRepository->findCombatLogRouteByPublicKey($this->settings->publicKey);
+        if ($existingDungeonRoute !== null) {
+            $existingDungeonRoute->delete();
+        }
+
         $dungeonRoute = $dungeonRouteRepository->create([
-            'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
-            'author_id' => $userId,
+            'public_key'         => $existingDungeonRoute?->public_key ?? $dungeonRouteRepository->generateRandomPublicKey(),
+            'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $currentMappingVersion->id,
+            'mapping_version_id' => $mappingVersion->id,
             'season_id'          => $currentSeasonForDungeon?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
@@ -82,12 +97,12 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
             'level_min'          => $this->challengeMode->level,
             'level_max'          => $this->challengeMode->level,
             'expires_at'         => $this->settings->temporary ? Carbon::now()->addHours(
-                config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                config('keystoneguru.sandbox_dungeon_route_expires_hours'),
             )->toDateTimeString() : null,
         ]);
 
         $dungeonRoute->setRelation('dungeon', $dungeon);
-        $dungeonRoute->setRelation('mappingVersion', $currentMappingVersion);
+        $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
         // Initially set the relation so we don't go fetching it from the database initially
         $dungeonRoute->setRelation('killZones', collect());
 
@@ -111,14 +126,14 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         return $dungeonRoute;
     }
 
+    #[\Override]
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {
-            'npcs' => CombatLogRouteNpcRequestModel::class,
-            'spells' => CombatLogRouteSpellRequestModel::class,
+            'npcs'         => CombatLogRouteNpcRequestModel::class,
+            'spells'       => CombatLogRouteSpellRequestModel::class,
             'playerDeaths' => CombatLogRoutePlayerDeathRequestModel::class,
-            default => null,
+            default        => null,
         };
     }
-
 }

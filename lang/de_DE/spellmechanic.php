@@ -1,0 +1,37 @@
+<?php
+
+return [
+
+    'asleep'        => '',
+    'banished'      => '',
+    'bleeding'      => '',
+    'charmed'       => '',
+    'gripped'       => '',
+    'dazed'         => '',
+    'disarmed'      => '',
+    'discovery'     => '',
+    'disoriented'   => '',
+    'distracted'    => '',
+    'enraged'       => '',
+    'snared'        => '',
+    'fleeing'       => '',
+    'frozen'        => '',
+    'healing'       => '',
+    'horrified'     => '',
+    'incapacitated' => '',
+    'interrupted'   => '',
+    'invulnerable'  => '',
+    'mounted'       => '',
+    'slowed'        => '',
+    'polymorphed'   => '',
+    'rooted'        => '',
+    'sapped'        => '',
+    'infected'      => '',
+    'shackled'      => '',
+    'shielded'      => '',
+    'silenced'      => '',
+    'stunned'       => '',
+    'turned'        => '',
+    'wounded'       => '',
+
+];

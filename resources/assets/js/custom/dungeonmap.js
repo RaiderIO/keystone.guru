@@ -7,6 +7,7 @@
  * @property {boolean} readonly
  * @property {boolean} sandbox
  * @property {String} defaultEnemyVisualType
+ * @property {String} defaultHeatmapShowTooltips
  * @property {String} defaultUnkilledEnemyOpacity
  * @property {String} defaultUnkilledImportantEnemyOpacity
  * @property {String} defaultEnemyAggressivenessBorder
@@ -20,6 +21,9 @@
  * @property {Number} defaultZoomMax
  * @property {boolean} showAttribution
  * @property {Object} dungeonroute
+ * @property {String} assetsBaseUrl
+ * @property {String} tilesBaseUrl
+ * @property {Number} floorId
  * @property {DungeonMapOptionsParamters} parameters
  */
 
@@ -64,6 +68,12 @@ class DungeonMap extends Signalable {
                 let data = $.extend({}, getHandlebarsDefaultVariables(), {
                     'upgrade_url': mapContext.getMappingVersionUpgradeUrl()
                 });
+
+                state.addSnackbar(template(data));
+            } else if( mapContext.getDungeon().key === DUNGEON_ALGETHAR_ACADEMY ) {
+                let template = Handlebars.templates['map_controls_snackbar_algethar_dragonflight_warning'];
+
+                let data = $.extend({}, getHandlebarsDefaultVariables(), {});
 
                 state.addSnackbar(template(data));
             }
@@ -251,7 +261,7 @@ class DungeonMap extends Signalable {
             let layerDeletedFn = function () {
                 layersDeleted++;
                 if (layersDeleted === layersLength) {
-                    showSuccessNotification(lang.get('messages.object.deleted'));
+                    showSuccessNotification(lang.get('js.object.deleted'));
                 }
             };
 
@@ -680,9 +690,9 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = false;
 
-        let dungeonData = getState().getMapContext().getDungeon();
-        for (let i = 0; i < dungeonData.floors.length; i++) {
-            let floor = dungeonData.floors[i];
+        let floors = getState().getMapContext().getVisibleFloors();
+        for (let i = 0; i < floors.length; i++) {
+            let floor = floors[i];
             if (floor.id === floorId) {
                 result = floor;
                 break;
@@ -741,9 +751,8 @@ class DungeonMap extends Signalable {
         let southWest = this.leafletMap.unproject([0, tileSize.y * zoomSizeFactor], floorMaxZoomLevel);
         let northEast = this.leafletMap.unproject([tileSize.x * zoomSizeFactor, 0], floorMaxZoomLevel);
 
-
         let dungeonData = getState().getMapContext().getDungeon();
-        this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.png`, {
+        this.mapTileLayer = L.tileLayer(`${this.options.tilesBaseUrl}/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.png`, {
             maxNativeZoom: c.map.leafletSettings.maxNativeZoom,
             maxZoom: floorMaxZoomLevel,
             attribution: 'Map data © Blizzard Entertainment',
@@ -772,7 +781,7 @@ class DungeonMap extends Signalable {
         this.leafletMap.addLayer(this.editableLayers);
 
         // If we confirmed editing something..
-        this.signal('map:refresh', {dungeonmap: this});
+        this.redrawMapContents();
 
         // Show/hide the attribution
         if (!this.options.showAttribution) {
@@ -805,6 +814,12 @@ class DungeonMap extends Signalable {
 
 
         this._refreshingMap = false;
+    }
+
+    redrawMapContents() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        this.signal('map:refresh', {dungeonmap: this});
     }
 
     isRefreshingMap() {

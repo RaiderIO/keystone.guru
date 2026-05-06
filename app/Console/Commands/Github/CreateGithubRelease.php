@@ -3,13 +3,15 @@
 namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Github\Api\Repo;
 use Github\Exception\MissingArgumentException;
 use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
+use Illuminate\Console\Command;
 use Throwable;
 
-class CreateGithubRelease extends BaseGithubReleaseCommand
+class CreateGithubRelease extends Command
 {
     use ExecutesShellCommands;
 
@@ -18,7 +20,7 @@ class CreateGithubRelease extends BaseGithubReleaseCommand
      *
      * @var string
      */
-    protected $signature = 'make:githubrelease {version?}';
+    protected $signature = 'make:githubrelease {version?} {--hash=}';
 
     /**
      * The console command description.
@@ -34,21 +36,23 @@ class CreateGithubRelease extends BaseGithubReleaseCommand
      * @throws MissingArgumentException
      * @throws Throwable
      */
-    public function handle(): void
-    {
+    public function handle(
+        ReleaseRepositoryInterface $releaseRepository,
+    ): void {
         $version = $this->argument('version');
-        $release = $this->findReleaseByVersion($version);
+        $hash    = $this->option('hash');
+        $release = $releaseRepository->findReleaseByVersion($version);
 
         if ($release !== null) {
             $this->info(sprintf('>> Creating Github release for %s', $release->version));
 
-            $username   = config('keystoneguru.github_username');
-            $repository = config('keystoneguru.github_repository');
+            $repositoryOwner = config('keystoneguru.github_repository_owner');
+            $repository      = config('keystoneguru.github_repository');
 
             /** @var Repo $githubRepoClient */
             $githubRepoClient = GitHub::repo();
             // May throw an exception if it doesn't exist
-            foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
+            foreach ($githubRepoClient->releases()->all($repositoryOwner, $repository) as $githubRelease) {
                 if ($githubRelease['name'] === $release->version) {
                     $this->error(sprintf('OK Unable to create release for %s; already exists!', $release->version));
 
@@ -59,11 +63,12 @@ class CreateGithubRelease extends BaseGithubReleaseCommand
             $body = $release->getGithubBodyAttribute();
 
             try {
-                $githubRepoClient->releases()->create($username, $repository, [
-                    'tag_name' => $release->version,
-                    'name'     => $release->version,
-                    'body'     => $body,
-                ]);
+                $githubRepoClient->releases()->create($repositoryOwner, $repository, array_filter([
+                    'tag_name'         => $release->version,
+                    'name'             => $release->version,
+                    'body'             => $body,
+                    'target_commitish' => $hash,
+                ]));
 
                 $this->info(sprintf('Successfully created GitHub release %s', $release->version));
             } catch (ValidationFailedException $exception) {

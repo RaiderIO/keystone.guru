@@ -8,6 +8,7 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 window.Popper = require('popper.js').default;
+window.offsetPolygon = require('offset-polygon').default;
 
 require('bootstrap');
 
@@ -19,23 +20,53 @@ require('bootstrap');
 
 // window.Vue = require('vue');
 
-/**
- * Echo server
- */
 import Echo from 'laravel-echo'
 /**
  * Translations coupling from server to client.
  */
-import messages from './messages';
 
-window.io = require('socket.io-client');
+import Pusher from 'pusher-js';
 
-window.startEcho = function () {
-    window.Echo = new Echo({
-        broadcaster: 'socket.io',
-        host: window.location.host
+window.Pusher = Pusher;
+
+function startLaravelEcho() {
+    if (window.LaravelEcho) {
+        return window.LaravelEcho;
+    }
+
+    if (getState() === false) {
+        console.error(`Unable to start Laravel Echo outside of map context!`);
+        return null;
+    }
+
+    window.LaravelEcho = new Echo({
+        broadcaster: 'reverb',
+        key: getState().getLaravelEchoAppKey(),
+        wsHost: window.location.hostname,
+        wsPort: window.location.protocol === 'https:' ? null : (window.location.port ?? 80),
+        wssPort: 443,
+        forceTLS: window.location.protocol === 'https:',
+        wsPath: '/reverb',
+        enabledTransports: ['ws', 'wss'],
+        // disableStats: true,
+        // cluster: 'mt1', // Required by pusher-js, even if unused by Reverb
     });
-};
+
+    return window.LaravelEcho;
+}
+
+function stopLaravelEcho() {
+    if (!window.LaravelEcho) return;
+    try {
+        window.LaravelEcho.disconnect();
+    } catch (e) {
+    }
+    window.LaravelEcho = null;
+    delete window.LaravelEcho;
+}
+
+window.startLaravelEcho = startLaravelEcho;
+window.stopLaravelEcho = stopLaravelEcho;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -45,11 +76,12 @@ window.startEcho = function () {
 
 window.axios = require('axios');
 
-window.datatables = require('datatables');
+window.datatables = require('datatables.net');
 window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
+window.edgeBuffer = require('leaflet-edgebuffer');
 window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
@@ -63,7 +95,7 @@ window.pwstrengthmeter = require('password-strength-meter');
 window.jqueryMousewheel = require('jquery-mousewheel');
 window.Cookies = require('js-cookie');
 window.hull = require('hull.js'); // Find the 'hull' of a random set of points
-window.Offset = require('polygon-offset'); // Offsetting polygons to get a smooth padding around them
+const offsetPolygon = require("offset-polygon");
 window.Lang = require('lang.js'); // Javascript translations
 window.d3 = require('d3'); // v3.5.14 since Pather uses an out-of-date version
 window.Pather = require('leaflet-pather');
@@ -87,20 +119,9 @@ require('@fortawesome/fontawesome-free');
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from "laravel-echo"
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
-window.lang = new Lang({messages});
+// Initialize with empty messages; language bundles (public/js/lang-<locale>-<version>.js)
+// will populate messages at runtime via window.lang.setMessages(...)
+window.lang = new Lang({messages: {}});
 
 // https://stackoverflow.com/questions/13046401/how-to-set-selected-select-option-in-handlebars-template
 window.Handlebars.registerHelper('select', function (value, options) {

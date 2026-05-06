@@ -32,7 +32,7 @@ class SeedOne extends Command
     /**
      * Create a new database seed command instance.
      *
-     * @param Resolver $resolver
+     * @param  Resolver $resolver
      * @return void
      */
     public function __construct(Resolver $resolver)
@@ -48,7 +48,7 @@ class SeedOne extends Command
      */
     public function handle(
         CacheServiceInterface $cacheService,
-        DatabaseSeeder        $databaseSeeder
+        DatabaseSeeder        $databaseSeeder,
     ): int {
         $className = $this->argument('className');
 
@@ -60,9 +60,7 @@ class SeedOne extends Command
             $classNames = explode(',', $className);
             $this->info(sprintf('Seeding database with only %s...', implode(', ', $classNames)));
 
-            $fullClassNames = collect($classNames)->map(function ($className) {
-                return 'Database\\Seeders\\' . $className;
-            })->toArray();
+            $fullClassNames = collect($classNames)->map(fn($className) => 'Database\\Seeders\\' . $className)->toArray();
 
             $databaseSeeder->run($cacheService, $fullClassNames);
         } finally {

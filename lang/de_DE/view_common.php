@@ -1,22 +1,18 @@
 <?php
 
 return [
-    'affixgroup'   => [
-        'affixgroup' => [
 
-        ],
-    ],
-    'dungeon'      => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => '',
             'this_week' => '',
             'next_week' => '',
             'new'       => '',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => '',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => '',
             'all'                      => '',
             'all_dungeons'             => '',
@@ -27,7 +23,7 @@ return [
         ],
     ],
     'dungeonroute' => [
-        'search'     => [
+        'search' => [
             'loadmore' => [
                 'loading' => '',
             ],
@@ -36,9 +32,12 @@ return [
             'attributes'              => '',
             'no_attributes_title'     => '',
             'select_attributes_title' => '',
+            'select_attributes'       => '',
             'attributes_selected'     => '',
         ],
-        'card'       => [
+        'card' => [
+            'thumbnail_alt'            => '',
+            'thumbnail_dungeon_alt'    => '',
             'no_description'           => '',
             'outdated_mapping_version' => '',
             'by_author'                => '',
@@ -48,31 +47,34 @@ return [
             'dominant_affix'           => '',
             'seasonal_affix'           => '',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => '',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => '',
             'affixes'               => '',
+            'select_affixes'        => '',
             'affixes_selected'      => '',
             'requirements'          => '',
             'enemy_enemy_forces'    => '',
             'favorite'              => '',
+            'select_requirements'   => '',
             'requirements_selected' => '',
             'tags'                  => '',
             'tags_title'            => '',
+            'select_tags'           => '',
             'tags_selected'         => '',
             'filter'                => '',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '',
         ],
     ],
-    'forms'        => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => '',
             'title_title'                                    => '',
             'dungeon_speedrun_required_npc_difficulty'       => '',
@@ -97,7 +99,7 @@ return [
             'registered_user_message'   => '',
             'create_route'              => '',
         ],
-        'login'                => [
+        'login' => [
             'login'                => '',
             'email_address'        => '',
             'password'             => '',
@@ -105,46 +107,52 @@ return [
             'forgot_your_password' => '',
             'login_through_oauth2' => '',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
+            'general'                                       => '',
             'map_facade_style'                              => '',
             'map_facade_style_title'                        => '',
             'map_facade_style_facade_option'                => '',
             'map_facade_style_split_floors_option'          => '',
             'map_facade_style_change_requires_page_refresh' => '',
-
-            'enemies'                                => '',
-            'enemy_number_style'                     => '',
-            'enemy_number_style_title'               => '',
-            'percentage'                             => '',
-            'enemy_forces'                           => '',
-            'unkilled_enemy_opacity'                 => '',
-            'unkilled_enemy_opacity_title'           => '',
-            'unkilled_important_enemy_opacity'       => '',
-            'unkilled_important_enemy_opacity_title' => '',
-            'show_aggressiveness_border'             => '',
-            'show_aggressiveness_border_title'       => '',
-            'highlight_dangerous_enemies'            => '',
-            'highlight_dangerous_enemies_title'      => '',
-            'drawing'                                => '',
-            'default_line_weight'                    => '',
-            'default_line_weight_title'              => '',
-            'default_line_color'                     => '',
-            'default_line_color_title'               => '',
+            'zoom_speed'                                    => '',
+            'zoom_speed_title'                              => '',
+            'heatmap'                                       => '',
+            'show_heatmap_tooltips'                         => '',
+            'show_heatmap_tooltips_title'                   => '',
+            'enemies'                                       => '',
+            'enemy_number_style'                            => '',
+            'enemy_number_style_title'                      => '',
+            'percentage'                                    => '',
+            'enemy_forces'                                  => '',
+            'unkilled_enemy_opacity'                        => '',
+            'unkilled_enemy_opacity_title'                  => '',
+            'unkilled_important_enemy_opacity'              => '',
+            'unkilled_important_enemy_opacity_title'        => '',
+            'show_aggressiveness_border'                    => '',
+            'show_aggressiveness_border_title'              => '',
+            'highlight_dangerous_enemies'                   => '',
+            'highlight_dangerous_enemies_title'             => '',
+            'drawing'                                       => '',
+            'default_line_weight'                           => '',
+            'default_line_weight_title'                     => '',
+            'default_line_color'                            => '',
+            'default_line_color_title'                      => '',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => '',
             'reset_title'                            => '',
             'unregistered_user_all_routes_temporary' => '',
             'temporary_route'                        => '',
             'temporary_route_title'                  => '',
             'parsing_your_string'                    => '',
+            'assign_notes_to_pulls'                  => '',
             'import_as_this_week'                    => '',
             'import_route'                           => '',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => '',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => '',
             'pull_number_style_title'           => '',
             'pull_number_style_percentage'      => '',
@@ -158,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => '',
             'always_apply_on_pull_change_title' => '',
         ],
-        'register'             => [
+        'register' => [
             'register'                => '',
             'username'                => '',
             'username_title'          => '',
@@ -175,7 +183,7 @@ return [
             'privacy_policy'          => '',
             'cookie_policy'           => '',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => '',
             'america'    => '',
             'antarctica' => '',
@@ -187,7 +195,7 @@ return [
             'timezone'   => '',
         ],
     ],
-    'general'      => [
+    'general' => [
         'linkpreview' => [
             'title'               => '',
             'description'         => '',
@@ -195,8 +203,8 @@ return [
             'twitter_description' => '',
         ],
     ],
-    'group'        => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => '',
             'awakened_enemy_set'       => '',
             'awakened_enemy_set_title' => '',
@@ -209,7 +217,7 @@ return [
             'party_member_nr' => '',
         ],
     ],
-    'layout'       => [
+    'layout' => [
         'footer' => [
             'developer'                       => '',
             'api_documentation'               => '',
@@ -219,6 +227,8 @@ return [
             'changelog_new'                   => '',
             'credits'                         => '',
             'about'                           => '',
+            'legacy'                          => '',
+            'affixes'                         => '',
             'external'                        => '',
             'patreon'                         => '',
             'discord'                         => '',
@@ -235,14 +245,15 @@ return [
             'toggle_navigation_title' => '',
             'create_route'            => '',
             'search'                  => '',
-            'expansion_routes'        => '',
+            'browse_by_expansion'     => '',
             'routes'                  => '',
+            'browse_routes'           => '',
+            'heatmaps'                => '',
             'explore'                 => '',
-            'affixes'                 => '',
             'new'                     => '',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => '',
                 'register'          => '',
                 'telescope'         => '',
@@ -267,21 +278,30 @@ return [
             ],
         ],
     ],
-    'maps'         => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => '',
                 'view_this_route' => '',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'dungeonroutesearch' => [
+                'description'    => '',
+                'settings_title' => '',
+                'enabled'        => '',
+                'disabled'       => '',
+                'key_level'      => '',
+                'title'          => '',
+                'username'       => '',
+            ],
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => '',
                     'timer_title'      => '',
                     'group_setup'      => '',
                     'affixes'          => '',
                     'route_info_title' => '',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => '',
                     'npc_class'               => '',
                     'npc_type'                => '',
@@ -289,61 +309,68 @@ return [
                     'enemy_visual_type'       => '',
                     'enemy_visual_type_title' => '',
                     'enemy_skippable'         => '',
+                    'enemy_group'             => '',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => '',
                     'floors'        => '',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => '',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => '',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => '',
                     'auto_solve' => '',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => '',
                     'unable_to_rate_own_route' => '',
                     'your_rating'              => '',
                 ],
             ],
-            'enemyinfo'      => [
-                'enemy_info'      => '',
-                'report_an_issue' => '',
-            ],
-            'heatmapsearch'  => [
-                'settings_title'      => '',
-                'enabled'             => '',
-                'disabled'            => '',
-                'event_type'          => '',
-                'data_type'           => '',
-                'npc_death_alt'       => '',
-                'player_death_alt'    => '',
-                'bloodlust_alt'       => '',
-                'data_type_title'     => '',
-                'filter'              => '',
-                'key_level'           => '',
-                'item_level'          => '',
-                'player_deaths'       => '',
-                'affixes'             => '',
-                'affixes_title'       => '',
-                'affixes_selected'    => '',
-                'weekly_affix_groups' => '',
-                'specializations'     => '',
-                'date_range'          => '',
-                'date_range_from'     => '',
-                'date_range_to'       => '',
-                'duration'            => '',
-                'advanced_options'    => '',
-                'advanced_option'     => [
+            'heatmapsearch' => [
+                'settings_title'         => '',
+                'enabled'                => '',
+                'disabled'               => '',
+                'event_type'             => '',
+                'data_type'              => '',
+                'npc_death_alt'          => '',
+                'player_death_alt'       => '',
+                'bloodlust_alt'          => '',
+                'data_type_title'        => '',
+                'filter'                 => '',
+                'key_level'              => '',
+                'item_level'             => '',
+                'player_deaths'          => '',
+                'affixes'                => '',
+                'affixes_title'          => '',
+                'affixes_selected'       => '',
+                'weekly_affix_groups'    => '',
+                'date_range'             => '',
+                'date_range_from'        => '',
+                'date_range_to'          => '',
+                'duration'               => '',
+                'class_and_spec_options' => '',
+                'class_and_spec_option'  => [
+                    'specializations'                     => '',
+                    'specializations_title'               => '',
+                    'classes'                             => '',
+                    'classes_title'                       => '',
+                    'specializations_player_deaths'       => '',
+                    'specializations_player_deaths_title' => '',
+                    'classes_player_deaths'               => '',
+                    'classes_player_deaths_title'         => '',
+                ],
+                'advanced_options' => '',
+                'advanced_option'  => [
                     'min_samples_required'       => '',
                     'min_samples_required_title' => '',
                 ],
-                'heat_options'        => '',
-                'heat_option'         => [
+                'heat_options' => '',
+                'heat_option'  => [
                     'min_opacity' => '',
                     'max_zoom'    => '',
                     'max'         => '',
@@ -353,7 +380,7 @@ return [
                     'pane'        => '',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => '',
                 'stop'                           => '',
                 'start'                          => '',
@@ -367,8 +394,6 @@ return [
                 'simulate_route'                 => '',
                 'edit_route_settings'            => '',
                 'edit_mapping_version'           => '',
-                'admin_header_title'             => '',
-                'explore_header_title'           => '',
                 'share'                          => '',
                 'start_live_session'             => '',
                 'start_live_session_paragraph_1' => '',
@@ -382,7 +407,7 @@ return [
                 'you_cannot_rate_your_own_route' => '',
                 'review_live_session'            => '',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => '',
                 'new_pull'                    => '',
                 'delete_all_pulls_title'      => '',
@@ -392,15 +417,17 @@ return [
                 'no_pulls_created_view'       => '',
             ],
             'pullsworkbench' => [
-                'modal'            => [
+                'modal' => [
                     'description' => [
                         'label'               => '',
                         'supported_html_tags' => '',
                         'save'                => '',
                     ],
-                    'spells'      => [
-                        'label' => '',
-                        'save'  => '',
+                    'supported_domains' => '',
+                    'spells'            => [
+                        'label'         => '',
+                        'select_spells' => '',
+                        'save'          => '',
                     ],
                 ],
                 'description'      => '',
@@ -409,37 +436,40 @@ return [
                 'remove_kill_area' => '',
                 'delete_killzone'  => '',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => '',
                 'clone_this_route_title'         => '',
                 'report_for_moderation'          => '',
                 'report_for_moderation_finished' => '',
             ],
         ],
-        'map'      => [
-            'no_teeming'      => '',
-            'visible_teeming' => '',
-            'hidden_teeming'  => '',
-
-            'any'      => '',
-            'alliance' => '',
-            'horde'    => '',
-
+        'map' => [
+            'no_teeming'                             => '',
+            'visible_teeming'                        => '',
+            'hidden_teeming'                         => '',
+            'any'                                    => '',
+            'alliance'                               => '',
+            'horde'                                  => '',
             'new_mapping_version_header_title'       => '',
             'new_mapping_version_header_description' => '',
-
-            'route' => '',
+            'route'                                  => '',
         ],
     ],
-    'modal'        => [
-        'dungeonroute'       => [
+    'mappingversion' => [
+        'select' => [
+            'mapping_version_readonly' => '',
+            'mapping_version'          => '',
+        ],
+    ],
+    'modal' => [
+        'dungeonroute' => [
             'removed' => [
                 'title'        => '',
                 'description'  => '',
                 'back_to_home' => '',
             ],
         ],
-        'userreport'         => [
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => '',
                 'your_name'              => '',
@@ -448,7 +478,7 @@ return [
                 'contact_by_email_guest' => '',
                 'submit'                 => '',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => '',
                 'your_name'              => '',
                 'what_is_wrong'          => '',
@@ -457,28 +487,29 @@ return [
                 'submit'                 => '',
             ],
         ],
-        'createroute'        => [
+        'createroute' => [
             'create_route'           => '',
             'create_temporary_route' => '',
             'import_from_mdt'        => '',
         ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => '',
             'terms_of_service'   => '',
             'privacy_policy'     => '',
             'cookie_policy'      => '',
             'i_agree'            => '',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => '',
             'enemy_forces_required'           => '',
             'enemy_forces_required_teeming'   => '',
             'enemy_forces_shrouded'           => '',
             'enemy_forces_shrouded_zul_gamux' => '',
             'timer_max_seconds'               => '',
+            'timer_max_minutes'               => '',
             'save'                            => '',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => '',
             'pull_settings' => '',
         ],
@@ -493,10 +524,10 @@ return [
             'route_not_created_from_combat_log' => '',
             'route_not_created_through_api'     => '',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => '',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => '',
             'publish'                          => '',
             'review_route_settings'            => '',
@@ -511,7 +542,7 @@ return [
             'loading'                          => '',
             'copy_to_clipboard'                => '',
         ],
-        'simulate'           => [
+        'simulate' => [
             'intro'                      => '',
             'title'                      => '',
             'get_simulationcraft_string' => '',
@@ -519,23 +550,22 @@ return [
             'loading'                    => '',
             'copy_to_clipboard'          => '',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-
-                'key_level'                               => '',
-                'key_level_title'                         => '',
-                'shrouded_bounty_type'                    => '',
-                'shrouded_bounty_type_title'              => '',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => '',
+                'key_level_title'            => '',
+                'shrouded_bounty_type'       => '',
+                'shrouded_bounty_type_title' => '',
+                'shrouded_bounty_types'      => [
                     'none'    => '',
                     'crit'    => '',
                     'haste'   => '',
                     'mastery' => '',
                     'vers'    => '',
                 ],
-                'affixes'                                 => '',
-                'affixes_title'                           => '',
-                'affixes_map'                             => [
+                'affixes'       => '',
+                'affixes_title' => '',
+                'affixes_map'   => [
                     'fortified'  => '',
                     'tyrannical' => '',
                 ],
@@ -556,10 +586,10 @@ return [
                     'power_infusion'       => '',
                     'bleeding'             => '',
                 ],
-                'hp_percent'                              => '',
-                'hp_percent_title'                        => '',
-                'bloodlust_per_pull'                      => '',
-                'bloodlust_per_pull_title'                => '',
+                'hp_percent'               => '',
+                'hp_percent_title'         => '',
+                'bloodlust_per_pull'       => '',
+                'bloodlust_per_pull_title' => '',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '',
@@ -572,16 +602,16 @@ return [
                 'description'                          => '',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => '',
         ],
     ],
-    'release'      => [
+    'release' => [
         'release' => [
             'new' => '',
         ],
     ],
-    'tag'          => [
+    'tag' => [
         'manager' => [
             'route_personal' => '',
             'route_team'     => '',
@@ -595,7 +625,7 @@ return [
             'create_new_tag' => '',
         ],
     ],
-    'team'         => [
+    'team' => [
         'details' => [
             'name'            => '',
             'description'     => '',
@@ -606,19 +636,19 @@ return [
             'submit'          => '',
             'disband_team'    => '',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => '',
             'team'        => '',
             'create_team' => '',
         ],
     ],
-    'thirdparty'   => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => '',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => '',
             ],
@@ -627,9 +657,10 @@ return [
             'learn_more' => '',
         ],
     ],
-    'user'         => [
+    'user' => [
         'name' => [
-            'avatar_title' => '',
+            'avatar_alt' => '',
+            'raider_io'  => '',
         ],
     ],
 

@@ -10,7 +10,8 @@
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-193.6225,\"lng\":201.7938},{\"lat\":-127.8618,\"lng\":184.7204}]"
-        }
+        },
+        "mdt_polyline": null
     },
     {
         "id": 2865,
@@ -23,6 +24,7 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-193.8311,\"lng\":201.9375},{\"lat\":-128.2557,\"lng\":185.0008}]"
-        }
+        },
+        "mdt_polyline": null
     }
 ]

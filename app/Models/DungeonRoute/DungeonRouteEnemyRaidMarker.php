@@ -21,7 +21,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonRouteEnemyRaidMarker extends Model
 {
-    protected $fillable = ['dungeon_route_id', 'raid_marker_id', 'enemy_id'];
+    protected $fillable = [
+        'dungeon_route_id',
+        'raid_marker_id',
+        'enemy_id',
+    ];
 
     public $hidden = ['dungeon_route_id'];
 

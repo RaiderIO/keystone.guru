@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int             $id
- * @property string          $name
- * @property string          $key
+ * @property int    $id
+ * @property string $name
+ * @property string $key
  *
  * @property Collection<Npc> $npcs
  *
@@ -21,9 +21,16 @@ class Characteristic extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['id', 'name', 'key'];
+    protected $fillable = [
+        'id',
+        'name',
+        'key',
+    ];
 
-    protected $visible = ['name', 'key'];
+    protected $visible = [
+        'name',
+        'key',
+    ];
 
     public const CHARACTERISTIC_TAUNT           = 'taunt';
     public const CHARACTERISTIC_INCAPACITATE    = 'incapacitate';
@@ -76,7 +83,6 @@ class Characteristic extends CacheModel
         self::CHARACTERISTIC_TURN_EVIL       => 23,
         self::CHARACTERISTIC_MIND_SOOTHE     => 24,
     ];
-
 
     /**
      * Gets all derived NPCs from this classification.

@@ -16,17 +16,9 @@ class EnemyVisualModifierRaidMarker extends EnemyVisualModifier {
      * @inheritDoc
      */
     _getValidIconNames() {
-        return [
-            '', // we are allowed to unset
-            'star',
-            'circle',
-            'diamond',
-            'triangle',
-            'moon',
-            'square',
-            'cross',
-            'skull'
-        ];
+        return [''].concat(getState().getMapContext().getStaticRaidMarkers().map(function (raidMarker){
+            return raidMarker.name;
+        }));
     }
 
     /**

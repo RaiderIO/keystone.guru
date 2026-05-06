@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ abstract class OAuthLoginController extends LoginController
     abstract protected function getUser($oauthUser, $oAuthId);
 
     /**
-     * @param  $id  string The ID that the auth provider supplied
+     * @param        $id string The ID that the auth provider supplied
      * @return mixed A globally uniquely identifyable ID to couple to the user account.
      */
     protected function getOAuthId(string $id)
@@ -36,7 +37,7 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Checks if a user exists by its username.
      *
-     * @param  $username  string The username to check.
+     * @param       $username string The username to check.
      * @return bool True if the user exists, false if it does not.
      */
     protected function userExistsByUsername(string $username): bool
@@ -47,7 +48,7 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Checks if a user exists by its e-mail address.
      *
-     * @param  $email  string The e-mail address to check.
+     * @param       $email string The e-mail address to check.
      * @return bool True if the user exists, false if it does not.
      */
     protected function userExistsByEmail(string $email): bool
@@ -58,8 +59,17 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Redirect the user to the OAuth authentication page.
      */
-    public function redirectToProvider(Request $request): RedirectResponse
-    {
+    public function redirectToProvider(
+        Request                      $request,
+        ReadOnlyModeServiceInterface $readOnlyModeService,
+    ) : RedirectResponse {
+        if ($readOnlyModeService->isReadOnly()) {
+            Session::flash('warning', __('controller.oauthlogin.flash.read_only_mode_enabled'));
+            $this->redirectTo = '/';
+
+            return redirect($this->redirectTo);
+        }
+
         $this->redirectTo = $request->get('redirect', '/');
 
         return Socialite::driver($this->getDriver())->redirect();

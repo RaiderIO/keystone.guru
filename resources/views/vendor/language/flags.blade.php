@@ -1,8 +1,9 @@
 <?php
 $user = Auth::user();
 // Default local or user locale
-$currentUserLocale     = Auth::check() ? Auth::user()->locale : 'en_US';
+$currentUserLocale     = Auth::check() ? $user->locale : config('app.locale');
 $currentUserLocaleName = language()->getName($currentUserLocale);
+$allLanguages = collect(config('language.all'))->keyBy('long');
 ?>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
@@ -14,7 +15,15 @@ $currentUserLocaleName = language()->getName($currentUserLocale);
             <a class="dropdown-item {{ $currentUserLocale === $code ? 'active' : '' }}"
                href="{{ language()->back($code) }}">
                 @include('vendor.language.flag', ['code' => $code, 'name' => $name]) {{ $name }}
+                @if(isset($allLanguages[$code]['ai']) && $allLanguages[$code] && $allLanguages[$code]['ai'])
+                    <sup class="text-warning">AI</sup>
+                @endif
             </a>
         @endforeach
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="https://crowdin.com/project/keystoneguru">
+            <i class="fas fa-external-link-alt"></i> {{ __('view_vendor.language.flags.contribute_translations') }}
+        </a>
+
     </div>
 </li>

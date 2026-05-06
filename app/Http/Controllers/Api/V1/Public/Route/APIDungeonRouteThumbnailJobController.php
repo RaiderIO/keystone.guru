@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobResource;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Gate;
 
 class APIDungeonRouteThumbnailJobController extends Controller
 {
@@ -34,10 +35,10 @@ class APIDungeonRouteThumbnailJobController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function get(
-        DungeonRouteThumbnailJob $dungeonRouteThumbnailJob
+    public function show(
+        DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
     ): DungeonRouteThumbnailJobResource {
-        $this->authorize('view', $dungeonRouteThumbnailJob->dungeonRoute);
+        Gate::authorize('view', $dungeonRouteThumbnailJob->dungeonRoute);
 
         return new DungeonRouteThumbnailJobResource($dungeonRouteThumbnailJob);
     }

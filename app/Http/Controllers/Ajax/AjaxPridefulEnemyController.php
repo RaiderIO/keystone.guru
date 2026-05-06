@@ -16,6 +16,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
 class AjaxPridefulEnemyController extends Controller
@@ -27,9 +28,9 @@ class AjaxPridefulEnemyController extends Controller
         Request                     $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        Enemy                       $enemy
+        Enemy                       $enemy,
     ): PridefulEnemy {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         /** @var PridefulEnemy $pridefulEnemy */
         $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
@@ -41,9 +42,9 @@ class AjaxPridefulEnemyController extends Controller
         $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
         $pridefulEnemy->enemy_id         = $enemy->id;
         // @TODO support facades? Idk it's all legacy at this point - the dungeons that have Prideful enemies are all not supported by facade anyway
-        $pridefulEnemy->floor_id         = (int)$request->get('floor_id');
-        $pridefulEnemy->lat              = (float)$request->get('lat');
-        $pridefulEnemy->lng              = (float)$request->get('lng');
+        $pridefulEnemy->floor_id = (int)$request->get('floor_id');
+        $pridefulEnemy->lat      = (float)$request->get('lat');
+        $pridefulEnemy->lng      = (float)$request->get('lng');
 
         if (!$pridefulEnemy->save()) {
             throw new Exception('Unable to save prideful enemy!');
@@ -67,7 +68,7 @@ class AjaxPridefulEnemyController extends Controller
      */
     public function delete(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             /** @var PridefulEnemy $pridefulEnemy */

@@ -41,15 +41,21 @@ class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, Ma
         'vertices_json',
     ];
 
-    protected $hidden = ['mappingVersion', 'floor'];
-
-    protected $casts = [
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'floor_union_id'     => 'integer',
+    protected $hidden = [
+        'mappingVersion',
+        'floor',
     ];
 
     private ?array $cachedVertices = null;
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'floor_union_id'     => 'integer',
+        ];
+    }
 
     public function mappingVersion(): BelongsTo
     {
@@ -80,8 +86,10 @@ class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, Ma
         return $this->floor->dungeon_id;
     }
 
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
-    {
+    public function cloneForNewMappingVersion(
+        MappingVersion         $mappingVersion,
+        ?MappingModelInterface $newParent = null,
+    ): Model {
         $clone                     = clone $this;
         $clone->exists             = false;
         $clone->id                 = null;

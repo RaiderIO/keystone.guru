@@ -11,7 +11,8 @@ class DungeonrouteDiscoverSearchloadmore extends InlineCode {
                 // @TODO is this true??
                 offset: 20,
                 limit: this.options.loadMoreCount,
-                expansion: this.options.expansion,
+                // @TODO This is not used anywhere?
+                gameVersion: this.options.gameVersion,
                 dungeon: this.options.dungeon,
                 beforeSend: function () {
                     $(self.options.loaderSelector).show();

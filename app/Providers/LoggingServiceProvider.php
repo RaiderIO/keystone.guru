@@ -10,6 +10,8 @@ use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
+use App\Jobs\Logging\RegenerateCombatLogRouteLogging;
+use App\Jobs\Logging\RegenerateCombatLogRouteLoggingInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLogging;
@@ -84,12 +86,15 @@ use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLogging;
 use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLoggingInterface;
 use App\Service\Wowhead\Logging\WowheadServiceLogging;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
+use App\Service\Wowhead\Logging\WowheadTranslationServiceLogging;
+use App\Service\Wowhead\Logging\WowheadTranslationServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
 {
+    #[\Override]
     public function register(): void
     {
         parent::register();
@@ -152,6 +157,7 @@ class LoggingServiceProvider extends ServiceProvider
         // Jobs
         $this->app->bind(ProcessRouteFloorThumbnailLoggingInterface::class, ProcessRouteFloorThumbnailLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailCustomLoggingInterface::class, ProcessRouteFloorThumbnailCustomLogging::class);
+        $this->app->bind(RegenerateCombatLogRouteLoggingInterface::class, RegenerateCombatLogRouteLogging::class);
 
         // MDT
         $this->app->bind(MDTImportStringServiceLoggingInterface::class, MDTImportStringServiceLogging::class);
@@ -173,6 +179,7 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Wowhead
         $this->app->bind(WowheadServiceLoggingInterface::class, WowheadServiceLogging::class);
+        $this->app->bind(WowheadTranslationServiceLoggingInterface::class, WowheadTranslationServiceLogging::class);
 
         // Wow Tools
         $this->app->bind(WowToolsServiceLoggingInterface::class, WowToolsServiceLogging::class);

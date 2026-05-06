@@ -27,9 +27,9 @@ use Illuminate\Support\Facades\App;
 abstract class BaseCombatFilter implements CombatLogParserInterface
 {
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
-    private const DEFEATED_PERCENTAGE = [
+    private const array DEFEATED_PERCENTAGE = [
         // Grim Batol: Valiona is defeated at 50%
-        40320  => 0.51,
+        40320 => 0.51,
 
         // Siege of Boralus: Viq'Goth flails around, disappears in the deep at 1 hp and leaves a chest
         128652 => 0.01,
@@ -59,10 +59,47 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         // Darkflame Cleft: The Darkness is defeated at 45%
         208747 => 0.46,
+
+        // Mogu'shan Palace: Trial of the King
+        61442 => 0.01,
+        61444 => 0.01,
+        61445 => 0.01,
+
+        // Shado-Pan Monastery:
+        // Shado-pan Desciples become friendly at 1hp
+        58198 => 0.01,
+        // Flying Snow becomes friendly at 1hp
+        56473 => 0.01,
+        // Fragrant Lotus becomes friendly at 1hp
+        56472 => 0.01,
+        // Master Snowdrift becomes friendly at 1hp
+        56541 => 0.01,
+        // Corrupted Taran Zhu despawns and becomes friendly Taran Zhu at 1hp
+        56884 => 0.01,
+
+        // Scholomance
+        // Lilian Voss
+        58722 => 0.01,
+
+        // Tazavesh: Streets of Wonder
+        // Achillite is never defeated, but starts pumping out lightning balls at 1hp instead
+        176555 => 0.01,
+
+        // The Dawnbreaker
+        // Rasha'nan is defeated at 60%
+        213937 => 0.61,
+
+        // Eco-Dome Al'Dani
+        // Soul-Scribe becomes unattackable at 1hp
+        234935 => 0.01,
+
+        // Windrunner Spire
+        // Emberdawn becomes unattackable at less than 5%
+        231606 => 0.05,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */
-    private const SUMMONED_NPC_ID_WHITELIST = [
+    private const array SUMMONED_NPC_ID_WHITELIST = [
         // Vexamus, Algeth'ar Academy is a boss that gets summoned
         194181,
     ];
@@ -114,8 +151,8 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
                     new PlayerDied(
                         $combatLogEvent,
                         $playerGuid,
-                        $this->lastKnownPlayerPositions->get($playerGuid->getGuid())
-                    )
+                        $this->lastKnownPlayerPositions->get($playerGuid->getGuid()),
+                    ),
                 );
                 $this->log->parsePlayerDeath($lineNr, $playerGuid);
 
@@ -130,9 +167,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
                 if ($npc !== null) {
                     // Npc was found, now retrieve the relevant GUID of the boss
                     /** @var CombatLogEvent $enemyEngagedEvent */
-                    $enemyEngagedEvent = $this->accurateEnemySightings->first(function ($value, $key) use ($npc) {
-                        return str_contains($key, $npc->id);
-                    });
+                    $enemyEngagedEvent = $this->accurateEnemySightings->first(fn($value, $key) => str_contains((string)$key, (string)$npc->id));
 
                     if ($enemyEngagedEvent !== null) {
                         // Found, now construct the GUID and continue as if this was a normal death
@@ -149,7 +184,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-
             } else {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
@@ -275,7 +309,8 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         ];
 
         $whitelistedNpcIds = [
-            128652, // Siege of Boralus: Viq'Goth, he damages himself when you fire a cannonball. We want to track this.
+            128652,
+            // Siege of Boralus: Viq'Goth, he damages himself when you fire a cannonball. We want to track this.
         ];
 
         if ($sourceGuid instanceof Creature &&

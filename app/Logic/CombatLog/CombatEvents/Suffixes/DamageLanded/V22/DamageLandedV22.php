@@ -7,5 +7,4 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedInterface
 
 class DamageLandedV22 extends DamageV22 implements DamageLandedInterface
 {
-
 }

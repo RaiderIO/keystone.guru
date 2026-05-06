@@ -27,6 +27,7 @@ class Range extends Prefix
         return $this->spellSchool;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

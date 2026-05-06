@@ -1,28 +1,28 @@
 <?php
 
 return [
-    'edit'      => [
-        'title'                   => 'Hodor',
-        'profile'                 => 'Hodor',
-        'account'                 => 'Hodor',
-        'patreon'                 => 'Hodor',
-        'change_password'         => 'Hodor',
-        'privacy'                 => 'Hodor',
-        'reports'                 => 'Hodor',
-        'menu_title'              => 'Hodor',
-        'avatar'                  => 'Hodor',
-        'avatar_title'            => 'Hodor',
-        'username'                => 'Hodor',
-        'username_title'          => 'Hodor',
-        'email'                   => 'Hodor',
-        'region'                  => 'Hodor',
-        'select_region'           => 'Hodor',
-        'show_as_anonymous'       => 'Hodor',
-        'show_as_anonymous_title' => 'Hodor',
-        'echo_color'              => 'Hodor',
-        'echo_color_title'        => 'Hodor',
-        'save'                    => 'Hodor',
 
+    'edit' => [
+        'title'                                            => 'Hodor',
+        'profile'                                          => 'Hodor',
+        'account'                                          => 'Hodor',
+        'patreon'                                          => 'Hodor',
+        'change_password'                                  => 'Hodor',
+        'privacy'                                          => 'Hodor',
+        'reports'                                          => 'Hodor',
+        'menu_title'                                       => 'Hodor',
+        'avatar'                                           => 'Hodor',
+        'avatar_alt'                                       => 'Hodor',
+        'username'                                         => 'Hodor',
+        'username_title'                                   => 'Hodor',
+        'email'                                            => 'Hodor',
+        'region'                                           => 'Hodor',
+        'select_region'                                    => 'Hodor',
+        'show_as_anonymous'                                => 'Hodor',
+        'show_as_anonymous_title'                          => 'Hodor',
+        'echo_color'                                       => 'Hodor',
+        'echo_color_title'                                 => 'Hodor',
+        'save'                                             => 'Hodor',
         'account_delete_consequences'                      => 'Hodor',
         'account_delete_consequence_routes'                => 'Hodor',
         'account_delete_consequence_routes_delete'         => 'Hodor',
@@ -35,25 +35,21 @@ return [
         'account_delete_consequence_reports_unresolved'    => 'Hodor',
         'account_delete_warning'                           => 'Hodor',
         'account_delete_confirm'                           => 'Hodor',
-
-        'unlink_from_patreon'             => 'Hodor',
-        'patreon_status_granted_manually' => 'Hodor',
-        'link_to_patreon_success'         => 'Hodor',
-        'link_to_patreon'                 => 'Hodor',
-        'link_to_patreon_description'     => 'Hodor',
-        'patreon_benefit_table'           => [
+        'unlink_from_patreon'                              => 'Hodor',
+        'patreon_status_granted_manually'                  => 'Hodor',
+        'link_to_patreon_success'                          => 'Hodor',
+        'link_to_patreon'                                  => 'Hodor',
+        'link_to_patreon_description'                      => 'Hodor',
+        'patreon_benefit_table'                            => [
             'header_active'  => 'Hodor',
             'header_benefit' => 'Hodor',
         ],
-
-        'current_password'     => 'Hodor',
-        'new_password'         => 'Hodor',
-        'new_password_confirm' => 'Hodor',
-        'submit'               => 'Hodor',
-
-        'ga_cookies_opt_out'  => 'Hodor',
-        'reports_description' => 'Hodor',
-
+        'current_password'                => 'Hodor',
+        'new_password'                    => 'Hodor',
+        'new_password_confirm'            => 'Hodor',
+        'submit'                          => 'Hodor',
+        'ga_cookies_opt_out'              => 'Hodor',
+        'reports_description'             => 'Hodor',
         'reports_table_header_id'         => 'Hodor',
         'reports_table_header_category'   => 'Hodor',
         'reports_table_header_message'    => 'Hodor',
@@ -64,32 +60,23 @@ return [
     'favorites' => [
         'title' => 'Hodor',
     ],
-    'overview'  => [
-        'title'                    => 'Hodor',
-        'favorites'                => 'Hodor',
-        'tags'                     => 'Hodor',
-        'teams'                    => 'Hodor',
-        'profile'                  => 'Hodor',
-        'route_coverage'           => 'Hodor',
-        'route_overview'           => 'Hodor',
-        'welcome_text'             => 'Hodor',
-        'create_route'             => 'Hodor',
-        'create_route_description' => 'Hodor',
-        'create_team'              => 'Hodor',
-        'create_team_description'  => 'Hodor',
-
+    'overview' => [
+        'title'          => 'Hodor',
+        'route_coverage' => 'Hodor',
+        'route_overview' => 'Hodor',
     ],
-    'routes'    => [
+    'routes' => [
         'title' => 'Hodor',
     ],
-    'tags'      => [
+    'tags' => [
         'title'                             => 'Hodor',
         'header'                            => 'Hodor',
         'description'                       => 'Hodor',
         'link_your_personal_route_overview' => 'Hodor',
     ],
-    'view'      => [
+    'view' => [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
+
 ];

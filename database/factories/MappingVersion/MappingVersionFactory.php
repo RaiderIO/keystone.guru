@@ -14,11 +14,11 @@ class MappingVersionFactory extends Factory
     public function definition(): array
     {
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::with('currentMappingVersion')->inRandomOrder()->first();
+        $dungeon = Dungeon::inRandomOrder()->first();
 
         return [
             'dungeon_id'                      => $dungeon->id,
-            'version'                         => $dungeon->currentMappingVersion->version + 1,
+            'version'                         => $dungeon->getCurrentMappingVersion()->version + 1,
             'enemy_forces_required'           => 350,
             'enemy_forces_required_teeming'   => null,
             'enemy_forces_shrouded'           => 9,

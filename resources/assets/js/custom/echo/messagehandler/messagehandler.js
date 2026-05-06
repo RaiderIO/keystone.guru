@@ -1,10 +1,10 @@
 /**
- * @property {Echo} echo
+ * @property {EchoHandler} echo
  * @property {String} message
  */
 class MessageHandler extends Signalable {
     /**
-     * @param echo {Echo}
+     * @param echo {EchoHandler}
      * @param message {String}
      */
     constructor(echo, message) {

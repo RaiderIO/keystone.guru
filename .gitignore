@@ -14,12 +14,15 @@
 # Generated file only used for temp output step for inclusion in compiled file
 /resources/assets/js/handlebars.js
 /resources/assets/js/precompile.js
+/resources/assets/js/generated
 /storage/*.key
+/storage/pail
 /storage/debugbar/*.json
 /storage/framework/maintenance.php
 /vendor
 /version
 /.idea
+/.nova
 /.vagrant
 Homestead.json
 Homestead.yaml
@@ -30,10 +33,11 @@ yarn-error.log
 _ide_helper.php
 .phpunit.result.cache
 /.phpunit.cache
+.php-cs-fixer.cache
 
 # Docker compose
 docker-compose/mysql
+!docker-compose/mysql/.gitkeep
 docker-compose/mysql-combatlog
-docker-compose/laravel-echo-server/laravel-echo-server.json
-docker-compose/laravel-echo-server/laravel-echo-server.lock
+!docker-compose/mysql-combatlog/.gitkeep
 docker-compose/redis-data

@@ -24,7 +24,7 @@ class CommonDungeonroutePublish extends InlineCode {
 
                 let optionData = {
                     value: publishState,
-                    text: lang.get(`messages.publish_state_title_${publishState}`),
+                    text: lang.get(`js.publish_state_title_${publishState}`),
                     selected: this.options.publishStateSelected === publishState ? 'selected' : false,
                 };
 
@@ -36,8 +36,8 @@ class CommonDungeonroutePublish extends InlineCode {
 
 
                 let data = {
-                    title: lang.get(`messages.publish_state_title_${publishState}`),
-                    subtext: this.addNewlines(lang.get(`messages.publish_state_subtext_${publishState}`), 60),
+                    title: lang.get(`js.publish_state_title_${publishState}`),
+                    subtext: this.addNewlines(lang.get(`js.publish_state_subtext_${publishState}`), 60),
                     fa_class: icons[publishState]
                 };
 
@@ -67,7 +67,7 @@ class CommonDungeonroutePublish extends InlineCode {
                 published_state: value
             },
             success: function (json) {
-                showSuccessNotification(lang.get('messages.route_published_state_changed'));
+                showSuccessNotification(lang.get('js.route_published_state_changed'));
             }
         });
     }

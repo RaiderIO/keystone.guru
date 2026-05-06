@@ -9,6 +9,7 @@ abstract class DungeonRouteTestBase extends AjaxPublicTestCase
 {
     protected DungeonRoute $dungeonRoute;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -20,6 +21,7 @@ abstract class DungeonRouteTestBase extends AjaxPublicTestCase
         $this->dungeonRoute->save();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->dungeonRoute->delete();

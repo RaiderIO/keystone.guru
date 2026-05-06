@@ -1,0 +1,85 @@
+<?php
+
+return [
+
+    'edit' => [
+        'title'                   => 'Perfil',
+        'profile'                 => 'Perfil',
+        'account'                 => 'Cuenta',
+        'patreon'                 => 'Patreon',
+        'change_password'         => 'Cambiar contraseña',
+        'privacy'                 => 'Privacidad',
+        'reports'                 => 'Reportes',
+        'menu_title'              => 'Perfil de %s',
+        'avatar'                  => 'Avatar',
+        'avatar_alt'              => 'Avatar de usuario',
+        'username'                => 'Nombre de usuario',
+        'username_title'          => 'Dado que iniciaste sesión usando un servicio de Autenticación externo, puedes cambiar tu nombre de usuario una vez.',
+        'email'                   => 'Correo electrónico',
+        'region'                  => 'Región',
+        'select_region'           => 'Seleccionar región',
+        'show_as_anonymous'       => 'Mostrar como Anónimo',
+        'show_as_anonymous_title' => 'Habilitar esta opción te mostrará como \'Anónimo\' al ver rutas que no forman parte de ningún equipo del que seas parte.
+                                Para tus propias rutas y para rutas parte de tus equipos, tu nombre siempre será visible.',
+        'echo_color'                                       => 'Color de edición de ruta sincronizada',
+        'echo_color_title'                                 => 'Cuando edites una ruta cooperativamente con un miembro del equipo, este color te identificará de manera única.',
+        'save'                                             => 'Guardar',
+        'account_delete_consequences'                      => 'Si eliminas tu cuenta de Keystone.guru sucederá lo siguiente',
+        'account_delete_consequence_routes'                => 'Rutas',
+        'account_delete_consequence_routes_delete'         => 'Tus %s rutas serán eliminadas.',
+        'account_delete_consequence_teams'                 => 'Equipos',
+        'account_delete_consequence_teams_you_are_removed' => 'Serás eliminado de este equipo.',
+        'account_delete_consequence_teams_new_admin'       => '%s será nombrado Administrador de este equipo.',
+        'account_delete_consequence_teams_team_deleted'    => 'Este equipo será eliminado (eres el único usuario en este equipo).',
+        'account_delete_consequence_patreon'               => 'La conexión entre Patreon y Keystone.guru será terminada. Ya no recibirás recompensas de Patreon.',
+        'account_delete_consequence_reports'               => 'Informes',
+        'account_delete_consequence_reports_unresolved'    => 'Tus %s informes no resueltos serán eliminados',
+        'account_delete_warning'                           => 'Tu cuenta será eliminada permanentemente. No hay vuelta atrás.',
+        'account_delete_confirm'                           => 'Eliminar mi cuenta de Keystone.guru',
+        'unlink_from_patreon'                              => 'Desvincular de Patreon',
+        'patreon_status_granted_manually'                  => 'Tu cuenta ha recibido todos los beneficios de :patreon porque eres especial y asombroso, ¡y no dejes que nadie te diga lo contrario! Tus suscripciones activas se enumeran a continuación. ¿Falta algo? Avísame lo antes posible en Discord y lo revisaré.',
+        'link_to_patreon_success'                          => 'Tu cuenta está vinculada a :patreon. Tus suscripciones activas se enumeran a continuación. ¿Falta algo? Si te suscribiste después de vincular tu Patreon, por favor vuelve a vincular o espera hasta una hora para que el script de sincronización actualice tu suscripción. ¿Aún no recibes tus beneficios? Avísame lo antes posible en Discord y lo revisaré.',
+        'link_to_patreon'                                  => 'Vincular a Patreon',
+        'link_to_patreon_description'                      => 'Para reclamar tus recompensas de Patreon, necesitas vincular tu cuenta de Patreon',
+        'patreon_benefit_table'                            => [
+            'header_active'  => 'Activo',
+            'header_benefit' => 'Beneficio',
+        ],
+        'current_password'                => 'Contraseña actual',
+        'new_password'                    => 'Nueva contraseña',
+        'new_password_confirm'            => 'Nueva contraseña (confirmar)',
+        'submit'                          => 'Enviar',
+        'ga_cookies_opt_out'              => 'Exclusión de cookies de Google Analytics',
+        'reports_description'             => 'Todas las rutas, enemigos y otros reportes que hayas hecho en el sitio se enumerarán aquí.',
+        'reports_table_header_id'         => 'Id',
+        'reports_table_header_category'   => 'Categoría',
+        'reports_table_header_message'    => 'Mensaje',
+        'reports_table_header_created_at' => 'Creado en',
+        'reports_table_header_status'     => 'Estado',
+        'reports_table_action_handled'    => 'Manejado',
+    ],
+    'favorites' => [
+        'title' => 'Mis favoritos',
+    ],
+    'overview' => [
+        'title'          => 'Resumen',
+        'route_coverage' => 'Cobertura de ruta',
+        'route_overview' => 'Resumen de ruta',
+    ],
+    'routes' => [
+        'title' => 'Mis rutas',
+    ],
+    'tags' => [
+        'title'       => 'Mis etiquetas',
+        'header'      => 'Mis etiquetas',
+        'description' => 'La función de etiquetado te permite organizar tus rutas de la forma que consideres adecuada. Puedes agregar etiquetas a las rutas viendo las Acciones para cada ruta en %s.
+                    Puedes administrar etiquetas para tus propias rutas aquí. Nadie más podrá ver tus etiquetas; para rutas adjuntas a un equipo
+                    puedes administrar un conjunto separado de etiquetas solo para ese equipo visitando la sección de Etiquetas al ver tu equipo.',
+        'link_your_personal_route_overview' => 'tu resumen personal de ruta',
+    ],
+    'view' => [
+        'title'  => 'Rutas de %s',
+        'header' => 'Rutas de %s',
+    ],
+
+];

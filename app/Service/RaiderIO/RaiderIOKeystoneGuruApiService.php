@@ -18,18 +18,16 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
     public function __construct(
         private readonly SeasonServiceInterface         $seasonService,
-        private readonly CombatLogEventServiceInterface $combatLogEventService
+        private readonly CombatLogEventServiceInterface $combatLogEventService,
     ) {
-
     }
 
     public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse
     {
         return HeatmapDataResponse::fromArray(
             $this->combatLogEventService->getGridAggregation(
-                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter)
-            )->toArray()
+                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
+            )->toArray(),
         );
     }
-
 }

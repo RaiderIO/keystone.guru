@@ -1,22 +1,18 @@
 <?php
 
 return [
-    'affixgroup'   => [
-        'affixgroup' => [
 
-        ],
-    ],
-    'dungeon'      => [
+    'dungeon' => [
         'griddiscover' => [
             'popular'   => 'Popular',
             'this_week' => 'This week',
             'next_week' => 'Next week',
             'new'       => 'New',
         ],
-        'gridtabs'     => [
+        'gridtabs' => [
             'raid' => 'Raid',
         ],
-        'select'       => [
+        'select' => [
             'dungeon'                  => 'Dungeon',
             'all'                      => 'All',
             'all_dungeons'             => 'All dungeons',
@@ -27,7 +23,7 @@ return [
         ],
     ],
     'dungeonroute' => [
-        'search'     => [
+        'search' => [
             'loadmore' => [
                 'loading' => 'Loading...',
             ],
@@ -36,9 +32,12 @@ return [
             'attributes'              => 'Attributes',
             'no_attributes_title'     => 'Select the attributes that your group is comfortable with handling.',
             'select_attributes_title' => 'Attributes describe what features your route has that others may not be able to complete due to composition differences or skill. Marking attributes properly enables others to find routes that fit them more easily.',
+            'select_attributes'       => 'Select attributes',
             'attributes_selected'     => '{0} attributes',
         ],
-        'card'       => [
+        'card' => [
+            'thumbnail_alt'            => 'Thumbnail',
+            'thumbnail_dungeon_alt'    => 'Thumbnail',
             'no_description'           => 'No description',
             'outdated_mapping_version' => 'This route uses an old mapping version for this dungeon. The route may not accurately reflect in-game enemies.',
             'by_author'                => 'By',
@@ -48,31 +47,34 @@ return [
             'dominant_affix'           => 'Dominant affix',
             'seasonal_affix'           => 'Seasonal affix',
         ],
-        'cardlist'   => [
+        'cardlist' => [
             'no_dungeonroutes' => 'No routes found',
         ],
-        'rating'     => [
+        'rating' => [
             'nr_of_votes' => '%s vote(s)',
         ],
-        'table'      => [
+        'table' => [
             'team'                  => 'Team',
             'affixes'               => 'Affixes',
+            'select_affixes'        => 'Select affixes',
             'affixes_selected'      => '{0} affixes selected',
             'requirements'          => 'Requirements',
             'enemy_enemy_forces'    => 'Enough enemy forces',
             'favorite'              => 'Favorite',
+            'select_requirements'   => 'Select requirements',
             'requirements_selected' => '{0} requirements',
             'tags'                  => 'Tags',
             'tags_title'            => 'No tags available',
+            'select_tags'           => 'Select tags',
             'tags_selected'         => '{0} tags selected',
             'filter'                => 'Filter',
         ],
-        'tier'       => [
+        'tier' => [
             'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',
         ],
     ],
-    'forms'        => [
-        'createroute'          => [
+    'forms' => [
+        'createroute' => [
             'title'                                          => 'Title',
             'title_title'                                    => 'Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Raid size',
@@ -97,7 +99,7 @@ return [
             'registered_user_message'   => 'A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
             'create_route'              => 'Create route',
         ],
-        'login'                => [
+        'login' => [
             'login'                => 'Login',
             'email_address'        => 'E-mail address',
             'password'             => 'Password',
@@ -105,41 +107,38 @@ return [
             'forgot_your_password' => 'Forgot your password?',
             'login_through_oauth2' => 'Login through OAuth2',
         ],
-        'mapsettings'          => [
+        'mapsettings' => [
             'general'                                       => 'General',
             'map_facade_style'                              => 'Use combined floors',
             'map_facade_style_title'                        => 'With the introduction of Dragonflight Season 3, various dungeons have had their floors combined into a single map. Using this new map is optional and you can toggle between the combined map or the traditional split-floor style here.',
             'map_facade_style_facade_option'                => 'Use combined floors',
             'map_facade_style_split_floors_option'          => 'Use split floors',
             'map_facade_style_change_requires_page_refresh' => 'Note: Changing this setting requires a page reload before changes take effect',
-
-            'zoom_speed'       => 'Zoom speed',
-            'zoom_speed_title' => 'This controls the speed at which the map zooms in and out when you use the mouse wheel.',
-
-            'heatmap'                     => 'Heatmap',
-            'show_heatmap_tooltips'       => 'Show mouse over tooltips',
-            'show_heatmap_tooltips_title' => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
-
-            'enemies'                                => 'Enemies',
-            'enemy_number_style'                     => 'Enemy number style',
-            'enemy_number_style_title'               => 'This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.',
-            'percentage'                             => 'Percentage',
-            'enemy_forces'                           => 'Enemy forces',
-            'unkilled_enemy_opacity'                 => 'Unkilled enemy opacity',
-            'unkilled_enemy_opacity_title'           => 'This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.',
-            'unkilled_important_enemy_opacity'       => 'Unkilled important enemy opacity',
-            'unkilled_important_enemy_opacity_title' => 'Important enemies are bosses, those that are permanently affected by an affix (Inspiring, Prideful etc.) or are marked as required. These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.',
-            'show_aggressiveness_border'             => 'Show aggressiveness border',
-            'show_aggressiveness_border_title'       => 'Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.',
-            'highlight_dangerous_enemies'            => 'Highlight dangerous enemies',
-            'highlight_dangerous_enemies_title'      => 'Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru. These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.',
-            'drawing'                                => 'Drawing',
-            'default_line_weight'                    => 'Default line weight',
-            'default_line_weight_title'              => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
-            'default_line_color'                     => 'Default line color',
-            'default_line_color_title'               => 'This controls the default color of any lines you create on the map, such as paths and free drawn lines.',
+            'zoom_speed'                                    => 'Zoom speed',
+            'zoom_speed_title'                              => 'This controls the speed at which the map zooms in and out when you use the mouse wheel.',
+            'heatmap'                                       => 'Heatmap',
+            'show_heatmap_tooltips'                         => 'Show mouse over tooltips',
+            'show_heatmap_tooltips_title'                   => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
+            'enemies'                                       => 'Enemies',
+            'enemy_number_style'                            => 'Enemy number style',
+            'enemy_number_style_title'                      => 'This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.',
+            'percentage'                                    => 'Percentage',
+            'enemy_forces'                                  => 'Enemy forces',
+            'unkilled_enemy_opacity'                        => 'Unkilled enemy opacity',
+            'unkilled_enemy_opacity_title'                  => 'This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.',
+            'unkilled_important_enemy_opacity'              => 'Unkilled important enemy opacity',
+            'unkilled_important_enemy_opacity_title'        => 'Important enemies are bosses, those that are permanently affected by an affix (Inspiring, Prideful etc.) or are marked as required. These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.',
+            'show_aggressiveness_border'                    => 'Show aggressiveness border',
+            'show_aggressiveness_border_title'              => 'Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.',
+            'highlight_dangerous_enemies'                   => 'Highlight dangerous enemies',
+            'highlight_dangerous_enemies_title'             => 'Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru. These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.',
+            'drawing'                                       => 'Drawing',
+            'default_line_weight'                           => 'Default line weight',
+            'default_line_weight_title'                     => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
+            'default_line_color'                            => 'Default line color',
+            'default_line_color_title'                      => 'This controls the default color of any lines you create on the map, such as paths and free drawn lines.',
         ],
-        'mdtimport'            => [
+        'mdtimport' => [
             'paste_mdt_export_string'                => 'Paste your Mythic Dungeon Tools export string',
             'reset_title'                            => 'Reset',
             'unregistered_user_all_routes_temporary' => 'As an unregistered user, all imported routes will be temporary routes which expire after %s hours.',
@@ -150,10 +149,10 @@ return [
             'import_as_this_week'                    => 'Import with this week\'s affixes instead',
             'import_route'                           => 'Import route',
         ],
-        'oauth'                => [
+        'oauth' => [
             'battletag_warning' => 'If you publish routes, your battletag/discord username will be visible until you change your username in your profile.',
         ],
-        'pullsettings'         => [
+        'pullsettings' => [
             'pull_number_style'                 => 'Pull number style',
             'pull_number_style_title'           => 'This controls how the pulls sidebar displays numbers.',
             'pull_number_style_percentage'      => 'Percentage',
@@ -167,7 +166,7 @@ return [
             'always_apply_on_pull_change'       => 'Always apply when I change pulls',
             'always_apply_on_pull_change_title' => 'Enabling this setting will update your pull\'s colors as you edit your pulls based on the pull gradient configured above. This setting is unique per route.',
         ],
-        'register'             => [
+        'register' => [
             'register'                => 'Register',
             'username'                => 'Username',
             'username_title'          => 'Your username may be visible if you choose to publish any routes you make.',
@@ -184,7 +183,7 @@ return [
             'privacy_policy'          => 'privacy policy',
             'cookie_policy'           => 'cookie policy',
         ],
-        'timezoneselect'       => [
+        'timezoneselect' => [
             'africa'     => 'Africa',
             'america'    => 'America',
             'antarctica' => 'Antarctica',
@@ -196,7 +195,7 @@ return [
             'timezone'   => 'Timezone',
         ],
     ],
-    'general'      => [
+    'general' => [
         'linkpreview' => [
             'title'               => ':title | Keystone.guru',
             'description'         => ':description Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
@@ -204,8 +203,8 @@ return [
             'twitter_description' => ':description Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
     ],
-    'group'        => [
-        'affixes'     => [
+    'group' => [
+        'affixes' => [
             'seasonal_index_preset'    => 'Preset :count',
             'awakened_enemy_set'       => 'Awakened enemy set',
             'awakened_enemy_set_title' => 'Awakened enemies (pillar bosses) for M+ levels 10 and higher come in two sets. Each set of affixes is marked either A or B. You may attach multiple affixes to your route whom can have both A and B sets. Choose here which set will be displayed on the map. You can always adjust your selection from the Route Settings menu later.',
@@ -218,7 +217,7 @@ return [
             'party_member_nr' => 'Party member #%d',
         ],
     ],
-    'layout'       => [
+    'layout' => [
         'footer' => [
             'developer'                       => 'Developer',
             'api_documentation'               => 'API documentation',
@@ -228,6 +227,8 @@ return [
             'changelog_new'                   => 'NEW',
             'credits'                         => 'Credits',
             'about'                           => 'About',
+            'legacy'                          => 'Legacy',
+            'affixes'                         => 'Affixes calendar',
             'external'                        => 'External',
             'patreon'                         => 'Patreon',
             'discord'                         => 'Discord',
@@ -244,14 +245,15 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'expansion_routes'        => 'Expansion routes',
+            'browse_by_expansion'     => 'Routes by expansion',
             'routes'                  => ':expansion',
-            'explore'                 => 'Explore',
-            'affixes'                 => 'Affixes',
+            'browse_routes'           => 'Browse routes',
+            'heatmaps'                => 'Heatmaps',
+            'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
         ],
-        'nav'    => [
-            'user'       => [
+        'nav' => [
+            'user' => [
                 'login'             => 'Login',
                 'register'          => 'Register',
                 'telescope'         => 'Telescope',
@@ -276,21 +278,30 @@ return [
             ],
         ],
     ],
-    'maps'         => [
+    'maps' => [
         'controls' => [
-            'draw'           => [
+            'draw' => [
                 'admin'           => 'Admin',
                 'view_this_route' => 'View',
             ],
-            'elements'       => [
-                'dungeonrouteinfo'         => [
+            'dungeonroutesearch' => [
+                'description'    => 'Select enemies on the map to include or exclude them from search results.',
+                'settings_title' => 'Map settings',
+                'enabled'        => 'Enabled',
+                'disabled'       => 'Disabled',
+                'key_level'      => 'Key level',
+                'title'          => 'Title',
+                'username'       => 'Username',
+            ],
+            'elements' => [
+                'dungeonrouteinfo' => [
                     'timer'            => 'Timer',
                     'timer_title'      => '+2: %s, +3: %s',
                     'group_setup'      => 'Group setup',
                     'affixes'          => 'Affixes',
                     'route_info_title' => 'Info',
                 ],
-                'enemyvisualtype'          => [
+                'enemyvisualtype' => [
                     'portrait'                => 'Portrait',
                     'npc_class'               => 'Class',
                     'npc_type'                => 'Type',
@@ -298,32 +309,29 @@ return [
                     'enemy_visual_type'       => 'Visuals',
                     'enemy_visual_type_title' => 'Visuals',
                     'enemy_skippable'         => 'Skippable',
+                    'enemy_group'             => 'Group',
                 ],
-                'floor_switch'             => [
+                'floor_switch' => [
                     'switch_floors' => 'Floors',
                     'floors'        => 'Floors',
                 ],
                 'mapobjectgroupvisibility' => [
                     'toggle_map_elements' => 'Elements',
                 ],
-                'labeltoggle'              => [
+                'labeltoggle' => [
                     'hide_labels' => 'Hide',
                 ],
-                'mdtclones'                => [
+                'mdtclones' => [
                     'mdt'        => 'Show MDT',
                     'auto_solve' => 'Auto solve',
                 ],
-                'rating'                   => [
+                'rating' => [
                     'rate_this_route'          => 'Rate',
                     'unable_to_rate_own_route' => 'You cannot rate your own route',
                     'your_rating'              => 'Your rating',
                 ],
             ],
-            'enemyinfo'      => [
-                'enemy_info'      => 'Enemy info',
-                'report_an_issue' => 'Report an issue',
-            ],
-            'heatmapsearch'  => [
+            'heatmapsearch' => [
                 'settings_title'         => 'Map settings',
                 'enabled'                => 'Enabled',
                 'disabled'               => 'Disabled',
@@ -357,13 +365,13 @@ return [
                     'classes_player_deaths'               => 'Classes (death)',
                     'classes_player_deaths_title'         => 'Only show deaths of these classes.',
                 ],
-                'advanced_options'       => 'Advanced options',
-                'advanced_option'        => [
+                'advanced_options' => 'Advanced options',
+                'advanced_option'  => [
                     'min_samples_required'       => 'Min. samples required',
                     'min_samples_required_title' => 'Decreases the threshold required for data to show up in the heatmap. Decreasing this value will lead to more data points being rendered.',
                 ],
-                'heat_options'           => 'Leaflet.heat options',
-                'heat_option'            => [
+                'heat_options' => 'Leaflet.heat options',
+                'heat_option'  => [
                     'min_opacity' => 'Min opacity',
                     'max_zoom'    => 'Max zoom',
                     'max'         => 'Max',
@@ -373,7 +381,7 @@ return [
                     'pane'        => 'Pane',
                 ],
             ],
-            'header'         => [
+            'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',
                 'start'                          => 'Start',
@@ -387,8 +395,6 @@ return [
                 'simulate_route'                 => 'Simulate',
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
-                'admin_header_title'             => '%s (mapping version %d)',
-                'explore_header_title'           => 'Explore :dungeon',
                 'share'                          => 'Share',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',
@@ -402,7 +408,7 @@ return [
                 'you_cannot_rate_your_own_route' => 'You cannot rate your own route - thank you for using live sessions!',
                 'review_live_session'            => 'Review live session',
             ],
-            'pulls'          => [
+            'pulls' => [
                 'settings_title'              => 'Map/pull settings',
                 'new_pull'                    => 'New pull',
                 'delete_all_pulls_title'      => 'Delete all pulls',
@@ -412,16 +418,17 @@ return [
                 'no_pulls_created_view'       => 'No pulls created.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
-                    'description'       => [
+                'modal' => [
+                    'description' => [
                         'label'               => 'Description',
                         'supported_html_tags' => 'Supported HTML tags: ',
                         'save'                => 'Save',
                     ],
                     'supported_domains' => 'Supported hyperlink domains (include https://): ',
                     'spells'            => [
-                        'label' => 'Spells',
-                        'save'  => 'Save',
+                        'label'         => 'Spells',
+                        'select_spells' => 'Select spells',
+                        'save'          => 'Save',
                     ],
                 ],
                 'description'      => 'Edit description',
@@ -430,40 +437,51 @@ return [
                 'remove_kill_area' => 'Remove kill area',
                 'delete_killzone'  => 'Delete pull',
             ],
-            'view'           => [
+            'view' => [
                 'edit_this_route_title'          => 'Edit',
                 'clone_this_route_title'         => 'Clone',
                 'report_for_moderation'          => 'Report',
                 'report_for_moderation_finished' => 'Reported',
             ],
         ],
-        'map'      => [
-            'no_teeming'      => 'Always visible',
-            'visible_teeming' => 'Visible when Teeming only',
-            'hidden_teeming'  => 'Hidden when Teeming only',
-
-            'any'      => 'Any',
-            'alliance' => 'Alliance',
-            'horde'    => 'Horde',
-
+        'map' => [
+            'no_teeming'                             => 'Always visible',
+            'visible_teeming'                        => 'Visible when Teeming only',
+            'hidden_teeming'                         => 'Hidden when Teeming only',
+            'any'                                    => 'Any',
+            'alliance'                               => 'Alliance',
+            'horde'                                  => 'Horde',
             'new_mapping_version_header_title'       => 'There is a new mapping version for this dungeon',
             'new_mapping_version_header_description' => 'Keystone.guru works with mapping versions for each dungeon.
                 Every time Blizzard makes a change to the mapping or an error is corrected, a new mapping version is created.
                 Routes that are created with previous mapping versions are not automatically updated to the latest version.
                 This warning indicates the mapping version used by this route is out of date and may not represent the in-game mapping',
-
             'route' => 'Route',
         ],
     ],
-    'modal'        => [
-        'dungeonroute'       => [
+    'mappingversion' => [
+        'select' => [
+            'mapping_version_readonly' => ':gameVersion version :version (readonly)',
+            'mapping_version'          => ':gameVersion version :version',
+        ],
+    ],
+    'modal' => [
+        'createroute' => [
+            'create_route'           => 'Create route',
+            'create_temporary_route' => 'Create temporary route',
+            'import_from_mdt'        => 'Import from MDT',
+        ],
+        'dungeonroute' => [
             'removed' => [
                 'title'        => 'Route removed',
                 'description'  => 'Your route has been removed and can no longer be viewed/edited. This can happen if your route was a temporary route and it has been automatically cleaned up or you deleted the route in a different browser tab.',
                 'back_to_home' => 'Back to home',
             ],
         ],
-        'userreport'         => [
+        'enemydetails' => [
+            'report_an_issue' => 'Report an issue',
+        ],
+        'userreport' => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
                 'your_name'              => 'Your name',
@@ -472,37 +490,33 @@ return [
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
                 'submit'                 => 'Submit',
             ],
-            'enemy'        => [
+            'enemy' => [
                 'report_enemy_bug'       => 'Report enemy bug',
                 'your_name'              => 'Your name',
-                'what_is_wrong'          => '',
+                'what_is_wrong'          => 'Please describe what is wrong with this enemy',
                 'contact_by_email'       => 'Contact me by e-mail if required for further investigation',
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
                 'submit'                 => 'Submit',
             ],
         ],
-        'createroute'        => [
-            'create_route'           => 'Create route',
-            'create_temporary_route' => 'Create temporary route',
-            'import_from_mdt'        => 'Import from MDT',
-        ],
-        'legal'              => [
+        'legal' => [
             'welcome_back_agree' => 'Welcome back! In order to proceed, you have to agree to our %s, %s and %s.',
             'terms_of_service'   => 'terms of service',
             'privacy_policy'     => 'privacy policy',
             'cookie_policy'      => 'cookie policy',
             'i_agree'            => 'I agree',
         ],
-        'mappingversion'     => [
+        'mappingversion' => [
             'facade_enabled'                  => 'Facade enabled',
             'enemy_forces_required'           => 'Enemy forces required',
             'enemy_forces_required_teeming'   => 'Enemy forces required (teeming)',
             'enemy_forces_shrouded'           => 'Enemy forces for Shrouded',
             'enemy_forces_shrouded_zul_gamux' => 'Enemy forces for Shrouded (Zul\'Gamux)',
             'timer_max_seconds'               => 'Timer (seconds)',
+            'timer_max_minutes'               => 'Timer (minutes)',
             'save'                            => 'Save',
         ],
-        'mapsettings'        => [
+        'mapsettings' => [
             'map_settings'  => 'Map settings',
             'pull_settings' => 'Pull settings',
         ],
@@ -517,10 +531,10 @@ return [
             'route_not_created_from_combat_log' => 'Route was not generated from a combat log',
             'route_not_created_through_api'     => 'Route was not generated through API',
         ],
-        'routesettings'      => [
+        'routesettings' => [
             'title' => 'Route settings',
         ],
-        'share'              => [
+        'share' => [
             'share'                            => 'Share',
             'publish'                          => 'Publish',
             'review_route_settings'            => 'Review your %s before publishing your route',
@@ -535,8 +549,8 @@ return [
             'loading'                          => 'Loading...',
             'copy_to_clipboard'                => 'Copy to clipboard',
         ],
-        'simulate'           => [
-            'intro'                      => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
+        'simulate' => [
+            'intro' => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
                 generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character\'s SimC string through either the addon or the site, select Advanced and paste Keystone.guru\'s output below your character\'s SimC string.',
             'title'                      => 'Simulate route',
             'get_simulationcraft_string' => 'Get SimulationCraft string',
@@ -544,23 +558,22 @@ return [
             'loading'                    => 'Loading...',
             'copy_to_clipboard'          => 'Copy to clipboard',
         ],
-        'simulateoptions'    => [
-            'default'  => [
-
-                'key_level'                               => 'Key level',
-                'key_level_title'                         => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
-                'shrouded_bounty_type'                    => 'Shrouded bounty',
-                'shrouded_bounty_type_title'              => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
-                'shrouded_bounty_types'                   => [
+        'simulateoptions' => [
+            'default' => [
+                'key_level'                  => 'Key level',
+                'key_level_title'            => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
+                'shrouded_bounty_type'       => 'Shrouded bounty',
+                'shrouded_bounty_type_title' => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
+                'shrouded_bounty_types'      => [
                     'none'    => 'No bounty',
                     'crit'    => 'Crit',
                     'haste'   => 'Haste',
                     'mastery' => 'Mastery',
                     'vers'    => 'Versatility',
                 ],
-                'affixes'                                 => 'Affixes',
-                'affixes_title'                           => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
-                'affixes_map'                             => [
+                'affixes'       => 'Affixes',
+                'affixes_title' => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
+                'affixes_map'   => [
                     'fortified'  => 'Fortified',
                     'tyrannical' => 'Tyrannical',
                 ],
@@ -581,10 +594,10 @@ return [
                     'power_infusion'       => 'Power Infusion',
                     'bleeding'             => 'Bleeding',
                 ],
-                'hp_percent'                              => 'HP percentage',
-                'hp_percent_title'                        => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-                'bloodlust_per_pull'                      => 'Bloodlust/Heroism/etc. per pull',
-                'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism/etc. Assigning these spells to a pull automatically populates this dropdown.',
+                'hp_percent'               => 'HP percentage',
+                'hp_percent_title'         => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
+                'bloodlust_per_pull'       => 'Bloodlust/Heroism/etc. per pull',
+                'bloodlust_per_pull_title' => 'Allows you to select which pulls have Bloodlust/Heroism/etc. Assigning these spells to a pull automatically populates this dropdown.',
             ],
             'advanced' => [
                 'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
@@ -593,24 +606,24 @@ return [
                 and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
                 max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
                 unless you\'re literally chain pulling with no down time in between.',
-                'use_mounts'                           => 'Use mounts',
-                'use_mounts_title'                     => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
-                'patreon_link_text'                    => 'Patreon',
-                'patreon_only'                         => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
-                'advanced_options'                     => 'Advanced options',
-                'description'                          => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
+                'use_mounts'        => 'Use mounts',
+                'use_mounts_title'  => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
+                'patreon_link_text' => 'Patreon',
+                'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
+                'advanced_options'  => 'Advanced options',
+                'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
             ],
         ],
-        'uploadlogs'         => [
+        'uploadlogs' => [
             'title' => 'Upload logs',
         ],
     ],
-    'release'      => [
+    'release' => [
         'release' => [
             'new' => 'NEW',
         ],
     ],
-    'tag'          => [
+    'tag' => [
         'manager' => [
             'route_personal' => 'Route',
             'route_team'     => 'Route',
@@ -624,7 +637,7 @@ return [
             'create_new_tag' => 'Create new tag',
         ],
     ],
-    'team'         => [
+    'team' => [
         'details' => [
             'name'            => 'Name',
             'description'     => 'Description',
@@ -635,19 +648,19 @@ return [
             'submit'          => 'Submit',
             'disband_team'    => 'Disband team',
         ],
-        'select'  => [
+        'select' => [
             'select_team' => 'Select team...',
             'team'        => 'Team',
             'create_team' => 'Create team',
         ],
     ],
-    'thirdparty'   => [
-        'nitropay'      => [
+    'thirdparty' => [
+        'nitropay' => [
             'adcontrols' => [
                 'remove_ads' => 'Remove ads',
             ],
         ],
-        'patreon'       => [
+        'patreon' => [
             'fancylink' => [
                 'patreon' => 'Patreon',
             ],
@@ -656,9 +669,10 @@ return [
             'learn_more' => 'Learn more',
         ],
     ],
-    'user'         => [
+    'user' => [
         'name' => [
-            'avatar_title' => 'Avatar',
+            'avatar_alt' => 'Avatar',
+            'raider_io'  => 'Raider.IO',
         ],
     ],
 

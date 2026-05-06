@@ -18,9 +18,8 @@ class CombatLogEventSearchResult
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventFilter        $combatLogEventFilter,
         private readonly Collection                  $combatLogEvents,
-        private readonly int                         $dungeonRouteCount
+        private readonly int                         $dungeonRouteCount,
     ) {
-
     }
 
     /**
@@ -45,11 +44,10 @@ class CombatLogEventSearchResult
         $useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 
         return [
-            'data'                => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent)
-            use ($dungeon, $floors, $useFacade) {
+            'data' => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent) use ($dungeon, $floors, $useFacade) {
                 $ingameXY = match ($this->combatLogEventFilter->getDataType()) {
                     CombatLogEventDataType::PlayerPosition => $combatLogEvent->getIngameXY(),
-                    CombatLogEventDataType::EnemyPosition => $combatLogEvent->getIngameXYEnemy()
+                    CombatLogEventDataType::EnemyPosition  => $combatLogEvent->getIngameXYEnemy(),
                 };
 
                 // If the XY is null, we can't calculate a map location
@@ -58,11 +56,11 @@ class CombatLogEventSearchResult
                 }
 
                 $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                    $ingameXY->setFloor($floors->get($combatLogEvent->ui_map_id))
+                    $ingameXY->setFloor($floors->get($combatLogEvent->ui_map_id)),
                 );
 
                 $latLngArray = ($useFacade ?
-                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
+                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->getCurrentMappingVersion(), $latLng) :
                     $latLng)->toArrayWithFloor();
 
                 $latLngArray['lat'] = round($latLngArray['lat'], 2);

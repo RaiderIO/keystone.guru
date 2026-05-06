@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                      $id
- * @property int                                      $race_id Blizzard race ID
- * @property string                                   $key
- * @property string                                   $name
- * @property int                                      $faction_id
+ * @property int    $id
+ * @property int    $race_id    Blizzard race ID
+ * @property string $key
+ * @property string $name
+ * @property int    $faction_id
  *
  * @property Faction                                  $faction
  * @property Collection<CharacterClass>               $classes
@@ -95,9 +95,17 @@ class CharacterRace extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['race_id', 'key', 'name', 'faction_id'];
+    public $fillable = [
+        'race_id',
+        'key',
+        'name',
+        'faction_id',
+    ];
 
     public function faction(): BelongsTo
     {

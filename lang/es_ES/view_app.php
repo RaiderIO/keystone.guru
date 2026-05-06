@@ -1,14 +1,15 @@
 <?php
 
 return [
-    'commit'  => [
-        'added'    => [
+
+    'commit' => [
+        'added' => [
             'added' => '',
         ],
         'modified' => [
             'modified' => '',
         ],
-        'removed'  => [
+        'removed' => [
             'removed' => '',
         ],
     ],
@@ -21,4 +22,5 @@ return [
             'get_started' => '',
         ],
     ],
+
 ];

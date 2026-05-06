@@ -5,13 +5,13 @@ use App\Models\Laratrust\Role;
 $user = Auth::user();
 ?>
 @guest
-    <li class="nav-item px-3">
+    <li class="nav-item px-2">
         <a class="btn btn-info" href="#" data-toggle="modal" data-target="#login_modal">
             <i class="fas fa-sign-in-alt"></i> {{__('view_common.layout.nav.user.login')}}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link px-3" href="#" data-toggle="modal" data-target="#register_modal">
+        <a class="nav-link px-2" href="#" data-toggle="modal" data-target="#register_modal">
             {{__('view_common.layout.nav.user.register')}}
         </a>
     </li>
@@ -19,7 +19,7 @@ $user = Auth::user();
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            @include('common.user.name', ['user' => $user])
+            @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
         </a>
         <div class="dropdown-menu text-center text-xl-left" aria-labelledby="navbarDropdown">
             @if($user->hasRole(Role::ROLE_ADMIN))
@@ -36,18 +36,18 @@ $user = Auth::user();
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item"
                    href="{{ route('admin.releases') }}">{{__('view_common.layout.nav.user.view_releases')}}</a>
-                @if( $user->isAbleTo('read-expansions') )
+{{--                @if( $user->isAbleTo('read-expansions') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.expansions') }}">{{__('view_common.layout.nav.user.view_expansions')}}</a>
-                @endif
-                @if( $user->isAbleTo('read-dungeons') )
+{{--                @endif--}}
+{{--                @if( $user->isAbleTo('read-dungeons') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.dungeons') }}">{{__('view_common.layout.nav.user.view_dungeons')}}</a>
-                @endif
-                @if( $user->isAbleTo('read-npcs') )
+{{--                @endif--}}
+{{--                @if( $user->isAbleTo('read-npcs') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.npcs') }}">{{__('view_common.layout.nav.user.view_npcs')}}</a>
-                @endif
+{{--                @endif--}}
                 <a class="dropdown-item"
                    href="{{ route('admin.spells') }}">{{__('view_common.layout.nav.user.view_spells')}}</a>
                 <a class="dropdown-item"
@@ -55,13 +55,16 @@ $user = Auth::user();
                 <a class="dropdown-item"
                    href="{{ route('admin.userreports') }}">{{__('view_common.layout.nav.user.view_user_reports') }}
                     @if($numUserReports > 0)
-                        <span class="badge badge-primary badge-pill">{{ $numUserReports }}</span>
+                        <span class="badge badge-warning badge-pill">{{ $numUserReports }}</span>
                     @endif
                 </a>
                 <div class="dropdown-divider"></div>
             @endif
+            <a class="dropdown-item" href="{{ route('profile.routes') }}">
+                <i class="fa fa-route"></i> {{ __('view_common.layout.nav.user.my_routes') }}
+            </a>
             <a class="dropdown-item" href="{{ route('profile.view', ['user' => Auth::user()]) }}">
-                <i class="fa fa-route"></i> {{ __('view_common.layout.nav.user.my_profile') }}
+                <i class="fa fa-user"></i> {{ __('view_common.layout.nav.user.my_profile') }}
             </a>
             <a class="dropdown-item" href="{{ route('profile.favorites') }}">
                 <i class="fa fa-star"></i> {{ __('view_common.layout.nav.user.my_favorites') }}

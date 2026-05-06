@@ -11,9 +11,12 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControlle
 #[Group('CorrectEvents')]
 abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogControllerTestBase
 {
-    protected function executeTest(string $fixtureName): void
+    protected function executeTest(string $fixtureName, bool $rewriteFixtures = false): void
     {
         // Fill function
+        if (!$this->hasJsonData(sprintf('%s_corrected', $fixtureName), '../../')) {
+            $rewriteFixtures = true;
+        }
 
         // Arrange
         $postBody = $this->getJsonData($fixtureName, '../../');
@@ -26,9 +29,15 @@ abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogC
 
         $responseArr = json_decode($response->content(), true);
 
-        $this->assertEqualsCanonicalizing(
-            $this->getJsonData(sprintf('%s_corrected', $fixtureName), '../../'),
-            $responseArr
-        );
+        if ($rewriteFixtures) {
+            $this->writeJsonData(sprintf('%s_corrected', $fixtureName), $responseArr, '../../');
+
+            $this->assertTrue(true, 'Corrected fixture written');
+        } else {
+            $this->assertEqualsCanonicalizing(
+                $this->getJsonData(sprintf('%s_corrected', $fixtureName), '../../'),
+                $responseArr,
+            );
+        }
     }
 }

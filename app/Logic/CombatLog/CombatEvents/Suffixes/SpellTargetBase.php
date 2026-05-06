@@ -16,6 +16,7 @@ abstract class SpellTargetBase extends SpellBase
     /**
      * @return HasParameters|$this
      */
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -25,6 +26,7 @@ abstract class SpellTargetBase extends SpellBase
         return $this;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 4;

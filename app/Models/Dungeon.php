@@ -15,42 +15,46 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
+use App\Service\Dungeon\DungeonServiceInterface;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Auth;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Mockery\Exception;
 
 /**
- * @property int                                    $id The ID of this Dungeon.
- * @property int                                    $expansion_id The linked expansion to this dungeon.
- * @property int                                    $game_version_id The linked game version to this dungeon.
- * @property int                                    $zone_id The ID of the location that WoW has given this dungeon.
- * @property int                                    $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int|null                               $instance_id The ID of the instance (used internally in the game, used for MDT mapping export purposes)
- * @property int|null                               $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
- * @property int                                    $mdt_id The ID that MDT has given this dungeon.
- * @property boolean                                $raid True if the dungeon is actually a raid, false if it is not.
- * @property string                                 $name The name of the dungeon.
- * @property string                                 $slug The url friendly slug of the dungeon.
- * @property string                                 $key Shorthand key of the dungeon
- * @property bool                                   $heatmap_enabled True if this dungeon has a heatmap enabled, false if it does not.
- * @property bool                                   $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
- * @property bool                                   $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
- * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
- * @property int                                    $views The amount of views this dungeon has had.
- * @property bool                                   $active True if this dungeon is active, false if it is not.
- * @property bool                                   $mdt_supported True if MDT is supported for this dungeon, false if it is not.
+ * @property int      $id                                 The ID of this Dungeon.
+ * @property int      $expansion_id                       The linked expansion to this dungeon.
+ * @property int      $zone_id                            The ID of the location that WoW has given this dungeon.
+ * @property int      $map_id                             The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int|null $instance_id                        The ID of the instance (used internally in the game, used for MDT mapping export purposes)
+ * @property int|null $challenge_mode_id                  The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int      $mdt_id                             The ID that MDT has given this dungeon.
+ * @property bool     $raid                               True if the dungeon is actually a raid, false if it is not.
+ * @property string   $name                               The name of the dungeon.
+ * @property string   $abbreviation                       HOV for Halls of Valor, GAMBIT for Tazavesh: Gambit etc.
+ * @property string   $slug                               The url friendly slug of the dungeon.
+ * @property string   $key                                Shorthand key of the dungeon.
+ * @property bool     $heatmap_enabled                    True if this dungeon has a heatmap enabled, false if it does not.
+ * @property bool     $speedrun_enabled                   True if this dungeon has a speedrun enabled, false if it does not.
+ * @property bool     $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
+ * @property bool     $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
+ * @property int      $views                              The number of views this dungeon has had.
+ * @property bool     $active                             True if this dungeon is active, false if it is not.
+ * @property bool     $has_wallpaper                      True if this dungeon has a wallpaper to show as a background.
+ * @property bool     $mdt_supported                      True if MDT is supported for this dungeon, false if it is not.
  *
- * @property Expansion                              $expansion
- * @property GameVersion                            $gameVersion
- * @property MappingVersion                         $currentMappingVersion
+ * @property Expansion $expansion
  *
  * @property Collection<MappingVersion>             $mappingVersions
  * @property Collection<Floor>                      $floors
@@ -78,20 +82,24 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 {
     use DungeonConstants;
 
-    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON       = 1;
-    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED = 2;
+    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON               = 1;
+    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED         = 2;
+    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_HEATMAP_EMBED = 3;
 
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected $appends = ['floor_count', 'mdt_supported'];
+    protected $appends = [
+        'floor_count',
+        'mdt_supported',
+    ];
 
     protected $fillable = [
         'expansion_id',
-        'game_version_id',
         'active',
+        'has_wallpaper',
         'raid',
         'heatmap_enabled',
         'speedrun_enabled',
@@ -103,16 +111,19 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'challenge_mode_id',
         'mdt_id',
         'name',
+        'abbreviation',
         'key',
         'slug',
         'views',
     ];
 
-    public $with = ['expansion', 'gameVersion', 'floors'];
+    public $with = [
+        'expansion',
+        'floors',
+    ];
 
     public $hidden = [
         'expansion_id',
-        'game_version_id',
         'map_id',
         'challenge_mode_id',
         'heatmap_enabled',
@@ -123,16 +134,19 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'active',
         'mdt_id',
         'zone_id',
-        'instance_id'
+        'instance_id',
     ];
 
     public $timestamps = false;
 
-    private $activeSeasonCache = null;
+    private ?Season $activeSeasonCache = null;
+
+    private ?Collection $currentMappingVersionCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -159,13 +173,15 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         $result = [];
         $npcs   = [];
 
+        $this->npcs->load('npcEnemyForces');
+
         try {
             // Loop through all floors
             foreach ($this->npcs as $npc) {
                 /** @var $npc Npc */
                 if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     /** @var NpcEnemyForces|null $npcEnemyForces */
-                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion();
 
                     $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0;
                 }
@@ -196,22 +212,68 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->belongsTo(Expansion::class);
     }
 
-    public function gameVersion(): BelongsTo
-    {
-        return $this->belongsTo(GameVersion::class);
-    }
-
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
     }
 
-    public function currentMappingVersion(): HasOne
+    public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
     {
-        return $this->hasOne(MappingVersion::class)
-            ->without(['dungeon'])
+        if ($this->currentMappingVersionCache === null) {
+            // Initialize the cache if it is not set
+            $this->currentMappingVersionCache = collect();
+        }
+
+        if ($this->currentMappingVersionCache->has($gameVersion->id)) {
+            return $this->currentMappingVersionCache->get($gameVersion->id);
+        }
+
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->mappingVersions()
+            ->where('game_version_id', $gameVersion->id)
             ->orderByDesc('mapping_versions.version')
-            ->limit(1);
+            ->without('dungeon')
+            ->first();
+
+        $this->currentMappingVersionCache->put($gameVersion->id, $mappingVersion);
+
+        return $mappingVersion;
+    }
+
+    /**
+     * Gets the current mapping version for the dungeon for the given game version, or otherwise the default game version.
+     * This will aim to return a mapping version for this dungeon as much as possible.
+     *
+     * @param  GameVersion|null    $gameVersion
+     * @return MappingVersion|null
+     */
+    public function getCurrentMappingVersion(?GameVersion $gameVersion = null): ?MappingVersion
+    {
+        $result = null;
+
+        // Attempt to load the current mapping version for the given game version
+        if ($gameVersion !== null) {
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersion);
+        }
+
+        // If we didn't find a mapping version for the given game version, fall back to the default game version
+        if ($result === null) {
+            $gameVersionService = app(GameVersionServiceInterface::class);
+            $result             = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion(Auth::user()))
+                // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
+                ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
+                // Fall back to the most recent mapping version if no mapping version was found for the default game version
+                // Maybe someone is viewing a dungeon for non-default game version A, while using non-default game version B,
+                // and the mapping for game version B does not exist yet. So just take what we can get.
+                ?? $this->mappingVersions()->orderByDesc('id')->first();
+        }
+
+        return $result;
+    }
+
+    public function hasMappingVersionForGameVersion(GameVersion $gameVersion): bool
+    {
+        return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
     }
 
     public function floors(): HasMany
@@ -231,7 +293,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
-        $useFacade = $useFacade ?? $mappingVersion->facade_enabled;
+        $useFacade ??= $mappingVersion->facade_enabled;
 
         // If we use facade
         // If we have facade, only return facade floor
@@ -262,12 +324,19 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->dungeonRoutes()->where('demo', true);
     }
 
-    public function npcs(bool $includeGlobalNpcs = true): HasMany
+    /**
+     * This relationship is a bit backwards but it's useful for finding routes in a current season.
+     *
+     * @return HasMany
+     */
+    public function seasonDungeons(): HasMany
     {
-        return $this->hasMany(Npc::class)
-            ->when($includeGlobalNpcs, static function (Builder $builder) {
-                $builder->orWhere('dungeon_id', -1);
-            });
+        return $this->hasMany(SeasonDungeon::class);
+    }
+
+    public function npcs(): BelongsToMany
+    {
+        return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');
     }
 
     public function enemies(): HasManyThrough
@@ -317,15 +386,19 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only the Siege of Boralus dungeon.
      */
-    public function scopeFactionSelectionRequired(Builder $query): Builder
+    #[Scope]
+    protected function factionSelectionRequired(Builder $query): Builder
     {
-        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/ self::DUNGEON_THE_NEXUS]);
+        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/
+            self::DUNGEON_THE_NEXUS,
+        ]);
     }
 
     /**
      * Scope a query to only include active dungeons.
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('dungeons.active', 1);
     }
@@ -333,9 +406,21 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * Scope a query to only include inactive dungeons.
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('dungeons.active', 0);
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
+     */
+    #[Scope]
+    protected function forGameVersion(Builder $query, GameVersion $gameVersion): Builder
+    {
+        return $query->whereHas('mappingVersions', function (Builder $query) use ($gameVersion) {
+            $query->where('game_version_id', $gameVersion->id);
+        });
     }
 
     public function getDungeonStart(): ?MapIcon
@@ -343,7 +428,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         $result = null;
 
         foreach ($this->floors as $floor) {
-            foreach ($floor->mapIcons($this->currentMappingVersion)->get() as $mapIcon) {
+            foreach ($floor->mapIcons()->get() as $mapIcon) {
+                /** @var MapIcon $mapIcon */
                 if ($mapIcon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
                     $result = $mapIcon;
                     break;
@@ -369,8 +455,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             return $this->activeSeasonCache;
         }
 
-        return $this->activeSeasonCache =
-            $seasonService->getUpcomingSeasonForDungeon($this) ??
+        return $this->activeSeasonCache = $seasonService->getUpcomingSeasonForDungeon($this) ??
             $seasonService->getMostRecentSeasonForDungeon($this) ??
             // Timewalking fallback
             $seasonService->getCurrentSeason($this->expansion);
@@ -395,15 +480,23 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
-        $result = $this->npcs(false)
-            ->selectRaw('MIN(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS min_health,
-                                   MAX(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS max_health')
+        $result = $this->npcs()
+            ->selectRaw('MIN(nh.health * (COALESCE(nh.percentage, 100) / 100)) AS min_health,
+                     MAX(nh.health * (COALESCE(nh.percentage, 100) / 100)) AS max_health')
             // Ensure that there's at least one enemy by having this join
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
+            ->join('npc_healths as nh', function (JoinClause $join) use ($mappingVersion) {
+                $join->on('nh.npc_id', '=', 'npcs.id')
+                    ->where('nh.game_version_id', '=', $mappingVersion->game_version_id);
+            })
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('npc_type_id', '!=', NpcType::CRITTER)
-            ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
+            ->whereIn('aggressiveness', [
+                Npc::AGGRESSIVENESS_AGGRESSIVE,
+                Npc::AGGRESSIVENESS_UNFRIENDLY,
+                Npc::AGGRESSIVENESS_AWAKENED,
+            ])
             // If we don't show em - don't take em into account for health calculations
             ->where(function ($query) {
                 $query->whereNull('enemies.seasonal_type')
@@ -417,48 +510,68 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         ];
     }
 
+    public function loadMappingVersions(): self
+    {
+        $this->load([
+            'mappingVersions' => function (HasMany $query) {
+                // Prevent circular reference loading - we also don't need it because WE are the dungeon
+                $query->without('dungeon')
+                    ->orderByDesc('mapping_versions.version');
+            },
+        ]);
+
+        return $this;
+    }
+
+    public function hasMappingVersionWithSeasons(): bool
+    {
+        return $this->loadMappingVersions()->mappingVersions->contains(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion->has_seasons);
+    }
+
+    /**
+     * @return Collection<GameVersion>
+     */
+    public function getMappingVersionGameVersions(): Collection
+    {
+        return $this->loadMappingVersions()->mappingVersions->map(static fn(MappingVersion $mappingVersion) => $mappingVersion->gameVersion)->unique('id');
+    }
+
     public function isFactionSelectionRequired(): bool
     {
-        return in_array($this->key, [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
+        return in_array($this->key, [
+            self::DUNGEON_SIEGE_OF_BORALUS,
+            self::DUNGEON_THE_NEXUS,
+        ]);
     }
 
     public function getImageUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
     }
 
     public function getImage32Url(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
     }
 
     public function getImageTransparentUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
     }
 
     public function getImageWallpaperUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
     }
 
     public function hasImageWallpaper(): bool
     {
-        return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
+        return $this->has_wallpaper;
     }
 
     public static function findExpansionByKey(string $key): ?string
     {
-        $result = null;
-
-        foreach (array_merge_recursive(self::ALL, self::ALL_RAID) as $expansion => $dungeonKeys) {
-            if (in_array($key, $dungeonKeys)) {
-                $result = $expansion;
-                break;
-            }
-        }
-
-        return $result;
+        return array_find_key(array_merge_recursive(self::ALL, self::ALL_RAID), fn($dungeonKeys) => in_array($key, $dungeonKeys));
     }
 
     public function getDungeonId(): ?int
@@ -479,6 +592,18 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $result;
     }
 
+    /**
+     * @return Dungeon Gets the current user's dungeon context or the default dungeon if none could be found
+     */
+    public static function getUserOrDefaultDungeon(): Dungeon
+    {
+        /** @var DungeonServiceInterface $dungeonService */
+        $dungeonService = App::make(DungeonServiceInterface::class);
+
+        return $dungeonService->getDungeonContext(Auth::user());
+    }
+
+    #[\Override]
     public static function boot(): void
     {
         parent::boot();

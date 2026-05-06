@@ -20,17 +20,17 @@ class KillZoneChangedEvent extends ModelChangedEvent
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected KillZone|Model                     $model
+        protected KillZone|Model                     $model,
     ) {
         parent::__construct($context, $user, $model);
     }
-
 
     public function broadcastAs(): string
     {
         return 'killzone-changed';
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         $parentResult = parent::broadcastWith();
@@ -39,9 +39,10 @@ class KillZoneChangedEvent extends ModelChangedEvent
         }
 
         return array_merge(
-            $parentResult, [
+            $parentResult,
+            [
                 'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
-            ]
+            ],
         );
     }
 }

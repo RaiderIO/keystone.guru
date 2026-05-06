@@ -25,6 +25,7 @@ class ZoneChange extends SpecialEvent
         return $this->difficultyId;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

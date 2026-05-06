@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\Spell\Spell;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
@@ -16,7 +17,10 @@ use Illuminate\Support\Collection;
 
 /**
  * @var bool                                     $showAds
+ * @var bool                                     $showSidebar
+ * @var bool|null                                $showDataSourceSnackbar
  * @var Dungeon                                  $dungeon
+ * @var MappingVersion                           $mappingVersion
  * @var Season                                   $season
  * @var bool                                     $embed
  * @var string                                   $embedStyle
@@ -47,9 +51,9 @@ $defaultState               ??= $isMobile ? 0 : $heatmapSearchSidebarState;
 $heatmapSearchEnabled       = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 
-$shouldShowHeatmapSearchSidebar = $defaultState === 1;
-$hideOnMove                     ??= $isMobile;
-$showAds                        ??= true;
+$isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
+$hideOnMove                           ??= $isMobile;
+$showAds                              ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
@@ -64,6 +68,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     return $a->id <=> $b->id;
 });
 
+<<<<<<< HEAD
 $characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization) {
     return __($characterClassSpecialization->class->name);
 })->mapWithKeys(function (Collection $specializations, string $className) {
@@ -87,6 +92,17 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
         ]
     ];
 })->toArray();
+=======
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization) => __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
+    $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
+        $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
+    ])
+])->toArray();
+
+$characterClassSelectOptions = $characterClasses->mapWithKeys(fn(CharacterClass $characterClass) => [
+    $characterClass->class_id => __($characterClass->name)
+])->toArray();
+>>>>>>> development
 
 $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn(Collection $spells, string $categoryName) => [
     __($categoryName) => $spells->mapWithKeys(
@@ -106,6 +122,10 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
     'hideOnMove' => $hideOnMove,
     'currentFiltersSelector' => '#heatmap_search_options_current_filters',
     'loaderSelector' => '#heatmap_search_loader',
+
+    // If the sidebar is hidden from view, ignore all UI options and just show the map
+    'passThroughEverything' => !$showSidebar,
+    'showDataSourceSnackbar' => $showDataSourceSnackbar ?? true,
 
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
@@ -177,13 +197,15 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
      {{ $embed ? 'embed' : '' }}
      {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
-     {{ $shouldShowHeatmapSearchSidebar ? 'active' : '' }}
+     {{ $isHeatmapSearchSidebarDefaultVisible ? 'active' : '' }}
      {{ $showAds ? 'ad_loaded' : '' }}
          ">
     <div class="bg-header">
-        <div id="heatmap_search_sidebar_trigger" class="handle">
-            <i class="fas {{ $shouldShowHeatmapSearchSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
-        </div>
+        @if($showSidebar)
+            <div id="heatmap_search_sidebar_trigger" class="handle" data-toggle="tooltip">
+                <i class="fas {{ $isHeatmapSearchSidebarDefaultVisible ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
+            </div>
+        @endif
 
         <div class="p-1">
             <div class="row pr-2 mb-2 no-gutters">
@@ -225,7 +247,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                    class="{{ CombatLogEventEventType::NpcDeath->value }}"
                                    value="{{ CombatLogEventEventType::NpcDeath->value }}"
                                    checked>
-                            <img src="{{ url('images/spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
+                            <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.npc_death') }}
@@ -234,7 +256,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::PlayerDeath->value }}"
                                    value="{{ CombatLogEventEventType::PlayerDeath->value }}">
-                            <img src="{{ url('images/spells/ability_rogue_feigndeath.jpg') }}"
+                            <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_death') }}
@@ -243,8 +265,13 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::PlayerSpell->value }}"
                                    value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+<<<<<<< HEAD
                             <img src="{{ url('images/spells/spell_nature_lightning.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.spell_casts_alt') }}"
+=======
+                            <img src="{{ ksgAssetImage('spells/spell_nature_bloodlust.jpg') }}"
+                                 alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}"
+>>>>>>> development
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_spell') }}
                         </label>
@@ -296,7 +323,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
                          data-toggle="buttons">
                         <?php
-                        $defaultRegion = Auth::check() ? GameServerRegion::getUserOrDefaultRegion()->short : GameServerRegion::WORLD;
+                        $defaultRegion = GameServerRegion::WORLD;
                         ?>
                         @foreach($allRegions as $region)
                             <label class="btn btn-secondary {{ $region->short === $defaultRegion ? 'active' : '' }}">
@@ -305,7 +332,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                        value="{{ $region->short }}"
                                     {{ $region->short === $defaultRegion ? 'checked' : '' }}
                                 >
-                                <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
+                                <img src="{{ ksgAssetImage(sprintf('flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
                                      class="filter_region_icon">
                                 {{ __($region->name) }}
@@ -350,26 +377,21 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     <div class="filter_affix">
                         <div class="row">
                             <div class="col">
-                                {!!
-                                    Form::select(
-                                        'filter_weekly_affix_groups[]',
-                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){
-                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
-                                        }), [],
-                                        [
-                                            'id' => 'filter_weekly_affix_groups',
-                                            'name' => 'weekly_affix_groups',
-                                            'class' => 'form-control affixselect selectpicker',
-                                            'multiple' => 'multiple'
-                                        ]
-                                    )
-                                 !!}
+                                {{
+                                    html()
+                                    ->multiselect('filter_weekly_affix_groups[]', $seasonWeeklyAffixGroups->mapWithKeys(function (WeeklyAffixGroup $seasonWeeklyAffixGroup) {
+                                        return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
+                                    }), [])
+                                    ->id('filter_weekly_affix_groups')
+                                    ->name('weekly_affix_groups')
+                                    ->class('form-control affixselect selectpicker')
+                                }}
                             </div>
                         </div>
                     </div>
                 @endcomponent
 
-                @if($dungeon->gameVersion->has_seasons)
+                @if($mappingVersion->gameVersion->has_seasons)
                     {{--                    @component('common.forms.labelinput', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
                     {{--                        <div class="filter_affix">--}}
                     {{--                            <div class="row">--}}
@@ -420,12 +442,22 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
                     ])
+<<<<<<< HEAD
                         @include('common.forms.select.imageselect', [
                             'id' => 'filter_classes',
                             'name' => 'classes',
                             'values' => $characterClassSelectOptions,
                             'multiple' => true
                         ])
+=======
+                        {{
+                            html()
+                                ->multiselect('filter_classes[]', $characterClassSelectOptions, [])
+                                ->id('filter_classes')
+                                ->name('classes')
+                                ->class('form-control selectpicker')
+                         }}
+>>>>>>> development
                     @endcomponent
 
                     @component('common.forms.labelinput', [
@@ -433,6 +465,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
                     ])
+<<<<<<< HEAD
                         @include('common.forms.select.imageselectcategories', [
                             'id' => 'filter_specializations',
                             'name' => 'filter_specializations[]',
@@ -440,6 +473,15 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                             'multiple' => true,
                             'liveSearch' => true,
                         ])
+=======
+                        {{
+                            html()
+                            ->multiselect('filter_specializations[]', $characterClassSpecializationsSelectOptions, [])
+                            ->id('filter_specializations')
+                            ->name('specializations')
+                            ->class('form-control selectpicker')
+                        }}
+>>>>>>> development
                     @endcomponent
 
 
@@ -449,12 +491,22 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
                     ])
+<<<<<<< HEAD
                         @include('common.forms.select.imageselect', [
                             'id' => 'filter_classes_player_deaths',
                             'name' => 'classes_player_deaths[]',
                             'values' => $characterClassSelectOptions,
                             'multiple' => true
                         ])
+=======
+                        {{
+                            html()
+                                ->multiselect('filter_classes_player_deaths[]', $characterClassSelectOptions, [])
+                                ->id('filter_classes_player_deaths')
+                                ->name('classes_player_deaths')
+                                ->class('form-control selectpicker')
+                        }}
+>>>>>>> development
                     @endcomponent
 
                     @component('common.forms.labelinput', [
@@ -463,6 +515,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
                     ])
+<<<<<<< HEAD
                         @include('common.forms.select.imageselectcategories', [
                             'id' => 'filter_specializations_player_deaths',
                             'name' => 'filter_specializations_player_deaths[]',
@@ -470,6 +523,15 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                             'multiple' => true,
                             'liveSearch' => true,
                         ])
+=======
+                        {{
+                            html()
+                                ->multiselect('filter_specializations_player_deaths[]', $characterClassSpecializationsSelectOptions, [])
+                                ->id('filter_specializations_player_deaths')
+                                ->name('specializations_player_deaths')
+                                ->class('form-control selectpicker')
+                         }}
+>>>>>>> development
                     @endcomponent
 
                 @endcomponent
@@ -563,11 +625,12 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                 </label>
                             </div>
                             <div class="col">
-                                {{ Form::select('pane',
-                                    ['overlayPane' => 'Overlay', 'markerPane' => 'Marker', 'tooltipPane' => 'Tooltip'],
-                                    'overlayPane',
-                                    ['id' => 'heatmap_heat_option_pane', 'class' => 'selectpicker']
-                                ) }}
+                                {{
+                                    html()
+                                        ->select('pane', ['overlayPane' => 'Overlay', 'markerPane' => 'Marker', 'tooltipPane' => 'Tooltip'], 'overlayPane')
+                                        ->id('heatmap_heat_option_pane')
+                                        ->class('selectpicker')
+                                }}
                             </div>
                         </div>
                     @endcomponent

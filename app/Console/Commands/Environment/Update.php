@@ -11,27 +11,27 @@ class Update extends Command
     use ExecutesShellCommands;
 
     public const COMPILE = [
-        'live'    => true,
-        'local'   => false,
-        'mapping' => true,
-        'staging' => true,
-        'testing' => true,
+        'production' => true,
+        'local'      => false,
+        'mapping'    => true,
+        'staging'    => true,
+        'testing'    => true,
     ];
 
     public const COMPILE_AS = [
-        'live'    => 'production',
-        'local'   => 'dev',
-        'mapping' => 'production',
-        'staging' => 'dev',
-        'testing' => 'dev',
+        'production' => 'production',
+        'local'      => 'dev',
+        'mapping'    => 'production',
+        'staging'    => 'dev',
+        'testing'    => 'dev',
     ];
 
     public const OPTIMIZE = [
-        'live'    => true,
-        'local'   => false,
-        'mapping' => true,
-        'staging' => true,
-        'testing' => false,
+        'production' => true,
+        'local'      => false,
+        'mapping'    => true,
+        'staging'    => true,
+        'testing'    => false,
     ];
 
     /**
@@ -51,16 +51,14 @@ class Update extends Command
      */
     public function handle(): int
     {
-        $environment = config('app.type');
+        $appType = config('app.type');
 
-        $this->info(sprintf('Updating Keystone.guru %s environment', $environment));
+        $this->info(sprintf('Updating Keystone.guru %s environment', $appType));
 
         // Regenerate IDE helper
         $this->call('clear-compiled');
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
-
-        $this->call('horizon:publish');
 
         $this->call('migrate', [
             '--database' => 'migrate',
@@ -82,7 +80,7 @@ class Update extends Command
         ]);
 
         // After seed, create a release if necessary
-        if ($environment === 'live') {
+        if ($appType === 'production') {
             $this->call('make:githubrelease');
             // With the release created, pull the latest tag
             $this->shell([
@@ -91,7 +89,7 @@ class Update extends Command
         }
 
         // User permissions are funky for local environments - tell git to ignore them
-        if ($environment === 'local') {
+        if ($appType === 'local') {
             $this->shell([
                 'git config --global --add safe.directory /var/www',
             ]);
@@ -103,12 +101,12 @@ class Update extends Command
         }
 
         $this->call('optimize:clear');
-        if (self::OPTIMIZE[$environment]) {
+        if (self::OPTIMIZE[$appType]) {
             $this->call('optimize');
         }
 
         $this->call('queue:restart');
-        if ($environment !== 'local') {
+        if ($appType !== 'local') {
             $this->call('supervisor:start');
         }
 
@@ -124,7 +122,7 @@ class Update extends Command
         ]);
 
         $this->call('vendor:publish', [
-            '--provider' => 'L5Swagger\L5SwaggerServiceProvider',
+            '--provider' => \L5Swagger\L5SwaggerServiceProvider::class,
         ]);
 
         // A bit of a nasty hack to fix permission issues

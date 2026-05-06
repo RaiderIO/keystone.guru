@@ -19,4 +19,4 @@ $publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonro
     'publishStateSelected' => $dungeonroute->publishedstate->name,
 ]])
 
-{!! Form::select('map_route_publish', [], 1, ['id' => 'map_route_publish', 'class' => 'form-control selectpicker', 'size' => count($publishStates)]) !!}
+{{ html()->select('map_route_publish', [], 1)->id('map_route_publish')->class('form-control selectpicker')->attribute('size', count($publishStates)) }}

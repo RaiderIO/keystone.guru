@@ -4,6 +4,11 @@ let cookieDefaultAttributes = undefined;
 // Environments
 const ENVIRONMENT_LOCAL = 'local';
 
+// Themes
+const THEME_LUX = 'lux';
+const THEME_DARKLY = 'darkly';
+const THEME_XALATATH = 'vapor';
+
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';
 const MAP_OBJECT_GROUP_BRUSHLINE = 'brushline';
@@ -53,10 +58,12 @@ const MAP_CONTEXT_TYPE_DUNGEON_ROUTE = 'dungeonroute';
 const MAP_CONTEXT_TYPE_LIVE_SESSION = 'livesession';
 const MAP_CONTEXT_TYPE_MAPPING_VERSION_EDIT = 'mappingVersionEdit';
 const MAP_CONTEXT_TYPE_DUNGEON_EXPLORE = 'dungeonExplore';
+const MAP_CONTEXT_TYPE_DUNGEON_ROUTE_SEARCH = 'dungeonRouteSearch';
 
 // Dungeons
 const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';
 const DUNGEON_THE_NEXUS = 'thenexus';
+const DUNGEON_ALGETHAR_ACADEMY = 'dragonacademy'; // Dragonflight version!!
 
 // Kill zones
 const NUMBER_STYLE_PERCENTAGE = 'percentage';
@@ -126,6 +133,10 @@ const NPC_TYPE_MECHANICAL = 9;
 const NPC_TYPE_UNDEAD = 10;
 const NPC_TYPE_UNCATEGORIZED = 11;
 
+// Hard coded NPC IDs we need to add exceptions for
+const NPC_ID_NATHREZIM_INFILTRATOR = 189878;
+const NPC_ID_ZUL_GAMUX = 190128;
+
 // Seasonal types
 let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';
@@ -157,6 +168,7 @@ const EXPANSION_THE_LAST_TITAN = 'tlt';
 // Map icons
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
 const MAP_ICON_TYPE_SPELL_HEROISM = 'spell_heroism';
+const MAP_ICON_TYPE_DOT_YELLOW = 'dot_yellow';
 const MAP_ICON_TYPE_DUNGEON_START_ID = 10;
 
 // Spells @TODO This should probably be dictated by the backend through MapContext
@@ -189,9 +201,12 @@ const TEEMING_VISIBLE = 'visible';
 const TEEMING_HIDDEN = 'hidden';
 
 // Game versions
-const GAME_VERSION_CLASSIC = 'classic';
-const GAME_VERSION_WOTLK = 'wotlk';
 const GAME_VERSION_RETAIL = 'retail';
+const GAME_VERSION_CLASSIC_ERA = 'classic';
+const GAME_VERSION_WOTLK = 'wotlk';
+const GAME_VERSION_BETA = 'beta';
+const GAME_VERSION_CATA = 'cata';
+const GAME_VERSION_MOP = 'mop';
 
 // Mountable Areas
 const MOVEMENT_SPEED_DEFAULT = 7;
@@ -438,9 +453,18 @@ let c = {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
                 return '#003280';
-            }, // #003280
-            defaultWeight: 2,
+            },
+            margin: 0.6,
+            arcSegments: function (nr) {
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
+            },
+            polygonOptions: {
+                weight: 1,
+                fillOpacity: 0,
+                opacity: 1
+            },
 
+            defaultWeight: 2,
             polylineOptions: {
                 color: '#090',
                 weight: 2,
@@ -642,21 +666,6 @@ let c = {
             userOverflowCount: 1
         },
         sanitizeTextDefaultAllowedTags: ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
-        sanitizeTextDefaultAllowedDomains: [
-            'keystone.guru',
-            'raider.io',
-            'twitch.tv',
-            'youtube.com',
-            'wowhead.com',
-            'icy-veins.com',
-            'worldofwarcraft.blizzard.com',
-            'wowpedia.fandom.com',
-            'wowwiki-archive.fandom.com',
-            'wago.io',
-            'curseforge.com',
-            'warcraftlogs.com',
-            'archon.gg',
-        ],
         sanitizeText: function (text, convertLineEnding = true) {
             if (text === null || typeof text !== 'string') {
                 return text;
@@ -672,7 +681,7 @@ let c = {
                 }
             }
 
-            return filterHTML(text, allowedTags, c.map.sanitizeTextDefaultAllowedDomains);
+            return filterHTML(text, allowedTags, getState().getSanitizeAllowedDomains());
         }
     }
 };

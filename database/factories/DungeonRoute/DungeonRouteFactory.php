@@ -9,6 +9,7 @@ use App\Models\PublishedState;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Random\RandomException;
 
 class DungeonRouteFactory extends Factory
 {
@@ -16,6 +17,7 @@ class DungeonRouteFactory extends Factory
 
     /**
      * Define the model's default state.
+     * @throws RandomException
      */
     public function definition(): array
     {
@@ -32,10 +34,8 @@ class DungeonRouteFactory extends Factory
             }
 
             $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
-            // Cannot use ->with(), that doesn't work with this relation due to the limit
-            $dungeon->load('currentMappingVersion');
             $count++;
-        } while ($dungeon?->currentMappingVersion === null);
+        } while ($dungeon->getCurrentMappingVersion() === null || $dungeon->floors->isEmpty());
 
         $activeSeason = $dungeon->getActiveSeason($seasonService);
 
@@ -43,15 +43,15 @@ class DungeonRouteFactory extends Factory
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'author_id'          => 1,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->currentMappingVersion->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
             'season_id'          => $activeSeason?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'team_id'            => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
 
             'clone_of'                   => null,
-            'title'                      => $this->faker->title(),
-            'description'                => '',
+            'title'                      => $this->faker->sentence(),
+            'description'                => $this->faker->paragraph(),
             'level_min'                  => $activeSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
             'level_max'                  => $activeSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
             'difficulty'                 => 'Casual',

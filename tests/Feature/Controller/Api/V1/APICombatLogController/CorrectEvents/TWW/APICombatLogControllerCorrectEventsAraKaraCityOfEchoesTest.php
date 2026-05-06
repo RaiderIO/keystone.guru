@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CorrectEvents\TWW;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\TWW;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
@@ -20,8 +20,14 @@ class APICombatLogControllerCorrectEventsAraKaraCityOfEchoesTest extends APIComb
     }
 
     #[Test]
-    public function create_givenAraKaraCityOfEchoes3Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenTwwS1AraKaraCityOfEchoes3Json_shouldReturnCorrectedJsonData(): void
     {
         $this->executeTest('TWW/tww_s1_ara_kara_city_of_echoes_3');
+    }
+
+    #[Test]
+    public function create_givenTwwS3PtrAraKaraCityOfEchoes3Json_shouldReturnCorrectedJsonData(): void
+    {
+        $this->executeTest('TWW/tww_s3_ptr_ara_kara_city_of_echoes_7');
     }
 }

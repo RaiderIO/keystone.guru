@@ -2,10 +2,11 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'Hodor',
             'mdt_string_format_not_recognized'    => 'Hodor',
+            'cli_weakauras_parser_not_found'      => 'Hodor',
             'invalid_mdt_string'                  => 'Hodor',
             'invalid_mdt_string_exception'        => 'Hodor',
             'mdt_importer_not_configured'         => 'Hodor',
@@ -18,40 +19,42 @@ return [
             'mdt_invalid_category'                => 'Hodor',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => 'Hodor',
-            'caches_dropped_successfully' => 'Hodor',
-            'releases_exported'           => 'Hodor',
-            'exception'                   => [
-                'internal_server_error' => 'Hodor',
-            ],
-            'feature_toggle_activated'    => 'Hodor',
-            'feature_toggle_deactivated'  => 'Hodor',
-            'feature_forgotten'           => 'Hodor',
+            'message_banner_set_successfully'   => 'Hodor',
+            'thumbnail_regenerate_result'       => 'Hodor',
+            'combatlog_route_regenerate_result' => 'Hodor',
+            'caches_dropped_successfully'       => 'Hodor',
+            'releases_exported'                 => 'Hodor',
+            'exception'                         => 'Hodor',
+            'feature_toggle_activated'          => 'Hodor',
+            'feature_toggle_deactivated'        => 'Hodor',
+            'feature_forgotten'                 => 'Hodor',
+            'read_only_mode_disabled'           => 'Hodor',
+            'read_only_mode_enabled'            => 'Hodor',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => 'Hodor',
         'mdt_generate_no_lua' => 'Hodor',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => 'Hodor',
             'unable_to_save_report'        => 'Hodor',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => 'Hodor',
             'unable_to_delete_brushline' => 'Hodor',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Hodor',
             'dungeon_updated' => 'Hodor',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => 'Hodor',
         'flash'          => [
             'route_cloned_successfully' => 'Hodor',
@@ -59,7 +62,7 @@ return [
             'route_created'             => 'Hodor',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => 'Hodor',
         'this_week_affixes' => 'Hodor',
         'next_week_affixes' => 'Hodor',
@@ -70,7 +73,7 @@ return [
             'next_week_affixes' => 'Hodor',
             'new'               => 'Hodor',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => 'Hodor',
             'this_week_affixes' => 'Hodor',
             'next_week_affixes' => 'Hodor',
@@ -84,35 +87,36 @@ return [
             'npc_deleted_successfully' => 'Hodor',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => 'Hodor',
             'expansion_updated'        => 'Hodor',
             'expansion_created'        => 'Hodor',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => 'Hodor',
             'not_found'                  => 'Hodor',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Hodor',
             'user_exists'             => 'Hodor',
             'email_exists'            => 'Hodor',
             'permission_denied'       => 'Hodor',
+            'read_only_mode_enabled'  => 'Hodor',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => 'Hodor',
         ],
         'legal_agreed_required' => 'Hodor',
         'legal_agreed_accepted' => 'Hodor',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => 'Hodor',
         ],
@@ -122,29 +126,30 @@ return [
             'github_exception' => 'Hodor',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => 'Hodor',
         'created_bare_successfully' => 'Hodor',
         'deleted_successfully'      => 'Hodor',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => 'Hodor',
         'error'           => [
             'mdt_string_parsing_failed'             => 'Hodor',
             'mdt_string_format_not_recognized'      => 'Hodor',
+            'cli_weakauras_parser_not_found'        => 'Hodor',
             'invalid_mdt_string_exception'          => 'Hodor',
             'invalid_mdt_string'                    => 'Hodor',
             'mdt_importer_not_configured_properly'  => 'Hodor',
             'cannot_create_route_must_be_logged_in' => 'Hodor',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => 'Hodor',
             'unable_to_delete_path' => 'Hodor',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => 'Hodor',
             'link_successful'         => 'Hodor',
@@ -154,7 +159,7 @@ return [
             'internal_error_occurred' => 'Hodor',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => 'Hodor',
             'username_already_in_use'          => 'Hodor',
@@ -172,7 +177,7 @@ return [
             'error_deleting_account'           => 'Hodor',
         ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => 'Hodor',
         ],
@@ -181,7 +186,7 @@ return [
             'spell_created' => 'Hodor',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => 'Hodor',
             'team_created'                        => 'Hodor',
@@ -191,7 +196,7 @@ return [
             'tag_already_exists'                  => 'Hodor',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => 'Hodor',
             'user_is_no_longer_an_admin'        => 'Hodor',

@@ -15,14 +15,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                        $id
- * @property int                        $mapping_version_id
- * @property int                        $floor_id
- * @property int                        $target_floor_id
- * @property float                      $lat
- * @property float                      $lng
- * @property float                      $size
- * @property float                      $rotation
+ * @property int   $id
+ * @property int   $mapping_version_id
+ * @property int   $floor_id
+ * @property int   $target_floor_id
+ * @property float $lat
+ * @property float $lng
+ * @property float $size
+ * @property float $rotation
+ *
  * @property MappingVersion             $mappingVersion
  * @property Floor                      $floor
  * @property Floor                      $targetFloor
@@ -52,17 +53,23 @@ class FloorUnion extends CacheModel implements MappingModelCloneableInterface, M
         'floorUnionAreas',
     ];
 
-    protected $hidden = ['mappingVersion', 'floor'];
-
-    protected $casts = [
-        'mapping_version_id' => 'integer',
-        'floor_id'           => 'integer',
-        'target_floor_id'    => 'integer',
-        'lat'                => 'float',
-        'lng'                => 'float',
-        'size'               => 'float',
-        'rotation'           => 'float',
+    protected $hidden = [
+        'mappingVersion',
+        'floor',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id' => 'integer',
+            'floor_id'           => 'integer',
+            'target_floor_id'    => 'integer',
+            'lat'                => 'float',
+            'lng'                => 'float',
+            'size'               => 'float',
+            'rotation'           => 'float',
+        ];
+    }
 
     public function mappingVersion(): BelongsTo
     {

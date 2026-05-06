@@ -10,7 +10,8 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-141.375,\"lng\":236.75},{\"lat\":-169.25,\"lng\":256}]"
-        }
+        },
+        "mdt_polyline": null
     },
     {
         "id": 9141,
@@ -23,7 +24,8 @@
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-156.4568,\"lng\":246.5948},{\"lat\":-141.6162,\"lng\":236.2435},{\"lat\":-156.4568,\"lng\":246.5948},{\"lat\":-169.9988,\"lng\":257.5583},{\"lat\":-156.4568,\"lng\":246.5948}]"
-        }
+        },
+        "mdt_polyline": null
     },
     {
         "id": 9260,
@@ -36,6 +38,7 @@
             "color_animated": null,
             "weight": 2,
             "vertices_json": "[{\"lat\":-156.4568,\"lng\":246.5948},{\"lat\":-141.6162,\"lng\":236.2435},{\"lat\":-156.4568,\"lng\":246.5948},{\"lat\":-169.9988,\"lng\":257.5583},{\"lat\":-156.4568,\"lng\":246.5948}]"
-        }
+        },
+        "mdt_polyline": null
     }
 ]

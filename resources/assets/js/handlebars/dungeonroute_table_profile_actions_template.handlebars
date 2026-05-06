@@ -7,6 +7,13 @@
                 {{actions_label}}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {{#if is_user_admin}}
+                <h6 class="dropdown-header">{{admin_label}}</h6>
+                <a class="dropdown-item dungeonroute-refresh-thumbnails cursor-pointer"
+                   data-publickey="{{public_key}}">
+                    <i class="fas fa-sync"></i> {{refresh_thumbnails_label}}
+                </a>
+                {{/if}}
                 <h6 class="dropdown-header">{{sharing_label}}</h6>
                 <a class="dropdown-item dungeonroute-publishedstate text-warning cursor-pointer {{#ifCond published '=='
                                                                                                           'unpublished'}} active {{/ifCond}}"

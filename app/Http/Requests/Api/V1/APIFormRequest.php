@@ -11,13 +11,14 @@ abstract class APIFormRequest extends FormRequest
 {
     protected abstract function getRequestModelClass(): ?string;
 
+    #[\Override]
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
             'message' => 'Validation errors',
             'data'    => $validator->errors(),
-        ]));
+        ], 422));
     }
 
     public function getModel(): ?RequestModel

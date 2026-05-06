@@ -21,7 +21,7 @@ foreach ($regions as $name => $mask) {
         // Us dumb Americans can't handle military time
         $ampm = $time->format('H') > 12 ? ' (' . $time->format('g:i a') . ')' : '';
         // Remove region name and add a sample time
-        $timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i') . $ampm;
+        $timezones[$name][$timezone] = substr($timezone, strlen((string) $name) + 1) . ' - ' . $time->format('H:i') . $ampm;
     }
 }
 

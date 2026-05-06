@@ -17,7 +17,7 @@ class CombatLogRouteSpellCorrectionRequestModel extends CombatLogRouteSpellReque
         ?string                                 $playerUid = null,
         ?string                                 $castAt = null,
         ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null
+        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
     ) {
         parent::__construct($spellId, $playerUid, $castAt, $coord);
     }

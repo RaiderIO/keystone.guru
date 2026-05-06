@@ -15,19 +15,32 @@ use Illuminate\Support\Collection;
 
 class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 {
-    public const DUNGEON_NAME_MAPPING = [
+    /**
+     * @var array<string, string> Keys are KSG names, values are Archon.gg names
+     */
+    public const array DUNGEON_NAME_MAPPING = [
         "Dawn of the Infinite: Galakrond's Fall" => "Galakrond's Fall",
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
-        'Ara-Kara: City of Echoes'               => 'Ara-Kara, City of Echoes',
-        'Operation Mechagon: Workshop'           => 'Operation: Mechagon - Workshop',
+
+        // TWW S3
+        'Ara-Kara, City of Echoes'    => 'Ara-Kara',
+        'Halls of Atonement'          => 'Halls',
+        'Operation: Floodgate'        => 'Floodgate',
+        'Priory of the Sacred Flame'  => 'Priory',
+        'Tazavesh: Streets of Wonder' => 'Streets',
+        "Tazavesh: So'leah's Gambit"  => 'Gambit',
+
+        // Midnight S1
+        "Magisters' Terrace"          => "Magisters'",
+        'The Seat of the Triumvirate' => 'Seat',
     ];
-    public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
+    public const string DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
-        private readonly AffixGroupEaseTierServiceLoggingInterface $log
+        private readonly AffixGroupEaseTierServiceLoggingInterface $log,
     ) {
     }
 
@@ -36,7 +49,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixes        = $tierList['encounterTierList']['label'];
         $tiersByDungeon = [];
         foreach ($tierList['encounterTierList']['tierLists'][0]['tiers'] as $tier) {
-
             foreach ($tier['entries'] as $entry) {
                 $tiersByDungeon[$dungeonNameMapping[$entry['name']] ?? $entry['name']] = $tier['tier'];
             }
@@ -51,7 +63,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 '%s|%s|%s',
                 $dungeon,
                 $affixes,
-                $tier
+                $tier,
             );
         }
 
@@ -81,6 +93,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $result    = null;
         $tiersHash = $this->getTiersHash($tierListsResponse, array_flip(self::DUNGEON_NAME_MAPPING));
+
         try {
             $lastUpdatedAt = Carbon::createFromFormat(self::DATE_TIME_FORMAT, $tierListsResponse['lastUpdated']);
         } catch (InvalidFormatException $exception) {
@@ -93,7 +106,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
             $lastEaseTierPull->created_at->isBefore($lastUpdatedAt) ||
             $lastEaseTierPull->affix_group_id !== $affixGroup->id ||
             $lastEaseTierPull->tiers_hash !== $tiersHash) {
-
             $affixGroupString       = $affixGroup->text;
             $affixGroupEaseTierPull = AffixGroupEaseTierPull::create([
                 'affix_group_id'  => $affixGroup->id,
@@ -118,11 +130,11 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                     foreach ($tierList['entries'] as $dungeon) {
                         /** @var array{id: int, name: string, url: string} $dungeon */
                         // If found
-                        $dungeonName = $dungeon['name'];
-                        $dungeon     = $dungeonList->get($dungeonName);
+                        $archonDungeonName = $dungeon['name'];
+                        $dungeon           = $dungeonList->get($archonDungeonName);
 
                         if ($dungeon === null) {
-                            $this->log->parseTierListUnknownDungeon($dungeonName);
+                            $this->log->parseTierListUnknownDungeon($archonDungeonName);
 
                             continue;
                         }
@@ -134,7 +146,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                             'tier'                          => $tier,
                         ];
 
-                        $this->log->parseTierListSavedDungeonTier($dungeonName, $tier);
+                        $this->log->parseTierListSavedDungeonTier($archonDungeonName, $tier);
                     }
                 } finally {
                     $this->log->parseTierListParseTierEnd();
@@ -224,15 +236,18 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
+            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(
+                Affix $affix,
+            ) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {
                 // Now we must find affix groups that correspond to the affix list
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
-
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(Affix $affix) => $affixes->search($affix->key) === false);
+                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(
+                        Affix $affix,
+                    ) => $affixes->search($affix->key) === false);
 
                     // If we have found the match, we're done
                     if ($notFoundAffixes->isEmpty()) {

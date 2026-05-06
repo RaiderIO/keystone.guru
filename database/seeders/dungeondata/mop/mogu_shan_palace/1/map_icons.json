@@ -1,1 +1,28 @@
-[]
+[
+    {
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -232.1167,
+        "lng": 154.8183,
+        "comment": "mapping.map_icons.mop.mogu_shan_palace.door_unlocks_after_trial_of_the_king",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -52.5918,
+        "lng": 108.3151,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

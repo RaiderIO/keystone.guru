@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,14 +21,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property int                       $id
- * @property int                       $dungeon_route_id
- * @property int|null                  $floor_id
- * @property string                    $color
- * @property string                    $description
- * @property int                       $index
- * @property float|null                $lat
- * @property float|null                $lng
+ * @property int        $id
+ * @property int        $dungeon_route_id
+ * @property int|null   $floor_id
+ * @property string     $color
+ * @property string     $description
+ * @property int        $index
+ * @property float|null $lat
+ * @property float|null $lng
  *
  * @property DungeonRoute              $dungeonRoute
  * @property Floor                     $floor
@@ -36,14 +37,15 @@ use Illuminate\Support\Facades\DB;
  * @property Collection<KillZoneSpell> $killZoneSpells
  * @property Collection<Spell>         $spells
  *
- * @property Carbon                    $updated_at
- * @property Carbon                    $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @mixin Eloquent
  */
 class KillZone extends Model
 {
     use HasLatLng;
+    use HasFactory;
 
     public $visible = [
         'id',
@@ -74,14 +76,6 @@ class KillZone extends Model
         'created_at',
     ];
 
-    protected $casts = [
-        'dungeon_route_id' => 'integer',
-        'floor_id'         => 'integer',
-        'index'            => 'integer',
-        'lat'              => 'float',
-        'lng'              => 'float',
-    ];
-
     /** @var Collection<int>|null */
     private ?Collection $enemiesAttributeCache = null;
 
@@ -89,6 +83,17 @@ class KillZone extends Model
     private ?Collection $enemiesCache = null;
 
     private ?Floor $dominantFloorCache = null;
+
+    protected function casts(): array
+    {
+        return [
+            'dungeon_route_id' => 'integer',
+            'floor_id'         => 'integer',
+            'index'            => 'integer',
+            'lat'              => 'float',
+            'lng'              => 'float',
+        ];
+    }
 
     public function setEnemiesAttributeCache(?Collection $enemyIds): void
     {
@@ -193,10 +198,12 @@ class KillZone extends Model
                 $floorTotals[$enemy->floor_id]++;
             }
 
-            // Will get a random floor if there's equal counts on multiple floors, that's ok
-            $floorId = array_search(max($floorTotals), $floorTotals, true);
+            if (!empty($floorTotals)) {
+                // Will get a random floor if there's equal counts on multiple floors, that's ok
+                $floorId = array_search(max($floorTotals), $floorTotals, true);
 
-            $result = Floor::findOrFail($floorId);
+                $result = Floor::findOrFail($floorId);
+            }
         }
 
         return $this->dominantFloorCache = $result;
@@ -285,7 +292,7 @@ class KillZone extends Model
         return new LatLng(
             $boundingBox['latMax'],
             $boundingBox['lngMin'] + (($boundingBox['lngMax'] - $boundingBox['lngMin']) / 2),
-            $this->getDominantFloor(true)
+            $this->getDominantFloor(true),
         );
     }
 
@@ -345,17 +352,21 @@ class KillZone extends Model
                  left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                  left join `npcs` on `npcs`.`id` = `kill_zone_enemies`.`npc_id`
                  left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
-                 left join `enemies` on `enemies`.`id` = `kill_zone_enemies`.`enemy_id`
+                 left join `enemies` on `enemies`.`npc_id` = `kill_zone_enemies`.`npc_id` AND `enemies`.`mdt_id` = `kill_zone_enemies`.`mdt_id`
                     {$ifIsShroudedJoins}
             where kill_zones.id = :kill_zone_id
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
               and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
-            ", ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
+            ", [
+            'teeming'      => (int)$teeming,
+            'kill_zone_id' => $this->id,
+        ]);
 
         return collect($queryResult);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -363,6 +374,7 @@ class KillZone extends Model
         // Delete kill zone properly if it gets deleted
         static::deleting(static function (KillZone $item) {
             $item->killZoneEnemies()->delete();
+            $item->killZoneSpells()->delete();
         });
     }
 }

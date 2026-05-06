@@ -1,23 +1,3 @@
-.sorting_asc {
-    background: url('/images/lib/datatables/sort_asc.png') no-repeat center right !important;
-}
-
-.sorting_desc {
-    background: url('/images/lib/datatables/sort_desc.png') no-repeat center right !important;
-}
-
-.sorting {
-    background: url('/images/lib/datatables/sort_both.png') no-repeat center right !important;
-}
-
-.sorting_asc_disabled {
-    background: url('/images/lib/datatables/sort_asc_disabled.png') no-repeat center right !important;
-}
-
-.sorting_desc_disabled {
-    background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
-}
-
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;
@@ -40,6 +20,14 @@
 }
 
 /** DATATABLES */
+div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    cursor: default;
+    color: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
 .row_selected {
     background-color: rgba(255, 255, 255, 0.15) !important;
     cursor: pointer;
@@ -79,6 +67,10 @@ ul.light-slider {
     display: block;
     height: auto;
     max-width: 100%;
+}
+
+.dungeon_card_dungeon_name {
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
 }
 
 /** Light Slider */
@@ -136,6 +128,17 @@ ul.light-slider {
 /*    max-height: 128px;*/
 /*}*/
 
+.list_dungeon.selectable.selected {
+    border: 0.125rem solid forestgreen;
+    border-radius: 5px;
+}
+
+/** Prevents the title from jumping when it gets selected */
+.list_dungeon.selectable.selected h5 {
+    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
+    top: calc(15% - 0.125rem); /* 0.125 for the border, but just one side since it's the top */
+}
+
 .discover .select_icon.class_icon.selectable,
 .discover .grid_dungeon.selectable {
     cursor: pointer;
@@ -170,10 +173,14 @@ ul.light-slider {
 
 .discover .card-img-caption .card-text {
     text-align: center;
-    width: calc(100% - 1rem); /* overcome the padding - this makes it fit exactly */
+    width: 100%;
     top: 15%;
     position: absolute;
     z-index: 1;
+}
+
+.discover .tab-content .card-img-caption .card-text {
+    width: calc(100% - 1rem); /* Search page - overcome the padding - this makes it fit exactly */
 }
 
 .discover .card-img-caption .card-text.subtext {
@@ -298,7 +305,6 @@ ul.light-slider {
 }
 
 .affixes_overview_table tr.timewalking.legion {
-    background-image: url('../images/dungeons/legion/wallpaper.jpg');
     background-position-x: center;
     background-position-y: -437px;
 }
@@ -381,4 +387,14 @@ ul.light-slider {
 
 #dungeonroute_coverage_affixgroup_table .covered_warning {
     background-color: #fcc57e11;
+}
+
+.user_icon {
+    max-width: 26px;
+    max-height: 26px;
+    border-radius: 30px;
+}
+
+.raider_io_staff_text {
+    color: #ffbd0a !important;
 }

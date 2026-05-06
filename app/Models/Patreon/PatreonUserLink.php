@@ -12,15 +12,15 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                            $id
- * @property int                            $user_id
- * @property string                         $email
- * @property string                         scope
- * @property string                         $access_token
- * @property string                         $refresh_token
- * @property string                         $version
- * @property string                         $expires_at
- * @property User                           $user
+ * @property int    $id
+ * @property int    $user_id
+ * @property string $email
+ * @property string $scope
+ * @property string $access_token
+ * @property string $refresh_token
+ * @property string $version
+ * @property string $expires_at
+ * @property User   $user
  *
  * @property Collection<PatreonUserBenefit> $patreonUserBenefits
  * @property Collection<PatreonBenefit>     $patreonBenefits
@@ -29,7 +29,7 @@ use Illuminate\Support\Collection;
  */
 class PatreonUserLink extends Model
 {
-    public const PERMANENT_TOKEN = 'grantedthroughadminpages';
+    public const string PERMANENT_TOKEN = 'grantedthroughadminpages';
 
     protected $fillable = [
         'user_id',
@@ -43,7 +43,10 @@ class PatreonUserLink extends Model
 
     protected $with = ['patreonbenefits'];
 
-    protected $visible = ['patreonbenefits', 'manually_granted'];
+    protected $visible = [
+        'patreonbenefits',
+        'manually_granted',
+    ];
 
     protected $appends = ['manually_granted'];
 
@@ -72,6 +75,7 @@ class PatreonUserLink extends Model
         return Carbon::createFromTimeString($this->expires_at)->isPast();
     }
 
+    #[\Override]
     protected static function boot()
     {
         parent::boot();

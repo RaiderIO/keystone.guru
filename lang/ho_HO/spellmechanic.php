@@ -1,0 +1,37 @@
+<?php
+
+return [
+
+    'asleep'        => 'Hodor',
+    'banished'      => 'Hodor',
+    'bleeding'      => 'Hodor',
+    'charmed'       => 'Hodor',
+    'gripped'       => 'Hodor',
+    'dazed'         => 'Hodor',
+    'disarmed'      => 'Hodor',
+    'discovery'     => 'Hodor',
+    'disoriented'   => 'Hodor',
+    'distracted'    => 'Hodor',
+    'enraged'       => 'Hodor',
+    'snared'        => 'Hodor',
+    'fleeing'       => 'Hodor',
+    'frozen'        => 'Hodor',
+    'healing'       => 'Hodor',
+    'horrified'     => 'Hodor',
+    'incapacitated' => 'Hodor',
+    'interrupted'   => 'Hodor',
+    'invulnerable'  => 'Hodor',
+    'mounted'       => 'Hodor',
+    'slowed'        => 'Hodor',
+    'polymorphed'   => 'Hodor',
+    'rooted'        => 'Hodor',
+    'sapped'        => 'Hodor',
+    'infected'      => 'Hodor',
+    'shackled'      => 'Hodor',
+    'shielded'      => 'Hodor',
+    'silenced'      => 'Hodor',
+    'stunned'       => 'Hodor',
+    'turned'        => 'Hodor',
+    'wounded'       => 'Hodor',
+
+];

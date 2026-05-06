@@ -49,7 +49,11 @@ class CombatLogVersion extends SpecialEvent
      */
     public function getVersionLong(): int
     {
-        [$major, $minor, $patch] = explode('.', $this->buildVersion);
+        [
+            $major,
+            $minor,
+            $patch,
+        ] = explode('.', $this->buildVersion);
 
         return ($this->version * 1_000_000_000) +
             ((int)$major * 1_000_000) + ((int)($minor ?? 0) * 1_000) + (int)($patch ?? 0);
@@ -58,6 +62,7 @@ class CombatLogVersion extends SpecialEvent
     /**
      * @throws Exception
      */
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

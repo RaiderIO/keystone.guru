@@ -13,6 +13,7 @@ class Instakill extends Suffix
         return $this->unconsciousOnDeath;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

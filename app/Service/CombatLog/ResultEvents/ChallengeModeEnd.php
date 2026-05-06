@@ -20,7 +20,7 @@ class ChallengeModeEnd extends BaseResultEvent
             $this->dungeon = Dungeon::where('challenge_mode_id', $combatantInfoEvent->getChallengeModeID())->firstOrFail();
         } catch (Exception) {
             throw new DungeonNotSupportedException(
-                sprintf('Dungeon with challenge mode ID %d not found', $combatantInfoEvent->getChallengeModeID())
+                sprintf('Dungeon with challenge mode ID %d not found', $combatantInfoEvent->getChallengeModeID()),
             );
         }
     }

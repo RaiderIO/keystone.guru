@@ -3,95 +3,121 @@
 return [
 
     'home' => [
-        'keystone_guru'    => '',
-        'affixes'          => '',
-        'changelog'        => '',
-        'routes'           => '',
-        'routes_expansion' => '',
-        'dungeon'          => [
-            'explore' => '',
+        'front_page' => 'Keystone.guru',
+        'affixes'    => 'Модифікатори',
+        'about'      => 'Про нас',
+        'credits'    => 'Подяки',
+        'changelog'  => [
+            'list'    => 'Список змін',
+            'release' => [
+                'view' => 'Версія :version',
+            ],
         ],
-        'dungeonroute'     => [
-            'new' => '',
+        'legal' => [
+            'cookies' => 'Політика cookie-файлів',
+            'privacy' => 'Політика конфіденційності',
+            'terms'   => 'Умови надання послуг',
         ],
-        'dungeonroutes'    => [
-            'search'            => '',
-            'popular'           => '',
-            'next_week_affixes' => '',
-            'this_week_affixes' => '',
-            'new'               => '',
-            'routes_season'     => '',
+        'routes'              => 'Маршрути',
+        'routes_expansion'    => 'Маршрути :expansion',
+        'routes_game_version' => 'Маршрути :gameVersion',
+        'gameversion'         => [
+            'update'  => ':gameVersion',
+            'dungeon' => [
+                'heatmap' => 'Тепломапа',
+                'explore' => 'Огляд',
+            ],
+        ],
+        'dungeonroute' => [
+            'new' => 'Новий маршрут',
+        ],
+        'dungeonroutes' => [
+            'search'            => 'Пошук',
+            'popular'           => 'Поширене',
+            'next_week_affixes' => 'Модифікатори наступного тижня',
+            'this_week_affixes' => 'Модифікатори поточного тижня',
+            'new'               => 'Нове',
+            'routes_season'     => 'Сезон :season',
             'season'            => [
-                'popular'           => '',
-                'next_week_affixes' => '',
-                'this_week_affixes' => '',
-                'new'               => '',
+                'popular'           => 'Поширене',
+                'next_week_affixes' => 'Модифікатори наступного тижня',
+                'this_week_affixes' => 'Модифікатори поточного тижня',
+                'new'               => 'Нове',
             ],
-            'discoverdungeon'   => [
-                'popular'           => '',
-                'next_week_affixes' => '',
-                'this_week_affixes' => '',
-                'new'               => '',
+            'discoverdungeon' => [
+                'popular'           => 'Поширене',
+                'next_week_affixes' => 'Модифікатори наступного тижня',
+                'this_week_affixes' => 'Модифікатори поточного тижня',
+                'new'               => 'Нове',
             ],
         ],
-        'my_profile'       => '',
-        'my_routes'        => '',
-        'my_tags'          => '',
-        'my_teams'         => '',
-        'overview'         => '',
-        'new_team'         => '',
-        'edit_team'        => '',
-        'join_team'        => '',
-        'admin'            => [
-            'admin'                      => '',
-            'tools'                      => [
-                'admin_tools'               => '',
-                'view_exported_dungeondata' => '',
-                'view_exported_releases'    => '',
-                'select_exception'          => '',
-                'mdt_diff'                  => '',
-                'view_mdt_string_contents'  => '',
-                'import_npcs'               => '',
+        'my_profile' => 'Мій публічний профіль',
+        'my_routes'  => 'Мої маршрути',
+        'my_tags'    => 'Мої мітки',
+        'my_teams'   => 'Мої команди',
+        'overview'   => 'Огляд',
+        'new_team'   => 'Нова команда',
+        'edit_team'  => 'Змінити команду',
+        'join_team'  => 'Вступити в команду',
+        'admin'      => [
+            'admin' => 'Адміністратор',
+            'tools' => [
+                'admin_tools'               => 'Панель адміністратора',
+                'view_exported_dungeondata' => 'Показати експортовані дані підземель',
+                'view_exported_releases'    => 'Показати експортовані версії',
+                'select_exception'          => 'Вибрати виняток',
+                'mdt_diff'                  => 'Різниця з MDT',
+                'view_mdt_string_contents'  => 'Показати вміст рядка MDT',
+                'import_npcs'               => 'Імпортувати НІПів',
+                'spells_missing_info'       => 'Відсутні дані заклять',
+                'npcs_missing_display_id'   => 'Відсутні ID для показу НІПів',
+                'thumbnails_regenerate'     => 'Оновити мініатюри',
+                'combat_log_regenerate'     => 'Оновити маршрути ARC',
             ],
-            'releases'                   => '',
-            'new_release'                => '',
-            'edit_release'               => '',
-            'expansions'                 => [
-                'expansions'     => '',
-                'new_expansion'  => '',
-                'edit_expansion' => '',
+            'releases'     => 'Версії',
+            'new_release'  => 'Нова версія',
+            'edit_release' => 'Змінити версію',
+            'expansions'   => [
+                'expansions'     => 'Розширення',
+                'new_expansion'  => 'Нове розширення',
+                'edit_expansion' => 'Змінити розширення',
             ],
-            'dungeons'                   => [
-                'dungeons'     => '',
-                'new_dungeon'  => '',
-                'edit_dungeon' => '',
+            'dungeons' => [
+                'dungeons'     => 'Підземелля',
+                'new_dungeon'  => 'Нове підземелля',
+                'edit_dungeon' => 'Змінити :dungeon',
             ],
-            'floors'                     => [
-                'new_floor'  => '',
-                'edit_floor' => '',
+            'floors' => [
+                'new_floor'  => 'Новий поверх',
+                'edit_floor' => 'Змінити поверх',
             ],
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc10man' => '',
-                'new_dungeonspeedrunrequirednpc25man' => '',
+                'new_dungeonspeedrunrequirednpc10man' => 'Новий обов\'язковий НІП для швидкісного забігу в підземеллі (10 гравців)',
+                'new_dungeonspeedrunrequirednpc25man' => 'Новий обов\'язковий НІП для швидкісного забігу в підземеллі (25 гравців)',
             ],
-            'npcs'                       => [
-                'npcs'     => '',
-                'new_npc'  => '',
-                'edit_npc' => '',
+            'npcs' => [
+                'npcs'     => 'НІПи',
+                'new_npc'  => 'Новий НІП',
+                'edit_npc' => 'Змінити :npc',
             ],
-            'npcenemyforces'             => [
-                'edit_npc_enemy_forces' => '',
+            'npcenemyforces' => [
+                'new_npc_enemy_forces'  => 'Нові очки військ НІПа',
+                'edit_npc_enemy_forces' => 'Змінити очки військ НІПа',
             ],
-            'spells'                     => [
-                'spells'     => '',
-                'new_spell'  => '',
-                'edit_spell' => '',
+            'npchealth' => [
+                'new_npc_health'  => 'Нове здоров\'я НІПа',
+                'edit_npc_health' => 'Змінити здоров\'я НІПа',
             ],
-            'users'                      => [
-                'users' => '',
+            'spells' => [
+                'spells'     => 'Закляття',
+                'new_spell'  => 'Нове закляття',
+                'edit_spell' => 'Змінити закляття',
             ],
-            'user_reports'               => [
-                'user_reports' => '',
+            'users' => [
+                'users' => 'Користувачі',
+            ],
+            'user_reports' => [
+                'user_reports' => 'Користувацькі звіти',
             ],
         ],
     ],

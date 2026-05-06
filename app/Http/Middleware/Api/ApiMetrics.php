@@ -27,7 +27,7 @@ class ApiMetrics
                 User::class,
                 Metric::CATEGORY_API_CALL,
                 $request->path(),
-                1
+                1,
             );
         }
 

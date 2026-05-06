@@ -18,6 +18,12 @@ class EnemyPatrol extends Polyline {
 
         let self = this;
 
+        this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
+            if (mapStateChangedEvent.data.newMapState instanceof EditMapState && self.highlighted) {
+                self._onAttachedEnemyMouseOut();
+            }
+        });
+
         this.weight = c.map.enemypatrol.defaultWeight;
 
         this.label = 'EnemyPatrol';
@@ -27,6 +33,9 @@ class EnemyPatrol extends Polyline {
         this.enemies = [];
         getState().register('focusedenemy:changed', this, function (focusedEnemyChangedEvent) {
             let enemy = focusedEnemyChangedEvent.data.focusedenemy;
+            if (enemy !== null && self.map.getMapState() instanceof EditMapState) {
+                return;
+            }
             // console.log('focusedenemy:changed', enemy, self.enemies, self.enemies.includes(enemy));
             if (enemy === null && self.highlighted) {
                 self._onAttachedEnemyMouseOut();
@@ -51,7 +60,7 @@ class EnemyPatrol extends Polyline {
                 name: 'couple_enemies',
                 type: 'button',
                 buttonType: 'info',
-                buttonText: lang.get('messages.enemypatrol_couple_enemies_button_text_label'),
+                buttonText: lang.get('js.enemypatrol_couple_enemies_button_text_label'),
                 clicked: function (e) {
                     self.map.leafletMap.closePopup();
 
@@ -74,6 +83,25 @@ class EnemyPatrol extends Polyline {
      */
     _getPolylineColorDefault() {
         return c.map.enemypatrol.defaultColor;
+    }
+
+    /**
+     * Smoothes out the patrol a bit so the edges aren't that sharp
+     *
+     * @returns {L.Layer|null}
+     */
+    _updateOffsetLayer() {
+        console.assert(this instanceof EnemyPatrol, 'this is not an EnemyPatrol', this);
+
+        // Build a layer based off a hull if we're supposed to
+        let vertices = this.getVertices();
+
+        let arcSegments = c.map.enemypatrol.arcSegments(vertices.length);
+        let offsetLatLngs = createOffsetPolygon(vertices, c.map.enemypatrol.margin, arcSegments, true);
+        if (offsetLatLngs.length > 3) {
+            this.layer.setLatLngs(offsetLatLngs);
+            this.rebindTooltip();
+        }
     }
 
     /**
@@ -125,6 +153,18 @@ class EnemyPatrol extends Polyline {
         }
 
         return result;
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        // Only called when not in admin state
+        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
+            this._updateOffsetLayer();
+        }
     }
 
     /**

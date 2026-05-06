@@ -4,6 +4,7 @@ namespace App\SeederHelpers\RelationImport\Mapping;
 
 use App\Models\EnemyPatrol;
 use App\SeederHelpers\RelationImport\Conditionals\MappingVersionConditional;
+use App\SeederHelpers\RelationImport\Parsers\Relation\EnemyPatrolMdtPolylineRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\EnemyPatrolPolylineRelationParser;
 
 class EnemyPatrolRelationMapping extends RelationMapping
@@ -20,6 +21,7 @@ class EnemyPatrolRelationMapping extends RelationMapping
         ]));
         $this->setPreSaveRelationParsers(collect([
             new EnemyPatrolPolylineRelationParser(),
+            new EnemyPatrolMdtPolylineRelationParser(),
         ]));
     }
 }

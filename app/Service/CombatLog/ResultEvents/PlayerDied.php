@@ -11,7 +11,7 @@ class PlayerDied extends BaseResultEvent
     public function __construct(
         UnitDied                                 $unitDied,
         private readonly Player                  $guid,
-        private readonly ?AdvancedCombatLogEvent $lastKnownEvent
+        private readonly ?AdvancedCombatLogEvent $lastKnownEvent,
     ) {
         parent::__construct($unitDied);
     }

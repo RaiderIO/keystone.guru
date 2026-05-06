@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $combat_log_path
- * @property bool   $extracted_data
+ * @property int  $id
+ * @property int  $combat_log_path
+ * @property bool $extracted_data
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at

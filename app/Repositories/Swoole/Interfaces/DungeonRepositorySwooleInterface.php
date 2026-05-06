@@ -6,5 +6,4 @@ use App\Repositories\Interfaces\DungeonRepositoryInterface;
 
 interface DungeonRepositorySwooleInterface extends DungeonRepositoryInterface
 {
-
 }

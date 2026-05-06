@@ -36,11 +36,12 @@ class Version extends \PHLAK\SemVer\Version
      *
      * Examples: 'v1', 'v1.2', 'v1-beta.4', 'v1.3+007'
      *
-     * @param string $version Version string
-     * @return self This Version object
+     * @param  string $version Version string
+     * @return self   This Version object
      *
      * @throws InvalidVersionException
      */
+    #[\Override]
     public static function parse(string $version): self
     {
         $semverRegex = '/^v?(?<major>\d+)(?:\.(?<minor>\d+)(?:\.(?<patch>\d+))?)?(?:-(?<pre_release>[0-9A-Za-z-.]+))?(?:\+(?<build>[0-9A-Za-z-.]+)?)?$/';

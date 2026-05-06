@@ -23,11 +23,13 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function failedValidation(Validator $validator)
     {
-        $errors = (new ValidationException($validator))->errors();
+        $errors = new ValidationException($validator)->errors();
+
         throw new HttpResponseException(
-            response()->json(['data' => $errors], 422)
+            response()->json(['data' => $errors], 422),
         );
     }
 
@@ -41,12 +43,14 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
             'limit'     => 'integer|required',
             'title'     => 'string',
             'season'    => Rule::exists(Season::class, 'id'),
-            'expansion' => [Rule::in(
-                Expansion::active()
-                    ->get()
-                    ->pluck('shortname')
-                    ->toArray()
-            )],
+            'expansion' => [
+                Rule::in(
+                    Expansion::active()
+                        ->get()
+                        ->pluck('shortname')
+                        ->toArray(),
+                ),
+            ],
         ];
     }
 }

@@ -20,7 +20,10 @@
     <script type="text/javascript">
         $(function () {
             $('#admin_release_table').DataTable({
-                'order': [[0, 'desc']]
+                'order': [[0, 'desc']],
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
             });
         });
     </script>

@@ -1,7 +1,7 @@
 class SearchFilterPassThrough extends SearchFilter
 {
-    constructor() {
-        super(null, null);
+    constructor(options = {}) {
+        super(null, null, options);
 
         this.value = '';
     }

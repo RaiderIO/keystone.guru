@@ -43,14 +43,14 @@ class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestMo
         ?CombatLogRouteCoordRequestModel        $coord = null,
         public ?CombatLogRouteCoordRequestModel $coordEnemy = null,
         public ?CombatLogRouteCoordRequestModel $gridCoord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoordEnemy = null
+        public ?CombatLogRouteCoordRequestModel $gridCoordEnemy = null,
     ) {
         parent::__construct(
             $npcId,
             $spawnUid,
             $engagedAt,
             $diedAt,
-            $coord
+            $coord,
         );
     }
 }

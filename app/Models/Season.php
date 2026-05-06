@@ -17,24 +17,24 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @property int                       $id
- * @property int                       $expansion_id
- * @property int                       $seasonal_affix_id
- * @property int                       $index
- * @property Carbon                    $start
- * @property int                       $presets
- * @property int                       $affix_group_count
- * @property int                       $start_affix_group_index The index of the affix that was the first affix to be available upon season start
- * @property int                       $key_level_min
- * @property int                       $key_level_max
- * @property int                       $item_level_min The minimum item level of items that can be obtained in this season
- * @property int                       $item_level_max The maximum item level of items that can be obtained in this season
- * @property string                    $name Dynamic attribute
- * @property string                    $name_med Dynamic attribute
- * @property string                    $name_long Dynamic attribute
- * @property int                       $start_period Dynamic attribute
+ * @property int    $id
+ * @property int    $expansion_id
+ * @property int    $seasonal_affix_id
+ * @property int    $index
+ * @property Carbon $start
+ * @property int    $presets
+ * @property int    $affix_group_count
+ * @property int    $start_affix_group_index The index of the affix that was the first affix to be available upon season start
+ * @property int    $key_level_min
+ * @property int    $key_level_max
+ * @property int    $item_level_min          The minimum item level of items that can be obtained in this season
+ * @property int    $item_level_max          The maximum item level of items that can be obtained in this season
+ * @property string $name                    Dynamic attribute
+ * @property string $name_med                Dynamic attribute
+ * @property string $name_long               Dynamic attribute
+ * @property int    $start_period            Dynamic attribute
  *
- * @property Expansion                 $expansion
+ * @property Expansion $expansion
  *
  * @property Collection<AffixGroup>    $affixGroups
  * @property Collection<Dungeon>       $dungeons
@@ -47,25 +47,25 @@ class Season extends CacheModel
     use HasStart;
     use SeederModel;
 
-    const SEASON_BFA_S1       = 1;
-    const SEASON_BFA_S2       = 2;
-    const SEASON_BFA_S3       = 3;
-    const SEASON_BFA_S4       = 4;
-    const SEASON_SL_S1        = 5;
-    const SEASON_SL_S2        = 6;
-    const SEASON_LEGION_TW_S1 = 7;
-    const SEASON_SL_S3        = 8;
-    const SEASON_SL_S4        = 9;
-    const SEASON_DF_S1        = 10;
-    const SEASON_DF_S2        = 11;
-    const SEASON_DF_S3        = 12;
-    const SEASON_DF_S4        = 13;
-    const SEASON_TWW_S1       = 14;
-    const SEASON_TWW_S2       = 15;
-    const SEASON_TWW_S3       = 16;
-    const SEASON_TWW_S4       = 17;
+    const int SEASON_BFA_S1       = 1;
+    const int SEASON_BFA_S2       = 2;
+    const int SEASON_BFA_S3       = 3;
+    const int SEASON_BFA_S4       = 4;
+    const int SEASON_SL_S1        = 5;
+    const int SEASON_SL_S2        = 6;
+    const int SEASON_LEGION_TW_S1 = 7;
+    const int SEASON_SL_S3        = 8;
+    const int SEASON_SL_S4        = 9;
+    const int SEASON_DF_S1        = 10;
+    const int SEASON_DF_S2        = 11;
+    const int SEASON_DF_S3        = 12;
+    const int SEASON_DF_S4        = 13;
+    const int SEASON_TWW_S1       = 14;
+    const int SEASON_TWW_S2       = 15;
+    const int SEASON_TWW_S3       = 16;
+    const int SEASON_MIDNIGHT_S1  = 17;
 
-    const ALL_SEASONS = [
+    const array ALL_SEASONS = [
         self::SEASON_BFA_S1,
         self::SEASON_BFA_S2,
         self::SEASON_BFA_S3,
@@ -82,7 +82,7 @@ class Season extends CacheModel
         self::SEASON_TWW_S1,
         self::SEASON_TWW_S2,
         self::SEASON_TWW_S3,
-        self::SEASON_TWW_S4,
+        self::SEASON_MIDNIGHT_S1,
     ];
 
     protected $fillable = [
@@ -99,22 +99,33 @@ class Season extends CacheModel
         'item_level_max',
     ];
 
-    public $with = ['expansion', 'affixGroups', 'dungeons'];
+    public $with = [
+        'expansion',
+        'affixGroups',
+        'dungeons',
+    ];
 
     public $timestamps = false;
 
-    protected $appends = ['name', 'name_long', 'start_period'];
-
-    protected $casts = [
-        'start'          => 'datetime',
-        'key_level_min'  => 'integer',
-        'key_level_max'  => 'integer',
-        'item_level_min' => 'integer',
-        'item_level_max' => 'integer',
+    protected $appends = [
+        'name',
+        'name_long',
+        'start_period',
     ];
 
     /** @var bool|null Cache for if we're a timewalking season or not */
     private ?bool $isTimewalkingSeason = null;
+
+    protected function casts(): array
+    {
+        return [
+            'start'          => 'datetime',
+            'key_level_min'  => 'integer',
+            'key_level_max'  => 'integer',
+            'item_level_min' => 'integer',
+            'item_level_max' => 'integer',
+        ];
+    }
 
     public function getNameAttribute(): string
     {
@@ -123,7 +134,10 @@ class Season extends CacheModel
 
     public function getNameLongAttribute(): string
     {
-        return __('seasons.name_long', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+        return __('seasons.name_long', [
+            'expansion' => __($this->expansion->name),
+            'season'    => $this->index,
+        ]);
     }
 
     public function getStartPeriodAttribute(): int
@@ -181,7 +195,7 @@ class Season extends CacheModel
         $targetTime = Carbon::create($date->year, $date->month, $date->day, $date->hour, null, null, $date->timezone);
 
         // Get the week difference
-        return $start->diffInWeeks($targetTime);
+        return (int)$start->diffInWeeks($targetTime, true);
     }
 
     /**
@@ -218,6 +232,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => $region->short,
             ]);
+
             throw $exception;
         }
 
@@ -238,6 +253,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => ($region ?? GameServerRegion::getUserOrDefaultRegion())->short,
             ]);
+
             throw $exception;
         }
 
@@ -252,6 +268,7 @@ class Season extends CacheModel
     public function getCurrentAffixGroup(): ?AffixGroup
     {
         $region = GameServerRegion::getUserOrDefaultRegion();
+
         try {
             $result = $this->getAffixGroupAt(Carbon::now(), $region);
         } catch (Exception $exception) {
@@ -259,6 +276,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => $region->short,
             ]);
+
             throw new Exception('Error getting current affix group');
         }
 
@@ -273,6 +291,7 @@ class Season extends CacheModel
     public function getNextAffixGroup(): ?AffixGroup
     {
         $region = GameServerRegion::getUserOrDefaultRegion();
+
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), $region);
         } catch (Exception $exception) {
@@ -280,6 +299,7 @@ class Season extends CacheModel
                 'exception' => $exception,
                 'region'    => $region->short,
             ]);
+
             throw new Exception('Error getting next affix group');
         }
 
@@ -289,7 +309,7 @@ class Season extends CacheModel
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param Carbon $date The date at which you want to know the affix group.
+     * @param  Carbon          $date The date at which you want to know the affix group.
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      *
      * @throws Exception
@@ -323,11 +343,15 @@ class Season extends CacheModel
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int
     {
-        $region          = GameServerRegion::getUserOrDefaultRegion();
-        $startIndex      = $this->affixGroups->search(
-            $this->getAffixGroupAt($this->start($region), $region)
+        $region     = GameServerRegion::getUserOrDefaultRegion();
+        $startAffix = $this->getAffixGroupAt($this->start($region), $region);
+
+        $startIndex = $this->affixGroups->search(
+            static fn(AffixGroup $g) => $startAffix !== null && $g->id === $startAffix->id,
         );
-        $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
+        $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(
+            AffixGroup $affixGroupCandidate,
+        ) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixGroups->count()) % $this->presets + 1 : 0;
     }

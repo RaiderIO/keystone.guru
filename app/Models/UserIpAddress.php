@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property User   $user
+ * @property User $user
  *
  * @mixin Eloquent
  */

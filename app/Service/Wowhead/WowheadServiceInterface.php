@@ -12,7 +12,7 @@ interface WowheadServiceInterface
 
     public function downloadMissingSpellIcons(): bool;
 
-    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc): ?int;
+    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc, ?string $html = null): ?int;
 
-    public function getSpellData(GameVersion $gameVersion, int $spellId): ?SpellDataResult;
+    public function getSpellData(GameVersion $gameVersion, int $spellId, ?string $html = null): ?SpellDataResult;
 }

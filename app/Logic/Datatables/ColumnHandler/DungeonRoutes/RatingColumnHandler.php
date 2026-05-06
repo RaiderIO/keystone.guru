@@ -20,10 +20,14 @@ class RatingColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'rating');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
-    {
-
-        //        $rating = $columnData['search']['value'];
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch,
+    ): void {
+        //        $rating = $columnData['search']['value'] ?? null;
         //        if (!empty($rating)) {
         //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
         //                /** @var $query Builder */

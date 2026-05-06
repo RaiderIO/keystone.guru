@@ -3,7 +3,11 @@ class EnemyVisualMainEnemySkippable extends EnemyVisualMain {
     constructor(enemyvisual) {
         super(enemyvisual);
 
-        this.iconName = this.enemyvisual.enemy.skippable ? 'skippable' : 'not_skippable';
+        this.iconName = this._getIconName();
+    }
+
+    _getIconName() {
+        return this.enemyvisual.enemy.skippable ? 'skippable' : 'not_skippable';
     }
 
     _getValidIconNames() {
@@ -24,7 +28,7 @@ class EnemyVisualMainEnemySkippable extends EnemyVisualMain {
         let displayText = this._getDisplayText();
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
             id: this.enemyvisual.enemy.id,
-            displayText: displayText,
+            display_text: displayText,
             skippable: this.enemyvisual.enemy.skippable ? 1 : 0,
             width: this._getTextWidth(displayText.length),
         });
@@ -39,7 +43,7 @@ class EnemyVisualMainEnemySkippable extends EnemyVisualMain {
      */
     _refreshNpc() {
         // Re-draw the visual
-        this.setIcon(this.iconName);
+        this.setIcon(this._getIconName());
     }
 
     /**

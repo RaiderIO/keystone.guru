@@ -11,7 +11,7 @@ class LatLngFixtures
     public static function getLatLng(
         Floor  $floor,
         ?float $lat = null,
-        ?float $lng = null
+        ?float $lng = null,
     ): LatLng {
         return new LatLng(
             $lat ?? random_int(CoordinatesService::MAP_MAX_LAT, 0),

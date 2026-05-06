@@ -1,0 +1,37 @@
+<?php
+
+return [
+
+    'asleep'        => '睡着',
+    'banished'      => '放逐',
+    'bleeding'      => '流血',
+    'charmed'       => '被魅惑',
+    'gripped'       => '抓住',
+    'dazed'         => '晕眩',
+    'disarmed'      => '被缴械',
+    'discovery'     => '发现',
+    'disoriented'   => '迷惑',
+    'distracted'    => '分心',
+    'enraged'       => '狂怒',
+    'snared'        => '陷阱',
+    'fleeing'       => '逃跑',
+    'frozen'        => '冻结',
+    'healing'       => '治疗',
+    'horrified'     => '惊恐',
+    'incapacitated' => '无能力',
+    'interrupted'   => '被打断',
+    'invulnerable'  => '无敌',
+    'mounted'       => '骑乘',
+    'slowed'        => '减速',
+    'polymorphed'   => '变形',
+    'rooted'        => '定身',
+    'sapped'        => '被闷棍',
+    'infected'      => '感染',
+    'shackled'      => '锁链',
+    'shielded'      => '护盾',
+    'silenced'      => '沉默',
+    'stunned'       => '昏迷',
+    'turned'        => '驱逐',
+    'wounded'       => '受伤',
+
+];

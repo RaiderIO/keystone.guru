@@ -12,7 +12,7 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputcombatlogroutejson {filePath}';
+    protected $signature = 'combatlog:outputcombatlogroutejson {filePath} {--dungeonOrRaid}';
 
     /**
      * The console command description.
@@ -31,9 +31,13 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
     {
         ini_set('memory_limit', '2G');
 
-        $filePath = $this->argument('filePath');
+        $filePath      = $this->argument('filePath');
+        $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogRouteBodyDungeonRouteService) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
+            $combatLogRouteBodyDungeonRouteService,
+            $dungeonOrRaid,
+        ) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('- Skipping file %s (not a .zip)', $filePath));
 
@@ -46,24 +50,30 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
                 return 0;
             }
 
-            return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath);
+            return $this->outputCombatLogRouteJson($combatLogRouteBodyDungeonRouteService, $filePath, $dungeonOrRaid);
         });
     }
 
     /**
      * @throws Exception
      */
-    private function outputCombatLogRouteJson(CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService, string $filePath): int
-    {
+    private function outputCombatLogRouteJson(
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
+        string                                     $filePath,
+        bool                                       $dungeonOrRaid = false,
+    ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultingFile = str_replace(['.txt', '.zip'], '.json', $filePath);
+        $resultingFile = str_replace([
+            '.txt',
+            '.zip',
+        ], '.json', $filePath);
 
-        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath);
-        if( $combatLogRouteJson !== null ) {
+        $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath, $dungeonOrRaid);
+        if ($combatLogRouteJson !== null) {
             $result = file_put_contents(
                 $resultingFile,
-                json_encode($combatLogRouteJson, JSON_PRETTY_PRINT)
+                json_encode($combatLogRouteJson, JSON_PRETTY_PRINT),
             );
 
             if ($result) {
@@ -71,7 +81,6 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
             } else {
                 $this->warn(sprintf('- Unable to write to file %s', $resultingFile));
             }
-
         } else {
             // It's recoverable - we can parse more files if we want to
             $result = 1;

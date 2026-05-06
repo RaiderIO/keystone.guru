@@ -24,10 +24,10 @@ class APICombatLogControllerCombatLogRouteAlgetharAcademyTest extends APICombatL
     public function create_givenAlgetharAcademyBunten16Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('DF/df_s4_algethar_academy_bunten_no_roster_16', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('DF/df_s4_algethar_academy_bunten_no_roster_16_mv_9', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

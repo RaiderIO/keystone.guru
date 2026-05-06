@@ -7,6 +7,8 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\HasTags;
+use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -14,22 +16,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int                      $id
- * @property string                   $public_key
- * @property string                   $name
- * @property string                   $description
- * @property string                   $invite_code
- * @property string                   $default_role
+ * @property int    $id
+ * @property string $public_key
+ * @property string $name
+ * @property string $description
+ * @property string $invite_code
+ * @property string $default_role
  *
- * @property Carbon                   $updated_at
- * @property Carbon                   $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
- * @property Collection<DungeonRoute> $dungeonroutes
+ * @property Collection<DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -37,14 +40,22 @@ class Team extends Model
 {
     use HasIconFile;
     use GeneratesPublicKey;
+    use HasTags;
 
-    protected $visible = ['name', 'description', 'public_key'];
+    protected $visible = [
+        'name',
+        'description',
+        'public_key',
+    ];
 
     protected $fillable = ['default_role'];
+
+    protected $with = ['iconfile'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -60,7 +71,7 @@ class Team extends Model
         return $this->belongsToMany(User::class, 'team_users');
     }
 
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
@@ -70,8 +81,10 @@ class Team extends Model
      */
     public function getVisibleRouteCount(): int
     {
-        return $this->dungeonroutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
-            PublishedState::TEAM, PublishedState::WORLD, PublishedState::WORLD_WITH_LINK,
+        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
+            PublishedState::TEAM,
+            PublishedState::WORLD,
+            PublishedState::WORLD_WITH_LINK,
         ])->get()->pluck('id'))->count();
     }
 
@@ -91,8 +104,8 @@ class Team extends Model
     /**
      * Adds a route to this Team.
      *
-     * @param DungeonRoute $dungeonRoute The route to add.
-     * @return bool True if successful, false if not (already assigned, for example).
+     * @param  DungeonRoute $dungeonRoute The route to add.
+     * @return bool         True if successful, false if not (already assigned, for example).
      */
     public function addRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -110,8 +123,8 @@ class Team extends Model
     /**
      * Removes a route from this Team.
      *
-     * @param DungeonRoute $dungeonRoute The route to remove.
-     * @return bool True if successful, false if not (already removed, for example).
+     * @param  DungeonRoute $dungeonRoute The route to remove.
+     * @return bool         True if successful, false if not (already removed, for example).
      */
     public function removeRoute(DungeonRoute $dungeonRoute): bool
     {
@@ -132,7 +145,7 @@ class Team extends Model
     /**
      * Get the role of a user in this team, or false if the user does not exist in this team.
      *
-     * @param User $user
+     * @param  User        $user
      * @return string|null
      */
     public function getUserRole(User $user): ?string
@@ -146,7 +159,7 @@ class Team extends Model
     /**
      * Get the roles that a user may assign to other users in this team.
      *
-     * @param User $user The user attempting to change roles.
+     * @param User $user       The user attempting to change roles.
      * @param User $targetUser The user that is targeted for a role change.
      */
     public function getAssignableRoles(User $user, User $targetUser): array
@@ -167,7 +180,6 @@ class Team extends Model
             if ($targetUserRoleKey !== $admin) {
                 // If the current user is a moderator or admin, and (if user is admin or the current user outranks the other user)
                 if ($userRoleKey >= $moderator && ($userRoleKey === $admin || $userRoleKey > $targetUserRoleKey)) {
-
                     // Count down from all roles that exist, starting by the role the user currently has
                     for ($i = $userRoleKey; $i > 0; $i--) {
                         // array_search to find key by value
@@ -185,9 +197,9 @@ class Team extends Model
      *
      * @TODO Should this go to a Policy?
      *
-     * @param User   $user
-     * @param User   $targetUser
-     * @param string $role
+     * @param  User   $user
+     * @param  User   $targetUser
+     * @param  string $role
      * @return bool
      */
     public function canChangeRole(User $user, User $targetUser, string $role): bool
@@ -256,7 +268,7 @@ class Team extends Model
     /**
      * Checks if the user is a collaborator or higher.
      *
-     * @param User $user
+     * @param  User $user
      * @return bool True if the user is, false if not.
      */
     public function isUserCollaborator(User $user): bool
@@ -281,7 +293,7 @@ class Team extends Model
     /**
      * Checks if a user is a member of this team or not.
      *
-     * @param User|null $user
+     * @param  User|null $user
      * @return bool
      */
     public function isUserMember(?User $user): bool
@@ -319,7 +331,7 @@ class Team extends Model
     /**
      * Removes a member from this Team.
      *
-     * @param User $member The user to remove.
+     * @param  User $member The user to remove.
      * @return bool True if successful, false if not (already removed, for example).
      */
     public function removeMember(User $member): bool
@@ -333,7 +345,7 @@ class Team extends Model
                     $member->patreonAdFreeGiveaway->delete();
                 }
 
-                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
+                $this->dungeonRoutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
             } catch (Exception) {
                 logger()->error('Unable to remove member from team', [
@@ -379,8 +391,10 @@ class Team extends Model
             throw new Exception(
                 sprintf(
                     'User %d is not an admin itself - cannot fetch new admin for team %d!',
-                    $user->id, $this->id,
-                ));
+                    $user->id,
+                    $this->id,
+                ),
+            );
         }
 
         $roles = TeamUser::ALL_ROLES;
@@ -392,13 +406,22 @@ class Team extends Model
         return $newOwner?->user;
     }
 
-    public function getAvailableTags(): Collection
+    /**
+     * @return Team|null Gets the team assigned to Raider.IO
+     */
+    public static function getRaiderIOTeam(): ?Team
     {
-        return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-            ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
-            ->get();
+        /** @var CacheServiceInterface $cacheService */
+        $cacheService = App::make(CacheServiceInterface::class);
+
+        return $cacheService->remember(
+            'raider_io_team',
+            static fn() => Team::where('id', config('keystoneguru.raider_io.team_id'))->first(),
+            config('keystoneguru.cache.raider_io_team.ttl'),
+        );
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -408,9 +431,7 @@ class Team extends Model
             // Delete icons
             $team->iconfile?->delete();
             // Remove any ad-free giveaways if the giver was part of this team
-            foreach ($team->members->filter(function (User $member) {
-                return $member->patreonAdFreeGiveaway !== null;
-            }) as $teamMember) {
+            foreach ($team->members->filter(fn(User $member) => $member->patreonAdFreeGiveaway !== null) as $teamMember) {
                 /** @var User $teamMember */
                 // If the giver of the patreon ad-free giveaway was part of this team
                 if ($team->members->pluck('id')->search($teamMember->patreonAdFreeGiveaway->giver_user_id)) {
@@ -420,7 +441,7 @@ class Team extends Model
             }
             // Delete all tags team tags belonging to our routes
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-                ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())
+                ->whereIn('model_id', $team->dungeonRoutes->pluck('id')->toArray())
                 ->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $team->id)->delete();

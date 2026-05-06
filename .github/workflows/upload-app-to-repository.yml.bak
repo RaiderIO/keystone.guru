@@ -1,0 +1,96 @@
+name: Build & Push app-aws → ECR (ksg-php-fpm, static keys)
+
+on:
+  push:
+    branches: [ development, master ]
+    tags: [ 'v*' ]
+  workflow_dispatch: {}
+
+env:
+  IMAGE_DIR: docker-compose/app-aws
+  IMAGE_FILE: docker-compose/app-aws/Dockerfile
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Use long-lived keys from repo secrets
+      - name: Configure AWS credentials (static keys)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Compute release version from seeders
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(database/seeders/releases/v*.json)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No release files found in database/seeders/releases/" >&2
+            exit 1
+          fi
+          version="$(
+            printf '%s\n' "${files[@]}" \
+            | sed -nE 's#.*/v([0-9]+(\.[0-9]+){1,3})\.json#\1#p' \
+            | sort -V \
+            | tail -n1
+          )"
+          if [[ -z "${version:-}" ]]; then
+            echo "Failed to derive version from filenames (no matches)." >&2
+            printf 'Saw files:\n'; printf '  - %s\n' "${files[@]}"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "version_v=v$version" >> "$GITHUB_OUTPUT"
+          echo "Derived version: $version (tag: v$version)"
+
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_PHP_FPM }}
+          tags: |
+            # Semver from seeders
+            type=raw,value=${{ steps.version.outputs.version }}
+            type=raw,value=${{ steps.version.outputs.version_v }}
+            # Convenience tags
+            type=raw,value=edge,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=sha
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.IMAGE_DIR }}
+          file: ${{ env.IMAGE_FILE }}
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Summary
+        run: |
+          echo "Derived version: ${{ steps.version.outputs.version }}"
+          echo "Pushed image tags:"
+          echo "${{ steps.meta.outputs.tags }}"

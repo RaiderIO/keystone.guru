@@ -10,7 +10,8 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-119.9103,\"lng\":240.8102},{\"lat\":-111.6634,\"lng\":238.3361},{\"lat\":-101.767,\"lng\":242.2946},{\"lat\":-96.3241,\"lng\":249.387},{\"lat\":-87.4174,\"lng\":254.1702}]"
-        }
+        },
+        "mdt_polyline": null
     },
     {
         "id": 526,
@@ -23,7 +24,8 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-187.2378,\"lng\":186.3763},{\"lat\":-206.0478,\"lng\":192.2634},{\"lat\":-227.5859,\"lng\":131.2388}]"
-        }
+        },
+        "mdt_polyline": null
     },
     {
         "id": 530,
@@ -36,7 +38,8 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-221.875,\"lng\":98},{\"lat\":-229.75,\"lng\":114.25},{\"lat\":-229.5,\"lng\":135.125},{\"lat\":-215.75,\"lng\":172.5},{\"lat\":-210.8741,\"lng\":188.1383},{\"lat\":-219.9684,\"lng\":192.8749},{\"lat\":-228.6837,\"lng\":165.2131}]"
-        }
+        },
+        "mdt_polyline": null
     },
     {
         "id": 531,
@@ -49,6 +52,7 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-226.375,\"lng\":165.625},{\"lat\":-216.375,\"lng\":195.25}]"
-        }
+        },
+        "mdt_polyline": null
     }
 ]

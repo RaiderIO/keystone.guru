@@ -11,11 +11,9 @@ use Log;
 
 class DebugInfoContextLogger
 {
-
     public function __construct(private readonly DebugInfoContextLoggerLoggingInterface $log)
     {
     }
-
 
     public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
@@ -30,7 +28,10 @@ class DebugInfoContextLogger
         ];
 
         // We don't want this on any other environment because it's just spam - I know the URLs on those environments
-        if (in_array(config('app.type'), ['live', 'staging'])) {
+        if (in_array(config('app.type'), [
+            'production',
+            'staging',
+        ])) {
             $context['url'] = $request->fullUrl();
         }
 

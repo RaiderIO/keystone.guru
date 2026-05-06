@@ -2,7 +2,7 @@
 
 return [
 
-    'admintools'                  => [
+    'admintools' => [
         'error' => [
             'mdt_string_parsing_failed'           => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'    => 'The MDT string format was not recognized.',
@@ -19,40 +19,42 @@ return [
             'mdt_invalid_category'                => 'Invalid category',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => 'Dispatched :success jobs for :total routes. :failed failed.',
-            'caches_dropped_successfully' => 'Caches dropped successfully',
-            'releases_exported'           => 'Releases exported',
-            'exception'                   => [
-                'internal_server_error' => 'Exception thrown in admin panel',
-            ],
-            'feature_toggle_activated'    => 'Feature :feature is now activated',
-            'feature_toggle_deactivated'  => 'Feature :feature is now deactivated',
-            'feature_forgotten'           => 'Feature :feature successfully forgotten',
+            'message_banner_set_successfully'   => 'Message banner set successfully',
+            'thumbnail_regenerate_result'       => 'Dispatched :success jobs for :total routes. :failed failed.',
+            'combatlog_route_regenerate_result' => 'Dispatched :count jobs',
+            'caches_dropped_successfully'       => 'Caches dropped successfully',
+            'releases_exported'                 => 'Releases exported',
+            'exception'                         => 'Exception thrown in admin panel',
+            'feature_toggle_activated'          => 'Feature :feature is now activated',
+            'feature_toggle_deactivated'        => 'Feature :feature is now deactivated',
+            'feature_forgotten'                 => 'Feature :feature successfully forgotten',
+            'read_only_mode_disabled'           => 'Read-only mode disabled',
+            'read_only_mode_enabled'            => 'Read-only mode enabled',
         ],
     ],
-    'apidungeonroute'             => [
+    'apidungeonroute' => [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
     ],
-    'apiuserreport'               => [
+    'apiuserreport' => [
         'error' => [
             'unable_to_update_user_report' => 'Unable to update user report',
             'unable_to_save_report'        => 'Unable to save report',
         ],
     ],
-    'brushline'                   => [
+    'brushline' => [
         'error' => [
             'unable_to_save_brushline'   => 'Unable to save line',
             'unable_to_delete_brushline' => 'Unable to delete line',
         ],
     ],
-    'dungeon'                     => [
+    'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
             'dungeon_updated' => 'Dungeon updated',
         ],
     ],
-    'dungeonroute'                => [
+    'dungeonroute' => [
         'unable_to_save' => 'Unable to save route',
         'flash'          => [
             'route_cloned_successfully' => 'Route cloned successfully',
@@ -60,7 +62,7 @@ return [
             'route_created'             => 'Route created',
         ],
     ],
-    'dungeonroutediscover'        => [
+    'dungeonroutediscover' => [
         'popular'           => 'Popular routes',
         'this_week_affixes' => 'This week\'s affixes',
         'next_week_affixes' => 'Next week\'s affixes',
@@ -71,7 +73,7 @@ return [
             'next_week_affixes' => '%s next week',
             'new'               => '%s new routes',
         ],
-        'dungeon'           => [
+        'dungeon' => [
             'popular'           => '%s popular routes',
             'this_week_affixes' => '%s this week',
             'next_week_affixes' => '%s next week',
@@ -81,39 +83,40 @@ return [
     'dungeonspeedrunrequirednpcs' => [
         'no_linked_npc' => 'No linked NPC',
         'flash'         => [
-            'npc_added_successfully'   => 'Successfully added NPC',
-            'npc_deleted_successfully' => 'Successfully removed NPC',
+            'npc_added_successfully'   => 'Successfully added required speedrun NPC',
+            'npc_deleted_successfully' => 'Successfully removed required speedrun NPC',
         ],
     ],
-    'expansion'                   => [
+    'expansion' => [
         'flash' => [
             'unable_to_save_expansion' => 'Unable to save expansion',
             'expansion_updated'        => 'Expansion updated',
             'expansion_created'        => 'Expansion created',
         ],
     ],
-    'generic'                     => [
+    'generic' => [
         'error' => [
             'floor_not_found_in_dungeon' => 'Floor not part of dungeon',
             'not_found'                  => 'Not found',
         ],
     ],
-    'oauthlogin'                  => [
+    'oauthlogin' => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
             'user_exists'             => 'There is already a user with username %s. Did you already register before?',
             'email_exists'            => 'There is already a user with e-mail address %s. Did you already register before?',
             'permission_denied'       => 'Unable to register - the request was denied. Please try again.',
+            'read_only_mode_enabled'  => 'Read-only mode is enabled. You cannot register at this time.',
         ],
     ],
-    'register'                    => [
-        'flash'                 => [
+    'register' => [
+        'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
         ],
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
     ],
-    'release'                     => [
+    'release' => [
         'error' => [
             'unable_to_save_release' => 'Unable to save release',
         ],
@@ -123,30 +126,30 @@ return [
             'github_exception' => 'An error occurred communicating with Github: :message',
         ],
     ],
-    'mappingversion'              => [
+    'mappingversion' => [
         'created_successfully'      => 'Added new mapping version!',
         'created_bare_successfully' => 'Added new bare mapping version!',
         'deleted_successfully'      => 'Deleted mapping version successfully',
     ],
-    'mdtimport'                   => [
+    'mdtimport' => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
             'mdt_string_parsing_failed'             => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
-            'cli_weakauras_parser_not_found'      => 'cli_weakauras_parser not installed.',
+            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser not installed.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',
             'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',
             'cannot_create_route_must_be_logged_in' => 'You must be logged in to create a route',
         ],
     ],
-    'path'                        => [
+    'path' => [
         'error' => [
             'unable_to_save_path'   => 'Unable to save path',
             'unable_to_delete_path' => 'Unable to delete path',
         ],
     ],
-    'patreon'                     => [
+    'patreon' => [
         'flash' => [
             'unlink_successful'       => 'Your Patreon account has successfully been unlinked.',
             'link_successful'         => 'Your Patreon has been linked successfully. Thank you!',
@@ -156,7 +159,7 @@ return [
             'internal_error_occurred' => 'An error occurred while processing Patreon\'s response - it appears to be malformed. The error was logged and will be dealt with. Please try again later.',
         ],
     ],
-    'profile'                     => [
+    'profile' => [
         'flash' => [
             'email_already_in_use'             => 'That username is already in use.',
             'username_already_in_use'          => 'That username is already in use.',
@@ -173,8 +176,15 @@ return [
             'account_deleted_successfully'     => 'Account deleted successfully.',
             'error_deleting_account'           => 'An error occurred. Please try again.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => 'Unable to add more ad-free giveaways. Limit reached.',
+            'add_ad_free_giveaway_already_ad_free'      => 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.',
+            'remove_ad_free_giveaway_not_found'         => 'Unable to remove ad-free giveaway - user does not have any at the moment.',
+            'remove_ad_free_giveaway_not_yours'         => 'Unable to remove ad-free giveaways that was not originally given by you.',
+        ],
     ],
-    'spell'                       => [
+    'spell' => [
         'error' => [
             'unable_to_save_spell' => 'Unable to save spell',
         ],
@@ -183,7 +193,7 @@ return [
             'spell_created' => 'Spell created',
         ],
     ],
-    'team'                        => [
+    'team' => [
         'flash' => [
             'team_updated'                        => 'Team updated',
             'team_created'                        => 'Team created',
@@ -193,7 +203,7 @@ return [
             'tag_already_exists'                  => 'This tag already exists',
         ],
     ],
-    'user'                        => [
+    'user' => [
         'flash' => [
             'user_is_now_an_admin'              => 'User :user is now an admin',
             'user_is_no_longer_an_admin'        => 'User :user is no longer an admin',

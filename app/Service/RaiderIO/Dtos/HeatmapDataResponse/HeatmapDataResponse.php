@@ -8,17 +8,16 @@ use Illuminate\Support\Collection;
 
 class HeatmapDataResponse implements Arrayable
 {
-    private Collection             $data;
+    private Collection $data;
     private CombatLogEventDataType $dataType;
-    private int                    $runCount;
-    private int                    $weightMax;
-    private int                    $gridSizeX;
-    private int                    $gridSizeY;
-    private ?string                $url = null;
+    private int $runCount;
+    private int $weightMax;
+    private int $gridSizeX;
+    private int $gridSizeY;
+    private ?string $url = null;
 
     private function __construct()
     {
-
     }
 
     public function getData(): Collection
@@ -59,8 +58,8 @@ class HeatmapDataResponse implements Arrayable
     public function toArray(): array
     {
         return [
-            'data'        => $this->data->map(
-                fn(HeatmapDataFloorData $floorData) => $floorData->toArray()
+            'data' => $this->data->map(
+                fn(HeatmapDataFloorData $floorData) => $floorData->toArray(),
             )->values()->toArray(),
             'data_type'   => $this->dataType->value,
             'run_count'   => $this->runCount,
@@ -78,7 +77,7 @@ class HeatmapDataResponse implements Arrayable
         $result->data = collect();
         foreach ($response['data'] as $floorData) {
             $result->data->push(
-                HeatmapDataFloorData::fromArray($floorData)
+                HeatmapDataFloorData::fromArray($floorData),
             );
         }
 

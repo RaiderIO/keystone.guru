@@ -96,9 +96,12 @@ class SearchInlineBase extends InlineCode {
             }
         }
 
+        if (html.length === 0) {
+            html = lang.get('js.filter_no_filters_active');
+        }
 
         $(this.options.currentFiltersSelector).html(
-            `<span class="mr-2">${lang.get('messages.filters')}:</span>${html}`
+            `<span class="mr-2">${lang.get('js.filters')}:</span>${html}`
         )
     }
 

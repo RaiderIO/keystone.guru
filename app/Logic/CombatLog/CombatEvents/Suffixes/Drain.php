@@ -13,6 +13,7 @@ class Drain extends Leech
         return $this->maxPower;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         if (isset($parameters[3])) {
@@ -22,11 +23,13 @@ class Drain extends Leech
         return $this;
     }
 
+    #[\Override]
     public function getOptionalParameterCount(): int
     {
         return 1;
     }
 
+    #[\Override]
     public function getParameterCount(): int
     {
         return 4;

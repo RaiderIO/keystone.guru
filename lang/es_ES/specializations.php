@@ -10,59 +10,60 @@ return [
     'demon_hunter' => [
         'havoc'     => '',
         'vengeance' => '',
+        'devourer'  => '',
     ],
-    'druid'        => [
+    'druid' => [
         'balance'     => '',
         'feral'       => '',
         'guardian'    => '',
         'restoration' => '',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => '',
         'preservation' => '',
         'augmentation' => '',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => '',
-        'marksman'      => '',
+        'marksmanship'  => '',
         'survival'      => '',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => '',
         'fire'   => '',
         'frost'  => '',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => '',
         'mistweaver' => '',
         'windwalker' => '',
     ],
-    'paladin'      => [
+    'paladin' => [
         'holy'        => '',
         'protection'  => '',
         'retribution' => '',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => '',
         'holy'       => '',
         'shadow'     => '',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => '',
         'outlaw'        => '',
         'subtlety'      => '',
     ],
-    'shaman'       => [
+    'shaman' => [
         'elemental'   => '',
         'enhancement' => '',
         'restoration' => '',
     ],
-    'warlock'      => [
+    'warlock' => [
         'affliction'  => '',
         'demonology'  => '',
         'destruction' => '',
     ],
-    'warrior'      => [
+    'warrior' => [
         'arms'       => '',
         'fury'       => '',
         'protection' => '',

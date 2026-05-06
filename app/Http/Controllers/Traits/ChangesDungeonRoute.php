@@ -11,18 +11,23 @@ use Illuminate\Support\Facades\Auth;
 trait ChangesDungeonRoute
 {
     private const IGNORE_KEYS = [
-        'index', // KillZone index upon mass change.. I don't care about this
+        'index',
+        // KillZone index upon mass change.. I don't care about this
         'updated_at',
     ];
 
     /**
-     * @param DungeonRoute $dungeonRoute
-     * @param Model|null   $beforeModel
-     * @param Model|null   $afterModel
+     * @param  DungeonRoute $dungeonRoute
+     * @param  Model|null   $beforeModel
+     * @param  Model|null   $afterModel
      * @throws Exception
      */
-    public function dungeonRouteChanged(DungeonRoute $dungeonRoute, ?Model $beforeModel, ?Model $afterModel, ?callable $modifyAttributes = null): void
-    {
+    public function dungeonRouteChanged(
+        DungeonRoute $dungeonRoute,
+        ?Model       $beforeModel,
+        ?Model       $afterModel,
+        ?callable    $modifyAttributes = null,
+    ): void {
         // We only care for these changes when the route is part of a team
         if ($dungeonRoute->team_id === -1) {
             return;
@@ -70,7 +75,7 @@ trait ChangesDungeonRoute
                 ];
             }
         } // Deleting a model
-        else if (empty($after)) {
+        elseif (empty($after)) {
             foreach ($before as $key => $value) {
                 $alteredKeys[$key] = [
                     'before' => $value,

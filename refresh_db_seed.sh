@@ -1,2 +1,2 @@
 #!/bin/sh
-php artisan db:seed --database=migrate -v
+php artisan db:seed --database=migrate

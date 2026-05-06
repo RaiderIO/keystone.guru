@@ -23,16 +23,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 use Throwable;
 
 class AjaxEnemyController extends AjaxMappingModelBaseController
 {
     /**
-     * @param APIEnemyFormRequest         $request
-     * @param CoordinatesServiceInterface $coordinatesService
-     * @param MappingVersion              $mappingVersion
-     * @param Enemy|null                  $enemy
+     * @param  APIEnemyFormRequest         $request
+     * @param  CoordinatesServiceInterface $coordinatesService
+     * @param  MappingVersion              $mappingVersion
+     * @param  Enemy|null                  $enemy
      * @return Enemy|Model
      *
      * @throws Throwable
@@ -41,7 +42,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         APIEnemyFormRequest         $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        ?Enemy                      $enemy = null
+        ?Enemy                      $enemy = null,
     ): Enemy|Model {
         $validated = $request->validated();
 
@@ -53,9 +54,14 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        $validated['kill_priority'] = (int)$validated['kill_priority'] === 0 ? null : (int)$validated['kill_priority'];
+        $validated['kill_priority'] = in_array((int)$validated['kill_priority'], [
+            0,
+            -1,
+        ]) ? null : (int)$validated['kill_priority'];
 
-        return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (
+            Enemy $enemy,
+        ) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
@@ -71,13 +77,27 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     }
                 }
             }
-            $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
+
+            $enemy->load([
+                'npc',
+                'npc.enemyForces',
+                'floor',
+            ])->makeHidden(['floor']);
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
                 $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
                 $newLatLng = $coordinatesService->calculateMapLocationForIngameLocation($ingameXY->setFloor($enemy->floor));
 
                 $enemy->update($newLatLng->toArray());
+            }
+
+            if ($enemy->npc !== null) {
+                $enemy->npc->name = __($enemy->npc->name);
+                foreach ($enemy->npc->spells as $spell) {
+                    $spell->name           = __($spell->name);
+                    $spell->category       = __($spell->category);
+                    $spell->cooldown_group = __($spell->cooldown_group);
+                }
             }
         });
     }
@@ -89,7 +109,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
      */
     public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
     {
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             $raidMarkerName = $request->get('raid_marker_name', '');
@@ -109,7 +129,6 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             } else {
                 $result = ['name' => ''];
             }
-
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -125,7 +144,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     public function delete(
         Request        $request,
         MappingVersion $mappingVersion,
-        Enemy          $enemy
+        Enemy          $enemy,
     ): Response {
         return DB::transaction(function () use ($enemy) {
             try {
@@ -149,8 +168,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent {
         return new EnemyChangedEvent($coordinatesService, $context, $user, $model);
     }
 }

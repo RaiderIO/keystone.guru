@@ -9,6 +9,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
@@ -26,6 +27,8 @@ use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\Cache\Redis\PHPRedisService;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\Cloudflare\CloudflareService;
@@ -57,12 +60,14 @@ use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DevDiscoverService;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSearchService;
+use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
+use App\Service\DungeonRoute\MapDrawingService;
+use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\EchoServer\EchoServerHttpApiService;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
@@ -84,6 +89,10 @@ use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\MDTMappingVersionService;
+use App\Service\MDT\MDTMappingVersionServiceInterface;
+use App\Service\MessageBanner\MessageBannerService;
+use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Service\Metric\MetricService;
 use App\Service\Metric\MetricServiceInterface;
 use App\Service\Npc\NpcService;
@@ -99,6 +108,8 @@ use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
+use App\Service\Reverb\ReverbHttpApiService;
+use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
@@ -115,6 +126,8 @@ use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
 use App\Service\Wowhead\WowheadService;
 use App\Service\Wowhead\WowheadServiceInterface;
+use App\Service\Wowhead\WowheadTranslationService;
+use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Contracts\View\View;
@@ -130,6 +143,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
+    #[\Override]
     public function register(): void
     {
         // External communication - no dependencies
@@ -140,6 +154,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
+        $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
         if (app()->runningUnitTests()) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {
@@ -148,14 +163,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Bind the interface to the actual service
-        $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
+        $this->app->bind(ReverbHttpApiServiceInterface::class, ReverbHttpApiService::class);
 
         // Internals
         $this->app->bind(CoordinatesServiceInterface::class, CoordinatesService::class);
         $this->app->bind(ThumbnailServiceInterface::class, ThumbnailService::class);
         $this->app->bind(PatreonServiceInterface::class, PatreonService::class);
-        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
-        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
@@ -168,7 +181,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
+        $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
+        $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
+        $this->app->bind(MapDrawingServiceInterface::class, MapDrawingService::class);
 
         // Depends on CookieService
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
@@ -177,19 +193,28 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
 
         // Model helpers
-        if (config('app.env') === 'local') {
+        if (in_array(config('app.env'), [
+            'local',
+            'testing',
+        ])) {
             $this->app->bind(CacheServiceInterface::class, DevCacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DevDiscoverService::class);
         } else {
             $this->app->bind(CacheServiceInterface::class, CacheService::class);
             $this->app->bind(DiscoverServiceInterface::class, DiscoverService::class);
         }
+        $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
 
         // Depends on CacheService
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
+
+        // Depends on CacheService, CoordinatesService
+        $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);
+        $this->app->bind(MDTMappingExportServiceInterface::class, MDTMappingExportService::class);
+        $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
 
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
@@ -227,7 +252,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ExpansionServiceInterface          $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService,
-        GameVersionServiceInterface        $gameVersionService
+        GameVersionServiceInterface        $gameVersionService,
+        MessageBannerServiceInterface      $messageBannerService,
+        ReadOnlyModeServiceInterface       $readOnlyModeService,
+        DungeonServiceInterface            $dungeonService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -253,7 +281,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $globalViewVariables = $viewService->getGlobalViewVariables();
 
         // All views
-        view()->share('isMobile', (new Agent())->isMobile());
+        view()->share('isMobile', new Agent()->isMobile());
         view()->share('isLocal', $globalViewVariables['isLocal']);
         view()->share('isMapping', $globalViewVariables['isMapping']);
         view()->share('isProduction', $globalViewVariables['isProduction']);
@@ -266,73 +294,124 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $currentExpansion       = null;
 
         // Can use the Auth() global here!
-        view()->composer('*', static function (View $view) use ($gameVersionService, $expansionService, &$isUserAdmin, &$adFree, &$userOrDefaultRegion, &$currentUserGameVersion, &$currentExpansion) {
+        view()->composer('*', static function (View $view) use (
+            $gameVersionService,
+            $expansionService,
+            &$isUserAdmin,
+            &
+            $adFree,
+            &$userOrDefaultRegion,
+            &$currentUserGameVersion,
+            &$currentExpansion
+        ) {
             // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
             /** @var User|null $user */
             $user = Auth::getUser();
             if ($isUserAdmin === null) {
-                $isUserAdmin = optional($user)->hasRole(Role::ROLE_ADMIN);
+                $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
             }
             if ($adFree === null) {
-                $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
-                    optional($user)->hasAdFreeGiveaway();
+                $adFree = $user?->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
+                    $user?->hasAdFreeGiveaway();
             }
-            $userOrDefaultRegion    ??= GameServerRegion::getUserOrDefaultRegion();
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $currentUserGameVersion ??= $gameVersionService->getGameVersion($user);
-            $currentExpansion       ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
+            $currentExpansion ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (!str_starts_with((string)$view->getName(), 'layouts')) {
                 $view->with('viewName', $view->getName());
-            } else if (!isset($view->getData()['viewName'])) {
+            } elseif (!isset($view->getData()['viewName'])) {
                 $view->with('viewName', 'home');
             }
-            $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
+            $view->with('theme', $_COOKIE['theme'] ?? User::DEFAULT_THEME);
             $view->with('isUserAdmin', $isUserAdmin);
             $view->with('adFree', $adFree);
             $view->with('userOrDefaultRegion', $userOrDefaultRegion);
             $view->with('currentUserGameVersion', $currentUserGameVersion);
+            $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 2);
         });
 
         // Home page
-        view()->composer('home', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
+        view()->composer('home', static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
             $view->with('userCount', $globalViewVariables['userCount']);
             $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
             $view->with('demoRouteMapping', $globalViewVariables['demoRouteMapping']);
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
+            $view->with('defaultGameVersion', GameVersion::getDefaultGameVersion());
         });
 
         // Main view
-        view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'],
-            static function (View $view) use ($globalViewVariables) {
+        view()->composer(
+            [
+                'layouts.app',
+                'layouts.sitepage',
+                'layouts.map',
+            ],
+            static function (View $view) use ($globalViewVariables, $messageBannerService, $readOnlyModeService) {
                 $view->with('version', $globalViewVariables['appVersion']);
                 $view->with('revision', $globalViewVariables['appRevision']);
                 $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
                 $view->with('latestRelease', $globalViewVariables['latestRelease']);
                 $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
-            });
+                $view->with('messageBanner', $messageBannerService->getMessage());
+                $view->with('readOnlyEnabled', $readOnlyModeService->isReadOnly());
+            },
+        );
 
-        view()->composer(['layouts.app', 'common.layout.footer'], static function (View $view) use ($globalViewVariables) {
-            $view->with('hasNewChangelog',
-                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
+        view()->composer(['common.maps.map'], static function (View $view) use ($globalViewVariables) {
+            $view->with('assetsBaseUrl', config('keystoneguru.assets_base_url'));
+            $view->with('tilesBaseUrl', config('keystoneguru.tiles_base_url'));
         });
 
-        view()->composer('common.layout.navgameversions', static function (View $view) use ($globalViewVariables) {
+        view()->composer([
+            'layouts.app',
+            'common.layout.footer',
+        ], static function (View $view) use ($globalViewVariables) {
+            $view->with(
+                'hasNewChangelog',
+                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'],
+            );
+        });
+
+        view()->composer('common.layout.nav.gameversions', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
-        view()->composer('common.layout.nav.user', static function (View $view) use ($isUserAdmin) {
-            $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 0);
-        });
-
-        view()->composer('common.layout.header', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
+        view()->composer('common.layout.header', static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+
+        view()->composer(['common.layout.header'], static function (View $view) use (
+            $viewService,
+            $dungeonService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
+            $userOrDefaultGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
+            $view->with('gameVersionDungeons', $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
+        });
+
+        view()->composer([
+            'misc.embedexplore',
+            'misc.embedheatmap',
+        ], static function (View $view) use ($viewService, $globalViewVariables) {
+            $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
         });
 
         view()->composer([
@@ -342,20 +421,27 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'misc.affixes',
             'dungeonroute.discover.discover',
             'dungeonroute.discover.dungeon.overview',
-            'dungeonroute.discover.season.overview',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+            /** @var GameVersion $gameVersion */
+            $gameVersion = $view->getData()['gameVersion'];
+            // @TODO Should be loaded but it's not??
+            $gameVersion->load(['expansion']);
+
             /** @var Expansion $expansion */
-            $expansion           = $view->getData()['expansion'];
+            $expansion = $view->getData()['expansion'] ?? null;
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
-            $expansionsData = $regionViewVariables['expansionsData']->get($expansion->shortname);
+            $expansionsData = $regionViewVariables['expansionsData']->get(($expansion ?? $gameVersion->expansion)->shortname);
             $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
             $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
         });
 
         // Dungeon grid view
-        view()->composer('dungeonroute.discover.search', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer('dungeonroute.discover.search', static function (View $view) use (
+            $viewService,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentExpansion', $regionViewVariables['currentExpansion']);
@@ -365,31 +451,48 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
         });
 
-        view()->composer('common.dungeonroute.create.dungeondifficultyselect', static function (View $view) use ($globalViewVariables) {
+        view()->composer('common.dungeonroute.create.dungeondifficultyselect', static function (View $view) use (
+            $globalViewVariables
+        ) {
             $view->with('allSpeedrunDungeons', $globalViewVariables['allSpeedrunDungeons']);
         });
 
-        view()->composer(['common.forms.oauth', 'common.forms.register'], static function (View $view) use ($globalViewVariables) {
+        view()->composer([
+            'common.forms.oauth',
+            'common.forms.register',
+        ], static function (View $view) use ($globalViewVariables) {
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
-        view()->composer(['common.forms.createroute', 'common.forms.createroutetemporary'], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer([
+            'common.forms.createroute',
+            'common.forms.createroutetemporary',
+        ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
 
             /** @var Season $currentSeason */
             $currentSeason = $regionViewVariables['currentSeason'];
 
+            $seasonLoader = fn(?Season $season) => $season
+                ?->load([
+                    'seasonDungeons' => static function ($query) {
+                        $query->without([
+                            'season',
+                            'dungeon',
+                        ]);
+                    },
+                ])
+                ->makeHidden([
+                    'expansion',
+                    'dungeons',
+                ])
+                ->makeVisible(['seasonDungeons']);
+
             $view->with('routeKeyLevelFrom', $currentSeason->key_level_min);
             $view->with('routeKeyLevelTo', $currentSeason->key_level_max);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']
-                ->load(['seasonDungeons' => static function ($query) {
-                    $query->without(['season', 'dungeon']);
-                }])
-                ->makeHidden(['affixGroups', 'expansion', 'dungeons'])
-                ->makeVisible(['seasonDungeons'])
-            );
-            $view->with('nextSeason', $regionViewVariables['nextSeason']?->without(['affixGroups', 'expansion', 'dungeons'])->with(['seasonDungeons']));
+            $view->with('currentSeason', $seasonLoader($regionViewVariables['currentSeason']));
+            $view->with('nextSeason', $seasonLoader($regionViewVariables['nextSeason']));
         });
 
         // Displaying a release
@@ -398,7 +501,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Displaying affixes
-        view()->composer('common.group.affixes', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
+        view()->composer('common.group.affixes', static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &
+            $userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('allExpansions', $globalViewVariables['allExpansions']->pluck('id', 'shortname'));
@@ -420,7 +528,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Dungeon grid display
-        view()->composer('common.dungeon.gridtabs', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
+        view()->composer('common.dungeon.gridtabs', static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
@@ -440,7 +552,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Dungeon selector
-        view()->composer('common.dungeon.select', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
+        view()->composer('common.dungeon.select', static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
@@ -454,7 +570,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Dungeonroute attributes selector, Dungeonroute table
-        view()->composer(['common.dungeonroute.attributes', 'common.dungeonroute.table'], static function (View $view) use ($globalViewVariables) {
+        view()->composer([
+            'common.dungeonroute.attributes',
+            'common.dungeonroute.table',
+        ], static function (View $view) use ($globalViewVariables) {
             $view->with('allRouteAttributes', $globalViewVariables['allRouteAttributes']);
         });
 
@@ -466,7 +585,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('affixGroupEaseTiersByAffixGroup', $globalViewVariables['affixGroupEaseTiersByAffixGroup']);
         });
 
-        view()->composer('common.dungeonroute.coverage.affixgroup', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer('common.dungeonroute.coverage.affixgroup', static function (View $view) use (
+            $viewService,
+            &
+            $userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var Season $selectedSeason */
@@ -486,7 +609,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Maps
-        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
+        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use (
+            $viewService,
+            $globalViewVariables,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
@@ -502,15 +629,32 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
         });
 
-        view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use ($globalViewVariables) {
+        view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use (
+            $globalViewVariables
+        ) {
             $view->with('spellsSelect', $globalViewVariables['selectableSpellsByCategory']);
         });
 
         // Admin
-        view()->composer('admin.dungeon.edit', static function (View $view) use ($mappingService) {
+        view()->composer('admin.dungeon.edit', static function (View $view) use (
+            $mappingService,
+            $globalViewVariables
+        ) {
             /** @var Dungeon|null $dungeon */
             $dungeon = $view->getData()['dungeon'] ?? null;
             $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
+        });
+        view()->composer('admin.dungeon.mappingversions', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+        view()->composer('admin.npchealth.edit', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+        view()->composer('admin.spell.edit', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+        view()->composer('admin.tools.messagebanner.set', static function (View $view) use ($messageBannerService) {
+            $view->with('messageBanner', $messageBannerService->getMessage());
         });
 
         // Team selector
@@ -519,7 +663,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Simulation
-        view()->composer('common.modal.simulate', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer('common.modal.simulate', static function (View $view) use (
+            $viewService,
+            &$userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var Season $currentSeason */
@@ -528,7 +675,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('isThundering', $currentAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
         });
 
-        view()->composer('common.modal.simulateoptions.default', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer('common.modal.simulateoptions.default', static function (View $view) use (
+            $viewService,
+            &
+            $userOrDefaultRegion
+        ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $shroudedBountyTypes = [];
@@ -545,12 +696,19 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
-            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static function (SimulationCraftRaidBuffs $raidBuff) {
-                return [
-                    $raidBuff->value =>
-                        __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
-                ];
-            })->toArray());
+            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(
+                SimulationCraftRaidBuffs $raidBuff,
+            ) => [
+                $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
+            ])->toArray());
+        });
+
+        view()->composer('common.modal.mappingversion', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+
+        view()->composer('common.mappingversion.select', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
         // Thirdparty
@@ -566,7 +724,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
-        view()->composer(['profile.overview', 'common.dungeonroute.coverage.affixgroup'], static function (View $view) {
+        view()->composer([
+            'profile.overview',
+            'common.dungeonroute.coverage.affixgroup',
+        ], static function (View $view) {
             $view->with('newRouteStyle', $_COOKIE['route_coverage_new_route_style'] ?? 'search');
         });
 

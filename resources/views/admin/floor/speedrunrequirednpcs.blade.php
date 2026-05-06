@@ -15,23 +15,31 @@ use App\Models\Floor\Floor;
 
     <script type="text/javascript">
         $(function () {
-            $('#admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table').DataTable({});
+            $('#admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table').DataTable({
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
+            });
         });
     </script>
 @endsection
 
-<h4>
-    @if($difficulty === Dungeon::DIFFICULTY_10_MAN )
-        {{ __('view_admin.floor.edit.speedrun_required_npcs.title_10_man') }}
-    @else
-        {{ __('view_admin.floor.edit.speedrun_required_npcs.title_25_man') }}
-    @endif
-</h4>
-<div class="float-right">
-    <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]) }}"
-       class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc') }}
-    </a>
+<div class="row">
+    <div class="col">
+        <h4>
+            @if($difficulty === Dungeon::DIFFICULTY_10_MAN )
+                {{ __('view_admin.floor.edit.speedrun_required_npcs.title_10_man') }}
+            @else
+                {{ __('view_admin.floor.edit.speedrun_required_npcs.title_25_man') }}
+            @endif
+        </h4>
+    </div>
+    <div class="col-auto">
+        <a href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]) }}"
+           class="btn btn-success text-white pull-right" role="button">
+            <i class="fas fa-plus"></i> {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc') }}
+        </a>
+    </div>
 </div>
 
 <table id="admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table"

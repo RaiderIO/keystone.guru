@@ -27,10 +27,9 @@ class GenerateItemIcons extends Command
      * @return int
      */
     public function handle(
-        ImageServiceInterface $imageService
+        ImageServiceInterface $imageService,
     ): int {
         $imagePaths = [
-            'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
             '171750.png'                            => 'nw_item_goliath.png',
             'inv_mace_1h_bastionquest_b_01.png'     => 'nw_item_hammer.png',
             'inv_shield_1h_bastionquest_b_01.jpg'   => 'nw_item_shield.png',
@@ -43,14 +42,29 @@ class GenerateItemIcons extends Command
             'inv_misc_web_02.jpg'                   => 'ara_kara_item_silk_wrap.png',
             'inv_egg_01.jpg'                        => 'karazhan_crypts_spider_nest.png',
             'spell_holy_rebuke.jpg'                 => 'priory_blessing_of_the_sacred_flame.png',
+            'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
             'inv_eng_crate.jpg'                     => 'floodgate_weapons_stockpile_explosion.png',
+            'spell_fire_sealoffire.jpg'             => 'gate_of_the_setting_sun_brazier.png',
+            'inv_112_arcane_beam.jpg'               => 'eco_dome_al_dani_shatter_conduit.png',
+            'spell_broker_nova.jpg'                 => 'eco_dome_al_dani_disruption_grenade.png',
+            'inv_112_arcane_buff.jpg'               => 'eco_dome_al_dani_kareshi_surge.png',
+            'inv_cooking_10_heartystew.jpg'         => 'maisara_caverns_hearty_vilebranch_stew.png',
+            'inv_enchant_voidsphere.jpg'            => 'seat_of_the_triumvirate_void_infusion.png',
         ];
 
-
         foreach ($imagePaths as $sourceImage => $targetImage) {
+            $targetImagePath = base_path(sprintf('../keystone.guru.assets/images/mapicon/%s', $targetImage));
+            if (is_writable($targetImagePath) && !file_exists($targetImagePath)) {
+                // Just write something
+                file_put_contents($targetImagePath, file_get_contents($sourceImage));
+
+                // Make sure the path is absolute
+                $targetImagePath = realpath($targetImagePath);
+            }
+
             $imageService->convertToItemImage(
-                resource_path(sprintf('assets/images/mapicon_gen/%s', $sourceImage)),
-                resource_path(sprintf('assets/images/mapicon/%s', $targetImage))
+                realpath(base_path(sprintf('../keystone.guru.assets/images/mapicon_gen/%s', $sourceImage))),
+                $targetImagePath,
             );
         }
 

@@ -28,8 +28,10 @@ $menuItems[] = ['icon' => 'fa-flag', 'text' => __('view_profile.edit.reports'), 
 
 $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
 ?>
-@extends('layouts.sitepage', ['wide' => true,
+@extends('layouts.sitepage', [
+    'wide' => true,
     'title' => __('view_profile.edit.title'),
+    'showAds' => false,
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
     'menuModelEdit' => $user,
@@ -49,7 +51,11 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
             appCode._newPassword('#new_password');
 
             // Disabled since it's not shown by default and causes a JS error otherwise
-            // $('#user_reports_table').DataTable({});
+            // $('#user_reports_table').DataTable({
+            //     'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+            //
+            //     })
+            // });
         });
     </script>
 @endsection

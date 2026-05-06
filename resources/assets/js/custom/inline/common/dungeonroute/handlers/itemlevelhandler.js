@@ -1,6 +1,6 @@
 class ItemLevelHandler {
     constructor(from, to) {
-        this.min = 400;
+        this.min = 240;
         this.max = 999;
 
         this.from = from;

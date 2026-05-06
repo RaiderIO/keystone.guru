@@ -29,7 +29,7 @@ class MissedV22 extends Suffix implements MissedInterface
 
     private bool $critical;
 
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getMissType(): Guid
     {
@@ -61,7 +61,7 @@ class MissedV22 extends Suffix implements MissedInterface
         return $this->damageType;
     }
 
-
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -70,12 +70,15 @@ class MissedV22 extends Suffix implements MissedInterface
         $this->offHand  = $parameters[1] !== 'nil';
 
         // It was an immune of sorts apparently. But the parameter CAN be optional if it's a SWING instead of a SPELL..
-        if (!isset($parameters[2]) || in_array($parameters[2], ['ST', 'AOE'])) {
+        if (!isset($parameters[2]) || in_array($parameters[2], [
+            'ST',
+            'AOE',
+        ])) {
             $this->amountMissed = 0;
             $this->amountTotal  = 0;
             $this->critical     = false;
             $this->damageType   = $parameters[2] ?? null;
-        } else if ($this->missType instanceof Block || $this->missType instanceof Resist) {
+        } elseif ($this->missType instanceof Block || $this->missType instanceof Resist) {
             $this->amountMissed = $parameters[2];
             $this->amountTotal  = 0;
             $this->critical     = false;

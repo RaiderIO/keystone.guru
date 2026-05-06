@@ -1,0 +1,16 @@
+name: Generate & Upload Map Context
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  mapcontext:
+    uses: ./.github/workflows/_ci-base.yml
+    with:
+      mode: mapcontext
+    secrets: inherit

@@ -9,7 +9,10 @@ use Illuminate\Support\Collection;
 
 class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySwooleInterface
 {
-    private Collection $floorsByUiMapIdAndDungeonId;
+    /** @var Collection<string, Floor> */
+    private readonly Collection $floorsByUiMapIdAndDungeonId;
+
+    /** @var Collection<int, Floor> */
     private Collection $defaultFloorByDungeonId;
 
     public function __construct()
@@ -20,32 +23,39 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         $this->defaultFloorByDungeonId     = collect();
     }
 
+    #[\Override]
     public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
-        $key = sprintf('%d-%s', $uiMapId, $dungeonId ?? 'null');
-
-        if ($this->floorsByUiMapIdAndDungeonId->has($key)) {
-            return $this->floorsByUiMapIdAndDungeonId->get($key);
+        if ($uiMapId === 0) {
+            return null;
         }
 
-        $floor = parent::findByUiMapId($uiMapId, $dungeonId);
+        $key = sprintf('%d-%s', $uiMapId, $dungeonId ?? 'null');
 
-        $this->floorsByUiMapIdAndDungeonId->put($key, $floor);
+        if (!$this->floorsByUiMapIdAndDungeonId->has($key)) {
+            $this->floorsByUiMapIdAndDungeonId->put($key, parent::findByUiMapId($uiMapId, $dungeonId));
+        }
 
-        return $floor;
+        return $this->floorsByUiMapIdAndDungeonId->get($key);
     }
 
+    #[\Override]
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor
     {
         if ($this->defaultFloorByDungeonId->has($dungeonId)) {
             return clone $this->defaultFloorByDungeonId->get($dungeonId);
         } // If we DID have entries - we just didn't have the one we were looking for, return null
-        else if ($this->defaultFloorByDungeonId->isNotEmpty()) {
+        elseif ($this->defaultFloorByDungeonId->isNotEmpty()) {
             return null;
         }
 
         // Get it all at once and store it in the cache
         $this->defaultFloorByDungeonId = Floor::where('default', 1)->get()->keyBy('dungeon_id');
+
+        // Hotfix for Seat of the Triumvirate not having default floor set
+        if ($dungeonId === 12) {
+            $this->defaultFloorByDungeonId->put(12, Floor::find(37));
+        }
 
         return clone $this->defaultFloorByDungeonId->get($dungeonId);
     }

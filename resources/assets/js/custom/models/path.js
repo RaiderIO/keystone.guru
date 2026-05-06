@@ -17,19 +17,19 @@ L.Draw.Path.prototype._getTooltipText = function () {
         labelText, distanceStr;
     if (this._markers.length === 0) {
         labelText = {
-            text: L.drawLocal.draw.handlers.route.tooltip.start
+            text: L.drawLocal.draw.handlers.path.tooltip.start
         };
     } else {
         distanceStr = showLength ? this._getMeasurementString() : '';
 
         if (this._markers.length === 1) {
             labelText = {
-                text: L.drawLocal.draw.handlers.route.tooltip.cont,
+                text: L.drawLocal.draw.handlers.path.tooltip.cont,
                 subtext: distanceStr
             };
         } else {
             labelText = {
-                text: L.drawLocal.draw.handlers.route.tooltip.end,
+                text: L.drawLocal.draw.handlers.path.tooltip.end,
                 subtext: distanceStr
             };
         }

@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'dungeon'                    => [
+
+    'dungeon' => [
         'edit' => [
             'title_new'                          => 'Hodor',
             'title_edit'                         => 'Hodor',
@@ -13,6 +14,7 @@ return [
             'speedrun_enabled'                   => 'Hodor',
             'speedrun_difficulty_10_man_enabled' => 'Hodor',
             'speedrun_difficulty_25_man_enabled' => 'Hodor',
+            'has_wallpaper'                      => 'Hodor',
             'facade_enabled'                     => 'Hodor',
             'id'                                 => 'Hodor',
             'game_version_id'                    => 'Hodor',
@@ -21,35 +23,39 @@ return [
             'instance_id'                        => 'Hodor',
             'challenge_mode_id'                  => 'Hodor',
             'mdt_id'                             => 'Hodor',
-            'dungeon_name'                       => 'Hodor',
+            'name'                               => 'Hodor',
+            'abbreviation'                       => 'Hodor',
             'key'                                => 'Hodor',
             'slug'                               => 'Hodor',
             'submit'                             => 'Hodor',
-
-            'floor_management' => [
-                'title'                   => 'Hodor',
-                'add_floor'               => 'Hodor',
-                'table_header_active'     => 'Hodor',
-                'table_header_facade'     => 'Hodor',
-                'table_header_id'         => 'Hodor',
-                'table_header_index'      => 'Hodor',
-                'table_header_name'       => 'Hodor',
-                'table_header_actions'    => 'Hodor',
+            'floor_management'                   => [
+                'title'        => 'Hodor',
+                'add_floor'    => 'Hodor',
+                'table_header' => [
+                    'id'      => 'Hodor',
+                    'index'   => 'Hodor',
+                    'name'    => 'Hodor',
+                    'active'  => 'Hodor',
+                    'facade'  => 'Hodor',
+                    'actions' => 'Hodor',
+                ],
                 'floor_edit_edit'         => 'Hodor',
                 'floor_edit_edit_mapping' => 'Hodor',
             ],
-
             'mapping_versions' => [
                 'title'                    => 'Hodor',
                 'add_bare_mapping_version' => 'Hodor',
                 'add_mapping_version'      => 'Hodor',
                 'delete'                   => 'Hodor',
-                'table_header_merged'      => 'Hodor',
-                'table_header_facade'      => 'Hodor',
-                'table_header_id'          => 'Hodor',
-                'table_header_version'     => 'Hodor',
-                'table_header_created_at'  => 'Hodor',
-                'table_header_actions'     => 'Hodor',
+                'table_header'             => [
+                    'merged'       => 'Hodor',
+                    'facade'       => 'Hodor',
+                    'id'           => 'Hodor',
+                    'game_version' => 'Hodor',
+                    'version'      => 'Hodor',
+                    'created_at'   => 'Hodor',
+                    'actions'      => 'Hodor',
+                ],
             ],
         ],
         'list' => [
@@ -57,7 +63,6 @@ return [
             'header'                            => 'Hodor',
             'table_header_active'               => 'Hodor',
             'table_header_expansion'            => 'Hodor',
-            'table_header_game_version'         => 'Hodor',
             'table_header_name'                 => 'Hodor',
             'table_header_enemy_forces'         => 'Hodor',
             'table_header_enemy_forces_teeming' => 'Hodor',
@@ -78,7 +83,7 @@ return [
             'submit'         => 'Hodor',
         ],
     ],
-    'expansion'                  => [
+    'expansion' => [
         'edit' => [
             'title_new'     => 'Hodor',
             'header_new'    => 'Hodor',
@@ -106,14 +111,14 @@ return [
             'edit'                 => 'Hodor',
         ],
     ],
-    'floor'                      => [
-        'flash'   => [
+    'floor' => [
+        'flash' => [
             'invalid_floor_id'           => 'Hodor',
             'invalid_mapping_version_id' => 'Hodor',
             'floor_updated'              => 'Hodor',
             'floor_created'              => 'Hodor',
         ],
-        'edit'    => [
+        'edit' => [
             'title_new'                          => 'Hodor',
             'header_new'                         => 'Hodor',
             'title_edit'                         => 'Hodor',
@@ -146,8 +151,7 @@ return [
                 'left'  => 'Hodor',
                 'right' => 'Hodor',
             ],
-            'submit'                             => 'Hodor',
-
+            'submit'                 => 'Hodor',
             'speedrun_required_npcs' => [
                 'title_10_man'         => 'Hodor',
                 'title_25_man'         => 'Hodor',
@@ -160,53 +164,46 @@ return [
             ],
         ],
         'mapping' => [
-            'title'  => 'Hodor',
-            'header' => 'Hodor',
+            'title'        => 'Hodor',
+            'header'       => 'Hodor',
+            'header_title' => 'Hodor',
         ],
     ],
-    'npc'                        => [
+    'npc' => [
         'flash' => [
             'npc_updated' => 'Hodor',
             'npc_created' => 'Hodor',
         ],
-        'edit'  => [
-            'title_new'                            => 'Hodor',
-            'header_new'                           => 'Hodor',
-            'title_edit'                           => 'Hodor',
-            'header_edit'                          => 'Hodor',
-            'name'                                 => 'Hodor',
-            'game_id'                              => 'Hodor',
-            'classification'                       => 'Hodor',
-            'aggressiveness'                       => 'Hodor',
-            'type'                                 => 'Hodor',
-            'class'                                => 'Hodor',
-            'base_health'                          => 'Hodor',
-            'scaled_health_to_base_health_apply'   => 'Hodor',
-            'scaled_health_placeholder'            => 'Hodor',
-            'scaled_health_percentage_placeholder' => 'Hodor',
-            'scaled_type_none'                     => 'Hodor',
-            'scaled_type_fortified'                => 'Hodor',
-            'scaled_type_tyrannical'               => 'Hodor',
-            'health_percentage'                    => 'Hodor',
-            'level'                                => 'Hodor',
-            'enemy_forces'                         => 'Hodor',
-            'enemy_forces_teeming'                 => 'Hodor',
-            'dangerous'                            => 'Hodor',
-            'truesight'                            => 'Hodor',
-            'bursting'                             => 'Hodor',
-            'bolstering'                           => 'Hodor',
-            'sanguine'                             => 'Hodor',
-            'runs_away_in_fear'                    => 'Hodor',
-            'bolstering_npc_whitelist'             => 'Hodor',
-            'bolstering_npc_whitelist_count'       => 'Hodor',
-            'spells'                               => 'Hodor',
-            'spells_count'                         => 'Hodor',
-            'submit'                               => 'Hodor',
-            'save_as_new_npc'                      => 'Hodor',
-            'all_npcs'                             => 'Hodor',
-            'all_dungeons'                         => 'Hodor',
+        'edit' => [
+            'title_new'                      => 'Hodor',
+            'header_new'                     => 'Hodor',
+            'title_edit'                     => 'Hodor',
+            'header_edit'                    => 'Hodor',
+            'name'                           => 'Hodor',
+            'game_id'                        => 'Hodor',
+            'classification'                 => 'Hodor',
+            'aggressiveness'                 => 'Hodor',
+            'type'                           => 'Hodor',
+            'class'                          => 'Hodor',
+            'level'                          => 'Hodor',
+            'enemy_forces'                   => 'Hodor',
+            'enemy_forces_teeming'           => 'Hodor',
+            'dangerous'                      => 'Hodor',
+            'truesight'                      => 'Hodor',
+            'bursting'                       => 'Hodor',
+            'bolstering'                     => 'Hodor',
+            'sanguine'                       => 'Hodor',
+            'runs_away_in_fear'              => 'Hodor',
+            'bolstering_npc_whitelist'       => 'Hodor',
+            'bolstering_npc_whitelist_count' => 'Hodor',
+            'spells'                         => 'Hodor',
+            'spells_count'                   => 'Hodor',
+            'submit'                         => 'Hodor',
+            'save_as_new_npc'                => 'Hodor',
+            'all_npcs'                       => 'Hodor',
+            'all_dungeons'                   => 'Hodor',
         ],
-        'list'  => [
+        'list' => [
             'all_dungeons'                => 'Hodor',
             'title'                       => 'Hodor',
             'header'                      => 'Hodor',
@@ -219,24 +216,80 @@ return [
             'table_header_classification' => 'Hodor',
             'table_header_actions'        => 'Hodor',
         ],
+        'npcenemyforces' => [
+            'add_npc_enemy_forces'         => 'Hodor',
+            'mapping_version_read_only'    => 'Hodor',
+            'edit_npc_enemy_forces'        => 'Hodor',
+            'delete_npc_enemy_forces'      => 'Hodor',
+            'table_header_id'              => 'Hodor',
+            'table_header_mapping_version' => 'Hodor',
+            'table_header_enemy_forces'    => 'Hodor',
+            'table_header_actions'         => 'Hodor',
+        ],
+        'npchealth' => [
+            'add_npc_health'    => 'Hodor',
+            'edit_npc_health'   => 'Hodor',
+            'delete_npc_health' => 'Hodor',
+            'table_header'      => [
+                'id'           => 'Hodor',
+                'game_version' => 'Hodor',
+                'health'       => 'Hodor',
+                'percentage'   => 'Hodor',
+                'actions'      => 'Hodor',
+            ],
+        ],
     ],
-    'npcenemyforces'             => [
-        'title'                        => 'Hodor',
-        'mapping_version_read_only'    => 'Hodor',
-        'edit_enemy_forces'            => 'Hodor',
-        'table_header_id'              => 'Hodor',
-        'table_header_mapping_version' => 'Hodor',
-        'table_header_enemy_forces'    => 'Hodor',
-        'table_header_actions'         => 'Hodor',
-        'edit'                         => [
+    'npcenemyforces' => [
+        'flash' => [
+            'enemy_forces_updated' => 'Hodor',
+            'enemy_forces_created' => 'Hodor',
+            'enemy_forces_deleted' => 'Hodor',
+        ],
+        'title' => 'Hodor',
+        'edit'  => [
             'title'                => 'Hodor',
             'header'               => 'Hodor',
+            'mapping_version'      => 'Hodor',
             'enemy_forces'         => 'Hodor',
             'enemy_forces_teeming' => 'Hodor',
             'submit'               => 'Hodor',
         ],
     ],
-    'release'                    => [
+    'npchealth' => [
+        'flash' => [
+            'npc_health_updated' => 'Hodor',
+            'npc_health_created' => 'Hodor',
+            'npc_health_deleted' => 'Hodor',
+        ],
+        'title' => 'Hodor',
+        'edit'  => [
+            'title'                                => 'Hodor',
+            'header'                               => 'Hodor',
+            'current'                              => 'Hodor',
+            'health'                               => 'Hodor',
+            'scaled_health_to_health_apply'        => 'Hodor',
+            'scaled_health_placeholder'            => 'Hodor',
+            'scaled_health_percentage_placeholder' => 'Hodor',
+            'scaled_type_none'                     => 'Hodor',
+            'scaled_type_fortified'                => 'Hodor',
+            'scaled_type_tyrannical'               => 'Hodor',
+            'auto_complete_npc_healths'            => 'Hodor',
+            'table_header'                         => [
+                'npc_id'         => 'Hodor',
+                'npc_name'       => 'Hodor',
+                'classification' => 'Hodor',
+                'health'         => 'Hodor',
+                'percentage'     => 'Hodor',
+                'actions'        => 'Hodor',
+            ],
+            'apply_to_npc_health' => 'Hodor',
+            'edit_npc_health'     => 'Hodor',
+            'percentage'          => 'Hodor',
+            'game_version'        => 'Hodor',
+            'submit'              => 'Hodor',
+        ],
+    ],
+    'release' => [
         'edit' => [
             'title_new'    => 'Hodor',
             'header_new'   => 'Hodor',
@@ -268,13 +321,14 @@ return [
             'edit'                 => 'Hodor',
         ],
     ],
-    'spell'                      => [
+    'spell' => [
         'edit' => [
             'title_new'         => 'Hodor',
             'header_new'        => 'Hodor',
             'title_edit'        => 'Hodor',
             'header_edit'       => 'Hodor',
             'game_id'           => 'Hodor',
+            'game_version_id'   => 'Hodor',
             'name'              => 'Hodor',
             'icon_name'         => 'Hodor',
             'category'          => 'Hodor',
@@ -297,27 +351,27 @@ return [
             'edit'                 => 'Hodor',
         ],
     ],
-    'tools'                      => [
-        'datadump'     => [
+    'tools' => [
+        'datadump' => [
             'viewexporteddungeondata' => [
                 'title'   => 'Hodor',
                 'header'  => 'Hodor',
                 'content' => 'Hodor',
             ],
-            'viewexportedrelease'     => [
+            'viewexportedrelease' => [
                 'title'   => 'Hodor',
                 'header'  => 'Hodor',
                 'content' => 'Hodor',
             ],
         ],
         'dungeonroute' => [
-            'view'            => [
+            'view' => [
                 'title'      => 'Hodor',
                 'header'     => 'Hodor',
                 'public_key' => 'Hodor',
                 'submit'     => 'Hodor',
             ],
-            'viewcontents'    => [
+            'viewcontents' => [
                 'title'  => 'Hodor',
                 'header' => 'Hodor',
             ],
@@ -329,7 +383,7 @@ return [
                 'table_header_actions'              => 'Hodor',
             ],
         ],
-        'enemyforces'  => [
+        'enemyforces' => [
             'title'                    => 'Hodor',
             'header'                   => 'Hodor',
             'paste_mennos_export_json' => 'Hodor',
@@ -340,7 +394,7 @@ return [
                 'submit' => 'Hodor',
             ],
         ],
-        'exception'    => [
+        'exception' => [
             'select' => [
                 'title'                     => 'Hodor',
                 'header'                    => 'Hodor',
@@ -348,7 +402,7 @@ return [
                 'submit'                    => 'Hodor',
             ],
         ],
-        'features'     => [
+        'features' => [
             'list' => [
                 'title'        => 'Hodor',
                 'header'       => 'Hodor',
@@ -357,17 +411,25 @@ return [
                     'feature' => 'Hodor',
                     'actions' => 'Hodor',
                 ],
-                'actions'      => [
+                'actions' => [
                     'toggle' => 'Hodor',
                     'forget' => 'Hodor',
                 ],
             ],
         ],
-        'mdt'          => [
-            'diff'                              => [
-                'title'                 => 'Hodor',
-                'header'                => 'Hodor',
-                'headers'               => [
+        'messagebanner' => [
+            'set' => [
+                'title'   => 'Hodor',
+                'header'  => 'Hodor',
+                'message' => 'Hodor',
+                'submit'  => 'Hodor',
+            ],
+        ],
+        'mdt' => [
+            'diff' => [
+                'title'   => 'Hodor',
+                'header'  => 'Hodor',
+                'headers' => [
                     'mismatched_health'               => 'Hodor',
                     'mismatched_enemy_count'          => 'Hodor',
                     'mismatched_enemy_type'           => 'Hodor',
@@ -384,19 +446,19 @@ return [
                 'npc_message'           => 'Hodor',
                 'apply_mdt_kg'          => 'Hodor',
             ],
-            'dungeonroute'                      => [
+            'dungeonroute' => [
                 'title'      => 'Hodor',
                 'header'     => 'Hodor',
                 'public_key' => 'Hodor',
                 'submit'     => 'Hodor',
             ],
-            'string'                            => [
+            'string' => [
                 'title'                        => 'Hodor',
                 'header'                       => 'Hodor',
                 'paste_your_mdt_export_string' => 'Hodor',
                 'submit'                       => 'Hodor',
             ],
-            'list'                              => [
+            'list' => [
                 'title'           => 'Hodor',
                 'header'          => 'Hodor',
                 'copy_mdt_string' => 'Hodor',
@@ -408,7 +470,7 @@ return [
                     'actions'       => 'Hodor',
                 ],
             ],
-            'dungeonmappinghash'                => [
+            'dungeonmappinghash' => [
                 'title'  => 'Hodor',
                 'header' => 'Hodor',
                 'submit' => 'Hodor',
@@ -418,32 +480,62 @@ return [
                 'header' => 'Hodor',
                 'submit' => 'Hodor',
             ],
+            'dungeonmappingversionaccuracy' => [
+                'title'  => 'Hodor',
+                'header' => 'Hodor',
+            ],
         ],
-        'npc'          => [
-            'import'                => [
+        'npc' => [
+            'import' => [
                 'title'                   => 'Hodor',
                 'header'                  => 'Hodor',
                 'paste_npc_import_string' => 'Hodor',
                 'submit'                  => 'Hodor',
             ],
             'managespellvisibility' => [
-                'title'  => 'Hodor',
-                'header' => 'Hodor',
-                'submit' => 'Hodor',
+                'title'           => 'Hodor',
+                'header'          => 'Hodor',
+                'submit'          => 'Hodor',
+                'spell_not_found' => 'Hodor',
             ],
         ],
-        'list'         => [
-            'title'                   => 'Hodor',
-            'header'                  => 'Hodor',
-            'header_tools'            => 'Hodor',
-            'subheader_npcs'          => 'Hodor',
-            'mass_import_npcs'        => 'Hodor',
-            'manage_spell_visibility' => 'Hodor',
-
-            'subheader_dungeonroute'                  => 'Hodor',
-            'view_dungeonroute_details'               => 'Hodor',
-            'view_dungeonroute_mapping_version_usage' => 'Hodor',
-
+        'spells' => [
+            'showmissingspellinfo' => [
+                'title'        => 'Hodor',
+                'header'       => 'Hodor',
+                'table_header' => [
+                    'id'      => 'Hodor',
+                    'name'    => 'Hodor',
+                    'actions' => 'Hodor',
+                ],
+                'wowhead' => 'Hodor',
+            ],
+        ],
+        'npcs' => [
+            'showmissingdisplayid' => [
+                'title'        => 'Hodor',
+                'header'       => 'Hodor',
+                'table_header' => [
+                    'id'      => 'Hodor',
+                    'name'    => 'Hodor',
+                    'actions' => 'Hodor',
+                ],
+                'wowhead' => 'Hodor',
+            ],
+        ],
+        'list' => [
+            'title'                                       => 'Hodor',
+            'header'                                      => 'Hodor',
+            'header_tools'                                => 'Hodor',
+            'subheader_message_banner'                    => 'Hodor',
+            'set_message_banner'                          => 'Hodor',
+            'subheader_npcs'                              => 'Hodor',
+            'mass_import_npcs'                            => 'Hodor',
+            'manage_spell_visibility'                     => 'Hodor',
+            'show_missing_npc_display_id'                 => 'Hodor',
+            'subheader_dungeonroute'                      => 'Hodor',
+            'view_dungeonroute_details'                   => 'Hodor',
+            'view_dungeonroute_mapping_version_usage'     => 'Hodor',
             'subheader_mdt'                               => 'Hodor',
             'view_mdt_string'                             => 'Hodor',
             'view_mdt_string_as_dungeonroute'             => 'Hodor',
@@ -452,33 +544,31 @@ return [
             'view_mdt_diff'                               => 'Hodor',
             'view_dungeon_mapping_hash'                   => 'Hodor',
             'view_dungeon_mapping_version_to_mdt_mapping' => 'Hodor',
-
-            'subheader_enemy_forces' => 'Hodor',
-            'enemy_forces_import'    => 'Hodor',
-
-            'subheader_wowtools'                 => 'Hodor',
-            'wowtools_import_ingame_coordinates' => 'Hodor',
-
-            'subheader_misc'     => 'Hodor',
-            'drop_caches'        => 'Hodor',
-            'throw_an_exception' => 'Hodor',
-
-            'subheader_mapping'  => 'Hodor',
-            'force_sync_mapping' => 'Hodor',
-
-            'subheader_features' => 'Hodor',
-            'manage_features'    => 'Hodor',
-
-            'subheader_actions'   => 'Hodor',
-            'export_dungeon_data' => 'Hodor',
-            'export_releases'     => 'Hodor',
-
-            'enemy_forces_recalculate' => 'Hodor',
-
-            'subheader_thumbnails'  => 'Hodor',
-            'thumbnails_regenerate' => 'Hodor',
+            'view_dungeon_mapping_version_accuracy'       => 'Hodor',
+            'subheader_enemy_forces'                      => 'Hodor',
+            'enemy_forces_import'                         => 'Hodor',
+            'subheader_wagogg'                            => 'Hodor',
+            'wagogg_import_ingame_coordinates'            => 'Hodor',
+            'subheader_misc'                              => 'Hodor',
+            'drop_caches'                                 => 'Hodor',
+            'throw_an_exception'                          => 'Hodor',
+            'subheader_mapping'                           => 'Hodor',
+            'force_sync_mapping'                          => 'Hodor',
+            'subheader_features'                          => 'Hodor',
+            'manage_features'                             => 'Hodor',
+            'subheader_actions'                           => 'Hodor',
+            'export_dungeon_data'                         => 'Hodor',
+            'export_releases'                             => 'Hodor',
+            'toggle_readonly_mode'                        => 'Hodor',
+            'enemy_forces_recalculate'                    => 'Hodor',
+            'subheader_thumbnails'                        => 'Hodor',
+            'thumbnails_regenerate'                       => 'Hodor',
+            'subheader_combatlog'                         => 'Hodor',
+            'combatlog_regenerate'                        => 'Hodor',
+            'subheader_spells'                            => 'Hodor',
+            'show_missing_spell_info'                     => 'Hodor',
         ],
-        'thumbnails'   => [
+        'thumbnails' => [
             'regenerate' => [
                 'title'        => 'Hodor',
                 'header'       => 'Hodor',
@@ -486,7 +576,22 @@ return [
                 'submit'       => 'Hodor',
             ],
         ],
-        'wowtools'     => [
+        'combatlog' => [
+            'regenerate' => [
+                'title'  => 'Hodor',
+                'header' => 'Hodor',
+                'submit' => 'Hodor',
+            ],
+        ],
+        'wagogg' => [
+            'importingamecoordinates' => [
+                'title'                       => 'Hodor',
+                'header'                      => 'Hodor',
+                'ui_map_assignment_table_csv' => 'Hodor',
+                'submit'                      => 'Hodor',
+            ],
+        ],
+        'wowtools' => [
             'importingamecoordinates' => [
                 'title'                                  => 'Hodor',
                 'header'                                 => 'Hodor',
@@ -497,7 +602,7 @@ return [
             ],
         ],
     ],
-    'user'                       => [
+    'user' => [
         'list' => [
             'title'                        => 'Hodor',
             'header'                       => 'Hodor',
@@ -513,7 +618,7 @@ return [
             'ip_addresses_cloudflare_link' => 'Hodor',
         ],
     ],
-    'userreport'                 => [
+    'userreport' => [
         'list' => [
             'title'                    => 'Hodor',
             'header'                   => 'Hodor',
@@ -527,4 +632,5 @@ return [
             'handled'                  => 'Hodor',
         ],
     ],
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'taunt'           => 'Taunt',
     'incapacitate'    => 'Incapacitate',
     'subjugate_demon' => 'Subjugate Demon',
@@ -25,4 +26,5 @@ return [
     'hibernate'       => 'Hibernate',
     'turn_evil'       => 'Turn Evil',
     'mind_soothe'     => 'Mind Soothe',
+
 ];

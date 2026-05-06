@@ -16,6 +16,7 @@ class WorldMarkerRemoved extends SpecialEvent
         return $this->marker;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

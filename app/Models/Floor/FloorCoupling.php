@@ -39,5 +39,9 @@ class FloorCoupling extends CacheModel
     //
     public $timestamps = false;
 
-    protected $fillable = ['floor1_id', 'floor2_id', 'direction'];
+    protected $fillable = [
+        'floor1_id',
+        'floor2_id',
+        'direction',
+    ];
 }

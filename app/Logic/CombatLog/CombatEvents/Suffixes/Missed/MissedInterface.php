@@ -6,7 +6,6 @@ use App\Logic\CombatLog\Guid\Guid;
 
 interface MissedInterface
 {
-
     public function getMissType(): Guid;
 
     public function isOffHand(): bool;

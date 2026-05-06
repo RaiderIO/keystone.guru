@@ -10,59 +10,60 @@ return [
     'demon_hunter' => [
         'havoc'     => 'Havoc',
         'vengeance' => 'Vengeance',
+        'devourer'  => 'Devourer',
     ],
-    'druid'        => [
+    'druid' => [
         'balance'     => 'Balance',
         'feral'       => 'Feral',
         'guardian'    => 'Guardian',
         'restoration' => 'Restoration',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => 'Devastation',
         'preservation' => 'Preservation',
         'augmentation' => 'Augmentation',
     ],
-    'hunter'       => [
+    'hunter' => [
         'beast_mastery' => 'Beast Mastery',
         'marksmanship'  => 'Marksmanship',
         'survival'      => 'Survival',
     ],
-    'mage'         => [
+    'mage' => [
         'arcane' => 'Arcane',
         'fire'   => 'Fire',
         'frost'  => 'Frost',
     ],
-    'monk'         => [
+    'monk' => [
         'brewmaster' => 'Brewmaster',
         'mistweaver' => 'Mistweaver',
         'windwalker' => 'Windwalker',
     ],
-    'paladin'      => [
+    'paladin' => [
         'holy'        => 'Holy',
         'protection'  => 'Protection',
         'retribution' => 'Retribution',
     ],
-    'priest'       => [
+    'priest' => [
         'discipline' => 'Discipline',
         'holy'       => 'Holy',
         'shadow'     => 'Shadow',
     ],
-    'rogue'        => [
+    'rogue' => [
         'assassination' => 'Assassination',
         'outlaw'        => 'Outlaw',
         'subtlety'      => 'Subtlety',
     ],
-    'shaman'       => [
+    'shaman' => [
         'elemental'   => 'Elemental',
         'enhancement' => 'Enhancement',
         'restoration' => 'Restoration',
     ],
-    'warlock'      => [
+    'warlock' => [
         'affliction'  => 'Affliction',
         'demonology'  => 'Demonology',
         'destruction' => 'Destruction',
     ],
-    'warrior'      => [
+    'warrior' => [
         'arms'       => 'Arms',
         'fury'       => 'Fury',
         'protection' => 'Protection',

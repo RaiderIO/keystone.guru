@@ -20,7 +20,7 @@ class MapChange extends BaseResultEvent
         $this->floor = Floor::findByUiMapId($baseEvent->getUiMapID());
         if ($this->floor === null) {
             throw new FloorNotSupportedException(
-                sprintf('Floor with ui MAP ID %d not found', $baseEvent->getUiMapID())
+                sprintf('Floor with ui MAP ID %d not found', $baseEvent->getUiMapID()),
             );
         }
     }

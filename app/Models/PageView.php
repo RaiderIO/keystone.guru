@@ -78,8 +78,8 @@ class PageView extends Model
     /**
      * Checks if the view may be counted or if it shouldn't be counted because a previously existing view is too recent.
      *
-     * @param  $modelId  int
-     * @param  $modelClass  string
+     * @param                $modelId    int
+     * @param                $modelClass string
      * @return PageView|null The most recent page view, or null if none was found.
      */
     private static function getMostRecentPageView(int $modelId, string $modelClass): ?PageView

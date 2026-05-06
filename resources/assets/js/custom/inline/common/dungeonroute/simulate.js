@@ -108,7 +108,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
             let $option = jQuery('<option>', {
                 value: killZone.id,
-                text: lang.get(`messages.simulate_pull`, {'index': killZone.index})
+                text: lang.get(`js.simulate_pull`, {'index': killZone.index})
             });
 
             $bloodlustPerPullSelect.append($option);

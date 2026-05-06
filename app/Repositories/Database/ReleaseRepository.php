@@ -35,4 +35,20 @@ class ReleaseRepository extends DatabaseRepository implements ReleaseRepositoryI
             DB::update('UPDATE `releases` SET `released` = 1');
         }
     }
+
+    public function findReleaseByVersion(?string $version): ?Release
+    {
+        if ($version === null) {
+            $release = Release::latest()->disableCache()->first();
+        } else {
+            if (!str_starts_with($version, 'v')) {
+                $version = 'v' . $version;
+            }
+
+            /** @var Release $release */
+            $release = Release::where('version', $version)->disableCache()->first();
+        }
+
+        return $release;
+    }
 }

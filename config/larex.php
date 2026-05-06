@@ -1,5 +1,7 @@
 <?php
 
+use App\Larex\GroupFilteringLaravelImporter;
+
 return [
 
     /*
@@ -52,10 +54,11 @@ return [
     'importers' => [
         'default' => 'laravel',
         'list'    => [
-            'laravel'    => Lukasss93\Larex\Importers\LaravelImporter::class,
-            'json:lang'  => Lukasss93\Larex\Importers\JsonLanguagesImporter::class,
-            'json:group' => Lukasss93\Larex\Importers\JsonGroupsImporter::class,
-            'crowdin'    => Lukasss93\LarexCrowdin\Importers\CrowdinImporter::class,
+            'laravel'       => Lukasss93\Larex\Importers\LaravelImporter::class,
+            'laravel-group' => GroupFilteringLaravelImporter::class,
+            'json:lang'     => Lukasss93\Larex\Importers\JsonLanguagesImporter::class,
+            'json:group'    => Lukasss93\Larex\Importers\JsonGroupsImporter::class,
+            'crowdin'       => Lukasss93\LarexCrowdin\Importers\CrowdinImporter::class,
         ],
     ],
 
@@ -150,5 +153,5 @@ return [
      | Wotuu: HERE IT WANTS DASHES BUT IT EXPORTS IT AS UNDERSCORES, YOU TELL ME MAN
      */
 
-    'source_language' => 'en-US',
+    'source_language' => 'en_US',
 ];

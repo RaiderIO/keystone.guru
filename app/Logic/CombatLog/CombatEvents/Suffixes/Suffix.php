@@ -3,10 +3,13 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\DamageLandedSupportBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\DamageSupportBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Energize\EnergizeBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedBuilder;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use Exception;
@@ -16,43 +19,43 @@ abstract class Suffix implements HasParameters
 {
     use ValidatesParameterCount;
 
-    public const SUFFIX_DAMAGE_LANDED_SUPPORT = 'DAMAGE_LANDED_SUPPORT';
-    public const SUFFIX_DAMAGE_LANDED  = 'DAMAGE_LANDED';
-    public const SUFFIX_DAMAGE_SUPPORT = 'DAMAGE_SUPPORT';
-    public const SUFFIX_DAMAGE         = 'DAMAGE';
-    public const SUFFIX_MISSED         = 'MISSED';
-    public const SUFFIX_HEAL_ABSORBED  = 'HEAL_ABSORBED';
-    public const SUFFIX_HEAL_SUPPORT   = 'HEAL_SUPPORT';
-    public const SUFFIX_HEAL           = 'HEAL';
-    public const SUFFIX_ABSORBED       = 'ABSORBED';
-    public const SUFFIX_ENERGIZE       = 'ENERGIZE';
-    public const SUFFIX_DRAIN          = 'DRAIN';
-    public const SUFFIX_LEECH          = 'LEECH';
-    public const SUFFIX_EMPOWER_INTERRUPT = 'EMPOWER_INTERRUPT';
-    public const SUFFIX_INTERRUPT      = 'INTERRUPT';
-    public const SUFFIX_DISPEL_FAILED  = 'DISPEL_FAILED';
-    public const SUFFIX_DISPEL         = 'DISPEL';
-    public const SUFFIX_STOLEN         = 'STOLEN';
-    public const SUFFIX_EXTRA_ATTACKS  = 'EXTRA_ATTACKS';
-    public const SUFFIX_AURA_APPLIED   = 'AURA_APPLIED';
-    public const SUFFIX_AURA_REMOVED   = 'AURA_REMOVED';
-    public const SUFFIX_AURA_APPLIED_DOSE = 'AURA_APPLIED_DOSE';
-    public const SUFFIX_AURA_REMOVED_DOSE = 'AURA_REMOVED_DOSE';
-    public const SUFFIX_AURA_REFRESH   = 'AURA_REFRESH';
-    public const SUFFIX_AURA_BROKEN_SPELL = 'AURA_BROKEN_SPELL';
-    public const SUFFIX_AURA_BROKEN    = 'AURA_BROKEN';
-    public const SUFFIX_CAST_START     = 'CAST_START';
-    public const SUFFIX_CAST_SUCCESS   = 'CAST_SUCCESS';
-    public const SUFFIX_CAST_FAILED    = 'CAST_FAILED';
-    public const SUFFIX_INSTAKILL      = 'INSTAKILL';
-    public const SUFFIX_DURABILITY_DAMAGE = 'DURABILITY_DAMAGE';
-    public const SUFFIX_DURABILITY_DAMAGE_ALL = 'DURABILITY_DAMAGE_ALL';
-    public const SUFFIX_CREATE         = 'CREATE';
-    public const SUFFIX_SUMMON         = 'SUMMON';
-    public const SUFFIX_EMPOWER_START  = 'EMPOWER_START';
-    public const SUFFIX_EMPOWER_END    = 'EMPOWER_END';
+    public const string SUFFIX_DAMAGE_LANDED_SUPPORT = 'DAMAGE_LANDED_SUPPORT';
+    public const string SUFFIX_DAMAGE_LANDED         = 'DAMAGE_LANDED';
+    public const string SUFFIX_DAMAGE_SUPPORT        = 'DAMAGE_SUPPORT';
+    public const string SUFFIX_DAMAGE                = 'DAMAGE';
+    public const string SUFFIX_MISSED                = 'MISSED';
+    public const string SUFFIX_HEAL_ABSORBED         = 'HEAL_ABSORBED';
+    public const string SUFFIX_HEAL_SUPPORT          = 'HEAL_SUPPORT';
+    public const string SUFFIX_HEAL                  = 'HEAL';
+    public const string SUFFIX_ABSORBED              = 'ABSORBED';
+    public const string SUFFIX_ENERGIZE              = 'ENERGIZE';
+    public const string SUFFIX_DRAIN                 = 'DRAIN';
+    public const string SUFFIX_LEECH                 = 'LEECH';
+    public const string SUFFIX_EMPOWER_INTERRUPT     = 'EMPOWER_INTERRUPT';
+    public const string SUFFIX_INTERRUPT             = 'INTERRUPT';
+    public const string SUFFIX_DISPEL_FAILED         = 'DISPEL_FAILED';
+    public const string SUFFIX_DISPEL                = 'DISPEL';
+    public const string SUFFIX_STOLEN                = 'STOLEN';
+    public const string SUFFIX_EXTRA_ATTACKS         = 'EXTRA_ATTACKS';
+    public const string SUFFIX_AURA_APPLIED          = 'AURA_APPLIED';
+    public const string SUFFIX_AURA_REMOVED          = 'AURA_REMOVED';
+    public const string SUFFIX_AURA_APPLIED_DOSE     = 'AURA_APPLIED_DOSE';
+    public const string SUFFIX_AURA_REMOVED_DOSE     = 'AURA_REMOVED_DOSE';
+    public const string SUFFIX_AURA_REFRESH          = 'AURA_REFRESH';
+    public const string SUFFIX_AURA_BROKEN_SPELL     = 'AURA_BROKEN_SPELL';
+    public const string SUFFIX_AURA_BROKEN           = 'AURA_BROKEN';
+    public const string SUFFIX_CAST_START            = 'CAST_START';
+    public const string SUFFIX_CAST_SUCCESS          = 'CAST_SUCCESS';
+    public const string SUFFIX_CAST_FAILED           = 'CAST_FAILED';
+    public const string SUFFIX_INSTAKILL             = 'INSTAKILL';
+    public const string SUFFIX_DURABILITY_DAMAGE     = 'DURABILITY_DAMAGE';
+    public const string SUFFIX_DURABILITY_DAMAGE_ALL = 'DURABILITY_DAMAGE_ALL';
+    public const string SUFFIX_CREATE                = 'CREATE';
+    public const string SUFFIX_SUMMON                = 'SUMMON';
+    public const string SUFFIX_EMPOWER_START         = 'EMPOWER_START';
+    public const string SUFFIX_EMPOWER_END           = 'EMPOWER_END';
 
-    public const SUFFIX_ALL = [
+    public const array SUFFIX_ALL = [
         self::SUFFIX_DAMAGE_LANDED_SUPPORT,
         self::SUFFIX_DAMAGE_LANDED,
         self::SUFFIX_DAMAGE_SUPPORT,
@@ -90,7 +93,7 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_EMPOWER_END,
     ];
 
-    private const SUFFIX_CLASS_MAPPING = [
+    private const array SUFFIX_CLASS_MAPPING = [
         self::SUFFIX_DAMAGE_LANDED_SUPPORT => DamageLandedSupportBuilder::class,
         self::SUFFIX_DAMAGE_LANDED         => DamageLandedBuilder::class,
         self::SUFFIX_DAMAGE_SUPPORT        => DamageSupportBuilder::class,
@@ -102,7 +105,7 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_HEAL_SUPPORT          => HealSupport::class,
         self::SUFFIX_HEAL                  => Heal::class,
         self::SUFFIX_ABSORBED              => Absorbed::class,
-        self::SUFFIX_ENERGIZE              => Energize::class,
+        self::SUFFIX_ENERGIZE              => EnergizeBuilder::class,
         self::SUFFIX_DRAIN                 => Drain::class,
         self::SUFFIX_LEECH                 => Leech::class,
         self::SUFFIX_EMPOWER_INTERRUPT     => EmpowerInterrupt::class,
@@ -111,8 +114,8 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DISPEL                => Dispel::class,
         self::SUFFIX_STOLEN                => Stolen::class,
         self::SUFFIX_EXTRA_ATTACKS         => ExtraAttacks::class,
-        self::SUFFIX_AURA_APPLIED          => AuraApplied::class,
-        self::SUFFIX_AURA_REMOVED          => AuraRemoved::class,
+        self::SUFFIX_AURA_APPLIED          => AuraAppliedBuilder::class,
+        self::SUFFIX_AURA_REMOVED          => AuraRemovedBuilder::class,
         self::SUFFIX_AURA_APPLIED_DOSE     => AuraAppliedDose::class,
         self::SUFFIX_AURA_REMOVED_DOSE     => AuraRemovedDose::class,
         self::SUFFIX_AURA_REFRESH          => AuraRefresh::class,

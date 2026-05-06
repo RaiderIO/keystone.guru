@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteTheStonevaultTest extends APICombatLog
         $postBody = $this->getJsonData('TWW/tww_s1_the_stonevault_4', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -52,7 +52,7 @@ class APICombatLogControllerCombatLogRouteTheStonevaultTest extends APICombatLog
         $postBody = $this->getJsonData('TWW/tww_s1_the_stonevault_6', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

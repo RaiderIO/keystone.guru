@@ -12,14 +12,15 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int        $id
- * @property string     $short
- * @property string     $name
- * @property Carbon     $epoch_start
- * @property string     $timezone
- * @property int        $reset_day_offset ISO-8601 numeric representation of the day of the week
- * @property string     $reset_hours_offset
- * @property Collection $users
+ * @property int    $id
+ * @property string $short
+ * @property string $name
+ * @property Carbon $epoch_start
+ * @property string $timezone
+ * @property int    $reset_day_offset   ISO-8601 numeric representation of the day of the week
+ * @property string $reset_hours_offset
+ * 
+ * @property Collection<User> $users
  *
  * @mixin Eloquent
  */
@@ -33,24 +34,24 @@ class GameServerRegion extends CacheModel
     //
     // https://eu.forums.blizzard.com/en/wow/t/weekly-reset-time-changing-to-0500-cet-on-16-november/398498
     // the date at which the EU epoch change kicks in
-    const EU_EPOCH_CHANGE_STARTED_AT_DATE = '2022-11-16 04:00:00';
+    const string EU_EPOCH_CHANGE_STARTED_AT_DATE = '2022-11-16 04:00:00';
 
     // The base date we return when requesting a date using the new epoch
-    const EU_EPOCH_CHANGE_DATE = '2005-12-28 04:00:00';
+    const string EU_EPOCH_CHANGE_DATE = '2005-12-28 04:00:00';
 
     // The period that the EU epoch change started at
-    const EU_EPOCH_CHANGE_PERIOD = 881;
+    const int EU_EPOCH_CHANGE_PERIOD = 881;
 
-    public const AMERICAS = 'us';
-    public const EUROPE   = 'eu';
-    public const CHINA    = 'cn';
-    public const TAIWAN   = 'tw';
-    public const KOREA    = 'kr';
-    public const WORLD    = 'world';
+    public const string AMERICAS = 'us';
+    public const string EUROPE   = 'eu';
+    public const string CHINA    = 'cn';
+    public const string TAIWAN   = 'tw';
+    public const string KOREA    = 'kr';
+    public const string WORLD    = 'world';
 
-    public const DEFAULT_REGION = GameServerRegion::AMERICAS;
+    public const string DEFAULT_REGION = GameServerRegion::AMERICAS;
 
-    public const ALL = [
+    public const array ALL = [
         self::AMERICAS => 1,
         self::EUROPE   => 2,
         self::CHINA    => 3,
@@ -59,13 +60,23 @@ class GameServerRegion extends CacheModel
         self::WORLD    => 6,
     ];
 
-    protected $fillable = ['short', 'name', 'epoch_start', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
-
-    protected $casts = [
-        'epoch_start' => 'datetime',
+    protected $fillable = [
+        'short',
+        'name',
+        'epoch_start',
+        'timezone',
+        'reset_day_offset',
+        'reset_hours_offset',
     ];
 
     public $timestamps = false;
+
+    protected function casts(): array
+    {
+        return [
+            'epoch_start' => 'datetime',
+        ];
+    }
 
     public function users(): HasMany
     {
@@ -87,28 +98,30 @@ class GameServerRegion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_region',
-            static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first()
+        return $cacheService->remember(
+            'default_region',
+            static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first(),
+            config('keystoneguru.cache.default_game_region.ttl'),
         );
     }
 
     /**
      * Get the leaderboard period based on the region and a given date.
      *
-     * @param Carbon $dateTime
+     * @param  Carbon $dateTime
      * @return int
      */
     public function getKeystoneLeaderboardPeriod(Carbon $dateTime): int
     {
         $epoch = self::getRegionEpochByDate($dateTime);
 
-        return $epoch->diffInWeeks($dateTime);
+        return (int)$epoch->diffInWeeks($dateTime, true);
     }
 
     /**
      * Get the epoch date for a region based on the given date.
      *
-     * @param Carbon $dateTime
+     * @param  Carbon      $dateTime
      * @return Carbon|null
      */
     public function getRegionEpochByDate(Carbon $dateTime): ?Carbon

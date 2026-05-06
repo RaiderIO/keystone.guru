@@ -19,7 +19,10 @@ use Illuminate\Support\Carbon;
  */
 class PatreonAdFreeGiveaway extends Model
 {
-    protected $fillable = ['giver_user_id', 'receiver_user_id'];
+    protected $fillable = [
+        'giver_user_id',
+        'receiver_user_id',
+    ];
 
     public function giver(): HasOne
     {

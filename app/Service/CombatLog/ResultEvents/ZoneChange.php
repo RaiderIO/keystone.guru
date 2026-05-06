@@ -19,7 +19,7 @@ class ZoneChange extends BaseResultEvent
             $this->dungeon = Dungeon::where('map_id', $baseEvent->getZoneId())->firstOrFail();
         } catch (Exception) {
             throw new DungeonNotSupportedException(
-                sprintf('Dungeon with map ID %d not found', $baseEvent->getZoneId())
+                sprintf('Dungeon with map ID %d not found', $baseEvent->getZoneId()),
             );
         }
     }

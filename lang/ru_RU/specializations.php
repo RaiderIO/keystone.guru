@@ -3,69 +3,70 @@
 return [
 
     'death_knight' => [
-        'blood'  => 'Кровь',
-        'frost'  => 'Лед',
-        'unholy' => 'Нечестивость',
+        'blood'  => '',
+        'frost'  => '',
+        'unholy' => '',
     ],
     'demon_hunter' => [
-        'havoc'     => 'Истребление',
-        'vengeance' => 'Месть',
+        'havoc'     => '',
+        'vengeance' => '',
+        'devourer'  => '',
     ],
-    'druid'        => [
-        'balance'     => 'Баланс',
-        'feral'       => 'Сила зверя',
-        'guardian'    => 'Страж',
-        'restoration' => 'Исцеление',
+    'druid' => [
+        'balance'     => '',
+        'feral'       => '',
+        'guardian'    => '',
+        'restoration' => '',
     ],
-    'evoker'       => [
+    'evoker' => [
         'devastation'  => '',
         'preservation' => '',
         'augmentation' => '',
     ],
-    'hunter'       => [
-        'beast_mastery' => 'Повелитель зверей',
+    'hunter' => [
+        'beast_mastery' => '',
         'marksmanship'  => '',
-        'survival'      => 'Выживание',
+        'survival'      => '',
     ],
-    'mage'         => [
-        'arcane' => 'Тайная магия',
-        'fire'   => 'Огонь',
-        'frost'  => 'Лед',
+    'mage' => [
+        'arcane' => '',
+        'fire'   => '',
+        'frost'  => '',
     ],
-    'monk'         => [
-        'brewmaster' => 'Хмелевар',
-        'mistweaver' => 'Ткач туманов',
-        'windwalker' => 'Танцующий с ветром',
+    'monk' => [
+        'brewmaster' => '',
+        'mistweaver' => '',
+        'windwalker' => '',
     ],
-    'paladin'      => [
-        'holy'        => 'Свет',
-        'protection'  => 'Защита',
-        'retribution' => 'Воздаяние',
+    'paladin' => [
+        'holy'        => '',
+        'protection'  => '',
+        'retribution' => '',
     ],
-    'priest'       => [
-        'discipline' => 'Послушание',
-        'holy'       => 'Свет',
-        'shadow'     => 'Тьма',
+    'priest' => [
+        'discipline' => '',
+        'holy'       => '',
+        'shadow'     => '',
     ],
-    'rogue'        => [
-        'assassination' => 'Ликвидация',
-        'outlaw'        => 'Головорез',
-        'subtlety'      => 'Скрытность',
+    'rogue' => [
+        'assassination' => '',
+        'outlaw'        => '',
+        'subtlety'      => '',
     ],
-    'shaman'       => [
-        'elemental'   => 'Стихии',
-        'enhancement' => 'Совершествование',
-        'restoration' => 'Исцеление',
+    'shaman' => [
+        'elemental'   => '',
+        'enhancement' => '',
+        'restoration' => '',
     ],
-    'warlock'      => [
-        'affliction'  => 'Колдовство',
-        'demonology'  => 'Демонология',
-        'destruction' => 'Разрушение',
+    'warlock' => [
+        'affliction'  => '',
+        'demonology'  => '',
+        'destruction' => '',
     ],
-    'warrior'      => [
-        'arms'       => 'Оружие',
-        'fury'       => 'Неистовство',
-        'protection' => 'Защита',
+    'warrior' => [
+        'arms'       => '',
+        'fury'       => '',
+        'protection' => '',
     ],
 
 ];

@@ -12,16 +12,6 @@
     border: 1px solid #222;
   }
 
-  .cid-s48MCQYojq {
-    //noinspection CssUnknownTarget
-    background-image: url('/images/home/darkly_header.jpg');
-  }
-
-  .cid-soU9jtw47v {
-    //noinspection CssUnknownTarget
-    background-image: url('/images/home/darkly_footer.jpg');
-  }
-
   .table-striped tbody tr:nth-of-type(odd) {
     background-color: var(--theme-darker);
   }
@@ -58,6 +48,10 @@
       text-decoration: none;
       color: var(--theme-text-contrast)
     }
+  }
+
+  div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    color: var(--theme-light) !important;
   }
 
   //.btn-info {

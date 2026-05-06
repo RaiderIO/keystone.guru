@@ -18,6 +18,7 @@ final class CloudflareServiceTest extends PublicTestCase
     /**
      * @throws Exception
      */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,7 +47,7 @@ final class CloudflareServiceTest extends PublicTestCase
             testCase: $this,
             methodsToMock: ['curlGet'],
             cacheService: $this->cacheService,
-            log: $log
+            log: $log,
         );
 
         $cloudflareService->method('curlGet')
@@ -77,7 +78,7 @@ final class CloudflareServiceTest extends PublicTestCase
             testCase: $this,
             methodsToMock: ['curlGet'],
             cacheService: $this->cacheService,
-            log: $log
+            log: $log,
         );
 
         $cloudflareService->method('curlGet')
@@ -141,7 +142,7 @@ final class CloudflareServiceTest extends PublicTestCase
             testCase: $this,
             methodsToMock: ['curlGet'],
             cacheService: $this->cacheService,
-            log: $log
+            log: $log,
         );
 
         $cloudflareService->method('curlGet')

@@ -21,9 +21,17 @@ class ReleaseChangelogCategory extends CacheModel
 
     public $timestamps = false;
 
-    protected $visible = ['id', 'key', 'name'];
+    protected $visible = [
+        'id',
+        'key',
+        'name',
+    ];
 
-    protected $fillable = ['id', 'key', 'name'];
+    protected $fillable = [
+        'id',
+        'key',
+        'name',
+    ];
 
     public const GENERAL_CHANGES          = 'general_changes';
     public const ROUTE_CHANGES            = 'route_changes';

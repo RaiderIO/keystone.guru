@@ -7,6 +7,7 @@ return [
         'api_route_not_found'   => '',
         'internal_server_error' => '',
         'unauthenticated'       => '',
+        'too_many_requests'     => '',
     ],
 
 ];

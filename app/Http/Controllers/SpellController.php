@@ -141,20 +141,18 @@ class SpellController extends Controller
     private function getEditViewParams(): array
     {
         return [
-            'categories'     => collect(Spell::ALL_CATEGORIES)->mapWithKeys(function (string $category) {
-                return [
-                    $category =>
-                        __(sprintf('spells.category.%s', $category)),
-                ];
-            })->toArray(),
-            'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
-            'schools'        => Spell::ALL_SCHOOLS,
-            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
-                return [
-                    $cooldownGroupKey =>
-                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey)),
-                ];
-            })->toArray(),
+            'categories' => collect(Spell::ALL_CATEGORIES)->mapWithKeys(fn(string $category) => [
+                $category => __(sprintf('spellcategory.%s', $category)),
+            ])->toArray(),
+            'dispelTypes' => collect(Spell::ALL_DISPEL_TYPES)->mapWithKeys(fn(string $dispelType) => [
+                $dispelType => __(sprintf('spelldispeltype.%s', $dispelType)),
+            ])->toArray(),
+            'schools' => collect(Spell::ALL_SCHOOLS)->mapWithKeys(fn(string $name, int $school) => [
+                __(sprintf('spellschools.%s', $name)) => $school,
+            ])->toArray(),
+            'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(fn(string $cooldownGroupKey) => [
+                $cooldownGroupKey => __(sprintf('spellcooldowngroup.%s', $cooldownGroupKey)),
+            ])->toArray(),
         ];
     }
 }

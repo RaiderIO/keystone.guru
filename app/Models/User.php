@@ -12,6 +12,7 @@ use App\Models\Patreon\PatreonUserLink;
 use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
+use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,33 +27,35 @@ use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 
 /**
- * @property int                       $id
- * @property string                    $public_key
- * @property int                       $game_server_region_id
- * @property int                       $patreon_user_link_id
- * @property int                       $game_version_id
- * @property string                    $name
- * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string                    $email
- * @property string                    $locale
- * @property string                    $theme
- * @property string                    $echo_color
- * @property bool                      $echo_anonymous
- * @property bool                      $changed_username
- * @property string                    $timezone
- * @property string                    $map_facade_style
- * @property string                    $password
- * @property string                    $raw_patreon_response_data
- * @property bool                      $legal_agreed
- * @property int                       $legal_agreed_ms
- * @property bool                      $analytics_cookie_opt_out
+ * @property int    $id
+ * @property string $public_key
+ * @property int    $game_server_region_id
+ * @property int    $patreon_user_link_id
+ * @property int    $game_version_id
+ * @property int    $dungeon_id                The dungeon context this user is in.
+ * @property string $name
+ * @property string $initials                  The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string $email
+ * @property string $locale
+ * @property string $theme
+ * @property string $echo_color
+ * @property bool   $echo_anonymous
+ * @property bool   $changed_username
+ * @property string $timezone
+ * @property string $map_facade_style
+ * @property string $password
+ * @property string $raw_patreon_response_data
+ * @property bool   $legal_agreed
+ * @property int    $legal_agreed_ms
+ * @property bool   $analytics_cookie_opt_out
  *
- * @property PatreonUserLink           $patreonUserLink
- * @property GameServerRegion          $gameServerRegion
- * @property GameVersion               $gameVersion
- * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
+ * @property PatreonUserLink       $patreonUserLink
+ * @property GameServerRegion      $gameServerRegion
+ * @property GameVersion           $gameVersion
+ * @property Dungeon               $dungeon
+ * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
  *
- * @property bool                      $is_admin
+ * @property bool $is_admin
  *
  * @property Collection<DungeonRoute>  $dungeonRoutes
  * @property Collection<UserReport>    $reports
@@ -69,17 +72,33 @@ class User extends Authenticatable implements LaratrustUser
     use HasIconFile;
     use HasRolesAndPermissions;
     use Notifiable;
+    use HasTags;
 
-    public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
+    public const string MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
+    public const string MAP_FACADE_STYLE_FACADE       = 'facade';
 
-    public const MAP_FACADE_STYLE_FACADE = 'facade';
-
-    public const MAP_FACADE_STYLE_ALL = [
+    public const array MAP_FACADE_STYLE_ALL = [
         self::MAP_FACADE_STYLE_SPLIT_FLOORS,
         self::MAP_FACADE_STYLE_FACADE,
     ];
 
-    public const DEFAULT_MAP_FACADE_STYLE = 'split_floors';
+    public const string DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
+
+    public const string THEME_DARKLY   = 'darkly';
+    public const string THEME_LUX      = 'lux';
+    public const string THEME_XALATATH = 'vapor';
+    public const string DEFAULT_THEME  = self::THEME_DARKLY;
+
+    public const array THEME_ALL = [
+        self::THEME_DARKLY,
+        self::THEME_LUX,
+        self::THEME_XALATATH,
+    ];
+
+    /**
+     * Can be used in certain circumstances to override the map facade style for the current request
+     */
+    private static ?string $OVERRIDE_MAP_FACADE_STYLE = null;
 
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)
@@ -96,6 +115,7 @@ class User extends Authenticatable implements LaratrustUser
         'game_server_region_id',
         'patreon_user_link_id',
         'game_version_id',
+        'dungeon_id',
         'public_key',
         'oauth_id',
         'name',
@@ -113,14 +133,23 @@ class User extends Authenticatable implements LaratrustUser
      * @var array
      */
     protected $visible = [
-        'id', 'public_key', 'name', 'echo_color',
+        'id',
+        'public_key',
+        'name',
+        'echo_color',
     ];
 
     protected $appends = [
         'initials',
     ];
 
-    protected $with = ['iconfile', 'patreonUserLink', 'gameVersion'];
+    protected $with = [
+        'iconfile',
+        'patreonUserLink',
+        'dungeon',
+        'gameVersion',
+        'roles',
+    ];
 
     public function getInitialsAttribute(): string
     {
@@ -152,6 +181,11 @@ class User extends Authenticatable implements LaratrustUser
         return $this->belongsTo(GameServerRegion::class);
     }
 
+    public function dungeon(): BelongsTo
+    {
+        return $this->belongsTo(Dungeon::class);
+    }
+
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
@@ -170,20 +204,6 @@ class User extends Authenticatable implements LaratrustUser
     public function ipAddresses(): HasMany
     {
         return $this->hasMany(UserIpAddress::class);
-    }
-
-    /**
-     * @return HasMany|Tag
-     */
-    public function tags(?int $categoryId = null): HasMany
-    {
-        $result = $this->hasMany(Tag::class);
-
-        if ($categoryId !== null) {
-            $result->where('tag_category_id', $categoryId);
-        }
-
-        return $result;
     }
 
     /**
@@ -218,7 +238,7 @@ class User extends Authenticatable implements LaratrustUser
         // Admins have all patreon benefits
         if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));
-        } else if (isset($this->patreonUserLink)) {
+        } elseif (isset($this->patreonUserLink)) {
             $result = $this->patreonUserLink->patreonBenefits->pluck(['key']);
         } else {
             $result = collect();
@@ -256,8 +276,9 @@ class User extends Authenticatable implements LaratrustUser
      */
     public function getRemainingRouteCount(): int
     {
-        return (int)max(0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count()
+        return (int)max(
+            0,
+            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count(),
         );
     }
 
@@ -290,13 +311,13 @@ class User extends Authenticatable implements LaratrustUser
         }
 
         return array_merge($teams, [
-            'patreon'       => [
+            'patreon' => [
                 'unlinked' => $this->patreonUserLink !== null,
             ],
             'dungeonroutes' => [
                 'delete_count' => ($this->dungeonRoutes()->count() - $this->dungeonRoutes()->isSandbox()->count()),
             ],
-            'reports'       => [
+            'reports' => [
                 'delete_count' => ($this->reports()->where('status', 0)->count()),
             ],
         ]);
@@ -304,9 +325,23 @@ class User extends Authenticatable implements LaratrustUser
 
     public static function getCurrentUserMapFacadeStyle(): string
     {
-        return Auth::user()?->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
+        return self::$OVERRIDE_MAP_FACADE_STYLE ??
+            Auth::user()?->map_facade_style ??
+            $_COOKIE['map_facade_style'] ??
+            User::DEFAULT_MAP_FACADE_STYLE;
     }
 
+    public static function forceMapFacadeStyle(string $mapFacadeStyle): void
+    {
+        self::$OVERRIDE_MAP_FACADE_STYLE = $mapFacadeStyle;
+    }
+
+    public static function isThemeDark(string $theme): bool
+    {
+        return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
+    }
+
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

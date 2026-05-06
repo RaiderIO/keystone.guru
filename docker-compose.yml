@@ -13,10 +13,22 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ../keystone.guru.assets:/var/keystone.guru.assets
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
+
+  app-assets:
+    image: nginx:1.27-alpine
+    container_name: keystone.guru-app-assets
+    restart: no
+    volumes:
+      # static files go straight into Nginx’s html dir (read-only is safest)
+      - ../keystone.guru.assets:/usr/share/nginx/html:ro
+    networks:
+      - keystone.guru
+    ports:
+      - "8009:80"
 
   app-swoole:
     build:
@@ -34,7 +46,6 @@ services:
     command: php /var/www/artisan octane:start --host=0.0.0.0 --port=9501 --workers=1 --task-workers=1
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -55,7 +66,6 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -81,25 +91,70 @@ services:
     environment:
       - "APP_URL=http://nginx"
 
-  laravel-echo-server:
+  reverb:
     build:
-      context: docker-compose/laravel-echo-server
+      context: docker-compose/app
       dockerfile: Dockerfile
-    image: laravel-echo-server
-    container_name: keystone.guru-laravel-echo-server
+    image: keystone.guru
+    container_name: keystone.guru-reverb
     depends_on:
       - redis
     restart: no
+    working_dir: /var/www/
+    command: php /var/www/artisan reverb:start #--debug
     ports:
       - "6001:6001"
     volumes:
-      - ./:/app
+      - ./:/var/www
     networks:
       - keystone.guru
 
+#  db:
+#    image: mysql:5.7
+#    container_name: keystone.guru-db
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_DATABASE: ${DB_DATABASE}
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_USER: ${DB_USERNAME}
+#      SERVICE_TAGS: dev
+#      SERVICE_NAME: mysql
+#    ports:
+#      - "34006:3306"
+#    command:
+#      - '--default-authentication-plugin=mysql_native_password'
+#    volumes:
+#      - ./docker-compose/mysql:/var/lib/mysql
+#      - ./docker-compose/data:/tmp/data
+#    networks:
+#      - keystone.guru
+#
+#  db-combatlog:
+#    image: mysql:5.7
+#    container_name: keystone.guru-db-combatlog
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_DATABASE: ${DB_COMBATLOG_DATABASE}
+#      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+#      MYSQL_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+#      MYSQL_USER: ${DB_COMBATLOG_USERNAME}
+#      SERVICE_TAGS: dev
+#      SERVICE_NAME: mysql
+#    ports:
+#      - "34007:3306"
+#    command:
+#      - '--default-authentication-plugin=mysql_native_password'
+#    volumes:
+#      - ./docker-compose/mysql-combatlog:/var/lib/mysql
+#      - ./docker-compose/data:/tmp/data
+#    networks:
+#      - keystone.guru
+
+# PROD DATABASE
   db:
     image: mysql:5.7
-    container_name: keystone.guru-db
+    container_name: keystone.guru-db-prod
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -113,14 +168,14 @@ services:
     command:
       - '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - ./docker-compose/mysql:/var/lib/mysql
+      - ./docker-compose/mysql-prod:/var/lib/mysql
       - ./docker-compose/data:/tmp/data
     networks:
       - keystone.guru
 
   db-combatlog:
     image: mysql:5.7
-    container_name: keystone.guru-db-combatlog
+    container_name: keystone.guru-db-prod-combatlog
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_COMBATLOG_DATABASE}
@@ -134,8 +189,34 @@ services:
     command:
       - '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - ./docker-compose/mysql-combatlog:/var/lib/mysql
+      - ./docker-compose/mysql-prod-combatlog:/var/lib/mysql
       - ./docker-compose/data:/tmp/data
+    networks:
+      - keystone.guru
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "34016:80"
+    networks:
+      - keystone.guru
+
+  phpmyadmin-combatlog:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    restart: always
+    depends_on:
+      - db-combatlog
+    environment:
+      PMA_HOST: db-combatlog
+      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+    ports:
+      - "34017:80"
     networks:
       - keystone.guru
 
@@ -147,8 +228,8 @@ services:
       # It complains about php-fpm not being there if this is not running first
       - app
       - app-swoole
-      - laravel-echo-server
-      - php-deployer
+      - reverb
+#      - php-deployer
     ports:
       - "8008:80"
     volumes:
@@ -176,30 +257,30 @@ services:
     ports:
       - "6381:80"
     environment:
-        - REDIS_1_HOST=redis
-        - REDIS_1_name="Keystone.guru Redis"
-        - REDIS_1_PORT=6380
+      - REDIS_1_HOST=redis
+      - REDIS_1_name="Keystone.guru Redis"
+      - REDIS_1_PORT=6380
     networks:
       - keystone.guru
 
-  php-deployer:
-    build:
-      context: docker-compose/php-deployer
-      dockerfile: Dockerfile
-    image: keystone.guru-php-deployer
-    container_name: keystone.guru-php-deployer
-    depends_on:
-      - db
-      - db-combatlog
-      - redis
-    restart: no
-    working_dir: /var/www/
-    volumes:
-      - ./:/var/www
-    networks:
-      - keystone.guru
-    secrets:
-      - deployer_ssh_key
+#  php-deployer:
+#    build:
+#      context: docker-compose/php-deployer
+#      dockerfile: Dockerfile
+#    image: keystone.guru-php-deployer
+#    container_name: keystone.guru-php-deployer
+#    depends_on:
+#      - db
+#      - db-combatlog
+#      - redis
+#    restart: no
+#    working_dir: /var/www/
+#    volumes:
+#      - ./:/var/www
+#    networks:
+#      - keystone.guru
+#    secrets:
+#      - deployer_ssh_key
 
   # https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/#sample-docker-composeyml
   opensearch-node1:
@@ -268,8 +349,8 @@ services:
     environment:
       - 'OPENSEARCH_HOSTS: ["https://keystone.guru-opensearch-node1:9201","https://keystone.guru-opensearch-node2:9201"]'
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
-#    volumes:
-#      - /docker-compose/opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+    #    volumes:
+    #      - /docker-compose/opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
     networks:
       - keystone.guru
 
@@ -311,9 +392,9 @@ volumes:
   influxdb-data:
   grafana-data:
 
-secrets:
-  deployer_ssh_key:
-    file: ~/.ssh/php-deployer
+#secrets:
+#  deployer_ssh_key:
+#    file: ~/.ssh/php-deployer
 
 networks:
   keystone.guru:

@@ -37,6 +37,7 @@ class WorldMarkerPlaced extends SpecialEvent
         return $this->positionY;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

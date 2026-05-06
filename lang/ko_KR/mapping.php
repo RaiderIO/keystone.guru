@@ -3,8 +3,16 @@
 return [
 
     'map_icons' => [
-        'legion'      => [
-            'court_of_stars'   => [
+        'mop' => [
+            'gate_of_the_setting_sun' => [
+                'krik_thik_spawn_note' => '',
+            ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => '',
+            ],
+        ],
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => '',
                 'arcane_beacon'                      => '',
                 'flask_of_the_solemn_night'          => '',
@@ -14,7 +22,7 @@ return [
             ],
         ],
         'sl' => [
-            'de_other_side'         => [
+            'de_other_side' => [
                 'start'                => '',
                 'graveyard_ardenweald' => '',
                 'graveyard_mechagon'   => '',
@@ -23,13 +31,14 @@ return [
                 'engineer_blob_button' => '',
                 'exit'                 => '',
             ],
-            'halls_of_atonement'    => [
+            'halls_of_atonement' => [
                 'start' => '',
                 'exit'  => '',
             ],
             'mists_of_tirna_scithe' => [
                 'start'                          => '',
                 'brambles'                       => '',
+                'overgrown_roots'                => '',
                 'depleted_anima_seed'            => '',
                 'map_missing_wall'               => '',
                 'savory_statshroom'              => '',
@@ -37,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => '',
                 'exit'                           => '',
             ],
-            'plaguefall'            => [
+            'plaguefall' => [
                 'start'              => '',
                 'graveyard_dr_ickus' => '',
                 'gushing_slime'      => '',
@@ -46,7 +55,7 @@ return [
                 'landing'            => '',
                 'exit'               => '',
             ],
-            'sanguine_depths'       => [
+            'sanguine_depths' => [
                 'start'                            => '',
                 'anima_cage'                       => '',
                 'tick_bug'                         => '',
@@ -58,12 +67,12 @@ return [
                 'zrali_essence'                    => '',
                 'exit'                             => '',
             ],
-            'spires_of_ascension'   => [
+            'spires_of_ascension' => [
                 'start'            => '',
                 'spear_of_destiny' => '',
                 'exit'             => '',
             ],
-            'the_necrotic_wake'     => [
+            'the_necrotic_wake' => [
                 'start'                  => '',
                 'bloody_javelin'         => '',
                 'forgotten_forgehammer'  => '',
@@ -74,7 +83,7 @@ return [
                 'grisly_curio'           => '',
                 'exit'                   => '',
             ],
-            'theater_of_pain'       => [
+            'theater_of_pain' => [
                 'start'                => '',
                 'necrolord_banner'     => '',
                 'graveyard_gorechop'   => '',
@@ -82,6 +91,36 @@ return [
                 'miniboss_pick_one'    => '',
                 'teleporter'           => '',
                 'exit'                 => '',
+            ],
+            'tazavesh_streets_of_wonder' => [
+                'bazaar_event_wave_one'   => '',
+                'bazaar_event_wave_two'   => '',
+                'bazaar_event_wave_three' => '',
+            ],
+        ],
+        'tww' => [
+            'the_stonevault' => [
+                'imbued_iron_energy' => '',
+            ],
+            'priory_of_the_sacred_flame' => [
+                'miniboss_explanation' => '',
+            ],
+        ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => '',
+                'versatility_increased'     => '',
+                'critical_strike_increased' => '',
+                'haste_increased'           => '',
+                'mastery_rating_increased'  => '',
+                'go_north'                  => '',
+                'go_south'                  => '',
+            ],
+            'maisara_caverns' => [
+                'hearty_vilebranch_stew' => '',
+            ],
+            'windrunner_spire' => [
+                'activates_after_killing_bosses' => '',
             ],
         ],
     ],

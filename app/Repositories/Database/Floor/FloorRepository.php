@@ -16,6 +16,10 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
 
     public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
+        if ($uiMapId === 0) {
+            return null;
+        }
+
         return Floor::where('ui_map_id', Floor::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->first();
@@ -23,6 +27,11 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
 
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor
     {
+        // Hotfix for Seat of the Triumvirate not having default floor set
+        if ($dungeonId === 12) {
+            return Floor::find(37);
+        }
+
         return Floor::where('dungeon_id', $dungeonId)->where('default', 1)->first();
     }
 }

@@ -30,6 +30,4 @@ class ChallengeModeRunDataServiceLogging extends StructuredLogging implements Ch
     {
         $this->end(__METHOD__, get_defined_vars());
     }
-
-
 }

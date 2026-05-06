@@ -4,6 +4,7 @@ namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\Structs\MapBounds;
+use App\Models\Dungeon;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use Illuminate\Support\Collection;
@@ -27,7 +28,7 @@ interface CombatLogServiceInterface
      */
     public function getUiMapIds(string $filePath): Collection;
 
-    public function getBoundsFromEvents(string $filePath): MapBounds;
+    public function getBoundsFromEvents(string $filePath, Dungeon $dungeon): MapBounds;
 
     /**
      * @return Collection<BaseResultEvent>

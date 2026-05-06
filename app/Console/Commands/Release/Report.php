@@ -62,7 +62,7 @@ class Report extends Command
             $this->info('Not reporting release; it was marked as silent!');
             // Not failed if not necessary
             $result = true;
-        } else if (config('app.type') === 'local' ||
+        } elseif (config('app.type') === 'local' ||
             ReleaseReportLog::where('release_id', $release->id)
                 ->where('platform', $platform)
                 ->doesntExist()
@@ -71,10 +71,10 @@ class Report extends Command
                 'reddit' => $redditApiService->createPost(
                     config('keystoneguru.reddit_subreddit'),
                     $release->getFormattedTitle(),
-                    $release->reddit_body
+                    $release->reddit_body,
                 ),
                 'discord' => $discordApiService->sendEmbeds(config('keystoneguru.webhook.discord.new_release.url'), $release->getDiscordEmbeds()),
-                default => throw new Exception(sprintf('Unsupported platform %s', $platform)),
+                default   => throw new Exception(sprintf('Unsupported platform %s', $platform)),
             };
 
             // Log this release so that we don't mention things multiple times

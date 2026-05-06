@@ -21,7 +21,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AffixGroupEaseTier extends CacheModel
 {
-    public $fillable = ['affix_group_ease_tier_pull_id', 'affix_group_id', 'dungeon_id', 'tier'];
+    public $fillable = [
+        'affix_group_ease_tier_pull_id',
+        'affix_group_id',
+        'dungeon_id',
+        'tier',
+    ];
 
     public $timestamps = false;
 

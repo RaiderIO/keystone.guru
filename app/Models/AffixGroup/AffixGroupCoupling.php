@@ -9,10 +9,10 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int        $id
- * @property int        $affix_id
- * @property int        $affix_group_id
- * @property int        $key_level
+ * @property int $id
+ * @property int $affix_id
+ * @property int $affix_group_id
+ * @property int $key_level
  *
  * @property Affix      $affix
  * @property AffixGroup $affixGroup
@@ -25,7 +25,11 @@ class AffixGroupCoupling extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['affix_id', 'affix_group_id', 'key_level'];
+    protected $fillable = [
+        'affix_id',
+        'affix_group_id',
+        'key_level',
+    ];
 
     public function affix(): HasOne
     {

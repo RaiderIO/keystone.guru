@@ -22,7 +22,7 @@ class UpdateRating extends SchedulerCommand
     protected $description = "Updates the rating of all dungeon routes.";
 
     public function handle(
-        DungeonRouteServiceInterface $dungeonRouteService
+        DungeonRouteServiceInterface $dungeonRouteService,
     ): int {
         return $this->trackTime(function () use ($dungeonRouteService) {
             $dungeonRouteService->updateRating();

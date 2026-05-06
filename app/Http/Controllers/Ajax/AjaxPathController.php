@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Mockery\Exception;
 use Teapot\StatusCode\Http;
 
@@ -37,12 +38,12 @@ class AjaxPathController extends Controller
         APIPathFormRequest          $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        ?Path                       $path = null)
-    {
+        ?Path                       $path = null,
+    ) {
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
 
-        $this->authorize('edit', $dungeonRoute);
-        $this->authorize('addPath', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
+        Gate::authorize('addPath', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -55,7 +56,7 @@ class AjaxPathController extends Controller
             $beforeModel = $path === null ? null : clone $path;
 
             if ($path === null) {
-                $path    = Path::create([
+                $path = Path::create([
                     'dungeon_route_id' => $dungeonRoute->id,
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
@@ -78,7 +79,7 @@ class AjaxPathController extends Controller
                         Polyline::findOrNew($path->polyline_id),
                         $beforeModel,
                         $path,
-                        $validated['polyline']
+                        $validated['polyline'],
                     );
 
                     // Set or unset the linked awakened obelisks now that we have an ID
@@ -116,7 +117,7 @@ class AjaxPathController extends Controller
         $dungeonRoute = $path->dungeonRoute;
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's path
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             if ($path->delete()) {

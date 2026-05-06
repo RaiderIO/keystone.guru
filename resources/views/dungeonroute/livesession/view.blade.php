@@ -1,4 +1,10 @@
-@extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $dungeonroute->title, 'cookieConsent' => $dungeonroute->demo === 1 ? false : null ])
+@extends('layouts.map', [
+    'custom' => true,
+    'footer' => false,
+    'header' => false,
+    'title' => __('view_dungeonroute.livesession.title', ['title' => $dungeonroute->title]),
+    'cookieConsent' => $dungeonroute->demo === 1 ? false : null
+])
 <?php
 
 use App\Models\Dungeon;
@@ -41,11 +47,11 @@ $dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
             'mappingVersion' => $dungeonroute->mappingVersion,
             'livesession' => $livesession,
             'edit' => false,
-            'floorId' => $floor->id,
+            'floor' => $floor,
             'show' => [
                 'header' => true,
                 'controls' => [
-                    'live' => true,
+                    'liveSession' => true,
                     'pulls' => true,
                     'enemyInfo' => true,
                 ],

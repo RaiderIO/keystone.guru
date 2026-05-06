@@ -4,7 +4,6 @@ namespace App\Service\CombatLog\DataExtractors\Logging;
 
 interface SpellDataExtractorLoggingInterface
 {
-
     public function isSummonedNpcNpcWasSummoned(int $npcId, string $npcName): void;
 
     public function assignDungeonToSpellAssignedDungeonToSpell(int $spellId, int $dungeonId): void;

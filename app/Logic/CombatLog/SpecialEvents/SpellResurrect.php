@@ -32,6 +32,7 @@ class SpellResurrect extends GenericSpecialEvent
         return $this->spellSchool;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

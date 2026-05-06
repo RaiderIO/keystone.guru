@@ -9,31 +9,6 @@ html, body, #map, #app, .wrapper {
     width: 100%;
 }
 
-/** HEADER */
-#map_header {
-    position: fixed;
-    width: 100%;
-    z-index: 100000;
-}
-
-.map_fade_out {
-    opacity: 0.8;
-    transition: opacity .2s ease-out;
-    -moz-transition: opacity .2s ease-out;
-    -webkit-transition: opacity .2s ease-out;
-    -o-transition: opacity .2s ease-out;
-}
-
-.map_fade_out:hover {
-    opacity: 1;
-}
-
-@media (max-width: 1200px) {
-    #map_header {
-        padding: 0.5rem;
-    }
-}
-
 #map.leaflet-container {
     font: unset;
     font-size: 12px;
@@ -145,11 +120,46 @@ html, body, #map, #app, .wrapper {
     text-shadow: black 2px 2px;
 }
 
-.header_embed_text_ellipsis > a,
-.header_embed_text_ellipsis > h4 {
+.header_embed_regular_logo {
+    width: 200px;
+}
+
+@media (max-width: 576px) { /* Bootstrap 'sm' breakpoint */
+    .header_embed_regular_logo {
+        width: 120px;
+    }
+}
+
+.header_embed_compact_logo {
+    height: 36px;
+    width: auto;
+}
+
+/*@media (max-width: 576px) { !* Bootstrap 'sm' breakpoint *!*/
+/*    .header_embed_compact_logo {*/
+/*        height: 100%;*/
+/*        width: 30px;*/
+/*    }*/
+/*}*/
+
+.header_embed_compact_logo_and_text {
+    height: 36px;
+    width: auto;
+}
+
+@media (max-width: 576px) { /* Bootstrap 'sm' breakpoint */
+    .header_embed_compact_logo_and_text {
+        height: 100%;
+        width: 120px;
+    }
+}
+
+
+.header_embed_text_ellipsis {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
 }
 
 #embed_copy_mdt_string {
@@ -297,10 +307,11 @@ html, body, #map, #app, .wrapper {
 
 /** Pulls section of the sidebar, adblock, when editing, without a speedrun enabled */
 .route_sidebar.right:not(.mobile,.embed) .edit .data_container:not(.has_speedrun) {
-    /** 250px is the height of the ad in the corner */
-    /** 24 px is the height of the report buttons */
+    /** 150px is the "top" value of the sidebar (space from the top) */
     /** 55 px is the height of the buttons at the top in the edit scenario */
-    max-height: calc(100vh - (142px + 55px));
+    /** 32 px is the height of the enemy forces indicator */
+    /** 21 px is the height of the leaflet banner at the bottom */
+    max-height: calc(100vh - (150px + 55px + 32px + 21px));
 }
 
 /** Pulls section of the sidebar, when editing, WITH a speedrun enabled */
@@ -351,30 +362,38 @@ html, body, #map, #app, .wrapper {
 
 /** Pulls section of the sidebar, with ad loaded, when viewing, without a speedrun enabled */
 .route_sidebar.right.ad_loaded .data_container:not(.has_speedrun) {
-    max-height: calc(100vh - (250px + 163px));
+    max-height: calc(100vh - (250px + 226px));
 }
 
 @media (min-height: 1000px) {
     /** Pulls section of the sidebar, with a big ad loaded, when viewing, without a speedrun enabled */
     .route_sidebar.right.ad_loaded .data_container:not(.has_speedrun) {
-        max-height: calc(100vh - (280px + 163px));
+        max-height: calc(100vh - (280px + 226px));
     }
 }
 
 /** Pulls section of the sidebar, adblock, when viewing, without a speedrun enabled */
 .route_sidebar.right .data_container:not(.has_speedrun) {
-    max-height: calc(100vh - 163px);
+    max-height: calc(100vh - 226px);
 }
 
-/** Heatmap section of the sidebar, adblock */
+/** Heatmap section of the sidebar, no ads */
 #heatmap_search_sidebar .data_container.explore {
-    max-height: calc(100vh - 205px);
+    max-height: calc(100vh - 306px);
 }
 
 #heatmap_search_sidebar.ad_loaded .data_container.explore {
-    max-height: calc(100vh - (250px + 198px));
+    max-height: calc(100vh - (314px + 198px));
 }
 
+/** Dungeonroute search section of the sidebar, no ads */
+#dungeonroute_search_sidebar .data_container.explore {
+    max-height: calc(100vh - 306px);
+}
+
+#dungeonroute_search_sidebar.ad_loaded .data_container.explore {
+    max-height: calc(100vh - (250px + 198px));
+}
 
 /** When embedding a route */
 .route_sidebar.right.embed.regular .data_container:not(.has_speedrun) {
@@ -526,7 +545,7 @@ html, body, #map, #app, .wrapper {
     width: 30px;
     height: 30px;
     font-size: 1.15rem;
-    border-radius: 16px;
+    border-radius: 32px;
 }
 
 .user_mouse_position {
@@ -554,21 +573,6 @@ html, body, #map, #app, .wrapper {
     font-size: 1rem;
 }
 
-@media (min-width: 1200px) {
-    #enemy_info_container {
-        margin: 0.5rem !important;
-    }
-}
-
-#enemy_info_container {
-    width: 300px;
-    margin: 0 !important;
-    z-index: 100000;
-}
-
-#enemy_info_container .card {
-    border-radius: 0 !important;
-}
 
 #attribution_container {
     width: 300px;
@@ -622,7 +626,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .snackbar_footer.ad_loaded {
-    margin-bottom: 72px !important;
+    margin-bottom: 90px !important;
 }
 
 @media (max-width: 1200px) {
@@ -819,53 +823,6 @@ html, body, #map, #app, .wrapper {
     background-color: black;
 }
 
-/*
- * Enemy classes
- */
-.melee {
-    background-image: url('/images/enemyclasses/melee.png') !important;
-}
-
-.caster {
-    background-image: url('/images/enemyclasses/caster.png') !important;
-}
-
-.ranged {
-    background-image: url('/images/enemyclasses/ranged.png') !important;
-}
-
-.healer {
-    background-image: url('/images/enemyclasses/healer.png') !important;
-}
-
-.boss {
-    background-image: url('/images/enemyclassifications/boss.png') !important;
-}
-
-.castermelee {
-    background-image: url('/images/enemyclasses/castermelee.png') !important;
-}
-
-.healercaster {
-    background-image: url('/images/enemyclasses/healercaster.png') !important;
-}
-
-.healermelee {
-    background-image: url('/images/enemyclasses/healermelee.png') !important;
-}
-
-.rangedcaster {
-    background-image: url('/images/enemyclasses/rangedcaster.png') !important;
-}
-
-.rangedhealer {
-    background-image: url('/images/enemyclasses/rangedhealer.png') !important;
-}
-
-.rangedmelee {
-    background-image: url('/images/enemyclasses/rangedmelee.png') !important;
-}
-
 .enemy_icon.mdt {
     background-color: hotpink;
 }
@@ -883,6 +840,7 @@ html, body, #map, #app, .wrapper {
  */
 .enemy_icon_npc_mdt,
 .enemy_icon_npc_enemy_forces,
+.enemy_icon_npc_enemy_group,
 .enemy_icon_npc_enemy_portrait,
 .enemy_icon_npc_enemy_skippable,
 .enemy_icon_npc_class,
@@ -935,6 +893,7 @@ html, body, #map, #app, .wrapper {
     background-color: #dc3c3c !important;
 }
 
+.enemy_icon_npc_enemy_group_inner,
 .enemy_icon_npc_enemy_skippable_inner,
 .enemy_icon_npc_enemy_forces_inner {
     display: flex;
@@ -959,48 +918,7 @@ html, body, #map, #app, .wrapper {
     background-color: #9200c4 !important;
 }
 
-.aberration {
-    background-image: url('/images/enemytypes/aberration.png') !important;
-}
-
-.beast {
-    background-image: url('/images/enemytypes/beast.png') !important;
-}
-
-.critter {
-    background-image: url('/images/enemytypes/critter.png') !important;
-}
-
-.demon {
-    background-image: url('/images/enemytypes/demon.png') !important;
-}
-
-.dragonkin {
-    background-image: url('/images/enemytypes/dragonkin.png') !important;
-}
-
-.elemental {
-    background-image: url('/images/enemytypes/elemental.png') !important;
-}
-
-.giant {
-    background-image: url('/images/enemytypes/giant.png') !important;
-}
-
-.humanoid {
-    background-image: url('/images/enemytypes/humanoid.png') !important;
-}
-
-.mechanical {
-    background-image: url('/images/enemytypes/mechanical.png') !important;
-}
-
-.undead {
-    background-image: url('/images/enemytypes/undead.png') !important;
-}
-
 .aggressive_enemy_icon {
-    background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;
 }
 
@@ -1013,6 +931,10 @@ html, body, #map, #app, .wrapper {
 }
 
 .inspiring {
+    border: 3px solid #ffd500;
+}
+
+.required_npc {
     border: 3px solid #ffd500;
 }
 
@@ -1060,48 +982,37 @@ html, body, #map, #app, .wrapper {
     border-radius: unset;
 }
 
-.classification_icon_elite {
-    background-image: url('/images/enemyclassifications/elite.png') !important;
-}
-
 .truesight {
-    background: white url('/images/enemymodifiers/truesight.png') no-repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .teeming {
-    background: white url('/images/enemymodifiers/teeming.png') no-repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_awakened {
-    background: white url('/images/enemymodifiers/awakened.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_encrypted {
-    background: white url('/images/enemymodifiers/encrypted.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_inspiring {
-    background: white url('/images/enemymodifiers/inspiring.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_prideful {
-    background: white url('/images/enemymodifiers/prideful.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_tormented {
-    background: white url('/images/enemymodifiers/tormented.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
@@ -1124,10 +1035,6 @@ html, body, #map, #app, .wrapper {
     background-color: #15c415 !important;
 }
 
-.boss_enemy_icon {
-    background: url('/images/enemyclassifications/boss.png') no-repeat center !important;
-}
-
 .flagged_enemy_icon {
     background-color: #cccc2d !important;
 }
@@ -1142,42 +1049,6 @@ html, body, #map, #app, .wrapper {
 
 .mdt_ok_enemy_icon {
     background-color: #15c415 !important;
-}
-
-.door_icon {
-    background: url('/images/mapicon/door.png') no-repeat center !important;
-}
-
-.door_locked_icon {
-    background: url('/images/mapicon/door_locked.png') no-repeat center !important;
-}
-
-.door_up_icon {
-    background: url('/images/mapicon/door_up.png') no-repeat center !important;
-}
-
-.door_down_icon {
-    background: url('/images/mapicon/door_down.png') no-repeat center !important;
-}
-
-.door_left_icon {
-    background: url('/images/mapicon/door_left.png') no-repeat center !important;
-}
-
-.door_right_icon {
-    background: url('/images/mapicon/door_right.png') no-repeat center !important;
-}
-
-.dungeon_start_icon {
-    background: url('/images/mapicon/dungeon_start.png') no-repeat center !important;
-}
-
-.graveyard_icon {
-    background: url('/images/mapicon/graveyard.png') no-repeat center !important;
-}
-
-.warlock_gateway_icon {
-    background: url('/images/mapicon/warlock_gateway.png') no-repeat center !important;
 }
 
 .killzone_icon_big {

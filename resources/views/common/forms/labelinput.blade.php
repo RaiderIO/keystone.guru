@@ -6,9 +6,14 @@
  * @var boolean|null $hidden
  */
 
+<<<<<<< HEAD
 $id    = $id ?? null;
 $title = $title ?? null;
 $hidden = $hidden ?? false;
+=======
+$id    ??= null;
+$title ??= null;
+>>>>>>> development
 ?>
 <div @if($id !== null) id="{{ $id }}" @endif class="form-group" @if($hidden) style="display: none;" @endif >
     <div class="row">

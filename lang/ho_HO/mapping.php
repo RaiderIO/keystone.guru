@@ -3,8 +3,16 @@
 return [
 
     'map_icons' => [
-        'legion'      => [
-            'court_of_stars'   => [
+        'mop' => [
+            'gate_of_the_setting_sun' => [
+                'krik_thik_spawn_note' => 'Hodor',
+            ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => 'Hodor',
+            ],
+        ],
+        'legion' => [
+            'court_of_stars' => [
                 'unlocks_after_patrol_captain_gerdo' => 'Hodor',
                 'arcane_beacon'                      => 'Hodor',
                 'flask_of_the_solemn_night'          => 'Hodor',
@@ -14,7 +22,7 @@ return [
             ],
         ],
         'sl' => [
-            'de_other_side'         => [
+            'de_other_side' => [
                 'start'                => 'Hodor',
                 'graveyard_ardenweald' => 'Hodor',
                 'graveyard_mechagon'   => 'Hodor',
@@ -23,7 +31,7 @@ return [
                 'engineer_blob_button' => 'Hodor',
                 'exit'                 => 'Hodor',
             ],
-            'halls_of_atonement'    => [
+            'halls_of_atonement' => [
                 'start' => 'Hodor',
                 'exit'  => 'Hodor',
             ],
@@ -38,7 +46,7 @@ return [
                 'door_unlock_after_ingra_maloch' => 'Hodor',
                 'exit'                           => 'Hodor',
             ],
-            'plaguefall'            => [
+            'plaguefall' => [
                 'start'              => 'Hodor',
                 'graveyard_dr_ickus' => 'Hodor',
                 'gushing_slime'      => 'Hodor',
@@ -47,7 +55,7 @@ return [
                 'landing'            => 'Hodor',
                 'exit'               => 'Hodor',
             ],
-            'sanguine_depths'       => [
+            'sanguine_depths' => [
                 'start'                            => 'Hodor',
                 'anima_cage'                       => 'Hodor',
                 'tick_bug'                         => 'Hodor',
@@ -59,12 +67,12 @@ return [
                 'zrali_essence'                    => 'Hodor',
                 'exit'                             => 'Hodor',
             ],
-            'spires_of_ascension'   => [
+            'spires_of_ascension' => [
                 'start'            => 'Hodor',
                 'spear_of_destiny' => 'Hodor',
                 'exit'             => 'Hodor',
             ],
-            'the_necrotic_wake'     => [
+            'the_necrotic_wake' => [
                 'start'                  => 'Hodor',
                 'bloody_javelin'         => 'Hodor',
                 'forgotten_forgehammer'  => 'Hodor',
@@ -75,7 +83,7 @@ return [
                 'grisly_curio'           => 'Hodor',
                 'exit'                   => 'Hodor',
             ],
-            'theater_of_pain'       => [
+            'theater_of_pain' => [
                 'start'                => 'Hodor',
                 'necrolord_banner'     => 'Hodor',
                 'graveyard_gorechop'   => 'Hodor',
@@ -84,12 +92,37 @@ return [
                 'teleporter'           => 'Hodor',
                 'exit'                 => 'Hodor',
             ],
+            'tazavesh_streets_of_wonder' => [
+                'bazaar_event_wave_one'   => 'Hodor',
+                'bazaar_event_wave_two'   => 'Hodor',
+                'bazaar_event_wave_three' => 'Hodor',
+            ],
         ],
         'tww' => [
             'the_stonevault' => [
                 'imbued_iron_energy' => 'Hodor',
             ],
-        ]
+            'priory_of_the_sacred_flame' => [
+                'miniboss_explanation' => 'Hodor',
+            ],
+        ],
+        'midnight' => [
+            'algeth_ar_academy' => [
+                'healing_taken_increased'   => 'Hodor',
+                'versatility_increased'     => 'Hodor',
+                'critical_strike_increased' => 'Hodor',
+                'haste_increased'           => 'Hodor',
+                'mastery_rating_increased'  => 'Hodor',
+                'go_north'                  => 'Hodor',
+                'go_south'                  => 'Hodor',
+            ],
+            'maisara_caverns' => [
+                'hearty_vilebranch_stew' => 'Hodor',
+            ],
+            'windrunner_spire' => [
+                'activates_after_killing_bosses' => 'Hodor',
+            ],
+        ],
     ],
 
 ];

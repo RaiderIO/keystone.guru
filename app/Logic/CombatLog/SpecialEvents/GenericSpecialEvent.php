@@ -14,6 +14,7 @@ abstract class GenericSpecialEvent extends SpecialEvent
         return $this->genericData;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

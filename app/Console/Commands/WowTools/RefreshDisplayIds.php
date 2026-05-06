@@ -37,9 +37,9 @@ class RefreshDisplayIds extends Command
             $displayId = $wowToolsService->getDisplayId($npc->id);
 
             if ($displayId !== null && $npc->update(['display_id' => $displayId])) {
-                $this->info(sprintf('- %s (%d): %d', $npc->name, $npc->id, $displayId));
+                $this->info(sprintf('- %s (%d): %d', __($npc->name), $npc->id, $displayId));
             } else {
-                $this->error(sprintf('- Failed to update %s (%d): %d', $npc->name, $npc->id, $displayId));
+                $this->error(sprintf('- Failed to update %s (%d): %d', __($npc->name), $npc->id, $displayId));
             }
 
             // Sleep half a second, don't DDOS wow.tools

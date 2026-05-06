@@ -17,7 +17,7 @@ class DungeonRouteCorrection
     public function __construct(LiveSession $liveSession)
     {
         $this->obsoleteEnemies = collect();
-        $this->enemyForces     = $liveSession->dungeonroute->enemy_forces;
+        $this->enemyForces     = $liveSession->dungeonRoute->enemy_forces;
     }
 
     public function getObsoleteEnemies(): Collection

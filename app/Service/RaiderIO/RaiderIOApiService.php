@@ -16,7 +16,11 @@ use Str;
 
 class RaiderIOApiService implements RaiderIOApiServiceInterface
 {
-    private const BASE_URL = 'https://raider.io/api/v1';
+    private const string BASE_URL = 'https://raider.io/api/v1';
+
+    private const array EXPANSION_SHORTNAME_OVERRIDE = [
+        'midnight' => 'mn',
+    ];
 
     use Curl;
 
@@ -24,29 +28,33 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         private readonly CoordinatesServiceInterface        $coordinatesService,
         private readonly SeasonServiceInterface             $seasonService,
         private readonly CombatLogEventServiceInterface     $combatLogEventService,
-        private readonly RaiderIOApiServiceLoggingInterface $log
+        private readonly RaiderIOApiServiceLoggingInterface $log,
     ) {
     }
 
     public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter): HeatmapDataResponse
     {
-        $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
-        $parameters       = [
-            sprintf(
-                'season=season-%s-%s',
-                $mostRecentSeason->expansion->shortname,
-                $mostRecentSeason->index
-            ),
-        ];
+        // Ensure a season is set, even if it wasn't passed
+        if ($heatmapDataFilter->getSeason() === null) {
+            $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
+            if ($mostRecentSeason !== null) {
+                $heatmapDataFilter->setSeason(sprintf(
+                    'season-%s-%s',
+                    self::EXPANSION_SHORTNAME_OVERRIDE[$mostRecentSeason->expansion->shortname] ?? $mostRecentSeason->expansion->shortname,
+                    $mostRecentSeason->index,
+                ));
+            }
+        }
 
-        foreach ($heatmapDataFilter->toArray($mostRecentSeason) as $key => $value) {
+        $parameters = [];
+        foreach ($heatmapDataFilter->toArray() as $key => $value) {
             $parameters[] = sprintf('%s=%s', Str::camel($key), $value);
         }
 
         $url = sprintf(
             '%s?%s',
             sprintf('%s/live-tracking/heatmaps/grid', self::BASE_URL),
-            implode('&', $parameters)
+            implode('&', $parameters),
         );
 
         try {
@@ -59,14 +67,15 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             if (!is_array($json) || !isset($json['gridsByFloor'], $json['numRuns'])) {
                 $this->log->getHeatmapDataInvalidResponse(
                     __($heatmapDataFilter->getDungeon()->name, [], 'en_US'),
-                    $response
+                    $url,
+                    $response,
                 );
 
-                throw new InvalidApiResponseException('Invalid response from Raider.IO API');
+                throw new InvalidApiResponseException('Invalid response from Raider.IO API', $url, $response);
             }
 
             return HeatmapDataResponse::fromArray(
-                (new RaiderIOHeatmapGridResponse(
+                new RaiderIOHeatmapGridResponse(
                     $this->coordinatesService,
                     CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
                     $json['gridsByFloor'],
@@ -74,11 +83,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $json['maxSamplesInGrid'],
                     $url,
                     $heatmapDataFilter->getFloorsAsArray(),
-                ))->toArray()
+                )->toArray(),
             );
         } finally {
             $this->log->getHeatmapDataEnd();
         }
     }
-
 }

@@ -5,11 +5,13 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
         let self = this;
 
         // Grouped affixes
-        $(this.selector).off('change').on('change', function () {
-            self.onChange();
+        if (!this.passThrough) {
+            $(this.selector).off('change').on('change', function () {
+                self.onChange();
 
-            refreshSelectPickers();
-        });
+                refreshSelectPickers();
+            });
+        }
     }
 
     getDefaultValue() {
@@ -21,7 +23,7 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
 
         let displayValue = value.length > 0 ? `${value[0]} - ${value[value.length - 1]}` : '';
 
-        return lang.get('messages.filter_input_select_weekly_affix_groups_header')
+        return lang.get('js.filter_input_select_weekly_affix_groups_header')
             .replace(':week', '' + displayValue);
     }
 

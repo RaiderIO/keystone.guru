@@ -28,6 +28,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Session;
@@ -42,15 +43,16 @@ class TeamController extends Controller
      */
     public function store(TeamFormRequest $request, ?Team $team = null)
     {
-        $new = $team === null;
+        $validated = $request->validated();
+        $new       = $team === null;
 
         if ($new) {
             $team             = new Team();
-            $team->name       = $request->get('name');
+            $team->name       = $validated['name'];
             $team->public_key = Team::generateRandomPublicKey();
         }
 
-        $team->description  = $request->get('description');
+        $team->description  = $validated['description'];
         $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
@@ -59,18 +61,8 @@ class TeamController extends Controller
             $logo = $request->file('logo');
 
             // Save was successful, now do any file handling that may be necessary
-            if ($logo !== null) {
-                // Save was successful, now do any file handling that may be necessary
-                try {
-                    $team->saveUploadedFile($logo);
-                } catch (Exception $ex) {
-                    if ($new) {
-                        // Roll back the saving of the expansion since something went wrong with the file.
-                        $team->delete();
-                    }
-
-                    throw $ex;
-                }
+            if (isset($validated['logo'])) {
+                $team->saveUploadedFile($validated['logo']);
             }
 
             if ($new) {
@@ -99,7 +91,7 @@ class TeamController extends Controller
      */
     public function edit(Request $request, Team $team): View
     {
-        $this->authorize('edit', $team);
+        Gate::authorize('edit', $team);
 
         /** @var User $user */
         $user = Auth::user();
@@ -118,7 +110,7 @@ class TeamController extends Controller
      */
     public function delete(Request $request, Team $team): RedirectResponse
     {
-        $this->authorize('delete', $team);
+        Gate::authorize('delete', $team);
 
         try {
             $team->delete();
@@ -136,7 +128,7 @@ class TeamController extends Controller
      */
     public function update(TeamFormRequest $request, Team $team)
     {
-        $this->authorize('edit', $team);
+        Gate::authorize('edit', $team);
 
         // Store it and show the edit page again
         $teamModel = $this->store($request, $team);
@@ -185,7 +177,10 @@ class TeamController extends Controller
 
         if ($team !== null) {
             if ($team->isCurrentUserMember()) {
-                $result = view('team.invite', ['team' => $team, 'member' => true]);
+                $result = view('team.invite', [
+                    'team'   => $team,
+                    'member' => true,
+                ]);
             } else {
                 $result = view('team.invite', ['team' => $team]);
             }
@@ -205,7 +200,10 @@ class TeamController extends Controller
         $team = Team::where('invite_code', $invitecode)->first();
 
         if ($team->isCurrentUserMember()) {
-            $result = view('team.invite', ['team' => $team, 'member' => true]);
+            $result = view('team.invite', [
+                'team'   => $team,
+                'member' => true,
+            ]);
         } else {
             /** @var User $user */
             $user = Auth::getUser();
@@ -221,18 +219,18 @@ class TeamController extends Controller
     /**
      * Creates a tag from the tag manager
      */
-    public function createtag(TagFormRequest $request): RedirectResponse
+    public function createTag(TagFormRequest $request, Team $team): RedirectResponse
     {
         $error = [];
 
         $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
 
         if (!Tag::where('name', $request->get('tag_name_new'))
-            ->where('user_id', Auth::id())
+            ->where('context_id', $team->id)
+            ->where('context_class', Team::class)
             ->where('tag_category_id', $tagCategoryId)
             ->exists()) {
-
-            Tag::saveFromRequest($request, $tagCategoryId);
+            Tag::saveFromRequest($request, $team, $tagCategoryId);
 
             Session::flash('status', __('controller.team.flash.tag_created_successfully'));
         } else {

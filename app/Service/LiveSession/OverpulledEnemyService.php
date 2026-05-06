@@ -23,7 +23,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
         $overpulledEnemyForces = $this->getOverpulledEnemyForces($liveSession);
 
         if ($overpulledEnemyForces->isNotEmpty()) {
-            $tooMuchEnemyForces = $liveSession->dungeonroute->getEnemyForcesTooMuch();
+            $tooMuchEnemyForces = $liveSession->dungeonRoute->getEnemyForcesTooMuch();
 
             // Start with the first mistake that was made and work on trying to reduce the value of this until it is 0 or lower
             $enemyForcesLeftToCorrect = $tooMuchEnemyForces;
@@ -42,9 +42,9 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 
                 // Loop over all available kill zones from which we can still potentially subtract enemy forces
                 foreach ($availableKillZones as $availableKillZone) {
-                    $availableKillZone->dungeonRoute = $liveSession->dungeonroute;
+                    $availableKillZone->dungeonRoute = $liveSession->dungeonRoute;
 
-                    $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonroute->teeming);
+                    $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonRoute->teeming);
 
                     // Contains a list of enemies, grouped by pack, with the -1 pack being enemies that are not assigned to a pack being LAST
                     $groupedBy = $skippableEnemyForces->groupBy('enemy_pack_id')->sortDesc();
@@ -83,7 +83,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
             }
 
             // Correct the new enemy forces for the route - subtract the $tooMuchEnemyForces since we already corrected for them
-            $dungeonRouteCorrection->setEnemyForces(($liveSession->dungeonroute->enemy_forces - $tooMuchEnemyForces) + $enemyForcesLeftToCorrect);
+            $dungeonRouteCorrection->setEnemyForces(($liveSession->dungeonRoute->enemy_forces - $tooMuchEnemyForces) + $enemyForcesLeftToCorrect);
         }
 
         return $dungeonRouteCorrection;

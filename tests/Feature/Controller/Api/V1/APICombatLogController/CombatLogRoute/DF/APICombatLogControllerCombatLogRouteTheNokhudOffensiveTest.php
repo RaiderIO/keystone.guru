@@ -15,7 +15,6 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICom
 #[Group('TheNokhudOffensive')]
 class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APICombatLogControllerCombatLogRouteTestBase
 {
-
     protected function getDungeonKey(): string
     {
         return Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE;
@@ -28,7 +27,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
         $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_14', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();
@@ -48,7 +47,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
         $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_8', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

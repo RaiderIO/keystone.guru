@@ -16,6 +16,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
     /**
      * @throws Exception
      */
+    #[\Override]
     public function setParameters(array $parameters): CombatLogEvent
     {
         $this->genericData = GenericDataBuilder::create($this->getCombatLogVersion());
@@ -26,12 +27,12 @@ class AdvancedCombatLogEvent extends CombatLogEvent
 
         $this->advancedData = AdvancedDataBuilder::create($this->getCombatLogVersion());
         $this->advancedData->setParameters(
-            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount(), $this->advancedData->getParameterCount())
+            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount(), $this->advancedData->getParameterCount()),
         );
 
         $this->suffix = Suffix::createFromEventName($this->getCombatLogVersion(), $this->getEventName());
         $this->suffix->setParameters(
-            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount() + $this->advancedData->getParameterCount())
+            array_slice($parameters, $this->genericData->getParameterCount() + $this->prefix->getParameterCount() + $this->advancedData->getParameterCount()),
         );
 
         return $this;

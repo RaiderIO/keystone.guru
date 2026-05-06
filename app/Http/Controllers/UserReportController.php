@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserReport;
-use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\View\View;
 
 class UserReportController extends Controller
@@ -15,8 +15,12 @@ class UserReportController extends Controller
      */
     public function get(): View
     {
+        // Disable lazy loading prevention
+        Model::preventLazyLoading(false);
+
         $userReports = UserReport::where('status', 0)->get();
         // Ugly way of loading this relationship, eager loading with dynamic relations don't work!
+
         foreach ($userReports as $userReport) {
             $userReport->model;
         }

@@ -8,9 +8,9 @@ use stdClass;
 trait SavesArrayToJsonFile
 {
     /**
-     * @param array|stdClass $dataArr
-     * @param string         $dir
-     * @param string         $filename
+     * @param  array|stdClass $dataArr
+     * @param  string         $dir
+     * @param  string         $filename
      * @throws Exception
      */
     protected function saveDataToJsonFile(mixed $dataArr, string $dir, string $filename): void
@@ -21,6 +21,7 @@ trait SavesArrayToJsonFile
 
         $filePath = $dir . '/' . $filename;
         $file     = null;
+
         try {
             $file = fopen($filePath, 'w') or exit('Cannot create file');
             if (!fwrite($file, json_encode($dataArr, JSON_PRETTY_PRINT))) {

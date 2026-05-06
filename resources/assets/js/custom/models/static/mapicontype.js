@@ -8,6 +8,7 @@ class MapIconType {
         this.width = remoteObject.width;
         this.height = remoteObject.height;
         this.admin_only = remoteObject.admin_only === 1;
+        this.icon_url = remoteObject.icon_url;
     }
 
     /**

@@ -24,8 +24,10 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
         $this->debug(__METHOD__);
     }
 
-    public function buildKillZonesCreateNewActiveChainPull(float $activePullAverageHPPercent, int $chainPullDetectionHPPercent): void
-    {
+    public function buildKillZonesCreateNewActiveChainPull(
+        float $activePullAverageHPPercent,
+        int   $chainPullDetectionHPPercent,
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
@@ -46,7 +48,7 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
 
     public function buildKillZonesNotAllSpellsAssigned(int $totalAssignedSpells, int $totalSpells): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function buildKillZonesCreateNewFinalPull(array $guids): void
@@ -56,13 +58,11 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
 
     public function determineSpellsCastBetweenInvalidSpellIdBetween(int $spellId): void
     {
-        $this->warning(__METHOD__, get_defined_vars());
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function determineSpellsCastBetweenInvalidSpellIdAfter(int $spellId): void
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
-
-
 }

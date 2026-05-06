@@ -23,6 +23,7 @@ let LeafletIconMarker = L.Marker.extend({
 });
 
 
+// let yellowDotCount = 0;
 /**
  * Get the Leaflet Marker that represents said mapIconType
  * @param mapIconType null|obj When null, default unknown marker type is returned
@@ -43,12 +44,18 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
 
         let isSelectable = editModeEnabled || deleteModeEnabled;
 
+        // let text = '';
+        // if(mapIconType.key === MAP_ICON_TYPE_DOT_YELLOW) {
+        //     text = ++yellowDotCount;
+        // }
+
         let handlebarsData = $.extend({}, mapIconType, {
             selectedclass: (editModeEnabled ? ' leaflet-edit-marker-selected' : (deleteModeEnabled ? ' leaflet-edit-marker-selected delete' : '')),
             outer_width: width + (isSelectable ? 8 : 0),
             outer_height: height + (isSelectable ? 8 : 0),
             inner_width: width,
-            inner_height: height
+            inner_height: height,
+            // text: text
         });
 
         icon = L.divIcon({
@@ -56,7 +63,7 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
             iconSize: [width, height],
             tooltipAnchor: [0, -(height / 2)],
             popupAnchor: [0, -(height / 2)],
-            className: 'map_icon map_icon_' + mapIconType.key
+            className: 'map_icon map_icon_' + mapIconType.key,
         });
     }
     return icon;
@@ -83,7 +90,9 @@ class Icon extends VersionableMapObject {
         this.register('object:changed', this, this._onObjectChanged.bind(this));
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
             if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.previousMapState instanceof EnemySelection ||
                 mapStateChangedEvent.data.newMapState instanceof EditMapState ||
+                mapStateChangedEvent.data.newMapState instanceof EnemySelection ||
                 mapStateChangedEvent.data.previousMapState instanceof DeleteMapState ||
                 mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
                 self._refreshVisual();
@@ -146,7 +155,7 @@ class Icon extends VersionableMapObject {
                 name: 'comment',
                 type: 'textarea',
                 default: '',
-                description: lang.get('messages.map_icon_comment_description_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
+                description: lang.get('js.map_icon_comment_description_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
             }),
             new Attribute({
                 name: 'lat',
@@ -184,10 +193,12 @@ class Icon extends VersionableMapObject {
 
         // Init once or only when visible (as in, only update icons on the same floor)
         if (this.isVisible() || (this.layer !== null && this.layer.getIcon() === LeafletIconUnknown)) {
+            let mapState = this.map.getMapState();
             this.layer.setIcon(
                 getLeafletIcon(this.map_icon_type,
-                    this.map.getMapState() instanceof EditMapState && this.isEditable(),
-                    this.map.getMapState() instanceof DeleteMapState && this.isDeletable()
+                    (mapState instanceof EditMapState && this.isEditable())
+                    || (mapState instanceof MDTEnemySelection || mapState instanceof EnemyPatrolEnemySelection),
+                    mapState instanceof DeleteMapState && this.isDeletable()
                 )
             );
 

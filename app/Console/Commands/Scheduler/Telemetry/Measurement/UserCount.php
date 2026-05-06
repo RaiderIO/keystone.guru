@@ -24,7 +24,7 @@ class UserCount extends Measurement
                     'google'       => User::where('oauth_id', 'LIKE', '%@google')->count(),
                     'battlenet'    => User::where('oauth_id', 'LIKE', '%@battlenet')->count(),
                 ],
-                time()
+                time(),
             ),
         ];
     }

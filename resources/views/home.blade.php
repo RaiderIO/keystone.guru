@@ -2,8 +2,10 @@
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Illuminate\Support\Collection;
+use App\Models\User;
 
 /**
  * @var Collection<DungeonRoute> $demoRoutes
@@ -12,6 +14,7 @@ use Illuminate\Support\Collection;
  * @var int                      $userCount
  * @var string                   $theme
  * @var Season                   $currentSeason
+ * @var GameVersion              $defaultGameVersion
  */
 
 $dungeonSelectId    = 'demo_dungeon_id';
@@ -51,7 +54,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                     </p>
                     <div class="mbr-section-btn mt-3">
                         <a class="btn btn-primary display-4" href="{{ $currentSeason !== null ?
-                                route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index]) :
+                                route('dungeonroutes.season', ['gameVersion' => $defaultGameVersion, 'season' => $currentSeason->index]) :
                                 route('dungeonroutes') }}">
                             <i class="fas fa-binoculars"></i>&nbsp;{{ __('view_home.discover_routes') }}
                         </a>
@@ -75,12 +78,13 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img class="darkly_image" src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}"
+                        <img class="darkly_image"
+                             src="{{ ksgAssetImage('home/darkly_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
-                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_discover_new_routes.jpg') }}"
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
-                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                             style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
                     </div>
@@ -93,7 +97,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         <p class="mbr-text mbr-fonts-style display-7">
                             {!! __('view_home.discover_new_routes_description',
                                     ['archon_gg' => '<a href="https://www.archon.gg/wow" target="_blank">archon.gg</a>',
-                                    'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('route search'))]) !!}
+                                    'routesearch' => sprintf('<a href="%s" target="_blank">%s</a>', route('dungeonroutes.search'), __('view_home.discover_new_routes_route_search'))]) !!}
                         </p>
                     </div>
                 </div>
@@ -107,13 +111,13 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image"
-                             src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
+                             src="{{ ksgAssetImage('home/darkly_feature_create_your_own_routes.jpg') }}"
                              alt="{{ __('view_home.create_your_own_routes') }}"
-                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
                         <img class="lux_image"
-                             src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
+                             src="{{ ksgAssetImage('home/lux_feature_create_your_own_routes.jpg') }}"
                              alt="{{ __('view_home.create_your_own_routes') }}"
-                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                             style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
                     </div>
@@ -140,12 +144,12 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image"
-                             src="{{ url('images/home/darkly_feature_get_organized.jpg') }}"
+                             src="{{ ksgAssetImage('home/darkly_feature_get_organized.jpg') }}"
                              alt="{{ __('view_home.get_organized') }}"
-                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_get_organized.jpg') }}"
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_get_organized.jpg') }}"
                              alt="{{ __('view_home.get_organized') }}"
-                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                             style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
                         </p>
                     </div>
@@ -170,12 +174,12 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image"
-                             src="{{ url('images/home/darkly_feature_custom_dungeon_mapping.jpg') }}"
+                             src="{{ ksgAssetImage('home/darkly_feature_custom_dungeon_mapping.jpg') }}"
                              alt="{{ __('view_home.custom_dungeon_mapping') }}"
-                             style="display: {{ $theme === 'darkly' ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_custom_dungeon_mapping.jpg') }}"
+                             style="display: {{ User::isThemeDark($theme) ? 'block' : 'none' }}">
+                        <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_custom_dungeon_mapping.jpg') }}"
                              alt="{{ __('view_home.custom_dungeon_mapping') }}"
-                             style="display: {{ $theme === 'lux' ? 'block' : 'none' }}">
+                             style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
                         </p>
                     </div>
@@ -259,7 +263,6 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
     @if($demoRoutes->isNotEmpty())
         <section class="map1 cid-soU5dLgjOI" id="map1-k" style="position: relative;">
-
 
             <div class="mbr-section-head mb-4">
                 <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-2">

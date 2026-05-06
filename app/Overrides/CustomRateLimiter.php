@@ -11,6 +11,7 @@ class CustomRateLimiter extends BaseRateLimiter
         parent::__construct($cache);
     }
 
+    #[\Override]
     public function cleanRateLimiterKey($key): string
     {
         // Add a custom prefix specifically for rate limiter keys

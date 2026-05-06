@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                       $id
- * @property int                       $icon_file_id
- * @property string                    $key
- * @property string                    $name
- * @property string                    $color
+ * @property int    $id
+ * @property int    $icon_file_id
+ * @property string $key
+ * @property string $name
+ * @property string $color
+ *
  * @property Collection<CharacterRace> $races
  * @property Collection<DungeonRoute>  $dungeonRoutes
  *
@@ -27,9 +28,18 @@ class Faction extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['id', 'icon_file_id', 'key', 'name', 'color'];
+    public $fillable = [
+        'id',
+        'icon_file_id',
+        'key',
+        'name',
+        'color',
+    ];
 
     protected $with = ['iconfile'];
 

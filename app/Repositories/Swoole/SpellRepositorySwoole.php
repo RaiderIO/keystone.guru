@@ -21,15 +21,29 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function findAllById(Collection $spellIds): Collection
     {
-        if ($this->allSpellsById->isEmpty()) {
-            $this->allSpellsById = Spell::all()->keyBy('id');
+        if ($spellIds->isEmpty()) {
+            return collect();
+        }
+
+        $spellIds     = $spellIds->unique();
+        $spellIdsById = $spellIds->flip();
+        $cachedSpells = $this->allSpellsById->intersectByKeys($spellIdsById);
+
+        if ($cachedSpells->count() !== $spellIds->count()) {
+            $missingSpellIds = $spellIdsById->diffKeys($cachedSpells)->keys();
+
+            $this->allSpellsById = $this->allSpellsById->merge(
+                Spell::query()->whereIn('id', $missingSpellIds)->get()->keyBy('id'),
+            );
         }
 
         $result = collect();
 
         foreach ($spellIds as $spellId) {
+            // Sometimes the spell may still not be found so ensure to guard against it.
             if ($this->allSpellsById->has($spellId)) {
                 $result->put($spellId, clone $this->allSpellsById->get($spellId));
             }

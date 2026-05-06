@@ -78,14 +78,14 @@ class EnemyForcesControls extends MapControl {
 
         let killZoneMapObjectGroup = getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         if (!killZoneMapObjectGroup.hasKilledAllRequiredEnemies()) {
-            $enemyForcesStatus.attr('title', lang.get('messages.enemy_forces_not_all_required_enemies_killed_label'))
+            $enemyForcesStatus.attr('title', lang.get('js.enemy_forces_not_all_required_enemies_killed_label'))
             $enemyForces.addClass('map_enemy_forces_too_little_warning');
 
             $('#map_enemy_forces_success').hide();
             $('#map_enemy_forces_warning').show();
         } else if (currentEnemyForces >= enemyForcesRequired) {
             if (enemyForcesPercent > 110) {
-                $enemyForcesStatus.attr('title', lang.get('messages.enemy_forces_too_much_label'));
+                $enemyForcesStatus.attr('title', lang.get('js.enemy_forces_too_much_label'));
                 $enemyForces.addClass('map_enemy_forces_too_much_warning');
 
                 $('#map_enemy_forces_success').hide();
@@ -97,7 +97,7 @@ class EnemyForcesControls extends MapControl {
                 $('#map_enemy_forces_warning').hide();
             }
         } else if (enemyForcesPercent < 100) {
-            $enemyForcesStatus.attr('title', lang.get('messages.enemy_forces_too_little_label'));
+            $enemyForcesStatus.attr('title', lang.get('js.enemy_forces_too_little_label'));
             $enemyForces.addClass('map_enemy_forces_too_little_warning');
             $('#map_enemy_forces_success').hide();
             $('#map_enemy_forces_warning').show();

@@ -1,0 +1,31 @@
+{
+    "id": 345,
+    "release_changelog_id": 352,
+    "version": "v14.2",
+    "title": "Reworked dungeon selection to be site-wide",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-03-20T22:45:07+00:00",
+    "updated_at": "2026-03-20T22:45:07+00:00",
+    "changelog": {
+        "id": 352,
+        "release_id": 345,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 352,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3118,
+                "change": "Reworked the site to have a global dungeon selector. This will improve site navigation and focus. Also gets rid of 4 places where you have to select a dungeon first before you can proceed to the next page. Feedback welcome!"
+            },
+            {
+                "release_changelog_id": 352,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3117,
+                "change": "Changing your username when you registered through OAuth now works again (one time!)"
+            }
+        ]
+    }
+}

@@ -23,7 +23,7 @@ class MapIconChangedEvent extends ModelChangedEvent
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected MapIcon|Model                      $model
+        protected MapIcon|Model                      $model,
     ) {
         parent::__construct($context, $user, $model);
     }
@@ -33,12 +33,14 @@ class MapIconChangedEvent extends ModelChangedEvent
         return 'mapicon-changed';
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(
-            parent::broadcastWith(), [
+            parent::broadcastWith(),
+            [
                 'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
-            ]
+            ],
         );
     }
 }

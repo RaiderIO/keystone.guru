@@ -16,7 +16,8 @@ class CombatLogEntry
 {
     public const DATE_FORMATS = [
         'm/d H:i:s.v',
-        'm/d/Y H:i:s.v-1', // These are all the timezones that are used in the combat log
+        'm/d/Y H:i:s.v-1',
+        // These are all the timezones that are used in the combat log
         'm/d/Y H:i:s.v-2',
         'm/d/Y H:i:s.v-3',
         'm/d/Y H:i:s.v-4',
@@ -47,7 +48,7 @@ class CombatLogEntry
         'm/d/Y H:i:s.v14',
     ];
 
-    private const RAW_EVENT_IGNORE = [
+    private const array RAW_EVENT_IGNORE = [
         'Search the gold piles for magic items!',
         'Everyone within 10 yards will be consumed!',
         ':20|t Voidstone Monstrosity is weakened by |cFFFF0000|Hspell:423839|h[Storm\'s Vengeance]|h|r!',
@@ -72,8 +73,10 @@ class CombatLogEntry
      *
      * @throws Exception
      */
-    public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL_11_0_5): ?BaseEvent
-    {
+    public function parseEvent(
+        array $eventWhiteList = [],
+        int   $combatLogVersion = CombatLogVersion::RETAIL_12_0_5,
+    ): ?BaseEvent {
         $matches = [];
         if (!preg_match('/(\d*\/\d*(?:\/\d*)? \d*:\d*:\d*.\d*(?:-\d*)?)\s\s(.+)/', $this->rawEvent, $matches)) {
             if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
@@ -111,12 +114,11 @@ class CombatLogEntry
                 }
                 // https://wowpedia.fandom.com/wiki/COMBAT_LOG_EVENT
                 // 11 base, 3 prefix, 9 suffix = 23 max parameters for non-advanced
-                else if (count($parameters) > 23) {
-                    $this->parsedEvent = (new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
+                elseif (count($parameters) > 23) {
+                    $this->parsedEvent = new AdvancedCombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent)->setParameters($parameters);
                 } else {
-                    $this->parsedEvent = (new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent))->setParameters($parameters);
+                    $this->parsedEvent = new CombatLogEvent($combatLogVersion, $this->parsedTimestamp, $eventName, $this->rawEvent)->setParameters($parameters);
                 }
-
             } catch (Error|Exception $exception) {
                 echo sprintf('%s parsing: %s', PHP_EOL . PHP_EOL . $exception->getMessage(), $this->rawEvent);
 
@@ -154,7 +156,7 @@ class CombatLogEntry
         if (self::$previousDateFormat !== null) {
             try {
                 return Carbon::createFromFormat(self::DATE_FORMATS[self::$previousDateFormat], $timestamp);
-            } catch (InvalidFormatException $invalidFormatException) {
+            } catch (InvalidFormatException) {
                 // Ignore, we'll try the other formats
             }
         }
@@ -169,7 +171,7 @@ class CombatLogEntry
                 $parsedTimestamp = Carbon::createFromFormat($dateFormat, $timestamp);
 
                 self::$previousDateFormat = $key;
-            } catch (InvalidFormatException $invalidFormatException) {
+            } catch (InvalidFormatException) {
                 continue;
             }
         }

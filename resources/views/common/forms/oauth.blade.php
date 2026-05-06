@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 <div class="form-group">
     <div class="row">
         <div class="col">
-            <img alt="Battle.net" src="{{ url('/images/oauth/battlenet_logo.png') }}" class="mx-auto d-block"/>
+            <img alt="Battle.net" src="{{ ksgAssetImage('oauth/battlenet_logo.png') }}" class="mx-auto d-block"/>
         </div>
     </div>
 </div>
@@ -32,7 +32,7 @@ use Illuminate\Support\Collection;
     <div class="row">
         <div class="col">
             <a href="{{ route('login.discord') }}">
-                <img alt="Discord" src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block"
+                <img alt="Discord" src="{{ ksgAssetImage('oauth/discord_logo.png') }}" class="mx-auto d-block"
                      style="max-height: 64px;"/>
             </a>
         </div>

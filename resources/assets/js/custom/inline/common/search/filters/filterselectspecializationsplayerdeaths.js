@@ -1,6 +1,6 @@
 class SearchFilterSpecializationsPlayerDeaths extends SearchFilterSpecializations {
-    constructor(selector, onChange) {
-        super(selector, onChange);
+    constructor(selector, onChange, options = {}) {
+        super(selector, onChange, options);
     }
 
     activate() {
@@ -9,15 +9,17 @@ class SearchFilterSpecializationsPlayerDeaths extends SearchFilterSpecialization
         let self = this;
 
         // Grouped affixes
-        $(this.selector).off('change').on('change', function () {
-            self.onChange();
+        if (!this.passThrough) {
+            $(this.selector).off('change').on('change', function () {
+                self.onChange();
 
-            refreshSelectPickers();
-        });
+                refreshSelectPickers();
+            });
+        }
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_select_specializations_player_deaths_header')
+        return lang.get('js.filter_input_select_specializations_player_deaths_header')
             .replace(':specializations', this._getSpecializationNames().join(', '));
     }
 }

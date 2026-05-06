@@ -19,7 +19,7 @@ class MissedV9SoD extends Suffix implements MissedInterface
 
     private int $amountTotal;
 
-    private ?string $damageType;
+    private ?string $damageType = null;
 
     public function getMissType(): Guid
     {
@@ -51,18 +51,21 @@ class MissedV9SoD extends Suffix implements MissedInterface
         return false;
     }
 
-
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
 
         $this->missType = Guid::createFromGuidString($parameters[0]);
         $this->offhand  = $parameters[1] !== 'nil';
-        if (!isset($parameters[2]) || in_array($parameters[2], ['ST', 'AOE'])) {
+        if (!isset($parameters[2]) || in_array($parameters[2], [
+            'ST',
+            'AOE',
+        ])) {
             $this->amountMissed = 0;
             $this->amountTotal  = 0;
             $this->damageType   = $parameters[2] ?? null;
-        } else if ($this->missType instanceof Block || $this->missType instanceof Resist) {
+        } elseif ($this->missType instanceof Block || $this->missType instanceof Resist) {
             $this->amountMissed = 0;
             $this->amountTotal  = 0;
             $this->damageType   = $parameters[2];

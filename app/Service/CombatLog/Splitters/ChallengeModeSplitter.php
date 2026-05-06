@@ -22,7 +22,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
 {
     private const MAX_TIMESTAMP_GAP_SECONDS = 10 * 60;
 
-    private const EVENTS_TO_KEEP = [
+    private const array EVENTS_TO_KEEP = [
         SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
         SpecialEvent::SPECIAL_EVENT_MAP_CHANGE,
@@ -30,21 +30,21 @@ class ChallengeModeSplitter extends CombatLogSplitter
         SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_END,
     ];
 
-    private ChallengeModeSplitterLoggingInterface $log;
+    private readonly ChallengeModeSplitterLoggingInterface $log;
     /** @var Collection<string> */
-    private Collection               $rawEvents;
-    private ?CombatLogVersionEvent   $lastCombatLogVersionEvent;
+    private Collection $rawEvents;
+    private ?CombatLogVersionEvent $lastCombatLogVersionEvent     = null;
     private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
-    private ?Dungeon                 $currentDungeon              = null;
-    private ?ZoneChangeEvent         $lastZoneChangeEvent;
-    private ?MapChangeEvent          $lastMapChangeEvent;
-    private ?Carbon                  $lastTimestamp               = null;
-    private ?Collection              $result                      = null;
-    private ?string $filePath;
-    private bool    $isInWrongZone = false;
+    private ?Dungeon $currentDungeon                              = null;
+    private ?ZoneChangeEvent $lastZoneChangeEvent                 = null;
+    private ?MapChangeEvent $lastMapChangeEvent                   = null;
+    private ?Carbon $lastTimestamp                                = null;
+    private ?Collection $result                                   = null;
+    private ?string $filePath                                     = null;
+    private bool $isInWrongZone                                   = false;
 
     public function __construct(
-        private readonly CombatLogServiceInterface $combatLogService
+        private readonly CombatLogServiceInterface $combatLogService,
     ) {
         $log = App::make(ChallengeModeSplitterLoggingInterface::class);
         /** @var ChallengeModeSplitterLoggingInterface $log */
@@ -67,14 +67,17 @@ class ChallengeModeSplitter extends CombatLogSplitter
             return $this->result;
         }
 
-
         $this->filePath = $filePath;
 
         // Pass $this->>parseCombatLogEvent as callable
         $this->combatLogService->parseCombatLog(
             $filePath,
-            fn($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr) =>
-                $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
+            fn(
+                $combatLogVersion,
+                $advancedLoggingEnabled,
+                $rawEvent,
+                $lineNr,
+            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr),
         );
 
         // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
@@ -93,8 +96,12 @@ class ChallengeModeSplitter extends CombatLogSplitter
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr): ?BaseEvent
-    {
+    private function parseCombatLogEvent(
+        int    $combatLogVersion,
+        bool   $advancedLoggingEnabled,
+        string $rawEvent,
+        int    $lineNr,
+    ): ?BaseEvent {
         $this->log->addContext('lineNr', [
             'combatLogVersion'       => $combatLogVersion,
             'advancedLoggingEnabled' => $advancedLoggingEnabled,
@@ -115,11 +122,11 @@ class ChallengeModeSplitter extends CombatLogSplitter
         if ($this->lastChallengeModeStartEvent instanceof ChallengeModeStartEvent) {
             // If there's too much of a gap between the last entry and the next one, just ditch the run
             if ($this->lastTimestamp instanceof Carbon &&
-                ($seconds = $this->lastTimestamp->diffInSeconds($combatLogEntry->getParsedTimestamp())) > self::MAX_TIMESTAMP_GAP_SECONDS) {
+                ($seconds = (int)$this->lastTimestamp->diffInSeconds($combatLogEntry->getParsedTimestamp(), true)) > self::MAX_TIMESTAMP_GAP_SECONDS) {
                 $this->log->parseCombatLogEventTooBigTimestampGap(
                     $seconds,
                     $this->lastTimestamp->toDateTimeString(),
-                    $combatLogEntry->getParsedTimestamp()->toDateTimeString()
+                    $combatLogEntry->getParsedTimestamp()->toDateTimeString(),
                 );
 
                 // Reset variables
@@ -133,7 +140,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
                 $parsedEvent->getZoneId() === $this->currentDungeon->map_id &&
                 $this->isInWrongZone) {
                 // Reset the flag
-                $this->isInWrongZone       = false;
+                $this->isInWrongZone = false;
                 // Capture the zone change though!
                 $this->lastZoneChangeEvent = $parsedEvent;
 
@@ -152,14 +159,13 @@ class ChallengeModeSplitter extends CombatLogSplitter
                         $this->lastZoneChangeEvent->getZoneId(),
                         $this->lastZoneChangeEvent->getZoneName(),
                         $this->currentDungeon->zone_id,
-                        __($this->currentDungeon->name, [], 'en_US')
+                        __($this->currentDungeon->name, [], 'en_US'),
                     );
                 }
 
                 // Return - consume the event, we don't want events from whatever place you hearthed to in our dungeon
                 return $parsedEvent;
             }
-
 
             // Save ALL events that come through after the challenge mode start event has been given
             $this->rawEvents->push($rawEvent);
@@ -184,7 +190,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
                 }
             }
         } // If we're going to start a challenge mode event
-        else if ($parsedEvent instanceof ChallengeModeStartEvent) {
+        elseif ($parsedEvent instanceof ChallengeModeStartEvent) {
             $this->log->parseCombatLogEventChallengeModeStartEvent();
 
             $this->lastChallengeModeStartEvent = $parsedEvent;
@@ -200,17 +206,16 @@ class ChallengeModeSplitter extends CombatLogSplitter
         if ($parsedEvent instanceof CombatLogVersionEvent) {
             $this->log->parseCombatLogEventCombatLogVersionEvent();
             $this->lastCombatLogVersionEvent = $parsedEvent;
-        } else if ($parsedEvent instanceof ZoneChangeEvent) {
+        } elseif ($parsedEvent instanceof ZoneChangeEvent) {
             $this->log->parseCombatLogEventZoneChangeEvent();
             $this->lastZoneChangeEvent = $parsedEvent;
-        } else if ($parsedEvent instanceof MapChangeEvent) {
+        } elseif ($parsedEvent instanceof MapChangeEvent) {
             $this->log->parseCombatLogEventMapChangeEvent();
             $this->lastMapChangeEvent = $parsedEvent;
         }
 
         return $parsedEvent;
     }
-
 
     private function resetCurrentChallengeMode(): void
     {
@@ -234,11 +239,12 @@ class ChallengeModeSplitter extends CombatLogSplitter
 
     protected function getCombatLogFileName(string $countStr): string
     {
-        return sprintf('%s_%d_%s%s',
-            pathinfo($this->filePath, PATHINFO_FILENAME),
+        return sprintf(
+            '%s_%d_%s%s',
+            pathinfo((string)$this->filePath, PATHINFO_FILENAME),
             $this->lastChallengeModeStartEvent->getKeystoneLevel(),
             Str::slug($this->lastChallengeModeStartEvent->getZoneName()),
-            $countStr
+            $countStr,
         );
     }
 }

@@ -48,11 +48,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      */
     _refresh() {
         // Bring all layers we just created to the front
-        for (let key in this.objects) {
-            this.setLayerToMapObject(null, this.objects[key]);
-            this.objects[key].cleanup();
-            this.objects[key].localDelete();
-        }
+        this.clear();
 
         this.objects = [];
         this.currentId = 1;

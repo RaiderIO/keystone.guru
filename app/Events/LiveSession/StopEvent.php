@@ -23,6 +23,7 @@ class StopEvent extends ContextEvent
      *
      * @return Channel[]
      */
+    #[\Override]
     public function broadcastOn(): array
     {
         return [
@@ -30,6 +31,7 @@ class StopEvent extends ContextEvent
         ];
     }
 
+    #[\Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

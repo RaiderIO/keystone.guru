@@ -2,158 +2,166 @@
 
 return [
 
-    'bolstering'                   => [
-        'name'        => '',
-        'description' => '',
+    'bolstering' => [
+        'name'        => 'Bolstering',
+        'description' => 'Коли помирає будь-який ворог, що не є босом, його передсмертний крик посилює союзників поблизу, збільшуючи їхнє максимальне здоров’я й шкоду на 20%.',
     ],
-    'bursting'                     => [
-        'name'        => '',
-        'description' => '',
+    'bursting' => [
+        'name'        => 'Bursting',
+        'description' => 'Вороги, що не є босами, вибухають після смерті, завдаючи всім гравцям шкоди рівної 10% від їхнього максимального здоров’я впродовж 4 секунд. Ефект накопичується.',
     ],
-    'explosive'                    => [
-        'name'        => '',
-        'description' => '',
+    'explosive' => [
+        'name'        => 'Explosive',
+        'description' => 'У бою вороги час від часу прикликають розжарені сфери, які вибухають, якщо їх не знищити.',
     ],
-    'fortified'                    => [
-        'name'        => '',
-        'description' => '',
+    'fortified' => [
+        'name'        => 'Fortified',
+        'description' => 'Вороги, що не є босами, мають на 20% більше здоров’я й завдають до 20% більшої шкоди.',
     ],
-    'grievous'                     => [
-        'name'        => '',
-        'description' => '',
+    'grievous' => [
+        'name'        => 'Grievous',
+        'description' => 'Поранені гравці зазнають дедалі більшої тривалої шкоди, доки їхній рівень здоров\'я нижче 90%.',
     ],
-    'infested'                     => [
-        'name'        => '',
-        'description' => '',
+    'infested' => [
+        'name'        => 'Infested',
+        'description' => 'Деякі вороги, що не є босами, заражені поріддям Ґ’ууна.',
     ],
-    'necrotic'                     => [
-        'name'        => '',
-        'description' => '',
+    'necrotic' => [
+        'name'        => 'Necrotic',
+        'description' => 'Усі ворожі атаки ближнього бою накладають накопичувальний ефект чуми, що завдає тривалої шкоди й зменшує отримуване зцілення.',
     ],
-    'quaking'                      => [
-        'name'        => '',
-        'description' => '',
+    'quaking' => [
+        'name'        => 'Quaking',
+        'description' => 'Час від часу всі гравці випускають ударну хвилю, яка завдає шкоди й перериває закляття союзників.',
     ],
-    'raging'                       => [
-        'name'        => '',
-        'description' => '',
+    'raging' => [
+        'name'        => 'Raging',
+        'description' => 'Коли рівень здоров’я ворогів, що не є босами, падає до 30%, вони скаженіють і стають невразливими до всіх ефектів контролю, окрім переривань.',
     ],
-    'relentless'                   => [
-        'name'        => '',
-        'description' => '',
+    'relentless' => [
+        'name'        => 'Relentless',
+        'description' => 'Вороги, що не є босами, отримують тимчасову невразливість до ефектів втрати контролю.',
     ],
-    'sanguine'                     => [
-        'name'        => '',
-        'description' => '',
+    'sanguine' => [
+        'name'        => 'Sanguine',
+        'description' => 'Вороги, що не є босами, залишають після смерті криваву калюжу, яка зцілює їхніх союзників і завдає шкоди гравцям.',
     ],
-    'skittish'                     => [
-        'name'        => '',
-        'description' => '',
+    'skittish' => [
+        'name'        => 'Skittish',
+        'description' => 'Вороги значно менше реагують на рівень загрози, створюваний танками.',
     ],
-    'teeming'                      => [
-        'name'        => '',
-        'description' => '',
+    'teeming' => [
+        'name'        => 'Teeming',
+        'description' => 'У підземеллі присутні додаткові вороги, що не є босами.',
     ],
-    'tyrannical'                   => [
-        'name'        => '',
-        'description' => '',
+    'tyrannical' => [
+        'name'        => 'Tyrannical',
+        'description' => 'Боси мають на 25% більше здоров’я й завдають до 15% більшої шкоди.',
     ],
-    'volcanic'                     => [
-        'name'        => '',
-        'description' => '',
+    'volcanic' => [
+        'name'        => 'Volcanic',
+        'description' => 'У бою вороги час від часу спричиняють викид полум’я під ногами віддалених гравців.',
     ],
-    'reaping'                      => [
-        'name'        => '',
-        'description' => '',
+    'reaping' => [
+        'name'        => 'Reaping',
+        'description' => 'Вороги, що не є босами, посилені Бвонсамді й час від часу шукають помсти після смерті.',
     ],
-    'beguiling'                    => [
-        'name'        => '',
-        'description' => '',
+    'beguiling' => [
+        'name'        => 'Beguiling',
+        'description' => 'У підземеллі присутні посланниці Азшари.',
     ],
-    'awakened'                     => [
-        'name'        => '',
-        'description' => '',
+    'awakened' => [
+        'name'        => 'Awakened',
+        'description' => 'Обеліски в підземеллі дозволяють гравцям увійти в Ні’алоту й поборотися з могутніми слугами Н’Зота. Якщо їх не подолати, вони з’являться під час бою з останнім босом.',
     ],
-    'inspiring'                    => [
-        'name'        => '',
-        'description' => '',
+    'inspiring' => [
+        'name'        => 'Inspiring',
+        'description' => 'Деякі вороги, що не є босами, надихають й посилюють союзників поблизу.',
     ],
-    'spiteful'                     => [
-        'name'        => '',
-        'description' => '',
+    'spiteful' => [
+        'name'        => 'Spiteful',
+        'description' => 'З трупів ворогів, що не є босами, постають покручі, які переслідують випадкових гравців.',
     ],
-    'storming'                     => [
-        'name'        => '',
-        'description' => '',
+    'storming' => [
+        'name'        => 'Storming',
+        'description' => 'У бою вороги час від часу прикликають небезпечні вихори.',
     ],
-    'prideful'                     => [
-        'name'        => '',
-        'description' => '',
+    'prideful' => [
+        'name'        => 'Prideful',
+        'description' => 'Гравці наповнюються гординею після вбивства ворогів, що не є босами, і згодом утворюють утілення гордині (Manifestation of Pride). Перемога над ним значно посилює гравців.',
     ],
-    'tormented'                    => [
-        'name'        => '',
-        'description' => '',
+    'tormented' => [
+        'name'        => 'Tormented',
+        'description' => 'У підземеллі можна зустріти слуг Тюремника, які надають могутні дари після смерті. Якщо їх не вбити, слуги посилять останнього боса.',
     ],
-    'unknown'                      => [
-        'name'        => '',
-        'description' => '',
+    'unknown' => [
+        'name'        => 'Невідомий',
+        'description' => 'Модифікатори цього тижня ще невідомі.',
     ],
-    'infernal'                     => [
-        'name'        => '',
-        'description' => '',
+    'infernal' => [
+        'name'        => 'Infernal',
+        'description' => 'Поблизу деяких босів розташовані пекельні маяки (Infernal Beacons). Активація маяка або бій з босом спричиняє вторгнення Легіону.',
     ],
-    'encrypted'                    => [
-        'name'        => '',
-        'description' => '',
+    'encrypted' => [
+        'name'        => 'Encrypted',
+        'description' => 'Вороги в підземеллі володіють реліквіями Передвічних. Знищте реліквії, щоб прикликати автомів Передвічних і здобути могутні посилення залежно від порядку знищення.',
     ],
-    'shrouded'                     => [
-        'name'        => '',
-        'description' => '',
+    'shrouded' => [
+        'name'        => 'Shrouded',
+        'description' => 'Натрезимські шпигуни замаскувалися серед ворогів у підземеллі. Картель Та щедро нагородить вас за допомогу в їхньому затриманні.',
     ],
-    'thundering'                   => [
-        'name'        => '',
-        'description' => '',
+    'thundering' => [
+        'name'        => 'Thundering',
+        'description' => 'Вороги мають на 5% більше здоров\'я. У бою гравці час від часу насичуються первісною силою вічної бурі Разаґет. Така сила несе великий ризик, тож якщо її не вивільнити вчасно, наслідки можуть бути приголомшливими.',
     ],
-    'afflicted'                    => [
-        'name'        => '',
-        'description' => '',
+    'afflicted' => [
+        'name'        => 'Afflicted',
+        'description' => 'У бою час від часу з\'являються стражденні душі, які шукають допомоги від гравців.',
     ],
-    'entangling'                   => [
-        'name'        => '',
-        'description' => '',
+    'entangling' => [
+        'name'        => 'Entangling',
+        'description' => 'У бою час від часу з\'являються звивисті лози, що обплутують гравців.',
     ],
-    'incorporeal'                  => [
-        'name'        => '',
-        'description' => '',
+    'incorporeal' => [
+        'name'        => 'Incorporeal',
+        'description' => 'У бою часу від часу з\'являються безтілесні створіння, які намагаються послабити гравців. ',
     ],
     'xalataths_bargain_ascendant' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Xal\'atath\'s Bargain: Ascendant',
+        'description' => 'У бою Зал\'атат прикликає сфери космічної енергії, що посилюють ворогів або гравців.',
     ],
-    'xalataths_bargain_devour'    => [
-        'name'        => '',
-        'description' => '',
+    'xalataths_bargain_devour' => [
+        'name'        => 'Xal\'atath\'s Bargain: Devour',
+        'description' => 'У бою Зал\'атат створює розломи, які поглинають сутності гравців.',
     ],
     'xalataths_bargain_voidbound' => [
-        'name'        => '',
-        'description' => '',
+        'name'        => 'Xal\'atath\'s Bargain: Voidbound',
+        'description' => 'У бою Зал\'атат прикликає посланницю Порожнечі, що посилює ворогів поблизу.',
     ],
-    'xalataths_bargain_oblivion'  => [
-        'name'        => '',
-        'description' => '',
+    'xalataths_bargain_oblivion' => [
+        'name'        => 'Xal\'atath\'s Bargain: Oblivion',
+        'description' => 'У бою Зал\'атат створює кристали Порожнечі, які можуть поглинути вороги або гравці.',
     ],
-    'xalataths_bargain_frenzied'  => [
-        'name'        => '',
-        'description' => '',
+    'xalataths_bargain_frenzied' => [
+        'name'        => 'Xal\'atath\'s Bargain: Frenzied',
+        'description' => 'Ворогів, що не є босами, охоплює шаленство, коли їхній рівень здоров\'я падає до 30%. Ефект збільшує швидкість на 40%, а отримувану шкоду — на 20%. ',
     ],
-    'xalataths_guile'             => [
-        'name'        => '',
-        'description' => '',
+    'xalataths_guile' => [
+        'name'        => 'Xal\'atath\'s Guile',
+        'description' => 'Зал’атат зраджує гравців і розриває угоди. Відтепер кожна смерть віднімає 15 секунд від доступного часу.',
     ],
-    'challengers_peril'            => [
-        'name'        => '',
-        'description' => '',
+    'challengers_peril' => [
+        'name'        => 'Challenger\'s Peril',
+        'description' => 'Час збільшується на 90 секунд, але смерть віднімає 15 секунд.',
     ],
-    'seasonal_index_preset'        => '',
+    'xalataths_bargain_pulsar' => [
+        'name'        => 'Xal\'atath\'s Bargain: Pulsar',
+        'description' => 'У бою Зал\'атат прикликає пульсари, що кружляють навколо гравців.',
+    ],
+    'lindormis_guidance' => [
+        'name'        => 'Lindormi\'s Guidance',
+        'description' => 'Ліндормі направляє гравців, послаблюючи деяких ворогів, що не є босами, ефектом «Часових пісків». Смерті гравців більше не скорочують доступний час на проходження ключа.',
+    ],
+    'seasonal_index_preset' => '%s набір %d',
 
 ];

@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Webhook\WowheadPageRequest;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use App\Service\Discord\DiscordApiServiceInterface;
+use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Teapot\StatusCode;
 
 class WebhookController extends Controller
 {
@@ -75,23 +82,24 @@ class WebhookController extends Controller
                 $totalCharacterCount += strlen($commitDescription);
 
                 $embeds[] = [
-                    'title'       => sprintf(
+                    'title' => sprintf(
                         '%s: %s',
                         $branch,
-                        substr(array_shift($lines), 0, 256)
+                        substr(array_shift($lines), 0, 256),
                     ),
                     'description' => $commitDescription,
                     'url'         => $commit['url'],
                 ];
 
                 if (!empty($commit['added']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
-                    $addedDescription    = substr(trim(view('app.commit.added', [
+                    $addedDescription = substr(trim(view('app.commit.added', [
                         'added' => $commit['added'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($addedDescription);
 
                     $embeds[] = [
-                        'color'       => 2328118, // #238636
+                        'color' => 2328118,
+                        // #238636
                         'description' => $addedDescription,
                     ];
                 }
@@ -103,19 +111,21 @@ class WebhookController extends Controller
                     $totalCharacterCount += strlen($modifiedDescription);
 
                     $embeds[] = [
-                        'color'       => 25284, // #0062C4
+                        'color' => 25284,
+                        // #0062C4
                         'description' => $modifiedDescription,
                     ];
                 }
 
                 if (!empty($commit['removed']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
-                    $removedDescription  = substr(trim(view('app.commit.removed', [
+                    $removedDescription = substr(trim(view('app.commit.removed', [
                         'removed' => $commit['removed'],
                     ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
                     $totalCharacterCount += strlen($removedDescription);
 
                     $embeds[] = [
-                        'color'       => 14300723, // #DA3633
+                        'color' => 14300723,
+                        // #DA3633
                         'description' => $removedDescription,
                     ];
                 }
@@ -129,7 +139,7 @@ class WebhookController extends Controller
                 // Add footer to the last embed
                 $lastKey                    = array_key_last($embeds);
                 $embeds[$lastKey]['footer'] = [
-                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                    'icon_url' => ksgAssetImage('external/discord/footer_image.png'),
                     'text'     => 'Keystone.guru Discord Bot',
                 ];
 
@@ -138,5 +148,80 @@ class WebhookController extends Controller
         }
 
         return response()->noContent();
+    }
+
+    public function wowheadOptions(Request $request): Response
+    {
+        return response()->noContent();
+    }
+
+    public function wowheadSpell(
+        WowheadPageRequest      $request,
+        WowheadServiceInterface $wowheadService,
+    ): string {
+        if (!config('app.debug', true)) {
+            abort(StatusCode::FORBIDDEN);
+        }
+
+        $validated = $request->validated();
+
+        preg_match('/spell=(\d+)/', $validated['url'], $matches);
+
+        $spellId = $matches[1] ?? null;
+
+        $retail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
+        $spell = Spell::find($spellId) ?? Spell::create([
+            'id'              => $spellId,
+            'game_version_id' => $retail->id,
+        ]);
+
+        $spellDataResult = $wowheadService->getSpellData(
+            $gameVersion = $retail,
+            $spellId,
+            $validated['html'],
+        );
+
+        $spellAttributes                    = $spellDataResult->toArray();
+        $spellAttributes['game_version_id'] = $gameVersion->id;
+        $spellAttributes['fetched_data_at'] = Carbon::now();
+
+        // Prevent category updates when we change it manually
+        if (in_array($spell->id, Spell::BLOODLUSTY_SPELLS)) {
+            unset($spellAttributes['category']);
+        }
+
+        $spell->update($spellAttributes);
+
+        return json_encode($spellDataResult->toArray());
+    }
+
+    public function wowheadNpc(
+        WowheadPageRequest      $request,
+        WowheadServiceInterface $wowheadService,
+    ): string {
+        if (!config('app.debug', true)) {
+            abort(StatusCode::FORBIDDEN);
+        }
+
+        $validated = $request->validated();
+
+        preg_match('/npc=(\d+)/', $validated['url'], $matches);
+
+        $npcId = $matches[1] ?? null;
+
+        $npc = Npc::findOrFail($npcId);
+
+        $displayId = $wowheadService->getNpcDisplayId(
+            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+            $npc,
+            $validated['html'],
+        );
+
+        $npc->update([
+            'display_id' => $displayId,
+        ]);
+
+        return json_encode($npc->toArray());
     }
 }

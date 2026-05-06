@@ -4,21 +4,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Jobs\RefreshEnemyForces;
+use App\Jobs\RegenerateCombatLogRoute;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
+use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
+use App\Models\User;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -28,6 +35,9 @@ use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MDT\MDTMappingVersionServiceInterface;
+use App\Service\MessageBanner\MessageBannerServiceInterface;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -40,6 +50,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Session;
@@ -60,7 +72,7 @@ class AdminToolsController extends Controller
 
     public function combatlog(
         MapContextServiceInterface              $mapContextService,
-        ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService
+        ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService,
     ): View {
         try {
             $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
@@ -83,7 +95,7 @@ class AdminToolsController extends Controller
                 //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
                 //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
                 //                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
-                )
+                ),
             );
         } catch (Exception $exception) {
             dd($exception);
@@ -104,9 +116,32 @@ class AdminToolsController extends Controller
             'dungeonroute' => $dungeonRoute,
             'title'        => $dungeonRoute->getTitleSlug(),
             'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, $floor),
+            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, User::getCurrentUserMapFacadeStyle()),
             'floorIndex'   => 1,
         ]);
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function messageBanner(): View
+    {
+        return view('admin.tools.messagebanner.set');
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function messageBannerSubmit(
+        Request                       $request,
+        MessageBannerServiceInterface $messageBannerService,
+    ): RedirectResponse {
+        $message = $request->get('message');
+        $messageBannerService->setMessage(empty($message) ? null : $message);
+
+        Session::flash('status', __('controller.admintools.flash.message_banner_set_successfully'));
+
+        return redirect()->route('admin.tools.messagebanner.set');
     }
 
     /**
@@ -168,9 +203,9 @@ class AdminToolsController extends Controller
                 $beforeModel = clone $npcCandidate;
 
                 /** @var Dungeon $dungeon */
-                $dungeon = Dungeon::where('zone_id', $npcData['location'][0])->first();
-                if ($dungeon === null) {
-                    $log[] = sprintf('*** Unable to find dungeon with zone_id %s; npc %s (%s) NOT added; needs manual work', $npcData['location'][0], $npcData['id'], $npcData['name']);
+                $dungeons = Dungeon::whereIn('zone_id', $npcData['location'])->get();
+                if ($dungeons->isEmpty()) {
+                    $log[] = sprintf('*** Unable to find dungeon(s) with zone_id(s) %s; npc %s (%s) NOT added; needs manual work', implode(', ', $npcData['location']), $npcData['id'], $npcData['name']);
 
                     continue;
                 }
@@ -189,33 +224,40 @@ class AdminToolsController extends Controller
                 }
 
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
-                // 8 since we start the expansion with 8 dungeons usually
-                $npcCandidate->dungeon_id = count($npcData['location']) > 1 ? -1 : $dungeon->id;
-                $npcCandidate->name       = $npcData['name'];
-                // Do not overwrite health if it was set already
-                if ($npcCandidate->base_health <= 0) {
-                    $npcCandidate->base_health = 12345;
-                }
+                // This will be converted to a translation with localization:exportnpcnames!
+                $npcCandidate->name = $npcData['name'];
 
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
-                    if ($existed) {
-                        $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
-                    } else {
-                        // Now create new enemy forces. Default to 0
-                        $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+                    foreach ($dungeons as $dungeon) {
+                        NpcDungeon::create([
+                            'npc_id'     => $npcCandidate->id,
+                            'dungeon_id' => $dungeon->id,
+                        ]);
 
-                        $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        if ($existed) {
+                            $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        } else {
+                            // Now create new enemy forces. Default to 0
+                            $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+
+                            $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        }
                     }
                 } else {
-                    $log[] = sprintf('*** Error saving NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    $log[] = sprintf('*** Error saving NPC %s (%s)', $npcData['id'], $npcData['name']);
                 }
 
                 // Changed the mapping; so make sure we synchronize it
                 $this->mappingChanged($beforeModel, $npcCandidate);
             }
+
+            // Cannot do this automatically due to permission issues
+            $log[] = '';
+            $log[] = 'You can now run php artisan localization:exportnpcnames to export the NPC names to the localization files.';
+            $log[] = 'You can now run php artisan localization:importnpcnames to convert the NPC names to translation keys in the database.';
         } catch (Exception $exception) {
             dump($exception);
         } finally {
@@ -224,20 +266,18 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @param Dungeon|null $dungeon
+     * @param  Dungeon|null $dungeon
      * @return View
      */
     public function manageSpellVisibility(Request $request, ?Dungeon $dungeon = null): View
     {
         return view('admin.tools.npc.managespellvisibility', [
-            'npcs'    => Npc::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
-                return $builder->where('dungeon_id', $dungeon->id);
-            })->with('npcSpells')
+            'npcs' => Npc::when($dungeon !== null, fn(Builder $builder) => $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                ->select('npcs.*')
+                ->where('npc_dungeons.dungeon_id', $dungeon->id))->with('npcSpells')
                 ->has('npcSpells')
                 ->paginate(50),
-            'spells'  => Spell::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
-                return $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id);
-            })->get()
+            'spells' => Spell::with('gameVersion')->when($dungeon !== null, fn(Builder $builder) => $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id))->get()
                 ->keyBy('id'),
             'dungeon' => $dungeon,
         ]);
@@ -270,12 +310,26 @@ class AdminToolsController extends Controller
         $publicKey = $request->get('public_key');
 
         $dungeonRoute = DungeonRoute::with([
-            'faction', 'specializations', 'classes', 'races', 'affixes',
-            'brushlines', 'paths', 'author', 'killZones', 'pridefulEnemies', 'publishedstate',
-            'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
-        ])->when(is_numeric($publicKey), function(Builder $builder) use ($publicKey) {
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+            'affixes',
+            'brushlines',
+            'paths',
+            'author',
+            'killZones',
+            'pridefulEnemies',
+            'publishedstate',
+            'ratings',
+            'favorites',
+            'enemyraidmarkers',
+            'mapicons',
+            'mdtImport',
+            'team',
+        ])->when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {
             $builder->where('id', $publicKey);
-        }, function(Builder $builder) use ($publicKey) {
+        }, function (Builder $builder) use ($publicKey) {
             $builder->where('public_key', $publicKey);
         })->firstOrFail();
 
@@ -291,7 +345,9 @@ class AdminToolsController extends Controller
     {
         $mappingVersionUsage = MappingVersion::orderBy('dungeon_id')
             ->get()
-            ->mapWithKeys(static fn(MappingVersion $mappingVersion) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
+            ->mapWithKeys(static fn(
+                MappingVersion $mappingVersion,
+            ) => [$mappingVersion->getPrettyName() => $mappingVersion->dungeonRoutes()->count()])
             ->groupBy(static fn(int $count, string $key) => $count === 0, true);
 
         return view('admin.tools.dungeonroute.mappingversions', [
@@ -360,7 +416,13 @@ class AdminToolsController extends Controller
     {
         $dungeonId = (int)$request->get('dungeon_id');
 
-        $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+        $builder = DungeonRoute::without([
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+            'affixes',
+        ])
             ->select('id')
             ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId));
 
@@ -391,7 +453,13 @@ class AdminToolsController extends Controller
         $dungeonId   = (int)$request->get('dungeon_id');
         $onlyMissing = (int)$request->get('only_missing');
 
-        $builder = DungeonRoute::without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+        $builder = DungeonRoute::without([
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+            'affixes',
+        ])
             ->with('dungeon')
             ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->orderByDesc('created_at');
@@ -421,6 +489,49 @@ class AdminToolsController extends Controller
     }
 
     /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function combatlogregenerate(): View
+    {
+        return view('admin.tools.combatlog.regenerate');
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function combatlogregeneratesubmit(Request $request): View
+    {
+        set_time_limit(3600);
+
+        $dungeonId = (int)$request->get('dungeon_id');
+
+        $count = 0;
+
+        // Cannot use joins since the other table lives in a different database
+        DungeonRoute::query()
+            ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count) {
+                $dungeonRoutes = $dungeonRoutes->keyBy('id');
+                /** @var Collection<ChallengeModeRun> $challengeModes */
+                $challengeModes = ChallengeModeRun::whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
+                    ->get();
+
+                foreach ($challengeModes as $challengeMode) {
+                    RegenerateCombatLogRoute::dispatch(
+                        $dungeonRoutes->get($challengeMode->dungeon_route_id)->id,
+                    );
+                    $count++;
+                }
+            });
+
+        Session::flash('status', __('controller.admintools.flash.combatlog_route_regenerate_result', [
+            'count' => $count,
+        ]));
+
+        return view('admin.tools.combatlog.regenerate');
+    }
+
+    /**
      * @return Factory|
      */
     public function mdtview(): View
@@ -428,12 +539,14 @@ class AdminToolsController extends Controller
         return view('admin.tools.mdt.string');
     }
 
-    public function mdtviewsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService): JsonResponse
-    {
+    public function mdtviewsubmit(
+        Request                         $request,
+        MDTImportStringServiceInterface $mdtImportStringService,
+    ): JsonResponse {
         return response()->json(
             $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
-                ->getDecoded()
+                ->getDecoded(),
         );
     }
 
@@ -459,19 +572,23 @@ class AdminToolsController extends Controller
      *
      * @throws Throwable
      */
-    public function mdtviewasdungeonroutesubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService)
-    {
+    public function mdtviewasdungeonroutesubmit(
+        Request                         $request,
+        MDTImportStringServiceInterface $mdtImportStringService,
+    ) {
         try {
             $dungeonRoute = $mdtImportStringService
                 ->setEncodedString($request->get('import_string'))
                 ->getDungeonRoute(collect(), collect());
-            $dungeonRoute->makeVisible(['affixes', 'killZones']);
+            $dungeonRoute->makeVisible([
+                'affixes',
+                'killZones',
+            ]);
 
             dd($dungeonRoute);
         } catch (InvalidMDTStringException) {
             return abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
-
             // Different message based on our deployment settings
             if (config('app.debug')) {
                 $message = sprintf(__('controller.admintools.error.invalid_mdt_string_exception'), $ex->getMessage());
@@ -502,13 +619,16 @@ class AdminToolsController extends Controller
      *
      * @throws Throwable
      */
-    public function mdtviewasstringsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService, MDTExportStringServiceInterface $mdtExportStringService)
-    {
+    public function mdtviewasstringsubmit(
+        Request                         $request,
+        MDTImportStringServiceInterface $mdtImportStringService,
+        MDTExportStringServiceInterface $mdtExportStringService,
+    ) {
         $publicKey = $request->get('public_key');
 
-        $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function(Builder $builder) use ($publicKey) {
+        $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {
             $builder->where('id', $publicKey);
-        }, function(Builder $builder) use ($publicKey) {
+        }, function (Builder $builder) use ($publicKey) {
             $builder->where('public_key', $publicKey);
         })->firstOrFail();
 
@@ -525,7 +645,6 @@ class AdminToolsController extends Controller
 
             dd($exportString, $stringContents);
         } catch (Exception $ex) {
-
             // Different message based on our deployment settings
             if (config('app.debug')) {
                 $message = sprintf(__('controller.admintools.error.invalid_mdt_string_exception'), $ex->getMessage());
@@ -556,8 +675,10 @@ class AdminToolsController extends Controller
      *
      * @throws Throwable
      */
-    public function mdtdungeonmappinghashsubmit(Request $request, MDTMappingImportServiceInterface $mdtMappingService): void
-    {
+    public function mdtdungeonmappinghashsubmit(
+        Request                          $request,
+        MDTMappingImportServiceInterface $mdtMappingService,
+    ): void {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
         dd($mdtMappingService->getMDTMappingHash($dungeon->key));
@@ -576,7 +697,9 @@ class AdminToolsController extends Controller
                     $dungeon = Dungeon::findOrFail($id);
 
                     return [
-                        __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(static fn(MappingVersion $mappingVersion) => [
+                        __($dungeon->name) => $mappingVersionByDungeon->mapWithKeys(static fn(
+                            MappingVersion $mappingVersion,
+                        ) => [
                             $mappingVersion->id => $mappingVersion->getPrettyName(),
                         ]),
                     ];
@@ -589,20 +712,77 @@ class AdminToolsController extends Controller
      *
      * @throws Throwable
      */
-    public function dungeonmappingversiontomdtmappingsubmit(Request $request, MDTMappingExportServiceInterface $mdtMappingService): void
-    {
+    public function dungeonmappingversiontomdtmappingsubmit(
+        Request                          $request,
+        MDTMappingExportServiceInterface $mdtMappingService,
+    ): void {
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version_id'));
 
         echo $mdtMappingService->getMDTMappingAsLuaString($mappingVersion);
         dd();
     }
 
+    public function dungeonMappingVersionAccuracy(
+        Request                           $request,
+        MDTMappingVersionServiceInterface $mappingVersionService,
+    ): View {
+        /** @var Collection<Dungeon> $allDungeons */
+        $allDungeons = Dungeon::with(['mappingVersions', 'mappingVersions.dungeon'])->get();
+
+        $dungeonAccuracyByFloor = collect();
+        foreach ($allDungeons as $dungeon) {
+            /**
+             * @var MappingVersion $latestMappingVersion I load the latest mapping version for this dungeon regardless
+             *                     of game version because we want to compare to the latest MDT version. The newest mapping version will
+             *                     generally be the mapping version that was used in the most recent version of MDT.
+             */
+            $latestMappingVersion = $dungeon->mappingVersions->first();
+
+            $dungeonAccuracyByFloor->put(
+                $dungeon->id,
+                $mappingVersionService->getMappingVersionAccuracy(
+                    $latestMappingVersion,
+                ),
+            );
+        }
+
+        return view('admin.tools.mdt.dungeonmappingversionaccuracy', [
+            'dungeonAccuracyByFloor' => $dungeonAccuracyByFloor,
+            'dungeonsById'           => $allDungeons->keyBy('id'),
+        ]);
+    }
+
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function importingamecoordinates(): View
+    public function spellsShowMissingSpellInfo(
+        SpellRepositoryInterface $spellRepository,
+    ): View {
+        $missingSpells = $spellRepository->getMissingSpellIds();
+
+        return view('admin.tools.spells.showmissingspellinfo', [
+            'spells' => Spell::whereNull('fetched_data_at')->get()->merge(
+                collect($missingSpells)->map(fn($spellId) => new Spell(['id' => $spellId, 'name' => 'Unknown'])),
+            ),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function npcsShowMissingDisplayId(): View
     {
-        return view('admin.tools.wowtools.importingamecoordinates');
+        return view('admin.tools.npc.showmissingdisplayid', [
+            'npcs' => Npc::whereNull('display_id')->get(),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function wagoggImportIngameCoordinates(): View
+    {
+        return view('admin.tools.wagogg.importingamecoordinates');
     }
 
     /**
@@ -610,171 +790,56 @@ class AdminToolsController extends Controller
      *
      * @throws Exception
      */
-    public function importingamecoordinatessubmit(Request $request): void
+    public function wagoggImportIngameCoordinatesSubmit(Request $request): void
     {
-        // Parse all Map TABLE data and convert them to a workable format
-        $mapTable                   = $request->get('map_table_xhr_response');
-        $mapTableParsed             = json_decode((string)$mapTable, true)['data'];
-        $mapTableHeaders            = [
-            'ID', 'Directory', 'MapName_lang', 'MapDescription0_lang', 'MapDescription1_lang', 'PvpShortDescription_lang',
-            'Corpse[0]', 'Corpse[1]', 'MapType', 'InstanceType', 'ExpansionID', 'AreaTableID', 'LoadingScreenID',
-            'TimeOfDayOverride', 'ParentMapId', 'CosmeticParentMapID', 'TimeOffset', 'MinimapIconScale', 'CorpseMapID',
-            'MaxPlayers', 'WindSettingsID', 'ZmpFileDataID', 'WdtFileDataID', 'NavigationMaxDistance', 'Flags[0]',
-            'Flags[1]', 'Flags[2]',
-        ];
-        $mapTableHeaderIndexMapName = array_search('MapName_lang', $mapTableHeaders, true);
-        $mapTableHeaderIndexMapId   = array_search('ID', $mapTableHeaders, true);
-
-        // Parse all Map Group Member TABLE data and convert them to a workable format
-        $mapGroupMemberTable                    = $request->get('ui_map_group_member_table_xhr_response');
-        $mapGroupMemberTableParsed              = json_decode((string)$mapGroupMemberTable, true)['data'];
-        $mapGroupMemberTableHeaders             = [
-            'ID', 'Name_lang', 'UiMapGroupID', 'UiMapID', 'FloorIndex', 'RelativeHeightIndex',
-        ];
-        $mapGroupMemberTableHeaderIndexNameLang = array_search('Name_lang', $mapGroupMemberTableHeaders, true);
-        $mapGroupMemberTableHeaderIndexUiMapId  = array_search('UiMapID', $mapGroupMemberTableHeaders, true);
-
         // Parse all UI Map Assignment TABLE data and convert them to a workable format
-        $uiMapAssignmentTable       = $request->get('ui_map_assignment_table_xhr_response');
-        $uiMapAssignmentTableParsed = json_decode((string)$uiMapAssignmentTable, true)['data'];
+        $uiMapAssignmentTable                   = $request->get('ui_map_assignment_table_csv');
+        $uiMapAssignmentTableParsed             = str_getcsv_assoc($uiMapAssignmentTable);
+        $uiMapAssignmentTableHeaders            = array_shift($uiMapAssignmentTableParsed);
+        $uiMapAssignmentTableHeaderIndexUiMapId = array_search('UiMapID', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMinX    = array_search('Region_0', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMinY    = array_search('Region_1', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMaxX    = array_search('Region_3', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMaxY    = array_search('Region_4', $uiMapAssignmentTableHeaders, true);
 
-        $uiMapAssignmentTableHeaders               = [
-            'UiMin[0]', 'UiMin[1]', 'UiMax[0]', 'UiMax[1]', 'Region[0]', 'Region[1]', 'Region[2]',
-            'Region[3]', 'Region[4]', 'Region[5]', 'ID', 'UiMapID', 'OrderIndex', 'MapID', 'AreaID',
-            'WMODoodadPlacementID', 'WMOGroupID',
-        ];
-        $uiMapAssignmentTableHeaderIndexMapId      = array_search('MapID', $uiMapAssignmentTableHeaders, true);
-        $uiMapAssignmentTableHeaderIndexUiMapId    = array_search('UiMapID', $uiMapAssignmentTableHeaders, true);
-        $uiMapAssignmentTableHeaderIndexOrderIndex = array_search('OrderIndex', $uiMapAssignmentTableHeaders, true);
-        $uiMapAssignmentTableHeaderIndexMinX       = array_search('Region[0]', $uiMapAssignmentTableHeaders, true);
-        $uiMapAssignmentTableHeaderIndexMinY       = array_search('Region[1]', $uiMapAssignmentTableHeaders, true);
-        $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders, true);
-        $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders, true);
-
-        /** @var Collection<Dungeon> $allDungeons */
+        /** @var Collection<Floor> $allFloors */
         //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
-        $allDungeons = Dungeon::where('map_id', '>', 0)->get()->keyBy('id');
+        $allFloors = Floor::where('facade', 0)
+            ->where('ui_map_id', '>', 0)
+            ->where('ingame_min_x', 0)
+            ->where('ingame_min_y', 0)
+//            ->where('ingame_max_x', 0)
+//            ->where('ingame_max_y', 0)
+            ->get();
 
-        $changedDungeons = collect();
+        dump('Changed floors:');
 
-        // Go over the Map TABLE and parse the map_id - it's the only thing we're interested in
-        foreach ($mapTableParsed as $mapTableRow) {
-            foreach ($allDungeons as $dungeon) {
-                // The map names don't always match up (the combined dungeons such as Karazhan seem problematic, have to do this by hand)
-                $mapId = (int)$mapTableRow[$mapTableHeaderIndexMapId];
-                if (trim((string)$mapTableRow[$mapTableHeaderIndexMapName]) === __($dungeon->name)) {
-                    if ($dungeon->map_id !== $mapId) {
-                        $beforeModel = clone $dungeon;
+        $allUiMapIds                = $allFloors->pluck('ui_map_id')->toArray();
+        $uiMapAssignmentTableParsed = array_filter($uiMapAssignmentTableParsed, fn(array $item) => in_array($item[$uiMapAssignmentTableHeaderIndexUiMapId], $allUiMapIds));
 
-                        $dungeon->update(['map_id' => $mapId]);
+        // Go over the UI Map Assignments and find the ones we're interested in
+        foreach ($allFloors as $floor) {
+            foreach ($uiMapAssignmentTableParsed as $index => $uiMapAssignmentRow) {
+                if (((int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId]) === $floor->ui_map_id) {
+                    $beforeModel = clone $floor;
 
-                        // Ensure that the mapping site sees this as a change
-                        $this->mappingChanged($beforeModel, $dungeon);
-                    }
+                    $floor->update([
+                        'ingame_min_x' => round((float)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX], 2),
+                        'ingame_min_y' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY], 2),
+                        'ingame_max_x' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX], 2),
+                        'ingame_max_y' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY], 2),
+                    ]);
 
-                    // We just want to know which dungeons did NOT have a map_id set, but if we found the dungeon we're okay
-                    $changedDungeons->put($dungeon->id, $dungeon);
+                    dump(sprintf('Updated floor %s (id: %d, ui_map_id: %d) ', __($floor->name), $floor->id, $floor->ui_map_id));
+
+//                    $this->mappingChanged($beforeModel, $floor);
+
                     break;
                 }
             }
         }
 
-        // Keep track of the unchanged dungeons so that we can notify them as a warning at the end of the call
-        $unchangedDungeons = $allDungeons->diffKeys($changedDungeons);
-
-        // Go over the UI Map Assignments and find the ones we're interested in
-        foreach ($allDungeons as $dungeon) {
-            if ($dungeon->floors->count() === 0) {
-                dump(sprintf('Skipping dungeon %s - no floors defined so no point', __($dungeon->name)));
-
-                continue;
-            }
-
-            foreach ($uiMapAssignmentTableParsed as $uiMapAssignmentRow) {
-                if ((int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMapId] === $dungeon->map_id &&
-                    (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexOrderIndex] === 0) {
-                    // Now that we know the UI map ID - cross-reference it with the map group to get the correct floor
-                    $uiMapId = (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId];
-
-                    // Try to find the map group member (floor definition) - NOTE: sometimes this doesn't exist,
-                    // and you'll have to manually verify it without!
-                    $foundMapGroupMember = false;
-                    foreach ($mapGroupMemberTableParsed as $mapGroupMemberRow) {
-                        if ((int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId] === $uiMapId) {
-                            // We found the group member - now find which floor it was for
-                            $mapGroupMemberFloorName = html_entity_decode(
-                                trim((string)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexNameLang]),
-                                ENT_QUOTES,
-                                'UTF-8'
-                            );
-                            $foundFloor              = false;
-                            foreach ($dungeon->floors as $floor) {
-                                if ($mapGroupMemberFloorName === __($floor->name)) {
-                                    $beforeModel = clone $floor;
-
-                                    $floor->update([
-                                        'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
-                                        'ingame_min_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY],
-                                        'ingame_max_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX],
-                                        'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
-                                    ]);
-
-                                    dump('Updated floor ' . __($floor->name));
-
-                                    $this->mappingChanged($beforeModel, $floor);
-                                    $foundFloor = true;
-                                    break;
-                                }
-                            }
-
-                            if (!$foundFloor) {
-                                dump(
-                                    sprintf('Unable to find floor with id %d and name %s in dungeon %s (typo in name or floor does not exist?)',
-                                        (int)$mapGroupMemberRow[$mapGroupMemberTableHeaderIndexUiMapId],
-                                        __($dungeon->name),
-                                        $mapGroupMemberFloorName
-                                    )
-                                );
-                            }
-
-                            $foundMapGroupMember = true;
-                            break;
-                        }
-                    }
-
-                    if (!$foundMapGroupMember) {
-                        if ($dungeon->floors->count() === 1) {
-                            /** @var Floor $floor */
-                            $floor       = $dungeon->floors->first();
-                            $beforeModel = clone $floor;
-
-                            $floor->update([
-                                'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
-                                'ingame_min_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY],
-                                'ingame_max_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX],
-                                'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
-                            ]);
-
-                            dump('Updated floor from backup: ' . __($floor->name));
-
-                            $this->mappingChanged($beforeModel, $floor);
-                        } else {
-                            dump(sprintf('Unable to find map group member with ui map id %d (%s)',
-                                (int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId],
-                                __($dungeon->name)
-                            ), [
-                                'ingame_min_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX],
-                                'ingame_min_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY],
-                                'ingame_max_x' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX],
-                                'ingame_max_y' => $uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY],
-                            ]);
-                        }
-                    }
-                }
-            }
-        }
-
-        dd($changedDungeons, $unchangedDungeons->pluck('name')->toArray());
+        dd('done!');
     }
 
     /**
@@ -784,15 +849,19 @@ class AdminToolsController extends Controller
      */
     public function mdtdiff(
         CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService
+        CoordinatesServiceInterface $coordinatesService,
     ): View {
         $warnings = new Collection();
-        $npcs     = Npc::with(['enemies', 'type'])->get();
+        $npcs     = Npc::with([
+            'npcEnemyForces',
+            'enemies',
+            'type',
+        ])->get();
 
         // For each dungeon
         foreach (Dungeon::all() as $dungeon) {
             /** @var Dungeon $dungeon */
-            $mdtNpcs = (new MDTDungeon($cacheService, $coordinatesService, $dungeon))->getMDTNPCs();
+            $mdtNpcs = new MDTDungeon($cacheService, $coordinatesService, $dungeon)->getMDTNPCs();
 
             // For each NPC that is found in the MDT Dungeon
             foreach ($mdtNpcs as $mdtNpc) {
@@ -802,71 +871,111 @@ class AdminToolsController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var \App\Models\Npc\Npc $npc */
+                /** @var Npc $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
                 if ($npc === null) {
                     $warnings->push(
-                        new ImportWarning('missing_npc',
+                        new ImportWarning(
+                            'missing_npc',
                             sprintf(__('controller.admintools.error.mdt_unable_to_find_npc_for_id'), $mdtNpc->getId()),
-                            ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
-                        )
+                            [
+                                'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),
+                                'npc'     => $npc,
+                            ],
+                        ),
                     );
                 } // Found, compare
                 else {
-
                     // Match health
-                    if ($npc->base_health !== $mdtNpc->getHealth()) {
+                    $npcHealth = $npc->getHealthByGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL));
+                    if ($npcHealth?->health !== $mdtNpc->getHealth()) {
                         $warnings->push(
-                            new ImportWarning('mismatched_health',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
-                            )
+                            new ImportWarning(
+                                'mismatched_health',
+                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npcHealth->health),
+                                [
+                                    'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),
+                                    'npc'     => $npc,
+                                    'old'     => $npcHealth->health,
+                                    'new'     => $mdtNpc->getHealth(),
+                                ],
+                            ),
                         );
                     }
 
                     // Match enemy forces
                     /** @var NpcEnemyForces|null $npcEnemyForces */
-                    $npcEnemyForces = $npc->enemyForcesByMappingVersion()->first();
+                    $npcEnemyForces = $npc->enemyForcesByMappingVersion();
                     if ($npcEnemyForces?->enemy_forces !== $mdtNpc->getCount()) {
                         $warnings->push(
-                            new ImportWarning('mismatched_enemy_forces',
+                            new ImportWarning(
+                                'mismatched_enemy_forces',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces'), $mdtNpc->getId(), $mdtNpc->getCount(), $npcEnemyForces?->enemy_forces),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces, 'new' => $mdtNpc->getCount()]
-                            )
+                                [
+                                    'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),
+                                    'npc'     => $npc,
+                                    'old'     => $npcEnemyForces?->enemy_forces,
+                                    'new'     => $mdtNpc->getCount(),
+                                ],
+                            ),
                         );
                     }
 
                     // Match enemy forces teeming
                     if ($npcEnemyForces?->enemy_forces_teeming !== $mdtNpc->getCountTeeming()) {
                         $warnings->push(
-                            new ImportWarning('mismatched_enemy_forces_teeming',
+                            new ImportWarning(
+                                'mismatched_enemy_forces_teeming',
                                 sprintf(__('controller.admintools.error.mdt_mismatched_enemy_forces_teeming'), $mdtNpc->getId(), $mdtNpc->getCountTeeming(), $npcEnemyForces?->enemy_forces_teeming),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcEnemyForces?->enemy_forces_teeming, 'new' => $mdtNpc->getCountTeeming()]
-                            )
+                                [
+                                    'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),
+                                    'npc'     => $npc,
+                                    'old'     => $npcEnemyForces?->enemy_forces_teeming,
+                                    'new'     => $mdtNpc->getCountTeeming(),
+                                ],
+                            ),
                         );
                     }
 
                     // Match clone count, should be equal
                     if ($npc->enemies->count() !== count($mdtNpc->getClones())) {
                         $warnings->push(
-                            new ImportWarning('mismatched_enemy_count',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_count'),
-                                    $mdtNpc->getId(), count($mdtNpc->getClones()), $npc->enemies === null ? 0 : $npc->enemies->count()),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc]
-                            )
+                            new ImportWarning(
+                                'mismatched_enemy_count',
+                                sprintf(
+                                    __('controller.admintools.error.mdt_mismatched_enemy_count'),
+                                    $mdtNpc->getId(),
+                                    count($mdtNpc->getClones()),
+                                    $npc->enemies === null ? 0 : $npc->enemies->count(),
+                                ),
+                                [
+                                    'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),
+                                    'npc'     => $npc,
+                                ],
+                            ),
                         );
                     }
 
                     // Match npc type, should be equal
                     if ($npc->type->type !== $mdtNpc->getCreatureType()) {
                         $warnings->push(
-                            new ImportWarning('mismatched_enemy_type',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_enemy_type'),
-                                    $mdtNpc->getId(), $mdtNpc->getCreatureType(), $npc->type->type),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->type->type, 'new' => $mdtNpc->getCreatureType()]
-                            )
+                            new ImportWarning(
+                                'mismatched_enemy_type',
+                                sprintf(
+                                    __('controller.admintools.error.mdt_mismatched_enemy_type'),
+                                    $mdtNpc->getId(),
+                                    $mdtNpc->getCreatureType(),
+                                    $npc->type->type,
+                                ),
+                                [
+                                    'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),
+                                    'npc'     => $npc,
+                                    'old'     => $npc->type->type,
+                                    'new'     => $mdtNpc->getCreatureType(),
+                                ],
+                            ),
                         );
                     }
                 }
@@ -902,27 +1011,30 @@ class AdminToolsController extends Controller
     /**
      * @return array
      */
-    public function applychange(Request $request)
+    public function applyChange(Request $request)
     {
-        $category = $request->get('category');
-        $npcId    = $request->get('npc_id');
-        $value    = $request->get('value');
+        $category  = $request->get('category');
+        $npcId     = $request->get('npc_id');
+        $dungeonId = $request->get('dungeon_id');
+        $value     = $request->get('value');
 
-        /** @var \App\Models\Npc\Npc $npc */
-        $npc = Npc::with(['enemyForces'])->find($npcId);
+        /** @var Npc $npc */
+        $npc     = Npc::with(['enemyForces'])->find($npcId);
+        $dungeon = Dungeon::findOrFail($dungeonId);
 
         switch ($category) {
             case 'mismatched_health':
-                $npc->base_health = $value;
-                $npc->save();
+                $npc->getHealthByGameVersion(
+                    GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+                )?->update([
+                    'health' => $value,
+                ]);
                 break;
             case 'mismatched_enemy_forces':
-                if ($npc->dungeon_id !== -1) {
-                    $npc->setEnemyForces($value);
-                }
+                $npc->setEnemyForces($value, $dungeon->getCurrentMappingVersion());
 
                 break;
-            // Teeming is deprecated pretty much
+                // Teeming is deprecated pretty much
             //            case 'mismatched_enemy_forces_teeming':
             //                $npc->enemyForces->enemy_forces_teeming = $value;
             //                $npc->enemyForces->save();
@@ -952,6 +1064,21 @@ class AdminToolsController extends Controller
         return view('admin.tools.list');
     }
 
+    public function toggleReadOnlyMode(
+        Request                      $request,
+        ReadOnlyModeServiceInterface $readOnlyModeService,
+    ): RedirectResponse {
+        if ($readOnlyModeService->isReadOnly()) {
+            $readOnlyModeService->setReadOnly(false);
+            Session::flash('status', __('controller.admintools.flash.read_only_mode_disabled'));
+        } else {
+            $readOnlyModeService->setReadOnly(true);
+            Session::flash('status', __('controller.admintools.flash.read_only_mode_enabled'));
+        }
+
+        return redirect()->route('admin.tools');
+    }
+
     /**
      * @throws Exception
      */
@@ -967,21 +1094,55 @@ class AdminToolsController extends Controller
      */
     public function exceptionselect(Request $request): View
     {
-        return view('admin.tools.exception.select');
+        return view('admin.tools.exception.select', [
+            'exceptions' => [
+                'TokenMismatchException' => 'TokenMismatchException',
+                'InternalServerError'    => 'InternalServerError',
+                'DiscordException'       => 'DiscordException',
+            ],
+        ]);
     }
 
     /**
      * @throws TokenMismatchException
      * @throws Exception
      */
-    public function exceptionselectsubmit(Request $request): void
+    public function exceptionselectsubmit(Request $request): array
     {
         switch ($request->get('exception')) {
             case 'TokenMismatchException':
-                throw new TokenMismatchException(__('controller.admintools.flash.exception.token_mismatch'));
+                throw new TokenMismatchException(__('controller.admintools.flash.exception'));
             case 'InternalServerError':
-                throw new Exception(__('controller.admintools.flash.exception.internal_server_error'));
+                throw new Exception(__('controller.admintools.flash.exception'));
+            case 'DiscordException':
+                Log::error('Manual Generic test log from web');
+
+                Log::channel('discord')->error('Manual Discord test log from web');
+
+                Log::stack([
+                    'daily',
+                    'discord',
+                ])->error('Manual stack log test from web');
+
+                $handlerLogging = app()->make(HandlerLoggingInterface::class);
+                $handlerLogging->uncaughtException(
+                    $request->ip(),
+                    $request->url(),
+                    null,
+                    null,
+                    null,
+                    'DiscordException',
+                    'Structured logging test from web',
+                );
+
+                return [
+                    'logging.default' => Config::get('logging.default'),
+                    'stack_channels'  => Config::get('logging.channels.stack.channels'),
+                    'discord_config'  => Config::get('logging.channels.discord'),
+                ];
         }
+
+        return [];
     }
 
     public function listFeatures(Request $request): View
@@ -1005,8 +1166,8 @@ class AdminToolsController extends Controller
         Session::flash('status', __(!$wasActive ?
             'controller.admintools.flash.feature_toggle_activated' :
             'controller.admintools.flash.feature_toggle_deactivated', [
-            'feature' => $feature,
-        ]));
+                'feature' => $feature,
+            ]));
 
         return redirect()->route('admin.tools.features.list');
     }

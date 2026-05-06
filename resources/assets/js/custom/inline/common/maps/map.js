@@ -96,20 +96,34 @@ class CommonMapsMap extends InlineCode {
 
             // Trigger info popover
             $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
+                $('#view_dungeonroute_affixes').html(
+                    handlebarsAffixGroupsParse(self.options.dungeonroute.affixes)
+                );
+
                 $('#view_dungeonroute_group_setup').html(
                     handlebarsGroupSetupParse(self.options.dungeonroute.setup)
                 );
 
-                // refreshTooltips();
+                refreshTooltips($('#view_dungeonroute_affixes .select_icon'));
             });
 
-            // Enemy info should be set on mouseover
-            getState().register('focusedenemy:changed', this, this._onFocusedEnemyChanged.bind(this));
+            // Enemy info should be set on right click
+            let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+            let registerEnemyContextMenuFn = function (addEvent) {
+                addEvent.data.object.register('enemy:contextmenu', self, self._onEnemyContextMenu.bind(self));
+            };
+            enemyMapObjectGroup.register('object:add', this, registerEnemyContextMenuFn);
+
+            // Register it for any enemies that were already added
+            for (let index in enemyMapObjectGroup.objects) {
+                if (enemyMapObjectGroup.objects.hasOwnProperty(index)) {
+                    registerEnemyContextMenuFn({data: {object: enemyMapObjectGroup.objects[index]}});
+                }
+            }
 
             $('#userreport_enemy_modal_submit').unbind('click').bind('click', this._submitEnemyUserReport.bind(this));
 
             this._dungeonMap.leafletMap.on('move', function () {
-                $('#enemy_info_container').hide();
             });
 
             // Live sessions
@@ -144,7 +158,7 @@ class CommonMapsMap extends InlineCode {
             map_unkilled_enemy_opacity: '50',
             map_unkilled_important_enemy_opacity: '80',
             map_enemy_aggressiveness_border: 0,
-            map_enemy_dangerous_border: 0,
+            map_enemy_dangerous_border: 1,
             enemy_display_type: 'enemy_portrait',
             echo_cursors_enabled: 1,
             map_controls_show_hide_labels: 1
@@ -228,7 +242,7 @@ class CommonMapsMap extends InlineCode {
                     // Floor selection may not exist
                     if ($selector.length > 0) {
                         let messageKey = selectors[i][0];
-                        $selector.attr('data-intro', lang.get(`messages.${messageKey}`));
+                        $selector.attr('data-intro', lang.get(`js.${messageKey}`));
                         $selector.attr('data-position', selectors[i][2]);
                         $selector.attr('data-step', step);
 
@@ -305,7 +319,7 @@ class CommonMapsMap extends InlineCode {
 
         // Add the header
         $mapObjectGroupVisibilityDropdown.append($('<a>', {
-            text: lang.get(`messages.header_map_object_group_label`),
+            text: lang.get(`js.header_map_object_group_label`),
             class: 'dropdown-item disabled'
         }));
 
@@ -342,7 +356,7 @@ class CommonMapsMap extends InlineCode {
                 }
 
                 $mapObjectGroupVisibilityDropdown.append($('<a>', {
-                    text: lang.get(`messages.${group.names[0]}_map_object_group_label`),
+                    text: lang.get(`js.${group.names[0]}_map_object_group_label`),
                     class: 'dropdown-item ' + (selected ? 'active' : ''),
                     'data-group': group.names[0]
                 }));
@@ -487,33 +501,37 @@ class CommonMapsMap extends InlineCode {
 
 
     /**
-     * Called when the focused enemy was changed
-     * @param focusedEnemyChangedEvent
+     * Called when the enemy context menu was triggered
+     * @param enemyContextMenuEvent
      * @private
      */
-    _onFocusedEnemyChanged(focusedEnemyChangedEvent) {
-        let focusedEnemy = focusedEnemyChangedEvent.data.focusedenemy;
-        let isNull = focusedEnemy === null;
-        // Show/hide based on being set or not
-        // $('#enemy_info_container').toggle(!isNull);
-        if (!isNull) {
-            let visualData = focusedEnemy.getVisualData();
-            if (visualData !== null) {
-                $('#enemy_info_container').show().find('.card-title').html(focusedEnemy.npc.name);
+    _onEnemyContextMenu(enemyContextMenuEvent) {
+        let enemy = enemyContextMenuEvent.context;
+        let visualData = enemy.getVisualData();
 
-                // Update the focused enemy in the sidebar
-                let template = Handlebars.templates['map_sidebar_enemy_info_template'];
-
-                $('#enemy_info_key_value_container').html(
-                    template(visualData)
+        if (visualData !== null) {
+            let $title = $('#enemy_details_modal_title_text').html(lang.get(enemy.npc.name));
+            if (getState().isMapAdmin()) {
+                $title.empty().append(
+                    $('<a />').attr('href', `/admin/npc/${enemy.npc.id}`).text(lang.get(enemy.npc.name))
                 );
-
-                refreshTooltips($('#enemy_info_container [data-toggle="tooltip"]'));
-                $('#enemy_report_enemy_id').val(focusedEnemy.id);
             }
+
+            let template = Handlebars.templates['map_sidebar_enemy_info_template'];
+            $('#enemy_details_modal_body').html(template(visualData));
+
+            refreshTooltips($('#enemy_details_modal_body [data-toggle="tooltip"]'));
+
+            // Reset report form
+            $('#enemy_report_enemy_id').val(enemy.id);
+            $('#enemy_report_username').val('');
+            $('#enemy_report_message').val('');
+            $('#enemy_report_contact_ok').prop('checked', false);
+            $('#enemy_report_collapse').collapse('hide');
+
+            $('#enemy_details_modal').modal('show');
         }
     }
-
 
     /**
      *
@@ -537,8 +555,8 @@ class CommonMapsMap extends InlineCode {
                 $('#userreport_enemy_modal_saving').show();
             },
             success: function () {
-                $('#userreport_enemy_modal').modal('hide');
-                showSuccessNotification(lang.get('messages.user_report_enemy_success'));
+                $('#enemy_report_collapse').collapse('hide');
+                showSuccessNotification(lang.get('js.user_report_enemy_success'));
             },
             complete: function () {
                 $('#userreport_enemy_modal_submit').show();
@@ -615,7 +633,8 @@ class CommonMapsMap extends InlineCode {
     _fetchMdtExportString() {
         $.ajax({
             type: 'GET',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
+            // When in edit mode, never use the cache, when viewing we DO want the cache to avoid excessive server load
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport?useCache=${this.options.edit ? 0 : 1}`,
             dataType: 'json',
             beforeSend: function () {
                 $('.mdt_export_loader_container').show();
@@ -776,11 +795,11 @@ class CommonMapsMap extends InlineCode {
 
             let closestValidMdtEnemy = this._getClosestMDTEnemyForEnemy(enemyToSolve);
             if (closestValidMdtEnemy !== null) {
-                console.log(`Auto solving enemy ${enemyToSolve.id} - mapping to MDT enemy ${closestValidMdtEnemy.id}/${closestValidMdtEnemy.npc.name}`);
+                console.log(`Auto solving enemy ${enemyToSolve.id} - mapping to MDT enemy ${closestValidMdtEnemy.id}/${lang.get(closestValidMdtEnemy.npc.name)}`);
                 closestValidMdtEnemy.connectToEnemy(enemyToSolve);
                 enemyToSolve.save();
             } else {
-                console.log(`Cannot find MDT enemy for ${enemyToSolve.id}/${enemyToSolve.npc.name}`);
+                console.log(`Cannot find MDT enemy for ${enemyToSolve.id}/${lang.get(enemyToSolve.npc.name)}`);
             }
         }
     }
@@ -840,7 +859,11 @@ class CommonMapsMap extends InlineCode {
     cleanup() {
         super.cleanup();
 
-        getState().unregister('focusedenemy:changed', this);
+        let enemyMapObjectGroup = this._dungeonMap.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+        for (let index in enemyMapObjectGroup.objects) {
+            enemyMapObjectGroup.objects[index].unregister('enemy:contextmenu', this);
+        }
+
         getState().unregister('snackbar:add', this);
         getState().unregister('snackbar:remove', this);
     }

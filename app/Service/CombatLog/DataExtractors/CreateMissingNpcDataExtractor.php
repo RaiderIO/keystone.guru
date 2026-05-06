@@ -11,6 +11,7 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcType;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLoggingInterface;
@@ -21,9 +22,9 @@ use Illuminate\Support\Collection;
 class CreateMissingNpcDataExtractor implements DataExtractorInterface
 {
     /** @var Collection<int>> */
-    private Collection $checkedNpcIds;
+    private readonly Collection $checkedNpcIds;
 
-    private CreateMissingNpcDataExtractorLoggingInterface $log;
+    private readonly CreateMissingNpcDataExtractorLoggingInterface $log;
 
     public function __construct()
     {
@@ -36,11 +37,13 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
 
-    public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
-    {
+    public function extractData(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                    $parsedEvent,
+    ): void {
         // Don't create summoned enemies!
         if ($parsedEvent instanceof CombatLogEvent && $parsedEvent->getSuffix() instanceof Summon) {
             $guid = $parsedEvent->getGenericData()->getDestGuid();
@@ -52,7 +55,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
                     $this->log->extractDataNpcWasSummoned(
                         $npcId,
-                        $parsedEvent->getGenericData()->getDestName()
+                        $parsedEvent->getGenericData()->getDestName(),
                     );
                 }
             }
@@ -78,12 +81,12 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             // Determine name
             if ($parsedEvent->getGenericData()->getSourceGuid()?->getGuid() === $guid->getGuid()) {
                 $name = $parsedEvent->getGenericData()->getSourceName();
-            } else if ($parsedEvent->getGenericData()->getDestGuid()?->getGuid() === $guid->getGuid()) {
+            } elseif ($parsedEvent->getGenericData()->getDestGuid()?->getGuid() === $guid->getGuid()) {
                 $name = $parsedEvent->getGenericData()->getDestName();
             } else {
                 $this->log->extractDataNpcNameNotFound(
                     $parsedEvent->getGenericData()->getSourceGuid()?->getGuid(),
-                    $parsedEvent->getGenericData()->getDestGuid()?->getGuid()
+                    $parsedEvent->getGenericData()->getDestGuid()?->getGuid(),
                 );
 
                 return;
@@ -98,7 +101,6 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
             $createdNpc = Npc::create([
                 'id'                => $guid->getId(),
-                'dungeon_id'        => $currentDungeon->dungeon->id,
                 'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
                 'npc_type_id'       => NpcType::HUMANOID,
                 'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
@@ -117,10 +119,16 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 } else {
                     // Calculate the base health based on the current key level + current max hp
                     $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $createdNpc->getScalingFactor(
-                            $currentDungeon->keyLevel,
-                            $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
-                        ));
+                        $currentDungeon->keyLevel,
+                        // Affixgroup can be null for PTR keys for example, which can have arbitrary affixes
+                        $currentDungeon->affixGroup?->affixes->pluck('key')->toArray() ?? [],
+                    ));
                 }
+
+                NpcDungeon::create([
+                    'npc_id'     => $createdNpc->id,
+                    'dungeon_id' => $currentDungeon->dungeon->id,
+                ]);
 
                 // @TODO For now don't update base health - I may be doing the calculation wrong, MDT's got it?
 //                $createdNpc->update([
@@ -138,7 +146,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             } else {
                 $this->log->extractDataNpcNotCreated(
                     $guid->getId(),
-                    $name
+                    $name,
                 );
             }
         }
@@ -146,7 +154,5 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
-
 }

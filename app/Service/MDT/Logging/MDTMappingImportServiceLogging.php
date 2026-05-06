@@ -7,8 +7,10 @@ use Exception;
 
 class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements MDTMappingImportServiceLoggingInterface
 {
-    public function importMappingVersionFromMDTMappingChanged(?string $mdtMappingHash, string $latestMdtMappingHash): void
-    {
+    public function importMappingVersionFromMDTMappingChanged(
+        ?string $mdtMappingHash,
+        string  $latestMdtMappingHash,
+    ): void {
         $this->info(__METHOD__, get_defined_vars());
     }
 
@@ -83,7 +85,9 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         int $npcCharacteristicsDeleted,
         int $npcCharacteristicsInserted,
         int $npcSpellsDeleted,
-        int $npcSpellsInserted
+        int $npcSpellsInserted,
+        int $npcDungeonsDeleted,
+        int $npcDungeonsInserted,
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -102,7 +106,6 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     {
         $this->debug(__METHOD__);
     }
-
 
     public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void
     {
@@ -169,8 +172,10 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(string $mdtUniqueKey, float $distance): void
-    {
+    public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(
+        string $mdtUniqueKey,
+        float  $distance,
+    ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
 
@@ -234,8 +239,12 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->start(__METHOD__);
     }
 
-    public function importEnemyPatrolsUnableToFindAttachedEnemy(int $mdtCloneIndex, array $mdtNpcClone, int $npcId, int $mdtId): void
-    {
+    public function importEnemyPatrolsUnableToFindAttachedEnemy(
+        int   $mdtCloneIndex,
+        array $mdtNpcClone,
+        int   $npcId,
+        int   $mdtId,
+    ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
 
@@ -249,7 +258,17 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->warning(__METHOD__, get_defined_vars());
     }
 
+    public function importEnemyPatrolsFoundExistingEnemyPatrol(int $enemyPatrolId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemyPatrolsSaveNewPolyline(int $polylineId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importEnemyPatrolsSaveNewMdtPolyline(int $polylineId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -264,9 +283,19 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importEnemyPatrolsCoupleEnemyPatrolToMdtPolyline(int $enemyPatrolId, int $polylineId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemyPatrolsCoupleEnemiesToEnemyPatrol(int $enemyPatrolId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(int $newEnemyPatrolId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function importEnemyPatrolsEnd(): void
@@ -294,8 +323,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function importMapPOIsNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void
-    {
+    public function importMapPOIsNewDungeonFloorSwitchMarkerOK(
+        int $dungeonFloorSwitchMarkerId,
+        int $floorId,
+        int $targetFloorId,
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 

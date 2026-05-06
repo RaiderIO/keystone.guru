@@ -23,11 +23,12 @@ parameters:
         maximumNumberOfProcesses: 4
         minimumNumberOfJobsPerProcess: 2
 
-
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'
 #
-#    excludePaths:
-#        - ./*/*/FileToBeExcluded.php
+
+    excludePaths:
+        # '#Keyword continue used outside of a loop or a switch statement#'
+        - resources/views/admin/tools/mdt/dungeonmappingversionaccuracy.blade.php
 #
 #    checkMissingIterableValueType: false

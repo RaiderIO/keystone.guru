@@ -12,6 +12,7 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
+use MarvinLabs\DiscordLogger\Discord\Exceptions\MessageCouldNotBeSent;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -42,6 +43,8 @@ class Handler extends ExceptionHandler
         MethodNotAllowedHttpException::class,
         NotFoundHttpException::class,
         AccessDeniedHttpException::class,
+        // No point in logging Discord message send failures to Discord
+        MessageCouldNotBeSent::class,
     ];
 
     /**
@@ -53,6 +56,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
+    #[\Override]
     public function report(Throwable $e): void
     {
         // request() is not available in console
@@ -64,8 +68,8 @@ class Handler extends ExceptionHandler
 
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
-            } else if (!in_array(get_class($e), $this->dontReport)) {
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), get_class($e), $e->getMessage());
+            } elseif (!in_array($e::class, $this->dontReport)) {
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage());
             }
         }
 
@@ -75,11 +79,12 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return mixed
      *
      * @throws Throwable
      */
+    #[\Override]
     public function render($request, Throwable $e)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {
@@ -90,13 +95,13 @@ class Handler extends ExceptionHandler
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
-            } else if ($e instanceof NotFoundHttpException) {
+            } elseif ($e instanceof NotFoundHttpException) {
                 return response()->json(['message' => __('exceptions.handler.api_route_not_found')], StatusCode::NOT_FOUND);
-            } else if ($e instanceof ThrottleRequestsException) {
+            } elseif ($e instanceof ThrottleRequestsException) {
                 return response()->json(['message' => __('exceptions.handler.too_many_requests')], RFC6585::TOO_MANY_REQUESTS);
-            } else if (!config('app.debug')) {
+            } elseif (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
-            } else if (config('app.type') !== 'local') {
+            } elseif (config('app.type') !== 'local') {
                 return response()->json(['message' => $e->getMessage()], StatusCode::INTERNAL_SERVER_ERROR);
             }
         }
@@ -107,9 +112,10 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param Request $request
+     * @param  Request $request
      * @return mixed
      */
+    #[\Override]
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {
@@ -130,7 +136,11 @@ class Handler extends ExceptionHandler
             return null;
         }
 
-        $keys = ['_token', 'password', 'password_confirmation'];
+        $keys = [
+            '_token',
+            'password',
+            'password_confirmation',
+        ];
         foreach ($keys as $key) {
             if (isset($array[$key]) && is_string($array[$key])) {
                 $array[$key] = '*********';

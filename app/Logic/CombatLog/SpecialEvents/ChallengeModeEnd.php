@@ -55,6 +55,7 @@ class ChallengeModeEnd extends SpecialEvent
         return $this->unknown2;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

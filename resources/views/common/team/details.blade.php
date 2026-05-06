@@ -9,26 +9,26 @@ use App\Models\TeamUser;
 ?>
 
 @isset($model)
-    {{ Form::model($model, ['route' => ['team.update', $model->public_key], 'method' => 'patch', 'files' => true]) }}
+    {{ html()->modelForm($model, 'PATCH', route('team.update', $model->public_key))->acceptsFiles()->open() }}
 @else
-    {{ Form::open(['route' => 'team.savenew', 'files' => true]) }}
+    {{ html()->form('POST', route('team.savenew'))->acceptsFiles()->open() }}
 @endisset
 
 @if(!isset($model))
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('name', __('view_common.team.details.name') . '<span class="form-required">*</span>', [], false) !!}
-        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+        {{ html()->label(__('view_common.team.details.name') . '<span class="form-required">*</span>', 'name') }}
+        {{ html()->text('name')->class('form-control') }}
     </div>
 @endif
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-    {!! Form::label('description', __('view_common.team.details.description')) !!}
-    {!! Form::text('description', null, ['class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.team.details.description'), 'description') }}
+    {{ html()->text('description')->class('form-control') }}
 </div>
 
 <div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
-    {!! Form::label('logo', __('view_common.team.details.logo')) !!}
-    {!! Form::file('logo', ['class' => 'form-control']) !!}
+    {{ html()->label(__('view_common.team.details.logo'), 'logo') }}
+    {{ html()->file('logo')->class('form-control') }}
 </div>
 
 @if(isset($model) && isset($model->iconfile))
@@ -41,9 +41,7 @@ use App\Models\TeamUser;
 
 <div class="row">
     <div class="col">
-        {!! Form::submit(isset($model) ?
-            __('view_common.team.details.save') :
-            __('view_common.team.details.submit'), ['class' => 'btn btn-info']) !!}
+        {{ html()->input('submit')->value(isset($model) ? __('view_common.team.details.save') : __('view_common.team.details.submit'))->class('btn btn-info') }}
     </div>
     <div class="col">
         @if(isset($model) && $model->getUserRole(Auth::user()) === TeamUser::ROLE_ADMIN)
@@ -54,4 +52,4 @@ use App\Models\TeamUser;
     </div>
 </div>
 
-{!! Form::close() !!}
+{{ html()->closeModelForm() }}

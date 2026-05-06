@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'discover'       => [
-        'dungeon'  => [
+
+    'discover' => [
+        'dungeon' => [
             'overview' => [
+                'weekly_route'               => 'Raider.IO Weekly Route',
                 'popular'                    => 'Popular routes',
                 'popular_by_current_affixes' => 'Popular routes by current affixes',
                 'popular_by_next_affixes'    => 'Popular routes by next affixes',
@@ -17,10 +19,10 @@ return [
             'popular_by_next_affixes'    => 'Popular routes by next affixes',
             'newly_published_routes'     => 'Newly published routes',
         ],
-        'panel'    => [
+        'panel' => [
             'show_more' => 'Show more',
         ],
-        'search'   => [
+        'search' => [
             'page_title'              => 'Search routes',
             'header'                  => 'Search routes',
             'title'                   => 'Title',
@@ -28,6 +30,7 @@ return [
             'key_level'               => 'Key level',
             'affixes'                 => 'Affixes',
             'affixes_title'           => 'Select affixes',
+            'select_affixes'          => 'Select affixes',
             'affixes_selected'        => '{0} affixes selected',
             'enemy_forces'            => 'Enemy forces',
             'enemy_forces_complete'   => 'Complete',
@@ -37,18 +40,19 @@ return [
             'user_placeholder'        => 'Filter by user',
         ],
     ],
-    'livesession'    => [
-        'view' => [
+    'livesession' => [
+        'title' => 'Live session - :title',
+        'view'  => [
             'any' => 'Any',
         ],
     ],
-    'edit'           => [
+    'edit' => [
         'title'                                   => 'Edit %s',
         'linkpreview_title'                       => '%s | Keystone.guru',
         'linkpreview_default_description'         => 'Edit M+ route for dungeon %s by %s',
         'linkpreview_default_description_sandbox' => 'Edit M+ route for dungeon %s',
     ],
-    'embed'          => [
+    'embed' => [
         'title'            => 'Embed :routeTitle',
         'any'              => 'Any',
         'select_floor'     => 'Select floor',
@@ -56,18 +60,18 @@ return [
         'affixes_selected' => '{0} affixes selected',
         'view_route'       => 'View route',
         'present_route'    => 'Present route',
-        'copy_mdt_string'  => 'Copy MDT string',
+        'copy_mdt_string'  => 'Copy MDT',
     ],
-    'limitreached'   => [
+    'limitreached' => [
         'title'                     => 'Limit reached',
         'header'                    => 'Limit reached',
         'limit_reached_description' => 'You have reached the maximum amount of routes you may create (%s). Please consider becoming a Patron to continue making more routes, or delete some of your existing routes. Thank you for using the site!',
         'become_a_patreon'          => 'Become a %s Patron!',
     ],
-    'new'            => [
+    'new' => [
         'title' => 'New route',
     ],
-    'newtemporary'   => [
+    'newtemporary' => [
         'title'  => 'Create temporary route',
         'header' => 'New temporary route',
     ],
@@ -76,15 +80,16 @@ return [
         'header'              => 'Route already claimed',
         'claimed_description' => 'This route has already been claimed by someone (or you used the back button in your browser to navigate here).',
     ],
-    'unavailable'    => [
+    'unavailable' => [
         'title'                   => 'Unpublished route',
         'unavailable_description' => 'You are not authorized to view this route. Ask the author of the route to change the route\'s Sharing settings so that you can view it.',
     ],
-    'view'           => [
+    'view' => [
         'any'                                     => 'Any',
         'linkpreview_title'                       => '%s',
         'linkpreview_default_description'         => 'M+ route for dungeon %s by %s.',
         'linkpreview_default_description_sandbox' => 'Temporary M+ route for dungeon %s.',
         'linkpreview_default_description_explore' => 'Explore %s.',
     ],
+
 ];

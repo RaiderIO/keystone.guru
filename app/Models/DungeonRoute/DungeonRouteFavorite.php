@@ -18,7 +18,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DungeonRouteFavorite extends Model
 {
-    public $fillable = ['dungeon_route_id', 'user_id'];
+    public $fillable = [
+        'dungeon_route_id',
+        'user_id',
+    ];
 
     public $timestamps = false;
 

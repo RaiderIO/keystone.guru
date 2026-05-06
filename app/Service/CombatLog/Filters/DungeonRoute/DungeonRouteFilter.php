@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Filters\DungeonRoute;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
+use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -38,32 +39,53 @@ class DungeonRouteFilter implements CombatLogParserInterface
     {
         if ($combatLogEvent instanceof CombatLogVersion && !$combatLogEvent->isAdvancedLogEnabled()) {
             throw new AdvancedLogNotEnabledException(
-                'Advanced combat logging must be enabled in order to create a dungeon route from a combat log!'
+                'Advanced combat logging must be enabled in order to create a dungeon route from a combat log!',
             );
-        } else if ($combatLogEvent instanceof ChallengeModeStart) {
-            try {
-                $dungeon = Dungeon::where('challenge_mode_id', $combatLogEvent->getChallengeModeID())->firstOrFail();
-            } catch (Exception) {
-                throw new DungeonNotSupportedException(
-                    sprintf('Dungeon with instance ID %d not found', $combatLogEvent->getInstanceID())
-                );
+        } elseif ($combatLogEvent instanceof ChallengeModeStart || $combatLogEvent instanceof ZoneChange) {
+            $dungeon       = null;
+            $keystoneLevel = null;
+
+            if ($combatLogEvent instanceof ChallengeModeStart) {
+                try {
+                    $dungeon = Dungeon::where('challenge_mode_id', $combatLogEvent->getChallengeModeID())->firstOrFail();
+                } catch (Exception) {
+                    throw new DungeonNotSupportedException(
+                        sprintf('Dungeon with instance ID %d not found', $combatLogEvent->getInstanceID()),
+                    );
+                }
+
+                $keystoneLevel = $combatLogEvent->getKeystoneLevel();
+            } elseif ($combatLogEvent instanceof ZoneChange) {
+                if ($this->dungeonRoute !== null) {
+                    // We already have a dungeon route, so we don't need to create a new one
+                    return false;
+                }
+
+                try {
+                    $dungeon = Dungeon::where('map_id', $combatLogEvent->getZoneId())->firstOrFail();
+                } catch (Exception) {
+                    throw new DungeonNotSupportedException(
+                        sprintf('Dungeon with zone ID %d not found', $combatLogEvent->getZoneId()),
+                    );
+                }
             }
 
-            $currentMappingVersion = $dungeon->currentMappingVersion;
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            $mostRecentSeason      = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
 
             $this->dungeonRoute = DungeonRoute::create([
                 'public_key'         => DungeonRoute::generateRandomPublicKey(),
                 'author_id'          => 1,
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $currentMappingVersion->id,
-                'season_id'          => $this->seasonService->getMostRecentSeasonForDungeon($dungeon)?->id,
+                'season_id'          => $mostRecentSeason?->id,
                 'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
                 'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
                 'title'              => __($dungeon->name, [], 'en_US'),
-                'level_min'          => $combatLogEvent->getKeystoneLevel(),
-                'level_max'          => $combatLogEvent->getKeystoneLevel(),
+                'level_min'          => $keystoneLevel ?? $mostRecentSeason?->key_level_min ?? 2,
+                'level_max'          => $keystoneLevel ?? $mostRecentSeason?->key_level_max ?? 20,
                 'expires_at'         => Carbon::now()->addHours(
-                    config('keystoneguru.sandbox_dungeon_route_expires_hours')
+                    config('keystoneguru.sandbox_dungeon_route_expires_hours'),
                 )->toDateTimeString(),
             ]);
 
@@ -72,10 +94,10 @@ class DungeonRouteFilter implements CombatLogParserInterface
 
             // Find the correct affix groups that match the affix combination the dungeon was started with
             $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
-            if ($currentSeasonForDungeon !== null) {
+            if ($currentSeasonForDungeon !== null && $combatLogEvent instanceof ChallengeModeStart) {
                 $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
                     $currentSeasonForDungeon,
-                    collect($combatLogEvent->getAffixIDs())
+                    collect($combatLogEvent->getAffixIDs()),
                 );
 
                 foreach ($affixGroups as $affixGroup) {

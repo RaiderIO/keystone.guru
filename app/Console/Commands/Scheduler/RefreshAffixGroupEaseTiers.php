@@ -29,7 +29,7 @@ class RefreshAffixGroupEaseTiers extends SchedulerCommand
      */
     public function handle(
         ArchonApiServiceInterface          $archonApiService,
-        AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
+        AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
     ): int {
         return $this->trackTime(function () use ($archonApiService, $affixGroupEaseTierService) {
             try {

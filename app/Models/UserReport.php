@@ -11,9 +11,9 @@ use Illuminate\Support\Carbon;
 /**
  * @property int    $id
  * @property int    $model_id
- * @property int    $model_class
+ * @property string $model_class
  * @property int    $user_id
- * @property string $username For anonymous users
+ * @property string $username    For anonymous users
  * @property string $category
  * @property string $message
  * @property bool   $contact_ok
@@ -22,13 +22,25 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property User   $user
+ * @property User $user
  *
  * @mixin Eloquent
  */
 class UserReport extends Model
 {
     use HasGenericModelRelation;
+
+    protected $fillable = [
+        'id',
+        'model_id',
+        'model_class',
+        'user_id',
+        'username',
+        'category',
+        'message',
+        'contact_ok',
+        'status',
+    ];
 
     public function user(): BelongsTo
     {

@@ -7,6 +7,7 @@ use App\Models\Characteristic;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -22,16 +23,18 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
 {
     public function __construct(
         private readonly CoordinatesServiceInterface             $coordinatesService,
-        private readonly MDTMappingExportServiceLoggingInterface $log
+        private readonly MDTMappingExportServiceLoggingInterface $log,
     ) {
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion, bool $excludeTranslations = false): string
-    {
+    public function getMDTMappingAsLuaString(
+        MappingVersion $mappingVersion,
+        bool           $excludeTranslations = false,
+        bool           $forceEnemyPatrols = false,
+    ): string {
         $translations = collect();
 
         //        return trim($this->getDungeonEnemies($mappingVersion, $translations));
@@ -40,14 +43,17 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion, $translations);
         $dungeonTotalCountString = $this->getDungeonTotalCount($mappingVersion);
         $mapPOIs                 = $this->getMapPOIs($mappingVersion);
-        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations);
+        $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations, $forceEnemyPatrols);
         $header                  = $this->getHeader($mappingVersion, $translations, $excludeTranslations);
 
         return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIs . $dungeonEnemies;
     }
 
-    private function getHeader(MappingVersion $mappingVersion, Collection $translations, bool $excludeTranslations = false): string
-    {
+    private function getHeader(
+        MappingVersion $mappingVersion,
+        Collection     $translations,
+        bool           $excludeTranslations = false,
+    ): string {
         $translations->push(__($mappingVersion->dungeon->name));
 
         $translationsLua = $excludeTranslations ? '' : $this->getTranslations($translations);
@@ -58,11 +64,19 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
             ->pluck('ui_map_id')
             ->toArray();
 
-        return sprintf('local MDT = MDT
+        $dungeonNameTranslationKey = $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name, [], 'en_US'));
+
+        return sprintf(
+            'local addonName = ...
+local MDT = MDT
 local L = MDT.L
 %slocal dungeonIndex = %d
 MDT.dungeonList[dungeonIndex] = L["%s"]
-MDT.mapInfo[dungeonIndex] = {};
+MDT.mapInfo[dungeonIndex] = {
+    shortname = L["%s"],
+    englishName = L["%s"],
+    mapID = %d,
+};
 
 local zones = { %s }
 for _, zone in ipairs(zones) do
@@ -71,8 +85,11 @@ end
 ',
             $translationsLua,
             $mappingVersion->dungeon->mdt_id,
-            $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name)),
-            implode(', ', $zoneIds)
+            $dungeonNameTranslationKey,
+            sprintf('%sShortName', Str::camel($dungeonNameTranslationKey)),
+            addslashes(__($mappingVersion->dungeon->name, [], 'en_US')),
+            $mappingVersion->dungeon->map_id,
+            implode(', ', $zoneIds),
         );
     }
 
@@ -83,7 +100,14 @@ end
             /** @var Floor $facadeFloor */
             $facadeFloor   = $mappingVersion->dungeon->floors()->firstWhere('facade', true);
             $dungeonMaps[] = '  [0] = "",';
-            $dungeonMaps[] = sprintf('  [1] = { customTextures = \'%s\' },', $facadeFloor->map_name);
+            $dungeonMaps[] = sprintf(
+                '  [1] = { customTextures = \'%s\' },',
+                sprintf(
+                    'Interface\\\\AddOns\\\\\'..addonName..\'\\\\%s\\\\Textures\\\\%s',
+                    $this->convertStringToTranslationKey(__($mappingVersion->dungeon->expansion->name, [], 'en_US')),
+                    $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name, [], 'en_US')),
+                ),
+            );
         } else {
             $index         = 0;
             $dungeonMaps[] = sprintf('  [%d] = "%s",', $index, $mappingVersion->dungeon->key);
@@ -129,7 +153,7 @@ MDT.dungeonSubLevels[dungeonIndex] = {
 MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnabled = true }
             ',
             $mappingVersion->enemy_forces_required <= 0 ? 300 : $mappingVersion->enemy_forces_required,
-            $mappingVersion->enemy_forces_required_teeming <= 0 ? 1000 : $mappingVersion->enemy_forces_required_teeming
+            $mappingVersion->enemy_forces_required_teeming <= 0 ? 1000 : $mappingVersion->enemy_forces_required_teeming,
         );
     }
 
@@ -138,46 +162,63 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         $mapPOIs = [];
 
         /** @var Collection<Floor> $floors */
-        $floors = $mappingVersion->dungeon->floors();
+        $floors = $mappingVersion->dungeon->floorsForMapFacade($mappingVersion, false);
         //        $floors->each(function (Floor $floor) use ($mappingVersion) {
         //            $floor->setRelation('dungeon', $mappingVersion->dungeon);
         //            $floor->load('mapIcons');
         //        });
 
+        $subLevelOverride = $mappingVersion->facade_enabled ? 1 : null;
         foreach ($floors as $floor) {
             $mapPOIsOnFloor = [];
             $mapPOIIndex    = 0;
 
-            /** @var DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
-            $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkers($mappingVersion)
-                ->with(['floor', 'targetFloor'])
-                ->get();
+            // MDT does not care for switch markers when the facade is enabled, so we skip them
+            if (!$mappingVersion->facade_enabled) {
+                /** @var DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+                $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkers($mappingVersion)
+                    ->with([
+                        'floor',
+                        'targetFloor',
+                    ])
+                    ->get();
 
-            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
-                    'template'        => 'MapLinkPinTemplate',
-                    'type'            => 'mapLink',
-                    'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
-                    'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
-                    'connectionIndex' => $mapPOIIndex, // @TODO this is wrong?
-                ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
+                foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                    $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
+                        'template'        => 'MapLinkPinTemplate',
+                        'type'            => 'mapLink',
+                        'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
+                        'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
+                        'connectionIndex' => $mapPOIIndex,
+                        // @TODO this is wrong?
+                    ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
+                }
             }
 
-            foreach ($floor->mapIcons($mappingVersion)->get() as $mapIcon) {
-                // Skip all map icon types that are not graveyards
-                if ($mapIcon->map_icon_type_id !== MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD]) {
-                    continue;
-                }
-
-                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
-                    'template'             => 'DeathReleasePinTemplate',
-                    'type'                 => 'graveyard',
-                    'graveyardDescription' => $mapIcon->comment ?? '',
-                ], Conversion::convertLatLngToMDTCoordinate($mapIcon->getLatLng()));
+            // Export graveyards and dungeon entrances
+            foreach ($floor->mapIcons($mappingVersion)->whereIn('map_icon_type_id', [
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            ])->get() as $mapIcon) {
+                /** @var MapIcon $mapIcon */
+                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge(
+                    match ($mapIcon->map_icon_type_id) {
+                        MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD] => [
+                            'template'             => 'DeathReleasePinTemplate',
+                            'type'                 => 'graveyard',
+                            'graveyardDescription' => $mapIcon->comment ?? '',
+                        ],
+                        MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START] => [
+                            'template' => 'MapLinkPinTemplate',
+                            'type'     => 'dungeonEntrance',
+                        ],
+                    },
+                    Conversion::convertLatLngToMDTCoordinate($mapIcon->getLatLng()),
+                );
             }
 
             if (!empty($mapPOIsOnFloor)) {
-                $mapPOIs[$floor->mdt_sub_level ?? $floor->index] = $mapPOIsOnFloor;
+                $mapPOIs[$subLevelOverride ?? $floor->mdt_sub_level ?? $floor->index] = $mapPOIsOnFloor;
             }
         }
 
@@ -186,18 +227,22 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 MDT.mapPOIs[dungeonIndex] = {};
 ';
         } else {
-            return (new PhpArray2LuaTable())->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
+            return new PhpArray2LuaTable()->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
         }
     }
 
     /**
      * Takes a mapping version and outputs an array in the way MDT would read it
      */
-    private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations): string
+    private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations, bool $forceEnemyPatrols = false): string
     {
         $dungeonEnemies = [];
 
-        $npcs = Npc::whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id])
+        /** @var Collection<Npc> $npcs */
+        $npcs = Npc::with('npcEnemyForces')
+            ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            ->select('npcs.*')
+            ->where('npc_dungeons.dungeon_id', $mappingVersion->dungeon_id)
             ->get()
             ->keyBy('id');
 
@@ -217,7 +262,11 @@ MDT.mapPOIs[dungeonIndex] = {};
 
         $enemiesByNpcId = $mappingVersion
             ->enemies()
-            ->with(['floor', 'enemyPatrol', 'enemyPack'])
+            ->with([
+                'floor',
+                'enemyPatrol',
+                'enemyPack',
+            ])
             ->get()
             ->groupBy('npc_id');
 
@@ -230,7 +279,10 @@ MDT.mapPOIs[dungeonIndex] = {};
             }
 
             // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
-            $enemies = $enemies->sort(static fn(Enemy $a, Enemy $b) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
+            $enemies = $enemies->sort(static fn(
+                Enemy $a,
+                Enemy $b,
+            ) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
 
@@ -243,7 +295,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             ];
 
             /** @var NpcEnemyForces|null $npcEnemyForces */
-            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->first();
+            $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id);
 
             $enemyForces = 0;
             if ($npcEnemyForces !== null) {
@@ -251,7 +303,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                 // These counts are different per mapping version so we need to correct it for MDT here
                 if ($npc->isShrouded()) {
                     $enemyForces = $mappingVersion->enemy_forces_shrouded;
-                } else if ($npc->isShroudedZulGamux()) {
+                } elseif ($npc->isShroudedZulGamux()) {
                     $enemyForces = $mappingVersion->enemy_forces_shrouded_zul_gamux;
                 }
             }
@@ -259,31 +311,30 @@ MDT.mapPOIs[dungeonIndex] = {};
             $isBoss = $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                 true : null;
 
+            $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->gameVersion);
             $dungeonEnemy = array_filter([
-                'name'             => addslashes($npc->name),
-                'id'               => $npc->id,
-                'count'            => $enemyForces,
-                'health'           => $npc->base_health,
-                'scale'            => $npc->mdt_scale ?? $scaleMapping[$npc->classification_id],
-                'stealthDetect'    => $npc->truesight ? true : null,
-                'displayId'        => $npc->display_id,
-                'creatureType'     => $npc->type->type,
-                'level'            => $npc->level,
-                'isBoss'           => $isBoss,
-                'encounterID'      => $npc->encounter_id,
+                'name'          => __($npc->name, [], 'en_US'),
+                'id'            => $npc->id,
+                'count'         => $enemyForces,
+                'health'        => $npcHealth?->health ?? 123456,
+                'scale'         => $npc->mdt_scale ?? $scaleMapping[$npc->classification_id],
+                'stealthDetect' => $npc->truesight ? true : null,
+                'displayId'     => $npc->display_id,
+                'creatureType'  => $npc->type->type,
+                'level'         => $npc->level,
+                'isBoss'        => $isBoss,
+                'encounterID'   => $npc->encounter_id,
                 // $npc->dungeon may be null if dungeon_id = -1
-                'instanceID'       => $isBoss ? $mappingVersion->dungeon->instance_id : null,
-                'characteristics'  => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
-                    return [__($characteristic->name, [], 'en_US') => true];
-                })->toArray(),
-                'spells'           => $npc->spells->mapWithKeys(function (Spell $spell) {
-                    return [$spell->id => []];
-                })->toArray(),
+                'instanceID'      => $isBoss ? $mappingVersion->dungeon->instance_id : null,
+                'characteristics' => $npc->characteristics->mapWithKeys(fn(Characteristic $characteristic) => [__($characteristic->name, [], 'en_US') => true])->toArray(),
+                'spells'          => $npc->spells
+                    ->filter(fn(Spell $spell) => !$spell->hidden_on_map)
+                    ->mapWithKeys(fn(Spell $spell) => [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []])->toArray(),
                 'clones'           => [],
-                'healthPercentage' => $npc->health_percentage ?? null,
+                'healthPercentage' => $npcHealth?->percentage ?? null,
             ], fn($value) => $value !== null);
 
-            $translations->push($npc->name);
+            $translations->push(__($npc->name, [], 'en_US'));
 
             $cloneIndex = 0;
             foreach ($enemies as $enemy) {
@@ -291,9 +342,9 @@ MDT.mapPOIs[dungeonIndex] = {};
                 // Individual enemies with no pack
                 if ($enemy->enemy_pack_id === null) {
                     $group = null;
-                } else if ($hasGroupsAlready) {
+                } elseif ($hasGroupsAlready) {
                     $group = $enemy->enemyPack->group;
-                } else if (!$enemyPackGroups->has($enemy->enemy_pack_id)) {
+                } elseif (!$enemyPackGroups->has($enemy->enemy_pack_id)) {
                     $enemyPackGroups->put($enemy->enemy_pack_id, $enemy->enemyPack->group ?? $group);
                 } else {
                     $group = $enemyPackGroups->get($enemy->enemy_pack_id);
@@ -302,9 +353,9 @@ MDT.mapPOIs[dungeonIndex] = {};
                 $convertedEnemyLatLng                  = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $enemy->getLatLng());
                 $mdtCoordinate                         = Conversion::convertLatLngToMDTCoordinate($convertedEnemyLatLng);
                 $dungeonEnemy['clones'][++$cloneIndex] = array_filter([
-                    'x'        => (float)($enemy->mdt_x ?? $mdtCoordinate['x']),
-                    'y'        => (float)($enemy->mdt_y ?? $mdtCoordinate['y']),
-                    'g'        => $group ?? null,
+                    'x' => (float)($enemy->mdt_x ?? $mdtCoordinate['x']),
+                    'y' => (float)($enemy->mdt_y ?? $mdtCoordinate['y']),
+                    'g' => $group ?? null,
                     // Facade means that the sublevel is ALWAYS 1 since there's only one MDT level
                     'sublevel' => $enemy->floor->mdt_sub_level ?? $mappingVersion->facade_enabled ? 1 : $enemy->floor->index,
                     'scale'    => $enemy->mdt_scale,
@@ -317,21 +368,36 @@ MDT.mapPOIs[dungeonIndex] = {};
                     $enemy->enemyPatrol->mdt_npc_id === $enemy->npc_id &&
                     $enemy->enemyPatrol->mdt_id === $enemy->mdt_id) {
                     $patrolVertices = [];
+                    $vertexIndex    = 0;
+                    // Prefer the mdt polyline if it exists (it was introduced later), otherwise use the regular polyline
+                    if (!$forceEnemyPatrols && $enemy->enemyPatrol->mdtPolyline !== null) {
+                        $polylineMdtXYs = $enemy->enemyPatrol->mdtPolyline
+                            ->getDecodedLatLngs($enemy->floor);
+                        foreach ($polylineMdtXYs as $vertexMdtLatLng) {
+                            // $vertexMdtLatLng actually contains the x and y in the lng and lat keys
+                            $patrolVertices[++$vertexIndex] = [
+                                'x' => $vertexMdtLatLng['lng'],
+                                'y' => $vertexMdtLatLng['lat'],
+                            ];
+                        }
+                    } else {
+                        // Fall back to the regular polyline that may be adjusted by us
+                        $polylineLatLngs = $enemy->enemyPatrol->polyline
+                            ->getDecodedLatLngs($enemy->floor);
 
-                    $polylineLatLngs = $enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor);
-                    $vertexIndex     = 0;
-                    foreach ($polylineLatLngs as $vertexLatLng) {
-                        $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
-                        $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
-                        // Reverse order
-                        $patrolVertices[++$vertexIndex] = [
-                            'x' => $vertexMDTXY['x'],
-                            'y' => $vertexMDTXY['y'],
-                        ];
+                        foreach ($polylineLatLngs as $vertexLatLng) {
+                            $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
+                            $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
+                            // Reverse order
+                            $patrolVertices[++$vertexIndex] = [
+                                'x' => $vertexMDTXY['x'],
+                                'y' => $vertexMDTXY['y'],
+                            ];
+                        }
+
+                        // MDT does not save the close off of its patrols, so remove the last vertex for export
+                        array_pop($patrolVertices);
                     }
-
-                    // MDT does not save the close off of its patrols, so remove the last vertex for export
-                    array_pop($patrolVertices);
 
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
 
@@ -345,7 +411,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             $dungeonEnemies[++$dungeonEnemyIndex] = $dungeonEnemy;
         }
 
-        return (new PhpArray2LuaTable())->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
+        return new PhpArray2LuaTable()->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
     }
 
     private function getTranslations(Collection $translations): string

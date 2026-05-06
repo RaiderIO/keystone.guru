@@ -1,0 +1,44 @@
+[
+    {
+        "id": 731,
+        "mapping_version_id": 649,
+        "floor_id": 423,
+        "floor_union_id": 750,
+        "vertices_json": "[{\"lat\":1.6819,\"lng\":-0.6728},{\"lat\":-258.0056,\"lng\":-2.6911},{\"lat\":-254.9782,\"lng\":383.8128},{\"lat\":0.3364,\"lng\":384.4856}]"
+    },
+    {
+        "id": 742,
+        "mapping_version_id": 652,
+        "floor_id": 423,
+        "floor_union_id": 761,
+        "vertices_json": "[{\"lat\":1.6819,\"lng\":-0.6728},{\"lat\":-258.0056,\"lng\":-2.6911},{\"lat\":-254.9782,\"lng\":383.8128},{\"lat\":0.3364,\"lng\":384.4856}]"
+    },
+    {
+        "id": 801,
+        "mapping_version_id": 666,
+        "floor_id": 423,
+        "floor_union_id": 821,
+        "vertices_json": "[{\"lat\":1.6819,\"lng\":-0.6728},{\"lat\":-258.0056,\"lng\":-2.6911},{\"lat\":-254.9782,\"lng\":383.8128},{\"lat\":0.3364,\"lng\":384.4856}]"
+    },
+    {
+        "id": 844,
+        "mapping_version_id": 678,
+        "floor_id": 423,
+        "floor_union_id": 864,
+        "vertices_json": "[{\"lat\":1.6819,\"lng\":-0.6728},{\"lat\":-258.0056,\"lng\":-2.6911},{\"lat\":-254.9782,\"lng\":383.8128},{\"lat\":0.3364,\"lng\":384.4856}]"
+    },
+    {
+        "id": 867,
+        "mapping_version_id": 687,
+        "floor_id": 423,
+        "floor_union_id": 887,
+        "vertices_json": "[{\"lat\":1.6819,\"lng\":-0.6728},{\"lat\":-258.0056,\"lng\":-2.6911},{\"lat\":-254.9782,\"lng\":383.8128},{\"lat\":0.3364,\"lng\":384.4856}]"
+    },
+    {
+        "id": 868,
+        "mapping_version_id": 689,
+        "floor_id": 423,
+        "floor_union_id": 888,
+        "vertices_json": "[{\"lat\":1.6819,\"lng\":-0.6728},{\"lat\":-258.0056,\"lng\":-2.6911},{\"lat\":-254.9782,\"lng\":383.8128},{\"lat\":0.3364,\"lng\":384.4856}]"
+    }
+]

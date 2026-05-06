@@ -22,16 +22,16 @@ class PatreonApiService implements PatreonApiServiceInterface
 
         try {
             $identityResponse = $this->getApiClient($accessToken)->get_data(
-                sprintf('identity?include=memberships,memberships.currently_entitled_tiers' .
+                sprintf(
+                    'identity?include=memberships,memberships.currently_entitled_tiers' .
                     '&%s=email,first_name,full_name,image_url,last_name,thumb_url,url,vanity,is_email_verified' .
                     '&%s=email,currently_entitled_amount_cents,lifetime_support_cents,last_charge_status,patron_status,last_charge_date,pledge_relationship_start',
                     urlencode('fields[user]'),
-                    urlencode('fields[member]')
-                )
+                    urlencode('fields[member]'),
+                ),
             );
 
             if (!isset($identityResponse['errors'])) {
-
                 if (!isset($identityResponse['included'])) {
                     $this->log->getIdentityIncludedNotFound();
                 } else {
@@ -64,10 +64,11 @@ class PatreonApiService implements PatreonApiServiceInterface
 
             $result = $this->getAllPages(
                 $this->getApiClient($accessToken),
-                sprintf('campaigns/%d?include=tiers,tiers.benefits&%s=title',
+                sprintf(
+                    'campaigns/%d?include=tiers,tiers.benefits&%s=title',
                     config('keystoneguru.patreon.campaign_id'),
-                    urlencode('fields[benefit]')
-                )
+                    urlencode('fields[benefit]'),
+                ),
             );
         } finally {
             $this->log->getCampaignTiersAndBenefitsEnd($result);
@@ -87,10 +88,11 @@ class PatreonApiService implements PatreonApiServiceInterface
             $this->log->getCampaignMembersStart();
             $result = $this->getAllPages(
                 $this->getApiClient($accessToken),
-                sprintf('campaigns/%d/members?include=currently_entitled_tiers&%s=email',
+                sprintf(
+                    'campaigns/%d/members?include=currently_entitled_tiers&%s=email',
                     config('keystoneguru.patreon.campaign_id'),
-                    urlencode('fields[member]')
-                )
+                    urlencode('fields[member]'),
+                ),
             );
         } finally {
             $this->log->getCampaignMembersEnd($result);
@@ -133,7 +135,7 @@ class PatreonApiService implements PatreonApiServiceInterface
             if ($requestResult === null) {
                 $next = null;
                 $this->log->getAllPagesUnknownResponse($originalResponse);
-            } else if (!isset($requestResult['errors'])) {
+            } elseif (!isset($requestResult['errors'])) {
                 // No errors - continue fetching pages
                 $resultData = array_merge($resultData, $requestResult['data']);
 

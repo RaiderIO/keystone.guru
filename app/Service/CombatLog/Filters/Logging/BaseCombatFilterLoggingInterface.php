@@ -39,6 +39,4 @@ interface BaseCombatFilterLoggingInterface
     public function getEnemyEngagedEventUsingFirstSightedEvent(string $guid): void;
 
     public function getEnemyEngagedEventUsingEngagedEvent(string $guid): void;
-
-
 }

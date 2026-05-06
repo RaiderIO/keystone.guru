@@ -5,6 +5,7 @@ namespace App\Service\Mapping;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Floor\FloorUnion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
@@ -66,15 +67,36 @@ class MappingService implements MappingServiceInterface
             ->keyBy(static fn(Dungeon $dungeon) => $dungeon->id);
     }
 
-    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
+    public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
     {
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
 
         $now = Carbon::now()->toDateTimeString();
 
         return MappingVersion::create([
             'dungeon_id'       => $dungeon->id,
+            'game_version_id'  => $gameVersion->id,
+            'mdt_mapping_hash' => null,
+            'version'          => $newVersion,
+            'facade_enabled'   => false,
+            'created_at'       => $now,
+            'updated_at'       => $now,
+        ]);
+    }
+
+    public function createNewMappingVersionFromPreviousMapping(
+        Dungeon     $dungeon,
+        GameVersion $gameVersion,
+    ): MappingVersion {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
+        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
+
+        $now = Carbon::now()->toDateTimeString();
+
+        return MappingVersion::create([
+            'dungeon_id'       => $dungeon->id,
+            'game_version_id'  => $gameVersion->id,
             'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? null,
             'version'          => $newVersion,
             'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
@@ -83,33 +105,37 @@ class MappingService implements MappingServiceInterface
         ]);
     }
 
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion
     {
-        $now = Carbon::now()->toDateTimeString();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+        $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
+            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
             'mdt_mapping_hash' => $hash,
-            'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
-            'facade_enabled'   => $dungeon->currentMappingVersion?->facade_enabled ?? false,
+            'version'          => ($currentMappingVersion?->version ?? 0) + 1,
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
 
         $newMappingVersion = MappingVersion::find($id);
 
-        return $this->copyMappingVersionContentsToDungeon($dungeon->currentMappingVersion, $newMappingVersion);
+        return $this->copyMappingVersionContentsToDungeon($currentMappingVersion, $newMappingVersion);
     }
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
     {
-        $now = Carbon::now()->toDateTimeString();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
+            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
             'mdt_mapping_hash' => $sourceMappingVersion->mdt_mapping_hash,
-            'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
-            'facade_enabled'   => $dungeon->currentMappingVersion?->facade_enabled ?? false,
+            'version'          => ($currentMappingVersion?->version ?? 0) + 1,
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
@@ -117,8 +143,10 @@ class MappingService implements MappingServiceInterface
         return MappingVersion::find($id);
     }
 
-    public function copyMappingVersionContentsToDungeon(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): MappingVersion
-    {
+    public function copyMappingVersionContentsToDungeon(
+        MappingVersion $sourceMappingVersion,
+        MappingVersion $targetMappingVersion,
+    ): MappingVersion {
         // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
         // MDT mapping
 
@@ -128,8 +156,8 @@ class MappingService implements MappingServiceInterface
 
         foreach ($sourceMappingVersion->dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
             /** @var DungeonFloorSwitchMarker $newDungeonFloorSwitchMarker */
-            $newDungeonFloorSwitchMarker                                      = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
-                $targetMappingVersion
+            $newDungeonFloorSwitchMarker = $dungeonFloorSwitchMarker->cloneForNewMappingVersion(
+                $targetMappingVersion,
             );
             $dungeonFloorSwitchMarkerIdMapping[$dungeonFloorSwitchMarker->id] = $newDungeonFloorSwitchMarker->id;
             $newDungeonFloorSwitchMarkers[]                                   = $newDungeonFloorSwitchMarker;
@@ -138,8 +166,7 @@ class MappingService implements MappingServiceInterface
         // Restore the links between the floor switches
         foreach ($newDungeonFloorSwitchMarkers as $newDungeonFloorSwitchMarker) {
             $newDungeonFloorSwitchMarker->update([
-                'linked_dungeon_floor_switch_marker_id' =>
-                    $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
+                'linked_dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerIdMapping[$newDungeonFloorSwitchMarker['linked_dungeon_floor_switch_marker_id']] ?? null,
             ]);
         }
 
@@ -186,13 +213,12 @@ class MappingService implements MappingServiceInterface
         return $targetMappingVersion;
     }
 
-
     /**
      * {@inheritDoc}
      */
-    public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
+    public function getMappingVersionOrNew(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
     {
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         $wasRecentlyChanged = $this->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id);
 
@@ -202,7 +228,7 @@ class MappingService implements MappingServiceInterface
         if ($wasRecentlyChanged) {
             $result = $currentMappingVersion;
         } else {
-            $result = $this->createNewMappingVersionFromPreviousMapping($dungeon);
+            $result = $this->createNewMappingVersionFromPreviousMapping($dungeon, $gameVersion);
         }
 
         return $result;

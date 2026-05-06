@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,15 @@ class TagPolicy
     {
         $result = false;
 
-        if ($tag->model_id !== null) {
+        // If the tag is from a specific user, you can only edit it if you're that user
+        if ($tag->context_class === User::class && $tag->context_id === $user->id) {
+            $result = true;
+        } elseif ($tag->context_class === Team::class) {
+            // If we're editing a team tag, and the user is part of this team, we can edit it
+            if (Team::findOrFail($tag->context_id)->isUserMember($user)) {
+                $result = true;
+            }
+        } elseif ($tag->model_id !== null) {
             switch ($tag->tagCategory->name) {
                 case TagCategory::DUNGEON_ROUTE_PERSONAL:
                 case TagCategory::DUNGEON_ROUTE_TEAM:
@@ -43,9 +52,6 @@ class TagPolicy
                     $result = $dungeonRoute?->mayUserEdit($user) ?? false;
                     break;
             }
-        } else {
-            // If the tag is not directly assigned to a model, it was created through the tag manager and this check should suffice
-            $result = $tag->user_id === $user->id;
         }
 
         return $result;

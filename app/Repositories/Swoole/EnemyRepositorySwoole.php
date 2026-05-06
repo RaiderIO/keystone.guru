@@ -10,13 +10,13 @@ use App\Repositories\Swoole\Traits\ClonesCollections;
 use Illuminate\Support\Collection;
 
 /**
- * @method Enemy create(array $attributes)
- * @method null find(int $id, array|string $columns = ['*'])
- * @method Enemy findOrFail(int $id, array|string $columns = ['*'])
- * @method Enemy findOrNew(int $id, array|string $columns = ['*'])
- * @method bool save(Enemy $model)
- * @method bool update(Enemy $model, array $attributes = [], array $options = [])
- * @method bool delete(Enemy $model)
+ * @method Enemy             create(array $attributes)
+ * @method null              find(int $id, array|string $columns = ['*'])
+ * @method Enemy             findOrFail(int $id, array|string $columns = ['*'])
+ * @method Enemy             findOrNew(int $id, array|string $columns = ['*'])
+ * @method bool              save(Enemy $model)
+ * @method bool              update(Enemy $model, array $attributes = [], array $options = [])
+ * @method bool              delete(Enemy $model)
  * @method Collection<Enemy> all()
  */
 class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySwooleInterface
@@ -36,6 +36,7 @@ class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySw
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection
     {
         if (!$this->availableEnemiesByMappingVersion->has($mappingVersion->id)) {

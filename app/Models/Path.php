@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $floor_id
- * @property int          $polyline_id
+ * @property int $id
+ * @property int $dungeon_route_id
+ * @property int $floor_id
+ * @property int $polyline_id
  *
- * @property Carbon       $updated_at
- * @property Carbon       $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline
@@ -30,22 +30,39 @@ class Path extends Model
 {
     use HasLinkedAwakenedObelisk;
 
-    protected $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
-
-    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
-
-    protected $casts = [
-        'id'               => 'int',
-        'dungeon_route_id' => 'int',
-        'floor_id'         => 'int',
-        'polyline_id'      => 'int',
+    protected $visible = [
+        'id',
+        'floor_id',
+        'linked_awakened_obelisk_id',
+        'polyline',
     ];
 
-    protected $with = ['polyline', 'linkedawakenedobelisks'];
+    protected $fillable = [
+        'dungeon_route_id',
+        'floor_id',
+        'polyline_id',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $with = [
+        'polyline',
+        'linkedawakenedobelisks',
+    ];
 
     protected $appends = ['linked_awakened_obelisk_id'];
 
     public $timestamps = true;
+
+    protected function casts(): array
+    {
+        return [
+            'id'               => 'int',
+            'dungeon_route_id' => 'int',
+            'floor_id'         => 'int',
+            'polyline_id'      => 'int',
+        ];
+    }
 
     /**
      * Get the dungeon route that this route is attached to.
@@ -68,6 +85,7 @@ class Path extends Model
         return $this->belongsTo(Floor::class);
     }
 
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

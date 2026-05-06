@@ -39,6 +39,7 @@ abstract class EncounterBase extends SpecialEvent
         return $this->groupSize;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

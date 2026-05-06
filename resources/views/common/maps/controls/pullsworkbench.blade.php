@@ -90,11 +90,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_description_modal'])
         <div class="form-group">
             <h4>
-                {!! Form::label(
-                    'map_killzonessidebar_killzone_description_modal_textarea',
-                    __('view_common.maps.controls.pullsworkbench.modal.description.label'),
-                    ['id' => 'map_killzonessidebar_killzone_description_modal_label']
-                ) !!}
+                {{ html()->label(__('view_common.maps.controls.pullsworkbench.modal.description.label'), 'map_killzonessidebar_killzone_description_modal_textarea')->id('map_killzonessidebar_killzone_description_modal_label') }}
             </h4>
             <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
             </div>
@@ -108,10 +104,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
             <div id="map_killzonessidebar_killzone_description_modal_remaining_characters"
                  class="form-group text-warning" style="display: none;">
             </div>
-            {{ Form::textarea('map_killzonessidebar_killzone_description_modal_textarea', '', [
-                'class' => 'form-control',
-                'id' => 'map_killzonessidebar_killzone_description_modal_textarea',
-            ]) }}
+            {{ html()->textarea('map_killzonessidebar_killzone_description_modal_textarea', '')->class('form-control')->id('map_killzonessidebar_killzone_description_modal_textarea') }}
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-dismiss="modal">
@@ -122,6 +115,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_spells_modal'])
         <div class="form-group">
+<<<<<<< HEAD
             {!! Form::label(
                 'map_killzonessidebar_killzone_spells_modal_select',
                 __('view_common.maps.controls.pullsworkbench.modal.spells.label'),
@@ -133,6 +127,30 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
                 'multiple' => true,
                 'liveSearch' => true,
             ])
+=======
+            {{ html()->label(__('view_common.maps.controls.pullsworkbench.modal.spells.label'), 'map_killzonessidebar_killzone_spells_modal_select')->id('map_killzonessidebar_killzone_spells_modal_label') }}
+            <select id="map_killzonessidebar_killzone_spells_modal_select"
+                    class="form-control selectpicker"
+                    data-live-search="true"
+                    data-none-selected-text="{{ __('view_common.maps.controls.pullsworkbench.modal.spells.select_spells') }}"
+                    multiple>
+                @foreach($spellsSelect as $group => $spells)
+                    <optgroup label="{{__($group)}}">
+                        @foreach($spells as $spell)
+                                <?php ob_start() ?>
+
+                            @include('common.forms.select.imageoption', [
+                                'url' => $spell['icon_url'],
+                                'name' => __($spell['name']),
+                            ])
+
+                                <?php $html = ob_get_clean(); ?>
+                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ __($spell['name']) }}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            </select>
+>>>>>>> development
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_spells_modal_save" class="btn btn-primary" data-dismiss="modal">

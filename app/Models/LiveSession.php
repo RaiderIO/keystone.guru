@@ -15,21 +15,20 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                         $id
- * @property int                         $dungeon_route_id
- * @property int                         $user_id
- * @property string                      $public_key
+ * @property int    $id
+ * @property int    $dungeon_route_id
+ * @property int    $user_id
+ * @property string $public_key
+ *
  * @property User                        $user
- * @property DungeonRoute                $dungeonroute
- * @property Collection<OverpulledEnemy> $overpulledenemies
+ * @property DungeonRoute                $dungeonRoute
+ * @property Collection<OverpulledEnemy> $overpulledEnemies
  * @property Carbon                      $expires_at
  *
  * @mixin Eloquent
  */
 class LiveSession extends Model
 {
-    protected $appends = ['enemies'];
-
     protected $fillable = [
         'dungeon_route_id',
         'user_id',
@@ -38,7 +37,7 @@ class LiveSession extends Model
 
     protected $with = [
         'user',
-        'dungeonroute',
+        'dungeonRoute',
     ];
 
     use GeneratesPublicKey;
@@ -46,6 +45,7 @@ class LiveSession extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -59,12 +59,12 @@ class LiveSession extends Model
     /**
      * Get the dungeon route that this live session is attached to.
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
-        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
-    public function overpulledenemies(): HasMany
+    public function overpulledEnemies(): HasMany
     {
         return $this->hasMany(OverpulledEnemy::class);
     }
@@ -93,7 +93,7 @@ class LiveSession extends Model
 
     public function getExpiresInSeconds(): ?int
     {
-        return $this->expires_at === null ? null : Carbon::createFromTimeString($this->expires_at)->diffInSeconds(now());
+        return $this->expires_at === null ? null : (int)Carbon::createFromTimeString($this->expires_at)->diffInSeconds(now(), true);
     }
 
     public function getExpiresInHoursSeconds(): ?string
@@ -102,7 +102,8 @@ class LiveSession extends Model
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
-    protected static function boot()
+    #[\Override]
+    protected static function boot(): void
     {
         parent::boot();
 

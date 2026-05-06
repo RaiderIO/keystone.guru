@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Requests\Api\V1\Route;
+
+use App\Http\Requests\Api\V1\APIFormRequest;
+use Illuminate\Validation\Rule;
+
+class DungeonRouteRequest extends APIFormRequest
+{
+    protected function getRequestModelClass(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     */
+    public function rules(): array
+    {
+        return [
+            'publicKey' => [
+                Rule::exists('dungeon_routes', 'public_key'),
+            ],
+        ];
+    }
+}

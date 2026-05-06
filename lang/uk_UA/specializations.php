@@ -3,69 +3,70 @@
 return [
 
     'death_knight' => [
-        'blood'  => '',
-        'frost'  => '',
-        'unholy' => '',
+        'blood'  => 'Кров',
+        'frost'  => 'Лід',
+        'unholy' => 'Нечестивість',
     ],
     'demon_hunter' => [
-        'havoc'     => '',
-        'vengeance' => '',
+        'havoc'     => 'Хаос',
+        'vengeance' => 'Помста',
+        'devourer'  => 'Пожирач',
     ],
-    'druid'        => [
-        'balance'     => '',
-        'feral'       => '',
-        'guardian'    => '',
-        'restoration' => '',
+    'druid' => [
+        'balance'     => 'Баланс',
+        'feral'       => 'Хижак',
+        'guardian'    => 'Захисник',
+        'restoration' => 'Відновлення',
     ],
-    'evoker'       => [
-        'devastation'  => '',
-        'preservation' => '',
-        'augmentation' => '',
+    'evoker' => [
+        'devastation'  => 'Спустошення',
+        'preservation' => 'Збереження',
+        'augmentation' => 'Наснаження',
     ],
-    'hunter'       => [
-        'beast_mastery' => '',
-        'marksman'      => '',
-        'survival'      => '',
+    'hunter' => [
+        'beast_mastery' => 'Володар звірів',
+        'marksmanship'  => 'Стрільба',
+        'survival'      => 'Виживання',
     ],
-    'mage'         => [
-        'arcane' => '',
-        'fire'   => '',
-        'frost'  => '',
+    'mage' => [
+        'arcane' => 'Таємна магія',
+        'fire'   => 'Вогонь',
+        'frost'  => 'Лід',
     ],
-    'monk'         => [
-        'brewmaster' => '',
-        'mistweaver' => '',
-        'windwalker' => '',
+    'monk' => [
+        'brewmaster' => 'Пивовар',
+        'mistweaver' => 'Ткач туманів',
+        'windwalker' => 'Вітроходець',
     ],
-    'paladin'      => [
-        'holy'        => '',
-        'protection'  => '',
-        'retribution' => '',
+    'paladin' => [
+        'holy'        => 'Святість',
+        'protection'  => 'Захист',
+        'retribution' => 'Відплата',
     ],
-    'priest'       => [
-        'discipline' => '',
-        'holy'       => '',
-        'shadow'     => '',
+    'priest' => [
+        'discipline' => 'Дисципліна',
+        'holy'       => 'Святість',
+        'shadow'     => 'Тінь',
     ],
-    'rogue'        => [
-        'assassination' => '',
-        'outlaw'        => '',
-        'subtlety'      => '',
+    'rogue' => [
+        'assassination' => 'Убивця',
+        'outlaw'        => 'Самоправець',
+        'subtlety'      => 'Непомітність',
     ],
-    'shaman'       => [
-        'elemental'   => '',
-        'enhancement' => '',
-        'restoration' => '',
+    'shaman' => [
+        'elemental'   => 'Стихії',
+        'enhancement' => 'Удосконалення',
+        'restoration' => 'Відновлення',
     ],
-    'warlock'      => [
-        'affliction'  => '',
-        'demonology'  => '',
-        'destruction' => '',
+    'warlock' => [
+        'affliction'  => 'Проклинання',
+        'demonology'  => 'Демонологія',
+        'destruction' => 'Руйнування',
     ],
-    'warrior'      => [
-        'arms'       => '',
-        'fury'       => '',
-        'protection' => '',
+    'warrior' => [
+        'arms'       => 'Зброя',
+        'fury'       => 'Лють',
+        'protection' => 'Захист',
     ],
 
 ];

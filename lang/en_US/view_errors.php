@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     '400' => [
         'title'   => '400 Bad request',
         'message' => 'Your browser sent an invalid request, please try again.',
@@ -37,4 +38,5 @@ return [
         'title'   => 'Service Unavailable',
         'message' => 'Keystone.guru is down for maintenance. We\'ll be back soon!',
     ],
+
 ];

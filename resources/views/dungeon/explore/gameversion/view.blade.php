@@ -1,18 +1,16 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
+use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon                      $dungeon
  * @var Floor                        $floor
  * @var string                       $title
- * @var MapContext                   $mapContext
- * @var boolean                      $showHeatmapSearch
+ * @var MapContextBase               $mapContext
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
  * @var int                          $itemLevelMin
@@ -20,6 +18,7 @@ use Illuminate\Support\Collection;
  * @var int                          $playerDeathsMin
  * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<Dungeon>          $gameVersionDungeons
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -38,31 +37,27 @@ use Illuminate\Support\Collection;
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->currentMappingVersion,
+            'mappingVersion' => $dungeon->getCurrentMappingVersion(),
             'floor' => $floor,
             'edit' => false,
             'echo' => false,
             'mapContext' => $mapContext,
+            'headerTitle' => __('view_dungeon.explore.gameversion.view.title', ['dungeon' => __($dungeon->name)]),
             'show' => [
                 'header' => true,
                 'controls' => [
                     'view' => true,
                     'pulls' => false,
-                    'heatmapSearch' => $showHeatmapSearch,
+                    'heatmapSearch' => false,
                     'enemyInfo' => true,
                 ],
             ],
-            'controlOptions' => [
-                'heatmapSearch' => [
-                    'keyLevelMin' => $keyLevelMin,
-                    'keyLevelMax' => $keyLevelMax,
-                    'itemLevelMin' => $itemLevelMin,
-                    'itemLevelMax' => $itemLevelMax,
-                    'playerDeathsMin' => $playerDeathsMin,
-                    'playerDeathsMax' => $playerDeathsMax,
-                    'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
-                ],
-            ],
+            'dungeonContextLinks' => $gameVersionDungeons->mapWithKeys(fn (Dungeon $dungeon) => [
+                $dungeon->key => route('dungeon.explore.gameversion.view', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon' => $dungeon,
+                ])
+            ])->put('more', route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion])),
             'hiddenMapObjectGroups' => [
                 'brushline',
                 'path',

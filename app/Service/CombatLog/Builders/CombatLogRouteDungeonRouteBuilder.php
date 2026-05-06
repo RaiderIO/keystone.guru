@@ -5,7 +5,6 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -42,7 +41,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
      * A list of spell IDs that can be assigned to pulls through ARC. We really don't want to assign dozens of spells
      * to a single pull, so we limit it to a few that are actually useful.
      */
-    private const VALID_SPELL_IDS = [
+    private const array VALID_SPELL_IDS = [
         Spell::SPELL_BLOODLUST,
         Spell::SPELL_HEROISM,
         Spell::SPELL_TIME_WARP,
@@ -50,13 +49,14 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         Spell::SPELL_ANCIENT_HYSTERIA,
         Spell::SPELL_PRIMAL_RAGE,
         Spell::SPELL_FERAL_HIDE_DRUMS,
+        Spell::SPELL_HARRIERS_CRY,
         Spell::SPELL_SHROUD_OF_CONCEALMENT,
     ];
 
-    private CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
+    private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
     /** @var Collection<int> */
-    protected Collection $validSpellIds;
+    protected Collection $validSpellsById;
 
     /**
      * @throws DungeonNotSupportedException
@@ -77,11 +77,12 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         protected readonly FloorRepositoryInterface   $floorRepository,
         protected readonly DungeonRepositoryInterface $dungeonRepository,
         protected readonly CombatLogRouteRequestModel $combatLogRoute,
-        ?int                                          $userId = null
+        ?int                                          $userId = null,
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
 
-        parent::__construct($coordinatesService,
+        parent::__construct(
+            $coordinatesService,
             $dungeonRouteRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,
@@ -94,12 +95,12 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $affixGroupRepository,
                 $dungeonRouteAffixGroupRepository,
                 $this->dungeonRepository,
-                $userId
+                $userId,
             ),
-            $log
+            $log,
         );
 
-        $this->validSpellIds = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
+        $this->validSpellsById = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
 
         /** @var CombatLogRouteDungeonRouteBuilderLoggingInterface $log */
         $this->log = $log;
@@ -116,7 +117,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     private function buildKillZones(): void
     {
-        $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(CombatLogRouteNpcRequestModel $npc) => $this->validNpcIds->search($npc->npcId) !== false);
+        $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(
+            CombatLogRouteNpcRequestModel $npc,
+        ) => $this->validNpcIds->search((int)$npc->npcId) !== false);
 
         $npcEngagedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestModel $npc) => [
             'type'      => 'engaged',
@@ -125,7 +128,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         ]);
 
         $npcDiedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestModel $npc) => [
-            'type'      => 'died',
+            'type' => 'died',
             // A bit of a hack - but prevent one-shot enemies from having their diedAt event
             // potentially come _before_ engagedAt event due to sorting
             'timestamp' => $npc->getDiedAt()->addSecond(),
@@ -160,12 +163,13 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             /** @var $event array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
+                /** @var Floor|null $newFloor */
                 $newFloor = $floorCache->get($event['npc']->coord->uiMapId);
 
                 if ($newFloor === null) {
                     $floorCache->put(
                         $event['npc']->coord->uiMapId,
-                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id)
+                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id),
                     );
                 }
 
@@ -194,11 +198,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($activePull === null) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePull();
-                } else if ($activePull->isCompleted()) {
+                } elseif ($activePull->isCompleted()) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActivePullChainPullCompleted();
                 } // Check if we need to account for chain pulling
-                else if (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
+                elseif (($activePullAverageHPPercent = $activePull->getAverageHPPercentAt($event['npc']->getEngagedAt()))
                     <= self::CHAIN_PULL_DETECTION_HP_PERCENT) {
                     $activePull = $this->activePullCollection->addNewPull();
                     $this->log->buildKillZonesCreateNewActiveChainPull($activePullAverageHPPercent, self::CHAIN_PULL_DETECTION_HP_PERCENT);
@@ -207,7 +211,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $activePullEnemy = $this->createActivePullEnemy($event['npc']);
                 $resolvedEnemy   = $this->findUnkilledEnemyForNpcAtIngameLocation(
                     $activePullEnemy,
-                    $this->activePullCollection->getInCombatGroups()
+                    $this->activePullCollection->getInCombatGroups(),
                 );
 
                 if ($resolvedEnemy === null) {
@@ -230,7 +234,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
                 $activePull->enemyEngaged($activePullEnemy);
-            } else if ($event['type'] === 'died') {
+            } elseif ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
                 foreach ($this->activePullCollection as $activePull) {
                     /** @var $activePull ActivePull */
@@ -294,7 +298,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->combatLogRoute->spells as $spell) {
             if ($lastDiedAt !== null) {
                 if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
-                    if (!$this->validSpellIds->has($spell->spellId)) {
+                    if (!$this->validSpellsById->has($spell->spellId)) {
                         $this->log->determineSpellsCastBetweenInvalidSpellIdBetween($spell->spellId);
 
                         continue;
@@ -302,8 +306,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($spell->spellId);
                     $assignedSpells++;
                 }
-            } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
-                if (!$this->validSpellIds->has($spell->spellId)) {
+            } elseif ($firstEngagedAt !== null && $spell->getCastAt()->isAfter($firstEngagedAt)) {
+                if (!$this->validSpellsById->has($spell->spellId)) {
                     $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
 
                     continue;
@@ -325,7 +329,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $npc->coord->x,
             $npc->coord->y,
             $npc->getEngagedAt(),
-            $npc->getDiedAt()
+            $npc->getDiedAt(),
         );
     }
 }

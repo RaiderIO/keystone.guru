@@ -17,7 +17,7 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
 
         return $this->parseCombatLogRecursively(
             $filePath,
-            fn(string $filePath) => $this->splitCombatLog($splitCombatLogCallable, $filePath)
+            fn(string $filePath) => $this->splitCombatLog($splitCombatLogCallable, $filePath),
         );
     }
 
@@ -38,7 +38,10 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
             $this->warn('- File contained no splittable parts!');
         }
 
-        $targetFileName = str_replace(['.txt', '.zip'], $targetFileExtension, $filePath);
+        $targetFileName = str_replace([
+            '.txt',
+            '.zip',
+        ], $targetFileExtension, $filePath);
 
         $this->comment(sprintf('- Renaming original file to %s', $targetFileName));
         rename($filePath, $targetFileName);

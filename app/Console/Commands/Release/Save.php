@@ -32,7 +32,11 @@ class Save extends Command
         $rootDirPath = database_path('seeders/releases/');
 
         foreach (Release::all() as $release) {
-            $release->makeHidden(['reddit_body', 'discord_body', 'github_body']);
+            $release->makeHidden([
+                'reddit_body',
+                'discord_body',
+                'github_body',
+            ]);
             $releaseArr = $release->toArray();
 
             /** @var $release Release */

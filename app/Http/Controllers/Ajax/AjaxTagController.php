@@ -10,7 +10,10 @@ use App\Http\Requests\Tag\APITagUpdateFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
+use App\Models\Team;
 use App\Models\Traits\HasTags;
+use App\Models\Traits\Taggable;
+use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -20,7 +23,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 
@@ -35,20 +38,25 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Collection<Tag>
-     */
-    public function get(Request $request, TagCategory $category)
-    {
-        return Tag::where('tag_category_id', $category->id)->where('user_id', Auth::id())->get();
-    }
-
-    /**
      * @return Application|ResponseFactory|Response
      *
      * @throws AuthorizationException
      */
-    public function store(APITagFormRequest $request)
-    {
+    public function store(
+        APITagFormRequest $request,
+    ) {
+        $validated = $request->validated();
+
+        $contextPublicKey = $validated['context'];
+        $contextClass     = $validated['context_class'];
+
+        /** @var Model|HasTags $context */
+        $context = match ($contextClass) {
+            'user'  => User::where('public_key', $contextPublicKey)->firstOrFail(),
+            'team'  => Team::where('public_key', $contextPublicKey)->firstOrFail(),
+            default => abort(StatusCode::BAD_REQUEST, 'Invalid context class'),
+        };
+
         /** @var TagCategory $tagCategory */
         $tagCategory = TagCategory::where('name', $request->get('category'))->firstOrFail();
 
@@ -59,37 +67,44 @@ class AjaxTagController extends Controller
         /** @var Builder $query */
         /** @noinspection PhpUndefinedMethodInspection */
         $query = $tagCategory->model_class::query();
-        if (in_array($tagCategory->name, [TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM])) {
+        if (in_array($tagCategory->name, [
+            TagCategory::DUNGEON_ROUTE_PERSONAL,
+            TagCategory::DUNGEON_ROUTE_TEAM,
+        ])) {
             /** @var DungeonRoute $dungeonRoute */
             $query = $query->where('public_key', $modelId);
         } else {
             $query = $query->where('id', $modelId);
         }
 
-        /** @var HasTags|Model $model */
+        /** @var Taggable|Model $model */
         $model = $query->firstOrFail();
 
         // Now that we know the category and created an instance of the model, check if we may actually do this
-        $this->authorize('create-tag', [$tagCategory, $model]);
+        Gate::authorize('create-tag', [
+            $tagCategory,
+            $model,
+        ]);
 
         //
         if (!$model->hasTag($tagCategory->id, $tagName)) {
-            // Get the first tag that has the same name, under the same user, with the same category
+            // Get the first tag that has the same name, under the same context, with the same category
             /** @var Tag $similarTag */
-            $similarTag = Tag::where('name', $tagName)->where('user_id', Auth::id())->where('tag_category_id', $tagCategory->id)->first();
+            $similarTag = Tag::where('name', $tagName)
+                ->where('context_id', $context->id)
+                ->where('context_class', $context::class)
+                ->where('tag_category_id', $tagCategory->id)
+                ->first();
 
-            // Save the tag we're trying to add
-            $tag = new Tag();
-            // Technically we can fetch the user_id by going through the model but that's just too much work and slow
-            $tag->user_id         = Auth::id();
-            $tag->tag_category_id = $tagCategory->id;
-            $tag->model_id        = $model->id;
-            $tag->model_class     = $tagCategory->model_class;
-            $tag->name            = $tagName;
-            // Will be null if no similar tag is found which is fine
-            $tag->color = $similarTag?->color;
-
-            if ($tag->save()) {
+            if ($tag = Tag::create([
+                'context_id'      => $context->id,
+                'context_class'   => $context::class,
+                'tag_category_id' => $tagCategory->id,
+                'model_id'        => $model->id,
+                'model_class'     => $tagCategory->model_class,
+                'name'            => $tagName,
+                'color'           => $similarTag?->color,
+            ])) {
                 $result = $tag;
             } else {
                 $result = response('Unable to save Tag', Http::INTERNAL_SERVER_ERROR);
@@ -106,13 +121,17 @@ class AjaxTagController extends Controller
      */
     public function updateAll(APITagUpdateFormRequest $request, Tag $tag): Response
     {
-        $this->authorize('edit', $tag);
+        Gate::authorize('edit', $tag);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)
             ->where('tag_category_id', $tag->tag_category_id)
-            ->where('user_id', Auth::id())
-            ->update(['name' => $request->get('name'), 'color' => $request->get('color')]);
+            ->where('context_id', $tag->context_id)
+            ->where('context_class', $tag->context_class)
+            ->update([
+                'name'  => $request->get('name'),
+                'color' => $request->get('color'),
+            ]);
 
         return response()->noContent();
     }
@@ -123,12 +142,13 @@ class AjaxTagController extends Controller
      */
     public function deleteAll(Request $request, Tag $tag): Response
     {
-        $this->authorize('delete', $tag);
+        Gate::authorize('delete', $tag);
 
         // Update all tags with the same name to the new name and color
         Tag::where('name', $tag->name)
             ->where('tag_category_id', $tag->tag_category_id)
-            ->where('user_id', Auth::id())
+            ->where('context_id', $tag->context_id)
+            ->where('context_class', $tag->context_class)
             ->delete();
 
         return response()->noContent();

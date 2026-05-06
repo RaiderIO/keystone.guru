@@ -2,12 +2,13 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Expansion                $expansion
+ * @var GameVersion              $gameVersion
  * @var string                   $title
+ * @var string|null              $link
  * @var int                      $cols
  * @var Collection<DungeonRoute> $dungeonroutes
  * @var AffixGroup               $currentAffixGroup
@@ -21,13 +22,16 @@ $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
 ?>
-<div class="discover_panel">
+<div class="discover_panel px-xl-2">
     <div class="row mt-4">
         <div class="col-xl">
             <h2 class="text-center">
                 @isset($link)
                     <a href="{{ $link }}">
                         {{ $title }}
+                        @if((parse_url($link)['host'] ?? '') !== parse_url(config('app.url'))['host'])
+                            <i class="fas fa-external-link-alt"></i>
+                        @endif
                     </a>
                 @else
                     {{ $title }}
@@ -38,7 +42,7 @@ $cache            ??= true;
                     <div class="offset-2">
                     </div>
                     <div class="col-8">
-                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'cols' => 1, 'center' => true])
+                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'cols' => 1, 'center' => true, 'isFirst' => true])
                     </div>
                 </div>
             @endisset
@@ -68,7 +72,7 @@ $cache            ??= true;
     @if($loadMore)
         @include('common.search.loadmore', [
             'category' => $category,
-            'expansion' => $expansion,
+            'gameVersion' => $gameVersion,
             'dungeon' => $dungeon,
             'routeListContainerSelector' => '#category_route_list',
         ])

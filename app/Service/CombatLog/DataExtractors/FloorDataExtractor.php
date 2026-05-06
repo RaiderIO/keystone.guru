@@ -17,12 +17,11 @@ class FloorDataExtractor implements DataExtractorInterface
 //    private ?Floor $previousFloor = null;
     private ?Floor $currentFloor = null;
 
-    private FloorDataExtractorLoggingInterface $log;
+    private readonly FloorDataExtractorLoggingInterface $log;
 
     public function __construct(
-        private readonly FloorRepositoryInterface                       $floorRepository
-    )
-    {
+        private readonly FloorRepositoryInterface $floorRepository,
+    ) {
         $log = App::make(FloorDataExtractorLoggingInterface::class);
         /** @var FloorDataExtractorLoggingInterface $log */
 
@@ -31,18 +30,24 @@ class FloorDataExtractor implements DataExtractorInterface
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
     }
 
-    public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
-    {
+    public function extractData(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                    $parsedEvent,
+    ): void {
         if (!($parsedEvent instanceof MapChange)) {
             // Don't log anything because that'd just spam the hell out of it
             return;
         }
 
         // Blizzard's floor coordinates are not accurate for The Necrotic Wake
-        if ($currentDungeon->dungeon->key === Dungeon::DUNGEON_THE_NECROTIC_WAKE) {
+        if (in_array($currentDungeon->dungeon->key, [
+            Dungeon::DUNGEON_THE_NECROTIC_WAKE,
+            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
+        ])) {
             return;
         }
 
@@ -50,7 +55,6 @@ class FloorDataExtractor implements DataExtractorInterface
 
         $this->currentFloor = $this->floorRepository->findByUiMapId($parsedEvent->getUiMapID(), $currentDungeon->dungeon->id);
         if ($this->currentFloor !== null) {
-
             $newIngameMinX = round($parsedEvent->getXMin(), 2);
             $newIngameMinY = round($parsedEvent->getYMin(), 2);
             $newIngameMaxX = round($parsedEvent->getXMax(), 2);
@@ -72,7 +76,7 @@ class FloorDataExtractor implements DataExtractorInterface
                     $newIngameMinX,
                     $newIngameMinY,
                     $newIngameMaxX,
-                    $newIngameMaxY
+                    $newIngameMaxY,
                 );
             }
         }

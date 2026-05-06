@@ -34,7 +34,7 @@ use Illuminate\Support\Collection;
                                 status: 1
                             },
                             success: function (json) {
-                                showSuccessNotification(lang.get('messages.user_report_handled_success'));
+                                showSuccessNotification(lang.get('js.user_report_handled_success'));
 
                                 // Refresh the table
                                 userReportsDatatable.row($this.closest('tr')).remove().draw();
@@ -42,6 +42,9 @@ use Illuminate\Support\Collection;
                         });
                     });
                 },
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
             });
         });
     </script>
@@ -68,7 +71,7 @@ use Illuminate\Support\Collection;
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->user->name }}</td>
                 <td>
-                    <span data-toggle="tooltip"
+                    <span data-toggle="tooltip" data-placement="right"
                           title="{{ isset($report->model) ? json_encode($report->model->toArray(), JSON_PRETTY_PRINT) : '' }}">{{ $report->category }}
                     </span>
                 </td>

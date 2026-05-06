@@ -3,10 +3,12 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\Expansion;
-use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\Team;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Expansion\ExpansionServiceInterface;
 use Closure;
 use Illuminate\Support\Facades\App;
 
@@ -22,7 +24,12 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
 
     protected ?Season $season = null;
 
+    protected ?GameVersion $gameVersion = null;
+
+    /** @var Expansion|null Only used when browsing by expansion explicitly - do not use otherwise */
     protected ?Expansion $expansion = null;
+
+    protected ?Team $excludeTeam = null;
 
     /**
      * DiscoverService constructor.
@@ -30,16 +37,16 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     public function __construct()
     {
         $this->cacheService     = App::make(CacheServiceInterface::class);
-        $this->expansionService = App::make(ExpansionService::class);
+        $this->expansionService = App::make(ExpansionServiceInterface::class);
     }
 
     /**
      * Makes sure that we have an expansion set at the end of this function if it wasn't set before
      */
-    public function ensureExpansion(): DiscoverServiceInterface
+    public function ensureGameVersion(): DiscoverServiceInterface
     {
-        if ($this->expansion === null) {
-            $this->expansion = $this->expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+        if ($this->gameVersion === null) {
+            $this->gameVersion = GameVersion::getDefaultGameVersion();
         }
 
         return $this;
@@ -88,9 +95,29 @@ abstract class BaseDiscoverService implements DiscoverServiceInterface
     /**
      * {@inheritDoc}
      */
+    public function withGameVersion(GameVersion $gameVersion): DiscoverServiceInterface
+    {
+        $this->gameVersion = $gameVersion;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function withCache(bool $enabled): DiscoverServiceInterface
     {
         $this->cacheService->setCacheEnabled($enabled);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function excludeTeam(?Team $team): DiscoverServiceInterface
+    {
+        $this->excludeTeam = $team;
 
         return $this;
     }

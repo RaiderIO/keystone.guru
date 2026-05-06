@@ -28,8 +28,8 @@ use Illuminate\Support\Collection;
         </tr>
         </thead>
         <tbody>
-        <tr>
             @foreach($features as $feature)
+                <tr>
                 <td>
                     @if(\Laravel\Pennant\Feature::active($feature))
                         <i class="fas fa-check-circle text-success"></i>
@@ -63,8 +63,8 @@ use Illuminate\Support\Collection;
                         </div>
                     </div>
                 </td>
+                </tr>
             @endforeach
-        </tr>
         </tbody>
     </table>
 @endsection

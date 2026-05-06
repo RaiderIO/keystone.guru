@@ -30,7 +30,7 @@ class CommonTagTagmanager extends InlineCode {
             },
             dataType: 'json',
             success: function (json) {
-                showSuccessNotification(lang.get('messages.save_tag_success'));
+                showSuccessNotification(lang.get('js.save_tag_success'));
             }
         });
     }
@@ -52,7 +52,7 @@ class CommonTagTagmanager extends InlineCode {
             success: function (json) {
                 $(`#tag_row_${id}`).fadeOut();
 
-                showSuccessNotification(lang.get('messages.delete_tag_success'));
+                showSuccessNotification(lang.get('js.delete_tag_success'));
             }
         });
     }

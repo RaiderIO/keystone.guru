@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\DungeonRoute\Dungeonroute;
+use App\Models\DungeonRoute\DungeonRoute;
 
-/** @var Dungeonroute $dungeonroute */
+/** @var DungeonRoute $dungeonroute */
 
 ob_start();
 ?>
@@ -39,11 +39,9 @@ ob_start();
             {{ __('view_common.maps.controls.elements.dungeonrouteinfo.affixes') }}
         </div>
     </div>
-    @foreach($dungeonroute->affixes as $affixGroup)
-        <div class="row no-gutters">
-            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixGroup, 'showText' => false, 'class' => 'w-100', 'cols' => 1])
-        </div>
-    @endforeach
+    <div id="view_dungeonroute_affixes" class="row no-gutters">
+
+    </div>
 </div>
 <?php $content = ob_get_clean(); ?>
     <!-- Dungeonroute info -->

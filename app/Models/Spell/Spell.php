@@ -4,12 +4,15 @@ namespace App\Models\Spell;
 
 use App\Models\CacheModel;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
@@ -17,25 +20,27 @@ use Illuminate\Support\Collection;
 use Str;
 
 /**
- * @property int                      $id
- * @property string|null              $category
- * @property string|null              $cooldown_group
- * @property string                   $dispel_type
- * @property string                   $mechanic
- * @property string                   $icon_name
- * @property string                   $name
- * @property int                      $schools_mask
- * @property int                      $miss_types_mask
- * @property bool                     $aura Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool                     $debuff Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
- * @property int                      $cast_time
- * @property int                      $duration
- * @property bool                     $selectable
- * @property bool                     $hidden_on_map
- * @property Carbon                   $fetched_data_at
+ * @property int         $id
+ * @property int         $game_version_id
+ * @property string|null $category
+ * @property string|null $cooldown_group
+ * @property string      $dispel_type
+ * @property string      $mechanic
+ * @property string      $icon_name
+ * @property string      $name
+ * @property int         $schools_mask
+ * @property int         $miss_types_mask
+ * @property bool        $aura            Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
+ * @property bool        $debuff          Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property int         $cast_time
+ * @property int         $duration
+ * @property bool        $selectable
+ * @property bool        $hidden_on_map
+ * @property Carbon      $fetched_data_at
  *
- * @property string                   $icon_url
+ * @property string $icon_url
  *
+ * @property GameVersion              $gameVersion
  * @property Collection<Dungeon>      $dungeons
  * @property Collection<SpellDungeon> $spellDungeons
  *
@@ -55,10 +60,14 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public $hidden = ['pivot'];
 
-    protected $appends = ['icon_url'];
+    protected $appends = [
+        'icon_url',
+        'wowhead_url',
+    ];
 
     protected $fillable = [
         'id',
+        'game_version_id',
         'category',
         'cooldown_group',
         'dispel_type',
@@ -77,25 +86,34 @@ class Spell extends CacheModel implements MappingModelInterface
         'fetched_data_at',
     ];
 
-    protected $casts = [
-        'id'              => 'integer',
-        'schools_mask'    => 'integer',
-        'miss_types_mask' => 'integer',
-        'aura'            => 'boolean',
-        'debuff'          => 'boolean',
-        'cast_time'       => 'integer',
-        'duration'        => 'integer',
-        'selectable'      => 'boolean',
-        'hidden_on_map'   => 'boolean',
-        'fetched_data_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'id'              => 'integer',
+            'game_version_id' => 'integer',
+            'schools_mask'    => 'integer',
+            'miss_types_mask' => 'integer',
+            'aura'            => 'boolean',
+            'debuff'          => 'boolean',
+            'cast_time'       => 'integer',
+            'duration'        => 'integer',
+            'selectable'      => 'boolean',
+            'hidden_on_map'   => 'boolean',
+            'fetched_data_at' => 'datetime',
+        ];
+    }
+
+    public function getWowheadUrlAttribute(): string
+    {
+        return self::getWowheadLink($this->game_version_id, $this->id, $this->name);
+    }
 
     public function setFetchedDataAtAttribute($value): void
     {
         if (is_string($value)) {
             try {
                 $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::SERIALIZED_DATE_TIME_FORMAT, $value);
-            } catch (InvalidFormatException $exception) {
+            } catch (InvalidFormatException) {
                 $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::DATABASE_DATE_TIME_FORMAT, $value);
             }
         } else {
@@ -107,16 +125,22 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         $result = [];
 
-        foreach (self::ALL_SCHOOLS as $school) {
+        foreach (self::ALL_SCHOOLS as $school => $value) {
             $result[$school] = $this->schools_mask & $school;
         }
 
         return $result;
     }
 
-    public function scopeVisible(): Builder
+    #[Scope]
+    protected function visible(): Builder
     {
         return $this->where('hidden_on_map', false);
+    }
+
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     public function dungeons(): HasManyThrough
@@ -134,18 +158,13 @@ class Spell extends CacheModel implements MappingModelInterface
      */
     public function getIconUrlAttribute(): string
     {
-        return url(sprintf('/images/spells/%s.jpg', $this->icon_name));
+        return ksgAssetImage(sprintf('spells/%s.jpg', $this->icon_name));
     }
 
     public function getDungeonId(): ?int
     {
         // Spells aren't tied to a specific dungeon, but they're part of the mapping
         return 0;
-    }
-
-    public function getWowheadLink(): string
-    {
-        return sprintf('https://wowhead.com/spell=%d/%s', $this->id, Str::slug($this->name));
     }
 
     public function isAssignedDungeon(Dungeon $dungeon): bool
@@ -161,13 +180,49 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public static function maskToReadableString(array $mapping, int $mask): string
+    public static function getWowheadLink(?int $gameVersionId, int $spellId, ?string $name = null): string
+    {
+        $wowheadBaseUrl = 'https://www.wowhead.com';
+        if ($gameVersionId !== null) {
+            switch ($gameVersionId) {
+                case GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]:
+                    $wowheadBaseUrl .= '/wrath';
+                    break;
+                case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
+                    $wowheadBaseUrl .= '/classic';
+                    break;
+                case GameVersion::ALL[GameVersion::GAME_VERSION_MOP]:
+                    $wowheadBaseUrl .= '/mop-classic';
+                    break;
+            }
+        }
+
+        $result = sprintf('%s/spell=%d', $wowheadBaseUrl, $spellId);
+
+        if (!empty(__($name))) {
+            $result .= '/' . Str::slug(__($name));
+        }
+
+        return $result;
+    }
+
+    public static function maskToReadableString(array $mapping, int $mask, ?string $translationPrefix = null): string
     {
         $result = [];
 
-        foreach ($mapping as $name => $bit) {
-            if ($mask & $bit) {
-                $result[] = $name;
+        foreach ($mapping as $key => $value) {
+            // New format: bitmask => name
+            if (is_int($key)) {
+                $bitmask = $key;
+                $name    = $value;
+            } // Old format: name => bitmask
+            else {
+                $bitmask = $value;
+                $name    = $key;
+            }
+
+            if (($mask & $bitmask) !== 0) {
+                $result[] = $translationPrefix === null ? $name : __($translationPrefix . '.' . $name);
             }
         }
 

@@ -6,15 +6,14 @@ use App\Models\RouteAttribute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
-use App\Models\TeamUser;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
  * @var SeasonService              $seasonService
- * @var Collection<Tag>           $searchTags
- * @var Collection<Tag>           $autoCompleteTags
+ * @var Collection<Tag>            $searchTags
+ * @var Collection<Tag>            $autoCompleteTags
  * @var Collection<RouteAttribute> $allRouteAttributes
  */
 
@@ -33,7 +32,7 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
     $_COOKIE['routes_viewmode'] : 'biglist';
 
 if ($team !== null) {
-    $searchTags = $team->getAvailableTags();
+    $searchTags = $team->tags;
 } else if (Auth::check()) {
     $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
     $searchTags    = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
@@ -46,9 +45,9 @@ $autoCompleteTags = collect();
 
 if (Auth::check()) {
     if ($team === null) {
-        $autoCompleteTags = Auth::user()->tags()->unique(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
+        $autoCompleteTags = Auth::user()->getUniqueTagNames(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
     } else {
-        $autoCompleteTags = $team->getAvailableTags();
+        $autoCompleteTags = $team->getUniqueTagNames(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM]);
     }
 } else {
     $autoCompleteTags = collect();
@@ -57,9 +56,10 @@ if (Auth::check()) {
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
             'currentUserId' => Auth::check() ? Auth::id() : -1,
+            'currentUserPublicKey' => Auth::check() ? Auth::user()->public_key : '',
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
-            'teamPublicKey' => $team ? $team->public_key : '',
+            'teamPublicKey' => $team?->public_key ?? null,
             'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamUsers', function(Builder $teamUsersBuilder){
                 $teamUsersBuilder->isModerator(Auth::id());
             })->get() : [],
@@ -91,8 +91,8 @@ if (Auth::check()) {
 <div class="row no-gutters">
     @if($team instanceof Team)
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('team_name', __('view_common.dungeonroute.table.team')) !!}
-            {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
+            {{ html()->label(__('view_common.dungeonroute.table.team'), 'team_name') }}
+            {{ html()->text('team_name', $team->name)->class('form-control')->isReadonly() }}
         </div>
     @endisset
     <div class="col-lg pl-1 pr-1">
@@ -106,13 +106,16 @@ if (Auth::check()) {
         ])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('affixes[]', __('view_common.dungeonroute.table.affixes')) !!}
-        {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
-            ['id' => 'affixes',
-            'class' => 'form-control affixselect selectpicker',
-            'multiple' => 'multiple',
-            'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('view_common.dungeonroute.table.affixes_selected')]) !!}
+        {{ html()->label(__('view_common.dungeonroute.table.affixes'), 'affixes[]') }}
+        {{
+            html()
+                ->multiselect('affixes[]', $affixgroups->pluck('text', 'id'))
+                ->id('affixes')
+                ->class('form-control affixselect selectpicker')
+                ->data('selected-text-format', 'count > 1')
+                ->data('none-selected-text', __('view_common.dungeonroute.table.select_affixes'))
+                ->data('count-selected-text', __('view_common.dungeonroute.table.affixes_selected'))
+             }}
     </div>
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
@@ -120,32 +123,38 @@ if (Auth::check()) {
         'showNoAttributes' => true])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('dungeonroute_requirements_select', __('view_common.dungeonroute.table.requirements')) !!}
+        {{ html()->label(__('view_common.dungeonroute.table.requirements'), 'dungeonroute_requirements_select') }}
         <?php
         $requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.table.enemy_enemy_forces')];
         if (Auth::check() && $view !== 'favorites') {
             $requirements['favorite'] = __('view_common.dungeonroute.table.favorite');
         }
         ?>
-        {!! Form::select('dungeon_id', $requirements, 0, [
-            'id' => 'dungeonroute_requirements_select',
-            'class' => 'form-control selectpicker',
-            'multiple' => 'multiple',
-            'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected'),
-        ]) !!}
+        {{
+            html()
+                ->multiselect('dungeon_id', $requirements, 0)
+                ->id('dungeonroute_requirements_select')
+                ->class('form-control selectpicker')
+                ->data('selected-text-format', 'count > 1')
+                ->data('none-selected-text', __('view_common.dungeonroute.table.select_requirements'))
+                ->data('count-selected-text', __('view_common.dungeonroute.table.requirements_selected'))
+        }}
     </div>
     @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('dungeonroute_tags_select[]', __('view_common.dungeonroute.table.tags')) !!}
-            {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,
-                ['id' => 'dungeonroute_tags_select',
-                'class' => 'form-control selectpicker',
-                'multiple' => 'multiple',
-                // Change the original text
-                'title' => $searchTags->isEmpty() ? __('view_common.dungeonroute.table.tags_title') : false,
-                'data-selected-text-format' => 'count > 1',
-                'data-count-selected-text' => __('view_common.dungeonroute.table.tags_selected')]) !!}
+            {{ html()->label(__('view_common.dungeonroute.table.tags'), 'dungeonroute_tags_select[]') }}
+            {{
+                html()
+                    ->multiselect('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'))
+                    ->id('dungeonroute_tags_select')
+                    ->class('form-control selectpicker')
+                    ->attribute('title', $searchTags->isEmpty() ?
+                        __('view_common.dungeonroute.table.tags_title') : __('view_common.dungeonroute.table.select_tags')
+                    )
+                    ->data('selected-text-format', 'count > 1')
+                    ->data('none-selected-text', __('view_common.dungeonroute.table.select_tags'))
+                    ->data('count-selected-text', __('view_common.dungeonroute.table.tags_selected'))
+             }}
         </div>
     @endif
     <div class="col-lg pl-1 pr-1">

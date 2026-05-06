@@ -24,8 +24,11 @@ use Throwable;
 
 class AjaxFloorUnionController extends AjaxMappingModelBaseController
 {
-    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
-    {
+    #[\Override]
+    protected function shouldCallMappingChanged(
+        ?MappingModelInterface $beforeModel,
+        ?MappingModelInterface $afterModel,
+    ): bool {
         return false;
     }
 
@@ -36,7 +39,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
         FloorUnionFormRequest       $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        ?FloorUnion                 $floorUnion = null
+        ?FloorUnion                 $floorUnion = null,
     ): FloorUnion|Model {
         $validated = $request->validated();
 
@@ -69,10 +72,12 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent {
         return new FloorUnionChangedEvent($context, $user, $model);
     }
-
-
 }

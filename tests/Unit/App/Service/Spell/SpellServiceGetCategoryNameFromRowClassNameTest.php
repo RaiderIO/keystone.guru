@@ -18,13 +18,13 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
     /** @var Collection<CharacterClass> */
     private Collection $characterClasses;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->characterClasses = CharacterClass::all()->keyBy('key');
     }
-
 
     /**
      * Scenario: Happy path, if we have a valid row class name we should find the character class for it, and return
@@ -38,14 +38,14 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
     public function getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidClassBasedRowClassName(
         string $rowClassName,
         string $characterClassName,
-        string $expected
+        string $expected,
     ): void {
         // Arrange
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -74,71 +74,70 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
             [
                 'Warrior Protection',
                 CharacterClass::CHARACTER_CLASS_WARRIOR,
-                'spells.category.warrior',
+                'spellcategory.warrior',
             ],
             [
                 'Hunter Survival',
                 CharacterClass::CHARACTER_CLASS_HUNTER,
-                'spells.category.hunter',
+                'spellcategory.hunter',
             ],
             [
                 'Death Knight Blood',
                 CharacterClass::CHARACTER_CLASS_DEATH_KNIGHT,
-                'spells.category.death_knight',
+                'spellcategory.death_knight',
             ],
             [
                 'Mage Fire',
                 CharacterClass::CHARACTER_CLASS_MAGE,
-                'spells.category.mage',
+                'spellcategory.mage',
             ],
             [
                 'Priest Discipline',
                 CharacterClass::CHARACTER_CLASS_PRIEST,
-                'spells.category.priest',
+                'spellcategory.priest',
             ],
             [
                 'Monk Mistweaver',
                 CharacterClass::CHARACTER_CLASS_MONK,
-                'spells.category.monk',
+                'spellcategory.monk',
             ],
             [
                 'Rogue Assassination',
                 CharacterClass::CHARACTER_CLASS_ROGUE,
-                'spells.category.rogue',
+                'spellcategory.rogue',
             ],
             [
                 'Warlock Destruction',
                 CharacterClass::CHARACTER_CLASS_WARLOCK,
-                'spells.category.warlock',
+                'spellcategory.warlock',
             ],
             [
                 'Shaman Enhancement',
                 CharacterClass::CHARACTER_CLASS_SHAMAN,
-                'spells.category.shaman',
+                'spellcategory.shaman',
             ],
             [
                 'Paladin Retribution',
                 CharacterClass::CHARACTER_CLASS_PALADIN,
-                'spells.category.paladin',
+                'spellcategory.paladin',
             ],
             [
                 'Druid Restoration',
                 CharacterClass::CHARACTER_CLASS_DRUID,
-                'spells.category.druid',
+                'spellcategory.druid',
             ],
             [
                 'Demon Hunter Havoc',
                 CharacterClass::CHARACTER_CLASS_DEMON_HUNTER,
-                'spells.category.demon_hunter',
+                'spellcategory.demon_hunter',
             ],
             [
                 'Evoker Preservation',
                 CharacterClass::CHARACTER_CLASS_EVOKER,
-                'spells.category.evoker',
+                'spellcategory.evoker',
             ],
         ];
     }
-
 
     /**
      * Scenario: Happy path, if we have a valid non-class based row class name, we should find the category immediately
@@ -151,14 +150,14 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
     #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName_DataProvider')]
     public function getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName(
         string $rowClassName,
-        string $expected
+        string $expected,
     ): void {
         // Arrange
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -185,11 +184,10 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         return [
             [
                 'General',
-                'spells.category.general',
+                'spellcategory.general',
             ],
         ];
     }
-
 
     /**
      * Scenario: Unhappy path, if we have an invalid row class name, and we cannot find the class for it, then we return
@@ -208,7 +206,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -231,7 +229,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         Assert::assertNull($result);
     }
 
-
     /**
      * Scenario: Unhappy path, if we have a added a new class but there wasn't a new category added for that class yet.
      *
@@ -252,7 +249,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $spellService = ServiceFixtures::getSpellServiceMock(
             testCase: $this,
             methodsToMock: ['getCharacterClassFromClassName'],
-            log: $log
+            log: $log,
         );
 
         $spellService
@@ -274,5 +271,4 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         // Assert
         Assert::assertNull($result);
     }
-
 }

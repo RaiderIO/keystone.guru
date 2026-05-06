@@ -72,7 +72,7 @@ class SearchHandlerDungeonRoute extends SearchHandler {
 
     searchMore() {
         console.assert(this instanceof SearchHandlerDungeonRoute, 'this is not a SearchHandlerDungeonRoute', this);
-        this.search(this.previousSearchParams, $.extend({}, {
+        this.search(this.previousSearchParams ?? new SearchParams([]), $.extend({}, {
             resetOffset: false
         }, this.options));
     }

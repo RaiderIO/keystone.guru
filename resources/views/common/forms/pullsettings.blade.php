@@ -44,8 +44,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
         </div>
         <div class="row">
             <div class="col">
-                {!! Form::checkbox('pulls_sidebar_floor_switch_visibility', 1, $pullsSidebarFloorSwitchVisibility,
-                        ['id' => 'pulls_sidebar_floor_switch_visibility', 'class' => 'form-control left_checkbox']) !!}
+                {{ html()->checkbox('pulls_sidebar_floor_switch_visibility', $pullsSidebarFloorSwitchVisibility, 1)->id('pulls_sidebar_floor_switch_visibility')->class('form-control left_checkbox') }}
             </div>
         </div>
     </div>
@@ -97,7 +96,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
             </div>
             <div class="row no-gutters view_dungeonroute_details_row">
                 <div class="col pr-2">
-                    {!! Form::checkbox('pull_gradient_apply_always', 1, $dungeonroute->pull_gradient_apply_always, ['id' => 'pull_gradient_apply_always', 'class' => 'form-control left_checkbox']) !!}
+                    {{ html()->checkbox('pull_gradient_apply_always', $dungeonroute->pull_gradient_apply_always, 1)->id('pull_gradient_apply_always')->class('form-control left_checkbox') }}
                 </div>
             </div>
         </div>

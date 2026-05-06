@@ -15,6 +15,10 @@
   @include spread-map($theme-map-lux);
 }
 
+:root.vapor {
+  @include spread-map($theme-map-vapor);
+}
+
 body {
   font-family: Salesforce Sans, Arial, sans-serif;
   background-color: var($--theme-darker) !important;
@@ -163,14 +167,14 @@ body {
   /* normal container */
   @media (min-width: 1440px) {
     .container {
-      max-width: 1400px;
+      max-width: 1650px;
     }
   }
 
   /* wide container */
   @media (min-width: 1440px) {
     .container_wide {
-      max-width: 1400px;
+      max-width: 1650px;
     }
   }
 
@@ -246,11 +250,11 @@ body {
   }
 
   .modal-backdrop {
-    z-index: 100010;
+    z-index: 100010 !important;
   }
 
   .modal {
-    z-index: 100011;
+    z-index: 100021 !important;
   }
 
   .modal-lg {
@@ -296,6 +300,15 @@ body {
   }
 
   /* Fixed messages always on top */
+
+  a {
+    color: var($--theme-link);
+  }
+
+  a:hover {
+    color: var($--theme-link-hover);
+  }
+
   .fixed-bottom {
     z-index: 1000;
   }
@@ -311,6 +324,10 @@ body {
 
   .alert_fixed_footer {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .border-accent {
+    border-color: var($--theme-border-accent) !important;
   }
 
   .btn-accent {
@@ -499,7 +516,8 @@ body {
   .enemy_icon.rangedcaster,
   .enemy_icon.rangedhealer,
   .enemy_icon.rangedmelee,
-  .enemy_icon.enemy_forces {
+  .enemy_icon.enemy_forces,
+  .enemy_icon.enemy_group {
     background-color: var($--theme-darker);
     color: var($--theme-text-contrast);
   }

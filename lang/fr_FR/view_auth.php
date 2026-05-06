@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'passwords' => [
         'email' => [
             'title'                    => '',
@@ -17,11 +18,12 @@ return [
             'reset_password'   => '',
         ],
     ],
-    'login'     => [
+    'login' => [
         'title' => '',
     ],
-    'register'  => [
+    'register' => [
         'title'  => '',
         'header' => '',
     ],
+
 ];

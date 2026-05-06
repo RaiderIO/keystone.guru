@@ -3,7 +3,6 @@
 namespace App\Http\Models\Request\CombatLog\Route;
 
 use App\Http\Models\Request\RequestModel;
-use App\Models\Enemy;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
@@ -28,7 +27,7 @@ class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arra
         public ?int                             $specId = null,
         public ?float                           $itemLevel = null,
         public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null
+        public ?CombatLogRouteCoordRequestModel $coord = null,
     ) {
     }
 

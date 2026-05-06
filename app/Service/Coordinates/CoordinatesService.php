@@ -2,7 +2,6 @@
 
 namespace App\Service\Coordinates;
 
-use App\Logic\Structs\GridLocation;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
@@ -12,17 +11,13 @@ use InvalidArgumentException;
 
 class CoordinatesService implements CoordinatesServiceInterface
 {
-    /** @var int Y */
-    public const MAP_MAX_LAT = -256;
+    public const int MAP_MAX_LAT = -256;
 
-    /** @var int X */
-    public const MAP_MAX_LNG = 384;
+    public const int MAP_MAX_LNG = 384;
 
-    /** @var int */
-    public const MAP_SIZE = 256;
+    public const int MAP_SIZE = 256;
 
-    /** @var int */
-    public const MAP_ASPECT_RATIO = 1.5;
+    public const float MAP_ASPECT_RATIO = 1.5;
 
     /**
      * @see mapcontext.js
@@ -33,9 +28,9 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         if ($floor === null) {
             throw new InvalidArgumentException('No floor set for latlng!');
-        } else if ($floor->facade) {
+        } elseif ($floor->facade) {
             throw new InvalidArgumentException(
-                sprintf('Unable to convert latlng %s that is on facade floor!', json_encode($latLng->toArrayWithFloor()))
+                sprintf('Unable to convert latlng %s that is on facade floor!', json_encode($latLng->toArrayWithFloor())),
             );
         }
 
@@ -49,7 +44,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         return new IngameXY(
             ($ingameMapSizeX * $factorLng) + $floor->ingame_min_x,
             ($ingameMapSizeY * $factorLat) + $floor->ingame_min_y,
-            $floor
+            $floor,
         );
     }
 
@@ -59,7 +54,7 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         if ($targetFloor === null) {
             throw new InvalidArgumentException('No floor set for ingame XY!');
-        } else if ($targetFloor->facade) {
+        } elseif ($targetFloor->facade) {
             sprintf('Unable to convert ingame XY %s that is on facade floor!', json_encode($ingameXY->toArrayWithFloor()));
         }
 
@@ -68,7 +63,7 @@ class CoordinatesService implements CoordinatesServiceInterface
 
         if ((int)$ingameMapSizeX === 0 || (int)$ingameMapSizeY === 0) {
             throw new InvalidArgumentException(
-                sprintf('Floor %s (%d) does not have ingame coordinates set!', __($targetFloor->name, [], 'en_US'), $targetFloor->id)
+                sprintf('Floor %s (%d) does not have ingame coordinates set!', __($targetFloor->name, [], 'en_US'), $targetFloor->id),
             );
         }
 
@@ -78,12 +73,15 @@ class CoordinatesService implements CoordinatesServiceInterface
         return new LatLng(
             (self::MAP_MAX_LAT * $factorY) + self::MAP_MAX_LAT,
             (self::MAP_MAX_LNG * $factorX) + self::MAP_MAX_LNG,
-            $targetFloor
+            $targetFloor,
         );
     }
 
-    public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng
-    {
+    public function convertFacadeMapLocationToMapLocation(
+        MappingVersion $mappingVersion,
+        LatLng         $latLng,
+        ?Floor         $forceFloor = null,
+    ): LatLng {
         $sourceFloor = $latLng->getFloor();
         if ($sourceFloor === null) {
             throw new InvalidArgumentException('No floor set for latlng!');
@@ -134,20 +132,22 @@ class CoordinatesService implements CoordinatesServiceInterface
                     $floorUnion->getLatLng(),
                     $floorUnion->size,
                     self::getMapCenterLatLng($floorUnion->targetFloor),
-                    self::MAP_SIZE
+                    self::MAP_SIZE,
                 );
 
                 // The point is now on the new map plane
                 break;
             }
-
         }
 
         return $result;
     }
 
-    public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?FloorUnion $forceFloorUnion = null): LatLng
-    {
+    public function convertMapLocationToFacadeMapLocation(
+        MappingVersion $mappingVersion,
+        LatLng         $latLng,
+        ?FloorUnion    $forceFloorUnion = null,
+    ): LatLng {
         $sourceFloor = $latLng->getFloor();
 
         if ($sourceFloor === null) {
@@ -159,7 +159,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         // If it is, we must use the target floor of the union instead to fetch the ingame_max_x etc.
         // Then, we must apply rotation to the MAP location (rotate it around union lat/lng) and do the conversion
         /** @var FloorUnion $floorUnion */
-        $floorUnion = $forceFloorUnion ?? $mappingVersion->getFloorUnionForLatLng($this, $mappingVersion, $latLng);
+        $floorUnion = $forceFloorUnion ?? $mappingVersion->getFloorUnionForLatLng($this, $latLng);
 
         // No floor unions mean we don't need to do anything - we're done
         if ($floorUnion === null) {
@@ -177,7 +177,7 @@ class CoordinatesService implements CoordinatesServiceInterface
             self::getMapCenterLatLng($floorUnion->targetFloor),
             self::MAP_SIZE,
             $floorUnion->getLatLng(),
-            $floorUnion->size
+            $floorUnion->size,
         );
 
         // 2. Rotate the point according to the floor union's rotation
@@ -191,7 +191,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         // Pythagoras theorem: a^2+b^2=c^2
         return sqrt(
             ($x1 - $x2) ** 2 +
-            ($y1 - $y2) ** 2
+            ($y1 - $y2) ** 2,
         );
     }
 
@@ -235,7 +235,10 @@ class CoordinatesService implements CoordinatesServiceInterface
                 return null;
             }
 
-            return LatLng::fromArray(['lat' => $lat, 'lng' => $lng]);
+            return LatLng::fromArray([
+                'lat' => $lat,
+                'lng' => $lng,
+            ]);
         }
     }
 
@@ -297,7 +300,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         return new IngameXY(
             ($gx * $stepX) + $floor->ingame_min_x,
             ($gy * $stepY) + $floor->ingame_min_y,
-            $floor
+            $floor,
         );
     }
 
@@ -306,7 +309,7 @@ class CoordinatesService implements CoordinatesServiceInterface
         return new LatLng(
             self::MAP_MAX_LAT / 2,
             self::MAP_MAX_LNG / 2,
-            $floor
+            $floor,
         );
     }
 }

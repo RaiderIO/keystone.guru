@@ -18,11 +18,12 @@ class CombatLogEventEnvelopeResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return [
             'data' => $this->collection->map(
-                static fn(CombatLogEvent $combatLogEvent) => new CombatLogEventResource($combatLogEvent)
+                static fn(CombatLogEvent $combatLogEvent) => new CombatLogEventResource($combatLogEvent),
             )->toArray(),
         ];
     }

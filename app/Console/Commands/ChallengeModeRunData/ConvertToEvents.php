@@ -44,17 +44,22 @@ class ConvertToEvents extends Command
         $progressBar = $this->output->createProgressBar($count);
         $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
 
-        $result = $challengeModeRunDataService->convert($force,
-            function (ChallengeModeRunData $challengeModeRunData) use (&$progressBar, $saveToOS, $challengeModeRunDataService) {
+        $result = $challengeModeRunDataService->convert(
+            $force,
+            function (ChallengeModeRunData $challengeModeRunData) use (
+                &$progressBar,
+                $saveToOS,
+                $challengeModeRunDataService
+            ) {
                 $progressBar->advance();
 
                 // This immediately saves the data to Opensearch so you can start using it while it's being inserted
                 if ($saveToOS) {
                     $challengeModeRunDataService->insertToOpensearch(
-                        CombatLogEvent::where('run_id', $challengeModeRunData->run_id)->get()
+                        CombatLogEvent::where('run_id', $challengeModeRunData->run_id)->get(),
                     );
                 }
-            }
+            },
         );
 
         $progressBar->finish();

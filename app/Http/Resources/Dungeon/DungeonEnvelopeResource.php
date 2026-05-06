@@ -19,11 +19,12 @@ class DungeonEnvelopeResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return [
             'data' => $this->collection->map(
-                static fn(Dungeon $dungeon) => new DungeonResource($dungeon)
+                static fn(Dungeon $dungeon) => new DungeonResource($dungeon),
             )->toArray(),
         ];
     }

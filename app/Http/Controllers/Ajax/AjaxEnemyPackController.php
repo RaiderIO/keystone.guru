@@ -29,7 +29,7 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
         EnemyPackFormRequest        $request,
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
-        ?EnemyPack                  $enemyPack = null
+        ?EnemyPack                  $enemyPack = null,
     ): EnemyPack {
         $validated = $request->validated();
 
@@ -62,8 +62,12 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent {
         return new EnemyPackChangedEvent($context, $user, $model);
     }
 }

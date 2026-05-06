@@ -140,14 +140,14 @@ return [
 
     'environments' => [
         'production' => [
-            'supervisor-default'       => [
+            'supervisor-default' => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-production-default', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 2,
                 'tries'      => 3,
             ],
-            'supervisor-long-running'  => [
+            'supervisor-long-running' => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-production-long-running', env('APP_TYPE'))],
                 'balance'    => 'simple',
@@ -155,31 +155,31 @@ return [
                 'tries'      => 1,
                 'timeout'    => 0,
             ],
-            'supervisor-thumbnail'     => [
-                'connection' => 'redis',
-                'queue'      => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
-                'balance'    => 'simple',
-                'processes'  => 3,
-                'tries'      => 1,
-            ],
-            'supervisor-thumbnail-api' => [
-                'connection' => 'redis',
-                'queue'      => [sprintf('%s-production-thumbnail-api', env('APP_TYPE'))],
-                'balance'    => 'simple',
-                'processes'  => 1,
-                'tries'      => 1,
-            ],
+            //            'supervisor-thumbnail' => [
+            //                'connection' => 'redis',
+            //                'queue'      => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
+            //                'balance'    => 'simple',
+            //                'processes'  => 4,
+            //                'tries'      => 1,
+            //            ],
+            //            'supervisor-thumbnail-api' => [
+            //                'connection' => 'redis',
+            //                'queue'      => [sprintf('%s-production-thumbnail-api', env('APP_TYPE'))],
+            //                'balance'    => 'simple',
+            //                'processes'  => 1,
+            //                'tries'      => 1,
+            //            ],
         ],
 
         'local' => [
-            'supervisor-default'       => [
+            'supervisor-default' => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-local-default', env('APP_TYPE'))],
                 'balance'    => 'simple',
                 'processes'  => 1,
                 'tries'      => 3,
             ],
-            'supervisor-long-running'  => [
+            'supervisor-long-running' => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-local-long-running', env('APP_TYPE'))],
                 'balance'    => 'simple',
@@ -187,7 +187,7 @@ return [
                 'tries'      => 1,
                 'timeout'    => 0,
             ],
-            'supervisor-thumbnail'     => [
+            'supervisor-thumbnail' => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],
                 'balance'    => 'simple',

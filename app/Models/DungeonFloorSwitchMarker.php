@@ -15,16 +15,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int                           $id
- * @property int                           $mapping_version_id
- * @property int                           $floor_id
- * @property int                           $source_floor_id
- * @property int                           $target_floor_id
- * @property int|null                      $linked_dungeon_floor_switch_marker_id
- * @property float                         $lat
- * @property float                         $lng
- * @property string                        $direction
- * @property string                        $floorCouplingDirection
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $floor_id
+ * @property int      $source_floor_id
+ * @property int      $target_floor_id
+ * @property int|null $linked_dungeon_floor_switch_marker_id
+ * @property float    $lat
+ * @property float    $lng
+ * @property string   $direction
+ * @property bool     $hidden_in_facade
+ * @property string   $floorCouplingDirection
+ *
  * @property Floor                         $floor
  * @property Floor|null                    $sourceFloor
  * @property Floor                         $targetFloor
@@ -40,7 +42,13 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
 
     protected $appends = ['floorCouplingDirection']; // , 'ingameX', 'ingameY'
 
-    protected $hidden = ['mappingVersion', 'floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
+    protected $hidden = [
+        'mappingVersion',
+        'floor',
+        'targetFloor',
+        'sourceFloor',
+        'laravel_through_key',
+    ];
 
     protected $fillable = [
         'id',
@@ -50,23 +58,28 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
         'target_floor_id',
         'linked_dungeon_floor_switch_marker_id',
         'direction',
+        'hidden_in_facade',
         'lat',
         'lng',
-    ];
-
-    protected $casts = [
-        'mapping_version_id'                    => 'integer',
-        'floor_id'                              => 'integer',
-        'source_floor_id'                       => 'integer',
-        'target_floor_id'                       => 'integer',
-        'linked_dungeon_floor_switch_marker_id' => 'integer',
-        'lat'                                   => 'float',
-        'lng'                                   => 'float',
     ];
 
     public $timestamps = false;
 
     private string $floorCouplingDirection = 'unknown';
+
+    protected function casts(): array
+    {
+        return [
+            'mapping_version_id'                    => 'integer',
+            'floor_id'                              => 'integer',
+            'source_floor_id'                       => 'integer',
+            'target_floor_id'                       => 'integer',
+            'linked_dungeon_floor_switch_marker_id' => 'integer',
+            'hidden_in_facade'                      => 'boolean',
+            'lat'                                   => 'float',
+            'lng'                                   => 'float',
+        ];
+    }
 
     //    /** @var float Future Laravel-me, please find a better solution for this Q.Q */
     //    private float $ingameX = 0;
@@ -139,10 +152,10 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
         $direction = $this->direction;
 
         return match ($direction) {
-            FloorCoupling::DIRECTION_UP => 1,
+            FloorCoupling::DIRECTION_UP   => 1,
             FloorCoupling::DIRECTION_DOWN => -1,
             FloorCoupling::DIRECTION_LEFT => -2,
-            default => 2,
+            default                       => 2,
         };
     }
 }

@@ -22,9 +22,9 @@ class SearchFilterEnemyForces extends SearchFilter {
         let result = '';
 
         if (this.getValue() === 0) {
-            result += lang.get('messages.filter_enemy_forces_header_incomplete');
+            result += lang.get('js.filter_enemy_forces_header_incomplete');
         } else {
-            result += lang.get('messages.filter_enemy_forces_header_complete');
+            result += lang.get('js.filter_enemy_forces_header_complete');
         }
 
         return result;

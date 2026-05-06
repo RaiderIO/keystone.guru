@@ -52,6 +52,7 @@ L.Draw.DungeonFloorSwitchMarker = L.Draw.Marker.extend({
  * @property {Number|null} linked_dungeon_floor_switch_marker_id
  * @property {String} floorCouplingDirection
  * @property {String|null} direction
+ * @property {Boolean} hidden_in_facade
  */
 class DungeonFloorSwitchMarker extends Icon {
 
@@ -72,7 +73,7 @@ class DungeonFloorSwitchMarker extends Icon {
         });
 
         if (getState().isEchoEnabled()) {
-            getState().getEcho().register('mouseposition:received', this, this._mousePositionReceived.bind(this));
+            getState().getEchoHandler().register('mouseposition:received', this, this._mousePositionReceived.bind(this));
         }
 
         // Whenever we have to display which users are on this floor, these users are on here
@@ -159,6 +160,11 @@ class DungeonFloorSwitchMarker extends Icon {
                     self.direction = value;
                 },
                 default: null
+            }),
+            new Attribute({
+                name: 'hidden_in_facade',
+                type: 'bool',
+                default: 0,
             }),
             new Attribute({
                 name: 'ingameX',
@@ -283,7 +289,7 @@ class DungeonFloorSwitchMarker extends Icon {
         }
 
         if (this.usersOnThisFloor.length > 0) {
-            let echo = state.getEcho();
+            let echo = state.getEchoHandler();
             let usernames = [];
             for (let i = 0; i < this.usersOnThisFloor.length; i++) {
                 let echoUser = echo.getUserByPublicKey(this.usersOnThisFloor[i]);
@@ -299,12 +305,12 @@ class DungeonFloorSwitchMarker extends Icon {
 
         if (targetFloor !== false) {
             // if (state.isCurrentDungeonFacadeEnabled()) {
-            //     return lang.get('messages.dungeonfloorswitchmarker_to_label', {floor: lang.get(targetFloor.name)});
+            //     return lang.get('js.dungeonfloorswitchmarker_to_label', {floor: lang.get(targetFloor.name)});
             // } else {
-            return lang.get('messages.dungeonfloorswitchmarker_go_to_label', {floor: lang.get(targetFloor.name)});
+            return lang.get('js.dungeonfloorswitchmarker_go_to_label', {floor: lang.get(targetFloor.name)});
             // }
         } else {
-            return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
+            return `${lang.get('js.dungeonfloorswitchmarker_unknown_label')}`;
         }
     }
 
@@ -316,12 +322,22 @@ class DungeonFloorSwitchMarker extends Icon {
         return `Floor switcher (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
     }
 
+    shouldBeVisible() {
+        let state = getState();
+        if (!(state.getMapContext() instanceof MapContextMappingVersionEdit) &&
+            state.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE && this.hidden_in_facade) {
+            return false;
+        }
+
+        return super.shouldBeVisible();
+    }
+
     cleanup() {
         super.cleanup();
         getState().unregister('floorid:changed', this);
 
         if (getState().isEchoEnabled()) {
-            getState().getEcho().unregister('mouseposition:received', this);
+            getState().getEchoHandler().unregister('mouseposition:received', this);
         }
     }
 }

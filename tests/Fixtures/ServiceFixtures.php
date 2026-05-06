@@ -11,6 +11,7 @@ use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cache\Redis\RedisServiceInterface;
 use App\Service\Cloudflare\CloudflareService;
 use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -46,11 +47,10 @@ class ServiceFixtures
         PublicTestCase                             $testCase,
         ?SeasonServiceInterface                    $seasonService = null,
         ?AffixGroupEaseTierServiceLoggingInterface $log = null,
-        array                                      $methodsToMock = []
-
+        array                                      $methodsToMock = [],
     ): MockObject|AffixGroupEaseTierServiceInterface {
         return $testCase
-            ->getMockBuilder(AffixGroupEaseTierService::class)
+            ->getMockBuilderPublic(AffixGroupEaseTierService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $seasonService ?? self::getSeasonServiceMock($testCase),
@@ -67,11 +67,10 @@ class ServiceFixtures
         ?CacheServiceInterface              $cacheService = null,
         ?ExpansionServiceInterface          $expansionService = null,
         ?AffixGroupEaseTierServiceInterface $easeTierService = null,
-        array                               $methodsToMock = []
-
+        array                               $methodsToMock = [],
     ): MockObject|ViewService {
         return $testCase
-            ->getMockBuilder(ViewService::class)
+            ->getMockBuilderPublic(ViewService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $cacheService ?? self::getCacheServiceMock($testCase),
@@ -84,10 +83,10 @@ class ServiceFixtures
     public static function getCombatLogServiceMock(
         PublicTestCase                   $testCase,
         CombatLogServiceLoggingInterface $log,
-        array                            $methodsToMock = []
+        array                            $methodsToMock = [],
     ): MockObject|CombatLogServiceInterface {
         return $testCase
-            ->getMockBuilder(CombatLogService::class)
+            ->getMockBuilderPublic(CombatLogService::class)
             ->setConstructorArgs([
                 $log,
             ])
@@ -99,10 +98,10 @@ class ServiceFixtures
         PublicTestCase                               $testCase,
         CombatLogService                             $combatLogService,
         CombatLogDungeonRouteServiceLoggingInterface $log,
-        array                                        $methodsToMock = []
+        array                                        $methodsToMock = [],
     ): MockObject|ResultEventDungeonRouteServiceInterface {
         return $testCase
-            ->getMockBuilder(ResultEventDungeonRouteService::class)
+            ->getMockBuilderPublic(ResultEventDungeonRouteService::class)
             ->setConstructorArgs([
                 $combatLogService,
                 $log,
@@ -113,22 +112,22 @@ class ServiceFixtures
 
     public static function getExpansionServiceMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|ExpansionServiceInterface {
-        return $testCase->getMockBuilder(ExpansionService::class)
+        return $testCase->getMockBuilderPublic(ExpansionService::class)
             ->onlyMethods($methodsToMock)
             ->getMock();
     }
 
     public static function getSeasonServiceMock(
-        PublicTestCase            $testCase,
-        SeasonRepositoryInterface $seasonRepository = null,
-        array                     $methodsToMock = [],
-        ?Collection               $seasons = null): MockObject|SeasonServiceInterface
-    {
+        PublicTestCase             $testCase,
+        ?SeasonRepositoryInterface $seasonRepository = null,
+        array                      $methodsToMock = [],
+        ?Collection                $seasons = null,
+    ): MockObject|SeasonServiceInterface {
         $methodsToMock[]          = 'getSeasons';
         $seasonServiceMockBuilder = $testCase
-            ->getMockBuilder(SeasonService::class)
+            ->getMockBuilderPublic(SeasonService::class)
             ->setConstructorArgs([
                 self::getExpansionServiceMock($testCase),
                 $seasonRepository ?? RepositoryFixtures::getSeasonRepositoryMock($testCase),
@@ -149,10 +148,10 @@ class ServiceFixtures
 
     public static function getCoordinatesServiceMock(
         PublicTestCase $testCase,
-        array          $methodsToMock = []
+        array          $methodsToMock = [],
     ): MockObject|CoordinatesServiceInterface {
         return $testCase
-            ->getMockBuilder(CoordinatesService::class)
+            ->getMockBuilderPublic(CoordinatesService::class)
             ->onlyMethods($methodsToMock)
             ->getMock();
     }
@@ -161,12 +160,12 @@ class ServiceFixtures
      * @throws Exception
      */
     public static function getMetricServiceMock(
-        PublicTestCase        $testCase,
-        array                 $methodsToMock = [],
-        CacheServiceInterface $cacheService = null,
+        PublicTestCase         $testCase,
+        array                  $methodsToMock = [],
+        ?CacheServiceInterface $cacheService = null,
     ): MockObject|MetricService {
         return $testCase
-            ->getMockBuilder(MetricService::class)
+            ->getMockBuilderPublic(MetricService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $cacheService ?? self::getCacheServiceMock($testCase),
@@ -178,13 +177,13 @@ class ServiceFixtures
      * @throws Exception
      */
     public static function getSpellServiceMock(
-        PublicTestCase               $testCase,
-        array                        $methodsToMock = [],
-        SpellRepositoryInterface     $spellRepository = null,
-        SpellServiceLoggingInterface $log = null
+        PublicTestCase                $testCase,
+        array                         $methodsToMock = [],
+        ?SpellRepositoryInterface     $spellRepository = null,
+        ?SpellServiceLoggingInterface $log = null,
     ): MockObject|SpellService {
         return $testCase
-            ->getMockBuilder(SpellService::class)
+            ->getMockBuilderPublic(SpellService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $spellRepository ?? RepositoryFixtures::getSpellRepositoryMock($testCase),
@@ -197,13 +196,13 @@ class ServiceFixtures
      * @throws Exception
      */
     public static function getCombatLogEventServiceMock(
-        PublicTestCase                        $testCase,
-        array                                 $methodsToMock = [],
-        CoordinatesServiceInterface           $coordinatesService = null,
-        CombatLogEventServiceLoggingInterface $log = null
+        PublicTestCase                         $testCase,
+        array                                  $methodsToMock = [],
+        ?CoordinatesServiceInterface           $coordinatesService = null,
+        ?CombatLogEventServiceLoggingInterface $log = null,
     ): MockObject|CombatLogEventService {
         return $testCase
-            ->getMockBuilder(CombatLogEventService::class)
+            ->getMockBuilderPublic(CombatLogEventService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $coordinatesService ?? ServiceFixtures::getCoordinatesServiceMock($testCase),
@@ -215,15 +214,32 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    public static function createRedisService(
+        PublicTestCase $testCase,
+        array          $methodsToMock = [],
+    ): MockObject|RedisServiceInterface {
+        return $testCase
+            ->getMockBuilderPublic(RedisServiceInterface::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+            ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
     public static function getCacheServiceMock(
         PublicTestCase                $testCase,
         array                         $methodsToMock = [],
+        ?RedisServiceInterface        $redisService = null,
         ?CacheServiceLoggingInterface $log = null,
-    ): MockObject|CloudflareService {
+    ): MockObject|CacheService {
         return $testCase
-            ->getMockBuilder(CacheService::class)
+            ->getMockBuilderPublic(CacheService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
+                $redisService ?? ServiceFixtures::createRedisService($testCase),
                 $log ?? LoggingFixtures::createCacheServiceLogging($testCase),
             ])
             ->getMock();
@@ -239,7 +255,7 @@ class ServiceFixtures
         ?CloudflareServiceLoggingInterface    $log = null,
     ): MockObject|CloudflareService {
         return $testCase
-            ->getMockBuilder(CloudflareService::class)
+            ->getMockBuilderPublic(CloudflareService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $cacheService ?? ServiceFixtures::getCacheServiceMock($testCase),

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int       $id The ID of this timewalking event.
+ * @property int       $id                   The ID of this timewalking event.
  * @property int       $expansion_id
  * @property int       $season_id
  * @property string    $key

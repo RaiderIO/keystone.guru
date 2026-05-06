@@ -13,6 +13,7 @@ abstract class EmpowerLevelBase extends Suffix
         return $this->powerLevel;
     }
 
+    #[\Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

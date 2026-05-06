@@ -17,6 +17,7 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
+    #[\Override]
     public function authorize(): bool
     {
         return true;
@@ -25,11 +26,16 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
     /**
      * Get the validation rules that apply to the request.
      */
+    #[\Override]
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'dungeonId'                    => ['required', Rule::exists(Dungeon::class, 'id')],
+            'dungeonId' => [
+                'required',
+                Rule::exists(Dungeon::class, 'id'),
+            ],
             // These are overrides since it's easier to split the csv as an array for this endpoint
+<<<<<<< HEAD
             'includeAffixIds'              => ['nullable', 'array'],
             'includeAffixIds.*'            => ['integer', Rule::exists(Affix::class, 'affix_id')],
             'includeClassIds'              => ['nullable', 'array'],
@@ -42,7 +48,48 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
             'includePlayerDeathSpecIds.*'  => ['integer', Rule::exists(CharacterClassSpecialization::class, 'specialization_id')],
             'includePlayerSpellIds'        => ['nullable', 'array'],
             'includePlayerSpellIds.*'      => ['integer', Rule::exists(Spell::class, 'id')],
+=======
+            'includeAffixIds' => [
+                'nullable',
+                'array',
+            ],
+            'includeAffixIds.*' => [
+                'integer',
+                Rule::exists(Affix::class, 'affix_id'),
+            ],
+            'includeClassIds' => [
+                'nullable',
+                'array',
+            ],
+            'includeClassIds.*' => [
+                'integer',
+                Rule::exists(CharacterClass::class, 'class_id'),
+            ],
+            'includeSpecIds' => [
+                'nullable',
+                'array',
+            ],
+            'includeSpecIds.*' => [
+                'integer',
+                Rule::exists(CharacterClassSpecialization::class, 'specialization_id'),
+            ],
+            'includePlayerDeathClassIds' => [
+                'nullable',
+                'array',
+            ],
+            'includePlayerDeathClassIds.*' => [
+                'integer',
+                Rule::exists(CharacterClass::class, 'class_id'),
+            ],
+            'includePlayerDeathSpecIds' => [
+                'nullable',
+                'array',
+            ],
+            'includePlayerDeathSpecIds.*' => [
+                'integer',
+                Rule::exists(CharacterClassSpecialization::class, 'specialization_id'),
+            ],
+>>>>>>> development
         ]);
     }
 }
-

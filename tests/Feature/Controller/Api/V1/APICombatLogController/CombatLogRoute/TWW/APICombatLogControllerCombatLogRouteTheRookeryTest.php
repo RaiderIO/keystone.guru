@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\TWW;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\TWW;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
@@ -26,7 +26,7 @@ class APICombatLogControllerCombatLogRouteTheRookeryTest extends APICombatLogCon
         $postBody = $this->getJsonData('TWW/tww_s2_ptr_the_rookery_15', self::FIXTURES_ROOT_DIR);
 
         // Act
-        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+        $response = $this->post(route('api.v1.combatlog.route.store'), $postBody);
 
         // Assert
         $response->assertCreated();

@@ -33,7 +33,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         EnemyPatrolFormRequest      $request,
         MappingVersion              $mappingVersion,
-        ?EnemyPatrol                $enemyPatrol = null
+        ?EnemyPatrol                $enemyPatrol = null,
     ): EnemyPatrol {
         $validated = $request->validated();
 
@@ -42,7 +42,10 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,
-            $validated,
+            array_merge($validated, [
+                // Ensure we keep the mdt polyline ID if it was set
+                'mdt_polyline_id' => $beforeModel?->mdt_polyline_id,
+            ]),
             EnemyPatrol::class,
             $enemyPatrol,
             function (EnemyPatrol $enemyPatrol) use ($coordinatesService, $validated, $beforeModel) {
@@ -58,11 +61,11 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                     Polyline::findOrNew($enemyPatrol->polyline_id),
                     $beforeModel,
                     $enemyPatrol,
-                    $validated['polyline']
+                    $validated['polyline'],
                 );
 
                 return true;
-            }
+            },
         );
     }
 
@@ -91,10 +94,12 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         return $result;
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model,
+    ): ModelChangedEvent {
         return new EnemyPatrolChangedEvent($context, $user, $model);
     }
-
-
 }

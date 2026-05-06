@@ -28,11 +28,16 @@ class TagCategory extends Model
         self::DUNGEON_ROUTE_TEAM     => 2,
     ];
 
-    protected $fillable = ['id', 'name', 'model_class'];
+    protected $fillable = [
+        'id',
+        'name',
+        'model_class',
+    ];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'name';

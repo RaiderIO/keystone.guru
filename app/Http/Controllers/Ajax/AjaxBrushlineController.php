@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -37,12 +38,13 @@ class AjaxBrushlineController extends Controller
         APIBrushlineFormRequest     $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        ?Brushline                  $brushline = null
+        ?Brushline                  $brushline = null,
     ) {
+        $test         = "";
         $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
 
-        $this->authorize('edit', $dungeonRoute);
-        $this->authorize('addBrushline', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
+        Gate::authorize('addBrushline', $dungeonRoute);
 
         $validated = $request->validated();
 
@@ -60,7 +62,7 @@ class AjaxBrushlineController extends Controller
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
                 ]);
-                $success   = $brushline instanceof Brushline;
+                $success = $brushline instanceof Brushline;
             } else {
                 $success = $brushline->update([
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -78,7 +80,7 @@ class AjaxBrushlineController extends Controller
                         Polyline::findOrNew($brushline->polyline_id),
                         $beforeModel,
                         $brushline,
-                        $validated['polyline']
+                        $validated['polyline'],
                     );
 
                     // Something's updated; broadcast it
@@ -111,7 +113,7 @@ class AjaxBrushlineController extends Controller
         $dungeonRoute = $brushline->dungeonRoute;
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's brush line
-        $this->authorize('edit', $dungeonRoute);
+        Gate::authorize('edit', $dungeonRoute);
 
         try {
             if ($brushline->delete()) {

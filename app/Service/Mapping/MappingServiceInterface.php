@@ -3,6 +3,7 @@
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
@@ -23,13 +24,17 @@ interface MappingServiceInterface
      */
     public function getDungeonsWithUnmergedMappingChanges(): Collection;
 
-    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion;
+    public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
+
+    public function createNewMappingVersionFromPreviousMapping(
+        Dungeon     $dungeon,
+        GameVersion $gameVersion,
+    ): MappingVersion;
 
     /**
      * Creates a new mapping version for a dungeon.
      */
-    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion;
-
+    public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion;
 
     /**
      * Takes an existing mapping version and applies it to a dungeon (can be the same dungeon, or another one).
@@ -39,7 +44,10 @@ interface MappingServiceInterface
     /**
      * Takes an existing mapping version's contents and applies it to another mapping version.
      */
-    public function copyMappingVersionContentsToDungeon(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): MappingVersion;
+    public function copyMappingVersionContentsToDungeon(
+        MappingVersion $sourceMappingVersion,
+        MappingVersion $targetMappingVersion,
+    ): MappingVersion;
 
     /**
      * Gets a mapping version of a dungeon, or creates a new one for this dungeon if the most recent version has been pushed.
@@ -48,5 +56,5 @@ interface MappingServiceInterface
      *
      * @return void
      */
-    public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion;
+    public function getMappingVersionOrNew(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
 }

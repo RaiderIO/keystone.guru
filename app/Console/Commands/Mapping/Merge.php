@@ -70,10 +70,12 @@ class Merge extends Command
         }
 
         // Build the title for the pull request
-        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(static fn(Dungeon $dungeon) => __($dungeon->name));
+        $changedDungeonNames = $mappingService->getDungeonsWithUnmergedMappingChanges()->map(static fn(
+            Dungeon $dungeon,
+        ) => __($dungeon->name));
         if ($changedDungeonNames->count() > 4) {
             $prTitle = sprintf('Mapping update for %s dungeons', $changedDungeonNames->count());
-        } else if ($changedDungeonNames->isEmpty()) {
+        } elseif ($changedDungeonNames->isEmpty()) {
             $prTitle = 'Mapping update for no dungeons';
         } else {
             $prTitle = sprintf('Mapping update for %s', $changedDungeonNames->implode(', '));

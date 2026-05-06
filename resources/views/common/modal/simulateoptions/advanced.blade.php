@@ -38,13 +38,13 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                         </label>
                         <div class="row">
                             <div class="col">
-                                {!! Form::text('simulate_ranged_pull_compensation_yards', '20', [
-                                         'id' => 'simulate_ranged_pull_compensation_yards',
-                                         'class' => 'form-control',
-                                         // http://ionden.com/a/plugins/ion.rangeSlider/api.html#a_ui
-                                         'data-block' => $hasAdvancedSimulation ? 'false' : 'true',
-                                         $hasAdvancedSimulation ? '' : 'readonly',
-                                         ]) !!}
+                                {{
+                                    html()
+                                        ->text('simulate_ranged_pull_compensation_yards', '20')
+                                        ->id('simulate_ranged_pull_compensation_yards')
+                                        ->class('form-control')
+                                        ->data('block', $hasAdvancedSimulation ? 'false' : 'true')
+                                }}
                             </div>
                         </div>
                     </div>
@@ -57,11 +57,7 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                         </label>
                         <div class="row">
                             <div class="col">
-                                {!! Form::checkbox('simulate_use_mounts', 1, true, [
-                                             'id' => 'simulate_use_mounts',
-                                             'class' => 'form-control left_checkbox',
-                                             $hasAdvancedSimulation ? '' : 'disabled',
-                                             ]) !!}
+                                {{ html()->checkbox('simulate_use_mounts', true, 1)->id('simulate_use_mounts')->class('form-control left_checkbox') }}
                             </div>
                         </div>
                     </div>

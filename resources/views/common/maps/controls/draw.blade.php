@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  */
 ?>
 <nav
-    class="route_sidebar route_manipulation_tools left h-100 row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
+    class="route_sidebar route_manipulation_tools left row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">
     <div class="bg-header" style="background-color: unset !important;">
         <!-- Draw controls are injected here through drawcontrols.js -->
         <div id="edit_route_draw_container" class="mb-2">

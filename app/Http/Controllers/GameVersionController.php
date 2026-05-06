@@ -11,9 +11,23 @@ use Redirect;
 
 class GameVersionController extends Controller
 {
-    public function update(Request $request, GameVersion $gameVersion, GameVersionServiceInterface $gameVersionService): RedirectResponse
-    {
+    public function update(
+        Request                     $request,
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService,
+    ): RedirectResponse {
+        $previousGameVersion = $gameVersionService->getGameVersion(Auth::user());
         $gameVersionService->setGameVersion($gameVersion, Auth::user());
+
+        // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
+        $referer = $request->headers->get('referer');
+        if ($referer) {
+            if (str_contains($referer, sprintf('/routes/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeonroutes.current');
+            } elseif (str_contains($referer, sprintf('/explore/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeon.explore');
+            }
+        }
 
         return Redirect::back();
     }

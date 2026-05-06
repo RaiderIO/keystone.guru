@@ -7,9 +7,9 @@ class StateManager extends Signalable {
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
 
-        // Echo handler
-        this.echoEnabled = false;
-        this._echo = null;
+        // Echohandler handler
+        this.laravelEchoEnabled = false;
+        this._echoHandler = null;
 
         /** @type {DungeonMap} The DungeonMap instance */
         this._map = null;
@@ -25,6 +25,7 @@ class StateManager extends Signalable {
         this._userData = null;
         // Whether we're currently in MDT select mode or not
         this._mdtMappingModeEnabled = false;
+        this._visibleFloorsByFloorId = null;
 
         // List of static arrays
         this.mapIconTypes = [];
@@ -33,15 +34,27 @@ class StateManager extends Signalable {
 
         this.snackbarIds = [];
         this.snackbarsAdded = 0;
+
+        this._sanitizeAllowedDomains = [];
     }
 
     /**
-     * Enables the Laravel Echo for this session.
+     * Enables the Laravel Echohandler for this session.
+     * @param {String} appKey
      */
-    enableEcho() {
+    enableLaravelEcho(appKey) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        this.echoEnabled = true;
+        this.laravelEchoEnabled = true;
+        this.laravelEchoAppKey = appKey;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getLaravelEchoAppKey() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this.laravelEchoAppKey;
     }
 
     /**
@@ -60,9 +73,27 @@ class StateManager extends Signalable {
             this._mapContext = new MapContextMappingVersionEdit(mapContext);
         } else if (mapContext.type === MAP_CONTEXT_TYPE_DUNGEON_EXPLORE) {
             this._mapContext = new MapContextDungeonExplore(mapContext);
+        } else if (mapContext.type === MAP_CONTEXT_TYPE_DUNGEON_ROUTE_SEARCH) {
+            this._mapContext = new MapContextDungeonRouteSearch(mapContext);
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }
+    }
+
+    /**
+     * @returns {String[]}
+     */
+    getSanitizeAllowedDomains() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._sanitizeAllowedDomains;
+    }
+
+    /**
+     * @param {String[]} allowedDomains
+     */
+    setSanitizeAllowedDomains(allowedDomains) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        this._sanitizeAllowedDomains = allowedDomains;
     }
 
     setDebug(debug) {
@@ -79,6 +110,15 @@ class StateManager extends Signalable {
 
     /**
      * Gets the currently focused enemy.
+     * @returns {Enemy}
+     */
+    getFocusedEnemy() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._focusedEnemy;
+    }
+
+    /**
+     * Sets the enemy that is focused by the user (mouse overed).
      * @param enemy {Enemy}
      */
     setFocusedEnemy(enemy) {
@@ -97,14 +137,6 @@ class StateManager extends Signalable {
 
         this._mdtMappingModeEnabled = enabled;
         this.signal('mdtmappingmodeenabled:changed', {mdtmappingmodeenabled: this._mdtMappingModeEnabled});
-    }
-
-    /**
-     * Sets the map icon types to be used in the state.
-     * @param {Number} mapIconTypes
-     */
-    setMapIconTypes(mapIconTypes) {
-        this.mapIconTypes = [];
     }
 
     /**
@@ -135,7 +167,7 @@ class StateManager extends Signalable {
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
         this.setMapFacadeStyle(this._map.options.mapFacadeStyle);
-        this.setFloorId(this.getMapContext().getInitialFloorId());
+        this.setFloorId(this._map.options.floorId);
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {
@@ -160,8 +192,8 @@ class StateManager extends Signalable {
 
         // Set up the echo handler if we should
         if (this.isEchoEnabled()) {
-            this._echo = new Echo(this._map);
-            this._echo.connect();
+            this._echoHandler = new EchoHandler(this._map);
+            this._echoHandler.connect();
 
             this.signal('echo:enabled');
         }
@@ -373,17 +405,17 @@ class StateManager extends Signalable {
     isEchoEnabled() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this.echoEnabled;
+        return this.laravelEchoEnabled;
     }
 
     /**
-     * Gets the Echo instance used for Echo communication.
-     * @returns {Echo}
+     * Gets the EchoHandler instance used for Echo communication.
+     * @returns {EchoHandler}
      */
-    getEcho() {
+    getEchoHandler() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        return this._echo;
+        return this._echoHandler;
     }
 
     /**
@@ -397,7 +429,7 @@ class StateManager extends Signalable {
 
     /**
      * Get the context of the map we are editing at this point.
-     * @returns {MapContextMappingVersionEdit|MapContextDungeonRoute|MapContextLiveSession|MapContextDungeonExplore}
+     * @returns {MapContextMappingVersionEdit|MapContextDungeonRoute|MapContextLiveSession|MapContextDungeonExplore|MapContextDungeonRouteSearch}
      */
     getMapContext() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -562,18 +594,16 @@ class StateManager extends Signalable {
     getCurrentFloor() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
-        let self = this;
-        let result = false;
-        // Iterate over the found floors
-        $.each(this._mapContext.getDungeon().floors, function (index, value) {
-            // Find the floor we're looking for
-            if (parseInt(value.id) === parseInt(self._floorId)) {
-                result = value;
-                return false;
-            }
-        });
+        if (this._visibleFloorsByFloorId === null) {
+            this._visibleFloorsByFloorId = new Map();
 
-        return result;
+            let floors = this._mapContext.getVisibleFloors();
+            for (let i = 0; i < floors.length; i++) {
+                this._visibleFloorsByFloorId.set(Number(floors[i].id), floors[i]);
+            }
+        }
+
+        return this._visibleFloorsByFloorId?.get(Number(this._floorId)) ?? false;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Service\DungeonRoute\Logging;
 
 use App\Logging\StructuredLogging;
 use Exception;
+use Throwable;
 
 class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServiceLoggingInterface
 {
@@ -17,8 +18,17 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->end(__METHOD__);
     }
 
-    public function createThumbnailCustomStart(string $publicKey, int $floorIndex, int $attempts, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void
-    {
+    public function createThumbnailCustomStart(
+        string $publicKey,
+        int    $floorIndex,
+        int    $attempts,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?int   $zoomLevel,
+        ?int   $quality,
+    ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
 
@@ -27,8 +37,17 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->end(__METHOD__);
     }
 
-    public function doCreateThumbnailStart(string $publicKey, int $floorIndex, string $targetFolder, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void
-    {
+    public function doCreateThumbnailStart(
+        string $publicKey,
+        int    $floorIndex,
+        string $targetFolder,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?int   $zoomLevel,
+        ?int   $quality,
+    ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
 
@@ -57,9 +76,14 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->debug(__METHOD__);
     }
 
-    public function doCreateThumbnailSuccess(string $target, bool $fileExists): void
+    public function attachThumbnailToDungeonRouteSuccess(string $target, bool $fileExists): void
     {
         $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function doCreateThumbnailException(Throwable|Exception $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function doCreateThumbnailRemovedTmpFileSuccess(): void
@@ -82,14 +106,32 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function doCreateThumbnailEnd(): void
     {
         $this->end(__METHOD__);
     }
 
-    public function copyThumbnailsError(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void
-    {
-        $this->error(__METHOD__, get_defined_vars());
+    public function attachThumbnailToDungeonRouteDeleteExistingThumbnail(
+        int     $id,
+        ?int    $fileId,
+        ?string $fileDisk,
+        ?string $filePath,
+        bool    $deleteResult,
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function copyThumbnailsException(
+        string    $sourcePublicKey,
+        string    $targetPublicKey,
+        int       $id,
+        Exception $exception,
+    ): void {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }

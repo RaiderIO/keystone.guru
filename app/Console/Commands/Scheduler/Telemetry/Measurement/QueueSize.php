@@ -25,7 +25,7 @@ class QueueSize extends Measurement
                 [
                     'size' => Queue::size($queueName),
                 ],
-                time()
+                time(),
             );
         }
 

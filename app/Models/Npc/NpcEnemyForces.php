@@ -11,11 +11,11 @@ use App\Models\Traits\SeederModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int            $id
- * @property int            $mapping_version_id
- * @property int            $npc_id
- * @property int            $enemy_forces
- * @property int|null       $enemy_forces_teeming
+ * @property int      $id
+ * @property int      $mapping_version_id
+ * @property int      $npc_id
+ * @property int      $enemy_forces
+ * @property int|null $enemy_forces_teeming
  *
  * @property MappingVersion $mappingVersion
  * @property Npc            $npc
@@ -51,6 +51,6 @@ class NpcEnemyForces extends CacheModel implements MappingModelCloneableInterfac
 
     public function getDungeonId(): ?int
     {
-        return $this->npc->dungeon_id;
+        return $this->npc->getDungeonId();
     }
 }

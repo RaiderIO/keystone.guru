@@ -18,8 +18,8 @@ trait CompressesImages
      * You need to install pngquant 1.8 on the server (ancient version 1.0 won't work).
      * There's package for Debian/Ubuntu and RPM for other distributions on http://pngquant.org
      *
-     * @param  $pathToPngFile  string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
-     * @param  $maxQuality  int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
+     * @param         $pathToPngFile string - path to any PNG file, e.g. $_FILE['file']['tmp_name']
+     * @param         $maxQuality    int - conversion quality, useful values from 60 to 100 (smaller number = smaller file)
      * @return string - content of PNG file after conversion
      *
      * @throws Exception
@@ -48,8 +48,8 @@ trait CompressesImages
     /**
      * Compresses a PNG from a source to a target file.
      *
-     * @param  $source  string
-     * @param  $target  string
+     * @param $source string
+     * @param $target string
      *
      * @throws Exception
      */

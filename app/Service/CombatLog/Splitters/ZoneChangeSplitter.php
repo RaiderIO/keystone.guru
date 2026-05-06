@@ -18,31 +18,31 @@ class ZoneChangeSplitter extends CombatLogSplitter
 {
     private const MAX_TIMESTAMP_GAP_SECONDS = 10 * 60;
 
-    private const EVENTS_TO_KEEP = [
+    private const array EVENTS_TO_KEEP = [
         SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
     ];
 
-    private ZoneChangeSplitterLoggingInterface $log;
+    private readonly ZoneChangeSplitterLoggingInterface $log;
 
-    private Collection $validDungeonMapIds;
+    private readonly Collection $validDungeonMapIds;
 
     /** @var Collection<string> */
     private Collection $rawEvents;
 
-    private ?string $lastCombatLogVersion;
+    private ?string $lastCombatLogVersion = null;
 
-    private ?ZoneChangeEvent $lastZoneChangeEvent;
+    private ?ZoneChangeEvent $lastZoneChangeEvent = null;
 
     private ?Carbon $lastTimestamp = null;
 
     private ?Collection $result = null;
 
-    private ?string $filePath;
+    private ?string $filePath = null;
 
     public function __construct(
         private readonly CombatLogServiceInterface  $combatLogService,
-        private readonly DungeonRepositoryInterface $dungeonRepository
+        private readonly DungeonRepositoryInterface $dungeonRepository,
     ) {
         $log = App::make(ZoneChangeSplitterLoggingInterface::class);
         /** @var ZoneChangeSplitterLoggingInterface $log */
@@ -51,9 +51,7 @@ class ZoneChangeSplitter extends CombatLogSplitter
         parent::__construct($this->log);
 
         // Flip keys and values, and yes
-        $this->validDungeonMapIds = $this->dungeonRepository->getAllMapIds()->mapWithKeys(function (int $mapId) {
-            return [$mapId => $mapId];
-        });
+        $this->validDungeonMapIds = $this->dungeonRepository->getAllMapIds()->mapWithKeys(fn(int $mapId) => [$mapId => $mapId]);
         // Nerub-ar Palace
         $this->validDungeonMapIds->put(2657, 2657);
     }
@@ -67,7 +65,12 @@ class ZoneChangeSplitter extends CombatLogSplitter
         // Pass $this->>parseCombatLogEvent as callable
         $this->combatLogService->parseCombatLog(
             $filePath,
-            fn($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
+            fn(
+                $combatLogVersion,
+                $advancedLoggingEnabled,
+                $rawEvent,
+                $lineNr,
+            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr),
         );
 
         // Make sure that everything captured from last zone change and onwards is still saved to disk
@@ -81,8 +84,12 @@ class ZoneChangeSplitter extends CombatLogSplitter
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
-    {
+    private function parseCombatLogEvent(
+        int    $combatLogVersion,
+        bool   $advancedLoggingEnabled,
+        string $rawEvent,
+        int    $lineNr,
+    ) {
         $this->log->addContext('lineNr', [
             'combatLogVersion'       => $combatLogVersion,
             'advancedLoggingEnabled' => $advancedLoggingEnabled,
@@ -105,7 +112,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
             $this->rawEvents->push($rawEvent);
             $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
         }
-
 
         // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
         if ($parsedEvent instanceof ZoneChangeEvent) {
@@ -134,7 +140,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         return $parsedEvent;
     }
-
 
     private function resetCurrentZone(): void
     {
@@ -175,11 +180,11 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
     protected function getCombatLogFileName(string $countStr): string
     {
-        return sprintf('%s_%s%s',
-            pathinfo($this->filePath, PATHINFO_FILENAME),
+        return sprintf(
+            '%s_%s%s',
+            pathinfo((string)$this->filePath, PATHINFO_FILENAME),
             Str::slug($this->lastZoneChangeEvent->getZoneName()),
-            $countStr
+            $countStr,
         );
     }
-
 }

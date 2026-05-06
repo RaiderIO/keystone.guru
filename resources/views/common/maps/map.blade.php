@@ -1,8 +1,10 @@
 <?php
 
-use App\Logic\MapContext\MapContext;
-use App\Logic\MapContext\MapContextDungeonExplore;
-use App\Logic\MapContext\MapContextDungeonRoute;
+use App\Logic\MapContext\MapContextMappingVersionData;
+use App\Logic\MapContext\Map\MapContextBase;
+use App\Logic\MapContext\Map\MapContextDungeonExplore;
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
+use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -10,57 +12,76 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Season;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 /**
- * @var User              $user
- * @var MapContext        $mapContext
- * @var Dungeon           $dungeon
- * @var Floor             $floor
- * @var MappingVersion    $mappingVersion
- * @var DungeonRoute|null $dungeonroute
- * @var LiveSession|null  $livesession
- * @var bool|null         $admin
- * @var bool|null         $embed
- * @var string|null       $embedStyle
- * @var bool|null         $edit
- * @var array             $show
- * @var array|null        $controlOptions
- * @var bool              $adFree
- * @var string|null       $mapBackgroundColor
- * @var string|null       $mapFacadeStyle
- * @var array|null        $parameters
+ * @var User|null                  $user
+ * @var MapContextBase             $mapContext
+ * @var Dungeon                    $dungeon
+ * @var Floor                      $floor
+ * @var Season|null                $season Used for heatmap
+ * @var MappingVersion             $mappingVersion
+ * @var DungeonRoute|null          $dungeonroute
+ * @var LiveSession|null           $livesession
+ * @var string|null                $headerTitle
+ * @var bool|null                  $admin
+ * @var bool|null                  $embed
+ * @var string|null                $embedStyle
+ * @var bool|null                  $edit
+ * @var array                      $show
+ * @var array|null                 $controlOptions
+ * @var bool                       $adFree
+ * @var string|null                $mapBackgroundColor
+ * @var string|null                $mapFacadeStyle
+ * @var string                     $assetsBaseUrl
+ * @var string                     $tilesBaseUrl
+ * @var array|null                 $parameters
+ * @var Collection<string, string> $dungeonContextLinks
  */
 
 $user = Auth::user();
 // Load the roles so we can use role-based checks in the JS
 $user?->load(['roles'])
-    ->makeVisible(['roles', 'map_facade_style']);
-$user?->setRelation('roles', $user->roles->map(function ($role) {
-    return $role->makeHidden(['id', 'pivot', 'created_at', 'updated_at']);
-}));
+    ->makeVisible([
+        'roles',
+        'map_facade_style'
+    ]);
+$user?->setRelation('roles', $user->roles->map(fn($role) => $role->makeHidden([
+    'id',
+    'pivot',
+    'created_at',
+    'updated_at'
+])));
 
-$isAdmin            = isset($admin) && $admin;
-$embed              = isset($embed) && $embed;
-$embedStyle         ??= '';
-$edit               = isset($edit) && $edit;
-$mapClasses         ??= '';
-$dungeonroute       ??= null;
-$livesession        ??= null;
-$mapBackgroundColor ??= null;
-$controlOptions     ??= [];
-$parameters         ??= [];
+$headerTitle         ??= null;
+$season              ??= null;
+$isAdmin             = isset($admin) && $admin;
+$embed               = isset($embed) && $embed;
+$embedStyle          ??= '';
+$edit                = isset($edit) && $edit;
+$mapClasses          ??= '';
+$dungeonroute        ??= null;
+$livesession         ??= null;
+$mapBackgroundColor  ??= null;
+$controlOptions      ??= [];
+$parameters          ??= [];
+$dungeonContextLinks ??= null;
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                  ??= [];
-$show['controls']['enemyInfo']     ??= true;
-$show['controls']['pulls']         ??= true;
+$show['controls']              ??= [];
+$show['controls']['enemyInfo'] ??= true;
+$show['controls']['pulls']     ??= true;
+// This controls whether heatmaps are shown at all
 $show['controls']['heatmapSearch'] ??= false;
-$show['controls']['enemyForces']   = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']          ??= false;
-$show['controls']['view']          ??= false;
-$show['controls']['present']       ??= false;
-$show['controls']['live']          ??= false;
+// This allows you to show heatmaps, but not the sidebar to influence them. You'll have to do that through parameters then.
+$show['controls']['heatmapSearchSidebar'] ??= true;
+$show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']                 ??= false;
+$show['controls']['view']                 ??= false;
+$show['controls']['present']              ??= false;
+$show['controls']['live']                 ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -71,6 +92,8 @@ $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opaci
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
 $mapFacadeStyle                   ??= User::getCurrentUserMapFacadeStyle();
 $useFacade                        = $mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
+$mapFacadeStyleForMappingVersion  = ($useFacade && $mappingVersion->facade_enabled) ? User::MAP_FACADE_STYLE_FACADE : User::MAP_FACADE_STYLE_SPLIT_FLOORS;
+
 
 // Allow echo to be overridden
 $echo           ??= Auth::check() && !$sandboxMode;
@@ -100,15 +123,33 @@ if ($isAdmin) {
     $adminOptions = [
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
-            ['key' => '', 'description' => __('view_common.maps.map.no_teeming')],
-            ['key' => Enemy::TEEMING_VISIBLE, 'description' => __('view_common.maps.map.visible_teeming')],
-            ['key' => Enemy::TEEMING_HIDDEN, 'description' => __('view_common.maps.map.hidden_teeming')],
+            [
+                'key'         => '',
+                'description' => __('view_common.maps.map.no_teeming')
+            ],
+            [
+                'key'         => Enemy::TEEMING_VISIBLE,
+                'description' => __('view_common.maps.map.visible_teeming')
+            ],
+            [
+                'key'         => Enemy::TEEMING_HIDDEN,
+                'description' => __('view_common.maps.map.hidden_teeming')
+            ],
         ],
         // Display options for changing Faction status for map objects
         'factions'       => [
-            ['key' => 'any', 'description' => __('view_common.maps.map.any')],
-            ['key' => Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
-            ['key' => Faction::FACTION_HORDE, 'description' => __('factions.horde')],
+            [
+                'key'         => 'any',
+                'description' => __('view_common.maps.map.any')
+            ],
+            [
+                'key'         => Faction::FACTION_ALLIANCE,
+                'description' => __('factions.alliance')
+            ],
+            [
+                'key'         => Faction::FACTION_HORDE,
+                'description' => __('factions.horde')
+            ],
         ],
     ];
 }
@@ -133,7 +174,10 @@ if ($isAdmin) {
     'defaultZoomMax' => $defaultZoomMax,
     'showAttribution' => $showAttribution,
     'dungeonroute' => $dungeonroute ?? null,
+    'assetsBaseUrl' => $assetsBaseUrl,
+    'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
+    'floorId' => $floor->id,
 ], $adminOptions)])
 
 @section('scripts')
@@ -141,12 +185,54 @@ if ($isAdmin) {
     @parent
 
     @include('common.handlebars.groupsetup')
+    @include('common.handlebars.affixgroups')
+
+    @if(config('app.type') === 'local')
+        <script src="{{ route('js.mapcontext.dungeon_data', [
+                'dungeon' => $dungeon,
+                'locale' => app()->getLocale(),
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+        <script src="{{ route('js.mapcontext.mapping_version_data', [
+                'dungeon' => $dungeon,
+                'mappingVersion' => $mappingVersion,
+                'mapFacadeStyle' => $mapFacadeStyleForMappingVersion,
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+        <script src="{{ route('js.mapcontext.static', [
+                'locale' => app()->getLocale(),
+                't' => time()
+            ]) }}" type="application/javascript"></script>
+
+    @else
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/data/%s/%s.js',
+                        $dungeon->slug,
+                        app()->getLocale()
+                    )) }}"
+            type="application/javascript"></script>
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/data/%s/%d/%s.js',
+                        $dungeon->slug,
+                        $mappingVersion->id,
+                        $mapFacadeStyleForMappingVersion
+                    )) }}"
+            type="application/javascript"></script>
+        <script
+            src="{{ ksgCompiledAsset(
+                    sprintf('mapcontext/static/%s.js',
+                        app()->getLocale()
+                    )) }}"
+            type="application/javascript"></script>
+    @endif
 
     @include('common.general.statemanager', [
         'echo' => $echo,
         'patreonBenefits' => $user?->getPatreonBenefits() ?? collect(),
         'userData' => $user,
-        'mapContext' => $mapContext->getProperties(),
+        'mapContext' => $mapContext,
     ])
     <script>
         var dungeonMap;
@@ -186,16 +272,36 @@ if ($isAdmin) {
 
 @if(!$noUI)
     @if(isset($show['header']) && $show['header'])
-        @include('common.maps.controls.header', [
-            'echo' => $echo,
-            'edit' => $edit,
-            'mapContext' => $mapContext,
-            'dungeon' => $dungeon,
-            'floor' => $floor,
-            'dungeonroute' => $dungeonroute,
-            'livesession' => $livesession,
-            'mappingVersion' => $mappingVersion,
-        ])
+        <nav id="map_header" class="map_fade_out">
+            @include('common.layout.header', [
+                'showMore' => true,
+                'showDungeonContext' => !($mapContext instanceof MapContextDungeonRoute),
+                'forceShrink' => true,
+                'dungeonContextLinks' => $dungeonContextLinks,
+            ])
+            @include('common.maps.controls.header', [
+                'echo' => $echo,
+                'edit' => $edit,
+                'mapContext' => $mapContext,
+                'dungeon' => $dungeon,
+                'floor' => $floor,
+                'headerTitle' => $headerTitle,
+                'dungeonroute' => $dungeonroute,
+                'livesession' => $livesession,
+                'mappingVersion' => $mappingVersion,
+            ])
+        </nav>
+        {{--        @include('common.maps.controls.header', [--}}
+        {{--            'echo' => $echo,--}}
+        {{--            'edit' => $edit,--}}
+        {{--            'mapContext' => $mapContext,--}}
+        {{--            'dungeon' => $dungeon,--}}
+        {{--            'floor' => $floor,--}}
+        {{--            'headerTitle' => $headerTitle,--}}
+        {{--            'dungeonroute' => $dungeonroute,--}}
+        {{--            'livesession' => $livesession,--}}
+        {{--            'mappingVersion' => $mappingVersion,--}}
+        {{--        ])--}}
     @endif
 
     @if(isset($show['controls']['draw']) && $show['controls']['draw'])
@@ -203,6 +309,14 @@ if ($isAdmin) {
             'isAdmin' => $isAdmin,
             'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
             'selectedFloorId' => $floor->id,
+            'isMobile' => $isMobile,
+        ])
+    @elseif(isset($show['controls']['liveSession']) && $show['controls']['liveSession'])
+        @include('common.maps.controls.livesession', [
+            'isAdmin' => $isAdmin,
+            'floors' => ($isAdmin ? $dungeon->floors() : $dungeon->floorsForMapFacade($mappingVersion, $useFacade)->active())->get(),
+            'selectedFloorId' => $floor->id,
+            'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
         ])
     @elseif(isset($show['controls']['view']) && $show['controls']['view'])
@@ -238,14 +352,22 @@ if ($isAdmin) {
     @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
         @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
+            'showSidebar' => $show['controls']['heatmapSearchSidebar'] ?? true,
+            'showDataSourceSnackbar' => $show['controls']['heatmapSearchShowDataSourceSnackbar'] ?? true,
             'defaultState' => $show['controls']['heatmapSearchDefaultState'] ?? null,
-            'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null,
+            'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null
         ]))
     @endif
 
-    @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
-        @include('common.maps.controls.enemyinfo')
+    @if(isset($show['controls']['dungeonRouteSearch']) && $show['controls']['dungeonRouteSearch'])
+        @include('common.maps.controls.dungeonroutesearch', array_merge($controlOptions['dungeonRouteSearch'] ?? [], [
+            'showAds' => $showAds && !$adFree,
+            'showSidebar' => $show['controls']['dungeonRouteSearchSidebar'] ?? true,
+            'defaultState' => $show['controls']['dungeonRouteSearchDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['dungeonRouteSearchHideOnMove'] ?? null
+        ]))
     @endif
+
 
     @if(isset($show['controls']['raiderioKsgAttribution']) && $show['controls']['raiderioKsgAttribution'])
         @include('common.maps.controls.attribution')
@@ -297,8 +419,8 @@ if ($isAdmin) {
             @include('common.modal.userreport.dungeonroute', ['dungeonroute' => $dungeonroute])
         @endcomponent
 
-        @component('common.general.modal', ['id' => 'userreport_enemy_modal'])
-            @include('common.modal.userreport.enemy')
+        @component('common.general.modal', ['id' => 'enemy_details_modal', 'size' => 'xl'])
+            @include('common.modal.enemydetails')
         @endcomponent
     @endisset
     @if($mapContext instanceof MapContextDungeonRoute)
@@ -306,6 +428,12 @@ if ($isAdmin) {
             @include('common.modal.dungeonroute.removed', ['dungeonroute' => $dungeonroute])
         @endcomponent
     @endisset
+
+    @if(!$noUI)
+        @if(isset($show['header']) && $show['header'])
+            @include('common.general.modallazy', ['targetView' => 'common.modal.createroute', 'id' => 'create_route_modal', 'size' => 'xl'])
+        @endif
+    @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
         isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])

@@ -1,24 +1,26 @@
 <?php
 
 return [
-    'commit'  => [
-        'added'    => [
-            'added' => '',
+
+    'commit' => [
+        'added' => [
+            'added' => 'Додано',
         ],
         'modified' => [
-            'modified' => '',
+            'modified' => 'Змінено',
         ],
-        'removed'  => [
-            'removed' => '',
+        'removed' => [
+            'removed' => 'Видалено',
         ],
     ],
     'release' => [
         'discord_footer' => [
-            'home'        => '',
-            'changelog'   => '',
-            'affixes'     => '',
-            'patreon'     => '',
-            'get_started' => '',
+            'home'        => 'Домівка',
+            'changelog'   => 'Список змін',
+            'affixes'     => 'Модифікатори',
+            'patreon'     => 'Patreon',
+            'get_started' => 'Розпочніть з',
         ],
     ],
+
 ];
