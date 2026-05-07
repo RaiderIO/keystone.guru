@@ -15,6 +15,7 @@ use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -73,6 +74,7 @@ class User extends Authenticatable implements LaratrustUser
     use HasRolesAndPermissions;
     use Notifiable;
     use HasTags;
+    use HasFactory;
 
     public const string MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
     public const string MAP_FACADE_STYLE_FACADE       = 'facade';

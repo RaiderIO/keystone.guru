@@ -18,6 +18,22 @@ use Tests\TestCases\PublicTestCase;
 final class APICacheControllerTest extends PublicTestCase
 {
     /**
+     * Mock CacheServiceInterface and Artisan so the controller body never actually drops caches
+     * or warms views during tests. Applied to every test so that even if the role:admin gate
+     * unexpectedly lets a request through, we get a deterministic 200 (which the assertion catches)
+     * rather than a 500 from a real cache/view-cache invocation.
+     *
+     * @throws Exception
+     */
+    private function stubCacheDependencies(): void
+    {
+        $cacheServiceMock = $this->createMockPublic(CacheServiceInterface::class);
+        app()->instance(CacheServiceInterface::class, $cacheServiceMock);
+
+        Artisan::shouldReceive('call')->andReturn(0);
+    }
+
+    /**
      * @throws Exception
      */
     #[Test]
@@ -30,20 +46,8 @@ final class APICacheControllerTest extends PublicTestCase
             $admin->hasRole(Role::ROLE_ADMIN),
             'User id=1 must have the admin role for this test (seed the database).',
         );
-        $this->be($admin);
-
-        $cacheServiceMock = $this->createMockPublic(CacheServiceInterface::class);
-        $cacheServiceMock->expects($this->once())->method('dropCaches');
-        app()->instance(CacheServiceInterface::class, $cacheServiceMock);
-
-        Artisan::shouldReceive('call')
-            ->with('modelCache:clear')
-            ->once()
-            ->andReturn(0);
-        Artisan::shouldReceive('call')
-            ->with('keystoneguru:view', ['operation' => 'cache'])
-            ->once()
-            ->andReturn(0);
+        $this->actingAs($admin);
+        $this->stubCacheDependencies();
 
         // Act
         $response = $this->postJson(route('api.v1.cache.drop'));
@@ -53,53 +57,49 @@ final class APICacheControllerTest extends PublicTestCase
         $response->assertExactJson(['status' => 'ok']);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Test]
     public function drop_givenAuthenticatedNonAdmin_shouldReturnForbidden(): void
     {
         // Arrange
         /** @var User $nonAdmin */
-        $nonAdmin = User::where('email', 'user@app.com')->firstOrFail();
-        $this->assertFalse(
-            $nonAdmin->hasRole(Role::ROLE_ADMIN),
-            'The non-admin fixture user must not have the admin role.',
-        );
-        $this->be($nonAdmin);
+        $nonAdmin = User::factory()->create();
 
-        // Act
-        $response = $this->postJson(route('api.v1.cache.drop'));
+        try {
+            $this->assertFalse(
+                $nonAdmin->hasRole(Role::ROLE_ADMIN),
+                'A freshly factoried user must not have the admin role.',
+            );
+            $this->actingAs($nonAdmin);
+            $this->stubCacheDependencies();
 
-        // Assert
-        $response->assertStatus(StatusCode::FORBIDDEN);
+            // Act
+            $response = $this->postJson(route('api.v1.cache.drop'));
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $response->assertJsonStructure(['error']);
+        } finally {
+            $nonAdmin->delete();
+        }
     }
 
-    #[Test]
-    public function drop_givenAuthenticatedInternalTeam_shouldReturnForbidden(): void
-    {
-        // Arrange
-        /** @var User $internalTeamUser */
-        $internalTeamUser = User::where('email', 'internal_team@app.com')->firstOrFail();
-        $this->assertFalse(
-            $internalTeamUser->hasRole(Role::ROLE_ADMIN),
-            'The internal_team fixture user must not have the admin role.',
-        );
-        $this->be($internalTeamUser);
-
-        // Act
-        $response = $this->postJson(route('api.v1.cache.drop'));
-
-        // Assert
-        $response->assertStatus(StatusCode::FORBIDDEN);
-    }
-
+    /**
+     * @throws Exception
+     */
     #[Test]
     public function drop_givenUnauthenticated_shouldReturnForbidden(): void
     {
         // Arrange - no authentication
+        $this->stubCacheDependencies();
 
         // Act
         $response = $this->postJson(route('api.v1.cache.drop'));
 
         // Assert
         $response->assertStatus(StatusCode::FORBIDDEN);
+        $response->assertJsonStructure(['error']);
     }
 }

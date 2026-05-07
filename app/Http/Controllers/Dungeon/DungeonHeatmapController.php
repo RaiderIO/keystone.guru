@@ -65,11 +65,15 @@ class DungeonHeatmapController extends Controller
         ]);
     }
 
-    public function viewDungeon(Request $request, GameVersion $gameVersion, Dungeon $dungeon): RedirectResponse
-    {
+    public function viewDungeon(
+        SeasonServiceInterface $seasonService,
+        Request                $request,
+        GameVersion            $gameVersion,
+        Dungeon                $dungeon,
+    ): RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -186,7 +190,7 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }

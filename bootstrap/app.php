@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\Api\ApiAuthentication;
+use App\Http\Middleware\Api\ApiRole;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\LegalAgreed;
@@ -64,6 +65,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'ajax'                      => OnlyAjax::class,
+            'api_role'                  => ApiRole::class,
             'bindings'                  => SubstituteBindings::class,
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'debugbarmessagelogger'     => DebugBarMessageLogger::class,

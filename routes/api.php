@@ -38,7 +38,7 @@ Route::prefix('v1')->group(static function () {
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
     });
 
-    Route::middleware(['role:admin'])->prefix('cache')->group(static function () {
+    Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {
         Route::post('drop', new APICacheController()->drop(...))->name('api.v1.cache.drop');
     });
 

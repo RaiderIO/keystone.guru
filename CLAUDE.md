@@ -234,6 +234,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - You must not remove any tests or test files from the tests directory without approval. These are not temporary or helper files; these are core to the application.
 - Structure every test using the Arrange-Act-Assert pattern. Arrange all necessary preconditions and inputs, Act on the object or method under test, and Assert that the expected results have occurred.
 - Every test name should follow the pattern of `[functionname]_given[Condition]_returns[ExpectedResult]`. For example: `myFunction_givenValidDate_returnsTrue` or `myFunction_givenInvalidDate_throwsInvalidArgumentException`.
+- Any created database records must be cleaned up using try...finally.
 
 ### Running Tests
 - Run the minimal number of tests, using an appropriate filter, before finalizing.
