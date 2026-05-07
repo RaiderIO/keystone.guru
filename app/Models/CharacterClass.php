@@ -85,7 +85,7 @@ class CharacterClass extends CacheModel
      */
     public function getIconUrlAttribute(): string
     {
-        return url(sprintf('/images/classes/%s.png', Str::replace('_', '', $this->key)));
+        return ksgAssetImage(sprintf('/classes/%s.png', Str::replace('_', '', $this->key)));
     }
 
     public function specializations(): HasMany

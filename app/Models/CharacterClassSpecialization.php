@@ -16,7 +16,7 @@ use Str;
  * @property string $key
  * @property string $name
  *
- * @property string         $icon_url Appended
+ * @property string $icon_url Appended
  *
  * @property CharacterClass $class
  *
@@ -48,10 +48,12 @@ class CharacterClassSpecialization extends CacheModel
     public function getIconUrlAttribute(): string
     {
         $className = Str::replace('_', '', $this->class->key);
-        return url(sprintf('/images/specializations/%s/%s_%s.png',
+
+        return ksgAssetImage(sprintf(
+            '/specializations/%s/%s_%s.png',
             $className,
             $className,
-            Str::replace('_', '', $this->key)
+            Str::replace('_', '', $this->key),
         ));
     }
 

@@ -52,7 +52,7 @@ class SearchFilterPlayerSpells extends SearchFilterSelect {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_select_player_spells_header')
+        return lang.get('js.filter_input_select_player_spells_header')
             .replace(':spells', this._getSpellNames().join(', '));
     }
 }
