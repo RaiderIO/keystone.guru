@@ -19,7 +19,7 @@ use Str;
  * @property string $name
  * @property string $color
  *
- * @property string                                   $icon_url Appended
+ * @property string $icon_url Appended
  *
  * @property Collection<CharacterClassSpecialization> $specializations
  * @property Collection<DungeonRoutePlayerClass>      $dungeonRoutePlayerClasses

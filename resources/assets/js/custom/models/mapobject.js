@@ -1065,6 +1065,8 @@ class MapObject extends Signalable {
             success: function (json) {
                 self.localDelete();
 
+                self.signal('delete:success', {json: json});
+
                 self.onDeleteSuccess(json);
             },
             error: function (xhr, textStatus, errorThrown) {

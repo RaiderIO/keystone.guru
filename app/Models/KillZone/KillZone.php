@@ -57,6 +57,7 @@ class KillZone extends Model
         'index',
         'enemies',
         'spells',
+        'killzone_paths',
     ];
 
     protected $appends = ['enemies'];

@@ -75,8 +75,8 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
                 'integer',
                 Rule::exists(CharacterClassSpecialization::class, 'specialization_id'),
             ],
-            'includePlayerSpellIds'        => ['nullable', 'array'],
-            'includePlayerSpellIds.*'      => ['integer', Rule::exists(Spell::class, 'id')],
+            'includePlayerSpellIds'   => ['nullable', 'array'],
+            'includePlayerSpellIds.*' => ['integer', Rule::exists(Spell::class, 'id')],
         ]);
     }
 }

@@ -173,6 +173,12 @@ class KillZone extends MapObject {
                     return self.spellIds;
                 }
             }),
+            new Attribute({
+                name: 'killzone_paths',
+                type: 'array',
+                edit: false,
+                default: undefined,
+            }),
         ]);
     }
 

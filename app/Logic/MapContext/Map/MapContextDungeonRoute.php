@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\KillZonePath\KillZonePathServiceInterface;
 
 /**
  * Class MapContextDungeonRoute
@@ -22,10 +23,11 @@ class MapContextDungeonRoute extends MapContextBase
     use ListsEnemies;
 
     public function __construct(
-        CacheServiceInterface       $cacheService,
-        CoordinatesServiceInterface $coordinatesService,
-        private DungeonRoute        $dungeonRoute,
-        string                      $mapFacadeStyle,
+        CacheServiceInterface                         $cacheService,
+        CoordinatesServiceInterface                   $coordinatesService,
+        private readonly KillZonePathServiceInterface $killZonePathService,
+        private DungeonRoute                          $dungeonRoute,
+        string                                        $mapFacadeStyle,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeonRoute->dungeon, $dungeonRoute->mappingVersion, $mapFacadeStyle);
     }
@@ -88,6 +90,7 @@ class MapContextDungeonRoute extends MapContextBase
             ]),
 
             // Relations
+            'killZonePaths'    => $this->killZonePathService->calculateForRoute($this->dungeonRoute, $useFacade),
             'killZones'        => $this->dungeonRoute->mapContextKillZones($this->coordinatesService, $useFacade),
             'mapIcons'         => $this->dungeonRoute->mapContextMapIcons($this->coordinatesService, $useFacade),
             'paths'            => $this->dungeonRoute->mapContextPaths($this->coordinatesService, $useFacade),

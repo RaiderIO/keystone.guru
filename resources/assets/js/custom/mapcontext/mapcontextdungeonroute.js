@@ -127,6 +127,13 @@ class MapContextDungeonRoute extends MapContext {
     /**
      * @returns {[]}
      */
+    getKillZonePaths() {
+        return this._options.killZonePaths ?? [];
+    }
+
+    /**
+     * @returns {[]}
+     */
     getPaths() {
         return this._options.paths;
     }

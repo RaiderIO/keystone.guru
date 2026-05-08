@@ -123,7 +123,7 @@ class PullWorkBench extends Signalable {
         );
         let $supportedDomains = $(`#map_killzonessidebar_killzone_description_modal_supported_domains`).attr(
             'title',
-            c.map.sanitizeTextDefaultAllowedDomains.join('<br>')
+            getState().getSanitizeAllowedDomains().join('<br>')
         );
         refreshTooltips($supportedDomains);
 

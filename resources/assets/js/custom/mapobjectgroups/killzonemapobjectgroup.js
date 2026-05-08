@@ -65,6 +65,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         mapObject.unregister('killzone:enemyremoved', this);
         mapObject.unregister('killzone:enemyadded', this);
+        mapObject.unregister('killzone:obsoleteenemychanged', this);
+        mapObject.unregister('killzone:overpulledenemyadded', this);
+        mapObject.unregister('killzone:obsoleteenemychanged', this);
     }
 
     _createMapObject(layer, options = {}) {

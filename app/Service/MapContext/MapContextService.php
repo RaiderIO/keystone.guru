@@ -16,6 +16,7 @@ use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\KillZonePath\KillZonePathServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
@@ -27,6 +28,7 @@ readonly class MapContextService implements MapContextServiceInterface
     public function __construct(
         private CacheServiceInterface           $cacheService,
         private CoordinatesServiceInterface     $coordinatesService,
+        private KillZonePathServiceInterface    $killZonePathService,
         private OverpulledEnemyServiceInterface $overpulledEnemyService,
         private SeasonServiceInterface          $seasonService,
     ) {
@@ -72,6 +74,7 @@ readonly class MapContextService implements MapContextServiceInterface
         return new MapContextDungeonRoute(
             $this->cacheService,
             $this->coordinatesService,
+            $this->killZonePathService,
             $dungeonRoute,
             $mapFacadeStyle,
         );

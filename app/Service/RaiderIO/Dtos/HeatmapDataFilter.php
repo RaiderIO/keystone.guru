@@ -88,7 +88,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param Collection<Spell> $includePlayerSpellIds
+     * @param  Collection<Spell> $includePlayerSpellIds
      * @return $this
      */
     public function setIncludePlayerSpellIds(Collection $includePlayerSpellIds): HeatmapDataFilter
@@ -460,7 +460,7 @@ class HeatmapDataFilter implements Arrayable
 
         if ($this->getIncludePlayerSpellIds()->isNotEmpty()) {
             $result['includePlayerSpellIds'] = implode(',', $this->getIncludePlayerSpellIds()->map(
-                fn(Spell $spell) => $spell->id
+                fn(Spell $spell) => $spell->id,
             )->toArray());
         }
 

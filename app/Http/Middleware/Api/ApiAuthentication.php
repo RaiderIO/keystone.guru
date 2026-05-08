@@ -3,7 +3,6 @@
 namespace App\Http\Middleware\Api;
 
 use App\Service\User\UserServiceInterface;
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
