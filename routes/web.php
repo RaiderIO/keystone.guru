@@ -11,6 +11,18 @@
 |
 */
 
+use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
+use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
+use App\Http\Controllers\AdminTools\AdminToolsDungeonRouteController;
+use App\Http\Controllers\AdminTools\AdminToolsEnemyForcesController;
+use App\Http\Controllers\AdminTools\AdminToolsExceptionController;
+use App\Http\Controllers\AdminTools\AdminToolsFeaturesController;
+use App\Http\Controllers\AdminTools\AdminToolsMdtController;
+use App\Http\Controllers\AdminTools\AdminToolsMessageBannerController;
+use App\Http\Controllers\AdminTools\AdminToolsNpcController;
+use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
+use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
+use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
@@ -397,81 +409,81 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/', new AdminToolsController()->index(...))->name('admin.tools');
                 Route::get('/combatlog', new AdminToolsController()->combatlog(...))->name('admin.combatlog');
 
-                Route::get('/messagebanner', new AdminToolsController()->messageBanner(...))->name('admin.tools.messagebanner.set');
-                Route::post('/messagebanner', new AdminToolsController()->messageBannerSubmit(...))->name('admin.tools.messagebanner.set.submit');
+                Route::get('/messagebanner', new AdminToolsMessageBannerController()->messageBanner(...))->name('admin.tools.messagebanner.set');
+                Route::post('/messagebanner', new AdminToolsMessageBannerController()->messageBannerSubmit(...))->name('admin.tools.messagebanner.set.submit');
 
-                Route::get('/npc/import', new AdminToolsController()->npcimport(...))->name('admin.tools.npc.import');
-                Route::post('/npc/import', new AdminToolsController()->npcimportsubmit(...))->name('admin.tools.npc.import.submit');
-                Route::get('/npc/manage-spell-visibility/{dungeon?}', new AdminToolsController()->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
-                Route::post('/npc/manage-spell-visibility/submit', new AdminToolsController()->manageSpellVisibilitySubmit(...))->name('admin.tools.npc.managespellvisibility.submit');
+                Route::get('/npc/import', new AdminToolsNpcController()->npcimport(...))->name('admin.tools.npc.import');
+                Route::post('/npc/import', new AdminToolsNpcController()->npcimportsubmit(...))->name('admin.tools.npc.import.submit');
+                Route::get('/npc/manage-spell-visibility/{dungeon?}', new AdminToolsNpcController()->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
+                Route::post('/npc/manage-spell-visibility/submit', new AdminToolsNpcController()->manageSpellVisibilitySubmit(...))->name('admin.tools.npc.managespellvisibility.submit');
 
                 // Dungeonroute
-                Route::get('/dungeonroute', new AdminToolsController()->dungeonroute(...))->name('admin.tools.dungeonroute.view');
-                Route::post('/dungeonroute', new AdminToolsController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
-                Route::get('/dungeonroute/mappingversions', new AdminToolsController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
+                Route::get('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroute(...))->name('admin.tools.dungeonroute.view');
+                Route::post('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
+                Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
 
                 // Import enemy forces
-                Route::get('enemyforces/import', new AdminToolsController()->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
-                Route::post('enemyforces/import', new AdminToolsController()->enemyforcesimportsubmit(...))->name('admin.tools.enemyforces.import.submit');
-                Route::get('enemyforces/recalculate', new AdminToolsController()->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
-                Route::post('enemyforces/recalculate', new AdminToolsController()->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
+                Route::get('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
+                Route::post('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimportsubmit(...))->name('admin.tools.enemyforces.import.submit');
+                Route::get('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
+                Route::post('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
 
                 // Thumbnails
-                Route::get('thumbnails/regenerate', new AdminToolsController()->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
-                Route::post('thumbnails/regenerate', new AdminToolsController()->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
+                Route::get('thumbnails/regenerate', new AdminToolsThumbnailsController()->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
+                Route::post('thumbnails/regenerate', new AdminToolsThumbnailsController()->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
 
                 // Combat log
-                Route::get('combatlog/regenerate', new AdminToolsController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
-                Route::post('combatlog/regenerate', new AdminToolsController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
+                Route::get('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
+                Route::post('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
-                    Route::get('string', new AdminToolsController()->mdtview(...))->name('admin.tools.mdt.string.view');
-                    Route::post('string', new AdminToolsController()->mdtviewsubmit(...))->name('admin.tools.mdt.string.submit');
+                    Route::get('string', new AdminToolsMdtController()->mdtview(...))->name('admin.tools.mdt.string.view');
+                    Route::post('string', new AdminToolsMdtController()->mdtviewsubmit(...))->name('admin.tools.mdt.string.submit');
 
                     // View string contents as a dungeonroute
-                    Route::get('string/dungeonroute', new AdminToolsController()->mdtviewasdungeonroute(...))->name('admin.tools.mdt.string.viewasdungeonroute');
-                    Route::post('string/dungeonroute', new AdminToolsController()->mdtviewasdungeonroutesubmit(...))->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+                    Route::get('string/dungeonroute', new AdminToolsMdtController()->mdtviewasdungeonroute(...))->name('admin.tools.mdt.string.viewasdungeonroute');
+                    Route::post('string/dungeonroute', new AdminToolsMdtController()->mdtviewasdungeonroutesubmit(...))->name('admin.tools.mdt.string.viewasdungeonroute.submit');
 
                     // View dungeonroute as string
-                    Route::get('dungeonroute/string', new AdminToolsController()->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
-                    Route::post('dungeonroute/string', new AdminToolsController()->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+                    Route::get('dungeonroute/string', new AdminToolsMdtController()->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
+                    Route::post('dungeonroute/string', new AdminToolsMdtController()->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
 
                     // View imported MDT strings
-                    Route::get('string/list', new AdminToolsController()->mdtImportList(...))->name('admin.tools.mdt.string.list');
+                    Route::get('string/list', new AdminToolsMdtController()->mdtImportList(...))->name('admin.tools.mdt.string.list');
 
                     // View mapping hash
-                    Route::get('dungeonmappinghash', new AdminToolsController()->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
-                    Route::post('dungeonmappinghash', new AdminToolsController()->mdtdungeonmappinghashsubmit(...))->name('admin.tools.mdt.dungeonmappinghash.submit');
+                    Route::get('dungeonmappinghash', new AdminToolsMdtController()->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
+                    Route::post('dungeonmappinghash', new AdminToolsMdtController()->mdtdungeonmappinghashsubmit(...))->name('admin.tools.mdt.dungeonmappinghash.submit');
 
                     // Convert Mapping Version to MDT Mapping
-                    Route::get('dungeonmappingversiontomdtmapping', new AdminToolsController()->dungeonmappingversiontomdtmapping(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
-                    Route::post('dungeonmappingversiontomdtmapping', new AdminToolsController()->dungeonmappingversiontomdtmappingsubmit(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
+                    Route::get('dungeonmappingversiontomdtmapping', new AdminToolsMdtController()->dungeonmappingversiontomdtmapping(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
+                    Route::post('dungeonmappingversiontomdtmapping', new AdminToolsMdtController()->dungeonmappingversiontomdtmappingsubmit(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
 
-                    Route::get('dungeon/mappingversion/accuracy', new AdminToolsController()->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
+                    Route::get('dungeon/mappingversion/accuracy', new AdminToolsMdtController()->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
                 });
 
                 // Spells
-                Route::get('spells/missingdata', new AdminToolsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
+                Route::get('spells/missingdata', new AdminToolsSpellsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
 
                 // NPCs
-                Route::get('npcs/missingdisplayid', new AdminToolsController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
+                Route::get('npcs/missingdisplayid', new AdminToolsNpcController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
 
                 // Wago.gg
-                Route::get('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
-                Route::post('wagogg/importingamecoordinates', new AdminToolsController()->wagoggImportIngameCoordinatesSubmit(...))->name('admin.tools.wagogg.import_ingame_coordinates.submit');
+                Route::get('wagogg/importingamecoordinates', new AdminToolsWagoGgController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
+                Route::post('wagogg/importingamecoordinates', new AdminToolsWagoGgController()->wagoggImportIngameCoordinatesSubmit(...))->name('admin.tools.wagogg.import_ingame_coordinates.submit');
 
                 // Feature management
-                Route::get('features', new AdminToolsController()->listFeatures(...))->name('admin.tools.features.list');
-                Route::post('features/toggle', new AdminToolsController()->toggleFeature(...))->name('admin.tools.features.toggle');
-                Route::post('features/forget', new AdminToolsController()->forgetFeature(...))->name('admin.tools.features.forget');
+                Route::get('features', new AdminToolsFeaturesController()->listFeatures(...))->name('admin.tools.features.list');
+                Route::post('features/toggle', new AdminToolsFeaturesController()->toggleFeature(...))->name('admin.tools.features.toggle');
+                Route::post('features/forget', new AdminToolsFeaturesController()->forgetFeature(...))->name('admin.tools.features.forget');
 
                 // Exception thrower
-                Route::get('exception', new AdminToolsController()->exceptionselect(...))->name('admin.tools.exception.select');
-                Route::post('exception', new AdminToolsController()->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
-                Route::get('mdt/diff', new AdminToolsController()->mdtdiff(...))->name('admin.tools.mdt.diff');
+                Route::get('exception', new AdminToolsExceptionController()->exceptionselect(...))->name('admin.tools.exception.select');
+                Route::post('exception', new AdminToolsExceptionController()->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
+                Route::get('mdt/diff', new AdminToolsMdtController()->mdtdiff(...))->name('admin.tools.mdt.diff');
                 Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
                 Route::get('mapping/forcesync', new AdminToolsController()->mappingForceSync(...))->name('admin.tools.mapping.forcesync');
-                Route::get('datadump/exportdungeondata', new AdminToolsController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
+                Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('datadump/exportreleases', new AdminToolsController()->exportreleases(...))->name('admin.tools.datadump.exportreleases');
                 Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
             });
@@ -572,7 +584,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 });
             });
             Route::put('/userreport/{userreport}/status', new AjaxUserReportController()->status(...));
-            Route::post('/tools/mdt/diff/apply', new AdminToolsController()->applyChange(...));
+            Route::post('/tools/mdt/diff/apply', new AdminToolsMdtController()->applyChange(...));
             Route::put('/user/{user}/patreon/benefits', new UserController()->storePatreonBenefits(...));
         });
 
