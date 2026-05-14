@@ -20,6 +20,7 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->leftJoin('spells', 'npc_spells.spell_id', '=', 'spells.id')
             ->whereNull('spells.id') // Ensure spell doesn't exist in spells table
             ->distinct()
+            ->get()
             ->pluck('npc_spells.spell_id')
             ->toArray();
     }
