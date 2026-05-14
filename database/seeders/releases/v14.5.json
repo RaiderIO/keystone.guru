@@ -1,0 +1,43 @@
+{
+    "id": 354,
+    "release_changelog_id": 361,
+    "version": "v14.5",
+    "title": "Ad-free status mangement from your profile, heatmap spell filtering (aside from just Bloodlust) and server-side pull-connections",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-05-14T13:17:23+00:00",
+    "updated_at": "2026-05-14T13:17:23+00:00",
+    "changelog": {
+        "id": 361,
+        "release_id": 354,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 361,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3059,
+                "change": "The Patreon perk to give an ad-free status to others in Teams you are a member of can now be managed from your profile, in addition to from your team(s) directly."
+            },
+            {
+                "release_changelog_id": 361,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2551,
+                "change": "Pull connections are now rendered server-side and as a result support full-pathfinding through the dungeon using floor switches. This now also includes Combined View (MDT-style)."
+            },
+            {
+                "release_changelog_id": 361,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3170,
+                "change": "Fixed a rare race condition when attempting to modify\/delete pulls."
+            },
+            {
+                "release_changelog_id": 361,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2812,
+                "change": "You can now filter on more than just Bloodlust - many cooldowns from all classes are now included."
+            }
+        ]
+    }
+}
