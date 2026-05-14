@@ -22,6 +22,7 @@ use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -60,7 +61,7 @@ class AjaxKillZoneController extends Controller
         $spellIds = $data['spells'] ?? null;
 
         /** @var KillZone $killZone */
-        $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id']);
+        $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id'] ?? null);
 
         $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
         // Prevent someone from updating different killzones than they are allowed to
@@ -74,10 +75,32 @@ class AjaxKillZoneController extends Controller
         $beforeModel = $killZone === null ? null : clone $killZone;
 
         if (!$killZone->exists) {
-            $killZone = KillZone::create($data);
-            // We JUST created the KillZone - so it does not have enemies (yet)
-            $killZone->setEnemiesAttributeCache(collect());
-            $success = $killZone instanceof KillZone;
+            try {
+                $killZone = KillZone::create($data);
+                // We JUST created the KillZone - so it does not have enemies (yet)
+                $killZone->setEnemiesAttributeCache(collect());
+                $success = $killZone instanceof KillZone;
+            } catch (UniqueConstraintViolationException) {
+                // Race condition: another request created this kill zone between findOrNew and create.
+                // Re-load and re-authorize before updating to prevent cross-route hijacking.
+                usleep(100000 + rand(0, 100000));
+
+                return $this->saveKillZone(
+                    $killZonePathService,
+                    $coordinatesService,
+                    $dungeonroute,
+                    $data,
+                    $recalculateEnemyForces,
+                    $recalculateKillZonePaths,
+                );
+//                $killZone = KillZone::with('dungeonRoute')->findOrFail($data['id']);
+//                if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
+//                    Gate::authorize('edit', $killZone->dungeonRoute);
+//                }
+//                $beforeModel = clone $killZone;
+//                $beforeModel->getEnemiesAttribute(true);
+//                $success = $killZone->update($data);
+            }
         } else {
             // Set the cache on the before model to properly store the changes
             $beforeModel->getEnemiesAttribute(true);
