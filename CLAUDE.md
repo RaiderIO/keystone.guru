@@ -34,6 +34,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 ## Application Structure & Architecture
 - Stick to existing directory structure; don't create new base folders without approval.
 - Do not change the application's dependencies without approval.
+- Avoid creating duplicate folders such as `app/Models/Models` or `tests/Feature/Feature`. Use existing folders and structure.
 
 ## Frontend Bundling
 - If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
@@ -60,6 +61,7 @@ For example:
 - The project uses WSL2, so you can also run basic Linux commands (such as `mkdir` or `ls`) in the WSL2 terminal if needed.
 - Do not run any commands directly on the host machine, such as Powershell commands.
 - All newly created files should have LF line endings.
+- Do not create new files or folders using `docker compose exec`. You will not be able to edit or remove them properly from the host machine otherwise.
 
 ## Project preferences
 - `sprintf` should always be used over direct concatenation for dynamic strings.

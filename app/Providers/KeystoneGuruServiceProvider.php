@@ -37,6 +37,8 @@ use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
+use App\Service\CombatLog\CombatLogParsingCriteriaService;
+use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -173,6 +175,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
+        $this->app->bind(CombatLogParsingCriteriaServiceInterface::class, CombatLogParsingCriteriaService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
