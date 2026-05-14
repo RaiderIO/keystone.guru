@@ -85,6 +85,7 @@ readonly class MapContextService implements MapContextServiceInterface
         return new MapContextLiveSession(
             $this->cacheService,
             $this->coordinatesService,
+            $this->killZonePathService,
             $this->overpulledEnemyService,
             $liveSession,
             $mapFacadeStyle,
