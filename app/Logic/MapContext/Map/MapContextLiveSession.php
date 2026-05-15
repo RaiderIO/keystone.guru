@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\KillZonePath\KillZonePathServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 
 /**
@@ -22,11 +23,12 @@ class MapContextLiveSession extends MapContextDungeonRoute
     public function __construct(
         CacheServiceInterface                            $cacheService,
         CoordinatesServiceInterface                      $coordinatesService,
+        private readonly KillZonePathServiceInterface    $killZonePathService,
         private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
         private readonly LiveSession                     $liveSession,
         string                                           $mapFacadeStyle,
     ) {
-        parent::__construct($cacheService, $coordinatesService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
+        parent::__construct($cacheService, $coordinatesService, $killZonePathService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
     }
 
     #[\Override]

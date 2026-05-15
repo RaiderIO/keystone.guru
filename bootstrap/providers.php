@@ -5,6 +5,7 @@ $providers = [
     App\Providers\ControllerServiceProvider::class,
     App\Providers\HelperServiceProvider::class,
     App\Providers\KeystoneGuruServiceProvider::class,
+    App\Providers\PathFindingServiceProvider::class,
     App\Providers\LoggingServiceProvider::class,
     App\Providers\OctaneServiceProvider::class,
     App\Providers\RepositoryServiceProvider::class,

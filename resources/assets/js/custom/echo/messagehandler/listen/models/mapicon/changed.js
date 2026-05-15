@@ -18,7 +18,7 @@ class MapIconChangedHandler extends ModelChangedHandler {
 
             // Apply the correct coordinates for our choice of facade
             let coordinates = this._getCorrectLatLngFromEvent(e);
-            if( coordinates !== false ){
+            if (coordinates !== false) {
                 e.model = $.extend({}, e.model, coordinates);
             }
 

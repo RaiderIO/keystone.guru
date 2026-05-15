@@ -20,12 +20,17 @@ class KillZoneChangedHandler extends ModelChangedHandler {
 
             // Apply the correct coordinates for our choice of facade
             let coordinates = this._getCorrectLatLngFromEvent(e, false);
-            if( coordinates !== false ){
+            if (coordinates !== false) {
                 e.model = $.extend({}, e.model, coordinates);
             }
 
             let mapObject = killZoneMapObjectGroup.loadMapObject(e.model, null, e.user);
             killZoneMapObjectGroup.setMapObjectVisibility(mapObject, true);
+
+            // @TODO use an event listener?
+            /** @type {KillZonePathMapObjectGroup} */
+            let killZonePathMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+            killZonePathMapObjectGroup.refresh(e.killzone_paths !== undefined ? e.killzone_paths : null);
 
             this._showChangedFromEchoNotification(mapObject, e.user);
         }

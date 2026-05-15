@@ -65,11 +65,15 @@ class DungeonHeatmapController extends Controller
         ]);
     }
 
-    public function viewDungeon(Request $request, GameVersion $gameVersion, Dungeon $dungeon): RedirectResponse
-    {
+    public function viewDungeon(
+        SeasonServiceInterface $seasonService,
+        Request                $request,
+        GameVersion            $gameVersion,
+        Dungeon                $dungeon,
+    ): RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -108,7 +112,11 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
+        $seasonString     = $request->get('season');
+        $mostRecentSeason = $seasonService->getSeasonFromShortString($seasonString) ??
+            $dungeon->getActiveSeason($seasonService);
+
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $mostRecentSeason);
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -141,11 +149,6 @@ class DungeonHeatmapController extends Controller
                     'floorIndex'  => $floor->index,
                 ] + $request->validated());
             }
-
-            $seasonString = $request->get('season');
-
-            $mostRecentSeason = $seasonService->getSeasonFromShortString($seasonString) ??
-                $dungeon->getActiveSeason($seasonService);
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
@@ -187,7 +190,7 @@ class DungeonHeatmapController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion);
+        $redirect = $this->guardAgainstInvalidAccess($gameVersion, $dungeon, $currentMappingVersion, $dungeon->getActiveSeason($seasonService));
         if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
@@ -317,11 +320,13 @@ class DungeonHeatmapController extends Controller
         GameVersion     $gameVersion,
         Dungeon         $dungeon,
         ?MappingVersion $currentMappingVersion,
+        ?Season         $mostRecentSeason = null,
     ): ?RedirectResponse {
         if (
             !$dungeon->active ||
-//            !$dungeon->heatmap_enabled ||
+            !$dungeon->heatmap_enabled ||
             $currentMappingVersion === null ||
+            $mostRecentSeason === null ||
             !Feature::active(Heatmap::class)
         ) {
             return redirect()->route('dungeon.heatmap.gameversion.select', [

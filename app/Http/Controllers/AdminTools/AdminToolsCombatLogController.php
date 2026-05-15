@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Controllers\AdminTools;
+
+use App\Http\Controllers\Controller;
+use App\Jobs\RegenerateCombatLogRoute;
+use App\Models\CombatLog\ChallengeModeRun;
+use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\View\View;
+use Session;
+
+class AdminToolsCombatLogController extends Controller
+{
+    public function combatlogregenerate(): View
+    {
+        return view('admin.tools.combatlog.regenerate');
+    }
+
+    public function combatlogregeneratesubmit(Request $request): View
+    {
+        set_time_limit(3600);
+
+        $dungeonId = (int)$request->get('dungeon_id');
+
+        $count = 0;
+
+        // Cannot use joins since the other table lives in a different database
+        DungeonRoute::query()
+            ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
+            ->chunkById(200, function (Collection $dungeonRoutes) use (&$count) {
+                $dungeonRoutes = $dungeonRoutes->keyBy('id');
+                /** @var Collection<ChallengeModeRun> $challengeModes */
+                $challengeModes = ChallengeModeRun::whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
+                    ->get();
+
+                foreach ($challengeModes as $challengeMode) {
+                    RegenerateCombatLogRoute::dispatch(
+                        $dungeonRoutes->get($challengeMode->dungeon_route_id)->id,
+                    );
+                    $count++;
+                }
+            });
+
+        Session::flash('status', __('controller.admintools.flash.combatlog_route_regenerate_result', [
+            'count' => $count,
+        ]));
+
+        return view('admin.tools.combatlog.regenerate');
+    }
+}

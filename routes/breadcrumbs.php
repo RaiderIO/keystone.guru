@@ -313,7 +313,7 @@ Breadcrumbs::for('admin.tools.spells.showmissingspellinfo', static function (Gen
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.spells_missing_info'), route('admin.tools.spells.showmissingspellinfo'));
 });
-Breadcrumbs::for('admin.tools.npcs.showmissingdisplayid', static function (Generator $trail) {
+Breadcrumbs::for('admin.tools.npc.showmissingdisplayid', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.npcs_missing_display_id'), route('admin.tools.npcs.showmissingdisplayid'));
 });
@@ -324,6 +324,62 @@ Breadcrumbs::for('admin.tools.thumbnails.regenerate', static function (Generator
 Breadcrumbs::for('admin.tools.combatlog.regenerate', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_regenerate'), route('admin.tools.combatlog.regenerate.view'));
+});
+Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view'), route('admin.tools.dungeonroute.view'));
+});
+Breadcrumbs::for('admin.tools.dungeonroute.viewcontents', static function (Generator $trail) {
+    $trail->parent('admin.tools.dungeonroute.view');
+    $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view_contents'), route('admin.tools.dungeonroute.view'));
+});
+Breadcrumbs::for('admin.tools.dungeonroute.mappingversions', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_mapping_version_usage'), route('admin.tools.dungeonroute.mappingversionusage'));
+});
+Breadcrumbs::for('admin.tools.enemyforces.import', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.enemyforces_import'), route('admin.tools.enemyforces.import.view'));
+});
+Breadcrumbs::for('admin.tools.enemyforces.recalculate', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.enemyforces_recalculate'), route('admin.tools.enemyforces.recalculate.view'));
+});
+Breadcrumbs::for('admin.tools.features.list', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.features_list'), route('admin.tools.features.list'));
+});
+Breadcrumbs::for('admin.tools.mdt.dungeonmappinghash', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.mdt_dungeon_mapping_hash'), route('admin.tools.mdt.dungeonmappinghash'));
+});
+Breadcrumbs::for('admin.tools.mdt.dungeonmappingversionaccuracy', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.mdt_dungeon_mapping_version_accuracy'), route('admin.tools.mdt.dungeon_mapping_version_accuracy'));
+});
+Breadcrumbs::for('admin.tools.mdt.dungeonmappingversiontomdtmapping', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.mdt_dungeon_mapping_version_to_mdt_mapping'), route('admin.tools.mdt.dungeonmappingversiontomdtmapping'));
+});
+Breadcrumbs::for('admin.tools.mdt.dungeonroute', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.mdt_dungeonroute'), route('admin.tools.mdt.string.viewasdungeonroute'));
+});
+Breadcrumbs::for('admin.tools.mdt.list', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.mdt_list'), route('admin.tools.mdt.string.list'));
+});
+Breadcrumbs::for('admin.tools.messagebanner.set', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.messagebanner_set'), route('admin.tools.messagebanner.set'));
+});
+Breadcrumbs::for('admin.tools.npc.managespellvisibility', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.npc_manage_spell_visibility'), route('admin.tools.npc.managespellvisibility'));
+});
+Breadcrumbs::for('admin.tools.wagogg.importingamecoordinates', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.wagogg_import_ingame_coordinates'), route('admin.tools.wagogg.import_ingame_coordinates'));
 });
 
 // Releases

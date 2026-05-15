@@ -616,8 +616,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {
-                /** @var $dungeon Dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-                $dungeon->active6();
+                /** @var Dungeon $dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
+                $dungeon->active();
             });
     }
 

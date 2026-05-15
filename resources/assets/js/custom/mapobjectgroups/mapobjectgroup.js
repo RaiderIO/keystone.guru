@@ -253,6 +253,7 @@ class MapObjectGroup extends Signalable {
         mapObject.register('object:deleted', this, (this._onObjectDeleted).bind(this));
         mapObject.register('save:beforesend', this, (this._onObjectSaveBeforeSend).bind(this));
         mapObject.register('save:success', this, (this._onObjectSaveSuccess).bind(this));
+        mapObject.register('delete:success', this, (this._onObjectDeleteSuccess).bind(this));
 
         return mapObject;
     }
@@ -406,6 +407,17 @@ class MapObjectGroup extends Signalable {
 
         this.signal('save:success', {object: mapObject, objectgroup: this});
     }
+
+
+    /**
+     * Gives access to the raw JSON received fromm the server when a map object is deleted.
+     * @param mapObjectDeleteSuccessEvent {object}
+     * @private
+     */
+    _onObjectDeleteSuccess(mapObjectDeleteSuccessEvent) {
+        this.signal('delete:success', $.extend({}, mapObjectDeleteSuccessEvent.data, {objectgroup: this}));
+    }
+
 
     /**
      * Loads MapObjects into this MapObjectGroup

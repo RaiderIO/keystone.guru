@@ -176,6 +176,13 @@ return [
             'account_deleted_successfully'     => 'Account deleted successfully.',
             'error_deleting_account'           => 'An error occurred. Please try again.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => 'Unable to add more ad-free giveaways. Limit reached.',
+            'add_ad_free_giveaway_already_ad_free'      => 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.',
+            'add_ad_free_giveaway_already_has_giveaway' => 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.',
+            'remove_ad_free_giveaway_not_found'         => 'Unable to remove ad-free giveaway - user does not have any at the moment.',
+            'remove_ad_free_giveaway_not_yours'         => 'Unable to remove ad-free giveaways that was not originally given by you.',
+        ],
     ],
     'spell' => [
         'error' => [

@@ -562,6 +562,7 @@ class CommonGroupComposition extends InlineCode {
         let $racesSelects = $(".raceselect select");
         let $classSelects = $(".classselect select");
 
+        // @TODO cherry-pick Removing this ecf23e798c5cfa3860d10774eb8f2590a0bee00e
         // For each specialization
         for (let i = 0; i < this._oldSpecializations.length; i++) {
             let characterSpecialization = this._oldSpecializations[i];
@@ -578,6 +579,15 @@ class CommonGroupComposition extends InlineCode {
             $classSelect.val(characterClass.id);
             // Have to manually trigger change..
             $classSelect.trigger('change');
+        }
+
+        // For each specialization
+        for (let i = 0; i < _oldSpecializations.length; i++) {
+            let characterSpecialization = _oldSpecializations[i];
+            let $specializationSelect = $($specializationsSelects[i]);
+            $specializationSelect.val(characterSpecialization.id);
+            // Have to manually trigger change..
+            $specializationSelect.trigger('change');
         }
 
         // For each race
