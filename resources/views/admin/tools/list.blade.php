@@ -70,6 +70,9 @@
     <div class="form-group">
         <a href="{{ route('admin.tools.combatlog.regenerate.view') }}">{{ __('view_admin.tools.list.combatlog_regenerate') }}</a>
     </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.combatlog.criteria.view') }}">{{ __('view_admin.tools.list.combatlog_criteria') }}</a>
+    </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_wagogg') }}</h4>
     <div class="form-group">

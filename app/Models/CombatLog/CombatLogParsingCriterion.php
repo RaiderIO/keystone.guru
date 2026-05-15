@@ -2,6 +2,9 @@
 
 namespace App\Models\CombatLog;
 
+use App\Models\CharacterClassSpecialization;
+use App\Models\Dungeon;
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Traits\HasGenericModelRelation;
 use Database\Factories\CombatLog\CombatLogParsingCriterionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +25,17 @@ class CombatLogParsingCriterion extends Model
     /** @use HasFactory<CombatLogParsingCriterionFactory> */
     use HasFactory;
     use HasGenericModelRelation;
+
+    /**
+     * Maps each valid criterion model class to the relations it requires eager-loaded
+     * so getName() can be called on every result without N+1 queries.
+     *
+     * @var array<class-string<CombatLogCriterionModelInterface>, list<string>>
+     */
+    public const array VALID_CRITERIA = [
+        Dungeon::class                      => [],
+        CharacterClassSpecialization::class => ['class'],
+    ];
 
     public $timestamps = false;
 

@@ -64,7 +64,15 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
                 'model_id'           => $modelId,
                 'date'               => $date,
             ],
-            ['count' => 0, 'threshold' => 100],
+            ['count' => 0, 'threshold' => $this->getDefaultThreshold($modelClass)],
         );
+    }
+
+    private function getDefaultThreshold(string $modelClass): int
+    {
+        return CombatLogParsingCriterion::query()
+            ->where('model_class', $modelClass)
+            ->orderBy('date', 'desc')
+            ->value('threshold') ?? 100;
     }
 }
