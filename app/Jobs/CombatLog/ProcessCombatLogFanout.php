@@ -2,11 +2,13 @@
 
 namespace App\Jobs\CombatLog;
 
+use App\Jobs\Logging\ProcessCombatLogFanoutLoggingInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class ProcessCombatLogFanout implements ShouldQueue
 {
@@ -23,8 +25,17 @@ class ProcessCombatLogFanout implements ShouldQueue
         $this->queue = sprintf('%s-%s-combat-log-fanout', config('app.type'), config('app.env'));
     }
 
-    public function handle(): void
+    public function handle(ProcessCombatLogFanoutLoggingInterface $log): void
     {
-        // #3177: List files in $this->s3Path within $this->s3Bucket and dispatch one ProcessCombatLogPart per file
+        $log->handleStart($this->s3Bucket, $this->s3Path, $this->combatLogVersion);
+
+        $files = Storage::disk('s3_combat_logs')->files($this->s3Path);
+
+        foreach ($files as $filePath) {
+            $log->handleFileFound($filePath);
+            ProcessCombatLogPart::dispatch($this->s3Bucket, $filePath, $this->combatLogVersion);
+        }
+
+        $log->handleEnd(count($files));
     }
 }
