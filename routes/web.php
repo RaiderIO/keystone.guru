@@ -85,12 +85,14 @@ use App\Http\Controllers\SpellController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReportController;
+use App\Http\Controllers\Webhook\RaiderIOWebhookController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\WowheadCors;
 
 // Webhooks
 Route::prefix('webhook')->group(static function () {
     Route::post('github', new WebhookController()->github(...))->name('webhook.github');
+    Route::post('raiderio/combatlog', new RaiderIOWebhookController()->combatLog(...))->name('webhook.raiderio.combatlog');
     Route::middleware([WowheadCors::class])->group(static function () {
         Route::options('wowhead/spell', new WebhookController()->wowheadOptions(...));
         Route::post('wowhead/spell', new WebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');

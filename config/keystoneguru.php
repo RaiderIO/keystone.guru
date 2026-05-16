@@ -365,6 +365,11 @@ return [
                 'url' => env('DISCORD_NEW_RELEASE_WEBHOOK'),
             ],
         ],
+
+        'raiderio' => [
+            'user'     => env('RAIDERIO_WEBHOOK_USER'),
+            'password' => env('RAIDERIO_WEBHOOK_PASSWORD'),
+        ],
     ],
 
     'patreon' => [
