@@ -176,6 +176,32 @@ $isActiveRoute = function (string $route) {
                         </li>
                     @endif
                 @endforeach
+                <?php
+                $compendiumRoutes       = [
+                    route('npc.compendium.index') => __('view_common.layout.header.npc_compendium'),
+                ];
+                $hasCompendiumSubActive = null;
+                $compendiumHeaderText   = __('view_common.layout.header.compendium');
+                $compendiumDropdownId   = Str::slug($compendiumHeaderText);
+                foreach ($compendiumRoutes as $itemKey => $item) {
+                    $hasCompendiumSubActive = $hasCompendiumSubActive ?? $isActiveRoute($itemKey);
+                }
+                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $hasCompendiumSubActive }}" href="#"
+                       id="{{ $compendiumDropdownId }}" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-book-open"></i>
+                        {{ $compendiumHeaderText }}
+                    </a>
+                    <div class="dropdown-menu text-center text-xl-left"
+                         aria-labelledby="{{ $compendiumDropdownId }}">
+                        @foreach($compendiumRoutes as $itemKey => $item)
+                            <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                               href="{{ $itemKey }}">{{ $item }}</a>
+                        @endforeach
+                    </div>
+                </li>
             </ul>
             <ul class="navbar-nav">
                 <?php

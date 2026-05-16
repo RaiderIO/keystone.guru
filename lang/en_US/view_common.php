@@ -251,6 +251,8 @@ return [
             'heatmaps'                => 'Heatmaps',
             'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
+            'compendium'              => 'Compendium',
+            'npc_compendium'          => 'NPCs',
         ],
         'nav' => [
             'user' => [

@@ -50,18 +50,18 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - Always run Laravel, test commands, and any other file system commands inside Docker.
 
 For example:
-
 - `docker compose exec -T app php ...`
 - `docker compose exec -T app php artisan ...`
 - `docker compose exec -T app vendor/bin/phpunit ...`
 
 ## Host Machine
-- The host machine runs Windows
+- The host machine runs Windows.
 - The project is set up to run in Docker, so all commands should be executed within the Docker environment.
 - The project uses WSL2, so you can also run basic Linux commands (such as `mkdir` or `ls`) in the WSL2 terminal if needed.
 - Do not run any commands directly on the host machine, such as Powershell commands.
 - All newly created files should have LF line endings.
 - Do not create new files or folders using `docker compose exec`. You will not be able to edit or remove them properly from the host machine otherwise.
+- Do not use `php artisan make:` commands to create new files. Instead, create new files directly in the codebase to ensure they are created with the correct permissions and structure.
 
 ## Project preferences
 - `sprintf` should always be used over direct concatenation for dynamic strings.
@@ -173,6 +173,15 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
 - Check sibling Form Requests to see if the application uses array or string based validation rules.
 - Any IDs in the post body of a request should be validated to ensure they exist in the database and are of the correct type. For example: `['user_id' => ['required', 'integer', 'exists:users,id']]`. Do not put this validation in a controller; it should be in a Form Request.
+- Any IDs that are validated through an `exists` rule should also have a cached getter so that the Controller can directly get a modal instance. For example:
+```php
+    public function dungeon(): Dungeon
+    {
+        return once(fn() => Dungeon::query()
+            ->where('challenge_mode_id', $this->validated('challenge_mode_id'))
+            ->firstOrFail());
+    }
+```
 
 ### Queues
 - Use queued jobs for time-consuming operations with the `ShouldQueue` interface.

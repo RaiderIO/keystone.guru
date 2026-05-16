@@ -57,6 +57,7 @@ use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
@@ -153,6 +154,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('dungeonroutes', new SiteController()->dungeonroutes(...));
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');
+    });
+
+    // Compendium
+    Route::prefix('compendium')->group(static function () {
+        Route::prefix('npc')->group(static function () {
+            Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
+        });
     });
 
     // Game version toggle
@@ -543,6 +551,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('metric')->group(static function () {
             Route::post('/', new AjaxMetricController()->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', new AjaxMetricController()->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
+        });
+
+        // Compendium
+        Route::prefix('compendium')->group(static function () {
+            Route::prefix('npc')->group(static function () {
+                Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
+            });
         });
 
         // Must be an admin to perform these actions

@@ -516,3 +516,11 @@ Breadcrumbs::for('admin.userreport.list', static function (Generator $trail) {
     $trail->parent('admin');
     $trail->push(__('breadcrumbs.home.admin.user_reports.user_reports'), route('admin.userreports'));
 });
+
+/**
+ * Compendium
+ */
+Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index'));
+});

@@ -4,10 +4,13 @@ return [
 
     'home' => [
         'front_page' => 'Keystone.guru',
-        'affixes'    => 'Affixes',
-        'about'      => 'About',
-        'credits'    => 'Credits',
-        'changelog'  => [
+        'compendium' => [
+            'npc' => 'NPC Compendium',
+        ],
+        'affixes'   => 'Affixes',
+        'about'     => 'About',
+        'credits'   => 'Credits',
+        'changelog' => [
             'list'    => 'Changelog',
             'release' => [
                 'view' => 'Release :version',
