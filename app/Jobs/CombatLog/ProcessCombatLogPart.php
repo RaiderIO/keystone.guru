@@ -2,11 +2,14 @@
 
 namespace App\Jobs\CombatLog;
 
+use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
+use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class ProcessCombatLogPart implements ShouldQueue
 {
@@ -25,8 +28,41 @@ class ProcessCombatLogPart implements ShouldQueue
         $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
     }
 
-    public function handle(): void
+    public function handle(
+        ProcessCombatLogPartLoggingInterface    $log,
+        CombatLogDataExtractionServiceInterface $extractionService,
+    ): void {
+        $log->handleStart($this->s3Bucket, $this->s3FilePath, $this->combatLogVersion);
+
+        $tempPath = sprintf('%s/%s_%s', sys_get_temp_dir(), uniqid('combat_log_'), basename($this->s3FilePath));
+        $resource = null;
+        $result   = false;
+
+        try {
+            $resource = Storage::disk('s3_combat_logs')->readStream($this->s3FilePath);
+            if ($this->writeResourceToDisk($resource, $tempPath) !== false) {
+                $log->handleDownloaded($tempPath);
+
+                $extractionService->extractData($tempPath);
+                $result = true;
+            } else {
+                $log->handleFileWriteFailed($tempPath);
+            }
+        } catch (\Throwable $e) {
+            $log->handleParseError($this->combatLogVersion, $e->getMessage(), $e::class, $this->s3FilePath);
+        } finally {
+            if (is_resource($resource)) {
+                fclose($resource);
+            }
+            if (file_exists($tempPath)) {
+                unlink($tempPath);
+            }
+            $log->handleEnd($result);
+        }
+    }
+
+    public function writeResourceToDisk($resource, $destination): int|false
     {
-        // #3178: Download $this->s3FilePath from $this->s3Bucket and process it
+        return file_put_contents($destination, $resource);
     }
 }

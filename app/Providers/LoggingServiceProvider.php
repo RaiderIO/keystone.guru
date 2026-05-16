@@ -8,6 +8,8 @@ use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
 use App\Jobs\Logging\ProcessCombatLogFanoutLogging;
 use App\Jobs\Logging\ProcessCombatLogFanoutLoggingInterface;
+use App\Jobs\Logging\ProcessCombatLogPartLogging;
+use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
@@ -158,6 +160,7 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Jobs
         $this->app->bind(ProcessCombatLogFanoutLoggingInterface::class, ProcessCombatLogFanoutLogging::class);
+        $this->app->bind(ProcessCombatLogPartLoggingInterface::class, ProcessCombatLogPartLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailLoggingInterface::class, ProcessRouteFloorThumbnailLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailCustomLoggingInterface::class, ProcessRouteFloorThumbnailCustomLogging::class);
         $this->app->bind(RegenerateCombatLogRouteLoggingInterface::class, RegenerateCombatLogRouteLogging::class);
