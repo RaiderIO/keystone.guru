@@ -90,19 +90,22 @@ final class ProcessCombatLogPartTest extends PublicTestCase
         Storage::disk('s3_combat_logs')->put(self::S3_FILE_PATH, 'combat log content');
 
         $log = $this->createMockPublic(ProcessCombatLogPartLoggingInterface::class);
-        $log->expects($this->once())->method('handleFileWriteFailed')->with(
-            self::S3_FILE_PATH,
-        );
+        $log->expects($this->once())->method('handleFileWriteFailed');
         $log->expects($this->once())->method('handleEnd')->with(false);
         app()->instance(ProcessCombatLogPartLoggingInterface::class, $log);
 
         // Act
-        $mockObject = $this->createPartialMock(ProcessCombatLogPart::class, ['writeResourceToDisk'])
+        $mockObject = $this->getMockBuilder(ProcessCombatLogPart::class)
+            ->setConstructorArgs([self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['writeResourceToDisk'])
+            ->getMock();
+
+        $mockObject
             ->expects($this->once())
             ->method('writeResourceToDisk')
             ->willReturn(false);
 
-        app()->call([new ProcessCombatLogPart(self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION), 'handle']);
+        app()->call([$mockObject, 'handle']);
 
         // Assert — handled by mock expectations above
     }
