@@ -4,8 +4,8 @@ namespace App\Http\Requests\Webhook;
 
 use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;

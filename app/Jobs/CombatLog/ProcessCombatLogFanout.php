@@ -20,7 +20,7 @@ class ProcessCombatLogFanout implements ShouldQueue
         private readonly string $s3Path,
         private readonly int    $combatLogVersion,
     ) {
-        $this->queue = 'combat-log-fanout';
+        $this->queue = sprintf('%s-%s-combat-log-fanout', config('app.type'), config('app.env'));
     }
 
     public function handle(): void
