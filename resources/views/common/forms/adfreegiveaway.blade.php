@@ -1,7 +1,12 @@
 <?php
 
-/** @var \App\Models\User $user */
-$hasAdFree                      = $user->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::AD_FREE);
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\User;
+
+/**
+ * @var User $user
+ */
+$hasAdFree                      = $user->hasPatreonBenefit(PatreonBenefit::AD_FREE);
 $adFreeGiveaway                 = $user->patreonAdFreeGiveaway;
 $hasAdFreeGiveawayByCurrentUser = $adFreeGiveaway !== null && $adFreeGiveaway->giver_user_id === Auth::id();
 $hasAdFreeGiveawayByOtherUser   = $adFreeGiveaway !== null && $adFreeGiveaway->giver_user_id !== Auth::id();
