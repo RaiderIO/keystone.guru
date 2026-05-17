@@ -524,3 +524,8 @@ Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index'));
 });
+
+Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $npc) {
+    $trail->parent('compendium.npc.index');
+    $trail->push(__('breadcrumbs.home.compendium.npc_show', ['name' => __($npc->name)]), route('npc.compendium.show', $npc));
+});

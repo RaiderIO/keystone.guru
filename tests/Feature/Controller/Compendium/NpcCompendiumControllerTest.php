@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Compendium;
 
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\Npc\Npc;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -109,6 +110,31 @@ final class NpcCompendiumControllerTest extends PublicTestCase
 
         // Assert
         $response->assertUnprocessable();
+    }
+
+    #[Test]
+    public function show_givenValidNpc_returnsOk(): void
+    {
+        // Arrange
+        $npc = Npc::with('classification')->first();
+        $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $npc));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__($npc->name));
+    }
+
+    #[Test]
+    public function show_givenInvalidNpc_returnsNotFound(): void
+    {
+        // Act
+        $response = $this->get(route('npc.compendium.show', ['npc' => 0]));
+
+        // Assert
+        $response->assertNotFound();
     }
 
     #[Test]

@@ -8,7 +8,9 @@ use App\Logic\Datatables\ColumnHandler\Compendium\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcHealth;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\View\View;
 
@@ -18,6 +20,21 @@ class NpcCompendiumController extends Controller
     {
         return view('compendium.npc.index', [
             'contextDungeon' => Dungeon::getUserOrDefaultDungeon(),
+        ]);
+    }
+
+    public function show(Npc $npc): View
+    {
+        $npc->load(['classification', 'dungeons.expansion']);
+
+        $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
+
+        /** @var NpcHealth|null $currentNpcHealth */
+        $currentNpcHealth = $npc->npcHealths->firstWhere('game_version_id', $currentGameVersion->id);
+
+        return view('compendium.npc.show', [
+            'npc'              => $npc,
+            'currentNpcHealth' => $currentNpcHealth,
         ]);
     }
 

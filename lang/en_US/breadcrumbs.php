@@ -5,7 +5,8 @@ return [
     'home' => [
         'front_page' => 'Keystone.guru',
         'compendium' => [
-            'npc' => 'NPC Compendium',
+            'npc'      => 'NPC Compendium',
+            'npc_show' => ':name',
         ],
         'affixes'   => 'Affixes',
         'about'     => 'About',

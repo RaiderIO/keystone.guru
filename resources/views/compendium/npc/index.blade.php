@@ -7,7 +7,7 @@ use App\Models\Npc\NpcClassification;
  * @var Dungeon $contextDungeon
  */
 ?>
-@extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_compendium.npc.index.title')])
+@extends('layouts.sitepage', ['title' => __('view_compendium.npc.index.title')])
 
 @section('header-title')
     {{ __('view_compendium.npc.index.header') }}
@@ -25,6 +25,7 @@ use App\Models\Npc\NpcClassification;
                 ])
 
             const skullIconUrl = '{{ ksgAssetImage('mapicon/raid_marker_skull.png') }}';
+            const npcShowBaseUrl = '{{ url('/compendium/npc') }}';
 
             const table = $('#compendium_npc_table').DataTable({
                 'processing': true,
@@ -53,7 +54,7 @@ use App\Models\Npc\NpcClassification;
                                 ? `<img src="${skullIconUrl}" width="16" height="16" class="mr-1" title="{{ __('view_compendium.npc.index.boss') }}" data-toggle="tooltip"/>`
                                 : '';
 
-                            return portrait + (data ?? '') + bossIcon;
+                            return `<a href="${npcShowBaseUrl}/${row.id}">${portrait}${data ?? ''}${bossIcon}</a>`;
                         },
                     },
                     {
@@ -73,8 +74,6 @@ use App\Models\Npc\NpcClassification;
                                 return '';
                             }
 
-                            console.log(data);
-
                             return data.filter((spell) => !spell.hidden_on_map).map(function (spell) {
                                 return `<a href="${spell.wowhead_url}" data-wh-icon-size="small">` +
                                     `<img src="${spell.icon_url}" width="16" height="16" loading="lazy"/>` +
@@ -83,6 +82,13 @@ use App\Models\Npc\NpcClassification;
                         },
                     },
                 ],
+                'createdRow': function (row, data) {
+                    $(row).css('cursor', 'pointer').on('click', function (e) {
+                        if (!$(e.target).closest('a').length) {
+                            window.location.href = `${npcShowBaseUrl}/${data.id}`;
+                        }
+                    });
+                },
                 'drawCallback': function () {
                     if (typeof $WowheadPower !== 'undefined') {
                         $WowheadPower.refreshLinks();
