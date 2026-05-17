@@ -10,18 +10,10 @@ class ProfileEdit extends InlineCode {
         });
 
         $('#profile_user_reports_table').DataTable({
-            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-
-            })
+            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {})
         });
 
-        let dataTable = $('#profile_ad_free_giveaway_table').DataTable({
-            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
-
-            })
-        });
-
-        dataTable.on('draw.dt', function (e, settings, json, xhr) {
+        $('#profile_ad_free_giveaway_table').on('draw.dt', function (e, settings, json, xhr) {
             $('.ad_free_giveaway_checkbox').unbind('change').bind('change', function () {
                 let $this = $(this);
                 let userPublicKey = $this.data('publickey');
@@ -45,6 +37,8 @@ class ProfileEdit extends InlineCode {
                     }
                 });
             });
+        }).DataTable({
+            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {})
         });
     }
 }

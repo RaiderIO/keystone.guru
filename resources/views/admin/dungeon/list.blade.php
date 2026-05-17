@@ -27,16 +27,14 @@ use Illuminate\Support\Collection;
 
     <script type="text/javascript">
         $(function () {
-            var dt = $('#admin_dungeon_table').DataTable({
+            $('#admin_dungeon_table').on('draw.dt', function (e, settings, json, xhr) {
+                refreshTooltips();
+            }).DataTable({
                 'aaSorting': [],
                 'lengthMenu': [50],
                 'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
 
                 })
-            });
-
-            dt.on('draw.dt', function (e, settings, json, xhr) {
-                refreshTooltips();
             });
         });
     </script>
