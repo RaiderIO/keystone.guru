@@ -3,6 +3,7 @@
  * @var GameVersion $gameVersion
  * @var Dungeon     $dungeon
  * @var string      $category
+ * @var int|null    $offset
  * @var string|null $routeLoaderSelector
  * @var string      $routeListContainerSelector
  */
@@ -21,6 +22,7 @@ $routeLoaderSelector ??= '#category_route_load_more_loader';
         'routeContainerListSelector' => $routeListContainerSelector,
         'routeLoadMoreSelector' => '#category_route_load_more',
         'routeLoaderSelector' => $routeLoaderSelector,
+        'loadMoreOffset' => $offset ?? 0,
         'loadMoreCount' => config('keystoneguru.discover.loadmore.count'),
     ]
 ])
