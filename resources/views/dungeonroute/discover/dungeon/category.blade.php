@@ -51,6 +51,7 @@ $affixgroup ??= null;
         'affixgroup' => $affixgroup,
         'dungeonroutes' => $dungeonroutes,
         'loadMore' => $dungeonroutes->count() >= config('keystoneguru.discover.limits.category'),
+        'loadMoreOffset' => config('keystoneguru.discover.limits.category'),
     ])
 
     @component('common.general.modal', ['id' => 'userreport_dungeonroute_modal'])
