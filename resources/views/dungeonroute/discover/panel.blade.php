@@ -18,6 +18,7 @@ $dungeon          ??= null;
 $cols             ??= 4;
 $showMore         ??= false;
 $loadMore         ??= false;
+$loadMoreOffset   ??= 0;
 $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
@@ -42,7 +43,12 @@ $cache            ??= true;
                     <div class="offset-2">
                     </div>
                     <div class="col-8">
-                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'cols' => 1, 'center' => true, 'isFirst' => true])
+                        @include('common.affixgroup.affixgroup', [
+                            'affixgroup' => $affixgroup,
+                            'cols' => 1,
+                            'center' => true,
+                            'isFirst' => true
+                        ])
                     </div>
                 </div>
             @endisset
@@ -74,6 +80,7 @@ $cache            ??= true;
             'category' => $category,
             'gameVersion' => $gameVersion,
             'dungeon' => $dungeon,
+            'offset' => $loadMoreOffset,
             'routeListContainerSelector' => '#category_route_list',
         ])
     @endif

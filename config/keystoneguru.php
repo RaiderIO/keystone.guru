@@ -253,7 +253,7 @@ return [
         /** Limits for how much dungeonroutes to display on certain pages */
         'limits' => [
             'overview'       => 12,
-            'category'       => 24,
+            'category'       => 12,
             'affix_overview' => 12,
             'search'         => 24,
             'per_dungeon'    => 8,

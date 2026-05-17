@@ -7,7 +7,7 @@ class SearchHandlerDungeonRoute extends SearchHandler {
         this.targetContainerSelector = targetContainerSelector;
         this.loadMoreSelector = loadMoreSelector;
 
-        this.offset = 0;
+        this.offset = typeof options.offset !== 'undefined' ? options.offset : 0;
         this.limit = typeof options.limit !== 'undefined' ? options.limit : 10;
         this.hasMore = true;
         this.loading = false;
@@ -64,6 +64,7 @@ class SearchHandlerDungeonRoute extends SearchHandler {
             offset: this.offset,
             limit: this.limit
         });
+        searchParams.addQueryParameters(this.options.data);
 
         super.search(searchParams, extendedOptions);
 

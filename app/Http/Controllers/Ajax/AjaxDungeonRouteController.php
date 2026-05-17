@@ -32,6 +32,7 @@ use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -418,12 +419,15 @@ class AjaxDungeonRouteController extends Controller
         $result = collect();
 
         // Prevent jokesters from playing around
-        $offset    = max($request->get('offset', 10), 0);
-        $limit     = min($request->get('limit', 10), 20);
-        $dungeonId = (int)$request->get('dungeon');
+        $offset        = max($request->get('offset', 10), 0);
+        $limit         = min($request->get('limit', 10), 20);
+        $dungeonId     = (int)$request->get('dungeon');
+        $gameVersionId = (int)$request->get('gameVersion');
 
         // Fetch the dungeon if it was set, and only if it is active
         $dungeon = $dungeonId !== 0 ? Dungeon::active()->where('id', $dungeonId)->first() : null;
+
+        $gameVersion = $gameVersionId !== 0 ? GameVersion::where('id', $gameVersionId)->first() : null;
 
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
@@ -438,9 +442,14 @@ class AjaxDungeonRouteController extends Controller
 
         // Prime the discover service
         $discoverService = $discoverService
-            ->withExpansion($expansion)
             ->excludeTeam(Team::getRaiderIOTeam())
             ->withBuilder($closure);
+
+        if ($gameVersion !== null) {
+            $discoverService = $discoverService->withGameVersion($gameVersion);
+        } else {
+            $discoverService = $discoverService->withExpansion($expansion);
+        }
 
         $region = GameServerRegion::getUserOrDefaultRegion();
 

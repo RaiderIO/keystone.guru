@@ -8,12 +8,13 @@ class DungeonrouteDiscoverSearchloadmore extends InlineCode {
             this.options.routeLoadMoreSelector,
             this.options.category, {
                 loaderSelector: this.options.loaderSelector,
-                // @TODO is this true??
-                offset: 20,
+                offset: this.options.loadMoreOffset,
                 limit: this.options.loadMoreCount,
-                // @TODO This is not used anywhere?
-                gameVersion: this.options.gameVersion,
-                dungeon: this.options.dungeon,
+                data: {
+                    test: 'test',
+                    gameVersion: this.options.gameVersion.id,
+                    dungeon: this.options.dungeon.id,
+                },
                 beforeSend: function () {
                     $(self.options.loaderSelector).show();
                 },
