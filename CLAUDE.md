@@ -67,9 +67,9 @@ For example:
 - `sprintf` should always be used over direct concatenation for dynamic strings.
 
 ## Git
-The project is under Git version control.
-
-- Any newly created files should be added to the repository.
+- The project is under Git version control.
+- Any newly created files should be staged.
+- Commits should not be done unless explicitly asked.
 
 ## Finishing up your work
 - After completing your work, ensure you run `composer run fix` to run PhpCsFixer and `composer run analyse` to run PhpStan to verify your work.

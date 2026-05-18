@@ -1,27 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Webhook;
 
-use App\Http\Requests\Webhook\WowheadPageRequest;
-use App\Models\GameVersion\GameVersion;
-use App\Models\Npc\Npc;
-use App\Models\Spell\Spell;
+use App\Http\Controllers\Controller;
 use App\Service\Discord\DiscordApiServiceInterface;
-use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Teapot\StatusCode;
 
-class WebhookController extends Controller
+class GithubWebhookController extends Controller
 {
     /**
-     * Validate an incoming github webhook
-     *
-     *
-     *
      * @throws BadRequestException|UnauthorizedException
      *
      * @see https://dev.to/ryan1/how-to-validate-github-webhooks-with-laravel-and-php-2he1
@@ -61,6 +51,10 @@ class WebhookController extends Controller
             $totalCharacterCount      = 0;
             $totalEmbedCharacterLimit = 5950;
 
+            // https://discord.com/developers/docs/resources/message#embed-object
+            $maxEmbedsPerMessage      = 10;
+            $maxDescriptionCharacters = 4096;
+
             foreach ($commits as $commit) {
                 // Skip system commits (such as merge branch X into Y)
                 if (($commit['committer']['name'] === 'Github' && $commit['committer']['email'] === 'noreply@github.com') ||
@@ -72,12 +66,18 @@ class WebhookController extends Controller
                     continue;
                 }
 
+                $remainingBudget = $totalEmbedCharacterLimit - $totalCharacterCount;
+
+                if ($remainingBudget <= 0 || count($embeds) >= $maxEmbedsPerMessage) {
+                    break;
+                }
+
                 $lines = explode('\\n', (string)$commit['message']);
 
                 $commitDescription = substr(trim(view('app.commit.commit', [
                     'commit' => $commit,
                     'lines'  => $lines,
-                ])->render()), 0, $totalEmbedCharacterLimit);
+                ])->render()), 0, min($maxDescriptionCharacters, $remainingBudget));
 
                 $totalCharacterCount += strlen($commitDescription);
 
@@ -91,10 +91,12 @@ class WebhookController extends Controller
                     'url'         => $commit['url'],
                 ];
 
-                if (!empty($commit['added']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
+                $remainingBudget = $totalEmbedCharacterLimit - $totalCharacterCount;
+
+                if (!empty($commit['added']) && $remainingBudget > 0 && count($embeds) < $maxEmbedsPerMessage) {
                     $addedDescription = substr(trim(view('app.commit.added', [
                         'added' => $commit['added'],
-                    ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
+                    ])->render()), 0, min($maxDescriptionCharacters, $remainingBudget));
                     $totalCharacterCount += strlen($addedDescription);
 
                     $embeds[] = [
@@ -102,12 +104,14 @@ class WebhookController extends Controller
                         // #238636
                         'description' => $addedDescription,
                     ];
+
+                    $remainingBudget = $totalEmbedCharacterLimit - $totalCharacterCount;
                 }
 
-                if (!empty($commit['modified']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
+                if (!empty($commit['modified']) && $remainingBudget > 0 && count($embeds) < $maxEmbedsPerMessage) {
                     $modifiedDescription = substr(trim(view('app.commit.modified', [
                         'modified' => $commit['modified'],
-                    ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
+                    ])->render()), 0, min($maxDescriptionCharacters, $remainingBudget));
                     $totalCharacterCount += strlen($modifiedDescription);
 
                     $embeds[] = [
@@ -115,12 +119,14 @@ class WebhookController extends Controller
                         // #0062C4
                         'description' => $modifiedDescription,
                     ];
+
+                    $remainingBudget = $totalEmbedCharacterLimit - $totalCharacterCount;
                 }
 
-                if (!empty($commit['removed']) && ($totalEmbedCharacterLimit - $totalCharacterCount > 0)) {
+                if (!empty($commit['removed']) && $remainingBudget > 0 && count($embeds) < $maxEmbedsPerMessage) {
                     $removedDescription = substr(trim(view('app.commit.removed', [
                         'removed' => $commit['removed'],
-                    ])->render()), 0, $totalEmbedCharacterLimit - $totalCharacterCount);
+                    ])->render()), 0, min($maxDescriptionCharacters, $remainingBudget));
                     $totalCharacterCount += strlen($removedDescription);
 
                     $embeds[] = [
@@ -148,80 +154,5 @@ class WebhookController extends Controller
         }
 
         return response()->noContent();
-    }
-
-    public function wowheadOptions(Request $request): Response
-    {
-        return response()->noContent();
-    }
-
-    public function wowheadSpell(
-        WowheadPageRequest      $request,
-        WowheadServiceInterface $wowheadService,
-    ): string {
-        if (!config('app.debug', true)) {
-            abort(StatusCode::FORBIDDEN);
-        }
-
-        $validated = $request->validated();
-
-        preg_match('/spell=(\d+)/', $validated['url'], $matches);
-
-        $spellId = $matches[1] ?? null;
-
-        $retail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
-
-        $spell = Spell::find($spellId) ?? Spell::create([
-            'id'              => $spellId,
-            'game_version_id' => $retail->id,
-        ]);
-
-        $spellDataResult = $wowheadService->getSpellData(
-            $gameVersion = $retail,
-            $spellId,
-            $validated['html'],
-        );
-
-        $spellAttributes                    = $spellDataResult->toArray();
-        $spellAttributes['game_version_id'] = $gameVersion->id;
-        $spellAttributes['fetched_data_at'] = Carbon::now();
-
-        // Prevent category updates when we change it manually
-        if (in_array($spell->id, Spell::BLOODLUSTY_SPELLS)) {
-            unset($spellAttributes['category']);
-        }
-
-        $spell->update($spellAttributes);
-
-        return json_encode($spellDataResult->toArray());
-    }
-
-    public function wowheadNpc(
-        WowheadPageRequest      $request,
-        WowheadServiceInterface $wowheadService,
-    ): string {
-        if (!config('app.debug', true)) {
-            abort(StatusCode::FORBIDDEN);
-        }
-
-        $validated = $request->validated();
-
-        preg_match('/npc=(\d+)/', $validated['url'], $matches);
-
-        $npcId = $matches[1] ?? null;
-
-        $npc = Npc::findOrFail($npcId);
-
-        $displayId = $wowheadService->getNpcDisplayId(
-            GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
-            $npc,
-            $validated['html'],
-        );
-
-        $npc->update([
-            'display_id' => $displayId,
-        ]);
-
-        return json_encode($npc->toArray());
     }
 }
