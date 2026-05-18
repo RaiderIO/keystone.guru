@@ -7,6 +7,7 @@ use App\Http\Requests\Compendium\NpcCompendiumRequest;
 use App\Logic\Datatables\ColumnHandler\Compendium\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
+use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
@@ -33,8 +34,9 @@ class NpcCompendiumController extends Controller
         $currentNpcHealth = $npc->npcHealths->firstWhere('game_version_id', $currentGameVersion->id);
 
         return view('compendium.npc.show', [
-            'npc'              => $npc,
-            'currentNpcHealth' => $currentNpcHealth,
+            'npc'                => $npc,
+            'currentNpcHealth'   => $currentNpcHealth,
+            'allCharacteristics' => Characteristic::orderBy('id')->get(),
         ]);
     }
 

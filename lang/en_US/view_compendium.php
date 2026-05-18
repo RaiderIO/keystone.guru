@@ -14,6 +14,7 @@ return [
             'title'                            => ':name — NPC Compendium',
             'header'                           => ':name',
             'section_characteristics'          => 'Characteristics',
+            'section_characteristics_tooltip'  => 'What is this NPC affected by?',
             'section_spells'                   => 'Spells',
             'section_dungeons'                 => 'Dungeons',
             'level'                            => 'Level',

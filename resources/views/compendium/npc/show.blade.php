@@ -6,10 +6,12 @@ use App\Models\Npc\NpcHealth;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Spell\Spell;
+use Illuminate\Support\Collection;
 
 /**
- * @var Npc          $npc
- * @var NpcHealth|null $currentNpcHealth
+ * @var Npc                         $npc
+ * @var NpcHealth|null              $currentNpcHealth
+ * @var Collection<Characteristic>  $allCharacteristics
  */
 
 $classificationBadge = match ($npc->classification->key ?? '') {
@@ -90,21 +92,33 @@ foreach (['dangerous', 'truesight', 'bursting', 'bolstering', 'sanguine', 'runs_
     </div>
 
     {{-- Characteristics --}}
+    <?php $npcCharacteristicIds = $npc->characteristics->pluck('id')->flip(); ?>
     <div class="row mb-4">
         <div class="col">
-            <h4>{{ __('view_compendium.npc.show.section_characteristics') }}</h4>
-            @if($npc->characteristics->isNotEmpty())
-                <div>
-                    @foreach($npc->characteristics as $characteristic)
-                        <?php /** @var Characteristic $characteristic */ ?>
-                        <span class="badge badge-info mr-1 mb-1">
-                            {{ __($characteristic->name) }}
-                        </span>
-                    @endforeach
+            <div class="row no-gutters">
+                <div class="col-auto">
+                    <h4>{{ __('view_compendium.npc.show.section_characteristics') }}</h4>
                 </div>
-            @else
-                <p class="text-muted">{{ __('view_compendium.npc.show.no_characteristics') }}</p>
-            @endif
+                <div class="col ml-1">
+                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+                       title="{{ __('view_compendium.npc.show.section_characteristics_tooltip') }}"></i>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap">
+                @foreach($allCharacteristics as $characteristic)
+                    <?php /** @var Characteristic $characteristic */ ?>
+                    <?php $hasCharacteristic = $npcCharacteristicIds->has($characteristic->id); ?>
+                    <div class="mr-2 mb-2 text-center" style="width: 48px;"
+                         data-toggle="tooltip" data-placement="top" title="{{ __($characteristic->name) }}">
+                        <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)) }}"
+                             width="36" height="36"
+                             loading="lazy"
+                             class="rounded"
+                             style="{{ $hasCharacteristic ? '' : 'filter: grayscale(100%); opacity: 0.35;' }}"
+                             alt="{{ __($characteristic->name) }}"/>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 
