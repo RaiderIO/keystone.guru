@@ -83,23 +83,13 @@ class AjaxKillZoneController extends Controller
             } catch (UniqueConstraintViolationException) {
                 // Race condition: another request created this kill zone between findOrNew and create.
                 // Re-load and re-authorize before updating to prevent cross-route hijacking.
-                usleep(100000 + rand(0, 100000));
-
-                return $this->saveKillZone(
-                    $killZonePathService,
-                    $coordinatesService,
-                    $dungeonroute,
-                    $data,
-                    $recalculateEnemyForces,
-                    $recalculateKillZonePaths,
-                );
-//                $killZone = KillZone::with('dungeonRoute')->findOrFail($data['id']);
-//                if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-//                    Gate::authorize('edit', $killZone->dungeonRoute);
-//                }
-//                $beforeModel = clone $killZone;
-//                $beforeModel->getEnemiesAttribute(true);
-//                $success = $killZone->update($data);
+                $killZone = KillZone::with('dungeonRoute')->findOrFail($data['id']);
+                if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
+                    Gate::authorize('edit', $killZone->dungeonRoute);
+                }
+                $beforeModel = clone $killZone;
+                $beforeModel->getEnemiesAttribute(true);
+                $success = $killZone->update($data);
             }
         } else {
             // Set the cache on the before model to properly store the changes
