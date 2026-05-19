@@ -145,6 +145,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMapPOIsMDTHasMapPOIs(): void;
 
+    public function importMapPOIsMissingTranslation(string $translationKey): void;
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
 
     public function importMapPOIsMapIconAlreadyExists(int $mapIconId, array $latLng, string $mdtMapPOIName): void;
