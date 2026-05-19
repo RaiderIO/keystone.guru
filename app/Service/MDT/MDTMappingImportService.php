@@ -529,9 +529,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     // Special case - if we manually assigned the MDT placeholder, we would want to migrate that over as well.
                     // But all other seasonal types can be adjusted by MDT and we copy them back over.
-                    if ($existingEnemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
-                        $mdtEnemy->seasonal_type        = Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER;
-                        $updatedFields['seasonal_type'] = Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER;
+                    if (in_array($existingEnemy->seasonal_type, [
+                        Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER,
+                        Enemy::SEASONAL_TYPE_REQUIRES_ACTIVATION,
+                    ])) {
+                        $mdtEnemy->seasonal_type        = $existingEnemy->seasonal_type;
+                        $updatedFields['seasonal_type'] = $existingEnemy->seasonal_type;
                     }
 
                     $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey(), $updatedFields);
