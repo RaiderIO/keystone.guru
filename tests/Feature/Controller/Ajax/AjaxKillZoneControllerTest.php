@@ -3,7 +3,6 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\Dungeon;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

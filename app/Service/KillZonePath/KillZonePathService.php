@@ -62,7 +62,7 @@ class KillZonePathService implements KillZonePathServiceInterface
         /** @var Collection<int, DungeonFloorSwitchMarker> $markersById */
         $markersById = $allMarkers->keyBy('id');
         foreach ($allMarkers as $marker) {
-            if ($marker->floor === null) {
+            if ($marker->floor === null || $marker->floor->facade) {
                 continue;
             }
 

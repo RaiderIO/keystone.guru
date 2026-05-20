@@ -7,88 +7,21 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class MDTMapPOI implements Arrayable
 {
-    public const string TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
-    public const string TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
-    // Ny'alotha spires
-    public const string TEMPLATE_VIGNETTE_PIN  = 'VignettePinTemplate';
-    public const string TEMPLATE_ANIMATED_LINE = 'MDTAnimatedLineTemplate';
-
-    public const ALL_TEMPLATES = [
-        self::TEMPLATE_MAP_LINK_PIN,
-        self::TEMPLATE_DEATH_RELEASE_PIN,
-        self::TEMPLATE_VIGNETTE_PIN,
-        self::TEMPLATE_ANIMATED_LINE,
-    ];
-
-    public const string TYPE_MAP_LINK                = 'mapLink';
-    public const string TYPE_DUNGEON_ENTRANCE        = 'dungeonEntrance';
-    public const string TYPE_GRAVEYARD               = 'graveyard';
-    public const string TYPE_GENERAL_NOTE            = 'generalNote';
-    public const string TYPE_ZOOM                    = 'zoom';
-    public const string TYPE_IRON_DOCKS_IRON_STAR    = 'ironDocksIronStar';
-    public const string TYPE_NYALOTHA_SPIRE          = 'nyalothaSpire';
-    public const string TYPE_THE_UNDERROT_SKIP       = 'tuSkip';
-    public const string TYPE_BRACKENHIDE_CAGE        = 'brackenhideCage';
-    public const string TYPE_BRACKENHIDE_CAULDRON    = 'brackenhideCauldron';
-    public const string TYPE_NELTHARUS_CHAIN         = 'neltharusChain';
-    public const string TYPE_NELTHARUS_FOOD          = 'neltharusFood';
-    public const string TYPE_NELTHARUS_SHIELD        = 'neltharusShield';
-    public const string TYPE_NW_ITEM                 = 'nwItem';
-    public const string TYPE_ARA_KARA_ITEM           = 'araKaraItem';
-    public const string TYPE_MISTS_ITEM              = 'mistsItem';
-    public const string TYPE_STONEVAULT_ITEM         = 'stonevaultItem';
-    public const string TYPE_COT_ITEM                = 'cityOfThreadsItem';
-    public const string TYPE_CINDERBREW_ITEM_A       = 'brewItemA';
-    public const string TYPE_CINDERBREW_ITEM_B       = 'brewItemB';
-    public const string TYPE_WORKSHOP_ITEM           = 'workshopItem';
-    public const string TYPE_PRIORY_ITEM             = 'prioryItem';
-    public const string TYPE_MOTHERLODE_ITEM         = 'motherlodeItem';
-    public const string TYPE_FLOODGATE_ITEM          = 'floodgateItem';
-    public const string TYPE_ECO_DOME_AL_DANI_ITEM_1 = 'EDAItem1';
-    public const string TYPE_ECO_DOME_AL_DANI_ITEM_2 = 'EDAItem2';
-    public const string TYPE_ECO_DOME_AL_DANI_ITEM_3 = 'EDAItem3';
-    public const string TYPE_TEXT_FRAME              = 'textFrame';
-    public const string TYPE_GENERIC_ITEM            = 'genericItem';
-
-    public const array ALL_TYPES = [
-        self::TYPE_MAP_LINK,
-        self::TYPE_DUNGEON_ENTRANCE,
-        self::TYPE_GRAVEYARD,
-        self::TYPE_GENERAL_NOTE,
-        self::TYPE_ZOOM,
-        self::TYPE_IRON_DOCKS_IRON_STAR,
-        self::TYPE_NYALOTHA_SPIRE,
-        self::TYPE_THE_UNDERROT_SKIP,
-        self::TYPE_BRACKENHIDE_CAGE,
-        self::TYPE_BRACKENHIDE_CAULDRON,
-        self::TYPE_NELTHARUS_CHAIN,
-        self::TYPE_NELTHARUS_FOOD,
-        self::TYPE_NELTHARUS_SHIELD,
-        self::TYPE_NW_ITEM,
-        self::TYPE_ARA_KARA_ITEM,
-        self::TYPE_STONEVAULT_ITEM,
-        self::TYPE_MISTS_ITEM,
-        self::TYPE_COT_ITEM,
-        self::TYPE_CINDERBREW_ITEM_A,
-        self::TYPE_CINDERBREW_ITEM_B,
-        self::TYPE_WORKSHOP_ITEM,
-        self::TYPE_PRIORY_ITEM,
-        self::TYPE_MOTHERLODE_ITEM,
-        self::TYPE_FLOODGATE_ITEM,
-        self::TYPE_ECO_DOME_AL_DANI_ITEM_1,
-        self::TYPE_ECO_DOME_AL_DANI_ITEM_2,
-        self::TYPE_ECO_DOME_AL_DANI_ITEM_3,
-        self::TYPE_TEXT_FRAME,
-        self::TYPE_GENERIC_ITEM,
-    ];
-
-    private readonly string $template;
-    private readonly string $type;
+    private readonly MDTMapPOITemplate $template;
+    private readonly MDTMapPOIType $type;
     private readonly ?int $itemType;
     private readonly ?int $itemIndex;
     private readonly ?int $target;
     private readonly ?int $direction;
     private readonly ?int $connectionIndex;
+    private readonly ?int $index;
+    private readonly ?string $textAnchor;
+    private readonly ?string $textAnchorTo;
+
+    /** @var array<string, mixed>|null */
+    private readonly ?array $info;
+
+    private readonly ?float $sizeMult;
     private readonly float $x;
     private readonly float $y;
 
@@ -97,23 +30,26 @@ class MDTMapPOI implements Arrayable
      */
     public function __construct(private readonly int $subLevel, private readonly array $rawMapPOI)
     {
-        $this->template        = $this->rawMapPOI['template'] ?? self::TEMPLATE_MAP_LINK_PIN;
-        $this->type            = $this->rawMapPOI['type'];
+        $templateValue  = $this->rawMapPOI['template'] ?? MDTMapPOITemplate::LinkPin->value;
+        $this->template = MDTMapPOITemplate::tryFrom($templateValue)
+            ?? throw new Exception(sprintf('Found new template %s - we need to add it!', $templateValue));
+
+        $typeValue  = $this->rawMapPOI['type'];
+        $this->type = MDTMapPOIType::tryFrom($typeValue)
+            ?? throw new Exception(sprintf('Found new type %s - we need to add it!', $typeValue));
+
         $this->itemType        = $this->rawMapPOI['itemType'] ?? null;
         $this->itemIndex       = $this->rawMapPOI['itemIndex'] ?? null;
         $this->target          = $this->rawMapPOI['target'] ?? null;
         $this->direction       = $this->rawMapPOI['direction'] ?? null;
         $this->connectionIndex = $this->rawMapPOI['connectionIndex'] ?? null;
+        $this->index           = $this->rawMapPOI['index'] ?? null;
+        $this->textAnchor      = $this->rawMapPOI['textAnchor'] ?? null;
+        $this->textAnchorTo    = $this->rawMapPOI['textAnchorTo'] ?? null;
+        $this->info            = $this->rawMapPOI['info'] ?? null;
+        $this->sizeMult        = $this->rawMapPOI['sizeMult'] ?? null;
         $this->x               = $this->rawMapPOI['x'];
         $this->y               = $this->rawMapPOI['y'];
-
-        if (!in_array($this->template, self::ALL_TEMPLATES)) {
-            throw new Exception(sprintf('Found new template %s - we need to add it!', $this->template));
-        }
-
-        if (!in_array($this->type, self::ALL_TYPES)) {
-            throw new Exception(sprintf('Found new type %s - we need to add it!', $this->type));
-        }
     }
 
     public function getSubLevel(): int
@@ -121,12 +57,12 @@ class MDTMapPOI implements Arrayable
         return $this->subLevel;
     }
 
-    public function getTemplate(): string
+    public function getTemplate(): MDTMapPOITemplate
     {
         return $this->template;
     }
 
-    public function getType(): string
+    public function getType(): MDTMapPOIType
     {
         return $this->type;
     }
@@ -156,6 +92,37 @@ class MDTMapPOI implements Arrayable
         return $this->connectionIndex;
     }
 
+    public function getIndex(): ?int
+    {
+        return $this->index;
+    }
+
+    public function getTextAnchor(): ?string
+    {
+        return $this->textAnchor;
+    }
+
+    public function getTextAnchorTo(): ?string
+    {
+        return $this->textAnchorTo;
+    }
+
+    /** @return array<string, mixed>|null */
+    public function getInfo(): ?array
+    {
+        return $this->info;
+    }
+
+    public function getSubType(): ?string
+    {
+        return $this->info['atlas'] ?? null;
+    }
+
+    public function getSizeMult(): ?float
+    {
+        return $this->sizeMult;
+    }
+
     public function getX(): float
     {
         return $this->x;
@@ -175,13 +142,18 @@ class MDTMapPOI implements Arrayable
     {
         return [
             'subLevel'        => $this->subLevel,
-            'template'        => $this->template,
-            'type'            => $this->type,
+            'template'        => $this->template->value,
+            'type'            => $this->type->value,
             'itemType'        => $this->itemType,
             'itemIndex'       => $this->itemIndex,
             'target'          => $this->target,
             'direction'       => $this->direction,
             'connectionIndex' => $this->connectionIndex,
+            'index'           => $this->index,
+            'textAnchor'      => $this->textAnchor,
+            'textAnchorTo'    => $this->textAnchorTo,
+            'info'            => $this->info,
+            'sizeMult'        => $this->sizeMult,
             'x'               => $this->x,
             'y'               => $this->y,
         ];

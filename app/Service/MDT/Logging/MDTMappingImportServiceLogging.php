@@ -313,6 +313,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__);
     }
 
+    public function importMapPOIsMissingTranslation(string $translationKey): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
