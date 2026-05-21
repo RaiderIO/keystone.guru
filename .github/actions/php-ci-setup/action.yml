@@ -45,7 +45,7 @@ runs:
         sudo make install
         echo "extension=lua.so" | sudo tee "$(php -r 'echo PHP_CONFIG_FILE_SCAN_DIR;')/99-lua.ini"
         php -m | grep -i lua
-        unzip storage/lua/LuaBitOp-1.0.3.zip -d /tmp
+        unzip "${GITHUB_WORKSPACE}/storage/lua/LuaBitOp-1.0.3.zip" -d /tmp
         cd /tmp/LuaBitOp-1.0.3
         make -j$(nproc)
         sudo mkdir -p /usr/lib/lua/5.3/
