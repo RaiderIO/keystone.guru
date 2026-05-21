@@ -6,7 +6,6 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOIType;
 use App\Logic\MDT\Entity\MDTPatrol;
-use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
@@ -19,7 +18,6 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
@@ -139,13 +137,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of NPCs and update/save them
             $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
 
-            $characteristicsByName = Characteristic::all()->mapWithKeys(fn(Characteristic $characteristic) => [__($characteristic->name, [], 'en_US') => $characteristic]);
-
-            $npcsUpdated                  = $npcsInserted = 0;
-            $npcCharacteristicsAttributes = [];
-            $npcSpellsAttributes          = [];
-            $npcDungeonsAttributes        = [];
-            $affectedNpcIds               = [];
+            $npcsUpdated           = $npcsInserted = 0;
+            $npcSpellsAttributes   = [];
+            $npcDungeonsAttributes = [];
+            $affectedNpcIds        = [];
 
             /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
@@ -203,25 +198,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npcHealth->percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npcHealth->save();
 
-                // Save characteristics
-                foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
-                    if (!$enabled) {
-                        continue;
-                    }
-
-                    /** @var Characteristic|null $characteristic */
-                    $characteristic = $characteristicsByName->get($characteristicName);
-                    if ($characteristic === null) {
-                        $this->log->importNpcsDataFromMDTUnableToFindCharacteristicForNpc($npc->id, $characteristicName);
-                        continue;
-                    }
-
-                    $npcCharacteristicsAttributes[] = [
-                        'npc_id'            => $npc->id,
-                        'characteristic_id' => $characteristic->id,
-                    ];
-                }
-
                 // Save spells that we don't know of yet
                 foreach ($mdtNpc->getSpells() as $spellId => $obj) {
                     if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
@@ -269,24 +245,17 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 }
             }
 
-            // It's easier to delete/insert new ones than try to maintain the IDs which don't really mean anything anyway
-            // Clear characteristics/spells for all affected NPCs
-            $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing spells - we're only interested in new ones
-//            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
+//            $npcSpellsDeleted = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing dungeons - we're only interested in new ones
 //            $npcDungeonsDeleted = NpcDungeon::whereIn('npc_id', $affectedNpcIds)->delete();
 
-            // Insert new ones
-            NpcCharacteristic::insert($npcCharacteristicsAttributes);
             NpcSpell::insert($npcSpellsAttributes);
             NpcDungeon::insert($npcDungeonsAttributes);
 
             $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
                 $npcsUpdated,
                 $npcsInserted,
-                $npcCharacteristicsDeleted,
-                count($npcCharacteristicsAttributes),
                 0,
                 count($npcSpellsAttributes),
                 0,

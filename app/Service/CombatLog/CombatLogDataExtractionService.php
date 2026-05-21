@@ -14,6 +14,7 @@ use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
 use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
+use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -52,6 +53,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             new NpcUpdateDataExtractor(),
             new FloorDataExtractor($this->floorRepository),
             new SpellDataExtractor($this->wowheadService),
+            new NpcCharacteristicDataExtractor(),
         ]);
     }
 
