@@ -337,6 +337,8 @@ return [
             'schools'           => 'Schools',
             'aura'              => 'Aura',
             'selectable'        => 'Selectable',
+            'characteristic'    => 'Characteristic',
+            'no_characteristic' => 'No characteristic',
             'submit'            => 'Submit',
             'save_as_new_spell' => 'Save as new spell',
         ],

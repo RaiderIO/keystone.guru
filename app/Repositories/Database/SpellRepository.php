@@ -31,4 +31,12 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->get()
             ->keyBy('id');
     }
+
+    public function getAllWithCharacteristic(): Collection
+    {
+        return Spell::query()
+            ->whereNotNull('characteristic_id')
+            ->get()
+            ->keyBy('id');
+    }
 }

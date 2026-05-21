@@ -11,6 +11,7 @@ use App\Models\CombatLog\CombatLogAnalyze;
 use App\Models\CombatLog\CombatLogAnalyzeStatus;
 use App\Models\Dungeon;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
 use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
@@ -46,6 +47,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         private readonly SeasonServiceInterface                         $seasonService,
         private readonly WowheadServiceInterface                        $wowheadService,
         private readonly FloorRepositoryInterface                       $floorRepository,
+        private readonly SpellRepositoryInterface                       $spellRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
         $this->dataExtractors = collect([
@@ -53,7 +55,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             new NpcUpdateDataExtractor(),
             new FloorDataExtractor($this->floorRepository),
             new SpellDataExtractor($this->wowheadService),
-            new NpcCharacteristicDataExtractor(),
+            new NpcCharacteristicDataExtractor($this->spellRepository),
         ]);
     }
 

@@ -9,6 +9,8 @@ use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
+use App\Models\Spell\Spell;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -41,7 +43,10 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
             fn() => Mockery::mock(NpcCharacteristicDataExtractorLoggingInterface::class)->shouldIgnoreMissing(),
         );
 
-        $this->extractor = new NpcCharacteristicDataExtractor();
+        // Ensure spell 118 has characteristic_id set before the extractor loads its cache
+        Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH]]);
+
+        $this->extractor = new NpcCharacteristicDataExtractor($this->app->make(SpellRepositoryInterface::class));
         $this->result    = new ExtractedDataResult();
 
         $dungeon              = Dungeon::first();
@@ -53,6 +58,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         try {
             NpcCharacteristic::where('npc_id', self::NPC_ID)->delete();
             Npc::where('id', self::NPC_ID)->delete();
+            Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => null]);
         } finally {
             parent::tearDown();
         }
