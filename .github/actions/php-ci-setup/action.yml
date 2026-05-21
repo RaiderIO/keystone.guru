@@ -52,6 +52,27 @@ runs:
         sudo cp bit.so /usr/lib/lua/5.3/
       shell: bash
 
+    - name: Restore cli_weakauras_parser cache
+      id: cache-cli-weakauras-parser
+      uses: actions/cache@v4
+      with:
+        path: ~/.cargo/bin/cli_weakauras_parser
+        key: cli-weakauras-parser-rust-1.91.1
+
+    - name: Build cli_weakauras_parser
+      if: steps.cache-cli-weakauras-parser.outputs.cache-hit != 'true'
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain 1.91.1 -y
+        source "$HOME/.cargo/env"
+        cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --locked
+      shell: bash
+
+    - name: Install cli_weakauras_parser system-wide
+      run: |
+        sudo cp ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
+        sudo chmod 0755 /usr/bin/cli_weakauras_parser
+      shell: bash
+
     - name: Install PHP dependencies
       run: composer install --no-interaction --prefer-dist --optimize-autoloader
       shell: bash

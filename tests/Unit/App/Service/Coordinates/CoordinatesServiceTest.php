@@ -133,6 +133,7 @@ final class CoordinatesServiceTest extends PublicTestCase
                 Dungeon::DUNGEON_EYE_OF_AZSHARA,
                 Dungeon::DUNGEON_VAULT_OF_THE_WARDENS,
                 Dungeon::DUNGEON_WINDRUNNER_SPIRE,
+                Dungeon::DUNGEON_NEXUS_POINT_XENAS,
             ])) {
                 continue;
             }
