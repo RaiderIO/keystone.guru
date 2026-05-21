@@ -3,6 +3,9 @@
 return [
 
     'map_icons' => [
+        'mdt' => [
+            'witherbark_prisoner' => 'Witherbark Prisoner',
+        ],
         'mop' => [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik Conscripts only spawn after defeating Commander Ri\'mok',

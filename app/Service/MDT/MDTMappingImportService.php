@@ -4,7 +4,7 @@ namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
-use App\Logic\MDT\Entity\MDTMapPOI;
+use App\Logic\MDT\Entity\MDTMapPOIType;
 use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
@@ -37,6 +37,7 @@ use Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
+use Str;
 
 class MDTMappingImportService implements MDTMappingImportServiceInterface
 {
@@ -528,9 +529,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     // Special case - if we manually assigned the MDT placeholder, we would want to migrate that over as well.
                     // But all other seasonal types can be adjusted by MDT and we copy them back over.
-                    if ($existingEnemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
-                        $mdtEnemy->seasonal_type        = Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER;
-                        $updatedFields['seasonal_type'] = Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER;
+                    if (in_array($existingEnemy->seasonal_type, [
+                        Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER,
+                        Enemy::SEASONAL_TYPE_REQUIRES_ACTIVATION,
+                    ])) {
+                        $mdtEnemy->seasonal_type        = $existingEnemy->seasonal_type;
+                        $updatedFields['seasonal_type'] = $existingEnemy->seasonal_type;
                     }
 
                     $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey(), $updatedFields);
@@ -862,14 +866,15 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $this->log->importMapPOIsMDTHasMapPOIs();
 
                 $mapIconTypeMapping = [
-                    MDTMapPOI::TYPE_GRAVEYARD               => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
-                    MDTMapPOI::TYPE_DUNGEON_ENTRANCE        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
-                    MDTMapPOI::TYPE_PRIORY_ITEM             => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME],
-                    MDTMapPOI::TYPE_FLOODGATE_ITEM          => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION],
-                    MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_1 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT],
-                    MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_2 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE],
-                    MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_3 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE],
-                    MDTMapPOI::TYPE_GENERAL_NOTE            => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_EXCLAMATION_YELLOW],
+                    MDTMapPOIType::Graveyard->value            => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
+                    MDTMapPOIType::DungeonEntrance->value      => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+                    MDTMapPOIType::PrioryItem->value           => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME],
+                    MDTMapPOIType::FloodgateItem->value        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION],
+                    MDTMapPOIType::EcoDomeAlDaniItem1->value   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT],
+                    MDTMapPOIType::EcoDomeAlDaniItem2->value   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE],
+                    MDTMapPOIType::EcoDomeAlDaniItem3->value   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE],
+                    MDTMapPOIType::GeneralNote->value          => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_EXCLAMATION_YELLOW],
+                    MDTMapPOIType::GenericAssignablePOI->value => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
                 ];
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {
@@ -881,13 +886,25 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     ], $floor);
                     $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
 
-                    if (isset($mapIconTypeMapping[$mdtMapPOI->getType()])) {
-                        $existingMapIcon = $currentMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeMapping[$mdtMapPOI->getType()]);
+                    if (isset($mapIconTypeMapping[$mdtMapPOI->getType()->value])) {
+                        $existingMapIcon = $currentMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeMapping[$mdtMapPOI->getType()->value]);
                         if ($existingMapIcon === null) {
-                            $mapIcon = MapIcon::create(array_merge([
+                            $translationKey = null;
+                            if ($mdtMapPOI->getType() === MDTMapPOIType::GenericAssignablePOI &&
+                                isset($mdtMapPOI->getInfo()['name'])) {
+                                $translationKey = sprintf('mapping.map_icons.mdt.%s', Str::snake($mdtMapPOI->getInfo()['name']));
+
+                                if (__($translationKey) === $translationKey) {
+                                    // No translation found, fallback to the raw name
+                                    $this->log->importMapPOIsMissingTranslation($translationKey);
+                                }
+                            }
+
+                            $mapIcon = MapIcon::create(array_merge(array_filter([
                                 'mapping_version_id' => $newMappingVersion->id,
-                                'map_icon_type_id'   => $mapIconTypeMapping[$mdtMapPOI->getType()],
-                            ], $latLng->toArrayWithFloor()));
+                                'map_icon_type_id'   => $mapIconTypeMapping[$mdtMapPOI->getType()->value],
+                                'comment'            => $translationKey,
+                            ]), $latLng->toArrayWithFloor()));
 
                             $this->log->importMapPOIsCreatedNewMapIcon(
                                 $mapIcon->id,
@@ -898,10 +915,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             $this->log->importMapPOIsMapIconAlreadyExists(
                                 $existingMapIcon->id,
                                 $latLng->toArray(),
-                                $mdtMapPOI->getType(),
+                                $mdtMapPOI->getType()->value,
                             );
                         }
-                    } elseif ($mdtMapPOI->getType() === MDTMapPOI::TYPE_MAP_LINK) {
+                    } elseif ($mdtMapPOI->getType() === MDTMapPOIType::MapLink) {
                         // So because of the linked_floor_switch_id we cannot re-import dungeon floor switches
                         // We cannot for sure map the floor switches between different versions to one another
                         // We could use coordinates but if they change it's iffy.

@@ -12,10 +12,10 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
 #[Group('UsesLua')]
+#[Group('MDTExportStringService')]
 class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTestBase
 {
     #[Test]
-    #[Group('MDTExportStringService')]
     #[Group('MDTExportStringServiceExtractObjects')]
     public function extractObjects_givenMapIconWithLinkInComment_shouldExportToMDTWithUrlIntact(): void
     {
@@ -45,7 +45,6 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
     }
 
     #[Test]
-    #[Group('MDTExportStringService')]
     #[Group('MDTExportStringServiceExtractObjects')]
     public function extractObjects_givenKillZoneWithLinkInDescription_shouldExportToMDTWithUrlIntact(): void
     {

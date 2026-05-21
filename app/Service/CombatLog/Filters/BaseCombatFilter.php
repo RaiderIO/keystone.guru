@@ -96,6 +96,11 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         // Windrunner Spire
         // Emberdawn becomes unattackable at less than 5%
         231606 => 0.05,
+
+        // Maisara Caverns
+        // Muro'jin and Nekraxx do die, but one can resurrect the other, so we consider them defeated at less than 2% hp
+        247570 => 0.02,
+        247572 => 0.02,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */

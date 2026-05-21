@@ -22,9 +22,60 @@ class KillZonePathService implements KillZonePathServiceInterface
     }
 
     /**
-     * @return array<array<array{lat: float, lng: float, floor_id: int|null}>>
+     * {@inheritDoc}
      */
     public function calculateForRoute(DungeonRoute $dungeonRoute, bool $useFacade): array
+    {
+        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute);
+
+        if (empty($killZoneNodeIds)) {
+            return [];
+        }
+
+        $segments = $this->computePathSegments($nodes, $edges, $killZoneNodeIds);
+
+        return $this->convertSegmentsToOutput($segments, $dungeonRoute, $useFacade);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function findPathsToKillZones(DungeonRoute $dungeonRoute): array
+    {
+        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute);
+
+        if (empty($killZoneNodeIds)) {
+            return [];
+        }
+
+        $killZoneIds = array_keys($killZoneNodeIds);
+        $nodeIdList  = array_values($killZoneNodeIds);
+        $result      = [];
+
+        // Dungeon start → first kill zone
+        $result[$killZoneIds[0]] = isset($nodes['start'])
+            ? $this->pathFindingService->findShortestPath($nodes, $edges, 'start', $nodeIdList[0])
+            : [];
+
+        // Consecutive kill-zone pairs
+        for ($i = 1; $i < count($nodeIdList); $i++) {
+            $result[$killZoneIds[$i]] = $this->pathFindingService->findShortestPath(
+                $nodes,
+                $edges,
+                $nodeIdList[$i - 1],
+                $nodeIdList[$i],
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Loads all required data from the database and constructs the pathfinding graph.
+     *
+     * @return array{array<string, PathNode>, PathEdge[], array<int, string>}
+     */
+    private function loadAndBuildGraph(DungeonRoute $dungeonRoute): array
     {
         $dungeonRoute->loadMissing(['dungeon', 'mappingVersion']);
 
@@ -93,54 +144,65 @@ class KillZonePathService implements KillZonePathServiceInterface
             $killZoneNodeIds[$killZone->id] = $id;
         }
 
-        if (empty($killZoneNodeIds)) {
-            return [];
-        }
-
-        // --- Same-floor edges (bidirectional, weighted by ingame distance) ---
-        /** @var array<int, PathNode[]> $nodesByFloor */
-        $nodesByFloor = [];
-        foreach ($nodes as $node) {
-            $floorId = $node->latLng->getFloor()?->id;
-            if ($floorId !== null) {
-                $nodesByFloor[$floorId][] = $node;
-            }
-        }
-
-        foreach ($nodesByFloor as $floorNodes) {
-            $count = count($floorNodes);
-            for ($i = 0; $i < $count; $i++) {
-                for ($j = $i + 1; $j < $count; $j++) {
-                    $a       = $floorNodes[$i];
-                    $b       = $floorNodes[$j];
-                    $weight  = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
-                    $edges[] = new PathEdge($a->id, $b->id, $weight);
-                    $edges[] = new PathEdge($b->id, $a->id, $weight);
+        if (!empty($killZoneNodeIds)) {
+            // --- Same-floor edges (bidirectional, weighted by ingame distance) ---
+            /** @var array<int, PathNode[]> $nodesByFloor */
+            $nodesByFloor = [];
+            foreach ($nodes as $node) {
+                $floorId = $node->latLng->getFloor()?->id;
+                if ($floorId !== null) {
+                    $nodesByFloor[$floorId][] = $node;
                 }
             }
-        }
 
-        // --- Cross-floor edges via linked floor-switch marker pairs (weight 0) ---
-        foreach ($allMarkers as $marker) {
-            if ($marker->linked_dungeon_floor_switch_marker_id === null) {
-                continue;
+            foreach ($nodesByFloor as $floorNodes) {
+                $count = count($floorNodes);
+                for ($i = 0; $i < $count; $i++) {
+                    for ($j = $i + 1; $j < $count; $j++) {
+                        $a       = $floorNodes[$i];
+                        $b       = $floorNodes[$j];
+                        $weight  = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
+                        $edges[] = new PathEdge($a->id, $b->id, $weight);
+                        $edges[] = new PathEdge($b->id, $a->id, $weight);
+                    }
+                }
             }
 
-            $linkedMarker = $markersById->get($marker->linked_dungeon_floor_switch_marker_id);
-            if ($linkedMarker === null || $linkedMarker->floor === null) {
-                continue;
-            }
+            // --- Cross-floor edges via linked floor-switch marker pairs (weight 0) ---
+            foreach ($allMarkers as $marker) {
+                if ($marker->linked_dungeon_floor_switch_marker_id === null) {
+                    continue;
+                }
 
-            $fromId  = sprintf('fsm_%d', $marker->id);
-            $toId    = sprintf('fsm_%d', $linkedMarker->id);
-            $edges[] = new PathEdge($fromId, $toId, 0);
+                $linkedMarker = $markersById->get($marker->linked_dungeon_floor_switch_marker_id);
+                if ($linkedMarker === null || $linkedMarker->floor === null) {
+                    continue;
+                }
+
+                $fromId  = sprintf('fsm_%d', $marker->id);
+                $toId    = sprintf('fsm_%d', $linkedMarker->id);
+                $edges[] = new PathEdge($fromId, $toId, 0);
+            }
         }
 
-        // --- Compute segments ---
+        return [$nodes, $edges, $killZoneNodeIds];
+    }
+
+    /**
+     * Computes ordered path segments between consecutive kill zones for frontend rendering.
+     * Empty paths are excluded.
+     *
+     * @param array<string, PathNode> $nodes
+     * @param PathEdge[]              $edges
+     * @param array<int, string>      $killZoneNodeIds
+     *
+     * @return LatLng[][]
+     */
+    private function computePathSegments(array $nodes, array $edges, array $killZoneNodeIds): array
+    {
         $nodeIdList = array_values($killZoneNodeIds);
         $segments   = [];
 
-        // Dungeon start → first kill zone
         if (isset($nodes['start'])) {
             $path = $this->pathFindingService->findShortestPath($nodes, $edges, 'start', $nodeIdList[0]);
             if (!empty($path)) {
@@ -148,7 +210,6 @@ class KillZonePathService implements KillZonePathServiceInterface
             }
         }
 
-        // Consecutive kill-zone pairs
         for ($i = 0; $i < count($nodeIdList) - 1; $i++) {
             $path = $this->pathFindingService->findShortestPath($nodes, $edges, $nodeIdList[$i], $nodeIdList[$i + 1]);
             if (!empty($path)) {
@@ -156,7 +217,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             }
         }
 
-        return $this->convertSegmentsToOutput($segments, $dungeonRoute, $useFacade);
+        return $segments;
     }
 
     /**
