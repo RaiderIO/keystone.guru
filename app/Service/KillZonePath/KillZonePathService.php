@@ -85,7 +85,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             ->get();
 
         $killZones = $dungeonRoute->killZones()
-            ->with(['floor'])
+            ->with(['floor', 'killZoneEnemies'])
             ->orderBy('index')
             ->get();
 
