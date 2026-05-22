@@ -46,6 +46,19 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
     }
 
     /**
+     * @param {string} routeKey Public key of the dungeon route
+     */
+    fetchAndRefresh(routeKey) {
+        $.ajax({
+            type: 'GET',
+            url: `/ajax/${routeKey}/killzone/paths`,
+            success: (response) => {
+                this.refresh(response.killzone_paths ?? null);
+            },
+        });
+    }
+
+    /**
      * @param {Array}  [killZonePaths] Updated path segments from server
      */
     refresh(killZonePaths = null) {
