@@ -35,7 +35,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function calculateRaidEventPullEnemies(
         KillZone $killZone,
-        LatLng   $previousKillLocation,
+        array    $path,
     ): RaidEventPullInterface {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
         $this->bloodLust = $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) &&
@@ -53,7 +53,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         }
 
         // Do not calculate a delay for an empty pull as it's impossible to determine a location for such a pull
-        $this->delay = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($killZone, $previousKillLocation));
+        $this->delay = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($path));
 
         return $this;
     }
@@ -61,28 +61,39 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     /**
      * {@inheritDoc}
      */
-    public function calculateDelay(KillZone $killZone, LatLng $previousKillLocation): float
+    public function calculateDelay(array $path): float
     {
-        // Convert the location of the pack to in-game location, and then determine the delay according to floor x-y
-        $killLocation = $killZone->getKillLocation();
-        // No enemies killed, no location, no pull, no delay
-        if ($killLocation === null || $previousKillLocation->getFloor() === null || $killLocation->getFloor() === null) {
+        $pathCount = count($path);
+        if ($pathCount < 2) {
             return 0;
         }
 
-        // On the same floor it's easy - just calculate the distance between and then subtract any mounted speed
-        if ($previousKillLocation->getFloor()->id === $killLocation->getFloor()->id) {
-            $result = $this->calculateDelayBetweenPoints($previousKillLocation, $killLocation);
-        } else {
-            // Different floors are a bit tricky - we need to find the closest floor switch marker, calculate the distance to that
-            // and then from that floor marker on the other side, calculate the distance to the pull. Add all up and you got the delay you're looking for
-            $result = $this->calculateDelayBetweenPointsOnDifferentFloors($previousKillLocation, $killLocation);
+        // Find the index of the last same-floor segment so ranged compensation is applied exactly once there
+        $lastSameFloorSegIdx = null;
+        for ($i = $pathCount - 2; $i >= 0; $i--) {
+            if ($path[$i]->getFloor()?->id === $path[$i + 1]->getFloor()?->id) {
+                $lastSameFloorSegIdx = $i;
+                break;
+            }
         }
 
-        return $result;
+        $totalDelay = 0.0;
+        for ($i = 0; $i < $pathCount - 1; $i++) {
+            $from = $path[$i];
+            $to   = $path[$i + 1];
+
+            // Cross-floor transitions (floor-switch marker pairs) have 0 travel time
+            if ($from->getFloor()?->id !== $to->getFloor()?->id) {
+                continue;
+            }
+
+            $totalDelay += $this->calculateDelayBetweenPoints($from, $to, $i === $lastSameFloorSegIdx);
+        }
+
+        return $totalDelay;
     }
 
-    public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB): float
+    public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB, bool $applyRangedCompensation = true): float
     {
         if ($latLngA->getFloor()?->id !== $latLngB->getFloor()?->id) {
             throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
@@ -104,7 +115,11 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $pointBIngameCoordinates->getX(),
             $pointAIngameCoordinates->getY(),
             $pointBIngameCoordinates->getY(),
-        ) - $this->options->ranged_pull_compensation_yards;
+        );
+
+        if ($applyRangedCompensation) {
+            $ingameDistanceToPointB -= $this->options->ranged_pull_compensation_yards;
+        }
 
         $delayMounted       = 0;
         $totalMountedFactor = 0;
@@ -124,7 +139,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $ingameDistanceToPointB * (1 - $totalMountedFactor),
         );
 
-        // If we utilized the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
+        // If we used the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
         if ($totalMountedFactor > 0) {
             $delayOnFootWithoutMounting = $this->calculateDelayForDistanceOnFoot(
                 $ingameDistanceToPointB,
@@ -136,34 +151,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             }
         }
 
-        // Calculate the final result
         return $delayMounted + $delayOnFoot + $delayMountCasts;
-    }
-
-    public function calculateDelayBetweenPointsOnDifferentFloors(LatLng $latLngA, LatLng $latLngB): float
-    {
-        return $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB) +
-            $this->calculateDistanceBetweenPointAndClosestFloorSwitchMarker($latLngA, $latLngB);
-    }
-
-    private function calculateDistanceBetweenPointAndClosestFloorSwitchMarker(LatLng $latLngA, LatLng $latLngB): float
-    {
-        $previousKillFloorClosestDungeonFloorSwitchMarker = $latLngA->getFloor()->findClosestFloorSwitchMarker(
-            $this->coordinatesService,
-            $latLngA,
-            $latLngB->getFloor()->id,
-        );
-
-        if ($previousKillFloorClosestDungeonFloorSwitchMarker !== null) {
-            // Now that we know the location of the floor switch marker, we can
-            $result = $this->calculateDelayBetweenPoints($latLngA, $previousKillFloorClosestDungeonFloorSwitchMarker->getLatLng());
-        } else {
-            // @TODO #1621
-            logger()->warning(sprintf('There is no floor switch marker from %d to %d!', $latLngA->getFloor()->id, $latLngB->getFloor()->id));
-            $result = 20;
-        }
-
-        return $result;
     }
 
     /**
@@ -172,14 +160,14 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self
     {
         $this->raidEventPullEnemies->push(
-            (new RaidEventPullEnemy($this->options, $enemy, $enemyIndexInPull)),
+            new RaidEventPullEnemy($this->options, $enemy, $enemyIndexInPull),
         );
 
         return $this;
     }
 
     /**
-     * The mounted factor is a value between 0 and 1 which indicates how much of the way we can mount - where 0 means
+     * The mounted factor is a value between 0 and 1 that indicates how much of the way we can mount - where 0 means
      * that we cannot mount, and 1 means we can mount all the way through. The mountCasts value indicates how many times
      * the user was dismounted and needed to re-cast their mount spell, which takes some time.
      *

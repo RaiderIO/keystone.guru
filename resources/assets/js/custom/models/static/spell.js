@@ -101,4 +101,11 @@ class Spell {
     getDispelType() {
         return lang.get(this.dispel_type);
     }
+
+    /**
+     * @returns {string}
+     */
+    getMechanic() {
+        return lang.get(this.mechanic);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Service\KillZonePath;
 
+use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 
 interface KillZonePathServiceInterface
@@ -17,4 +18,14 @@ interface KillZonePathServiceInterface
      * @return array<array<array{lat: float, lng: float, floor_id: int|null}>>
      */
     public function calculateForRoute(DungeonRoute $dungeonRoute, bool $useFacade): array;
+
+    /**
+     * Returns the shortest path to each kill zone, keyed by kill zone ID.
+     * The first entry is the path from the dungeon start to the first kill zone.
+     * Subsequent entries are paths between consecutive kill zones.
+     * Cross-floor transitions are represented as adjacent waypoints on different floors.
+     *
+     * @return array<int, LatLng[]>
+     */
+    public function findPathsToKillZones(DungeonRoute $dungeonRoute): array;
 }

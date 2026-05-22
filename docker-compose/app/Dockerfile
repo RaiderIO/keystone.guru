@@ -9,7 +9,7 @@ RUN ls -lh /usr/local/cargo/bin
 
 
 RUN cargo --version && rustc --version
-RUN cargo install --git https://github.com/Zireael-N/cli-weakauras-parser.git --locked
+RUN cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --locked
 
 ### ---- Runtime image ----
 FROM php:8.4-fpm

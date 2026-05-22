@@ -66,7 +66,6 @@ For example:
 
 ## Git
 The project is under Git version control.
-
 - Any newly created files should be added to the repository.
 
 ## Finishing up your work
