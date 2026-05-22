@@ -189,7 +189,11 @@ class KillZone extends Model
             $result = $this->floor;
         }
 
-        if ($result === null && $this->killZoneEnemies()->count() > 0) {
+        if ($result === null && (
+            $this->relationLoaded('killZoneEnemies') ?
+                $this->killZoneEnemies->isNotEmpty() :
+                $this->killZoneEnemies()->exists()
+        )) {
             $floorTotals = [];
             foreach ($this->getEnemies($useCache) as $enemy) {
                 if (!isset($floorTotals[$enemy->floor_id])) {
