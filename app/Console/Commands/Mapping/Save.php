@@ -3,8 +3,8 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Models\CombatLog\CombatLogNpcSpellAssignment;
-use App\Models\CombatLog\CombatLogSpellUpdate;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
@@ -262,8 +262,8 @@ class Save extends Command
         // Save all spells
         $this->info('Saving Combatlog data');
 
-        $this->saveDataToJsonFile(CombatLogNpcSpellAssignment::all()->toArray(), $combatlogDir, 'combat_log_npc_spell_assignments.json');
-        $this->saveDataToJsonFile(CombatLogSpellUpdate::all()->toArray(), $combatlogDir, 'combat_log_spell_updates.json');
+        $this->saveDataToJsonFile(CombatLogNpcEvent::all()->toArray(), $combatlogDir, 'combat_log_npc_events.json');
+        $this->saveDataToJsonFile(CombatLogSpellEvent::all()->toArray(), $combatlogDir, 'combat_log_spell_events.json');
         $this->saveDataToJsonFile(ParsedCombatLog::all()->toArray(), $combatlogDir, 'parsed_combat_logs.json');
     }
 

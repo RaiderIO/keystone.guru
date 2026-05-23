@@ -14,8 +14,6 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
-use App\Models\CombatLog\CombatLogNpcSpellAssignment;
-use App\Models\CombatLog\CombatLogSpellUpdate;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
@@ -30,7 +28,7 @@ use Illuminate\Support\Collection;
 
 class SpellDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int, CombatLogEvent> */
+    /** @var Collection<int, Collection<CombatLogEvent>> */
     private Collection $spellIdsForDungeon;
 
     /** @var Collection<int> */
@@ -188,7 +186,7 @@ class SpellDataExtractor implements DataExtractorInterface
             $this->spellIdsForDungeon->put($currentDungeon->dungeon->id, collect());
         }
 
-        /** @var Collection $spellIdsForDungeon */
+        /** @var Collection<int, CombatLogEvent> $spellIdsForDungeon */
         $spellIdsForDungeon = $this->spellIdsForDungeon->get($currentDungeon->dungeon->id);
 
         if (!$spellIdsForDungeon->has($prefix->getSpellId())) {
@@ -269,13 +267,6 @@ class SpellDataExtractor implements DataExtractorInterface
                     ]);
                 }
 
-                CombatLogNpcSpellAssignment::create([
-                    'npc_id'          => $npc->id,
-                    'spell_id'        => $prefix->getSpellId(),
-                    'combat_log_path' => $this->currentCombatLogFilePath,
-                    'raw_event'       => $parsedEvent->getRawEvent(),
-                ]);
-
                 // Refresh the relation
                 $npc->unsetRelation('npcSpells')->load('npcSpells');
 
@@ -310,15 +301,6 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         if ($spell->isDirty() && $spell->save()) {
-            $boolToInt = fn($value) => is_bool($value) ? (int)$value : $value;
-            CombatLogSpellUpdate::create([
-                'spell_id'        => $spell->id,
-                'before'          => json_encode(array_map($boolToInt, $before)),
-                'after'           => json_encode(array_map($boolToInt, $spell->getAttributes())),
-                'combat_log_path' => $this->currentCombatLogFilePath,
-                'raw_event'       => $combatLogEvent->getRawEvent(),
-            ]);
-
             $result->updatedSpell();
 
             return true;
@@ -366,15 +348,6 @@ class SpellDataExtractor implements DataExtractorInterface
             $createdSpell = SpellModel::create($spellAttributes);
             // Load the relationship in advance
             $createdSpell->setRelation('spellDungeons', collect());
-
-            // Ensure we know this is when the spell was created
-            CombatLogSpellUpdate::create([
-                'spell_id'        => $createdSpell->id,
-                'before'          => null,
-                'after'           => json_encode($createdSpell->getAttributes()),
-                'combat_log_path' => $this->currentCombatLogFilePath,
-                'raw_event'       => $combatLogEvent->getRawEvent(),
-            ]);
 
             // With the created spell, update it according to the combat log event that created it (aura assignments etc)
             $this->updateSpell($result, $createdSpell, $combatLogEvent);

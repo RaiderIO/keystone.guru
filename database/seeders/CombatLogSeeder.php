@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\CombatLog\CombatLogNpcSpellAssignment;
-use App\Models\CombatLog\CombatLogSpellUpdate;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\ParsedCombatLog;
 use FilesystemIterator;
 use Illuminate\Database\Seeder;
@@ -21,9 +21,9 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
         $rootDir         = database_path('seeders/combatlogs/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
-        $combatLogNpcSpellAssignmentAttributes = [];
-        $combatLogSpellUpdateAttributes        = [];
-        $parsedCombatLogAttributes             = [];
+        $combatLogNpcEventAttributes   = [];
+        $combatLogSpellEventAttributes = [];
+        $parsedCombatLogAttributes     = [];
 
         // Iterate over all saved releases
         foreach ($rootDirIterator as $combatLogSeederDataFilePath) {
@@ -47,10 +47,10 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
                 $modelData['updated_at'] = Carbon::createFromFormat(ParsedCombatLog::SERIALIZED_DATE_TIME_FORMAT, $modelData['updated_at'])->toDateTimeString();
             }
 
-            if (str_contains($combatLogSeederDataFilePath, 'combat_log_npc_spell_assignments')) {
-                $combatLogNpcSpellAssignmentAttributes = $modelsData;
-            } elseif (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_updates')) {
-                $combatLogSpellUpdateAttributes = $modelsData;
+            if (str_contains($combatLogSeederDataFilePath, 'combat_log_npc_events')) {
+                $combatLogNpcEventAttributes = $modelsData;
+            } elseif (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_events')) {
+                $combatLogSpellEventAttributes = $modelsData;
             } elseif (str_contains($combatLogSeederDataFilePath, 'parsed_combat_logs')) {
                 $parsedCombatLogAttributes = $modelsData;
             } else {
@@ -59,12 +59,12 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
         }
 
         // Insert the data into the database
-        collect($combatLogNpcSpellAssignmentAttributes)->chunk(1000)->each(function (Collection $chunk) {
-            CombatLogNpcSpellAssignment::from(DatabaseSeeder::getTempTableName(CombatLogNpcSpellAssignment::class))
+        collect($combatLogNpcEventAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            CombatLogNpcEvent::from(DatabaseSeeder::getTempTableName(CombatLogNpcEvent::class))
                 ->insert($chunk->toArray());
         });
-        collect($combatLogSpellUpdateAttributes)->chunk(1000)->each(function (Collection $chunk) {
-            CombatLogSpellUpdate::from(DatabaseSeeder::getTempTableName(CombatLogSpellUpdate::class))
+        collect($combatLogSpellEventAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            CombatLogSpellEvent::from(DatabaseSeeder::getTempTableName(CombatLogSpellEvent::class))
                 ->insert($chunk->toArray());
         });
         collect($parsedCombatLogAttributes)->chunk(1000)->each(function (Collection $chunk) {
@@ -76,8 +76,8 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [
-            CombatLogNpcSpellAssignment::class,
-            CombatLogSpellUpdate::class,
+            CombatLogNpcEvent::class,
+            CombatLogSpellEvent::class,
             ParsedCombatLog::class,
         ];
     }
