@@ -26,11 +26,55 @@ runs:
     - name: Install system clients (mysql + redis CLI)
       run: |
         sudo apt-get update
-        sudo apt-get install -y default-mysql-client redis-tools
+        sudo apt-get install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
+      shell: bash
+
+    - name: Build PHP Lua extension
+      run: |
+        sudo ln -sfn /usr/include/lua5.3 /usr/include/lua
+        sudo cp /usr/lib/*-linux-gnu/liblua5.3.a /usr/lib/liblua.a 2>/dev/null || true
+        sudo cp /usr/lib/*-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so 2>/dev/null || true
+        sudo ln -f /usr/include/lua5.3/lua.h /usr/include/lauxlib.h || true
+        sudo ln -f /usr/include/lua5.3/lua.h /usr/include/lua.h || true
+        sudo ln -f /usr/include/lua5.3/lua.h /usr/include/luaconf.h || true
+        git clone https://github.com/Wotuu/php-lua.git /tmp/php-lua
+        cd /tmp/php-lua
+        phpize
+        ./configure
+        make -j$(nproc)
+        sudo make install
+        echo "extension=lua.so" | sudo tee "$(php -r 'echo PHP_CONFIG_FILE_SCAN_DIR;')/99-lua.ini"
+        php -m | grep -i lua
+        unzip "${GITHUB_WORKSPACE}/storage/lua/LuaBitOp-1.0.3.zip" -d /tmp
+        cd /tmp/LuaBitOp-1.0.3
+        make -j$(nproc)
+        sudo mkdir -p /usr/lib/lua/5.3/
+        sudo cp bit.so /usr/lib/lua/5.3/
+      shell: bash
+
+    - name: Restore cli_weakauras_parser cache
+      id: cache-cli-weakauras-parser
+      uses: actions/cache@v4
+      with:
+        path: ~/.cargo/bin/cli_weakauras_parser
+        key: cli-weakauras-parser-rust-1.91.1
+
+    - name: Build cli_weakauras_parser
+      if: steps.cache-cli-weakauras-parser.outputs.cache-hit != 'true'
+      run: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain 1.91.1 -y
+        source "$HOME/.cargo/env"
+        cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --locked
+      shell: bash
+
+    - name: Install cli_weakauras_parser system-wide
+      run: |
+        sudo cp ~/.cargo/bin/cli_weakauras_parser /usr/bin/cli_weakauras_parser
+        sudo chmod 0755 /usr/bin/cli_weakauras_parser
       shell: bash
 
     - name: Install PHP dependencies
-      run: composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-lua
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader
       shell: bash
 
     - name: Compute git version and save to file

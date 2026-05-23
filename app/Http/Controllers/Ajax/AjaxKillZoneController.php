@@ -43,16 +43,25 @@ class AjaxKillZoneController extends Controller
         return $killZonePathService->calculateForRoute($dungeonRoute, $useFacade);
     }
 
+    public function paths(
+        KillZonePathServiceInterface $killZonePathService,
+        DungeonRoute                 $dungeonRoute,
+    ): array {
+        Gate::authorize('view', $dungeonRoute);
+
+        return [
+            'killzone_paths' => $this->getKillZonePaths($killZonePathService, $dungeonRoute),
+        ];
+    }
+
     /**
      * @throws \Exception
      */
     private function saveKillZone(
-        KillZonePathServiceInterface $killZonePathService,
-        CoordinatesServiceInterface  $coordinatesService,
-        DungeonRoute                 $dungeonroute,
-        array                        $data,
-        bool                         $recalculateEnemyForces = true,
-        bool                         $recalculateKillZonePaths = true,
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonroute,
+        array                       $data,
+        bool                        $recalculateEnemyForces = true,
     ): KillZone {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
@@ -191,7 +200,7 @@ class AjaxKillZoneController extends Controller
                 // Something's updated; broadcast it
                 /** @var User $user */
                 $user = Auth::user();
-                broadcast(new KillZoneChangedEvent($killZonePathService, $coordinatesService, $dungeonroute, $user, $killZone, $recalculateKillZonePaths));
+                broadcast(new KillZoneChangedEvent($coordinatesService, $dungeonroute, $user, $killZone));
             }
         } else {
             throw new Exception('Unable to save kill zone!');
@@ -227,7 +236,7 @@ class AjaxKillZoneController extends Controller
 
             $data['id'] = $killZone?->id ?? null;
 
-            $result = $this->saveKillZone($killZonePathService, $coordinatesService, $dungeonRoute, $data, $killZone !== null);
+            $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
             $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
@@ -261,11 +270,9 @@ class AjaxKillZoneController extends Controller
                 // Do not save the enemy forces - we save it one time down below
                 $killZones->push(
                     $this->saveKillZone(
-                        $killZonePathService,
                         $coordinatesService,
                         $dungeonRoute,
                         $kzDataWithoutEnemies,
-                        false,
                         false,
                     ),
                 );
@@ -346,7 +353,7 @@ class AjaxKillZoneController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::user();
-                    broadcast(new KillZoneDeletedEvent($killZonePathService, $dungeonRoute, $user, $killZone));
+                    broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
                 }
 
                 $dungeonRoute->load('killZones');
@@ -400,7 +407,7 @@ class AjaxKillZoneController extends Controller
                     foreach ($killZones as $killZone) {
                         $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
 
-                        broadcast(new KillZoneDeletedEvent($killZonePathService, $dungeonRoute, $user, $killZone, false));
+                        broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
                     }
 
                     foreach ($pridefulEnemies as $pridefulEnemy) {

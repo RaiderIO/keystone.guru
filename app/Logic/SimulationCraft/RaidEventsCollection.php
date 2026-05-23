@@ -2,10 +2,10 @@
 
 namespace App\Logic\SimulationCraft;
 
-use App\Models\KillZone\KillZone;
 use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Illuminate\Support\Collection;
 
 class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollectionInterface
@@ -15,6 +15,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
 
     public function __construct(
         private readonly CoordinatesServiceInterface      $coordinatesService,
+        private readonly KillZonePathServiceInterface     $killZonePathService,
         private readonly SimulationCraftRaidEventsOptions $options,
     ) {
     }
@@ -26,10 +27,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
     {
         $this->raidEventPulls = collect();
 
-        /** @var KillZone|null $previousKillZone */
-        $previousKillZone = null;
-        $dungeonStartIcon = $this->options->dungeonRoute->dungeon->getDungeonStart();
-        $dungeonStartIcon->load('floor');
+        $pathsToKillZones = $this->killZonePathService->findPathsToKillZones($this->options->dungeonRoute);
 
         foreach ($this->options->dungeonRoute->killZones as $killZone) {
             // Skip empty pulls
@@ -37,14 +35,10 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
                 continue;
             }
 
-            $previousKillLocation = $previousKillZone === null ? $dungeonStartIcon->getLatLng() : $previousKillZone->getKillLocation();
-
             $this->raidEventPulls->push(
                 new RaidEventPull($this->coordinatesService, $this->options)
-                    ->calculateRaidEventPullEnemies($killZone, $previousKillLocation),
+                    ->calculateRaidEventPullEnemies($killZone, $pathsToKillZones[$killZone->id] ?? []),
             );
-
-            $previousKillZone = $killZone;
         }
 
         return $this;

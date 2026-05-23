@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Support\Carbon;
 use Tests\TestCases\AjaxPublicTestCase;
 
 abstract class DungeonRouteTestBase extends AjaxPublicTestCase
@@ -45,6 +46,7 @@ abstract class DungeonRouteTestBase extends AjaxPublicTestCase
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
+            'expires_at'         => Carbon::now()->addHours(2),
         ]);
     }
 }

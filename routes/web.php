@@ -594,6 +594,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::put('/brushline/{brushline}', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.update');
             Route::delete('/brushline/{brushline}', new AjaxBrushlineController()->delete(...))->name('ajax.dungeonroute.brushline.delete');
 
+            Route::get('/killzone/paths', new AjaxKillZoneController()->paths(...));
             Route::put('/killzone/mass', new AjaxKillZoneController()->storeAll(...));
             Route::post('/killzone', new AjaxKillZoneController()->store(...));
             Route::put('/killzone/{killZone}', new AjaxKillZoneController()->store(...));

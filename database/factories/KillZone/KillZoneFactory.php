@@ -2,6 +2,9 @@
 
 namespace Database\Factories\KillZone;
 
+use App\Models\Enemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Service\Coordinates\CoordinatesService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +40,16 @@ class KillZoneFactory extends Factory
             'created_at'       => Carbon::now(),
             'updated_at'       => Carbon::now(),
         ];
+    }
+
+    public function withEnemies(Enemy ...$enemies): self
+    {
+        return $this->afterCreating(static function (KillZone $killZone) use ($enemies): void {
+            foreach ($enemies as $enemy) {
+                KillZoneEnemy::factory()
+                    ->forEnemy($enemy)
+                    ->create(['kill_zone_id' => $killZone->id]);
+            }
+        });
     }
 }

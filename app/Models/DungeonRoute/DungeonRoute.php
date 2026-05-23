@@ -60,6 +60,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -511,6 +512,27 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $killZones = $this->killZones()
             ->with(['floor'])
             ->get();
+
+        if ($killZones->isNotEmpty()) {
+            $killZoneIds = $killZones->pluck('id');
+
+            $enemyIdsByKillZone = Enemy::select('enemies.id', 'kill_zone_enemies.kill_zone_id')
+                ->join('kill_zone_enemies', static function (JoinClause $clause) {
+                    $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
+                        ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
+                })
+                ->where('enemies.mapping_version_id', $this->mapping_version_id)
+                ->whereIn('kill_zone_enemies.kill_zone_id', $killZoneIds)
+                ->disableCache()
+                ->get()
+                ->groupBy('kill_zone_id');
+
+            foreach ($killZones as $killZone) {
+                $killZone->setEnemiesAttributeCache(
+                    ($enemyIdsByKillZone[$killZone->id] ?? collect())->pluck('id'),
+                );
+            }
+        }
 
         if ($useFacade) {
             foreach ($killZones as $killZone) {
