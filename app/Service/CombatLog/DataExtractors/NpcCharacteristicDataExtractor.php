@@ -9,6 +9,9 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Characteristic;
+use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell as SpellModel;
@@ -16,6 +19,7 @@ use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class NpcCharacteristicDataExtractor implements DataExtractorInterface
@@ -26,17 +30,35 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
     /** @var Collection<string> */
     private Collection $addedCharacteristics;
 
+    /**
+     * All (npc_id, characteristic_id) pairs observed this session — batch-upserted in afterExtract.
+     *
+     * @var Collection<int, array{npc_id: int, characteristic_id: int}>
+     */
+    private Collection $pendingObservations;
+
+    /**
+     * Newly discovered pairs with no existing NpcCharacteristic — written in afterExtract.
+     *
+     * @var Collection<int, array{npc_id: int, characteristic_id: int}>
+     */
+    private Collection $pendingNewNpcCharacteristics;
+
     /** @var Collection<int, SpellModel> */
     private readonly Collection $spellsWithCharacteristics;
 
     private readonly NpcCharacteristicDataExtractorLoggingInterface $log;
 
+    private ?string $currentCombatLogFilePath = null;
+
     public function __construct(
         private readonly SpellRepositoryInterface $spellRepository,
     ) {
-        $this->npcCache                  = collect();
-        $this->addedCharacteristics      = collect();
-        $this->spellsWithCharacteristics = $this->spellRepository->getAllWithCharacteristic();
+        $this->npcCache                     = collect();
+        $this->addedCharacteristics         = collect();
+        $this->pendingObservations          = collect();
+        $this->pendingNewNpcCharacteristics = collect();
+        $this->spellsWithCharacteristics    = $this->spellRepository->getAllWithCharacteristic();
 
         $log = App::make(NpcCharacteristicDataExtractorLoggingInterface::class);
         /** @var NpcCharacteristicDataExtractorLoggingInterface $log */
@@ -46,6 +68,7 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
 
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
+        $this->currentCombatLogFilePath = $combatLogFilePath;
     }
 
     public function extractData(
@@ -107,32 +130,71 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $alreadyHasCharacteristic = $npc->npcCharacteristics
-            ->contains('characteristic_id', $characteristicId);
+        $this->addedCharacteristics->push($dedupKey);
 
-        if ($alreadyHasCharacteristic) {
-            $this->addedCharacteristics->push($dedupKey);
-            $this->log->extractDataCharacteristicAlreadyAssigned($npcId, $characteristicKey);
-
-            return;
-        }
-
-        NpcCharacteristic::create([
+        // Always queue an observation — this keeps the rolling window alive even for already-known characteristics
+        $this->pendingObservations->push([
             'npc_id'            => $npcId,
             'characteristic_id' => $characteristicId,
         ]);
 
-        $npc->unsetRelation('npcCharacteristics')->load('npcCharacteristics');
-        $this->addedCharacteristics->push($dedupKey);
+        $alreadyHasCharacteristic = $npc->npcCharacteristics->contains('characteristic_id', $characteristicId);
 
-        $result->createdNpcCharacteristic();
+        if ($alreadyHasCharacteristic) {
+            $this->log->extractDataCharacteristicAlreadyAssigned($npcId, $characteristicKey);
+        } else {
+            $this->pendingNewNpcCharacteristics->push([
+                'npc_id'            => $npcId,
+                'characteristic_id' => $characteristicId,
+            ]);
 
-        $this->log->extractDataAssignedCharacteristicToNpc($npcId, $characteristicKey, $parsedEvent->getRawEvent());
+            $this->log->extractDataAssignedCharacteristicToNpc($npcId, $characteristicKey, $parsedEvent->getRawEvent());
+        }
     }
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-        $this->npcCache             = collect();
-        $this->addedCharacteristics = collect();
+        if ($this->pendingObservations->isNotEmpty()) {
+            $now  = Carbon::now()->toDateTimeString();
+            $rows = $this->pendingObservations->map(fn(array $obs) => [
+                'npc_id'            => $obs['npc_id'],
+                'characteristic_id' => $obs['characteristic_id'],
+                'observed_on'       => Carbon::today()->toDateString(),
+                'combat_log_path'   => $this->currentCombatLogFilePath ?? '',
+                'created_at'        => $now,
+                'updated_at'        => $now,
+            ])->all();
+
+            CombatLogNpcCharacteristicObservation::upsert(
+                $rows,
+                ['npc_id', 'characteristic_id', 'observed_on'],
+                ['combat_log_path', 'updated_at'],
+            );
+        }
+
+        foreach ($this->pendingNewNpcCharacteristics as $pending) {
+            $npcCharacteristic = NpcCharacteristic::firstOrCreate([
+                'npc_id'            => $pending['npc_id'],
+                'characteristic_id' => $pending['characteristic_id'],
+            ]);
+
+            if ($npcCharacteristic->wasRecentlyCreated) {
+                CombatLogNpcEvent::create([
+                    'npc_id'          => $pending['npc_id'],
+                    'event_type'      => CombatLogNpcEventType::CharacteristicAdded,
+                    'model_class'     => Characteristic::class,
+                    'model_id'        => $pending['characteristic_id'],
+                    'combat_log_path' => $this->currentCombatLogFilePath,
+                ]);
+
+                $result->createdNpcCharacteristic();
+            }
+        }
+
+        $this->npcCache                     = collect();
+        $this->addedCharacteristics         = collect();
+        $this->pendingObservations          = collect();
+        $this->pendingNewNpcCharacteristics = collect();
+        $this->currentCombatLogFilePath     = null;
     }
 }

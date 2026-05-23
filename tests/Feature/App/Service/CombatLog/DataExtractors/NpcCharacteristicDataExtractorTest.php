@@ -6,6 +6,9 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\Characteristic;
+use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
@@ -23,10 +26,11 @@ use Tests\TestCases\PublicTestCase;
 #[Group('NpcCharacteristicDataExtractor')]
 final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 {
-    private const int    NPC_ID    = 999501;
-    private const int    SPELL_ID  = 118; // Polymorph → CHARACTERISTIC_POLYMORPH
-    private const string NPC_GUID  = 'Creature-0-2085-2290-22744-999501-00012D4051';
-    private const string RAW_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-999501-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
+    private const int    NPC_ID          = 9995011;
+    private const int    SPELL_ID        = 118; // Polymorph → CHARACTERISTIC_POLYMORPH
+    private const string NPC_GUID        = 'Creature-0-2085-2290-22744-9995011-00012D4051';
+    private const string RAW_EVENT       = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
+    private const string COMBAT_LOG_PATH = '/tmp/test.log';
 
     private NpcCharacteristicDataExtractor $extractor;
 
@@ -59,6 +63,8 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
             NpcCharacteristic::where('npc_id', self::NPC_ID)->delete();
             Npc::where('id', self::NPC_ID)->delete();
             Spell::where('id', self::SPELL_ID)->update(['characteristic_id' => null]);
+            CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->delete();
+            CombatLogNpcEvent::where('npc_id', self::NPC_ID)->delete();
         } finally {
             parent::tearDown();
         }
@@ -85,6 +91,20 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         return (new CombatLogEntry(self::RAW_EVENT))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
     }
 
+    /**
+     * Runs the full extract lifecycle: beforeExtract → extractData (one or more events) → afterExtract.
+     *
+     * @param BaseEvent[] $events
+     */
+    private function runExtract(array $events, string $combatLogPath = self::COMBAT_LOG_PATH): void
+    {
+        $this->extractor->beforeExtract($this->result, $combatLogPath);
+        foreach ($events as $event) {
+            $this->extractor->extractData($this->result, $this->currentDungeon, $event);
+        }
+        $this->extractor->afterExtract($this->result, $combatLogPath);
+    }
+
     #[Test]
     public function extractData_givenMappedSpellAuraAppliedToCreature_createsNpcCharacteristic(): void
     {
@@ -92,7 +112,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         $this->createTestNpc();
 
         // Act
-        $this->extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent());
+        $this->runExtract([$this->parsedEvent()]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['createdNpcCharacteristics']);
@@ -110,8 +130,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         $parsedEvent = $this->parsedEvent();
 
         // Act
-        $this->extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
-        $this->extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
+        $this->runExtract([$parsedEvent, $parsedEvent]);
 
         // Assert
         $this->assertSame(1, $this->result->toArray()['createdNpcCharacteristics']);
@@ -134,7 +153,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         ]);
 
         // Act
-        $this->extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent());
+        $this->runExtract([$this->parsedEvent()]);
 
         // Assert
         $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
@@ -151,12 +170,11 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
     {
         // Arrange
         $this->createTestNpc();
-        // Spell 9999999 is not in SPELL_CHARACTERISTIC_MAP
-        $rawEvent    = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-999501-00012D4051,"TestNpc",0xa48,0x0,9999999,"Unknown",0x1,DEBUFF';
+        $rawEvent    = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,9999999,"Unknown",0x1,DEBUFF';
         $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
 
         // Act
-        $this->extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
+        $this->runExtract([$parsedEvent]);
 
         // Assert
         $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
@@ -166,10 +184,10 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
     #[Test]
     public function extractData_givenMappedSpellButNpcNotInDb_doesNotCreateNpcCharacteristic(): void
     {
-        // Arrange — NPC 999501 does not exist in DB
+        // Arrange — NPC 9995011 does not exist in DB
 
         // Act
-        $this->extractor->extractData($this->result, $this->currentDungeon, $this->parsedEvent());
+        $this->runExtract([$this->parsedEvent()]);
 
         // Assert
         $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
@@ -186,9 +204,82 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
 
         // Act
-        $this->extractor->extractData($this->result, $this->currentDungeon, $parsedEvent);
+        $this->runExtract([$parsedEvent]);
 
         // Assert
         $this->assertSame(0, $this->result->toArray()['createdNpcCharacteristics']);
+    }
+
+    #[Test]
+    public function extractData_givenNewCharacteristic_writesObservationAndCreatesEvent(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+
+        // Act
+        $this->runExtract([$this->parsedEvent()]);
+
+        // Assert — observation row written to combatlog DB
+        $this->assertDatabaseHas('combat_log_npc_characteristic_observations', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+            'combat_log_path'   => self::COMBAT_LOG_PATH,
+        ], 'combatlog');
+
+        // Assert — event row written for the new discovery
+        $this->assertDatabaseHas('combat_log_npc_events', [
+            'npc_id'      => self::NPC_ID,
+            'event_type'  => CombatLogNpcEventType::CharacteristicAdded->value,
+            'model_class' => Characteristic::class,
+            'model_id'    => $characteristicId,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenAlreadyKnownCharacteristic_writesObservationButNoEvent(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        NpcCharacteristic::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+
+        // Act
+        $this->runExtract([$this->parsedEvent()]);
+
+        // Assert — observation still written (keeps rolling window alive)
+        $this->assertDatabaseHas('combat_log_npc_characteristic_observations', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ], 'combatlog');
+
+        // Assert — no event because characteristic already existed
+        $this->assertDatabaseMissing('combat_log_npc_events', [
+            'npc_id'     => self::NPC_ID,
+            'event_type' => CombatLogNpcEventType::CharacteristicAdded->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function afterExtract_givenSameCharacteristicSeenMultipleTimes_writesOneObservationRow(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        $parsedEvent      = $this->parsedEvent();
+
+        // Act — same event seen 5 times in one log
+        $this->runExtract([$parsedEvent, $parsedEvent, $parsedEvent, $parsedEvent, $parsedEvent]);
+
+        // Assert — only one observation row for today
+        $this->assertSame(
+            1,
+            CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)
+                ->where('characteristic_id', $characteristicId)
+                ->count(),
+        );
     }
 }
