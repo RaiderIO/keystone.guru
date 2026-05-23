@@ -109,7 +109,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
             'npc_id'            => self::NPC_ID,
             'characteristic_id' => $characteristicId,
         ]);
-        $this->createNpcCharacteristicObservation(now()->subDays(DetectStaleCombatLogDataCommand::OBSERVATION_WINDOW_DAYS + 1));
+        $this->createNpcCharacteristicObservation(now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1));
 
         // Act
         $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
@@ -160,7 +160,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         $this->createTestSpell(['aura' => true]);
         $this->createSpellPropertyObservation(
             SpellProperty::Aura,
-            now()->subDays(DetectStaleCombatLogDataCommand::OBSERVATION_WINDOW_DAYS + 1),
+            now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1),
         );
 
         // Act
@@ -196,7 +196,10 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     #[Test]
     public function handle_prunesObservationsOlderThanFourDays(): void
     {
-        // Arrange — create observations at different ages
+        // Arrange — pin the observation window to 3 so the prune threshold is predictable regardless of .env
+        config(['keystoneguru.combat_log_staleness.observation_window_days' => 3]);
+
+        // create observations at different ages
         $this->createTestNpc();
         NpcCharacteristic::create([
             'npc_id'            => self::NPC_ID,

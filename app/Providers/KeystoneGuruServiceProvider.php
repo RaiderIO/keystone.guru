@@ -49,6 +49,8 @@ use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Compendium\NpcCompendiumService;
+use App\Service\Compendium\NpcCompendiumServiceInterface;
 use App\Service\Cookies\CookieService;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
@@ -208,6 +210,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
+        $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
 
         // Depends on CacheService

@@ -12,6 +12,7 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
+use App\Service\Compendium\NpcCompendiumServiceInterface;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\View\View;
 
@@ -24,9 +25,9 @@ class NpcCompendiumController extends Controller
         ]);
     }
 
-    public function show(Npc $npc): View
+    public function show(Npc $npc, NpcCompendiumServiceInterface $npcCompendiumService): View
     {
-        $npc->load(['classification', 'dungeons.expansion']);
+        $npc->load(['classification', 'dungeons.expansion', 'npcSpells']);
 
         $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
 
@@ -37,6 +38,7 @@ class NpcCompendiumController extends Controller
             'npc'                => $npc,
             'currentNpcHealth'   => $currentNpcHealth,
             'allCharacteristics' => Characteristic::orderBy('id')->get(),
+            'eventFeed'          => $npcCompendiumService->buildEventFeed($npc),
         ]);
     }
 
