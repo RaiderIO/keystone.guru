@@ -488,4 +488,9 @@ return [
         'user'     => env('COMBAT_LOG_ROUTE_REGENERATION_USER'),
         'password' => env('COMBAT_LOG_ROUTE_REGENERATION_PASSWORD'),
     ],
+
+    'combat_log_staleness' => [
+        /** The number of days without a new observation before an NPC characteristic or spell property is considered stale and removed. */
+        'observation_window_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_WINDOW_DAYS', 3),
+    ],
 ];
