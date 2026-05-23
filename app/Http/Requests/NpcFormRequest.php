@@ -35,7 +35,6 @@ class NpcFormRequest extends FormRequest
                 'required',
             ],
             'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
-            'health_percentage'         => 'int|nullable',
             'level'                     => 'int|nullable',
             'dangerous'                 => 'bool',
             'truesight'                 => 'bool',

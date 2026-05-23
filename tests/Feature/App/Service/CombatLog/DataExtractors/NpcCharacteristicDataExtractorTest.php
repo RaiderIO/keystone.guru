@@ -79,7 +79,6 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
             'npc_class_id'      => 1,
             'display_id'        => null,
             'name'              => 'Test NPC',
-            'health_percentage' => null,
             'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
             'dangerous'         => 0,
             'truesight'         => 0,

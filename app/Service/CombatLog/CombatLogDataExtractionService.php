@@ -22,7 +22,6 @@ use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -45,7 +44,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,
         private readonly SeasonServiceInterface                         $seasonService,
-        private readonly WowheadServiceInterface                        $wowheadService,
         private readonly FloorRepositoryInterface                       $floorRepository,
         private readonly SpellRepositoryInterface                       $spellRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
@@ -54,7 +52,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             new CreateMissingNpcDataExtractor(),
             new NpcUpdateDataExtractor(),
             new FloorDataExtractor($this->floorRepository),
-            new SpellDataExtractor($this->wowheadService),
+            new SpellDataExtractor(),
             new NpcCharacteristicDataExtractor($this->spellRepository),
         ]);
     }
