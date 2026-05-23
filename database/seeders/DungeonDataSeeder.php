@@ -102,6 +102,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->flushModels();
         $this->importDungeonRoutes();
         $this->flushModels();
+        $this->preserveColumns();
 
         Stopwatch::dumpAll();
     }
@@ -229,6 +230,36 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         // Init the place where we store all models so we can insert them all at once
         foreach ($this->relationMapping as $relationMapping) {
             $this->importedModels->put($relationMapping->getClass(), collect());
+        }
+    }
+
+    /**
+     * For each mapping that declares preserved columns, copy those column values from the live table
+     * into the temp table. This runs after all models have been flushed into temp tables but before
+     * DatabaseSeeder swaps them in, so that combat-log-derived data survives a re-seed.
+     * New rows (not yet in the live table) keep the defaults from the JSON file.
+     */
+    private function preserveColumns(): void
+    {
+        foreach ($this->relationMapping as $mapping) {
+            $preservedColumns = $mapping->getPreservedColumns();
+            if (empty($preservedColumns)) {
+                continue;
+            }
+
+            $instance   = new ($mapping->getClass())();
+            $liveTable  = $instance->getTable();
+            $tempTable  = DatabaseSeeder::getTempTableName($mapping->getClass());
+            $setClauses = collect($preservedColumns)
+                ->map(fn(string $col) => sprintf('t.%s = orig.%s', $col, $col))
+                ->implode(', ');
+
+            DB::statement(sprintf(
+                'UPDATE %s t INNER JOIN %s orig ON orig.id = t.id SET %s',
+                $tempTable,
+                $liveTable,
+                $setClauses,
+            ));
         }
     }
 

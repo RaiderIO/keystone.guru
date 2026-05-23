@@ -480,6 +480,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 // Spells
                 Route::get('spells/missingdata', new AdminToolsSpellsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
+                Route::get('spells/savetoseeder', new AdminToolsSpellsController()->spellsSaveToSeeder(...))->name('admin.tools.spells.savetoseeder');
 
                 // NPCs
                 Route::get('npcs/missingdisplayid', new AdminToolsNpcController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');

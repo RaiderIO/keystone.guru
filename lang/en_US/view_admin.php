@@ -510,7 +510,8 @@ return [
                     'name'    => 'Name',
                     'actions' => 'Actions',
                 ],
-                'wowhead' => 'View on Wowhead',
+                'wowhead'        => 'View on Wowhead',
+                'save_to_seeder' => 'Download spells.json',
             ],
         ],
         'npcs' => [

@@ -131,4 +131,15 @@ abstract class RelationMapping
     {
         return $this->persistent;
     }
+
+    /**
+     * Columns whose values should be copied from the live table into the temp table before the swap,
+     * so that combat-log-derived data survives a re-seed.
+     *
+     * @return string[]
+     */
+    public function getPreservedColumns(): array
+    {
+        return [];
+    }
 }
