@@ -39,9 +39,9 @@ return [
                 'title' => 'Recent Activity',
                 'empty' => 'No activity recorded yet.',
                 'event' => [
-                    'characteristic_added'   => 'Became :name',
-                    'characteristic_removed' => 'No longer :name',
-                    'spell_assigned'         => 'First observed casting :name',
+                    'characteristic_added'   => ':name',
+                    'characteristic_removed' => ':name',
+                    'spell_assigned'         => ':name',
                     'spell_created'          => ':spell added to database',
                     'property_changed'       => ':spell is now :property',
                     'property_removed'       => ':spell is no longer :property',

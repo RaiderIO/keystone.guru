@@ -40,6 +40,10 @@ use App\Models\Spell\Spell;
                     <tbody>
                     @foreach($npc->spells as $spell)
                         <?php /** @var Spell $spell */ ?>
+                        @if($spell->hidden_on_map)
+                            @continue
+                        @endif
+
                         <tr>
                             <td>
                                 <a href="{{ $spell->wowhead_url }}" data-wh-icon-size="small">

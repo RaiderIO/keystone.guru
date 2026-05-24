@@ -5,6 +5,7 @@ namespace App\Service\Compendium;
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 class NpcCompendiumService implements NpcCompendiumServiceInterface
@@ -24,6 +25,11 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $group->each(fn(CombatLogNpcEvent $event) => $event->setRelation('model', $models->get($event->model_id)));
         });
 
+        // Reject events that are related to hidden spells, as they are not relevant for the compendium feed
+        $npcEvents = $npcEvents->reject(
+            fn(CombatLogNpcEvent $event) => $event->model instanceof Spell && $event->model->hidden_on_map,
+        );
+
         $spellIds = $npc->npcSpells->pluck('spell_id');
 
         $spellEvents = $spellIds->isNotEmpty()
@@ -35,7 +41,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
                 ->get()
             : collect();
 
-        return $npcEvents->concat($spellEvents)
+        return $npcEvents->merge($spellEvents)
             ->sortByDesc('created_at')
             ->take(50)
             ->values();

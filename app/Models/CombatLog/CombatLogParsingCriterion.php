@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $combat_log_version
- * @property string $model_class
- * @property int    $model_id
- * @property Carbon $date
- * @property int    $count
- * @property int    $threshold
+ * @property int          $id
+ * @property int          $combat_log_version
+ * @property class-string $model_class
+ * @property int          $model_id
+ * @property Carbon       $date
+ * @property int          $count
+ * @property int          $threshold
  */
 class CombatLogParsingCriterion extends Model
 {

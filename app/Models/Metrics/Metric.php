@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $model_id
- * @property string $model_class
- * @property int    $category
- * @property string $tag
- * @property int    $value
+ * @property int          $id
+ * @property int          $model_id
+ * @property class-string $model_class
+ * @property int          $category
+ * @property string       $tag
+ * @property int          $value
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at

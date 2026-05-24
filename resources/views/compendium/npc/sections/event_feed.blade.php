@@ -86,7 +86,7 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                         </span>
                         <div>
                             <span>{{ $eventDescription($event) }}</span>
-                            <small class="text-muted ml-1">— {{ $event->created_at->diffForHumans() }}</small>
+                            <small class="text-muted ml-1">- {{ $event->created_at->diffForHumans() }}</small>
                         </div>
                     </li>
                 @endforeach
