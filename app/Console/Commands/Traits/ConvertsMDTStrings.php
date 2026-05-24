@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Traits;
 
-use App\Traits\SavesStringToTempDisk;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -11,11 +10,6 @@ use Symfony\Component\Process\Process;
  */
 trait ConvertsMDTStrings
 {
-    use SavesStringToTempDisk;
-
-    /** @var string The location to save files - this currently uses the memfs, so it's superfast */
-    private static string $TMP_FILE_SUB_DIR = 'mdt';
-
     private static string $SUDO = '/usr/bin/sudo';
 
     private static string $CLI_PARSER_ENCODE_CMD = '/usr/bin/cli_weakauras_parser encode %s';
@@ -39,21 +33,18 @@ trait ConvertsMDTStrings
      */
     private function transform(bool $encode, string $string): ?string
     {
-        $result = null;
-
-        // Save a temp file so that the parser can handle it
+        $result   = null;
         $fileName = null;
 
         try {
-            $fileName = $this->saveFile(self::$TMP_FILE_SUB_DIR, $string);
+            $tmpFile = tempnam(sys_get_temp_dir(), 'ksg_mdt_');
 
-            if ($fileName !== null) {
+            if ($tmpFile !== false) {
+                $fileName = $tmpFile;
+                file_put_contents($fileName, $string);
+
                 $cmd = sprintf($encode ? self::$CLI_PARSER_ENCODE_CMD : self::$CLI_PARSER_DECODE_CMD, $fileName);
-                // Performing sudo on local environment causes issues - but we're already root then
-                // ^ okay what issues then genius? It works fine locally
-//                if (config('app.type') !== 'local') {
                 $cmd = sprintf('%s %s', self::$SUDO, $cmd);
-//                }
 
                 $process = new Process(explode(' ', $cmd));
                 $process->run();
