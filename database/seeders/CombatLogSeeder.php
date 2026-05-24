@@ -5,11 +5,10 @@ namespace Database\Seeders;
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\ParsedCombatLog;
-use FilesystemIterator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Str;
+use Illuminate\Support\Str;
 
 class CombatLogSeeder extends Seeder implements TableSeederInterface
 {
@@ -18,61 +17,35 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $rootDir         = database_path('seeders/combatlogs/');
-        $rootDirIterator = new FilesystemIterator($rootDir);
+        $rootDir = database_path('seeders/combatlogs/');
 
-        $combatLogNpcEventAttributes   = [];
-        $combatLogSpellEventAttributes = [];
-        $parsedCombatLogAttributes     = [];
+        foreach (self::getAffectedModelClasses() as $modelClass) {
+            $fileName   = Str::snake(class_basename($modelClass)) . 's';
+            $modelsData = json_decode(file_get_contents(sprintf('%s%s.json', $rootDir, $fileName)), true);
 
-        // Iterate over all saved releases
-        foreach ($rootDirIterator as $combatLogSeederDataFilePath) {
-            // Only JSON files
-            if (!Str::endsWith($combatLogSeederDataFilePath, '.json')) {
-                continue;
-            }
-
-            $modelJson = file_get_contents($combatLogSeederDataFilePath);
-            // Convert to models
-            $modelsData = json_decode($modelJson, true);
-
-            foreach ($modelsData as $modelData) {
-                // If the models don't contain timestamps, don't try to set them
+            foreach ($modelsData as &$modelData) {
                 if (!isset($modelData['created_at'])) {
                     continue;
                 }
 
                 // Using ParsedCombatLog, but it doesn't matter for other models - it comes from a trait
                 $modelData['created_at'] = Carbon::createFromFormat(ParsedCombatLog::SERIALIZED_DATE_TIME_FORMAT, $modelData['created_at'])->toDateTimeString();
-                $modelData['updated_at'] = Carbon::createFromFormat(ParsedCombatLog::SERIALIZED_DATE_TIME_FORMAT, $modelData['updated_at'])->toDateTimeString();
+                if (isset($modelData['updated_at'])) {
+                    $modelData['updated_at'] = Carbon::createFromFormat(ParsedCombatLog::SERIALIZED_DATE_TIME_FORMAT, $modelData['updated_at'])->toDateTimeString();
+                }
             }
+            unset($modelData);
 
-            if (str_contains($combatLogSeederDataFilePath, 'combat_log_npc_events')) {
-                $combatLogNpcEventAttributes = $modelsData;
-            } elseif (str_contains($combatLogSeederDataFilePath, 'combat_log_spell_events')) {
-                $combatLogSpellEventAttributes = $modelsData;
-            } elseif (str_contains($combatLogSeederDataFilePath, 'parsed_combat_logs')) {
-                $parsedCombatLogAttributes = $modelsData;
-            } else {
-                throw new \Exception(sprintf('Unknown .json file found in combatlogs directory: %s', $combatLogSeederDataFilePath));
-            }
+            collect($modelsData)->chunk(1000)->each(function (Collection $chunk) use ($modelClass) {
+                $modelClass::from(DatabaseSeeder::getTempTableName($modelClass))
+                    ->insert($chunk->toArray());
+            });
         }
-
-        // Insert the data into the database
-        collect($combatLogNpcEventAttributes)->chunk(1000)->each(function (Collection $chunk) {
-            CombatLogNpcEvent::from(DatabaseSeeder::getTempTableName(CombatLogNpcEvent::class))
-                ->insert($chunk->toArray());
-        });
-        collect($combatLogSpellEventAttributes)->chunk(1000)->each(function (Collection $chunk) {
-            CombatLogSpellEvent::from(DatabaseSeeder::getTempTableName(CombatLogSpellEvent::class))
-                ->insert($chunk->toArray());
-        });
-        collect($parsedCombatLogAttributes)->chunk(1000)->each(function (Collection $chunk) {
-            ParsedCombatLog::from(DatabaseSeeder::getTempTableName(ParsedCombatLog::class))
-                ->insert($chunk->toArray());
-        });
     }
 
+    /**
+     * @return class-string[]
+     */
     public static function getAffectedModelClasses(): array
     {
         return [

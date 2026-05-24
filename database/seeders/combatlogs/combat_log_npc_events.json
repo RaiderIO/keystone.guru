@@ -1,1 +1,2531 @@
-[]
+[
+    {
+        "id": 1,
+        "npc_id": 252610,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:55+00:00"
+    },
+    {
+        "id": 2,
+        "npc_id": 252561,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 3,
+        "npc_id": 252567,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 4,
+        "npc_id": 252558,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 5,
+        "npc_id": 252559,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 6,
+        "npc_id": 252563,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 7,
+        "npc_id": 252565,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 8,
+        "npc_id": 252551,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 9,
+        "npc_id": 252602,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 10,
+        "npc_id": 252603,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 11,
+        "npc_id": 252555,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 12,
+        "npc_id": 252566,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 13,
+        "npc_id": 252564,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T21:02:56+00:00"
+    },
+    {
+        "id": 14,
+        "npc_id": 252567,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 15,
+        "npc_id": 252559,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 16,
+        "npc_id": 252558,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 17,
+        "npc_id": 252558,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 18,
+        "npc_id": 252602,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 19,
+        "npc_id": 252561,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 20,
+        "npc_id": 252567,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron_trimmed.zip",
+        "created_at": "2026-05-23T22:00:57+00:00"
+    },
+    {
+        "id": 21,
+        "npc_id": 231861,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 474407,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:03+00:00"
+    },
+    {
+        "id": 22,
+        "npc_id": 231861,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 474414,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:03+00:00"
+    },
+    {
+        "id": 23,
+        "npc_id": 234148,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1254246,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 24,
+        "npc_id": 234124,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 25,
+        "npc_id": 232369,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 26,
+        "npc_id": 232369,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 27,
+        "npc_id": 234089,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 28,
+        "npc_id": 234124,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 29,
+        "npc_id": 234486,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 30,
+        "npc_id": 232369,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 31,
+        "npc_id": 234089,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 32,
+        "npc_id": 234124,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 33,
+        "npc_id": 234486,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 34,
+        "npc_id": 234089,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 35,
+        "npc_id": 234486,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 36,
+        "npc_id": 234124,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 37,
+        "npc_id": 251861,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 38,
+        "npc_id": 259387,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 39,
+        "npc_id": 259387,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 40,
+        "npc_id": 234486,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 41,
+        "npc_id": 259387,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 42,
+        "npc_id": 232106,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 43,
+        "npc_id": 232106,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 44,
+        "npc_id": 232106,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 45,
+        "npc_id": 232106,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 46,
+        "npc_id": 231861,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 47,
+        "npc_id": 240973,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 48,
+        "npc_id": 231863,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 49,
+        "npc_id": 234069,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 50,
+        "npc_id": 234065,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 51,
+        "npc_id": 234064,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 52,
+        "npc_id": 234065,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 53,
+        "npc_id": 255376,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 54,
+        "npc_id": 255376,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 55,
+        "npc_id": 249086,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 56,
+        "npc_id": 249086,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 57,
+        "npc_id": 234069,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 58,
+        "npc_id": 234065,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 59,
+        "npc_id": 234069,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 60,
+        "npc_id": 234065,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 61,
+        "npc_id": 249086,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 62,
+        "npc_id": 234064,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 63,
+        "npc_id": 234064,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 64,
+        "npc_id": 231864,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 65,
+        "npc_id": 257447,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 66,
+        "npc_id": 257447,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 67,
+        "npc_id": 249086,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 68,
+        "npc_id": 255376,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 69,
+        "npc_id": 255376,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 70,
+        "npc_id": 231865,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:09:04+00:00"
+    },
+    {
+        "id": 71,
+        "npc_id": 252567,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 72,
+        "npc_id": 252565,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 73,
+        "npc_id": 252603,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 74,
+        "npc_id": 252557,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 75,
+        "npc_id": 252555,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 76,
+        "npc_id": 252602,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 77,
+        "npc_id": 252551,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 78,
+        "npc_id": 252610,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 79,
+        "npc_id": 252566,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 80,
+        "npc_id": 252563,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:09+00:00"
+    },
+    {
+        "id": 81,
+        "npc_id": 252566,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 82,
+        "npc_id": 252557,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 83,
+        "npc_id": 252566,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 84,
+        "npc_id": 252621,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 85,
+        "npc_id": 254691,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 86,
+        "npc_id": 254684,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 87,
+        "npc_id": 254691,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:09:10+00:00"
+    },
+    {
+        "id": 88,
+        "npc_id": 196947,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 376760,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 89,
+        "npc_id": 191610,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 376449,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 90,
+        "npc_id": 197398,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 91,
+        "npc_id": 197406,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 92,
+        "npc_id": 197398,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 93,
+        "npc_id": 197406,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 94,
+        "npc_id": 197406,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 95,
+        "npc_id": 196642,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 96,
+        "npc_id": 196548,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 97,
+        "npc_id": 196548,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 98,
+        "npc_id": 196642,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 99,
+        "npc_id": 192329,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 100,
+        "npc_id": 192333,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 101,
+        "npc_id": 196671,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 102,
+        "npc_id": 196694,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 103,
+        "npc_id": 196045,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 104,
+        "npc_id": 196694,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 105,
+        "npc_id": 196045,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 106,
+        "npc_id": 196045,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 107,
+        "npc_id": 196694,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 108,
+        "npc_id": 196577,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 109,
+        "npc_id": 196044,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 110,
+        "npc_id": 196044,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 111,
+        "npc_id": 196577,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 112,
+        "npc_id": 196577,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 113,
+        "npc_id": 196044,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 114,
+        "npc_id": 196045,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 115,
+        "npc_id": 196202,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 116,
+        "npc_id": 196202,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 117,
+        "npc_id": 196202,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 118,
+        "npc_id": 190609,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "created_at": "2026-05-23T22:09:17+00:00"
+    },
+    {
+        "id": 119,
+        "npc_id": 122322,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 120,
+        "npc_id": 122403,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 121,
+        "npc_id": 122322,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 122,
+        "npc_id": 122403,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 123,
+        "npc_id": 122405,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 124,
+        "npc_id": 122716,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 125,
+        "npc_id": 122716,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 126,
+        "npc_id": 122716,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 127,
+        "npc_id": 255320,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 128,
+        "npc_id": 255320,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 129,
+        "npc_id": 122413,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 130,
+        "npc_id": 122412,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 131,
+        "npc_id": 122404,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 132,
+        "npc_id": 122413,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 133,
+        "npc_id": 122405,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 134,
+        "npc_id": 122404,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:09:26+00:00"
+    },
+    {
+        "id": 135,
+        "npc_id": 253302,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1262411,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 136,
+        "npc_id": 247570,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1260643,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 137,
+        "npc_id": 253683,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1259789,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 138,
+        "npc_id": 251674,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1255629,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 139,
+        "npc_id": 248684,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 140,
+        "npc_id": 242964,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 141,
+        "npc_id": 242964,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 142,
+        "npc_id": 249002,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 143,
+        "npc_id": 249020,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 144,
+        "npc_id": 248685,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 145,
+        "npc_id": 254740,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 146,
+        "npc_id": 248693,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 147,
+        "npc_id": 248685,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 148,
+        "npc_id": 249036,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 149,
+        "npc_id": 249036,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 150,
+        "npc_id": 248692,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 151,
+        "npc_id": 248690,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 152,
+        "npc_id": 248692,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 153,
+        "npc_id": 251674,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 154,
+        "npc_id": 251674,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:09:35+00:00"
+    },
+    {
+        "id": 155,
+        "npc_id": 76142,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 154149,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 156,
+        "npc_id": 76142,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1252877,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 157,
+        "npc_id": 76266,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1253541,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 158,
+        "npc_id": 250992,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 159,
+        "npc_id": 76149,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 160,
+        "npc_id": 251880,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 161,
+        "npc_id": 76143,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 162,
+        "npc_id": 76266,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "created_at": "2026-05-23T22:09:43+00:00"
+    },
+    {
+        "id": 163,
+        "npc_id": 232071,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 164,
+        "npc_id": 232056,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 165,
+        "npc_id": 232056,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 166,
+        "npc_id": 238099,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 167,
+        "npc_id": 232175,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 168,
+        "npc_id": 232116,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 169,
+        "npc_id": 232119,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 170,
+        "npc_id": 232147,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 171,
+        "npc_id": 231631,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:09:52+00:00"
+    },
+    {
+        "id": 172,
+        "npc_id": 252852,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1257078,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 173,
+        "npc_id": 241539,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1257836,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 174,
+        "npc_id": 248373,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 175,
+        "npc_id": 248769,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 176,
+        "npc_id": 248769,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 177,
+        "npc_id": 251031,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 178,
+        "npc_id": 254928,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 179,
+        "npc_id": 254926,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 180,
+        "npc_id": 241642,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 181,
+        "npc_id": 254926,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 182,
+        "npc_id": 254932,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 183,
+        "npc_id": 241546,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:10:02+00:00"
+    },
+    {
+        "id": 184,
+        "npc_id": 196044,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 185,
+        "npc_id": 196694,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 186,
+        "npc_id": 196577,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 187,
+        "npc_id": 196045,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 188,
+        "npc_id": 196671,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 189,
+        "npc_id": 197398,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 190,
+        "npc_id": 197406,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 191,
+        "npc_id": 197219,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 192,
+        "npc_id": 192680,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 193,
+        "npc_id": 192329,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 194,
+        "npc_id": 192333,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 195,
+        "npc_id": 196202,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 196,
+        "npc_id": 196200,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 197,
+        "npc_id": 197219,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 198,
+        "npc_id": 192680,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 199,
+        "npc_id": 192329,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 200,
+        "npc_id": 191736,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 201,
+        "npc_id": 196045,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 202,
+        "npc_id": 196200,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 203,
+        "npc_id": 196202,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:06+00:00"
+    },
+    {
+        "id": 204,
+        "npc_id": 196044,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:11+00:00"
+    },
+    {
+        "id": 205,
+        "npc_id": 252555,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:10:16+00:00"
+    },
+    {
+        "id": 206,
+        "npc_id": 252603,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:10:16+00:00"
+    },
+    {
+        "id": 207,
+        "npc_id": 252603,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:10:16+00:00"
+    },
+    {
+        "id": 208,
+        "npc_id": 252564,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:10:16+00:00"
+    },
+    {
+        "id": 209,
+        "npc_id": 254691,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:10:16+00:00"
+    },
+    {
+        "id": 210,
+        "npc_id": 196694,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_8_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:24+00:00"
+    },
+    {
+        "id": 211,
+        "npc_id": 196044,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_8_algethar-academy.zip",
+        "created_at": "2026-05-23T22:10:24+00:00"
+    },
+    {
+        "id": 212,
+        "npc_id": 122322,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 213,
+        "npc_id": 122571,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 214,
+        "npc_id": 122413,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 215,
+        "npc_id": 255320,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 216,
+        "npc_id": 122413,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 217,
+        "npc_id": 122405,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 218,
+        "npc_id": 252756,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:10:32+00:00"
+    },
+    {
+        "id": 219,
+        "npc_id": 234067,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1270762,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:10:48+00:00"
+    },
+    {
+        "id": 220,
+        "npc_id": 234089,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:10:48+00:00"
+    },
+    {
+        "id": 221,
+        "npc_id": 234068,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:10:48+00:00"
+    },
+    {
+        "id": 222,
+        "npc_id": 257447,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:10:48+00:00"
+    },
+    {
+        "id": 223,
+        "npc_id": 249086,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:10:48+00:00"
+    },
+    {
+        "id": 224,
+        "npc_id": 234062,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_9_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:11:00+00:00"
+    },
+    {
+        "id": 225,
+        "npc_id": 239636,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_150554_9_magisters-terrace.zip",
+        "created_at": "2026-05-23T22:11:00+00:00"
+    },
+    {
+        "id": 226,
+        "npc_id": 122405,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_10_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:11:09+00:00"
+    },
+    {
+        "id": 227,
+        "npc_id": 122313,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_10_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:11:09+00:00"
+    },
+    {
+        "id": 228,
+        "npc_id": 122716,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_10_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:11:09+00:00"
+    },
+    {
+        "id": 229,
+        "npc_id": 122404,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_10_seat-of-the-triumvirate.zip",
+        "created_at": "2026-05-23T22:11:09+00:00"
+    },
+    {
+        "id": 230,
+        "npc_id": 252565,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_11_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:11:19+00:00"
+    },
+    {
+        "id": 231,
+        "npc_id": 252635,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_11_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:11:19+00:00"
+    },
+    {
+        "id": 232,
+        "npc_id": 252566,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_11_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:11:19+00:00"
+    },
+    {
+        "id": 233,
+        "npc_id": 252567,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_11_pit-of-saron.zip",
+        "created_at": "2026-05-23T22:11:19+00:00"
+    },
+    {
+        "id": 234,
+        "npc_id": 249002,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 235,
+        "npc_id": 248685,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 236,
+        "npc_id": 253302,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 237,
+        "npc_id": 248693,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 238,
+        "npc_id": 249020,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 239,
+        "npc_id": 254740,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 240,
+        "npc_id": 248684,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 241,
+        "npc_id": 248686,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 242,
+        "npc_id": 249022,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 243,
+        "npc_id": 253683,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 244,
+        "npc_id": 248692,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 245,
+        "npc_id": 249025,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 246,
+        "npc_id": 248690,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 247,
+        "npc_id": 253458,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 248,
+        "npc_id": 249024,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 249,
+        "npc_id": 249030,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 250,
+        "npc_id": 249036,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1278156,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 251,
+        "npc_id": 248693,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 252,
+        "npc_id": 242964,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 253,
+        "npc_id": 249020,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 254,
+        "npc_id": 248684,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 255,
+        "npc_id": 249036,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 256,
+        "npc_id": 248692,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 257,
+        "npc_id": 249024,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 258,
+        "npc_id": 248690,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 259,
+        "npc_id": 249025,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "created_at": "2026-05-23T22:11:24+00:00"
+    },
+    {
+        "id": 260,
+        "npc_id": 232070,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 261,
+        "npc_id": 232070,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 262,
+        "npc_id": 236894,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 263,
+        "npc_id": 231606,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 264,
+        "npc_id": 232070,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 265,
+        "npc_id": 232171,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 266,
+        "npc_id": 232171,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 267,
+        "npc_id": 232176,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 268,
+        "npc_id": 232173,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 269,
+        "npc_id": 236153,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 270,
+        "npc_id": 232147,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 271,
+        "npc_id": 232146,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 272,
+        "npc_id": 232283,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "created_at": "2026-05-23T22:11:31+00:00"
+    },
+    {
+        "id": 273,
+        "npc_id": 251031,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1282724,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:39+00:00"
+    },
+    {
+        "id": 274,
+        "npc_id": 248708,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:39+00:00"
+    },
+    {
+        "id": 275,
+        "npc_id": 251024,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:39+00:00"
+    },
+    {
+        "id": 276,
+        "npc_id": 254926,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:39+00:00"
+    },
+    {
+        "id": 277,
+        "npc_id": 248708,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:39+00:00"
+    },
+    {
+        "id": 278,
+        "npc_id": 252852,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1257091,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:41+00:00"
+    },
+    {
+        "id": 279,
+        "npc_id": 252852,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1284664,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:41+00:00"
+    },
+    {
+        "id": 280,
+        "npc_id": 252852,
+        "event_type": "spell_assigned",
+        "model_class": "App\\Models\\Spell\\Spell",
+        "model_id": 1265334,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:41+00:00"
+    },
+    {
+        "id": 281,
+        "npc_id": 241647,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
+        "created_at": "2026-05-23T22:11:41+00:00"
+    }
+]
