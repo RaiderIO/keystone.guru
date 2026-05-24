@@ -5,6 +5,7 @@ namespace App\Service\CombatLog;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaServiceInterface
 {
@@ -34,11 +35,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
         $today = Carbon::now()->toDateString();
 
         foreach ($criteria as $criterion) {
-            CombatLogParsingCriterion::query()
-                ->where('combat_log_version', $combatLogVersion)
-                ->where('model_class', $criterion->getModelClass())
-                ->where('model_id', $criterion->getModelId())
-                ->where('date', $today)
+            $this->findOrCreate($combatLogVersion, $criterion->getModelClass(), $criterion->getModelId(), $today)
                 ->increment('count');
         }
     }
@@ -48,6 +45,16 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
         CombatLogParsingCriterion::query()
             ->where('date', Carbon::now()->toDateString())
             ->update(['count' => 0]);
+    }
+
+    public function getBelowThresholdCriteria(int $combatLogVersion, string $modelClass): Collection
+    {
+        return CombatLogParsingCriterion::query()
+            ->where('combat_log_version', $combatLogVersion)
+            ->where('model_class', $modelClass)
+            ->where('date', Carbon::now()->toDateString())
+            ->whereColumn('count', '<', 'threshold')
+            ->get();
     }
 
     private function findOrCreate(

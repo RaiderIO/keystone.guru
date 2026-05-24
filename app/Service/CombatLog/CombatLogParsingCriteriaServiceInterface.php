@@ -2,7 +2,9 @@
 
 namespace App\Service\CombatLog;
 
+use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
+use Illuminate\Support\Collection;
 
 interface CombatLogParsingCriteriaServiceInterface
 {
@@ -29,4 +31,11 @@ interface CombatLogParsingCriteriaServiceInterface
      * Resets all criterion counts for today (UTC date) to zero.
      */
     public function resetAllForToday(): void;
+
+    /**
+     * Returns all criteria rows for today where count < threshold for the given model class.
+     *
+     * @return Collection<int, CombatLogParsingCriterion>
+     */
+    public function getBelowThresholdCriteria(int $combatLogVersion, string $modelClass): Collection;
 }
