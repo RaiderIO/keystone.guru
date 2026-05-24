@@ -13,7 +13,11 @@ use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDungeon;
+use App\Service\Season\SeasonServiceInterface;
+use App\Service\Season\SeasonServiceStub;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,6 +32,8 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     protected function tearDown(): void
     {
         try {
+            NpcDungeon::where('npc_id', self::NPC_ID)->delete();
+            SpellDungeon::where('spell_id', self::SPELL_ID)->delete();
             NpcCharacteristic::where('npc_id', self::NPC_ID)->delete();
             Npc::where('id', self::NPC_ID)->delete();
             CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->delete();
@@ -99,12 +105,37 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         ]);
     }
 
+    private function getCurrentSeasonDungeonId(): int
+    {
+        return app(SeasonServiceInterface::class)
+            ->getCurrentSeason()
+            ->seasonDungeons()
+            ->value('dungeon_id');
+    }
+
+    private function linkNpcToCurrentSeason(): void
+    {
+        NpcDungeon::create([
+            'npc_id'     => self::NPC_ID,
+            'dungeon_id' => $this->getCurrentSeasonDungeonId(),
+        ]);
+    }
+
+    private function linkSpellToCurrentSeason(): void
+    {
+        SpellDungeon::create([
+            'spell_id'   => self::SPELL_ID,
+            'dungeon_id' => $this->getCurrentSeasonDungeonId(),
+        ]);
+    }
+
     #[Test]
     public function handle_givenStaleNpcCharacteristic_removesNpcCharacteristicAndCreatesRemovedEvent(): void
     {
         // Arrange
         $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
         $this->createTestNpc();
+        $this->linkNpcToCurrentSeason();
         NpcCharacteristic::create([
             'npc_id'            => self::NPC_ID,
             'characteristic_id' => $characteristicId,
@@ -133,6 +164,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         // Arrange
         $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
         $this->createTestNpc();
+        $this->linkNpcToCurrentSeason();
         NpcCharacteristic::create([
             'npc_id'            => self::NPC_ID,
             'characteristic_id' => $characteristicId,
@@ -154,10 +186,38 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenStaleNpcCharacteristicNotInCurrentSeason_keepsNpcCharacteristic(): void
+    {
+        // Arrange
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        $this->createTestNpc();
+        // Deliberately do NOT link NPC to any current-season dungeon
+        NpcCharacteristic::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        $this->createNpcCharacteristicObservation(now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1));
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert — characteristic must be preserved because the NPC is not in the current season
+        $this->assertDatabaseHas('npc_characteristics', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        $this->assertDatabaseMissing('combat_log_npc_events', [
+            'npc_id'     => self::NPC_ID,
+            'event_type' => CombatLogNpcEventType::CharacteristicRemoved->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
     public function handle_givenStaleSpellProperty_clearsPropertyAndCreatesRemovedEvent(): void
     {
         // Arrange
         $this->createTestSpell(['aura' => true]);
+        $this->linkSpellToCurrentSeason();
         $this->createSpellPropertyObservation(
             SpellProperty::Aura,
             now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1),
@@ -180,6 +240,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     {
         // Arrange
         $this->createTestSpell(['aura' => true]);
+        $this->linkSpellToCurrentSeason();
         $this->createSpellPropertyObservation(SpellProperty::Aura, now());
 
         // Act
@@ -194,6 +255,57 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenStaleSpellPropertyNotInCurrentSeason_keepsSpellProperty(): void
+    {
+        // Arrange
+        $this->createTestSpell(['aura' => true]);
+        // Deliberately do NOT link Spell to any current-season dungeon
+        $this->createSpellPropertyObservation(
+            SpellProperty::Aura,
+            now()->subDays(config('keystoneguru.combat_log_staleness.observation_window_days') + 1),
+        );
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert — property must be preserved because the spell is not in the current season
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'aura' => true]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenNoCurrentSeason_skipsStaleDetectionButPrunesObservations(): void
+    {
+        // Arrange
+        config(['keystoneguru.combat_log_staleness.observation_window_days' => 3]);
+        $this->app->instance(SeasonServiceInterface::class, new SeasonServiceStub());
+
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+        $this->createTestNpc();
+        NpcCharacteristic::create([
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        // Stale observation (will be pruned) and a fresh one (will be kept)
+        $this->createNpcCharacteristicObservation(now()->subDays(5));
+        $this->createNpcCharacteristicObservation(now()->subDays(3));
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert — characteristic kept (no season → skip stale detection)
+        $this->assertDatabaseHas('npc_characteristics', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        // Assert — old observation pruned, recent one kept
+        $this->assertSame(1, CombatLogNpcCharacteristicObservation::where('npc_id', self::NPC_ID)->count());
+    }
+
+    #[Test]
     public function handle_prunesObservationsOlderThanFourDays(): void
     {
         // Arrange — pin the observation window to 3 so the prune threshold is predictable regardless of .env
@@ -201,6 +313,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
 
         // create observations at different ages
         $this->createTestNpc();
+        $this->linkNpcToCurrentSeason();
         NpcCharacteristic::create([
             'npc_id'            => self::NPC_ID,
             'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH],
@@ -217,6 +330,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
         ]);
 
         $this->createTestSpell(['aura' => true]);
+        $this->linkSpellToCurrentSeason();
         // 3 days old → should be kept
         $this->createSpellPropertyObservation(SpellProperty::Aura, now()->subDays(3));
         // 5 days old → should be pruned
