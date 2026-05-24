@@ -33,4 +33,11 @@ class ParsedCombatLog extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function casts(): array
+    {
+        return [
+            'run_id' => 'integer',
+        ];
+    }
 }
