@@ -158,7 +158,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
-        if (app()->runningUnitTests()) {
+        if (app()->runningUnitTests() || app()->environment('local')) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);

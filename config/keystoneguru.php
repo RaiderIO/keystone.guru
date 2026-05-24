@@ -469,7 +469,13 @@ return [
     ],
 
     'raider_io' => [
-        'team_id'      => 2136,
+        'team_id'            => 2136,
+        'combat_log_polling' => [
+            'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 1),
+            'mythic_level_min'         => (int)env('COMBAT_LOG_POLLING_MYTHIC_LEVEL_MIN', 10),
+            'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
+            'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
+        ],
         'weekly_route' => [
             'url'  => 'https://raider.io/weekly-routes',
             'tags' => [
