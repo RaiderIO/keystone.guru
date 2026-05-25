@@ -2,11 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CombatLog\CombatLogEventEventType;
-use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Season;
-use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;

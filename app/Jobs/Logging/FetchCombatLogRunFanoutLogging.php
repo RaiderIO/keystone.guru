@@ -21,7 +21,7 @@ class FetchCombatLogRunFanoutLogging extends StructuredLogging implements FetchC
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function handleIteratingFiles(int $runId, string $s3Bucket, string $s3Path, int $fileCount): void
+    public function handleDispatchingFanout(int $runId, string $s3Bucket, string $s3Path): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

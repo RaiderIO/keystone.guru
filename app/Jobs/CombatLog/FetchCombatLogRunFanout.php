@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Fetches where to find combat log data from a given run, and then either directly processes the
@@ -54,17 +53,13 @@ class FetchCombatLogRunFanout implements ShouldQueue
                     $download->diskName,
                 );
             } else {
-                $files = Storage::disk($download->diskName)->files($download->s3Path);
-                $log->handleIteratingFiles($this->runId, $download->s3Bucket, $download->s3Path, count($files));
+                $log->handleDispatchingFanout($this->runId, $download->s3Bucket, $download->s3Path);
 
-                foreach ($files as $filePath) {
-                    ProcessCombatLogPart::dispatch(
-                        $download->s3Bucket,
-                        $filePath,
-                        $download->combatLogVersion,
-                        $download->diskName,
-                    );
-                }
+                ProcessCombatLogFanout::dispatch(
+                    $download->s3Bucket,
+                    $download->s3Path,
+                    $download->combatLogVersion,
+                );
             }
         } finally {
             $log->handleEnd($this->runId);
