@@ -165,15 +165,15 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
         $downloadUrl = config('keystoneguru.raider_io.combat_log_polling.download_url');
 
-        if (empty($downloadUrl)) {
-            $this->log->getCombatLogForRunNotConfigured();
-
-            return null;
-        }
-
-        $url = sprintf('%s/%d', rtrim($downloadUrl, '/'), $runId);
-
         try {
+            if (empty($downloadUrl)) {
+                $this->log->getCombatLogForRunNotConfigured();
+
+                return null;
+            }
+
+            $url = sprintf('%s/%d', rtrim($downloadUrl, '/'), $runId);
+
             $response = $this->curlGet($url);
             $json     = json_decode($response, true);
 

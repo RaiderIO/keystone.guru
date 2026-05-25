@@ -37,11 +37,6 @@ return [
             'throw'                   => true,
         ],
 
-        'local_combat_logs' => [
-            'driver' => 'local',
-            'root'   => base_path(),
-        ],
-
         's3_combat_logs' => [
             'driver'                  => 's3',
             'key'                     => env('AWS_S3_ACCESS_KEY_ID'),

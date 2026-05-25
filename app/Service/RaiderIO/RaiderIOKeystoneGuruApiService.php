@@ -47,13 +47,14 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
     public function searchAdvancedRuns(SearchAdvancedRunsFilter $filter): SearchAdvancedRunsResponse
     {
-        $zipFiles = glob(base_path('tbc/*.zip'));
+        $zipFiles = glob(base_path('tmp_combatlogs/*.zip'));
 
         if ($zipFiles === false) {
             return new SearchAdvancedRunsResponse([], 0);
         }
 
         $dungeonZoneId   = $filter->dungeon?->zone_id ?? self::FAKE_DUNGEON_ZONE_ID;
+        $challengeModeId = $filter->dungeon?->challenge_mode_id ?? self::FAKE_CHALLENGE_MODE_ID;
         $specBlizzardIds = $filter->specs->pluck('specialization_id')->map('intval')->values()->all();
         $memberSpecIds   = !empty($specBlizzardIds) ? $specBlizzardIds : self::FAKE_SPEC_IDS;
 
@@ -61,7 +62,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
         foreach ($zipFiles as $index => $filePath) {
             $runs[] = new SearchAdvancedRun(
                 id:              $index + 1,
-                challengeModeId: self::FAKE_CHALLENGE_MODE_ID,
+                challengeModeId: $challengeModeId,
                 dungeonZoneId:   $dungeonZoneId,
                 memberSpecIds:   $memberSpecIds,
             );
@@ -72,23 +73,22 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
     public function getCombatLogForRun(int $runId): ?CombatLogDownloadResponse
     {
-        $zipFiles = glob(base_path('tbc/*.zip'));
+        $zipFiles = glob(base_path('tmp_combatlogs/*.zip'));
 
         if ($zipFiles === false) {
             return null;
         }
 
-        $index   = $runId - 1;
-        $absPath = $zipFiles[$index] ?? null;
+        $absPath = $zipFiles[array_rand($zipFiles)] ?? null;
 
         if ($absPath === null) {
             return null;
         }
 
         return new CombatLogDownloadResponse(
-            diskName:         'local_combat_logs',
-            s3Bucket:         'local',
-            s3Path:           sprintf('tbc/%s', basename($absPath)),
+            diskName:         's3_combat_logs',
+            s3Bucket:         config('filesystems.disks.s3_combat_logs.bucket'),
+            s3Path:           basename($absPath),
             combatLogVersion: max(CombatLogVersion::RETAIL_ALL),
             isFile:           true,
         );

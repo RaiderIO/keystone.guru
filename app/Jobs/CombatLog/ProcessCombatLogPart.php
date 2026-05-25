@@ -35,7 +35,7 @@ class ProcessCombatLogPart implements ShouldQueue
     ): void {
         $log->handleStart($this->s3Bucket, $this->s3FilePath, $this->combatLogVersion);
 
-        $tempPath = sprintf('%s/%s_%s', sys_get_temp_dir(), uniqid('combat_log_'), basename($this->s3FilePath));
+        $tempPath = sprintf('%s/%s', sys_get_temp_dir(), basename($this->s3FilePath));
         $resource = null;
         $result   = false;
 
@@ -57,6 +57,11 @@ class ProcessCombatLogPart implements ShouldQueue
             }
             if (file_exists($tempPath)) {
                 unlink($tempPath);
+            }
+            // Clean up the extracted combat log too
+            $txtFilePath = str_replace('zip', 'txt', $tempPath);
+            if (file_exists($txtFilePath)) {
+                unlink($txtFilePath);
             }
             $log->handleEnd($result);
         }
