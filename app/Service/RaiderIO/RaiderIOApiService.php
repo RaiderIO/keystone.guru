@@ -97,32 +97,37 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
     public function searchAdvancedRuns(SearchAdvancedRunsFilter $filter): SearchAdvancedRunsResponse
     {
-        $params = [
-            'type'                => 'mythic_plus_runs',
-            'hasAutoRoute[0][eq]' => 1,
-            'season[0][eq]'       => $filter->season,
-            'mythicLevel[0][gte]' => $filter->mythicLevelMin,
-            'numChests[0][eq]'    => 1,
-            'numChests[1][eq]'    => 2,
-            'numChests[2][eq]'    => 3,
-            'completedAt[0][gte]' => $filter->completedAtFrom->toDateString(),
-            'timezone'            => 'UTC',
-            'sort[hasAutoRoute]'  => 'desc',
-            'limit'               => $filter->limit,
-            'offset'              => $filter->offset,
-        ];
-
-        if ($filter->dungeonZoneId !== null) {
-            $params['dungeonZoneId[0][eq]'] = $filter->dungeonZoneId;
-        }
+        $completedAt = ['gte' => $filter->completedAtFrom->toDateString()];
 
         if ($filter->completedAtTo !== null) {
-            $params['completedAt[0][lte]'] = $filter->completedAtTo->toDateString();
+            $completedAt['lte'] = $filter->completedAtTo->toDateString();
         }
 
-        foreach ($filter->specBlizzardIds as $index => $specId) {
-            $params[sprintf('memberSpecIds[%d][eq]', $index)] = $specId;
-        }
+        $dungeonZoneId = $filter->dungeon?->zone_id;
+        $memberSpecIds = $filter->specs
+            ->pluck('specialization_id')
+            ->map(fn($specId) => ['eq' => (int)$specId])
+            ->values()
+            ->toArray();
+
+        $params = array_filter([
+            'type'         => 'mythic_plus_runs',
+            'hasAutoRoute' => [0 => ['eq' => 1]],
+            'season'       => [0 => ['eq' => $this->buildSeasonString($filter->season->expansion->shortname, $filter->season->index)]],
+            'mythicLevel'  => [0 => ['gte' => $filter->mythicLevelMin]],
+            'numChests'    => [
+                0 => ['eq' => 1],
+                1 => ['eq' => 2],
+                2 => ['eq' => 3],
+            ],
+            'completedAt'   => [0 => $completedAt],
+            'timezone'      => 'UTC',
+            'sort'          => ['hasAutoRoute' => 'desc'],
+            'limit'         => $filter->limit,
+            'offset'        => $filter->offset,
+            'dungeonZoneId' => $dungeonZoneId !== null ? [0 => ['eq' => $dungeonZoneId]] : null,
+            'memberSpecIds' => !empty($memberSpecIds) ? $memberSpecIds : null,
+        ]);
 
         $url = sprintf('%s?%s', self::SEARCH_ADVANCED_URL, http_build_query($params));
 

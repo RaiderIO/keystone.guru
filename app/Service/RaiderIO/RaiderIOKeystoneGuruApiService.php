@@ -53,13 +53,17 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
             return new SearchAdvancedRunsResponse([], 0);
         }
 
+        $dungeonZoneId   = $filter->dungeon?->zone_id ?? self::FAKE_DUNGEON_ZONE_ID;
+        $specBlizzardIds = $filter->specs->pluck('specialization_id')->map('intval')->values()->all();
+        $memberSpecIds   = !empty($specBlizzardIds) ? $specBlizzardIds : self::FAKE_SPEC_IDS;
+
         $runs = [];
         foreach ($zipFiles as $index => $filePath) {
             $runs[] = new SearchAdvancedRun(
                 id:              $index + 1,
                 challengeModeId: self::FAKE_CHALLENGE_MODE_ID,
-                dungeonZoneId:   self::FAKE_DUNGEON_ZONE_ID,
-                memberSpecIds:   self::FAKE_SPEC_IDS,
+                dungeonZoneId:   $dungeonZoneId,
+                memberSpecIds:   $memberSpecIds,
             );
         }
 
