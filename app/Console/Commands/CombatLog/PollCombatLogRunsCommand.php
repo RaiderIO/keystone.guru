@@ -111,7 +111,7 @@ class PollCombatLogRunsCommand extends Command
         int               $combatLogVersion,
         Collection        $dungeonsByChallengeModeId,
         Collection        $allSpecsByBlizzardId,
-        array            &$existingRunIds,
+        array            &             $existingRunIds,
     ): void {
         /** @var ?Dungeon $dungeon */
         $dungeon = $dungeonsByChallengeModeId->get($run->challengeModeId);
