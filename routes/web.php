@@ -87,14 +87,12 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\Webhook\GithubWebhookController;
-use App\Http\Controllers\Webhook\RaiderIOWebhookController;
 use App\Http\Controllers\Webhook\WowheadWebhookController;
 use App\Http\Middleware\WowheadCors;
 
 // Webhooks
 Route::prefix('webhook')->group(static function () {
     Route::post('github', new GithubWebhookController()->github(...))->name('webhook.github');
-    Route::post('raiderio/combatlog', new RaiderIOWebhookController()->combatLog(...))->name('webhook.raiderio.combatlog');
     Route::middleware([WowheadCors::class])->group(static function () {
         Route::options('wowhead/spell', new WowheadWebhookController()->wowheadOptions(...));
         Route::post('wowhead/spell', new WowheadWebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');

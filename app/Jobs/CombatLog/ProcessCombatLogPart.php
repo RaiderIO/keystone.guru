@@ -24,6 +24,7 @@ class ProcessCombatLogPart implements ShouldQueue
         private readonly string $s3Bucket,
         private readonly string $s3FilePath,
         private readonly int    $combatLogVersion,
+        private readonly string $diskName = 's3_combat_logs',
     ) {
         $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
     }
@@ -39,7 +40,7 @@ class ProcessCombatLogPart implements ShouldQueue
         $result   = false;
 
         try {
-            $resource = Storage::disk('s3_combat_logs')->readStream($this->s3FilePath);
+            $resource = Storage::disk($this->diskName)->readStream($this->s3FilePath);
             if ($this->writeResourceToDisk($resource, $tempPath) !== false) {
                 $log->handleDownloaded($tempPath);
 
