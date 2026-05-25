@@ -30,6 +30,10 @@ class CombatLogParsingCriterion extends Model
      * Maps each valid criterion model class to the relations it requires eager-loaded
      * so getName() can be called on every result without N+1 queries.
      *
+     * When adding a new criterion model, ensure you update this file too:
+     * - app/Console/Commands/CombatLog/PollCombatLogRunsCommand.php
+     *
+     *
      * @var array<class-string<CombatLogCriterionModelInterface>, list<string>>
      */
     public const array VALID_CRITERIA = [

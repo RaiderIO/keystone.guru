@@ -2,8 +2,12 @@
 
 namespace App\Service\CombatLog;
 
+use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogParsingCriterion;
+use App\Models\Dungeon;
+use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -55,6 +59,32 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             ->where('date', Carbon::now()->toDateString())
             ->whereColumn('count', '<', 'threshold')
             ->get();
+    }
+
+    public function getAllModelsForCriteria(string $modelClass, Season $season): Collection
+    {
+        return match ($modelClass) {
+            Dungeon::class                      => $season->dungeons()->get(),
+            CharacterClassSpecialization::class => CharacterClassSpecialization::query()->get(),
+            default                             => collect(),
+        };
+    }
+
+    public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season): Collection
+    {
+        $allModels = $this->getAllModelsForCriteria($modelClass, $season);
+
+        /** @var array<int, true> $atThresholdModelIds */
+        $atThresholdModelIds = CombatLogParsingCriterion::query()
+            ->where('combat_log_version', $combatLogVersion)
+            ->where('model_class', $modelClass)
+            ->where('date', Carbon::now()->toDateString())
+            ->whereColumn('count', '>=', 'threshold')
+            ->pluck('model_id')
+            ->flip()
+            ->all();
+
+        return $allModels->filter(fn(Model $model) => !isset($atThresholdModelIds[$model->id]));
     }
 
     private function findOrCreate(

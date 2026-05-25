@@ -6,6 +6,7 @@ use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Dungeon;
+use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaService;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
+#[Group('CombatLogParsingCriteriaService')]
 final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
 {
     private const int VERSION    = CombatLogVersion::RETAIL_12_0_5;
@@ -53,7 +55,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function shouldParse_givenNoPriorActivity_returnsTrue(): void
     {
         // Arrange — no rows exist yet
@@ -66,7 +67,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function shouldParse_givenBothCountsBelowThreshold_returnsTrue(): void
     {
         // Arrange
@@ -81,7 +81,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function shouldParse_givenDungeonCountAtThreshold_returnsFalse(): void
     {
         // Arrange
@@ -96,7 +95,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function shouldParse_givenClassSpecCountAtThreshold_returnsFalse(): void
     {
         // Arrange
@@ -111,7 +109,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function recordParsed_givenValidCriteria_incrementsBothCounters(): void
     {
         // Arrange
@@ -132,7 +129,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function shouldParse_givenYesterdayCountsAtThreshold_returnsTrue(): void
     {
         // Arrange — yesterday's rows at threshold should not affect today
@@ -151,7 +147,6 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
     public function resetAllForToday_givenExistingCounts_resetsCountsToZero(): void
     {
         // Arrange
@@ -173,7 +168,112 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('CombatLogParsingCriteriaService')]
+    public function getAllModelsForCriteria_givenDungeonClass_returnsSeasonDungeons(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+
+        // Act
+        $result = $this->service->getAllModelsForCriteria(Dungeon::class, $season);
+
+        // Assert
+        $this->assertNotEmpty($result);
+        $this->assertContainsOnlyInstancesOf(Dungeon::class, $result->all());
+    }
+
+    #[Test]
+    public function getAllModelsForCriteria_givenSpecClass_returnsAllSpecs(): void
+    {
+        // Arrange
+        $season = Season::query()->firstOrFail();
+
+        // Act
+        $result = $this->service->getAllModelsForCriteria(CharacterClassSpecialization::class, $season);
+
+        // Assert
+        $this->assertNotEmpty($result);
+        $this->assertContainsOnlyInstancesOf(CharacterClassSpecialization::class, $result->all());
+    }
+
+    #[Test]
+    public function getModelsEligibleForPolling_givenNoRowsExist_returnsAllSeasonDungeons(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+        /** @var Dungeon $dungeon */
+        $dungeon = $season->dungeons()->firstOrFail();
+
+        try {
+            CombatLogParsingCriterion::query()
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->where('date', Carbon::now()->toDateString())
+                ->delete();
+
+            // Act
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season);
+
+            // Assert — all season dungeons are eligible when no rows exist
+            $this->assertNotEmpty($result);
+            $this->assertTrue($result->contains('id', $dungeon->id));
+            $this->assertContainsOnlyInstancesOf(Dungeon::class, $result->all());
+        } finally {
+            CombatLogParsingCriterion::query()
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->delete();
+        }
+    }
+
+    #[Test]
+    public function getModelsEligibleForPolling_givenDungeonAtThreshold_excludesDungeon(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+        /** @var Dungeon $dungeon */
+        $dungeon = $season->dungeons()->firstOrFail();
+
+        try {
+            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->atThreshold()->create();
+
+            // Act
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season);
+
+            // Assert — dungeon at threshold is excluded
+            $this->assertFalse($result->contains('id', $dungeon->id));
+        } finally {
+            CombatLogParsingCriterion::query()
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->delete();
+        }
+    }
+
+    #[Test]
+    public function getModelsEligibleForPolling_givenDungeonBelowThreshold_includesDungeon(): void
+    {
+        // Arrange
+        $season = Season::query()->has('dungeons')->firstOrFail();
+        /** @var Dungeon $dungeon */
+        $dungeon = $season->dungeons()->firstOrFail();
+
+        try {
+            CombatLogParsingCriterion::factory()->forDungeon($dungeon->id)->withCount(50)->create();
+
+            // Act
+            $result = $this->service->getModelsEligibleForPolling(self::VERSION, Dungeon::class, $season);
+
+            // Assert — dungeon below threshold is still included
+            $this->assertTrue($result->contains('id', $dungeon->id));
+        } finally {
+            CombatLogParsingCriterion::query()
+                ->where('model_class', Dungeon::class)
+                ->where('model_id', $dungeon->id)
+                ->delete();
+        }
+    }
+
+    #[Test]
     public function resetAllForToday_givenYesterdayCounts_doesNotResetYesterdayRows(): void
     {
         // Arrange

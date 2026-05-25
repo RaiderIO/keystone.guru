@@ -5,14 +5,18 @@ namespace App\Console\Commands\CombatLog;
 use App\Jobs\CombatLog\FetchCombatLogRunFanout;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\CharacterClassSpecialization;
+use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
+use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
+use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -42,10 +46,15 @@ class PollCombatLogRunsCommand extends Command
 
         $combatLogVersion = array_key_last(CombatLogVersion::RETAIL_ALL);
 
-        $dungeonCriteria = $this->criteriaService->getBelowThresholdCriteria($combatLogVersion, Dungeon::class);
-        $specCriteria    = $this->criteriaService->getBelowThresholdCriteria($combatLogVersion, CharacterClassSpecialization::class);
+        $allModelsByClass      = [];
+        $eligibleModelsByClass = [];
 
-        if ($dungeonCriteria->isEmpty() && $specCriteria->isEmpty()) {
+        foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
+            $allModelsByClass[$modelClass]      = $this->criteriaService->getAllModelsForCriteria($modelClass, $season);
+            $eligibleModelsByClass[$modelClass] = $this->criteriaService->getModelsEligibleForPolling($combatLogVersion, $modelClass, $season);
+        }
+
+        if (collect($eligibleModelsByClass)->every(fn(Collection $c) => $c->isEmpty())) {
             $this->info('All criteria at threshold - nothing to poll.');
 
             return self::SUCCESS;
@@ -55,17 +64,8 @@ class PollCombatLogRunsCommand extends Command
         $mythicLevelMin  = (int)config('keystoneguru.raider_io.combat_log_polling.mythic_level_min');
         $limit           = (int)config('keystoneguru.raider_io.combat_log_polling.limit');
 
-        $allDungeons = Dungeon::query()->get();
-
-        $dungeonsByModelId = $allDungeons->keyBy('id');
-
-        $belowThresholdSpecs = CharacterClassSpecialization::query()
-            ->whereIn('id', $specCriteria->pluck('model_id'))
-            ->get();
-
-        $allSpecsByBlizzardId = CharacterClassSpecialization::query()
-            ->get()
-            ->keyBy('specialization_id');
+        $dungeonsByChallengeModeId = $allModelsByClass[Dungeon::class]->keyBy('challenge_mode_id');
+        $allSpecsByBlizzardId      = $allModelsByClass[CharacterClassSpecialization::class]->keyBy('specialization_id');
 
         $existingRunIds = ParsedCombatLog::query()
             ->whereNotNull('run_id')
@@ -73,81 +73,30 @@ class PollCombatLogRunsCommand extends Command
             ->flip()
             ->all();
 
-        // Phase 1 — dungeon-based: each dungeon below threshold gets its own targeted query
-        foreach ($dungeonCriteria as $criterion) {
-            /** @var ?Dungeon $dungeon */
-            $dungeon = $dungeonsByModelId->get($criterion->model_id);
+        foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
+            foreach ($eligibleModelsByClass[$modelClass] as $model) {
+                $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->id);
 
-            if ($dungeon === null) {
-                continue;
-            }
-
-            $filter = new SearchAdvancedRunsFilter(
-                dungeon:         $dungeon,
-                season:          $season,
-                specs:           $belowThresholdSpecs,
-                completedAtFrom: $completedAtFrom,
-                completedAtTo:   null,
-                mythicLevelMin:  $mythicLevelMin,
-                limit:           $limit,
-                offset:          0,
-            );
-            $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
-
-            foreach ($response->runs as $run) {
-                if (isset($existingRunIds[$run->id])) {
+                // Re-evaluate before each API call: prior dispatches may have already
+                // recorded enough runs for this criterion via recordParsed().
+                if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
                     continue;
                 }
 
-                $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id);
+                $filter   = $this->buildFilterForCriterion($modelClass, $model, $season, $completedAtFrom, $mythicLevelMin, $limit);
+                $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
 
-                if (!$this->criteriaService->shouldParse($combatLogVersion, [$dungeonCriterion])) {
-                    break;
+                foreach ($response->runs as $run) {
+                    if (isset($existingRunIds[$run->id])) {
+                        continue;
+                    }
+
+                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
+                        break;
+                    }
+
+                    $this->dispatchRun($run, $combatLogVersion, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds);
                 }
-
-                $specCriteriaForRun = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId);
-
-                $this->dispatchRun($run->id, $combatLogVersion, $dungeonCriterion, $specCriteriaForRun, $existingRunIds);
-            }
-        }
-
-        // Phase 2 — spec-based: a single query without dungeon filter catches runs from maxed-out dungeons
-        if ($belowThresholdSpecs->isNotEmpty()) {
-            $belowThresholdSpecBlizzardIds = $belowThresholdSpecs->pluck('specialization_id')->all();
-            $dungeonsByChallengeModeId     = $allDungeons->keyBy('challenge_mode_id');
-
-            $filter = new SearchAdvancedRunsFilter(
-                dungeon:         null,
-                season:          $season,
-                specs:           $belowThresholdSpecs,
-                completedAtFrom: $completedAtFrom,
-                completedAtTo:   null,
-                mythicLevelMin:  $mythicLevelMin,
-                limit:           $limit,
-                offset:          0,
-            );
-            $response = $this->raiderIOApiService->searchAdvancedRuns($filter);
-
-            foreach ($response->runs as $run) {
-                if (isset($existingRunIds[$run->id])) {
-                    continue;
-                }
-
-                if (empty(array_intersect($run->memberSpecIds, $belowThresholdSpecBlizzardIds))) {
-                    continue;
-                }
-
-                /** @var ?Dungeon $dungeon */
-                $dungeon = $dungeonsByChallengeModeId->get($run->challengeModeId);
-
-                if ($dungeon === null) {
-                    continue;
-                }
-
-                $dungeonCriterion   = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id);
-                $specCriteriaForRun = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId);
-
-                $this->dispatchRun($run->id, $combatLogVersion, $dungeonCriterion, $specCriteriaForRun, $existingRunIds);
             }
         }
 
@@ -155,25 +104,73 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * @param CombatLogParsingCriterionCheck[] $specCriteria
-     * @param array<int, true>                 $existingRunIds
+     * @param array<int, true> $existingRunIds
      */
     private function dispatchRun(
-        int                            $runId,
-        int                            $combatLogVersion,
-        CombatLogParsingCriterionCheck $dungeonCriterion,
-        array                          $specCriteria,
-        array                        &                          $existingRunIds,
+        SearchAdvancedRun $run,
+        int               $combatLogVersion,
+        Collection        $dungeonsByChallengeModeId,
+        Collection        $allSpecsByBlizzardId,
+        array            &$existingRunIds,
     ): void {
-        $this->criteriaService->recordParsed(
-            $combatLogVersion,
-            array_merge([$dungeonCriterion], $specCriteria),
-        );
+        /** @var ?Dungeon $dungeon */
+        $dungeon = $dungeonsByChallengeModeId->get($run->challengeModeId);
 
-        ParsedCombatLog::create(['run_id' => $runId]);
-        $existingRunIds[$runId] = true;
+        if ($dungeon === null) {
+            return;
+        }
 
-        FetchCombatLogRunFanout::dispatch($runId, $combatLogVersion);
+        $dungeonCriterion = new CombatLogParsingCriterionCheck(Dungeon::class, $dungeon->id);
+        $specCriteria     = $this->buildSpecCriteria($run->memberSpecIds, $allSpecsByBlizzardId);
+
+        $this->criteriaService->recordParsed($combatLogVersion, array_merge([$dungeonCriterion], $specCriteria));
+
+        ParsedCombatLog::create(['run_id' => $run->id]);
+        $existingRunIds[$run->id] = true;
+
+        FetchCombatLogRunFanout::dispatch($run->id, $combatLogVersion);
+    }
+
+    /**
+     * @param  class-string             $modelClass
+     * @param  Model                    $model
+     * @param  Season                   $season
+     * @param  Carbon                   $completedAtFrom
+     * @param  int                      $mythicLevelMin
+     * @param  int                      $limit
+     * @return SearchAdvancedRunsFilter
+     */
+    private function buildFilterForCriterion(
+        string $modelClass,
+        Model  $model,
+        Season $season,
+        Carbon $completedAtFrom,
+        int    $mythicLevelMin,
+        int    $limit,
+    ): SearchAdvancedRunsFilter {
+        return match ($modelClass) {
+            Dungeon::class => new SearchAdvancedRunsFilter(
+                dungeon:         $model,
+                season:          $season,
+                specs:           collect(),
+                completedAtFrom: $completedAtFrom,
+                completedAtTo:   null,
+                mythicLevelMin:  $mythicLevelMin,
+                limit:           $limit,
+                offset:          0,
+            ),
+            /** @var CharacterClassSpecialization $model */
+            CharacterClassSpecialization::class => new SearchAdvancedRunsFilter(
+                dungeon:         null,
+                season:          $season,
+                specs:           collect([$model]),
+                completedAtFrom: $completedAtFrom,
+                completedAtTo:   null,
+                mythicLevelMin:  $mythicLevelMin,
+                limit:           $limit,
+                offset:          0,
+            ),
+        };
     }
 
     /**
