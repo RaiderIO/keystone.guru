@@ -28,6 +28,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="DB_CONNECTION" value="phpunit"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="PENNANT_STORE" value="array"/>
     </php>
     <source>
         <include>

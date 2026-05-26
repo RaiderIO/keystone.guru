@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Controller\Compendium;
 
+use App\Features\NpcCompendium;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Npc\Npc;
+use App\Models\User;
+use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -26,8 +29,56 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         ],
     ];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::findOrFail(1));
+        Feature::define(NpcCompendium::class, true);
+    }
+
     #[Test]
-    public function index_givenNoAuth_returnsOk(): void
+    public function index_givenNoAuthFeatureDisabled_returnsNotFound(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        Feature::define(NpcCompendium::class, false);
+
+        // Act
+        $response = $this->get(route('npc.compendium.index'));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function index_givenAdminFeatureDisabled_returnsNotFound(): void
+    {
+        // Arrange
+        Feature::define(NpcCompendium::class, false);
+
+        // Act
+        $response = $this->get(route('npc.compendium.index'));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function index_givenNoAuthFeatureEnabled_returnsOk(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+
+        // Act
+        $response = $this->get(route('npc.compendium.index'));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function index_givenAdminFeatureEnabled_returnsOk(): void
     {
         // Act
         $response = $this->get(route('npc.compendium.index'));
