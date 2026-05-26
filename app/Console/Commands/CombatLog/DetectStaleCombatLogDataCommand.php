@@ -15,7 +15,6 @@ use App\Models\Spell\Spell;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class DetectStaleCombatLogDataCommand extends Command
 {
@@ -32,6 +31,8 @@ class DetectStaleCombatLogDataCommand extends Command
 
     public function handle(): int
     {
+        $this->info(sprintf('combatlog:detectstaledata — window=%dd', $this->observationWindowDays()));
+
         $this->removeStaleNpcCharacteristics();
         $this->removeStaleSpellProperties();
         $this->pruneOldObservations();
@@ -74,19 +75,13 @@ class DetectStaleCombatLogDataCommand extends Command
             })
             ->count();
 
-        $this->info(sprintf('Scanning %d NPC characteristics for stale data...', $total));
-
-        $bar = $this->output->createProgressBar($total);
-        $bar->setFormat(ProgressBar::FORMAT_NORMAL);
-        $bar->start();
-
         $removedCount = 0;
 
         NpcCharacteristic::query()
             ->whereIn('npc_id', function ($q) use ($currentSeasonDungeonIds): void {
                 $q->select('npc_id')->from('npc_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             })
-            ->chunk(200, function (Collection $chunk) use ($cutoff, $bar, &$removedCount): void {
+            ->chunk(200, function (Collection $chunk) use ($cutoff, &$removedCount): void {
                 /** @var Collection<CombatLogNpcCharacteristicObservation> $chunk */
                 $freshKeys = CombatLogNpcCharacteristicObservation::query()
                     ->select(['npc_id', 'characteristic_id'])
@@ -119,14 +114,9 @@ class DetectStaleCombatLogDataCommand extends Command
                     // Use toBase() to bypass SeederModel's deleting observer, which only allows admin users to delete
                     NpcCharacteristic::query()->whereIn('id', $staleIds)->toBase()->delete();
                 }
-
-                $bar->advance($chunk->count());
             });
 
-        $bar->finish();
-        $this->newLine();
-        $this->info(sprintf('Removed %d stale NPC characteristic(s).', $removedCount));
-        $this->newLine();
+        $this->info(sprintf('combatlog:detectstaledata — npc_characteristics scanned=%d removed=%d', $total, $removedCount));
     }
 
     private function removeStaleSpellProperties(): void
@@ -141,14 +131,11 @@ class DetectStaleCombatLogDataCommand extends Command
         $cutoff       = now()->subDays($this->observationWindowDays())->toDateString();
         $removedCount = 0;
 
-        $this->info('Scanning spell properties for stale data...');
-
         foreach (SpellProperty::cases() as $property) {
             $removedCount += $this->removeStaleSpellProperty($property, $cutoff, $currentSeasonDungeonIds);
         }
 
-        $this->info(sprintf('Removed %d stale spell property assignment(s).', $removedCount));
-        $this->newLine();
+        $this->info(sprintf('combatlog:detectstaledata — spell_properties total_removed=%d', $removedCount));
     }
 
     private function removeStaleSpellProperty(SpellProperty $property, string $cutoff, Collection $currentSeasonDungeonIds): int
@@ -167,11 +154,7 @@ class DetectStaleCombatLogDataCommand extends Command
         $total        = (clone $query)->count();
         $removedCount = 0;
 
-        $bar = $this->output->createProgressBar($total);
-        $bar->setFormat(sprintf(' %%current%%/%%max%% [%%bar%%] %%percent:3s%%%% — %s', $property->value));
-        $bar->start();
-
-        $query->chunk(200, function (Collection $spells) use ($property, $cutoff, $bar, &$removedCount): void {
+        $query->chunk(200, function (Collection $spells) use ($property, $cutoff, &$removedCount): void {
             $freshSpellIds = CombatLogSpellPropertyObservation::query()
                 ->whereIn('spell_id', $spells->pluck('id'))
                 ->where('property', $property)
@@ -193,12 +176,9 @@ class DetectStaleCombatLogDataCommand extends Command
                     ]);
                 }
             }
-
-            $bar->advance($spells->count());
         });
 
-        $bar->finish();
-        $this->newLine();
+        $this->info(sprintf('combatlog:detectstaledata — spell_property=%s scanned=%d removed=%d', $property->value, $total, $removedCount));
 
         return $removedCount;
     }
@@ -231,15 +211,14 @@ class DetectStaleCombatLogDataCommand extends Command
     {
         $pruneDate = now()->subDays($this->observationWindowDays() + 1)->toDateString();
 
-        $this->info(sprintf('Pruning observations older than %d days...', $this->observationWindowDays() + 1));
-
         $npcCount   = CombatLogNpcCharacteristicObservation::query()->where('observed_on', '<', $pruneDate)->delete();
         $spellCount = CombatLogSpellPropertyObservation::query()->where('observed_on', '<', $pruneDate)->delete();
 
         $this->info(sprintf(
-            'Pruned %d NPC characteristic observation(s) and %d spell property observation(s).',
+            'combatlog:detectstaledata — pruned npc_observations=%d spell_observations=%d cutoff=%s',
             $npcCount,
             $spellCount,
+            $pruneDate,
         ));
     }
 }
