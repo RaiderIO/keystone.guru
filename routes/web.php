@@ -11,6 +11,7 @@
 |
 */
 
+use App\Features\NpcCompendium;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
 use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
@@ -156,12 +157,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 
     // Compendium
-    Route::prefix('compendium')->group(static function () {
-        Route::prefix('npc')->group(static function () {
-            Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
-            Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
+    Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
+        ->prefix('compendium')->group(static function () {
+            Route::prefix('npc')->group(static function () {
+                Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
+                Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
+            });
         });
-    });
 
     // Game version toggle
     Route::prefix('gameversion')->group(static function () {
@@ -555,11 +557,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
 
         // Compendium
-        Route::prefix('compendium')->group(static function () {
-            Route::prefix('npc')->group(static function () {
-                Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
+        Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
+            ->prefix('compendium')->group(static function () {
+                Route::prefix('npc')->group(static function () {
+                    Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
+                });
             });
-        });
 
         // Must be an admin to perform these actions
         Route::middleware(['auth', 'role:admin'])->group(static function () {

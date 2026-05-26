@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Compendium;
 
+use App\Features\NpcCompendium;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Compendium\NpcCompendiumRequest;
 use App\Logic\Datatables\ColumnHandler\Compendium\DungeonColumnHandler;
