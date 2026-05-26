@@ -83,7 +83,7 @@ class DetectStaleCombatLogDataCommand extends Command
             ->whereIn('npc_id', function ($q) use ($currentSeasonDungeonIds): void {
                 $q->select('npc_id')->from('npc_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             })
-            ->chunk(200, function (Collection $chunk) use ($cutoff, &$removedCount): void {
+            ->chunkById(200, function (Collection $chunk) use ($cutoff, &$removedCount): void {
                 /** @var Collection<CombatLogNpcCharacteristicObservation> $chunk */
                 $freshKeys = CombatLogNpcCharacteristicObservation::query()
                     ->select(['npc_id', 'characteristic_id'])
@@ -157,7 +157,7 @@ class DetectStaleCombatLogDataCommand extends Command
         $total        = (clone $query)->count();
         $removedCount = 0;
 
-        $query->chunk(200, function (Collection $spells) use ($property, $cutoff, &$removedCount): void {
+        $query->chunkById(200, function (Collection $spells) use ($property, $cutoff, &$removedCount): void {
             $freshSpellIds = CombatLogSpellPropertyObservation::query()
                 ->whereIn('spell_id', $spells->pluck('id'))
                 ->where('property', $property)
