@@ -19,11 +19,11 @@ $appType = config('app.type');
 $commands = [];
 
 $commands[] = Schedule::command('combatlog:detectstaledata')->hourly();
-if (in_array($appType, [
-    'production',
-])) {
-    $commands[] = Schedule::command('combatlog:pollruns')->hourly();
-}
+//if (in_array($appType, [
+//    'production',
+//])) {
+//    $commands[] = Schedule::command('combatlog:pollruns')->hourly();
+//}
 
 $commands[] = Schedule::command('dungeonroute:updatepopularity')->hourly();
 $commands[] = Schedule::command('dungeonroute:updaterating')->everyFifteenMinutes();
