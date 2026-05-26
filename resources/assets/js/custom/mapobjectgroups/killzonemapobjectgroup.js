@@ -429,7 +429,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     }
                 }
 
-                if (callback !== null) {
+                /** @type KillZonePathMapObjectGroup */
+                let killZonePathMapObjectGroup = self.manager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+                killZonePathMapObjectGroup.refresh([]);
+
+                if (callback !== null && typeof callback === 'function') {
                     callback();
                 }
 
