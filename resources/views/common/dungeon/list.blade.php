@@ -20,7 +20,7 @@ $links           ??= collect();
 $selectable      ??= false;
 $selected        ??= null;
 $subtextFn       ??= null;
-$height          ??= null;
+$width           ??= null;
 $showMore        ??= false;
 $maxColCount     ??= 8;
 
@@ -40,6 +40,7 @@ $maxColCount     ??= 8;
             'isSelected' => $selected === $dungeon->key,
             'imageUrl' => $dungeon->getImageUrl(),
             'imageAlt' => __($dungeon->name),
+            'width' => $width,
         ])
     <?php
     }
@@ -52,6 +53,7 @@ $maxColCount     ??= 8;
             'isSelected' => !$hasSelectedDungeon,
             'imageUrl' => $gameVersion->expansion->getWallpaperUrl(),
             'imageAlt' => __($gameVersion->expansion->name),
+            'width' => $width,
         ])
     <?php
     }

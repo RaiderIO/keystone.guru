@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -15,6 +16,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
+use App\Models\Traits\HasCombatLogCriterion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -78,9 +80,10 @@ use Mockery\Exception;
  *
  * @mixin Eloquent
  */
-class Dungeon extends CacheModel implements MappingModelInterface, TracksPageViewInterface
+class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, MappingModelInterface, TracksPageViewInterface
 {
     use DungeonConstants;
+    use HasCombatLogCriterion;
 
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON               = 1;
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED         = 2;
@@ -542,6 +545,11 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             self::DUNGEON_SIEGE_OF_BORALUS,
             self::DUNGEON_THE_NEXUS,
         ]);
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->getImageUrl();
     }
 
     public function getImageUrl(): string

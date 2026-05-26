@@ -30,6 +30,12 @@ use Illuminate\Support\Collection;
 
 
 @section('content')
+    <div class="mb-3">
+        <a href="{{ route('admin.tools.spells.savetoseeder') }}" class="btn btn-primary">
+            <i class="fas fa-download"></i> {{ __('view_admin.tools.spells.showmissingspellinfo.save_to_seeder') }}
+        </a>
+    </div>
+
     <div class="form-group">
         <table id="spells_table" class="tablesorter default_table table-striped">
             <thead>

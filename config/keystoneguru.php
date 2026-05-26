@@ -365,6 +365,11 @@ return [
                 'url' => env('DISCORD_NEW_RELEASE_WEBHOOK'),
             ],
         ],
+
+        'raiderio' => [
+            'user'     => env('RAIDERIO_WEBHOOK_USER'),
+            'password' => env('RAIDERIO_WEBHOOK_PASSWORD'),
+        ],
     ],
 
     'patreon' => [
@@ -464,7 +469,13 @@ return [
     ],
 
     'raider_io' => [
-        'team_id'      => 2136,
+        'team_id'            => 2136,
+        'combat_log_polling' => [
+            'completed_at_window_days' => (int)env('COMBAT_LOG_POLLING_COMPLETED_AT_WINDOW_DAYS', 1),
+            'mythic_level_min'         => (int)env('COMBAT_LOG_POLLING_MYTHIC_LEVEL_MIN', 10),
+            'limit'                    => (int)env('COMBAT_LOG_POLLING_LIMIT', 100),
+            'download_url'             => env('COMBAT_LOG_POLLING_DOWNLOAD_URL'),
+        ],
         'weekly_route' => [
             'url'  => 'https://raider.io/weekly-routes',
             'tags' => [
@@ -482,5 +493,10 @@ return [
     'combat_log_route_regeneration' => [
         'user'     => env('COMBAT_LOG_ROUTE_REGENERATION_USER'),
         'password' => env('COMBAT_LOG_ROUTE_REGENERATION_PASSWORD'),
+    ],
+
+    'combat_log_staleness' => [
+        /** The number of days without a new observation before an NPC characteristic or spell property is considered stale and removed. */
+        'observation_window_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_WINDOW_DAYS', 3),
     ],
 ];

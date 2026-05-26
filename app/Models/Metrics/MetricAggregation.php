@@ -7,13 +7,13 @@ use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 
 /**
- * @property int    $model_id
- * @property string $model_class
- * @property int    $category
- * @property string $tag
- * @property int    $value
- * @property string $updated_at
- * @property string $created_at
+ * @property int          $model_id
+ * @property class-string $model_class
+ * @property int          $category
+ * @property string       $tag
+ * @property int          $value
+ * @property string       $updated_at
+ * @property string       $created_at
  *
  * @author Wouter
  *

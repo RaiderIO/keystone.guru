@@ -4,6 +4,7 @@ use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiRole;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
+use App\Http\Middleware\EnsureFeatureIsActive;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
@@ -73,6 +74,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'read_only_mode'            => ReadOnlyMode::class,
             'track_ip'                  => TracksUserIpAddress::class,
             'viewcachebuster'           => ViewCacheBuster::class,
+            'feature_active'            => EnsureFeatureIsActive::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

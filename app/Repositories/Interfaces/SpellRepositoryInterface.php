@@ -28,4 +28,9 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<Spell>
      */
     public function findAllById(Collection $spellIds): Collection;
+
+    /**
+     * @return Collection<int, Spell> keyed by spell ID
+     */
+    public function getAllWithCharacteristic(): Collection;
 }
