@@ -322,7 +322,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             this._addKillZone(killZone);
 
             // Listen to changes in the killzone
-            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:spellschanged', 'object:changed'], this, function (killZoneChangedEvent) {
+            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:enemieschanged', 'killzone:spellschanged', 'object:changed'], this, function (killZoneChangedEvent) {
                 // Ignore killzones that haven't saved yet
                 if (killZoneChangedEvent.context.id <= 0) {
                     return;
@@ -529,7 +529,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
 
             // Stop listening to changes in the killzone
-            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
+            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:enemieschanged', 'object:changed'], self);
         });
 
         killZoneMapObjectGroup.register([
