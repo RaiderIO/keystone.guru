@@ -37,6 +37,8 @@ use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
+use App\Service\CombatLog\CombatLogParsingCriteriaService;
+use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -47,6 +49,8 @@ use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Compendium\NpcCompendiumService;
+use App\Service\Compendium\NpcCompendiumServiceInterface;
 use App\Service\Cookies\CookieService;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
@@ -154,7 +158,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
-        if (app()->runningUnitTests()) {
+        if (
+            app()->runningUnitTests()
+            || app()->environment('local')
+        ) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
@@ -172,6 +179,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
+        $this->app->bind(CombatLogParsingCriteriaServiceInterface::class, CombatLogParsingCriteriaService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
@@ -205,6 +213,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
+        $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
 
         // Depends on CacheService

@@ -169,6 +169,10 @@ class KillZonePathService implements KillZonePathServiceInterface
             }
 
             // --- Cross-floor edges via linked floor-switch marker pairs (weight 0) ---
+            // A null linked_dungeon_floor_switch_marker_id indicates a one-way marker: no cross-floor
+            // edge is added, so pathfinding cannot traverse through it in that direction. To make a
+            // switch one-way in the admin map, set linked_dungeon_floor_switch_marker_id to null on
+            // the marker whose direction of travel should be blocked.
             foreach ($allMarkers as $marker) {
                 if ($marker->linked_dungeon_floor_switch_marker_id === null) {
                     continue;

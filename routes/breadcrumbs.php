@@ -325,6 +325,10 @@ Breadcrumbs::for('admin.tools.combatlog.regenerate', static function (Generator 
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_regenerate'), route('admin.tools.combatlog.regenerate.view'));
 });
+Breadcrumbs::for('admin.tools.combatlog.criteria', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.combat_log_criteria'), route('admin.tools.combatlog.criteria.view'));
+});
 Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view'), route('admin.tools.dungeonroute.view'));
@@ -511,4 +515,17 @@ Breadcrumbs::for('admin.user.list', static function (Generator $trail) {
 Breadcrumbs::for('admin.userreport.list', static function (Generator $trail) {
     $trail->parent('admin');
     $trail->push(__('breadcrumbs.home.admin.user_reports.user_reports'), route('admin.userreports'));
+});
+
+/**
+ * Compendium
+ */
+Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index'));
+});
+
+Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $npc) {
+    $trail->parent('compendium.npc.index');
+    $trail->push(__('breadcrumbs.home.compendium.npc_show', ['name' => __($npc->name)]), route('npc.compendium.show', $npc));
 });

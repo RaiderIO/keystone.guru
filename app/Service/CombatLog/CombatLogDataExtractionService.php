@@ -11,16 +11,17 @@ use App\Models\CombatLog\CombatLogAnalyze;
 use App\Models\CombatLog\CombatLogAnalyzeStatus;
 use App\Models\Dungeon;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
 use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
+use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -43,15 +44,16 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,
         private readonly SeasonServiceInterface                         $seasonService,
-        private readonly WowheadServiceInterface                        $wowheadService,
         private readonly FloorRepositoryInterface                       $floorRepository,
+        private readonly SpellRepositoryInterface                       $spellRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
         $this->dataExtractors = collect([
             new CreateMissingNpcDataExtractor(),
             new NpcUpdateDataExtractor(),
             new FloorDataExtractor($this->floorRepository),
-            new SpellDataExtractor($this->wowheadService),
+            new SpellDataExtractor(),
+            new NpcCharacteristicDataExtractor($this->spellRepository),
         ]);
     }
 

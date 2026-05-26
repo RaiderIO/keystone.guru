@@ -1,21 +1,32 @@
 <?php
 
+use App\Models\Characteristic;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell                   $spell
- * @var Floor                   $floor
- * @var array<string>           $categories
- * @var array<string>           $dispelTypes
- * @var array<string>           $cooldownGroups
- * @var Collection<GameVersion> $allGameVersions
+ * @var Spell                        $spell
+ * @var Floor                        $floor
+ * @var array<string>                $categories
+ * @var array<string>                $dispelTypes
+ * @var array<string>                $cooldownGroups
+ * @var Collection<GameVersion>      $allGameVersions
+ * @var Collection<Characteristic>   $allCharacteristics
  */
 
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
+
+$characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]])
+    ->merge($allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
+        $c->id => [
+            'icon_url' => ksgAssetImage(sprintf('spells/%s.jpg', $c->icon_name)),
+            'name'     => __($c->name),
+        ],
+    ]))
+    ->toArray();
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$spell ?? null],
@@ -43,6 +54,18 @@ $gameVersionsSelect = $allGameVersions
         <span class="form-required">*</span>
         {{ html()->select('game_version_id', $gameVersionsSelect)->class('form-control selectpicker') }}
         @include('common.forms.form-error', ['key' => 'game_version_id'])
+    </div>
+
+    <div class="form-group{{ $errors->has('characteristic_id') ? ' has-error' : '' }}">
+        {{ html()->label(__('view_admin.spell.edit.characteristic'), 'characteristic_id') }}
+        @include('common.forms.select.imageselect', [
+            'id'         => 'characteristic_id',
+            'name'       => 'characteristic_id',
+            'values'     => $characteristicOptions,
+            'selected'   => isset($spell) ? $spell->characteristic_id : null,
+            'liveSearch' => true,
+        ])
+        @include('common.forms.form-error', ['key' => 'characteristic_id'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

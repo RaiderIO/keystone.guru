@@ -6,6 +6,12 @@ use App\Exceptions\Logging\HandlerLogging;
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
+use App\Jobs\Logging\FetchCombatLogRunFanoutLogging;
+use App\Jobs\Logging\FetchCombatLogRunFanoutLoggingInterface;
+use App\Jobs\Logging\ProcessCombatLogFanoutLogging;
+use App\Jobs\Logging\ProcessCombatLogFanoutLoggingInterface;
+use App\Jobs\Logging\ProcessCombatLogPartLogging;
+use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
@@ -34,6 +40,8 @@ use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLo
 use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLogging;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
+use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLogging;
+use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLogging;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLogging;
@@ -129,6 +137,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(FloorDataExtractorLoggingInterface::class, FloorDataExtractorLogging::class);
         $this->app->bind(NpcUpdateDataExtractorLoggingInterface::class, NpcUpdateDataExtractorLogging::class);
         $this->app->bind(SpellDataExtractorLoggingInterface::class, SpellDataExtractorLogging::class);
+        $this->app->bind(NpcCharacteristicDataExtractorLoggingInterface::class, NpcCharacteristicDataExtractorLogging::class);
         /// Filters
         $this->app->bind(BaseCombatFilterLoggingInterface::class, BaseCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);
@@ -155,6 +164,9 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(ThumbnailServiceLoggingInterface::class, ThumbnailServiceLogging::class);
 
         // Jobs
+        $this->app->bind(FetchCombatLogRunFanoutLoggingInterface::class, FetchCombatLogRunFanoutLogging::class);
+        $this->app->bind(ProcessCombatLogFanoutLoggingInterface::class, ProcessCombatLogFanoutLogging::class);
+        $this->app->bind(ProcessCombatLogPartLoggingInterface::class, ProcessCombatLogPartLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailLoggingInterface::class, ProcessRouteFloorThumbnailLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailCustomLoggingInterface::class, ProcessRouteFloorThumbnailCustomLogging::class);
         $this->app->bind(RegenerateCombatLogRouteLoggingInterface::class, RegenerateCombatLogRouteLogging::class);

@@ -17,10 +17,4 @@ interface SpellDataExtractorLoggingInterface
     public function createMissingSpellCreatedSpell(string $name, int $spellId): void;
 
     public function afterExtractDungeonEnd(): void;
-
-    public function createSpellAndFetchInfoSpellDataResultIsNull(int $spellId): void;
-
-    public function createSpellAndFetchInfoStart(int $spellId): void;
-
-    public function createSpellAndFetchInfoEnd(): void;
 }

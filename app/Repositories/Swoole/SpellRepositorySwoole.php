@@ -11,6 +11,8 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
 {
     private Collection $allSpellsById;
 
+    private ?Collection $spellsWithCharacteristics = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -50,5 +52,15 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
         }
 
         return $result;
+    }
+
+    #[\Override]
+    public function getAllWithCharacteristic(): Collection
+    {
+        if ($this->spellsWithCharacteristics === null) {
+            $this->spellsWithCharacteristics = parent::getAllWithCharacteristic();
+        }
+
+        return $this->spellsWithCharacteristics;
     }
 }

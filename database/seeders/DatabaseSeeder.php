@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // Combatlog
         CombatLogSeeder::class,
 
-        // Seeders which don't depend on anything else
+        // Seeders that don't depend on anything else
         ExpansionsSeeder::class,
         GameServerRegionsSeeder::class,
         GameVersionsSeeder::class,

@@ -24,17 +24,18 @@ class SpellFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'             => 'required',
-            'name'           => 'required|string',
-            'icon_name'      => 'required|string',
-            'category'       => Rule::in(Spell::ALL_CATEGORIES),
-            'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
-            'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
-            'schools'        => 'array',
-            'schools.*'      => Rule::in(array_keys(Spell::ALL_SCHOOLS)),
-            'aura'           => 'boolean',
-            'selectable'     => 'boolean',
-            'hidden_on_map'  => 'boolean',
+            'id'                => 'required',
+            'name'              => 'required|string',
+            'icon_name'         => 'required|string',
+            'category'          => Rule::in(Spell::ALL_CATEGORIES),
+            'dispel_type'       => Rule::in(Spell::ALL_DISPEL_TYPES),
+            'cooldown_group'    => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
+            'schools'           => 'array',
+            'schools.*'         => Rule::in(array_keys(Spell::ALL_SCHOOLS)),
+            'aura'              => 'boolean',
+            'selectable'        => 'boolean',
+            'hidden_on_map'     => 'boolean',
+            'characteristic_id' => 'nullable|integer|exists:characteristics,id',
         ];
     }
 }
