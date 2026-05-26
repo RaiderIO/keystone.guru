@@ -70,6 +70,7 @@ class DetectStaleCombatLogDataCommand extends Command
 
         $cutoff = now()->subDays($this->observationWindowDays())->toDateString();
         $total  = NpcCharacteristic::query()
+            ->disableCache()
             ->whereIn('npc_id', function ($q) use ($currentSeasonDungeonIds): void {
                 $q->select('npc_id')->from('npc_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             })
@@ -78,6 +79,7 @@ class DetectStaleCombatLogDataCommand extends Command
         $removedCount = 0;
 
         NpcCharacteristic::query()
+            ->disableCache()
             ->whereIn('npc_id', function ($q) use ($currentSeasonDungeonIds): void {
                 $q->select('npc_id')->from('npc_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             })
@@ -141,6 +143,7 @@ class DetectStaleCombatLogDataCommand extends Command
     private function removeStaleSpellProperty(SpellProperty $property, string $cutoff, Collection $currentSeasonDungeonIds): int
     {
         $query = Spell::query()
+            ->disableCache()
             ->whereIn('id', function ($q) use ($currentSeasonDungeonIds): void {
                 $q->select('spell_id')->from('spell_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             });
