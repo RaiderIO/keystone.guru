@@ -90,12 +90,10 @@ class EnemyVisual extends Signalable {
             self.buildVisual();
         });
         this.map.register('map:mapstatechanged', this, function (mapStateChangedEvent) {
-            if (mapStateChangedEvent.data.previousMapState instanceof EditMapState ||
-                mapStateChangedEvent.data.previousMapState instanceof EnemySelection ||
-                mapStateChangedEvent.data.newMapState instanceof EditMapState ||
-                mapStateChangedEvent.data.newMapState instanceof EnemySelection ||
-                mapStateChangedEvent.data.previousMapState instanceof DeleteMapState ||
-                mapStateChangedEvent.data.newMapState instanceof DeleteMapState) {
+            let prev = mapStateChangedEvent.data.previousMapState;
+            let next = mapStateChangedEvent.data.newMapState;
+            if ((prev !== null && prev.shouldRebuildEnemyVisuals()) ||
+                (next !== null && next.shouldRebuildEnemyVisuals())) {
                 self.buildVisual();
             }
         });

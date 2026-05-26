@@ -506,6 +506,9 @@ class DungeonMap extends Signalable {
             if (this.mapState === null && ctrlKeyPressed && this.options.edit) {
                 // Add it to a new pull
                 let newKillZone = killZoneMapObjectGroup.createNewPull([enemy.id]);
+                if (newKillZone === null) {
+                    return;
+                }
 
                 this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             } else if (selectedEnemyExistingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
@@ -535,6 +538,9 @@ class DungeonMap extends Signalable {
                 // Create a new pull; all UI will update based on the events fired here.
                 let selectedKillZoneIndex = currentMapState instanceof EditKillZoneEnemySelection ? currentMapState.getMapObject().index : null;
                 let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds, selectedKillZoneIndex);
+                if (newKillZone === null) {
+                    return;
+                }
 
                 this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             }

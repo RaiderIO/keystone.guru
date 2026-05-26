@@ -463,6 +463,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         $(this.options.killZonesPullsSettingsDeleteAllSelector).unbind('click').bind('click', function () {
             showConfirmYesCancel(lang.get('js.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
+                /** @type KillZoneMapObjectGroup */
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 killZoneMapObjectGroup.deleteAll();

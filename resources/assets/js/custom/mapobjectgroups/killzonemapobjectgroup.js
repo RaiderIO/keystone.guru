@@ -226,6 +226,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     createNewPull(enemyIds = [], afterIndex = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
+        if (this.hasPendingObject()) {
+            console.warn('KillZoneMapObjectGroup: ignoring createNewPull, a pull is still being synced');
+            return null;
+        }
+
         let toSave = [];
         // If we're inserting it last - we don't affect existing killzones
         if (afterIndex !== null) {
