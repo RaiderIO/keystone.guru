@@ -509,7 +509,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
         killZoneMapObjectGroup.register(['object:add', 'save:success'], this, function (killZoneSaveSuccessEvent) {
             // Ignore killzones that haven't saved yet
-            if (killZoneSaveSuccessEvent.context.id <= 0) {
+            if (killZoneSaveSuccessEvent.data.object.id <= 0) {
                 return;
             }
 
