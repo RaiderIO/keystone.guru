@@ -111,16 +111,14 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
 
         let self = this;
         let killZoneChangedFn = function (event) {
-            console.warn(`KillZonePathMapObjectGroup received killzone event:`, event);
             self.refresh(event.data.object.killzone_paths !== undefined ? event.data.object.killzone_paths : null)
         };
 
         // Deleting killzones retrieves the raw json, handle it slightly differently
         let killZoneDeletedFn = function (event) {
-            console.warn(`KillZonePathMapObjectGroup received killzone deleted event:`, event);
             self.refresh(event.data.json.killzone_paths !== undefined ? event.data.json.killzone_paths : null);
         }
-
+1
         killZoneMapObjectGroup.register('save:success', this, killZoneChangedFn);
         killZoneMapObjectGroup.register('delete:success', this, killZoneDeletedFn);
 

@@ -109,7 +109,7 @@ class EditKillZoneEnemySelection extends EnemySelection {
             let killZone = killZoneMapObjectGroup.objects[key];
 
             // Keep track of all killzones that were ever changed
-            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved'], this, function (killZoneChangedEvent) {
+            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:enemieschanged'], this, function (killZoneChangedEvent) {
                 let killZoneId = killZoneChangedEvent.context.id;
                 if (!self._blackListedKillZoneIds.includes(killZoneId) && !self._changedKillZoneIds.includes(killZoneId)) {
                     self._changedKillZoneIds.push(killZoneId);
@@ -124,7 +124,7 @@ class EditKillZoneEnemySelection extends EnemySelection {
         for (let key in killZoneMapObjectGroup.objects) {
             let killZone = killZoneMapObjectGroup.objects[key];
 
-            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved'], this);
+            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:enemieschanged'], this);
         }
 
         // Save all the killzones that were changed

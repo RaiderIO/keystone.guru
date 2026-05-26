@@ -7,6 +7,10 @@ class MDTEnemySelection extends EnemySelection {
         return 'MDTEnemySelection';
     }
 
+    shouldRebuildEnemyVisuals() {
+        return true;
+    }
+
     /**
      * Filters an enemy if it should be selected or not.
      * @param {Enemy} source
