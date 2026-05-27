@@ -18,7 +18,7 @@ $classificationBadge = match ($npc->classification->key ?? '') {
 };
 
 $flags = [];
-foreach (['dangerous', 'truesight', 'bursting', 'bolstering', 'sanguine', 'runs_away_in_fear'] as $flag) {
+foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'runs_away_in_fear'] as $flag) {
     if ($npc->{$flag}) {
         $flags[] = __('view_admin.npc.edit.' . $flag);
     }
@@ -56,11 +56,11 @@ foreach (['dangerous', 'truesight', 'bursting', 'bolstering', 'sanguine', 'runs_
                     {{ $npc->type->type }}
                 </span>
             @endif
-            @if($npc->class)
-                <span class="badge badge-secondary mr-1">
-                    {{ __(sprintf('npcclasses.%s', $npc->class->key)) }}
-                </span>
-            @endif
+{{--            @if($npc->class)--}}
+{{--                <span class="badge badge-secondary mr-1">--}}
+{{--                    {{ __(sprintf('npcclasses.%s', $npc->class->key)) }}--}}
+{{--                </span>--}}
+{{--            @endif--}}
             @foreach($flags as $flag)
                 <span class="badge badge-warning mr-1">{{ $flag }}</span>
             @endforeach

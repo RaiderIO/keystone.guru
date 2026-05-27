@@ -253,6 +253,7 @@ return [
             'new'                     => 'NEW',
             'compendium'              => 'Compendium',
             'npc_compendium'          => 'NPCs',
+            'compendium_activity'     => 'Activity',
         ],
         'nav' => [
             'user' => [

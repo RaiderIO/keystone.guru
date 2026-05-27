@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'event' => [
+        'characteristic_added'   => 'Affected by :name',
+        'characteristic_removed' => 'Unaffected by :name',
+        'spell_assigned'         => 'Casts :name',
+        'spell_created'          => ':spell added to database',
+        'property_changed'       => 'Affected by :property',
+        'property_removed'       => 'Unaffected by :property',
+        'property'               => [
+            'aura'   => 'Aura',
+            'debuff' => 'Debuff',
+        ],
+    ],
     'npc' => [
         'index' => [
             'title'                 => 'NPC Compendium',
@@ -38,19 +50,19 @@ return [
             'event_feed' => [
                 'title' => 'Recent Activity',
                 'empty' => 'No activity recorded yet.',
-                'event' => [
-                    'characteristic_added'   => 'Affected by :name',
-                    'characteristic_removed' => 'Unaffected by :name',
-                    'spell_assigned'         => 'Casts :name',
-                    'spell_created'          => ':spell added to database',
-                    'property_changed'       => ':spell is now :property',
-                    'property_removed'       => ':spell is no longer :property',
-                    'property'               => [
-                        'aura'   => 'Aura',
-                        'debuff' => 'Debuff',
-                    ],
-                ],
             ],
+        ],
+    ],
+    'activity' => [
+        'index' => [
+            'title'  => 'Compendium Activity',
+            'header' => 'Compendium Activity',
+            'empty'  => 'No activity recorded yet.',
+        ],
+        'day' => [
+            'title'  => ':date - Compendium Activity',
+            'header' => 'Compendium Activity for :date',
+            'empty'  => 'No activity recorded for this day.',
         ],
     ],
 ];

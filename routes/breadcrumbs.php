@@ -17,6 +17,7 @@ use App\Models\Spell\Spell;
 use App\Models\Team;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator;
+use Illuminate\Support\Carbon;
 
 /**
  * Home page
@@ -528,4 +529,15 @@ Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
 Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $npc) {
     $trail->parent('compendium.npc.index');
     $trail->push(__('breadcrumbs.home.compendium.npc_show', ['name' => __($npc->name)]), route('npc.compendium.show', $npc));
+});
+
+Breadcrumbs::for('compendium.activity.index', static function (Generator $trail, Dungeon $dungeon) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.activity'), route('compendium.activity.index'));
+    $trail->push(__($dungeon->name), route('compendium.activity', $dungeon));
+});
+
+Breadcrumbs::for('compendium.activity.day', static function (Generator $trail, Dungeon $dungeon, Carbon $date) {
+    $trail->parent('compendium.activity.index', $dungeon);
+    $trail->push(__('breadcrumbs.home.compendium.activity_day', ['date' => $date->format('F j, Y')]), route('compendium.activity.day', ['dungeon' => $dungeon, 'date' => $date->format('Y-m-d')]));
 });

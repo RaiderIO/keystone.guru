@@ -13,7 +13,10 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
 use App\Service\Compendium\NpcCompendiumServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class NpcCompendiumController extends Controller
@@ -39,6 +42,63 @@ class NpcCompendiumController extends Controller
             'currentNpcHealth'   => $currentNpcHealth,
             'allCharacteristics' => Characteristic::orderBy('id')->get(),
             'eventFeed'          => $npcCompendiumService->buildEventFeed($npc),
+        ]);
+    }
+
+    public function activityIndex(
+        SeasonServiceInterface $seasonService,
+    ): RedirectResponse {
+        $dungeon = $this->getContextDungeonOrDefault($seasonService);
+
+        if ($dungeon === null) {
+            return redirect()->route('home');
+        }
+
+        return redirect()->route('compendium.activity', ['dungeon' => $dungeon]);
+    }
+
+    public function activity(
+        Dungeon                       $dungeon,
+        SeasonServiceInterface        $seasonService,
+        NpcCompendiumServiceInterface $npcCompendiumService,
+    ): View|RedirectResponse {
+        $contextDungeon = $this->getContextDungeonOrDefault($seasonService);
+        if ($contextDungeon === null) {
+            return redirect()->route('home');
+        } elseif ($contextDungeon->id !== $dungeon->id) {
+            return redirect()->route('compendium.activity', ['dungeon' => $contextDungeon]);
+        }
+
+        $dates       = $npcCompendiumService->getActivityDates(10, $dungeon);
+        $eventsByDay = [];
+
+        foreach ($dates->items() as $date) {
+            $eventsByDay[$date] = $npcCompendiumService->getEventsForDate(Carbon::parse($date), $dungeon);
+        }
+
+        return view('compendium.activity.index', [
+            'contextDungeon' => $dungeon,
+            'dates'          => $dates,
+            'eventsByDay'    => $eventsByDay,
+        ]);
+    }
+
+    public function activityDay(Dungeon $dungeon, string $date, NpcCompendiumServiceInterface $npcCompendiumService): View
+    {
+        try {
+            $carbon = Carbon::createFromFormat('Y-m-d', $date);
+        } catch (\Exception) {
+            abort(404);
+        }
+
+        if (!$carbon || $carbon->format('Y-m-d') !== $date) {
+            abort(404);
+        }
+
+        return view('compendium.activity.day', [
+            'contextDungeon' => $dungeon,
+            'date'           => $carbon,
+            'events'         => $npcCompendiumService->getEventsForDate($carbon, $dungeon),
         ]);
     }
 
@@ -76,5 +136,24 @@ class NpcCompendiumController extends Controller
             ])
             ->applyRequestToBuilder()
             ->getResult();
+    }
+
+    private function getContextDungeonOrDefault(SeasonServiceInterface $seasonService): ?Dungeon
+    {
+        $result = null;
+
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $currentSeason  = $seasonService->getCurrentSeason();
+
+        if ($currentSeason !== null) {
+            if ($currentSeason->hasDungeon($contextDungeon)) {
+                $result = $contextDungeon;
+            } else {
+                /** @var Dungeon $dungeon */
+                $result = $currentSeason->dungeons()->first();
+            }
+        }
+
+        return $result;
     }
 }

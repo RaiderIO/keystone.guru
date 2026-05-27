@@ -163,6 +163,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
             });
+            Route::prefix('activity')->group(static function () {
+                Route::get('/', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
+                Route::prefix('{dungeon}')->group(static function () {
+                    Route::get('/', new NpcCompendiumController()->activity(...))->name('compendium.activity');
+                    Route::get('/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
+                });
+            });
         });
 
     // Game version toggle

@@ -5,8 +5,10 @@ return [
     'home' => [
         'front_page' => 'Keystone.guru',
         'compendium' => [
-            'npc'      => 'NPC Compendium',
-            'npc_show' => ':name',
+            'npc'          => 'NPC Compendium',
+            'npc_show'     => ':name',
+            'activity'     => 'Compendium Activity',
+            'activity_day' => ':date',
         ],
         'affixes'   => 'Affixes',
         'about'     => 'About',

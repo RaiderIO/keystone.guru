@@ -182,6 +182,7 @@ $isActiveRoute = function (string $route) {
                         <?php
                         $compendiumRoutes       = [
                             route('npc.compendium.index') => __('view_common.layout.header.npc_compendium'),
+                            route('compendium.activity.index') => __('view_common.layout.header.compendium_activity'),
                         ];
                         $hasCompendiumSubActive = null;
                         $compendiumHeaderText   = __('view_common.layout.header.compendium');

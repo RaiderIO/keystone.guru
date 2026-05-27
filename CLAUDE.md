@@ -134,12 +134,27 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## Comments
 - Prefer PHPDoc blocks over inline comments. Never use comments within the code itself unless there is something very complex going on.
+- If there's existing comments in the code, prefer to keep them around if they aren't completely redundant.
 
 ## PHPDoc Blocks
 - Add useful array shape type definitions for arrays when appropriate.
 
 ## Enums
 - Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
+
+## Class definition order
+- traits
+- constants
+- static properties
+- private properties
+- protected properties
+- public properties
+- constructor
+- public methods
+- protected methods
+- private methods
+- static methods
+- magic methods (like `__call` or `__get`)
 
 === tests rules ===
 
