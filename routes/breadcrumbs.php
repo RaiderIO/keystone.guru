@@ -531,6 +531,16 @@ Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $
     $trail->push(__('breadcrumbs.home.compendium.npc_show', ['name' => __($npc->name)]), route('npc.compendium.show', $npc));
 });
 
+Breadcrumbs::for('compendium.spell.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index'));
+});
+
+Breadcrumbs::for('compendium.spell.show', static function (Generator $trail, Spell $spell) {
+    $trail->parent('compendium.spell.index');
+    $trail->push(__('breadcrumbs.home.compendium.spell_show', ['name' => __($spell->name)]), route('spell.compendium.show', $spell));
+});
+
 Breadcrumbs::for('compendium.activity.index', static function (Generator $trail, Dungeon $dungeon) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.compendium.activity'), route('compendium.activity.index'));

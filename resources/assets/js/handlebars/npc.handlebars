@@ -1,0 +1,9 @@
+<a href="{{compendium_url}}">
+    {{#if portrait_url}}
+        <img src="{{portrait_url}}" width="20" height="20" class="rounded mr-1" loading="lazy"/>
+    {{/if}}
+    {{#if is_boss}}
+         <img src="{{boss_icon_url}}" width="16" height="16" class="mr-1" title="{{ boss_label }}" data-toggle="tooltip"/>
+    {{/if}}
+    {{name}}
+</a>

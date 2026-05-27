@@ -181,8 +181,9 @@ $isActiveRoute = function (string $route) {
                 @if(Feature::active(NpcCompendium::class))
                         <?php
                         $compendiumRoutes       = [
-                            route('npc.compendium.index') => __('view_common.layout.header.npc_compendium'),
-                            route('compendium.activity.index') => __('view_common.layout.header.compendium_activity'),
+                            route('npc.compendium.index') => sprintf('%s %s', '<i class="fas fa-dragon"></i>', __('view_common.layout.header.npc_compendium')),
+                            route('spell.compendium.index') => sprintf('%s %s', '<i class="fas fa-magic"></i>', __('view_common.layout.header.spell_compendium')),
+                            route('compendium.activity.index') => sprintf('%s %s', '<i class="fas fa-stream"></i>', __('view_common.layout.header.compendium_activity')),
                         ];
                         $hasCompendiumSubActive = null;
                         $compendiumHeaderText   = __('view_common.layout.header.compendium');
@@ -202,7 +203,7 @@ $isActiveRoute = function (string $route) {
                              aria-labelledby="{{ $compendiumDropdownId }}">
                             @foreach($compendiumRoutes as $itemKey => $item)
                                 <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
-                                   href="{{ $itemKey }}">{{ $item }}</a>
+                                   href="{{ $itemKey }}">{!! $item !!}</a>
                             @endforeach
                         </div>
                     </li>

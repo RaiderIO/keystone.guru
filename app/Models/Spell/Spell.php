@@ -7,6 +7,7 @@ use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Carbon\Exceptions\InvalidFormatException;
@@ -14,8 +15,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
@@ -43,8 +44,9 @@ use Str;
  * @property string $icon_url
  *
  * @property GameVersion              $gameVersion
- * @property Collection<Dungeon>      $dungeons
+ * @property Collection<int, Dungeon> $dungeons
  * @property Collection<SpellDungeon> $spellDungeons
+ * @property Collection<Npc>          $npcs
  * @property Characteristic|null      $characteristic
  *
  * @method static Builder visible()
@@ -153,9 +155,14 @@ class Spell extends CacheModel implements MappingModelInterface
         return $this->belongsTo(GameVersion::class);
     }
 
-    public function dungeons(): HasManyThrough
+    public function npcs(): BelongsToMany
     {
-        return $this->hasManyThrough(Dungeon::class, SpellDungeon::class);
+        return $this->belongsToMany(Npc::class, 'npc_spells', 'spell_id', 'npc_id');
+    }
+
+    public function dungeons(): BelongsToMany
+    {
+        return $this->belongsToMany(Dungeon::class, 'spell_dungeons', 'spell_id', 'dungeon_id');
     }
 
     public function spellDungeons(): HasMany

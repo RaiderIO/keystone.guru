@@ -7,6 +7,8 @@ return [
         'compendium' => [
             'npc'          => 'NPC Compendium',
             'npc_show'     => ':name',
+            'spell'        => 'Spell Compendium',
+            'spell_show'   => ':name',
             'activity'     => 'Compendium Activity',
             'activity_day' => ':date',
         ],

@@ -112,24 +112,19 @@ $eventAnchorId = static function (CombatLogNpcEvent|CombatLogSpellEvent $event):
 $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
     if ($event instanceof CombatLogNpcEvent) {
         /** @var Npc|null $npc */
-        $npc  = $event->getRelation('npc');
-        $name = $npc ? e(__($npc->name)) : sprintf('#%d', $event->npc_id);
-        $icon = $npc && $npc->enemy_portrait_url
-            ? sprintf('<img src="%s" width="20" height="20" class="rounded mr-1" loading="lazy" alt=""/>', e(ksgAsset($npc->enemy_portrait_url)))
-            : '';
-        $url  = $npc ? route('npc.compendium.show', $npc->id) : null;
+        $npc = $event->getRelation('npc');
 
-        return $url
-            ? sprintf('<a href="%s">%s%s</a>', e($url), $icon, $name)
-            : $icon . $name;
+        if (!$npc) {
+            return sprintf('#%d', $event->npc_id);
+        }
+
+        return view('common.npc.link', ['npc' => $npc])->render();
     }
 
     /** @var Spell|null $spell */
     $spell = $event->getRelation('spell');
 
-    return $spell
-        ? sprintf('<a href="%s"><img src="%s" width="20" height="20" class="mr-1" loading="lazy" alt=""/></a>', e($spell->wowhead_url), e($spell->icon_url))
-        : '';
+    return $spell ? view('common.spell.link', ['spell' => $spell])->render() : '';
 };
 ?>
 @isset($date)

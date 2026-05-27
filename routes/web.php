@@ -59,6 +59,7 @@ use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
+use App\Http\Controllers\Compendium\SpellCompendiumController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
@@ -162,6 +163,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
+            });
+            Route::prefix('spell')->group(static function () {
+                Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
+                Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
             });
             Route::prefix('activity')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
@@ -568,6 +573,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             ->prefix('compendium')->group(static function () {
                 Route::prefix('npc')->group(static function () {
                     Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
+                });
+                Route::prefix('spell')->group(static function () {
+                    Route::get('/', new SpellCompendiumController()->get(...))->name('ajax.spell.compendium.search');
                 });
             });
 

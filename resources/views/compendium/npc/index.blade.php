@@ -26,6 +26,9 @@ use App\Models\Npc\NpcClassification;
 
             const skullIconUrl = '{{ ksgAssetImage('mapicon/raid_marker_skull.png') }}';
             const npcShowBaseUrl = '{{ url('/compendium/npc') }}';
+            const spellShowBaseUrl = '{{ url('/compendium/spell') }}';
+            const npcTemplate = Handlebars.templates['npc'];
+            const spellTemplate = Handlebars.templates['spell_template'];
 
             const table = $('#compendium_npc_table').DataTable({
                 'processing': true,
@@ -47,14 +50,13 @@ use App\Models\Npc\NpcClassification;
                         'data': 'name',
                         'name': 'name',
                         'render': function (data, type, row) {
-                            const portrait = row.enemy_portrait_url
-                                ? `<img src="${assetsBaseUrl}/${row.enemy_portrait_url}" width="20" height="20" class="mr-1" loading="lazy"/>`
-                                : '';
-                            const bossIcon = bossClassificationIds.includes(row.classification_id)
-                                ? `<img src="${skullIconUrl}" width="16" height="16" class="mr-1" title="{{ __('view_compendium.npc.index.boss') }}" data-toggle="tooltip"/>`
-                                : '';
-
-                            return `<a href="${npcShowBaseUrl}/${row.id}">${portrait}${data ?? ''}${bossIcon}</a>`;
+                            return npcTemplate({
+                                compendium_url: `${npcShowBaseUrl}/${row.id}`,
+                                portrait_url: `${assetsBaseUrl}/${row.enemy_portrait_url}`,
+                                is_boss: bossClassificationIds.includes(row.classification_id),
+                                boss_icon_url: skullIconUrl,
+                                name: data ?? '',
+                            });
                         },
                     },
                     {
@@ -75,9 +77,11 @@ use App\Models\Npc\NpcClassification;
                             }
 
                             return data.filter((spell) => !spell.hidden_on_map).map(function (spell) {
-                                return `<a href="${spell.wowhead_url}" data-wh-icon-size="small">` +
-                                    `<img src="${spell.icon_url}" width="16" height="16" loading="lazy"/>` +
-                                    `</a>`;
+                                return spellTemplate({
+                                    compendium_url: `${spellShowBaseUrl}/${spell.id}`,
+                                    icon_url: spell.icon_url,
+                                    name: lang.get(spell.name),
+                                });
                             }).join('');
                         },
                     },

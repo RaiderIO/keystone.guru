@@ -253,6 +253,7 @@ return [
             'new'                     => 'NEW',
             'compendium'              => 'Compendium',
             'npc_compendium'          => 'NPCs',
+            'spell_compendium'        => 'Spells',
             'compendium_activity'     => 'Activity',
         ],
         'nav' => [
@@ -619,6 +620,11 @@ return [
         ],
         'uploadlogs' => [
             'title' => 'Upload logs',
+        ],
+    ],
+    'npc' => [
+        'link' => [
+            'boss' => 'Boss',
         ],
     ],
     'release' => [

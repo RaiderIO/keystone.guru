@@ -53,6 +53,49 @@ return [
             ],
         ],
     ],
+    'spell' => [
+        'index' => [
+            'title'                 => 'Spell Compendium',
+            'header'                => 'Spell Compendium',
+            'table_header_name'     => 'Name',
+            'table_header_dungeons' => 'Dungeons',
+            'table_header_used_by'  => 'Used by',
+        ],
+        'show' => [
+            'title'   => ':name — Spell Compendium',
+            'wowhead' => 'View on Wowhead',
+        ],
+        'sections' => [
+            'header' => [
+                'aura'   => 'Aura',
+                'debuff' => 'Debuff',
+            ],
+            'details' => [
+                'title'                      => 'Details',
+                'header_schools'             => 'Schools',
+                'header_schools_tooltip'     => 'What type of damage does this spell do?',
+                'header_miss_types'          => 'Miss types',
+                'header_miss_types_tooltip'  => 'What can you do to avoid this spell?',
+                'header_dispel_type'         => 'Dispel type',
+                'header_dispel_type_tooltip' => 'What type of dispel can be used to remove this spell?',
+                'header_mechanic'            => 'Mechanic',
+                'header_cast_time'           => 'Cast time',
+                'header_duration'            => 'Duration',
+            ],
+            'dungeons' => [
+                'title'       => 'Dungeons',
+                'empty'       => 'Not linked to any dungeons.',
+                'header_name' => 'Name',
+            ],
+            'npcs' => [
+                'title'                 => 'Used by',
+                'empty'                 => 'No NPCs recorded.',
+                'header_name'           => 'Name',
+                'header_classification' => 'Classification',
+                'header_dungeons'       => 'Dungeons',
+            ],
+        ],
+    ],
     'activity' => [
         'index' => [
             'title'  => 'Compendium Activity',

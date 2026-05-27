@@ -45,12 +45,7 @@ use App\Models\Spell\Spell;
                         @endif
 
                         <tr>
-                            <td>
-                                <a href="{{ $spell->wowhead_url }}" data-wh-icon-size="small">
-                                    <img src="{{ $spell->icon_url }}" width="24" height="24" loading="lazy"/>
-                                    {{ __($spell->name) }}
-                                </a>
-                            </td>
+                            <td>@include('common.spell.link', ['spell' => $spell, 'size' => 24])</td>
                             <td>{{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') }}</td>
                             <td>{{ Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask, 'spellmisstypes') }}</td>
                             <td>{{ __($spell->dispel_type) }}</td>
