@@ -33,7 +33,7 @@ class AssignMissingSpellDungeons extends Command
         $bar = $this->output->createProgressBar(Npc::count());
         $bar->start();
 
-        Npc::with(['npcDungeons', 'npcSpells'])->chunk(100, function (Collection $npcs) use ($bar) {
+        Npc::with(['npcDungeons', 'npcSpells.spell.spellDungeons'])->chunk(100, function (Collection $npcs) use ($bar) {
             foreach ($npcs as $npc) {
                 /** @var Npc $npc */
                 // No dungeons assigned, cannot infer anything
@@ -48,11 +48,11 @@ class AssignMissingSpellDungeons extends Command
 
                     // For each dungeon this NPC is in, ensure the spell is also assigned to that dungeon
                     foreach ($npc->npcDungeons as $npcDungeon) {
-                        if ($spell->spellDungeons->pluck('dungeon_id')->contains($npc->dungeon_id)) {
-                            return;
+                        if ($spell->spellDungeons->pluck('dungeon_id')->contains($npcDungeon->dungeon_id)) {
+                            continue;
                         }
 
-                        SpellDungeon::create([
+                        SpellDungeon::firstOrCreate([
                             'spell_id'   => $spell->id,
                             'dungeon_id' => $npcDungeon->dungeon_id,
                         ]);
