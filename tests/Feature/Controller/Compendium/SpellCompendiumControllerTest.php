@@ -103,10 +103,39 @@ final class SpellCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenValidSpell_rendersEventFeedSection(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+
+        // Act
+        $response = $this->get(route('spell.compendium.show', $spell));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText(__('view_compendium.spell.sections.event_feed.title'));
+    }
+
+    #[Test]
     public function show_givenInvalidSpell_returnsNotFound(): void
     {
         // Act
         $response = $this->get(route('spell.compendium.show', ['spell' => 0]));
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    public function show_givenHiddenSpell_returnsNotFound(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', true)->first();
+        $this->assertNotNull($spell);
+
+        // Act
+        $response = $this->get(route('spell.compendium.show', $spell));
 
         // Assert
         $response->assertNotFound();

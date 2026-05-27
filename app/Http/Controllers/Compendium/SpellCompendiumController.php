@@ -8,6 +8,7 @@ use App\Logic\Datatables\ColumnHandler\Compendium\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Spell\NameColumnHandler;
 use App\Logic\Datatables\SpellsDatatablesHandler;
 use App\Models\Spell\Spell;
+use App\Service\Compendium\SpellCompendiumServiceInterface;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\View\View;
 
@@ -18,15 +19,20 @@ class SpellCompendiumController extends Controller
         return view('compendium.spell.index');
     }
 
-    public function show(Spell $spell): View
+    public function show(Spell $spell, SpellCompendiumServiceInterface $spellCompendiumService): View
     {
+        if ($spell->hidden_on_map) {
+            abort(404);
+        }
+
         $spell->load(['gameVersion', 'dungeons.expansion', 'characteristic']);
 
         $npcs = $spell->npcs()->with(['classification', 'dungeons'])->get();
 
         return view('compendium.spell.show', [
-            'spell' => $spell,
-            'npcs'  => $npcs,
+            'spell'     => $spell,
+            'npcs'      => $npcs,
+            'eventFeed' => $spellCompendiumService->buildEventFeed($spell),
         ]);
     }
 

@@ -94,6 +94,10 @@ return [
                 'header_classification' => 'Classification',
                 'header_dungeons'       => 'Dungeons',
             ],
+            'event_feed' => [
+                'title' => 'Recent Activity',
+                'empty' => 'No activity recorded yet.',
+            ],
         ],
     ],
     'activity' => [

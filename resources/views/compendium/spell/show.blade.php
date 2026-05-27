@@ -1,12 +1,15 @@
 <?php
 
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell           $spell
- * @var Collection<Npc> $npcs
+ * @var Spell                                               $spell
+ * @var Collection<Npc>                                     $npcs
+ * @var Collection<CombatLogNpcEvent|CombatLogSpellEvent>   $eventFeed
  */
 ?>
 @extends('layouts.sitepage', [
@@ -35,4 +38,6 @@ use Illuminate\Support\Collection;
     @include('compendium.spell.sections.dungeons')
 
     @include('compendium.spell.sections.npcs')
+
+    @include('compendium.spell.sections.event_feed')
 @endsection

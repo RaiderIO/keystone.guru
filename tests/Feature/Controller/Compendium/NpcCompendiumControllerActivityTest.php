@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Compendium;
 
 use App\Features\NpcCompendium;
 use App\Models\Dungeon;
+use App\Models\Season;
 use App\Models\User;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -24,7 +25,8 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
         $this->actingAs(User::findOrFail(1));
         Feature::define(NpcCompendium::class, true);
 
-        $this->dungeon = Dungeon::first();
+        $this->dungeon = Season::orderByDesc('id')->first()->dungeons()->first();
+//        dump($this->dungeon->name);
     }
 
     #[Test]
@@ -61,7 +63,7 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
     }
 
     #[Test]
-    public function activity_givenNoAuth_returnsOk(): void
+    public function activity_givenFeatureEnabledNoAuth_returnsOk(): void
     {
         // Arrange
         $this->actingAsGuest();

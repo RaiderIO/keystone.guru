@@ -62,7 +62,7 @@ class NpcCompendiumController extends Controller
         SeasonServiceInterface        $seasonService,
         NpcCompendiumServiceInterface $npcCompendiumService,
     ): View|RedirectResponse {
-        $contextDungeon = $this->getContextDungeonOrDefault($seasonService);
+        $contextDungeon = $this->getContextDungeonOrDefault($seasonService, $dungeon);
         if ($contextDungeon === null) {
             return redirect()->route('home');
         } elseif ($contextDungeon->id !== $dungeon->id) {
@@ -138,19 +138,26 @@ class NpcCompendiumController extends Controller
             ->getResult();
     }
 
-    private function getContextDungeonOrDefault(SeasonServiceInterface $seasonService): ?Dungeon
-    {
+    private function getContextDungeonOrDefault(
+        SeasonServiceInterface $seasonService,
+        ?Dungeon               $dungeon = null,
+    ): ?Dungeon {
         $result = null;
 
-        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
-        $currentSeason  = $seasonService->getCurrentSeason();
+        $currentSeason = $seasonService->getCurrentSeason();
 
         if ($currentSeason !== null) {
-            if ($currentSeason->hasDungeon($contextDungeon)) {
-                $result = $contextDungeon;
+            if ($dungeon !== null && $currentSeason->hasDungeon($dungeon)) {
+                $result = $dungeon;
             } else {
-                /** @var Dungeon $dungeon */
-                $result = $currentSeason->dungeons()->first();
+                // Fall back on the context dungeon if the requested dungeon is not valid
+                $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+                if ($currentSeason->hasDungeon($contextDungeon)) {
+                    $result = $contextDungeon;
+                } else {
+                    /** @var Dungeon $dungeon */
+                    $result = $currentSeason->dungeons()->first();
+                }
             }
         }
 
