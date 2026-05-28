@@ -27,10 +27,13 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Metric\MetricService;
+use App\Service\Season\SeasonAffixGroupService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use App\Service\Spell\SpellService;
+use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\View\ViewService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -144,6 +147,25 @@ class ServiceFixtures
             ]));
 
         return $seasonServiceMock;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getSeasonAffixGroupServiceMock(
+        PublicTestCase                    $testCase,
+        ?SeasonServiceInterface           $seasonService = null,
+        ?TimewalkingEventServiceInterface $timewalkingEventService = null,
+        array                             $methodsToMock = [],
+    ): MockObject|SeasonAffixGroupServiceInterface {
+        return $testCase
+            ->getMockBuilderPublic(SeasonAffixGroupService::class)
+            ->setConstructorArgs([
+                $seasonService ?? self::getSeasonServiceMock($testCase),
+                $timewalkingEventService ?? $testCase->createMockPublic(TimewalkingEventServiceInterface::class),
+            ])
+            ->onlyMethods($methodsToMock)
+            ->getMock();
     }
 
     public static function getCoordinatesServiceMock(

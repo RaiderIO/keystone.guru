@@ -11,6 +11,7 @@ use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Traits\Curl;
 
@@ -31,8 +32,9 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     use Curl;
 
     public function __construct(
-        private readonly SeasonServiceInterface         $seasonService,
-        private readonly CombatLogEventServiceInterface $combatLogEventService,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private readonly CombatLogEventServiceInterface   $combatLogEventService,
     ) {
     }
 
@@ -40,7 +42,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     {
         return HeatmapDataResponse::fromArray(
             $this->combatLogEventService->getGridAggregation(
-                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
+                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $this->seasonAffixGroupService, $heatmapDataFilter),
             )->toArray(),
         );
     }

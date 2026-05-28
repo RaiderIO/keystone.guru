@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -52,9 +53,12 @@ class ExpansionService implements ExpansionServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getData(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ExpansionData
-    {
-        return new ExpansionData($this, $expansion, $gameServerRegion);
+    public function getData(
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        Expansion                        $expansion,
+        ?GameServerRegion                $gameServerRegion = null
+    ): ExpansionData {
+        return new ExpansionData($this, $seasonAffixGroupService, $expansion, $gameServerRegion);
     }
 
     /**
@@ -105,7 +109,7 @@ class ExpansionService implements ExpansionServiceInterface
      * {@inheritDoc}
      */
     public function getCurrentSeasonAffixGroups(
-        Expansion         $expansion,
+        Expansion $expansion,
         ?GameServerRegion $gameServerRegion = null,
     ): Collection {
         $currentSeason = $this->getCurrentSeason($expansion, $gameServerRegion);

@@ -4,6 +4,8 @@ namespace App\Service\Expansion;
 
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Service\Season\SeasonAffixGroupService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Illuminate\Support\Collection;
 
 class ExpansionData
@@ -14,11 +16,12 @@ class ExpansionData
 
     public function __construct(
         ExpansionServiceInterface         $expansionService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         private readonly Expansion        $expansion,
         private readonly GameServerRegion $gameServerRegion,
     ) {
         $this->activeDungeons  = $this->expansion->dungeonsAndRaids;
-        $this->expansionSeason = new ExpansionSeason($expansionService, $this->expansion, $this->gameServerRegion);
+        $this->expansionSeason = new ExpansionSeason($expansionService, $seasonAffixGroupService, $this->expansion, $this->gameServerRegion);
     }
 
     public function getExpansion(): Expansion

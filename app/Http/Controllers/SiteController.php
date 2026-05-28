@@ -18,6 +18,7 @@ use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
@@ -223,6 +224,7 @@ class SiteController extends Controller
         Request                          $request,
         DiscoverServiceInterface         $discoverService,
         SeasonService                    $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         ExpansionService                 $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService,
     ): View {
@@ -238,6 +240,7 @@ class SiteController extends Controller
             'expansion'               => $currentExpansion,
             'gameVersion'             => GameVersion::getDefaultGameVersion(),
             'seasonService'           => $seasonService,
+            'seasonAffixGroupService' => $seasonAffixGroupService,
             'offset'                  => $offset,
             'showPrevious'            => $offset > $minOffset,
             'showNext'                => $offset < $maxOffset,

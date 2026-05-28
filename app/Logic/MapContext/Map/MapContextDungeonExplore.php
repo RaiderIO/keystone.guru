@@ -8,6 +8,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
 /**
@@ -22,12 +23,13 @@ class MapContextDungeonExplore extends MapContextMappingVersion
     use ListsEnemies;
 
     public function __construct(
-        CacheServiceInterface                   $cacheService,
-        CoordinatesServiceInterface             $coordinatesService,
-        private readonly SeasonServiceInterface $seasonService,
-        Dungeon                                 $dungeon,
-        MappingVersion                          $mappingVersion,
-        string                                  $mapFacadeStyle,
+        CacheServiceInterface                             $cacheService,
+        CoordinatesServiceInterface                       $coordinatesService,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        Dungeon                                           $dungeon,
+        MappingVersion                                    $mappingVersion,
+        string                                            $mapFacadeStyle,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
     }
@@ -62,7 +64,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);
 
         return array_merge(parent::toArray(), [
-            'featuredAffixes'   => $activeSeason?->getFeaturedAffixes() ?? [],
+            'featuredAffixes'   => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
             'seasonStartPeriod' => $activeSeason?->start_period ?? 0,
         ]);
     }

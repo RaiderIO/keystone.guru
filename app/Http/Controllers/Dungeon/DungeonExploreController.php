@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Illuminate\Contracts\View\View;
@@ -95,13 +96,14 @@ class DungeonExploreController extends Controller
     }
 
     public function viewDungeonFloor(
-        ExploreUrlFormRequest      $request,
-        MapContextServiceInterface $mapContextService,
-        SeasonServiceInterface     $seasonService,
-        DungeonServiceInterface    $dungeonService,
-        GameVersion                $gameVersion,
-        Dungeon                    $dungeon,
-        string                     $floorIndex = '1',
+        ExploreUrlFormRequest            $request,
+        MapContextServiceInterface       $mapContextService,
+        SeasonServiceInterface           $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        DungeonServiceInterface          $dungeonService,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        string                           $floorIndex = '1',
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -154,7 +156,7 @@ class DungeonExploreController extends Controller
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
-                    $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
             ]));
@@ -173,12 +175,13 @@ class DungeonExploreController extends Controller
     }
 
     public function embed(
-        ExploreEmbedUrlFormRequest $request,
-        MapContextServiceInterface $mapContextService,
-        SeasonServiceInterface     $seasonService,
-        GameVersion                $gameVersion,
-        Dungeon                    $dungeon,
-        string                     $floorIndex = '1',
+        ExploreEmbedUrlFormRequest       $request,
+        MapContextServiceInterface       $mapContextService,
+        SeasonServiceInterface           $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        string                           $floorIndex = '1',
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -261,7 +264,7 @@ class DungeonExploreController extends Controller
             'mapFacadeStyle'          => $mapFacadeStyle,
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
-                $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'   => $validated,
             'defaultZoom'  => $defaultZoom,

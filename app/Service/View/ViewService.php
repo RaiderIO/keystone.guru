@@ -23,6 +23,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
@@ -47,6 +48,7 @@ class ViewService implements ViewServiceInterface
     public function __construct(
         private readonly CacheServiceInterface              $cacheService,
         private readonly ExpansionServiceInterface          $expansionService,
+        private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
         private readonly AffixGroupEaseTierServiceInterface $easeTierService,
     ) {
         // Load the release version from the file, this is used to cache view variables
@@ -228,7 +230,7 @@ class ViewService implements ViewServiceInterface
                 /** @var Collection<ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
-                    $expansionsData->put($expansion->shortname, $this->expansionService->getData($expansion, $gameServerRegion));
+                    $expansionsData->put($expansion->shortname, $this->expansionService->getData($this->seasonAffixGroupService, $expansion, $gameServerRegion));
                 }
 
                 /** @var Collection<Expansion> $activeExpansions */

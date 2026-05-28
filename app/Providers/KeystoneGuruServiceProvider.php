@@ -115,6 +115,8 @@ use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Reverb\ReverbHttpApiService;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
+use App\Service\Season\SeasonAffixGroupService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
@@ -230,6 +232,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
+
+        // Depends on SeasonService, TimewalkingEventService
+        $this->app->bind(SeasonAffixGroupServiceInterface::class, SeasonAffixGroupService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
 

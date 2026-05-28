@@ -14,6 +14,7 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Traits\Curl;
 use Str;
@@ -33,6 +34,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
     public function __construct(
         private readonly CoordinatesServiceInterface        $coordinatesService,
         private readonly SeasonServiceInterface             $seasonService,
+        private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
         private readonly CombatLogEventServiceInterface     $combatLogEventService,
         private readonly RaiderIOApiServiceLoggingInterface $log,
     ) {
@@ -82,7 +84,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             return HeatmapDataResponse::fromArray(
                 new RaiderIOHeatmapGridResponse(
                     $this->coordinatesService,
-                    CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
+                    CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $this->seasonAffixGroupService, $heatmapDataFilter),
                     $json['gridsByFloor'],
                     $json['numRuns'],
                     $json['maxSamplesInGrid'],
