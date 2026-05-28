@@ -19,6 +19,18 @@ class CombatLogVersion
     public const int RETAIL_12_0_1      = 22_012_000_001;
     public const int RETAIL_12_0_5      = 22_012_000_005;
 
+    public const array RETAIL_ALL = [
+        self::RETAIL_10_1_0 => 2,
+        self::RETAIL_11_0_2 => 3,
+        self::RETAIL_11_0_5 => 4,
+        self::RETAIL_11_0_7 => 7,
+        self::RETAIL_11_1_0 => 8,
+        self::RETAIL_11_1_7 => 10,
+        self::RETAIL_11_2_0 => 11,
+        self::RETAIL_12_0_1 => 12,
+        self::RETAIL_12_0_5 => 14,
+    ];
+
     public const array ALL = [
         self::CLASSIC            => 1,
         self::RETAIL_10_1_0      => 2,

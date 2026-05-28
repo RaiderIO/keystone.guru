@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
@@ -55,10 +56,11 @@ class CombatLogEventFilter implements Arrayable
     private ?int $minSamplesRequired = null;
 
     public function __construct(
-        private readonly SeasonServiceInterface  $seasonService,
-        private readonly Dungeon                 $dungeon,
-        private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType  $dataType,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private readonly Dungeon                          $dungeon,
+        private readonly CombatLogEventEventType          $eventType,
+        private readonly CombatLogEventDataType           $dataType,
     ) {
         $this->affixes                     = collect();
         $this->classes                     = collect();
@@ -441,7 +443,7 @@ class CombatLogEventFilter implements Arrayable
             $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
             if ($mostRecentSeason !== null) {
                 /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
-                $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
+                $weeklyAffixGroupsSinceStart = $this->seasonAffixGroupService->getWeeklyAffixGroupsSinceStart(
                     $mostRecentSeason,
                     GameServerRegion::getUserOrDefaultRegion(),
                 );
@@ -471,11 +473,13 @@ class CombatLogEventFilter implements Arrayable
     }
 
     public static function fromHeatmapDataFilter(
-        SeasonServiceInterface $seasonService,
-        HeatmapDataFilter      $heatmapDataFilter,
+        SeasonServiceInterface           $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        HeatmapDataFilter                $heatmapDataFilter,
     ): CombatLogEventFilter {
         $combatLogEventFilter = new CombatLogEventFilter(
             $seasonService,
+            $seasonAffixGroupService,
             $heatmapDataFilter->getDungeon(),
             $heatmapDataFilter->getEventType(),
             $heatmapDataFilter->getDataType(),

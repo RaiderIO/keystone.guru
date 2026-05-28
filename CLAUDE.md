@@ -34,6 +34,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 ## Application Structure & Architecture
 - Stick to existing directory structure; don't create new base folders without approval.
 - Do not change the application's dependencies without approval.
+- Avoid creating duplicate folders such as `app/Models/Models` or `tests/Feature/Feature`. Use existing folders and structure.
 
 ## Frontend Bundling
 - If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
@@ -49,24 +50,26 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - Always run Laravel, test commands, and any other file system commands inside Docker.
 
 For example:
-
 - `docker compose exec -T app php ...`
 - `docker compose exec -T app php artisan ...`
 - `docker compose exec -T app vendor/bin/phpunit ...`
 
 ## Host Machine
-- The host machine runs Windows
+- The host machine runs Windows.
 - The project is set up to run in Docker, so all commands should be executed within the Docker environment.
 - The project uses WSL2, so you can also run basic Linux commands (such as `mkdir` or `ls`) in the WSL2 terminal if needed.
 - Do not run any commands directly on the host machine, such as Powershell commands.
 - All newly created files should have LF line endings.
+- Do not create new files or folders using `docker compose exec`. You will not be able to edit or remove them properly from the host machine otherwise.
+- Do not use `php artisan make:` commands to create new files. Instead, create new files directly in the codebase to ensure they are created with the correct permissions and structure.
 
 ## Project preferences
 - `sprintf` should always be used over direct concatenation for dynamic strings.
 
 ## Git
-The project is under Git version control.
-- Any newly created files should be added to the repository.
+- The project is under Git version control.
+- Any newly created files should be staged.
+- Commits should not be done unless explicitly asked.
 
 ## Finishing up your work
 - After completing your work, ensure you run `composer run fix` to run PhpCsFixer and `composer run analyse` to run PhpStan to verify your work.
@@ -131,12 +134,27 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## Comments
 - Prefer PHPDoc blocks over inline comments. Never use comments within the code itself unless there is something very complex going on.
+- If there's existing comments in the code, prefer to keep them around if they aren't completely redundant.
 
 ## PHPDoc Blocks
 - Add useful array shape type definitions for arrays when appropriate.
 
 ## Enums
 - Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
+
+## Class definition order
+- traits
+- constants
+- static properties
+- private properties
+- protected properties
+- public properties
+- constructor
+- public methods
+- protected methods
+- private methods
+- static methods
+- magic methods (like `__call` or `__get`)
 
 === tests rules ===
 
@@ -169,6 +187,16 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ### Controllers & Validation
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
 - Check sibling Form Requests to see if the application uses array or string based validation rules.
+- Any IDs in the post body of a request should be validated to ensure they exist in the database and are of the correct type. For example: `['user_id' => ['required', 'integer', 'exists:users,id']]`. Do not put this validation in a controller; it should be in a Form Request.
+- Any IDs that are validated through an `exists` rule should also have a cached getter so that the Controller can directly get a modal instance. For example:
+```php
+    public function dungeon(): Dungeon
+    {
+        return once(fn() => Dungeon::query()
+            ->where('challenge_mode_id', $this->validated('challenge_mode_id'))
+            ->firstOrFail());
+    }
+```
 
 ### Queues
 - Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
@@ -208,6 +236,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ### Database
 - When modifying a column, the migration must include all of the attributes that were previously defined on the column. Otherwise, they will be dropped and lost.
 - Laravel 12 allows limiting eagerly loaded records natively, without external packages: `$query->latest()->limit(10);`.
+- Do not use foreign keys for migrations. This application does not use them, and they can cause issues with seeding and testing.
 
 ### Models
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
@@ -216,6 +245,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Use the `__()` helper function for localization and translation of strings. Use translation keys. For example: `__('view_common.my.folder.structure.welcome_to_the_website')`.
 - The language folder exists in the root of the project. Translation files are located in `lang/{locale}/` and should be organized by relevant class name (such as `Spell` -> `spells.php`) or folder structure for views (such as `view_common` or `view_dungeon`). For example: `lang/en/auth.php`, `lang/en/dashboard.php`, etc.
 - Only ever edit localization files in the `lang/en_US` directory. All other languages are handled externally.
+- For blade.php files, the translation keys matches exactly the file structure and name. For example, `resources/views/common/footer.blade.php` would have translation keys like `view_common.footer.copyright`.
 
 === pennant/core rules ===
 

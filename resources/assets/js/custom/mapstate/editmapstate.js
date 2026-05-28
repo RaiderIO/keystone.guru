@@ -7,6 +7,10 @@ class EditMapState extends MapState {
         return 'EditMapState';
     }
 
+    shouldRebuildEnemyVisuals() {
+        return true;
+    }
+
     start() {
         super.start();
         let self = this;

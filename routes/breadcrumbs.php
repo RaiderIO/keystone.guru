@@ -17,6 +17,7 @@ use App\Models\Spell\Spell;
 use App\Models\Team;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator;
+use Illuminate\Support\Carbon;
 
 /**
  * Home page
@@ -325,6 +326,10 @@ Breadcrumbs::for('admin.tools.combatlog.regenerate', static function (Generator 
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_regenerate'), route('admin.tools.combatlog.regenerate.view'));
 });
+Breadcrumbs::for('admin.tools.combatlog.criteria', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.combat_log_criteria'), route('admin.tools.combatlog.criteria.view'));
+});
 Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view'), route('admin.tools.dungeonroute.view'));
@@ -511,4 +516,38 @@ Breadcrumbs::for('admin.user.list', static function (Generator $trail) {
 Breadcrumbs::for('admin.userreport.list', static function (Generator $trail) {
     $trail->parent('admin');
     $trail->push(__('breadcrumbs.home.admin.user_reports.user_reports'), route('admin.userreports'));
+});
+
+/**
+ * Compendium
+ */
+Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index'));
+});
+
+Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $npc) {
+    $trail->parent('compendium.npc.index');
+    $trail->push(__('breadcrumbs.home.compendium.npc_show', ['name' => __($npc->name)]), route('npc.compendium.show', $npc));
+});
+
+Breadcrumbs::for('compendium.spell.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index'));
+});
+
+Breadcrumbs::for('compendium.spell.show', static function (Generator $trail, Spell $spell) {
+    $trail->parent('compendium.spell.index');
+    $trail->push(__('breadcrumbs.home.compendium.spell_show', ['name' => __($spell->name)]), route('spell.compendium.show', $spell));
+});
+
+Breadcrumbs::for('compendium.activity.index', static function (Generator $trail, Dungeon $dungeon) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.activity'), route('compendium.activity.index'));
+    $trail->push(__($dungeon->name), route('compendium.activity', $dungeon));
+});
+
+Breadcrumbs::for('compendium.activity.day', static function (Generator $trail, Dungeon $dungeon, Carbon $date) {
+    $trail->parent('compendium.activity.index', $dungeon);
+    $trail->push(__('breadcrumbs.home.compendium.activity_day', ['date' => $date->format('F j, Y')]), route('compendium.activity.day', ['dungeon' => $dungeon, 'date' => $date->format('Y-m-d')]));
 });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\Heatmap;
+use App\Features\NpcCompendium;
 use App\Features\SearchPageRework;
 use App\Models\Dungeon;
 use App\Models\Expansion;
@@ -176,6 +177,37 @@ $isActiveRoute = function (string $route) {
                         </li>
                     @endif
                 @endforeach
+
+                @if(Feature::active(NpcCompendium::class))
+                        <?php
+                        $compendiumRoutes       = [
+                            route('npc.compendium.index') => sprintf('%s %s', '<i class="fas fa-dragon"></i>', __('view_common.layout.header.npc_compendium')),
+                            route('spell.compendium.index') => sprintf('%s %s', '<i class="fas fa-magic"></i>', __('view_common.layout.header.spell_compendium')),
+                            route('compendium.activity.index') => sprintf('%s %s', '<i class="fas fa-stream"></i>', __('view_common.layout.header.compendium_activity')),
+                        ];
+                        $hasCompendiumSubActive = null;
+                        $compendiumHeaderText   = __('view_common.layout.header.compendium');
+                        $compendiumDropdownId   = Str::slug($compendiumHeaderText);
+                        foreach ($compendiumRoutes as $itemKey => $item) {
+                            $hasCompendiumSubActive = $hasCompendiumSubActive ?? $isActiveRoute($itemKey);
+                        }
+                        ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ $hasCompendiumSubActive }}" href="#"
+                           id="{{ $compendiumDropdownId }}" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-book-open"></i>
+                            {{ $compendiumHeaderText }}
+                        </a>
+                        <div class="dropdown-menu text-center text-xl-left"
+                             aria-labelledby="{{ $compendiumDropdownId }}">
+                            @foreach($compendiumRoutes as $itemKey => $item)
+                                <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                                   href="{{ $itemKey }}">{!! $item !!}</a>
+                            @endforeach
+                        </div>
+                    </li>
+                @endif
             </ul>
             <ul class="navbar-nav">
                 <?php

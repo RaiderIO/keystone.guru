@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
  * @property int    $id
  * @property string $name
  * @property string $key
+ * @property string $icon_name
  *
  * @property Collection<Npc> $npcs
  *
@@ -25,11 +26,13 @@ class Characteristic extends CacheModel
         'id',
         'name',
         'key',
+        'icon_name',
     ];
 
     protected $visible = [
         'name',
         'key',
+        'icon_name',
     ];
 
     public const CHARACTERISTIC_TAUNT           = 'taunt';

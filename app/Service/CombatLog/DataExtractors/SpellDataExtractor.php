@@ -14,9 +14,12 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
-use App\Models\CombatLog\CombatLogNpcSpellAssignment;
-use App\Models\CombatLog\CombatLogSpellUpdate;
-use App\Models\GameVersion\GameVersion;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogNpcEventType;
+use App\Models\CombatLog\CombatLogSpellEvent;
+use App\Models\CombatLog\CombatLogSpellEventType;
+use App\Models\CombatLog\CombatLogSpellPropertyObservation;
+use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
@@ -24,35 +27,57 @@ use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
-use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class SpellDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int, CombatLogEvent> */
+    /** @var Collection<int, Collection<CombatLogEvent>> */
     private Collection $spellIdsForDungeon;
 
     /** @var Collection<int> */
     private Collection $summonedNpcs;
 
-    /** @var Collection<Npc> */
+    /** @var Collection<int, Npc|false> */
     private Collection $npcCache;
 
     /** @var Collection<int, SpellModel> */
     private readonly Collection $allSpells;
 
+    /**
+     * All (spell_id, property) pairs observed this session — batch-upserted in afterExtract.
+     *
+     * @var Collection<string, array{spell_id: int, property: SpellProperty}>
+     */
+    private Collection $pendingPropertyObservations;
+
+    /**
+     * New (npc_id, spell_id, dungeon_id) triples discovered this session — written in afterExtract.
+     *
+     * @var Collection<string, array{npc_id: int, spell_id: int, dungeon_id: int}>
+     */
+    private Collection $pendingNpcSpellAssignments;
+
+    /**
+     * Newly created spells — SpellCreated events written in afterExtract.
+     *
+     * @var Collection<int, SpellModel>
+     */
+    private Collection $pendingNewSpells;
+
     private readonly SpellDataExtractorLoggingInterface $log;
 
     private ?string $currentCombatLogFilePath = null;
 
-    public function __construct(
-        private readonly WowheadServiceInterface $wowheadService,
-    ) {
-        $this->spellIdsForDungeon = collect();
-        $this->summonedNpcs       = collect();
-        $this->npcCache           = collect();
-        $this->allSpells          = SpellModel::with('spellDungeons')->get()->keyBy('id');
+    public function __construct()
+    {
+        $this->spellIdsForDungeon          = collect();
+        $this->summonedNpcs                = collect();
+        $this->npcCache                    = collect();
+        $this->pendingPropertyObservations = collect();
+        $this->pendingNpcSpellAssignments  = collect();
+        $this->pendingNewSpells            = collect();
+        $this->allSpells                   = SpellModel::with('spellDungeons')->get()->keyBy('id');
 
         $log = App::make(SpellDataExtractorLoggingInterface::class);
         /** @var SpellDataExtractorLoggingInterface $log */
@@ -110,10 +135,9 @@ class SpellDataExtractor implements DataExtractorInterface
             // If the NPC broke an aura - that's not the NPC casting "Stealth" on a player - no it broke it out of it,
             // so don't assign that spell to this NPC
             if (!($suffix instanceof AuraBrokenSpell) && !($suffix instanceof AuraBroken)) {
-                $this->extractSpellData($result, $currentDungeon, $parsedEvent, $prefix);
-
+                $this->extractSpellData($result, $prefix);
+                $this->collectPropertyObservations($parsedEvent, $prefix);
                 $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
-
                 $this->assignSpellToNpc($result, $currentDungeon, $parsedEvent, $sourceGuid, $prefix);
             }
         }
@@ -121,11 +145,87 @@ class SpellDataExtractor implements DataExtractorInterface
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-        // Reset
-        $this->spellIdsForDungeon       = collect();
-        $this->summonedNpcs             = collect();
-        $this->npcCache                 = collect();
-        $this->currentCombatLogFilePath = null;
+        // SpellCreated events must be written before PropertyChanged so the event feed is chronologically correct
+        foreach ($this->pendingNewSpells as $spellId => $spell) {
+            CombatLogSpellEvent::create([
+                'spell_id'        => $spellId,
+                'event_type'      => CombatLogSpellEventType::SpellCreated,
+                'property'        => null,
+                'combat_log_path' => $this->currentCombatLogFilePath,
+            ]);
+        }
+
+        if ($this->pendingPropertyObservations->isNotEmpty()) {
+            $now  = Carbon::now()->toDateTimeString();
+            $rows = $this->pendingPropertyObservations->map(fn(array $observation) => [
+                'spell_id'        => $observation['spell_id'],
+                'property'        => $observation['property']->value,
+                'observed_on'     => Carbon::today()->toDateString(),
+                'combat_log_path' => $this->currentCombatLogFilePath ?? '',
+                'created_at'      => $now,
+                'updated_at'      => $now,
+            ])->all();
+
+            CombatLogSpellPropertyObservation::upsert(
+                $rows,
+                ['spell_id', 'property', 'observed_on'],
+                ['combat_log_path', 'updated_at'],
+            );
+
+            foreach ($this->pendingPropertyObservations as $observation) {
+                /** @var SpellModel|null $spell */
+                $spell = $this->allSpells->get($observation['spell_id']);
+                if ($spell === null || $this->spellHasProperty($spell, $observation['property'])) {
+                    continue;
+                }
+
+                $this->applyPropertyToSpell($spell, $observation['property']);
+
+                if ($spell->isDirty() && $spell->save()) {
+                    $result->updatedSpell();
+
+                    CombatLogSpellEvent::create([
+                        'spell_id'        => $observation['spell_id'],
+                        'event_type'      => CombatLogSpellEventType::PropertyChanged,
+                        'property'        => $observation['property'],
+                        'combat_log_path' => $this->currentCombatLogFilePath,
+                    ]);
+                }
+            }
+        }
+
+        foreach ($this->pendingNpcSpellAssignments as $pending) {
+            NpcSpell::create([
+                'npc_id'   => $pending['npc_id'],
+                'spell_id' => $pending['spell_id'],
+            ]);
+
+            if (!SpellDungeon::where('spell_id', $pending['spell_id'])
+                ->where('dungeon_id', $pending['dungeon_id'])->exists()) {
+                SpellDungeon::create([
+                    'spell_id'   => $pending['spell_id'],
+                    'dungeon_id' => $pending['dungeon_id'],
+                ]);
+            }
+
+            CombatLogNpcEvent::create([
+                'npc_id'          => $pending['npc_id'],
+                'event_type'      => CombatLogNpcEventType::SpellAssigned,
+                'model_class'     => SpellModel::class,
+                'model_id'        => $pending['spell_id'],
+                'combat_log_path' => $this->currentCombatLogFilePath,
+            ]);
+
+            $result->createdNpcSpell();
+        }
+
+        $this->spellIdsForDungeon          = collect();
+        $this->summonedNpcs                = collect();
+        $this->npcCache                    = collect();
+        $this->pendingPropertyObservations = collect();
+        $this->pendingNpcSpellAssignments  = collect();
+        $this->pendingNewSpells            = collect();
+        $this->currentCombatLogFilePath    = null;
     }
 
     private function isSummonedNpc(CombatLogEvent $parsedEvent): bool
@@ -152,29 +252,53 @@ class SpellDataExtractor implements DataExtractorInterface
         return $result;
     }
 
-    private function extractSpellData(
-        ExtractedDataResult          $result,
-        DataExtractionCurrentDungeon $currentDungeon,
-        CombatLogEvent               $parsedEvent,
-        Spell                        $spell,
-    ): void {
-        // Now that we've extract spell data from the combat log, either update the data that's there in the database,
-        // or fetch some additional info from Wowhead
+    private function extractSpellData(ExtractedDataResult $result, Spell $spell): void
+    {
         $spellId = $spell->getSpellId();
         if ($this->allSpells->has($spellId)) {
-            // Update the spell based on a found combat log event
-            $this->updateSpell($result, $this->allSpells->get($spellId), $parsedEvent);
-
             return;
         }
 
-        // Create a new spell and fetch the info for it
-        $createdSpell = $this->createSpellAndFetchInfo($result, $currentDungeon, $spell, $parsedEvent);
-        if ($createdSpell instanceof SpellModel) {
-            // Add to master list so that it doesn't get inserted twice
-            $this->allSpells->put($spellId, $createdSpell);
+        $createdSpell = $this->createSpell($result, $spell);
+        $this->allSpells->put($spellId, $createdSpell);
+        $this->pendingNewSpells->put($spellId, $createdSpell);
 
-            $this->log->createMissingSpellCreatedSpell($createdSpell->name, $spellId);
+        $this->log->createMissingSpellCreatedSpell($createdSpell->name, $spellId);
+    }
+
+    private function collectPropertyObservations(CombatLogEvent $parsedEvent, Spell $prefix): void
+    {
+        $spellId  = $prefix->getSpellId();
+        $suffix   = $parsedEvent->getSuffix();
+        $destGuid = $parsedEvent->getGenericData()->getDestGuid();
+
+        $properties = [];
+
+        if ($suffix instanceof AuraAppliedInterface) {
+            if ($suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
+                $destGuid instanceof Creature &&
+                $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE) {
+                $properties[] = SpellProperty::Aura;
+            } elseif ($suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF && $destGuid instanceof Player) {
+                $properties[] = SpellProperty::Debuff;
+            }
+        }
+
+        if ($suffix instanceof MissedInterface) {
+            $bit = SpellModel::GUID_MISS_TYPE_MAPPING[$suffix->getMissType()::class] ?? null;
+            if ($bit !== null) {
+                $properties[] = SpellProperty::fromMissTypeBit($bit);
+            }
+        }
+
+        foreach ($properties as $property) {
+            $dedupKey = sprintf('%d-%s', $spellId, $property->value);
+            if (!$this->pendingPropertyObservations->has($dedupKey)) {
+                $this->pendingPropertyObservations->put($dedupKey, [
+                    'spell_id' => $spellId,
+                    'property' => $property,
+                ]);
+            }
         }
     }
 
@@ -188,7 +312,7 @@ class SpellDataExtractor implements DataExtractorInterface
             $this->spellIdsForDungeon->put($currentDungeon->dungeon->id, collect());
         }
 
-        /** @var Collection $spellIdsForDungeon */
+        /** @var Collection<int, CombatLogEvent> $spellIdsForDungeon */
         $spellIdsForDungeon = $this->spellIdsForDungeon->get($currentDungeon->dungeon->id);
 
         if (!$spellIdsForDungeon->has($prefix->getSpellId())) {
@@ -211,7 +335,6 @@ class SpellDataExtractor implements DataExtractorInterface
                         'dungeon_id' => $currentDungeon->dungeon->id,
                     ]);
 
-                    // Refresh relationship
                     $spell->unsetRelation('spellDungeons')->load('spellDungeons');
 
                     $result->createdSpellDungeon();
@@ -236,7 +359,7 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         // Assign spell IDs to NPCs
-        /** @var Npc|null|bool $npc */
+        /** @var Npc|null|false $npc */
         $npc = $this->npcCache->get($sourceGuid->getId());
         if ($npc === false) {
             return;
@@ -249,37 +372,16 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         if ($npc instanceof Npc) {
+            $dedupKey    = sprintf('%d-%d', $npc->id, $prefix->getSpellId());
             $npcHasSpell = $npc->npcSpells->filter(fn(NpcSpell $npcSpell) => $npcSpell->spell_id === $prefix->getSpellId())->isNotEmpty();
 
             // This NPC now casts this spell - we have proof
-            if (!$npcHasSpell) {
-                NpcSpell::create([
-                    'npc_id'   => $npc->id,
-                    'spell_id' => $prefix->getSpellId(),
+            if (!$npcHasSpell && !$this->pendingNpcSpellAssignments->has($dedupKey)) {
+                $this->pendingNpcSpellAssignments->put($dedupKey, [
+                    'npc_id'     => $npc->id,
+                    'spell_id'   => $prefix->getSpellId(),
+                    'dungeon_id' => $currentDungeon->dungeon->id,
                 ]);
-
-                // Assign the spell to the dungeon as well
-                if (
-                    !SpellDungeon::where('spell_id', $prefix->getSpellId())
-                        ->where('dungeon_id', $currentDungeon->dungeon->id)->exists()
-                ) {
-                    SpellDungeon::create([
-                        'spell_id'   => $prefix->getSpellId(),
-                        'dungeon_id' => $currentDungeon->dungeon->id,
-                    ]);
-                }
-
-                CombatLogNpcSpellAssignment::create([
-                    'npc_id'          => $npc->id,
-                    'spell_id'        => $prefix->getSpellId(),
-                    'combat_log_path' => $this->currentCombatLogFilePath,
-                    'raw_event'       => $parsedEvent->getRawEvent(),
-                ]);
-
-                // Refresh the relation
-                $npc->unsetRelation('npcSpells')->load('npcSpells');
-
-                $result->createdNpcSpell();
 
                 $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
             }
@@ -288,100 +390,52 @@ class SpellDataExtractor implements DataExtractorInterface
         }
     }
 
-    private function updateSpell(
-        ExtractedDataResult $result,
-        SpellModel          $spell,
-        CombatLogEvent      $combatLogEvent,
-    ): bool {
-        $before = $spell->getAttributes();
-
-        $suffix      = $combatLogEvent->getSuffix();
-        $spell->aura = $spell->aura ||
-        ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
-            $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
-            $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE) ? 1 : 0;
-        $spell->debuff = $spell->debuff ||
-        ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
-            $combatLogEvent->getGenericData()->getDestGuid() instanceof Player) ? 1 : 0;
-        // If a spell was missed somehow, write it to the miss_types_mask field
-        if ($suffix instanceof MissedInterface) {
-            $spell->miss_types_mask |=
-                SpellModel::GUID_MISS_TYPE_MAPPING[$suffix->getMissType()::class] ?? 0;
+    private function applyPropertyToSpell(SpellModel $spell, SpellProperty $property): void
+    {
+        if ($property === SpellProperty::Aura) {
+            $spell->aura = true;
+        } elseif ($property === SpellProperty::Debuff) {
+            $spell->debuff = true;
+        } else {
+            $spell->miss_types_mask |= $this->missTypeBit($property);
         }
-
-        if ($spell->isDirty() && $spell->save()) {
-            $boolToInt = fn($value) => is_bool($value) ? (int)$value : $value;
-            CombatLogSpellUpdate::create([
-                'spell_id'        => $spell->id,
-                'before'          => json_encode(array_map($boolToInt, $before)),
-                'after'           => json_encode(array_map($boolToInt, $spell->getAttributes())),
-                'combat_log_path' => $this->currentCombatLogFilePath,
-                'raw_event'       => $combatLogEvent->getRawEvent(),
-            ]);
-
-            $result->updatedSpell();
-
-            return true;
-        }
-
-        return false;
     }
 
-    private function createSpellAndFetchInfo(
-        ExtractedDataResult          $result,
-        DataExtractionCurrentDungeon $currentDungeon,
-        Spell                        $spell,
-        CombatLogEvent               $combatLogEvent,
-    ): ?SpellModel {
-        try {
-            $this->log->createSpellAndFetchInfoStart($spell->getSpellId());
-
-            // @TODO We need to know the game version assigned to the combat log to do this properly
-            $spellDataResult = $this->wowheadService->getSpellData(
-                GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
-                $spell->getSpellId(),
-            );
-
-            $spellAttributes = [
-                'id'              => $spell->getSpellId(),
-                'fetched_data_at' => Carbon::now(),
-            ];
-
-            if ($spellDataResult === null) {
-                $this->log->createSpellAndFetchInfoSpellDataResultIsNull($spell->getSpellId());
-
-                $spellAttributes = array_merge($spellAttributes, [
-                    'dispel_type'  => '',
-                    'icon_name'    => '',
-                    'name'         => $spell->getSpellName(),
-                    'schools_mask' => $spell->getSpellSchool(),
-                    'aura'         => false,
-                ]);
-            } else {
-                $spellAttributes = array_merge($spellAttributes, $spellDataResult->toArray());
-            }
-
-            $result->createdSpell();
-
-            $createdSpell = SpellModel::create($spellAttributes);
-            // Load the relationship in advance
-            $createdSpell->setRelation('spellDungeons', collect());
-
-            // Ensure we know this is when the spell was created
-            CombatLogSpellUpdate::create([
-                'spell_id'        => $createdSpell->id,
-                'before'          => null,
-                'after'           => json_encode($createdSpell->getAttributes()),
-                'combat_log_path' => $this->currentCombatLogFilePath,
-                'raw_event'       => $combatLogEvent->getRawEvent(),
-            ]);
-
-            // With the created spell, update it according to the combat log event that created it (aura assignments etc)
-            $this->updateSpell($result, $createdSpell, $combatLogEvent);
-
-            return $createdSpell;
-        } finally {
-            $this->log->createSpellAndFetchInfoEnd();
+    private function spellHasProperty(SpellModel $spell, SpellProperty $property): bool
+    {
+        if ($property === SpellProperty::Aura) {
+            return $spell->aura;
         }
+
+        if ($property === SpellProperty::Debuff) {
+            return $spell->debuff;
+        }
+
+        return (bool)($spell->miss_types_mask & $this->missTypeBit($property));
+    }
+
+    private function missTypeBit(SpellProperty $property): int
+    {
+        $name = substr($property->value, 5);
+        $bit  = array_search($name, SpellModel::ALL_MISS_TYPES, true);
+
+        return $bit !== false ? (int)$bit : 0;
+    }
+
+    private function createSpell(ExtractedDataResult $result, Spell $prefix): SpellModel
+    {
+        $createdSpell = SpellModel::create([
+            'id'           => $prefix->getSpellId(),
+            'dispel_type'  => '',
+            'icon_name'    => '',
+            'name'         => $prefix->getSpellName(),
+            'schools_mask' => $prefix->getSpellSchool(),
+            'aura'         => false,
+        ]);
+        $createdSpell->setRelation('spellDungeons', collect());
+
+        $result->createdSpell();
+
+        return $createdSpell;
     }
 }

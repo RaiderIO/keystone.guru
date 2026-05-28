@@ -187,6 +187,21 @@ return [
                 'tries'      => 1,
                 'timeout'    => 0,
             ],
+            'supervisor-combat-log-fanout' => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-local-combat-log-fanout', env('APP_TYPE'))],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 3,
+            ],
+            'supervisor-combat-log-process' => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-local-combat-log-process', env('APP_TYPE'))],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 1,
+                'timeout'    => 1800,
+            ],
             'supervisor-thumbnail' => [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-local-thumbnail', env('APP_TYPE'))],

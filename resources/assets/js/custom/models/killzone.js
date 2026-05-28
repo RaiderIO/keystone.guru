@@ -57,6 +57,7 @@ class KillZone extends MapObject {
         // Layer that is shown to the user and that he/she can click on to make adjustments to this killzone. May be null
         this.enemiesLayer = null;
         this.overpulledEnemiesLayer = null;
+        this._isBulkUpdating = false;
 
         this.setSynced(false);
 
@@ -255,13 +256,11 @@ class KillZone extends MapObject {
             return;
         }
 
-        let spellIds = [];
+        let spellIds = remoteSpells.map(remoteSpell => parseInt(remoteSpell.id));
 
-        this.spells = [];
-        for (let i = 0; i < remoteSpells.length; i++) {
-            let remoteSpell = remoteSpells[i];
-
-            spellIds.push(remoteSpell.id);
+        // Do not unnecessarily call this function - it can be heavy
+        if (_.isEqual([...this.spellIds].sort(), [...spellIds].sort())) {
+            return;
         }
 
         this.setSpells(spellIds);
@@ -370,7 +369,9 @@ class KillZone extends MapObject {
                     enemy.unregister('object:changed', this);
                 }
             }
-            this.signal('killzone:enemyremoved', {enemy: enemy});
+            if (!this._isBulkUpdating) {
+                this.signal('killzone:enemyremoved', {enemy: enemy});
+            }
         }
 
         // If the enemy we're removing from the pull is the real one
@@ -432,7 +433,9 @@ class KillZone extends MapObject {
                 enemy.register('object:changed', this, this._pridefulEnemyChanged.bind(this));
             }
             enemy.register('obsolete:changed', this, this._enemyObsoleteChanged.bind(this));
-            this.signal('killzone:enemyadded', {enemy: enemy});
+            if (!this._isBulkUpdating) {
+                this.signal('killzone:enemyadded', {enemy: enemy});
+            }
         }
 
         // If the enemy we're adding to the pull is the real one, not the one attached to a pack with the final boss
@@ -918,8 +921,12 @@ class KillZone extends MapObject {
 
         let self = this;
 
+        let previousForces = this.getEnemyForces();
+
         // Remove any enemies that we may have had
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        this._isBulkUpdating = true;
 
         // Copy enemies array as we're making changes in it by removing enemies
         let currentEnemies = [...this.enemies];
@@ -950,6 +957,11 @@ class KillZone extends MapObject {
                     'this enemy was probably removed during a migration?');
             }
         }
+
+        this._isBulkUpdating = false;
+
+        let newForces = this.getEnemyForces();
+        this.signal('killzone:enemieschanged', {previousForces: previousForces, newForces: newForces});
 
         this.redrawConnectionsToEnemies();
     }

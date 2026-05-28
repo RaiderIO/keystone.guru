@@ -512,6 +512,15 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
+     * Returns true if a local object with ID -1 is currently in-flight (created but not yet synced with the server).
+     * @returns {boolean}
+     */
+    hasPendingObject() {
+        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
+        return this.objects.hasOwnProperty(this._getMapObjectKey(-1));
+    }
+
+    /**
      * Finds an object in this map object group by its ID.
      * @param id {Number}
      * @returns {MapObject}

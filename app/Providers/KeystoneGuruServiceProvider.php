@@ -37,6 +37,8 @@ use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
 use App\Service\CombatLog\CombatLogMappingVersionServiceInterface;
+use App\Service\CombatLog\CombatLogParsingCriteriaService;
+use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\CombatLogService;
@@ -47,6 +49,10 @@ use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Compendium\NpcCompendiumService;
+use App\Service\Compendium\NpcCompendiumServiceInterface;
+use App\Service\Compendium\SpellCompendiumService;
+use App\Service\Compendium\SpellCompendiumServiceInterface;
 use App\Service\Cookies\CookieService;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
@@ -109,6 +115,8 @@ use App\Service\Reddit\RedditApiService;
 use App\Service\Reddit\RedditApiServiceInterface;
 use App\Service\Reverb\ReverbHttpApiService;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
+use App\Service\Season\SeasonAffixGroupService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
@@ -154,7 +162,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
         $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
-        if (app()->runningUnitTests()) {
+        if (
+            app()->runningUnitTests()
+            || app()->environment('local')
+        ) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
@@ -172,6 +183,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
+        $this->app->bind(CombatLogParsingCriteriaServiceInterface::class, CombatLogParsingCriteriaService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
@@ -205,6 +217,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RedisServiceInterface::class, PHPRedisService::class);
 
         $this->app->bind(ExpansionServiceInterface::class, ExpansionService::class);
+        $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
+        $this->app->bind(SpellCompendiumServiceInterface::class, SpellCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
 
         // Depends on CacheService
@@ -218,6 +232,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on ExpansionService
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
+
+        // Depends on SeasonService, TimewalkingEventService
+        $this->app->bind(SeasonAffixGroupServiceInterface::class, SeasonAffixGroupService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
         $this->app->bind(CoverageServiceInterface::class, CoverageService::class);
 
@@ -255,6 +272,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         MessageBannerServiceInterface      $messageBannerService,
         ReadOnlyModeServiceInterface       $readOnlyModeService,
         DungeonServiceInterface            $dungeonService,
+        SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -586,6 +604,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.dungeonroute.coverage.affixgroup', static function (View $view) use (
             $viewService,
+            $seasonAffixGroupService,
             &
             $userOrDefaultRegion
         ) {
@@ -602,7 +621,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('selectedSeason', $selectedSeason);
-            $view->with('currentAffixGroup', $selectedSeason->getCurrentAffixGroup());
+            $view->with('currentAffixGroup', $seasonAffixGroupService->getCurrentAffixGroup($selectedSeason));
             $view->with('affixGroups', $selectedSeason->affixGroups);
             $view->with('dungeons', $selectedSeason->dungeons);
         });
@@ -664,18 +683,20 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Simulation
         view()->composer('common.modal.simulate', static function (View $view) use (
             $viewService,
+            $seasonAffixGroupService,
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
-            $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
             $view->with('isThundering', $currentAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
         });
 
         view()->composer('common.modal.simulateoptions.default', static function (View $view) use (
             $viewService,
+            $seasonAffixGroupService,
             &
             $userOrDefaultRegion
         ) {
@@ -691,7 +712,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
-            $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);

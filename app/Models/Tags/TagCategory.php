@@ -7,9 +7,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    $id
- * @property string $name
- * @property string $model_class
+ * @property int          $id
+ * @property string       $name
+ * @property class-string $model_class
  *
  * @mixin Eloquent
  */

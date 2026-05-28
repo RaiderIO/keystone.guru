@@ -276,13 +276,15 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function isAffectedByFortified(): bool
     {
-        return in_array($this->classification_id, [
-            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
-            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
-        ]);
+        return !$this->isBoss();
     }
 
     public function isAffectedByTyrannical(): bool
+    {
+        return $this->isBoss();
+    }
+
+    public function isBoss(): bool
     {
         return in_array($this->classification_id, [
             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],

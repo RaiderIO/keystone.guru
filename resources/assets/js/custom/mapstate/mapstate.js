@@ -54,6 +54,10 @@ class MapState extends Signalable {
         return false;
     }
 
+    shouldRebuildEnemyVisuals() {
+        return false;
+    }
+
     isStarted() {
         return this._started;
     }

@@ -163,6 +163,7 @@ return [
     'patreon_label'                                                  => 'Patreon',
     'datatable_no_users_in_table'                                    => 'No users found',
     'datatable_no_npcs_in_table'                                     => 'No npcs found',
+    'datatable_no_spells_in_table'                                   => 'No spells found',
     'enemy_count_label'                                              => 'Enemy count',
     'user_report_handled_success'                                    => 'User report successfully marked as resolved',
     'dungeonroute_refresh_thumbnail_success'                         => 'Thumbnail refresh queued successfully',
@@ -493,5 +494,6 @@ return [
     'refresh_thumbnails_label'                                             => 'Refresh thumbnails',
     'search_results_label'                                                 => 'Search results',
     'no_search_results_label'                                              => 'No search results found',
+    'boss_label'                                                           => 'Boss',
 
 ];

@@ -1,0 +1,1538 @@
+[
+    {
+        "id": 2,
+        "spell_id": 154149,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 3,
+        "spell_id": 154159,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 4,
+        "spell_id": 159382,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 5,
+        "spell_id": 1250708,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 6,
+        "spell_id": 1251204,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 7,
+        "spell_id": 1251598,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 8,
+        "spell_id": 1252054,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 9,
+        "spell_id": 1252877,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 10,
+        "spell_id": 1253367,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 11,
+        "spell_id": 1253909,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 12,
+        "spell_id": 1254010,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 13,
+        "spell_id": 1254566,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 14,
+        "spell_id": 1254670,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 15,
+        "spell_id": 1254671,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 16,
+        "spell_id": 1254676,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 17,
+        "spell_id": 1254678,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 18,
+        "spell_id": 1254690,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 19,
+        "spell_id": 1255765,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 20,
+        "spell_id": 1255966,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 21,
+        "spell_id": 1257155,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 22,
+        "spell_id": 1257546,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 23,
+        "spell_id": 1257716,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 24,
+        "spell_id": 1257781,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 25,
+        "spell_id": 1257914,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 26,
+        "spell_id": 1258217,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 27,
+        "spell_id": 1259677,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 28,
+        "spell_id": 1259772,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 29,
+        "spell_id": 1259882,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 30,
+        "spell_id": 1264987,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 31,
+        "spell_id": 1270079,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 32,
+        "spell_id": 1273356,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 33,
+        "spell_id": 1277556,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 34,
+        "spell_id": 153757,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 35,
+        "spell_id": 153954,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 36,
+        "spell_id": 154043,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 37,
+        "spell_id": 154150,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 38,
+        "spell_id": 390918,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 39,
+        "spell_id": 427473,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 40,
+        "spell_id": 1243741,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 41,
+        "spell_id": 1243752,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 42,
+        "spell_id": 1251023,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 43,
+        "spell_id": 1251554,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 44,
+        "spell_id": 1251568,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 45,
+        "spell_id": 1251775,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 46,
+        "spell_id": 1251813,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 47,
+        "spell_id": 1251833,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 48,
+        "spell_id": 1252130,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 49,
+        "spell_id": 1252675,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 50,
+        "spell_id": 1252733,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 51,
+        "spell_id": 1252777,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 52,
+        "spell_id": 1252816,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 53,
+        "spell_id": 1253446,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 54,
+        "spell_id": 1253511,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 55,
+        "spell_id": 1253520,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 56,
+        "spell_id": 1253541,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 57,
+        "spell_id": 1253543,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 58,
+        "spell_id": 1253779,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 59,
+        "spell_id": 1253844,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 60,
+        "spell_id": 1254043,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 61,
+        "spell_id": 1254175,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 62,
+        "spell_id": 1254380,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 63,
+        "spell_id": 1254475,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 64,
+        "spell_id": 1254672,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 65,
+        "spell_id": 1254687,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 66,
+        "spell_id": 1254689,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 67,
+        "spell_id": 1255629,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 68,
+        "spell_id": 1256561,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 69,
+        "spell_id": 1257088,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 70,
+        "spell_id": 1257091,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 71,
+        "spell_id": 1257898,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 72,
+        "spell_id": 1259255,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 73,
+        "spell_id": 1259631,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 74,
+        "spell_id": 1259731,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 75,
+        "spell_id": 1259786,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 76,
+        "spell_id": 1259789,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 77,
+        "spell_id": 1259794,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 78,
+        "spell_id": 1260643,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 79,
+        "spell_id": 1260709,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 80,
+        "spell_id": 1262411,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 81,
+        "spell_id": 1263292,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 82,
+        "spell_id": 1264693,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 83,
+        "spell_id": 1265334,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 84,
+        "spell_id": 1266188,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 85,
+        "spell_id": 1266381,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 86,
+        "spell_id": 1266488,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 87,
+        "spell_id": 1270762,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 88,
+        "spell_id": 1271623,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 89,
+        "spell_id": 1283770,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 90,
+        "spell_id": 467621,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 91,
+        "spell_id": 468962,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 92,
+        "spell_id": 472054,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 93,
+        "spell_id": 1216963,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 94,
+        "spell_id": 1248219,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 95,
+        "spell_id": 1248879,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 96,
+        "spell_id": 1251813,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 97,
+        "spell_id": 1253844,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 98,
+        "spell_id": 1254175,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 99,
+        "spell_id": 1254475,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 100,
+        "spell_id": 1254672,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 101,
+        "spell_id": 1254677,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 102,
+        "spell_id": 1254679,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 103,
+        "spell_id": 1255964,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 104,
+        "spell_id": 1256586,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 105,
+        "spell_id": 1257088,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 106,
+        "spell_id": 1257328,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 107,
+        "spell_id": 1257782,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 108,
+        "spell_id": 1257898,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 109,
+        "spell_id": 1258205,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 110,
+        "spell_id": 1258431,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 111,
+        "spell_id": 1258433,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 112,
+        "spell_id": 1258434,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 113,
+        "spell_id": 1258435,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 114,
+        "spell_id": 1258436,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 115,
+        "spell_id": 1258437,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 116,
+        "spell_id": 1258439,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 117,
+        "spell_id": 1258445,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 118,
+        "spell_id": 1258482,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 119,
+        "spell_id": 1258802,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 120,
+        "spell_id": 1259202,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 121,
+        "spell_id": 1259205,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 122,
+        "spell_id": 1259255,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 123,
+        "spell_id": 1259274,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 124,
+        "spell_id": 1259664,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:07+00:00"
+    },
+    {
+        "id": 125,
+        "spell_id": 1259731,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 126,
+        "spell_id": 1260648,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 127,
+        "spell_id": 1261315,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 128,
+        "spell_id": 1261808,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 129,
+        "spell_id": 1262582,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 130,
+        "spell_id": 1262630,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 131,
+        "spell_id": 1262900,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 132,
+        "spell_id": 1263292,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 133,
+        "spell_id": 1264693,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 134,
+        "spell_id": 1264989,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 135,
+        "spell_id": 1266381,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 136,
+        "spell_id": 1269631,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 137,
+        "spell_id": 1270085,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 138,
+        "spell_id": 1271479,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 139,
+        "spell_id": 1276648,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 140,
+        "spell_id": 1278754,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 141,
+        "spell_id": 1278950,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 142,
+        "spell_id": 1279627,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 143,
+        "spell_id": 1279667,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 144,
+        "spell_id": 468924,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 145,
+        "spell_id": 1251024,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 146,
+        "spell_id": 1255964,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 147,
+        "spell_id": 1256561,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 148,
+        "spell_id": 1257782,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 149,
+        "spell_id": 1257920,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 150,
+        "spell_id": 1259631,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 151,
+        "spell_id": 1260648,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 152,
+        "spell_id": 1282478,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 153,
+        "spell_id": 388863,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 154,
+        "spell_id": 388866,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 155,
+        "spell_id": 468962,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 156,
+        "spell_id": 473258,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 157,
+        "spell_id": 473668,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 158,
+        "spell_id": 1214038,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 159,
+        "spell_id": 1216253,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 160,
+        "spell_id": 1225015,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 161,
+        "spell_id": 1225135,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 162,
+        "spell_id": 1244985,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 163,
+        "spell_id": 1248138,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 164,
+        "spell_id": 1251767,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 165,
+        "spell_id": 1255434,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 166,
+        "spell_id": 1258802,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 167,
+        "spell_id": 1259255,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 168,
+        "spell_id": 1259274,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 169,
+        "spell_id": 1264186,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 170,
+        "spell_id": 1264687,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 171,
+        "spell_id": 1264989,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 172,
+        "spell_id": 1269631,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 173,
+        "spell_id": 1270085,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 174,
+        "spell_id": 1276648,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 175,
+        "spell_id": 1279995,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 176,
+        "spell_id": 1282915,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 177,
+        "spell_id": 1282955,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 178,
+        "spell_id": 473640,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 179,
+        "spell_id": 1216643,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 180,
+        "spell_id": 1255964,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 181,
+        "spell_id": 1257782,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 182,
+        "spell_id": 1257920,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 183,
+        "spell_id": 1259202,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 184,
+        "spell_id": 1259205,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 185,
+        "spell_id": 1259255,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 186,
+        "spell_id": 1259274,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 187,
+        "spell_id": 1264042,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 188,
+        "spell_id": 1282915,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 189,
+        "spell_id": 1251024,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 190,
+        "spell_id": 1257920,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 191,
+        "spell_id": 1259631,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 192,
+        "spell_id": 154396,
+        "event_type": "property_removed",
+        "property": "miss_reflect",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    },
+    {
+        "id": 193,
+        "spell_id": 1216135,
+        "event_type": "property_removed",
+        "property": "miss_reflect",
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:08+00:00"
+    }
+]

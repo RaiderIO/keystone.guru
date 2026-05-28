@@ -44,7 +44,9 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -76,7 +78,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function get(Request $request, ThumbnailServiceInterface $thumbnailService)
+    public function get(Request $request, ThumbnailServiceInterface $thumbnailService, SeasonServiceInterface $seasonService, SeasonAffixGroupServiceInterface $seasonAffixGroupService)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -224,7 +226,7 @@ class AjaxDungeonRouteController extends Controller
             // Handles any searching/filtering based on dungeon
             new DungeonColumnHandler($dtHandler),
             // Handles any searching/filtering based on DR Affixes
-            new DungeonRouteAffixesColumnHandler($dtHandler),
+            new DungeonRouteAffixesColumnHandler($dtHandler, $seasonService, $seasonAffixGroupService),
             // Sort by the amount of attributes
             new DungeonRouteAttributesColumnHandler($dtHandler),
             // Allow sorting by author name
@@ -254,6 +256,7 @@ class AjaxDungeonRouteController extends Controller
         AjaxDungeonRouteSearchFormRequest $request,
         ExpansionServiceInterface         $expansionService,
         ThumbnailServiceInterface         $thumbnailService,
+        SeasonAffixGroupServiceInterface  $seasonAffixGroupService,
     ) {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -395,7 +398,7 @@ class AjaxDungeonRouteController extends Controller
             $thumbnailService->queueThumbnailRefreshIfMissing($result);
 
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $season?->getCurrentAffixGroupInRegion($userRegion) ??
+                'currentAffixGroup' => ($season !== null ? $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion) : null) ??
                         $expansionService->getCurrentAffixGroup($expansion, $userRegion) ??
                         null,
                 'dungeonroutes'    => $result,

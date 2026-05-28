@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -17,7 +18,17 @@ interface ExpansionServiceInterface
 
     public function getNextExpansion(?GameServerRegion $gameServerRegion = null): ?Expansion;
 
-    public function getData(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ExpansionData;
+    /**
+     * @param  SeasonAffixGroupServiceInterface $seasonAffixGroupService Required to prevent circular dependencies
+     * @param  Expansion                        $expansion
+     * @param  GameServerRegion|null            $gameServerRegion
+     * @return ExpansionData
+     */
+    public function getData(
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        Expansion                        $expansion,
+        ?GameServerRegion                $gameServerRegion = null,
+    ): ExpansionData;
 
     public function getCurrentSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season;
 

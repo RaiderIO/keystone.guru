@@ -7,6 +7,10 @@ class DeleteMapState extends MapState {
         return 'DeleteMapState';
     }
 
+    shouldRebuildEnemyVisuals() {
+        return true;
+    }
+
     start() {
         super.start();
         let self = this;

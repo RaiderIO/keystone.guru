@@ -29,7 +29,7 @@ class WowheadService implements WowheadServiceInterface
     private const string IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
     private const string IDENTIFYING_TOKEN_SPELL_ICON_NAME         = '#images/wow/icons/large/(.*)\.jpg#';
     private const string IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC = '/Icon\.create\("([^"]+)"/';
-    private const string IDENTIFYING_REGEX_SPELL_CATEGORY          = '/WH\.Gatherer\.addData\(6,\s*1,\s*\{[^}]*"name_enus":"([^"]+)"}/';
+    private const string IDENTIFYING_REGEX_SPELL_CATEGORY          = '/WH\.Gatherer\.addData\(13,\s*1,\s*\{[^}]*"name_enus":"([^"]+)"}/';
     private const string IDENTIFYING_TOKEN_SPELL_MECHANIC          = '<th>Mechanic</th>';
     private const string IDENTIFYING_TOKEN_SPELL_SCHOOL            = '<th>School</th>';
     private const string IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE       = '<th>Dispel type</th>';
@@ -261,6 +261,7 @@ class WowheadService implements WowheadServiceInterface
 
                     $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
                 }
+                $dispelType      = sprintf('spelldispeltype.%s', $dispelType);
                 $dispelTypeFound = false;
                 $dispelTypeSet   = true;
             } // Cast time

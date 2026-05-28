@@ -3,9 +3,11 @@
 namespace App\Models\Spell;
 
 use App\Models\CacheModel;
+use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
+use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Carbon\Exceptions\InvalidFormatException;
@@ -13,8 +15,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
@@ -30,19 +32,22 @@ use Str;
  * @property string      $name
  * @property int         $schools_mask
  * @property int         $miss_types_mask
- * @property bool        $aura            Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool        $debuff          Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property bool        $aura              Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
+ * @property bool        $debuff            Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
  * @property int         $cast_time
  * @property int         $duration
  * @property bool        $selectable
  * @property bool        $hidden_on_map
+ * @property int|null    $characteristic_id
  * @property Carbon      $fetched_data_at
  *
  * @property string $icon_url
  *
  * @property GameVersion              $gameVersion
- * @property Collection<Dungeon>      $dungeons
+ * @property Collection<int, Dungeon> $dungeons
  * @property Collection<SpellDungeon> $spellDungeons
+ * @property Collection<Npc>          $npcs
+ * @property Characteristic|null      $characteristic
  *
  * @method static Builder visible()
  *
@@ -82,6 +87,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'duration',
         'selectable',
         'hidden_on_map',
+        'characteristic_id',
         'icon_url',
         'fetched_data_at',
     ];
@@ -89,17 +95,18 @@ class Spell extends CacheModel implements MappingModelInterface
     protected function casts(): array
     {
         return [
-            'id'              => 'integer',
-            'game_version_id' => 'integer',
-            'schools_mask'    => 'integer',
-            'miss_types_mask' => 'integer',
-            'aura'            => 'boolean',
-            'debuff'          => 'boolean',
-            'cast_time'       => 'integer',
-            'duration'        => 'integer',
-            'selectable'      => 'boolean',
-            'hidden_on_map'   => 'boolean',
-            'fetched_data_at' => 'datetime',
+            'id'                => 'integer',
+            'game_version_id'   => 'integer',
+            'schools_mask'      => 'integer',
+            'miss_types_mask'   => 'integer',
+            'aura'              => 'boolean',
+            'debuff'            => 'boolean',
+            'cast_time'         => 'integer',
+            'duration'          => 'integer',
+            'selectable'        => 'boolean',
+            'hidden_on_map'     => 'boolean',
+            'characteristic_id' => 'integer',
+            'fetched_data_at'   => 'datetime',
         ];
     }
 
@@ -138,14 +145,24 @@ class Spell extends CacheModel implements MappingModelInterface
         return $this->where('hidden_on_map', false);
     }
 
+    public function characteristic(): BelongsTo
+    {
+        return $this->belongsTo(Characteristic::class);
+    }
+
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
-    public function dungeons(): HasManyThrough
+    public function npcs(): BelongsToMany
     {
-        return $this->hasManyThrough(Dungeon::class, SpellDungeon::class);
+        return $this->belongsToMany(Npc::class, 'npc_spells', 'spell_id', 'npc_id');
+    }
+
+    public function dungeons(): BelongsToMany
+    {
+        return $this->belongsToMany(Dungeon::class, 'spell_dungeons', 'spell_id', 'dungeon_id');
     }
 
     public function spellDungeons(): HasMany

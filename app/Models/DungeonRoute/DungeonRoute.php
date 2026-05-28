@@ -48,6 +48,7 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
@@ -1270,7 +1271,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             if ($seasonOfSeasonalType !== null) {
                 try {
-                    $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion($gameServerRegion);
+                    $currentAffixGroup = resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroupInRegion($seasonOfSeasonalType, $gameServerRegion);
                 } catch (Exception) {
                     // It's okay - we can recover in the next IF
                     logger()->error('Unable to find current affixgroup for seasonal type', [
@@ -1528,7 +1529,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             /** @var SeasonService $seasonService */
             $seasonService     = App::make(SeasonServiceInterface::class);
-            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+            $currentSeason     = $seasonService->getCurrentSeason();
+            $currentAffixGroup = $currentSeason !== null ? resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroup($currentSeason) : null;
 
             if ($currentAffixGroup !== null) {
                 foreach ($this->affixes as $affixGroup) {
@@ -1627,7 +1629,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         if ($this->affixgroups()->count() === 0) {
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
-                'affix_group_id' => $activeSeason->getCurrentAffixGroup()?->id ??
+                'affix_group_id' => resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroup($activeSeason)?->id ??
                     $activeSeason->affixGroups->first()->id,
                 'dungeon_route_id' => $this->id,
             ]);

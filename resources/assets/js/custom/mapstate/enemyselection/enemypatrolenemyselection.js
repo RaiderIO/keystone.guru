@@ -7,6 +7,10 @@ class EnemyPatrolEnemySelection extends EnemySelection {
         return 'EnemyPatrolEnemySelection';
     }
 
+    shouldRebuildEnemyVisuals() {
+        return true;
+    }
+
     /**
      * Filters an enemy if it should be selected or not.
      * @param source {MapObject}

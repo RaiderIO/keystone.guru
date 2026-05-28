@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -52,9 +53,12 @@ class ExpansionService implements ExpansionServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getData(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ExpansionData
-    {
-        return new ExpansionData($this, $expansion, $gameServerRegion);
+    public function getData(
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        Expansion                        $expansion,
+        ?GameServerRegion                $gameServerRegion = null,
+    ): ExpansionData {
+        return new ExpansionData($this, $seasonAffixGroupService, $expansion, $gameServerRegion);
     }
 
     /**
@@ -88,7 +92,9 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup
     {
-        return optional($this->getCurrentSeason($expansion, $gameServerRegion))->getCurrentAffixGroupInRegion($gameServerRegion);
+        $season = $this->getCurrentSeason($expansion, $gameServerRegion);
+
+        return $season !== null ? resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroupInRegion($season, $gameServerRegion) : null;
     }
 
     /**
@@ -98,7 +104,9 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getNextAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup
     {
-        return optional($this->getCurrentSeason($expansion, $gameServerRegion))->getNextAffixGroupInRegion($gameServerRegion);
+        $season = $this->getCurrentSeason($expansion, $gameServerRegion);
+
+        return $season !== null ? resolve(SeasonAffixGroupServiceInterface::class)->getNextAffixGroupInRegion($season, $gameServerRegion) : null;
     }
 
     /**

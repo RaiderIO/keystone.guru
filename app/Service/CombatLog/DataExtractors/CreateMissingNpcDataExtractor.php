@@ -106,7 +106,6 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
                 'display_id'        => null,
                 'name'              => $name,
-                'health_percentage' => null,
                 'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
                 'dangerous'         => 0,
                 'truesight'         => 0,

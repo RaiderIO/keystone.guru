@@ -5,16 +5,12 @@ namespace App\Models;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasStart;
 use App\Models\Traits\SeederModel;
-use App\Service\Season\SeasonService;
-use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 /**
  * @property int    $id
@@ -113,9 +109,6 @@ class Season extends CacheModel
         'start_period',
     ];
 
-    /** @var bool|null Cache for if we're a timewalking season or not */
-    private ?bool $isTimewalkingSeason = null;
-
     protected function casts(): array
     {
         return [
@@ -168,211 +161,5 @@ class Season extends CacheModel
     public function hasDungeon(Dungeon $dungeon): bool
     {
         return $this->seasonDungeons()->where('dungeon_id', $dungeon->id)->exists();
-    }
-
-    /**
-     * Get a list of unique affixes found in this season.
-     */
-    public function getFeaturedAffixes(): Collection
-    {
-        return Affix::query()
-            ->selectRaw('affixes.*')
-            ->join('affix_group_couplings', 'affix_group_couplings.affix_id', '=', 'affixes.id')
-            ->join('affix_groups', 'affix_groups.id', '=', 'affix_group_couplings.affix_group_id')
-            ->where('affix_groups.season_id', $this->id)
-            ->get()
-            ->unique('id');
-    }
-
-    /**
-     * Get the amount of weeks that have passed since the start of the M+ season, on a specific date.
-     */
-    public function getWeeksSinceStartAt(Carbon $date): int
-    {
-        $start = $this->start();
-
-        // Target date
-        $targetTime = Carbon::create($date->year, $date->month, $date->day, $date->hour, null, null, $date->timezone);
-
-        // Get the week difference
-        return (int)$start->diffInWeeks($targetTime, true);
-    }
-
-    /**
-     * Get the amount of full iterations of the entire list of affix groups that this season has done, since the start
-     * of the season.
-     */
-    public function getAffixGroupIterations(): int
-    {
-        return $this->getAffixGroupIterationsAt(Carbon::now());
-    }
-
-    /**
-     * Get the amount of full iterations of the entire list of affix groups
-     */
-    public function getAffixGroupIterationsAt(Carbon $date): int
-    {
-        $weeksSinceStart = $this->getWeeksSinceStartAt($date);
-
-        // Round down
-        return (int)($weeksSinceStart / $this->affixGroups->count());
-    }
-
-    /**
-     * Get the affix group that is currently active in the region's timezone.
-     *
-     * @throws Exception
-     */
-    public function getCurrentAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
-    {
-        try {
-            $result = $this->getAffixGroupAt(Carbon::now(), $region);
-        } catch (Exception $exception) {
-            Log::error('Error getting current affix group', [
-                'exception' => $exception,
-                'region'    => $region->short,
-            ]);
-
-            throw $exception;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get the affix group that will be active next week in the region's timezone.
-     *
-     * @throws Exception
-     */
-    public function getNextAffixGroupInRegion(?GameServerRegion $region = null): ?AffixGroup
-    {
-        try {
-            $result = $this->getAffixGroupAt(Carbon::now()->addWeek(), $region);
-        } catch (Exception $exception) {
-            Log::error('Error getting current affix group', [
-                'exception' => $exception,
-                'region'    => ($region ?? GameServerRegion::getUserOrDefaultRegion())->short,
-            ]);
-
-            throw $exception;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get the affix group that is currently active in the user's timezone (if user timezone was set).
-     *
-     * @throws Exception
-     */
-    public function getCurrentAffixGroup(): ?AffixGroup
-    {
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
-        try {
-            $result = $this->getAffixGroupAt(Carbon::now(), $region);
-        } catch (Exception $exception) {
-            Log::error('Error getting current affix group', [
-                'exception' => $exception,
-                'region'    => $region->short,
-            ]);
-
-            throw new Exception('Error getting current affix group');
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get the affix group that will be active in the user's timezone next week (if user timezone was set).
-     *
-     * @throws Exception
-     */
-    public function getNextAffixGroup(): ?AffixGroup
-    {
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
-        try {
-            $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), $region);
-        } catch (Exception $exception) {
-            Log::error('Error getting next affix group', [
-                'exception' => $exception,
-                'region'    => $region->short,
-            ]);
-
-            throw new Exception('Error getting next affix group');
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get which affix group is active on this region at a specific point in time.
-     *
-     * @param  Carbon          $date The date at which you want to know the affix group.
-     * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
-     *
-     * @throws Exception
-     * @TODO Move to SeasonService
-     */
-    public function getAffixGroupAt(Carbon $date, ?GameServerRegion $region = null): ?AffixGroup
-    {
-        /** @var SeasonService $seasonService */
-        if ($this->hasTimewalkingEvent()) {
-            $timewalkingEventService = resolve(TimewalkingEventService::class);
-            $result                  = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
-        } else {
-            // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,
-            // we do not know anything before that, so we need help
-            $seasonService = resolve(SeasonService::class);
-
-            // Get the affix group which occurs after a few weeks and return that
-            $affixGroupIndex = $seasonService->getAffixGroupIndexAt($date, $region, $this->expansion);
-
-            // Make sure that the affixes wrap over if we run out
-            // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
-            $result = $affixGroupIndex === null ? null :
-                ($affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function getPresetForAffixGroup(AffixGroup $affixGroup): int
-    {
-        $region     = GameServerRegion::getUserOrDefaultRegion();
-        $startAffix = $this->getAffixGroupAt($this->start($region), $region);
-
-        $startIndex = $this->affixGroups->search(
-            static fn(AffixGroup $g) => $startAffix !== null && $g->id === $startAffix->id,
-        );
-        $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(
-            AffixGroup $affixGroupCandidate,
-        ) => $affixGroupCandidate->id === $affixGroup->id)->first());
-
-        return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixGroups->count()) % $this->presets + 1 : 0;
-    }
-
-    /**
-     * Get the current preset (if any) at a specific date.
-     *
-     * @return int The preset at the passed date.
-     */
-    public function getPresetAtDate(Carbon $date): int
-    {
-        // Only if the current season has presets do we calculate, otherwise return 0
-        return $this->presets !== 0 ? $this->getWeeksSinceStartAt($date) % $this->presets : 0;
-    }
-
-    private function hasTimewalkingEvent(): bool
-    {
-        if ($this->isTimewalkingSeason !== null) {
-            return $this->isTimewalkingSeason;
-        }
-
-        return $this->isTimewalkingSeason = $this->expansion->hasTimewalkingEvent();
     }
 }

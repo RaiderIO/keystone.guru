@@ -18,6 +18,7 @@ use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
@@ -223,6 +224,7 @@ class SiteController extends Controller
         Request                          $request,
         DiscoverServiceInterface         $discoverService,
         SeasonService                    $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         ExpansionService                 $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService,
     ): View {
@@ -233,21 +235,24 @@ class SiteController extends Controller
         $offset    = (int)$request->get('offset', 0);
         $offset    = max(min($offset, $maxOffset), $minOffset);
 
+        $currentSeason = $seasonService->getCurrentSeason($currentExpansion);
+
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
             'gameVersion'             => GameVersion::getDefaultGameVersion(),
             'seasonService'           => $seasonService,
+            'seasonAffixGroupService' => $seasonAffixGroupService,
             'offset'                  => $offset,
             'showPrevious'            => $offset > $minOffset,
             'showNext'                => $offset < $maxOffset,
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),
+                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null),
                 'nextweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getNextAffixGroup()),
+                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getNextAffixGroup($currentSeason) : null),
             ],
         ]);
     }

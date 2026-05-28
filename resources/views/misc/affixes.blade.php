@@ -10,26 +10,28 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Illuminate\Support\Collection;
 
 /**
- * @var TimewalkingEventService $timewalkingEventService
- * @var SeasonService           $seasonService
- * @var AffixGroup              $currentAffixGroup
- * @var AffixGroup              $nextAffixGroup
- * @var int                     $offset
- * @var Expansion               $expansion
- * @var GameVersion             $gameVersion
- * @var GameServerRegion        $userOrDefaultRegion
- * @var bool                    $showPrevious
- * @var bool                    $showNext
+ * @var TimewalkingEventService          $timewalkingEventService
+ * @var SeasonService                    $seasonService
+ * @var SeasonAffixGroupServiceInterface $seasonAffixGroupService
+ * @var AffixGroup                       $currentAffixGroup
+ * @var AffixGroup                       $nextAffixGroup
+ * @var int                              $offset
+ * @var Expansion                        $expansion
+ * @var GameVersion                      $gameVersion
+ * @var GameServerRegion                 $userOrDefaultRegion
+ * @var bool                             $showPrevious
+ * @var bool                             $showNext
  */
 
 $affixGroupsBySeason = collect();
 
-foreach ($seasonService->getDisplayedAffixGroups($offset) as $affixGroupArr) {
+foreach ($seasonAffixGroupService->getDisplayedAffixGroups($offset) as $affixGroupArr) {
     $affixGroup = $affixGroupArr['affix_group'];
 
     if (!$affixGroupsBySeason->has($affixGroup->season_id)) {
