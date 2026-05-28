@@ -61,8 +61,8 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
         // staging only when a release is staged
         return [
             'local',
-//            'testing',
-//            'production',
+            //            'testing',
+            //            'production',
         ];
     }
 }
