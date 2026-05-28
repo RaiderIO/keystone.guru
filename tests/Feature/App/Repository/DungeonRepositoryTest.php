@@ -24,7 +24,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getAllMapIds_givenSeededDungeons_returnsUniqueCollection(): void
     {
         // Act
@@ -36,7 +35,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getByChallengeModeIdOrFail_givenValidChallengeModeId_returnsDungeon(): void
     {
         // Arrange
@@ -52,7 +50,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getByChallengeModeIdOrFail_givenInvalidChallengeModeId_throwsModelNotFoundException(): void
     {
         // Assert
@@ -63,7 +60,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getMappingVersionByVersion_givenExistingVersion_returnsMappingVersion(): void
     {
         // Arrange
@@ -80,7 +76,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getMappingVersionByVersion_givenNonExistentVersion_returnsNull(): void
     {
         // Arrange
@@ -95,7 +90,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getByInstanceId_givenValidInstanceId_returnsDungeon(): void
     {
         // Arrange
@@ -111,7 +105,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getByInstanceId_givenNonExistentInstanceId_returnsNull(): void
     {
         // Act
@@ -122,7 +115,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getByMappingVersion_givenNullMappingVersion_returnsNull(): void
     {
         // Arrange
@@ -137,7 +129,6 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRepository')]
     public function getByMappingVersion_givenValidIds_returnsDungeon(): void
     {
         // Arrange

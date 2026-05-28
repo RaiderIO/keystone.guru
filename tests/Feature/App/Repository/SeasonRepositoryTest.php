@@ -23,7 +23,6 @@ final class SeasonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('SeasonRepository')]
     public function getMostRecentSeasonForDungeon_givenDungeonWithPastSeasons_returnsSeason(): void
     {
         // Arrange — find a dungeon that participates in at least one past season
@@ -41,7 +40,6 @@ final class SeasonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('SeasonRepository')]
     public function getMostRecentSeasonForDungeon_givenDungeonWithNoSeasons_returnsNull(): void
     {
         // Arrange — find a dungeon that has no season_dungeon associations at all
@@ -60,7 +58,6 @@ final class SeasonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('SeasonRepository')]
     public function getUpcomingSeasonForDungeon_givenDungeonWithNoUpcomingSeasons_returnsNull(): void
     {
         // Arrange — find a dungeon that has no upcoming season within the next year
@@ -75,7 +72,6 @@ final class SeasonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('SeasonRepository')]
     public function getMostRecentSeasonForDungeon_givenDungeonWithMultipleSeasons_returnsMostRecent(): void
     {
         // Arrange — find a dungeon with at least two past seasons so we can confirm ordering

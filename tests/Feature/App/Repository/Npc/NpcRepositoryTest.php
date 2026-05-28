@@ -24,7 +24,6 @@ final class NpcRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('NpcRepository')]
     public function getInUseNpcs_givenMappingVersion_returnsNonEmptyCollection(): void
     {
         // Arrange
@@ -45,7 +44,6 @@ final class NpcRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('NpcRepository')]
     public function getInUseNpcs_givenMappingVersion_returnsOnlyNpcsForThatDungeon(): void
     {
         // Arrange
@@ -71,7 +69,6 @@ final class NpcRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('NpcRepository')]
     public function getInUseNpcIds_givenMappingVersion_returnsCollectionOfIntegers(): void
     {
         // Arrange
@@ -95,7 +92,6 @@ final class NpcRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('NpcRepository')]
     public function getInUseNpcIds_givenMappingVersion_alwaysIncludesBrackenhideGnollId(): void
     {
         // Arrange — the Brackenhide Gnoll (194373) is hardcoded into getInUseNpcIds for Witherling conversion
@@ -115,7 +111,6 @@ final class NpcRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('NpcRepository')]
     public function getInUseNpcIds_givenPreloadedNpcCollection_usesItInsteadOfQuerying(): void
     {
         // Arrange

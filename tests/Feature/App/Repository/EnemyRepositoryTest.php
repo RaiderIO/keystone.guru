@@ -23,16 +23,18 @@ final class EnemyRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('EnemyRepository')]
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_returnsNonEmptyCollection(): void
     {
         // Arrange
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
+            ->where('challenge_mode_id', '>', 0)
             ->whereHas('floors')
+            ->orderByDesc('id')
             ->first();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
+
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         // Act
@@ -44,7 +46,6 @@ final class EnemyRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('EnemyRepository')]
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_keysCollectionByEnemyId(): void
     {
         // Arrange
@@ -65,7 +66,6 @@ final class EnemyRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('EnemyRepository')]
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_excludesMdtPlaceholders(): void
     {
         // Arrange
@@ -88,7 +88,6 @@ final class EnemyRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('EnemyRepository')]
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_setsDefaultKillPriority(): void
     {
         // Arrange

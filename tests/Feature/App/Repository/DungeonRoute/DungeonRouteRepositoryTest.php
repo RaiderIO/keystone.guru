@@ -27,7 +27,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function generateRandomPublicKey_givenNoArguments_returnsNonEmptyString(): void
     {
         // Act
@@ -39,7 +38,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function generateRandomPublicKey_givenMultipleCalls_returnsUniqueKeys(): void
     {
         // Act
@@ -50,7 +48,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function findCombatLogRouteByPublicKey_givenNullKey_returnsNull(): void
     {
         // Act
@@ -61,7 +58,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function findCombatLogRouteByPublicKey_givenNonExistentKey_returnsNull(): void
     {
         // Act
@@ -72,7 +68,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function findRoutes_givenFilter_returnsCollection(): void
     {
         // Arrange
@@ -92,7 +87,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function findRoutes_givenTitleFilter_returnsOnlyMatchingRoutes(): void
     {
         // Arrange
@@ -120,7 +114,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
-    #[Group('DungeonRouteRepository')]
     public function findRoutes_givenKeyLevelFilter_returnsRoutesWithinRange(): void
     {
         // Arrange
