@@ -112,4 +112,19 @@ return [
             'empty'  => 'No activity recorded for this day.',
         ],
     ],
+    'class' => [
+        'index' => [
+            'title'  => 'Compendium — By Class',
+            'header' => 'By Class',
+        ],
+        'show' => [
+            'title'                       => ':name — By Class',
+            'context_dungeon'             => 'Showing results for: :dungeon',
+            'table_header_spell'          => 'Spell',
+            'table_header_characteristic' => 'Characteristic',
+            'table_header_npcs'           => 'Affected NPCs',
+            'no_spells'                   => 'No CC spells found for this class in this game version.',
+            'no_npcs'                     => '—',
+        ],
+    ],
 ];
