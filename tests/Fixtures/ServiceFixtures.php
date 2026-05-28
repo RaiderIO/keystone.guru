@@ -51,12 +51,14 @@ class ServiceFixtures
         ?SeasonServiceInterface                    $seasonService = null,
         ?AffixGroupEaseTierServiceLoggingInterface $log = null,
         array                                      $methodsToMock = [],
+        ?SeasonAffixGroupServiceInterface          $seasonAffixGroupService = null,
     ): MockObject|AffixGroupEaseTierServiceInterface {
         return $testCase
             ->getMockBuilderPublic(AffixGroupEaseTierService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
                 $seasonService ?? self::getSeasonServiceMock($testCase),
+                $seasonAffixGroupService ?? self::getSeasonAffixGroupServiceMock($testCase),
                 $log ?? LoggingFixtures::createAffixGroupEaseTierServiceLogging($testCase),
             ])
             ->getMock();
@@ -71,6 +73,7 @@ class ServiceFixtures
         ?ExpansionServiceInterface          $expansionService = null,
         ?AffixGroupEaseTierServiceInterface $easeTierService = null,
         array                               $methodsToMock = [],
+        ?SeasonAffixGroupServiceInterface   $seasonAffixGroupService = null,
     ): MockObject|ViewService {
         return $testCase
             ->getMockBuilderPublic(ViewService::class)
@@ -78,6 +81,7 @@ class ServiceFixtures
             ->setConstructorArgs([
                 $cacheService ?? self::getCacheServiceMock($testCase),
                 $expansionService ?? self::getExpansionServiceMock($testCase),
+                $seasonAffixGroupService ?? self::getSeasonAffixGroupServiceMock($testCase),
                 $easeTierService ?? self::getAffixGroupEaseTierServiceMock($testCase),
             ])
             ->getMock();

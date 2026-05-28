@@ -8,6 +8,7 @@ use App\Models\Expansion;
 use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 
 class Cache extends SchedulerCommand
 {
@@ -28,9 +29,12 @@ class Cache extends SchedulerCommand
     /**
      * Execute the console command.
      */
-    public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int
-    {
-        return $this->trackTime(function () use ($discoverService, $expansionService) {
+    public function handle(
+        DiscoverServiceInterface         $discoverService,
+        ExpansionServiceInterface        $expansionService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+    ): int {
+        return $this->trackTime(function () use ($discoverService, $expansionService, $seasonAffixGroupService) {
             $async = (bool)$this->option('async');
 
             if ($async) {
@@ -86,8 +90,8 @@ class Cache extends SchedulerCommand
                     // Only cache the current and next affix groups
                     // The other affix groups are not queried as often so they can miss the cache
                     $affixGroups = array_filter([
-                        $season->getCurrentAffixGroup(),
-                        $season->getNextAffixGroup(),
+                        $seasonAffixGroupService->getCurrentAffixGroup($season),
+                        $seasonAffixGroupService->getNextAffixGroup($season),
                     ]);
 
                     foreach ($affixGroups as $affixGroup) {

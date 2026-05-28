@@ -36,8 +36,8 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     /**
      * Get which affix group is active on this region at a specific point in time.
      *
-     * @param Season $season The season for which you want to know the affix group.
-     * @param Carbon $date The date at which you want to know the affix group.
+     * @param  Season          $season The season for which you want to know the affix group.
+     * @param  Carbon          $date   The date at which you want to know the affix group.
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      *
      * @throws Exception
@@ -60,9 +60,10 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     /**
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon            $date,
-                                         ?GameServerRegion $region = null,
-                                         ?Expansion        $expansion = null
+    public function getAffixGroupIndexAt(
+        Carbon            $date,
+        ?GameServerRegion $region = null,
+        ?Expansion        $expansion = null,
     ): ?int {
         $season = $this->seasonService->getSeasonAt($date, $expansion, $region);
 
@@ -85,8 +86,8 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     /**
      * Get the amount of weeks that have passed since the start of the M+ season, on a specific date.
      *
-     * @param Season $season
-     * @param Carbon $date
+     * @param  Season $season
+     * @param  Carbon $date
      * @return int
      */
     public function getWeeksSinceStartAt(Season $season, Carbon $date): int
@@ -102,7 +103,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      * Get the amount of full iterations of the entire list of affix groups that this season has done, since the start
      * of the season.
      *
-     * @param Season $season
+     * @param  Season $season
      * @return int
      */
     public function getAffixGroupIterations(Season $season): int
@@ -113,8 +114,8 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     /**
      * Get the amount of full iterations of the entire list of affix groups
      *
-     * @param Season $season
-     * @param Carbon $date
+     * @param  Season $season
+     * @param  Carbon $date
      * @return int
      */
     public function getAffixGroupIterationsAt(Season $season, Carbon $date): int
@@ -214,7 +215,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         $region     = GameServerRegion::getUserOrDefaultRegion();
         $startAffix = $this->getAffixGroupAt($season, $season->start($region), $region);
 
-        $startIndex      = $season->affixGroups->search(
+        $startIndex = $season->affixGroups->search(
             static fn(AffixGroup $g) => $startAffix !== null && $g->id === $startAffix->id,
         );
         $affixGroupIndex = $season->affixGroups->search($season->affixGroups->filter(static fn(

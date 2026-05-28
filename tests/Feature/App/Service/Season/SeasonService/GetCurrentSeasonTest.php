@@ -74,7 +74,7 @@ final class GetCurrentSeasonTest extends PublicTestCase
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
         $this->travelTo(
             Carbon::create(2025, 03, 03)
-                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->subMinute()
+                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->subMinute(),
         );
 
         // Act
@@ -94,7 +94,7 @@ final class GetCurrentSeasonTest extends PublicTestCase
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
         $this->travelTo(
             Carbon::create(2025, 03, 03)
-                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->addMinute()
+                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->addMinute(),
         );
 
         // Act
@@ -114,7 +114,7 @@ final class GetCurrentSeasonTest extends PublicTestCase
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
         $this->travelTo(
             Carbon::create(2026, 03, 02)
-                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->subMinute()
+                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->subMinute(),
         );
 
         // Act
@@ -129,12 +129,12 @@ final class GetCurrentSeasonTest extends PublicTestCase
     public function getCurrentSeason_GivenOneMinuteIntoNewExpansion_ShouldReturnNewSeason(): void
     {
         // Arrange - Midnight S1 starts 2026-03-02
-        $service      = app(SeasonServiceInterface::class);
+        $service           = app(SeasonServiceInterface::class);
         $midnightExpansion = Expansion::where('shortname', Expansion::EXPANSION_MIDNIGHT)->firstOrFail();
-        $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion          = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
         $this->travelTo(
             Carbon::create(2026, 03, 02)
-                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->addMinute()
+                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->addMinute(),
         );
 
         // Act

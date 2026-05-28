@@ -10,13 +10,17 @@ namespace App\Logic\Datatables\ColumnHandler\DungeonRoutes;
 
 use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
-use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 
 class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 {
-    public function __construct(DatatablesHandler $dtHandler)
-    {
+    public function __construct(
+        DatatablesHandler                                 $dtHandler,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+    ) {
         parent::__construct($dtHandler, 'affixes.id');
     }
 
@@ -37,10 +41,17 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 
         // Only order
         if ($order !== null) {
-            $seasonService = resolve(SeasonService::class);
+            $currentSeason = $this->seasonService->getCurrentSeason();
+            if ($currentSeason === null) {
+                return;
+            }
 
             // Order by the current affix on top, otherwise by ID
-            $currentAffixId = $seasonService->getCurrentSeason()->getCurrentAffixGroup()->id;
+            $currentAffixId = $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason)?->id;
+            if ($currentAffixId === null) {
+                return;
+            }
+
             // In order to sort by another table, join it
             // $builder->leftJoin('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id');
             // Then sort by current affix ID on top, THEN sort by ID ascending

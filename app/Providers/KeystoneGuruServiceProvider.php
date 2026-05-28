@@ -272,6 +272,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         MessageBannerServiceInterface      $messageBannerService,
         ReadOnlyModeServiceInterface       $readOnlyModeService,
         DungeonServiceInterface            $dungeonService,
+        SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -603,6 +604,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         view()->composer('common.dungeonroute.coverage.affixgroup', static function (View $view) use (
             $viewService,
+            $seasonAffixGroupService,
             &
             $userOrDefaultRegion
         ) {
@@ -619,7 +621,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('selectedSeason', $selectedSeason);
-            $view->with('currentAffixGroup', $selectedSeason->getCurrentAffixGroup());
+            $view->with('currentAffixGroup', $seasonAffixGroupService->getCurrentAffixGroup($selectedSeason));
             $view->with('affixGroups', $selectedSeason->affixGroups);
             $view->with('dungeons', $selectedSeason->dungeons);
         });
@@ -681,18 +683,20 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Simulation
         view()->composer('common.modal.simulate', static function (View $view) use (
             $viewService,
+            $seasonAffixGroupService,
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
-            $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
             $view->with('isThundering', $currentAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
         });
 
         view()->composer('common.modal.simulateoptions.default', static function (View $view) use (
             $viewService,
+            $seasonAffixGroupService,
             &
             $userOrDefaultRegion
         ) {
@@ -708,7 +712,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
-            $currentAffixGroup = $currentSeason->getCurrentAffixGroup();
+            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);

@@ -5,9 +5,7 @@ namespace App\Models;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasStart;
 use App\Models\Traits\SeederModel;
-use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -163,45 +161,5 @@ class Season extends CacheModel
     public function hasDungeon(Dungeon $dungeon): bool
     {
         return $this->seasonDungeons()->where('dungeon_id', $dungeon->id)->exists();
-    }
-
-    /**
-     * Get the affix group that is currently active in the region's timezone.
-     *
-     * @throws Exception
-     */
-    public function getCurrentAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
-    {
-        return resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroupInRegion($this, $region);
-    }
-
-    /**
-     * Get the affix group that will be active next week in the region's timezone.
-     *
-     * @throws Exception
-     */
-    public function getNextAffixGroupInRegion(?GameServerRegion $region = null): ?AffixGroup
-    {
-        return resolve(SeasonAffixGroupServiceInterface::class)->getNextAffixGroupInRegion($this, $region);
-    }
-
-    /**
-     * Get the affix group that is currently active in the user's timezone (if user timezone was set).
-     *
-     * @throws Exception
-     */
-    public function getCurrentAffixGroup(): ?AffixGroup
-    {
-        return resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroup($this);
-    }
-
-    /**
-     * Get the affix group that will be active in the user's timezone next week (if user timezone was set).
-     *
-     * @throws Exception
-     */
-    public function getNextAffixGroup(): ?AffixGroup
-    {
-        return resolve(SeasonAffixGroupServiceInterface::class)->getNextAffixGroup($this);
     }
 }

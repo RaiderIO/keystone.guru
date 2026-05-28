@@ -56,7 +56,7 @@ class ExpansionService implements ExpansionServiceInterface
     public function getData(
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         Expansion                        $expansion,
-        ?GameServerRegion                $gameServerRegion = null
+        ?GameServerRegion                $gameServerRegion = null,
     ): ExpansionData {
         return new ExpansionData($this, $seasonAffixGroupService, $expansion, $gameServerRegion);
     }
@@ -92,7 +92,9 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup
     {
-        return optional($this->getCurrentSeason($expansion, $gameServerRegion))->getCurrentAffixGroupInRegion($gameServerRegion);
+        $season = $this->getCurrentSeason($expansion, $gameServerRegion);
+
+        return $season !== null ? resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroupInRegion($season, $gameServerRegion) : null;
     }
 
     /**
@@ -102,14 +104,16 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getNextAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup
     {
-        return optional($this->getCurrentSeason($expansion, $gameServerRegion))->getNextAffixGroupInRegion($gameServerRegion);
+        $season = $this->getCurrentSeason($expansion, $gameServerRegion);
+
+        return $season !== null ? resolve(SeasonAffixGroupServiceInterface::class)->getNextAffixGroupInRegion($season, $gameServerRegion) : null;
     }
 
     /**
      * {@inheritDoc}
      */
     public function getCurrentSeasonAffixGroups(
-        Expansion $expansion,
+        Expansion         $expansion,
         ?GameServerRegion $gameServerRegion = null,
     ): Collection {
         $currentSeason = $this->getCurrentSeason($expansion, $gameServerRegion);

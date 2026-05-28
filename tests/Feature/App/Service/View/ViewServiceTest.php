@@ -11,6 +11,7 @@ use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
 use Throwable;
 
+#[Group('ViewService')]
 final class ViewServiceTest extends PublicTestCase
 {
     use LoadsJsonFiles;
@@ -20,7 +21,6 @@ final class ViewServiceTest extends PublicTestCase
      * @throws Throwable
      */
     #[Test]
-    #[Group('ViewService')]
     #[DataProvider('shouldLoadViewVariables_GivenWhitelistedUrls_ShouldReturnTrue_dataProvider')]
     public function shouldLoadViewVariables_GivenWhitelistedUrls_ShouldReturnTrue(
         string $uri,
@@ -48,7 +48,6 @@ final class ViewServiceTest extends PublicTestCase
      * @throws Throwable
      */
     #[Test]
-    #[Group('ViewService')]
     #[DataProvider('shouldLoadViewVariables_GivenBlacklistedUrls_ShouldReturnFalse_dataProvider')]
     public function shouldLoadViewVariables_GivenBlacklistedUrls_ShouldReturnFalse(
         string $uri,
@@ -81,7 +80,6 @@ final class ViewServiceTest extends PublicTestCase
      * @throws Throwable
      */
     #[Test]
-    #[Group('ViewService')]
     #[DataProvider('shouldLoadViewVariables_GivenValidViewUrls_ShouldReturnTrue_dataProvider')]
     public function shouldLoadViewVariables_GivenValidViewUrls_ShouldReturnTrue(
         string $uri,

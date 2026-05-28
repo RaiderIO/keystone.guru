@@ -10,6 +10,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -27,9 +28,10 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
      * @throws Exception
      */
     public function discoverSeason(
-        Expansion                $expansion,
-        string                   $seasonIndex,
-        DiscoverServiceInterface $discoverService,
+        Expansion                        $expansion,
+        string                           $seasonIndex,
+        DiscoverServiceInterface         $discoverService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ) {
         $gameVersion = GameVersion::firstWhere('expansion_id', $expansion->id) ?? GameVersion::getDefaultGameVersion();
 
@@ -46,8 +48,8 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $season->getCurrentAffixGroupInRegion($userRegion);
-        $nextAffixGroup    = $season->getNextAffixGroupInRegion($userRegion);
+        $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion);
+        $nextAffixGroup    = $seasonAffixGroupService->getNextAffixGroupInRegion($season, $userRegion);
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.expansion.season',
