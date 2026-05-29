@@ -19,15 +19,15 @@ interface ExpansionServiceInterface
     public function getNextExpansion(?GameServerRegion $gameServerRegion = null): ?Expansion;
 
     /**
-     * @param SeasonAffixGroupServiceInterface $seasonAffixGroupService Required to prevent circular dependencies
-     * @param Expansion                        $expansion
-     * @param GameServerRegion|null            $gameServerRegion
+     * @param  SeasonAffixGroupServiceInterface $seasonAffixGroupService Required to prevent circular dependencies
+     * @param  Expansion                        $expansion
+     * @param  GameServerRegion|null            $gameServerRegion
      * @return ExpansionData
      */
     public function getData(
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         Expansion                        $expansion,
-        ?GameServerRegion                $gameServerRegion = null
+        ?GameServerRegion                $gameServerRegion = null,
     ): ExpansionData;
 
     public function getCurrentSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season;
@@ -41,7 +41,7 @@ interface ExpansionServiceInterface
     public function getNextAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
 
     public function getCurrentSeasonAffixGroups(
-        Expansion $expansion,
+        Expansion         $expansion,
         ?GameServerRegion $gameServerRegion = null,
     ): Collection;
 }

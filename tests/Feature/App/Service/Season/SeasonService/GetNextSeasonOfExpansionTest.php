@@ -39,7 +39,7 @@ final class GetNextSeasonOfExpansionTest extends PublicTestCase
         $usRegion     = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
         $this->travelTo(
             Carbon::create(2025)
-                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->subMinute()
+                ->addDays($usRegion->reset_day_offset)->addHours($usRegion->reset_hours_offset)->subMinute(),
         );
 
         // Act
