@@ -60,9 +60,19 @@ final class SeasonRepositoryTest extends PublicTestCase
     #[Test]
     public function getUpcomingSeasonForDungeon_givenDungeonWithNoUpcomingSeasons_returnsNull(): void
     {
-        // Arrange — find a dungeon that has no upcoming season within the next year
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->first();
+        // Arrange — find a dungeon that has no upcoming season
+        $now = now();
+
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::whereNotNull('challenge_mode_id')
+            ->whereDoesntHave('seasonDungeons.season', static function ($query) use ($now) {
+                $query->where('start', '>', $now);
+            })
+            ->first();
+
+        if ($dungeon === null) {
+            $this->markTestSkipped('No dungeon without an upcoming season found in the seeded database.');
+        }
 
         // Act
         $result = $this->repository->getUpcomingSeasonForDungeon($dungeon);
@@ -76,8 +86,10 @@ final class SeasonRepositoryTest extends PublicTestCase
     {
         // Arrange — find a dungeon with at least two past seasons so we can confirm ordering
         /** @var Dungeon|null $dungeon */
-        $dungeon = Dungeon::whereHas('seasonDungeons.season', static function ($query) {
-            $query->where('start', '<=', now());
+        $dungeon = Dungeon::whereHas('seasonDungeons', static function ($query) {
+            $query->whereHas('season', static function ($seasonQuery) {
+                $seasonQuery->where('start', '<=', now());
+            });
         }, '>=', 2)->first();
 
         if ($dungeon === null) {
