@@ -54,7 +54,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $spellEvents->each(fn(CombatLogSpellEvent $event) => $event->setRelation('spell', $spells->get($event->spell_id)));
         }
 
-        return $npcEvents->merge($spellEvents)
+        return $npcEvents->concat($spellEvents)
             ->sortByDesc('created_at')
             ->take(50)
             ->values();
@@ -122,7 +122,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             $spellEvents->each(fn(CombatLogSpellEvent $event) => $event->setRelation('spell', $spells->get($event->spell_id)));
         }
 
-        return $npcEvents->merge($spellEvents)
+        return $npcEvents->concat($spellEvents)
             ->sortByDesc('created_at')
             ->values();
     }
