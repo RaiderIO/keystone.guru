@@ -267,6 +267,8 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Structure every test using the Arrange-Act-Assert pattern. Arrange all necessary preconditions and inputs, Act on the object or method under test, and Assert that the expected results have occurred.
 - Every test name should follow the pattern of `[functionname]_given[Condition]_returns[ExpectedResult]`. For example: `myFunction_givenValidDate_returnsTrue` or `myFunction_givenInvalidDate_throwsInvalidArgumentException`.
 - Any created database records must be cleaned up using try...finally.
+- Test groups should be placed in the test class docblock, not the method docblock. For example: a `CombatLog` group for all tests in the `CombatLog` folder, a `EncounterStart` for all tests in the `EncounterStart` file.
+- A DataProvider should be placed right below the last test using it, not at the top or the bottom of the class.
 
 ### Running Tests
 - Run the minimal number of tests, using an appropriate filter, before finalizing.
