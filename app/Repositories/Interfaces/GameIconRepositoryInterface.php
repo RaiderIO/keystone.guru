@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                 update(GameIcon $model, array $attributes = [], array $options = [])
  * @method bool                 delete(GameIcon $model)
  * @method Collection<GameIcon> all()
+ * @method bool                 exists(array $columns)
  */
 interface GameIconRepositoryInterface extends BaseRepositoryInterface
 {

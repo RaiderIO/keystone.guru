@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @method bool            update(Npc $model, array $attributes = [], array $options = [])
  * @method bool            delete(Npc $model)
  * @method Collection<Npc> all()
+ * @method bool            exists(array $columns)
  */
 interface NpcRepositoryInterface extends BaseRepositoryInterface
 {

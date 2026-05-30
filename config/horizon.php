@@ -198,7 +198,7 @@ return [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-local-combat-log-process', env('APP_TYPE'))],
                 'balance'    => 'simple',
-                'processes'  => 1,
+                'processes'  => 4,
                 'tries'      => 1,
                 'timeout'    => 1800,
             ],

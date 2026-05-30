@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                             update(DungeonRouteFavorite $model, array $attributes = [], array $options = [])
  * @method bool                             delete(DungeonRouteFavorite $model)
  * @method Collection<DungeonRouteFavorite> all()
+ * @method bool                             exists(array $columns)
  */
 interface DungeonRouteFavoriteRepositoryInterface extends BaseRepositoryInterface
 {

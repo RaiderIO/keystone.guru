@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                       update(CombatLogEvent $model, array $attributes = [], array $options = [])
  * @method bool                       delete(CombatLogEvent $model)
  * @method Collection<CombatLogEvent> all()
+ * @method bool                       exists(array $columns)
  */
 interface CombatLogEventRepositoryInterface extends BaseRepositoryInterface
 {

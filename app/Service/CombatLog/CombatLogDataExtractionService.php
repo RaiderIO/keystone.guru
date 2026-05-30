@@ -9,7 +9,9 @@ use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogAnalyze;
 use App\Models\CombatLog\CombatLogAnalyzeStatus;
+use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
+use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
@@ -46,6 +48,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         private readonly SeasonServiceInterface                         $seasonService,
         private readonly FloorRepositoryInterface                       $floorRepository,
         private readonly SpellRepositoryInterface                       $spellRepository,
+        private readonly ParsedCombatLogRepositoryInterface             $parsedCombatLogRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
         $this->dataExtractors = collect([
@@ -57,8 +60,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         ]);
     }
 
-    public function extractData(string $filePath, ?callable $onProcessLine = null): ExtractedDataResult
+    public function extractData(string $filePath, ?bool $force = null, ?callable $onProcessLine = null): ?ExtractedDataResult
     {
+        $force ??= false;
+
+        if (!$force && $this->parsedCombatLogRepository->exists(['combat_log_path' => $filePath])) {
+            return null;
+        }
+
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
         $currentDungeon = null;
@@ -122,6 +131,15 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
         foreach ($this->dataExtractors as $dataExtractor) {
             $dataExtractor->afterExtract($result, $filePath);
+        }
+
+        if (!$force) {
+            ParsedCombatLog::insert([
+                'combat_log_path' => $filePath,
+                'extracted_data'  => true,
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ]);
         }
 
         return $result;
@@ -221,7 +239,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     'status' => CombatLogAnalyzeStatus::Processing,
                 ]);
 
-                $result = $this->extractData($filePath, function (int $lineNr) use ($totalLines, $combatLogAnalyze) {
+                $result = $this->extractData($filePath, false, function (int $lineNr) use ($totalLines, $combatLogAnalyze) {
                     $progressPercent = (int)(($lineNr / $totalLines) * 100);
                     if ($progressPercent !== $combatLogAnalyze->percent_completed && $progressPercent % 5 === 0) {
                         $this->log->extractDataAsyncAnalyzeProgress($progressPercent, $lineNr, $totalLines);

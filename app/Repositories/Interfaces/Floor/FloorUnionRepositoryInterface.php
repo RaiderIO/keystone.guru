@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                   update(FloorUnion $model, array $attributes = [], array $options = [])
  * @method bool                   delete(FloorUnion $model)
  * @method Collection<FloorUnion> all()
+ * @method bool                   exists(array $columns)
  */
 interface FloorUnionRepositoryInterface extends BaseRepositoryInterface
 {

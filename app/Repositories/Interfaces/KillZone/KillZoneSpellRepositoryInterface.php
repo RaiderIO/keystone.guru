@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                      update(KillZoneSpell $model, array $attributes = [], array $options = [])
  * @method bool                      delete(KillZoneSpell $model)
  * @method Collection<KillZoneSpell> all()
+ * @method bool                      exists(array $columns)
  */
 interface KillZoneSpellRepositoryInterface extends BaseRepositoryInterface
 {

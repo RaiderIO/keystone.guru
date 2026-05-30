@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @method bool               update(Season $model, array $attributes = [], array $options = [])
  * @method bool               delete(Season $model)
  * @method Collection<Season> all()
+ * @method bool               exists(array $columns)
  */
 interface SeasonRepositoryInterface extends BaseRepositoryInterface
 {

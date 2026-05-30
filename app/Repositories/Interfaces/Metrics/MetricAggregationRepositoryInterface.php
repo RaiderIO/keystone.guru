@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                          update(MetricAggregation $model, array $attributes = [], array $options = [])
  * @method bool                          delete(MetricAggregation $model)
  * @method Collection<MetricAggregation> all()
+ * @method bool                          exists(array $columns)
  */
 interface MetricAggregationRepositoryInterface extends BaseRepositoryInterface
 {

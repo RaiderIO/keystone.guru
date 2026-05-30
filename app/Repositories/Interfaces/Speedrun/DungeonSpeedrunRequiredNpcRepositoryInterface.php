@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                   update(DungeonSpeedrunRequiredNpc $model, array $attributes = [], array $options = [])
  * @method bool                                   delete(DungeonSpeedrunRequiredNpc $model)
  * @method Collection<DungeonSpeedrunRequiredNpc> all()
+ * @method bool                                   exists(array $columns)
  */
 interface DungeonSpeedrunRequiredNpcRepositoryInterface extends BaseRepositoryInterface
 {

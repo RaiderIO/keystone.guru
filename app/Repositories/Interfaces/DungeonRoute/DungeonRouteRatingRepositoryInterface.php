@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                           update(DungeonRouteRating $model, array $attributes = [], array $options = [])
  * @method bool                           delete(DungeonRouteRating $model)
  * @method Collection<DungeonRouteRating> all()
+ * @method bool                           exists(array $columns)
  */
 interface DungeonRouteRatingRepositoryInterface extends BaseRepositoryInterface
 {

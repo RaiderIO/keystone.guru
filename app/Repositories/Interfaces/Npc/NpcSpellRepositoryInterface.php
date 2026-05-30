@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                 update(NpcSpell $model, array $attributes = [], array $options = [])
  * @method bool                 delete(NpcSpell $model)
  * @method Collection<NpcSpell> all()
+ * @method bool                 exists(array $columns)
  */
 interface NpcSpellRepositoryInterface extends BaseRepositoryInterface
 {

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                      update(KillZoneEnemy $model, array $attributes = [], array $options = [])
  * @method bool                      delete(KillZoneEnemy $model)
  * @method Collection<KillZoneEnemy> all()
+ * @method bool                      exists(array $columns)
  */
 interface KillZoneEnemyRepositoryInterface extends BaseRepositoryInterface
 {

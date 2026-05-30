@@ -60,6 +60,11 @@ abstract class StubRepository extends BaseRepository
         return true;
     }
 
+    public function exists(array $columns): bool
+    {
+        return true;
+    }
+
     public function all(): Collection
     {
         return collect();
