@@ -14,6 +14,7 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Traits\Curl;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * This service mocks the RaiderIO API service and returns data from Keystone.guru instead for the interim
@@ -49,9 +50,9 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
     public function searchAdvancedRuns(SearchAdvancedRunsFilter $filter): SearchAdvancedRunsResponse
     {
-        $zipFiles = glob(base_path('tmp_combatlogs/*.zip'));
+        $zipFiles = $this->getS3ZipFiles();
 
-        if ($zipFiles === false) {
+        if (empty($zipFiles)) {
             return new SearchAdvancedRunsResponse([], 0);
         }
 
@@ -75,24 +76,39 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
     public function getCombatLogForRun(int $runId): ?CombatLogDownloadResponse
     {
-        $zipFiles = glob(base_path('tmp_combatlogs/*.zip'));
+        $zipFiles = $this->getS3ZipFiles();
 
-        if ($zipFiles === false) {
+        if (empty($zipFiles)) {
             return null;
         }
 
-        $absPath = $zipFiles[array_rand($zipFiles)] ?? null;
+        $s3Path = $zipFiles[array_rand($zipFiles)] ?? null;
 
-        if ($absPath === null) {
+        if ($s3Path === null) {
             return null;
         }
 
         return new CombatLogDownloadResponse(
             diskName:         's3_combat_logs',
-            s3Bucket:         config('filesystems.disks.s3_combat_logs.bucket'),
-            s3Path:           basename($absPath),
+            s3Bucket:         config('filesystems.disks.s3_combat_logs.bucket') ?? '',
+            s3Path:           $s3Path,
             combatLogVersion: max(CombatLogVersion::RETAIL_ALL),
             isFile:           true,
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getS3ZipFiles(): array
+    {
+        try {
+            return collect(Storage::disk('s3_combat_logs')->files(''))
+                ->filter(fn(string $path): bool => str_ends_with($path, '.zip'))
+                ->values()
+                ->all();
+        } catch (\Throwable) {
+            return [];
+        }
     }
 }
