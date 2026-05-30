@@ -2527,5 +2527,635 @@
         "model_id": 1,
         "combat_log_path": "tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
         "created_at": "2026-05-23T22:11:41+00:00"
+    },
+    {
+        "id": 283,
+        "npc_id": 76143,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 284,
+        "npc_id": 76149,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 285,
+        "npc_id": 76266,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 286,
+        "npc_id": 196044,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 287,
+        "npc_id": 231606,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 288,
+        "npc_id": 232070,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 289,
+        "npc_id": 232070,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 290,
+        "npc_id": 232070,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 291,
+        "npc_id": 232146,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 292,
+        "npc_id": 232147,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 293,
+        "npc_id": 232171,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 294,
+        "npc_id": 232171,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 295,
+        "npc_id": 232173,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 296,
+        "npc_id": 232176,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 297,
+        "npc_id": 232283,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 298,
+        "npc_id": 234062,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 299,
+        "npc_id": 234068,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 300,
+        "npc_id": 234089,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 301,
+        "npc_id": 236153,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 302,
+        "npc_id": 236894,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 303,
+        "npc_id": 239636,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 304,
+        "npc_id": 241647,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 305,
+        "npc_id": 242964,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 306,
+        "npc_id": 242964,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 307,
+        "npc_id": 242964,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 308,
+        "npc_id": 248684,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 309,
+        "npc_id": 248684,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 310,
+        "npc_id": 248685,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 311,
+        "npc_id": 248685,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 312,
+        "npc_id": 248690,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 313,
+        "npc_id": 248690,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 314,
+        "npc_id": 248692,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 315,
+        "npc_id": 248692,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 14,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 316,
+        "npc_id": 248692,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 317,
+        "npc_id": 248693,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 318,
+        "npc_id": 248693,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 319,
+        "npc_id": 249002,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 320,
+        "npc_id": 249020,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 321,
+        "npc_id": 249020,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 322,
+        "npc_id": 249024,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 323,
+        "npc_id": 249025,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 324,
+        "npc_id": 249036,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 325,
+        "npc_id": 249036,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 326,
+        "npc_id": 249036,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 327,
+        "npc_id": 249086,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 328,
+        "npc_id": 250992,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 329,
+        "npc_id": 251674,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 2,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 330,
+        "npc_id": 251674,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 331,
+        "npc_id": 251880,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 332,
+        "npc_id": 252551,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 333,
+        "npc_id": 252555,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 334,
+        "npc_id": 252555,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 335,
+        "npc_id": 252557,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 336,
+        "npc_id": 252558,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 337,
+        "npc_id": 252559,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 338,
+        "npc_id": 252561,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 339,
+        "npc_id": 252565,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 340,
+        "npc_id": 252566,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 341,
+        "npc_id": 252566,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 342,
+        "npc_id": 252567,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 343,
+        "npc_id": 252567,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 344,
+        "npc_id": 252602,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 345,
+        "npc_id": 252602,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 346,
+        "npc_id": 252603,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 347,
+        "npc_id": 252610,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 348,
+        "npc_id": 252621,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 349,
+        "npc_id": 254684,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 350,
+        "npc_id": 254691,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 5,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 351,
+        "npc_id": 254740,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
+    },
+    {
+        "id": 352,
+        "npc_id": 257447,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 11,
+        "combat_log_path": null,
+        "created_at": "2026-05-28T15:57:06+00:00"
     }
 ]

@@ -8,6 +8,7 @@ use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Support\Carbon;
@@ -40,6 +41,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
+        private readonly SeasonAffixGroupServiceInterface          $seasonAffixGroupService,
         private readonly AffixGroupEaseTierServiceLoggingInterface $log,
     ) {
     }
@@ -81,8 +83,9 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixGroupString = $tierListsResponse['encounterTierList']['label'];
         // TWW S1 _kinda_ did away with affixes, but I still have them, Archon removed them
         // so I'm just subbing them with the current affix group if not set
-        $affixGroup = $affixGroupString === null
-            ? $this->seasonService->getCurrentSeason()?->getCurrentAffixGroup()
+        $currentSeason = $this->seasonService->getCurrentSeason();
+        $affixGroup    = $affixGroupString === null
+            ? ($currentSeason !== null ? $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null)
             : $this->getAffixGroupByString($affixGroupString);
 
         if ($affixGroup === null) {

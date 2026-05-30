@@ -39,6 +39,7 @@ use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -66,6 +67,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     public function __construct(
         /** @var SeasonService Used for grabbing info about the current M+ season. */
         private readonly SeasonServiceInterface                 $seasonService,
+        private readonly SeasonAffixGroupServiceInterface       $seasonAffixGroupService,
         private readonly CacheServiceInterface                  $cacheService,
         private readonly CoordinatesServiceInterface            $coordinatesService,
         private readonly MDTImportStringServiceLoggingInterface $log,
@@ -87,7 +89,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         if ($importAsThisWeek || $affixGroup === null) {
             $activeSeason = $dungeon->getActiveSeason($this->seasonService);
             if ($activeSeason !== null) {
-                $affixGroup = $activeSeason->getCurrentAffixGroup();
+                $affixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($activeSeason);
             }
         }
 
@@ -987,7 +989,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ), false);
 
             $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
-            $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
+            $currentAffixGroupForDungeon = $currentSeason !== null ? $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null;
 
             return new ImportStringDetails(
                 $warnings,

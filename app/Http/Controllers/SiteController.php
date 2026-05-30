@@ -235,6 +235,8 @@ class SiteController extends Controller
         $offset    = (int)$request->get('offset', 0);
         $offset    = max(min($offset, $maxOffset), $minOffset);
 
+        $currentSeason = $seasonService->getCurrentSeason($currentExpansion);
+
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
@@ -247,10 +249,10 @@ class SiteController extends Controller
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),
+                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null),
                 'nextweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getNextAffixGroup()),
+                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getNextAffixGroup($currentSeason) : null),
             ],
         ]);
     }
