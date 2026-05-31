@@ -275,13 +275,13 @@ class ViewService implements ViewServiceInterface
         ));
     }
 
-    public function shouldLoadViewVariables(string $uri): bool
+    public function shouldLoadViewVariables(string $pathInfo): bool
     {
-        $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static fn($url) => Str::startsWith($uri, $url));
+        $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static fn($url) => Str::startsWith($pathInfo, $url));
 
         if (!$isWhitelisted) {
             // If it's blacklisted..
-            if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static fn($url) => Str::startsWith($uri, $url))) {
+            if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static fn($url) => Str::startsWith($pathInfo, $url))) {
                 // Don't set the view variables at all
                 return false;
             }

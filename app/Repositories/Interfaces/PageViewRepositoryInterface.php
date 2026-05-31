@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                 update(PageView $model, array $attributes = [], array $options = [])
  * @method bool                 delete(PageView $model)
  * @method Collection<PageView> all()
+ * @method bool                 exists(array $columns)
  */
 interface PageViewRepositoryInterface extends BaseRepositoryInterface
 {

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                   update(UserReport $model, array $attributes = [], array $options = [])
  * @method bool                   delete(UserReport $model)
  * @method Collection<UserReport> all()
+ * @method bool                   exists(array $columns)
  */
 interface UserReportRepositoryInterface extends BaseRepositoryInterface
 {

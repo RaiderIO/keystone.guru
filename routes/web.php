@@ -58,6 +58,7 @@ use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Compendium\ClassCompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
 use App\Http\Controllers\Dungeon\DungeonController;
@@ -174,6 +175,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::get('/', new NpcCompendiumController()->activity(...))->name('compendium.activity');
                     Route::get('/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
                 });
+            });
+            Route::prefix('class')->group(static function () {
+                Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
+                Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
             });
         });
 

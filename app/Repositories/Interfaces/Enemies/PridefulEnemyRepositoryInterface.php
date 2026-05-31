@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                      update(PridefulEnemy $model, array $attributes = [], array $options = [])
  * @method bool                      delete(PridefulEnemy $model)
  * @method Collection<PridefulEnemy> all()
+ * @method bool                      exists(array $columns)
  */
 interface PridefulEnemyRepositoryInterface extends BaseRepositoryInterface
 {

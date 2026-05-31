@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                   update(Permission $model, array $attributes = [], array $options = [])
  * @method bool                   delete(Permission $model)
  * @method Collection<Permission> all()
+ * @method bool                   exists(array $columns)
  */
 interface PermissionRepositoryInterface extends BaseRepositoryInterface
 {

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                 update(DungeonFloorSwitchMarker $model, array $attributes = [], array $options = [])
  * @method bool                                 delete(DungeonFloorSwitchMarker $model)
  * @method Collection<DungeonFloorSwitchMarker> all()
+ * @method bool                                 exists(array $columns)
  */
 interface DungeonFloorSwitchMarkerRepositoryInterface extends BaseRepositoryInterface
 {

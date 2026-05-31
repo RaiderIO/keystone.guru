@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
  * @method bool                     update(DungeonRoute $model, array $attributes = [], array $options = [])
  * @method bool                     delete(DungeonRoute $model)
  * @method Collection<DungeonRoute> all()
+ * @method bool                     exists(array $columns)
  */
 interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 {

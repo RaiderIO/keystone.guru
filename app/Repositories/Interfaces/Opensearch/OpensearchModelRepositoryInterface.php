@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                        update(OpensearchModel $model, array $attributes = [], array $options = [])
  * @method bool                        delete(OpensearchModel $model)
  * @method Collection<OpensearchModel> all()
+ * @method bool                        exists(array $columns)
  */
 interface OpensearchModelRepositoryInterface extends BaseRepositoryInterface
 {

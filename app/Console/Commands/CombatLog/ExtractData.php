@@ -50,16 +50,16 @@ class ExtractData extends BaseCombatLogCommand
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        if (!$force && ParsedCombatLog::where('combat_log_path', $filePath)->exists()) {
-            $this->warn(
+        $result = $combatLogDataExtractionService->extractData($filePath, $force);
+        if ($result === null) {
+            $this->comment(
                 '- Data already extracted for this file',
             );
 
             return 0;
         }
 
-        $result = $combatLogDataExtractionService->extractData($filePath);
-        $data   = array_filter($result->toArray());
+        $data = array_filter($result->toArray());
         if (!empty($data)) {
             foreach ($data as $key => $value) {
                 if (!isset($this->combinedDataResult[$key])) {
@@ -73,15 +73,6 @@ class ExtractData extends BaseCombatLogCommand
             $this->comment(
                 '- Did not find any data to update',
             );
-        }
-
-        if (!$force) {
-            ParsedCombatLog::insert([
-                'combat_log_path' => $filePath,
-                'extracted_data'  => true,
-                'created_at'      => now(),
-                'updated_at'      => now(),
-            ]);
         }
 
         return 0;

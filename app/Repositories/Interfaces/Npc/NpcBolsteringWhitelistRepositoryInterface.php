@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                               update(NpcBolsteringWhitelist $model, array $attributes = [], array $options = [])
  * @method bool                               delete(NpcBolsteringWhitelist $model)
  * @method Collection<NpcBolsteringWhitelist> all()
+ * @method bool                               exists(array $columns)
  */
 interface NpcBolsteringWhitelistRepositoryInterface extends BaseRepositoryInterface
 {

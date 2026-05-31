@@ -82,7 +82,7 @@ final class EnemyRepositoryTest extends PublicTestCase
 
         // Assert — MDT placeholder enemies must not appear in results
         $placeholders = $result->filter(
-            static fn(Enemy $enemy) => $enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER
+            static fn(Enemy $enemy) => $enemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER,
         );
         $this->assertEmpty($placeholders, 'MDT placeholder enemies should not be included in the builder collection.');
     }

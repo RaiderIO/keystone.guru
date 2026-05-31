@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                       update(RouteAttribute $model, array $attributes = [], array $options = [])
  * @method bool                       delete(RouteAttribute $model)
  * @method Collection<RouteAttribute> all()
+ * @method bool                       exists(array $columns)
  */
 interface RouteAttributeRepositoryInterface extends BaseRepositoryInterface
 {

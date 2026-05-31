@@ -280,7 +280,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 return;
             }
 
-            if (!$viewService->shouldLoadViewVariables(request()->getUri())) {
+            if (!$viewService->shouldLoadViewVariables(request()->getPathInfo())) {
                 return;
             }
 

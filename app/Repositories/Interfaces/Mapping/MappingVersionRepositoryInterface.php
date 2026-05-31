@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                       update(MappingVersion $model, array $attributes = [], array $options = [])
  * @method bool                       delete(MappingVersion $model)
  * @method Collection<MappingVersion> all()
+ * @method bool                       exists(array $columns)
  */
 interface MappingVersionRepositoryInterface extends BaseRepositoryInterface
 {

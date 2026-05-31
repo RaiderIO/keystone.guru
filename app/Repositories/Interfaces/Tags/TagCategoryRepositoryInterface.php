@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                    update(TagCategory $model, array $attributes = [], array $options = [])
  * @method bool                    delete(TagCategory $model)
  * @method Collection<TagCategory> all()
+ * @method bool                    exists(array $columns)
  */
 interface TagCategoryRepositoryInterface extends BaseRepositoryInterface
 {

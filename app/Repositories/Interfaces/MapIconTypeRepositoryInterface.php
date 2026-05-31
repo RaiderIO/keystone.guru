@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                    update(MapIconType $model, array $attributes = [], array $options = [])
  * @method bool                    delete(MapIconType $model)
  * @method Collection<MapIconType> all()
+ * @method bool                    exists(array $columns)
  */
 interface MapIconTypeRepositoryInterface extends BaseRepositoryInterface
 {

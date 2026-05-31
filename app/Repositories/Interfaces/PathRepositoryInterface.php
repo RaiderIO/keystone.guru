@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool             update(Path $model, array $attributes = [], array $options = [])
  * @method bool             delete(Path $model)
  * @method Collection<Path> all()
+ * @method bool             exists(array $columns)
  */
 interface PathRepositoryInterface extends BaseRepositoryInterface
 {

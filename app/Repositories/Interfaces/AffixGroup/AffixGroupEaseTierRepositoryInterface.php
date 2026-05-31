@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                           update(AffixGroupEaseTier $model, array $attributes = [], array $options = [])
  * @method bool                           delete(AffixGroupEaseTier $model)
  * @method Collection<AffixGroupEaseTier> all()
+ * @method bool                           exists(array $columns)
  */
 interface AffixGroupEaseTierRepositoryInterface extends BaseRepositoryInterface
 {

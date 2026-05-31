@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                    update(DungeonRouteEnemyRaidMarker $model, array $attributes = [], array $options = [])
  * @method bool                                    delete(DungeonRouteEnemyRaidMarker $model)
  * @method Collection<DungeonRouteEnemyRaidMarker> all()
+ * @method bool                                    exists(array $columns)
  */
 interface DungeonRouteEnemyRaidMarkerRepositoryInterface extends BaseRepositoryInterface
 {
