@@ -48,6 +48,7 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
             ], $attributes));
         } while (
             !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
+            $dungeonRoute->mappingVersion->facade_enabled ||
             $this->getSafeMdtEnemies($dungeonRoute, $enemyCount)->count() < $enemyCount
         );
 
