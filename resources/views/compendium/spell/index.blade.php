@@ -54,7 +54,7 @@ use App\Models\Npc\NpcClassification;
                         'name': 'name',
                         'render': function (data, type, row) {
                             return spellTemplate({
-                                compendium_url: `${spellShowBaseUrl}/${row.id}`,
+                                compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });
@@ -92,7 +92,7 @@ use App\Models\Npc\NpcClassification;
                 'createdRow': function (row, data) {
                     $(row).css('cursor', 'pointer').on('click', function (e) {
                         if (!$(e.target).closest('a').length) {
-                            window.location.href = `${spellShowBaseUrl}/${data.id}`;
+                            window.location.href = `${spellShowBaseUrl}/${data.id}-${slugify(data.name)}`;
                         }
                     });
                 },

@@ -11,6 +11,8 @@ use App\Models\Dungeon;
 use App\Models\Spell\Spell;
 use App\Service\Compendium\SpellCompendiumServiceInterface;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SpellCompendiumController extends Controller
@@ -22,10 +24,14 @@ class SpellCompendiumController extends Controller
         ]);
     }
 
-    public function show(Spell $spell, SpellCompendiumServiceInterface $spellCompendiumService): View
+    public function show(Spell $spell, SpellCompendiumServiceInterface $spellCompendiumService, Request $request): View|RedirectResponse
     {
         if ($spell->hidden_on_map) {
             abort(404);
+        }
+
+        if (($request->route()->originalParameters()['spell'] ?? '') !== $spell->getRouteKey()) {
+            return redirect(route('spell.compendium.show', $spell), 301);
         }
 
         $spell->load(['gameVersion', 'dungeons.expansion', 'characteristic']);

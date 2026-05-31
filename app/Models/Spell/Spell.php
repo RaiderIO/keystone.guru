@@ -139,6 +139,18 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
+    public function resolveRouteBinding($value, $field = null): ?static
+    {
+        $id = (int)explode('-', (string)$value, 2)[0];
+
+        return $this->where('id', $id)->first();
+    }
+
+    public function getRouteKey(): string
+    {
+        return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
+    }
+
     #[Scope]
     protected function visible(): Builder
     {

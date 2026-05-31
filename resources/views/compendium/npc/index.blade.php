@@ -78,7 +78,7 @@ use App\Models\Npc\NpcClassification;
 
                             return data.filter((spell) => !spell.hidden_on_map).map(function (spell) {
                                 return spellTemplate({
-                                    compendium_url: `${spellShowBaseUrl}/${spell.id}`,
+                                    compendium_url: `${spellShowBaseUrl}/${spell.id}-${slugify(lang.get(spell.name))}`,
                                     icon_url: spell.icon_url,
                                     name: lang.get(spell.name),
                                 });
