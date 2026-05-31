@@ -79,7 +79,7 @@ use App\Models\Npc\NpcClassification;
 
                             return data.map(function (npc) {
                                 return npcTemplate({
-                                    compendium_url: `${npcShowBaseUrl}/${npc.id}`,
+                                    compendium_url: `${npcShowBaseUrl}/${npc.id}-${slugify(lang.get(npc.name))}`,
                                     portrait_url: `${assetsBaseUrl}/${npc.enemy_portrait_url}`,
                                     is_boss: bossClassificationIds.includes(npc.classification_id),
                                     boss_icon_url: skullIconUrl,

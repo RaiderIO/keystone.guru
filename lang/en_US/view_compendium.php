@@ -119,7 +119,6 @@ return [
         ],
         'show' => [
             'title'                       => ':name - By Class',
-            'context_dungeon'             => 'Showing results for: :dungeon',
             'table_header_spell'          => 'Spell',
             'table_header_characteristic' => 'Characteristic',
             'table_header_npcs'           => 'Affected NPCs',

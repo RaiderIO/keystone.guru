@@ -558,7 +558,8 @@ Breadcrumbs::for('compendium.class.index', static function (Generator $trail) {
     $trail->push(__('breadcrumbs.home.compendium.class'), route('compendium.class.index'));
 });
 
-Breadcrumbs::for('compendium.class.show', static function (Generator $trail, CharacterClass $characterClass) {
+Breadcrumbs::for('compendium.class.show', static function (Generator $trail, CharacterClass $characterClass, Dungeon $dungeon) {
     $trail->parent('compendium.class.index');
     $trail->push(__($characterClass->name), route('compendium.class.show', $characterClass));
+    $trail->push(__($dungeon->name));
 });

@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbs'       => 'compendium.class.show',
-    'breadcrumbsParams' => [$characterClass],
+    'breadcrumbsParams' => [$characterClass, $contextDungeon],
     'title'             => __('view_compendium.class.show.title', ['name' => __($characterClass->name)]),
 ])
 
@@ -31,9 +31,6 @@ use Illuminate\Support\Collection;
         </div>
         <div class="col">
             <h2 class="mb-1">{{ __($characterClass->name) }}</h2>
-            <p class="text-muted mb-0">
-                {!! __('view_compendium.class.show.context_dungeon', ['dungeon' => sprintf('<strong>%s</strong>', __($contextDungeon->name))]) !!}
-            </p>
         </div>
     </div>
 
