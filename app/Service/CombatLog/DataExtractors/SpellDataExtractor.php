@@ -10,6 +10,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBroken;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Interrupt;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
@@ -140,6 +141,15 @@ class SpellDataExtractor implements DataExtractorInterface
                 $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
                 $this->assignSpellToNpc($result, $currentDungeon, $parsedEvent, $sourceGuid, $prefix);
             }
+        }
+
+        // Track interrupted NPC spells: when a player interrupts a creature, mark the interrupted spell as interruptible.
+        if ($suffix instanceof Interrupt &&
+            $sourceGuid instanceof Player &&
+            $destGuid instanceof Creature &&
+            $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE &&
+            $this->summonedNpcs->search($destGuid->getId()) === false) {
+            $this->collectInterruptObservation($result, $suffix);
         }
     }
 
@@ -390,6 +400,36 @@ class SpellDataExtractor implements DataExtractorInterface
         }
     }
 
+    private function collectInterruptObservation(ExtractedDataResult $result, Interrupt $interrupt): void
+    {
+        $spellId = $interrupt->getExtraSpellId();
+
+        if (!$this->allSpells->has($spellId)) {
+            $createdSpell = SpellModel::create([
+                'id'           => $spellId,
+                'dispel_type'  => '',
+                'icon_name'    => '',
+                'name'         => $interrupt->getExtraSpellName(),
+                'schools_mask' => $interrupt->getExtraSchool(),
+                'aura'         => false,
+            ]);
+            $createdSpell->setRelation('spellDungeons', collect());
+            $result->createdSpell();
+            $this->allSpells->put($spellId, $createdSpell);
+            $this->pendingNewSpells->put($spellId, $createdSpell);
+
+            $this->log->createMissingSpellCreatedSpell($createdSpell->name, $spellId);
+        }
+
+        $dedupKey = sprintf('%d-%s', $spellId, SpellProperty::MissInterrupt->value);
+        if (!$this->pendingPropertyObservations->has($dedupKey)) {
+            $this->pendingPropertyObservations->put($dedupKey, [
+                'spell_id' => $spellId,
+                'property' => SpellProperty::MissInterrupt,
+            ]);
+        }
+    }
+
     private function applyPropertyToSpell(SpellModel $spell, SpellProperty $property): void
     {
         if ($property === SpellProperty::Aura) {
@@ -408,7 +448,7 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         if ($property === SpellProperty::Debuff) {
-            return $spell->debuff;
+            return (bool)$spell->debuff;
         }
 
         return (bool)($spell->miss_types_mask & $this->missTypeBit($property));

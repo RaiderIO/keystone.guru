@@ -39,6 +39,9 @@ final class SpellDataExtractorTest extends PublicTestCase
     /** SPELL_AURA_APPLIED, source=NPC, dest=Player, DEBUFF → triggers SpellProperty::Debuff */
     private const string RAW_DEBUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Player-4184-005B8B04,"TestPlayer",0x512,0x0,999602,"TestSpell",0x1,DEBUFF';
 
+    /** SPELL_INTERRUPT, source=Player, dest=NPC_ID=999601, prefix=Kick/6552, suffix=TestSpell/999602 → triggers SpellProperty::MissInterrupt */
+    private const string RAW_INTERRUPT_EVENT = '8/2/2024 16:24:18.477-4  SPELL_INTERRUPT,Player-1084-0B48C032,"TestPlayer",0x512,0x80000000,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,6552,"Kick",0x1,999602,"TestSpell",32';
+
     private ExtractedDataResult $result;
 
     private DataExtractionCurrentDungeon $currentDungeon;
@@ -224,6 +227,69 @@ final class SpellDataExtractorTest extends PublicTestCase
         ], 'combatlog');
 
         $this->assertSame(1, $this->result->toArray()['createdNpcSpells']);
+    }
+
+    #[Test]
+    public function afterExtract_givenInterruptEvent_writesObservationAndSetsInterruptProperty(): void
+    {
+        // Arrange — interrupted spell already exists with no miss_types_mask bits set
+        $this->createTestSpell(['miss_types_mask' => 0]);
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)]);
+
+        // Assert — observation row written to combatlog DB
+        $this->assertDatabaseHas('combat_log_spell_property_observations', [
+            'spell_id'        => self::SPELL_ID,
+            'property'        => SpellProperty::MissInterrupt->value,
+            'combat_log_path' => self::COMBAT_LOG_PATH,
+        ], 'combatlog');
+
+        // Assert — miss_types_mask bit 1024 set on the spell
+        $this->assertDatabaseHas('spells', [
+            'id'              => self::SPELL_ID,
+            'miss_types_mask' => 1024,
+        ]);
+
+        // Assert — PropertyChanged event written
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyChanged->value,
+            'property'   => SpellProperty::MissInterrupt->value,
+        ], 'combatlog');
+
+        $this->assertSame(1, $this->result->toArray()['updatedSpells']);
+    }
+
+    #[Test]
+    public function afterExtract_givenInterruptEventForNewSpell_createsSpellThenSetsInterruptProperty(): void
+    {
+        // Arrange — spell does not exist yet
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_INTERRUPT_EVENT)]);
+
+        // Assert — spell was created
+        $this->assertDatabaseHas('spells', [
+            'id' => self::SPELL_ID,
+        ]);
+
+        // Assert — observation row written
+        $this->assertDatabaseHas('combat_log_spell_property_observations', [
+            'spell_id' => self::SPELL_ID,
+            'property' => SpellProperty::MissInterrupt->value,
+        ], 'combatlog');
+
+        // Assert — miss_types_mask bit 1024 set
+        $this->assertDatabaseHas('spells', [
+            'id'              => self::SPELL_ID,
+            'miss_types_mask' => 1024,
+        ]);
+
+        $this->assertSame(1, $this->result->toArray()['createdSpells']);
+        $this->assertSame(1, $this->result->toArray()['updatedSpells']);
     }
 
     #[Test]

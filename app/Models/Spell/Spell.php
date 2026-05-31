@@ -33,7 +33,7 @@ use Str;
  * @property int         $schools_mask
  * @property int         $miss_types_mask
  * @property bool        $aura              Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool        $debuff            Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property bool|null   $debuff            Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
  * @property int         $cast_time
  * @property int         $duration
  * @property bool        $selectable

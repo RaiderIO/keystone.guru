@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Models\CombatLog\ParsedCombatLog;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 
 class ExtractData extends BaseCombatLogCommand
