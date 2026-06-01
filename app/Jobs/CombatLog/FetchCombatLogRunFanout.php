@@ -4,6 +4,7 @@ namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\FetchCombatLogRunFanoutLoggingInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
+use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,7 +38,7 @@ class FetchCombatLogRunFanout implements ShouldQueue
         $log->handleStart($this->runId, $this->combatLogVersion);
 
         try {
-            $download = $raiderIOApiService->getCombatLogForRun($this->runId);
+            $download = $raiderIOApiService->getCombatLogSegmentsForRun($this->runId);
 
             if ($download === null) {
                 $log->handleDownloadNotAvailable($this->runId);
@@ -45,23 +46,15 @@ class FetchCombatLogRunFanout implements ShouldQueue
                 return;
             }
 
-            if ($download->isFile) {
-                $log->handleDispatchingPart($this->runId, $download->diskName, $download->s3Path);
+            foreach ($download->segments as $segment) {
+                /** @var CombatLogSegment $segment */
+                $log->handleDispatchingSegment($this->runId, $segment->id, $segment->downloadUrl);
 
-                ProcessCombatLogPart::dispatch(
-                    $download->s3Bucket,
-                    $download->s3Path,
-                    $download->combatLogVersion,
-                    $download->diskName,
-                    $this->runContext,
-                );
-            } else {
-                $log->handleDispatchingFanout($this->runId, $download->s3Bucket, $download->s3Path);
-
-                ProcessCombatLogFanout::dispatch(
-                    $download->s3Bucket,
-                    $download->s3Path,
-                    $download->combatLogVersion,
+                ProcessCombatLogSegmentFromUrl::dispatch(
+                    $this->runId,
+                    $segment->id,
+                    $segment->downloadUrl,
+                    $this->combatLogVersion,
                     $this->runContext,
                 );
             }

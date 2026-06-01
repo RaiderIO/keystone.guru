@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Jobs\CombatLog;
 
-use App\Jobs\CombatLog\ProcessCombatLogPart;
+use App\Jobs\CombatLog\ProcessCombatLogFromS3;
 use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use Illuminate\Support\Facades\Storage;
@@ -43,7 +43,7 @@ final class ProcessCombatLogPartTest extends PublicTestCase
         app()->instance(ProcessCombatLogPartLoggingInterface::class, $log);
 
         // Act
-        app()->call([new ProcessCombatLogPart(self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION), 'handle']);
+        app()->call([new ProcessCombatLogFromS3(self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION), 'handle']);
 
         // Assert — handled by mock expectations above
     }
@@ -74,7 +74,7 @@ final class ProcessCombatLogPartTest extends PublicTestCase
         app()->instance(ProcessCombatLogPartLoggingInterface::class, $log);
 
         // Act
-        app()->call([new ProcessCombatLogPart(self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION), 'handle']);
+        app()->call([new ProcessCombatLogFromS3(self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION), 'handle']);
 
         // Assert — handled by mock expectations above
     }
@@ -95,7 +95,7 @@ final class ProcessCombatLogPartTest extends PublicTestCase
         app()->instance(ProcessCombatLogPartLoggingInterface::class, $log);
 
         // Act
-        $mockObject = $this->getMockBuilder(ProcessCombatLogPart::class)
+        $mockObject = $this->getMockBuilder(ProcessCombatLogFromS3::class)
             ->setConstructorArgs([self::S3_BUCKET, self::S3_FILE_PATH, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['writeResourceToDisk'])
             ->getMock();

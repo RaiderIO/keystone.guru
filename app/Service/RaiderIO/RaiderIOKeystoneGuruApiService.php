@@ -2,10 +2,10 @@
 
 namespace App\Service\RaiderIO;
 
-use App\Logic\CombatLog\CombatLogVersion;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
-use App\Service\RaiderIO\Dtos\CombatLogDownloadResponse;
+use App\Service\RaiderIO\Dtos\CombatLogSegment;
+use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
@@ -13,7 +13,6 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\Traits\Curl;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -29,8 +28,6 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
     /** Hardcoded dungeon zone ID matching the challenge mode ID above. */
     private const int FAKE_DUNGEON_ZONE_ID = 8910;
-
-    use Curl;
 
     public function __construct(
         private readonly SeasonServiceInterface           $seasonService,
@@ -76,7 +73,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
         return new SearchAdvancedRunsResponse($runs, count($runs));
     }
 
-    public function getCombatLogForRun(int $runId): ?CombatLogDownloadResponse
+    public function getCombatLogSegmentsForRun(int $runId): ?CombatLogSegmentsResponse
     {
         $zipFiles = $this->getS3ZipFiles();
 
@@ -90,12 +87,21 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
             return null;
         }
 
-        return new CombatLogDownloadResponse(
-            diskName:         's3_combat_logs',
-            s3Bucket:         config('filesystems.disks.s3_combat_logs.bucket') ?? '',
-            s3Path:           $s3Path,
-            combatLogVersion: max(CombatLogVersion::RETAIL_ALL),
-            isFile:           true,
+        try {
+            $downloadUrl = Storage::disk('s3_combat_logs')->temporaryUrl($s3Path, now()->addMinutes(30));
+        } catch (\RuntimeException) {
+            $downloadUrl = Storage::disk('s3_combat_logs')->url($s3Path);
+        }
+
+        return new CombatLogSegmentsResponse(
+            sourceUserId: 0,
+            segments:     [
+                new CombatLogSegment(
+                    id:          1,
+                    type:        'combat_log',
+                    downloadUrl: $downloadUrl,
+                ),
+            ],
         );
     }
 

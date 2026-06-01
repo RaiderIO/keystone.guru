@@ -8,9 +8,7 @@ interface FetchCombatLogRunFanoutLoggingInterface
 
     public function handleDownloadNotAvailable(int $runId): void;
 
-    public function handleDispatchingPart(int $runId, string $diskName, string $s3Path): void;
-
-    public function handleDispatchingFanout(int $runId, string $s3Bucket, string $s3Path): void;
+    public function handleDispatchingSegment(int $runId, int $segmentId, string $downloadUrl): void;
 
     public function handleEnd(int $runId): void;
 }

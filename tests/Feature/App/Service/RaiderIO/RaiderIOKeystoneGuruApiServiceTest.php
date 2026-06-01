@@ -3,7 +3,7 @@
 namespace Tests\Feature\App\Service\RaiderIO;
 
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
-use App\Service\RaiderIO\Dtos\CombatLogDownloadResponse;
+use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('RaiderIO')]
@@ -25,10 +26,19 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
     {
         parent::setUp();
 
+        /** @var SeasonServiceInterface|MockObject $seasonService */
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+
+        /** @var SeasonAffixGroupServiceInterface|MockObject $seasonAffixGroupService */
+        $seasonAffixGroupService = $this->createMockPublic(SeasonAffixGroupServiceInterface::class);
+
+        /** @var CombatLogEventServiceInterface|MockObject $combatLogEventService */
+        $combatLogEventService = $this->createMockPublic(CombatLogEventServiceInterface::class);
+
         $this->service = new RaiderIOKeystoneGuruApiService(
-            $this->createMockPublic(SeasonServiceInterface::class),
-            $this->createMockPublic(SeasonAffixGroupServiceInterface::class),
-            $this->createMockPublic(CombatLogEventServiceInterface::class),
+            $seasonService,
+            $seasonAffixGroupService,
+            $combatLogEventService,
         );
     }
 
@@ -98,7 +108,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getCombatLogForRun_givenZipFilesInS3_returnsCombatLogDownloadResponse(): void
+    public function getCombatLogSegmentsForRun_givenZipFilesInS3_returnsCombatLogSegmentsResponseWithOneSegment(): void
     {
         // Arrange
         Storage::fake('s3_combat_logs');
@@ -106,23 +116,23 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
         Storage::disk('s3_combat_logs')->put('run2.zip', 'content');
 
         // Act
-        $result = $this->service->getCombatLogForRun(1);
+        $result = $this->service->getCombatLogSegmentsForRun(1);
 
         // Assert
-        $this->assertInstanceOf(CombatLogDownloadResponse::class, $result);
-        $this->assertSame('s3_combat_logs', $result->diskName);
-        $this->assertTrue($result->isFile);
-        $this->assertTrue(str_ends_with($result->s3Path, '.zip'));
+        $this->assertInstanceOf(CombatLogSegmentsResponse::class, $result);
+        $this->assertCount(1, $result->segments);
+        $this->assertSame(1, $result->segments[0]->id);
+        $this->assertNotEmpty($result->segments[0]->downloadUrl);
     }
 
     #[Test]
-    public function getCombatLogForRun_givenNoFilesInS3_returnsNull(): void
+    public function getCombatLogSegmentsForRun_givenNoFilesInS3_returnsNull(): void
     {
         // Arrange
         Storage::fake('s3_combat_logs');
 
         // Act
-        $result = $this->service->getCombatLogForRun(1);
+        $result = $this->service->getCombatLogSegmentsForRun(1);
 
         // Assert
         $this->assertNull($result);

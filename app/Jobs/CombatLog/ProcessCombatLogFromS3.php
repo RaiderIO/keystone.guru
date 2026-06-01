@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
-class ProcessCombatLogPart implements ShouldQueue
+class ProcessCombatLogFromS3 implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;

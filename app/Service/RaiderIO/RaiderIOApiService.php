@@ -5,7 +5,8 @@ namespace App\Service\RaiderIO;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\Service\RaiderIO\Dtos\CombatLogDownloadResponse;
+use App\Service\RaiderIO\Dtos\CombatLogSegment;
+use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\RaiderIOHeatmapGridResponse;
@@ -24,6 +25,8 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
     private const string BASE_URL = 'https://raider.io/api/v1';
 
     private const string SEARCH_ADVANCED_URL = 'https://raider.io/api/search-advanced';
+
+    private const string SEGMENTS_URL = 'https://raider.io/api/v1/combatlog/download';
 
     private const array EXPANSION_SHORTNAME_OVERRIDE = [
         'midnight' => 'mn',
@@ -161,39 +164,37 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         }
     }
 
-    public function getCombatLogForRun(int $runId): ?CombatLogDownloadResponse
+    public function getCombatLogSegmentsForRun(int $runId): ?CombatLogSegmentsResponse
     {
-        $this->log->getCombatLogForRunStart($runId);
+        $this->log->getCombatLogSegmentsForRunStart($runId);
 
-        $downloadUrl = config('keystoneguru.raider_io.combat_log_polling.download_url');
+        $url = sprintf('%s/%d', self::SEGMENTS_URL, $runId);
 
         try {
-            if (empty($downloadUrl)) {
-                $this->log->getCombatLogForRunNotConfigured();
-
-                return null;
-            }
-
-            $url = sprintf('%s/%d', rtrim($downloadUrl, '/'), $runId);
-
             $response = $this->curlGet($url);
             $json     = json_decode($response, true);
 
-            if (!is_array($json) || !isset($json['s3_bucket'], $json['s3_path'], $json['combat_log_version'])) {
-                $this->log->getCombatLogForRunInvalidResponse($runId, $url, $response);
+            if (!is_array($json) || !isset($json['sourceUserId'], $json['segments']) || !is_array($json['segments'])) {
+                $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
 
                 return null;
             }
 
-            return new CombatLogDownloadResponse(
-                diskName:        's3_combat_logs',
-                s3Bucket:        (string)$json['s3_bucket'],
-                s3Path:          (string)$json['s3_path'],
-                combatLogVersion: (int)$json['combat_log_version'],
-                isFile:          false,
+            $segments = array_map(
+                fn(array $s): CombatLogSegment => new CombatLogSegment(
+                    id:          (int)$s['id'],
+                    type:        (string)$s['type'],
+                    downloadUrl: (string)$s['downloadUrl'],
+                ),
+                $json['segments'],
+            );
+
+            return new CombatLogSegmentsResponse(
+                sourceUserId: (int)$json['sourceUserId'],
+                segments:     $segments,
             );
         } finally {
-            $this->log->getCombatLogForRunEnd($runId);
+            $this->log->getCombatLogSegmentsForRunEnd($runId);
         }
     }
 

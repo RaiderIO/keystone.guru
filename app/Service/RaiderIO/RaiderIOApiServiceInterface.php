@@ -2,7 +2,7 @@
 
 namespace App\Service\RaiderIO;
 
-use App\Service\RaiderIO\Dtos\CombatLogDownloadResponse;
+use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
@@ -19,7 +19,7 @@ interface RaiderIOApiServiceInterface
     public function searchAdvancedRuns(SearchAdvancedRunsFilter $filter): SearchAdvancedRunsResponse;
 
     /**
-     * Returns null if the download URL is not configured or the API returns an invalid response.
+     * Returns null if the API returns an invalid response.
      */
-    public function getCombatLogForRun(int $runId): ?CombatLogDownloadResponse;
+    public function getCombatLogSegmentsForRun(int $runId): ?CombatLogSegmentsResponse;
 }

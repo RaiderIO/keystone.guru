@@ -16,12 +16,7 @@ class FetchCombatLogRunFanoutLogging extends StructuredLogging implements FetchC
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function handleDispatchingPart(int $runId, string $diskName, string $s3Path): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
-    public function handleDispatchingFanout(int $runId, string $s3Bucket, string $s3Path): void
+    public function handleDispatchingSegment(int $runId, int $segmentId, string $downloadUrl): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

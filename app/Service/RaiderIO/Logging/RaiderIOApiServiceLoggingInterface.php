@@ -16,11 +16,9 @@ interface RaiderIOApiServiceLoggingInterface
 
     public function searchAdvancedRunsEnd(int $count): void;
 
-    public function getCombatLogForRunStart(int $runId): void;
+    public function getCombatLogSegmentsForRunStart(int $runId): void;
 
-    public function getCombatLogForRunNotConfigured(): void;
+    public function getCombatLogSegmentsForRunInvalidResponse(int $runId, string $url, string $response): void;
 
-    public function getCombatLogForRunInvalidResponse(int $runId, string $url, string $response): void;
-
-    public function getCombatLogForRunEnd(int $runId): void;
+    public function getCombatLogSegmentsForRunEnd(int $runId): void;
 }

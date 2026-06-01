@@ -3,7 +3,7 @@
 namespace Tests\Feature\Jobs\CombatLog;
 
 use App\Jobs\CombatLog\ProcessCombatLogFanout;
-use App\Jobs\CombatLog\ProcessCombatLogPart;
+use App\Jobs\CombatLog\ProcessCombatLogFromS3;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\Group;
@@ -12,7 +12,7 @@ use Tests\TestCases\PublicTestCase;
 
 #[Group('Jobs')]
 #[Group('CombatLog')]
-final class ProcessCombatLogFanoutTest extends PublicTestCase
+final class ProcessCombatLogFromS3Test extends PublicTestCase
 {
     private const string S3_BUCKET          = 'raiderio-combat-logs';
     private const string S3_PATH            = 'runs/2026/05/15/abc123';
@@ -32,8 +32,8 @@ final class ProcessCombatLogFanoutTest extends PublicTestCase
         app()->call([new ProcessCombatLogFanout(self::S3_BUCKET, self::S3_PATH, self::COMBAT_LOG_VERSION), 'handle']);
 
         // Assert
-        Bus::assertDispatchedTimes(ProcessCombatLogPart::class, 3);
-        Bus::assertDispatched(ProcessCombatLogPart::class, function (ProcessCombatLogPart $job): bool {
+        Bus::assertDispatchedTimes(ProcessCombatLogFromS3::class, 3);
+        Bus::assertDispatched(ProcessCombatLogFromS3::class, function (ProcessCombatLogFromS3 $job): bool {
             $bucket   = new \ReflectionProperty($job, 's3Bucket')->getValue($job);
             $filePath = new \ReflectionProperty($job, 's3FilePath')->getValue($job);
 
@@ -52,6 +52,6 @@ final class ProcessCombatLogFanoutTest extends PublicTestCase
         app()->call([new ProcessCombatLogFanout(self::S3_BUCKET, self::S3_PATH, self::COMBAT_LOG_VERSION), 'handle']);
 
         // Assert
-        Bus::assertNotDispatched(ProcessCombatLogPart::class);
+        Bus::assertNotDispatched(ProcessCombatLogFromS3::class);
     }
 }

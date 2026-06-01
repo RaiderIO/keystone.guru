@@ -35,7 +35,7 @@ class ProcessCombatLogFanout implements ShouldQueue
 
         foreach ($files as $filePath) {
             $log->handleFileFound($filePath);
-            ProcessCombatLogPart::dispatch($this->s3Bucket, $filePath, $this->combatLogVersion, runContext: $this->runContext);
+            ProcessCombatLogFromS3::dispatch($this->s3Bucket, $filePath, $this->combatLogVersion, runContext: $this->runContext);
         }
 
         $log->handleEnd(count($files));
