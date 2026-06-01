@@ -3,6 +3,7 @@
 namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\FetchCombatLogRunFanoutLoggingInterface;
+use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,8 +23,9 @@ class FetchCombatLogRunFanout implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        private readonly int $runId,
-        private readonly int $combatLogVersion,
+        private readonly int                           $runId,
+        private readonly int                           $combatLogVersion,
+        private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
         $this->queue = sprintf('%s-%s-combat-log-fanout', config('app.type'), config('app.env'));
     }
@@ -51,6 +53,7 @@ class FetchCombatLogRunFanout implements ShouldQueue
                     $download->s3Path,
                     $download->combatLogVersion,
                     $download->diskName,
+                    $this->runContext,
                 );
             } else {
                 $log->handleDispatchingFanout($this->runId, $download->s3Bucket, $download->s3Path);
@@ -59,6 +62,7 @@ class FetchCombatLogRunFanout implements ShouldQueue
                     $download->s3Bucket,
                     $download->s3Path,
                     $download->combatLogVersion,
+                    $this->runContext,
                 );
             }
         } finally {

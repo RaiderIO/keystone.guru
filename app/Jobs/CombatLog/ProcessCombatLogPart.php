@@ -4,6 +4,7 @@ namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
+use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,10 +22,11 @@ class ProcessCombatLogPart implements ShouldQueue
     public int $timeout = 1800;
 
     public function __construct(
-        private readonly string $s3Bucket,
-        private readonly string $s3FilePath,
-        private readonly int    $combatLogVersion,
-        private readonly string $diskName = 's3_combat_logs',
+        private readonly string                        $s3Bucket,
+        private readonly string                        $s3FilePath,
+        private readonly int                           $combatLogVersion,
+        private readonly string                        $diskName = 's3_combat_logs',
+        private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
         $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
     }
@@ -44,7 +46,7 @@ class ProcessCombatLogPart implements ShouldQueue
             if ($this->writeResourceToDisk($resource, $tempPath) !== false) {
                 $log->handleDownloaded($tempPath);
 
-                $extractionService->extractData($tempPath);
+                $extractionService->extractData($tempPath, runContext: $this->runContext);
                 $result = true;
             } else {
                 $log->handleFileWriteFailed($tempPath);

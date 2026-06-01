@@ -3,11 +3,17 @@
 namespace App\Service\CombatLog;
 
 use App\Models\CombatLog\CombatLogAnalyze;
+use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 
 interface CombatLogDataExtractionServiceInterface
 {
-    public function extractData(string $filePath, ?bool $force = null, ?callable $onProcessLine = null): ?ExtractedDataResult;
+    public function extractData(
+        string                        $filePath,
+        ?bool                         $force = null,
+        ?callable                     $onProcessLine = null,
+        ?CombatLogRunContextInterface $runContext = null,
+    ): ?ExtractedDataResult;
 
     /**
      * Analyzes a combat log and extracts all relevant information from it.

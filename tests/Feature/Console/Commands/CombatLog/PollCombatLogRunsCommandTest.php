@@ -312,6 +312,8 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
             challengeModeId: $challengeModeId,
             dungeonZoneId:   $this->dungeon->zone_id ?? 0,
             memberSpecIds:   $memberSpecIds,
+            mythicLevel:     10,
+            affixes:         [],
         );
     }
 }

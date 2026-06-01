@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogDungeonContextInterface;
+
 /**
  * CHALLENGE_MODE_START,"The Underrot",1841,251,2,[9]
  *
@@ -9,7 +11,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
  *
  * @since 26/05/2023
  */
-class ChallengeModeStart extends SpecialEvent
+class ChallengeModeStart extends SpecialEvent implements HasCombatLogDungeonContextInterface
 {
     private string $zoneName;
 
@@ -41,7 +43,12 @@ class ChallengeModeStart extends SpecialEvent
         return $this->keystoneLevel;
     }
 
-    public function getAffixIDs(): array
+    public function getKeyLevel(): ?int
+    {
+        return $this->getKeystoneLevel();
+    }
+
+    public function getAffixIDs(): ?array
     {
         return $this->affixIDs;
     }
