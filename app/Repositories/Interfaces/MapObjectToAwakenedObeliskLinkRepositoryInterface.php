@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                       update(MapObjectToAwakenedObeliskLink $model, array $attributes = [], array $options = [])
  * @method bool                                       delete(MapObjectToAwakenedObeliskLink $model)
  * @method Collection<MapObjectToAwakenedObeliskLink> all()
+ * @method bool                                       exists(array $columns)
  */
 interface MapObjectToAwakenedObeliskLinkRepositoryInterface extends BaseRepositoryInterface
 {

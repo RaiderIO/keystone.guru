@@ -51,7 +51,7 @@ use App\Models\Npc\NpcClassification;
                         'name': 'name',
                         'render': function (data, type, row) {
                             return npcTemplate({
-                                compendium_url: `${npcShowBaseUrl}/${row.id}`,
+                                compendium_url: `${npcShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
                                 portrait_url: `${assetsBaseUrl}/${row.enemy_portrait_url}`,
                                 is_boss: bossClassificationIds.includes(row.classification_id),
                                 boss_icon_url: skullIconUrl,
@@ -78,7 +78,7 @@ use App\Models\Npc\NpcClassification;
 
                             return data.filter((spell) => !spell.hidden_on_map).map(function (spell) {
                                 return spellTemplate({
-                                    compendium_url: `${spellShowBaseUrl}/${spell.id}`,
+                                    compendium_url: `${spellShowBaseUrl}/${spell.id}-${slugify(lang.get(spell.name))}`,
                                     icon_url: spell.icon_url,
                                     name: lang.get(spell.name),
                                 });
@@ -89,7 +89,7 @@ use App\Models\Npc\NpcClassification;
                 'createdRow': function (row, data) {
                     $(row).css('cursor', 'pointer').on('click', function (e) {
                         if (!$(e.target).closest('a').length) {
-                            window.location.href = `${npcShowBaseUrl}/${data.id}`;
+                            window.location.href = `${npcShowBaseUrl}/${data.id}-${slugify(data.name)}`;
                         }
                     });
                 },

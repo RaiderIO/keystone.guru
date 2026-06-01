@@ -16,5 +16,5 @@ interface ViewServiceInterface
      */
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array;
 
-    public function shouldLoadViewVariables(string $uri): bool;
+    public function shouldLoadViewVariables(string $pathInfo): bool;
 }

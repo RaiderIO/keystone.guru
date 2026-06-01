@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                  update(MDTImport $model, array $attributes = [], array $options = [])
  * @method bool                  delete(MDTImport $model)
  * @method Collection<MDTImport> all()
+ * @method bool                  exists(array $columns)
  */
 interface MDTImportRepositoryInterface extends BaseRepositoryInterface
 {

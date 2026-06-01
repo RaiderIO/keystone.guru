@@ -7,7 +7,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartEvent;
-use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
+use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogVersionInterface;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
@@ -380,7 +380,7 @@ class CombatLogService implements CombatLogServiceInterface
             $isAdvancedLoggingEnabled = true;
             while (($rawEvent = fgets($handle)) !== false) {
                 $parsedEvent = $callback($combatLogVersion, $isAdvancedLoggingEnabled, $rawEvent, ++$lineNr);
-                if ($parsedEvent instanceof CombatLogVersionEvent) {
+                if ($parsedEvent instanceof HasCombatLogVersionInterface) {
                     $combatLogVersion         = $parsedEvent->getVersionLong();
                     $isAdvancedLoggingEnabled = $parsedEvent->isAdvancedLogEnabled();
                     $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion, $isAdvancedLoggingEnabled);

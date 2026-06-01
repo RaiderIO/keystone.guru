@@ -106,7 +106,6 @@ use Illuminate\Support\Collection;
                                    href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, __($spell->name, [], 'en_US')) }}"
                                    data-wh-icon-size="medium"
                                 >
-                                    <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>
                                     {{ __($spell->name) }}
                                 </a>
                             </div>

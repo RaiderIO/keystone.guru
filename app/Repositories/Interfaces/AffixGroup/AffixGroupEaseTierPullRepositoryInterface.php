@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                               update(AffixGroupEaseTierPull $model, array $attributes = [], array $options = [])
  * @method bool                               delete(AffixGroupEaseTierPull $model)
  * @method Collection<AffixGroupEaseTierPull> all()
+ * @method bool                               exists(array $columns)
  */
 interface AffixGroupEaseTierPullRepositoryInterface extends BaseRepositoryInterface
 {

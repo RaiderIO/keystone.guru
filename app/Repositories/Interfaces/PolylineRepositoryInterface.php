@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                 update(Polyline $model, array $attributes = [], array $options = [])
  * @method bool                 delete(Polyline $model)
  * @method Collection<Polyline> all()
+ * @method bool                 exists(array $columns)
  */
 interface PolylineRepositoryInterface extends BaseRepositoryInterface
 {

@@ -25,7 +25,7 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         'columns' => [
             ['name' => 'name',      'search' => ['value' => ''], 'searchable' => 'true',  'orderable' => 'true'],
             ['name' => 'dungeon_id', 'search' => ['value' => ''], 'searchable' => 'false', 'orderable' => 'false'],
-            ['name' => 'npc_names', 'search' => ['value' => ''], 'searchable' => 'false', 'orderable' => 'false'],
+            ['name' => 'npcs',      'search' => ['value' => ''], 'searchable' => 'false', 'orderable' => 'false'],
         ],
     ];
 
@@ -100,6 +100,50 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         // Assert
         $response->assertOk();
         $response->assertSeeText(__($spell->name));
+    }
+
+    #[Test]
+    public function show_givenCorrectSlug_returnsOk(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+
+        // Act
+        $response = $this->get(route('spell.compendium.show', $spell));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function show_givenIdOnly_redirectsToCanonicalUrl(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+
+        // Act
+        $response = $this->get(sprintf('/compendium/spell/%d', $spell->id));
+
+        // Assert
+        $response->assertRedirect(route('spell.compendium.show', $spell));
+        $response->assertStatus(301);
+    }
+
+    #[Test]
+    public function show_givenWrongSlug_redirectsToCanonicalUrl(): void
+    {
+        // Arrange
+        $spell = Spell::where('hidden_on_map', false)->first();
+        $this->assertNotNull($spell);
+
+        // Act
+        $response = $this->get(sprintf('/compendium/spell/%d-wrong-slug', $spell->id));
+
+        // Assert
+        $response->assertRedirect(route('spell.compendium.show', $spell));
+        $response->assertStatus(301);
     }
 
     #[Test]

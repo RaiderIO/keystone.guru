@@ -4,6 +4,7 @@
 
 /** @noinspection PhpParamsInspection */
 
+use App\Models\CharacterClass;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
@@ -550,4 +551,15 @@ Breadcrumbs::for('compendium.activity.index', static function (Generator $trail,
 Breadcrumbs::for('compendium.activity.day', static function (Generator $trail, Dungeon $dungeon, Carbon $date) {
     $trail->parent('compendium.activity.index', $dungeon);
     $trail->push(__('breadcrumbs.home.compendium.activity_day', ['date' => $date->format('F j, Y')]), route('compendium.activity.day', ['dungeon' => $dungeon, 'date' => $date->format('Y-m-d')]));
+});
+
+Breadcrumbs::for('compendium.class.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.compendium.class'), route('compendium.class.index'));
+});
+
+Breadcrumbs::for('compendium.class.show', static function (Generator $trail, CharacterClass $characterClass, Dungeon $dungeon) {
+    $trail->parent('compendium.class.index');
+    $trail->push(__($characterClass->name), route('compendium.class.show', $characterClass));
+    $trail->push(__($dungeon->name));
 });

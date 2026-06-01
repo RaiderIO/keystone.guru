@@ -255,6 +255,7 @@ return [
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Spells',
             'compendium_activity'     => 'Activity',
+            'class_compendium'        => 'By Class',
         ],
         'nav' => [
             'user' => [

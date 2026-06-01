@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                              update(PatreonAdFreeGiveaway $model, array $attributes = [], array $options = [])
  * @method bool                              delete(PatreonAdFreeGiveaway $model)
  * @method Collection<PatreonAdFreeGiveaway> all()
+ * @method bool                              exists(array $columns)
  */
 interface PatreonAdFreeGiveawayRepositoryInterface extends BaseRepositoryInterface
 {

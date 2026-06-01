@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                 update(DungeonRouteThumbnailJob $model, array $attributes = [], array $options = [])
  * @method bool                                 delete(DungeonRouteThumbnailJob $model)
  * @method Collection<DungeonRouteThumbnailJob> all()
+ * @method bool                                 exists(array $columns)
  */
 interface DungeonRouteThumbnailJobRepositoryInterface extends BaseRepositoryInterface
 {

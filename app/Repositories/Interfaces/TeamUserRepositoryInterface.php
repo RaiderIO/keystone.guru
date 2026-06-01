@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                 update(TeamUser $model, array $attributes = [], array $options = [])
  * @method bool                 delete(TeamUser $model)
  * @method Collection<TeamUser> all()
+ * @method bool                 exists(array $columns)
  */
 interface TeamUserRepositoryInterface extends BaseRepositoryInterface
 {

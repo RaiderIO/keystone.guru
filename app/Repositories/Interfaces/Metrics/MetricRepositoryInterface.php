@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool               update(Metric $model, array $attributes = [], array $options = [])
  * @method bool               delete(Metric $model)
  * @method Collection<Metric> all()
+ * @method bool               exists(array $columns)
  */
 interface MetricRepositoryInterface extends BaseRepositoryInterface
 {

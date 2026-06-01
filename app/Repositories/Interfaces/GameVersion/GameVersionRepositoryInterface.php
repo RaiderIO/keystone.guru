@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                    update(GameVersion $model, array $attributes = [], array $options = [])
  * @method bool                    delete(GameVersion $model)
  * @method Collection<GameVersion> all()
+ * @method bool                    exists(array $columns)
  */
 interface GameVersionRepositoryInterface extends BaseRepositoryInterface
 {

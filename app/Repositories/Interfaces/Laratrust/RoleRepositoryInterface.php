@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool             update(Role $model, array $attributes = [], array $options = [])
  * @method bool             delete(Role $model)
  * @method Collection<Role> all()
+ * @method bool             exists(array $columns)
  */
 interface RoleRepositoryInterface extends BaseRepositoryInterface
 {

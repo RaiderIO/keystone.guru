@@ -1,4 +1,11 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Npc\NpcClassification;
+
+/**
+ * @var Dungeon $contextDungeon
+ */
 ?>
 @extends('layouts.sitepage', ['title' => __('view_compendium.spell.index.title')])
 
@@ -11,8 +18,17 @@
 
     <script type="text/javascript">
         $(function () {
+            const assetsBaseUrl = '{{ config('keystoneguru.assets_base_url') }}';
+            const bossClassificationIds = @json([
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]
+                ]);
+
+            const skullIconUrl = '{{ ksgAssetImage('mapicon/raid_marker_skull.png') }}';
             const spellShowBaseUrl = '{{ url('/compendium/spell') }}';
+            const npcShowBaseUrl = '{{ url('/compendium/npc') }}';
             const spellTemplate = Handlebars.templates['spell_template'];
+            const npcTemplate = Handlebars.templates['npc'];
 
             const table = $('#compendium_spell_table').DataTable({
                 'processing': true,
@@ -38,7 +54,7 @@
                         'name': 'name',
                         'render': function (data, type, row) {
                             return spellTemplate({
-                                compendium_url: `${spellShowBaseUrl}/${row.id}`,
+                                compendium_url: `${spellShowBaseUrl}/${row.id}-${slugify(data ?? '')}`,
                                 icon_url: row.icon_url,
                                 name: data ?? '',
                             });
@@ -52,16 +68,31 @@
                     },
                     {
                         'title': '{{ __('view_compendium.spell.index.table_header_used_by') }}',
-                        'data': 'npc_names',
-                        'name': 'npc_names',
+                        'data': 'npcs',
+                        'name': 'npcs',
                         'orderable': false,
                         'searchable': false,
+                        'render': function (data) {
+                            if (!data || !data.length) {
+                                return '';
+                            }
+
+                            return data.map(function (npc) {
+                                return npcTemplate({
+                                    compendium_url: `${npcShowBaseUrl}/${npc.id}-${slugify(lang.get(npc.name))}`,
+                                    portrait_url: `${assetsBaseUrl}/${npc.enemy_portrait_url}`,
+                                    is_boss: bossClassificationIds.includes(npc.classification_id),
+                                    boss_icon_url: skullIconUrl,
+                                    name: lang.get(npc.name),
+                                });
+                            }).join('');
+                        },
                     },
                 ],
                 'createdRow': function (row, data) {
                     $(row).css('cursor', 'pointer').on('click', function (e) {
                         if (!$(e.target).closest('a').length) {
-                            window.location.href = `${spellShowBaseUrl}/${data.id}`;
+                            window.location.href = `${spellShowBaseUrl}/${data.id}-${slugify(data.name)}`;
                         }
                     });
                 },
@@ -86,6 +117,7 @@
                 'showAll'     => false,
                 'showSeasons' => true,
                 'required'    => false,
+                'selected'    => $contextDungeon->id,
             ])
         </div>
     </div>

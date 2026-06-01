@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool              update(Floor $model, array $attributes = [], array $options = [])
  * @method bool              delete(Floor $model)
  * @method Collection<Floor> all()
+ * @method bool              exists(array $columns)
  */
 interface FloorRepositoryInterface extends BaseRepositoryInterface
 {

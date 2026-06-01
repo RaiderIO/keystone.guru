@@ -179,6 +179,50 @@ final class NpcCompendiumControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenCorrectSlug_returnsOk(): void
+    {
+        // Arrange
+        $npc = Npc::with('classification')->first();
+        $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $npc));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    #[Test]
+    public function show_givenIdOnly_redirectsToCanonicalUrl(): void
+    {
+        // Arrange
+        $npc = Npc::first();
+        $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(sprintf('/compendium/npc/%d', $npc->id));
+
+        // Assert
+        $response->assertRedirect(route('npc.compendium.show', $npc));
+        $response->assertStatus(301);
+    }
+
+    #[Test]
+    public function show_givenWrongSlug_redirectsToCanonicalUrl(): void
+    {
+        // Arrange
+        $npc = Npc::first();
+        $this->assertNotNull($npc);
+
+        // Act
+        $response = $this->get(sprintf('/compendium/npc/%d-wrong-slug', $npc->id));
+
+        // Assert
+        $response->assertRedirect(route('npc.compendium.show', $npc));
+        $response->assertStatus(301);
+    }
+
+    #[Test]
     public function show_givenInvalidNpc_returnsNotFound(): void
     {
         // Act

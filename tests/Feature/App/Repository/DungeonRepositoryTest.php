@@ -64,7 +64,7 @@ final class DungeonRepositoryTest extends PublicTestCase
     {
         // Arrange
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->first();
+        $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->first();
         $mappingVersion = $dungeon->mappingVersions()->first();
 
         // Act
@@ -133,7 +133,7 @@ final class DungeonRepositoryTest extends PublicTestCase
     {
         // Arrange
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')->first();
+        $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->first();
         $mappingVersion = $dungeon->mappingVersions()->first();
 
         // Act

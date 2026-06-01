@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                      update(MountableArea $model, array $attributes = [], array $options = [])
  * @method bool                      delete(MountableArea $model)
  * @method Collection<MountableArea> all()
+ * @method bool                      exists(array $columns)
  */
 interface MountableAreaRepositoryInterface extends BaseRepositoryInterface
 {

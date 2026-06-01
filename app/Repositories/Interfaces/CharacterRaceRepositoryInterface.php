@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                      update(CharacterRace $model, array $attributes = [], array $options = [])
  * @method bool                      delete(CharacterRace $model)
  * @method Collection<CharacterRace> all()
+ * @method bool                      exists(array $columns)
  */
 interface CharacterRaceRepositoryInterface extends BaseRepositoryInterface
 {

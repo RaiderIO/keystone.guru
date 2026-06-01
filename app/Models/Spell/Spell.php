@@ -33,7 +33,7 @@ use Str;
  * @property int         $schools_mask
  * @property int         $miss_types_mask
  * @property bool        $aura              Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool        $debuff            Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property bool|null   $debuff            Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
  * @property int         $cast_time
  * @property int         $duration
  * @property bool        $selectable
@@ -137,6 +137,18 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         return $result;
+    }
+
+    public function resolveRouteBinding($value, $field = null): ?static
+    {
+        $id = (int)explode('-', (string)$value, 2)[0];
+
+        return $this->where('id', $id)->first();
+    }
+
+    public function getRouteKey(): string
+    {
+        return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
     }
 
     #[Scope]

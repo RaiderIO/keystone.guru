@@ -62,7 +62,7 @@ class CharacterClassSpecialization extends CacheModel implements CombatLogCriter
 
     public function getName(): string
     {
-        return sprintf('%s — %s', __($this->class->name), __($this->name));
+        return sprintf('%s - %s', __($this->class->name), __($this->name));
     }
 
     public function getImageLink(): ?string

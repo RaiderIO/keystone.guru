@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * @property int        $id
@@ -122,6 +123,18 @@ class Npc extends CacheModel implements MappingModelInterface
             'level'             => 'integer',
             'mdt_scale'         => 'float',
         ];
+    }
+
+    public function resolveRouteBinding($value, $field = null): ?static
+    {
+        $id = (int)explode('-', (string)$value, 2)[0];
+
+        return $this->where('id', $id)->first();
+    }
+
+    public function getRouteKey(): string
+    {
+        return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
     }
 
     public function getEnemyPortraitUrlAttribute(): string

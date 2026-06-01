@@ -42,6 +42,21 @@ function convertToSlug(text) {
         .replace(/ +/g, '-');
 }
 
+/**
+ * Converts text to a URL-safe slug matching PHP's Str::slug().
+ * Handles diacritics via Unicode normalization (e.g. ä→a, é→e).
+ * @param {string} text
+ * @returns {string}
+ */
+function slugify(text) {
+    return (text ?? '')
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
 function createOffsetPolygon(vertices, offset, arcSegments, roundCornersOnly = false) {
     let latLngs = vertices.map(point => ({x: point.lng, y: point.lat}));
 

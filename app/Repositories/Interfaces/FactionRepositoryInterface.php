@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                update(Faction $model, array $attributes = [], array $options = [])
  * @method bool                delete(Faction $model)
  * @method Collection<Faction> all()
+ * @method bool                exists(array $columns)
  */
 interface FactionRepositoryInterface extends BaseRepositoryInterface
 {

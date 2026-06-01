@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                         update(DungeonRoutePlayerSpecialization $model, array $attributes = [], array $options = [])
  * @method bool                                         delete(DungeonRoutePlayerSpecialization $model)
  * @method Collection<DungeonRoutePlayerSpecialization> all()
+ * @method bool                                         exists(array $columns)
  */
 interface DungeonRoutePlayerSpecializationRepositoryInterface extends BaseRepositoryInterface
 {

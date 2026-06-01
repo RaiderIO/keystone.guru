@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                       update(PublishedState $model, array $attributes = [], array $options = [])
  * @method bool                       delete(PublishedState $model)
  * @method Collection<PublishedState> all()
+ * @method bool                       exists(array $columns)
  */
 interface PublishedStateRepositoryInterface extends BaseRepositoryInterface
 {

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                        update(EnemyActiveAura $model, array $attributes = [], array $options = [])
  * @method bool                        delete(EnemyActiveAura $model)
  * @method Collection<EnemyActiveAura> all()
+ * @method bool                        exists(array $columns)
  */
 interface EnemyActiveAuraRepositoryInterface extends BaseRepositoryInterface
 {

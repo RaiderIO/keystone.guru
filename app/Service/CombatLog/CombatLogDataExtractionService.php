@@ -4,12 +4,14 @@ namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
-use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
+use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogDungeonContextInterface;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogAnalyze;
 use App\Models\CombatLog\CombatLogAnalyzeStatus;
+use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
+use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
@@ -18,6 +20,7 @@ use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
+use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
@@ -46,6 +49,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         private readonly SeasonServiceInterface                         $seasonService,
         private readonly FloorRepositoryInterface                       $floorRepository,
         private readonly SpellRepositoryInterface                       $spellRepository,
+        private readonly ParsedCombatLogRepositoryInterface             $parsedCombatLogRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
         $this->dataExtractors = collect([
@@ -57,8 +61,18 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         ]);
     }
 
-    public function extractData(string $filePath, ?callable $onProcessLine = null): ExtractedDataResult
-    {
+    public function extractData(
+        string                        $filePath,
+        ?bool                         $force = null,
+        ?callable                     $onProcessLine = null,
+        ?CombatLogRunContextInterface $runContext = null,
+    ): ?ExtractedDataResult {
+        $force ??= false;
+
+        if (!$force && $this->parsedCombatLogRepository->exists(['combat_log_path' => $filePath])) {
+            return null;
+        }
+
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
         $currentDungeon = null;
@@ -74,7 +88,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             bool   $advancedLoggingEnabled,
             string $rawEvent,
             int    $lineNr,
-        ) use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
+        ) use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine, $runContext) {
             // We don't care if there's no advanced logging enabled!
             if (!$advancedLoggingEnabled) {
                 return null;
@@ -102,7 +116,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             }
 
             // Override the current data if we can, otherwise default back to whatever we parsed before
-            $currentDungeon = $this->extractDungeon($currentDungeon, $parsedEvent) ?? $currentDungeon;
+            $currentDungeon = $this->extractDungeon($currentDungeon, $parsedEvent, $runContext) ?? $currentDungeon;
 
             if ($currentDungeon === null) {
                 $this->log->extractDataDungeonNotSet();
@@ -124,40 +138,43 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $dataExtractor->afterExtract($result, $filePath);
         }
 
+        if (!$force) {
+            ParsedCombatLog::insert([
+                'combat_log_path' => $filePath,
+                'extracted_data'  => true,
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ]);
+        }
+
         return $result;
     }
 
     private function extractDungeon(
         ?DataExtractionCurrentDungeon $currentDungeon,
         BaseEvent                     $parsedEvent,
+        ?CombatLogRunContextInterface $runContext = null,
     ): ?DataExtractionCurrentDungeon {
         $result = null;
 
-        // One way or another, enforce we extract the dungeon from the combat log
-        if ($parsedEvent instanceof ChallengeModeStart) {
-            $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
+        if ($parsedEvent instanceof HasCombatLogDungeonContextInterface) {
+            $dungeon  = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
+            $keyLevel = $parsedEvent->getKeyLevel() ?? $runContext?->getKeyLevel();
+            $affixIds = $parsedEvent->getAffixIDs() ?? $runContext?->getAffixIds();
 
-            $currentKeyLevel      = $parsedEvent->getKeystoneLevel();
-            $currentKeyAffixGroup = null;
-
-            // Find the correct affix groups that match the affix combination the dungeon was started with
-            $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
-            if ($currentSeasonForDungeon !== null) {
-                $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
-                    $currentSeasonForDungeon,
-                    collect($parsedEvent->getAffixIDs()),
-                );
-
-                /** @var AffixGroup|null $currentKeyAffixGroup */
-                $currentKeyAffixGroup = $affixGroups->first();
+            $affixGroup = null;
+            $season     = $dungeon->getActiveSeason($this->seasonService);
+            if ($season !== null && $affixIds !== null) {
+                /** @var AffixGroup|null $affixGroup */
+                $affixGroup = AffixGroup::findMatchingAffixGroupsForAffixIds($season, collect($affixIds))->first();
             }
 
-            $result = new DataExtractionCurrentDungeon($dungeon, $currentKeyLevel, $currentKeyAffixGroup);
+            $result = new DataExtractionCurrentDungeon($dungeon, $keyLevel, $affixGroup);
 
-            $this->log->extractDataSetChallengeMode(
+            $this->log->extractDataSetDungeon(
                 __($dungeon->name, [], 'en_US'),
-                $currentKeyLevel,
-                $currentKeyAffixGroup?->getTextAttribute(),
+                $keyLevel,
+                $affixGroup?->getTextAttribute(),
             );
         } elseif ($parsedEvent instanceof ZoneChange) {
             if ($currentDungeon?->keyLevel !== null) {
@@ -221,7 +238,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     'status' => CombatLogAnalyzeStatus::Processing,
                 ]);
 
-                $result = $this->extractData($filePath, function (int $lineNr) use ($totalLines, $combatLogAnalyze) {
+                $result = $this->extractData($filePath, false, function (int $lineNr) use ($totalLines, $combatLogAnalyze) {
                     $progressPercent = (int)(($lineNr / $totalLines) * 100);
                     if ($progressPercent !== $combatLogAnalyze->percent_completed && $progressPercent % 5 === 0) {
                         $this->log->extractDataAsyncAnalyzeProgress($progressPercent, $lineNr, $totalLines);

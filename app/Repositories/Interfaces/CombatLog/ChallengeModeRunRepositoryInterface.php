@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                         update(ChallengeModeRun $model, array $attributes = [], array $options = [])
  * @method bool                         delete(ChallengeModeRun $model)
  * @method Collection<ChallengeModeRun> all()
+ * @method bool                         exists(array $columns)
  */
 interface ChallengeModeRunRepositoryInterface extends BaseRepositoryInterface
 {

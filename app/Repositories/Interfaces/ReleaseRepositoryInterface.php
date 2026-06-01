@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                update(Release $model, array $attributes = [], array $options = [])
  * @method bool                delete(Release $model)
  * @method Collection<Release> all()
+ * @method bool                exists(array $columns)
  */
 interface ReleaseRepositoryInterface extends BaseRepositoryInterface
 {

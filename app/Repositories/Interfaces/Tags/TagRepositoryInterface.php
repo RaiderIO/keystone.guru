@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool            update(Tag $model, array $attributes = [], array $options = [])
  * @method bool            delete(Tag $model)
  * @method Collection<Tag> all()
+ * @method bool            exists(array $columns)
  */
 interface TagRepositoryInterface extends BaseRepositoryInterface
 {

@@ -16,6 +16,7 @@ use App\Service\Compendium\NpcCompendiumServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
@@ -28,8 +29,12 @@ class NpcCompendiumController extends Controller
         ]);
     }
 
-    public function show(Npc $npc, NpcCompendiumServiceInterface $npcCompendiumService): View
+    public function show(Npc $npc, NpcCompendiumServiceInterface $npcCompendiumService, Request $request): View|RedirectResponse
     {
+        if (($request->route()->originalParameters()['npc'] ?? '') !== $npc->getRouteKey()) {
+            return redirect(route('npc.compendium.show', $npc), 301);
+        }
+
         $npc->load(['classification', 'dungeons.expansion', 'npcSpells']);
 
         $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();

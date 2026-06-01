@@ -23,7 +23,7 @@ return [
             'table_header_spells'   => 'Spells',
         ],
         'show' => [
-            'title' => ':name — NPC Compendium',
+            'title' => ':name - NPC Compendium',
         ],
         'sections' => [
             'header' => [
@@ -62,7 +62,7 @@ return [
             'table_header_used_by'  => 'Used by',
         ],
         'show' => [
-            'title'   => ':name — Spell Compendium',
+            'title'   => ':name - Spell Compendium',
             'wowhead' => 'View on Wowhead',
         ],
         'sections' => [
@@ -110,6 +110,20 @@ return [
             'title'  => ':date - Compendium Activity',
             'header' => 'Compendium Activity for :date',
             'empty'  => 'No activity recorded for this day.',
+        ],
+    ],
+    'class' => [
+        'index' => [
+            'title'  => 'Compendium - By Class',
+            'header' => 'By Class',
+        ],
+        'show' => [
+            'title'                       => ':name - By Class',
+            'table_header_spell'          => 'Spell',
+            'table_header_characteristic' => 'Characteristic',
+            'table_header_npcs'           => 'Affected NPCs',
+            'no_spells'                   => 'No CC spells found for this class in this game version.',
+            'no_npcs'                     => '-',
         ],
     ],
 ];

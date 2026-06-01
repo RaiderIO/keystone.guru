@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
+use App\Service\CombatLog\Dtos\CombatLogRunContext;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -171,7 +172,7 @@ class PollCombatLogRunsCommand extends Command
             $existingRunIds[$run->id] = true;
         }
 
-        FetchCombatLogRunFanout::dispatch($run->id, $combatLogVersion);
+        FetchCombatLogRunFanout::dispatch($run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
 
         return true;
     }

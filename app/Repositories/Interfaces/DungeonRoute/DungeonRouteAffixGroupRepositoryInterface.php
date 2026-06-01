@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                               update(DungeonRouteAffixGroup $model, array $attributes = [], array $options = [])
  * @method bool                               delete(DungeonRouteAffixGroup $model)
  * @method Collection<DungeonRouteAffixGroup> all()
+ * @method bool                               exists(array $columns)
  */
 interface DungeonRouteAffixGroupRepositoryInterface extends BaseRepositoryInterface
 {

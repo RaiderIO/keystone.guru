@@ -9,7 +9,7 @@ use App\Models\MapIconType;
  */
 $size ??= 20;
 ?>
-<a href="{{ route('npc.compendium.show', $npc->id) }}">
+<a href="{{ route('npc.compendium.show', $npc) }}">
     @if($npc->enemy_portrait_url)
         <img src="{{ ksgAsset($npc->enemy_portrait_url) }}"
              width="{{ $size }}" height="{{ $size }}"
