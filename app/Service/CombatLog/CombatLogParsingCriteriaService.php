@@ -84,7 +84,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             ->flip()
             ->all();
 
-        return $allModels->filter(fn(Model $model) => !isset($atThresholdModelIds[$model->id]));
+        return $allModels->filter(fn(Model $model) => !isset($atThresholdModelIds[$model->getKey()]));
     }
 
     private function findOrCreate(

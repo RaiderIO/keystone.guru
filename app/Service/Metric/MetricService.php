@@ -31,7 +31,7 @@ class MetricService implements MetricServiceInterface
     public function storeMetricByModel(?Model $model, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
-            'model_id'    => $model?->id,
+            'model_id'    => $model?->getKey(),
             'model_class' => $model !== null ? $model::class : null,
             'category'    => $category,
             'tag'         => $tag,

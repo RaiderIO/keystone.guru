@@ -58,25 +58,25 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property Collection<MappingVersion>             $mappingVersions
- * @property Collection<Floor>                      $floors
- * @property Collection<Floor>                      $activeFloors
- * @property Collection<DungeonRoute>               $dungeonRoutes
- * @property Collection<DungeonRoute>               $dungeonRoutesForExport
- * @property Collection<Npc>                        $npcs
- * @property Collection<Enemy>                      $enemies
- * @property Collection<EnemyPack>                  $enemyPacks
- * @property Collection<EnemyPatrol>                $enemyPatrols
- * @property Collection<MapIcon>                    $mapIcons
- * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
- * @property Collection<MountableArea>              $mountableAreas
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
- * @property Collection<Spell>                      $spells
+ * @property Collection<MappingVersion>                         $mappingVersions
+ * @property Collection<Floor>                                  $floors
+ * @property Collection<Floor>                                  $activeFloors
+ * @property Collection<DungeonRoute>                           $dungeonRoutes
+ * @property Collection<DungeonRoute>                           $dungeonRoutesForExport
+ * @property \Illuminate\Database\Eloquent\Collection<int, Npc> $npcs
+ * @property Collection<Enemy>                                  $enemies
+ * @property Collection<EnemyPack>                              $enemyPacks
+ * @property Collection<EnemyPatrol>                            $enemyPatrols
+ * @property Collection<MapIcon>                                $mapIcons
+ * @property Collection<DungeonFloorSwitchMarker>               $dungeonFloorSwitchMarkers
+ * @property Collection<MountableArea>                          $mountableAreas
+ * @property Collection<DungeonSpeedrunRequiredNpc>             $dungeonSpeedrunRequiredNpcs10Man
+ * @property Collection<DungeonSpeedrunRequiredNpc>             $dungeonSpeedrunRequiredNpcs25Man
+ * @property Collection<Spell>                                  $spells
  *
- * @method static Builder active()
- * @method static Builder inactive()
- * @method static Builder factionSelectionRequired()
+ * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> active()
+ * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> inactive()
+ * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> factionSelectionRequired()
  *
  * @mixin Eloquent
  */
@@ -181,7 +181,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         try {
             // Loop through all floors
             foreach ($this->npcs as $npc) {
-                /** @var $npc Npc */
+                /** @var Npc $npc */
                 if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion();
@@ -215,6 +215,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->belongsTo(Expansion::class);
     }
 
+    /** @return HasMany<MappingVersion, Dungeon> */
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
@@ -279,6 +280,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
     }
 
+    /** @return HasMany<Floor, Dungeon> */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
@@ -294,6 +296,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->floors()->active();
     }
 
+    /** @return HasMany<Floor, Dungeon> */
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
         $useFacade ??= $mappingVersion->facade_enabled;
@@ -337,6 +340,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->hasMany(SeasonDungeon::class);
     }
 
+    /** @return BelongsToMany<Npc, Dungeon> */
     public function npcs(): BelongsToMany
     {
         return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');

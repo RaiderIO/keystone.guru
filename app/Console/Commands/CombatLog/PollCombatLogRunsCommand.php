@@ -101,7 +101,7 @@ class PollCombatLogRunsCommand extends Command
 
         foreach (array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass) {
             foreach ($eligibleModelsByClass[$modelClass] as $model) {
-                $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->id);
+                $primaryCheck = new CombatLogParsingCriterionCheck($modelClass, $model->getKey());
 
                 // Re-evaluate before each API call: prior dispatches may have already
                 // recorded enough runs for this criterion via recordParsed().

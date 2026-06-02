@@ -27,7 +27,6 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon
     {
         if ($this->dungeonsByChallengeModeId->isEmpty()) {
-            /** @var Collection<Dungeon> $dungeonsByChallengeModeId */
             $this->dungeonsByChallengeModeId = Dungeon::get()->keyBy('challenge_mode_id');
 
             foreach ($this->dungeonsByChallengeModeId as $dungeon) {

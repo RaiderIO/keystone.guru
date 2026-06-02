@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class EncounterStartBuilder implements SpecialEventBuilderInterface
 {
     /**
-     * @return SpecialEvent|EncounterStartInterface
+     * @return SpecialEvent
      */
     public static function create(
         int    $combatLogVersion,

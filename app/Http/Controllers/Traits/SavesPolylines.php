@@ -41,17 +41,19 @@ trait SavesPolylines
         // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
         $useFacade        = $mappingVersion->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
         $originalVertices = $data['vertices_json'];
-        /** @var Floor $originalFloor */
-        $originalFloor = $ownerModel->floor;
+        /** @var Floor|null $originalFloor */
+        $originalFloor = $ownerModel->getAttribute('floor');
         $changedFloor  = null;
 
         if ($useFacade) {
             $vertices     = json_decode($data['vertices_json'], true);
             $realVertices = [];
             foreach ($vertices as $vertex) {
-                $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
+                /** @var Floor|null $ownerFloor */
+                $ownerFloor = $ownerModel->getAttribute('floor');
+                $latLng     = $coordinatesService->convertFacadeMapLocationToMapLocation(
                     $mappingVersion,
-                    new LatLng($vertex['lat'], $vertex['lng'], $ownerModel->floor),
+                    new LatLng($vertex['lat'], $vertex['lng'], $ownerFloor),
                     $changedFloor,
                 );
 
@@ -68,7 +70,7 @@ trait SavesPolylines
         $polyline = Polyline::updateOrCreate([
             'id' => $polyline->id,
         ], [
-            'model_id'       => $ownerModel->id,
+            'model_id'       => $ownerModel->getKey(),
             'model_class'    => $ownerModel::class,
             'color'          => $data['color'] ?? '#f00',
             'color_animated' => Auth::check() &&

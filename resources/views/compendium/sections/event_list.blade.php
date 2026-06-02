@@ -79,7 +79,7 @@ $spellPropertyName = static function (SpellProperty $property): string {
 
 $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $event) use ($spellPropertyName): string {
     if ($event instanceof CombatLogNpcEvent) {
-        $modelName = $event->model ? __($event->model->name) : sprintf('#%d', $event->model_id);
+        $modelName = $event->model ? __($event->model->getAttribute('name')) : sprintf('#%d', $event->model_id);
 
         return match ($event->event_type) {
             CombatLogNpcEventType::CharacteristicAdded => __('view_compendium.event.characteristic_added', ['name' => $modelName]),

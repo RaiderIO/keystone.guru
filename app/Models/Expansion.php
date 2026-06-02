@@ -31,9 +31,9 @@ use Illuminate\Support\Collection;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property Collection<Dungeon> $dungeons
- * @property Collection<Dungeon> $raids
- * @property Collection<Dungeon> $dungeonsAndRaids
+ * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon> $dungeons
+ * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon> $raids
+ * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon> $dungeonsAndRaids
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
@@ -114,16 +114,19 @@ class Expansion extends CacheModel
         return 'shortname';
     }
 
+    /** @return HasMany<Dungeon, Expansion> */
     public function dungeons(): HasMany
     {
         return $this->hasMany(Dungeon::class)->where('raid', 0)->orderBy('name');
     }
 
+    /** @return HasMany<Dungeon, Expansion> */
     public function raids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->where('raid', 1)->orderBy('name');
     }
 
+    /** @return HasMany<Dungeon, Expansion> */
     public function dungeonsAndRaids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->orderBy('name');

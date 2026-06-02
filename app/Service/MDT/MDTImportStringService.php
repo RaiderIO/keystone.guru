@@ -369,7 +369,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             // Find the matching enemy of the clones
-            /** @var Enemy $mdtEnemy */
             $mdtEnemy   = null;
             $isEmissary = false;
             if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
@@ -383,7 +382,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         break;
                     }
 
-                    /** @var $mdtEnemyCandidate Enemy */
+                    /** @var Enemy $mdtEnemyCandidate */
                     if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
                         // Found it
                         $mdtEnemy = $mdtEnemyCandidate;
@@ -408,12 +407,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             // We now know the MDT enemy that the user was trying to import. However, we need to know
             // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-            /** @var Enemy $enemy */
             $enemy = null;
             // Only if we have the npc assigned at all
             if ($enemiesByNpcId->has($mdtEnemy->npc_id)) {
                 foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
-                    /** @var $enemyCandidate Enemy */
+                    /** @var Enemy $enemyCandidate */
                     if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
                         $enemy = $enemyCandidate;
                         break;

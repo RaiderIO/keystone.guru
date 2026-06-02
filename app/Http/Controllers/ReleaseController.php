@@ -8,7 +8,6 @@ use App\Models\ReleaseChangelog;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\ReleaseChangelogChange;
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -94,7 +93,7 @@ class ReleaseController extends Controller
     /**
      * Show a page for creating a new release.
      *
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -104,7 +103,7 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, Release $release): View
     {
@@ -115,7 +114,7 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */
@@ -154,7 +153,7 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function view(Release $release): View
     {

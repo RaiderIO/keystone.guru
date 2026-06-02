@@ -5,10 +5,8 @@ namespace App\Http\Resources\Dungeon;
 use App\Http\Resources\Floor\FloorResource;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 /**
  * @OA\Schema(
@@ -50,7 +48,7 @@ class DungeonResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
     #[\Override]
     public function toArray(Request $request): array

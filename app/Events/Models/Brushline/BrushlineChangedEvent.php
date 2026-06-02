@@ -37,13 +37,16 @@ class BrushlineChangedEvent extends ModelChangedEvent
     #[\Override]
     public function broadcastWith(): array
     {
+        /** @var Brushline $model */
+        $model = $this->model;
+
         return array_merge(
             parent::broadcastWith(),
             [
-                'model_data' => $this->model->polyline->getCoordinatesData(
+                'model_data' => $model->polyline->getCoordinatesData(
                     $this->coordinatesService,
-                    $this->model->dungeonRoute->mappingVersion,
-                    $this->model->floor,
+                    $model->dungeonRoute->mappingVersion,
+                    $model->floor,
                 ),
             ],
         );

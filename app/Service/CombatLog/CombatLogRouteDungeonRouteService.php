@@ -12,7 +12,6 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
-use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
 use App\Logic\Structs\IngameXY;
@@ -333,7 +332,6 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         ),
                     );
                 } elseif ($resultEvent instanceof SpellCastResultEvent) {
-                    /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
                     $spells->push(
@@ -517,9 +515,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
-        /** @var Collection<Npc> $validNpcIds */
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Npc> $npcs */
         $npcs = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
-        /** @var Collection<int> $validNpcIds */
+        /** @var Collection<int, int> $validNpcIds */
         $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
         /** @var Floor $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);

@@ -5,10 +5,8 @@ namespace App\Http\Resources\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 /**
  * @OA\Schema(schema="PullEnemy")
@@ -32,7 +30,7 @@ class KillZoneEnemyResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
     #[\Override]
     public function toArray(Request $request): array

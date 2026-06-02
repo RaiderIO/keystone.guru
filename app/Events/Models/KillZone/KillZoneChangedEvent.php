@@ -27,14 +27,17 @@ class KillZoneChangedEvent extends ModelChangedEvent
     #[\Override]
     public function broadcastWith(): array
     {
-        if ($this->model->floor_id === null) {
+        /** @var KillZone $model */
+        $model = $this->model;
+
+        if ($model->floor_id === null) {
             return parent::broadcastWith();
         }
 
         return array_merge(
             parent::broadcastWith(),
             [
-                'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
+                'model_data' => $model->getCoordinatesData($this->coordinatesService),
             ],
         );
     }

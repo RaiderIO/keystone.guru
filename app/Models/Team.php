@@ -382,8 +382,6 @@ class Team extends Model
      * @return User|null Null returned if there was no change in owner.
      *
      * @throws Exception
-     *
-     * @var User
      */
     public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {

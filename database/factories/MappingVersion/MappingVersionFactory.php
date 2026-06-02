@@ -4,6 +4,9 @@ use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<MappingVersion>
+ */
 class MappingVersionFactory extends Factory
 {
     protected $model = MappingVersion::class;

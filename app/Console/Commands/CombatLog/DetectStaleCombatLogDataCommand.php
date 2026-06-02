@@ -84,7 +84,6 @@ class DetectStaleCombatLogDataCommand extends Command
                 $q->select('npc_id')->from('npc_dungeons')->whereIn('dungeon_id', $currentSeasonDungeonIds);
             })
             ->chunkById(200, function (Collection $chunk) use ($cutoff, &$removedCount): void {
-                /** @var Collection<CombatLogNpcCharacteristicObservation> $chunk */
                 $freshKeys = CombatLogNpcCharacteristicObservation::query()
                     ->select(['npc_id', 'characteristic_id'])
                     ->whereIn('npc_id', $chunk->pluck('npc_id')->unique())

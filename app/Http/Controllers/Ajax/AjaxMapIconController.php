@@ -47,7 +47,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      * @param  MappingVersion|null         $mappingVersion     Set -> admin endpoint,
      * @param  DungeonRoute|null           $dungeonRoute       Set -> route edit endpoint
      * @param  MapIcon|null                $mapIcon
-     * @return MapIcon|Model
+     * @return MapIcon
      *
      * @throws AuthorizationException
      * @throws Throwable

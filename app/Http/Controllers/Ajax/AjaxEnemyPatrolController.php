@@ -25,7 +25,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     use SavesPolylines;
 
     /**
-     * @return EnemyPatrol|Model
+     * @return EnemyPatrol
      *
      * @throws Throwable
      */

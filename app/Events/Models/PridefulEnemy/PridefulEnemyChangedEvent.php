@@ -36,10 +36,13 @@ class PridefulEnemyChangedEvent extends ModelChangedEvent
     #[\Override]
     public function broadcastWith(): array
     {
+        /** @var PridefulEnemy $model */
+        $model = $this->model;
+
         return array_merge(
             parent::broadcastWith(),
             [
-                'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
+                'model_data' => $model->getCoordinatesData($this->coordinatesService),
             ],
         );
     }

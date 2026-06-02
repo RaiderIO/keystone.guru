@@ -190,6 +190,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
                     return false;
                 }
             } else {
+                assert($combatLogEvent instanceof CombatLogEvent);
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
             }

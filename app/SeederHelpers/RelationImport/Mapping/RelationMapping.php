@@ -5,7 +5,6 @@ namespace App\SeederHelpers\RelationImport\Mapping;
 use App\SeederHelpers\RelationImport\Conditionals\ConditionalInterface;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\AttributeParserInterface;
 use App\SeederHelpers\RelationImport\Parsers\Relation\RelationParserInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -120,7 +119,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @return Model|string
+     * @return string
      */
     public function getClass(): string
     {

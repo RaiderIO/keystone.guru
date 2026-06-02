@@ -5,7 +5,6 @@ namespace App\Events\LiveSession;
 use App\Events\ContextEvent;
 use App\Models\LiveSession;
 use App\Models\User;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -36,7 +35,7 @@ class InviteEvent extends ContextEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel|array
+     * @return array
      */
     #[\Override]
     public function broadcastOn(): array

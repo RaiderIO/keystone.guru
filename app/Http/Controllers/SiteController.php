@@ -28,7 +28,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +41,7 @@ class SiteController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return Application|Factory|View
+     * @return View
      */
     public function test(): View
     {
@@ -52,7 +51,7 @@ class SiteController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return Application|Factory|View
+     * @return View
      */
     public function index(
         CoverageServiceInterface        $coverageService,
@@ -130,7 +129,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return RedirectResponse
      */
     public function home(Request $request): RedirectResponse
     {
@@ -138,7 +137,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function credits(Request $request): View
     {
@@ -146,7 +145,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function about(Request $request): View
     {
@@ -154,7 +153,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function privacy(Request $request): View
     {
@@ -162,7 +161,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function terms(Request $request): View
     {
@@ -170,7 +169,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function cookies(Request $request): View
     {
@@ -192,7 +191,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function health(Request $request): View
     {
@@ -200,7 +199,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function mapping(Request $request): View
     {
@@ -208,7 +207,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function timetest(Request $request): View
     {
@@ -216,7 +215,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */
@@ -288,7 +287,6 @@ class SiteController extends Controller
 
         // Redis check: PING
         try {
-            /** @var Status $pong */
             $pong = Redis::connection()->client()->ping();
 
             // Some clients return "PONG" or true
@@ -317,7 +315,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Redirector|RedirectResponse
+     * @return RedirectResponse
      */
     public function dungeonroutes(Request $request): RedirectResponse
     {
@@ -330,7 +328,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function embed(Request $request, DungeonRoute $dungeonRoute): View
     {
@@ -341,7 +339,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function embedExplore(
         Request     $request,
@@ -358,7 +356,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function embedHeatmap(
         Request     $request,

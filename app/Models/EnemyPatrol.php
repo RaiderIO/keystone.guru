@@ -103,7 +103,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         MappingVersion         $mappingVersion,
         ?MappingModelInterface $newParent = null,
     ): EnemyPatrol {
-        /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
+        /** @var static $clonedEnemyPatrol */
         $clonedEnemyPatrol                     = clone $this;
         $clonedEnemyPatrol->exists             = false;
         $clonedEnemyPatrol->id                 = null;

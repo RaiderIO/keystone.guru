@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Random\RandomException;
 
+/**
+ * @extends Factory<DungeonRoute>
+ */
 class DungeonRouteFactory extends Factory
 {
     protected $model = DungeonRoute::class;
@@ -24,7 +27,6 @@ class DungeonRouteFactory extends Factory
         /** @var SeasonServiceInterface $seasonService */
         $seasonService = app()->make(SeasonServiceInterface::class);
 
-        /** @var Dungeon $dungeon */
         $count    = 0;
         $maxCount = 10;
         do {

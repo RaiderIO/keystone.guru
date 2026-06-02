@@ -22,8 +22,10 @@ class ApiMetrics
     public function handle(Request $request, Closure $next): Response
     {
         if (!app()->runningUnitTests()) {
+            /** @var \App\Models\User $authUser */
+            $authUser = Auth::user();
             $this->metricService->storeMetricAsync(
-                Auth::user()->id,
+                $authUser->id,
                 User::class,
                 Metric::CATEGORY_API_CALL,
                 $request->path(),

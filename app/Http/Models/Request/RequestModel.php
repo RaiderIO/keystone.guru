@@ -40,7 +40,7 @@ abstract class RequestModel
                 $propertyReflection = new \ReflectionProperty($object, $key);
                 $type               = $propertyReflection->getType();
 
-                if ($type) {
+                if ($type instanceof \ReflectionNamedType) {
                     $typeName = $type->getName();
 
                     // Handle Laravel Collection

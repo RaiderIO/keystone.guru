@@ -10,7 +10,7 @@ trait CloneForNewMappingVersionNoRelations
         MappingVersion         $mappingVersion,
         ?MappingModelInterface $newParent = null,
     ): Model {
-        /** @var Model|MappingModelInterface $clone */
+        /** @var static $clone */
         $clone                     = clone $this;
         $clone->exists             = false;
         $clone->id                 = null;

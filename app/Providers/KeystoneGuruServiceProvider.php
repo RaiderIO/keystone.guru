@@ -311,7 +311,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $currentExpansion       = null;
 
         // Can use the Auth() global here!
-        view()->composer('*', static function (View $view) use (
+        view()->composer('*', static function (\Illuminate\View\View $view) use (
             $gameVersionService,
             $expansionService,
             &$isUserAdmin,

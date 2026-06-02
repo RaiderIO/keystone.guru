@@ -79,7 +79,7 @@ use Illuminate\Support\Collection;
                 </tr>
                 @foreach($category as $importWarning)
                         <?php /** @var ImportWarning $importWarning */
-                        /** @var $data array{old: ?string, new: ?string, npc: ?Npc} */
+                        /** @var array{old: ?string, new: ?string, npc: ?Npc} $data */
                         $data   = ($importWarning->getData());
                         $mdtNpc = $data['mdt_npc'];
 

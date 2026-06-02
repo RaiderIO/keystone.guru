@@ -215,7 +215,7 @@ class Release extends CacheModel
      */
     public function isMajorUpgrade(): bool
     {
-        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getMajor() < $this->getSymVer()->getMajor();
+        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->major < $this->getSymVer()->major;
     }
 
     /**
@@ -225,7 +225,7 @@ class Release extends CacheModel
      */
     public function isMinorUpgrade(): bool
     {
-        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getMinor() < $this->getSymVer()->getMinor();
+        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->minor < $this->getSymVer()->minor;
     }
 
     /**
@@ -235,7 +235,7 @@ class Release extends CacheModel
      */
     public function isBugfixUpgrade(): bool
     {
-        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->getPatch() < $this->getSymVer()->getPatch();
+        return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->patch < $this->getSymVer()->patch;
     }
 
     private function publicRoute(string $name, array $params = [], string $host = 'https://keystone.guru'): string

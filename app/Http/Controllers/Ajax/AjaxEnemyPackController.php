@@ -21,7 +21,7 @@ use Throwable;
 class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
-     * @return EnemyPack|Model
+     * @return EnemyPack
      *
      * @throws Throwable
      */

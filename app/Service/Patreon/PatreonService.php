@@ -164,7 +164,7 @@ class PatreonService implements PatreonServiceInterface
             // We now know which user this is - update the benefits of this user
             $newBenefits = collect();
             foreach ($member['relationships']['currently_entitled_tiers']['data'] as $currentlyEntitledTier) {
-                /** @var $currentlyEntitledTier array{id: int, type: string} */
+                /** @var array{id: int, type: string} $currentlyEntitledTier */
                 // For all tiers this user is paying for - combine the benefits to one big array
                 $newBenefits = $newBenefits->merge($this->getBenefitsByTierId($campaignTiers, $campaignBenefits, $currentlyEntitledTier['id']));
             }
@@ -357,8 +357,6 @@ class PatreonService implements PatreonServiceInterface
             if ((int)$tier['id'] === $tierId) {
                 // Found the tier, now match the benefits..
                 foreach ($tier['relationships']['benefits']['data'] as $benefitData) {
-                    /** @var $benefitData {array: id: string, type: string} */
-
                     // Search the list of benefits for a match, and if found add the title to the result array
                     foreach ($campaignBenefits as $campaignBenefit) {
                         if ($campaignBenefit['id'] === $benefitData['id']) {

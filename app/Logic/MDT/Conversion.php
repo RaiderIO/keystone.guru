@@ -397,7 +397,7 @@ class Conversion
                 'mdtWeek' => $mdtWeek,
             ]);
 
-            $affixGroup = $season->getCurrentAffixGroup();
+            $affixGroup = $season->affixGroups->first();
         }
 
         return $affixGroup;

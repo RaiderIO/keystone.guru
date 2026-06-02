@@ -140,7 +140,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
 
             // Retrieve all routes and then delete them
             foreach ($dungeonRoutes as $dungeonRoute) {
-                /** @var $dungeonRoute DungeonRoute */
+                /** @var DungeonRoute $dungeonRoute */
                 try {
                     $dungeonRoute->delete();
                     $deletedRouteCount++;

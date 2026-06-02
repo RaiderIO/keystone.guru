@@ -10,7 +10,7 @@ parameters:
         - tests/
 
     # Level 9 is the highest level
-    level: 1
+    level: 2
 
     # I have no idea why this is necessary
     scanDirectories:
@@ -30,6 +30,10 @@ parameters:
     excludePaths:
         # '#Keyword continue used outside of a loop or a switch statement#'
         - resources/views/admin/tools/mdt/dungeonmappingversionaccuracy.blade.php
+        # Legacy migrations ran against old framework API (Blueprint::double with column/total args removed in L10+)
+        - database/migrations_legacy/
+        # Legacy Laravel 5-style factory file, superseded by class-based factories
+        - database/factories/ModelFactory.php
 
     ignoreErrors:
         # Blade templates use ??= as a pattern to set optional variable defaults

@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Logic\Structs\LatLng;
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\ParsedCombatLog;
@@ -10,12 +11,12 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasLatLngInterface;
+use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
-use App\Models\Traits\HasLatLng;
-use App\Models\Traits\HasVertices;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -462,27 +463,29 @@ class Save extends Command
      */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
-        $roundLatLngFn = static function (mixed $model) {
-            /** @var HasLatLng $model */
-            $model->lat = round($model->lat, 4);
-            $model->lng = round($model->lng, 4);
+        $roundLatLngFn = static function (Model&HasLatLngInterface $model) {
+            $latLng = $model->getLatLng();
+            $model->setLatLng(new LatLng(
+                round($latLng->getLat(), 4),
+                round($latLng->getLng(), 4),
+                $latLng->getFloor(),
+            ));
 
             return $model;
         };
 
-        $roundLatLngVerticesFn = static function (mixed $model) {
-            /** @var HasVertices $model */
+        $roundLatLngVerticesFn = static function (Model&HasVerticesInterface $model) {
             $decodedLatLngs = $model->getDecodedLatLngs();
             foreach ($decodedLatLngs as $latLng) {
                 $latLng->setLat(round($latLng->getLat(), 4));
                 $latLng->setLng(round($latLng->getLng(), 4));
             }
-            $model->vertices_json = json_encode($decodedLatLngs->toArray());
+            $model->setAttribute('vertices_json', json_encode($decodedLatLngs->toArray()));
 
             return $model;
         };
         $roundLatLngPolyLinesFn = static function (mixed $model) use ($roundLatLngVerticesFn) {
-            /** @var HasVertices $polyline */
+            /** @var Model&HasVerticesInterface $polyline */
             $polyline = $model->polyline;
 
             return $roundLatLngVerticesFn($polyline);
@@ -496,7 +499,7 @@ class Save extends Command
             ->each($roundLatLngFn);
 
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
-        $enemyPatrols = $floor->enemyPatrolsForExport->values()->makeVisible(['mdtPolyline'])->each($roundLatLngPolyLinesFn);
+        $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
         /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values()->each($roundLatLngFn);
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder

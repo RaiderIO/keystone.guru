@@ -134,7 +134,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                         /** @var array{id: int, name: string, url: string} $dungeon */
                         // If found
                         $archonDungeonName = $dungeon['name'];
-                        $dungeon           = $dungeonList->get($archonDungeonName);
+                        /** @var \App\Models\Dungeon|null $dungeon */
+                        $dungeon = $dungeonList->get($archonDungeonName);
 
                         if ($dungeon === null) {
                             $this->log->parseTierListUnknownDungeon($archonDungeonName);
@@ -198,7 +199,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $latestAffixGroupEaseTierPull = AffixGroupEaseTierPull::latest()->first();
         if ($latestAffixGroupEaseTierPull !== null) {
-            /** @var AffixGroupEaseTier|null $affixGroupEaseTier */
+            /** @var \Illuminate\Support\Collection<int, AffixGroupEaseTier> $result */
             $result = $latestAffixGroupEaseTierPull->affixGroupEaseTiers()
                 ->whereIn('affix_group_id', $affixGroups->pluck('id')->toArray())
                 ->get()

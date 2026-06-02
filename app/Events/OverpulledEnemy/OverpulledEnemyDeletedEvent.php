@@ -3,7 +3,6 @@
 namespace App\Events\OverpulledEnemy;
 
 use App\Events\ContextEvent;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;

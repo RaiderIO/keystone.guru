@@ -29,7 +29,7 @@ use Illuminate\View\View;
 class DungeonRouteDiscoverController extends Controller
 {
     /**
-     * @return Factory|View
+     * @return View
      */
     public function search(
         SeasonServiceInterface $seasonService,
@@ -198,7 +198,6 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param  Dungeon                  $dungeon
      * @return Factory|RedirectResponse
      *
      * @throws AuthorizationException

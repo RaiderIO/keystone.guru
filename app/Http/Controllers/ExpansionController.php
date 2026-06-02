@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ExpansionFormRequest;
 use App\Models\Expansion;
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -35,7 +34,7 @@ class ExpansionController extends Controller
     /**
      * Show a page for creating a new expansion.
      *
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -43,7 +42,7 @@ class ExpansionController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, Expansion $expansion): View
     {
@@ -51,7 +50,7 @@ class ExpansionController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */
@@ -84,7 +83,7 @@ class ExpansionController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {

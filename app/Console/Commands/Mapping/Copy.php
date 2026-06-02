@@ -94,7 +94,7 @@ class Copy extends Command
                 foreach ($entities as $entity) {
                     /** @noinspection PhpPossiblePolymorphicInvocationInspection Trust me bro */
                     $attributes = [
-                        'floor_id' => $floorIdMapping->get($entity->floor_id),
+                        'floor_id' => $floorIdMapping->get($entity->getAttribute('floor_id')),
                     ];
 
                     if ($entity instanceof DungeonFloorSwitchMarker) {

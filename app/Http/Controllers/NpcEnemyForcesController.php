@@ -7,11 +7,10 @@ use App\Http\Requests\Npc\NpcEnemyForcesFormRequest;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 use Request;
 
 class NpcEnemyForcesController extends Controller
@@ -48,7 +47,7 @@ class NpcEnemyForcesController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
     {
@@ -75,7 +74,7 @@ class NpcEnemyForcesController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function delete(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): RedirectResponse
     {

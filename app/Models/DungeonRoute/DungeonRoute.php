@@ -94,6 +94,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property bool     $demo
  * @property array    $setup                       Attribute
  * @property bool     $has_thumbnail               Attribute
+ * @property int      $has_enemy_forces            Computed column added by CoverageService::selectRaw()
  * @property string   $pull_gradient
  * @property bool     $pull_gradient_apply_always
  * @property int      $dungeon_difficulty
@@ -304,6 +305,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /** @return BelongsTo<Dungeon, DungeonRoute> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
@@ -379,6 +381,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsToMany(AffixGroup::class, 'dungeon_route_affix_groups');
     }
 
+    /** @return HasMany<KillZone, DungeonRoute> */
     public function killZones(): HasMany
     {
         return $this->hasMany(KillZone::class)->orderBy('index');
@@ -484,9 +487,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     private function convertVerticesForFacade(
-        CoordinatesServiceInterface $coordinatesService,
-        ConvertsVerticesInterface   $hasVertices,
-        Floor                       $floor,
+        CoordinatesServiceInterface                                   $coordinatesService,
+        ConvertsVerticesInterface&\Illuminate\Database\Eloquent\Model $hasVertices,
+        Floor                                                         $floor,
     ): Floor {
         $convertedLatLngs = collect();
 
@@ -499,10 +502,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        /** @noinspection PhpDynamicFieldDeclarationInspection */
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(
+        $hasVertices->setAttribute('vertices_json', json_encode($convertedLatLngs->map(static fn(
             LatLng $latLng,
-        ) => $latLng->toArray()));
+        ) => $latLng->toArray())));
 
         return $newFloor;
     }
@@ -639,8 +641,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {
-                /** @var Dungeon $dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-                $dungeon->active();
+                $dungeon->where('dungeons.active', 1);
             });
     }
 
@@ -901,10 +902,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      * @throws Exception
      */
     public function saveFromRequest(
-        Request                   $request,
-        SeasonServiceInterface    $seasonService,
-        ExpansionServiceInterface $expansionService,
-        ThumbnailServiceInterface $thumbnailService,
+        \Illuminate\Foundation\Http\FormRequest $request,
+        SeasonServiceInterface                  $seasonService,
+        ExpansionServiceInterface               $expansionService,
+        ThumbnailServiceInterface               $thumbnailService,
     ): bool {
         $result = false;
 
@@ -1193,10 +1194,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     ]);
                 }
 
-                /** @var $model Model */
-                $model->id               = 0;
-                $model->exists           = false;
-                $model->dungeon_route_id = $dungeonRoute->id;
+                $model->setAttribute($model->getKeyName(), 0);
+                $model->exists = false;
+                $model->setAttribute('dungeon_route_id', $dungeonRoute->id);
                 $model->save();
 
                 // KillZone, save the enemies that were attached to them
@@ -1488,7 +1488,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             ) => $affix->key === Affix::AFFIX_XALATATHS_GUILE);
 
             if ($xalAtathsGuile !== null) {
-                /** @var AffixGroupCoupling|null $affixCoupling */
                 $affixGroup->load(['affixGroupCouplings']);
                 $affixCoupling = $affixGroup->affixGroupCouplings->first(fn(
                     AffixGroupCoupling $affix,

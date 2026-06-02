@@ -163,6 +163,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasRole(Role::ROLE_ADMIN);
     }
 
+    /** @return HasMany<DungeonRoute, User> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
@@ -305,7 +306,7 @@ class User extends Authenticatable implements LaratrustUser
                 $newOwner = null;
             }
 
-            /** @var $team Team */
+            /** @var Team $team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
                 'new_owner' => $newOwner,
@@ -357,12 +358,12 @@ class User extends Authenticatable implements LaratrustUser
                 // Remove ourselves from the team
                 $team->removeMember($user);
 
-                /** @var $team Team */
+                /** @var Team $team */
                 if (!$team->isUserAdmin($user)) {
                     continue;
                 }
 
-                /** @var $team Team */
+                /** @var Team $team */
                 try {
                     $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                     if ($newAdmin !== null) {

@@ -13,6 +13,7 @@ use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Floor\FloorUnionArea;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Interfaces\CloneForNewMappingVersionInterface;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
@@ -154,6 +155,7 @@ class MappingVersion extends Model
         return $this->hasMany(DungeonFloorSwitchMarker::class);
     }
 
+    /** @return HasMany<\App\Models\Enemy, MappingVersion> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class)->orderBy('id');
@@ -284,7 +286,6 @@ class MappingVersion extends Model
             $this->cachedFloorUnionsForFloor = collect();
         }
 
-        /** @var Collection<FloorUnion> $floorUnions */
         if ($this->cachedFloorUnionsForFloor->has($floor->id)) {
             $floorUnions = $this->cachedFloorUnionsForFloor->get($floor->id);
         } else {
@@ -339,9 +340,9 @@ class MappingVersion extends Model
      * @todo duplicated function in DungeonRoute.php
      */
     private function convertVerticesForFacade(
-        CoordinatesServiceInterface $coordinatesService,
-        ConvertsVerticesInterface   $hasVertices,
-        Floor                       $floor,
+        CoordinatesServiceInterface                                   $coordinatesService,
+        ConvertsVerticesInterface&\Illuminate\Database\Eloquent\Model $hasVertices,
+        Floor                                                         $floor,
     ): Floor {
         $convertedLatLngs = collect();
 
@@ -354,9 +355,9 @@ class MappingVersion extends Model
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(
+        $hasVertices->setAttribute('vertices_json', json_encode($convertedLatLngs->map(static fn(
             LatLng $latLng,
-        ) => $latLng->toArray()));
+        ) => $latLng->toArray())));
 
         return $newFloor;
     }
@@ -558,7 +559,7 @@ class MappingVersion extends Model
 
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
-                /** @var CloneForNewMappingVersionNoRelations $model */
+                /** @var Model&CloneForNewMappingVersionInterface $model */
                 $newModel = $model->cloneForNewMappingVersion($newMappingVersion);
 
                 /** @var Collection $modelMapping */

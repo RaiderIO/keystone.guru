@@ -43,17 +43,19 @@ use Illuminate\Support\Str;
  * @property NpcType           $type
  * @property NpcClass          $class
  *
- * @property NpcEnemyForces|null                $enemyForces
- * @property Collection<NpcEnemyForces>         $npcEnemyForces
- * @property Collection<Enemy>                  $enemies
- * @property Collection<Characteristic>         $characteristics
- * @property Collection<NpcCharacteristic>      $npcCharacteristics
- * @property Collection<Spell>                  $spells
- * @property Collection<NpcSpell>               $npcSpells
- * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
- * @property Collection<Dungeon>                $dungeons
- * @property Collection<NpcDungeon>             $npcDungeons
- * @property Collection<NpcHealth>              $npcHealths
+ * @property NpcEnemyForces|null                                                   $enemyForces
+ * @property Collection<NpcEnemyForces>                                            $npcEnemyForces
+ * @property Collection<Enemy>                                                     $enemies
+ * @property Collection<Characteristic>                                            $characteristics
+ * @property Collection<NpcCharacteristic>                                         $npcCharacteristics
+ * @property Collection<Spell>                                                     $spells
+ * @property Collection<NpcSpell>                                                  $npcSpells
+ * @property \Illuminate\Database\Eloquent\Collection<int, NpcBolsteringWhitelist> $npcbolsteringwhitelists
+ * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon>                $dungeons
+ * @property Collection<NpcDungeon>                                                $npcDungeons
+ * @property Collection<NpcHealth>                                                 $npcHealths
+ * @property float|null                                                            $min_health              Computed aggregate column (getNpcsMinMaxHealth)
+ * @property float|null                                                            $max_health              Computed aggregate column (getNpcsMinMaxHealth)
  *
  * @mixin Eloquent
  */

@@ -3,10 +3,8 @@
 namespace App\Http\Resources\Affix;
 
 use App\Models\Affix;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 /**
  * @OA\Schema ( schema="Affix" )
@@ -20,7 +18,7 @@ class AffixResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
     #[\Override]
     public function toArray(Request $request): array

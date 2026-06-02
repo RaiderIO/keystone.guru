@@ -76,7 +76,7 @@ class SpellController extends Controller
     /**
      * Show a page for creating a new spell.
      *
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -84,7 +84,7 @@ class SpellController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, Spell $spell): View
     {
@@ -133,7 +133,7 @@ class SpellController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {

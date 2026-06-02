@@ -1,6 +1,6 @@
 <?php
 /** @var boolean $isMobile */
-/** @var string $id */
+/** @var non-falsy-string $id */
 /** @var string $type */
 /** @var bool $map */
 

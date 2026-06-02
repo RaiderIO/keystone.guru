@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon $epoch_start
  * @property string $timezone
  * @property int    $reset_day_offset   ISO-8601 numeric representation of the day of the week
- * @property string $reset_hours_offset
+ * @property int    $reset_hours_offset
  * 
  * @property Collection<User> $users
  *

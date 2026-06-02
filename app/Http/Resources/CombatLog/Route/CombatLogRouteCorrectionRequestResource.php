@@ -3,10 +3,8 @@
 namespace App\Http\Resources\CombatLog\Route;
 
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 /**
  * @OA\Schema(schema="CombatLogRouteRequestCorrection")
@@ -26,7 +24,7 @@ class CombatLogRouteCorrectionRequestResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
     #[\Override]
     public function toArray(Request $request): array

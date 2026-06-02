@@ -23,7 +23,7 @@ use Throwable;
 class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @return MountableArea|Model
+     * @return MountableArea
      *
      * @throws Exception
      * @throws Throwable

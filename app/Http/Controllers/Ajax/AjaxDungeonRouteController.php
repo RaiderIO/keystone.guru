@@ -50,8 +50,6 @@ use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -638,7 +636,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|Response
+     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -818,6 +816,7 @@ class AjaxDungeonRouteController extends Controller
         $useCache = (int)$request->get('useCache', 1) === 1;
 
         try {
+            /** @var \Illuminate\Support\Collection<int, ImportWarning> $warnings */
             $warnings     = new Collection();
             $dungeonRoute = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)
@@ -825,7 +824,6 @@ class AjaxDungeonRouteController extends Controller
 
             $warningResult = [];
             foreach ($warnings as $warning) {
-                /** @var $warning ImportWarning */
                 $warningResult[] = $warning->toArray();
             }
 

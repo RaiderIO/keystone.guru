@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int    $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
  * @property string $text                     To string of the affix group
  *
- * @property Collection<Affix>              $affixes
- * @property Collection<AffixGroupCoupling> $affixGroupCouplings
+ * @property Collection<Affix>                                                 $affixes
+ * @property \Illuminate\Database\Eloquent\Collection<int, AffixGroupCoupling> $affixGroupCouplings
  *
  * @mixin Eloquent
  */
@@ -42,6 +42,7 @@ abstract class AffixGroupBase extends CacheModel
             ->orderBy(sprintf('%s.id', $this->getAffixGroupCouplingsTableName()), 'asc');
     }
 
+    /** @return HasMany<AffixGroupCoupling, static> */
     public function affixGroupCouplings(): HasMany
     {
         return $this->hasMany(AffixGroupCoupling::class);
@@ -54,7 +55,7 @@ abstract class AffixGroupBase extends CacheModel
     {
         $result = [];
         foreach ($this->affixes as $affix) {
-            /** @var $affix Affix */
+            /** @var Affix $affix */
             $result[] = __($affix->name);
         }
 

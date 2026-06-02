@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
-use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
@@ -150,7 +149,6 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @param  Dungeon                  $dungeon
      * @return Factory|RedirectResponse
      *
      * @throws AuthorizationException

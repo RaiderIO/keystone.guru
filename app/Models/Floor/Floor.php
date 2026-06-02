@@ -54,27 +54,27 @@ use Illuminate\Support\Collection;
  * @property Dungeon         $dungeon
  * @property FloorUnion|null $floorUnion
  *
- * @property Collection<Enemy>                      $enemies
- * @property Collection<EnemyPack>                  $enemypacks
- * @property Collection<EnemyPatrol>                $enemypatrols
- * @property Collection<MapIcon>                    $mapIcons
- * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
- * @property Collection<MountableArea>              $mountableareas
- * @property Collection<FloorUnion>                 $floorUnions
- * @property Collection<FloorUnionArea>             $floorUnionAreas
- * @property Collection<Enemy>                      $enemiesForExport
- * @property Collection<EnemyPack>                  $enemyPacksForExport
- * @property Collection<EnemyPatrol>                $enemyPatrolsForExport
- * @property Collection<MapIcon>                    $mapIconsForExport
- * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkersForExport
- * @property Collection<MountableArea>              $mountableAreasForExport
- * @property Collection<FloorUnion>                 $floorUnionsForExport
- * @property Collection<FloorUnionArea>             $floorUnionAreasForExport
- * @property Collection<FloorCoupling>              $floorcouplings
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonspeedrunrequirednpcs
- * @property Collection<Floor>                      $connectedFloors
- * @property Collection<Floor>                      $directConnectedFloors
- * @property Collection<Floor>                      $reverseConnectedFloors
+ * @property Collection<Enemy>                                          $enemies
+ * @property Collection<EnemyPack>                                      $enemypacks
+ * @property Collection<EnemyPatrol>                                    $enemypatrols
+ * @property Collection<MapIcon>                                        $mapIcons
+ * @property Collection<DungeonFloorSwitchMarker>                       $dungeonFloorSwitchMarkers
+ * @property Collection<MountableArea>                                  $mountableareas
+ * @property Collection<FloorUnion>                                     $floorUnions
+ * @property Collection<FloorUnionArea>                                 $floorUnionAreas
+ * @property Collection<Enemy>                                          $enemiesForExport
+ * @property Collection<EnemyPack>                                      $enemyPacksForExport
+ * @property \Illuminate\Database\Eloquent\Collection<int, EnemyPatrol> $enemyPatrolsForExport
+ * @property Collection<MapIcon>                                        $mapIconsForExport
+ * @property Collection<DungeonFloorSwitchMarker>                       $dungeonFloorSwitchMarkersForExport
+ * @property Collection<MountableArea>                                  $mountableAreasForExport
+ * @property Collection<FloorUnion>                                     $floorUnionsForExport
+ * @property Collection<FloorUnionArea>                                 $floorUnionAreasForExport
+ * @property Collection<FloorCoupling>                                  $floorcouplings
+ * @property Collection<DungeonSpeedrunRequiredNpc>                     $dungeonspeedrunrequirednpcs
+ * @property Collection<Floor>                                          $connectedFloors
+ * @property Collection<Floor>                                          $directConnectedFloors
+ * @property Collection<Floor>                                          $reverseConnectedFloors
  *
  * @method static Builder active()
  * @method static Builder indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)

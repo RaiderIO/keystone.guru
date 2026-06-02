@@ -62,11 +62,11 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
         MappingVersion         $mappingVersion,
         ?MappingModelInterface $newParent = null,
     ): Polyline {
-        /** @var Polyline|MappingModelInterface $clone */
+        /** @var static $clone */
         $clone           = clone $this;
         $clone->exists   = false;
         $clone->id       = null;
-        $clone->model_id = $newParent->id;
+        $clone->model_id = $newParent->getKey();
         $clone->save();
 
         return $clone;

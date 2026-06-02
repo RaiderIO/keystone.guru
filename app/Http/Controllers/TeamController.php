@@ -19,14 +19,11 @@ use App\Models\TeamUser;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
@@ -77,7 +74,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -85,7 +82,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|RedirectResponse|Response
+     * @return View
      *
      * @throws AuthorizationException
      */
@@ -157,7 +154,7 @@ class TeamController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {
@@ -167,7 +164,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function invite(Request $request, string $invitecode)
     {
@@ -192,7 +189,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function inviteaccept(Request $request, string $invitecode)
     {

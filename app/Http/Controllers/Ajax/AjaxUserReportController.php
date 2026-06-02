@@ -32,7 +32,7 @@ class AjaxUserReportController extends Controller
     private function store(UserReportFormRequest $request, Model $model): bool
     {
         $userReport              = new UserReport();
-        $userReport->model_id    = $model->id;
+        $userReport->model_id    = $model->getKey();
         $userReport->model_class = $model::class;
         $userReport->user_id     = Auth::id() ?? -1;
         // May be null if user was not logged in, this is fine

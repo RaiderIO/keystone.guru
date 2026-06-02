@@ -9,17 +9,15 @@ use App\Models\Floor\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Session;
 
 class DungeonSpeedrunRequiredNpcsController extends Controller
 {
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function create(
         NpcServiceInterface $npcService,

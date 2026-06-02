@@ -50,7 +50,7 @@ class File extends Model
     ];
 
     /**
-     * @return bool|null|void
+     * @return void
      *
      * @throws Exception
      */
@@ -142,7 +142,7 @@ class File extends Model
         $path = $uploadedFile->store($dir, $disk);
 
         $file = File::create([
-            'model_id'    => $model->id,
+            'model_id'    => $model->getKey(),
             'model_class' => $model::class,
             'disk'        => $disk,
             'path'        => $path,

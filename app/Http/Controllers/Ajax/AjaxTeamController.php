@@ -166,7 +166,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return PatreonAdFreeGiveaway
      *
      * @throws AuthorizationException
      */
@@ -196,7 +196,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return Response
      *
      * @throws AuthorizationException
      */

@@ -5,9 +5,7 @@ namespace App\Http\Resources\DungeonRoute;
 use App\Http\Resources\KillZone\KillZoneResource;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
-use JsonSerializable;
 
 /**
  * @OA\Schema(schema="DungeonRoute")
@@ -36,7 +34,7 @@ class DungeonRouteResource extends DungeonRouteSummaryResource
     /**
      * Transform the resource into an array.
      *
-     * @return array|Arrayable|JsonSerializable
+     * @return array
      */
     #[\Override]
     public function toArray(Request $request): array
