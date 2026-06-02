@@ -67,10 +67,10 @@
  * @property {HeatmapSearchOptions} options
  */
 class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
-    constructor(options) {
-        super(new SearchHandlerHeatmap(options), options);
-
-        let self = this;
+    constructor(id, bladePath, options) {
+        super(new SearchHandlerHeatmap($.extend({}, {
+            loaderSelector: options.loaderSelector,
+        }, options)), id, bladePath, options);
 
         this.sidebar = new Sidebar(options);
         this.initializing = true;

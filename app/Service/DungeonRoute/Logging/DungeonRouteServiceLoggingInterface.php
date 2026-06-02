@@ -25,4 +25,12 @@ interface DungeonRouteServiceLoggingInterface
     public function touchRoutesForTeamStart(int $teamId): void;
 
     public function touchRoutesForTeamEnd(int $teamId, int $updatedRouteCount): void;
+
+    public function publishScheduledDungeonRoutesStart(): void;
+
+    public function publishScheduledDungeonRoutesEnd(int $publishedCount): void;
+
+    public function publishScheduledDungeonRouteSkippedNoPatreon(int $dungeonRouteId, int $scheduledPublishId): void;
+
+    public function publishScheduledDungeonRouteSkippedInactiveDungeon(int $dungeonRouteId, int $dungeonId, int $scheduledPublishId): void;
 }

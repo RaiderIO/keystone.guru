@@ -1,8 +1,8 @@
 class CommonMapsKillzonessidebar extends InlineCode {
 
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
 
         this.sidebar = new Sidebar(options);
         this.pullWorkBench = new PullWorkBench(this);

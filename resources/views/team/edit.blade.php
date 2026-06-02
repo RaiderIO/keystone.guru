@@ -13,7 +13,10 @@ use App\Models\User;
  * @var int  $userAdFreeTeamMembersMax
  */
 
-$title = sprintf(__('view_team.edit.title'), $team->name);
+$title                        = sprintf(__('view_team.edit.title'), $team->name);
+$routesTableInlineId          = 'team_edit_routes_table';
+$routePublishingTableInlineId = 'team_edit_route_publishing_table';
+
 /** @var User $user */
 $user      = Auth::user();
 $menuItems = [
@@ -23,7 +26,7 @@ $menuItems = [
 ];
 // May only edit details when member is a moderator
 if ($userIsModerator) {
-//    $menuItems[] = ['icon' => 'fa-clock', 'text' => __('view_team.edittabs.routepublishing.title'), 'target' => '#route_publishing'];
+    $menuItems[] = ['icon' => 'fa-clock', 'text' => __('view_team.edittabs.routepublishing.title'), 'target' => '#route_publishing'];
     $menuItems[] = ['icon' => 'fa-tag', 'text' => __('view_team.edittabs.tags.title'), 'target' => '#team_tags'];
     $menuItems[] = ['icon' => 'fa-edit', 'text' => __('view_team.edittabs.details.title'), 'target' => '#details'];
 }
@@ -65,6 +68,9 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
+    'dependenciesById' => [$routesTableInlineId, $routePublishingTableInlineId],
+    'routesTableInlineId' => $routesTableInlineId,
+
     'data' => $data,
     'teamName' => $team->name,
     'teamPublicKey' => $team->public_key,
@@ -88,18 +94,25 @@ foreach ($team->teamUsers as $teamUser) {
 
     <div class="tab-content">
         @include('team.edittabs.overview', ['team' => $team])
-        @include('team.edittabs.routes', ['team' => $team, 'userIsModerator' => $userIsModerator])
+        @include('team.edittabs.routes', [
+            'inlineId' => $routesTableInlineId,
+            'team' => $team,
+            'userIsModerator' => $userIsModerator,
+        ])
         @include('team.edittabs.members', [
             'team' => $team,
             'userIsModerator' => $userIsModerator,
             'userHasAdFreeTeamMembersPatreonBenefit' => $userHasAdFreeTeamMembersPatreonBenefit,
             'userAdFreeTeamMembersRemaining' => $userAdFreeTeamMembersRemaining,
-            'userAdFreeTeamMembersMax' => $userAdFreeTeamMembersMax
+            'userAdFreeTeamMembersMax' => $userAdFreeTeamMembersMax,
         ])
         @include('team.edittabs.teamtags', ['team' => $team])
 
         @if($userIsModerator)
-{{--            @include('team.edittabs.routepublishing', ['team' => $team])--}}
+            @include('team.edittabs.routepublishing', [
+                'inlineId' => $routePublishingTableInlineId,
+                'team' => $team,
+            ])
             @include('team.edittabs.details', ['team' => $team])
         @endif
     </div>

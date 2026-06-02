@@ -154,6 +154,27 @@ class DungeonRoutePolicy
         return $user->hasRole(Role::ROLE_ADMIN);
     }
 
+    /**
+     * Determine whether the user can schedule a publish for a dungeon route.
+     * Requires the route to be in a team, and the user to be a moderator or higher in that team.
+     */
+    public function schedulePublish(User $user, DungeonRoute $dungeonRoute): Response
+    {
+        if ($dungeonRoute->team_id === null) {
+            return $this->deny(__('policy.schedule_publish_route_not_in_team'));
+        }
+
+        if ($dungeonRoute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN)) {
+            return $this->allow();
+        }
+
+        if ($dungeonRoute->team->isUserModerator($user)) {
+            return $this->allow();
+        }
+
+        return $this->deny();
+    }
+
     public function addKillZone(?User $user, DungeonRoute $dungeonRoute): Response
     {
         if ($dungeonRoute->killZones()->count() >= config('keystoneguru.dungeon_route_limits.kill_zones')) {
