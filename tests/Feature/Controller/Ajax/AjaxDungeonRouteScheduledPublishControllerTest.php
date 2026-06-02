@@ -66,14 +66,14 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
         // Act
         $response = $this->put(
             route('api.dungeonroute.scheduledpublish.store', ['dungeonRoute' => $this->dungeonRoute]),
-            ['published_state' => PublishedState::TEAM, 'publish_at' => $publishAt],
+            ['published_state' => PublishedState::WORLD, 'publish_at' => $publishAt],
         );
 
         // Assert
         $response->assertNoContent();
         $this->assertDatabaseHas('dungeon_route_scheduled_publishes', [
             'dungeon_route_id' => $this->dungeonRoute->id,
-            'published_state'  => PublishedState::TEAM,
+            'published_state'  => PublishedState::WORLD,
         ]);
     }
 
@@ -86,7 +86,7 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
         // Act
         $response = $this->withHeaders(['Accept' => 'application/json'])->put(
             route('api.dungeonroute.scheduledpublish.store', ['dungeonRoute' => $this->dungeonRoute]),
-            ['published_state' => PublishedState::TEAM, 'publish_at' => $publishAt],
+            ['published_state' => PublishedState::WORLD, 'publish_at' => $publishAt],
         );
 
         // Assert
@@ -122,7 +122,7 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
             // Act
             $response = $this->put(
                 route('api.dungeonroute.scheduledpublish.store', ['dungeonRoute' => $routeWithoutTeam]),
-                ['published_state' => PublishedState::TEAM, 'publish_at' => $publishAt],
+                ['published_state' => PublishedState::WORLD, 'publish_at' => $publishAt],
             );
 
             // Assert
