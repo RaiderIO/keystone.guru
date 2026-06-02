@@ -18,13 +18,11 @@ use App\Models\Team;
     <div class="form-group">
         {{ __('view_team.edittabs.routepublishing.description') }}
     </div>
-    <div class="form-group">
-        {!! Form::label('route_publishing_enabled', __('view_team.edittabs.routepublishing.enabled')) !!}
-        {!! Form::checkbox('route_publishing_enabled', 1, $team->route_publishing_enabled ?? 0, [
-            'id' => 'route_publishing_enabled_checkbox',
-            'class' => 'form-control left_checkbox'
+    @component('common.general.alert', ['type' => 'info', 'name' => 'team-route-publishing-timezone-warning'])
+        {!! __('view_team.edittabs.routepublishing.timezone_warning', [
+            'link' => sprintf('<a href="%s" target="_blank">%s</a>', route('profile.edit'), __('view_team.edittabs.routepublishing.profile_link'))
         ]) !!}
-    </div>
+    @endcomponent
     <div class="form-group">
         @include('common.dungeonroute.table', [
             'inlineId' => $inlineId,

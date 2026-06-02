@@ -128,7 +128,7 @@ if (Auth::check()) {
         ])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {{ html()->label(sprintf('%s[]', $affixSelectId), __('view_common.dungeonroute.table.affixes')) }}
+        {{ html()->label(__('view_common.dungeonroute.table.affixes'), sprintf('%s[]', $affixSelectId)) }}
         {{
             html()
                 ->multiselect(sprintf('%s[]', $affixSelectId), $affixgroups->pluck('text', 'id'))

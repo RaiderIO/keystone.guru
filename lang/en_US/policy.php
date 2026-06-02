@@ -11,5 +11,6 @@ return [
     'add_brushline_limit_reached'             => 'Unable to add more than :limit free-drawn lines to a single route.',
     'add_path_limit_reached'                  => 'Unable to add more than :limit paths to a single route.',
     'add_map_icon_limit_reached'              => 'Unable to add more than :limit map icons to a single route.',
+    'schedule_publish_route_not_in_team'      => 'Unable to schedule publish: this route is not assigned to a team.',
 
 ];

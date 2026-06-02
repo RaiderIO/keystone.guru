@@ -103,19 +103,6 @@ class TeamEdit extends InlineCode {
             });
         });
 
-        $(this.options.routePublishingEnabledSelector).on('change', function () {
-            $.ajax({
-                type: 'PUT',
-                url: `/ajax/team/${self.options.teamPublicKey}/routepublishing`,
-                dataType: 'json',
-                data: {
-                    enabled: parseInt($(this).val())
-                },
-                success: function () {
-                    showSuccessNotification(lang.get('messages.change_route_publishing_success'));
-                }
-            });
-        });
     }
 
     /**

@@ -3,18 +3,21 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class DungeonRouteService implements DungeonRouteServiceInterface
+readonly class DungeonRouteService implements DungeonRouteServiceInterface
 {
     public function __construct(
-        private readonly DungeonRouteRepositoryInterface     $dungeonRouteRepository,
-        private readonly ThumbnailServiceInterface           $thumbnailService,
-        private readonly DungeonRouteServiceLoggingInterface $log,
+        private DungeonRouteRepositoryInterface     $dungeonRouteRepository,
+        private ThumbnailServiceInterface           $thumbnailService,
+        private DungeonRouteServiceLoggingInterface $log,
     ) {
     }
 
@@ -168,5 +171,52 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         }
 
         return $updatedRouteCount;
+    }
+
+    public function publishScheduledDungeonRoutes(): int
+    {
+        $publishedCount = 0;
+
+        try {
+            $this->log->publishScheduledDungeonRoutesStart();
+
+            /** @var Collection<DungeonRouteScheduledPublish> $scheduledPublishes */
+            $scheduledPublishes = DungeonRouteScheduledPublish::query()
+                ->where('publish_at', '<=', now())
+                ->with(['dungeonRoute.dungeon', 'dungeonRoute.author'])
+                ->get();
+
+            foreach ($scheduledPublishes as $scheduledPublish) {
+                $dungeonRoute   = $scheduledPublish->dungeonRoute;
+                $publishedState = $scheduledPublish->published_state;
+
+                if ($publishedState === PublishedState::WORLD_WITH_LINK &&
+                    ($dungeonRoute->author === null || !$dungeonRoute->author->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES))) {
+                    $this->log->publishScheduledDungeonRouteSkippedNoPatreon($dungeonRoute->id, $scheduledPublish->id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
+
+                if ($publishedState === PublishedState::WORLD && !$dungeonRoute->dungeon->active) {
+                    $this->log->publishScheduledDungeonRouteSkippedInactiveDungeon($dungeonRoute->id, $dungeonRoute->dungeon_id, $scheduledPublish->id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
+
+                $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
+
+                if ($publishedState === PublishedState::WORLD) {
+                    $dungeonRoute->published_at = now();
+                }
+
+                $dungeonRoute->save();
+                $scheduledPublish->delete();
+                $publishedCount++;
+            }
+        } finally {
+            $this->log->publishScheduledDungeonRoutesEnd($publishedCount);
+        }
+
+        return $publishedCount;
     }
 }

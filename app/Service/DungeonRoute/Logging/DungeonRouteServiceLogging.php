@@ -60,4 +60,24 @@ class DungeonRouteServiceLogging extends RollbarStructuredLogging implements Dun
     {
         $this->end(__METHOD__, get_defined_vars());
     }
+
+    public function publishScheduledDungeonRoutesStart(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    public function publishScheduledDungeonRoutesEnd(int $publishedCount): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
+
+    public function publishScheduledDungeonRouteSkippedNoPatreon(int $dungeonRouteId, int $scheduledPublishId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function publishScheduledDungeonRouteSkippedInactiveDungeon(int $dungeonRouteId, int $dungeonId, int $scheduledPublishId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 }

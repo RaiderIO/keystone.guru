@@ -203,6 +203,40 @@ class DungeonrouteTable extends InlineCode {
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
 
+            $('.scheduled-publish-save').unbind('click').bind('click', function () {
+                let $form     = $(this).closest('.scheduled-publish-form');
+                let publicKey = $form.data('public-key');
+
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/${publicKey}/scheduledPublish`,
+                    data: {
+                        published_state: $form.find('.scheduled-publish-state select').val(),
+                        publish_at: $form.find('.scheduled-publish-at').val()
+                    },
+                    dataType: 'json',
+                    success: function () {
+                        showSuccessNotification(lang.get('js.scheduled_publish_saved'));
+                        $(self.options.filterButtonSelector).trigger('click');
+                    }
+                });
+            });
+
+            $('.scheduled-publish-clear').unbind('click').bind('click', function () {
+                let $form     = $(this).closest('.scheduled-publish-form');
+                let publicKey = $form.data('public-key');
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/ajax/${publicKey}/scheduledPublish`,
+                    dataType: 'json',
+                    success: function () {
+                        showSuccessNotification(lang.get('js.scheduled_publish_cleared'));
+                        $(self.options.filterButtonSelector).trigger('click');
+                    }
+                });
+            });
+
             self.carouselHandler.refreshCarousel('', {autoWidth: false});
         });
 
@@ -457,10 +491,20 @@ class DungeonrouteTable extends InlineCode {
                 }
             },
             scheduling: {
-                'title': lang.get('messages.scheduling_label'),
+                'title': lang.get('js.scheduling_label'),
                 'render': function (data, type, row, meta) {
                     let template = Handlebars.templates['team_dungeonroute_table_route_publishing_actions_template'];
-                    return template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
+                    let scheduledPublish = row.scheduled_publish || {};
+                    let publishAt = scheduledPublish.publish_at || '';
+                    if (publishAt) {
+                        // datetime-local requires YYYY-MM-DDTHH:MM; normalize ISO strings and space-separated formats
+                        publishAt = publishAt.replace(' ', 'T').slice(0, 16);
+                    }
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
+                        public_key:              row.public_key,
+                        scheduled_publish_at:    publishAt,
+                        scheduled_publish_state: scheduledPublish.published_state || 'world',
+                    }));
                 }
             }
         };

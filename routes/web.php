@@ -683,6 +683,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 Route::post('/publishedState', new AjaxDungeonRouteController()->publishedState(...))->name('api.dungeonroute.publishedstate');
 
+                Route::put('/scheduledPublish', new AjaxDungeonRouteController()->storeScheduledPublish(...))->name('api.dungeonroute.scheduledpublish.store');
+                Route::delete('/scheduledPublish', new AjaxDungeonRouteController()->destroyScheduledPublish(...))->name('api.dungeonroute.scheduledpublish.destroy');
+
                 Route::post('/rate', new AjaxDungeonRouteController()->rate(...))->name('api.dungeonroute.rate');
                 Route::delete('/rate', new AjaxDungeonRouteController()->rateDelete(...))->name('api.dungeonroute.rate.delete');
 

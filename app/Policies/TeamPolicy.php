@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -45,7 +46,7 @@ class TeamPolicy
 
     public function changeRoutePublishing(User $user, Team $team): bool
     {
-        return $team->getUserRole($user) === TeamUser::ROLE_ADMIN;
+        return $user->hasRole(Role::ROLE_ADMIN);
     }
 
     public function removeMember(User $user, Team $team, User $member): bool

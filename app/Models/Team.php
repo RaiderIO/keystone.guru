@@ -49,7 +49,14 @@ class Team extends Model
         'public_key',
     ];
 
-    protected $fillable = ['default_role', 'route_publishing_enabled'];
+    protected $fillable = [
+        'default_role',
+        'route_publishing_enabled',
+        'public_key',
+        'name',
+        'description',
+        'invite_code',
+    ];
 
     protected $with = ['iconfile'];
 

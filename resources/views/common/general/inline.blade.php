@@ -10,6 +10,7 @@ ob_start();
 <script>
     @if(!$async)
     document.addEventListener('DOMContentLoaded', function () {
+        @endif
         let code = _inlineManager.init('{{ $id }}', '{{ $path }}', {!!  json_encode($options) !!});
 
         if (!code.isActivated()) {
