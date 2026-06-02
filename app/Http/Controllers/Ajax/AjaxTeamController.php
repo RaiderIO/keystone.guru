@@ -48,7 +48,7 @@ class AjaxTeamController extends Controller
      */
     public function changeRoutePublishing(TeamRoutePublishingFormRequest $request, Team $team): Response
     {
-        $this->authorize('change-route-publishing', $team);
+        Gate::authorize('change-route-publishing', $team);
 
         $team->update(['route_publishing_enabled' => $request->get('enabled')]);
 

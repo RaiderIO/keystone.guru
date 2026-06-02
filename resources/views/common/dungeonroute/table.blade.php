@@ -73,7 +73,7 @@ if (Auth::check()) {
             'viewMode' => $cookieViewMode,
 
             'tableSelector' => '#' . $tableId,
-            'filterButtonId' => '#' . $filterButtonId,
+            'filterButtonSelector' => '#' . $filterButtonId,
             'dungeonSelectId' => '#' . $dungeonSelectId,
             'affixSelectId' => '#' . $affixSelectId,
             'attributesSelectId' => '#' . $attributesSelectId,

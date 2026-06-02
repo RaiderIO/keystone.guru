@@ -20,16 +20,16 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int                      $id
- * @property string                   $public_key
- * @property string                   $name
- * @property string                   $description
- * @property string                   $invite_code
- * @property string                   $default_role
- * @property boolean                  $route_publishing_enabled
+ * @property int    $id
+ * @property string $public_key
+ * @property string $name
+ * @property string $description
+ * @property string $invite_code
+ * @property string $default_role
+ * @property bool   $route_publishing_enabled
  *
- * @property Carbon                   $updated_at
- * @property Carbon                   $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
@@ -92,7 +92,7 @@ class Team extends Model
     /**
      * Checks if a user can add/remove a route to this team or not.
      *
-     * @param User $user
+     * @param  User $user
      * @return bool
      */
     public function canAddRemoveRoute(User $user): bool
