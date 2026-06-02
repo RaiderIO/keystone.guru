@@ -6,6 +6,10 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Enemy;
 use Illuminate\Support\Carbon;
 
+/**
+ * Represents a single enemy within an active pull, holding its NPC ID, engagement position, timestamps, and the
+ * resolved Enemy entity it was matched to.
+ */
 class ActivePullEnemy
 {
     private ?Enemy $resolvedEnemy = null;

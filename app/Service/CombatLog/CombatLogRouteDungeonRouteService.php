@@ -72,6 +72,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Orchestrates combat log parsing: runs filters to produce result events, then builds a DungeonRoute with kill zones
+ * via CombatLogRouteDungeonRouteBuilder.
+ */
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
 {
     public function __construct(

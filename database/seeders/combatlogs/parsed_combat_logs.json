@@ -10574,5 +10574,2981 @@
         "extracted_data": 1,
         "created_at": "2026-05-23T22:12:48+00:00",
         "updated_at": "2026-05-23T22:12:48+00:00"
+    },
+    {
+        "id": 1327,
+        "combat_log_path": null,
+        "run_id": 1,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1328,
+        "combat_log_path": null,
+        "run_id": 2,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1329,
+        "combat_log_path": null,
+        "run_id": 3,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1330,
+        "combat_log_path": null,
+        "run_id": 4,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1331,
+        "combat_log_path": null,
+        "run_id": 5,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1332,
+        "combat_log_path": null,
+        "run_id": 6,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1333,
+        "combat_log_path": null,
+        "run_id": 7,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1334,
+        "combat_log_path": null,
+        "run_id": 8,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1335,
+        "combat_log_path": null,
+        "run_id": 9,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1336,
+        "combat_log_path": null,
+        "run_id": 10,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1337,
+        "combat_log_path": null,
+        "run_id": 11,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1338,
+        "combat_log_path": null,
+        "run_id": 12,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1339,
+        "combat_log_path": null,
+        "run_id": 13,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1340,
+        "combat_log_path": null,
+        "run_id": 14,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:34+00:00",
+        "updated_at": "2026-05-30T21:07:34+00:00"
+    },
+    {
+        "id": 1341,
+        "combat_log_path": null,
+        "run_id": 15,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1342,
+        "combat_log_path": null,
+        "run_id": 16,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1343,
+        "combat_log_path": null,
+        "run_id": 17,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1344,
+        "combat_log_path": null,
+        "run_id": 18,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1345,
+        "combat_log_path": null,
+        "run_id": 19,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1346,
+        "combat_log_path": null,
+        "run_id": 20,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1347,
+        "combat_log_path": null,
+        "run_id": 21,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1348,
+        "combat_log_path": null,
+        "run_id": 22,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1349,
+        "combat_log_path": null,
+        "run_id": 23,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1350,
+        "combat_log_path": null,
+        "run_id": 24,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1351,
+        "combat_log_path": null,
+        "run_id": 25,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1352,
+        "combat_log_path": null,
+        "run_id": 26,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1353,
+        "combat_log_path": null,
+        "run_id": 27,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1354,
+        "combat_log_path": null,
+        "run_id": 28,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1355,
+        "combat_log_path": null,
+        "run_id": 29,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1356,
+        "combat_log_path": null,
+        "run_id": 30,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1357,
+        "combat_log_path": null,
+        "run_id": 31,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:35+00:00",
+        "updated_at": "2026-05-30T21:07:35+00:00"
+    },
+    {
+        "id": 1358,
+        "combat_log_path": null,
+        "run_id": 32,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1359,
+        "combat_log_path": null,
+        "run_id": 33,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1360,
+        "combat_log_path": null,
+        "run_id": 34,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1361,
+        "combat_log_path": null,
+        "run_id": 35,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1362,
+        "combat_log_path": null,
+        "run_id": 36,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1363,
+        "combat_log_path": null,
+        "run_id": 37,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1364,
+        "combat_log_path": null,
+        "run_id": 38,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1365,
+        "combat_log_path": null,
+        "run_id": 39,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1366,
+        "combat_log_path": null,
+        "run_id": 40,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1367,
+        "combat_log_path": null,
+        "run_id": 41,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1368,
+        "combat_log_path": null,
+        "run_id": 42,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1369,
+        "combat_log_path": null,
+        "run_id": 43,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1370,
+        "combat_log_path": null,
+        "run_id": 44,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1371,
+        "combat_log_path": null,
+        "run_id": 45,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1372,
+        "combat_log_path": null,
+        "run_id": 46,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1373,
+        "combat_log_path": null,
+        "run_id": 47,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1374,
+        "combat_log_path": null,
+        "run_id": 48,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1375,
+        "combat_log_path": null,
+        "run_id": 49,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1376,
+        "combat_log_path": null,
+        "run_id": 50,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:36+00:00",
+        "updated_at": "2026-05-30T21:07:36+00:00"
+    },
+    {
+        "id": 1377,
+        "combat_log_path": null,
+        "run_id": 51,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1378,
+        "combat_log_path": null,
+        "run_id": 52,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1379,
+        "combat_log_path": null,
+        "run_id": 53,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1380,
+        "combat_log_path": null,
+        "run_id": 54,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1381,
+        "combat_log_path": null,
+        "run_id": 55,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1382,
+        "combat_log_path": null,
+        "run_id": 56,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1383,
+        "combat_log_path": null,
+        "run_id": 57,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1384,
+        "combat_log_path": null,
+        "run_id": 58,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1385,
+        "combat_log_path": null,
+        "run_id": 59,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1386,
+        "combat_log_path": null,
+        "run_id": 60,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1387,
+        "combat_log_path": null,
+        "run_id": 61,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1388,
+        "combat_log_path": null,
+        "run_id": 62,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1389,
+        "combat_log_path": null,
+        "run_id": 63,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1390,
+        "combat_log_path": null,
+        "run_id": 64,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1391,
+        "combat_log_path": null,
+        "run_id": 65,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1392,
+        "combat_log_path": null,
+        "run_id": 66,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1393,
+        "combat_log_path": null,
+        "run_id": 67,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1394,
+        "combat_log_path": null,
+        "run_id": 68,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:37+00:00",
+        "updated_at": "2026-05-30T21:07:37+00:00"
+    },
+    {
+        "id": 1395,
+        "combat_log_path": null,
+        "run_id": 69,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1396,
+        "combat_log_path": null,
+        "run_id": 70,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1397,
+        "combat_log_path": null,
+        "run_id": 71,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1398,
+        "combat_log_path": null,
+        "run_id": 72,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1399,
+        "combat_log_path": null,
+        "run_id": 73,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1400,
+        "combat_log_path": null,
+        "run_id": 74,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1401,
+        "combat_log_path": null,
+        "run_id": 75,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1402,
+        "combat_log_path": null,
+        "run_id": 76,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1403,
+        "combat_log_path": null,
+        "run_id": 77,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1404,
+        "combat_log_path": null,
+        "run_id": 78,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1405,
+        "combat_log_path": null,
+        "run_id": 79,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1406,
+        "combat_log_path": null,
+        "run_id": 80,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1407,
+        "combat_log_path": null,
+        "run_id": 81,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1408,
+        "combat_log_path": null,
+        "run_id": 82,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1409,
+        "combat_log_path": null,
+        "run_id": 83,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1410,
+        "combat_log_path": null,
+        "run_id": 84,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1411,
+        "combat_log_path": null,
+        "run_id": 85,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1412,
+        "combat_log_path": null,
+        "run_id": 86,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1413,
+        "combat_log_path": null,
+        "run_id": 87,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1414,
+        "combat_log_path": null,
+        "run_id": 88,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1415,
+        "combat_log_path": null,
+        "run_id": 89,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1416,
+        "combat_log_path": null,
+        "run_id": 90,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:38+00:00",
+        "updated_at": "2026-05-30T21:07:38+00:00"
+    },
+    {
+        "id": 1417,
+        "combat_log_path": null,
+        "run_id": 91,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1418,
+        "combat_log_path": null,
+        "run_id": 92,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1419,
+        "combat_log_path": null,
+        "run_id": 93,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1420,
+        "combat_log_path": null,
+        "run_id": 94,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1421,
+        "combat_log_path": null,
+        "run_id": 95,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1422,
+        "combat_log_path": null,
+        "run_id": 96,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1423,
+        "combat_log_path": null,
+        "run_id": 97,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1424,
+        "combat_log_path": null,
+        "run_id": 98,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1425,
+        "combat_log_path": null,
+        "run_id": 99,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1426,
+        "combat_log_path": null,
+        "run_id": 100,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1427,
+        "combat_log_path": null,
+        "run_id": 101,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1428,
+        "combat_log_path": null,
+        "run_id": 102,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1429,
+        "combat_log_path": null,
+        "run_id": 103,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1430,
+        "combat_log_path": null,
+        "run_id": 104,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1431,
+        "combat_log_path": null,
+        "run_id": 105,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1432,
+        "combat_log_path": null,
+        "run_id": 106,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1433,
+        "combat_log_path": null,
+        "run_id": 107,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1434,
+        "combat_log_path": null,
+        "run_id": 108,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1435,
+        "combat_log_path": null,
+        "run_id": 109,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1436,
+        "combat_log_path": null,
+        "run_id": 110,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1437,
+        "combat_log_path": null,
+        "run_id": 111,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1438,
+        "combat_log_path": null,
+        "run_id": 112,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1439,
+        "combat_log_path": null,
+        "run_id": 113,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1440,
+        "combat_log_path": null,
+        "run_id": 114,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1441,
+        "combat_log_path": null,
+        "run_id": 115,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1442,
+        "combat_log_path": null,
+        "run_id": 116,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1443,
+        "combat_log_path": null,
+        "run_id": 117,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1444,
+        "combat_log_path": null,
+        "run_id": 118,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1445,
+        "combat_log_path": null,
+        "run_id": 119,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1446,
+        "combat_log_path": null,
+        "run_id": 120,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:39+00:00",
+        "updated_at": "2026-05-30T21:07:39+00:00"
+    },
+    {
+        "id": 1447,
+        "combat_log_path": null,
+        "run_id": 121,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1448,
+        "combat_log_path": null,
+        "run_id": 122,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1449,
+        "combat_log_path": null,
+        "run_id": 123,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1450,
+        "combat_log_path": null,
+        "run_id": 124,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1451,
+        "combat_log_path": null,
+        "run_id": 125,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1452,
+        "combat_log_path": null,
+        "run_id": 126,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1453,
+        "combat_log_path": null,
+        "run_id": 127,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1454,
+        "combat_log_path": null,
+        "run_id": 128,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1455,
+        "combat_log_path": null,
+        "run_id": 129,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1456,
+        "combat_log_path": null,
+        "run_id": 130,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1457,
+        "combat_log_path": null,
+        "run_id": 131,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1458,
+        "combat_log_path": null,
+        "run_id": 132,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1459,
+        "combat_log_path": null,
+        "run_id": 133,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1460,
+        "combat_log_path": null,
+        "run_id": 134,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1461,
+        "combat_log_path": null,
+        "run_id": 135,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1462,
+        "combat_log_path": null,
+        "run_id": 136,
+        "extracted_data": 0,
+        "created_at": "2026-05-30T21:07:40+00:00",
+        "updated_at": "2026-05-30T21:07:40+00:00"
+    },
+    {
+        "id": 1463,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042526_214108_13_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:28+00:00",
+        "updated_at": "2026-05-30T21:59:28+00:00"
+    },
+    {
+        "id": 1464,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042026_212438_13_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:42+00:00",
+        "updated_at": "2026-05-30T21:59:42+00:00"
+    },
+    {
+        "id": 1465,
+        "combat_log_path": "\/tmp\/WoWCombatLog-033126_220657_9_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:42+00:00",
+        "updated_at": "2026-05-30T21:59:42+00:00"
+    },
+    {
+        "id": 1466,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_5_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:51+00:00",
+        "updated_at": "2026-05-30T21:59:51+00:00"
+    },
+    {
+        "id": 1467,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_9_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:55+00:00",
+        "updated_at": "2026-05-30T21:59:55+00:00"
+    },
+    {
+        "id": 1468,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032926_211608_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:56+00:00",
+        "updated_at": "2026-05-30T21:59:56+00:00"
+    },
+    {
+        "id": 1469,
+        "combat_log_path": "\/tmp\/WoWCombatLog-040926_204933_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T21:59:56+00:00",
+        "updated_at": "2026-05-30T21:59:56+00:00"
+    },
+    {
+        "id": 1470,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050226_231722_12_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:05+00:00",
+        "updated_at": "2026-05-30T22:00:05+00:00"
+    },
+    {
+        "id": 1471,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_10_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:08+00:00",
+        "updated_at": "2026-05-30T22:00:08+00:00"
+    },
+    {
+        "id": 1472,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_150554_9_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:16+00:00",
+        "updated_at": "2026-05-30T22:00:16+00:00"
+    },
+    {
+        "id": 1473,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051326_195458_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:16+00:00",
+        "updated_at": "2026-05-30T22:00:16+00:00"
+    },
+    {
+        "id": 1474,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051426_210900_14_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:24+00:00",
+        "updated_at": "2026-05-30T22:00:24+00:00"
+    },
+    {
+        "id": 1475,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051426_210900_15_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:27+00:00",
+        "updated_at": "2026-05-30T22:00:27+00:00"
+    },
+    {
+        "id": 1476,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041426_212611_14_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:44+00:00",
+        "updated_at": "2026-05-30T22:00:44+00:00"
+    },
+    {
+        "id": 1477,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051526_202926_12_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:52+00:00",
+        "updated_at": "2026-05-30T22:00:52+00:00"
+    },
+    {
+        "id": 1478,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051126_201154_13_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:00:56+00:00",
+        "updated_at": "2026-05-30T22:00:56+00:00"
+    },
+    {
+        "id": 1479,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_210306_2_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:06+00:00",
+        "updated_at": "2026-05-30T22:01:06+00:00"
+    },
+    {
+        "id": 1480,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050226_200925_12_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:06+00:00",
+        "updated_at": "2026-05-30T22:01:06+00:00"
+    },
+    {
+        "id": 1481,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042826_212444_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:10+00:00",
+        "updated_at": "2026-05-30T22:01:10+00:00"
+    },
+    {
+        "id": 1482,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050426_203340_13_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:10+00:00",
+        "updated_at": "2026-05-30T22:01:10+00:00"
+    },
+    {
+        "id": 1483,
+        "combat_log_path": "\/tmp\/WoWCombatLog-033026_202540_2_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:18+00:00",
+        "updated_at": "2026-05-30T22:01:18+00:00"
+    },
+    {
+        "id": 1484,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042826_094330_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:20+00:00",
+        "updated_at": "2026-05-30T22:01:20+00:00"
+    },
+    {
+        "id": 1485,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_10_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:24+00:00",
+        "updated_at": "2026-05-30T22:01:24+00:00"
+    },
+    {
+        "id": 1486,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032926_211608_11_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:26+00:00",
+        "updated_at": "2026-05-30T22:01:26+00:00"
+    },
+    {
+        "id": 1487,
+        "combat_log_path": "\/tmp\/WoWCombatLog-033026_202540_5_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:32+00:00",
+        "updated_at": "2026-05-30T22:01:32+00:00"
+    },
+    {
+        "id": 1488,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051326_195458_10_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:37+00:00",
+        "updated_at": "2026-05-30T22:01:37+00:00"
+    },
+    {
+        "id": 1489,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_15_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:47+00:00",
+        "updated_at": "2026-05-30T22:01:47+00:00"
+    },
+    {
+        "id": 1490,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041826_212220_10_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:50+00:00",
+        "updated_at": "2026-05-30T22:01:50+00:00"
+    },
+    {
+        "id": 1491,
+        "combat_log_path": "\/tmp\/WoWCombatLog-052726_232530_12_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:01:54+00:00",
+        "updated_at": "2026-05-30T22:01:54+00:00"
+    },
+    {
+        "id": 1492,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_150554_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:02:01+00:00",
+        "updated_at": "2026-05-30T22:02:01+00:00"
+    },
+    {
+        "id": 1493,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042126_214419_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:02:16+00:00",
+        "updated_at": "2026-05-30T22:02:16+00:00"
+    },
+    {
+        "id": 1494,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041826_212220_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:02:22+00:00",
+        "updated_at": "2026-05-30T22:02:22+00:00"
+    },
+    {
+        "id": 1495,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042726_205759_10_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:02:30+00:00",
+        "updated_at": "2026-05-30T22:02:30+00:00"
+    },
+    {
+        "id": 1496,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032526_101613_8_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:02:31+00:00",
+        "updated_at": "2026-05-30T22:02:31+00:00"
+    },
+    {
+        "id": 1497,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_210306_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:02:31+00:00",
+        "updated_at": "2026-05-30T22:02:31+00:00"
+    },
+    {
+        "id": 1498,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:03:14+00:00",
+        "updated_at": "2026-05-30T22:03:14+00:00"
+    },
+    {
+        "id": 1499,
+        "combat_log_path": "\/tmp\/WoWCombatLog-052126_124118_4_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:03:48+00:00",
+        "updated_at": "2026-05-30T22:03:48+00:00"
+    },
+    {
+        "id": 1500,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042126_092058_2_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:03:51+00:00",
+        "updated_at": "2026-05-30T22:03:51+00:00"
+    },
+    {
+        "id": 1501,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042526_212016_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:04:05+00:00",
+        "updated_at": "2026-05-30T22:04:05+00:00"
+    },
+    {
+        "id": 1502,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042026_212438_12_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:04:10+00:00",
+        "updated_at": "2026-05-30T22:04:10+00:00"
+    },
+    {
+        "id": 1503,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051226_204157_14_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:04:12+00:00",
+        "updated_at": "2026-05-30T22:04:12+00:00"
+    },
+    {
+        "id": 1504,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041926_205749_11_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:04:20+00:00",
+        "updated_at": "2026-05-30T22:04:20+00:00"
+    },
+    {
+        "id": 1505,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042526_214108_13_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:04:39+00:00",
+        "updated_at": "2026-05-30T22:04:39+00:00"
+    },
+    {
+        "id": 1506,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_212059_13_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:04:44+00:00",
+        "updated_at": "2026-05-30T22:04:44+00:00"
+    },
+    {
+        "id": 1507,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041626_213323_14_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:01+00:00",
+        "updated_at": "2026-05-30T22:05:01+00:00"
+    },
+    {
+        "id": 1508,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041426_212611_13_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:05+00:00",
+        "updated_at": "2026-05-30T22:05:05+00:00"
+    },
+    {
+        "id": 1509,
+        "combat_log_path": "\/tmp\/WoWCombatLog-052326_171620_4_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:15+00:00",
+        "updated_at": "2026-05-30T22:05:15+00:00"
+    },
+    {
+        "id": 1510,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051126_201154_14_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:18+00:00",
+        "updated_at": "2026-05-30T22:05:18+00:00"
+    },
+    {
+        "id": 1511,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051226_204157_11_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:19+00:00",
+        "updated_at": "2026-05-30T22:05:19+00:00"
+    },
+    {
+        "id": 1512,
+        "combat_log_path": "\/tmp\/WoWCombatLog-040926_204933_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:26+00:00",
+        "updated_at": "2026-05-30T22:05:26+00:00"
+    },
+    {
+        "id": 1513,
+        "combat_log_path": "\/tmp\/WoWCombatLog-033026_202540_7_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:29+00:00",
+        "updated_at": "2026-05-30T22:05:29+00:00"
+    },
+    {
+        "id": 1514,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050726_195554_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:35+00:00",
+        "updated_at": "2026-05-30T22:05:35+00:00"
+    },
+    {
+        "id": 1515,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032526_101613_4_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:45+00:00",
+        "updated_at": "2026-05-30T22:05:45+00:00"
+    },
+    {
+        "id": 1516,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_212059_13_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:46+00:00",
+        "updated_at": "2026-05-30T22:05:46+00:00"
+    },
+    {
+        "id": 1517,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_8_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:49+00:00",
+        "updated_at": "2026-05-30T22:05:49+00:00"
+    },
+    {
+        "id": 1518,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_210306_8_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:05:57+00:00",
+        "updated_at": "2026-05-30T22:05:57+00:00"
+    },
+    {
+        "id": 1519,
+        "combat_log_path": "\/tmp\/WoWCombatLog-033026_202540_10_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:01+00:00",
+        "updated_at": "2026-05-30T22:06:01+00:00"
+    },
+    {
+        "id": 1520,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_204303_12_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:02+00:00",
+        "updated_at": "2026-05-30T22:06:02+00:00"
+    },
+    {
+        "id": 1521,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051526_213112_12_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:03+00:00",
+        "updated_at": "2026-05-30T22:06:03+00:00"
+    },
+    {
+        "id": 1522,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051326_210101_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:17+00:00",
+        "updated_at": "2026-05-30T22:06:17+00:00"
+    },
+    {
+        "id": 1523,
+        "combat_log_path": "\/tmp\/WoWCombatLog-040326_202503_9_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:20+00:00",
+        "updated_at": "2026-05-30T22:06:20+00:00"
+    },
+    {
+        "id": 1524,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050426_212259_10_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:23+00:00",
+        "updated_at": "2026-05-30T22:06:23+00:00"
+    },
+    {
+        "id": 1525,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042026_212438_12_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:23+00:00",
+        "updated_at": "2026-05-30T22:06:23+00:00"
+    },
+    {
+        "id": 1526,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042826_212444_10_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:41+00:00",
+        "updated_at": "2026-05-30T22:06:41+00:00"
+    },
+    {
+        "id": 1527,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_212059_13_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:41+00:00",
+        "updated_at": "2026-05-30T22:06:41+00:00"
+    },
+    {
+        "id": 1528,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050726_195554_12_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:48+00:00",
+        "updated_at": "2026-05-30T22:06:48+00:00"
+    },
+    {
+        "id": 1529,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041826_212220_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:53+00:00",
+        "updated_at": "2026-05-30T22:06:53+00:00"
+    },
+    {
+        "id": 1530,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_13_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:55+00:00",
+        "updated_at": "2026-05-30T22:06:55+00:00"
+    },
+    {
+        "id": 1531,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051526_202926_11_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:06:57+00:00",
+        "updated_at": "2026-05-30T22:06:57+00:00"
+    },
+    {
+        "id": 1532,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032526_101613_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:12+00:00",
+        "updated_at": "2026-05-30T22:07:12+00:00"
+    },
+    {
+        "id": 1533,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041426_212611_14_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:19+00:00",
+        "updated_at": "2026-05-30T22:07:19+00:00"
+    },
+    {
+        "id": 1534,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042026_133636_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:30+00:00",
+        "updated_at": "2026-05-30T22:07:30+00:00"
+    },
+    {
+        "id": 1535,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042526_212016_11_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:38+00:00",
+        "updated_at": "2026-05-30T22:07:38+00:00"
+    },
+    {
+        "id": 1536,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050826_202519_12_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:38+00:00",
+        "updated_at": "2026-05-30T22:07:38+00:00"
+    },
+    {
+        "id": 1537,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042726_205759_12_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:47+00:00",
+        "updated_at": "2026-05-30T22:07:47+00:00"
+    },
+    {
+        "id": 1538,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051926_211529_5_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:53+00:00",
+        "updated_at": "2026-05-30T22:07:53+00:00"
+    },
+    {
+        "id": 1539,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042126_214419_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:07:54+00:00",
+        "updated_at": "2026-05-30T22:07:54+00:00"
+    },
+    {
+        "id": 1540,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041626_213323_13_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:06+00:00",
+        "updated_at": "2026-05-30T22:08:06+00:00"
+    },
+    {
+        "id": 1541,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_205146_9_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:12+00:00",
+        "updated_at": "2026-05-30T22:08:12+00:00"
+    },
+    {
+        "id": 1542,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042726_205759_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:22+00:00",
+        "updated_at": "2026-05-30T22:08:22+00:00"
+    },
+    {
+        "id": 1543,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041426_212611_15_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:38+00:00",
+        "updated_at": "2026-05-30T22:08:38+00:00"
+    },
+    {
+        "id": 1544,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051926_203027_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:41+00:00",
+        "updated_at": "2026-05-30T22:08:41+00:00"
+    },
+    {
+        "id": 1545,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032526_101613_7_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:53+00:00",
+        "updated_at": "2026-05-30T22:08:53+00:00"
+    },
+    {
+        "id": 1546,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042826_212444_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:08:56+00:00",
+        "updated_at": "2026-05-30T22:08:56+00:00"
+    },
+    {
+        "id": 1547,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_210306_11_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:09:19+00:00",
+        "updated_at": "2026-05-30T22:09:19+00:00"
+    },
+    {
+        "id": 1548,
+        "combat_log_path": "\/tmp\/WoWCombatLog-052026_164644_2_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:09:21+00:00",
+        "updated_at": "2026-05-30T22:09:21+00:00"
+    },
+    {
+        "id": 1549,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042626_202711_11_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:09:35+00:00",
+        "updated_at": "2026-05-30T22:09:35+00:00"
+    },
+    {
+        "id": 1550,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_12_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:09:35+00:00",
+        "updated_at": "2026-05-30T22:09:35+00:00"
+    },
+    {
+        "id": 1551,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_5_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:09:45+00:00",
+        "updated_at": "2026-05-30T22:09:45+00:00"
+    },
+    {
+        "id": 1552,
+        "combat_log_path": "\/tmp\/WoWCombatLog-040926_204933_10_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:10:07+00:00",
+        "updated_at": "2026-05-30T22:10:07+00:00"
+    },
+    {
+        "id": 1553,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032526_101613_7_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:10:10+00:00",
+        "updated_at": "2026-05-30T22:10:10+00:00"
+    },
+    {
+        "id": 1554,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_2_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:10:11+00:00",
+        "updated_at": "2026-05-30T22:10:11+00:00"
+    },
+    {
+        "id": 1555,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050226_200925_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:10:15+00:00",
+        "updated_at": "2026-05-30T22:10:15+00:00"
+    },
+    {
+        "id": 1556,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041626_213323_12_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:10:29+00:00",
+        "updated_at": "2026-05-30T22:10:29+00:00"
+    },
+    {
+        "id": 1557,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_14_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:11:02+00:00",
+        "updated_at": "2026-05-30T22:11:02+00:00"
+    },
+    {
+        "id": 1558,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042626_202711_10_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:11:28+00:00",
+        "updated_at": "2026-05-30T22:11:28+00:00"
+    },
+    {
+        "id": 1559,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_12_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:11:35+00:00",
+        "updated_at": "2026-05-30T22:11:35+00:00"
+    },
+    {
+        "id": 1560,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050426_203340_12_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:11:43+00:00",
+        "updated_at": "2026-05-30T22:11:43+00:00"
+    },
+    {
+        "id": 1561,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042026_212438_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:11:51+00:00",
+        "updated_at": "2026-05-30T22:11:51+00:00"
+    },
+    {
+        "id": 1562,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050226_200925_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:11:54+00:00",
+        "updated_at": "2026-05-30T22:11:54+00:00"
+    },
+    {
+        "id": 1563,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042726_205759_10_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:13:13+00:00",
+        "updated_at": "2026-05-30T22:13:13+00:00"
+    },
+    {
+        "id": 1564,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051126_213858_12_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:14:32+00:00",
+        "updated_at": "2026-05-30T22:14:32+00:00"
+    },
+    {
+        "id": 1565,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032626_200439_11_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:14:42+00:00",
+        "updated_at": "2026-05-30T22:14:42+00:00"
+    },
+    {
+        "id": 1566,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042426_202956_9_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:16:30+00:00",
+        "updated_at": "2026-05-30T22:16:30+00:00"
+    },
+    {
+        "id": 1567,
+        "combat_log_path": "\/tmp\/WoWCombatLog-040626_203032_8_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:16:35+00:00",
+        "updated_at": "2026-05-30T22:16:35+00:00"
+    },
+    {
+        "id": 1568,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041926_214405_14_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:16:59+00:00",
+        "updated_at": "2026-05-30T22:16:59+00:00"
+    },
+    {
+        "id": 1569,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042126_214419_10_seat-of-the-triumvirate-1.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:17:12+00:00",
+        "updated_at": "2026-05-30T22:17:12+00:00"
+    },
+    {
+        "id": 1570,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050726_195554_13_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:17:17+00:00",
+        "updated_at": "2026-05-30T22:17:17+00:00"
+    },
+    {
+        "id": 1571,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_204303_11_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:18:21+00:00",
+        "updated_at": "2026-05-30T22:18:21+00:00"
+    },
+    {
+        "id": 1572,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050526_212651_10_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:20:20+00:00",
+        "updated_at": "2026-05-30T22:20:20+00:00"
+    },
+    {
+        "id": 1573,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051626_185900_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-30T22:21:11+00:00",
+        "updated_at": "2026-05-30T22:21:11+00:00"
+    },
+    {
+        "id": 1574,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050426_212259_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:41:30+00:00",
+        "updated_at": "2026-05-31T09:41:30+00:00"
+    },
+    {
+        "id": 1575,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042026_133636_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:42:06+00:00",
+        "updated_at": "2026-05-31T09:42:06+00:00"
+    },
+    {
+        "id": 1576,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042526_212016_11_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:43:19+00:00",
+        "updated_at": "2026-05-31T09:43:19+00:00"
+    },
+    {
+        "id": 1577,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051326_195458_10_skyreach-1.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:45:51+00:00",
+        "updated_at": "2026-05-31T09:45:51+00:00"
+    },
+    {
+        "id": 1578,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050226_231722_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:03+00:00",
+        "updated_at": "2026-05-31T09:46:03+00:00"
+    },
+    {
+        "id": 1579,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041826_212220_11_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:28+00:00",
+        "updated_at": "2026-05-31T09:46:28+00:00"
+    },
+    {
+        "id": 1580,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_204303_11_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:31+00:00",
+        "updated_at": "2026-05-31T09:46:31+00:00"
+    },
+    {
+        "id": 1581,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041926_214405_14_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:42+00:00",
+        "updated_at": "2026-05-31T09:46:42+00:00"
+    },
+    {
+        "id": 1582,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051126_213858_13_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:44+00:00",
+        "updated_at": "2026-05-31T09:46:44+00:00"
+    },
+    {
+        "id": 1583,
+        "combat_log_path": "\/tmp\/WoWCombatLog-041926_205749_10_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:45+00:00",
+        "updated_at": "2026-05-31T09:46:45+00:00"
+    },
+    {
+        "id": 1584,
+        "combat_log_path": "\/tmp\/WoWCombatLog-040926_204933_7_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:51+00:00",
+        "updated_at": "2026-05-31T09:46:51+00:00"
+    },
+    {
+        "id": 1585,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050926_203326_12_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:55+00:00",
+        "updated_at": "2026-05-31T09:46:55+00:00"
+    },
+    {
+        "id": 1586,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050426_203340_11_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:46:58+00:00",
+        "updated_at": "2026-05-31T09:46:58+00:00"
+    },
+    {
+        "id": 1587,
+        "combat_log_path": "\/tmp\/WoWCombatLog-043026_202351_10_algethar-academy.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:03+00:00",
+        "updated_at": "2026-05-31T09:47:03+00:00"
+    },
+    {
+        "id": 1588,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050326_204303_10_seat-of-the-triumvirate.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:14+00:00",
+        "updated_at": "2026-05-31T09:47:14+00:00"
+    },
+    {
+        "id": 1589,
+        "combat_log_path": "\/tmp\/WoWCombatLog-043026_202351_11_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:15+00:00",
+        "updated_at": "2026-05-31T09:47:15+00:00"
+    },
+    {
+        "id": 1590,
+        "combat_log_path": "\/tmp\/WoWCombatLog-050226_200925_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:21+00:00",
+        "updated_at": "2026-05-31T09:47:21+00:00"
+    },
+    {
+        "id": 1591,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042826_204356_2_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:25+00:00",
+        "updated_at": "2026-05-31T09:47:25+00:00"
+    },
+    {
+        "id": 1592,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042326_213826_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:34+00:00",
+        "updated_at": "2026-05-31T09:47:34+00:00"
+    },
+    {
+        "id": 1593,
+        "combat_log_path": "\/tmp\/WoWCombatLog-043026_202351_11_windrunner-spire.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:47:39+00:00",
+        "updated_at": "2026-05-31T09:47:39+00:00"
+    },
+    {
+        "id": 1594,
+        "combat_log_path": "\/tmp\/WoWCombatLog-032826_205146_8_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T09:48:12+00:00",
+        "updated_at": "2026-05-31T09:48:12+00:00"
+    },
+    {
+        "id": 1595,
+        "combat_log_path": "\/tmp\/WoWCombatLog-052726_232530_11_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T13:22:52+00:00",
+        "updated_at": "2026-05-31T13:22:52+00:00"
+    },
+    {
+        "id": 1596,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051926_203027_10_skyreach.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T13:23:16+00:00",
+        "updated_at": "2026-05-31T13:23:16+00:00"
+    },
+    {
+        "id": 1597,
+        "combat_log_path": "\/tmp\/WoWCombatLog-042526_212016_10_maisara-caverns.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T13:24:04+00:00",
+        "updated_at": "2026-05-31T13:24:04+00:00"
+    },
+    {
+        "id": 1598,
+        "combat_log_path": "\/tmp\/WoWCombatLog-051926_203027_10_nexus-point-xenas.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T13:24:33+00:00",
+        "updated_at": "2026-05-31T13:24:33+00:00"
+    },
+    {
+        "id": 1607,
+        "combat_log_path": "\/tmp\/run_2_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:21+00:00",
+        "updated_at": "2026-05-31T19:54:21+00:00"
+    },
+    {
+        "id": 1608,
+        "combat_log_path": "\/tmp\/run_1_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:24+00:00",
+        "updated_at": "2026-05-31T19:54:24+00:00"
+    },
+    {
+        "id": 1609,
+        "combat_log_path": "\/tmp\/run_4_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:32+00:00",
+        "updated_at": "2026-05-31T19:54:32+00:00"
+    },
+    {
+        "id": 1610,
+        "combat_log_path": "\/tmp\/run_3_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:35+00:00",
+        "updated_at": "2026-05-31T19:54:35+00:00"
+    },
+    {
+        "id": 1611,
+        "combat_log_path": "\/tmp\/run_5_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:43+00:00",
+        "updated_at": "2026-05-31T19:54:43+00:00"
+    },
+    {
+        "id": 1612,
+        "combat_log_path": "\/tmp\/run_7_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:46+00:00",
+        "updated_at": "2026-05-31T19:54:46+00:00"
+    },
+    {
+        "id": 1613,
+        "combat_log_path": "\/tmp\/run_8_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:49+00:00",
+        "updated_at": "2026-05-31T19:54:49+00:00"
+    },
+    {
+        "id": 1614,
+        "combat_log_path": "\/tmp\/run_6_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:54:49+00:00",
+        "updated_at": "2026-05-31T19:54:49+00:00"
+    },
+    {
+        "id": 1615,
+        "combat_log_path": "\/tmp\/run_10_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:01+00:00",
+        "updated_at": "2026-05-31T19:55:01+00:00"
+    },
+    {
+        "id": 1616,
+        "combat_log_path": "\/tmp\/run_11_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:03+00:00",
+        "updated_at": "2026-05-31T19:55:03+00:00"
+    },
+    {
+        "id": 1617,
+        "combat_log_path": "\/tmp\/run_9_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:04+00:00",
+        "updated_at": "2026-05-31T19:55:04+00:00"
+    },
+    {
+        "id": 1618,
+        "combat_log_path": "\/tmp\/run_12_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:07+00:00",
+        "updated_at": "2026-05-31T19:55:07+00:00"
+    },
+    {
+        "id": 1619,
+        "combat_log_path": "\/tmp\/run_13_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:16+00:00",
+        "updated_at": "2026-05-31T19:55:16+00:00"
+    },
+    {
+        "id": 1620,
+        "combat_log_path": "\/tmp\/run_14_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:20+00:00",
+        "updated_at": "2026-05-31T19:55:20+00:00"
+    },
+    {
+        "id": 1621,
+        "combat_log_path": "\/tmp\/run_15_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:20+00:00",
+        "updated_at": "2026-05-31T19:55:20+00:00"
+    },
+    {
+        "id": 1622,
+        "combat_log_path": "\/tmp\/run_16_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:31+00:00",
+        "updated_at": "2026-05-31T19:55:31+00:00"
+    },
+    {
+        "id": 1623,
+        "combat_log_path": "\/tmp\/run_19_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:33+00:00",
+        "updated_at": "2026-05-31T19:55:33+00:00"
+    },
+    {
+        "id": 1624,
+        "combat_log_path": "\/tmp\/run_17_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:35+00:00",
+        "updated_at": "2026-05-31T19:55:35+00:00"
+    },
+    {
+        "id": 1625,
+        "combat_log_path": "\/tmp\/run_20_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:39+00:00",
+        "updated_at": "2026-05-31T19:55:39+00:00"
+    },
+    {
+        "id": 1626,
+        "combat_log_path": "\/tmp\/run_18_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:44+00:00",
+        "updated_at": "2026-05-31T19:55:44+00:00"
+    },
+    {
+        "id": 1627,
+        "combat_log_path": "\/tmp\/run_22_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:45+00:00",
+        "updated_at": "2026-05-31T19:55:45+00:00"
+    },
+    {
+        "id": 1628,
+        "combat_log_path": "\/tmp\/run_21_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:49+00:00",
+        "updated_at": "2026-05-31T19:55:49+00:00"
+    },
+    {
+        "id": 1629,
+        "combat_log_path": "\/tmp\/run_23_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:55:58+00:00",
+        "updated_at": "2026-05-31T19:55:58+00:00"
+    },
+    {
+        "id": 1630,
+        "combat_log_path": "\/tmp\/run_25_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:00+00:00",
+        "updated_at": "2026-05-31T19:56:00+00:00"
+    },
+    {
+        "id": 1631,
+        "combat_log_path": "\/tmp\/run_24_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:03+00:00",
+        "updated_at": "2026-05-31T19:56:03+00:00"
+    },
+    {
+        "id": 1632,
+        "combat_log_path": "\/tmp\/run_26_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:11+00:00",
+        "updated_at": "2026-05-31T19:56:11+00:00"
+    },
+    {
+        "id": 1633,
+        "combat_log_path": "\/tmp\/run_28_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:18+00:00",
+        "updated_at": "2026-05-31T19:56:18+00:00"
+    },
+    {
+        "id": 1634,
+        "combat_log_path": "\/tmp\/run_29_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:21+00:00",
+        "updated_at": "2026-05-31T19:56:21+00:00"
+    },
+    {
+        "id": 1635,
+        "combat_log_path": "\/tmp\/run_30_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:23+00:00",
+        "updated_at": "2026-05-31T19:56:23+00:00"
+    },
+    {
+        "id": 1636,
+        "combat_log_path": "\/tmp\/run_27_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:23+00:00",
+        "updated_at": "2026-05-31T19:56:23+00:00"
+    },
+    {
+        "id": 1637,
+        "combat_log_path": "\/tmp\/run_31_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:35+00:00",
+        "updated_at": "2026-05-31T19:56:35+00:00"
+    },
+    {
+        "id": 1638,
+        "combat_log_path": "\/tmp\/run_32_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:35+00:00",
+        "updated_at": "2026-05-31T19:56:35+00:00"
+    },
+    {
+        "id": 1639,
+        "combat_log_path": "\/tmp\/run_34_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:40+00:00",
+        "updated_at": "2026-05-31T19:56:40+00:00"
+    },
+    {
+        "id": 1640,
+        "combat_log_path": "\/tmp\/run_33_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:41+00:00",
+        "updated_at": "2026-05-31T19:56:41+00:00"
+    },
+    {
+        "id": 1641,
+        "combat_log_path": "\/tmp\/run_35_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:47+00:00",
+        "updated_at": "2026-05-31T19:56:47+00:00"
+    },
+    {
+        "id": 1642,
+        "combat_log_path": "\/tmp\/run_36_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:50+00:00",
+        "updated_at": "2026-05-31T19:56:50+00:00"
+    },
+    {
+        "id": 1643,
+        "combat_log_path": "\/tmp\/run_38_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:56:57+00:00",
+        "updated_at": "2026-05-31T19:56:57+00:00"
+    },
+    {
+        "id": 1644,
+        "combat_log_path": "\/tmp\/run_37_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:00+00:00",
+        "updated_at": "2026-05-31T19:57:00+00:00"
+    },
+    {
+        "id": 1645,
+        "combat_log_path": "\/tmp\/run_39_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:04+00:00",
+        "updated_at": "2026-05-31T19:57:04+00:00"
+    },
+    {
+        "id": 1646,
+        "combat_log_path": "\/tmp\/run_40_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:04+00:00",
+        "updated_at": "2026-05-31T19:57:04+00:00"
+    },
+    {
+        "id": 1647,
+        "combat_log_path": "\/tmp\/run_41_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:11+00:00",
+        "updated_at": "2026-05-31T19:57:11+00:00"
+    },
+    {
+        "id": 1648,
+        "combat_log_path": "\/tmp\/run_43_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:13+00:00",
+        "updated_at": "2026-05-31T19:57:13+00:00"
+    },
+    {
+        "id": 1649,
+        "combat_log_path": "\/tmp\/run_42_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:13+00:00",
+        "updated_at": "2026-05-31T19:57:13+00:00"
+    },
+    {
+        "id": 1650,
+        "combat_log_path": "\/tmp\/run_47_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:27+00:00",
+        "updated_at": "2026-05-31T19:57:27+00:00"
+    },
+    {
+        "id": 1651,
+        "combat_log_path": "\/tmp\/run_45_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:29+00:00",
+        "updated_at": "2026-05-31T19:57:29+00:00"
+    },
+    {
+        "id": 1652,
+        "combat_log_path": "\/tmp\/run_44_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:30+00:00",
+        "updated_at": "2026-05-31T19:57:30+00:00"
+    },
+    {
+        "id": 1653,
+        "combat_log_path": "\/tmp\/run_46_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:33+00:00",
+        "updated_at": "2026-05-31T19:57:33+00:00"
+    },
+    {
+        "id": 1654,
+        "combat_log_path": "\/tmp\/run_48_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:45+00:00",
+        "updated_at": "2026-05-31T19:57:45+00:00"
+    },
+    {
+        "id": 1655,
+        "combat_log_path": "\/tmp\/run_49_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:46+00:00",
+        "updated_at": "2026-05-31T19:57:46+00:00"
+    },
+    {
+        "id": 1656,
+        "combat_log_path": "\/tmp\/run_50_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:48+00:00",
+        "updated_at": "2026-05-31T19:57:48+00:00"
+    },
+    {
+        "id": 1657,
+        "combat_log_path": "\/tmp\/run_51_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:55+00:00",
+        "updated_at": "2026-05-31T19:57:55+00:00"
+    },
+    {
+        "id": 1658,
+        "combat_log_path": "\/tmp\/run_52_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:57:59+00:00",
+        "updated_at": "2026-05-31T19:57:59+00:00"
+    },
+    {
+        "id": 1659,
+        "combat_log_path": "\/tmp\/run_53_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:02+00:00",
+        "updated_at": "2026-05-31T19:58:02+00:00"
+    },
+    {
+        "id": 1660,
+        "combat_log_path": "\/tmp\/run_56_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:03+00:00",
+        "updated_at": "2026-05-31T19:58:03+00:00"
+    },
+    {
+        "id": 1661,
+        "combat_log_path": "\/tmp\/run_54_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:05+00:00",
+        "updated_at": "2026-05-31T19:58:05+00:00"
+    },
+    {
+        "id": 1662,
+        "combat_log_path": "\/tmp\/run_55_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:07+00:00",
+        "updated_at": "2026-05-31T19:58:07+00:00"
+    },
+    {
+        "id": 1663,
+        "combat_log_path": "\/tmp\/run_57_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:09+00:00",
+        "updated_at": "2026-05-31T19:58:09+00:00"
+    },
+    {
+        "id": 1664,
+        "combat_log_path": "\/tmp\/run_60_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:17+00:00",
+        "updated_at": "2026-05-31T19:58:17+00:00"
+    },
+    {
+        "id": 1665,
+        "combat_log_path": "\/tmp\/run_61_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:24+00:00",
+        "updated_at": "2026-05-31T19:58:24+00:00"
+    },
+    {
+        "id": 1666,
+        "combat_log_path": "\/tmp\/run_58_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:25+00:00",
+        "updated_at": "2026-05-31T19:58:25+00:00"
+    },
+    {
+        "id": 1667,
+        "combat_log_path": "\/tmp\/run_59_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:26+00:00",
+        "updated_at": "2026-05-31T19:58:26+00:00"
+    },
+    {
+        "id": 1668,
+        "combat_log_path": "\/tmp\/run_62_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:30+00:00",
+        "updated_at": "2026-05-31T19:58:30+00:00"
+    },
+    {
+        "id": 1669,
+        "combat_log_path": "\/tmp\/run_65_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:39+00:00",
+        "updated_at": "2026-05-31T19:58:39+00:00"
+    },
+    {
+        "id": 1670,
+        "combat_log_path": "\/tmp\/run_63_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:41+00:00",
+        "updated_at": "2026-05-31T19:58:41+00:00"
+    },
+    {
+        "id": 1671,
+        "combat_log_path": "\/tmp\/run_64_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:44+00:00",
+        "updated_at": "2026-05-31T19:58:44+00:00"
+    },
+    {
+        "id": 1672,
+        "combat_log_path": "\/tmp\/run_66_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:47+00:00",
+        "updated_at": "2026-05-31T19:58:47+00:00"
+    },
+    {
+        "id": 1673,
+        "combat_log_path": "\/tmp\/run_67_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:54+00:00",
+        "updated_at": "2026-05-31T19:58:54+00:00"
+    },
+    {
+        "id": 1674,
+        "combat_log_path": "\/tmp\/run_68_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:55+00:00",
+        "updated_at": "2026-05-31T19:58:55+00:00"
+    },
+    {
+        "id": 1675,
+        "combat_log_path": "\/tmp\/run_71_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:58:58+00:00",
+        "updated_at": "2026-05-31T19:58:58+00:00"
+    },
+    {
+        "id": 1676,
+        "combat_log_path": "\/tmp\/run_69_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:02+00:00",
+        "updated_at": "2026-05-31T19:59:02+00:00"
+    },
+    {
+        "id": 1677,
+        "combat_log_path": "\/tmp\/run_70_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:12+00:00",
+        "updated_at": "2026-05-31T19:59:12+00:00"
+    },
+    {
+        "id": 1678,
+        "combat_log_path": "\/tmp\/run_72_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:13+00:00",
+        "updated_at": "2026-05-31T19:59:13+00:00"
+    },
+    {
+        "id": 1679,
+        "combat_log_path": "\/tmp\/run_74_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:17+00:00",
+        "updated_at": "2026-05-31T19:59:17+00:00"
+    },
+    {
+        "id": 1680,
+        "combat_log_path": "\/tmp\/run_73_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:18+00:00",
+        "updated_at": "2026-05-31T19:59:18+00:00"
+    },
+    {
+        "id": 1681,
+        "combat_log_path": "\/tmp\/run_76_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:23+00:00",
+        "updated_at": "2026-05-31T19:59:23+00:00"
+    },
+    {
+        "id": 1682,
+        "combat_log_path": "\/tmp\/run_78_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:23+00:00",
+        "updated_at": "2026-05-31T19:59:23+00:00"
+    },
+    {
+        "id": 1683,
+        "combat_log_path": "\/tmp\/run_77_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:23+00:00",
+        "updated_at": "2026-05-31T19:59:23+00:00"
+    },
+    {
+        "id": 1684,
+        "combat_log_path": "\/tmp\/run_75_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:23+00:00",
+        "updated_at": "2026-05-31T19:59:23+00:00"
+    },
+    {
+        "id": 1685,
+        "combat_log_path": "\/tmp\/run_79_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:37+00:00",
+        "updated_at": "2026-05-31T19:59:37+00:00"
+    },
+    {
+        "id": 1686,
+        "combat_log_path": "\/tmp\/run_81_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:39+00:00",
+        "updated_at": "2026-05-31T19:59:39+00:00"
+    },
+    {
+        "id": 1687,
+        "combat_log_path": "\/tmp\/run_82_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:44+00:00",
+        "updated_at": "2026-05-31T19:59:44+00:00"
+    },
+    {
+        "id": 1688,
+        "combat_log_path": "\/tmp\/run_80_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:45+00:00",
+        "updated_at": "2026-05-31T19:59:45+00:00"
+    },
+    {
+        "id": 1689,
+        "combat_log_path": "\/tmp\/run_84_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:52+00:00",
+        "updated_at": "2026-05-31T19:59:52+00:00"
+    },
+    {
+        "id": 1690,
+        "combat_log_path": "\/tmp\/run_83_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:55+00:00",
+        "updated_at": "2026-05-31T19:59:55+00:00"
+    },
+    {
+        "id": 1691,
+        "combat_log_path": "\/tmp\/run_85_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:57+00:00",
+        "updated_at": "2026-05-31T19:59:57+00:00"
+    },
+    {
+        "id": 1692,
+        "combat_log_path": "\/tmp\/run_86_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T19:59:58+00:00",
+        "updated_at": "2026-05-31T19:59:58+00:00"
+    },
+    {
+        "id": 1693,
+        "combat_log_path": "\/tmp\/run_89_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:06+00:00",
+        "updated_at": "2026-05-31T20:00:06+00:00"
+    },
+    {
+        "id": 1694,
+        "combat_log_path": "\/tmp\/run_88_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:13+00:00",
+        "updated_at": "2026-05-31T20:00:13+00:00"
+    },
+    {
+        "id": 1695,
+        "combat_log_path": "\/tmp\/run_87_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:13+00:00",
+        "updated_at": "2026-05-31T20:00:13+00:00"
+    },
+    {
+        "id": 1696,
+        "combat_log_path": "\/tmp\/run_90_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:17+00:00",
+        "updated_at": "2026-05-31T20:00:17+00:00"
+    },
+    {
+        "id": 1697,
+        "combat_log_path": "\/tmp\/run_93_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:24+00:00",
+        "updated_at": "2026-05-31T20:00:24+00:00"
+    },
+    {
+        "id": 1698,
+        "combat_log_path": "\/tmp\/run_92_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:27+00:00",
+        "updated_at": "2026-05-31T20:00:27+00:00"
+    },
+    {
+        "id": 1699,
+        "combat_log_path": "\/tmp\/run_94_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:29+00:00",
+        "updated_at": "2026-05-31T20:00:29+00:00"
+    },
+    {
+        "id": 1700,
+        "combat_log_path": "\/tmp\/run_91_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:29+00:00",
+        "updated_at": "2026-05-31T20:00:29+00:00"
+    },
+    {
+        "id": 1701,
+        "combat_log_path": "\/tmp\/run_97_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:43+00:00",
+        "updated_at": "2026-05-31T20:00:43+00:00"
+    },
+    {
+        "id": 1702,
+        "combat_log_path": "\/tmp\/run_98_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:45+00:00",
+        "updated_at": "2026-05-31T20:00:45+00:00"
+    },
+    {
+        "id": 1703,
+        "combat_log_path": "\/tmp\/run_100_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:49+00:00",
+        "updated_at": "2026-05-31T20:00:49+00:00"
+    },
+    {
+        "id": 1704,
+        "combat_log_path": "\/tmp\/run_95_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:52+00:00",
+        "updated_at": "2026-05-31T20:00:52+00:00"
+    },
+    {
+        "id": 1705,
+        "combat_log_path": "\/tmp\/run_96_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:00:57+00:00",
+        "updated_at": "2026-05-31T20:00:57+00:00"
+    },
+    {
+        "id": 1706,
+        "combat_log_path": "\/tmp\/run_99_combined.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-05-31T20:01:03+00:00",
+        "updated_at": "2026-05-31T20:01:03+00:00"
     }
 ]

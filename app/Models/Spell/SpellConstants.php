@@ -238,6 +238,13 @@ trait SpellConstants
     public const int SPELL_THUNDEROUS_DRUMS      = 444257;
     public const int SPELL_HARRIERS_CRY          = 466904;
     public const int SPELL_SHROUD_OF_CONCEALMENT = 114018;
+    public const int SPELL_CONTROL_UNDEAD        = 111673;
+    public const int SPELL_SUBJUGATE_DEMON       = 1098;
+
+    public const array CHARM_SPELLS = [
+        self::SPELL_CONTROL_UNDEAD,
+        self::SPELL_SUBJUGATE_DEMON,
+    ];
 
     public const array BLOODLUSTY_SPELLS = [
         self::SPELL_BLOODLUST,

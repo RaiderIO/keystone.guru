@@ -6,12 +6,15 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\Prefixes\Spell as SpellPrefix;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -22,6 +25,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
 /**
+ * Processes raw combat log events into EnemyEngaged/EnemyKilled/PlayerDied result events by tracking which enemies
+ * are in combat (via accurateEnemySightings) and detecting their deaths, defeats, or charm-based removals.
+ *
  * @property Collection<BaseResultEvent> $resultEvents
  */
 abstract class BaseCombatFilter implements CombatLogParserInterface
@@ -375,23 +381,18 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
     private function hasDeathAuraApplied(BaseEvent $combatLogEvent): bool
     {
-        return false;
+        if (!($combatLogEvent instanceof CombatLogEvent)) {
+            return false;
+        }
+        if (!($combatLogEvent->getSuffix() instanceof AuraAppliedInterface)) {
+            return false;
+        }
+        $prefix = $combatLogEvent->getPrefix();
+        if (!($prefix instanceof SpellPrefix)) {
+            return false;
+        }
 
-        //        if (!($combatLogEvent instanceof CombatLogEvent)) {
-        //            return false;
-        //        }
-        //        if (!($combatLogEvent->getSuffix() instanceof AuraApplied)) {
-        //            return false;
-        //        }
-        //        $prefix = $combatLogEvent->getPrefix();
-        //        if (!($prefix instanceof Spell)) {
-        //            return false;
-        //        }
-        //
-        //        return in_array($prefix->getSpellId(), [
-        //            // Recovering... (Uldaman: Legacy of Tyr first boss(es))
-        //            375339,
-        //        ]);
+        return in_array($prefix->getSpellId(), Spell::CHARM_SPELLS);
     }
 
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool

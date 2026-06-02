@@ -60,8 +60,9 @@ class ProcessCombatLogSegments implements ShouldQueue
 
                 if (!$this->curlSaveToFile($segment->downloadUrl, $tempPath)) {
                     $log->handleSegmentDownloadFailed($this->runId, $segment->id, $tempPath);
+
                     throw new \RuntimeException(
-                        sprintf('Failed to download segment %d for run %d', $segment->id, $this->runId)
+                        sprintf('Failed to download segment %d for run %d', $segment->id, $this->runId),
                     );
                 }
 

@@ -11,6 +11,9 @@ use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\SpellCast;
 use Illuminate\Support\Collection;
 
+/**
+ * Captures SPELL_CAST_SUCCESS events for all spells marked selectable in the DB and emits SpellCast result events.
+ */
 class SpellFilter implements CombatLogParserInterface
 {
     private readonly Collection $spellsToTrack;
