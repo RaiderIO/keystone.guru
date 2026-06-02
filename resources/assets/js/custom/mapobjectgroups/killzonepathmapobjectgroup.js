@@ -122,6 +122,8 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
         killZoneMapObjectGroup.register('save:success', this, killZoneChangedFn);
         killZoneMapObjectGroup.register('delete:success', this, killZoneDeletedFn);
 
+        getState().register('killzonepathweight:changed', this, () => this.refresh());
+
         this.refresh();
         this._initialized = true;
     }
@@ -146,7 +148,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             polyline: {
                 color: c.map.polyline.killzonepath.color,
                 color_animated: null,
-                weight: c.map.polyline.killzonepath.weight,
+                weight: getState().getKillzonePathWeight(),
                 vertices_json: JSON.stringify(vertices),
             }
         }, options));

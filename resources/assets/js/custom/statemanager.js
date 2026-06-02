@@ -369,6 +369,22 @@ class StateManager extends Signalable {
     }
 
     /**
+     * @param {number} weight
+     */
+    setKillzonePathWeight(weight) {
+        Cookies.set('killzone_path_weight', weight, cookieDefaultAttributes);
+
+        this.signal('killzonepathweight:changed', {weight: weight});
+    }
+
+    /**
+     * @returns {number}
+     */
+    getKillzonePathWeight() {
+        return parseInt(Cookies.get('killzone_path_weight'));
+    }
+
+    /**
      * Sets whether to show floor switches in the pull sidebar
      * @param {boolean} visible
      */

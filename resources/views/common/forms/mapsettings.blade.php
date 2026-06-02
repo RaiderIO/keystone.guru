@@ -3,6 +3,7 @@
 use App\Models\User;
 
 $mapFacadeStyleChecked            = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+$killzonePathWeight               = User::getCurrentUserKillzonePathWeight();
 $mapZoomSpeed                     = $_COOKIE['map_zoom_speed'] ?? '50';
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
 $mapHeatmapShowTooltips           = $_COOKIE['map_heatmap_show_tooltips'] ?? 1;
@@ -195,6 +196,30 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row no-gutters">
             <div class="col pr-2">
                 {{ html()->checkbox('map_settings_enemy_dangerous_border', $mapEnemyDangerousBorder, 1)->id('map_settings_enemy_dangerous_border')->class('form-control left_checkbox') }}
+            </div>
+        </div>
+    </div>
+
+    <h4>{{ __('view_common.forms.mapsettings.killzone_path') }}</h4>
+
+    <!-- Killzone path stroke width -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label for="map_settings_killzone_path_weight">
+                    {{ __('view_common.forms.mapsettings.killzone_path_weight') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('view_common.forms.mapsettings.killzone_path_weight_title') }}"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="map_settings_killzone_path_weight" class="form-control-range" type="range" min="1"
+                       max="5" value="{{ $killzonePathWeight }}">
+            </div>
+            <div class="col-auto value">
+                {{ $killzonePathWeight }}
             </div>
         </div>
     </div>

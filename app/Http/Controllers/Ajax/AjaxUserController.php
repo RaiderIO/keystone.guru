@@ -75,6 +75,6 @@ class AjaxUserController extends Controller
 
         $user->update($request->validated());
 
-        return $user->makeVisible('map_facade_style');
+        return $user->makeVisible(['map_facade_style', 'killzone_path_weight']);
     }
 }
