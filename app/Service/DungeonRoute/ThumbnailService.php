@@ -439,7 +439,6 @@ class ThumbnailService implements ThumbnailServiceInterface
             $isCustom,
             $target,
             $thumbnailData,
-            &$result
         ) {
             /** @var Floor $floor */
             $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
@@ -454,7 +453,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 })
                 ->get();
 
-            $disk ??= config('filesystems.default', 'public');
+            $disk                  = config('filesystems.default', 'public');
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,

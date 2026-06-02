@@ -12,7 +12,7 @@ class OverpulledEnemyDeletedEvent extends ContextEvent
 {
     protected int $enemy_id;
 
-    public function __construct(Model $context, User $user, OverpulledEnemy $overpulledEnemy, Enemy $enemy)
+    public function __construct(Model $context, User $user, Enemy $enemy)
     {
         // Don't save Model here because serialization will fail due to object being deleted
         $this->enemy_id = $enemy->id;

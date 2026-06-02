@@ -10,7 +10,7 @@ parameters:
         - tests/
 
     # Level 9 is the highest level
-    level: 0
+    level: 1
 
     # I have no idea why this is necessary
     scanDirectories:
@@ -30,5 +30,19 @@ parameters:
     excludePaths:
         # '#Keyword continue used outside of a loop or a switch statement#'
         - resources/views/admin/tools/mdt/dungeonmappingversionaccuracy.blade.php
-#
+
+    ignoreErrors:
+        # Blade templates use ??= as a pattern to set optional variable defaults
+        - identifier: nullCoalesce.variable
+          path: resources/views
+        # Blade templates use isset() for optional variables
+        - identifier: isset.variable
+          path: resources/views
+        # Blade foreach loop variables and view-composer-provided variables
+        - identifier: variable.undefined
+          path: resources/views
+        # Blade templates captured variables that phpstan thinks are unused
+        - identifier: closure.unusedUse
+          path: resources/views
+
 #    checkMissingIterableValueType: false

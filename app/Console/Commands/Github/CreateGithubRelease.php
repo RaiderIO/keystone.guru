@@ -50,6 +50,7 @@ class CreateGithubRelease extends Command
             $repository      = config('keystoneguru.github_repository');
 
             /** @var Repo $githubRepoClient */
+            // @phpstan-ignore staticMethod.notFound
             $githubRepoClient = GitHub::repo();
             // May throw an exception if it doesn't exist
             foreach ($githubRepoClient->releases()->all($repositoryOwner, $repository) as $githubRelease) {

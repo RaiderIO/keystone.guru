@@ -18,10 +18,10 @@ use Tests\TestCases\PublicTestCase;
 #[Group('CombatLog')]
 final class ProcessCombatLogSegmentsTest extends PublicTestCase
 {
-    private const int RUN_ID              = 42;
-    private const int COMBAT_LOG_VERSION  = 22012000005;
-    private const string DOWNLOAD_URL_1   = 'https://raider.io/segments/42/1.txt';
-    private const string DOWNLOAD_URL_2   = 'https://raider.io/segments/42/2.txt';
+    private const int RUN_ID             = 42;
+    private const int COMBAT_LOG_VERSION = 22012000005;
+    private const string DOWNLOAD_URL_1  = 'https://raider.io/segments/42/1.txt';
+    private const string DOWNLOAD_URL_2  = 'https://raider.io/segments/42/2.txt';
 
     /**
      * @throws Exception

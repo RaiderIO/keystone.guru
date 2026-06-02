@@ -381,7 +381,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             },
         );
 
-        view()->composer(['common.maps.map'], static function (View $view) use ($globalViewVariables) {
+        view()->composer(['common.maps.map'], static function (View $view) {
             $view->with('assetsBaseUrl', config('keystoneguru.assets_base_url'));
             $view->with('tilesBaseUrl', config('keystoneguru.tiles_base_url'));
         });
@@ -415,19 +415,16 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer(['common.layout.header'], static function (View $view) use (
-            $viewService,
             $dungeonService,
-            $globalViewVariables,
-            &$userOrDefaultRegion
         ) {
-            $userOrDefaultGameVersion ??= GameVersion::getUserOrDefaultGameVersion();
+            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
             $view->with('gameVersionDungeons', $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
         });
 
         view()->composer([
             'misc.embedexplore',
             'misc.embedheatmap',
-        ], static function (View $view) use ($viewService, $globalViewVariables) {
+        ], static function (View $view) use ($globalViewVariables) {
             $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
         });
 
@@ -444,7 +441,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             // @TODO Should be loaded but it's not??
             $gameVersion->load(['expansion']);
 
-            /** @var Expansion $expansion */
+            /** @var Expansion|null $expansion */
             $expansion = $view->getData()['expansion'] ?? null;
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
@@ -656,7 +653,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Admin
         view()->composer('admin.dungeon.edit', static function (View $view) use (
             $mappingService,
-            $globalViewVariables
         ) {
             /** @var Dungeon|null $dungeon */
             $dungeon = $view->getData()['dungeon'] ?? null;

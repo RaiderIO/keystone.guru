@@ -36,4 +36,10 @@ abstract class BaseCombatLogCommand extends Command
 
         return $result;
     }
+
+    protected function removeFile(string $filePath): void
+    {
+        $this->info(sprintf('Removing file %s', $filePath));
+        unlink($filePath);
+    }
 }

@@ -1551,7 +1551,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getSubHeaderHtml(): string
     {
         // Only add the 'clone of' when the user cloned it from someone else as a form of credit
-        if (isset($model->clone_of) && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
+        if ($this->clone_of !== null && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
             $subTitle = __('models.dungeonroute.subtitle_clone_of', [
                 // Can't use %s for the href since PhpStorm then complains >.>
                 'routeLink' => sprintf(

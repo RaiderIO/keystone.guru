@@ -92,7 +92,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+        if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -206,7 +206,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+        if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.present', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -279,7 +279,7 @@ class DungeonRouteController extends Controller
         $zoomLevel = $request->get('z');
 
         $titleSlug = $dungeonroute->getTitleSlug();
-        if (!isset($title) || $titleSlug !== $title) {
+        if ($titleSlug !== $title) {
             return redirect()->route('dungeonroute.preview', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,

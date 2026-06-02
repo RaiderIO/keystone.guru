@@ -50,7 +50,7 @@ class AssignMDTIDs extends Command
 
         $count = 0;
         foreach ($mappingVersions as $mappingVersion) {
-            if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) {
+            if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) { // @phpstan-ignore empty.variable
                 $enemies = $mappingVersion->enemies()
                     ->orderBy('npc_id')
                     ->orderBy('id')

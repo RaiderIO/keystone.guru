@@ -44,7 +44,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
                 // Compute the attribute IDs that the user does NOT want
                 $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
 
-                $filterFn = static function ($query) use (&$invalidAttributeIds, &$routeAttributeIds) {
+                $filterFn = static function ($query) use (&$invalidAttributeIds) {
                     /** @var $query Builder */
                     $query->whereIn('dungeon_route_attributes.route_attribute_id', $invalidAttributeIds);
                 };

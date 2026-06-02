@@ -8,8 +8,6 @@ use Illuminate\Support\Carbon;
 
 class ActivePullEnemy
 {
-    private ?Enemy $resolvedEnemy = null;
-
     public function __construct(
         private readonly string  $uniqueId,
         private readonly int     $npcId,
@@ -17,6 +15,7 @@ class ActivePullEnemy
         private readonly float   $y,
         private readonly Carbon  $engagedAt,
         private readonly ?Carbon $diedAt,
+        private ?Enemy           $resolvedEnemy = null,
     ) {
     }
 
