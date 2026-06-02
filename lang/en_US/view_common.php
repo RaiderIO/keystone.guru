@@ -326,6 +326,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => 'Hide',
                 ],
+                'facadetoggle' => [
+                    'facade'       => 'Facade',
+                    'split_floors' => 'Split floors',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'Show MDT',
                     'auto_solve' => 'Auto solve',
