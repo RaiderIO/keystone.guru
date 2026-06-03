@@ -3933,7 +3933,7 @@
         "facade_enabled": 0,
         "created_at": "2023-11-12T22:10:08.000000Z",
         "updated_at": "2023-11-20T12:56:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 277,
@@ -3949,7 +3949,7 @@
         "facade_enabled": 0,
         "created_at": "2023-11-21T20:48:30.000000Z",
         "updated_at": "2023-11-21T20:48:30.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 287,
@@ -3965,7 +3965,7 @@
         "facade_enabled": 1,
         "created_at": "2023-11-21T22:16:32.000000Z",
         "updated_at": "2023-11-21T22:16:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 288,
@@ -3981,7 +3981,7 @@
         "facade_enabled": 1,
         "created_at": "2023-11-23T20:43:19.000000Z",
         "updated_at": "2023-11-23T20:43:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 289,
@@ -3997,7 +3997,7 @@
         "facade_enabled": 1,
         "created_at": "2023-11-26T21:52:44.000000Z",
         "updated_at": "2023-11-26T21:52:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 290,
@@ -4013,7 +4013,7 @@
         "facade_enabled": 1,
         "created_at": "2023-11-28T21:06:12.000000Z",
         "updated_at": "2023-11-28T21:06:12.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 291,
@@ -4029,7 +4029,7 @@
         "facade_enabled": 1,
         "created_at": "2023-11-28T21:19:14.000000Z",
         "updated_at": "2023-11-28T21:38:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 292,
@@ -4045,7 +4045,7 @@
         "facade_enabled": 1,
         "created_at": "2023-12-13T21:12:44.000000Z",
         "updated_at": "2023-12-13T21:12:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 293,
@@ -4061,7 +4061,7 @@
         "facade_enabled": 0,
         "created_at": "2023-12-13T21:12:49.000000Z",
         "updated_at": "2024-01-04T21:10:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 294,
@@ -4077,7 +4077,7 @@
         "facade_enabled": 1,
         "created_at": "2023-12-13T21:12:55.000000Z",
         "updated_at": "2024-01-04T21:11:30.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 295,
@@ -4093,7 +4093,7 @@
         "facade_enabled": 0,
         "created_at": "2023-12-13T21:12:59.000000Z",
         "updated_at": "2024-01-04T21:11:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 296,
@@ -4109,7 +4109,7 @@
         "facade_enabled": 0,
         "created_at": "2023-12-13T21:13:03.000000Z",
         "updated_at": "2024-01-02T15:51:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 297,
@@ -4125,7 +4125,7 @@
         "facade_enabled": 1,
         "created_at": "2023-12-13T21:13:06.000000Z",
         "updated_at": "2024-01-04T21:11:56.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 298,
@@ -4141,7 +4141,7 @@
         "facade_enabled": 1,
         "created_at": "2023-12-13T21:13:12.000000Z",
         "updated_at": "2023-12-13T21:13:12.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 299,
@@ -4157,7 +4157,7 @@
         "facade_enabled": 1,
         "created_at": "2023-12-13T21:13:15.000000Z",
         "updated_at": "2023-12-13T21:13:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 300,
@@ -4173,7 +4173,7 @@
         "facade_enabled": 0,
         "created_at": "2024-01-28T13:07:04.000000Z",
         "updated_at": "2024-01-28T13:07:04.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 301,
@@ -4189,7 +4189,7 @@
         "facade_enabled": 0,
         "created_at": "2024-01-28T13:07:07.000000Z",
         "updated_at": "2024-01-28T13:07:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 302,
@@ -4205,7 +4205,7 @@
         "facade_enabled": 1,
         "created_at": "2024-01-28T13:07:09.000000Z",
         "updated_at": "2024-01-28T13:07:09.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 303,
@@ -4221,7 +4221,7 @@
         "facade_enabled": 1,
         "created_at": "2024-01-28T13:07:10.000000Z",
         "updated_at": "2024-01-28T13:07:10.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 304,
@@ -4237,7 +4237,7 @@
         "facade_enabled": 0,
         "created_at": "2024-03-04T20:25:02.000000Z",
         "updated_at": "2024-03-04T20:25:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 305,
@@ -4253,7 +4253,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-07T20:17:43.000000Z",
         "updated_at": "2024-04-09T07:58:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 306,
@@ -4269,7 +4269,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-09T08:03:12.000000Z",
         "updated_at": "2024-05-13T19:11:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 307,
@@ -4285,7 +4285,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-09T14:05:24.000000Z",
         "updated_at": "2024-04-09T14:05:24.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 308,
@@ -4301,7 +4301,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-09T19:54:20.000000Z",
         "updated_at": "2024-04-09T19:59:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 309,
@@ -4317,7 +4317,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-09T21:05:57.000000Z",
         "updated_at": "2024-04-09T21:05:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 310,
@@ -4333,7 +4333,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-10T20:36:10.000000Z",
         "updated_at": "2024-04-10T20:36:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 311,
@@ -4349,7 +4349,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-10T21:11:05.000000Z",
         "updated_at": "2024-04-10T21:11:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 312,
@@ -4365,7 +4365,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-11T09:18:40.000000Z",
         "updated_at": "2024-04-11T09:18:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 313,
@@ -4381,7 +4381,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-11T20:11:11.000000Z",
         "updated_at": "2024-04-11T20:11:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 314,
@@ -4397,7 +4397,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-11T20:41:46.000000Z",
         "updated_at": "2024-04-11T20:41:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 315,
@@ -4413,7 +4413,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-12T09:45:45.000000Z",
         "updated_at": "2024-04-12T09:45:45.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 316,
@@ -4429,7 +4429,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-12T09:57:57.000000Z",
         "updated_at": "2024-04-12T09:58:56.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 317,
@@ -4445,7 +4445,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-14T11:31:16.000000Z",
         "updated_at": "2024-04-14T11:31:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 318,
@@ -4461,7 +4461,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-22T20:09:21.000000Z",
         "updated_at": "2024-04-22T20:09:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 319,
@@ -4477,7 +4477,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-22T20:18:29.000000Z",
         "updated_at": "2024-04-22T20:18:38.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 320,
@@ -4493,7 +4493,7 @@
         "facade_enabled": 1,
         "created_at": "2024-04-22T20:31:44.000000Z",
         "updated_at": "2024-04-22T20:31:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 321,
@@ -4509,7 +4509,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:06:14.000000Z",
         "updated_at": "2024-05-13T20:06:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 322,
@@ -4525,7 +4525,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:10:06.000000Z",
         "updated_at": "2024-05-13T20:10:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 323,
@@ -4541,7 +4541,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:12:16.000000Z",
         "updated_at": "2024-05-13T20:12:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 324,
@@ -4557,7 +4557,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:16:04.000000Z",
         "updated_at": "2024-05-13T20:16:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 325,
@@ -4573,7 +4573,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:29:28.000000Z",
         "updated_at": "2024-05-13T20:29:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 326,
@@ -4589,7 +4589,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:30:44.000000Z",
         "updated_at": "2024-05-13T20:30:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 327,
@@ -4605,7 +4605,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:31:34.000000Z",
         "updated_at": "2024-05-13T20:31:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 328,
@@ -4621,7 +4621,7 @@
         "facade_enabled": 1,
         "created_at": "2024-05-13T20:32:42.000000Z",
         "updated_at": "2024-05-13T20:32:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 329,
@@ -4637,7 +4637,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-05T19:57:07.000000Z",
         "updated_at": "2024-06-05T19:57:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 330,
@@ -4653,7 +4653,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:11:56.000000Z",
         "updated_at": "2024-07-24T21:22:18.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 331,
@@ -4669,7 +4669,7 @@
         "facade_enabled": 0,
         "created_at": "2024-06-28T09:12:00.000000Z",
         "updated_at": "2024-06-28T09:12:00.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 332,
@@ -4685,7 +4685,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:12:05.000000Z",
         "updated_at": "2024-07-25T21:45:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 333,
@@ -4701,7 +4701,7 @@
         "facade_enabled": 0,
         "created_at": "2024-06-28T09:12:07.000000Z",
         "updated_at": "2024-06-28T09:12:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 334,
@@ -4717,7 +4717,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:12:09.000000Z",
         "updated_at": "2025-02-18T20:20:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 335,
@@ -4733,7 +4733,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:12:19.000000Z",
         "updated_at": "2024-07-26T13:36:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 336,
@@ -4749,7 +4749,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:12:21.000000Z",
         "updated_at": "2025-02-17T21:50:45.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 337,
@@ -4765,7 +4765,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:12:25.000000Z",
         "updated_at": "2024-07-27T20:53:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 338,
@@ -4781,7 +4781,7 @@
         "facade_enabled": 1,
         "created_at": "2024-06-28T09:13:49.000000Z",
         "updated_at": "2024-07-26T21:17:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 353,
@@ -4797,7 +4797,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-17T10:02:37.000000Z",
         "updated_at": "2024-07-17T10:02:37.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 354,
@@ -4813,7 +4813,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-17T10:33:21.000000Z",
         "updated_at": "2024-07-17T10:33:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 355,
@@ -4829,7 +4829,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-24T20:47:34.000000Z",
         "updated_at": "2024-07-25T20:40:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 357,
@@ -4845,7 +4845,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-24T21:22:29.000000Z",
         "updated_at": "2024-07-24T21:22:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 358,
@@ -4861,7 +4861,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-25T20:55:16.000000Z",
         "updated_at": "2024-07-25T20:55:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 359,
@@ -4877,7 +4877,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-25T21:45:07.000000Z",
         "updated_at": "2024-07-25T21:45:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 360,
@@ -4893,7 +4893,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-26T14:37:27.000000Z",
         "updated_at": "2024-07-26T14:37:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 361,
@@ -4909,7 +4909,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-26T15:01:20.000000Z",
         "updated_at": "2024-07-26T15:01:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 362,
@@ -4925,7 +4925,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-26T20:45:01.000000Z",
         "updated_at": "2024-07-26T20:45:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 363,
@@ -4941,7 +4941,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-27T20:17:00.000000Z",
         "updated_at": "2024-07-27T20:17:00.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 364,
@@ -4957,7 +4957,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-27T20:25:14.000000Z",
         "updated_at": "2024-07-27T20:27:50.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 365,
@@ -4973,7 +4973,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-27T20:46:51.000000Z",
         "updated_at": "2024-07-27T20:46:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 366,
@@ -4989,7 +4989,7 @@
         "facade_enabled": 1,
         "created_at": "2024-07-27T21:07:33.000000Z",
         "updated_at": "2024-07-27T21:07:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 375,
@@ -5005,7 +5005,7 @@
         "facade_enabled": 0,
         "created_at": "2024-08-11T13:47:36.000000Z",
         "updated_at": "2024-08-11T13:47:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 376,
@@ -5021,7 +5021,7 @@
         "facade_enabled": 1,
         "created_at": "2024-08-15T19:55:36.000000Z",
         "updated_at": "2024-08-15T19:55:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 377,
@@ -5037,7 +5037,7 @@
         "facade_enabled": 1,
         "created_at": "2024-08-15T20:58:10.000000Z",
         "updated_at": "2024-08-15T20:58:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 378,
@@ -5053,7 +5053,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-03T14:49:46.000000Z",
         "updated_at": "2024-09-16T14:40:17.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 379,
@@ -5069,7 +5069,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-03T15:13:50.000000Z",
         "updated_at": "2024-09-16T14:39:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 380,
@@ -5085,7 +5085,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-04T13:38:35.000000Z",
         "updated_at": "2024-09-16T14:39:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 381,
@@ -5101,7 +5101,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-04T14:05:54.000000Z",
         "updated_at": "2024-09-16T14:39:40.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 382,
@@ -5117,7 +5117,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-06T07:52:40.000000Z",
         "updated_at": "2024-09-06T07:52:40.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 383,
@@ -5133,7 +5133,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-06T08:00:15.000000Z",
         "updated_at": "2024-09-06T08:00:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 384,
@@ -5149,7 +5149,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-06T10:02:52.000000Z",
         "updated_at": "2024-09-16T14:41:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 385,
@@ -5165,7 +5165,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-06T10:52:39.000000Z",
         "updated_at": "2024-09-16T14:41:17.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 386,
@@ -5181,7 +5181,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-06T13:05:32.000000Z",
         "updated_at": "2024-09-16T14:40:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 387,
@@ -5197,7 +5197,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-16T13:31:38.000000Z",
         "updated_at": "2024-09-16T13:31:38.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 388,
@@ -5213,7 +5213,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-16T20:22:19.000000Z",
         "updated_at": "2024-09-16T20:22:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 389,
@@ -5229,7 +5229,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-18T09:32:51.000000Z",
         "updated_at": "2024-09-18T09:32:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 390,
@@ -5245,7 +5245,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-18T09:33:11.000000Z",
         "updated_at": "2024-09-18T09:33:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 391,
@@ -5261,7 +5261,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-18T09:36:55.000000Z",
         "updated_at": "2024-09-18T09:36:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 392,
@@ -5277,7 +5277,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-18T09:41:58.000000Z",
         "updated_at": "2024-09-18T09:41:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 393,
@@ -5293,7 +5293,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-18T09:53:22.000000Z",
         "updated_at": "2024-09-18T09:53:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 394,
@@ -5309,7 +5309,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-18T09:56:32.000000Z",
         "updated_at": "2024-09-18T09:56:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 395,
@@ -5325,7 +5325,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-20T20:48:18.000000Z",
         "updated_at": "2024-09-20T20:48:18.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 396,
@@ -5341,7 +5341,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-21T21:43:55.000000Z",
         "updated_at": "2024-09-21T21:43:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 397,
@@ -5357,7 +5357,7 @@
         "facade_enabled": 1,
         "created_at": "2024-09-30T19:54:15.000000Z",
         "updated_at": "2024-09-30T19:54:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 398,
@@ -5373,7 +5373,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-01T08:27:57.000000Z",
         "updated_at": "2024-10-01T08:27:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 399,
@@ -5389,7 +5389,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-07T21:10:55.000000Z",
         "updated_at": "2024-10-07T21:10:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 400,
@@ -5405,7 +5405,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-12T12:10:28.000000Z",
         "updated_at": "2024-10-12T12:10:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 401,
@@ -5421,7 +5421,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-12T12:59:49.000000Z",
         "updated_at": "2024-10-12T12:59:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 402,
@@ -5437,7 +5437,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-12T13:04:41.000000Z",
         "updated_at": "2024-10-12T13:04:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 403,
@@ -5453,7 +5453,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-12T13:43:23.000000Z",
         "updated_at": "2024-10-12T13:43:23.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 404,
@@ -5469,7 +5469,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-12T21:27:36.000000Z",
         "updated_at": "2024-10-12T21:27:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 405,
@@ -5485,7 +5485,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-12T21:34:11.000000Z",
         "updated_at": "2024-10-12T21:34:12.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 406,
@@ -5501,7 +5501,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-16T20:49:28.000000Z",
         "updated_at": "2024-10-16T20:49:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 407,
@@ -5517,7 +5517,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-16T20:54:16.000000Z",
         "updated_at": "2024-10-16T20:54:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 408,
@@ -5533,7 +5533,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-16T20:57:46.000000Z",
         "updated_at": "2024-10-16T20:57:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 409,
@@ -5549,7 +5549,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-16T20:59:19.000000Z",
         "updated_at": "2024-10-16T20:59:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 410,
@@ -5565,7 +5565,7 @@
         "facade_enabled": 1,
         "created_at": "2024-10-16T21:05:54.000000Z",
         "updated_at": "2024-10-16T21:05:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 411,
@@ -5581,7 +5581,7 @@
         "facade_enabled": 0,
         "created_at": "2024-10-21T21:29:12.000000Z",
         "updated_at": "2024-10-21T21:29:12.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 412,
@@ -5597,7 +5597,7 @@
         "facade_enabled": 0,
         "created_at": "2024-10-21T21:29:14.000000Z",
         "updated_at": "2024-10-21T21:29:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 413,
@@ -5613,7 +5613,7 @@
         "facade_enabled": 0,
         "created_at": "2024-10-21T21:29:36.000000Z",
         "updated_at": "2024-10-21T21:29:36.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 414,
@@ -5629,7 +5629,7 @@
         "facade_enabled": 0,
         "created_at": "2024-10-21T21:29:39.000000Z",
         "updated_at": "2024-10-21T21:29:39.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 416,
@@ -5645,7 +5645,7 @@
         "facade_enabled": 1,
         "created_at": "2024-11-05T10:54:34.000000Z",
         "updated_at": "2024-11-05T10:54:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 417,
@@ -5661,7 +5661,7 @@
         "facade_enabled": 1,
         "created_at": "2024-11-05T11:04:12.000000Z",
         "updated_at": "2024-11-05T11:04:12.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 418,
@@ -5677,7 +5677,7 @@
         "facade_enabled": 1,
         "created_at": "2024-11-05T11:11:01.000000Z",
         "updated_at": "2024-11-05T11:11:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 419,
@@ -5693,7 +5693,7 @@
         "facade_enabled": 1,
         "created_at": "2024-11-05T11:21:03.000000Z",
         "updated_at": "2024-11-05T11:21:04.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 420,
@@ -5709,7 +5709,7 @@
         "facade_enabled": 1,
         "created_at": "2024-11-05T11:23:01.000000Z",
         "updated_at": "2024-11-05T11:23:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 422,
@@ -5725,7 +5725,7 @@
         "facade_enabled": 0,
         "created_at": "2024-11-27T21:44:49.000000Z",
         "updated_at": "2024-11-27T21:44:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 423,
@@ -5741,7 +5741,7 @@
         "facade_enabled": 0,
         "created_at": "2024-11-27T22:11:19.000000Z",
         "updated_at": "2024-11-27T22:11:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 424,
@@ -5757,7 +5757,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-08T15:29:34.000000Z",
         "updated_at": "2025-01-08T15:29:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 425,
@@ -5773,7 +5773,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-08T15:34:40.000000Z",
         "updated_at": "2025-01-08T15:34:40.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 426,
@@ -5789,7 +5789,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-08T15:34:47.000000Z",
         "updated_at": "2025-01-08T15:34:47.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 427,
@@ -5805,7 +5805,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-08T15:34:49.000000Z",
         "updated_at": "2025-01-08T15:34:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 428,
@@ -5821,7 +5821,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T09:09:26.000000Z",
         "updated_at": "2025-01-14T09:09:26.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 429,
@@ -5837,7 +5837,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T09:09:44.000000Z",
         "updated_at": "2025-01-14T09:09:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 431,
@@ -5853,7 +5853,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T12:05:48.000000Z",
         "updated_at": "2025-01-14T12:05:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 432,
@@ -5869,7 +5869,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:08.000000Z",
         "updated_at": "2025-01-14T13:20:08.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 433,
@@ -5885,7 +5885,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:11.000000Z",
         "updated_at": "2025-01-14T13:20:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 434,
@@ -5901,7 +5901,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:14.000000Z",
         "updated_at": "2025-01-14T13:20:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 435,
@@ -5917,7 +5917,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:17.000000Z",
         "updated_at": "2025-01-14T13:20:17.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 436,
@@ -5933,7 +5933,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:20.000000Z",
         "updated_at": "2025-01-14T13:20:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 437,
@@ -5949,7 +5949,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:23.000000Z",
         "updated_at": "2025-01-14T13:20:23.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 438,
@@ -5965,7 +5965,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:25.000000Z",
         "updated_at": "2025-01-14T13:20:25.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 439,
@@ -5981,7 +5981,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:28.000000Z",
         "updated_at": "2025-01-14T13:20:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 440,
@@ -5997,7 +5997,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:20:53.000000Z",
         "updated_at": "2025-01-14T13:20:53.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 442,
@@ -6013,7 +6013,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-14T13:28:41.000000Z",
         "updated_at": "2025-01-14T13:28:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 443,
@@ -6029,7 +6029,7 @@
         "facade_enabled": 0,
         "created_at": "2025-01-16T22:18:39.000000Z",
         "updated_at": "2025-01-16T22:18:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 444,
@@ -6045,7 +6045,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-05T22:11:03.000000Z",
         "updated_at": "2025-02-05T22:11:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 445,
@@ -6061,7 +6061,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-07T20:48:26.000000Z",
         "updated_at": "2025-02-07T20:48:26.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 464,
@@ -6077,7 +6077,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-08T22:23:01.000000Z",
         "updated_at": "2025-02-08T22:23:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 465,
@@ -6093,7 +6093,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-08T22:26:13.000000Z",
         "updated_at": "2025-02-08T22:26:13.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 467,
@@ -6109,7 +6109,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-09T13:57:57.000000Z",
         "updated_at": "2025-02-09T13:57:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 482,
@@ -6125,7 +6125,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-10T20:58:43.000000Z",
         "updated_at": "2025-02-10T20:58:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 483,
@@ -6141,7 +6141,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-16T13:47:49.000000Z",
         "updated_at": "2025-02-16T15:14:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 495,
@@ -6157,7 +6157,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-16T20:47:36.000000Z",
         "updated_at": "2025-03-03T20:27:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 498,
@@ -6173,7 +6173,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-17T10:03:48.000000Z",
         "updated_at": "2025-02-17T10:03:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 503,
@@ -6189,7 +6189,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-17T10:38:20.000000Z",
         "updated_at": "2025-02-17T10:38:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 504,
@@ -6205,7 +6205,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-17T20:41:43.000000Z",
         "updated_at": "2025-02-17T20:51:53.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 505,
@@ -6221,7 +6221,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-17T20:53:07.000000Z",
         "updated_at": "2025-02-17T20:53:08.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 507,
@@ -6237,7 +6237,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-17T21:50:47.000000Z",
         "updated_at": "2025-02-17T21:50:47.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 508,
@@ -6253,7 +6253,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-18T20:25:37.000000Z",
         "updated_at": "2025-02-18T20:25:37.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 509,
@@ -6269,7 +6269,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-19T12:13:57.000000Z",
         "updated_at": "2025-02-19T12:14:10.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 510,
@@ -6285,7 +6285,7 @@
         "facade_enabled": 1,
         "created_at": "2025-02-19T22:00:00.000000Z",
         "updated_at": "2025-03-03T20:26:04.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 511,
@@ -6301,7 +6301,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-20T22:02:50.000000Z",
         "updated_at": "2025-02-20T22:02:50.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 512,
@@ -6317,7 +6317,7 @@
         "facade_enabled": 0,
         "created_at": "2025-02-20T22:05:43.000000Z",
         "updated_at": "2025-02-20T22:05:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 515,
@@ -6333,7 +6333,7 @@
         "facade_enabled": 0,
         "created_at": "2025-03-01T14:04:33.000000Z",
         "updated_at": "2025-03-03T20:25:35.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 516,
@@ -6349,7 +6349,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-01T20:54:27.000000Z",
         "updated_at": "2025-03-03T20:25:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 517,
@@ -6365,7 +6365,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-01T22:20:16.000000Z",
         "updated_at": "2025-03-03T20:26:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 518,
@@ -6381,7 +6381,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-01T22:36:02.000000Z",
         "updated_at": "2025-03-03T20:26:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 519,
@@ -6397,7 +6397,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-01T22:42:48.000000Z",
         "updated_at": "2025-03-01T22:42:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 520,
@@ -6413,7 +6413,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-03T20:29:20.000000Z",
         "updated_at": "2025-03-03T20:29:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 521,
@@ -6429,7 +6429,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-03T20:37:50.000000Z",
         "updated_at": "2025-03-03T20:37:50.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 522,
@@ -6445,7 +6445,7 @@
         "facade_enabled": 0,
         "created_at": "2025-03-03T21:00:04.000000Z",
         "updated_at": "2025-03-03T21:00:04.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 523,
@@ -6461,7 +6461,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-04T11:02:42.000000Z",
         "updated_at": "2025-03-04T11:02:42.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 524,
@@ -6477,7 +6477,7 @@
         "facade_enabled": 0,
         "created_at": "2025-03-17T12:36:24.000000Z",
         "updated_at": "2025-03-17T12:36:24.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 525,
@@ -6493,7 +6493,7 @@
         "facade_enabled": 1,
         "created_at": "2025-03-19T09:01:07.000000Z",
         "updated_at": "2025-03-19T09:01:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 526,
@@ -6509,7 +6509,7 @@
         "facade_enabled": 0,
         "created_at": "2025-04-04T13:41:38.000000Z",
         "updated_at": "2025-04-04T13:41:38.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 538,
@@ -6525,7 +6525,7 @@
         "facade_enabled": 0,
         "created_at": "2025-04-11T13:49:32.000000Z",
         "updated_at": "2025-04-11T13:49:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 539,
@@ -6541,7 +6541,7 @@
         "facade_enabled": 0,
         "created_at": "2025-04-12T13:00:33.000000Z",
         "updated_at": "2025-04-12T13:00:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 540,
@@ -6557,7 +6557,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-26T15:31:24.000000Z",
         "updated_at": "2025-06-26T15:31:24.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 541,
@@ -6573,7 +6573,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-26T15:33:34.000000Z",
         "updated_at": "2025-07-14T13:21:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 542,
@@ -6589,7 +6589,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-27T08:52:23.000000Z",
         "updated_at": "2025-07-11T18:42:24.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 543,
@@ -6605,7 +6605,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-27T13:32:04.000000Z",
         "updated_at": "2025-07-11T20:05:17.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 544,
@@ -6621,7 +6621,7 @@
         "facade_enabled": 1,
         "created_at": "2025-06-27T14:29:59.000000Z",
         "updated_at": "2025-07-16T12:35:35.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 545,
@@ -6637,7 +6637,7 @@
         "facade_enabled": 1,
         "created_at": "2025-06-27T20:12:42.000000Z",
         "updated_at": "2025-07-16T12:32:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 549,
@@ -6653,7 +6653,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-28T20:12:14.000000Z",
         "updated_at": "2025-07-13T14:16:17.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 550,
@@ -6669,7 +6669,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-28T20:37:41.000000Z",
         "updated_at": "2025-07-13T13:17:26.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 558,
@@ -6685,7 +6685,7 @@
         "facade_enabled": 0,
         "created_at": "2025-06-29T12:31:57.000000Z",
         "updated_at": "2025-07-13T14:54:13.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 561,
@@ -6701,7 +6701,7 @@
         "facade_enabled": 0,
         "created_at": "2025-07-10T12:22:43.000000Z",
         "updated_at": "2025-07-10T12:22:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 562,
@@ -6717,7 +6717,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-29T10:48:17.000000Z",
         "updated_at": "2025-07-29T12:48:13.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 568,
@@ -6733,7 +6733,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-29T15:11:50.000000Z",
         "updated_at": "2025-07-29T15:11:50.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 569,
@@ -6749,7 +6749,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-29T19:55:05.000000Z",
         "updated_at": "2025-07-29T19:55:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 572,
@@ -6765,7 +6765,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-29T21:02:48.000000Z",
         "updated_at": "2025-07-29T21:02:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 573,
@@ -6781,7 +6781,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-30T12:22:55.000000Z",
         "updated_at": "2025-07-30T12:25:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 574,
@@ -6797,7 +6797,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-30T12:53:57.000000Z",
         "updated_at": "2025-07-30T12:53:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 575,
@@ -6813,7 +6813,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-30T14:04:17.000000Z",
         "updated_at": "2025-07-30T14:15:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 579,
@@ -6829,7 +6829,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-30T14:23:27.000000Z",
         "updated_at": "2025-07-30T14:23:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 580,
@@ -6845,7 +6845,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-30T21:14:56.000000Z",
         "updated_at": "2025-07-30T21:14:56.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 581,
@@ -6861,7 +6861,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-31T13:03:22.000000Z",
         "updated_at": "2025-07-31T13:03:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 582,
@@ -6877,7 +6877,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-31T19:57:33.000000Z",
         "updated_at": "2025-07-31T19:57:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 583,
@@ -6893,7 +6893,7 @@
         "facade_enabled": 1,
         "created_at": "2025-07-31T21:10:55.000000Z",
         "updated_at": "2025-07-31T21:10:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 585,
@@ -6909,7 +6909,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T20:36:39.000000Z",
         "updated_at": "2025-08-10T20:36:40.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 592,
@@ -6925,7 +6925,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:07:01.000000Z",
         "updated_at": "2025-08-10T21:07:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 594,
@@ -6941,7 +6941,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:17:43.000000Z",
         "updated_at": "2025-08-10T21:17:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 595,
@@ -6957,7 +6957,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:20:06.000000Z",
         "updated_at": "2025-08-10T21:20:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 596,
@@ -6973,7 +6973,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:22:54.000000Z",
         "updated_at": "2025-08-12T19:55:31.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 597,
@@ -6989,7 +6989,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:37:15.000000Z",
         "updated_at": "2025-08-10T21:37:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 598,
@@ -7005,7 +7005,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:38:57.000000Z",
         "updated_at": "2025-08-10T21:38:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 599,
@@ -7021,7 +7021,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-10T21:46:28.000000Z",
         "updated_at": "2025-08-10T21:46:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 600,
@@ -7037,7 +7037,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-24T19:24:55.000000Z",
         "updated_at": "2025-08-24T19:24:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 601,
@@ -7053,7 +7053,7 @@
         "facade_enabled": 1,
         "created_at": "2025-08-24T20:21:01.000000Z",
         "updated_at": "2025-08-24T20:21:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 602,
@@ -7069,7 +7069,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T19:37:08.000000Z",
         "updated_at": "2025-09-07T19:37:08.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 603,
@@ -7085,7 +7085,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T19:42:34.000000Z",
         "updated_at": "2025-09-07T19:42:34.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 604,
@@ -7101,7 +7101,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T20:03:08.000000Z",
         "updated_at": "2025-09-07T20:03:09.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 605,
@@ -7117,7 +7117,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T20:17:52.000000Z",
         "updated_at": "2025-09-07T20:17:52.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 606,
@@ -7133,7 +7133,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T20:27:49.000000Z",
         "updated_at": "2025-09-07T20:27:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 607,
@@ -7149,7 +7149,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T20:34:09.000000Z",
         "updated_at": "2025-09-07T20:34:09.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 609,
@@ -7165,7 +7165,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-07T20:41:20.000000Z",
         "updated_at": "2025-09-07T20:41:20.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 610,
@@ -7181,7 +7181,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-09T20:24:08.000000Z",
         "updated_at": "2025-09-09T20:24:08.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 611,
@@ -7197,7 +7197,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-26T21:01:37.000000Z",
         "updated_at": "2025-09-27T19:46:33.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 612,
@@ -7213,7 +7213,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:44:19.000000Z",
         "updated_at": "2025-09-27T19:44:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 613,
@@ -7229,7 +7229,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-27T19:44:44.000000Z",
         "updated_at": "2025-09-27T19:44:53.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 614,
@@ -7245,7 +7245,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:46:37.000000Z",
         "updated_at": "2025-09-27T19:46:37.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 615,
@@ -7261,7 +7261,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:47:49.000000Z",
         "updated_at": "2025-09-27T19:47:59.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 616,
@@ -7277,7 +7277,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:48:21.000000Z",
         "updated_at": "2025-09-27T19:48:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 617,
@@ -7293,7 +7293,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:52:16.000000Z",
         "updated_at": "2025-09-27T19:52:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 618,
@@ -7309,7 +7309,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-27T19:53:02.000000Z",
         "updated_at": "2025-09-27T19:53:11.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 619,
@@ -7325,7 +7325,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-27T19:54:59.000000Z",
         "updated_at": "2025-09-27T19:55:10.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 620,
@@ -7341,7 +7341,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-27T19:55:15.000000Z",
         "updated_at": "2025-09-27T19:55:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 621,
@@ -7357,7 +7357,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:55:33.000000Z",
         "updated_at": "2025-09-27T19:55:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 622,
@@ -7373,7 +7373,7 @@
         "facade_enabled": 0,
         "created_at": "2025-09-27T19:55:51.000000Z",
         "updated_at": "2025-09-27T19:56:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 623,
@@ -7389,7 +7389,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-27T19:56:09.000000Z",
         "updated_at": "2025-09-27T19:56:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 624,
@@ -7405,7 +7405,7 @@
         "facade_enabled": 1,
         "created_at": "2025-09-27T19:56:22.000000Z",
         "updated_at": "2025-09-27T19:56:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 627,
@@ -7421,7 +7421,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-01T20:46:57.000000Z",
         "updated_at": "2025-10-01T20:46:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 628,
@@ -7437,7 +7437,7 @@
         "facade_enabled": 0,
         "created_at": "2025-10-02T19:38:36.000000Z",
         "updated_at": "2025-11-04T10:21:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 629,
@@ -7453,7 +7453,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-02T20:49:21.000000Z",
         "updated_at": "2025-10-02T20:49:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 630,
@@ -7469,7 +7469,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-02T21:02:04.000000Z",
         "updated_at": "2025-11-04T10:22:23.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 631,
@@ -7485,7 +7485,7 @@
         "facade_enabled": 0,
         "created_at": "2025-10-03T08:29:05.000000Z",
         "updated_at": "2025-10-03T08:29:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 632,
@@ -7501,7 +7501,7 @@
         "facade_enabled": 0,
         "created_at": "2025-10-03T08:40:37.000000Z",
         "updated_at": "2025-11-04T10:22:47.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 633,
@@ -7517,7 +7517,7 @@
         "facade_enabled": 0,
         "created_at": "2025-10-03T09:00:08.000000Z",
         "updated_at": "2025-11-04T10:23:22.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 634,
@@ -7533,7 +7533,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-03T09:30:49.000000Z",
         "updated_at": "2025-10-03T09:30:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 635,
@@ -7549,7 +7549,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-03T20:29:04.000000Z",
         "updated_at": "2025-11-04T10:23:39.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 636,
@@ -7565,7 +7565,7 @@
         "facade_enabled": 0,
         "created_at": "2025-10-03T21:15:08.000000Z",
         "updated_at": "2025-10-03T21:15:08.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 637,
@@ -7581,7 +7581,7 @@
         "facade_enabled": 0,
         "created_at": "2025-10-03T21:30:16.000000Z",
         "updated_at": "2025-10-03T21:30:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 638,
@@ -7597,7 +7597,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-05T19:07:07.000000Z",
         "updated_at": "2025-10-05T19:07:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 639,
@@ -7613,7 +7613,7 @@
         "facade_enabled": 1,
         "created_at": "2025-10-05T19:55:18.000000Z",
         "updated_at": "2025-11-04T10:24:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 640,
@@ -7629,7 +7629,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:43.000000Z",
         "updated_at": "2026-01-10T21:20:43.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 641,
@@ -7645,7 +7645,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:54.000000Z",
         "updated_at": "2026-01-10T21:20:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 642,
@@ -7661,7 +7661,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:57.000000Z",
         "updated_at": "2026-01-10T21:20:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 643,
@@ -7677,7 +7677,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:20:58.000000Z",
         "updated_at": "2026-01-10T21:20:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 644,
@@ -7693,7 +7693,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:00.000000Z",
         "updated_at": "2026-01-10T21:21:00.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 645,
@@ -7709,7 +7709,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:02.000000Z",
         "updated_at": "2026-01-10T21:21:02.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 646,
@@ -7725,7 +7725,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-10T21:21:04.000000Z",
         "updated_at": "2026-01-10T21:21:04.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 647,
@@ -7741,7 +7741,7 @@
         "facade_enabled": 0,
         "created_at": "2026-01-10T21:21:19.000000Z",
         "updated_at": "2026-01-26T09:27:42.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 649,
@@ -7757,7 +7757,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-14T23:10:54.000000Z",
         "updated_at": "2026-01-14T23:10:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 650,
@@ -7773,7 +7773,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-14T23:18:14.000000Z",
         "updated_at": "2026-01-14T23:18:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 651,
@@ -7789,7 +7789,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-14T23:23:57.000000Z",
         "updated_at": "2026-01-14T23:23:57.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 652,
@@ -7805,7 +7805,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-20T15:36:15.000000Z",
         "updated_at": "2026-01-20T15:36:15.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 653,
@@ -7821,7 +7821,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-20T16:24:09.000000Z",
         "updated_at": "2026-01-20T16:24:09.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 655,
@@ -7837,7 +7837,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-20T21:33:14.000000Z",
         "updated_at": "2026-01-20T21:33:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 657,
@@ -7853,7 +7853,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-23T19:49:00.000000Z",
         "updated_at": "2026-01-23T19:49:01.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 658,
@@ -7869,7 +7869,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-23T22:09:46.000000Z",
         "updated_at": "2026-01-23T22:09:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 661,
@@ -7885,7 +7885,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-25T10:17:03.000000Z",
         "updated_at": "2026-01-25T10:17:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 662,
@@ -7901,7 +7901,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-25T20:49:50.000000Z",
         "updated_at": "2026-01-25T20:49:50.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 663,
@@ -7917,7 +7917,7 @@
         "facade_enabled": 0,
         "created_at": "2026-01-26T09:28:31.000000Z",
         "updated_at": "2026-01-26T09:28:31.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 665,
@@ -7933,7 +7933,7 @@
         "facade_enabled": 1,
         "created_at": "2026-01-26T10:33:21.000000Z",
         "updated_at": "2026-01-26T10:33:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 666,
@@ -7949,7 +7949,7 @@
         "facade_enabled": 1,
         "created_at": "2026-02-02T12:46:23.000000Z",
         "updated_at": "2026-02-02T12:46:24.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 667,
@@ -7965,7 +7965,7 @@
         "facade_enabled": 1,
         "created_at": "2026-02-02T12:47:29.000000Z",
         "updated_at": "2026-02-02T12:47:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 668,
@@ -7981,7 +7981,7 @@
         "facade_enabled": 1,
         "created_at": "2026-02-02T12:47:39.000000Z",
         "updated_at": "2026-02-02T12:47:39.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 669,
@@ -7997,7 +7997,7 @@
         "facade_enabled": 1,
         "created_at": "2026-02-02T12:47:44.000000Z",
         "updated_at": "2026-02-02T12:47:45.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 670,
@@ -8013,7 +8013,7 @@
         "facade_enabled": 1,
         "created_at": "2026-02-02T12:47:49.000000Z",
         "updated_at": "2026-02-02T12:47:49.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 671,
@@ -8029,7 +8029,7 @@
         "facade_enabled": 0,
         "created_at": "2026-02-02T12:47:57.000000Z",
         "updated_at": "2026-02-02T12:47:58.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 672,
@@ -8045,7 +8045,7 @@
         "facade_enabled": 1,
         "created_at": "2026-02-02T12:48:02.000000Z",
         "updated_at": "2026-02-02T12:48:03.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 673,
@@ -8061,7 +8061,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-08T19:22:32.000000Z",
         "updated_at": "2026-03-08T19:22:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 674,
@@ -8077,7 +8077,7 @@
         "facade_enabled": 0,
         "created_at": "2026-03-12T19:19:18.000000Z",
         "updated_at": "2026-03-12T19:19:18.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 677,
@@ -8093,7 +8093,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-22T20:57:25.000000Z",
         "updated_at": "2026-03-23T21:09:25.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 678,
@@ -8109,7 +8109,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-23T12:10:33.000000Z",
         "updated_at": "2026-03-23T21:09:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 679,
@@ -8125,7 +8125,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-23T13:10:40.000000Z",
         "updated_at": "2026-03-23T21:10:09.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 680,
@@ -8141,7 +8141,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-23T13:55:48.000000Z",
         "updated_at": "2026-03-23T21:09:55.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 681,
@@ -8157,7 +8157,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-23T13:59:29.000000Z",
         "updated_at": "2026-03-23T21:07:23.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 682,
@@ -8173,7 +8173,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-23T14:31:20.000000Z",
         "updated_at": "2026-03-23T21:07:54.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 683,
@@ -8189,7 +8189,7 @@
         "facade_enabled": 0,
         "created_at": "2026-03-23T14:46:35.000000Z",
         "updated_at": "2026-03-23T21:08:07.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 684,
@@ -8205,7 +8205,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-23T15:10:04.000000Z",
         "updated_at": "2026-03-23T21:08:59.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 686,
@@ -8221,7 +8221,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-27T15:42:29.000000Z",
         "updated_at": "2026-03-27T15:42:29.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 687,
@@ -8237,7 +8237,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-29T08:29:44.000000Z",
         "updated_at": "2026-03-29T08:29:44.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 688,
@@ -8253,7 +8253,7 @@
         "facade_enabled": 0,
         "created_at": "2026-03-31T14:17:14.000000Z",
         "updated_at": "2026-03-31T14:17:14.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 689,
@@ -8269,7 +8269,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:03:16.000000Z",
         "updated_at": "2026-03-31T19:03:16.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 690,
@@ -8285,7 +8285,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:03:30.000000Z",
         "updated_at": "2026-03-31T19:03:30.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 693,
@@ -8301,7 +8301,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:14:45.000000Z",
         "updated_at": "2026-03-31T19:14:45.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 694,
@@ -8317,7 +8317,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:15:05.000000Z",
         "updated_at": "2026-03-31T19:15:05.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 695,
@@ -8333,7 +8333,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:15:27.000000Z",
         "updated_at": "2026-03-31T19:15:28.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 696,
@@ -8349,7 +8349,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:15:38.000000Z",
         "updated_at": "2026-03-31T19:15:38.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 697,
@@ -8365,7 +8365,7 @@
         "facade_enabled": 1,
         "created_at": "2026-03-31T19:15:50.000000Z",
         "updated_at": "2026-03-31T19:15:51.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 699,
@@ -8381,7 +8381,7 @@
         "facade_enabled": 1,
         "created_at": "2026-04-07T19:40:41.000000Z",
         "updated_at": "2026-04-07T19:40:41.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 703,
@@ -8397,7 +8397,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-11T21:12:21.000000Z",
         "updated_at": "2026-04-11T21:12:21.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 707,
@@ -8413,7 +8413,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-13T14:58:09.000000Z",
         "updated_at": "2026-04-13T14:58:09.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 708,
@@ -8429,7 +8429,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-28T13:59:32.000000Z",
         "updated_at": "2026-04-28T13:59:32.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 709,
@@ -8445,7 +8445,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-28T13:59:45.000000Z",
         "updated_at": "2026-04-28T13:59:45.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 711,
@@ -8461,7 +8461,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-28T14:19:46.000000Z",
         "updated_at": "2026-04-28T14:19:46.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 712,
@@ -8477,7 +8477,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-30T14:44:48.000000Z",
         "updated_at": "2026-04-30T14:44:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 713,
@@ -8493,7 +8493,7 @@
         "facade_enabled": 0,
         "created_at": "2026-04-30T14:45:19.000000Z",
         "updated_at": "2026-04-30T14:45:19.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 714,
@@ -8509,7 +8509,7 @@
         "facade_enabled": 0,
         "created_at": "2026-05-16T15:18:06.000000Z",
         "updated_at": "2026-05-16T15:18:06.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 715,
@@ -8525,7 +8525,7 @@
         "facade_enabled": 1,
         "created_at": "2026-05-19T14:57:48.000000Z",
         "updated_at": "2026-05-19T14:57:48.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 718,
@@ -8541,7 +8541,7 @@
         "facade_enabled": 0,
         "created_at": "2026-05-19T15:22:27.000000Z",
         "updated_at": "2026-05-19T15:22:27.000000Z",
-        "merged": false
+        "merged": true
     },
     {
         "id": 719,
@@ -8557,6 +8557,6 @@
         "facade_enabled": 1,
         "created_at": "2026-05-23T07:28:57.000000Z",
         "updated_at": "2026-05-23T07:28:57.000000Z",
-        "merged": false
+        "merged": true
     }
 ]

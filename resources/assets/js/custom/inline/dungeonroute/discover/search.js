@@ -1,6 +1,6 @@
 class DungeonrouteDiscoverSearch extends SearchInlineBase {
 
-    constructor(options) {
+    constructor(id, bladePath, options) {
         super(new SearchHandlerDungeonRoute(
             options.targetContainerSelector,
             options.loadMoreSelector,
@@ -8,7 +8,7 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
                 limit: options.limit,
                 loaderSelector: options.loaderSelector,
             }, options)
-        ), options);
+        ), id, bladePath, options);
 
         this.filters = {
             'season': new SearchFilterManualSeason(this._search.bind(this)),

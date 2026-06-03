@@ -112,16 +112,17 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Carbon   $published_at
  * @property Carbon   $expires_at
  *
- * @property MappingVersion        $mappingVersion
- * @property Dungeon               $dungeon
- * @property Path                  $route
- * @property Season|null           $season
- * @property Faction               $faction
- * @property User|null             $author           Can be null in case of temporary route
- * @property MDTImport             $mdtImport
- * @property Team                  $team
- * @property PublishedState        $publishedState
- * @property ChallengeModeRun|null $challengeModeRun Is only set if route is created through API
+ * @property MappingVersion                    $mappingVersion
+ * @property Dungeon                           $dungeon
+ * @property Path                              $route
+ * @property Season|null                       $season
+ * @property Faction                           $faction
+ * @property User|null                         $author           Can be null in case of temporary route
+ * @property MDTImport                         $mdtImport
+ * @property Team                              $team
+ * @property PublishedState                    $publishedState
+ * @property DungeonRouteScheduledPublish|null $scheduledPublish
+ * @property ChallengeModeRun|null             $challengeModeRun Is only set if route is created through API
  *
  * @property EloquentCollection<int, CharacterClassSpecialization>     $specializations
  * @property EloquentCollection<int, CharacterClass>                   $classes
@@ -479,6 +480,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function scheduledPublish(): HasOne
+    {
+        return $this->hasOne(DungeonRouteScheduledPublish::class);
     }
 
     public function tagsteam(): HasMany

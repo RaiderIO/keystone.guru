@@ -15,6 +15,7 @@ use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
+use App\Http\Requests\DungeonRoute\ScheduledPublishFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -30,10 +31,12 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
+use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
@@ -53,6 +56,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -88,7 +92,7 @@ class AjaxDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with([
+        $withRelations = [
             'faction',
             'specializations',
             'classes',
@@ -101,7 +105,13 @@ class AjaxDungeonRouteController extends Controller
             'ratings',
             'metricAggregations',
             $tagsRelationshipName,
-        ])
+        ];
+
+        if ($teamPublicKey) {
+            $withRelations[] = 'scheduledPublish';
+        }
+
+        $routes = DungeonRoute::with($withRelations)
             ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -607,6 +617,49 @@ class AjaxDungeonRouteController extends Controller
         $dungeonRoute->save();
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
+
+        return response()->noContent();
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function storeScheduledPublish(ScheduledPublishFormRequest $request, DungeonRoute $dungeonRoute): Response
+    {
+        Gate::authorize('schedule-publish', $dungeonRoute);
+
+        $publishedState = $request->validated('published_state');
+
+        /** @var User $user */
+        $user = Auth::user();
+        if ($publishedState === PublishedState::WORLD_WITH_LINK) {
+            if (!$user->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES)) {
+                abort(422, 'The world_with_link publish state requires a Patreon subscription.');
+            }
+        }
+
+        DungeonRouteScheduledPublish::updateOrCreate(
+            ['dungeon_route_id' => $dungeonRoute->id],
+            [
+                'published_state' => $publishedState,
+                'publish_at'      => Carbon::parse(
+                    $request->validated('publish_at'),
+                    $user->timezone ?? config('app.timezone'),
+                )->setTimezone(config('app.timezone')),
+            ],
+        );
+
+        return response()->noContent();
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroyScheduledPublish(Request $request, DungeonRoute $dungeonRoute): Response
+    {
+        Gate::authorize('schedule-publish', $dungeonRoute);
+
+        $dungeonRoute->scheduledPublish?->delete();
 
         return response()->noContent();
     }

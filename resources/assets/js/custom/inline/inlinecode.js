@@ -1,7 +1,9 @@
 class InlineCode {
 
 
-    constructor(options) {
+    constructor(id, bladePath, options) {
+        this.id = id;
+        this.bladePath = bladePath;
         this.options = options;
 
         this._activated = false;

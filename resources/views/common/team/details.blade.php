@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\TeamUser;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var Team|null $model
@@ -36,6 +38,13 @@ use App\Models\TeamUser;
         {{__('view_common.team.details.current_logo') }}: <img src="{{ $model->iconfile->getURL() }}"
                                                                alt="{{ __('view_common.team.details.team_logo_title') }}"
                                                                style="max-width: 48px"/>
+    </div>
+@endif
+
+@if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) && isset($model))
+    <div class="form-group">
+        {{ html()->label(__('view_common.team.details.route_publishing_enabled'), 'route_publishing_enabled') }}
+        {{ html()->checkbox('route_publishing_enabled', $model->route_publishing_enabled, 1)->class('form-control left_checkbox') }}
     </div>
 @endif
 

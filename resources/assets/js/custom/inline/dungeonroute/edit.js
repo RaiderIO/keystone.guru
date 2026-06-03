@@ -1,7 +1,7 @@
 class DungeonrouteEdit extends InlineCode {
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
 
 
         this.settingsTabRoute = new SettingsTabRoute(options);
