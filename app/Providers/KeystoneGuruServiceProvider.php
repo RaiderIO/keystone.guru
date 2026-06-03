@@ -137,11 +137,11 @@ use App\Service\Wowhead\WowheadTranslationService;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
-use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 use Str;
 
@@ -311,7 +311,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $currentExpansion       = null;
 
         // Can use the Auth() global here!
-        view()->composer('*', static function (\Illuminate\View\View $view) use (
+        view()->composer('*', static function (View $view) use (
             $gameVersionService,
             $expansionService,
             &$isUserAdmin,

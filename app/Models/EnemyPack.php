@@ -11,9 +11,9 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id
@@ -27,8 +27,8 @@ use Illuminate\Support\Collection;
  * @property string      $label
  * @property string      $vertices_json
  *
- * @property Floor             $floor
- * @property Collection<Enemy> $enemies
+ * @property Floor                          $floor
+ * @property EloquentCollection<int, Enemy> $enemies
  *
  * @mixin Eloquent
  */
@@ -83,9 +83,9 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
     }
 
     /**
-     * @return Collection<Enemy>
+     * @return EloquentCollection<int, Enemy>
      */
-    public function getEnemiesWithSeasonalType(string $seasonalType): Collection
+    public function getEnemiesWithSeasonalType(string $seasonalType): EloquentCollection
     {
         return $this->enemies()->where('seasonal_type', $seasonalType)->get();
     }

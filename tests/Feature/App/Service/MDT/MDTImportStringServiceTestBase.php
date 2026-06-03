@@ -26,10 +26,12 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
             $dungeonRoute = DungeonRoute::factory()->create(array_merge([
                 'expires_at' => now()->addHour(),
             ], $attributes));
-        } while (
-            !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
-            $dungeonRoute->mappingVersion->facade_enabled
-        );
+
+            if (!Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) || $dungeonRoute->mappingVersion->facade_enabled) {
+                $dungeonRoute->delete();
+                $dungeonRoute = null;
+            }
+        } while ($dungeonRoute === null);
 
         return $dungeonRoute;
     }
@@ -46,11 +48,16 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
             $dungeonRoute = DungeonRoute::factory()->create(array_merge([
                 'expires_at' => now()->addHour(),
             ], $attributes));
-        } while (
-            !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
-            $dungeonRoute->mappingVersion->facade_enabled ||
-            $this->getSafeMdtEnemies($dungeonRoute, $enemyCount)->count() < $enemyCount
-        );
+
+            if (
+                !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
+                $dungeonRoute->mappingVersion->facade_enabled ||
+                $this->getSafeMdtEnemies($dungeonRoute, $enemyCount)->count() < $enemyCount
+            ) {
+                $dungeonRoute->delete();
+                $dungeonRoute = null;
+            }
+        } while ($dungeonRoute === null);
 
         return $dungeonRoute;
     }

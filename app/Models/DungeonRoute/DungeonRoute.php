@@ -55,6 +55,7 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -121,31 +122,31 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property PublishedState        $publishedState
  * @property ChallengeModeRun|null $challengeModeRun Is only set if route is created through API
  *
- * @property Collection                              $specializations
- * @property Collection                              $classes
- * @property Collection                              $races
- * @property Collection                              $playerspecializations
- * @property Collection                              $playerclasses
- * @property Collection                              $playerraces
- * @property Collection<AffixGroup>                  $affixes
- * @property Collection<DungeonRouteAffixGroup>      $affixGroups
- * @property Collection<DungeonRouteRating>          $ratings
- * @property Collection<DungeonRouteFavorite>        $favorites
- * @property Collection<LiveSession>                 $livesessions
- * @property Collection<Brushline>                   $brushlines
- * @property Collection<Path>                        $paths
- * @property Collection<KillZone>                    $killZones
- * @property Collection<PridefulEnemy>               $pridefulEnemies
- * @property Collection<OverpulledEnemy>             $overpulledenemies
- * @property Collection<DungeonRouteEnemyRaidMarker> $enemyRaidMarkers
- * @property Collection<MapIcon>                     $mapicons
- * @property Collection<PageView>                    $pageviews
- * @property Collection<Tag>                         $tags
- * @property Collection<RouteAttribute>              $routeattributes
- * @property Collection<DungeonRouteAttribute>       $routeattributesraw
- * @property Collection<DungeonRouteThumbnailJob>    $dungeonRouteThumbnailJobs
- * @property Collection<DungeonRouteThumbnail>       $dungeonRouteThumbnails
- * @property Collection<File>                        $thumbnails
+ * @property EloquentCollection<int, CharacterClassSpecialization>     $specializations
+ * @property EloquentCollection<int, CharacterClass>                   $classes
+ * @property EloquentCollection<int, CharacterRace>                    $races
+ * @property EloquentCollection<int, DungeonRoutePlayerSpecialization> $playerspecializations
+ * @property EloquentCollection<int, DungeonRoutePlayerClass>          $playerclasses
+ * @property EloquentCollection<int, DungeonRoutePlayerRace>           $playerraces
+ * @property EloquentCollection<int, AffixGroup>                       $affixes
+ * @property EloquentCollection<int, DungeonRouteAffixGroup>           $affixGroups
+ * @property EloquentCollection<int, DungeonRouteRating>               $ratings
+ * @property EloquentCollection<int, DungeonRouteFavorite>             $favorites
+ * @property EloquentCollection<int, LiveSession>                      $livesessions
+ * @property EloquentCollection<int, Brushline>                        $brushlines
+ * @property EloquentCollection<int, Path>                             $paths
+ * @property EloquentCollection<int, KillZone>                         $killZones
+ * @property EloquentCollection<int, PridefulEnemy>                    $pridefulEnemies
+ * @property EloquentCollection<int, OverpulledEnemy>                  $overpulledenemies
+ * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
+ * @property EloquentCollection<int, MapIcon>                          $mapicons
+ * @property EloquentCollection<int, PageView>                         $pageviews
+ * @property EloquentCollection<int, Tag>                              $tags
+ * @property EloquentCollection<int, RouteAttribute>                   $routeattributes
+ * @property EloquentCollection<int, DungeonRouteAttribute>            $routeattributesraw
+ * @property EloquentCollection<int, DungeonRouteThumbnailJob>         $dungeonRouteThumbnailJobs
+ * @property EloquentCollection<int, DungeonRouteThumbnail>            $dungeonRouteThumbnails
+ * @property EloquentCollection<int, File>                             $thumbnails
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()

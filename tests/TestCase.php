@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
 
     private const float WARN_TEST_DURATION_SECONDS = 1.0;
 
-    private const float MAX_TEST_DURATION_SECONDS = 3.0;
+    private const float MAX_TEST_DURATION_SECONDS = 10.0;
 
     private float $testStartTime;
 

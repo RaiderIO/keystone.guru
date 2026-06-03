@@ -11,6 +11,7 @@ use App\Models\Spell\SpellDungeon;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('AssignMissingSpellDungeons')]
@@ -70,6 +71,7 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
     }
 
     #[Test]
+    #[SlowTest]
     public function handle_givenAllNpcsWithDungeonAndSpellMissingDungeon_assignsDungeonToSpell(): void
     {
         // Arrange

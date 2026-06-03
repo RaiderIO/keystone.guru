@@ -21,6 +21,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Traits\SeederModel;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,16 +49,16 @@ use Illuminate\Support\Collection;
  * @property GameVersion $gameVersion
  * @property Dungeon     $dungeon
  *
- * @property Collection<DungeonRoute>             $dungeonRoutes
- * @property Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers
- * @property Collection<Enemy>                    $enemies
- * @property Collection<EnemyPack>                $enemyPacks
- * @property Collection<EnemyPatrol>              $enemyPatrols
- * @property Collection<MapIcon>                  $mapIcons
- * @property Collection<MountableArea>            $mountableAreas
- * @property Collection<FloorUnion>               $floorUnions
- * @property Collection<FloorUnionArea>           $floorUnionAreas
- * @property Collection<NpcEnemyForces>           $npcEnemyForces
+ * @property EloquentCollection<int, DungeonRoute>             $dungeonRoutes
+ * @property EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers
+ * @property EloquentCollection<int, Enemy>                    $enemies
+ * @property EloquentCollection<int, EnemyPack>                $enemyPacks
+ * @property EloquentCollection<int, EnemyPatrol>              $enemyPatrols
+ * @property EloquentCollection<int, MapIcon>                  $mapIcons
+ * @property EloquentCollection<int, MountableArea>            $mountableAreas
+ * @property EloquentCollection<int, FloorUnion>               $floorUnions
+ * @property EloquentCollection<int, FloorUnionArea>           $floorUnionAreas
+ * @property EloquentCollection<int, NpcEnemyForces>           $npcEnemyForces
  *
  * @mixin Eloquent
  */
@@ -251,9 +252,9 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<FloorUnion>
+     * @return EloquentCollection<int, FloorUnion>
      */
-    public function getFloorUnionsOnFloor(int $floorId): Collection
+    public function getFloorUnionsOnFloor(int $floorId): EloquentCollection
     {
         if ($this->cachedFloorUnionsOnFloor === null) {
             $this->cachedFloorUnionsOnFloor = collect();
@@ -278,9 +279,9 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<FloorUnion>
+     * @return EloquentCollection<int, FloorUnion>
      */
-    public function getFloorUnionsForFloor(Floor $floor): Collection
+    public function getFloorUnionsForFloor(Floor $floor): EloquentCollection
     {
         if ($this->cachedFloorUnionsForFloor === null) {
             $this->cachedFloorUnionsForFloor = collect();
@@ -363,11 +364,11 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<EnemyPack>
+     * @return EloquentCollection<int, EnemyPack>
      */
-    public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
     {
-        /** @var Collection<EnemyPack> $enemyPacks */
+        /** @var EloquentCollection<int, EnemyPack> $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with([
             'floor',
             'enemies:enemies.id,enemies.enemy_pack_id',
@@ -387,11 +388,11 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<EnemyPatrol>
+     * @return EloquentCollection<int, EnemyPatrol>
      */
-    public function mapContextEnemyPatrols(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextEnemyPatrols(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
     {
-        /** @var Collection<EnemyPatrol> $enemyPatrols */
+        /** @var EloquentCollection<int, EnemyPatrol> $enemyPatrols */
         $enemyPatrols = $this->enemyPatrols()->with('floor')->get();
 
         if ($this->facade_enabled && $useFacade) {
@@ -408,11 +409,11 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<MapIcon>
+     * @return EloquentCollection<int, MapIcon>
      */
-    public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
     {
-        /** @var Collection<MapIcon> $mapIcons */
+        /** @var EloquentCollection<int, MapIcon> $mapIcons */
         $mapIcons = $this->mapIcons()
             ->with(['floor'])
             ->get();
@@ -432,13 +433,13 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<DungeonFloorSwitchMarker>
+     * @return EloquentCollection<int, DungeonFloorSwitchMarker>
      */
     public function mapContextDungeonFloorSwitchMarkers(
         CoordinatesServiceInterface $coordinatesService,
         bool                        $useFacade,
-    ): Collection {
-        /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
+    ): EloquentCollection {
+        /** @var EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
             ->whereNull('source_floor_id')
             ->with('floor')
@@ -463,13 +464,13 @@ class MappingVersion extends Model
     }
 
     /**
-     * @return Collection<MountableArea>
+     * @return EloquentCollection<int, MountableArea>
      */
     public function mapContextMountableAreas(
         CoordinatesServiceInterface $coordinatesService,
         bool                        $useFacade,
-    ): Collection {
-        /** @var Collection<MountableArea> $mountableAreas */
+    ): EloquentCollection {
+        /** @var EloquentCollection<int, MountableArea> $mountableAreas */
         $mountableAreas = $this->mountableAreas()->with('floor')->get();
 
         if ($this->facade_enabled && $useFacade) {
@@ -485,7 +486,7 @@ class MappingVersion extends Model
         return $mountableAreas;
     }
 
-    public function mapContextFloorUnions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    public function mapContextFloorUnions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
     {
         return $this->floorUnions;
     }
@@ -493,7 +494,7 @@ class MappingVersion extends Model
     public function mapContextFloorUnionAreas(
         CoordinatesServiceInterface $coordinatesService,
         bool                        $useFacade,
-    ): Collection {
+    ): EloquentCollection {
         return $this->floorUnionAreas;
     }
 
@@ -507,7 +508,7 @@ class MappingVersion extends Model
             if ($newMappingVersion->dungeon === null) {
                 return;
             }
-            /** @var Collection<MappingVersion> $existingMappingVersions */
+            /** @var EloquentCollection<int, MappingVersion> $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
             // Nothing to do if we don't have an older mapping version
             if ($existingMappingVersions->count() < 2) {
@@ -534,7 +535,7 @@ class MappingVersion extends Model
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-            /** @var Collection<MappingModelInterface> $previousMapping */
+            /** @var Collection<int, MappingModelInterface> $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
                 ->merge($previousMappingVersion->enemies)

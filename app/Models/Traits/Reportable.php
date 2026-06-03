@@ -3,11 +3,11 @@
 namespace App\Models\Traits;
 
 use App\Models\UserReport;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
- * @property Collection<UserReport> $userreports
+ * @property EloquentCollection<int, UserReport> $userreports
  */
 trait Reportable
 {

@@ -24,6 +24,7 @@ use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -58,21 +59,21 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property Collection<MappingVersion>                         $mappingVersions
- * @property Collection<Floor>                                  $floors
- * @property Collection<Floor>                                  $activeFloors
- * @property Collection<DungeonRoute>                           $dungeonRoutes
- * @property Collection<DungeonRoute>                           $dungeonRoutesForExport
- * @property \Illuminate\Database\Eloquent\Collection<int, Npc> $npcs
- * @property Collection<Enemy>                                  $enemies
- * @property Collection<EnemyPack>                              $enemyPacks
- * @property Collection<EnemyPatrol>                            $enemyPatrols
- * @property Collection<MapIcon>                                $mapIcons
- * @property Collection<DungeonFloorSwitchMarker>               $dungeonFloorSwitchMarkers
- * @property Collection<MountableArea>                          $mountableAreas
- * @property Collection<DungeonSpeedrunRequiredNpc>             $dungeonSpeedrunRequiredNpcs10Man
- * @property Collection<DungeonSpeedrunRequiredNpc>             $dungeonSpeedrunRequiredNpcs25Man
- * @property Collection<Spell>                                  $spells
+ * @property EloquentCollection<int, MappingVersion>             $mappingVersions
+ * @property EloquentCollection<int, Floor>                      $floors
+ * @property EloquentCollection<int, Floor>                      $activeFloors
+ * @property EloquentCollection<int, DungeonRoute>               $dungeonRoutes
+ * @property EloquentCollection<int, DungeonRoute>               $dungeonRoutesForExport
+ * @property EloquentCollection<int, Npc>                        $npcs
+ * @property EloquentCollection<int, Enemy>                      $enemies
+ * @property EloquentCollection<int, EnemyPack>                  $enemyPacks
+ * @property EloquentCollection<int, EnemyPatrol>                $enemyPatrols
+ * @property EloquentCollection<int, MapIcon>                    $mapIcons
+ * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
+ * @property EloquentCollection<int, MountableArea>              $mountableAreas
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
+ * @property EloquentCollection<int, Spell>                      $spells
  *
  * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> active()
  * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> inactive()

@@ -7,12 +7,12 @@ use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
 use Carbon\CarbonInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
@@ -20,10 +20,10 @@ use Illuminate\Support\Collection;
  * @property int    $user_id
  * @property string $public_key
  *
- * @property User                        $user
- * @property DungeonRoute                $dungeonRoute
- * @property Collection<OverpulledEnemy> $overpulledEnemies
- * @property Carbon                      $expires_at
+ * @property User                                     $user
+ * @property DungeonRoute                             $dungeonRoute
+ * @property EloquentCollection<int, OverpulledEnemy> $overpulledEnemies
+ * @property Carbon                                   $expires_at
  *
  * @mixin Eloquent
  */
@@ -70,9 +70,9 @@ class LiveSession extends Model
     }
 
     /**
-     * @return Collection<Enemy>
+     * @return EloquentCollection<int, Enemy>
      */
-    public function getEnemies(): Collection
+    public function getEnemies(): EloquentCollection
     {
         return Enemy::select('enemies.*')
             ->join('overpulled_enemies', static function (JoinClause $clause) {

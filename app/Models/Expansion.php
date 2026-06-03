@@ -12,6 +12,7 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
@@ -31,9 +32,10 @@ use Illuminate\Support\Collection;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon> $dungeons
- * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon> $raids
- * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon> $dungeonsAndRaids
+ * @property EloquentCollection<int, Dungeon> $dungeons
+ * @property EloquentCollection<int, Dungeon> $raids
+ * @property EloquentCollection<int, Dungeon> $dungeonsAndRaids
+ * @property EloquentCollection<int, Season>  $seasons
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *

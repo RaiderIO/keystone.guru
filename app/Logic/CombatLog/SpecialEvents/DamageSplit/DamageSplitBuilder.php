@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
 class DamageSplitBuilder implements SpecialEventBuilderInterface
 {
     /**
-     * @return SpecialEvent
+     * @return SpecialEvent&DamageSplitInterface
      */
     public static function create(
         int    $combatLogVersion,

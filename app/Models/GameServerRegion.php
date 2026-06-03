@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
  * @property int    $reset_day_offset   ISO-8601 numeric representation of the day of the week
  * @property int    $reset_hours_offset
  * 
- * @property Collection<User> $users
+ * @property EloquentCollection<int, User> $users
  *
  * @mixin Eloquent
  */

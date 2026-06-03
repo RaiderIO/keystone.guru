@@ -119,7 +119,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @return string
+     * @return class-string
      */
     public function getClass(): string
     {

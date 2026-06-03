@@ -189,10 +189,11 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } else {
-                assert($combatLogEvent instanceof CombatLogEvent);
+            } elseif ($combatLogEvent instanceof UnitDied) {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
+            } else {
+                return false;
             }
 
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
@@ -229,9 +230,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             }
 
             // Push a new result event - we successfully killed this enemy, and it gave count!
-            $this->resultEvents->push((new EnemyEngaged($enemyEngagedEvent)));
+            $this->resultEvents->push(new EnemyEngaged($enemyEngagedEvent));
             // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
-            $this->resultEvents->push((new EnemyKilled($combatLogEvent, $destGuid)));
+            $this->resultEvents->push(new EnemyKilled($combatLogEvent, $destGuid));
             // Speed up parsing by getting rid of the accurate enemy sighting - it's part of killed enemies now so won't get handled anymore
             $this->accurateEnemySightings->forget($destGuid->getGuid());
 

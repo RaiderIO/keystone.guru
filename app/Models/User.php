@@ -15,6 +15,7 @@ use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -58,12 +59,12 @@ use Laratrust\Traits\HasRolesAndPermissions;
  *
  * @property bool $is_admin
  *
- * @property Collection<DungeonRoute>  $dungeonRoutes
- * @property Collection<UserReport>    $reports
- * @property Collection<Team>          $teams
- * @property Collection<Role>          $roles
- * @property Collection<Tag>           $tags
- * @property Collection<UserIpAddress> $ipAddresses
+ * @property EloquentCollection<int, DungeonRoute>  $dungeonRoutes
+ * @property EloquentCollection<int, UserReport>    $reports
+ * @property EloquentCollection<int, Team>          $teams
+ * @property EloquentCollection<int, Role>          $roles
+ * @property EloquentCollection<int, Tag>           $tags
+ * @property EloquentCollection<int, UserIpAddress> $ipAddresses
  *
  * @mixin Eloquent
  */

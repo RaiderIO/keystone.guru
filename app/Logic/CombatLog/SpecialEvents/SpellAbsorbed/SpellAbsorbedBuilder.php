@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
 {
     /**
-     * @return SpecialEvent
+     * @return SpecialEvent&SpellAbsorbedInterface
      */
     public static function create(
         int    $combatLogVersion,

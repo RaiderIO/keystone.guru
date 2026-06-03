@@ -7,11 +7,11 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Carbon\CarbonInterval;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 /**
  * @property int  $id
@@ -24,10 +24,10 @@ use Illuminate\Support\Collection;
  *
  * @property Carbon $created_at
  *
- * @property Dungeon                   $dungeon
- * @property DungeonRoute              $dungeonRoute
- * @property ChallengeModeRunData      $challengeModeRunData
- * @property Collection<EnemyPosition> $enemyPositions
+ * @property Dungeon                                $dungeon
+ * @property DungeonRoute                           $dungeonRoute
+ * @property ChallengeModeRunData                   $challengeModeRunData
+ * @property EloquentCollection<int, EnemyPosition> $enemyPositions
  *
  * @author Wouter
  *

@@ -240,6 +240,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->where('mapping_version_id', $filter->mappingVersion->id)
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('clone_of')
+            ->whereNull('expires_at')
             ->orderByDesc('popularity');
 
         if ($filter->includedEnemies !== null) {

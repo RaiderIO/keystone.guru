@@ -5,15 +5,15 @@ namespace App\Models\Npc;
 use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
  * @property string $name
  * @property string $key
  *
- * @property Collection<Npc> $npcs
+ * @property EloquentCollection<int, Npc> $npcs
  *
  * @mixin Eloquent
  */

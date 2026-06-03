@@ -127,7 +127,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->deleteOutdatedDungeonRoutesStart();
 
-            $dungeonRoutes = DungeonRoute::with([
+            DungeonRoute::with([
                 'brushlines',
                 'paths',
                 'killZones',
@@ -136,18 +136,17 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                 ->whereRaw('expires_at < NOW()')
                 ->where('expires_at', '!=', 0)
                 ->whereNotNull('expires_at')
-                ->get();
-
-            // Retrieve all routes and then delete them
-            foreach ($dungeonRoutes as $dungeonRoute) {
-                /** @var DungeonRoute $dungeonRoute */
-                try {
-                    $dungeonRoute->delete();
-                    $deletedRouteCount++;
-                } catch (Exception $ex) {
-                    $this->log->deleteOutdatedDungeonRouteException($dungeonRoute->id, $ex);
-                }
-            }
+                ->chunkById(100, function ($dungeonRoutes) use (&$deletedRouteCount) {
+                    foreach ($dungeonRoutes as $dungeonRoute) {
+                        /** @var DungeonRoute $dungeonRoute */
+                        try {
+                            $dungeonRoute->delete();
+                            $deletedRouteCount++;
+                        } catch (Exception $ex) {
+                            $this->log->deleteOutdatedDungeonRouteException($dungeonRoute->id, $ex);
+                        }
+                    }
+                });
         } finally {
             $this->log->deleteOutdatedDungeonRoutesEnd($deletedRouteCount);
         }

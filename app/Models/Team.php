@@ -11,11 +11,11 @@ use App\Models\Traits\HasTags;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,9 +30,9 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property Collection<TeamUser>     $teamUsers
- * @property Collection<User>         $members
- * @property Collection<DungeonRoute> $dungeonRoutes
+ * @property EloquentCollection<int, TeamUser>     $teamUsers
+ * @property EloquentCollection<int, User>         $members
+ * @property EloquentCollection<int, DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */

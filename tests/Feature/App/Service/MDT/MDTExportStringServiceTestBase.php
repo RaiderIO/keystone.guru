@@ -18,7 +18,12 @@ abstract class MDTExportStringServiceTestBase extends PublicTestCase
             $dungeonRoute = DungeonRoute::factory()->create(array_merge([
                 'expires_at' => now()->addHour(),
             ], $attributes));
-        } while (!Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key));
+
+            if (!Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key)) {
+                $dungeonRoute->delete();
+                $dungeonRoute = null;
+            }
+        } while ($dungeonRoute === null);
 
         return $dungeonRoute;
     }

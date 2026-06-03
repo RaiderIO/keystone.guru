@@ -13,6 +13,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Spell\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -43,19 +44,19 @@ use Illuminate\Support\Str;
  * @property NpcType           $type
  * @property NpcClass          $class
  *
- * @property NpcEnemyForces|null                                                   $enemyForces
- * @property Collection<NpcEnemyForces>                                            $npcEnemyForces
- * @property Collection<Enemy>                                                     $enemies
- * @property Collection<Characteristic>                                            $characteristics
- * @property Collection<NpcCharacteristic>                                         $npcCharacteristics
- * @property Collection<Spell>                                                     $spells
- * @property Collection<NpcSpell>                                                  $npcSpells
- * @property \Illuminate\Database\Eloquent\Collection<int, NpcBolsteringWhitelist> $npcbolsteringwhitelists
- * @property \Illuminate\Database\Eloquent\Collection<int, Dungeon>                $dungeons
- * @property Collection<NpcDungeon>                                                $npcDungeons
- * @property Collection<NpcHealth>                                                 $npcHealths
- * @property float|null                                                            $min_health              Computed aggregate column (getNpcsMinMaxHealth)
- * @property float|null                                                            $max_health              Computed aggregate column (getNpcsMinMaxHealth)
+ * @property NpcEnemyForces|null                             $enemyForces
+ * @property EloquentCollection<int, NpcEnemyForces>         $npcEnemyForces
+ * @property EloquentCollection<int, Enemy>                  $enemies
+ * @property EloquentCollection<int, Characteristic>         $characteristics
+ * @property EloquentCollection<int, NpcCharacteristic>      $npcCharacteristics
+ * @property EloquentCollection<int, Spell>                  $spells
+ * @property EloquentCollection<int, NpcSpell>               $npcSpells
+ * @property EloquentCollection<int, NpcBolsteringWhitelist> $npcbolsteringwhitelists
+ * @property EloquentCollection<int, Dungeon>                $dungeons
+ * @property EloquentCollection<int, NpcDungeon>             $npcDungeons
+ * @property EloquentCollection<int, NpcHealth>              $npcHealths
+ * @property float|null                                      $min_health              Computed aggregate column (getNpcsMinMaxHealth)
+ * @property float|null                                      $max_health              Computed aggregate column (getNpcsMinMaxHealth)
  *
  * @mixin Eloquent
  */

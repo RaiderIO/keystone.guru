@@ -14,11 +14,11 @@ use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Str;
 
 /**
@@ -43,11 +43,11 @@ use Str;
  *
  * @property string $icon_url
  *
- * @property GameVersion              $gameVersion
- * @property Collection<int, Dungeon> $dungeons
- * @property Collection<SpellDungeon> $spellDungeons
- * @property Collection<Npc>          $npcs
- * @property Characteristic|null      $characteristic
+ * @property GameVersion                           $gameVersion
+ * @property EloquentCollection<int, Dungeon>      $dungeons
+ * @property EloquentCollection<int, SpellDungeon> $spellDungeons
+ * @property EloquentCollection<int, Npc>          $npcs
+ * @property Characteristic|null                   $characteristic
  *
  * @method static Builder visible()
  *
