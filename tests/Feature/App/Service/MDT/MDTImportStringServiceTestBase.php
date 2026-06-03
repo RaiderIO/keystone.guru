@@ -10,57 +10,11 @@ use App\Models\Polyline;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use Illuminate\Support\Collection;
+use Tests\Feature\Traits\GeneratesDungeonRoutes;
 
 abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTestBase
 {
-    /**
-     * Returns an MDT-compatible route whose mapping version does not use facades.
-     * Facade dungeons convert random factory coordinates through a facade-to-floor
-     * projection that can fail for arbitrary lat/lng values, causing intermittent
-     * floor-matching failures during import.
-     */
-    protected function getMDTCompatibleNonFacadeDungeonRoute(array $attributes = []): DungeonRoute
-    {
-        do {
-            /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->create(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
-
-            if (!Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) || $dungeonRoute->mappingVersion->facade_enabled) {
-                $dungeonRoute->delete();
-                $dungeonRoute = null;
-            }
-        } while ($dungeonRoute === null);
-
-        return $dungeonRoute;
-    }
-
-    /**
-     * Returns an MDT-compatible route that has at least $enemyCount enemies guaranteed to
-     * survive an import round-trip. Filters out teeming-only enemies, MDT placeholders,
-     * and seasonally restricted enemies that the import service would skip.
-     */
-    protected function getMDTCompatibleDungeonRouteWithSafeEnemies(int $enemyCount = 1, array $attributes = []): DungeonRoute
-    {
-        do {
-            /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->create(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
-
-            if (
-                !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
-                $dungeonRoute->mappingVersion->facade_enabled ||
-                $this->getSafeMdtEnemies($dungeonRoute, $enemyCount)->count() < $enemyCount
-            ) {
-                $dungeonRoute->delete();
-                $dungeonRoute = null;
-            }
-        } while ($dungeonRoute === null);
-
-        return $dungeonRoute;
-    }
+    use GeneratesDungeonRoutes;
 
     /**
      * Returns enemies that are guaranteed to survive an import round-trip.

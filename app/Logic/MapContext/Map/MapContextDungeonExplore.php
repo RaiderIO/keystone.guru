@@ -10,6 +10,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Override;
 
 /**
  * Class MapContextDungeonExplore
@@ -58,7 +59,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         $activeSeason = $this->dungeon->getActiveSeason($this->seasonService);

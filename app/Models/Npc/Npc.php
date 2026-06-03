@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * @property int        $id
@@ -397,7 +398,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $dungeon?->id ?? null;
     }
 
-    #[\Override]
+    #[Override]
     protected static function booted(): void
     {
         parent::booted();

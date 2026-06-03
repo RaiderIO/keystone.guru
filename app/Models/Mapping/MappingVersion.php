@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @property int         $id
@@ -157,7 +158,7 @@ class MappingVersion extends Model
         return $this->hasMany(DungeonFloorSwitchMarker::class);
     }
 
-    /** @return HasMany<\App\Models\Enemy, $this> */
+    /** @return HasMany<Enemy, $this> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class)->orderBy('id');
@@ -343,9 +344,9 @@ class MappingVersion extends Model
      * @todo duplicated function in DungeonRoute.php
      */
     private function convertVerticesForFacade(
-        CoordinatesServiceInterface                                   $coordinatesService,
-        ConvertsVerticesInterface&\Illuminate\Database\Eloquent\Model $hasVertices,
-        Floor                                                         $floor,
+        CoordinatesServiceInterface     $coordinatesService,
+        ConvertsVerticesInterface&Model $hasVertices,
+        Floor                           $floor,
     ): Floor {
         $convertedLatLngs = collect();
 
@@ -500,7 +501,7 @@ class MappingVersion extends Model
         return $this->floorUnionAreas;
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot()
     {
         parent::boot();

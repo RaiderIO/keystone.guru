@@ -5,6 +5,7 @@ namespace App\Http\Resources\CombatLog\Route;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="CombatLogRouteRequestCorrection")
@@ -26,7 +27,7 @@ class CombatLogRouteCorrectionRequestResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return $this->resource->toArray();

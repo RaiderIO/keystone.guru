@@ -13,7 +13,6 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Error;

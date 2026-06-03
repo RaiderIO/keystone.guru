@@ -10,6 +10,7 @@ use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
 use App\Service\CombatLog\Filters\BaseSpecialEventsFilter;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
+use Override;
 
 class SpecialEventsFilter extends BaseSpecialEventsFilter
 {
@@ -19,7 +20,7 @@ class SpecialEventsFilter extends BaseSpecialEventsFilter
      * @throws DungeonNotSupportedException
      * @throws FloorNotSupportedException
      */
-    #[\Override]
+    #[Override]
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // Starts

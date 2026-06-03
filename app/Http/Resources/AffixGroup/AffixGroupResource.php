@@ -6,6 +6,7 @@ use App\Http\Resources\Affix\AffixResource;
 use App\Models\AffixGroup\AffixGroup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="AffixGroup")
@@ -20,7 +21,7 @@ class AffixGroupResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

@@ -3,16 +3,21 @@
 namespace App\Repositories\Swoole;
 
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
 use App\Repositories\Database\Npc\NpcRepository;
 use App\Repositories\Swoole\Interfaces\NpcRepositorySwooleInterface;
 use App\Repositories\Swoole\Traits\ClonesCollections;
 use Illuminate\Support\Collection;
+use Override;
 
 class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleInterface
 {
     use ClonesCollections;
 
+    /** @var Collection<int, Collection<int, Npc>> */
     private Collection $inUseNpcsByMappingVersionId;
+
+    /** @var Collection<int, Collection<int, int>> */
     private Collection $inUseNpcIdsByMappingVersionId;
 
     public function __construct()
@@ -26,7 +31,7 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
     /**
      * @inheritDoc
      */
-    #[\Override]
+    #[Override]
     public function getInUseNpcs(MappingVersion $mappingVersion): Collection
     {
         if (!$this->inUseNpcsByMappingVersionId->has($mappingVersion->id)) {
@@ -43,7 +48,7 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
     /**
      * @inheritDoc
      */
-    #[\Override]
+    #[Override]
     public function getInUseNpcIds(?MappingVersion $mappingVersion = null, ?Collection $inUseNpcs = null): Collection
     {
         if (!$this->inUseNpcIdsByMappingVersionId->has($mappingVersion->id)) {

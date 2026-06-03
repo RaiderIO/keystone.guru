@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Teapot\StatusCode;
+use Throwable;
 
 class SiteController extends Controller
 {
@@ -281,7 +282,7 @@ class SiteController extends Controller
             DB::connection()->getPdo(); // ensure PDO established
             DB::select('SELECT 1');     // trivial round trip
             $checks['database']['ok'] = true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $checks['database']['error'] = $e->getMessage();
         }
 
@@ -294,7 +295,7 @@ class SiteController extends Controller
             if (!$checks['redis']['ok']) {
                 $checks['redis']['error'] = 'Unexpected PING response';
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $checks['redis']['error'] = $e->getMessage();
         }
 

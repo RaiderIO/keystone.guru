@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * @property int    $id
@@ -55,7 +56,7 @@ class Team extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -419,7 +420,7 @@ class Team extends Model
         );
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

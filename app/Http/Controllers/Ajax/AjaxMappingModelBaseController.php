@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
@@ -61,7 +62,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             $onSaveSuccess,
             $echoContext
         ) {
-            /** @var \App\Models\Mapping\MappingModelInterface|null $beforeModel */
+            /** @var MappingModelInterface|null $beforeModel */
             $beforeModel = $model === null ? null : clone $model;
 
             if ($model === null) {
@@ -88,7 +89,7 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-                    /** @var \App\Models\Floor\Floor|null $floor */
+                    /** @var Floor|null $floor */
                     $floor = $model->getAttribute('floor');
                     $echoContext ??= $floor?->dungeon;
                     broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));

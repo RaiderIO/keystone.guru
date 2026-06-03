@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * @property int    $id
@@ -79,7 +80,7 @@ class GameVersion extends CacheModel
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'key';

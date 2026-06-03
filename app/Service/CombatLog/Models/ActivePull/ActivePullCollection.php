@@ -4,6 +4,11 @@ namespace App\Service\CombatLog\Models\ActivePull;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @template TKey of array-key
+ *
+ * @template-covariant TValue
+ */
 class ActivePullCollection extends Collection
 {
     public function addNewPull(): ActivePull

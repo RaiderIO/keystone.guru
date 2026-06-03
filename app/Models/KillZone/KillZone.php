@@ -20,6 +20,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Override;
 
 /**
  * @property int        $id
@@ -372,7 +373,7 @@ class KillZone extends Model
         return collect($queryResult);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

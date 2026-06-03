@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes\Energize\V9;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Energize\EnergizeInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
+use Override;
 
 class EnergizeV9 extends Suffix implements EnergizeInterface
 {
@@ -36,7 +37,7 @@ class EnergizeV9 extends Suffix implements EnergizeInterface
         return $this->maxPower;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

@@ -63,7 +63,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -71,6 +71,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Override;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -264,7 +265,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -491,9 +492,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     private function convertVerticesForFacade(
-        CoordinatesServiceInterface                                   $coordinatesService,
-        ConvertsVerticesInterface&\Illuminate\Database\Eloquent\Model $hasVertices,
-        Floor                                                         $floor,
+        CoordinatesServiceInterface     $coordinatesService,
+        ConvertsVerticesInterface&Model $hasVertices,
+        Floor                           $floor,
     ): Floor {
         $convertedLatLngs = collect();
 
@@ -906,7 +907,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      * @throws Exception
      */
     public function saveFromRequest(
-        \Illuminate\Foundation\Http\FormRequest $request,
+        FormRequest $request,
         SeasonServiceInterface                  $seasonService,
         ExpansionServiceInterface               $expansionService,
         ThumbnailServiceInterface               $thumbnailService,
@@ -1702,7 +1703,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

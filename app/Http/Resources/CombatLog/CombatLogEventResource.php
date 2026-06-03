@@ -5,6 +5,7 @@ namespace App\Http\Resources\CombatLog;
 use App\Models\CombatLog\CombatLogEvent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * Class CombatLogEventResource
@@ -22,7 +23,7 @@ class CombatLogEventResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return $this->openSearchArray();

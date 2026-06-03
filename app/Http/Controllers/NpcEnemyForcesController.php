@@ -20,7 +20,7 @@ class NpcEnemyForcesController extends Controller
     /**
      * Show a page for creating a new npc.
      *
-     * @return Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function create(Npc $npc)
     {
@@ -49,7 +49,7 @@ class NpcEnemyForcesController extends Controller
     /**
      * @return View
      */
-    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
+    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): View
     {
         return view('admin.npcenemyforces.edit', [
             'npc'            => $npc,
@@ -61,7 +61,7 @@ class NpcEnemyForcesController extends Controller
         NpcEnemyForcesFormRequest $request,
         Npc                       $npc,
         NpcEnemyForces            $npcEnemyForces,
-    ): \Illuminate\View\View {
+    ): View {
         $npcEnemyForces->update($request->validated());
 
         // Message to the user

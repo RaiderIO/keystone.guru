@@ -27,6 +27,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Override;
 
 /**
  * @property int    $id
@@ -345,7 +346,7 @@ class User extends Authenticatable implements LaratrustUser
         return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

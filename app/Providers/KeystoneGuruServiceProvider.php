@@ -143,6 +143,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
+use Override;
 use Str;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
@@ -150,7 +151,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         // External communication - no dependencies

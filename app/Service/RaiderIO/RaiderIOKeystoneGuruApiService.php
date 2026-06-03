@@ -14,6 +14,8 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
+use Throwable;
 
 /**
  * This service mocks the RaiderIO API service and returns data from Keystone.guru instead for the interim
@@ -89,7 +91,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
 
         try {
             $downloadUrl = Storage::disk('s3_combat_logs')->temporaryUrl($s3Path, now()->addMinutes(30));
-        } catch (\RuntimeException) {
+        } catch (RuntimeException) {
             $downloadUrl = Storage::disk('s3_combat_logs')->url($s3Path);
         }
 
@@ -115,7 +117,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
                 ->filter(fn(string $path): bool => str_ends_with($path, '.zip'))
                 ->values()
                 ->all();
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return [];
         }
     }

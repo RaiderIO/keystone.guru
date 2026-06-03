@@ -7,6 +7,8 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Override;
+use RuntimeException;
 
 /**
  * @property int          $id
@@ -52,7 +54,7 @@ class File extends Model
     /**
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function delete(): bool|null
     {
         $result = parent::delete();
@@ -102,7 +104,7 @@ class File extends Model
         $driver = config(sprintf('filesystems.disks.%s.driver', $this->disk));
 
         if ($driver !== 'local') {
-            throw new \RuntimeException('getFullPath() is only available for local disks.');
+            throw new RuntimeException('getFullPath() is only available for local disks.');
         }
 
         return Storage::disk($this->disk)->path($this->path);
@@ -160,7 +162,7 @@ class File extends Model
         return $file;
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

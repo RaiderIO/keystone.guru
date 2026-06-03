@@ -5,6 +5,7 @@ namespace App\Console\Commands\Environment;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Jobs\RefreshDiscoverCache;
 use Illuminate\Console\Command;
+use L5Swagger\L5SwaggerServiceProvider;
 
 class Update extends Command
 {
@@ -122,7 +123,7 @@ class Update extends Command
         ]);
 
         $this->call('vendor:publish', [
-            '--provider' => \L5Swagger\L5SwaggerServiceProvider::class,
+            '--provider' => L5SwaggerServiceProvider::class,
         ]);
 
         // A bit of a nasty hack to fix permission issues

@@ -7,6 +7,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Repositories\Database\DungeonRepository;
 use App\Repositories\Swoole\Interfaces\DungeonRepositorySwooleInterface;
 use Illuminate\Support\Collection;
+use Override;
 
 class DungeonRepositorySwoole extends DungeonRepository implements DungeonRepositorySwooleInterface
 {
@@ -23,7 +24,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
         $this->dungeonMappingVersions    = collect();
     }
 
-    #[\Override]
+    #[Override]
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon
     {
         if ($this->dungeonsByChallengeModeId->isEmpty()) {
@@ -41,7 +42,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
         return $dungeon;
     }
 
-    #[\Override]
+    #[Override]
     public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion
     {
         if (!$this->dungeonMappingVersions->has($dungeon->id)) {

@@ -4,13 +4,14 @@ namespace App\Http\Requests\DungeonRoute;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Override;
 
 class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    #[\Override]
+    #[Override]
     public function authorize(): bool
     {
         return true;
@@ -19,7 +20,7 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     /**
      * Get the validation rules that apply to the request.
      */
-    #[\Override]
+    #[Override]
     public function rules(): array
     {
         return array_merge(parent::rules(), [

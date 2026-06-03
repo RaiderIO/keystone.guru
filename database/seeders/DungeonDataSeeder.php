@@ -108,7 +108,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function importDungeonMapping(): void
     {
@@ -187,7 +187,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function importDungeonRoutes(): void
     {
@@ -266,7 +266,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     private function flushModels(): void
     {
         foreach ($this->importedModels as $class => $models) {
-            /** @var class-string<\Illuminate\Database\Eloquent\Model> $class */
+            /** @var class-string<Model> $class */
             /** @var Collection $models */
             if ($models->isEmpty()) {
                 continue;
@@ -399,7 +399,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 $updatedModels++;
             } // If we should do some post-processing, create & save it now so that we can do just that
             elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
-                /** @var class-string<\Illuminate\Database\Eloquent\Model> $mappingClass */
+                /** @var class-string<Model> $mappingClass */
                 $mappingClass = $mapping->getClass();
                 $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
                 $updatedModels++;

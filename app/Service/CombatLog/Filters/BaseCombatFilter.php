@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
@@ -112,10 +113,10 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection<int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
-    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
+    /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
     private readonly Collection $accurateEnemySightings;
 
-    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
+    /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
     private readonly Collection $lastKnownPlayerPositions;
 
     /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
@@ -189,10 +190,12 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } elseif ($combatLogEvent instanceof UnitDied) {
+            } elseif ($combatLogEvent instanceof CombatLogEvent) {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
             } else {
+                $this->log->parseInvalidCombatLogEvent($lineNr);
+
                 return false;
             }
 

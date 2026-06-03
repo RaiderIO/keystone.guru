@@ -9,6 +9,7 @@ use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Teapot\StatusCode;
+use function response;
 
 class AjaxHeatmapController extends Controller
 {
@@ -29,14 +30,14 @@ class AjaxHeatmapController extends Controller
         RaiderIOApiServiceInterface $raiderIOApiService,
     ): JsonResponse {
         try {
-            return \response()->json(
+            return response()->json(
                 $raiderIOApiService->getHeatmapData(
                     HeatmapDataFilter::fromArray($request->validated()),
                 )->toArray(),
                 StatusCode::OK,
             );
         } catch (InvalidApiResponseException $exception) {
-            return \response()->json(
+            return response()->json(
                 $exception->toArray(),
                 StatusCode::INTERNAL_SERVER_ERROR,
             );

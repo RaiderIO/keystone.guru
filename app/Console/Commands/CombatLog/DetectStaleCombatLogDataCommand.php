@@ -15,6 +15,7 @@ use App\Models\Spell\Spell;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use LogicException;
 
 class DetectStaleCombatLogDataCommand extends Command
 {
@@ -206,7 +207,7 @@ class DetectStaleCombatLogDataCommand extends Command
             }
         }
 
-        throw new \LogicException(sprintf('No miss type bit found for SpellProperty: %s', $property->value));
+        throw new LogicException(sprintf('No miss type bit found for SpellProperty: %s', $property->value));
     }
 
     private function pruneOldObservations(): void

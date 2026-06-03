@@ -26,7 +26,7 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
             $mdtExportStringService = app()->make(MDTExportStringServiceInterface::class);
             $url                    = 'https://raider.io/some_article';
 
-            $dungeonRoute = $this->getMDTCompatibleDungeonRoute();
+            $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
 
             /** @var MapIcon $mapIcon */
             $mapIcon = MapIcon::factory()->create([
@@ -61,7 +61,7 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
             $mdtExportStringService = app()->make(MDTExportStringServiceInterface::class);
             $url                    = 'https://raider.io/some_article';
 
-            $dungeonRoute = $this->getMDTCompatibleDungeonRoute();
+            $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
 
             /** @var Enemy $randomEnemy */
             $randomEnemy = $dungeonRoute->mappingVersion->enemies()->inRandomOrder()->first();

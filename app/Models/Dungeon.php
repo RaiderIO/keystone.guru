@@ -34,6 +34,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Mockery\Exception;
+use Override;
 
 /**
  * @property int      $id                                 The ID of this Dungeon.
@@ -75,9 +76,9 @@ use Mockery\Exception;
  * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
  * @property EloquentCollection<int, Spell>                      $spells
  *
- * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> active()
- * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> inactive()
- * @method static \Illuminate\Database\Eloquent\Builder<Dungeon> factionSelectionRequired()
+ * @method static Builder<Dungeon> active()
+ * @method static Builder<Dungeon> inactive()
+ * @method static Builder<Dungeon> factionSelectionRequired()
  *
  * @mixin Eloquent
  */
@@ -151,7 +152,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -617,7 +618,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $dungeonService->getDungeonContext(Auth::user());
     }
 
-    #[\Override]
+    #[Override]
     public static function boot(): void
     {
         parent::boot();

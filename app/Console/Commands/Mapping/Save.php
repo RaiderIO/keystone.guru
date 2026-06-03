@@ -18,6 +18,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Traits\SavesArrayToJsonFile;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -47,7 +48,7 @@ class Save extends Command
 
     /**
      * Execute the console command.
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(): int
     {
@@ -88,7 +89,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveMappingVersions(string $dungeonDataDir): void
     {
@@ -110,7 +111,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveMappingCommitLogs(string $dungeonDataDir): void
     {
@@ -132,7 +133,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveDungeons(string $dungeonDataDir): void
     {
@@ -195,7 +196,7 @@ class Save extends Command
 
     /**
      * @param  string     $dungeonDataDir
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveNpcs(string $dungeonDataDir): void
     {
@@ -235,7 +236,7 @@ class Save extends Command
 
     /**
      * @param  string     $dungeonDataDir
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveSpells(string $dungeonDataDir): void
     {
@@ -256,7 +257,7 @@ class Save extends Command
     /**
      * @param  string     $combatlogDir
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveCombatlogData(string $combatlogDir): void
     {
@@ -270,7 +271,7 @@ class Save extends Command
 
     /**
      * @param  string     $dungeonDataDir
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveDungeonData(string $dungeonDataDir): void
     {
@@ -314,7 +315,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
@@ -459,7 +460,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {

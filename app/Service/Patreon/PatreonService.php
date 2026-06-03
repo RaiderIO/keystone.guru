@@ -8,6 +8,7 @@ use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
+use Exception;
 
 class PatreonService implements PatreonServiceInterface
 {
@@ -253,6 +254,7 @@ class PatreonService implements PatreonServiceInterface
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
+                        /** @var array $member */
                         $member = collect($identityResponse['included'])->filter(static fn(
                             array $included,
                         ) => $included['type'] === 'member')->first();
@@ -272,7 +274,7 @@ class PatreonService implements PatreonServiceInterface
                 $result = LinkToUserIdResult::PatreonSessionExpired;
                 $this->log->linkToUserAccountSessionExpired();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = LinkToUserIdResult::InternalErrorOccurred;
 
             $this->log->linkToUserAccountException($e);

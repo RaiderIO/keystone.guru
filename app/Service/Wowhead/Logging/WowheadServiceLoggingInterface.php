@@ -2,9 +2,11 @@
 
 namespace App\Service\Wowhead\Logging;
 
+use Throwable;
+
 interface WowheadServiceLoggingInterface
 {
-    public function getNpcHealthHtmlParsingException(\Throwable $ex): void;
+    public function getNpcHealthHtmlParsingException(Throwable $ex): void;
 
     public function downloadMissingSpellIconsStart(): void;
 

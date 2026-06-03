@@ -5,6 +5,7 @@ namespace App\Http\Resources\Dungeon;
 use App\Models\Dungeon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Override;
 
 /**
  * @OA\Schema(schema="DungeonEnvelope")
@@ -19,7 +20,7 @@ class DungeonEnvelopeResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

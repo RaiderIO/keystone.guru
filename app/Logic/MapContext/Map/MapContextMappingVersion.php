@@ -7,6 +7,7 @@ use App\Models\Faction;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Override;
 
 /**
  * Class MapContextMappingVersion
@@ -27,7 +28,7 @@ abstract class MapContextMappingVersion extends MapContextBase
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [

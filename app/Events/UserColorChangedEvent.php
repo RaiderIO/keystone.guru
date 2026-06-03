@@ -2,9 +2,11 @@
 
 namespace App\Events;
 
+use Override;
+
 class UserColorChangedEvent extends ContextEvent
 {
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

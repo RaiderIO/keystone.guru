@@ -12,6 +12,7 @@ use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Override;
 
 class NameColumnHandler extends SimpleColumnHandler
 {
@@ -20,7 +21,7 @@ class NameColumnHandler extends SimpleColumnHandler
         parent::__construct($dtHandler, 'name', 'npc_name_translations.translation');
     }
 
-    #[\Override]
+    #[Override]
     protected function applyFilter(
         Builder $subBuilder,
         Builder $orderBuilder,

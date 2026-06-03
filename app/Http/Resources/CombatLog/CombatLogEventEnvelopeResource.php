@@ -5,6 +5,7 @@ namespace App\Http\Resources\CombatLog;
 use App\Models\CombatLog\CombatLogEvent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Override;
 
 /**
  * Class CombatLogEventEnvelopeResource
@@ -18,7 +19,7 @@ class CombatLogEventEnvelopeResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

@@ -5,10 +5,11 @@ namespace App\Providers;
 use App\Service\Controller\Api\V1\APIDungeonRouteControllerService;
 use App\Service\Controller\Api\V1\APIDungeonRouteControllerServiceInterface;
 use MarvinLabs\DiscordLogger\ServiceProvider;
+use Override;
 
 class ControllerServiceProvider extends ServiceProvider
 {
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         // API

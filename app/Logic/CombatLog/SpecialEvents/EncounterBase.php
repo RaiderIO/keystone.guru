@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * ENCOUNTER_START,2111,"Elder Leaxa",8,5,1841
  *
@@ -39,7 +41,7 @@ abstract class EncounterBase extends SpecialEvent
         return $this->groupSize;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

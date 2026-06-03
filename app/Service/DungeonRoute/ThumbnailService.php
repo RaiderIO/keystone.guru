@@ -11,6 +11,7 @@ use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -407,7 +408,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 }
 
                 $result->push($copiedThumbnail);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // Could be thrown if the file does not exist, or if the disk is not available
                 $this->log->copyThumbnailsException(
                     $sourceDungeonRoute->public_key,

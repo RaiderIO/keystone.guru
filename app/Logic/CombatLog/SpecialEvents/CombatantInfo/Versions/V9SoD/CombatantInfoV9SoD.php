@@ -7,6 +7,8 @@ use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoInterface;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use Exception;
+use Override;
 
 class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
 {
@@ -212,7 +214,7 @@ class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
         return 0;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);
@@ -220,7 +222,7 @@ class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
         // If GUID is null at this point this will crash - but that's okay, we NEED this to be set
         $playerGuid = Guid::createFromGuidString($parameters[0]);
         if (!($playerGuid instanceof Player)) {
-            throw new \Exception('PlayerGuid is not a Player');
+            throw new Exception('PlayerGuid is not a Player');
         }
         $this->playerGuid             = $playerGuid;
         $this->faction                = (int)$parameters[1];

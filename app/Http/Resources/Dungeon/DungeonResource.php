@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(
@@ -50,7 +51,7 @@ class DungeonResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

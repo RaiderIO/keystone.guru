@@ -816,7 +816,7 @@ class AjaxDungeonRouteController extends Controller
         $useCache = (int)$request->get('useCache', 1) === 1;
 
         try {
-            /** @var \Illuminate\Support\Collection<int, ImportWarning> $warnings */
+            /** @var Collection<int, ImportWarning> $warnings */
             $warnings     = new Collection();
             $dungeonRoute = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)

@@ -2,6 +2,8 @@
 
 namespace App\Exceptions\Logging;
 
+use Throwable;
+
 interface HandlerLoggingInterface
 {
     public function tooManyRequests(
@@ -9,7 +11,7 @@ interface HandlerLoggingInterface
         string     $url,
         ?int       $userId,
         ?string    $username,
-        \Throwable $throwable,
+        Throwable $throwable,
     ): void;
 
     public function uncaughtException(

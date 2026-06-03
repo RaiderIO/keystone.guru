@@ -7,6 +7,7 @@ use App\Models\KillZone\KillZone;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 class KillZoneChangedEvent extends ModelChangedEvent
 {
@@ -24,7 +25,7 @@ class KillZoneChangedEvent extends ModelChangedEvent
         return 'killzone-changed';
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         /** @var KillZone $model */

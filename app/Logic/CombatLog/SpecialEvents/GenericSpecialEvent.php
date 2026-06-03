@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
+use Override;
 
 abstract class GenericSpecialEvent extends SpecialEvent
 {
@@ -14,7 +15,7 @@ abstract class GenericSpecialEvent extends SpecialEvent
         return $this->genericData;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

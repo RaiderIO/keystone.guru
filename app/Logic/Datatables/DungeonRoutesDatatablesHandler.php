@@ -10,14 +10,16 @@ namespace App\Logic\Datatables;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Override;
 
 class DungeonRoutesDatatablesHandler extends DatatablesHandler
 {
-    #[\Override]
+    #[Override]
     public function getResult(): array
     {
-        /** @var array{draw: int, recordsTotal: int, data: \Illuminate\Support\Collection<int, DungeonRoute>, recordsFiltered: int, input: array, queries: array} $result */
+        /** @var array{draw: int, recordsTotal: int, data: Collection<int, DungeonRoute>, recordsFiltered: int, input: array, queries: array} $result */
         $result = parent::getResult();
 
         $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) {
