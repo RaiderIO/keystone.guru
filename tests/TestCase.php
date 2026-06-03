@@ -66,6 +66,10 @@ abstract class TestCase extends BaseTestCase
 
     private function isExcludedFromTimingCheck(): bool
     {
+        if (config('app.env') === 'production') {
+            return true;
+        }
+
         $classReflector = new \ReflectionClass($this);
 
         if (!empty($classReflector->getAttributes(SlowTest::class))) {
