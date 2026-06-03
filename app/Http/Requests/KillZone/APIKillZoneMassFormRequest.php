@@ -26,7 +26,9 @@ class APIKillZoneMassFormRequest extends FormRequest
                 'required',
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
-            'killzones.*.index' => 'int',
+            'killzones.*.index'     => 'int',
+            'killzones.*.enemies'   => 'nullable|array',
+            'killzones.*.enemies.*' => 'integer',
         ];
     }
 }

@@ -9,7 +9,6 @@ use App\Http\Requests\DungeonRoute\DungeonRoutePreviewUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeFormRequest;
-use App\Jobs\RefreshEnemyForces;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -17,6 +16,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\User;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -694,29 +694,17 @@ class DungeonRouteController extends Controller
     /**
      * @throws AuthorizationException
      * @throws InvalidArgumentException
-     * @throws Exception
      */
     public function upgrade(
-        Request      $request,
-        Dungeon      $dungeon,
-        DungeonRoute $dungeonroute,
-        ?string      $title,
+        DungeonRouteServiceInterface $dungeonRouteService,
+        Dungeon                      $dungeon,
+        DungeonRoute                 $dungeonroute,
+        ?string                      $title,
     ): RedirectResponse {
         Gate::authorize('edit', $dungeonroute);
 
-        // Store it
-        $dungeonroute->update([
-            'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion(
-                $dungeonroute->mappingVersion->gameVersion,
-            )->id,
-        ]);
+        $dungeonRouteService->upgradeMappingVersion($dungeonroute);
 
-        // Refresh the enemy forces
-        new RefreshEnemyForces($dungeonroute->id)->handle();
-
-        DungeonRoute::dropCaches($dungeonroute->id);
-
-        // Display the edit page
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,

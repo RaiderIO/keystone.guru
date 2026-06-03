@@ -64,16 +64,18 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
             $dungeonRoute = $this->getMDTCompatibleDungeonRoute();
 
             /** @var Enemy $randomEnemy */
-            $randomEnemy = $dungeonRoute->mappingVersion->enemies()->inRandomOrder()->first();
+            $randomEnemy = Enemy::where('mapping_version_id', $dungeonRoute->mapping_version_id)
+                ->whereNull('teeming')
+                ->whereNull('seasonal_type')
+                ->inRandomOrder()
+                ->first();
             /** @var KillZone $killZone */
             $killZone = KillZone::factory()->create([
                 'description' => sprintf('some string <a href="%s">link text</a>', $url),
             ]);
 
-            $killZoneEnemies = KillZoneEnemy::factory()->count(10)->create([
+            $killZoneEnemies = KillZoneEnemy::factory()->forEnemy($randomEnemy)->count(1)->create([
                 'kill_zone_id' => $killZone->id,
-                'npc_id'       => $randomEnemy->npc_id,
-                'mdt_id'       => $randomEnemy->mdt_id,
             ]);
             $killZone->killZoneEnemies()->saveMany($killZoneEnemies);
             $dungeonRoute->killZones()->save($killZone);

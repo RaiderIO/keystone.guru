@@ -2,6 +2,8 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Models\DungeonRoute\DungeonRoute;
+
 interface DungeonRouteServiceInterface
 {
     public function updatePopularity(): int;
@@ -13,4 +15,6 @@ interface DungeonRouteServiceInterface
     public function deleteExpiredDungeonRoutes(): int;
 
     public function touchRoutesForTeam(int $teamId): int;
+
+    public function upgradeMappingVersion(DungeonRoute $dungeonRoute): void;
 }
