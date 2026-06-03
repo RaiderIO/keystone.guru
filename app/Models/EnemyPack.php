@@ -77,6 +77,7 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return HasMany<Enemy, $this> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);

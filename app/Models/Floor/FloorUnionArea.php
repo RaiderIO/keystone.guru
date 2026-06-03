@@ -90,9 +90,9 @@ class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, Ma
         MappingVersion         $mappingVersion,
         ?MappingModelInterface $newParent = null,
     ): Model {
-        $clone                     = clone $this;
-        $clone->exists             = false;
-        $clone->id                 = null;
+        $clone         = clone $this;
+        $clone->exists = false;
+        unset($clone->id);
         $clone->mapping_version_id = $mappingVersion->id;
         $clone->floor_union_id     = $newParent?->id ?? 0;
         $clone->save();

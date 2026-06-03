@@ -55,7 +55,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
-    /** @var Collection<int> */
+    /** @var Collection<int, \App\Models\Spell\Spell> */
     protected Collection $validSpellsById;
 
     /**

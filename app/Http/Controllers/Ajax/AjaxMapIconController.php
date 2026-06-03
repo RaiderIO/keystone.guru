@@ -80,6 +80,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;
 
+        /** @var MapIcon */
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,

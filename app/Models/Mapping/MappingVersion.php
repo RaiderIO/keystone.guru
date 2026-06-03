@@ -108,11 +108,12 @@ class MappingVersion extends Model
 
     public $timestamps = true;
 
+    /** @var Collection<int, EloquentCollection<int, FloorUnion>>|null */
     private ?Collection $cachedFloorUnionsOnFloor = null;
 
     private ?Collection $cachedFloorUnionsForFloor = null;
 
-    private ?int $isLatestForDungeonCache = null;
+    private ?bool $isLatestForDungeonCache = null;
 
     protected function casts(): array
     {
@@ -156,7 +157,7 @@ class MappingVersion extends Model
         return $this->hasMany(DungeonFloorSwitchMarker::class);
     }
 
-    /** @return HasMany<\App\Models\Enemy, MappingVersion> */
+    /** @return HasMany<\App\Models\Enemy, $this> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class)->orderBy('id');
@@ -182,6 +183,7 @@ class MappingVersion extends Model
         return $this->hasMany(MountableArea::class);
     }
 
+    /** @return HasMany<FloorUnion, $this> */
     public function floorUnions(): HasMany
     {
         return $this->hasMany(FloorUnion::class);
@@ -206,7 +208,7 @@ class MappingVersion extends Model
                 ->max('version') === $this->version;
         }
 
-        return $this->isLatestForDungeonCache;
+        return $this->isLatestForDungeonCache ?? false;
     }
 
     public function getPrettyName(): string

@@ -601,7 +601,7 @@ class AjaxDungeonRouteController extends Controller
 
         $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
         if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
-            $dungeonRoute->published_at = date('Y-m-d H:i:s', time());
+            $dungeonRoute->published_at = now();
         }
 
         $dungeonRoute->save();

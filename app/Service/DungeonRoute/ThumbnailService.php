@@ -164,7 +164,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 } else {
                     try {
                         // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
-                        $dungeonRoute->thumbnail_updated_at = Carbon::now()->toDateTimeString();
+                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
                         // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
                         $dungeonRoute->timestamps = false;
                         $dungeonRoute->save();

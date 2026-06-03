@@ -66,7 +66,8 @@ abstract class TestCase extends BaseTestCase
 
     private function isExcludedFromTimingCheck(): bool
     {
-        if (env('APP_ENV') === 'production') {
+        /** @noinspection LaravelFunctionsInspection config() is not available at this point */
+        if (env('APP_ENV') === 'production') { // @phpstan-ignore larastan.noEnvCallsOutsideOfConfig
             return true;
         }
 

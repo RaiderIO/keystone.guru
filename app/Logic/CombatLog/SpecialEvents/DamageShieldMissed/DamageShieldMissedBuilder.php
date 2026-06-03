@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class DamageShieldMissedBuilder implements SpecialEventBuilderInterface
 {
     /**
-     * @return SpecialEvent&DamageShieldMissedInterface
+     * @return SpecialEvent
      */
     public static function create(
         int    $combatLogVersion,

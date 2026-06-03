@@ -143,6 +143,7 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         $id = (int)explode('-', (string)$value, 2)[0];
 
+        /** @var static|null */
         return $this->where('id', $id)->first();
     }
 

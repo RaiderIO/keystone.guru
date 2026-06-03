@@ -93,7 +93,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = [
         'floor_count',
@@ -145,6 +145,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     private ?Season $activeSeasonCache = null;
 
+    /** @var Collection<int, MappingVersion>|null  */
     private ?Collection $currentMappingVersionCache = null;
 
     /**
@@ -216,7 +217,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->belongsTo(Expansion::class);
     }
 
-    /** @return HasMany<MappingVersion, Dungeon> */
+    /** @return HasMany<MappingVersion, $this> */
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
@@ -281,7 +282,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
     }
 
-    /** @return HasMany<Floor, Dungeon> */
+    /** @return HasMany<Floor, $this> */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
@@ -297,7 +298,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->floors()->active();
     }
 
-    /** @return HasMany<Floor, Dungeon> */
+    /** @return HasMany<Floor, $this> */
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
         $useFacade ??= $mappingVersion->facade_enabled;
@@ -341,7 +342,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->hasMany(SeasonDungeon::class);
     }
 
-    /** @return BelongsToMany<Npc, Dungeon> */
+    /** @return BelongsToMany<Npc, $this> */
     public function npcs(): BelongsToMany
     {
         return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');

@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 trait HasTags
 {
     /**
-     * @return HasMany<Tag, self>
+     * @return HasMany<Tag, $this>
      */
     public function tags(?int $categoryId = null): HasMany
     {

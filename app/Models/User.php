@@ -111,7 +111,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'id',
@@ -133,7 +133,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that should be visible for outsiders.
      *
-     * @var array
+     * @var list<string>
      */
     protected $visible = [
         'id',
@@ -164,7 +164,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasRole(Role::ROLE_ADMIN);
     }
 
-    /** @return HasMany<DungeonRoute, User> */
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');

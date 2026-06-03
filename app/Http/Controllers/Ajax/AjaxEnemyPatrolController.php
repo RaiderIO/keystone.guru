@@ -25,8 +25,6 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     use SavesPolylines;
 
     /**
-     * @return EnemyPatrol
-     *
      * @throws Throwable
      */
     public function store(
@@ -39,6 +37,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
 
         $beforeModel = $enemyPatrol !== null ? clone $enemyPatrol : null;
 
+        /** @var EnemyPatrol */
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,

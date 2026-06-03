@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
 class File extends Model
 {
     /**
-     * @var array None of this really matters for externals
+     * @var list<string> None of this really matters for externals
      */
     public $hidden = [
         'id',
@@ -34,7 +34,7 @@ class File extends Model
     ];
 
     /**
-     * @var array Only this really matters when we're echoing the file.
+     * @var list<string> Only this really matters when we're echoing the file.
      */
     public $appends = [
         'url',
@@ -50,16 +50,18 @@ class File extends Model
     ];
 
     /**
-     * @return void
-     *
      * @throws Exception
      */
     #[\Override]
-    public function delete(): void
+    public function delete(): bool|null
     {
-        if (parent::delete()) {
+        $result = parent::delete();
+
+        if ($result) {
             $this->deleteFromDisk();
         }
+
+        return $result;
     }
 
     /**

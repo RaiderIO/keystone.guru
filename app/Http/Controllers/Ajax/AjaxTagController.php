@@ -37,7 +37,7 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|Response
+     * @return Application|ResponseFactory|Response|Tag
      *
      * @throws AuthorizationException
      */
@@ -64,7 +64,6 @@ class AjaxTagController extends Controller
 
         // Reconstruct the model that we're trying to tag
         /** @var Builder $query */
-        /** @noinspection PhpUndefinedMethodInspection */
         $query = $tagCategory->model_class::query();
         if (in_array($tagCategory->name, [
             TagCategory::DUNGEON_ROUTE_PERSONAL,

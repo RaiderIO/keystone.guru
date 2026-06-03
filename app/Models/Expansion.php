@@ -103,8 +103,10 @@ class Expansion extends CacheModel
         self::EXPANSION_TLT          => 13,
     ];
 
+    /** @var Collection<int, Season>|null  */
     private ?Collection $currentSeasonCache = null;
 
+    /** @var Collection<int, Season>|null  */
     private ?Collection $nextSeasonCache = null;
 
     /**
@@ -116,19 +118,19 @@ class Expansion extends CacheModel
         return 'shortname';
     }
 
-    /** @return HasMany<Dungeon, Expansion> */
+    /** @return HasMany<Dungeon, $this> */
     public function dungeons(): HasMany
     {
         return $this->hasMany(Dungeon::class)->where('raid', 0)->orderBy('name');
     }
 
-    /** @return HasMany<Dungeon, Expansion> */
+    /** @return HasMany<Dungeon, $this> */
     public function raids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->where('raid', 1)->orderBy('name');
     }
 
-    /** @return HasMany<Dungeon, Expansion> */
+    /** @return HasMany<Dungeon, $this> */
     public function dungeonsAndRaids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->orderBy('name');

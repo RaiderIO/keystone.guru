@@ -44,7 +44,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
      */
     private array $cachedConvertedFunctionNames = [];
 
-    /** @var LogManager[] */
+    /** @var LoggerInterface[] */
     private array $loggers = [];
 
     public function __construct()

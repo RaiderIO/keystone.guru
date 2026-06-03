@@ -27,6 +27,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -375,7 +376,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|RedirectResponse|Redirector|View
      *
      * @throws AuthorizationException
      */
@@ -524,8 +525,8 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @param  mixed                    $dungeonroute
-     * @return Application|Factory|View
+     * @param  mixed                             $dungeonroute
+     * @return Application|Factory|View|Response
      *
      * @throws AuthorizationException
      */
