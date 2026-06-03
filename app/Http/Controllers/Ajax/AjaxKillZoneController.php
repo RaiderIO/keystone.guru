@@ -136,7 +136,7 @@ class AjaxKillZoneController extends Controller
                 KillZoneEnemy::insert($killZoneEnemies);
 
                 // Reload the relation so getEnemiesAttribute() returns accurate data
-                $killZone->load('killZoneEnemies');
+                $killZone->load('enemies');
             }
 
             // May be null for mass request
@@ -164,7 +164,7 @@ class AjaxKillZoneController extends Controller
                 array & $afterAttributes,
             ) use ($beforeEnemyIds, $killZone) {
                 $beforeAttributes['enemies'] = $beforeEnemyIds;
-                $afterAttributes['enemies']  = $killZone->getEnemiesAttribute();
+                $afterAttributes['enemies']  = $killZone->enemies->pluck('id');
             });
 
             // If killzone has lat/lng set, convert it to facade location if it's not already

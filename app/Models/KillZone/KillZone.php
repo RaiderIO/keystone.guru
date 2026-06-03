@@ -32,8 +32,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @property DungeonRoute                           $dungeonRoute
  * @property Floor                                  $floor
- * @property Collection<int, int>                   $enemies        Integer IDs via accessor; use getRelation('enemies') for Enemy models after eager-loading
- * @property EloquentCollection<int, Enemy>         $enemyModels    Populated after ->load('enemies') or ->with('enemies')
+ * @property EloquentCollection<int, Enemy>         $enemies         Enemy models via BelongsToMany; serialized to integer IDs in toArray()
  * @property EloquentCollection<int, KillZoneEnemy> $killZoneEnemies
  * @property EloquentCollection<int, KillZoneSpell> $killZoneSpells
  * @property EloquentCollection<int, Spell>         $spells
@@ -60,8 +59,6 @@ class KillZone extends Model
         'spells',
         'killzone_paths',
     ];
-
-    protected $appends = ['enemies'];
 
     protected $with = ['spells:id,icon_name'];
 
@@ -91,11 +88,6 @@ class KillZone extends Model
         ];
     }
 
-    public function getEnemiesAttribute(): Collection
-    {
-        return $this->killZoneEnemies->pluck('enemy_id')->filter()->values();
-    }
-
     /**
      * Get the dungeon route that this killzone is attached to.
      */
@@ -112,6 +104,11 @@ class KillZone extends Model
     public function killZoneSpells(): HasMany
     {
         return $this->hasMany(KillZoneSpell::class);
+    }
+
+    public function enemies(): BelongsToMany
+    {
+        return $this->belongsToMany(Enemy::class, 'kill_zone_enemies', 'kill_zone_id', 'enemy_id');
     }
 
     public function spells(): BelongsToMany
@@ -134,13 +131,9 @@ class KillZone extends Model
      */
     public function getEnemies(): EloquentCollection
     {
-        $enemyIds = $this->killZoneEnemies->pluck('enemy_id')->filter()->values();
+        $this->loadMissing('enemies.npc');
 
-        if ($enemyIds->isEmpty()) {
-            return new EloquentCollection();
-        }
-
-        return Enemy::with(['npc'])->whereIn('id', $enemyIds)->get();
+        return $this->getRelation('enemies');
     }
 
     /**
@@ -159,9 +152,11 @@ class KillZone extends Model
         }
 
         if ($result === null && (
-            $this->relationLoaded('killZoneEnemies') ?
-                $this->killZoneEnemies->isNotEmpty() :
-                $this->killZoneEnemies()->exists()
+            $this->relationLoaded('enemies') ? $this->getRelation('enemies')->isNotEmpty() : (
+                $this->relationLoaded('killZoneEnemies') ?
+                    $this->killZoneEnemies->isNotEmpty() :
+                    $this->killZoneEnemies()->exists()
+            )
         )) {
             $floorTotals = [];
             foreach ($this->getEnemies() as $enemy) {
@@ -338,6 +333,23 @@ class KillZone extends Model
         ]);
 
         return collect($queryResult);
+    }
+
+    /**
+     * Serialize enemies as an array of integer IDs for the frontend instead of full model objects.
+     *
+     * @return array<string, mixed>
+     */
+    #[\Override]
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+
+        if (isset($array['enemies'])) {
+            $array['enemies'] = array_column($array['enemies'], 'id');
+        }
+
+        return $array;
     }
 
     #[\Override]
