@@ -13,7 +13,12 @@ $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
-@include('common.general.inline', ['path' => 'common/dungeon/mappingversion'])
+@include('common.general.inline', [
+    'path' => 'common/modal/mappingversion',
+    'options' => [
+        'saveMappingVersionSelector' => '#save_mapping_version'
+    ]
+])
 
 <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
     {{ html()->label(__('view_admin.dungeon.edit.game_version_id'), 'game_version_id') }}

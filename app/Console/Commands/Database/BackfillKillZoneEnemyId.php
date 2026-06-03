@@ -42,7 +42,7 @@ class BackfillKillZoneEnemyId extends Command
         $updated  = 0;
         $orphaned = 0;
 
-        for($start = $maxId; $start >= $minId; $start -= $chunkSize) {
+        for ($start = $maxId; $start >= $minId; $start -= $chunkSize) {
             $end = $start - $chunkSize + 1;
 
             DB::statement("
