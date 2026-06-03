@@ -40,11 +40,13 @@ abstract class TestCase extends BaseTestCase
     {
         $elapsed = microtime(true) - $this->testStartTime;
 
-        parent::tearDown();
-
         if ($this->isExcludedFromTimingCheck()) {
+
+            parent::tearDown();
             return;
         }
+
+        parent::tearDown();
 
         if ($elapsed > self::MAX_TEST_DURATION_SECONDS) {
             $this->fail(sprintf(
@@ -66,8 +68,7 @@ abstract class TestCase extends BaseTestCase
 
     private function isExcludedFromTimingCheck(): bool
     {
-        /** @noinspection LaravelFunctionsInspection config() is not available at this point */
-        if (env('APP_ENV') === 'production') { // @phpstan-ignore larastan.noEnvCallsOutsideOfConfig
+        if (!config('app.debug')) {
             return true;
         }
 
