@@ -66,7 +66,7 @@ abstract class TestCase extends BaseTestCase
 
     private function isExcludedFromTimingCheck(): bool
     {
-        if (config('app.env') === 'production') {
+        if (env('APP_ENV') === 'production') {
             return true;
         }
 
