@@ -133,7 +133,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsCoupleEnemiesToEnemyPatrol(int $enemyPatrolId): void;
 
-    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(int $newEnemyPatrolId): void;
+    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(?int $newEnemyPatrolId): void;
 
     public function importEnemyPatrolsEnd(): void;
 

@@ -2,11 +2,12 @@
 
 namespace App\Service\Cache\Traits;
 
+use Closure;
 use Illuminate\Support\Facades\Cache;
 
 trait RemembersToFile
 {
-    private function rememberLocal(string $key, int $ttl, \Closure $compute, bool $cacheEnabled = true): mixed
+    private function rememberLocal(string $key, int $ttl, Closure $compute, bool $cacheEnabled = true): mixed
     {
         if (!$cacheEnabled || config('app.env') === 'local') {
             return $compute();

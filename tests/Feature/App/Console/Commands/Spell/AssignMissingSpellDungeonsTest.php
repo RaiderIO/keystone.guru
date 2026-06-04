@@ -11,6 +11,7 @@ use App\Models\Spell\SpellDungeon;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('AssignMissingSpellDungeons')]
@@ -70,7 +71,8 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenNpcWithDungeonAndSpellMissingDungeon_assignsDungeonToSpell(): void
+    #[SlowTest]
+    public function handle_givenAllNpcsWithDungeonAndSpellMissingDungeon_assignsDungeonToSpell(): void
     {
         // Arrange
         $this->createTestNpc();
@@ -80,6 +82,27 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
 
         // Act
         $this->artisan(AssignMissingSpellDungeons::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spell_dungeons', [
+            'spell_id'   => self::SPELL_ID,
+            'dungeon_id' => self::DUNGEON_ID,
+        ]);
+    }
+
+    #[Test]
+    public function handle_givenNpcWithDungeonAndSpellMissingDungeon_assignsDungeonToSpell(): void
+    {
+        // Arrange
+        $this->createTestNpc();
+        $this->createTestSpell();
+        NpcDungeon::create(['npc_id' => self::NPC_ID, 'dungeon_id' => self::DUNGEON_ID]);
+        NpcSpell::create(['npc_id' => self::NPC_ID, 'spell_id' => self::SPELL_ID]);
+
+        // Act
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
 
         // Assert
         $this->assertDatabaseHas('spell_dungeons', [
@@ -99,7 +122,9 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
         SpellDungeon::create(['spell_id' => self::SPELL_ID, 'dungeon_id' => self::DUNGEON_ID]);
 
         // Act
-        $this->artisan(AssignMissingSpellDungeons::class)->assertSuccessful();
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
 
         // Assert — exactly one SpellDungeon record, not two
         $this->assertSame(
@@ -118,7 +143,9 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
         // Deliberately no NpcDungeon
 
         // Act
-        $this->artisan(AssignMissingSpellDungeons::class)->assertSuccessful();
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
 
         // Assert
         $this->assertDatabaseMissing('spell_dungeons', ['spell_id' => self::SPELL_ID]);
@@ -136,7 +163,9 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
         NpcSpell::create(['npc_id' => self::NPC_ID, 'spell_id' => self::SPELL_ID]);
 
         // Act
-        $this->artisan(AssignMissingSpellDungeons::class)->assertSuccessful();
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
 
         // Assert
         $this->assertDatabaseHas('spell_dungeons', ['spell_id' => self::SPELL_ID, 'dungeon_id' => self::DUNGEON_ID]);
@@ -156,7 +185,9 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
         SpellDungeon::create(['spell_id' => self::SPELL_ID, 'dungeon_id' => self::DUNGEON_ID]);
 
         // Act
-        $this->artisan(AssignMissingSpellDungeons::class)->assertSuccessful();
+        $this->artisan(AssignMissingSpellDungeons::class, [
+            'npc' => self::NPC_ID,
+        ])->assertSuccessful();
 
         // Assert — first dungeon still has exactly one record, second dungeon was added
         $this->assertSame(

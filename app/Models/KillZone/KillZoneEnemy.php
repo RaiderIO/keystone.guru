@@ -16,8 +16,9 @@ use Illuminate\Database\Query\JoinClause;
  * @property int $npc_id
  * @property int $mdt_id
  *
- * @property KillZone $killZone
- * @property Npc      $npc
+ * @property KillZone   $killZone
+ * @property Npc        $npc
+ * @property Enemy|null $enemy
  *
  * @mixin Eloquent
  */

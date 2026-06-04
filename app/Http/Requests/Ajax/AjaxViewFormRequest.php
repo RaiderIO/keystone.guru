@@ -4,6 +4,7 @@ namespace App\Http\Requests\Ajax;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Override;
 
 class AjaxViewFormRequest extends FormRequest
 {
@@ -30,7 +31,7 @@ class AjaxViewFormRequest extends FormRequest
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function validationData(): array
     {
         // Merge route params into the data being validated

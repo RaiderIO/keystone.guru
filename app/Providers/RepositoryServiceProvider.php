@@ -229,10 +229,11 @@ use App\Repositories\Interfaces\UserIpAddressRepositoryInterface;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         parent::register();

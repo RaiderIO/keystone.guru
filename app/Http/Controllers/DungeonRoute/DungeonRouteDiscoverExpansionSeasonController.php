@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
-use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
@@ -18,6 +17,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class DungeonRouteDiscoverExpansionSeasonController extends Controller
 {
@@ -71,7 +71,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -108,7 +108,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -150,8 +150,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @param  Dungeon                  $dungeon
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -192,7 +191,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */

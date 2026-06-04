@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * CHALLENGE_MODE_END,1841,1,2,1423854,42.612125,63.918190
  *
@@ -55,7 +57,7 @@ class ChallengeModeEnd extends SpecialEvent
         return $this->unknown2;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

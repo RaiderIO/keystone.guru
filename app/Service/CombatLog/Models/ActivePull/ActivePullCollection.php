@@ -5,7 +5,11 @@ namespace App\Service\CombatLog\Models\ActivePull;
 use Illuminate\Support\Collection;
 
 /**
- * Ordered collection of all currently open ActivePulls; drives chain-pull detection and group-in-combat lookups.
+ * @template TKey of array-key
+ *
+ * @template-covariant TValue
+ *
+ *  Ordered collection of all currently open ActivePulls; drives chain-pull detection and group-in-combat lookups.
  */
 class ActivePullCollection extends Collection
 {

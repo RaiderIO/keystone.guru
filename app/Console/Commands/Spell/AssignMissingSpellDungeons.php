@@ -16,7 +16,7 @@ class AssignMissingSpellDungeons extends Command
      *
      * @var string
      */
-    protected $signature = 'spell:assignmissingdungeons';
+    protected $signature = 'spell:assignmissingdungeons {npc? : The NPC ID to assign missing spell dungeons for}';
 
     /**
      * The console command description.
@@ -33,35 +33,39 @@ class AssignMissingSpellDungeons extends Command
         $bar = $this->output->createProgressBar(Npc::count());
         $bar->start();
 
-        Npc::with(['npcDungeons', 'npcSpells.spell.spellDungeons'])->chunk(100, function (Collection $npcs) use ($bar) {
-            foreach ($npcs as $npc) {
-                /** @var Npc $npc */
-                // No dungeons assigned, cannot infer anything
-                if ($npc->npcDungeons->count() === 0) {
-                    continue;
+        $npcId = $this->argument('npc');
+
+        Npc::with(['npcDungeons', 'npcSpells.spell.spellDungeons'])
+            ->when($npcId !== null, fn($q) => $q->where('id', $npcId))
+            ->chunk(100, function (Collection $npcs) use ($bar) {
+                foreach ($npcs as $npc) {
+                    /** @var Npc $npc */
+                    // No dungeons assigned, cannot infer anything
+                    if ($npc->npcDungeons->count() === 0) {
+                        continue;
+                    }
+
+                    // For each spell this NPC can cast, ensure that that spell is also assigned to the same dungeon(s)
+                    $npc->npcSpells->each(function (NpcSpell $npcSpell) use ($npc) {
+                        /** @var Spell $spell */
+                        $spell = $npcSpell->spell;
+
+                        // For each dungeon this NPC is in, ensure the spell is also assigned to that dungeon
+                        foreach ($npc->npcDungeons as $npcDungeon) {
+                            if ($spell->spellDungeons->pluck('dungeon_id')->contains($npcDungeon->dungeon_id)) {
+                                continue;
+                            }
+
+                            SpellDungeon::firstOrCreate([
+                                'spell_id'   => $spell->id,
+                                'dungeon_id' => $npcDungeon->dungeon_id,
+                            ]);
+                        }
+                    });
                 }
 
-                // For each spell this NPC can cast, ensure that that spell is also assigned to the same dungeon(s)
-                $npc->npcSpells->each(function (NpcSpell $npcSpell) use ($npc) {
-                    /** @var Spell $spell */
-                    $spell = $npcSpell->spell;
-
-                    // For each dungeon this NPC is in, ensure the spell is also assigned to that dungeon
-                    foreach ($npc->npcDungeons as $npcDungeon) {
-                        if ($spell->spellDungeons->pluck('dungeon_id')->contains($npcDungeon->dungeon_id)) {
-                            continue;
-                        }
-
-                        SpellDungeon::firstOrCreate([
-                            'spell_id'   => $spell->id,
-                            'dungeon_id' => $npcDungeon->dungeon_id,
-                        ]);
-                    }
-                });
-            }
-
-            $bar->advance($npcs->count());
-        });
+                $bar->advance($npcs->count());
+            });
 
         $bar->finish();
         $this->newLine();

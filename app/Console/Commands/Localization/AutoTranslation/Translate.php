@@ -52,7 +52,7 @@ class Translate extends Command
             //            'characteristics',
             //            'classes',
         ];
-        if (!empty($validKeys)) {
+        if (!empty($validKeys)) { // @phpstan-ignore empty.variable
             $validTexts = [];
             foreach ($texts as $key => $text) {
                 if (in_array(explode('.', (string)$key)[0], $validKeys)) {

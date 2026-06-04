@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool   $admin_only
  * @property string $icon_url
  *
- * @property MapIcon $mapIcons
+ * @property EloquentCollection<int, MapIcon> $mapIcons
  *
  * @mixin Eloquent
  */

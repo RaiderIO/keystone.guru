@@ -88,7 +88,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             bool   $advancedLoggingEnabled,
             string $rawEvent,
             int    $lineNr,
-        ) use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine, $runContext) {
+        ) use (&$result, &$currentDungeon, $onProcessLine, $runContext) {
             // We don't care if there's no advanced logging enabled!
             if (!$advancedLoggingEnabled) {
                 return null;

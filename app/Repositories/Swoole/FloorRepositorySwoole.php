@@ -6,6 +6,7 @@ use App\Models\Floor\Floor;
 use App\Repositories\Database\Floor\FloorRepository;
 use App\Repositories\Swoole\Interfaces\FloorRepositorySwooleInterface;
 use Illuminate\Support\Collection;
+use Override;
 
 class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySwooleInterface
 {
@@ -23,7 +24,7 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         $this->defaultFloorByDungeonId     = collect();
     }
 
-    #[\Override]
+    #[Override]
     public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
         if ($uiMapId === 0) {
@@ -39,7 +40,7 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
         return $this->floorsByUiMapIdAndDungeonId->get($key);
     }
 
-    #[\Override]
+    #[Override]
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor
     {
         if ($this->defaultFloorByDungeonId->has($dungeonId)) {

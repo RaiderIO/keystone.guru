@@ -5,6 +5,7 @@ namespace App\Logic\Datatables\ColumnHandler\Compendium;
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use Illuminate\Database\Eloquent\Builder;
+use Override;
 
 class DungeonColumnHandler extends SimpleColumnHandler
 {
@@ -13,7 +14,7 @@ class DungeonColumnHandler extends SimpleColumnHandler
         parent::__construct($dtHandler, 'dungeon_id', 'dungeon_names');
     }
 
-    #[\Override]
+    #[Override]
     protected function applyFilter(
         Builder $subBuilder,
         Builder $orderBuilder,

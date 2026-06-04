@@ -7,11 +7,10 @@ use App\Http\Requests\Npc\NpcEnemyForcesFormRequest;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 use Request;
 
 class NpcEnemyForcesController extends Controller
@@ -21,7 +20,7 @@ class NpcEnemyForcesController extends Controller
     /**
      * Show a page for creating a new npc.
      *
-     * @return Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function create(Npc $npc)
     {
@@ -48,9 +47,9 @@ class NpcEnemyForcesController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
-    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
+    public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): View
     {
         return view('admin.npcenemyforces.edit', [
             'npc'            => $npc,
@@ -62,7 +61,7 @@ class NpcEnemyForcesController extends Controller
         NpcEnemyForcesFormRequest $request,
         Npc                       $npc,
         NpcEnemyForces            $npcEnemyForces,
-    ): \Illuminate\View\View {
+    ): View {
         $npcEnemyForces->update($request->validated());
 
         // Message to the user
@@ -75,7 +74,7 @@ class NpcEnemyForcesController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function delete(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): RedirectResponse
     {

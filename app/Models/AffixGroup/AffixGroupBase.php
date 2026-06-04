@@ -5,7 +5,7 @@ namespace App\Models\AffixGroup;
 use App\Models\Affix;
 use App\Models\CacheModel;
 use Eloquent;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int    $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
  * @property string $text                     To string of the affix group
  *
- * @property Collection<Affix>              $affixes
- * @property Collection<AffixGroupCoupling> $affixGroupCouplings
+ * @property EloquentCollection<int, Affix>              $affixes
+ * @property EloquentCollection<int, AffixGroupCoupling> $affixGroupCouplings
  *
  * @mixin Eloquent
  */
@@ -42,6 +42,7 @@ abstract class AffixGroupBase extends CacheModel
             ->orderBy(sprintf('%s.id', $this->getAffixGroupCouplingsTableName()), 'asc');
     }
 
+    /** @return HasMany<AffixGroupCoupling, $this> */
     public function affixGroupCouplings(): HasMany
     {
         return $this->hasMany(AffixGroupCoupling::class);
@@ -54,7 +55,7 @@ abstract class AffixGroupBase extends CacheModel
     {
         $result = [];
         foreach ($this->affixes as $affix) {
-            /** @var $affix Affix */
+            /** @var Affix $affix */
             $result[] = __($affix->name);
         }
 

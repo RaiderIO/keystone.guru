@@ -19,12 +19,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Override;
 use Teapot\StatusCode\Http;
 use Throwable;
 
 class AjaxFloorUnionController extends AjaxMappingModelBaseController
 {
-    #[\Override]
+    #[Override]
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,

@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\SpecialEvents\EncounterEnd\Versions\V20;
 
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use Override;
 
 /**
  * 6/27 21:37:42.817  ENCOUNTER_END,2100,"Viq'Goth",8,5,1,227927
@@ -51,7 +52,7 @@ class EncounterEndV20 extends SpecialEvent implements EncounterEndInterface
         return $this->fightTimeMS;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

@@ -13,6 +13,9 @@ use Illuminate\Support\Carbon;
 
 class EnvironmentalDamageBuilder implements SpecialEventBuilderInterface
 {
+    /**
+     * @return SpecialEvent
+     */
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,

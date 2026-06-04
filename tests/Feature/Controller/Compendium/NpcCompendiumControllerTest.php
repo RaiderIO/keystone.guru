@@ -101,6 +101,9 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         $options = $xpath->query('//select[@id="compendium_filter_dungeon"]//option');
         $values  = [];
         foreach ($options as $option) {
+            if (!$option instanceof \DOMElement) {
+                continue;
+            }
             $value = $option->getAttribute('value');
             if (is_numeric($value) && (int)$value > 0) {
                 $values[] = (int)$value;

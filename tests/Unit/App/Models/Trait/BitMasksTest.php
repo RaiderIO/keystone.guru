@@ -14,6 +14,8 @@ class BitMasksTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
+        parent::setUp();
+
         // Create an anonymous class that uses the BitMasks trait
         $this->bitMask = new class {
             use BitMasks;

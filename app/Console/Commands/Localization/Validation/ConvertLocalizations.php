@@ -76,8 +76,7 @@ class ConvertLocalizations extends Command
     /**
      * Convert nested arrays to dot notation.
      *
-     * @param  array  $array
-     * @param  string $prefix
+     * @param  array $array
      * @return array
      */
     protected function convertDotNotationToArray(array $array): array

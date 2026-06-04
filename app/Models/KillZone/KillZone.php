@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Override;
 
 /**
  * @property int        $id
@@ -30,12 +32,12 @@ use Illuminate\Support\Facades\DB;
  * @property float|null $lat
  * @property float|null $lng
  *
- * @property DungeonRoute              $dungeonRoute
- * @property Floor                     $floor
- * @property Collection<int>           $enemies
- * @property Collection<KillZoneEnemy> $killZoneEnemies
- * @property Collection<KillZoneSpell> $killZoneSpells
- * @property Collection<Spell>         $spells
+ * @property DungeonRoute                           $dungeonRoute
+ * @property Floor                                  $floor
+ * @property Collection<int>                        $enemies
+ * @property EloquentCollection<int, KillZoneEnemy> $killZoneEnemies
+ * @property EloquentCollection<int, KillZoneSpell> $killZoneSpells
+ * @property EloquentCollection<int, Spell>         $spells
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -156,9 +158,9 @@ class KillZone extends Model
     }
 
     /**
-     * @return Collection<Enemy>
+     * @return EloquentCollection<int, Enemy>
      */
-    public function getEnemies(bool $useCache = false): Collection
+    public function getEnemies(bool $useCache = false): EloquentCollection
     {
         return $useCache && $this->enemiesCache !== null ?
             $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
@@ -371,7 +373,7 @@ class KillZone extends Model
         return collect($queryResult);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

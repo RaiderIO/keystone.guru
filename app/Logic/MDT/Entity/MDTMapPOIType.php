@@ -34,4 +34,5 @@ enum MDTMapPOIType: string
     case TextFrame            = 'textFrame';
     case GenericItem          = 'genericItem';
     case GenericAssignablePOI = 'genericAssignablePOI';
+    case RookItem             = 'rookItem';
 }

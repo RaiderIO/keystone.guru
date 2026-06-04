@@ -100,10 +100,10 @@ class AjaxOverpulledEnemyController extends Controller
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $overpulledEnemy, $enemy));
+                    broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));
                 }
 
-                // Optionally don't calculate the return value
+                // Optionally, don't calculate the return value
                 $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
             }
         } catch (Exception) {

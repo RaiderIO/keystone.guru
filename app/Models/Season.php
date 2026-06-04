@@ -6,11 +6,11 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasStart;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
@@ -32,9 +32,9 @@ use Illuminate\Support\Collection;
  *
  * @property Expansion $expansion
  *
- * @property Collection<AffixGroup>    $affixGroups
- * @property Collection<Dungeon>       $dungeons
- * @property Collection<SeasonDungeon> $seasonDungeons
+ * @property EloquentCollection<int, AffixGroup>    $affixGroups
+ * @property EloquentCollection<int, Dungeon>       $dungeons
+ * @property EloquentCollection<int, SeasonDungeon> $seasonDungeons
  *
  * @mixin Eloquent
  */
@@ -148,6 +148,7 @@ class Season extends CacheModel
         return $this->hasMany(AffixGroup::class);
     }
 
+    /** @return BelongsToMany<Dungeon, $this> */
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');

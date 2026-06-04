@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @OA\Schema(schema="CombatLogRouteRequest")
@@ -126,7 +127,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         return $dungeonRoute;
     }
 
-    #[\Override]
+    #[Override]
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {

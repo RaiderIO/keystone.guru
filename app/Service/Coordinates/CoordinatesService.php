@@ -196,7 +196,7 @@ class CoordinatesService implements CoordinatesServiceInterface
     }
 
     /**
-     * @return array{lng: float, lat: float}|null
+     * @return LatLng|null
      */
     public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng
     {

@@ -10,7 +10,7 @@
 
     /**
      * @var Collection<int, Collection<CombatLogParsingCriterion>>                                               $criteriaByVersion
-     * @var array<class-string, \Illuminate\Database\Eloquent\Collection<int, CombatLogCriterionModelInterface>> $modelsById
+     * @var array<class-string, \Illuminate\Support\Collection<int, CombatLogCriterionModelInterface>> $modelsById
      */
     ?>
 

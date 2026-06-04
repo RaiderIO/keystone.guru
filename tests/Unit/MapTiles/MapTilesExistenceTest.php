@@ -7,8 +7,10 @@ use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
+#[SlowTest]
 final class MapTilesExistenceTest extends PublicTestCase
 {
     #[Test]

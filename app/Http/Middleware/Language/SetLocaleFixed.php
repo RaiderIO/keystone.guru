@@ -2,7 +2,11 @@
 
 namespace App\Http\Middleware\Language;
 
+use App;
+use Carbon\Carbon;
 use Closure;
+use Date;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 
@@ -21,7 +25,7 @@ class SetLocaleFixed
         }
 
         // Set app language
-        \App::setLocale($locale);
+        App::setLocale($locale);
 
         // Remove AI suffix if it was there just for the Carbon/Date setLocale functions
         $locale = Str::replace('_ai', '', $locale);
@@ -33,7 +37,7 @@ class SetLocaleFixed
                 $locale = explode('-', (string)$locale)[0];
             }
 
-            \Carbon\Carbon::setLocale($locale);
+            Carbon::setLocale($locale);
         }
 
         // Set date language
@@ -43,7 +47,7 @@ class SetLocaleFixed
                 $locale = explode('-', (string)$locale)[0];
             }
 
-            \Date::setLocale($locale);
+            Date::setLocale($locale);
         }
     }
 
@@ -81,8 +85,8 @@ class SetLocaleFixed
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param Request $request
+     * @param Closure $next
      *
      * @return mixed
      */

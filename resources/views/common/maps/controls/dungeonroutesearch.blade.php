@@ -15,7 +15,7 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool           $showAds
+ * @var bool|null      $showAds
  * @var MappingVersion $mappingVersion
  * @var bool           $isMobile
  * @var int            $keyLevelMin

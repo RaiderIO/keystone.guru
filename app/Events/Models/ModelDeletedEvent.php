@@ -5,6 +5,7 @@ namespace App\Events\Models;
 use App\Events\ContextEvent;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 abstract class ModelDeletedEvent extends ContextEvent
 {
@@ -20,7 +21,7 @@ abstract class ModelDeletedEvent extends ContextEvent
         parent::__construct($context, $user);
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

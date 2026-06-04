@@ -4,19 +4,19 @@ namespace App\Models\DungeonRoute;
 
 use App\Models\CharacterRace;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Collection;
 
 /**
- * @property int                                $id
- * @property int                                $dungeon_route_id
- * @property int                                $character_race_id
- * @property int                                $index
- * @property DungeonRoute                       $dungeonRoute
- * @property CharacterRace                      $characterRace
- * @property Collection<DungeonRoutePlayerRace> $races
+ * @property int                                             $id
+ * @property int                                             $dungeon_route_id
+ * @property int                                             $character_race_id
+ * @property int                                             $index
+ * @property DungeonRoute                                    $dungeonRoute
+ * @property CharacterRace                                   $characterRace
+ * @property EloquentCollection<int, DungeonRoutePlayerRace> $races
  *
  * @mixin Eloquent
  */

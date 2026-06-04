@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
- * @var int    $id
- * @var int    $challenge_mode_run_id
- * @var int    $floor_id
- * @var int    $npc_id
- * @var string $guid
- * @var float  $lat
- * @var float  $lng
+ * @property int    $id
+ * @property int    $challenge_mode_run_id
+ * @property int    $floor_id
+ * @property int    $npc_id
+ * @property string $guid
+ * @property float  $lat
+ * @property float  $lng
  *
  * @property Carbon $created_at
  * @property Floor  $floor

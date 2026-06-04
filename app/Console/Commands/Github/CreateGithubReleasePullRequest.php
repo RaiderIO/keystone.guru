@@ -53,6 +53,7 @@ class CreateGithubReleasePullRequest extends Command
             $repository      = config('keystoneguru.github_repository');
 
             /** @var PullRequest $githubPullRequestClient */
+            // @phpstan-ignore staticMethod.notFound
             $githubPullRequestClient = GitHub::pr();
             // May throw an exception if it doesn't exist
             $existingPullRequestId = 0;
@@ -94,6 +95,7 @@ class CreateGithubReleasePullRequest extends Command
 
                 // Assign the 'release' label to the pull request
                 /** @var Issue $githubIssueClient */
+                // @phpstan-ignore staticMethod.notFound
                 $githubIssueClient = GitHub::issues();
                 $githubIssueClient->update($repositoryOwner, $repository, $newPullRequest['number'], [
                     'labels'    => array_merge($params['labels'], ['release']),

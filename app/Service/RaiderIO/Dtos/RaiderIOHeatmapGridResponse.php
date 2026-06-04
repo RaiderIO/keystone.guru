@@ -7,6 +7,7 @@ use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * This represents the Raider.io version of the response from Opensearch. It uses much of the same
@@ -26,7 +27,7 @@ class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
         parent::__construct($coordinatesService, $combatLogEventFilter, $results, $runCount, $floorsAsArray);
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         $result = parent::toArray();

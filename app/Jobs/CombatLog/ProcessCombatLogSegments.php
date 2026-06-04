@@ -12,6 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use RuntimeException;
+use Throwable;
 
 class ProcessCombatLogSegments implements ShouldQueue
 {
@@ -61,7 +63,7 @@ class ProcessCombatLogSegments implements ShouldQueue
                 if (!$this->curlSaveToFile($segment->downloadUrl, $tempPath)) {
                     $log->handleSegmentDownloadFailed($this->runId, $segment->id, $tempPath);
 
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         sprintf('Failed to download segment %d for run %d', $segment->id, $this->runId),
                     );
                 }
@@ -82,10 +84,10 @@ class ProcessCombatLogSegments implements ShouldQueue
 
             $extractionService->extractData($combinedPath);
             $result = true;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Re-throw download failures so the job can be retried with fresh one-time URLs.
             throw $e;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $log->handleParseError($this->runId, $this->combatLogVersion, $e->getMessage(), $e::class);
         } finally {
             foreach ($tempFiles as $tempFile) {

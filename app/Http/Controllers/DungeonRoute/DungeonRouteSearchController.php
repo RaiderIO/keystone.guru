@@ -9,7 +9,6 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +43,7 @@ class DungeonRouteSearchController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return RedirectResponse
      */
     public function searchByGameVersion(
         Request     $request,

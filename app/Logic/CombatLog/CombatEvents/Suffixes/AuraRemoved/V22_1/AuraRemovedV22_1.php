@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\V22_1;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
+use Override;
 
 class AuraRemovedV22_1 extends AuraBase implements AuraRemovedInterface
 {
@@ -18,7 +19,7 @@ class AuraRemovedV22_1 extends AuraBase implements AuraRemovedInterface
     /**
      * @return HasParameters|$this
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -28,13 +29,13 @@ class AuraRemovedV22_1 extends AuraBase implements AuraRemovedInterface
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getOptionalParameterCount(): int
     {
         return 2;
     }
 
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 3;

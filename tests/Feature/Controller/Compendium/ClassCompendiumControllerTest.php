@@ -6,6 +6,7 @@ use App\Features\NpcCompendium;
 use App\Models\CharacterClass;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell;
@@ -13,6 +14,7 @@ use App\Models\User;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Fixtures\DungeonFixtures;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -109,17 +111,10 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
 
         // Find a dungeon whose current mapping version has enemies for the Retail game version
-        $dungeon        = null;
-        $mappingVersion = null;
-        foreach (Dungeon::active()->get() as $candidate) {
-            $mv = $candidate->getCurrentMappingVersion();
-            if ($mv !== null && $mv->game_version_id === 1 && \App\Models\Enemy::where('mapping_version_id', $mv->id)->exists()) {
-                $dungeon        = $candidate;
-                $mappingVersion = $mv;
-                break;
-            }
-        }
+        $dungeon        = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
+        $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion());
         $this->assertNotNull($dungeon);
+        $this->assertNotNull($mappingVersion);
 
         $spell = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))
             ->whereNotNull('characteristic_id')
