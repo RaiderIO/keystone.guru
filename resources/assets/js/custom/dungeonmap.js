@@ -494,7 +494,7 @@ class DungeonMap extends Signalable {
         // If we selected an enemy
         if (getState().getMapContext() instanceof MapContextLiveSession) {
 
-        } else if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
+        } else if (EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
             let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
@@ -520,7 +520,7 @@ class DungeonMap extends Signalable {
                 }
             }
             // Shift click creates a new pack always
-            else if (this.mapState === null || (this.mapState instanceof EditKillZoneEnemySelection && shiftKeyPressed)) {
+            else if (this.options.edit && (this.mapState === null || (this.mapState instanceof EditKillZoneEnemySelection && shiftKeyPressed))) {
                 // Create a new pack instead
 
                 // Add ourselves to this new pull
