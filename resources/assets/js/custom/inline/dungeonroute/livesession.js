@@ -1,7 +1,5 @@
 class DungeonrouteLivesession extends InlineCode {
 
-    /**
-     */
     activate() {
 
         this.stopLiveSessionInterval = null;
@@ -44,7 +42,6 @@ class DungeonrouteLivesession extends InlineCode {
     }
 
     /**
-     *
      * @private
      */
     _stopLiveSession() {

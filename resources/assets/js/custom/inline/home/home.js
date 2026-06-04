@@ -1,7 +1,14 @@
+/**
+ * @typedef {Object} HomeHomeOptions
+ * @property {string} dungeon_select_id
+ * @property {string} demo_routes_iframe_id
+ * @property {Object} demo_route_mapping
+ */
+
+/**
+ * @property {HomeHomeOptions} options
+ */
 class HomeHome extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 

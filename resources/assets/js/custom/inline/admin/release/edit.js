@@ -1,8 +1,14 @@
+/**
+ * @typedef {Object} AdminReleaseEditOptions
+ * @property {Object} changelog
+ * @property {Object[]} categories
+ */
+
+/**
+ * @property {AdminReleaseEditOptions} options
+ */
 class AdminReleaseEdit extends InlineCode {
 
-    /**
-     *
-     */
     activate() {
         let self = this;
 

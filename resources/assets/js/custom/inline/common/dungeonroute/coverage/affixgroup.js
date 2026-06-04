@@ -1,7 +1,4 @@
 class CommonDungeonrouteCoverageAffixgroup extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 

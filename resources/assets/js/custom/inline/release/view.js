@@ -1,14 +1,17 @@
+/**
+ * @typedef {Object} ReleaseViewOptions
+ * @property {number} max_release
+ */
+
+/**
+ * @property {ReleaseViewOptions} options
+ */
 class ReleaseView extends InlineCode {
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
         let key = 'changelog_release';
-
-        let self = this;
 
         let lastReadRelease = Cookies.get(key);
         if (typeof lastReadRelease === 'undefined' || lastReadRelease < this.options.max_release) {

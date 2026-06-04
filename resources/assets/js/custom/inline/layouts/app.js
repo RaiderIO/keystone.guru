@@ -1,7 +1,12 @@
+/**
+ * @typedef {Object} LayoutsAppOptions
+ * @property {boolean} guest
+ */
+
+/**
+ * @property {LayoutsAppOptions} options
+ */
 class LayoutsApp extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -91,6 +96,7 @@ class LayoutsApp extends InlineCode {
 
     /**
      * Initiates a password checker on a 'enter your password' input.
+     * @param {string} selector
      **/
     _newPassword(selector) {
         let $selector = $(selector);
@@ -151,7 +157,6 @@ function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
 }
 
 /**
- *
  * @private
  */
 function _hideTooltips() {
@@ -186,7 +191,7 @@ $.fn.refreshTooltips = function () {
 }
 
 /**
- * @param enabled {Boolean}
+ * @param {boolean} [enabled=true]
  * @param $element
  */
 function toggleTooltips(enabled = true, $element = null) {

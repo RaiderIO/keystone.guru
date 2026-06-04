@@ -1,7 +1,4 @@
 class CommonGeneralMenuitemsanchor extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 

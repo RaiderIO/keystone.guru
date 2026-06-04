@@ -6,9 +6,6 @@ class TeamList extends InlineCode {
         this._dt = null;
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 

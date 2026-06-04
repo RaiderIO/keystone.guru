@@ -1,6 +1,5 @@
 class ProfileEdit extends InlineCode {
 
-
     activate() {
         super.activate();
 

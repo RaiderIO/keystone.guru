@@ -1,3 +1,24 @@
+/**
+ * @typedef {Object} CommonMapsKillzonessidebarOptions
+ * @property {string} stateCookie
+ * @property {number} defaultState
+ * @property {boolean} hideOnMove
+ * @property {string} sidebarSelector
+ * @property {string} sidebarToggleSelector
+ * @property {string} sidebarScrollSelector
+ * @property {string} anchor
+ * @property {string} newKillZoneSelector
+ * @property {string} killZonesContainerSelector
+ * @property {string} killZonesPullsSettingsMapNumberStyleSelector
+ * @property {string} killZonesPullsSettingsNumberStyleSelector
+ * @property {string} killZonesPullsSettingsDeleteAllSelector
+ * @property {string} killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector
+ * @property {boolean} edit
+ */
+
+/**
+ * @property {CommonMapsKillzonessidebarOptions} options
+ */
 class CommonMapsKillzonessidebar extends InlineCode {
 
 

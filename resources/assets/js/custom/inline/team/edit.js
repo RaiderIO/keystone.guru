@@ -1,3 +1,19 @@
+/**
+ * @typedef {Object} TeamEditOptions
+ * @property {string} routesTableInlineId
+ * @property {Object[]} data
+ * @property {string} teamName
+ * @property {string} teamPublicKey
+ * @property {boolean} userIsModerator
+ * @property {number} currentUserId
+ * @property {string} currentUserName
+ * @property {string} currentUserRole
+ * @property {number} adFreeGiveawayLeft
+ */
+
+/**
+ * @property {TeamEditOptions} options
+ */
 class TeamEdit extends InlineCode {
 
     constructor(id, bladePath, options) {
@@ -5,9 +21,6 @@ class TeamEdit extends InlineCode {
         this._dt = null;
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -107,7 +120,7 @@ class TeamEdit extends InlineCode {
 
     /**
      * Gets icon data for a role.
-     * @param roleName The name of the role you want icon data for.
+     * @param {string} roleName The name of the role you want icon data for.
      * @returns {boolean}
      * @private
      */
@@ -375,7 +388,7 @@ class TeamEdit extends InlineCode {
 
     /**
      *
-     * @param {Number} userId
+     * @param {number} userId
      * @returns {Array|null}
      */
     getDataByUserId(userId) {

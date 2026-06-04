@@ -1,3 +1,25 @@
+/**
+ * @typedef {Object} DungeonrouteTableOptions
+ * @property {number} currentUserId
+ * @property {string} currentUserPublicKey
+ * @property {string} tableView
+ * @property {string} viewMode
+ * @property {string} tableSelector
+ * @property {string} filterButtonSelector
+ * @property {string} dungeonSelectId
+ * @property {string} affixSelectId
+ * @property {string} attributesSelectId
+ * @property {string} requirementsSelectId
+ * @property {string} tagsSelectId
+ * @property {string} tableListViewToggleSelector
+ * @property {string|null} teamPublicKey
+ * @property {Object[]} teams
+ * @property {Object[]} autoCompleteTags
+ */
+
+/**
+ * @property {DungeonrouteTableOptions} options
+ */
 class DungeonrouteTable extends InlineCode {
 
     constructor(id, bladePath, options) {
@@ -24,9 +46,6 @@ class DungeonrouteTable extends InlineCode {
         }
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 

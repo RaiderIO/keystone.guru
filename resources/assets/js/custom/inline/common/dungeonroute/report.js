@@ -1,7 +1,13 @@
+/**
+ * @typedef {Object} CommonDungeonrouteReportOptions
+ * @property {string} selectorRoot
+ * @property {string} publicKey
+ */
+
+/**
+ * @property {CommonDungeonrouteReportOptions} options
+ */
 class CommonDungeonrouteReport extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
         let self = this;
@@ -23,7 +29,6 @@ class CommonDungeonrouteReport extends InlineCode {
     }
 
     /**
-     *
      * @private
      */
     _submitDungeonRouteUserReport() {
