@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogDungeonContextInterface;
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogVersionInterface;
 use App\Logic\CombatLog\SpecialEvents\Traits\ComputesVersionLong;
+use Override;
 
 /**
  * Trash variant (31 params):
@@ -178,7 +179,7 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class Drain extends Leech
 {
@@ -13,7 +14,7 @@ class Drain extends Leech
         return $this->maxPower;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         if (isset($parameters[3])) {
@@ -23,13 +24,13 @@ class Drain extends Leech
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getOptionalParameterCount(): int
     {
         return 1;
     }
 
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 4;

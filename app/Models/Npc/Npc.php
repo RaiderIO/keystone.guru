@@ -13,12 +13,14 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Spell\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * @property int        $id
@@ -43,17 +45,19 @@ use Illuminate\Support\Str;
  * @property NpcType           $type
  * @property NpcClass          $class
  *
- * @property NpcEnemyForces|null                $enemyForces
- * @property Collection<NpcEnemyForces>         $npcEnemyForces
- * @property Collection<Enemy>                  $enemies
- * @property Collection<Characteristic>         $characteristics
- * @property Collection<NpcCharacteristic>      $npcCharacteristics
- * @property Collection<Spell>                  $spells
- * @property Collection<NpcSpell>               $npcSpells
- * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
- * @property Collection<Dungeon>                $dungeons
- * @property Collection<NpcDungeon>             $npcDungeons
- * @property Collection<NpcHealth>              $npcHealths
+ * @property NpcEnemyForces|null                             $enemyForces
+ * @property EloquentCollection<int, NpcEnemyForces>         $npcEnemyForces
+ * @property EloquentCollection<int, Enemy>                  $enemies
+ * @property EloquentCollection<int, Characteristic>         $characteristics
+ * @property EloquentCollection<int, NpcCharacteristic>      $npcCharacteristics
+ * @property EloquentCollection<int, Spell>                  $spells
+ * @property EloquentCollection<int, NpcSpell>               $npcSpells
+ * @property EloquentCollection<int, NpcBolsteringWhitelist> $npcbolsteringwhitelists
+ * @property EloquentCollection<int, Dungeon>                $dungeons
+ * @property EloquentCollection<int, NpcDungeon>             $npcDungeons
+ * @property EloquentCollection<int, NpcHealth>              $npcHealths
+ * @property float|null                                      $min_health              Computed aggregate column (getNpcsMinMaxHealth)
+ * @property float|null                                      $max_health              Computed aggregate column (getNpcsMinMaxHealth)
  *
  * @mixin Eloquent
  */
@@ -129,6 +133,7 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         $id = (int)explode('-', (string)$value, 2)[0];
 
+        /** @var static|null */
         return $this->where('id', $id)->first();
     }
 
@@ -194,9 +199,12 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function spells(bool $onlyVisibleOnMap = true): BelongsToMany
     {
-        return $this->belongsToMany(Spell::class, 'npc_spells')
+        /** @var BelongsToMany<Spell, $this> $query */
+        $query = $this->belongsToMany(Spell::class, 'npc_spells')
             ->when($onlyVisibleOnMap, static fn($query) => $query->where('hidden_on_map', false))
             ->orderBy('spells.id');
+
+        return $query;
     }
 
     public function npcSpells(): HasMany
@@ -390,7 +398,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $dungeon?->id ?? null;
     }
 
-    #[\Override]
+    #[Override]
     protected static function booted(): void
     {
         parent::booted();

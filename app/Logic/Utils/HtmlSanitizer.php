@@ -5,6 +5,7 @@ namespace App\Logic\Utils;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
+use Exception;
 
 class HtmlSanitizer
 {
@@ -87,7 +88,7 @@ class HtmlSanitizer
                                     $element->replaceChild($textNode, $child);
                                     continue;
                                 }
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 // Invalid URL, replace with text
                                 $textNode = $element->ownerDocument->createTextNode($child->textContent);
                                 $element->replaceChild($textNode, $child);

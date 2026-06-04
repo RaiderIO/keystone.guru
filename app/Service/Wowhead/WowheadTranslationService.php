@@ -16,6 +16,7 @@ use PHPHtmlParser\Exceptions\LogicalException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 use PHPHtmlParser\Exceptions\StrictException;
 use PHPHtmlParser\Options;
+use Str;
 
 class WowheadTranslationService implements WowheadTranslationServiceInterface
 {
@@ -104,7 +105,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
 
                     $result->put($locale, $result->get($locale, collect())
-                        ->put($npcId, $npcName ?? ''));
+                        ->put($npcId, $npcName));
                 }
             }
         }
@@ -190,7 +191,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
                     $response = $this->curlGet($url);
 
-                    $response = \Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
+                    $response = Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
 
                     $dom = new Dom();
                     $dom->loadStr($response, new Options()->setRemoveScripts(false));

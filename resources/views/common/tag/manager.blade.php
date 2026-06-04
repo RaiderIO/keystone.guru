@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var HasTags $context
+ * @var \Illuminate\Database\Eloquent\Model&\App\Models\Interfaces\HasTagsInterface $context
  * @var string  $category
  * @var string  $theme
  */
@@ -9,7 +9,6 @@
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
-use App\Models\Traits\HasTags;
 use App\Models\User;
 
 $tagCategoryNameMapping = [

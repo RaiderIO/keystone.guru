@@ -5,12 +5,12 @@ namespace App\Models\Traits;
 use App\Models\MapIcon;
 use App\Models\MapObjectToAwakenedObeliskLink;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
- * @property int|null                                   $linked_awakened_obelisk_id
- * @property Collection<MapObjectToAwakenedObeliskLink> $linkedawakenedobelisks
+ * @property int|null                                                $linked_awakened_obelisk_id
+ * @property EloquentCollection<int, MapObjectToAwakenedObeliskLink> $linkedawakenedobelisks
  *
  * @mixin Eloquent
  */

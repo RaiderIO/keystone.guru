@@ -58,7 +58,7 @@ abstract class DatatablesHandler
         }
 
         foreach ($dtColumnHandlers as $handler) {
-            /** @var $handler DatatablesColumnHandler */
+            /** @var DatatablesColumnHandler $handler */
             $this->columnHandlers[$handler->getColumnName()] = $handler;
         }
 

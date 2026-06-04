@@ -8,6 +8,7 @@ use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use SocialiteProviders\Battlenet\Provider;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 
 class BattleNetLoginController extends OAuthLoginController
 {
@@ -35,7 +36,7 @@ class BattleNetLoginController extends OAuthLoginController
     public function redirectToProvider(
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,
-    ): RedirectResponse {
+    ): RedirectResponse|SymfonyRedirectResponse {
         $this->redirectTo = $request->get('redirect', '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);

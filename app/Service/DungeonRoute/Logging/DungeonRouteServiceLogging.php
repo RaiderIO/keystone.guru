@@ -3,6 +3,7 @@
 namespace App\Service\DungeonRoute\Logging;
 
 use App\Logging\RollbarStructuredLogging;
+use Exception;
 
 class DungeonRouteServiceLogging extends RollbarStructuredLogging implements DungeonRouteServiceLoggingInterface
 {
@@ -41,7 +42,7 @@ class DungeonRouteServiceLogging extends RollbarStructuredLogging implements Dun
         $this->start(__METHOD__);
     }
 
-    public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, \Exception $ex): void
+    public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, Exception $ex): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

@@ -15,6 +15,7 @@ use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,6 +27,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Override;
 
 /**
  * @property int    $id
@@ -59,12 +61,12 @@ use Laratrust\Traits\HasRolesAndPermissions;
  *
  * @property bool $is_admin
  *
- * @property Collection<DungeonRoute>  $dungeonRoutes
- * @property Collection<UserReport>    $reports
- * @property Collection<Team>          $teams
- * @property Collection<Role>          $roles
- * @property Collection<Tag>           $tags
- * @property Collection<UserIpAddress> $ipAddresses
+ * @property EloquentCollection<int, DungeonRoute>  $dungeonRoutes
+ * @property EloquentCollection<int, UserReport>    $reports
+ * @property EloquentCollection<int, Team>          $teams
+ * @property EloquentCollection<int, Role>          $roles
+ * @property EloquentCollection<int, Tag>           $tags
+ * @property EloquentCollection<int, UserIpAddress> $ipAddresses
  *
  * @mixin Eloquent
  */
@@ -113,7 +115,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'id',
@@ -136,7 +138,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that should be visible for outsiders.
      *
-     * @var array
+     * @var list<string>
      */
     protected $visible = [
         'id',
@@ -167,6 +169,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasRole(Role::ROLE_ADMIN);
     }
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
@@ -309,7 +312,7 @@ class User extends Authenticatable implements LaratrustUser
                 $newOwner = null;
             }
 
-            /** @var $team Team */
+            /** @var Team $team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
                 'new_owner' => $newOwner,
@@ -352,7 +355,7 @@ class User extends Authenticatable implements LaratrustUser
         return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -366,12 +369,12 @@ class User extends Authenticatable implements LaratrustUser
                 // Remove ourselves from the team
                 $team->removeMember($user);
 
-                /** @var $team Team */
+                /** @var Team $team */
                 if (!$team->isUserAdmin($user)) {
                     continue;
                 }
 
-                /** @var $team Team */
+                /** @var Team $team */
                 try {
                     $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                     if ($newAdmin !== null) {

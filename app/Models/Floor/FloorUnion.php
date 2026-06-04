@@ -3,6 +3,7 @@
 namespace App\Models\Floor;
 
 use App\Models\CacheModel;
+use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -10,9 +11,9 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int   $id
@@ -24,14 +25,14 @@ use Illuminate\Support\Collection;
  * @property float $size
  * @property float $rotation
  *
- * @property MappingVersion             $mappingVersion
- * @property Floor                      $floor
- * @property Floor                      $targetFloor
- * @property Collection<FloorUnionArea> $floorUnionAreas
+ * @property MappingVersion                          $mappingVersion
+ * @property Floor                                   $floor
+ * @property Floor                                   $targetFloor
+ * @property EloquentCollection<int, FloorUnionArea> $floorUnionAreas
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class FloorUnion extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

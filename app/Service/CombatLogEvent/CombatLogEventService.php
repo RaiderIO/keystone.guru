@@ -445,8 +445,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         for ($i = 0; $i < $runCount; $i++) {
             $combatLogEventAttributes = collect();
 
-            /** @var Dungeon $dungeon */
             $dungeon ??= $season->dungeons->random();
+            /** @var Dungeon $dungeon */
             // Cannot load directly on the relation - need to fix
             $currentMappingVersion = $dungeon->getCurrentMappingVersion()
                 ->load('enemies');

@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Prefixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class Range extends Prefix
 {
@@ -27,7 +28,7 @@ class Range extends Prefix
         return $this->spellSchool;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

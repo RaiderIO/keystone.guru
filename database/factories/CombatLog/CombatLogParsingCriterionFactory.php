@@ -9,6 +9,9 @@ use App\Models\Dungeon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<CombatLogParsingCriterion>
+ */
 class CombatLogParsingCriterionFactory extends Factory
 {
     protected $model = CombatLogParsingCriterion::class;

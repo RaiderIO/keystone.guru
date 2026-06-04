@@ -4,12 +4,13 @@ namespace App\Models\Patreon;
 
 use App\Models\User;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @property int    $id
@@ -22,8 +23,8 @@ use Illuminate\Support\Collection;
  * @property string $expires_at
  * @property User   $user
  *
- * @property Collection<PatreonUserBenefit> $patreonUserBenefits
- * @property Collection<PatreonBenefit>     $patreonBenefits
+ * @property EloquentCollection<int, PatreonUserBenefit> $patreonUserBenefits
+ * @property EloquentCollection<int, PatreonBenefit>     $patreonBenefits
  *
  * @mixin Eloquent
  */
@@ -75,7 +76,7 @@ class PatreonUserLink extends Model
         return Carbon::createFromTimeString($this->expires_at)->isPast();
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot()
     {
         parent::boot();

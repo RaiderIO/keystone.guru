@@ -21,9 +21,11 @@ use App\Service\Season\SeasonServiceStub;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DetectStaleCombatLogDataCommand')]
+#[SlowTest]
 final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
 {
     private const int NPC_ID   = 9995099;

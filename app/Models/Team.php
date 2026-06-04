@@ -11,13 +11,14 @@ use App\Models\Traits\HasTags;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * @property int    $id
@@ -31,9 +32,9 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property Collection<TeamUser>     $teamUsers
- * @property Collection<User>         $members
- * @property Collection<DungeonRoute> $dungeonRoutes
+ * @property EloquentCollection<int, TeamUser>     $teamUsers
+ * @property EloquentCollection<int, User>         $members
+ * @property EloquentCollection<int, DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -63,7 +64,7 @@ class Team extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -391,8 +392,6 @@ class Team extends Model
      * @return User|null Null returned if there was no change in owner.
      *
      * @throws Exception
-     *
-     * @var User
      */
     public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {
@@ -433,14 +432,14 @@ class Team extends Model
     /**
      * Gets all tags available for routes in this team.
      */
-    public function getAvailableTags(): Collection
+    public function getAvailableTags(): EloquentCollection
     {
         return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
             ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
             ->get();
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

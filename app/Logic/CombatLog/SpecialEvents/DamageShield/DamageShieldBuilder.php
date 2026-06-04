@@ -13,6 +13,9 @@ use Illuminate\Support\Carbon;
 
 class DamageShieldBuilder implements SpecialEventBuilderInterface
 {
+    /**
+     * @return SpecialEvent&DamageShieldInterface
+     */
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,

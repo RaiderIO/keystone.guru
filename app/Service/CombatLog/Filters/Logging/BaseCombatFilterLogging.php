@@ -26,6 +26,11 @@ class BaseCombatFilterLogging extends RollbarStructuredLogging implements BaseCo
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function parseInvalidCombatLogEvent(int $lineNr): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function parseEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());

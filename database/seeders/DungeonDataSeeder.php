@@ -108,7 +108,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function importDungeonMapping(): void
     {
@@ -117,7 +117,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Parse the root files first
         foreach ($rootDirIterator as $rootDirChild) {
-            /** @var $rootDirChild SplFileInfo */
+            /** @var SplFileInfo $rootDirChild */
             if ($rootDirChild->getType() === 'dir') {
                 continue;
             }
@@ -129,7 +129,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // For each expansion
         foreach ($rootDirIterator as $rootDirChild) {
-            /** @var $rootDirChild SplFileInfo */
+            /** @var SplFileInfo $rootDirChild */
             if ($rootDirChild->getType() !== 'dir') {
                 continue;
             }
@@ -147,13 +147,13 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
-                /** @var $dungeonKeyDir SplFileInfo */
+                /** @var SplFileInfo $dungeonKeyDir */
                 $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
                 foreach ($floorDirIterator as $floorDirFile) {
-                    /** @var $floorDirFile SplFileInfo */
+                    /** @var SplFileInfo $floorDirFile */
                     if ($floorDirFile->getType() !== 'dir') {
                         continue;
                     }
@@ -169,7 +169,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
                 $floorDirIterator->rewind();
                 foreach ($floorDirIterator as $floorDirFile) {
-                    /** @var $floorDirFile SplFileInfo */
+                    /** @var SplFileInfo $floorDirFile */
                     if ($floorDirFile->getType() === 'dir') {
                         continue;
                     }
@@ -187,7 +187,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function importDungeonRoutes(): void
     {
@@ -196,7 +196,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // For each expansion
         foreach ($rootDirIterator as $rootDirChild) {
-            /** @var $rootDirChild SplFileInfo */
+            /** @var SplFileInfo $rootDirChild */
             if ($rootDirChild->getType() !== 'dir') {
                 continue;
             }
@@ -209,7 +209,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
                 foreach ($floorDirIterator as $floorDirFile) {
-                    /** @var $floorDirFile SplFileInfo */
+                    /** @var SplFileInfo $floorDirFile */
                     if ($floorDirFile->getType() === 'dir') {
                         continue;
                     }
@@ -266,8 +266,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     private function flushModels(): void
     {
         foreach ($this->importedModels as $class => $models) {
-            /** @var $class \Eloquent */
-            /** @var $models Collection */
+            /** @var class-string<Model> $class */
+            /** @var Collection $models */
             if ($models->isEmpty()) {
                 continue;
             }
@@ -399,7 +399,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 $updatedModels++;
             } // If we should do some post-processing, create & save it now so that we can do just that
             elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
-                /** @var \Eloquent $mappingClass */
+                /** @var class-string<Model> $mappingClass */
                 $mappingClass = $mapping->getClass();
                 $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
                 $updatedModels++;
@@ -423,7 +423,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
             foreach ($mapping->getPostSaveRelationParsers() as $attributeParser) {
                 foreach ($modelData as $key => $value) {
-                    /** @var $attributeParser RelationParserInterface */
+                    /** @var RelationParserInterface $attributeParser */
                     // Relations are always arrays, so exclude those that are not, then verify if the parser can handle this, then if it can, parse it
                     if (is_array($value) &&
                         $attributeParser->canParseModel($mapping->getClass()) &&

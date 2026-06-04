@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 abstract class SpellTargetBase extends SpellBase
 {
@@ -16,7 +17,7 @@ abstract class SpellTargetBase extends SpellBase
     /**
      * @return HasParameters|$this
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -26,7 +27,7 @@ abstract class SpellTargetBase extends SpellBase
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 4;

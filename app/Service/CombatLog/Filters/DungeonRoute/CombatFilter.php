@@ -9,6 +9,7 @@ use App\Service\CombatLog\Filters\Logging\DungeonRouteCombatFilterLoggingInterfa
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Override;
 
 class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
 {
@@ -25,7 +26,7 @@ class CombatFilter extends BaseCombatFilter implements CombatLogParserInterface
         $this->log = $log;
     }
 
-    #[\Override]
+    #[Override]
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // First, we wait for the challenge mode to start

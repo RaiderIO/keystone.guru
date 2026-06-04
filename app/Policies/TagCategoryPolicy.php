@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Tags\TagCategory;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -17,7 +18,7 @@ class TagCategoryPolicy
     public function createTag(User $user, TagCategory $tagCategory, Model $model): bool
     {
         $result = match ($tagCategory->name) {
-            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model->mayUserEdit($user),
+            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model instanceof DungeonRoute && $model->mayUserEdit($user),
             default => false,
         };
 

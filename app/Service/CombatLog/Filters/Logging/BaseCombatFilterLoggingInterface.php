@@ -12,6 +12,8 @@ interface BaseCombatFilterLoggingInterface
 
     public function parseUnitDied(int $lineNr, string $guid): void;
 
+    public function parseInvalidCombatLogEvent(int $lineNr): void;
+
     public function parseEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void;
 
     public function parseEnemyWasAlreadyKilled(int $lineNr, string $guid): void;

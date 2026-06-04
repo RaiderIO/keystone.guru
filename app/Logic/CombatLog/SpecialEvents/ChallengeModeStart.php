@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogDungeonContextInterface;
+use Override;
 
 /**
  * CHALLENGE_MODE_START,"The Underrot",1841,251,2,[9]
@@ -53,7 +54,7 @@ class ChallengeModeStart extends SpecialEvent implements HasCombatLogDungeonCont
         return $this->affixIDs;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

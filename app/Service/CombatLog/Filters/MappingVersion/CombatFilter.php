@@ -8,6 +8,7 @@ use App\Service\CombatLog\Filters\BaseCombatFilter;
 use App\Service\CombatLog\Filters\Logging\MappingVersionCombatFilterLoggingInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Override;
 
 class CombatFilter extends BaseCombatFilter
 {
@@ -24,7 +25,7 @@ class CombatFilter extends BaseCombatFilter
         $this->log = $log;
     }
 
-    #[\Override]
+    #[Override]
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // First, we wait for the dungeon to start

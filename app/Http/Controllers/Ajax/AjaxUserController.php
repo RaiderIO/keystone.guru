@@ -69,7 +69,9 @@ class AjaxUserController extends Controller
         /** @var User|null $user */
         $user = User::where('public_key', $publicKey)->first();
 
-        if ($user === null || $user->public_key !== Auth::user()->public_key) {
+        /** @var User|null $currentUser */
+        $currentUser = Auth::user();
+        if ($user === null || $user->public_key !== $currentUser?->public_key) {
             abort(StatusCode::BAD_REQUEST);
         }
 

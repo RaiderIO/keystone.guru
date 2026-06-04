@@ -142,7 +142,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcDungeonsAttributes = [];
             $affectedNpcIds        = [];
 
-            /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 if (in_array($mdtNpc->getId(), self::IGNORE_NPC_DATA_NPC_IDS)) {
                     $this->log->importNpcsDataFromMDTIgnoreNpc($mdtNpc->getId());
@@ -359,8 +358,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @throws Exception
      */
-    private function importNpcs(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion): void
-    {
+    private function importNpcs(
+        MappingVersion $newMappingVersion,
+        MDTDungeon     $mdtDungeon,
+        Dungeon        $dungeon,
+        GameVersion    $gameVersion,
+    ): void {
         try {
             $this->log->importNpcsStart();
 
@@ -554,7 +557,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             // Save enemy packs
             foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
-                /** @var $mdtEnemiesWithGroupsByEnemyPack Collection<Enemy> */
+                /** @var Collection<int, Enemy> $mdtEnemiesWithGroupsByEnemyPack */
                 $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
                     ->filter(static fn(
                         Enemy $enemy,
@@ -809,7 +812,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             $newMappingVersion,
                         );
 
-                        $this->log->importEnemyPatrolsClonedPatrolWithoutMdtPolyline($enemyPatrol->id);
+                        $this->log->importEnemyPatrolsClonedPatrolWithoutMdtPolyline(isset($enemyPatrol) ? $enemyPatrol->id : null);
                     }
                 }
             }

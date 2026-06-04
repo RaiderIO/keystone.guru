@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 class ZoneChange extends SpecialEvent
 {
     private int $zoneId;
@@ -25,7 +27,7 @@ class ZoneChange extends SpecialEvent
         return $this->difficultyId;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

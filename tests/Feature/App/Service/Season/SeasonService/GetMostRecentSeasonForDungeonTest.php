@@ -27,7 +27,7 @@ final class GetMostRecentSeasonForDungeonTest extends PublicTestCase
         // Arrange
         $service = app(SeasonServiceInterface::class);
 
-        /** @var Dungeon|MockObject $dungeon */
+        /** @var MockObject&Dungeon $dungeon */
         $dungeon = $this->createPartialMockPublic(Dungeon::class, ['hasMappingVersionWithSeasons']);
         $dungeon->method('hasMappingVersionWithSeasons')->willReturn(false);
 
@@ -47,7 +47,7 @@ final class GetMostRecentSeasonForDungeonTest extends PublicTestCase
         // Arrange
         $expectedSeason = Season::findOrFail(Season::SEASON_BFA_S4);
 
-        /** @var Dungeon|MockObject $dungeon */
+        /** @var MockObject&Dungeon $dungeon */
         $dungeon = $this->createPartialMockPublic(Dungeon::class, ['hasMappingVersionWithSeasons']);
         $dungeon->method('hasMappingVersionWithSeasons')->willReturn(true);
 
@@ -58,7 +58,7 @@ final class GetMostRecentSeasonForDungeonTest extends PublicTestCase
             ->with($dungeon)
             ->willReturn($expectedSeason);
 
-        /** @var SeasonService|MockObject $service */
+        /** @var MockObject&SeasonService $service */
         $service = $this->getMockBuilderPublic(SeasonService::class)
             ->setConstructorArgs([
                 ServiceFixtures::getExpansionServiceMock($this),
@@ -81,14 +81,14 @@ final class GetMostRecentSeasonForDungeonTest extends PublicTestCase
     public function getMostRecentSeasonForDungeon_GivenDungeonWithMappingVersionWithSeasons_WhenRepositoryReturnsNull_ShouldReturnNull(): void
     {
         // Arrange
-        /** @var Dungeon|MockObject $dungeon */
+        /** @var MockObject&Dungeon $dungeon */
         $dungeon = $this->createPartialMockPublic(Dungeon::class, ['hasMappingVersionWithSeasons']);
         $dungeon->method('hasMappingVersionWithSeasons')->willReturn(true);
 
         $seasonRepository = RepositoryFixtures::getSeasonRepositoryMock($this);
         $seasonRepository->method('getMostRecentSeasonForDungeon')->willReturn(null);
 
-        /** @var SeasonService|MockObject $service */
+        /** @var MockObject&SeasonService $service */
         $service = $this->getMockBuilderPublic(SeasonService::class)
             ->setConstructorArgs([
                 ServiceFixtures::getExpansionServiceMock($this),

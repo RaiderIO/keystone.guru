@@ -51,7 +51,7 @@ class AssignPackGroups extends Command
 
         $count = 0;
         foreach ($mappingVersions as $mappingVersion) {
-            if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) {
+            if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) { // @phpstan-ignore empty.variable
                 /** @var Collection<EnemyPack> $enemyPacks */
                 $enemyPacks = $mappingVersion->enemyPacks()
                     ->orderBy('id')

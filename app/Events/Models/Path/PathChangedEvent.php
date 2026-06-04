@@ -8,6 +8,7 @@ use App\Models\Path;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
  * @property MapIcon $model
@@ -34,16 +35,19 @@ class PathChangedEvent extends ModelChangedEvent
         return 'path-changed';
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
+        /** @var Path $model */
+        $model = $this->model;
+
         return array_merge(
             parent::broadcastWith(),
             [
-                'model_data' => $this->model->polyline->getCoordinatesData(
+                'model_data' => $model->polyline->getCoordinatesData(
                     $this->coordinatesService,
-                    $this->model->dungeonRoute->mappingVersion,
-                    $this->model->floor,
+                    $model->dungeonRoute->mappingVersion,
+                    $model->floor,
                 ),
             ],
         );

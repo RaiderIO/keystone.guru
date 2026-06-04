@@ -4,6 +4,7 @@ namespace App\Console\Commands\Scheduler;
 
 use App\Console\Commands\Traits\SavesToInfluxDB;
 use App\Logic\Utils\Stopwatch;
+use Exception;
 use Illuminate\Console\Command;
 
 abstract class SchedulerCommand extends Command
@@ -19,7 +20,7 @@ abstract class SchedulerCommand extends Command
 
         try {
             $callable();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->error($ex->getMessage());
 
             return 1;

@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
@@ -17,10 +17,10 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property int    $faction_id
  *
- * @property Faction                                  $faction
- * @property Collection<CharacterClass>               $classes
- * @property Collection<CharacterClassSpecialization> $specializations
- * @property Collection<CharacterClassSpecialization> $dungeonRoutePlayerRace
+ * @property Faction                                               $faction
+ * @property EloquentCollection<int, CharacterClass>               $classes
+ * @property EloquentCollection<int, CharacterClassSpecialization> $specializations
+ * @property EloquentCollection<int, DungeonRoutePlayerRace>       $dungeonRoutePlayerRace
  *
  * @mixin Eloquent
  */

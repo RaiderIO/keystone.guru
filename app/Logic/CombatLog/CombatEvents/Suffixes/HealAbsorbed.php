@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\Guid\Guid;
+use Override;
 
 class HealAbsorbed extends Suffix
 {
@@ -73,7 +74,7 @@ class HealAbsorbed extends Suffix
     /**
      * @return HasParameters|$this
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

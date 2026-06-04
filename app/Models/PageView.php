@@ -5,7 +5,6 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -88,7 +87,6 @@ class PageView extends Model
         // PHP session ID for keeping track of guests
         $sessionId = Session::getId();
 
-        /** @var Collection $existingPageViews */
         return PageView::where('user_id', $userId)
             ->where('model_id', $modelId)
             ->where('model_class', $modelClass)

@@ -49,6 +49,7 @@ class CreateGithubReleaseTicket extends Command
             $repository      = config('keystoneguru.github_repository');
 
             /** @var Issue $githubIssueClient */
+            // @phpstan-ignore staticMethod.notFound
             $githubIssueClient = GitHub::issues();
             // May throw an exception if it doesn't exist
             $existingIssueId = 0;

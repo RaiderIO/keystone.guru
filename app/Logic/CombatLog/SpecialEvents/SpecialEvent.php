@@ -167,7 +167,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
             return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
         } elseif (isset(self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName])) {
-            /** @var SpecialEventBuilderInterface $className */
+            /** @var class-string<SpecialEventBuilderInterface> $className */
             $className = self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName];
 
             return $className::create($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);

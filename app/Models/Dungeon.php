@@ -24,6 +24,7 @@ use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,6 +34,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Mockery\Exception;
+use Override;
 
 /**
  * @property int      $id                                 The ID of this Dungeon.
@@ -58,25 +60,25 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property Collection<MappingVersion>             $mappingVersions
- * @property Collection<Floor>                      $floors
- * @property Collection<Floor>                      $activeFloors
- * @property Collection<DungeonRoute>               $dungeonRoutes
- * @property Collection<DungeonRoute>               $dungeonRoutesForExport
- * @property Collection<Npc>                        $npcs
- * @property Collection<Enemy>                      $enemies
- * @property Collection<EnemyPack>                  $enemyPacks
- * @property Collection<EnemyPatrol>                $enemyPatrols
- * @property Collection<MapIcon>                    $mapIcons
- * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
- * @property Collection<MountableArea>              $mountableAreas
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
- * @property Collection<Spell>                      $spells
+ * @property EloquentCollection<int, MappingVersion>             $mappingVersions
+ * @property EloquentCollection<int, Floor>                      $floors
+ * @property EloquentCollection<int, Floor>                      $activeFloors
+ * @property EloquentCollection<int, DungeonRoute>               $dungeonRoutes
+ * @property EloquentCollection<int, DungeonRoute>               $dungeonRoutesForExport
+ * @property EloquentCollection<int, Npc>                        $npcs
+ * @property EloquentCollection<int, Enemy>                      $enemies
+ * @property EloquentCollection<int, EnemyPack>                  $enemyPacks
+ * @property EloquentCollection<int, EnemyPatrol>                $enemyPatrols
+ * @property EloquentCollection<int, MapIcon>                    $mapIcons
+ * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
+ * @property EloquentCollection<int, MountableArea>              $mountableAreas
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
+ * @property EloquentCollection<int, Spell>                      $spells
  *
- * @method static Builder active()
- * @method static Builder inactive()
- * @method static Builder factionSelectionRequired()
+ * @method static Builder<Dungeon> active()
+ * @method static Builder<Dungeon> inactive()
+ * @method static Builder<Dungeon> factionSelectionRequired()
  *
  * @mixin Eloquent
  */
@@ -92,7 +94,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = [
         'floor_count',
@@ -144,12 +146,13 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     private ?Season $activeSeasonCache = null;
 
+    /** @var Collection<int, MappingVersion>|null  */
     private ?Collection $currentMappingVersionCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -181,7 +184,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         try {
             // Loop through all floors
             foreach ($this->npcs as $npc) {
-                /** @var $npc Npc */
+                /** @var Npc $npc */
                 if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion();
@@ -215,6 +218,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->belongsTo(Expansion::class);
     }
 
+    /** @return HasMany<MappingVersion, $this> */
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
@@ -279,6 +283,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
     }
 
+    /** @return HasMany<Floor, $this> */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
@@ -294,6 +299,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->floors()->active();
     }
 
+    /** @return HasMany<Floor, $this> */
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
         $useFacade ??= $mappingVersion->facade_enabled;
@@ -337,6 +343,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->hasMany(SeasonDungeon::class);
     }
 
+    /** @return BelongsToMany<Npc, $this> */
     public function npcs(): BelongsToMany
     {
         return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');
@@ -611,7 +618,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $dungeonService->getDungeonContext(Auth::user());
     }
 
-    #[\Override]
+    #[Override]
     public static function boot(): void
     {
         parent::boot();

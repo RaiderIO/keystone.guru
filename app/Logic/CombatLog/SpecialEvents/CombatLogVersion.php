@@ -6,6 +6,7 @@ use App\Logic\CombatLog\CombatLogVersion as CombatLogVersionConstant;
 use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogVersionInterface;
 use App\Logic\CombatLog\SpecialEvents\Traits\ComputesVersionLong;
 use Exception;
+use Override;
 
 /**
  * COMBAT_LOG_VERSION,20,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,10.1.0,PROJECT_ID,1
@@ -55,7 +56,7 @@ class CombatLogVersion extends SpecialEvent implements HasCombatLogVersionInterf
     /**
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

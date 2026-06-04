@@ -26,13 +26,13 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
     {
         parent::setUp();
 
-        /** @var SeasonServiceInterface|MockObject $seasonService */
+        /** @var MockObject&SeasonServiceInterface $seasonService */
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
 
-        /** @var SeasonAffixGroupServiceInterface|MockObject $seasonAffixGroupService */
+        /** @var MockObject&SeasonAffixGroupServiceInterface $seasonAffixGroupService */
         $seasonAffixGroupService = $this->createMockPublic(SeasonAffixGroupServiceInterface::class);
 
-        /** @var CombatLogEventServiceInterface|MockObject $combatLogEventService */
+        /** @var MockObject&CombatLogEventServiceInterface $combatLogEventService */
         $combatLogEventService = $this->createMockPublic(CombatLogEventServiceInterface::class);
 
         $this->service = new RaiderIOKeystoneGuruApiService(

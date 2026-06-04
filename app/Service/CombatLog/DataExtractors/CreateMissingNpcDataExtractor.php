@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 
 class CreateMissingNpcDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int>> */
+    /** @var Collection<int, int> */
     private readonly Collection $checkedNpcIds;
 
     private readonly CreateMissingNpcDataExtractorLoggingInterface $log;

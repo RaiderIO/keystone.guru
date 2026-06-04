@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\App\Repository;
 
-use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Repositories\Database\EnemyRepository;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Fixtures\DungeonFixtures;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('EnemyRepository')]
@@ -26,12 +26,7 @@ final class EnemyRepositoryTest extends PublicTestCase
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_returnsNonEmptyCollection(): void
     {
         // Arrange
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')
-            ->where('challenge_mode_id', '>', 0)
-            ->whereHas('floors')
-            ->orderByDesc('id')
-            ->first();
+        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
@@ -49,18 +44,18 @@ final class EnemyRepositoryTest extends PublicTestCase
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_keysCollectionByEnemyId(): void
     {
         // Arrange
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')
-            ->whereHas('floors')
-            ->first();
+        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
+
+//        dd([$dungeon->key, $mappingVersion->version, $mappingVersion->id]);
 
         // Act
         $result = $this->repository->getAvailableEnemiesForDungeonRouteBuilder($mappingVersion);
 
         // Assert — collection must be keyed by enemy ID
+        $this->assertNotEmpty($result);
         $firstEnemy = $result->first();
         $this->assertEquals($firstEnemy->id, $result->keys()->first());
     }
@@ -69,10 +64,7 @@ final class EnemyRepositoryTest extends PublicTestCase
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_excludesMdtPlaceholders(): void
     {
         // Arrange
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')
-            ->whereHas('floors')
-            ->first();
+        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
@@ -91,10 +83,7 @@ final class EnemyRepositoryTest extends PublicTestCase
     public function getAvailableEnemiesForDungeonRouteBuilder_givenMappingVersion_setsDefaultKillPriority(): void
     {
         // Arrange
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::whereNotNull('challenge_mode_id')
-            ->whereHas('floors')
-            ->first();
+        $dungeon = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
 
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');

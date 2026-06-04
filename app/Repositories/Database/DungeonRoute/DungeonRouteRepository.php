@@ -40,7 +40,6 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
     {
-        /** @var Collection<DungeonRoute> $routes */
         return DungeonRoute::where('author_id', '>', '0')
             // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
             ->where(static function (EloquentBuilder $builder) {
@@ -73,7 +72,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     }
 
     /**
-     * @return Collection<string, Collection<WeeklyRoute>>
+     * @return Collection<string, Collection<int, WeeklyRoute>>
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
@@ -109,6 +108,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->get()
             ->groupBy(fn(DungeonRoute $route) => $route->dungeon->key)
             ->map(function (Collection $dungeonRoutes) use ($weeklyRouteTags) {
+                /** @var Collection<int, WeeklyRoute> $result */
                 $result = collect();
                 foreach ($weeklyRouteTags as $key => $value) {
                     /** @var DungeonRoute $dungeonRoute */
@@ -241,6 +241,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->where('mapping_version_id', $filter->mappingVersion->id)
             ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
             ->whereNull('clone_of')
+            ->whereNull('expires_at')
             ->orderByDesc('popularity');
 
         if ($filter->includedEnemies !== null) {

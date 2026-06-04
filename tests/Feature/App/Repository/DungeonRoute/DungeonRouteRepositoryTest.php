@@ -9,6 +9,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Attributes\SlowTest;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonRouteRepository')]
@@ -68,6 +69,7 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     }
 
     #[Test]
+    #[SlowTest]
     public function findRoutes_givenFilter_returnsCollection(): void
     {
         // Arrange

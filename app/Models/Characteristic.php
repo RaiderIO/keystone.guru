@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * @property string $key
  * @property string $icon_name
  *
- * @property Collection<Npc> $npcs
+ * @property EloquentCollection<int, Npc> $npcs
  *
  * @mixin Eloquent
  */

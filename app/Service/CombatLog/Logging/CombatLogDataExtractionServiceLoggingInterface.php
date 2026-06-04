@@ -2,9 +2,10 @@
 
 namespace App\Service\CombatLog\Logging;
 
+use App\Logging\StructuredLoggingInterface;
 use Exception;
 
-interface CombatLogDataExtractionServiceLoggingInterface
+interface CombatLogDataExtractionServiceLoggingInterface extends StructuredLoggingInterface
 {
     public function extractDataTimestampNotSet(): void;
 

@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class ProcessCombatLogFromS3 implements ShouldQueue
 {
@@ -51,7 +52,7 @@ class ProcessCombatLogFromS3 implements ShouldQueue
             } else {
                 $log->handleFileWriteFailed($tempPath);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $log->handleParseError($this->combatLogVersion, $e->getMessage(), $e::class, $this->s3FilePath);
         } finally {
             if (is_resource($resource)) {

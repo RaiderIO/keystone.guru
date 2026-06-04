@@ -2,7 +2,9 @@
 
 namespace App\Service\CombatLog\Logging;
 
-interface CombatLogMappingVersionServiceLoggingInterface
+use App\Logging\StructuredLoggingInterface;
+
+interface CombatLogMappingVersionServiceLoggingInterface extends StructuredLoggingInterface
 {
     public function createMappingVersionFromChallengeModeStart(string $filePath): void;
 
