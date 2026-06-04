@@ -46,6 +46,7 @@ use Override;
  * @property bool   $changed_username
  * @property string $timezone
  * @property string $map_facade_style
+ * @property int    $kill_zone_path_weight
  * @property string $password
  * @property string $raw_patreon_response_data
  * @property bool   $legal_agreed
@@ -88,6 +89,8 @@ class User extends Authenticatable implements LaratrustUser
 
     public const string DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
+    public const int DEFAULT_KILL_ZONE_PATH_WEIGHT = 5;
+
     public const string THEME_DARKLY   = 'darkly';
     public const string THEME_LUX      = 'lux';
     public const string THEME_XALATATH = 'vapor';
@@ -126,6 +129,7 @@ class User extends Authenticatable implements LaratrustUser
         'email',
         'echo_color',
         'map_facade_style',
+        'kill_zone_path_weight',
         'password',
         'legal_agreed',
         'legal_agreed_ms',
@@ -334,6 +338,11 @@ class User extends Authenticatable implements LaratrustUser
             Auth::user()?->map_facade_style ??
             $_COOKIE['map_facade_style'] ??
             User::DEFAULT_MAP_FACADE_STYLE;
+    }
+
+    public static function getCurrentUserKillzonePathWeight(): int
+    {
+        return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT);
     }
 
     public static function forceMapFacadeStyle(string $mapFacadeStyle): void

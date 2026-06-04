@@ -82,5 +82,24 @@ class SettingsTabMap extends SettingsTab {
         $('#map_settings_enemy_dangerous_border').bind('change', function () {
             getState().setEnemyDangerousBorder($(this).is(':checked'));
         });
+
+        // Killzone path stroke width
+        $('#map_settings_kill_zone_path_weight').bind('change', function () {
+            let weight = parseInt($(this).val());
+            getState().setKillZonePathWeight(weight);
+
+            let user = getState().getUser();
+            if (user !== null) {
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/user/${user.public_key}`,
+                    dataType: 'json',
+                    data: {
+                        kill_zone_path_weight: weight,
+                        _method: 'PATCH'
+                    }
+                });
+            }
+        });
     }
 }
