@@ -327,8 +327,8 @@ return [
                     'hide_labels' => 'Hide',
                 ],
                 'facadetoggle' => [
-                    'facade'       => 'Facade',
-                    'split_floors' => 'Split floors',
+                    'facade'       => 'MDT-style',
+                    'split_floors' => 'Blizzard-style',
                 ],
                 'mdtclones' => [
                     'mdt'        => 'Show MDT',

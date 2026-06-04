@@ -45,11 +45,11 @@ use Illuminate\Support\Collection;
         </div>
 
         <div id="view_route_misc_actions_container">
-            @include('common.maps.controls.elements.labeltoggle')
-
             @if($facadeEnabled)
                 @include('common.maps.controls.elements.facadetoggle')
             @endif
+
+            @include('common.maps.controls.elements.labeltoggle')
         </div>
     </div>
 </nav>

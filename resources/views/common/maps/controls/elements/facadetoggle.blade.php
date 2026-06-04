@@ -12,8 +12,8 @@ $isFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACA
         <i class="fa fa-layer-group"></i>
         <span class="map_controls_element_label_toggle" style="display: none;">
             {{ $isFacade
-                ? __('view_common.maps.controls.elements.facadetoggle.facade')
-                : __('view_common.maps.controls.elements.facadetoggle.split_floors') }}
+                ? __('view_common.maps.controls.elements.facadetoggle.split_floors')
+                : __('view_common.maps.controls.elements.facadetoggle.facade') }}
         </span>
     </div>
 </div>
