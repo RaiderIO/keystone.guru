@@ -36,8 +36,9 @@ class DungeonRouteFactory extends Factory
             }
 
             $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
             $count++;
-        } while ($dungeon->getCurrentMappingVersion() === null || $dungeon->floors->isEmpty());
+        } while ($currentMappingVersion === null || $dungeon->floors->isEmpty());
 
         $activeSeason = $dungeon->getActiveSeason($seasonService);
 
@@ -45,7 +46,7 @@ class DungeonRouteFactory extends Factory
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'author_id'          => 1,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $currentMappingVersion->id,
             'season_id'          => $activeSeason?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'team_id'            => null,

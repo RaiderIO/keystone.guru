@@ -35,32 +35,5 @@ trait GeneratesDungeonRoutes {
         return $dungeonRoute;
     }
 
-    /**
-     * Returns an MDT-compatible route that has at least $enemyCount enemies guaranteed to
-     * survive an import round-trip. Filters out teeming-only enemies, MDT placeholders,
-     * and seasonally restricted enemies that the import service would skip.
-     */
-    protected function getMDTCompatibleDungeonRouteWithSafeEnemies(int $enemyCount = 1, array $attributes = []): DungeonRoute
-    {
-        do {
-            /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->make(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
 
-            $dungeonRoute->load(['dungeon', 'mappingVersion']);
-
-            if (
-                !Conversion::hasMDTDungeonName($dungeonRoute->dungeon->key) ||
-                $dungeonRoute->mappingVersion->facade_enabled ||
-                $this->getSafeMdtEnemies($dungeonRoute, $enemyCount)->count() < $enemyCount
-            ) {
-                $dungeonRoute = null;
-            }
-        } while ($dungeonRoute === null);
-
-        $dungeonRoute->save();
-
-        return $dungeonRoute;
-    }
 }

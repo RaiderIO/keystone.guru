@@ -14,32 +14,34 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
     #[Group('MDTImportStringServicePulls')]
     public function getDungeonRoute_givenRouteWithThreeKillZones_returnsThreeKillZones(): void
     {
-        $dungeonRoute  = null;
-        $importedRoute = null;
+        for ($i = 0; $i < 100; $i++) {
+            $dungeonRoute  = null;
+            $importedRoute = null;
 
-        try {
-            // Arrange
-            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
-            $randomEnemy  = $this->getSafeMdtEnemies($dungeonRoute)->first();
+            try {
+                // Arrange
+                $dungeonRoute  = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+                $randomEnemies = $this->getSafeMdtEnemies($dungeonRoute, 3);
 
-            foreach (range(1, 3) as $index) {
-                KillZone::factory()->withEnemies($randomEnemy)->create([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'index'            => $index,
-                    'description'      => null,
-                ]);
+                foreach (range(1, 3) as $index) {
+                    KillZone::factory()->withEnemies($randomEnemies->get($index - 1))->create([
+                        'dungeon_route_id' => $dungeonRoute->id,
+                        'index'            => $index,
+                        'description'      => null,
+                    ]);
+                }
+
+                $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
+
+                // Act
+                $importedRoute = $this->importStringToDungeonRoute($encodedString);
+
+                // Assert
+                $this->assertCount(3, $importedRoute->killZones);
+            } finally {
+                $importedRoute?->delete();
+                $dungeonRoute?->delete();
             }
-
-            $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
-
-            // Act
-            $importedRoute = $this->importStringToDungeonRoute($encodedString);
-
-            // Assert
-            $this->assertCount(3, $importedRoute->killZones);
-        } finally {
-            $importedRoute?->delete();
-            $dungeonRoute?->delete();
         }
     }
 
