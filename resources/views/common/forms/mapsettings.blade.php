@@ -200,22 +200,22 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         </div>
     </div>
 
-    <h4>{{ __('view_common.forms.mapsettings.killzone_path') }}</h4>
+    <h4>{{ __('view_common.forms.mapsettings.kill_zone_path') }}</h4>
 
     <!-- Killzone path stroke width -->
     <div class="form-group">
         <div class="row">
             <div class="col">
-                <label for="map_settings_killzone_path_weight">
-                    {{ __('view_common.forms.mapsettings.killzone_path_weight') }}
+                <label for="map_settings_kill_zone_path_weight">
+                    {{ __('view_common.forms.mapsettings.kill_zone_path_weight') }}
                     <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{ __('view_common.forms.mapsettings.killzone_path_weight_title') }}"></i>
+                       title="{{ __('view_common.forms.mapsettings.kill_zone_path_weight_title') }}"></i>
                 </label>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <input id="map_settings_killzone_path_weight" class="form-control-range" type="range" min="1"
+                <input id="map_settings_kill_zone_path_weight" class="form-control-range" type="range" min="1"
                        max="5" value="{{ $killzonePathWeight }}">
             </div>
             <div class="col-auto value">

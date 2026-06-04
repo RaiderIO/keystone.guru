@@ -162,7 +162,7 @@ class CommonMapsMap extends InlineCode {
             enemy_display_type: 'enemy_portrait',
             echo_cursors_enabled: 1,
             map_controls_show_hide_labels: 1,
-            killzone_path_weight: 5
+            kill_zone_path_weight: 5
         };
 
         for (let name in cookieDefaults) {

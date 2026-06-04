@@ -102,9 +102,9 @@ class SettingsTabMap extends SettingsTab {
         });
 
         // Killzone path stroke width
-        $('#map_settings_killzone_path_weight').bind('change', function () {
+        $('#map_settings_kill_zone_path_weight').bind('change', function () {
             let weight = parseInt($(this).val());
-            getState().setKillzonePathWeight(weight);
+            getState().setKillZonePathWeight(weight);
 
             let user = getState().getUser();
             if (user !== null) {
@@ -113,7 +113,7 @@ class SettingsTabMap extends SettingsTab {
                     url: `/ajax/user/${user.public_key}`,
                     dataType: 'json',
                     data: {
-                        killzone_path_weight: weight,
+                        kill_zone_path_weight: weight,
                         _method: 'PATCH'
                     }
                 });
