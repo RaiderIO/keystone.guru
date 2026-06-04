@@ -326,6 +326,7 @@ if ($isAdmin) {
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
+            'facadeEnabled' => $mappingVersion->facade_enabled,
         ])
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [

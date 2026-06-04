@@ -329,6 +329,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => 'Hide',
                 ],
+                'facadetoggle' => [
+                    'facade'       => 'MDT-style',
+                    'split_floors' => 'Blizzard-style',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'Show MDT',
                     'auto_solve' => 'Auto solve',

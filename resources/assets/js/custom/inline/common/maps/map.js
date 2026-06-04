@@ -79,6 +79,7 @@ class CommonMapsMap extends InlineCode {
             this._setupZoomControl();
             this._setupFavorite();
             this._setupLabelToggle();
+            this._setupFacadeToggle();
 
             // Sharing
             if (getState().getMapContext().getDungeon().mdt_supported) {
@@ -502,6 +503,38 @@ class CommonMapsMap extends InlineCode {
 
 
     /**
+     * @private
+     */
+    _setupFacadeToggle() {
+        let $btn = $('#map_controls_element_facade_toggle_btn');
+        if ($btn.length === 0) {
+            return;
+        }
+
+        $btn.unbind('click').bind('click', function () {
+            let current = $btn.data('current');
+            let newStyle = current === MAP_FACADE_STYLE_FACADE
+                ? MAP_FACADE_STYLE_SPLIT_FLOORS
+                : MAP_FACADE_STYLE_FACADE;
+
+            getState().setMapFacadeStyle(newStyle);
+
+            let user = getState().getUser();
+            if (user !== null) {
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/user/${user.public_key}`,
+                    dataType: 'json',
+                    data: {map_facade_style: newStyle, _method: 'PATCH'},
+                    complete: () => window.location.reload(),
+                });
+            } else {
+                window.location.reload();
+            }
+        });
+    }
+
+    /**
      * Called when the enemy context menu was triggered
      * @param enemyContextMenuEvent
      * @private
@@ -776,6 +809,7 @@ class CommonMapsMap extends InlineCode {
 
         // If the floor ID has changed we must also re-show/hide labels since the map controls get rebuilt
         this._setupLabelToggle();
+        this._setupFacadeToggle();
 
         // Make sure that the sidebar's select picker gets updated with the newly selected value
         refreshSelectPickers();

@@ -16,34 +16,6 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 
     <h4>{{ __('view_common.forms.mapsettings.general') }}</h4>
 
-    <!-- Map facade style -->
-    <div class="form-group">
-        <div class="row">
-            <div class="col">
-                <label for="map_settings_map_facade_style">
-                    {{ __('view_common.forms.mapsettings.map_facade_style') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{ __('view_common.forms.mapsettings.map_facade_style_title') }}"></i>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <input id="map_settings_map_facade_style" type="checkbox"
-                       {{ $mapFacadeStyleChecked ? 'checked' : '' }}
-                       data-toggle="toggle" data-width="200px" data-height="20px"
-                       data-onstyle="primary" data-offstyle="primary"
-                       data-on="{{ __('view_common.forms.mapsettings.map_facade_style_facade_option') }}"
-                       data-off="{{ __('view_common.forms.mapsettings.map_facade_style_split_floors_option') }}">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                {{ __('view_common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}
-            </div>
-        </div>
-    </div>
-
     <!-- Map zoom speed -->
     <div class="form-group">
         <div class="row">
