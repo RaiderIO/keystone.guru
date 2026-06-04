@@ -1,19 +1,33 @@
+/**
+ * @typedef {Object} ProfileEditOptions
+ * @property {string} userReportsTableSelector
+ * @property {string} adFreeGiveawayTableSelector
+ * @property {string} adFreeGiveawayCheckboxSelector
+ * @property {string} echoColorSelector
+ * @property {string} classColorSelector
+ */
+
+/**
+ * @property {ProfileEditOptions} options
+ */
 class ProfileEdit extends InlineCode {
 
     activate() {
         super.activate();
 
-        let $classColors = $('.profile_class_color');
+        let self = this;
+
+        let $classColors = $(this.options.classColorSelector);
         $classColors.unbind('click').bind('click', function () {
-            $('#echo_color').val($(this).data('color'));
+            $(self.options.echoColorSelector).val($(this).data('color'));
         });
 
-        $('#profile_user_reports_table').DataTable({
+        $(this.options.userReportsTableSelector).DataTable({
             'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {})
         });
 
-        $('#profile_ad_free_giveaway_table').on('draw.dt', function (e, settings, json, xhr) {
-            $('.ad_free_giveaway_checkbox').unbind('change').bind('change', function () {
+        $(this.options.adFreeGiveawayTableSelector).on('draw.dt', function (e, settings, json, xhr) {
+            $(self.options.adFreeGiveawayCheckboxSelector).unbind('change').bind('change', function () {
                 let $this = $(this);
                 let userPublicKey = $this.data('publickey');
                 let isChecked = $this.is(':checked');

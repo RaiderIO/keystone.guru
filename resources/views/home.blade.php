@@ -26,6 +26,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
     'dungeon_select_id' => '#' . $dungeonSelectId,
     'demo_routes_iframe_id' => '#' . $demoRoutesIFrameId,
     'demo_route_mapping' => $demoRouteMapping,
+    'demoLoaderSelector' => '.demo-loader',
 ]])
 
 @section('content')

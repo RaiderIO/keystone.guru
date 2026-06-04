@@ -16,7 +16,16 @@ $gameVersionsSelect = $allGameVersions
 @include('common.general.inline', [
     'path' => 'common/modal/mappingversion',
     'options' => [
-        'saveMappingVersionSelector' => '#save_mapping_version'
+        'saveMappingVersionSelector' => '#save_mapping_version',
+        'saveMappingVersionSavingSelector' => '#save_mapping_version_saving',
+        'gameVersionIdSelector' => '#map_mapping_version_game_version_id',
+        'facadeEnabledSelector' => '#map_mapping_version_facade_enabled',
+        'enemyForcesRequiredSelector' => '#map_mapping_version_enemy_forces_required',
+        'enemyForcesRequiredTeemingSelector' => '#map_mapping_version_enemy_forces_required_teeming',
+        'enemyForcesShroudedSelector' => '#map_mapping_version_enemy_forces_shrouded',
+        'enemyForcesShroudedZulGamuxSelector' => '#map_mapping_version_enemy_forces_shrouded_zul_gamux',
+        'timerMaxSecondsSelector' => '#map_mapping_version_timer_max_seconds',
+        'timerMaxMinutesSelector' => '#map_mapping_version_timer_max_minutes',
     ]
 ])
 

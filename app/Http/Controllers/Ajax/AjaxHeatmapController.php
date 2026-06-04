@@ -8,8 +8,8 @@ use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Teapot\StatusCode;
 use function response;
+use Teapot\StatusCode;
 
 class AjaxHeatmapController extends Controller
 {

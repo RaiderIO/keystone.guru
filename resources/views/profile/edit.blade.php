@@ -38,7 +38,11 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
 ])
 
 @include('common.general.inline', ['path' => 'profile/edit', 'options' => [
-
+    'userReportsTableSelector' => '#profile_user_reports_table',
+    'adFreeGiveawayTableSelector' => '#profile_ad_free_giveaway_table',
+    'adFreeGiveawayCheckboxSelector' => '.ad_free_giveaway_checkbox',
+    'echoColorSelector' => '#echo_color',
+    'classColorSelector' => '.profile_class_color',
 ]])
 
 @section('scripts')

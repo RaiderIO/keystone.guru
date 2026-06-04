@@ -2,6 +2,9 @@
  * @typedef {Object} AdminReleaseEditOptions
  * @property {Object} changelog
  * @property {Object[]} categories
+ * @property {string} addChangeButtonSelector
+ * @property {string} changesContainerSelector
+ * @property {string} changeDeleteBtnSelector
  */
 
 /**
@@ -24,7 +27,7 @@ class AdminReleaseEdit extends InlineCode {
         this._addChangeRow();
 
         // Add a new row when the button is pressed
-        $('#add_change_button').unbind('click').bind('click', function () {
+        $(this.options.addChangeButtonSelector).unbind('click').bind('click', function () {
             self._addChangeRow();
         });
     }
@@ -52,10 +55,10 @@ class AdminReleaseEdit extends InlineCode {
 
         let html = template(data);
 
-        let $container = $('#changes_container');
+        let $container = $(this.options.changesContainerSelector);
         $container.append(html);
 
-        $('.change_delete_btn').unbind('click').bind('click', function () {
+        $(this.options.changeDeleteBtnSelector).unbind('click').bind('click', function () {
             // Remove the row
             $($(this).closest('.row')).remove();
         });

@@ -1,3 +1,13 @@
+/**
+ * @typedef {Object} DungeonrouteLivesessionOptions
+ * @property {string} stopLiveSessionSelector
+ * @property {string} stoppedContainerSelector
+ * @property {string} countdownSelector
+ */
+
+/**
+ * @property {DungeonrouteLivesessionOptions} options
+ */
 class DungeonrouteLivesession extends InlineCode {
 
     activate() {
@@ -11,7 +21,7 @@ class DungeonrouteLivesession extends InlineCode {
             this.startExpiresCountdown();
         }
 
-        $('#stop_live_session').unbind('click').bind('click', this._stopLiveSession.bind(this));
+        $(this.options.stopLiveSessionSelector).unbind('click').bind('click', this._stopLiveSession.bind(this));
     }
 
     /**
@@ -23,13 +33,14 @@ class DungeonrouteLivesession extends InlineCode {
         }
 
         // Toggle UI state
-        $('#stop_live_session').hide();
-        $('#stopped_live_session_container').css('display', 'inherit');
+        $(this.options.stopLiveSessionSelector).hide();
+        $(this.options.stoppedContainerSelector).css('display', 'inherit');
 
+        let self = this;
         let tick = function () {
             let minutesRemaining = Math.floor(getState().getMapContext().getExpiresInSeconds() / 60);
 
-            $('#stopped_live_session_countdown').html(
+            $(self.options.countdownSelector).html(
                 `Expires in ${minutesRemaining === 0 ? '<1' : minutesRemaining}m`
             );
 
