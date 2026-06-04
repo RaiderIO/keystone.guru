@@ -5,6 +5,7 @@ namespace App\Models\Floor;
 use App\Logic\Structs\LatLng;
 use App\Models\CacheModel;
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class FloorUnionArea extends CacheModel implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use HasVertices;
     use SeederModel;

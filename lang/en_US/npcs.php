@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 return [
     68        => 'Stormwind City Guard',
@@ -5210,7 +5210,7 @@ return [
     212705    => 'Chained Stormrook',
     212709    => 'Chained Stormrook stormling',
     212715    => 'Nerubian Saboteur',
-    212739    => 'Consuming Voidstone',
+    212739    => 'Radiating Voidstone',
     212764    => 'Engine Speaker',
     212765    => 'Void-Bound Despoiler',
     212775    => 'Faceless Seer',
@@ -5587,6 +5587,8 @@ return [
     237657    => 'Glacial Fetters',
     237964    => 'Harbinger of Sin',
     238024    => 'Creeping Malison',
+    238034    => 'Windrunner Soldier',
+    238035    => 'Swiftshot Archer',
     238049    => 'Scouting Trapper',
     238055    => 'Dark Rider',
     238099    => 'Pesty Lashling',
@@ -5862,6 +5864,7 @@ return [
     248708    => 'Nexus Adept',
     248769    => 'Smudge',
     249002    => 'Warding Mask',
+    249012    => 'Putrid Boggorm',
     249020    => 'Hexbound Eagle',
     249022    => 'Bramblemaw Bear',
     249024    => 'Hollow Soulrender',
@@ -5910,6 +5913,7 @@ return [
     252756    => 'Void-Infused Destroyer',
     252825    => 'Mana Battery',
     252852    => 'Corespark Conduit',
+    252870    => 'Arcane Tripwire',
     252886    => 'Potatoad',
     252903    => 'Nascent Dreadflail',
     253159    => 'Training Dummy',

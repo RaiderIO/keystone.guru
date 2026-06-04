@@ -20,6 +20,7 @@ use App\Models\Spell\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -195,7 +196,7 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $dungeonDataDir
+     * @param  string    $dungeonDataDir
      * @throws Exception
      */
     private function saveNpcs(string $dungeonDataDir): void
@@ -235,7 +236,7 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $dungeonDataDir
+     * @param  string    $dungeonDataDir
      * @throws Exception
      */
     private function saveSpells(string $dungeonDataDir): void
@@ -255,7 +256,7 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $combatlogDir
+     * @param  string    $combatlogDir
      * @return void
      * @throws Exception
      */
@@ -270,7 +271,7 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $dungeonDataDir
+     * @param  string    $dungeonDataDir
      * @throws Exception
      */
     private function saveDungeonData(string $dungeonDataDir): void
@@ -493,15 +494,19 @@ class Save extends Command
         };
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without([
-            'npc',
-            'type',
-        ])->get()->makeVisible(['mdt_scale'])->values()
+        $enemies = $floor->enemiesForExport()
+            ->without([
+                'npc',
+                'type',
+            ])
+            ->get()
+            ->makeVisible(['mdt_scale'])
+            ->values()
             ->each($roundLatLngFn);
 
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
         $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
-        /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
+        /** @var EloquentCollection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values()->each($roundLatLngFn);
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
         $dungeonFloorSwitchMarkers
@@ -514,7 +519,7 @@ class Save extends Command
             })
             ->each($roundLatLngFn);
 
-        /** @var \Illuminate\Database\Eloquent\Collection $mapIcons */
+        /** @var EloquentCollection $mapIcons */
         $mapIcons        = $floor->mapIconsForExport->values()->each($roundLatLngFn);
         $mountableAreas  = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
         $floorUnions     = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values()->each($roundLatLngFn);

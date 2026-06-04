@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
+use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -34,7 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin Eloquent
  */
-class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class DungeonFloorSwitchMarker extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

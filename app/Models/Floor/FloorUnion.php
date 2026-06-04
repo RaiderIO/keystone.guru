@@ -3,6 +3,7 @@
 namespace App\Models\Floor;
 
 use App\Models\CacheModel;
+use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class FloorUnion extends CacheModel implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
