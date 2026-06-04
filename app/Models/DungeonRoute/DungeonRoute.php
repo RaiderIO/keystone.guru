@@ -913,10 +913,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      * @throws Exception
      */
     public function saveFromRequest(
-        FormRequest $request,
-        SeasonServiceInterface                  $seasonService,
-        ExpansionServiceInterface               $expansionService,
-        ThumbnailServiceInterface               $thumbnailService,
+        FormRequest               $request,
+        SeasonServiceInterface    $seasonService,
+        ExpansionServiceInterface $expansionService,
+        ThumbnailServiceInterface $thumbnailService,
     ): bool {
         $result = false;
 

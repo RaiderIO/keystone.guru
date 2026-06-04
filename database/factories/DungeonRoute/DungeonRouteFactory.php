@@ -35,7 +35,7 @@ class DungeonRouteFactory extends Factory
                 throw new \Exception('Unable to find a dungeon to create a route for!');
             }
 
-            $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+            $dungeon               = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
             $currentMappingVersion = $dungeon->getCurrentMappingVersion();
             $count++;
         } while ($currentMappingVersion === null || $dungeon->floors->isEmpty());

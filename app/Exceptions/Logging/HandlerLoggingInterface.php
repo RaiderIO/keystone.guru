@@ -7,10 +7,10 @@ use Throwable;
 interface HandlerLoggingInterface
 {
     public function tooManyRequests(
-        string     $ip,
-        string     $url,
-        ?int       $userId,
-        ?string    $username,
+        string    $ip,
+        string    $url,
+        ?int      $userId,
+        ?string   $username,
         Throwable $throwable,
     ): void;
 

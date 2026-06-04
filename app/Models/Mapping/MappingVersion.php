@@ -624,9 +624,7 @@ class MappingVersion extends Model
         static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
-            foreach ($mappingVersion->enemyPacks as $enemyPack) {
-                $enemyPack->delete();
-            }
+            $mappingVersion->enemyPacks()->delete();
 
             foreach ($mappingVersion->enemyPatrols as $enemyPatrol) {
                 $enemyPatrol->delete();

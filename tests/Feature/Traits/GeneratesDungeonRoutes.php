@@ -4,13 +4,15 @@ namespace Tests\Feature\Traits;
 
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
-trait GeneratesDungeonRoutes {
+trait GeneratesDungeonRoutes
+{
     /**
      * Returns an MDT-compatible route whose mapping version does not use facades.
      * Facade dungeons convert random factory coordinates through a facade-to-floor
@@ -39,7 +41,6 @@ trait GeneratesDungeonRoutes {
 
         return $dungeonRoute;
     }
-
 
     /**
      * Returns an MDT-compatible route that has at least $enemyCount enemies guaranteed to
@@ -76,6 +77,8 @@ trait GeneratesDungeonRoutes {
      * enemies that would be skipped by the import service based on route conditions.
      * Also cross-checks against the actual MDT clone data to exclude enemies whose
      * mdt_id does not exist in the MDT Lua file (e.g. KG has mdt_id=1 but MDT starts at 2).
+     * Additionally, applies the same clone-index offset hacks as parseMdtNpcClonesInPull()
+     * to exclude enemies that would fail to match during import due to duplicate-NPC merging.
      *
      * @return Collection<int, Enemy>
      */
@@ -87,10 +90,15 @@ trait GeneratesDungeonRoutes {
             'dungeon'            => $dungeonRoute->dungeon,
         ])->getClonesAsEnemies($dungeonRoute->mappingVersion, $dungeonRoute->dungeon->floors);
 
-        // Build a lookup of valid (effectiveNpcId_mdtId) pairs from the actual MDT data
-        $validMdtPairs = $mdtClones
-            ->map(static fn(Enemy $clone) => sprintf('%d_%d', $clone->npc_id, $clone->mdt_id))
-            ->flip();
+        // Lookup: "effectiveNpcId_mdt_id" => MDT clone (used to find mdt_npc_index per enemy)
+        $mdtCloneByPair = $mdtClones->keyBy(
+            static fn(Enemy $clone): string => sprintf('%d_%d', $clone->npc_id, $clone->mdt_id),
+        );
+
+        // Grouped lookup: mdt_npc_index => Collection<Enemy> (used to verify offset clone exists)
+        $mdtClonesByNpcIndex = $mdtClones->groupBy('mdt_npc_index');
+
+        $dungeon = $dungeonRoute->dungeon;
 
         return $dungeonRoute->mappingVersion->enemies()
             ->whereNotNull('mdt_id')
@@ -98,12 +106,38 @@ trait GeneratesDungeonRoutes {
             ->where(fn($q) => $q->where('seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER)->orWhereNull('seasonal_type'))
             ->whereNull('seasonal_index')
             ->get()
-            ->filter(static function (Enemy $enemy) use ($validMdtPairs): bool {
-                return $validMdtPairs->has(sprintf('%d_%d', $enemy->mdt_npc_id ?? $enemy->npc_id, $enemy->mdt_id));
+            ->filter(static function (Enemy $enemy) use ($mdtCloneByPair, $mdtClonesByNpcIndex, $dungeon): bool {
+                $effectiveNpcId = $enemy->mdt_npc_id ?? $enemy->npc_id;
+                $mdtClone       = $mdtCloneByPair->get(sprintf('%d_%d', $effectiveNpcId, $enemy->mdt_id));
+
+                if ($mdtClone === null) {
+                    return false;
+                }
+
+                $npcIndex    = $mdtClone->mdt_npc_index;
+                $importMdtId = $enemy->mdt_id;
+
+                // Mirror the clone-index offset hacks from MDTImportStringService::parseMdtNpcClonesInPull().
+                // These compensate for MDT's duplicate-NPC merging, which shifts clone indices for
+                // specific NPCs. Without this check, enemies near the top of the accessible clone
+                // range would pass the MDT-existence filter but fail during import.
+                if ($dungeon->key === Dungeon::DUNGEON_SIEGE_OF_BORALUS && $npcIndex === 35) {
+                    $importMdtId += 15;
+                } elseif ($dungeon->key === Dungeon::DUNGEON_TOL_DAGOR && $npcIndex === 11) {
+                    $importMdtId += 2;
+                } elseif ($dungeon->key === Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE && $npcIndex === 23) {
+                    $importMdtId += 5;
+                }
+
+                if ($importMdtId === $enemy->mdt_id) {
+                    return true;
+                }
+
+                return $mdtClonesByNpcIndex->has($npcIndex) &&
+                    $mdtClonesByNpcIndex->get($npcIndex)->contains('mdt_id', $importMdtId);
             })
             ->shuffle()
             ->take($limit)
             ->values();
     }
-
 }

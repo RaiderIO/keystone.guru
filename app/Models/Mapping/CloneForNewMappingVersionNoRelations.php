@@ -4,7 +4,6 @@ namespace App\Models\Mapping;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 trait CloneForNewMappingVersionNoRelations
 {
     public function cloneForNewMappingVersion(

@@ -2,14 +2,9 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
-use App\Logic\MDT\Conversion;
-use App\Logic\MDT\Data\MDTDungeon;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemy;
 use App\Models\Polyline;
-use App\Service\Cache\CacheServiceInterface;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use Illuminate\Support\Collection;
@@ -19,11 +14,11 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
 {
     use GeneratesDungeonRoutes;
 
-    protected function exportDungeonRouteToString(DungeonRoute $dungeonRoute): string
+    protected function exportDungeonRouteToString(DungeonRoute $dungeonRoute, ?Collection $warnings = null): string
     {
         return app()->make(MDTExportStringServiceInterface::class)
             ->setDungeonRoute($dungeonRoute)
-            ->getEncodedString(new Collection());
+            ->getEncodedString($warnings ?? new Collection());
     }
 
     protected function importStringToDungeonRoute(string $encodedString, bool $assignNotesToPulls = false): DungeonRoute

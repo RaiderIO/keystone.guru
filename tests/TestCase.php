@@ -24,8 +24,8 @@ abstract class TestCase extends BaseTestCase
         parent::assertPreConditions();
 
         try {
-            $methodReflector    = new \ReflectionMethod($this, $this->name());
-            $repeatAttributes   = $methodReflector->getAttributes(Repeat::class);
+            $methodReflector  = new \ReflectionMethod($this, $this->name());
+            $repeatAttributes = $methodReflector->getAttributes(Repeat::class);
         } catch (\ReflectionException) {
             return;
         }
@@ -69,8 +69,8 @@ abstract class TestCase extends BaseTestCase
         $elapsed = microtime(true) - $this->testStartTime;
 
         if ($this->isExcludedFromTimingCheck()) {
-
             parent::tearDown();
+
             return;
         }
 

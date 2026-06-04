@@ -11,7 +11,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int                      $id
+ * @property int      $id
  * @property int      $floor_id
  * @property int      $npc_id
  * @property int      $npc2_id
