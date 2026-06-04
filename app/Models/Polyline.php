@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin Eloquent
  */
-class Polyline extends Model implements ConvertsVerticesInterface, MappingModelCloneableInterface
+class Polyline extends Model implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface
 {
     use HasGenericModelRelation;
     use HasVertices;
@@ -63,9 +64,9 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
         ?MappingModelInterface $newParent = null,
     ): Polyline {
         /** @var static $clone */
-        $clone           = clone $this;
-        $clone->exists   = false;
-        $clone->id       = null;
+        $clone         = clone $this;
+        $clone->exists = false;
+        unset($clone->id);
         $clone->model_id = $newParent->getKey();
         $clone->save();
 

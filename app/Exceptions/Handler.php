@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Logging\HandlerLoggingInterface;
+use App\Models\User;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use MarvinLabs\DiscordLogger\Discord\Exceptions\MessageCouldNotBeSent;
+use Override;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -28,7 +30,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that should not be reported.
      *
-     * @var array
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         AuthenticationException::class,
@@ -56,7 +58,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
-    #[\Override]
+    #[Override]
     public function report(Throwable $e): void
     {
         // request() is not available in console
@@ -64,7 +66,7 @@ class Handler extends ExceptionHandler
 
         if (app()->has(HandlerLoggingInterface::class) && !app()->runningInConsole()) {
             $handlerLogging = app()->make(HandlerLoggingInterface::class);
-            /** @var \App\Models\User|null $user */
+            /** @var User|null $user */
             $user = Auth::user();
 
             if ($e instanceof TooManyRequestsHttpException) {
@@ -85,7 +87,7 @@ class Handler extends ExceptionHandler
      *
      * @throws Throwable
      */
-    #[\Override]
+    #[Override]
     public function render($request, Throwable $e)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {
@@ -116,7 +118,7 @@ class Handler extends ExceptionHandler
      * @param  Request $request
      * @return mixed
      */
-    #[\Override]
+    #[Override]
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->isJson() || $this->isApiRequest($request)) {

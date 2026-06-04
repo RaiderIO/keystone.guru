@@ -44,7 +44,7 @@ class LiveSessionController extends Controller
         ]);
 
         // If the team is set for this route, invite all team members that are currently viewing this route to join
-        /** @var \App\Models\User|null $user */
+        /** @var User|null $user */
         $user = Auth::user();
         if ($dungeonroute->team instanceof Team && $dungeonroute->team->isUserMember($user)) {
             try {

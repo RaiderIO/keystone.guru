@@ -8,6 +8,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="DungeonRouteSummary")
@@ -38,7 +39,7 @@ class DungeonRouteSummaryResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

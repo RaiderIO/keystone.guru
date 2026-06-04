@@ -7,6 +7,7 @@ use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\GameServerRegion;
 use Illuminate\Validation\Rule;
+use Override;
 
 /**
  * All options that a user can pass to the heatmap URL to generate a heatmap
@@ -16,7 +17,7 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    #[\Override]
+    #[Override]
     public function authorize(): bool
     {
         return true;
@@ -25,7 +26,7 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     /**
      * Get the validation rules that apply to the request.
      */
-    #[\Override]
+    #[Override]
     public function rules(): array
     {
         // @formatter:off

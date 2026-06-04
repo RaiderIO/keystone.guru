@@ -12,6 +12,7 @@ use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Exception;
 use Illuminate\Support\Collection;
 
 class MDTMappingVersionService implements MDTMappingVersionServiceInterface
@@ -25,7 +26,7 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
     /**
      * @throws InvalidMDTDungeonException
      * @throws InvalidMDTExpansionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMappingVersionAccuracy(MappingVersion $mappingVersion): ?Collection
     {

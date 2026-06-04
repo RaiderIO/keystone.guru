@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Override;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
@@ -31,7 +32,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use ChangesDungeonRoute;
 
-    #[\Override]
+    #[Override]
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,
@@ -80,6 +81,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;
 
+        /** @var MapIcon */
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,

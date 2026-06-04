@@ -5,6 +5,7 @@ namespace App\Http\Resources\Floor;
 use App\Models\Floor\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="Floor")
@@ -26,7 +27,7 @@ class FloorResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

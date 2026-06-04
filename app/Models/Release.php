@@ -8,6 +8,7 @@ use App\Vendor\SemVer\Version;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Override;
 use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 
@@ -74,7 +75,7 @@ class Release extends CacheModel
         return Release::where('id', '<', $this->id)->orderBy('id', 'desc')->first();
     }
 
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'version';

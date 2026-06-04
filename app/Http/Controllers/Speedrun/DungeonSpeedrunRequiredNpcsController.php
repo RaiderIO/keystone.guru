@@ -25,7 +25,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         Dungeon             $dungeon,
         Floor               $floor,
         int                 $difficulty,
-    ): \Illuminate\View\View {
+    ): View {
         $npcs = $npcService->getNpcsForDropdown(collect([$dungeon]))->toArray();
 
         return view('admin.dungeonspeedrunrequirednpc.new', [

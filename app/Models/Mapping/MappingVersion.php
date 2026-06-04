@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @property int         $id
@@ -108,11 +109,12 @@ class MappingVersion extends Model
 
     public $timestamps = true;
 
+    /** @var Collection<int, EloquentCollection<int, FloorUnion>>|null */
     private ?Collection $cachedFloorUnionsOnFloor = null;
 
     private ?Collection $cachedFloorUnionsForFloor = null;
 
-    private ?int $isLatestForDungeonCache = null;
+    private ?bool $isLatestForDungeonCache = null;
 
     protected function casts(): array
     {
@@ -156,7 +158,7 @@ class MappingVersion extends Model
         return $this->hasMany(DungeonFloorSwitchMarker::class);
     }
 
-    /** @return HasMany<\App\Models\Enemy, MappingVersion> */
+    /** @return HasMany<Enemy, $this> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class)->orderBy('id');
@@ -182,6 +184,7 @@ class MappingVersion extends Model
         return $this->hasMany(MountableArea::class);
     }
 
+    /** @return HasMany<FloorUnion, $this> */
     public function floorUnions(): HasMany
     {
         return $this->hasMany(FloorUnion::class);
@@ -206,7 +209,7 @@ class MappingVersion extends Model
                 ->max('version') === $this->version;
         }
 
-        return $this->isLatestForDungeonCache;
+        return $this->isLatestForDungeonCache ?? false;
     }
 
     public function getPrettyName(): string
@@ -341,9 +344,9 @@ class MappingVersion extends Model
      * @todo duplicated function in DungeonRoute.php
      */
     private function convertVerticesForFacade(
-        CoordinatesServiceInterface                                   $coordinatesService,
-        ConvertsVerticesInterface&\Illuminate\Database\Eloquent\Model $hasVertices,
-        Floor                                                         $floor,
+        CoordinatesServiceInterface     $coordinatesService,
+        ConvertsVerticesInterface&Model $hasVertices,
+        Floor                           $floor,
     ): Floor {
         $convertedLatLngs = collect();
 
@@ -498,7 +501,7 @@ class MappingVersion extends Model
         return $this->floorUnionAreas;
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot()
     {
         parent::boot();
@@ -621,9 +624,7 @@ class MappingVersion extends Model
         static::deleting(static function (MappingVersion $mappingVersion) {
             $mappingVersion->dungeonFloorSwitchMarkers()->delete();
             $mappingVersion->enemies()->delete();
-            foreach ($mappingVersion->enemyPacks as $enemyPack) {
-                $enemyPack->delete();
-            }
+            $mappingVersion->enemyPacks()->delete();
 
             foreach ($mappingVersion->enemyPatrols as $enemyPatrol) {
                 $enemyPatrol->delete();

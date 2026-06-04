@@ -30,7 +30,7 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function edit(Request $request): \Illuminate\View\View
+    public function edit(Request $request): View
     {
         return view('profile.edit');
     }
@@ -38,7 +38,7 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function view(Request $request, User $user): \Illuminate\View\View
+    public function view(Request $request, User $user): View
     {
         return view('profile.view', ['user' => $user]);
     }
@@ -65,7 +65,7 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function favorites(Request $request): \Illuminate\View\View
+    public function favorites(Request $request): View
     {
         return view('profile.favorites');
     }
@@ -73,7 +73,7 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function tags(Request $request): \Illuminate\View\View
+    public function tags(Request $request): View
     {
         return view('profile.tags');
     }
@@ -184,7 +184,7 @@ class ProfileController extends Controller
     /**
      * @return View
      */
-    public function changepassword(Request $request): \Illuminate\View\View
+    public function changepassword(Request $request): View
     {
         $currentPw          = $request->get('current_password');
         $newPassword        = $request->get('new_password');

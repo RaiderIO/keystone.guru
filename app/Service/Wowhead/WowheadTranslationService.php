@@ -16,6 +16,7 @@ use PHPHtmlParser\Exceptions\LogicalException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 use PHPHtmlParser\Exceptions\StrictException;
 use PHPHtmlParser\Options;
+use Str;
 
 class WowheadTranslationService implements WowheadTranslationServiceInterface
 {
@@ -190,7 +191,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
                     $response = $this->curlGet($url);
 
-                    $response = \Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
+                    $response = Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
 
                     $dom = new Dom();
                     $dom->loadStr($response, new Options()->setRemoveScripts(false));

@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use PHPUnit\Event;
+use Tests\Attributes\Repeat;
 use Tests\Attributes\SlowTest;
 
 abstract class TestCase extends BaseTestCase
@@ -16,6 +17,33 @@ abstract class TestCase extends BaseTestCase
     private const float MAX_TEST_DURATION_SECONDS = 10.0;
 
     private float $testStartTime;
+
+    #[\Override]
+    protected function assertPreConditions(): void
+    {
+        parent::assertPreConditions();
+
+        try {
+            $methodReflector  = new \ReflectionMethod($this, $this->name());
+            $repeatAttributes = $methodReflector->getAttributes(Repeat::class);
+        } catch (\ReflectionException) {
+            return;
+        }
+
+        if (empty($repeatAttributes)) {
+            return;
+        }
+
+        /** @var Repeat $repeat */
+        $repeat     = $repeatAttributes[0]->newInstance();
+        $methodName = $this->name();
+        $args       = $this->providedData();
+
+        // Run N-1 extra iterations here; runTest() provides the final one.
+        for ($i = 0; $i < $repeat->times - 1; $i++) {
+            $this->{$methodName}(...$args);
+        }
+    }
 
     #[\Override]
     protected function setUp(): void
@@ -40,11 +68,13 @@ abstract class TestCase extends BaseTestCase
     {
         $elapsed = microtime(true) - $this->testStartTime;
 
-        parent::tearDown();
-
         if ($this->isExcludedFromTimingCheck()) {
+            parent::tearDown();
+
             return;
         }
+
+        parent::tearDown();
 
         if ($elapsed > self::MAX_TEST_DURATION_SECONDS) {
             $this->fail(sprintf(
@@ -66,6 +96,10 @@ abstract class TestCase extends BaseTestCase
 
     private function isExcludedFromTimingCheck(): bool
     {
+        if (!config('app.debug')) {
+            return true;
+        }
+
         $classReflector = new \ReflectionClass($this);
 
         if (!empty($classReflector->getAttributes(SlowTest::class))) {
@@ -75,6 +109,9 @@ abstract class TestCase extends BaseTestCase
         try {
             $methodReflector = new \ReflectionMethod($this, $this->name());
             if (!empty($methodReflector->getAttributes(SlowTest::class))) {
+                return true;
+            }
+            if (!empty($methodReflector->getAttributes(Repeat::class))) {
                 return true;
             }
         } catch (\ReflectionException) {

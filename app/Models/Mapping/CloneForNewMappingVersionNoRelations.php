@@ -10,10 +10,10 @@ trait CloneForNewMappingVersionNoRelations
         MappingVersion         $mappingVersion,
         ?MappingModelInterface $newParent = null,
     ): Model {
-        /** @var static $clone */
-        $clone                     = clone $this;
-        $clone->exists             = false;
-        $clone->id                 = null;
+        /** @var static&Model&MappingModelInterface $clone */
+        $clone         = clone $this;
+        $clone->exists = false;
+        unset($clone->id);
         $clone->mapping_version_id = $mappingVersion->id;
         $clone->save();
 

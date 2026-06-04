@@ -6,6 +6,7 @@ use App\Events\ContextEvent;
 use App\Models\LiveSession;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PresenceChannel;
+use Override;
 
 /**
  * Class StopEvent
@@ -23,7 +24,7 @@ class StopEvent extends ContextEvent
      *
      * @return Channel[]
      */
-    #[\Override]
+    #[Override]
     public function broadcastOn(): array
     {
         return [
@@ -31,7 +32,7 @@ class StopEvent extends ContextEvent
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

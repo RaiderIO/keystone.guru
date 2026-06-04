@@ -119,7 +119,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -156,7 +156,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -198,7 +198,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -239,7 +239,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */

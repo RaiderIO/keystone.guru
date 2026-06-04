@@ -31,6 +31,9 @@ use Illuminate\Support\Collection;
 use Random\RandomException;
 
 /**
+ * Converts the NPC timeline from a CombatLogRouteRequestModel into kill zones by walking engaged/died events
+ * in chronological order and grouping them into pulls using chain-pull detection.
+ *
  * @author Wouter
  *
  * @since 24/06/2023
@@ -51,11 +54,13 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         Spell::SPELL_FERAL_HIDE_DRUMS,
         Spell::SPELL_HARRIERS_CRY,
         Spell::SPELL_SHROUD_OF_CONCEALMENT,
+        Spell::SPELL_CONTROL_UNDEAD,
+        Spell::SPELL_SUBJUGATE_DEMON,
     ];
 
     private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
-    /** @var Collection<int> */
+    /** @var Collection<int, Spell> */
     protected Collection $validSpellsById;
 
     /**

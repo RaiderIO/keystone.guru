@@ -63,7 +63,7 @@ class SeasonAffixGroupServiceStub implements SeasonAffixGroupServiceInterface
         return null;
     }
 
-    public function getPresetForAffixGroup(Season $season, \App\Models\AffixGroup\AffixGroup $affixGroup): int
+    public function getPresetForAffixGroup(Season $season, AffixGroup $affixGroup): int
     {
         return 0;
     }

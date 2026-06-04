@@ -7,6 +7,7 @@ use App\Models\Enemies\PridefulEnemy;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
  * @property PridefulEnemy $model
@@ -33,7 +34,7 @@ class PridefulEnemyChangedEvent extends ModelChangedEvent
         return 'pridefulenemy-changed';
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         /** @var PridefulEnemy $model */

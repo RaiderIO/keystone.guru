@@ -347,7 +347,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $npcIndex          = (int)$mdtNpcIndex;
         $mdtClones         = $mdtNpcClones;
 
-        $totalEnemiesSelected += count($mdtClones);
+        $totalEnemiesSelected = (int)($totalEnemiesSelected + count($mdtClones));
         // Only if filled
         foreach ($mdtClones as $index => $cloneIndex) {
             // This comes in through as a double, cast to int

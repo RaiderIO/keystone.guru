@@ -6,6 +6,7 @@ use App\Http\Resources\KillZone\KillZoneResource;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use Illuminate\Http\Request;
+use Override;
 
 /**
  * @OA\Schema(schema="DungeonRoute")
@@ -36,7 +37,7 @@ class DungeonRouteResource extends DungeonRouteSummaryResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return array_insert_after(parent::toArray($request), 'expiresAt', [

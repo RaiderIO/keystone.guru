@@ -16,6 +16,7 @@ return (new PhpCsFixer\Config())
     ->setIndent("    ")
     ->setLineEnding("\n")
     ->setFinder($finder)
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRules([
         // Arrays & commas
         'array_syntax'                => ['syntax' => 'short'],

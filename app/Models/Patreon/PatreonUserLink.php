@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property int    $id
@@ -75,7 +76,7 @@ class PatreonUserLink extends Model
         return Carbon::createFromTimeString($this->expires_at)->isPast();
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot()
     {
         parent::boot();

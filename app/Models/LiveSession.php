@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property int    $id
@@ -45,7 +46,7 @@ class LiveSession extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -102,7 +103,7 @@ class LiveSession extends Model
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

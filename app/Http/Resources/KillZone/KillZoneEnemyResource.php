@@ -7,6 +7,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="PullEnemy")
@@ -32,7 +33,7 @@ class KillZoneEnemyResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         /** @var NpcEnemyForces|null $enemyForces */

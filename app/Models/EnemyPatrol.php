@@ -11,6 +11,7 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Override;
 
 /**
  * @property int      $id
@@ -104,9 +105,9 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         ?MappingModelInterface $newParent = null,
     ): EnemyPatrol {
         /** @var static $clonedEnemyPatrol */
-        $clonedEnemyPatrol                     = clone $this;
-        $clonedEnemyPatrol->exists             = false;
-        $clonedEnemyPatrol->id                 = null;
+        $clonedEnemyPatrol         = clone $this;
+        $clonedEnemyPatrol->exists = false;
+        unset($clonedEnemyPatrol->id);
         $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
         $clonedEnemyPatrol->save();
 
@@ -121,7 +122,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $clonedEnemyPatrol;
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

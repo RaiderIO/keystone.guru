@@ -4,6 +4,7 @@ namespace App\Console\Commands\Dungeon;
 
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
@@ -43,7 +44,7 @@ class CreateMissingFloors extends Command
             $this->info(sprintf('- %s', __($dungeon->name, [], 'en_US')));
             $index = 1;
             if (!is_array($translatedFloors)) {
-                throw new \Exception(sprintf('Translated floors should be an array for %s', $dungeon->name));
+                throw new Exception(sprintf('Translated floors should be an array for %s', $dungeon->name));
             }
 
             foreach ($translatedFloors as $key => $value) {

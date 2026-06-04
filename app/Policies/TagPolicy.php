@@ -20,7 +20,7 @@ class TagPolicy
     public function createTag(User $user, TagCategory $tagCategory, Model $model): bool
     {
         $result = match ($tagCategory->name) {
-            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model instanceof \App\Models\DungeonRoute\DungeonRoute && $model->mayUserEdit($user),
+            TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM => $model instanceof DungeonRoute && $model->mayUserEdit($user),
             default => false,
         };
 

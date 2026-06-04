@@ -16,6 +16,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,7 @@ trait SavesPolylines
 
     /**
      * @param  array{color: string, color_animated: string, weight: int, vertices_json: string} $data
-     * @throws \Exception
+     * @throws Exception
      */
     private function savePolylineToModel(
         CoordinatesServiceInterface $coordinatesService,

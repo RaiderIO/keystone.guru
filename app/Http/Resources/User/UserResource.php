@@ -5,6 +5,7 @@ namespace App\Http\Resources\User;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="User")
@@ -22,7 +23,7 @@ class UserResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

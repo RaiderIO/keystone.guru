@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * @property int    $id
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $description
  * @property string $invite_code
  * @property string $default_role
+ * @property bool   $route_publishing_enabled
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -48,14 +50,21 @@ class Team extends Model
         'public_key',
     ];
 
-    protected $fillable = ['default_role'];
+    protected $fillable = [
+        'default_role',
+        'route_publishing_enabled',
+        'public_key',
+        'name',
+        'description',
+        'invite_code',
+    ];
 
     protected $with = ['iconfile'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -91,7 +100,8 @@ class Team extends Model
     /**
      * Checks if a user can add/remove a route to this team or not.
      *
-     * @param User $user
+     * @param  User $user
+     * @return bool
      */
     public function canAddRemoveRoute(User $user): bool
     {
@@ -419,7 +429,17 @@ class Team extends Model
         );
     }
 
-    #[\Override]
+    /**
+     * Gets all tags available for routes in this team.
+     */
+    public function getAvailableTags(): EloquentCollection
+    {
+        return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
+            ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
+            ->get();
+    }
+
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

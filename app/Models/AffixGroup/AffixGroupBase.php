@@ -42,7 +42,7 @@ abstract class AffixGroupBase extends CacheModel
             ->orderBy(sprintf('%s.id', $this->getAffixGroupCouplingsTableName()), 'asc');
     }
 
-    /** @return HasMany<AffixGroupCoupling, static> */
+    /** @return HasMany<AffixGroupCoupling, $this> */
     public function affixGroupCouplings(): HasMany
     {
         return $this->hasMany(AffixGroupCoupling::class);

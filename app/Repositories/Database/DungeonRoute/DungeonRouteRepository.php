@@ -72,7 +72,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
     }
 
     /**
-     * @return Collection<string, Collection<WeeklyRoute>>
+     * @return Collection<string, Collection<int, WeeklyRoute>>
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
@@ -108,6 +108,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             ->get()
             ->groupBy(fn(DungeonRoute $route) => $route->dungeon->key)
             ->map(function (Collection $dungeonRoutes) use ($weeklyRouteTags) {
+                /** @var Collection<int, WeeklyRoute> $result */
                 $result = collect();
                 foreach ($weeklyRouteTags as $key => $value) {
                     /** @var DungeonRoute $dungeonRoute */

@@ -2,6 +2,8 @@
 
 namespace App\Service\DungeonRoute\Logging;
 
+use Exception;
+
 interface DungeonRouteServiceLoggingInterface
 {
     public function updatePopularityStart(): void;
@@ -18,11 +20,19 @@ interface DungeonRouteServiceLoggingInterface
 
     public function deleteOutdatedDungeonRoutesStart(): void;
 
-    public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, \Exception $ex): void;
+    public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, Exception $ex): void;
 
     public function deleteOutdatedDungeonRoutesEnd(int $deletedRouteCount): void;
 
     public function touchRoutesForTeamStart(int $teamId): void;
 
     public function touchRoutesForTeamEnd(int $teamId, int $updatedRouteCount): void;
+
+    public function publishScheduledDungeonRoutesStart(): void;
+
+    public function publishScheduledDungeonRoutesEnd(int $publishedCount): void;
+
+    public function publishScheduledDungeonRouteSkippedNoPatreon(int $dungeonRouteId, int $scheduledPublishId): void;
+
+    public function publishScheduledDungeonRouteSkippedInactiveDungeon(int $dungeonRouteId, int $dungeonId, int $scheduledPublishId): void;
 }

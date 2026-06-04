@@ -4,6 +4,7 @@ namespace App\Http\Requests\Heatmap;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Override;
 
 /**
  * All options that a user can pass to the explore embed URL to generate a heatmap in an iframe.
@@ -13,7 +14,7 @@ class HeatmapEmbedUrlFormRequest extends ExploreUrlFormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    #[\Override]
+    #[Override]
     public function authorize(): bool
     {
         return true;
@@ -22,7 +23,7 @@ class HeatmapEmbedUrlFormRequest extends ExploreUrlFormRequest
     /**
      * Get the validation rules that apply to the request.
      */
-    #[\Override]
+    #[Override]
     public function rules(): array
     {
         return array_merge(parent::rules(), [

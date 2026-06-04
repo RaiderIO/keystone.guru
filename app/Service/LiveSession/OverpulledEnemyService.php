@@ -90,7 +90,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
     }
 
     /**
-     * @return Collection<array{array{kill_zone: KillZone, enemy_forces: int}}>
+     * @return Collection<int, array{kill_zone: KillZone, enemy_forces: int}>
      */
     private function getOverpulledEnemyForces(LiveSession $liveSession): Collection
     {

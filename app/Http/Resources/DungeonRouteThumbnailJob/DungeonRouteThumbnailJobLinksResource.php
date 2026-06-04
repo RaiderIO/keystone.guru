@@ -5,6 +5,7 @@ namespace App\Http\Resources\DungeonRouteThumbnailJob;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Override;
 
 /**
  * @OA\Schema(schema="RouteThumbnailJobLinks")
@@ -20,7 +21,7 @@ class DungeonRouteThumbnailJobLinksResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         $isCompleted = $this->status === DungeonRouteThumbnailJob::STATUS_COMPLETED;

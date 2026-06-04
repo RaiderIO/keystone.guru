@@ -19,6 +19,7 @@ use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Deprecated;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -510,7 +511,7 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
      */
-    #[\Deprecated(message: 'Use FloorRepository::findByUiMapId instead')]
+    #[Deprecated(message: 'Use FloorRepository::findByUiMapId instead')]
     public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)

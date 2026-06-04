@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\Guid\Guid;
+use Override;
 
 class HealSupport extends Heal
 {
@@ -14,7 +15,7 @@ class HealSupport extends Heal
         return $this->supportGuid;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -24,7 +25,7 @@ class HealSupport extends Heal
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 6;

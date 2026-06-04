@@ -5,6 +5,9 @@ namespace App\Service\CombatLog\Models\ActivePull;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * Tracks the state of a single pull in progress: which enemies are currently in combat and which have been killed.
+ */
 class ActivePull
 {
     protected ?Carbon $startTime;

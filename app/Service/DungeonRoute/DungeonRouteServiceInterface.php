@@ -17,4 +17,6 @@ interface DungeonRouteServiceInterface
     public function touchRoutesForTeam(int $teamId): int;
 
     public function upgradeMappingVersion(DungeonRoute $dungeonRoute): void;
+
+    public function publishScheduledDungeonRoutes(): int;
 }

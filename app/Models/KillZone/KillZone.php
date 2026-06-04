@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Override;
 
 /**
  * @property int        $id
@@ -352,7 +353,7 @@ class KillZone extends Model
         return $array;
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

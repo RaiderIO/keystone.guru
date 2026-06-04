@@ -6,6 +6,7 @@ use App\Models\Spell\Spell;
 use App\Repositories\Database\SpellRepository;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use Illuminate\Support\Collection;
+use Override;
 
 class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySwooleInterface
 {
@@ -23,7 +24,7 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
     /**
      * @inheritDoc
      */
-    #[\Override]
+    #[Override]
     public function findAllById(Collection $spellIds): Collection
     {
         if ($spellIds->isEmpty()) {
@@ -54,7 +55,7 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
         return $result;
     }
 
-    #[\Override]
+    #[Override]
     public function getAllWithCharacteristic(): Collection
     {
         if ($this->spellsWithCharacteristics === null) {

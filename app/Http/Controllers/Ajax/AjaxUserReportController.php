@@ -40,7 +40,7 @@ class AjaxUserReportController extends Controller
         $userReport->category   = $request->get('category');
         $userReport->message    = $request->get('message', '');
         $userReport->contact_ok = $request->get('contact_ok', false);
-        $userReport->status     = 0;
+        $userReport->status     = '0';
 
         $saveResult = $userReport->save();
         if ($saveResult) {

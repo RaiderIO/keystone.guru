@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Queue;
+use Override;
 
 /**
  * @OA\Schema(schema="RouteThumbnailJob")
@@ -38,7 +39,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         $queueSize = Queue::size(sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env')));

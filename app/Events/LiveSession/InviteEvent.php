@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * Class InviteEvent
@@ -37,7 +38,7 @@ class InviteEvent extends ContextEvent
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function broadcastOn(): array
     {
         return [
@@ -45,7 +46,7 @@ class InviteEvent extends ContextEvent
         ];
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

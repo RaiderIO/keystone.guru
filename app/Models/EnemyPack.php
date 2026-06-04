@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -32,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyPack extends CacheModel implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
@@ -77,6 +78,7 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return HasMany<Enemy, $this> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);

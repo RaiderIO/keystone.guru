@@ -6,6 +6,7 @@ use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use App\Service\Cache\Redis\RedisServiceInterface;
+use Override;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class DevCacheService extends CacheService
@@ -19,7 +20,7 @@ class DevCacheService extends CacheService
         $this->setBypassCache(true);
     }
 
-    #[\Override]
+    #[Override]
     public function get(string $key): mixed
     {
         $result = parent::get($key);
@@ -33,7 +34,7 @@ class DevCacheService extends CacheService
      *
      * @throws InvalidArgumentException
      */
-    #[\Override]
+    #[Override]
     public function rememberWhen(bool $condition, string $key, mixed $value, mixed $ttl = null): mixed
     {
         $measureKey = sprintf('cacheservice-rememberwhen[%s]:%s', $key, $condition ? 'pass' : 'fail');
@@ -48,7 +49,7 @@ class DevCacheService extends CacheService
     /**
      * @param Closure|mixed $value
      */
-    #[\Override]
+    #[Override]
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
         $measureKey = sprintf('cacheservice-remember[%s]', $key);

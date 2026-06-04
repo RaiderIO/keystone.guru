@@ -18,7 +18,7 @@ class MDTImportStringServiceDecodeTest extends MDTImportStringServiceTestBase
 
         try {
             // Arrange
-            $dungeonRoute  = $this->getMDTCompatibleDungeonRoute();
+            $dungeonRoute  = $this->getMDTCompatibleNonFacadeDungeonRoute();
             $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
 
             // Act

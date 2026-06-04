@@ -7,6 +7,8 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Enemy;
 
 /**
+ * Result event emitted when an enemy first enters combat; carries the original CombatLogEvent with engagement position.
+ *
  * @author Wouter
  *
  * @since 01/06/2023

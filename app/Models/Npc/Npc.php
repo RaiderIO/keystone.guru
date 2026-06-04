@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * @property int        $id
@@ -132,6 +133,7 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         $id = (int)explode('-', (string)$value, 2)[0];
 
+        /** @var static|null */
         return $this->where('id', $id)->first();
     }
 
@@ -197,9 +199,12 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function spells(bool $onlyVisibleOnMap = true): BelongsToMany
     {
-        return $this->belongsToMany(Spell::class, 'npc_spells')
+        /** @var BelongsToMany<Spell, $this> $query */
+        $query = $this->belongsToMany(Spell::class, 'npc_spells')
             ->when($onlyVisibleOnMap, static fn($query) => $query->where('hidden_on_map', false))
             ->orderBy('spells.id');
+
+        return $query;
     }
 
     public function npcSpells(): HasMany
@@ -393,7 +398,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $dungeon?->id ?? null;
     }
 
-    #[\Override]
+    #[Override]
     protected static function booted(): void
     {
         parent::booted();

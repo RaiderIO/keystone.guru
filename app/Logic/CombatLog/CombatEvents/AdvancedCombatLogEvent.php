@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataBuilder;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Prefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use Exception;
+use Override;
 
 class AdvancedCombatLogEvent extends CombatLogEvent
 {
@@ -16,7 +17,7 @@ class AdvancedCombatLogEvent extends CombatLogEvent
     /**
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): CombatLogEvent
     {
         $this->genericData = GenericDataBuilder::create($this->getCombatLogVersion());

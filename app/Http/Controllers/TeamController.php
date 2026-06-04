@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Http\Requests\TeamFormRequest;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Tags\Tag;
@@ -52,6 +53,12 @@ class TeamController extends Controller
         $team->description  = $validated['description'];
         $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
+
+        /** @var User $currentUser */
+        $currentUser = Auth::user();
+        if ($currentUser->hasRole(Role::ROLE_ADMIN)) {
+            $team->route_publishing_enabled = $request->boolean('route_publishing_enabled');
+        }
 
         // Update or insert it
         if ($team->save()) {
@@ -97,7 +104,7 @@ class TeamController extends Controller
             'userHasAdFreeTeamMembersPatreonBenefit' => $user->hasPatreonBenefit(PatreonBenefit::AD_FREE_TEAM_MEMBERS),
             'userAdFreeTeamMembersRemaining'         => PatreonAdFreeGiveaway::getCountLeft($user),
             'userAdFreeTeamMembersMax'               => config('keystoneguru.patreon.ad_free_giveaways'),
-            'userIsModerator'                        => $team->isUserModerator($user),
+            'userIsModerator'                        => $team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN),
             'team'                                   => $team,
         ]);
     }

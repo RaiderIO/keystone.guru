@@ -8,6 +8,7 @@ use App\Models\Path;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
  * @property MapIcon $model
@@ -34,7 +35,7 @@ class PathChangedEvent extends ModelChangedEvent
         return 'path-changed';
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         /** @var Path $model */

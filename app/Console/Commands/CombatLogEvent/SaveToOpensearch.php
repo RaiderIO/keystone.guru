@@ -42,6 +42,6 @@ class SaveToOpensearch extends Command
 
         $progressBar->finish();
 
-        return $result;
+        return $result ? self::SUCCESS : self::FAILURE;
     }
 }

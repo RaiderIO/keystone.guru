@@ -55,6 +55,6 @@ class SavePending extends SchedulerCommand
             Log::channel('scheduler')->error('Failed to save metrics to the database.');
         }
 
-        return !$result;
+        return $result ? self::SUCCESS : self::FAILURE;
     }
 }

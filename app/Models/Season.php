@@ -148,7 +148,7 @@ class Season extends CacheModel
         return $this->hasMany(AffixGroup::class);
     }
 
-    /** @return BelongsToMany<Dungeon, Season> */
+    /** @return BelongsToMany<Dungeon, $this> */
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');

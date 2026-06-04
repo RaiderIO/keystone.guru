@@ -27,6 +27,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Override;
 
 /**
  * @property int    $id
@@ -111,7 +112,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'id',
@@ -133,7 +134,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that should be visible for outsiders.
      *
-     * @var array
+     * @var list<string>
      */
     protected $visible = [
         'id',
@@ -164,7 +165,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasRole(Role::ROLE_ADMIN);
     }
 
-    /** @return HasMany<DungeonRoute, User> */
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
@@ -345,7 +346,7 @@ class User extends Authenticatable implements LaratrustUser
         return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

@@ -68,13 +68,8 @@ class IngameXY implements Arrayable
         ];
     }
 
-    public function __clone()
+    public function __clone(): void
     {
-        return new IngameXY(
-            $this->x,
-            $this->y,
-            $this->floor,
-        );
     }
 
     public static function fromArray(array $ingameXY, ?Floor $floor): IngameXY

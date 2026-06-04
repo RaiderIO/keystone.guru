@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 class MapChange extends SpecialEvent
 {
     private int $uiMapID;
@@ -46,7 +48,7 @@ class MapChange extends SpecialEvent
         return $this->yMin;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

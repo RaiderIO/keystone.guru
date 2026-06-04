@@ -53,7 +53,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
             $enemyIds = $killZoneData['enemies'];
             unset($killZoneData['enemies']);
 
-            /** @var array{id: int} $spells */
+            /** @var array<int, array{id: int}> $spells */
             $spells = $killZoneData['spells'];
             unset($killZoneData['spells']);
 

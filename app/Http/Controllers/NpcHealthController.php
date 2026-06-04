@@ -20,7 +20,7 @@ class NpcHealthController extends Controller
     /**
      * Show a page for creating a new npc.
      *
-     * @return Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function create(Npc $npc)
     {
@@ -55,7 +55,7 @@ class NpcHealthController extends Controller
     /**
      * @return View
      */
-    public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): \Illuminate\View\View
+    public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): View
     {
         return view('admin.npchealth.edit', [
             'npc'                    => $npc,

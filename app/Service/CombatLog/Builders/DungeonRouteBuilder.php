@@ -26,15 +26,18 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
 
+/**
+ * Base builder that resolves NPC combat log events to Enemy entities using weighted spatial distance matching.
+ */
 abstract class DungeonRouteBuilder
 {
-    private const DUNGEON_ENEMY_FLOOR_CHECK_ENABLED = [
+    private const array DUNGEON_ENEMY_FLOOR_CHECK_ENABLED = [
         //        Dungeon::DUNGEON_THE_ROOKERY,
         //        Dungeon::DUNGEON_WAYCREST_MANOR
         //        Dungeon::DUNGEON_THEATER_OF_PAIN
     ];
 
-    protected const NPC_ID_MAPPING = [
+    protected const array NPC_ID_MAPPING = [
         // Brackenhide Gnolls transform into Witherlings after engaging them
         194373 => 187238,
     ];
@@ -63,12 +66,13 @@ abstract class DungeonRouteBuilder
 
     protected ?Floor $currentFloor;
 
-    /** @var Collection<Enemy> */
+    /** @var Collection<int, Enemy> */
     protected Collection $availableEnemies;
 
+    /** @var ActivePullCollection<int, ActivePull>  */
     protected ActivePullCollection $activePullCollection;
 
-    /** @var Collection<int> */
+    /** @var Collection<int, int> */
     protected Collection $validNpcIds;
 
     private int $killZoneIndex = 1;

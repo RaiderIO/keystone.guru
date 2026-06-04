@@ -7,6 +7,7 @@ use App\Models\MapIcon;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
  * @property MapIcon $model
@@ -33,7 +34,7 @@ class MapIconChangedEvent extends ModelChangedEvent
         return 'mapicon-changed';
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         /** @var MapIcon $model */
