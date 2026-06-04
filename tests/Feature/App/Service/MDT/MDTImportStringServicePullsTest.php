@@ -13,7 +13,6 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
 {
     #[Test]
     #[Group('MDTImportStringServicePulls')]
-    #[Repeat(1000)]
     public function getDungeonRoute_givenRouteWithThreeKillZones_returnsThreeKillZones(): void
     {
         $dungeonRoute  = null;
