@@ -9,6 +9,7 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use Database\Seeders\DatabaseSeeder;
 use Exception;
+use Illuminate\Support\Collection;
 
 class DungeonRouteKillZoneRelationParser implements RelationParserInterface
 {
@@ -37,6 +38,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
         }
 
         // Cache all enemies that we need to resolve the enemies for this route
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::from(DatabaseSeeder::getTempTableName(Enemy::class))->whereIn('id', $allEnemyIds)->get()->keyBy('id');
 
         $killZoneEnemyAttributes = [];
@@ -72,11 +74,12 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
                         throw new Exception(sprintf('Unable to find enemy with id %s', $enemyId));
                     }
 
-                    // Make sure the enemy's relation with the kill zone is restored.
+                    // Make sure the enemy's relationship with the kill zone is restored.
                     $killZoneEnemyAttributes[] = [
                         'kill_zone_id' => $killZone->id,
-                        'npc_id'       => $enemy->npc_id,
+                        'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                         'mdt_id'       => $enemy->mdt_id,
+                        'enemy_id'     => $enemy->id,
                     ];
 
                     $savedEnemyIds->push($enemyId);
@@ -103,7 +106,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
         KillZoneEnemy::insert($killZoneEnemyAttributes);
         KillZoneSpell::insert($killZoneSpellAttributes);
 
-        // Didn't really change anything so just return the value.
+        // Didn't really change anything, so just return the value.
         return $modelData;
     }
 }

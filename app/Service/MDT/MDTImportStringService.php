@@ -460,8 +460,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             $killZoneAttributes['killZoneEnemies'][] = [
-                'npc_id' => $enemy->npc_id,
-                'mdt_id' => $enemy->mdt_id,
+                'npc_id'   => $enemy->npc_id,
+                'mdt_id'   => $enemy->mdt_id,
+                'enemy_id' => $enemy->id,
                 // Cache for the hasFinalBoss check below - it's slow otherwise
                 'enemy' => $enemy,
             ];

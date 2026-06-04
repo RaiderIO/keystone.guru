@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +33,7 @@ use Override;
  *
  * @property DungeonRoute                           $dungeonRoute
  * @property Floor                                  $floor
- * @property Collection<int>                        $enemies
+ * @property EloquentCollection<int, Enemy>         $enemies         Enemy models via BelongsToMany; serialized to integer IDs in toArray()
  * @property EloquentCollection<int, KillZoneEnemy> $killZoneEnemies
  * @property EloquentCollection<int, KillZoneSpell> $killZoneSpells
  * @property EloquentCollection<int, Spell>         $spells
@@ -62,8 +61,6 @@ class KillZone extends Model
         'killzone_paths',
     ];
 
-    protected $appends = ['enemies'];
-
     protected $with = ['spells:id,icon_name'];
 
     protected $fillable = [
@@ -79,12 +76,6 @@ class KillZone extends Model
         'created_at',
     ];
 
-    /** @var Collection<int>|null */
-    private ?Collection $enemiesAttributeCache = null;
-
-    /** @var Collection<Enemy>|null */
-    private ?Collection $enemiesCache = null;
-
     private ?Floor $dominantFloorCache = null;
 
     protected function casts(): array
@@ -96,32 +87,6 @@ class KillZone extends Model
             'lat'              => 'float',
             'lng'              => 'float',
         ];
-    }
-
-    public function setEnemiesAttributeCache(?Collection $enemyIds): void
-    {
-        $this->enemiesAttributeCache = $enemyIds;
-    }
-
-    public function getEnemiesAttribute(?bool $resetCache = false): Collection
-    {
-        if ($resetCache) {
-            $this->enemiesAttributeCache = null;
-        }
-
-        return $this->enemiesAttributeCache ?? Enemy::select('enemies.id')
-            ->join('kill_zone_enemies', static function (JoinClause $clause) {
-                $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
-                    ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
-            })
-            ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
-            ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
-            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('kill_zone_enemies.kill_zone_id', $this->id)
-            // Disabling model caching makes this query work - not sure why the cache would break it, but it does
-            ->disableCache()
-            ->get()
-            ->map(static fn(Enemy $enemy) => $enemy->id);
     }
 
     /**
@@ -142,6 +107,11 @@ class KillZone extends Model
         return $this->hasMany(KillZoneSpell::class);
     }
 
+    public function enemies(): BelongsToMany
+    {
+        return $this->belongsToMany(Enemy::class, 'kill_zone_enemies', 'kill_zone_id', 'enemy_id');
+    }
+
     public function spells(): BelongsToMany
     {
         return $this->belongsToMany(Spell::class, 'kill_zone_spells');
@@ -160,20 +130,11 @@ class KillZone extends Model
     /**
      * @return EloquentCollection<int, Enemy>
      */
-    public function getEnemies(bool $useCache = false): EloquentCollection
+    public function getEnemies(): EloquentCollection
     {
-        return $useCache && $this->enemiesCache !== null ?
-            $this->enemiesCache : $this->enemiesCache = Enemy::select('enemies.*')
-                ->with(['npc'])
-                ->join('kill_zone_enemies', static function (JoinClause $clause) {
-                    $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
-                        ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
-                })
-                ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
-                ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
-                ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-                ->where('kill_zone_enemies.kill_zone_id', $this->id)
-                ->get();
+        $this->loadMissing('enemies.npc');
+
+        return $this->getRelation('enemies');
     }
 
     /**
@@ -192,12 +153,14 @@ class KillZone extends Model
         }
 
         if ($result === null && (
-            $this->relationLoaded('killZoneEnemies') ?
-                $this->killZoneEnemies->isNotEmpty() :
-                $this->killZoneEnemies()->exists()
+            $this->relationLoaded('enemies') ? $this->getRelation('enemies')->isNotEmpty() : (
+                $this->relationLoaded('killZoneEnemies') ?
+                    $this->killZoneEnemies->isNotEmpty() :
+                    $this->killZoneEnemies()->exists()
+            )
         )) {
             $floorTotals = [];
-            foreach ($this->getEnemies($useCache) as $enemy) {
+            foreach ($this->getEnemies() as $enemy) {
                 if (!isset($floorTotals[$enemy->floor_id])) {
                     $floorTotals[$enemy->floor_id] = 0;
                 }
@@ -221,7 +184,7 @@ class KillZone extends Model
         if (isset($this->lat) && isset($this->lng)) {
             return new LatLng($this->lat, $this->lng, $this->getDominantFloor(true));
         } else {
-            $enemies = $this->getEnemies($useCache);
+            $enemies = $this->getEnemies();
 
             if ($enemies->isEmpty()) {
                 return null;
@@ -371,6 +334,23 @@ class KillZone extends Model
         ]);
 
         return collect($queryResult);
+    }
+
+    /**
+     * Serialize enemies as an array of integer IDs for the frontend instead of full model objects.
+     *
+     * @return array<string, mixed>
+     */
+    #[\Override]
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+
+        if (isset($array['enemies'])) {
+            $array['enemies'] = array_column($array['enemies'], 'id');
+        }
+
+        return $array;
     }
 
     #[Override]

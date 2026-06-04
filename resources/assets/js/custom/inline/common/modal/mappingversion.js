@@ -1,9 +1,18 @@
-class CommonDungeonMappingversion extends InlineCode {
+/**
+ @typedef {Object} CommonModalMappingversionOptions
+ @property {string} saveMappingVersionSelector
+ @property {Number} lng
+ @property {Number} floor_id
+ */
+
+/**
+ * @property {CommonModalMappingversionOptions} options
+ */
+class CommonModalMappingversion extends InlineCode {
 
     activate() {
-
         // Save settings in the modal
-        $('#save_mapping_version').unbind('click').bind('click', this._saveMappingVersion);
+        $(this.options.saveMappingVersionSelector).unbind('click').bind('click', this._saveMappingVersion);
     }
 
     /**

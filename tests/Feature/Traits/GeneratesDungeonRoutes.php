@@ -9,10 +9,35 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 trait GeneratesDungeonRoutes
 {
+    protected function createNonFacadeDungeonRouteWithEnemies(): DungeonRoute
+    {
+        $count = 0;
+        do {
+            if (++$count > 20) {
+                throw new \RuntimeException('Unable to find a non-facade dungeon');
+            }
+            /** @var Dungeon $dungeon */
+            $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+            $mappingVersion = $dungeon->getCurrentMappingVersion();
+        } while (
+            $mappingVersion === null ||
+            $mappingVersion->facade_enabled ||
+            $dungeon->floors->isEmpty() ||
+            $mappingVersion->enemies()->count() === 0
+        );
+
+        return DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+            'expires_at'         => Carbon::now()->addHours(2),
+        ]);
+    }
+
     /**
      * Returns an MDT-compatible route whose mapping version does not use facades.
      * Facade dungeons convert random factory coordinates through a facade-to-floor

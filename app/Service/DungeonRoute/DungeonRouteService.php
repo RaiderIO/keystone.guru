@@ -2,11 +2,13 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Jobs\RefreshEnemyForces;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Collection;
@@ -16,6 +18,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
 {
     public function __construct(
         private DungeonRouteRepositoryInterface     $dungeonRouteRepository,
+        private KillZoneEnemyRepositoryInterface    $killZoneEnemyRepository,
         private ThumbnailServiceInterface           $thumbnailService,
         private DungeonRouteServiceLoggingInterface $log,
     ) {
@@ -170,6 +173,36 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         }
 
         return $updatedRouteCount;
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function upgradeMappingVersion(DungeonRoute $dungeonRoute): void
+    {
+        $newMappingVersionId = $dungeonRoute->dungeon->getCurrentMappingVersion(
+            $dungeonRoute->mappingVersion->gameVersion,
+        )->id;
+
+        DB::transaction(function () use ($dungeonRoute, $newMappingVersionId): void {
+            $this->dungeonRouteRepository->update($dungeonRoute, ['mapping_version_id' => $newMappingVersionId]);
+
+            $killZoneIds = $dungeonRoute->killZones->pluck('id');
+
+            // Reset enemy_id so we don't keep stale references to the old mapping version
+            $this->killZoneEnemyRepository->resetEnemyIdByKillZoneIds($killZoneIds);
+
+            // Re-resolve enemy_id against the new mapping version
+            $this->killZoneEnemyRepository->updateEnemyIdsByMappingVersion($dungeonRoute->id, $newMappingVersionId);
+
+            // Remove enemies that do not exist in the new mapping version
+            $this->killZoneEnemyRepository->deleteOrphanedByKillZoneIds($killZoneIds);
+
+            // Refresh the enemy forces
+            new RefreshEnemyForces($dungeonRoute->id)->handle();
+        });
+
+        DungeonRoute::dropCaches($dungeonRoute->id);
     }
 
     public function publishScheduledDungeonRoutes(): int

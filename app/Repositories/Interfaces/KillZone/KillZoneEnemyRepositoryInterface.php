@@ -19,4 +19,11 @@ use Illuminate\Support\Collection;
  */
 interface KillZoneEnemyRepositoryInterface extends BaseRepositoryInterface
 {
+    /** @param Collection<int> $killZoneIds */
+    public function resetEnemyIdByKillZoneIds(Collection $killZoneIds): void;
+
+    public function updateEnemyIdsByMappingVersion(int $dungeonRouteId, int $mappingVersionId): void;
+
+    /** @param Collection<int> $killZoneIds */
+    public function deleteOrphanedByKillZoneIds(Collection $killZoneIds): void;
 }

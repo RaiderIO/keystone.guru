@@ -8,17 +8,17 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\JoinClause;
 
 /**
  * @property int $id
  * @property int $kill_zone_id
  * @property int $npc_id
  * @property int $mdt_id
+ * @property int $enemy_id
  *
- * @property KillZone   $killZone
- * @property Npc        $npc
- * @property Enemy|null $enemy
+ * @property KillZone $killZone
+ * @property Npc      $npc
+ * @property Enemy    $enemy
  *
  * @mixin Eloquent
  */
@@ -37,7 +37,18 @@ class KillZoneEnemy extends Model
         'kill_zone_id',
         'npc_id',
         'mdt_id',
+        'enemy_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'kill_zone_id' => 'integer',
+            'npc_id'       => 'integer',
+            'mdt_id'       => 'integer',
+            'enemy_id'     => 'integer',
+        ];
+    }
 
     public function killZone(): BelongsTo
     {
@@ -49,21 +60,8 @@ class KillZoneEnemy extends Model
         return $this->belongsTo(Npc::class);
     }
 
-    public function getEnemy(): Enemy
+    public function enemy(): BelongsTo
     {
-        /** @var Enemy $result */
-        $result = Enemy::select('enemies.*')
-            ->join('kill_zone_enemies', static function (JoinClause $clause) {
-                $clause->on('kill_zone_enemies.npc_id', 'enemies.npc_id')
-                    ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
-            })
-            ->join('kill_zones', 'kill_zones.id', 'kill_zone_enemies.kill_zone_id')
-            ->join('dungeon_routes', 'dungeon_routes.id', 'kill_zones.dungeon_route_id')
-            ->whereColumn('mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('kill_zone_enemies.npc_id', $this->npc_id)
-            ->where('kill_zone_enemies.mdt_id', $this->mdt_id)
-            ->first();
-
-        return $result;
+        return $this->belongsTo(Enemy::class);
     }
 }

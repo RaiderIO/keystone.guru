@@ -157,8 +157,9 @@ abstract class DungeonRouteBuilder
                         // Schedule for creation later
                         $killZoneEnemiesAttributes->push([
                             'kill_zone_id' => $killZone->id,
-                            'npc_id'       => $enemy->npc_id,
+                            'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                             'mdt_id'       => $enemy->mdt_id,
+                            'enemy_id'     => $enemy->id,
                         ]);
 
                         $this->log->createPullEnemyAttachedToKillZone(
