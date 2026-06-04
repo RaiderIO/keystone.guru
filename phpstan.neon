@@ -23,10 +23,6 @@ parameters:
         maximumNumberOfProcesses: 4
         minimumNumberOfJobsPerProcess: 2
 
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-
     excludePaths:
         # '#Keyword continue used outside of a loop or a switch statement#'
         - resources/views/admin/tools/mdt/dungeonmappingversionaccuracy.blade.php
@@ -48,5 +44,12 @@ parameters:
         # Blade templates captured variables that phpstan thinks are unused
         - identifier: closure.unusedUse
           path: resources/views
+        # TrayLabs InfluxDB facade — writePoints() is a magic method not declared in the facade stub
+        # reportUnmatched: false — errors appear in CI (fresh vendor) but not locally (cached reflection)
+        - identifier: staticMethod.notFound
+          reportUnmatched: false
+          paths:
+            - app/Console/Commands/Traits/SavesToInfluxDB.php
+            - app/Console/Commands/Scheduler/Telemetry/Telemetry.php
 
 #    checkMissingIterableValueType: false
