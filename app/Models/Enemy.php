@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -12,9 +13,9 @@ use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id
@@ -46,17 +47,17 @@ use Illuminate\Support\Collection;
  * @property float       $lat
  * @property float       $lng
  *
- * @property EnemyPack|null              $enemyPack
- * @property Npc|null                    $npc
- * @property Floor                       $floor
- * @property EnemyPatrol|null            $enemyPatrol
- * @property Enemy|null                  $exclusiveEnemy
- * @property MappingVersion              $mappingVersion
- * @property Collection<EnemyActiveAura> $enemyActiveAuras
+ * @property EnemyPack|null                           $enemyPack
+ * @property Npc|null                                 $npc
+ * @property Floor                                    $floor
+ * @property EnemyPatrol|null                         $enemyPatrol
+ * @property Enemy|null                               $exclusiveEnemy
+ * @property MappingVersion                           $mappingVersion
+ * @property EloquentCollection<int, EnemyActiveAura> $enemyActiveAuras
  *
  * @mixin Eloquent
  */
-class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, HasLatLngInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

@@ -393,11 +393,11 @@ class Conversion
 
         // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));
         if ($affixGroup === null) {
-            logger()->error('Unable to find affix group for mdtWeek - returning current affix group instead', [
+            logger()->error('Unable to find affix group for mdtWeek - returning first affix group instead', [
                 'mdtWeek' => $mdtWeek,
             ]);
 
-            $affixGroup = $season->getCurrentAffixGroup();
+            $affixGroup = $season->affixGroups->getNth($season->start_affix_group_index);
         }
 
         return $affixGroup;

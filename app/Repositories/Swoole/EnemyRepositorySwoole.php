@@ -8,6 +8,7 @@ use App\Repositories\Database\EnemyRepository;
 use App\Repositories\Swoole\Interfaces\EnemyRepositorySwooleInterface;
 use App\Repositories\Swoole\Traits\ClonesCollections;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @method Enemy             create(array $attributes)
@@ -23,7 +24,7 @@ class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySw
 {
     use ClonesCollections;
 
-    /** @var Collection<Collection<Enemy>> */
+    /** @var Collection<int, Collection<int, Enemy>> */
     private Collection $availableEnemiesByMappingVersion;
 
     public function __construct()
@@ -36,7 +37,7 @@ class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySw
     /**
      * @inheritDoc
      */
-    #[\Override]
+    #[Override]
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection
     {
         if (!$this->availableEnemiesByMappingVersion->has($mappingVersion->id)) {

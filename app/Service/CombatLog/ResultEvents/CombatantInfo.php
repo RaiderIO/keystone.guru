@@ -18,8 +18,8 @@ class CombatantInfo extends BaseResultEvent
 
     public function getCombatantInfoEvent(): CombatantInfoEvent
     {
-        /** @var CombatantInfoEvent $baseEvent */
         $baseEvent = $this->getBaseEvent();
+        assert($baseEvent instanceof CombatantInfoEvent);
 
         return $baseEvent;
     }

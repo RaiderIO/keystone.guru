@@ -10,11 +10,13 @@ use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * @property int    $id
@@ -25,8 +27,8 @@ use Illuminate\Support\Facades\Auth;
  * @property bool   $has_seasons
  * @property bool   $active
  *
- * @property Expansion                  $expansion
- * @property Collection<MappingVersion> $mappingVersions
+ * @property Expansion                               $expansion
+ * @property EloquentCollection<int, MappingVersion> $mappingVersions
  *
  * @method static Builder active()
  */
@@ -78,7 +80,7 @@ class GameVersion extends CacheModel
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'key';

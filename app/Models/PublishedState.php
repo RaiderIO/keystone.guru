@@ -6,13 +6,14 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                      $id
- * @property string                   $name
- * @property Collection<DungeonRoute> $dungeonRoutes
+ * @property int                                   $id
+ * @property string                                $name
+ * @property EloquentCollection<int, DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */

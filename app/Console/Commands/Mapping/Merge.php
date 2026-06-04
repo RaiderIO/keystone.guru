@@ -45,6 +45,7 @@ class Merge extends Command
         $base       = 'development';
 
         /** @var PullRequest $githubPrClient */
+        // @phpstan-ignore staticMethod.notFound
         $githubPrClient = GitHub::pr();
 
         $prList = $githubPrClient->all($username, $repository, [

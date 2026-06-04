@@ -2,6 +2,9 @@
 
 namespace App\Models\Interfaces;
 
+/**
+ * @method mixed getKey()
+ */
 interface CombatLogCriterionModelInterface
 {
     /**

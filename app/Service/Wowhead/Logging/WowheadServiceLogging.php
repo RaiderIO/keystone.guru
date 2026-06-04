@@ -3,10 +3,11 @@
 namespace App\Service\Wowhead\Logging;
 
 use App\Logging\StructuredLogging;
+use Throwable;
 
 class WowheadServiceLogging extends StructuredLogging implements WowheadServiceLoggingInterface
 {
-    public function getNpcHealthHtmlParsingException(\Throwable $ex): void
+    public function getNpcHealthHtmlParsingException(Throwable $ex): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

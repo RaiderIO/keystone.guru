@@ -3,6 +3,8 @@
 namespace App\Http\Models\Request;
 
 use Illuminate\Support\Collection;
+use ReflectionNamedType;
+use ReflectionProperty;
 
 abstract class RequestModel
 {
@@ -37,10 +39,10 @@ abstract class RequestModel
 
         foreach ($data as $key => $value) {
             if (property_exists($object, $key)) {
-                $propertyReflection = new \ReflectionProperty($object, $key);
+                $propertyReflection = new ReflectionProperty($object, $key);
                 $type               = $propertyReflection->getType();
 
-                if ($type) {
+                if ($type instanceof ReflectionNamedType) {
                     $typeName = $type->getName();
 
                     // Handle Laravel Collection

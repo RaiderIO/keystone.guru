@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * @author Wouter
  *
@@ -37,7 +39,7 @@ class WorldMarkerPlaced extends SpecialEvent
         return $this->positionY;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

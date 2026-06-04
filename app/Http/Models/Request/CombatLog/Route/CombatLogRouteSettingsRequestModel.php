@@ -4,6 +4,7 @@ namespace App\Http\Models\Request\CombatLog\Route;
 
 use App\Http\Models\Request\RequestModel;
 use Illuminate\Contracts\Support\Arrayable;
+use Override;
 
 /**
  * @OA\Schema(schema="CombatLogRouteSettings")
@@ -22,7 +23,7 @@ class CombatLogRouteSettingsRequestModel extends RequestModel implements Arrayab
     ) {
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         // Make sure that mappingVersion is not echoed if it is null

@@ -21,6 +21,7 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 /**
  * This class is used as a filter to extract CombatLogEvents from Opensearch.
@@ -504,7 +505,7 @@ class CombatLogEventFilter implements Arrayable
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
             $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
             if ($timerSeconds === null) {
-                throw new \InvalidArgumentException('Mapping version does not have a timer max seconds value');
+                throw new InvalidArgumentException('Mapping version does not have a timer max seconds value');
             }
 
             $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);

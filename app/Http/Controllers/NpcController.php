@@ -176,7 +176,7 @@ class NpcController extends Controller
     /**
      * Show a page for creating a new npc.
      *
-     * @return Factory|View
+     * @return View
      */
     public function create()
     {
@@ -210,7 +210,7 @@ class NpcController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, NpcServiceInterface $npcService, Npc $npc): View
     {
@@ -266,7 +266,7 @@ class NpcController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {

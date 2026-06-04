@@ -21,8 +21,6 @@ use Throwable;
 class AjaxEnemyPackController extends AjaxMappingModelBaseController
 {
     /**
-     * @return EnemyPack|Model
-     *
      * @throws Throwable
      */
     public function store(
@@ -33,6 +31,7 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
     ): EnemyPack {
         $validated = $request->validated();
 
+        /** @var EnemyPack */
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, EnemyPack::class, $enemyPack);
     }
 

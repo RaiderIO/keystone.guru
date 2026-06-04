@@ -12,11 +12,13 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @property int    $id
@@ -31,9 +33,10 @@ use Illuminate\Support\Collection;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property Collection<Dungeon> $dungeons
- * @property Collection<Dungeon> $raids
- * @property Collection<Dungeon> $dungeonsAndRaids
+ * @property EloquentCollection<int, Dungeon> $dungeons
+ * @property EloquentCollection<int, Dungeon> $raids
+ * @property EloquentCollection<int, Dungeon> $dungeonsAndRaids
+ * @property EloquentCollection<int, Season>  $seasons
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
@@ -101,29 +104,34 @@ class Expansion extends CacheModel
         self::EXPANSION_TLT          => 13,
     ];
 
+    /** @var Collection<int, Season>|null  */
     private ?Collection $currentSeasonCache = null;
 
+    /** @var Collection<int, Season>|null  */
     private ?Collection $nextSeasonCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'shortname';
     }
 
+    /** @return HasMany<Dungeon, $this> */
     public function dungeons(): HasMany
     {
         return $this->hasMany(Dungeon::class)->where('raid', 0)->orderBy('name');
     }
 
+    /** @return HasMany<Dungeon, $this> */
     public function raids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->where('raid', 1)->orderBy('name');
     }
 
+    /** @return HasMany<Dungeon, $this> */
     public function dungeonsAndRaids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->orderBy('name');

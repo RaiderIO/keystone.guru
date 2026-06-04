@@ -10,6 +10,7 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Spell as SpellPrefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
@@ -118,10 +119,10 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection<int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
-    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
+    /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
     private readonly Collection $accurateEnemySightings;
 
-    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
+    /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
     private readonly Collection $lastKnownPlayerPositions;
 
     /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
@@ -195,9 +196,13 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } else {
+            } elseif ($combatLogEvent instanceof CombatLogEvent) {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
+            } else {
+                $this->log->parseInvalidCombatLogEvent($lineNr);
+
+                return false;
             }
 
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
@@ -234,9 +239,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             }
 
             // Push a new result event - we successfully killed this enemy, and it gave count!
-            $this->resultEvents->push((new EnemyEngaged($enemyEngagedEvent)));
+            $this->resultEvents->push(new EnemyEngaged($enemyEngagedEvent));
             // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
-            $this->resultEvents->push((new EnemyKilled($combatLogEvent, $destGuid)));
+            $this->resultEvents->push(new EnemyKilled($combatLogEvent, $destGuid));
             // Speed up parsing by getting rid of the accurate enemy sighting - it's part of killed enemies now so won't get handled anymore
             $this->accurateEnemySightings->forget($destGuid->getGuid());
 

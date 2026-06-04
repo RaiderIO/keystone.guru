@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\SpecialEvents\EncounterEnd\Versions\V9;
 
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use Override;
 
 /**
  * ENCOUNTER_END,665,"Gehennas",226,20,1
@@ -50,7 +51,7 @@ class EncounterEndV9 extends SpecialEvent implements EncounterEndInterface
         return 0;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

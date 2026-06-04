@@ -1,8 +1,10 @@
 <?php
-/** @var boolean $isMobile */
-/** @var string $id */
-/** @var string $type */
-/** @var bool $map */
+/**
+ * @var boolean $isMobile
+ * @var non-falsy-string $id
+ * @var string $type
+ * @var bool $map
+ */
 
 $id   = 'playwire-' . $id;
 $type ??= 'responsive';

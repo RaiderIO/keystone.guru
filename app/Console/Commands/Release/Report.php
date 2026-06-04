@@ -47,7 +47,6 @@ class Report extends Command
         $version  = $this->argument('version');
         $platform = $this->argument('platform');
 
-        /** @var Release $release */
         if ($version === 'latest') {
             $release = Release::latest()->first();
         } else {

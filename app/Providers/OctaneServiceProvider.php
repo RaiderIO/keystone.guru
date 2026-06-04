@@ -13,10 +13,11 @@ use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Repositories\Swoole\NpcRepositorySwoole;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class OctaneServiceProvider extends ServiceProvider
 {
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         parent::register();

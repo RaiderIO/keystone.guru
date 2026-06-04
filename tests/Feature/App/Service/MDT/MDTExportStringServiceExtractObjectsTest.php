@@ -7,6 +7,7 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\MapIcon;
 use App\Service\MDT\MDTExportStringServiceInterface;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -17,68 +18,83 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
 {
     #[Test]
     #[Group('MDTExportStringServiceExtractObjects')]
-    public function extractObjects_givenMapIconWithLinkInComment_shouldExportToMDTWithUrlIntact(): void
+    public function extractObjects_givenMapIconWithLinkInComment_shouldExportToMdtWithUrlIntact(): void
     {
-        // Arrange
-        $mdtExportStringService = app()->make(MDTExportStringServiceInterface::class);
-        $url                    = 'https://raider.io/some_article';
+        $dungeonRoute = null;
 
-        $dungeonRoute = $this->getMDTCompatibleDungeonRoute();
+        try {
+            // Arrange
+            $mdtExportStringService = app()->make(MDTExportStringServiceInterface::class);
+            $url                    = 'https://raider.io/some_article';
 
-        /** @var MapIcon $mapIcon */
-        $mapIcon = MapIcon::factory()->create([
-            'comment' => sprintf('some string <a href="%s">link text</a>', $url),
-        ]);
-        $dungeonRoute->mapIcons()->save($mapIcon);
+            $dungeonRoute = $this->getMDTCompatibleNonFacadeDungeonRoute();
 
-        $warnings = collect();
+            /** @var MapIcon $mapIcon */
+            $mapIcon = MapIcon::factory()->create([
+                'comment' => sprintf('some string <a href="%s">link text</a>', $url),
+            ]);
+            $dungeonRoute->mapIcons()->save($mapIcon);
 
-        // Act
-        $encodedString = $mdtExportStringService->setDungeonRoute($dungeonRoute)->getEncodedString($warnings);
+            $warnings = collect();
 
-        // Assert
-        $decodedString = json_decode($this->decode($encodedString), true);
+            // Act
+            $encodedString = $mdtExportStringService->setDungeonRoute($dungeonRoute)->getEncodedString($warnings);
 
-        Assert::assertIsArray($decodedString);
-        Assert::assertEmpty($warnings);
-        Assert::assertEquals(sprintf('some string (%s)', $url), $decodedString['objects'][0]['d'][4]);
+            // Assert
+            $decodedString = json_decode($this->decode($encodedString), true);
+
+            Assert::assertIsArray($decodedString);
+            Assert::assertEmpty($warnings);
+            Assert::assertEquals(sprintf('some string (%s)', $url), $decodedString['objects'][0]['d'][4]);
+        } finally {
+            $dungeonRoute?->delete();
+        }
     }
 
     #[Test]
     #[Group('MDTExportStringServiceExtractObjects')]
-    public function extractObjects_givenKillZoneWithLinkInDescription_shouldExportToMDTWithUrlIntact(): void
+    public function extractObjects_givenKillZoneWithLinkInDescription_shouldExportToMdtWithUrlIntact(): void
     {
-        // Arrange
-        $mdtExportStringService = app()->make(MDTExportStringServiceInterface::class);
-        $url                    = 'https://raider.io/some_article';
+        $dungeonRoute = null;
 
-        $dungeonRoute = $this->getMDTCompatibleDungeonRoute();
+        try {
+            // Arrange
+            $mdtExportStringService = app()->make(MDTExportStringServiceInterface::class);
+            $url                    = 'https://raider.io/some_article';
 
-        /** @var Enemy $randomEnemy */
-        $randomEnemy = $dungeonRoute->mappingVersion->enemies()->inRandomOrder()->first();
-        /** @var KillZone $killZone */
-        $killZone = KillZone::factory()->create([
-            'description' => sprintf('some string <a href="%s">link text</a>', $url),
-        ]);
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
 
-        $killZoneEnemies = KillZoneEnemy::factory()->count(10)->create([
-            'kill_zone_id' => $killZone->id,
-            'npc_id'       => $randomEnemy->npc_id,
-            'mdt_id'       => $randomEnemy->mdt_id,
-        ]);
-        $killZone->killZoneEnemies()->saveMany($killZoneEnemies);
-        $dungeonRoute->killZones()->save($killZone);
+            /** @var Collection<int, Enemy> $randomEnemies */
+            $randomEnemies = $this->getSafeMdtEnemies($dungeonRoute);
 
-        $warnings = collect();
+            foreach ($randomEnemies as $randomEnemy) {
+                /** @var KillZone $killZone */
+                $killZone = KillZone::factory()->create([
+                    'description' => sprintf('some string <a href="%s">link text</a>', $url),
+                ]);
 
-        // Act
-        $encodedString = $mdtExportStringService->setDungeonRoute($dungeonRoute)->getEncodedString($warnings);
+                $killZoneEnemy = KillZoneEnemy::factory()->create([
+                    'kill_zone_id' => $killZone->id,
+                    'npc_id'       => $randomEnemy->npc_id,
+                    'mdt_id'       => $randomEnemy->mdt_id,
+                ]);
+                $killZone->killZoneEnemies()->save($killZoneEnemy);
+                $dungeonRoute->killZones()->save($killZone);
+            }
 
-        // Assert
-        $decodedString = json_decode($this->decode($encodedString), true);
+            $warnings = collect();
 
-        Assert::assertIsArray($decodedString);
-        Assert::assertEmpty($warnings);
-        Assert::assertEquals(sprintf('some string (%s)', $url), $decodedString['objects'][0]['d'][4]);
+            // Act
+            $encodedString = $mdtExportStringService->setDungeonRoute($dungeonRoute)->getEncodedString($warnings);
+
+            // Assert
+            $decodedString = json_decode($this->decode($encodedString), true);
+
+            Assert::assertIsArray($decodedString);
+            Assert::assertEmpty($warnings);
+            Assert::assertEquals(sprintf('some string (%s)', $url), $decodedString['objects'][0]['d'][4]);
+        } finally {
+            $dungeonRoute?->delete();
+        }
     }
 }

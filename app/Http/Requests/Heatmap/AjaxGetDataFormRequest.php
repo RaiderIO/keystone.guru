@@ -8,6 +8,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
 use App\Models\Spell\Spell;
 use Illuminate\Validation\Rule;
+use Override;
 
 /**
  * Used when the heatmaps request data from the backend.
@@ -17,7 +18,7 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    #[\Override]
+    #[Override]
     public function authorize(): bool
     {
         return true;
@@ -26,7 +27,7 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
     /**
      * Get the validation rules that apply to the request.
      */
-    #[\Override]
+    #[Override]
     public function rules(): array
     {
         return array_merge(parent::rules(), [

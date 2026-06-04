@@ -66,12 +66,13 @@ abstract class DungeonRouteBuilder
 
     protected ?Floor $currentFloor;
 
-    /** @var Collection<Enemy> */
+    /** @var Collection<int, Enemy> */
     protected Collection $availableEnemies;
 
+    /** @var ActivePullCollection<int, ActivePull>  */
     protected ActivePullCollection $activePullCollection;
 
-    /** @var Collection<int> */
+    /** @var Collection<int, int> */
     protected Collection $validNpcIds;
 
     private int $killZoneIndex = 1;

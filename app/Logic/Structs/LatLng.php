@@ -115,13 +115,8 @@ class LatLng implements Arrayable
         ];
     }
 
-    public function __clone()
+    public function __clone(): void
     {
-        return new LatLng(
-            $this->lat,
-            $this->lng,
-            $this->floor,
-        );
     }
 
     /**

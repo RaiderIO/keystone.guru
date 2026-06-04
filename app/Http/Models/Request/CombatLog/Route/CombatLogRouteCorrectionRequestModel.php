@@ -3,6 +3,7 @@
 namespace App\Http\Models\Request\CombatLog\Route;
 
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @OA\Schema(schema="CombatLogRouteCorrectionRequest")
@@ -22,7 +23,7 @@ class CombatLogRouteCorrectionRequestModel extends CombatLogRouteRequestModel
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
-    #[\Override]
+    #[Override]
     public static function getCollectionItemType(string $key): ?string
     {
         return match ($key) {

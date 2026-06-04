@@ -53,8 +53,6 @@ use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -613,7 +611,7 @@ class AjaxDungeonRouteController extends Controller
 
         $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
         if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
-            $dungeonRoute->published_at = date('Y-m-d H:i:s', time());
+            $dungeonRoute->published_at = now();
         }
 
         $dungeonRoute->save();
@@ -691,7 +689,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|Response
+     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -871,6 +869,7 @@ class AjaxDungeonRouteController extends Controller
         $useCache = (int)$request->get('useCache', 1) === 1;
 
         try {
+            /** @var Collection<int, ImportWarning> $warnings */
             $warnings     = new Collection();
             $dungeonRoute = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)
@@ -878,7 +877,6 @@ class AjaxDungeonRouteController extends Controller
 
             $warningResult = [];
             foreach ($warnings as $warning) {
-                /** @var $warning ImportWarning */
                 $warningResult[] = $warning->toArray();
             }
 

@@ -7,6 +7,7 @@ use App\Models\Enemy;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
  * @property Enemy $model
@@ -33,13 +34,16 @@ class EnemyChangedEvent extends ModelChangedEvent
         return 'enemy-changed';
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
+        /** @var Enemy $model */
+        $model = $this->model;
+
         return array_merge(
             parent::broadcastWith(),
             [
-                'model_data' => $this->model->getCoordinatesData($this->coordinatesService),
+                'model_data' => $model->getCoordinatesData($this->coordinatesService),
             ],
         );
     }

@@ -2,6 +2,8 @@
 
 namespace App\Logic\Utils;
 
+use Debugbar;
+
 class Stopwatch
 {
     /**
@@ -41,7 +43,7 @@ class Stopwatch
         }
 
         if (config('debugbar.enabled') && class_exists('Debugbar')) {
-            \Debugbar::startMeasure($timerName);
+            Debugbar::startMeasure($timerName);
         }
     }
 
@@ -61,7 +63,7 @@ class Stopwatch
         }
 
         if (config('debugbar.enabled') && class_exists('Debugbar')) {
-            \Debugbar::stopMeasure($timerName);
+            Debugbar::stopMeasure($timerName);
         }
     }
 
@@ -109,7 +111,7 @@ class Stopwatch
 
         unset(self::$timers[$timerName]);
         if (config('debugbar.enabled') && class_exists('Debugbar')) {
-            \Debugbar::stopMeasure($timerName);
+            Debugbar::stopMeasure($timerName);
         }
 
         return $elapsed;

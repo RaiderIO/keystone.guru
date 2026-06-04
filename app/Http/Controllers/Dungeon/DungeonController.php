@@ -9,7 +9,6 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +59,7 @@ class DungeonController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -85,7 +84,7 @@ class DungeonController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, Dungeon $dungeon): View
     {
@@ -96,7 +95,7 @@ class DungeonController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */
@@ -129,7 +128,7 @@ class DungeonController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {

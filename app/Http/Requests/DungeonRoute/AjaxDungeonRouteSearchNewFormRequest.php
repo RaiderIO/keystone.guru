@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use Closure;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Override;
 
 class AjaxDungeonRouteSearchNewFormRequest extends FormRequest
 {
@@ -21,7 +23,7 @@ class AjaxDungeonRouteSearchNewFormRequest extends FormRequest
     /**
      * {@inheritDoc}
      */
-    #[\Override]
+    #[Override]
     protected function failedValidation(Validator $validator)
     {
         $errors = new ValidationException($validator)->errors();
@@ -40,7 +42,7 @@ class AjaxDungeonRouteSearchNewFormRequest extends FormRequest
             'bail',
             'string',
             'regex:/^\d+;\d+$/',
-            function (string $attribute, mixed $value, \Closure $fail) {
+            function (string $attribute, mixed $value, Closure $fail) {
                 [$npcId, $mdtId] = explode(';', $value);
 
                 $exists = DB::table('enemies')

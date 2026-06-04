@@ -4,6 +4,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V22;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
+use Override;
 
 class DamageV22 extends DamageV20
 {
@@ -17,7 +18,7 @@ class DamageV22 extends DamageV20
         return $this->damageType;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -27,7 +28,7 @@ class DamageV22 extends DamageV20
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 11;

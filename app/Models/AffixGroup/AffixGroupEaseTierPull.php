@@ -4,10 +4,11 @@ namespace App\Models\AffixGroup;
 
 use App\Models\CacheModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @property int    $id
@@ -18,8 +19,8 @@ use Illuminate\Support\Collection;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
- * @property AffixGroup                     $affixGroup
- * @property Collection<AffixGroupEaseTier> $affixGroupEaseTiers
+ * @property AffixGroup                                  $affixGroup
+ * @property EloquentCollection<int, AffixGroupEaseTier> $affixGroupEaseTiers
  *
  * @mixin Eloquent
  **/
@@ -53,7 +54,7 @@ class AffixGroupEaseTierPull extends CacheModel
         return $this->hasMany(AffixGroupEaseTier::class);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

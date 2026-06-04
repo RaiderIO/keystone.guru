@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use Override;
+
 class AjaxDungeonRouteSubmitFormRequest extends DungeonRouteSubmitFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      */
-    #[\Override]
+    #[Override]
     public function rules(): array
     {
         $rules = parent::rules();

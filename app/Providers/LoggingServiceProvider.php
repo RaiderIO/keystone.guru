@@ -101,10 +101,11 @@ use App\Service\Wowhead\Logging\WowheadTranslationServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class LoggingServiceProvider extends ServiceProvider
 {
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         parent::register();
