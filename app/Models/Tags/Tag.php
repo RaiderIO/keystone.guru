@@ -4,8 +4,8 @@ namespace App\Models\Tags;
 
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Interfaces\HasTagsInterface;
 use App\Models\Traits\HasGenericModelRelation;
-use App\Models\Traits\HasTags;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,11 +83,11 @@ class Tag extends Model
 
     public static function saveFromRequest(TagFormRequest $request, Model $context, int $tagCategoryId): Tag
     {
-        /** @var Model|HasTags $context */
+        /** @var Model&HasTagsInterface $context */
         $validated = $request->validated();
 
         return Tag::create([
-            'context_id'      => $context->id,
+            'context_id'      => $context->getKey(),
             'context_class'   => $context::class,
             'tag_category_id' => $tagCategoryId,
             'model_id'        => null,

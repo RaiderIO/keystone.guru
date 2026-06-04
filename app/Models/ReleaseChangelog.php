@@ -4,16 +4,16 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Collection;
 
 /**
- * @property int                                $id
- * @property int                                $release_id
- * @property string                             $description
- * @property Release                            $release
- * @property Collection<ReleaseChangelogChange> $changes
+ * @property int                                             $id
+ * @property int                                             $release_id
+ * @property string                                          $description
+ * @property Release                                         $release
+ * @property EloquentCollection<int, ReleaseChangelogChange> $changes
  *
  * @mixin Eloquent
  */

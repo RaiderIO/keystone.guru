@@ -50,7 +50,7 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             }
 
             // Save the release last!
-            /** @var array{created_at: Carbon, updated_at: Carbon} $releaseAttribute */
+            /** @var array{id: int, created_at: Carbon, updated_at: Carbon, ...} $releaseAttribute */
             $releaseAttribute = array_filter($modelsData, function ($value) {
                 return !is_array($value);
             });

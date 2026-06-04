@@ -249,7 +249,9 @@ use (
 };
 
 if ($cache) {
-    $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
+    /** @var \App\Models\User|null $authUser */
+    $authUser          = Auth::user();
+    $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
 // Echo the result of this function
     echo $cacheService->remember(
         DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),

@@ -72,7 +72,7 @@ class FloorController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function create(Request $request, Dungeon $dungeon): View
     {
@@ -102,7 +102,7 @@ class FloorController extends Controller
     }
 
     /**
-     * @return Application|Factory|View|RedirectResponse
+     * @return View|RedirectResponse
      */
     public function mapping(
         Request                    $request,
@@ -129,7 +129,7 @@ class FloorController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */

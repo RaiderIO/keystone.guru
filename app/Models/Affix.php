@@ -6,8 +6,8 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Collection;
 use Str;
 
 /**
@@ -21,7 +21,7 @@ use Str;
  * @property string $image_name The name of the image of this Affix (appended).
  * @property string $image_url  The URL to the image of this Affix (appended).
  *
- * @property Collection<AffixGroup> $affixGroups
+ * @property EloquentCollection<int, AffixGroup> $affixGroups
  *
  * @mixin Eloquent
  */

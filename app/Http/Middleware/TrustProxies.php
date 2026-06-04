@@ -6,6 +6,7 @@ use App\Service\Cloudflare\CloudflareServiceInterface;
 use Closure;
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
+use Override;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrustProxies extends Middleware
@@ -24,7 +25,7 @@ class TrustProxies extends Middleware
     {
     }
 
-    #[\Override]
+    #[Override]
     public function handle(Request $request, Closure $next): Response
     {
         if (app()->isProduction()) {

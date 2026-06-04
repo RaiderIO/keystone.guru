@@ -16,31 +16,29 @@ use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\Reverb\ReverbHttpApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Session;
 
 class ProfileController extends Controller
 {
     /**
-     * @return Application|Factory|View
+     * @return View
      */
-    public function edit(Request $request): \Illuminate\View\View
+    public function edit(Request $request): View
     {
         return view('profile.edit');
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
-    public function view(Request $request, User $user): \Illuminate\View\View
+    public function view(Request $request, User $user): View
     {
         return view('profile.view', ['user' => $user]);
     }
@@ -65,17 +63,17 @@ class ProfileController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
-    public function favorites(Request $request): \Illuminate\View\View
+    public function favorites(Request $request): View
     {
         return view('profile.favorites');
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
-    public function tags(Request $request): \Illuminate\View\View
+    public function tags(Request $request): View
     {
         return view('profile.tags');
     }
@@ -184,9 +182,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
-    public function changepassword(Request $request): \Illuminate\View\View
+    public function changepassword(Request $request): View
     {
         $currentPw          = $request->get('current_password');
         $newPassword        = $request->get('new_password');
@@ -223,7 +221,7 @@ class ProfileController extends Controller
     /**
      * Creates a tag from the tag manager
      *
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function createTag(TagFormRequest $request): RedirectResponse
     {

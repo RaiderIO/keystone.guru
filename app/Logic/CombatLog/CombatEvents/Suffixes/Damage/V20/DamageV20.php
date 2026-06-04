@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
+use Override;
 
 class DamageV20 extends Suffix implements DamageInterface
 {
@@ -78,7 +79,7 @@ class DamageV20 extends Suffix implements DamageInterface
         return $this->crushing;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

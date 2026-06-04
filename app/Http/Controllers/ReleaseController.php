@@ -8,7 +8,6 @@ use App\Models\ReleaseChangelog;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\ReleaseChangelogChange;
 use Exception;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -65,7 +64,7 @@ class ReleaseController extends Controller
         $release->backup_db = $request->get('backup_db', 0);
         $release->silent    = $request->get('silent', 0);
         $release->spotlight = $request->get('spotlight', 0);
-        $release->released  = 1;
+        $release->released  = true;
 
         // Match the changelog to the release
         $release->release_changelog_id = $changelog->id;
@@ -94,7 +93,7 @@ class ReleaseController extends Controller
     /**
      * Show a page for creating a new release.
      *
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -104,7 +103,7 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, Release $release): View
     {
@@ -115,7 +114,7 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */
@@ -154,7 +153,7 @@ class ReleaseController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function view(Release $release): View
     {

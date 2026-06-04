@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class Missed extends Suffix
 {
@@ -41,7 +42,7 @@ class Missed extends Suffix
         return $this->critical;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

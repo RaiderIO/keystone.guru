@@ -37,6 +37,7 @@ class SpellCompendiumService implements SpellCompendiumServiceInterface
             $npcEvents->each(fn(CombatLogNpcEvent $event) => $event->setRelation('npc', $npcs->get($event->npc_id)));
         }
 
+        /** @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> */
         return $spellEvents->merge($npcEvents)
             ->sortByDesc('created_at')
             ->take(50)

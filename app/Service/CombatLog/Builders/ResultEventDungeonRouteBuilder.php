@@ -70,7 +70,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                 );
 
                 if ($resultEvent instanceof MapChangeResultEvent) {
-                    /** @var $baseEvent MapChangeCombatLogEvent */
+                    /** @var MapChangeCombatLogEvent $baseEvent */
                     $this->currentFloor = $resultEvent->getFloor();
                 } elseif ($this->currentFloor === null) {
                     $this->log->buildNoFloorFoundYet();

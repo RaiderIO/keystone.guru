@@ -33,6 +33,7 @@ use App\Service\CombatLog\Builders\Logging\CombatLogRouteCorrectionBuilderLoggin
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use Override;
 
 /**
  * Takes a CombatLogRouteRequestModel and pushes it through ARC. It then returns a new CombatLogRouteRequestModel with the locations corrected
@@ -84,7 +85,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         );
     }
 
-    #[\Override]
+    #[Override]
     protected function buildFinished(): void
     {
         // Do not call parent - we don't care about enemy forces etc

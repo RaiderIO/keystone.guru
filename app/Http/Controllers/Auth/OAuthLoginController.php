@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 use Session;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 
 abstract class OAuthLoginController extends LoginController
 {
@@ -62,7 +63,7 @@ abstract class OAuthLoginController extends LoginController
     public function redirectToProvider(
         Request                      $request,
         ReadOnlyModeServiceInterface $readOnlyModeService,
-    ) : RedirectResponse {
+    ): RedirectResponse|SymfonyRedirectResponse {
         if ($readOnlyModeService->isReadOnly()) {
             Session::flash('warning', __('controller.oauthlogin.flash.read_only_mode_enabled'));
             $this->redirectTo = '/';

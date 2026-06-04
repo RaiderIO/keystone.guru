@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use Closure;
@@ -17,7 +18,7 @@ class DebugInfoContextLogger
 
     public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
-        if (\App::runningUnitTests()) {
+        if (App::runningUnitTests()) {
             return $next($request);
         }
 

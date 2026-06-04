@@ -23,7 +23,7 @@ use Throwable;
 class AjaxMountableAreaController extends AjaxMappingModelBaseController
 {
     /**
-     * @return MountableArea|Model
+     * @return MountableArea
      *
      * @throws Exception
      * @throws Throwable
@@ -39,6 +39,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
+        /** @var MountableArea */
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, MountableArea::class, $mountableArea);
     }
 

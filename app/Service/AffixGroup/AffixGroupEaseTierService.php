@@ -11,6 +11,7 @@ use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Exceptions\InvalidFormatException;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -74,7 +75,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     /**
      * {@inheritDoc}
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull
     {
@@ -134,7 +135,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                         /** @var array{id: int, name: string, url: string} $dungeon */
                         // If found
                         $archonDungeonName = $dungeon['name'];
-                        $dungeon           = $dungeonList->get($archonDungeonName);
+                        /** @var Dungeon|null $dungeon */
+                        $dungeon = $dungeonList->get($archonDungeonName);
 
                         if ($dungeon === null) {
                             $this->log->parseTierListUnknownDungeon($archonDungeonName);
@@ -198,7 +200,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $latestAffixGroupEaseTierPull = AffixGroupEaseTierPull::latest()->first();
         if ($latestAffixGroupEaseTierPull !== null) {
-            /** @var AffixGroupEaseTier|null $affixGroupEaseTier */
+            /** @var Collection<int, AffixGroupEaseTier> $result */
             $result = $latestAffixGroupEaseTierPull->affixGroupEaseTiers()
                 ->whereIn('affix_group_id', $affixGroups->pluck('id')->toArray())
                 ->get()

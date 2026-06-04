@@ -12,6 +12,9 @@ use Illuminate\Support\Carbon;
 
 class CombatantInfoBuilder implements SpecialEventBuilderInterface
 {
+    /**
+     * @return SpecialEvent&CombatantInfoInterface
+     */
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,

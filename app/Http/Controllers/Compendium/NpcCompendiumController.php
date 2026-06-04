@@ -14,6 +14,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
 use App\Service\Compendium\NpcCompendiumServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -92,7 +93,7 @@ class NpcCompendiumController extends Controller
     {
         try {
             $carbon = Carbon::createFromFormat('Y-m-d', $date);
-        } catch (\Exception) {
+        } catch (Exception) {
             abort(404);
         }
 

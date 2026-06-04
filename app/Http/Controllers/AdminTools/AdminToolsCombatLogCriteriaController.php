@@ -4,7 +4,6 @@ namespace App\Http\Controllers\AdminTools;
 
 use App\Http\Controllers\Controller;
 use App\Models\CombatLog\CombatLogParsingCriterion;
-use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +28,7 @@ class AdminToolsCombatLogCriteriaController extends Controller
         foreach (CombatLogParsingCriterion::VALID_CRITERIA as $modelClass => $with) {
             $ids = $criteria->where('model_class', $modelClass)->pluck('model_id');
 
-            /** @var class-string<CombatLogCriterionModelInterface|Model> $modelClass */
+            /** @var class-string<Model> $modelClass */
             $modelsById[$modelClass] = $modelClass::query()
                 ->with($with)
                 ->whereIn('id', $ids)

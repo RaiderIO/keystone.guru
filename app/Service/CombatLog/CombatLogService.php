@@ -29,6 +29,7 @@ use File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Throwable;
 use ZipArchive;
 
 class CombatLogService implements CombatLogServiceInterface
@@ -234,7 +235,7 @@ class CombatLogService implements CombatLogServiceInterface
 
                         try {
                             $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
-                        } catch (\Throwable $throwable) {
+                        } catch (Throwable $throwable) {
                             $this->log->getResultEventsForChallengeModeFilterParseError($baseEvent->getRawEvent(), $lineNr, $throwable);
 
                             throw $throwable;

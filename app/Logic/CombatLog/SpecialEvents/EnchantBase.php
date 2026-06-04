@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * ENCHANT_REMOVED,0000000000000000,nil,0x80000000,0x80000000,Player-3684-0DE448BF,"Bunten-Mal'Ganis",0x511,0x0,"Howling Rune",204319,"Bloodfire Extraction Conduit"
  * ENCHANT_APPLIED,Player-3684-0DE448BF,"Bunten-Mal'Ganis",0x511,0x8,Player-3684-0DE448BF,"Bunten-Mal'Ganis",0x511,0x8,"Howling Rune",195505,"Caustic Coldsteel Slicer"
@@ -33,7 +35,7 @@ abstract class EnchantBase extends SpecialEvent
         return $this->itemName;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

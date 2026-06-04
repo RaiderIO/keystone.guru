@@ -7,9 +7,9 @@ use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 use Str;
 
 /**
@@ -21,9 +21,10 @@ use Str;
  *
  * @property string $icon_url Appended
  *
- * @property Collection<CharacterClassSpecialization> $specializations
- * @property Collection<DungeonRoutePlayerClass>      $dungeonRoutePlayerClasses
- * @property Collection<DungeonRoutePlayerRace>       $dungeonRoutePlayerRaces
+ * @property EloquentCollection<int, CharacterRace>                $races
+ * @property EloquentCollection<int, CharacterClassSpecialization> $specializations
+ * @property EloquentCollection<int, DungeonRoutePlayerClass>      $dungeonRoutePlayerClasses
+ * @property EloquentCollection<int, DungeonRoutePlayerRace>       $dungeonRoutePlayerRaces
  *
  * @mixin Eloquent
  */

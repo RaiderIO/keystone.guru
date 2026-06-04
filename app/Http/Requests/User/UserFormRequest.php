@@ -27,7 +27,7 @@ class UserFormRequest extends FormRequest
                 'nullable',
                 Rule::in(User::MAP_FACADE_STYLE_ALL),
             ],
-            'killzone_path_weight' => [
+            'kill_zone_path_weight' => [
                 'nullable',
                 'integer',
                 'between:1,5',

@@ -148,7 +148,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
             polyline: {
                 color: c.map.polyline.killzonepath.color,
                 color_animated: null,
-                weight: getState().getKillzonePathWeight(),
+                weight: getState().getKillZonePathWeight(),
                 vertices_json: JSON.stringify(vertices),
             }
         }, options));

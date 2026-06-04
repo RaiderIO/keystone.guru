@@ -5,6 +5,7 @@ namespace App\Http\Resources\DungeonRouteThumbnailJob;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Override;
 
 /**
  * @OA\Schema(schema="RouteThumbnailJobEnvelope")
@@ -19,7 +20,7 @@ class DungeonRouteThumbnailJobEnvelopeResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

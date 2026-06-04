@@ -5,6 +5,7 @@ namespace App\Service\Coordinates;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 
 interface CoordinatesServiceInterface
@@ -19,9 +20,15 @@ interface CoordinatesServiceInterface
         ?Floor         $forceFloor = null,
     ): LatLng;
 
-    public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng;
+    public function convertMapLocationToFacadeMapLocation(
+        MappingVersion $mappingVersion,
+        LatLng         $latLng,
+        ?FloorUnion    $forceFloorUnion = null,
+    ): LatLng;
 
     public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng;
+
+    public function distanceBetweenPoints(float $x1, float $x2, float $y1, float $y2): float;
 
     public function distance(LatLng $latLngA, LatLng $latLngB): float;
 

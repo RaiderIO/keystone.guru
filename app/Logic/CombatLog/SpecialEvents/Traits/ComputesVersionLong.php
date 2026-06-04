@@ -17,6 +17,6 @@ trait ComputesVersionLong
         ] = explode('.', $this->getBuildVersion());
 
         return ($this->getVersionNumber() * 1_000_000_000) +
-            ((int)$major * 1_000_000) + ((int)($minor ?? 0) * 1_000) + (int)($patch ?? 0);
+            ((int)$major * 1_000_000) + ((int)$minor * 1_000) + (int)$patch;
     }
 }

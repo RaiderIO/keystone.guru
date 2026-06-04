@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * 5/27 13:08:17.696  SPELL_RESURRECT,Player-3676-0E1A2816,"Dudeurdead-Area52",0x512,0x0,Player-63-0CD36083,"Bunnicula-Ysera",0x10512,0x0,7328,"Redemption",0x2
  *
@@ -32,7 +34,7 @@ class SpellResurrect extends GenericSpecialEvent
         return $this->spellSchool;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

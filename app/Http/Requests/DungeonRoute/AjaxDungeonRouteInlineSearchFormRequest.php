@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use Override;
+
 /**
  * All options that a user can pass to search for a dungeon route on the map view
  */
@@ -10,7 +12,7 @@ class AjaxDungeonRouteInlineSearchFormRequest extends DungeonRouteBaseUrlFormReq
     /**
      * Determine if the user is authorized to make this request.
      */
-    #[\Override]
+    #[Override]
     public function authorize(): bool
     {
         return true;
@@ -19,7 +21,7 @@ class AjaxDungeonRouteInlineSearchFormRequest extends DungeonRouteBaseUrlFormReq
     /**
      * Get the validation rules that apply to the request.
      */
-    #[\Override]
+    #[Override]
     public function rules(): array
     {
         // @formatter:off

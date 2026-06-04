@@ -3,6 +3,7 @@
 namespace App\Overrides;
 
 use Illuminate\Cache\RateLimiter as BaseRateLimiter;
+use Override;
 
 class CustomRateLimiter extends BaseRateLimiter
 {
@@ -11,7 +12,7 @@ class CustomRateLimiter extends BaseRateLimiter
         parent::__construct($cache);
     }
 
-    #[\Override]
+    #[Override]
     public function cleanRateLimiterKey($key): string
     {
         // Add a custom prefix specifically for rate limiter keys

@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\MissType\Block;
 use App\Logic\CombatLog\Guid\MissType\Resist;
+use Override;
 
 class MissedV9SoD extends Suffix implements MissedInterface
 {
@@ -51,7 +52,7 @@ class MissedV9SoD extends Suffix implements MissedInterface
         return false;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

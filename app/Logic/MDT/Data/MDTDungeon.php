@@ -125,6 +125,7 @@ class MDTDungeon
      * @param  Collection<Floor> $floors The floors that you want to get the clones for.
      * @return Collection<Enemy>
      */
+    /** @param \Illuminate\Database\Eloquent\Collection<int, Floor> $floors */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
         return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use (

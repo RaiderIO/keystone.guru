@@ -41,7 +41,7 @@ class MapObjectToAwakenedObeliskLink extends Model
     public function targetmapicon(): HasOne
     {
         return $this->hasOne(MapIcon::class)
-            ->where('floor_id', $this->sourcemapobject->floor_id)
+            ->where('floor_id', $this->sourcemapobject->getAttribute('floor_id'))
             ->where('map_icon_type_id', $this->target_map_icon_type_id)
             ->where('seasonal_index', $this->target_map_icon_seasonal_index);
     }

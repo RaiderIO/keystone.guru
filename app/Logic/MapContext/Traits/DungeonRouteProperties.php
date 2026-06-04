@@ -2,10 +2,6 @@
 
 namespace App\Logic\MapContext\Traits;
 
-use App\Models\DungeonRoute\DungeonRoute;
-use App\Service\Coordinates\CoordinatesServiceInterface;
-use Illuminate\Support\Collection;
-
 /**
  * Trait DungeonRouteTrait
  */

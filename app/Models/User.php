@@ -15,6 +15,7 @@ use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,6 +27,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Override;
 
 /**
  * @property int    $id
@@ -44,7 +46,7 @@ use Laratrust\Traits\HasRolesAndPermissions;
  * @property bool   $changed_username
  * @property string $timezone
  * @property string $map_facade_style
- * @property int    $killzone_path_weight
+ * @property int    $kill_zone_path_weight
  * @property string $password
  * @property string $raw_patreon_response_data
  * @property bool   $legal_agreed
@@ -59,12 +61,12 @@ use Laratrust\Traits\HasRolesAndPermissions;
  *
  * @property bool $is_admin
  *
- * @property Collection<DungeonRoute>  $dungeonRoutes
- * @property Collection<UserReport>    $reports
- * @property Collection<Team>          $teams
- * @property Collection<Role>          $roles
- * @property Collection<Tag>           $tags
- * @property Collection<UserIpAddress> $ipAddresses
+ * @property EloquentCollection<int, DungeonRoute>  $dungeonRoutes
+ * @property EloquentCollection<int, UserReport>    $reports
+ * @property EloquentCollection<int, Team>          $teams
+ * @property EloquentCollection<int, Role>          $roles
+ * @property EloquentCollection<int, Tag>           $tags
+ * @property EloquentCollection<int, UserIpAddress> $ipAddresses
  *
  * @mixin Eloquent
  */
@@ -87,7 +89,7 @@ class User extends Authenticatable implements LaratrustUser
 
     public const string DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
-    public const int DEFAULT_KILLZONE_PATH_WEIGHT = 5;
+    public const int DEFAULT_KILL_ZONE_PATH_WEIGHT = 5;
 
     public const string THEME_DARKLY   = 'darkly';
     public const string THEME_LUX      = 'lux';
@@ -113,7 +115,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'id',
@@ -127,7 +129,7 @@ class User extends Authenticatable implements LaratrustUser
         'email',
         'echo_color',
         'map_facade_style',
-        'killzone_path_weight',
+        'kill_zone_path_weight',
         'password',
         'legal_agreed',
         'legal_agreed_ms',
@@ -136,7 +138,7 @@ class User extends Authenticatable implements LaratrustUser
     /**
      * The attributes that should be visible for outsiders.
      *
-     * @var array
+     * @var list<string>
      */
     protected $visible = [
         'id',
@@ -167,6 +169,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasRole(Role::ROLE_ADMIN);
     }
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class, 'author_id');
@@ -309,7 +312,7 @@ class User extends Authenticatable implements LaratrustUser
                 $newOwner = null;
             }
 
-            /** @var $team Team */
+            /** @var Team $team */
             $teams['teams'][$team->name] = [
                 'result'    => $team->members()->count() === 1 ? 'deleted' : 'new_owner',
                 'new_owner' => $newOwner,
@@ -339,7 +342,7 @@ class User extends Authenticatable implements LaratrustUser
 
     public static function getCurrentUserKillzonePathWeight(): int
     {
-        return Auth::user()?->killzone_path_weight ?? (int)($_COOKIE['killzone_path_weight'] ?? self::DEFAULT_KILLZONE_PATH_WEIGHT);
+        return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT);
     }
 
     public static function forceMapFacadeStyle(string $mapFacadeStyle): void
@@ -352,7 +355,7 @@ class User extends Authenticatable implements LaratrustUser
         return in_array($theme, [self::THEME_DARKLY, self::THEME_XALATATH]);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -366,12 +369,12 @@ class User extends Authenticatable implements LaratrustUser
                 // Remove ourselves from the team
                 $team->removeMember($user);
 
-                /** @var $team Team */
+                /** @var Team $team */
                 if (!$team->isUserAdmin($user)) {
                     continue;
                 }
 
-                /** @var $team Team */
+                /** @var Team $team */
                 try {
                     $newAdmin = $team->getNewAdminUponAdminAccountDeletion($user);
                     if ($newAdmin !== null) {

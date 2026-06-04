@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\Guid\Guid;
+use Override;
 
 /**
  * 8/14/2024 23:32:54.6402  STAGGER_CLEAR,Player-4184-00C9CE4F,81892.343750
@@ -27,7 +28,7 @@ class StaggerBase extends SpecialEvent
         return $this->amount;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);
