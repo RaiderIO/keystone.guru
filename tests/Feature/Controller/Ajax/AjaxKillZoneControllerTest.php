@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
-use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Attributes\Repeat;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 
 #[Group('Controller')]
@@ -24,7 +24,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
         // Replace with a non-facade dungeon route so KillZonePathService doesn't fail
         // on facade floor-switch markers when calculateForRoute is called.
         $this->dungeonRoute->delete();
-        $this->dungeonRoute = $this->createNonFacadeDungeonRoute();
+        $this->dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
     }
 
     #[Test]
@@ -83,7 +83,9 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Enemy $enemy */
-        $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)->inRandomOrder()->first();
+        $enemy = Enemy::where('mapping_version_id', $this->dungeonRoute->mapping_version_id)
+            ->inRandomOrder()
+            ->first();
 
         try {
             // Act
@@ -97,7 +99,9 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
             // Assert
             $response->assertSuccessful();
 
-            $killZone      = $this->dungeonRoute->killZones()->first();
+            /** @var KillZone $killZone */
+            $killZone = $this->dungeonRoute->killZones()->first();
+            /** @var KillZoneEnemy $killZoneEnemy */
             $killZoneEnemy = KillZoneEnemy::where('kill_zone_id', $killZone->id)->first();
 
             $this->assertNotNull($killZoneEnemy);
