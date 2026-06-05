@@ -1,3 +1,18 @@
+/**
+ * @typedef {Object} DungeonrouteDiscoverSearchloadmoreOptions
+ * @property {string} routeContainerListSelector
+ * @property {string} routeLoadMoreSelector
+ * @property {string} loaderSelector
+ * @property {string} category
+ * @property {number} loadMoreOffset
+ * @property {number} loadMoreCount
+ * @property {Object} gameVersion
+ * @property {Object} dungeon
+ */
+
+/**
+ * @property {DungeonrouteDiscoverSearchloadmoreOptions} options
+ */
 class DungeonrouteDiscoverSearchloadmore extends InlineCode {
 
     activate() {

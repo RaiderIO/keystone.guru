@@ -55,7 +55,9 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
         'common/group/affixes',
     ],
     'options' => [
-
+        'coverageFilterButtonSelector' => '.dungeonroute_coverage_filter_select .btn',
+        'coverageNewDungeonRouteButtonSelector' => '.dungeonroute_coverage_new_dungeon_route .btn',
+        'seasonIdSelector' => '#dungeonroute_coverage_season_id',
     ],
 ])
 

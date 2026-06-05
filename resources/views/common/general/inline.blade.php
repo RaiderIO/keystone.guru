@@ -11,9 +11,9 @@ ob_start();
     @if(!$async)
     document.addEventListener('DOMContentLoaded', function () {
         @endif
-        let code = _inlineManager.init('{{ $id }}', '{{ $path }}', {!!  json_encode($options) !!});
+        let code{{ $id }} = _inlineManager.init('{{ $id }}', '{{ $path }}', {!!  json_encode($options) !!});
 
-        if (!code.isActivated()) {
+        if (!code{{ $id }}.isActivated()) {
             <?php
             /** If modal is set, only load this when we're actually opening the modal to speed up loading. */
             if ($modal){ ?>

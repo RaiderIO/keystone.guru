@@ -1,3 +1,11 @@
+/**
+ * @typedef {Object} TeamListOptions
+ * @property {string} tableSelector
+ */
+
+/**
+ * @property {TeamListOptions} options
+ */
 class TeamList extends InlineCode {
 
     constructor(id, bladePath, options) {
@@ -6,13 +14,10 @@ class TeamList extends InlineCode {
         this._dt = null;
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
-        this._dt = $('#team_table').DataTable({
+        this._dt = $(this.options.tableSelector).DataTable({
             'searching': false,
             'bLengthChange': false,
             'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {

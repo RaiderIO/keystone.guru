@@ -2,6 +2,7 @@
  * @typedef {Object} OptionsType
  * @property {string} currentExpansionKey - The current expansion key.
  * @property {string} dungeonroute - The dungeon route.
+ * @property {string} seasonalIndexSelector
  */
 
 /**
@@ -312,7 +313,7 @@ class CommonGroupAffixes extends InlineCode {
             }
 
             if (maxIndex >= 0) {
-                $('#seasonal_index').val(maxIndex);
+                $(this.options.seasonalIndexSelector).val(maxIndex);
                 refreshSelectPickers();
             }
         }
