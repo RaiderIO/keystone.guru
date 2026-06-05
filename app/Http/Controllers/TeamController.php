@@ -89,12 +89,14 @@ class TeamController extends Controller
     }
 
     /**
-     * @return View
-     *
      * @throws AuthorizationException
      */
-    public function edit(Request $request, Team $team): View
+    public function edit(Request $request, Team $team): View|RedirectResponse
     {
+        if (($request->route()->originalParameters()['team'] ?? '') !== $team->getRouteKey()) {
+            return redirect(route('team.edit', $team), 301);
+        }
+
         Gate::authorize('edit', $team);
 
         /** @var User $user */
