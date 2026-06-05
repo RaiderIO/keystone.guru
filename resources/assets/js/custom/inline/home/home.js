@@ -1,7 +1,15 @@
+/**
+ * @typedef {Object} HomeHomeOptions
+ * @property {string} dungeon_select_id
+ * @property {string} demo_routes_iframe_id
+ * @property {Object} demo_route_mapping
+ * @property {string} demoLoaderSelector
+ */
+
+/**
+ * @property {HomeHomeOptions} options
+ */
 class HomeHome extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -11,11 +19,11 @@ class HomeHome extends InlineCode {
             let dungeonId = $(this).val();
 
             $(self.options.demo_routes_iframe_id).attr('src', `/${self.options.demo_route_mapping[dungeonId]}`);
-            $('.demo-loader').show();
+            $(self.options.demoLoaderSelector).show();
         });
 
         $(self.options.demo_routes_iframe_id).on('load', function () {
-            $('.demo-loader').hide();
+            $(self.options.demoLoaderSelector).hide();
         });
     }
 }

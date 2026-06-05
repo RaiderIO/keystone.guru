@@ -45,7 +45,7 @@ $rootClass ??= '';
 
 // Bit of a hack to do this here - but for now this works
 $showSpotlightRelease = false;
-if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
+if ($showSpotlight) {
     // Only if the user hasn't seen the latest spotlight release yet
     $showSpotlightRelease = ($_COOKIE['changelog_release'] ?? 0) < $latestReleaseSpotlight->id;
 

@@ -3,8 +3,6 @@
  */
 class DungeonExploreGameversionEmbed extends InlineCode {
 
-    /**
-     */
     activate() {
         super.activate();
 

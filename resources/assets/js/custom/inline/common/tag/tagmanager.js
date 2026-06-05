@@ -15,7 +15,6 @@ class CommonTagTagmanager extends InlineCode {
     }
 
     /**
-     *
      * @private
      */
     _onTagSaveClicked() {
@@ -36,7 +35,6 @@ class CommonTagTagmanager extends InlineCode {
     }
 
     /**
-     *
      * @private
      */
     _onTagDeleteClicked() {

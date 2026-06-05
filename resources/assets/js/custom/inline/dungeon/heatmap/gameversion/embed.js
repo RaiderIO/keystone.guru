@@ -1,7 +1,5 @@
 class DungeonHeatmapGameversionEmbed extends InlineCode {
 
-    /**
-     */
     activate() {
         super.activate();
 

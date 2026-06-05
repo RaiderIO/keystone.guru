@@ -1,3 +1,33 @@
+/**
+ * @typedef {Object} CommonMapsMapOptions
+ * @property {boolean} embed
+ * @property {boolean} edit
+ * @property {boolean} readonly
+ * @property {boolean} sandbox
+ * @property {string} defaultEnemyVisualType
+ * @property {boolean} defaultHeatmapShowTooltips
+ * @property {number} defaultUnkilledEnemyOpacity
+ * @property {number} defaultUnkilledImportantEnemyOpacity
+ * @property {boolean} defaultEnemyAggressivenessBorder
+ * @property {string} mapFacadeStyle
+ * @property {boolean} noUI
+ * @property {boolean} showControls
+ * @property {boolean} gestureHandling
+ * @property {boolean} zoomToContents
+ * @property {string[]} hiddenMapObjectGroups
+ * @property {number} defaultZoom
+ * @property {number} defaultZoomMax
+ * @property {boolean} showAttribution
+ * @property {Object|null} dungeonroute
+ * @property {string} assetsBaseUrl
+ * @property {string} tilesBaseUrl
+ * @property {Object} parameters
+ * @property {number} floorId
+ */
+
+/**
+ * @property {CommonMapsMapOptions} options
+ */
 class CommonMapsMap extends InlineCode {
 
     constructor(id, bladePath, options) {
@@ -18,9 +48,6 @@ class CommonMapsMap extends InlineCode {
         return this._dungeonMap;
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 

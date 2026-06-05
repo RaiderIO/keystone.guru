@@ -1,8 +1,19 @@
+/**
+ * @typedef {Object} AdminNpchealthEditOptions
+ * @property {string} healthSelector
+ * @property {string} scaledHealthSelector
+ * @property {string} scaledHealthToBaseHealthApplyBtnSelector
+ * @property {string} scaledHealthPercentageSelector
+ * @property {string} scaledHealthLevelSelector
+ * @property {string} scaledHealthTypeSelector
+ * @property {string} healthPercentageSelector
+ */
+
+/**
+ * @property {AdminNpchealthEditOptions} options
+ */
 class AdminNpchealthEdit extends InlineCode {
 
-    /**
-     *
-     */
     activate() {
         let self = this;
 
@@ -19,7 +30,7 @@ class AdminNpchealthEdit extends InlineCode {
                 }
             });
 
-        let $healthPercentageInput = $(this.options.healthPercentageSelector)
+        $(this.options.healthPercentageSelector)
             .ionRangeSlider({
                 grid: true,
                 grid_snap: true,
@@ -45,10 +56,10 @@ class AdminNpchealthEdit extends InlineCode {
             let percentage = $(self.options.scaledHealthPercentageSelector).val() || 100;
 
             let affixes = [];
-            if( self._isFortified() ) {
+            if (self._isFortified()) {
                 affixes.push(AFFIX_FORTIFIED);
             }
-            if( self._isTyrannical() ) {
+            if (self._isTyrannical()) {
                 affixes.push(AFFIX_TYRANNICAL);
             }
 
@@ -61,7 +72,6 @@ class AdminNpchealthEdit extends InlineCode {
     }
 
     /**
-     *
      * @returns {boolean}
      * @private
      */
@@ -70,7 +80,6 @@ class AdminNpchealthEdit extends InlineCode {
     }
 
     /**
-     *
      * @returns {boolean}
      * @private
      */

@@ -1,3 +1,30 @@
+/**
+ * @typedef {Object} TeamEditOptions
+ * @property {string} routesTableInlineId
+ * @property {Object[]} data
+ * @property {string} teamName
+ * @property {string} teamPublicKey
+ * @property {boolean} userIsModerator
+ * @property {number} currentUserId
+ * @property {string} currentUserName
+ * @property {string} currentUserRole
+ * @property {number} adFreeGiveawayLeft
+ * @property {string} inviteLinkCopyButtonSelector
+ * @property {string} inviteLinkInputSelector
+ * @property {string} inviteLinkRefreshSelector
+ * @property {string} addRouteBtnSelector
+ * @property {string} viewExistingRoutesSelector
+ * @property {string} deleteTeamSelector
+ * @property {string} dungeonrouteFilterSelector
+ * @property {string} defaultRoleSelector
+ * @property {string} teamMembersTableSelector
+ * @property {string} detailsMethodInputSelector
+ * @property {string} detailsFormSelector
+ */
+
+/**
+ * @property {TeamEditOptions} options
+ */
 class TeamEdit extends InlineCode {
 
     constructor(id, bladePath, options) {
@@ -5,9 +32,6 @@ class TeamEdit extends InlineCode {
         this._dt = null;
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -23,39 +47,39 @@ class TeamEdit extends InlineCode {
         let routesTableInlineCode = _inlineManager.getInlineCodeById(this.options.routesTableInlineId);
         let tableView = routesTableInlineCode.getTableView();
 
-        $('#team_invite_link_copy_to_clipboard').unbind('click').bind('click', function () {
-            copyToClipboard($('#team_members_invite_link').val());
+        $(this.options.inviteLinkCopyButtonSelector).unbind('click').bind('click', function () {
+            copyToClipboard($(self.options.inviteLinkInputSelector).val());
         });
 
         // Refresh invite link
-        $('#team_invite_link_refresh').unbind('click').bind('click', function () {
+        $(this.options.inviteLinkRefreshSelector).unbind('click').bind('click', function () {
             self.refreshInviteLink();
         });
 
         // Add route to team button - only if enabled (user is Moderator)
-        $('#add_route_btn:enabled').unbind('click').bind('click', function () {
+        $(this.options.addRouteBtnSelector + ':enabled').unbind('click').bind('click', function () {
             tableView.setAddMode(true);
 
             routesTableInlineCode.refreshTable();
             $(this).hide();
-            $('#view_existing_routes').show();
+            $(self.options.viewExistingRoutesSelector).show();
         });
 
         // Cancel button when done adding routes
-        $('#view_existing_routes').unbind('click').bind('click', function () {
+        $(this.options.viewExistingRoutesSelector).unbind('click').bind('click', function () {
             tableView.setAddMode(false);
 
             routesTableInlineCode.refreshTable();
             $(this).hide();
-            $('#add_route_btn').show();
+            $(self.options.addRouteBtnSelector).show();
         });
 
-        $('#delete_team').unbind('click').bind('click', function (clickEvent) {
+        $(this.options.deleteTeamSelector).unbind('click').bind('click', function (clickEvent) {
             showConfirmYesCancel(lang.get('js.delete_team_confirm_label'), function () {
                 // Change the method to DELETE
-                $('#details [name="_method"]').val('DELETE');
+                $(self.options.detailsMethodInputSelector).val('DELETE');
                 // Submit the form
-                $('#details form').submit();
+                $(self.options.detailsFormSelector).submit();
             }, null, {type: 'error'});
 
             clickEvent.preventDefault();
@@ -68,7 +92,7 @@ class TeamEdit extends InlineCode {
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             if ($(e.target).attr('href') === '#routes') {
                 // Refresh the table to trigger the preview being generated properly
-                $('#dungeonroute_filter').trigger('click');
+                $(self.options.dungeonrouteFilterSelector).trigger('click');
             }
 
             $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
@@ -89,7 +113,7 @@ class TeamEdit extends InlineCode {
             });
         });
 
-        $('#default_role').bind('change', function (e) {
+        $(this.options.defaultRoleSelector).bind('change', function (e) {
             $.ajax({
                 type: 'PUT',
                 url: `/ajax/team/${self.options.teamPublicKey}/changedefaultrole`,
@@ -107,7 +131,7 @@ class TeamEdit extends InlineCode {
 
     /**
      * Gets icon data for a role.
-     * @param roleName The name of the role you want icon data for.
+     * @param {string} roleName The name of the role you want icon data for.
      * @returns {boolean}
      * @private
      */
@@ -223,7 +247,7 @@ class TeamEdit extends InlineCode {
     refreshTeamMembersTable() {
         let self = this;
 
-        let $table = $('#team_members_table');
+        let $table = $(this.options.teamMembersTableSelector);
         if (this._dt !== null) {
             this._dt.destroy();
             $table.empty();
@@ -375,7 +399,7 @@ class TeamEdit extends InlineCode {
 
     /**
      *
-     * @param {Number} userId
+     * @param {number} userId
      * @returns {Array|null}
      */
     getDataByUserId(userId) {
@@ -393,12 +417,14 @@ class TeamEdit extends InlineCode {
     }
 
     refreshInviteLink() {
+        let self = this;
+
         $.ajax({
             type: 'GET',
             url: `/ajax/team/${this.options.teamPublicKey}/refreshlink`,
             dataType: 'json',
             success: function (response) {
-                $('#team_members_invite_link').val(response.new_invite_link);
+                $(self.options.inviteLinkInputSelector).val(response.new_invite_link);
 
                 showInfoNotification(lang.get('js.invite_link_refreshed'));
             }

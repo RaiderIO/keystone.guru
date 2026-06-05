@@ -1,7 +1,17 @@
+/**
+ * @typedef {Object} CommonFormsCreatebaseOptions
+ * @property {string} levelSelector
+ * @property {string} dungeonSelector
+ * @property {number} keyLevelMinDefault
+ * @property {number} keyLevelMaxDefault
+ * @property {Object|null} currentSeason
+ * @property {Object|null} nextSeason
+ */
+
+/**
+ * @property {CommonFormsCreatebaseOptions} options
+ */
 class CommonFormsCreatebase extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 

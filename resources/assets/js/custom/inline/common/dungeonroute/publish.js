@@ -1,7 +1,15 @@
+/**
+ * @typedef {Object} CommonDungeonroutePublishOptions
+ * @property {string} publishSelector
+ * @property {string[]} publishStates
+ * @property {string[]} publishStatesAvailable
+ * @property {string} publishStateSelected
+ */
+
+/**
+ * @property {CommonDungeonroutePublishOptions} options
+ */
 class CommonDungeonroutePublish extends InlineCode {
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -54,8 +62,7 @@ class CommonDungeonroutePublish extends InlineCode {
     }
 
     /**
-     *
-     * @param value string Must be one of the available published states
+     * @param {string} value Must be one of the available published states
      * @private
      */
     _setPublished(value) {
@@ -73,9 +80,8 @@ class CommonDungeonroutePublish extends InlineCode {
     }
 
     /**
-     *
-     * @param str
-     * @param count
+     * @param {string} str
+     * @param {number} [count=30]
      * @returns {string}
      */
     addNewlines(str, count = 30) {

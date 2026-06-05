@@ -79,6 +79,18 @@ foreach ($team->teamUsers as $teamUser) {
     'currentUserName' => $user->name,
     'currentUserRole' => $team->getUserRole($user),
     'adFreeGiveawayLeft' => $userAdFreeTeamMembersRemaining,
+
+    'inviteLinkCopyButtonSelector' => '#team_invite_link_copy_to_clipboard',
+    'inviteLinkInputSelector' => '#team_members_invite_link',
+    'inviteLinkRefreshSelector' => '#team_invite_link_refresh',
+    'addRouteBtnSelector' => '#add_route_btn',
+    'viewExistingRoutesSelector' => '#view_existing_routes',
+    'deleteTeamSelector' => '#delete_team',
+    'dungeonrouteFilterSelector' => '#dungeonroute_filter',
+    'defaultRoleSelector' => '#default_role',
+    'teamMembersTableSelector' => '#team_members_table',
+    'detailsMethodInputSelector' => '#details [name="_method"]',
+    'detailsFormSelector' => '#details form',
 ]])
 
 @section('scripts')

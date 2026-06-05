@@ -37,6 +37,11 @@ $dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
 @include('common.general.inline', [
     'path' => 'dungeonroute/livesession',
     'dependencies' => ['common/maps/map'],
+    'options' => [
+        'stopLiveSessionSelector' => '#stop_live_session',
+        'stoppedContainerSelector' => '#stopped_live_session_container',
+        'countdownSelector' => '#stopped_live_session_countdown',
+    ],
 ])
 
 @section('content')
