@@ -383,6 +383,10 @@ Breadcrumbs::for('admin.tools.wagogg.importingamecoordinates', static function (
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.wagogg_import_ingame_coordinates'), route('admin.tools.wagogg.import_ingame_coordinates'));
 });
+Breadcrumbs::for('admin.tools.artisancommands.backfillkillzoneenemyid', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.artisancommands_backfill_kill_zone_enemy_id'), route('admin.tools.artisancommands.backfillkillzoneenemyid.view'));
+});
 
 // Releases
 Breadcrumbs::for('admin.release.list', static function (Generator $trail) {

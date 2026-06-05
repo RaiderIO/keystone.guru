@@ -235,6 +235,21 @@
             </div>
         </div>
 
+        {{-- Artisan Commands --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-terminal"></i> {{ __('view_admin.tools.list.subheader_artisan_commands') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.artisancommands.backfillkillzoneenemyid.view') }}">{{ __('view_admin.tools.list.backfill_kill_zone_enemy_id') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.backfill_kill_zone_enemy_id_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         {{-- Actions (destructive) --}}
         <div class="col-12 mb-4">
             <div class="card border-danger">

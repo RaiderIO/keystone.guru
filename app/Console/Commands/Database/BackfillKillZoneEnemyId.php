@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
  */
 class BackfillKillZoneEnemyId extends Command
 {
-    protected $signature = 'ksg:backfill-kill-zone-enemy-id {--chunk=50000 : Rows per batch}';
+    protected $signature = 'ksg:backfill-kill-zone-enemy-id {--chunk=50000 : Rows per batch} {--min= : Lower bound ID (inclusive)} {--max= : Upper bound ID (inclusive)}';
 
     protected $description = 'Backfills enemy_id on kill_zone_enemies for existing records (one-time operation)';
 
@@ -24,8 +24,18 @@ class BackfillKillZoneEnemyId extends Command
     {
         $chunkSize = (int)$this->option('chunk');
 
-        $minId = (int)DB::table('kill_zone_enemies')->whereNull('enemy_id')->min('id');
-        $maxId = (int)DB::table('kill_zone_enemies')->whereNull('enemy_id')->max('id');
+        $minOption = $this->option('min');
+        $maxOption = $this->option('max');
+
+        $query = DB::table('kill_zone_enemies')->whereNull('enemy_id');
+
+        if ($minOption !== null && $maxOption !== null) {
+            $minId = (int)$minOption;
+            $maxId = (int)$maxOption;
+        } else {
+            $minId = (int)$query->min('id');
+            $maxId = (int)$query->max('id');
+        }
 
         if ($minId === 0) {
             $this->info('All kill_zone_enemies already have enemy_id set. Nothing to do.');
@@ -33,17 +43,11 @@ class BackfillKillZoneEnemyId extends Command
             return 0;
         }
 
-        $total  = (int)DB::table('kill_zone_enemies')->whereNull('enemy_id')->count();
-        $chunks = (int)ceil(($maxId - $minId + 1) / $chunkSize);
-
-        $this->info(sprintf('Backfilling %s rows across %s chunks (chunk size: %s)...', number_format($total), $chunks, number_format($chunkSize)));
-
-        $bar      = $this->output->createProgressBar($chunks);
         $updated  = 0;
         $orphaned = 0;
 
         for ($start = $maxId; $start >= $minId; $start -= $chunkSize) {
-            $end = $start - $chunkSize + 1;
+            $end = max($start - $chunkSize + 1, $minId);
 
             DB::statement("
                 UPDATE kill_zone_enemies kze
@@ -58,24 +62,27 @@ class BackfillKillZoneEnemyId extends Command
                   AND kze.enemy_id IS NULL
             ", [$end, $start]);
 
-            $stillNull = (int)DB::table('kill_zone_enemies')
+            $stillNull = DB::table('kill_zone_enemies')
                 ->whereNull('enemy_id')
                 ->whereBetween('id', [$end, $start])
                 ->count();
 
-            $orphaned += $stillNull;
-            $updated += ($chunkSize - $stillNull);
+            if ($stillNull > 0) {
+                DB::table('kill_zone_enemies')
+                    ->whereNull('enemy_id')
+                    ->whereBetween('id', [$end, $start])
+                    ->delete();
+            }
 
-            $bar->advance();
+            $chunkRowCount = $start - $end + 1;
+            $orphaned += $stillNull;
+            $updated += ($chunkRowCount - $stillNull);
         }
 
-        $bar->finish();
-        $this->newLine();
         $this->info(sprintf('Updated: %s rows', number_format($updated)));
 
         if ($orphaned > 0) {
-            $this->warn(sprintf('%s orphan rows (no matching enemy) were left with enemy_id = NULL.', number_format($orphaned)));
-            $this->warn('These belong to dungeon routes whose enemies were deleted or are from outdated mapping versions.');
+            $this->warn(sprintf('%s orphan rows (no matching enemy) were deleted.', number_format($orphaned)));
         }
 
         return 0;
