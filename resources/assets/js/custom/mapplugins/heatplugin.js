@@ -5,6 +5,7 @@ class HeatPlugin extends MapPlugin {
         let self = this;
 
         this.hidden = false;
+        this.showOnTop = false;
         this.heatLayer = null;
         this.draw = false;
         /** A grid of weights for each coordinate for each floor - used for the tooltips */
@@ -35,6 +36,13 @@ class HeatPlugin extends MapPlugin {
         });
         state.register('heatmapshowtooltips:changed', this, function (heatmapShowTooltipsChangedEvent) {
             self.mouseTooltipEnabled = heatmapShowTooltipsChangedEvent.data.visible;
+        });
+
+        state.register('heatmapshowontop:changed', this, function (event) {
+            self.showOnTop = event.data.onTop;
+            if (self.heatLayer !== null) {
+                self.heatLayer.setOptions({pane: event.data.onTop ? 'tooltipPane' : 'overlayPane'});
+            }
         });
 
         if (!isMobile()) {
@@ -166,7 +174,9 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
-        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
+        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings, {
+            pane: this.showOnTop ? 'tooltipPane' : 'overlayPane',
+        }));
 
         this.heatLayer.addTo(this.map.leafletMap);
         // let self = this;

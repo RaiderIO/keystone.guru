@@ -226,6 +226,7 @@ class StateManager extends Signalable {
 
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
         this.setHeatmapShowTooltips(this._map.options.defaultHeatmapShowTooltips);
+        this.setHeatmapShowOnTop(this._map.options.defaultHeatmapShowOnTop);
         this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
@@ -295,6 +296,18 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('heatmapshowtooltips:changed', {visible: visible});
+    }
+
+    /**
+     * Sets whether the heatmap should be rendered on top of enemies or behind them.
+     * @param {Boolean} onTop
+     */
+    setHeatmapShowOnTop(onTop) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_heatmap_show_on_top', onTop ? 1 : 0, cookieDefaultAttributes);
+
+        // Let everyone know it's changed
+        this.signal('heatmapshowontop:changed', {onTop: onTop});
     }
 
     /**
