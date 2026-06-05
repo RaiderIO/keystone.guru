@@ -3,7 +3,6 @@
 namespace Tests\Feature\Console\Commands\CombatLog;
 
 use App\Jobs\CombatLog\FetchCombatLogRunFanout;
-use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
@@ -23,8 +22,6 @@ use Tests\TestCases\PublicTestCase;
 #[Group('CombatLog')]
 final class PollCombatLogRunsCommandTest extends PublicTestCase
 {
-    private int $combatLogVersion;
-
     private Dungeon $dungeon;
 
     private CharacterClassSpecialization $spec;
@@ -39,10 +36,9 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
     {
         parent::setUp();
 
-        $this->combatLogVersion = array_key_last(CombatLogVersion::RETAIL_ALL);
-        $this->dungeon          = Dungeon::query()->whereNotNull('challenge_mode_id')->first();
-        $this->spec             = CharacterClassSpecialization::query()->first();
-        $this->season           = Season::query()->first();
+        $this->dungeon = Dungeon::query()->whereNotNull('challenge_mode_id')->first();
+        $this->spec    = CharacterClassSpecialization::query()->first();
+        $this->season  = Season::query()->first();
 
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeason')->willReturn($this->season);

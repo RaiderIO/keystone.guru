@@ -2,6 +2,7 @@
 
 namespace App\Service\Season\SeasonAffixGroupService;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
@@ -54,7 +55,7 @@ final class GetWeeklyAffixGroupsSinceStartTest extends PublicTestCase
         // Assert
         foreach ($result as $entry) {
             $this->assertInstanceOf(WeeklyAffixGroup::class, $entry);
-            $this->assertNotNull($entry->affixGroup);
+            $this->assertInstanceOf(AffixGroup::class, $entry->affixGroup);
             $this->assertGreaterThan(0, $entry->week);
             $this->assertInstanceOf(Carbon::class, $entry->date);
         }

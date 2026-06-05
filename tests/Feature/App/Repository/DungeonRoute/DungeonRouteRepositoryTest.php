@@ -34,7 +34,6 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
         $result = $this->repository->generateRandomPublicKey();
 
         // Assert
-        $this->assertIsString($result);
         $this->assertNotEmpty($result);
     }
 

@@ -30,7 +30,6 @@ final class MetricServiceTest extends PublicTestCase
         $result = $metricService->groupMetrics($pendingMetrics, $seconds);
 
         // Assert
-        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         $this->assertCount(count($expectedResult), $result);
 

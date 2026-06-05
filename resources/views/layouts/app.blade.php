@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * @var string  $theme
  * @var bool    $hasNewChangelog
  * @var Release $latestRelease
- * @var Release $latestReleaseSpotlight
+ * @var Release|null $latestReleaseSpotlight
  */
 
 $cookieService = resolve(CookieServiceInterface::class);
@@ -45,7 +45,7 @@ $rootClass ??= '';
 
 // Bit of a hack to do this here - but for now this works
 $showSpotlightRelease = false;
-if ($showSpotlight) {
+if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     // Only if the user hasn't seen the latest spotlight release yet
     $showSpotlightRelease = ($_COOKIE['changelog_release'] ?? 0) < $latestReleaseSpotlight->id;
 

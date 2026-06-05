@@ -20,9 +20,6 @@ class CharacterRaceClassesSeeder extends Seeder implements TableSeederInterface
         $factionAllianceId = Faction::ALL[Faction::FACTION_ALLIANCE];
         $factionHordeId    = Faction::ALL[Faction::FACTION_HORDE];
 
-        if ($factionAllianceId === 0 || $factionHordeId === 0) {
-            throw new Exception('Unable to find factions');
-        }
         /** @var Collection<CharacterRace> $characterRaces */
         $characterRaces = CharacterRace::all()->keyBy('key');
         // Set icons for each inserted class

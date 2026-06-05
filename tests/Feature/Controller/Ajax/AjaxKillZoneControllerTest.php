@@ -100,7 +100,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
 
             /** @var KillZone $killZone */
             $killZone = $this->dungeonRoute->killZones()->first();
-            /** @var KillZoneEnemy $killZoneEnemy */
+            /** @var KillZoneEnemy|null $killZoneEnemy */
             $killZoneEnemy = KillZoneEnemy::where('kill_zone_id', $killZone->id)->first();
 
             $this->assertNotNull($killZoneEnemy);
