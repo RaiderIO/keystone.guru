@@ -118,6 +118,6 @@ class DungeonService implements DungeonServiceInterface
         $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
         $nextSeason    = $currentSeason === null ? null : $this->seasonService->getNextSeason($currentSeason);
 
-        return ($nextSeason ?? $currentSeason)?->dungeons ?? $gameVersion->expansion->dungeons;
+        return ($nextSeason ?? $currentSeason)?->dungeons ?? $gameVersion->expansion->dungeons; // @phpstan-ignore nullsafe.neverNull
     }
 }

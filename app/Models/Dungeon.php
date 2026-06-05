@@ -146,7 +146,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     private ?Season $activeSeasonCache = null;
 
-    /** @var Collection<int, MappingVersion>|null  */
+    /** @var Collection<int, MappingVersion|null>|null  */
     private ?Collection $currentMappingVersionCache = null;
 
     /**
@@ -185,11 +185,11 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
             // Loop through all floors
             foreach ($this->npcs as $npc) {
                 /** @var Npc $npc */
-                if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                if ($npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion();
 
-                    $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0;
+                    $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0; // @phpstan-ignore nullsafe.neverNull
                 }
             }
         } catch (Exception $exception) {
@@ -235,7 +235,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
             return $this->currentMappingVersionCache->get($gameVersion->id);
         }
 
-        /** @var MappingVersion $mappingVersion */
+        /** @var MappingVersion|null $mappingVersion */
         $mappingVersion = $this->mappingVersions()
             ->where('game_version_id', $gameVersion->id)
             ->orderByDesc('mapping_versions.version')
@@ -469,23 +469,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
             $seasonService->getMostRecentSeasonForDungeon($this) ??
             // Timewalking fallback
             $seasonService->getCurrentSeason($this->expansion);
-    }
-
-    private function getNpcsHealthBuilderEnemyForcesDungeonExclusionList(): array
-    {
-        // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
-        $allRaids = array_merge(...array_values(self::ALL_RAID));
-
-        return array_merge(
-            $allRaids,
-            // These expansions never had M+ so ignore exclusions based on enemy forces since they never had any
-            self::ALL[Expansion::EXPANSION_CLASSIC],
-            self::ALL[Expansion::EXPANSION_TBC],
-            self::ALL[Expansion::EXPANSION_WOTLK],
-            self::ALL[Expansion::EXPANSION_CATACLYSM],
-            self::ALL[Expansion::EXPANSION_MOP],
-            self::ALL[Expansion::EXPANSION_WOD],
-        );
     }
 
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array

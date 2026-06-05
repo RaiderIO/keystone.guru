@@ -19,7 +19,7 @@ use Illuminate\Support\Carbon;
  *
  * @property Carbon $created_at
  *
- * @property Spell $spell
+ * @property Spell|null $spell
  *
  * @mixin Eloquent
  */

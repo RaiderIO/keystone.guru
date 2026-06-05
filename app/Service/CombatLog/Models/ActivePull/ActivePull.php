@@ -91,7 +91,7 @@ class ActivePull
 
     public function enemyKilled(string $uniqueId): ActivePull
     {
-        /** @var ActivePullEnemy $activePullEnemy */
+        /** @var ActivePullEnemy|null $activePullEnemy */
         $activePullEnemy = $this->enemiesInCombat->get($uniqueId);
         if ($activePullEnemy !== null) {
             $this->enemiesInCombat->forget($uniqueId);

@@ -97,7 +97,7 @@ class AjaxOverpulledEnemyController extends Controller
                     ->where('mdt_id', $enemy->mdt_id)
                     ->first();
 
-                if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) {
+                if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) { // @phpstan-ignore booleanAnd.leftAlwaysTrue
                     /** @var User $user */
                     $user = Auth::getUser();
                     broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));

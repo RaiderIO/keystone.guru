@@ -86,14 +86,14 @@ class AjaxTagController extends Controller
         //
         if (!$model->hasTag($tagCategory->id, $tagName)) {
             // Get the first tag that has the same name, under the same context, with the same category
-            /** @var Tag $similarTag */
+            /** @var Tag|null $similarTag */
             $similarTag = Tag::where('name', $tagName)
                 ->where('context_id', $context->getKey())
                 ->where('context_class', $context::class)
                 ->where('tag_category_id', $tagCategory->id)
                 ->first();
 
-            if ($tag = Tag::create([
+            if ($tag = Tag::create([ // @phpstan-ignore if.alwaysTrue
                 'context_id'      => $context->getKey(),
                 'context_class'   => $context::class,
                 'tag_category_id' => $tagCategory->id,

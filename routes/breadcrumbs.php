@@ -262,11 +262,7 @@ Breadcrumbs::for('team.list', static function (Generator $trail) {
 
 Breadcrumbs::for('team.edit', static function (Generator $trail, Team $team) {
     $trail->parent('team.list');
-    if ($team === null) {
-        $trail->push(__('breadcrumbs.home.new_team'), route('team.new'));
-    } else {
-        $trail->push(__('breadcrumbs.home.edit_team'), route('team.edit', $team));
-    }
+    $trail->push(__('breadcrumbs.home.edit_team'), route('team.edit', $team));
 });
 
 Breadcrumbs::for('team.invite', static function (Generator $trail, Team $team) {

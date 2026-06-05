@@ -35,7 +35,7 @@ class FloorController extends Controller
             $floor = Floor::create(array_merge([
                 'dungeon_id' => $dungeon->id,
             ], $validated));
-            $success = $floor instanceof Floor;
+            $success = true;
         } else {
             $success = $floor->update($validated);
         }

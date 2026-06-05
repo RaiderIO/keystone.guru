@@ -22,8 +22,8 @@ use Illuminate\Support\Carbon;
  *
  * @property Carbon $created_at
  *
- * @property Npc   $npc
- * @property Model $model
+ * @property Npc        $npc
+ * @property Model|null $model
  *
  * @mixin Eloquent
  */

@@ -162,6 +162,7 @@ try {
 @endsection
 
     <?php
+// @phpstan-ignore catch.neverThrown
 } catch (Throwable $throwable) {
     Log::withContext([
         'user'              => Auth::id(),

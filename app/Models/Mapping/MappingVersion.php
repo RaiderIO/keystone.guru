@@ -47,8 +47,8 @@ use Override;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property GameVersion $gameVersion
- * @property Dungeon     $dungeon
+ * @property GameVersion  $gameVersion
+ * @property Dungeon|null $dungeon
  *
  * @property EloquentCollection<int, DungeonRoute>             $dungeonRoutes
  * @property EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers

@@ -38,10 +38,10 @@ class DungeonRouteDiscoverController extends Controller
         $nextSeason    = $seasonService->getNextSeasonOfExpansion();
 
         return view('dungeonroute.discover.search', [
-            'currentSeasonKeyLevelMin' => $currentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'currentSeasonKeyLevelMax' => $currentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-            'nextSeasonKeyLevelMin'    => $nextSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'nextSeasonKeyLevelMax'    => $nextSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+            'currentSeasonKeyLevelMin' => $currentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'currentSeasonKeyLevelMax' => $currentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
+            'nextSeasonKeyLevelMin'    => $nextSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'nextSeasonKeyLevelMax'    => $nextSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
         ]);
     }
 

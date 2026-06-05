@@ -28,7 +28,6 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 {
     private const int    NPC_ID          = 9995011;
     private const int    SPELL_ID        = 118; // Polymorph → CHARACTERISTIC_POLYMORPH
-    private const string NPC_GUID        = 'Creature-0-2085-2290-22744-9995011-00012D4051';
     private const string RAW_EVENT       = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,118,"Polymorph",0x40,DEBUFF';
     private const string COMBAT_LOG_PATH = '/tmp/test.log';
 

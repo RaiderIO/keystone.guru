@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class DatatablesColumnHandler
 {
-    private readonly ?string $columnData;
+    private readonly string $columnData;
 
     public function __construct(
         private readonly DatatablesHandler $dtHandler,

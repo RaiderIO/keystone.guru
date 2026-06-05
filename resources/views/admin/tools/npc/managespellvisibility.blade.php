@@ -76,7 +76,7 @@ use Illuminate\Support\Collection;
                 $sortedNpcSpells = $npc->npcSpells->sortBy(function(NpcSpell $npcSpell) use($spells) {
                     /** @var Spell $spell */
                     $spell = $spells->get($npcSpell->spell_id);
-                    return __($spell?->name) ?? '';
+                    return __($spell->name);
                 })->values();
                 ?>
             @foreach($sortedNpcSpells as $npcSpell)

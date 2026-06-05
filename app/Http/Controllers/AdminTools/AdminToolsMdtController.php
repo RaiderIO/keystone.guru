@@ -257,7 +257,7 @@ class AdminToolsMdtController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var Npc $npc */
+                /** @var Npc|null $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
@@ -334,7 +334,7 @@ class AdminToolsMdtController extends Controller
                                     __('controller.admintools.error.mdt_mismatched_enemy_count'),
                                     $mdtNpc->getId(),
                                     count($mdtNpc->getClones()),
-                                    $npc->enemies === null ? 0 : $npc->enemies->count(),
+                                    $npc->enemies->count(),
                                 ),
                                 [
                                     'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),

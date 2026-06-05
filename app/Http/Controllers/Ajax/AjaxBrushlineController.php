@@ -41,7 +41,7 @@ class AjaxBrushlineController extends Controller
         DungeonRoute                $dungeonRoute,
         ?Brushline                  $brushline = null,
     ) {
-        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
         Gate::authorize('addBrushline', $dungeonRoute);
@@ -62,7 +62,7 @@ class AjaxBrushlineController extends Controller
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
                 ]);
-                $success = $brushline instanceof Brushline;
+                $success = true;
             } else {
                 $success = $brushline->update([
                     'dungeon_route_id' => $dungeonRoute->id,

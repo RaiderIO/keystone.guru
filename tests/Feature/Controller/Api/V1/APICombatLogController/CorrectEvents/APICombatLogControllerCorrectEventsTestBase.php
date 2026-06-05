@@ -31,8 +31,6 @@ abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogC
 
         if ($rewriteFixtures) {
             $this->writeJsonData(sprintf('%s_corrected', $fixtureName), $responseArr, '../../');
-
-            $this->assertTrue(true, 'Corrected fixture written');
         } else {
             $this->assertEqualsCanonicalizing(
                 $this->getJsonData(sprintf('%s_corrected', $fixtureName), '../../'),

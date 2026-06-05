@@ -102,7 +102,7 @@ final class PublishScheduledTest extends PublicTestCase
             // Assert
             $worldRoute->refresh();
             $this->assertEquals(PublishedState::ALL[PublishedState::WORLD], $worldRoute->published_state_id);
-            $this->assertNotNull($worldRoute->published_at);
+            $this->assertInstanceOf(Carbon::class, $worldRoute->published_at);
             $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', [
                 'dungeon_route_id' => $worldRoute->id,
             ]);

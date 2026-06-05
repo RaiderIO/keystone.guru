@@ -118,7 +118,7 @@ class PollCombatLogRunsCommand extends Command
                         continue;
                     }
 
-                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) {
+                    if (!$this->criteriaService->shouldParse($combatLogVersion, [$primaryCheck])) { // @phpstan-ignore booleanNot.alwaysFalse
                         break;
                     }
 
@@ -216,6 +216,7 @@ class PollCombatLogRunsCommand extends Command
                 limit:           $limit,
                 offset:          0,
             ),
+            default => throw new \UnexpectedValueException(sprintf('Unknown model class: %s', $modelClass)),
         };
     }
 

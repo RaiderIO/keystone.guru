@@ -16,10 +16,10 @@ class MappingService implements MappingServiceInterface
 {
     public function shouldSynchronizeMapping(): bool
     {
-        /** @var MappingChangeLog $mostRecentMappingChangeLog */
+        /** @var MappingChangeLog|null $mostRecentMappingChangeLog */
         $mostRecentMappingChangeLog = MappingChangeLog::latest()->first();
 
-        /** @var MappingCommitLog $mostRecentMappingCommitLog */
+        /** @var MappingCommitLog|null $mostRecentMappingCommitLog */
         $mostRecentMappingCommitLog = MappingCommitLog::latest()->first();
 
         // If not synced at all yet, or if we've synced, but it was before any changes were done
@@ -69,8 +69,9 @@ class MappingService implements MappingServiceInterface
 
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
     {
+        /** @var MappingVersion|null $currentMappingVersion */
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
-        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
+        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1; // @phpstan-ignore nullsafe.neverNull
 
         $now = Carbon::now()->toDateTimeString();
 
@@ -89,17 +90,18 @@ class MappingService implements MappingServiceInterface
         Dungeon     $dungeon,
         GameVersion $gameVersion,
     ): MappingVersion {
+        /** @var MappingVersion|null $currentMappingVersion */
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
-        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
+        $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1; // @phpstan-ignore nullsafe.neverNull
 
         $now = Carbon::now()->toDateTimeString();
 
         return MappingVersion::create([
             'dungeon_id'       => $dungeon->id,
             'game_version_id'  => $gameVersion->id,
-            'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? null,
+            'mdt_mapping_hash' => $currentMappingVersion?->mdt_mapping_hash ?? null, // @phpstan-ignore nullsafe.neverNull
             'version'          => $newVersion,
-            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
@@ -107,15 +109,16 @@ class MappingService implements MappingServiceInterface
 
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?GameVersion $gameVersion, ?string $hash): MappingVersion
     {
+        /** @var MappingVersion|null $currentMappingVersion */
         $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
         $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
-            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
             'mdt_mapping_hash' => $hash,
-            'version'          => ($currentMappingVersion?->version ?? 0) + 1,
-            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
+            'version'          => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
@@ -127,15 +130,16 @@ class MappingService implements MappingServiceInterface
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
     {
+        /** @var MappingVersion|null $currentMappingVersion */
         $currentMappingVersion = $dungeon->getCurrentMappingVersion();
         $now                   = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
-            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'game_version_id'  => $currentMappingVersion?->game_version_id ?? GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL], // @phpstan-ignore nullsafe.neverNull
             'mdt_mapping_hash' => $sourceMappingVersion->mdt_mapping_hash,
-            'version'          => ($currentMappingVersion?->version ?? 0) + 1,
-            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
+            'version'          => ($currentMappingVersion?->version ?? 0) + 1, // @phpstan-ignore nullsafe.neverNull
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false, // @phpstan-ignore nullsafe.neverNull
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);

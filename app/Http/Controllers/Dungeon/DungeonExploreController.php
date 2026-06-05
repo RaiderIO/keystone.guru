@@ -72,7 +72,7 @@ class DungeonExploreController extends Controller
             ]);
         }
 
-        /** @var Floor $defaultFloor */
+        /** @var Floor|null $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
             ->defaultOrFacade($currentMappingVersion)
             ->first();
@@ -80,7 +80,7 @@ class DungeonExploreController extends Controller
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
             'gameVersion' => $gameVersion,
             'dungeon'     => $dungeon,
-            'floorIndex'  => $defaultFloor?->index ?? '1',
+            'floorIndex'  => $defaultFloor->index,
         ]);
     }
 
@@ -117,13 +117,13 @@ class DungeonExploreController extends Controller
             $floorIndex = '1';
         }
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
                 ->defaultOrFacade($currentMappingVersion)
                 ->first();
@@ -131,7 +131,7 @@ class DungeonExploreController extends Controller
             return redirect()->route('dungeon.explore.gameversion.view.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor?->index ?? '1',
+                'floorIndex'  => $defaultFloor->index,
             ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -204,7 +204,7 @@ class DungeonExploreController extends Controller
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
@@ -212,7 +212,7 @@ class DungeonExploreController extends Controller
         $validated = $request->validated();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
                 ->defaultOrFacade($currentMappingVersion)
                 ->first();
@@ -220,7 +220,7 @@ class DungeonExploreController extends Controller
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor?->index ?? '1',
+                'floorIndex'  => $defaultFloor->index,
             ] + $validated);
         } elseif ($floor->index !== (int)$floorIndex) {
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
@@ -288,10 +288,10 @@ class DungeonExploreController extends Controller
     private function getFilterSettings(?Season $season): array
     {
         return [
-            'keyLevelMin'           => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'keyLevelMax'           => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-            'itemLevelMin'          => $season?->item_level_min ?? 0,
-            'itemLevelMax'          => $season?->item_level_max ?? 0,
+            'keyLevelMin'           => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'keyLevelMax'           => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
+            'itemLevelMin'          => $season?->item_level_min ?? 0, // @phpstan-ignore nullsafe.neverNull
+            'itemLevelMax'          => $season?->item_level_max ?? 0, // @phpstan-ignore nullsafe.neverNull
             'playerDeathsMin'       => 0,
             'playerDeathsMax'       => 99,
             'minSamplesRequiredMin' => 1,

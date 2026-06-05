@@ -105,7 +105,7 @@ class LiveSessionController extends Controller
             $dungeonroute,
             $title,
             $liveSession,
-            $defaultFloor?->index ?? '1',
+            $defaultFloor->index,
         );
     }
 
@@ -127,7 +127,7 @@ class LiveSessionController extends Controller
 
         try {
             Gate::authorize('view', $liveSession);
-        } catch (AuthorizationException) {
+        } catch (AuthorizationException) { // @phpstan-ignore catch.neverThrown
             abort(StatusCode::GONE);
         }
 
@@ -146,7 +146,7 @@ class LiveSessionController extends Controller
             $floorIndex = '1';
         }
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();

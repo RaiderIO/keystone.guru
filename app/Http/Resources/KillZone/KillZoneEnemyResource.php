@@ -42,7 +42,7 @@ class KillZoneEnemyResource extends JsonResource
         return [
             'npcId' => $this->npc_id,
             //            'mdtIndex'    => $this->mdt_id,
-            'enemyForces' => $enemyForces?->enemy_forces ?? 0,
+            'enemyForces' => $enemyForces?->enemy_forces ?? 0, // @phpstan-ignore nullsafe.neverNull
         ];
     }
 }

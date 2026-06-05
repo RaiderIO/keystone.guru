@@ -23,7 +23,7 @@ class ExpansionFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        /** @var Expansion $expansion */
+        /** @var Expansion|null $expansion */
         $expansion = $this->route()->parameter('expansion');
         $rules     = [
             'name' => [

@@ -377,7 +377,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
             foreach ($this->dungeons as $dungeon) {
                 foreach ($dungeon->mappingVersions as $mappingVersion) {
-                    $result = $result && NpcEnemyForces::create([
+                    $result = $result && NpcEnemyForces::create([ // @phpstan-ignore booleanAnd.leftAlwaysTrue, booleanAnd.rightAlwaysTrue
                         'npc_id'               => $this->id,
                         'mapping_version_id'   => $mappingVersion->id,
                         'enemy_forces'         => $existingEnemyForces,
@@ -395,7 +395,7 @@ class Npc extends CacheModel implements MappingModelInterface
         /** @var Dungeon|null $dungeon */
         $dungeon = $this->dungeons->first();
 
-        return $dungeon?->id ?? null;
+        return $dungeon?->id;
     }
 
     #[Override]

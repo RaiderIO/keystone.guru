@@ -111,7 +111,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 'truesight'         => 0,
             ]);
 
-            if ($createdNpc instanceof Npc) {
+            if ($createdNpc instanceof Npc) { // @phpstan-ignore instanceof.alwaysTrue
                 // Determine health
                 if ($currentDungeon->keyLevel === null) {
                     $baseHealth = $parsedEvent->getAdvancedData()->getMaxHP();

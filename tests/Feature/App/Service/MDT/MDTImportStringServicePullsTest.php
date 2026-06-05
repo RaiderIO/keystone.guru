@@ -5,7 +5,6 @@ namespace Tests\Feature\App\Service\MDT;
 use App\Models\KillZone\KillZone;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Attributes\Repeat;
 
 #[Group('UsesLua')]
 #[Group('MDTImportStringService')]

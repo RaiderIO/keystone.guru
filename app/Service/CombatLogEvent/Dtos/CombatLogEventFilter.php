@@ -450,9 +450,9 @@ class CombatLogEventFilter implements Arrayable
                 );
 
                 /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
-                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period);
+                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason->start_period);
                 /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
-                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period);
+                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason->start_period);
 
                 // Add a date range filter
                 $must[] = Range::make('start', [
@@ -504,7 +504,7 @@ class CombatLogEventFilter implements Arrayable
 
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
             $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
-            if ($timerSeconds === null) {
+            if ($timerSeconds === null) { // @phpstan-ignore identical.alwaysFalse
                 throw new InvalidArgumentException('Mapping version does not have a timer max seconds value');
             }
 

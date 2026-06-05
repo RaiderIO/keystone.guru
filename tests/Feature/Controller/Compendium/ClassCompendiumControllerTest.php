@@ -113,7 +113,6 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Find a dungeon whose current mapping version has enemies for the Retail game version
         $dungeon        = DungeonFixtures::getDungeonWithCurrentMappingVersionWithEnemies();
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion());
-        $this->assertNotNull($dungeon);
         $this->assertNotNull($mappingVersion);
 
         $spell = Spell::where('category', sprintf('spellcategory.%s', $characterClass->key))

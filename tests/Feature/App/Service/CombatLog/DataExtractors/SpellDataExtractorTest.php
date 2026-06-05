@@ -36,9 +36,6 @@ final class SpellDataExtractorTest extends PublicTestCase
     /** SPELL_AURA_APPLIED, source=NPC, dest=NPC, BUFF → triggers SpellProperty::Aura */
     private const string RAW_BUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Creature-0-2085-2290-22744-999601-000000001,"TestNpc",0xa48,0x0,999602,"TestSpell",0x1,BUFF';
 
-    /** SPELL_AURA_APPLIED, source=NPC, dest=Player, DEBUFF → triggers SpellProperty::Debuff */
-    private const string RAW_DEBUFF_EVENT = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,Player-4184-005B8B04,"TestPlayer",0x512,0x0,999602,"TestSpell",0x1,DEBUFF';
-
     /** SPELL_INTERRUPT, source=Player, dest=NPC_ID=999601, prefix=Kick/6552, suffix=TestSpell/999602 → triggers SpellProperty::MissInterrupt */
     private const string RAW_INTERRUPT_EVENT = '8/2/2024 16:24:18.477-4  SPELL_INTERRUPT,Player-1084-0B48C032,"TestPlayer",0x512,0x80000000,Creature-0-2085-2290-22744-999601-000000000,"TestNpc",0xa48,0x0,6552,"Kick",0x1,999602,"TestSpell",32';
 

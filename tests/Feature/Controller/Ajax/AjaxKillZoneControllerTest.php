@@ -7,7 +7,6 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Attributes\Repeat;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 
 #[Group('Controller')]
@@ -101,7 +100,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
 
             /** @var KillZone $killZone */
             $killZone = $this->dungeonRoute->killZones()->first();
-            /** @var KillZoneEnemy $killZoneEnemy */
+            /** @var KillZoneEnemy|null $killZoneEnemy */
             $killZoneEnemy = KillZoneEnemy::where('kill_zone_id', $killZone->id)->first();
 
             $this->assertNotNull($killZoneEnemy);

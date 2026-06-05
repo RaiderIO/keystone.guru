@@ -212,6 +212,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                             'template' => 'MapLinkPinTemplate',
                             'type'     => 'dungeonEntrance',
                         ],
+                        default => [],
                     },
                     Conversion::convertLatLngToMDTCoordinate($mapIcon->getLatLng()),
                 );
@@ -254,7 +255,7 @@ MDT.mapPOIs[dungeonIndex] = {};
 
         $hasGroupsAlready = false;
         foreach ($mappingVersion->enemyPacks as $enemyPack) {
-            if ($enemyPack->group !== null) {
+            if ($enemyPack->group !== null) { // @phpstan-ignore notIdentical.alwaysTrue
                 $hasGroupsAlready = true;
                 break;
             }
@@ -316,7 +317,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'name'          => __($npc->name, [], 'en_US'),
                 'id'            => $npc->id,
                 'count'         => $enemyForces,
-                'health'        => $npcHealth?->health ?? 123456,
+                'health'        => $npcHealth?->health ?? 123456, // @phpstan-ignore nullsafe.neverNull
                 'scale'         => $npc->mdt_scale ?? $scaleMapping[$npc->classification_id],
                 'stealthDetect' => $npc->truesight ? true : null,
                 'displayId'     => $npc->display_id,
@@ -331,7 +332,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                     ->filter(fn(Spell $spell) => !$spell->hidden_on_map)
                     ->mapWithKeys(fn(Spell $spell) => [$spell->id => $spell->dispel_type === Spell::DISPEL_TYPE_ENRAGE ? ['enrage' => true] : []])->toArray(),
                 'clones'           => [],
-                'healthPercentage' => $npcHealth?->percentage ?? null,
+                'healthPercentage' => $npcHealth?->percentage ?? null, // @phpstan-ignore nullsafe.neverNull
             ], fn($value) => $value !== null);
 
             $translations->push(__($npc->name, [], 'en_US'));

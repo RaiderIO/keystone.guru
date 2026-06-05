@@ -127,7 +127,7 @@ class SyncZoneNames extends Command
         $zoneIdIndexReference = collect();
         foreach ($englishFloorNames as $zoneId => $floorNames) {
             // Find the KSG floor that this translation belongs to
-            /** @var Dungeon $dungeon */
+            /** @var Dungeon|null $dungeon */
             $dungeon = $dungeonsByZoneId->get($zoneId);
             if (!($dungeon instanceof Dungeon)) {
                 // We don't care - there's many zones that we don't have a dungeon for
@@ -169,7 +169,7 @@ class SyncZoneNames extends Command
             }
 
             // If we have a facade floor, save the facade floor's name as the dungeon name
-            /** @var Floor $facadeFloor */
+            /** @var Floor|null $facadeFloor */
             $facadeFloor = $dungeon->floors->firstWhere('facade', true);
             if ($facadeFloor !== null) {
                 $dungeonZoneIdIndexReference[$facadeFloor->id] = [

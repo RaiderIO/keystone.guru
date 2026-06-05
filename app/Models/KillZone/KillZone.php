@@ -31,7 +31,7 @@ use Override;
  * @property float|null $lat
  * @property float|null $lng
  *
- * @property DungeonRoute                           $dungeonRoute
+ * @property DungeonRoute|null                      $dungeonRoute
  * @property Floor                                  $floor
  * @property EloquentCollection<int, Enemy>         $enemies         Enemy models via BelongsToMany; serialized to integer IDs in toArray()
  * @property EloquentCollection<int, KillZoneEnemy> $killZoneEnemies

@@ -7,7 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
  **/
 
 $dungeonroute ??= null;
-$publicKey    = $dungeonroute?->public_key ?? 'auto';
+$publicKey    = $dungeonroute !== null ? $dungeonroute->public_key : 'auto';
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/report', 'options' => [

@@ -6,7 +6,7 @@ use App\Models\Timewalking\TimewalkingEvent;
 use Illuminate\Support\Carbon;
 
 /**
- * @var TimewalkingEvent $timewalkingEvent
+ * @var TimewalkingEvent|null $timewalkingEvent
  * @var Season           $season
  * @var AffixGroup       $affixGroup
  * @var Carbon|null      $startDate

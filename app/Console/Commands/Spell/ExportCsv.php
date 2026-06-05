@@ -40,7 +40,7 @@ class ExportCsv extends Command
 
             return [
                 'id'          => $spell->id,
-                'npc_id'      => $npc?->id ?? 'UNKNOWN',
+                'npc_id'      => $npc?->id ?? 'UNKNOWN', // @phpstan-ignore nullsafe.neverNull
                 'mechanic'    => __($spell->mechanic, [], 'en_US'),
                 'name'        => __($spell->name, [], 'en_US'),
                 'dispel_type' => in_array($spell->dispel_type, Spell::ALL_DISPEL_TYPES) ?

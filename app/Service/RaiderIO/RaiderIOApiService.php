@@ -2,7 +2,6 @@
 
 namespace App\Service\RaiderIO;
 
-use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
@@ -38,7 +37,6 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         private readonly CoordinatesServiceInterface        $coordinatesService,
         private readonly SeasonServiceInterface             $seasonService,
         private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
-        private readonly CombatLogEventServiceInterface     $combatLogEventService,
         private readonly RaiderIOApiServiceLoggingInterface $log,
     ) {
     }

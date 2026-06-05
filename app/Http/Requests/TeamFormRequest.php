@@ -23,7 +23,7 @@ class TeamFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        /** @var Team $team */
+        /** @var Team|null $team */
         $team = $this->route()->parameter('team');
 
         if ($team === null) {

@@ -19,8 +19,8 @@ use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private const ?int RATE_LIMIT_OVERRIDE_HTTP           = null;
-    private const ?int RATE_LIMIT_OVERRIDE_PER_MINUTE_API = null;
+    private static ?int $rateLimitOverrideHttp         = null; // @phpstan-ignore property.unusedType
+    private static ?int $rateLimitOverridePerMinuteApi = null; // @phpstan-ignore property.unusedType
 
     /**
      * Bootstrap any application services.
@@ -87,10 +87,10 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting(): void
     {
-        RateLimiter::for('create-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 100)->by($this->userKey($request)));
-        RateLimiter::for('create-tag', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request)));
-        RateLimiter::for('create-team', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 5)->by($this->userKey($request)));
-        RateLimiter::for('create-reports', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request)));
+        RateLimiter::for('create-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 100)->by($this->userKey($request)));
+        RateLimiter::for('create-tag', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
+        RateLimiter::for('create-team', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 5)->by($this->userKey($request)));
+        RateLimiter::for('create-reports', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
         RateLimiter::for('create-user', function (Request $request) {
             // Bots somehow trigger /register?redirect=someurl a lot, so we have to catch it and not have them trigger the rate limiter
             // Besides, I only care about people creating new accounts, not "trying" to register
@@ -98,24 +98,24 @@ class AppServiceProvider extends ServiceProvider
                 return Limit::none();
             }
 
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 50)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 50)->by($this->userKey($request));
         });
 
         // Heavy GET requests
-        RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 600)->by($this->userKey($request)));
+        RateLimiter::for('search-dungeonroute', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));
 
         // This consumes the same resources as creating a route - so we limit it
-        RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 1200)->by($this->userKey($request)));
-        RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 1200)->by($this->userKey($request)));
-        RateLimiter::for('simulate', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 120)->by($this->userKey($request)));
+        RateLimiter::for('mdt-details', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        RateLimiter::for('mdt-export', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 1200)->by($this->userKey($request)));
+        RateLimiter::for('simulate', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
     }
 
     private function configureApiRateLimiting(): void
     {
-        RateLimiter::for('api-general', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 900)->by($this->userKey($request)));
-        RateLimiter::for('api-combatlog-create-dungeonroute', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 120)->by($this->userKey($request)));
-        RateLimiter::for('api-combatlog-correct-event', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 900)->by($this->userKey($request)));
-        RateLimiter::for('api-create-dungeonroute-thumbnail', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 30)->by($this->userKey($request)));
+        RateLimiter::for('api-general', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
+        RateLimiter::for('api-combatlog-create-dungeonroute', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 120)->by($this->userKey($request)));
+        RateLimiter::for('api-combatlog-correct-event', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 900)->by($this->userKey($request)));
+        RateLimiter::for('api-create-dungeonroute-thumbnail', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 30)->by($this->userKey($request)));
     }
 
     private function noLimitForExemptions(Request $request): ?Limit

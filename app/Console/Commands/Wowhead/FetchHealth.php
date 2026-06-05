@@ -32,7 +32,7 @@ class FetchHealth extends Command
      */
     public function handle(WowheadServiceInterface $wowheadService): void
     {
-        /** @var Dungeon $dungeon */
+        /** @var Dungeon|null $dungeon */
         $dungeon = Dungeon::firstWhere('key', $this->argument('dungeon'));
 
         if ($dungeon === null) {

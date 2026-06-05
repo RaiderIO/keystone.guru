@@ -473,7 +473,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             } elseif ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
             } else {
-                /** @var NpcEnemyForces $npcEnemyForces */
+                /** @var NpcEnemyForces|null $npcEnemyForces */
                 $npcEnemyForces = $enemyForcesByNpcIds->get($enemy->npc->id);
 
                 if ($npcEnemyForces !== null) {
@@ -647,7 +647,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Get the proper index of the floor, validated for length
                 $mdtSubLevel = ((int)$details[2]);
 
-                /** @var Floor $floor */
+                /** @var Floor|null $floor */
                 $floor = $floors->first(static fn(
                     Floor $floor,
                 ) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
@@ -881,17 +881,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             $spellId = Spell::SPELL_BLOODLUST;
                         } elseif ($commentLower === 'heroism') {
                             $spellId = Spell::SPELL_HEROISM;
-                        } elseif ($commentLower === 'fury of the aspects') {
+                        } elseif ($commentLower === 'fury of the aspects') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
                         } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
                             $spellId = Spell::SPELL_TIME_WARP;
                         } elseif ($commentLower === 'ancient hysteria') {
                             $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
-                        } elseif ($commentLower === 'drums') {
+                        } elseif ($commentLower === 'drums') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_THUNDEROUS_DRUMS;
-                        } elseif ($commentLower === 'primal rage') {
+                        } elseif ($commentLower === 'primal rage') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_PRIMAL_RAGE;
-                        } elseif ($commentLower === 'harriers cry') {
+                        } elseif ($commentLower === 'harriers cry') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_HARRIERS_CRY;
                         }
 
@@ -996,7 +996,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $dungeon,
                 collect([$affixGroup?->getTextAttribute() ?? '']),
                 $affixGroup !== null && $currentAffixGroupForDungeon !== null &&
-                $affixGroup->id === $currentAffixGroupForDungeon?->id,
+                $affixGroup->id === $currentAffixGroupForDungeon->id,
                 $importStringPulls->getKillZoneAttributes()->count(),
                 $importStringObjects->getPaths()->count(),
                 $importStringObjects->getLines()->count(),
@@ -1081,8 +1081,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 'teeming'    => boolval($decoded['value']['teeming'] ?? false),
                 'title'      => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $decoded['text'],
                 'difficulty' => 'Casual',
-                'level_min'  => $decoded['difficulty'] ?? $season?->key_level_min ?? 2,
-                'level_max'  => $decoded['difficulty'] ?? $season?->key_level_max ?? 2,
+                'level_min'  => $decoded['difficulty'] ?? $season?->key_level_min ?? 2, // @phpstan-ignore nullsafe.neverNull
+                'level_max'  => $decoded['difficulty'] ?? $season?->key_level_max ?? 2, // @phpstan-ignore nullsafe.neverNull
                 'expires_at' => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
             ]);
 

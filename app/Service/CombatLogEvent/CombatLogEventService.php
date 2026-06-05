@@ -457,7 +457,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $runStart      = $season->start->copy()->addHours(random_int(0, $seasonLengthHours));
             $runPeriod     = $season->start_period + random_int(0, $seasonLengthWeeks);
             // RaiderIO regions
-            $regions  = array_values(GameServerRegion::ALL);
+            $regions  = array_keys(GameServerRegion::ALL);
             $regionId = match ($regions[array_rand($regions)]) {
                 GameServerRegion::EUROPE   => 3,
                 GameServerRegion::AMERICAS => 2,

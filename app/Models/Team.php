@@ -160,7 +160,7 @@ class Team extends Model
      */
     public function getUserRole(User $user): ?string
     {
-        /** @var TeamUser $teamUser */
+        /** @var TeamUser|null $teamUser */
         $teamUser = $this->teamUsers()->where('user_id', $user->id)->first();
 
         return $teamUser?->role;
@@ -244,7 +244,7 @@ class Team extends Model
      */
     public function changeRole(User $user, string $role): void
     {
-        /** @var TeamUser $teamUser */
+        /** @var TeamUser|null $teamUser */
         $teamUser = $this->teamUsers()->where('user_id', $user->id)->first();
         $roles    = TeamUser::ALL_ROLES;
         // Only when user is part of the team, and when the role is a valid one.

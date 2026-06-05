@@ -23,7 +23,7 @@ class ReleaseFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        /** @var Release $release */
+        /** @var Release|null $release */
         $release = $this->route()->parameter('release');
 
         $rule = Rule::unique('releases', 'version');

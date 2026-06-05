@@ -69,10 +69,9 @@ use (
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(
-                static fn(AffixGroup $affixGroup
-                ) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null
-            );
+            $tierAffixGroup = $dungeonroute->affixes->filter(
+                static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id
+            )->isNotEmpty() ? $currentAffixGroup : null;
         }
     }
     // Attempt a default value if there's only one affix set

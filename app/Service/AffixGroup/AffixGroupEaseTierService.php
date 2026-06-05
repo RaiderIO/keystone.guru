@@ -239,7 +239,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixes = collect(explode(', ', $affixString));
 
         // Filter out properties that don't have the correct amount of affixes
-        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
+        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) { // @phpstan-ignore notIdentical.alwaysTrue
             // Check if there's any affixes in the list that we cannot find in our own database
             $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(
                 Affix $affix,
