@@ -25,7 +25,6 @@ use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Polyline;
-use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -36,7 +35,6 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
-use App\Repositories\Stub\AffixGroup\AffixGroupRepository as AffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
@@ -62,6 +60,8 @@ use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceStub;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
 use Auth;
@@ -84,7 +84,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly MapDrawingServiceInterface                        $mapDrawingService,
         protected readonly DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
         protected readonly DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
-        protected readonly AffixGroupRepositoryInterface                     $affixGroupRepository,
+        protected readonly SeasonAffixGroupServiceInterface                  $seasonAffixGroupService,
         protected readonly KillZoneRepositoryInterface                       $killZoneRepository,
         protected readonly KillZoneEnemyRepositoryInterface                  $killZoneEnemyRepository,
         protected readonly KillZoneSpellRepositoryInterface                  $killZoneSpellRepository,
@@ -111,10 +111,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     {
         $dungeonRoute = new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
+            $this->seasonAffixGroupService,
             $this->coordinatesService,
             $this->dungeonRouteRepository,
             $this->dungeonRouteAffixGroupRepository,
-            $this->affixGroupRepository,
             $this->killZoneRepository,
             $this->killZoneEnemyRepository,
             $this->killZoneSpellRepository,
@@ -148,10 +148,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     {
         $builder = new CombatLogRouteCombatLogEventsBuilder(
             $this->seasonService,
+            new SeasonAffixGroupServiceStub(),
             $this->coordinatesService,
             new DungeonRouteRepositoryStub(),
             new DungeonRouteAffixGroupRepositoryStub(),
-            new AffixGroupRepositoryStub(),
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
@@ -179,10 +179,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
         $builder = new CombatLogRouteCorrectionBuilder(
             new SeasonServiceStub(),
+            new SeasonAffixGroupServiceStub(),
             $this->coordinatesService,
             new DungeonRouteRepositoryStub(),
             new DungeonRouteAffixGroupRepositoryStub(),
-            new AffixGroupRepositoryStub(),
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
@@ -282,7 +282,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $npcEngagedEvents = collect();
             $spells           = collect();
             $playerDeaths     = collect();
-            /** @var Collection<CombatantInfoResultEvent> $mostRecentCombatantInfo */
+            /** @var Collection<string, CombatantInfoResultEvent> $mostRecentCombatantInfo */
             $mostRecentCombatantInfo        = collect();
             $mostRecentCombatantInfoIndexFn = static function (string $guid) use ($mostRecentCombatantInfo) {
                 $index = 0;
