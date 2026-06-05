@@ -590,6 +590,9 @@ return [
             'subheader_spells'                                        => 'Spells',
             'show_missing_spell_info'                                 => 'Show missing spell data',
             'show_missing_spell_info_description'                     => 'List spells that are missing damage, icon, or other metadata.',
+            'subheader_artisan_commands'                              => 'Artisan Commands',
+            'backfill_kill_zone_enemy_id'                             => 'Backfill kill zone enemy IDs',
+            'backfill_kill_zone_enemy_id_description'                 => 'One-time backfill of enemy_id on kill_zone_enemies for records where it is NULL.',
             'subheader_actions'                                       => 'Actions',
             'drop_caches'                                             => 'Drop caches',
             'drop_caches_description'                                 => 'Clear all application caches immediately.',
@@ -599,6 +602,22 @@ return [
             'export_releases_description'                             => 'Download a data dump of all changelog entries.',
             'toggle_readonly_mode'                                    => 'Toggle read-only mode',
             'toggle_readonly_mode_description'                        => 'Put the site into read-only mode, blocking all write operations.',
+        ],
+        'artisancommands' => [
+            'backfillkillzoneenemyid' => [
+                'title'          => 'Backfill kill zone enemy IDs',
+                'header'         => 'Backfill kill zone enemy IDs',
+                'description'    => 'Populates enemy_id on kill_zone_enemies for all existing NULL rows. Run once after deploying the migration. Keep this page open — each chunk is processed as a separate request and the progress bar updates as you go.',
+                'start'          => 'Start backfill',
+                'pause'          => 'Pause',
+                'stop'           => 'Stop',
+                'resume'         => 'Resume',
+                'nothing_to_do'  => 'All rows already have enemy_id set. Nothing to do.',
+                'rows_remaining' => ':count rows remaining (IDs :min – :max)',
+                'completed'      => 'Backfill complete.',
+                'elapsed'        => 'Elapsed',
+                'eta'            => 'ETA',
+            ],
         ],
         'thumbnails' => [
             'regenerate' => [

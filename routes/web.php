@@ -12,6 +12,7 @@
 */
 
 use App\Features\NpcCompendium;
+use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
 use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
@@ -510,6 +511,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('features', new AdminToolsFeaturesController()->listFeatures(...))->name('admin.tools.features.list');
                 Route::post('features/toggle', new AdminToolsFeaturesController()->toggleFeature(...))->name('admin.tools.features.toggle');
                 Route::post('features/forget', new AdminToolsFeaturesController()->forgetFeature(...))->name('admin.tools.features.forget');
+
+                // Artisan commands
+                Route::get('artisan-commands/backfill-kill-zone-enemy-id', new AdminToolsArtisanCommandsController()->backfillKillZoneEnemyId(...))->name('admin.tools.artisancommands.backfillkillzoneenemyid.view');
+                Route::post('artisan-commands/run', new AdminToolsArtisanCommandsController()->run(...))->name('admin.tools.artisancommands.run');
 
                 // Exception thrower
                 Route::get('exception', new AdminToolsExceptionController()->exceptionselect(...))->name('admin.tools.exception.select');
