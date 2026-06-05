@@ -24,7 +24,7 @@ class MapContextLiveSession extends MapContextDungeonRoute
     public function __construct(
         CacheServiceInterface                            $cacheService,
         CoordinatesServiceInterface                      $coordinatesService,
-        private readonly KillZonePathServiceInterface    $killZonePathService,
+        KillZonePathServiceInterface                     $killZonePathService,
         private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
         private readonly LiveSession                     $liveSession,
         string                                           $mapFacadeStyle,

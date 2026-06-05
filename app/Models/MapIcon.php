@@ -141,6 +141,6 @@ class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneable
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor->dungeon_id;
     }
 }

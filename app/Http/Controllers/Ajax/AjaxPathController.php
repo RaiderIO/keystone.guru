@@ -40,7 +40,7 @@ class AjaxPathController extends Controller
         DungeonRoute                $dungeonRoute,
         ?Path                       $path = null,
     ) {
-        $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
         Gate::authorize('addPath', $dungeonRoute);
@@ -61,7 +61,7 @@ class AjaxPathController extends Controller
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
                 ]);
-                $success = $path instanceof Path;
+                $success = true;
             } else {
                 $success = $path->update([
                     'dungeon_route_id' => $dungeonRoute->id,

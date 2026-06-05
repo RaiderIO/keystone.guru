@@ -25,8 +25,8 @@ use Override;
  * @property string   $faction
  *
  * @property MappingVersion $mappingVersion
- * @property Floor          $floor
- * @property Polyline       $polyline
+ * @property Floor|null     $floor
+ * @property Polyline|null  $polyline
  * @property Polyline|null  $mdtPolyline
  *
  * @mixin Eloquent
@@ -97,7 +97,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor?->dungeon_id;
     }
 
     public function cloneForNewMappingVersion(

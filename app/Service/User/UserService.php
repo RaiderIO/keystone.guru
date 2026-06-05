@@ -34,7 +34,7 @@ class UserService implements UserServiceInterface
 
         $base64     = Str::replace('Basic ', '', $authentication);
         $usernamePw = base64_decode($base64);
-        if ($usernamePw === false) {
+        if ($usernamePw === false) { // @phpstan-ignore identical.alwaysFalse
             return false;
         }
 

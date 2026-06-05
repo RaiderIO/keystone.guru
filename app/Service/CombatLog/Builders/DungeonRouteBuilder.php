@@ -229,7 +229,7 @@ abstract class DungeonRouteBuilder
 
         /** @var LatLng|null $previousPullLatLng */
         $previousPullLatLng = null;
-        /** @var KillZone $previousPull */
+        /** @var KillZone|null $previousPull */
         $previousPull = $this->dungeonRoute->killZones->last();
         if ($previousPull !== null) {
             $previousPullLatLng = $previousPull->getKillLocation(true);

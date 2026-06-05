@@ -30,6 +30,6 @@ class Decode extends Command
      */
     public function handle(): void
     {
-        $this->info($this->decode($this->argument('string')) ?? '');
+        $this->info($this->decode($this->argument('string')) ?? ''); // @phpstan-ignore nullCoalesce.expr
     }
 }

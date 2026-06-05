@@ -73,12 +73,12 @@ trait SavesPolylines
         ], [
             'model_id'       => $ownerModel->getKey(),
             'model_class'    => $ownerModel::class,
-            'color'          => $data['color'] ?? '#f00',
+            'color'          => $data['color'],
             'color_animated' => Auth::check() &&
                 Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ?
                     $data['color_animated'] : null,
-            'weight'        => (int)($data['weight'] ?? 2),
-            'vertices_json' => $data['vertices_json'] ?? '{}',
+            'weight'        => (int)$data['weight'],
+            'vertices_json' => $data['vertices_json'],
         ]);
 
         if ($dungeonRoute !== null) {
@@ -88,7 +88,7 @@ trait SavesPolylines
         // Couple the model to the newly created/updated polyline
         $ownerModel->update([
             'polyline_id' => $polyline->id,
-            'floor_id'    => $changedFloor?->id ?? $originalFloor->id,
+            'floor_id'    => $changedFloor !== null ? $changedFloor->id : $originalFloor->id,
         ]);
         $ownerModel->setRelation('polyline', $polyline);
 

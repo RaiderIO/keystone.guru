@@ -111,7 +111,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
                 /** @var Collection<int, WeeklyRoute> $result */
                 $result = collect();
                 foreach ($weeklyRouteTags as $key => $value) {
-                    /** @var DungeonRoute $dungeonRoute */
+                    /** @var DungeonRoute|null $dungeonRoute */
                     $dungeonRoute = $dungeonRoutes->first(fn(DungeonRoute $route) => $route->tags->first()?->name === $value);
                     if ($dungeonRoute) {
                         $result->push(new WeeklyRoute($key, $dungeonRoute));
@@ -322,7 +322,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         $result = [];
 
         foreach ($values as $value) {
-            if (!is_string($value)) {
+            if (!is_string($value)) { // @phpstan-ignore function.alreadyNarrowedType
                 continue;
             }
 

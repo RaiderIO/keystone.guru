@@ -160,7 +160,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // If logged in
-        if ($user !== null) {
+        if ($user !== null) { // @phpstan-ignore notIdentical.alwaysTrue
             $mine = $request->get('mine', false);
 
             // Handle favorites

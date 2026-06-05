@@ -72,7 +72,7 @@ class DungeonRouteSearchController extends Controller
             ]);
         }
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->defaultOrFacade($mappingVersion)
             ->first();
@@ -86,8 +86,8 @@ class DungeonRouteSearchController extends Controller
             'parameters'          => $request->validated(),
             'title'               => __($dungeon->name),
             'mapContext'          => $mapContextService->createMapContextDungeonRouteSearch($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle()),
-            'keyLevelMin'         => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'keyLevelMax'         => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+            'keyLevelMin'         => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'keyLevelMax'         => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
         ]);
     }

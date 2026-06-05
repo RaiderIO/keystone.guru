@@ -98,7 +98,7 @@ abstract class OAuthLoginController extends LoginController
             $success   = false;
 
             $oAuthId = $this->getOAuthId($oauthUser->id);
-            /** @var User $existingUser */
+            /** @var User|null $existingUser */
             $existingUser = User::firstWhere('oauth_id', $oAuthId);
             // Does this user exist..
             if ($existingUser === null) {

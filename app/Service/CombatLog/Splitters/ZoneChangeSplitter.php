@@ -9,15 +9,12 @@ use App\Logic\CombatLog\SpecialEvents\ZoneChange as ZoneChangeEvent;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Splitters\Logging\ZoneChangeSplitterLoggingInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class ZoneChangeSplitter extends CombatLogSplitter
 {
-    private const MAX_TIMESTAMP_GAP_SECONDS = 10 * 60;
-
     private const array EVENTS_TO_KEEP = [
         SpecialEvent::SPECIAL_EVENT_COMBAT_LOG_VERSION,
         SpecialEvent::SPECIAL_EVENT_ZONE_CHANGE,
@@ -33,8 +30,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
     private ?string $lastCombatLogVersion = null;
 
     private ?ZoneChangeEvent $lastZoneChangeEvent = null;
-
-    private ?Carbon $lastTimestamp = null;
 
     private ?Collection $result = null;
 
@@ -110,7 +105,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
         if ($this->lastZoneChangeEvent instanceof ZoneChangeEvent) {
             // Save ALL events that come through after the challenge mode start event has been given
             $this->rawEvents->push($rawEvent);
-            $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
         }
 
         // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
@@ -147,7 +141,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         $this->rawEvents           = collect();
         $this->lastZoneChangeEvent = null;
-        $this->lastTimestamp       = null;
     }
 
     private function reset(): void

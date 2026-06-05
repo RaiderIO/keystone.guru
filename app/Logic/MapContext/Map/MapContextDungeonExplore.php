@@ -66,7 +66,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
 
         return array_merge(parent::toArray(), [
             'featuredAffixes'   => $activeSeason == null ? [] : $this->seasonAffixGroupService->getFeaturedAffixes($activeSeason),
-            'seasonStartPeriod' => $activeSeason?->start_period ?? 0,
+            'seasonStartPeriod' => $activeSeason?->start_period ?? 0, // @phpstan-ignore nullsafe.neverNull
         ]);
     }
 }

@@ -82,8 +82,8 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
                 'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
                 'title'              => __($dungeon->name, [], 'en_US'),
-                'level_min'          => $keystoneLevel ?? $mostRecentSeason?->key_level_min ?? 2,
-                'level_max'          => $keystoneLevel ?? $mostRecentSeason?->key_level_max ?? 20,
+                'level_min'          => $keystoneLevel ?? $mostRecentSeason?->key_level_min ?? 2, // @phpstan-ignore nullsafe.neverNull
+                'level_max'          => $keystoneLevel ?? $mostRecentSeason?->key_level_max ?? 20, // @phpstan-ignore nullsafe.neverNull
                 'expires_at'         => Carbon::now()->addHours(
                     config('keystoneguru.sandbox_dungeon_route_expires_hours'),
                 )->toDateTimeString(),

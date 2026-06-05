@@ -30,7 +30,7 @@ $linkMapFn             = static fn(Dungeon $dungeon) => [
 $subtextFn             ??= null;
 $filterFn              ??= fn(Dungeon $dungeon) => true;
 $nextSeasonDungeons    = $nextSeason?->dungeons->filter($filterFn)->values() ?? collect();
-$currentSeasonDungeons = $currentSeason?->dungeons->filter($filterFn)->values() ?? collect();
+$currentSeasonDungeons = $currentSeason->dungeons->filter($filterFn)->values();
 
 $selectedSeasonId = null;
 if ($gameVersion->has_seasons) {

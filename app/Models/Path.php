@@ -21,9 +21,9 @@ use Override;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property DungeonRoute $dungeonRoute
- * @property Polyline     $polyline
- * @property Floor        $floor
+ * @property DungeonRoute  $dungeonRoute
+ * @property Polyline|null $polyline
+ * @property Floor         $floor
  *
  * @mixin Eloquent
  */

@@ -2,8 +2,6 @@
 
 namespace App\Http\Models\Request\CombatLog\Route;
 
-use App\Models\Enemy;
-
 /**
  * @OA\Schema(schema="CombatLogRoutePlayerDeathCorrection")
  * @OA\Property(property="characterId",type="integer")
@@ -16,8 +14,6 @@ use App\Models\Enemy;
  */
 class CombatLogRoutePlayerDeathCorrectionRequestModel extends CombatLogRoutePlayerDeathRequestModel
 {
-    private ?Enemy $resolvedEnemy = null;
-
     public function __construct(
         ?int                                    $characterId = null,
         ?int                                    $classId = null,

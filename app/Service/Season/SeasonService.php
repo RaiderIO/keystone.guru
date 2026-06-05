@@ -45,7 +45,7 @@ class SeasonService implements SeasonServiceInterface
             $region ?? GameServerRegion::getUserOrDefaultRegion(),
         );
 
-        if ($this->seasonCache->empty()) {
+        if ($this->seasonCache->empty()) { // @phpstan-ignore if.alwaysTrue
             $this->seasonCache = Season::selectRaw('seasons.*')
                 ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
                 ->whereNull('timewalking_events.id')
@@ -53,9 +53,7 @@ class SeasonService implements SeasonServiceInterface
                 ->get();
         }
 
-        return $this->seasonCache->when($expansion !== null, static fn(
-            Collection $seasonCache,
-        ) => $seasonCache->where('expansion_id', $expansion->id));
+        return $this->seasonCache->where('expansion_id', $expansion->id);
     }
 
     public function getFirstSeason(): Season
@@ -93,7 +91,7 @@ class SeasonService implements SeasonServiceInterface
         $region ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
-        /** @var Season $season */
+        /** @var Season|null $season */
         $season = Season::whereRaw(
             'DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) <= ?',
             [

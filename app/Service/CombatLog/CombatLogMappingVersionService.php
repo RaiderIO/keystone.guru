@@ -115,7 +115,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         GameVersion     $gameVersion,
         ?MappingVersion $mappingVersion = null,
         bool            $enemyConnections = false,
-    ): ?MappingVersion {
+    ): MappingVersion {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
         $hasExistingMappingVersion = $mappingVersion !== null;

@@ -139,7 +139,7 @@ class PatreonService implements PatreonServiceInterface
                 return false;
             }
 
-            /** @var PatreonUserLink $patreonUserLink */
+            /** @var PatreonUserLink|null $patreonUserLink */
             $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
 
             if ($patreonUserLink === null) {
@@ -149,7 +149,7 @@ class PatreonService implements PatreonServiceInterface
             }
 
             $user = $patreonUserLink->user;
-            if ($user === null) {
+            if ($user === null) { // @phpstan-ignore identical.alwaysFalse
                 $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
 
                 return false;
@@ -351,7 +351,7 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
-    private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): ?array
+    private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): array
     {
         $result = [];
 

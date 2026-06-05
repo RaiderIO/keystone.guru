@@ -86,10 +86,6 @@ class DungeonRouteLegacyController extends Controller
         DungeonRoute                   $dungeonRoute,
         string                         $floorIndex,
     ): RedirectResponse {
-        if ($dungeonRoute === null) {
-            abort(404);
-        }
-
         return redirect()->route('dungeonroute.view.floor', [
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,

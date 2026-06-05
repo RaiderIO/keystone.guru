@@ -80,16 +80,15 @@ class AjaxKillZoneController extends Controller
 
         Gate::authorize('addKillZone', $dungeonroute);
 
-        /** @var KillZone|null $beforeModel */
-        $beforeModel = $killZone === null ? null : clone $killZone;
+        $beforeModel = clone $killZone;
 
         // Capture the before-state enemy IDs before any delete/insert
-        $beforeEnemyIds = $beforeModel?->killZoneEnemies->pluck('enemy_id') ?? collect();
+        $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
 
         if (!$killZone->exists) {
             try {
                 $killZone = KillZone::create($data);
-                $success  = $killZone instanceof KillZone;
+                $success  = true;
             } catch (UniqueConstraintViolationException) {
                 // Race condition: another request created this kill zone between findOrNew and create.
                 // Re-load and re-authorize before updating to prevent cross-route hijacking.
@@ -115,7 +114,7 @@ class AjaxKillZoneController extends Controller
                 $killZoneEnemies = [];
                 $enemyModels     = $dungeonroute->mappingVersion->enemies()->whereIn('id', $enemyIds)->get();
                 foreach ($enemyIds as $enemyId) {
-                    /** @var Enemy $enemy */
+                    /** @var Enemy|null $enemy */
                     $enemy = $enemyModels->where('id', $enemyId)->first();
                     // Could be if someone decides to send an enemy ID that is not part of the current mapping version
                     if ($enemy === null) {
@@ -221,7 +220,7 @@ class AjaxKillZoneController extends Controller
         DungeonRoute                 $dungeonRoute,
         ?KillZone                    $killZone = null,
     ): KillZone {
-        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         try {
             $data = $request->validated();
@@ -235,7 +234,7 @@ class AjaxKillZoneController extends Controller
                 $data['spells'] = [];
             }
 
-            $data['id'] = $killZone?->id ?? null;
+            $data['id'] = $killZone?->id ?? null; // @phpstan-ignore nullsafe.neverNull
 
             $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
             $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));

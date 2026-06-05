@@ -102,7 +102,7 @@ $zoomToContents ??= false;
 // Show ads or not
 $showAds ??= true;
 // If this is an embedded route, do not show ads
-if ($embed || $dungeonroute?->demo === 1) {
+if ($embed || $dungeonroute?->demo === true) {
     $showAds = false;
 }
 

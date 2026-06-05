@@ -143,7 +143,7 @@ class MDTDungeon
             }
 
             // Ensure floors is a collection
-            if (!($floors instanceof Collection)) {
+            if (!($floors instanceof Collection)) { // @phpstan-ignore instanceof.alwaysTrue
                 $floors = [$floors];
             }
 

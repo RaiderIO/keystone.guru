@@ -22,9 +22,9 @@ use Override;
  * @property string $public_key
  *
  * @property User                                     $user
- * @property DungeonRoute                             $dungeonRoute
+ * @property DungeonRoute|null                        $dungeonRoute
  * @property EloquentCollection<int, OverpulledEnemy> $overpulledEnemies
- * @property Carbon                                   $expires_at
+ * @property Carbon|null                              $expires_at
  *
  * @mixin Eloquent
  */

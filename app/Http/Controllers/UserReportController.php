@@ -22,7 +22,7 @@ class UserReportController extends Controller
         // Ugly way of loading this relationship, eager loading with dynamic relations don't work!
 
         foreach ($userReports as $userReport) {
-            $userReport->model;
+            $userReport->model; // @phpstan-ignore expr.resultUnused
         }
 
         return view('admin.userreport.list', ['models' => $userReports]);

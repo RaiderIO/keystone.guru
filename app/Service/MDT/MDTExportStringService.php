@@ -67,7 +67,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
-                    5 => $this->convertHtmlToMdtComment($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''),
+                    5 => $this->convertHtmlToMdtComment($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''), // @phpstan-ignore nullsafe.neverNull, nullCoalesce.expr
                 ],
             ];
         }
@@ -182,9 +182,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $html = preg_replace_callback(
             '/<a\b[^>]*?href=(?:"([^"]+)"|\'([^\']+)\')[^>]*>.*?<\/a>/i',
             static function (array $matches): string {
-                $href = $matches[1] !== '' ? $matches[1] : ($matches[2] ?? '');
+                $href = $matches[1] !== '' ? $matches[1] : $matches[2];
 
-                return $href !== '' ? sprintf('(%s)', $href) : '';
+                return sprintf('(%s)', $href);
             },
             $html,
         );

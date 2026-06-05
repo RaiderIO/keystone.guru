@@ -37,8 +37,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,
     ): bool {
-        /** @var MapIcon $beforeModel */
-        /** @var MapIcon $afterModel */
+        /** @var MapIcon|null $beforeModel */
+        /** @var MapIcon|null $afterModel */
         return $beforeModel?->dungeon_route_id === null || $afterModel?->dungeon_route_id === null;
     }
 
@@ -60,7 +60,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         ?DungeonRoute               $dungeonRoute,
         ?MapIcon                    $mapIcon = null,
     ): MapIcon {
-        $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
         $validated                     = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 

@@ -32,7 +32,7 @@ class UserController extends Controller
 
     public function makeRole(Request $request, User $user, string $role): RedirectResponse
     {
-        /** @var User $currentUser */
+        /** @var User|null $currentUser */
         $currentUser = Auth::user();
 
         if ($currentUser !== null) {

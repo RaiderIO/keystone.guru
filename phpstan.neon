@@ -10,7 +10,7 @@ parameters:
         - tests/
 
     # Level 9 is the highest level
-    level: 3
+    level: 4
 
     # I have no idea why this is necessary
     scanDirectories:
@@ -51,5 +51,20 @@ parameters:
           paths:
             - app/Console/Commands/Traits/SavesToInfluxDB.php
             - app/Console/Commands/Scheduler/Telemetry/Telemetry.php
+        # HasLatLng trait: @property annotations say nullable, but specific class contexts infer non-null.
+        # The null-guard is correct — the trait is used in both nullable and non-nullable contexts.
+        - identifier: booleanAnd.alwaysTrue
+          path: app/Models/Traits/HasLatLng.php
+        - identifier: notIdentical.alwaysTrue
+          path: app/Models/Traits/HasLatLng.php
+        # These traits exist for potential future use / are referenced dynamically
+        - identifier: trait.unused
+          path: app/Http/Controllers/Traits/ChecksForDuplicates.php
+        - identifier: trait.unused
+          path: app/Http/Controllers/Traits/ListsKillzones.php
+        - identifier: trait.unused
+          path: app/Logic/MapContext/Traits/DungeonRouteProperties.php
+        - identifier: trait.unused
+          path: app/Traits/CompressesImages.php
 
 #    checkMissingIterableValueType: false

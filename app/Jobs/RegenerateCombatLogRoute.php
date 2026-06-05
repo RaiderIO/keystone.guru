@@ -48,7 +48,7 @@ class RegenerateCombatLogRoute implements ShouldQueue
             }
 
             $challengeModeRun = $dungeonRoute->challengeModeRun;
-            if ($challengeModeRun === null || $challengeModeRun->challengeModeRunData === null) {
+            if ($challengeModeRun === null || $challengeModeRun->challengeModeRunData === null) { // @phpstan-ignore identical.alwaysFalse
                 $log->handleChallengeModeRunNotSet();
 
                 return;

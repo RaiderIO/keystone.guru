@@ -190,7 +190,7 @@ function hex2name($hex)
 }
 
 /**
- * @return false|string
+ * @return string
  */
 function pad($v)
 {
@@ -263,7 +263,7 @@ function pickHexFromHandlers(array $handlers, float $weight): string
         }
 
         assert($color1 !== null, 'color1 === null!');
-        assert($color2 !== null, 'color2 === null!');
+        assert($color2 !== null, 'color2 === null!'); // @phpstan-ignore function.alreadyNarrowedType, notIdentical.alwaysTrue
 
         $invertedScaledWeight = 1 - $scaledWeight;
 

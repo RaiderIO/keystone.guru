@@ -126,7 +126,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
                 )));
             }
 
-            foreach ($correctedCombatLogRoute->playerDeaths ?? [] as $playerDeath) {
+            foreach ($correctedCombatLogRoute->playerDeaths ?? [] as $playerDeath) { // @phpstan-ignore nullCoalesce.property
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($correctedCombatLogRoute, $now, $start, $end, $playerDeath->coord->uiMapId),
                     [
@@ -180,8 +180,8 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
             'timer_fraction'     => $correctedCombatLogRoute->challengeMode->timerFraction,
             'num_deaths'         => $correctedCombatLogRoute->challengeMode->numDeaths,
             'ui_map_id'          => $uiMapId,
-            'num_members'        => $correctedCombatLogRoute->roster?->numMembers ?? 0,
-            'average_item_level' => $correctedCombatLogRoute->roster?->averageItemLevel ?? 0,
+            'num_members'        => $correctedCombatLogRoute->roster?->numMembers ?? 0, // @phpstan-ignore nullsafe.neverNull
+            'average_item_level' => $correctedCombatLogRoute->roster?->averageItemLevel ?? 0, // @phpstan-ignore nullsafe.neverNull
             'characters'         => $this->getCharactersJsonFromRoster($correctedCombatLogRoute),
             'context'            => "[]",
             'created_at'         => $now,
@@ -194,7 +194,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
     ): string {
         $result = [];
 
-        for ($i = 0; $i < $correctedCombatLogRoute->roster?->numMembers ?? 0; $i++) {
+        for ($i = 0; $i < ($correctedCombatLogRoute->roster?->numMembers ?? 0); $i++) { // @phpstan-ignore nullsafe.neverNull
             $result[] = [
                 'id'    => $correctedCombatLogRoute->roster->characterIds[$i] ?? 12345,
                 'class' => $correctedCombatLogRoute->roster->classIds[$i] ?? 1,

@@ -124,11 +124,6 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
         return $totalAccuracy / $count;
     }
 
-    private function getDistance(array $xy1, array $xy2): float
-    {
-        return sqrt($this->getDistanceSquared($xy1, $xy2));
-    }
-
     private function getDistanceSquared(array $xy1, array $xy2): float
     {
         return ($xy1['x'] - $xy2['x']) ** 2 + ($xy1['y'] - $xy2['y']) ** 2;

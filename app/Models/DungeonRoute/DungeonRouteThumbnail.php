@@ -19,7 +19,7 @@ use Override;
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
- * @property File         $file
+ * @property File|null    $file
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at

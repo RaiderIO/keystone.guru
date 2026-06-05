@@ -55,8 +55,8 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
             return new SearchAdvancedRunsResponse([], 0);
         }
 
-        $dungeonZoneId   = $filter->dungeon?->zone_id ?? self::FAKE_DUNGEON_ZONE_ID;
-        $challengeModeId = $filter->dungeon?->challenge_mode_id ?? self::FAKE_CHALLENGE_MODE_ID;
+        $dungeonZoneId   = $filter->dungeon?->zone_id ?? self::FAKE_DUNGEON_ZONE_ID; // @phpstan-ignore nullsafe.neverNull
+        $challengeModeId = $filter->dungeon?->challenge_mode_id ?? self::FAKE_CHALLENGE_MODE_ID; // @phpstan-ignore nullsafe.neverNull
         $specBlizzardIds = $filter->specs->pluck('specialization_id')->map('intval')->values()->all();
         $memberSpecIds   = !empty($specBlizzardIds) ? $specBlizzardIds : self::FAKE_SPEC_IDS;
 

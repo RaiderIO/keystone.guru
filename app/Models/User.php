@@ -53,11 +53,11 @@ use Override;
  * @property int    $legal_agreed_ms
  * @property bool   $analytics_cookie_opt_out
  *
- * @property PatreonUserLink       $patreonUserLink
- * @property GameServerRegion      $gameServerRegion
- * @property GameVersion           $gameVersion
- * @property Dungeon               $dungeon
- * @property PatreonAdFreeGiveaway $patreonAdFreeGiveaway
+ * @property PatreonUserLink|null       $patreonUserLink
+ * @property GameServerRegion|null      $gameServerRegion
+ * @property GameVersion|null           $gameVersion
+ * @property Dungeon|null               $dungeon
+ * @property PatreonAdFreeGiveaway|null $patreonAdFreeGiveaway
  *
  * @property bool $is_admin
  *
@@ -335,14 +335,14 @@ class User extends Authenticatable implements LaratrustUser
     public static function getCurrentUserMapFacadeStyle(): string
     {
         return self::$OVERRIDE_MAP_FACADE_STYLE ??
-            Auth::user()?->map_facade_style ??
+            Auth::user()?->map_facade_style ?? // @phpstan-ignore nullsafe.neverNull
             $_COOKIE['map_facade_style'] ??
             User::DEFAULT_MAP_FACADE_STYLE;
     }
 
     public static function getCurrentUserKillzonePathWeight(): int
     {
-        return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT);
+        return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT); // @phpstan-ignore nullsafe.neverNull
     }
 
     public static function forceMapFacadeStyle(string $mapFacadeStyle): void

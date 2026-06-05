@@ -175,7 +175,7 @@ class TeamController extends Controller
      */
     public function invite(Request $request, string $invitecode)
     {
-        /** @var Team $team */
+        /** @var Team|null $team */
         $team   = Team::where('invite_code', $invitecode)->first();
         $result = null;
 

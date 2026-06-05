@@ -27,9 +27,9 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeath"}, nullable=true)
  *
- * @property Collection<CombatLogRouteNpcRequestModel>         $npcs
- * @property Collection<CombatLogRouteSpellRequestModel>       $spells
- * @property Collection<CombatLogRoutePlayerDeathRequestModel> $playerDeaths
+ * @property Collection<CombatLogRouteNpcRequestModel>|null         $npcs
+ * @property Collection<CombatLogRouteSpellRequestModel>|null       $spells
+ * @property Collection<CombatLogRoutePlayerDeathRequestModel>|null $playerDeaths
  */
 class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 {
@@ -87,7 +87,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         }
 
         $dungeonRoute = $dungeonRouteRepository->create([
-            'public_key'         => $existingDungeonRoute?->public_key ?? $dungeonRouteRepository->generateRandomPublicKey(),
+            'public_key'         => $existingDungeonRoute?->public_key ?? $dungeonRouteRepository->generateRandomPublicKey(), // @phpstan-ignore nullsafe.neverNull
             'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,

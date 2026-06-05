@@ -288,7 +288,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             $mapIconAttributes->push(array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => $dungeonRoute?->id ?? null,
+                'dungeon_route_id'   => $dungeonRoute?->id ?? null, // @phpstan-ignore nullsafe.neverNull
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DOT_YELLOW],
                 'comment'            => $comment,

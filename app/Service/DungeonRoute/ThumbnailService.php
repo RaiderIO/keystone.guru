@@ -243,7 +243,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        if ($dungeonRoute->mappingVersion === null) {
+        if ($dungeonRoute->mappingVersion === null) { // @phpstan-ignore identical.alwaysFalse
             $this->log->queueThumbnailRefreshMappingVersionNull($dungeonRoute->public_key);
             // Do not return - we just assume the thumbnail is generated. Otherwise this will keep spamming
             // the logs with this error when it really isn't that important.
@@ -402,7 +402,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $thumbnailData,
                 );
 
-                if ($copiedThumbnail === null) {
+                if ($copiedThumbnail === null) { // @phpstan-ignore identical.alwaysFalse
                     // If we failed to copy the thumbnail, then we don't want to continue
                     continue;
                 }
@@ -433,7 +433,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         string       $target,
         string       $thumbnailData,
         bool         $isCustom = false,
-    ): ?DungeonRouteThumbnail {
+    ): DungeonRouteThumbnail {
         return DB::transaction(function () use (
             $dungeonRoute,
             $floorIndex,

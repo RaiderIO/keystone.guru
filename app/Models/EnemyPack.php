@@ -94,6 +94,6 @@ class EnemyPack extends CacheModel implements HasVerticesInterface, ConvertsVert
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor->dungeon_id;
     }
 }
