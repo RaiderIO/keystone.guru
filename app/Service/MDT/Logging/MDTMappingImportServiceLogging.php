@@ -82,8 +82,6 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
-        int $npcCharacteristicsDeleted,
-        int $npcCharacteristicsInserted,
         int $npcSpellsDeleted,
         int $npcSpellsInserted,
         int $npcDungeonsDeleted,
@@ -125,11 +123,6 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     public function importNpcsStart(): void
     {
         $this->start(__METHOD__);
-    }
-
-    public function importNpcsDataFromMDTUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void
-    {
-        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function importNpcsDataFromMDTSpellInExcludeList(): void
@@ -293,7 +286,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(int $newEnemyPatrolId): void
+    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(?int $newEnemyPatrolId): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

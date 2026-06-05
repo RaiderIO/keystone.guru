@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class Instakill extends Suffix
 {
@@ -13,7 +14,7 @@ class Instakill extends Suffix
         return $this->unconsciousOnDeath;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

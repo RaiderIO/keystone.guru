@@ -23,6 +23,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
@@ -34,6 +35,8 @@ class ViewService implements ViewServiceInterface
     private const array VIEW_VARIABLES_URL_WHITELIST = [
         // search actually renders views back to the user which we need
         '/ajax/search',
+        // Renders views through Ajax
+        '/ajax/view',
     ];
 
     private const array VIEW_VARIABLES_URL_BLACKLIST = [
@@ -47,6 +50,7 @@ class ViewService implements ViewServiceInterface
     public function __construct(
         private readonly CacheServiceInterface              $cacheService,
         private readonly ExpansionServiceInterface          $expansionService,
+        private readonly SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
         private readonly AffixGroupEaseTierServiceInterface $easeTierService,
     ) {
         // Load the release version from the file, this is used to cache view variables
@@ -228,7 +232,7 @@ class ViewService implements ViewServiceInterface
                 /** @var Collection<ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
-                    $expansionsData->put($expansion->shortname, $this->expansionService->getData($expansion, $gameServerRegion));
+                    $expansionsData->put($expansion->shortname, $this->expansionService->getData($this->seasonAffixGroupService, $expansion, $gameServerRegion));
                 }
 
                 /** @var Collection<Expansion> $activeExpansions */
@@ -273,13 +277,13 @@ class ViewService implements ViewServiceInterface
         ));
     }
 
-    public function shouldLoadViewVariables(string $uri): bool
+    public function shouldLoadViewVariables(string $pathInfo): bool
     {
-        $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static fn($url) => Str::startsWith($uri, $url));
+        $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static fn($url) => Str::startsWith($pathInfo, $url));
 
         if (!$isWhitelisted) {
             // If it's blacklisted..
-            if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static fn($url) => Str::startsWith($uri, $url))) {
+            if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static fn($url) => Str::startsWith($pathInfo, $url))) {
                 // Don't set the view variables at all
                 return false;
             }

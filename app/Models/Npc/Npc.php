@@ -13,11 +13,14 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Spell\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Override;
 
 /**
  * @property int        $id
@@ -42,17 +45,19 @@ use Illuminate\Support\Collection;
  * @property NpcType           $type
  * @property NpcClass          $class
  *
- * @property NpcEnemyForces|null                $enemyForces
- * @property Collection<NpcEnemyForces>         $npcEnemyForces
- * @property Collection<Enemy>                  $enemies
- * @property Collection<Characteristic>         $characteristics
- * @property Collection<NpcCharacteristic>      $npcCharacteristics
- * @property Collection<Spell>                  $spells
- * @property Collection<NpcSpell>               $npcSpells
- * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
- * @property Collection<Dungeon>                $dungeons
- * @property Collection<NpcDungeon>             $npcDungeons
- * @property Collection<NpcHealth>              $npcHealths
+ * @property NpcEnemyForces|null                             $enemyForces
+ * @property EloquentCollection<int, NpcEnemyForces>         $npcEnemyForces
+ * @property EloquentCollection<int, Enemy>                  $enemies
+ * @property EloquentCollection<int, Characteristic>         $characteristics
+ * @property EloquentCollection<int, NpcCharacteristic>      $npcCharacteristics
+ * @property EloquentCollection<int, Spell>                  $spells
+ * @property EloquentCollection<int, NpcSpell>               $npcSpells
+ * @property EloquentCollection<int, NpcBolsteringWhitelist> $npcbolsteringwhitelists
+ * @property EloquentCollection<int, Dungeon>                $dungeons
+ * @property EloquentCollection<int, NpcDungeon>             $npcDungeons
+ * @property EloquentCollection<int, NpcHealth>              $npcHealths
+ * @property float|null                                      $min_health              Computed aggregate column (getNpcsMinMaxHealth)
+ * @property float|null                                      $max_health              Computed aggregate column (getNpcsMinMaxHealth)
  *
  * @mixin Eloquent
  */
@@ -124,6 +129,19 @@ class Npc extends CacheModel implements MappingModelInterface
         ];
     }
 
+    public function resolveRouteBinding($value, $field = null): ?static
+    {
+        $id = (int)explode('-', (string)$value, 2)[0];
+
+        /** @var static|null */
+        return $this->where('id', $id)->first();
+    }
+
+    public function getRouteKey(): string
+    {
+        return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));
+    }
+
     public function getEnemyPortraitUrlAttribute(): string
     {
         return sprintf('images/enemyportraits/%d.png', $this->id);
@@ -181,9 +199,12 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function spells(bool $onlyVisibleOnMap = true): BelongsToMany
     {
-        return $this->belongsToMany(Spell::class, 'npc_spells')
+        /** @var BelongsToMany<Spell, $this> $query */
+        $query = $this->belongsToMany(Spell::class, 'npc_spells')
             ->when($onlyVisibleOnMap, static fn($query) => $query->where('hidden_on_map', false))
             ->orderBy('spells.id');
+
+        return $query;
     }
 
     public function npcSpells(): HasMany
@@ -276,13 +297,15 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function isAffectedByFortified(): bool
     {
-        return in_array($this->classification_id, [
-            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
-            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
-        ]);
+        return !$this->isBoss();
     }
 
     public function isAffectedByTyrannical(): bool
+    {
+        return $this->isBoss();
+    }
+
+    public function isBoss(): bool
     {
         return in_array($this->classification_id, [
             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
@@ -354,7 +377,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
             foreach ($this->dungeons as $dungeon) {
                 foreach ($dungeon->mappingVersions as $mappingVersion) {
-                    $result = $result && NpcEnemyForces::create([
+                    $result = $result && NpcEnemyForces::create([ // @phpstan-ignore booleanAnd.leftAlwaysTrue, booleanAnd.rightAlwaysTrue
                         'npc_id'               => $this->id,
                         'mapping_version_id'   => $mappingVersion->id,
                         'enemy_forces'         => $existingEnemyForces,
@@ -372,10 +395,10 @@ class Npc extends CacheModel implements MappingModelInterface
         /** @var Dungeon|null $dungeon */
         $dungeon = $this->dungeons->first();
 
-        return $dungeon?->id ?? null;
+        return $dungeon?->id;
     }
 
-    #[\Override]
+    #[Override]
     protected static function booted(): void
     {
         parent::booted();

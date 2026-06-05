@@ -8,6 +8,7 @@ use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
+use Exception;
 
 class PatreonService implements PatreonServiceInterface
 {
@@ -138,7 +139,7 @@ class PatreonService implements PatreonServiceInterface
                 return false;
             }
 
-            /** @var PatreonUserLink $patreonUserLink */
+            /** @var PatreonUserLink|null $patreonUserLink */
             $patreonUserLink = PatreonUserLink::with(['user'])->where('email', $memberEmail)->first();
 
             if ($patreonUserLink === null) {
@@ -148,7 +149,7 @@ class PatreonService implements PatreonServiceInterface
             }
 
             $user = $patreonUserLink->user;
-            if ($user === null) {
+            if ($user === null) { // @phpstan-ignore identical.alwaysFalse
                 $this->log->applyPaidBenefitsForMemberCannotFindUserForPatreonUserLink();
 
                 return false;
@@ -164,7 +165,7 @@ class PatreonService implements PatreonServiceInterface
             // We now know which user this is - update the benefits of this user
             $newBenefits = collect();
             foreach ($member['relationships']['currently_entitled_tiers']['data'] as $currentlyEntitledTier) {
-                /** @var $currentlyEntitledTier array{id: int, type: string} */
+                /** @var array{id: int, type: string} $currentlyEntitledTier */
                 // For all tiers this user is paying for - combine the benefits to one big array
                 $newBenefits = $newBenefits->merge($this->getBenefitsByTierId($campaignTiers, $campaignBenefits, $currentlyEntitledTier['id']));
             }
@@ -253,6 +254,7 @@ class PatreonService implements PatreonServiceInterface
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
+                        /** @var array $member */
                         $member = collect($identityResponse['included'])->filter(static fn(
                             array $included,
                         ) => $included['type'] === 'member')->first();
@@ -272,7 +274,7 @@ class PatreonService implements PatreonServiceInterface
                 $result = LinkToUserIdResult::PatreonSessionExpired;
                 $this->log->linkToUserAccountSessionExpired();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = LinkToUserIdResult::InternalErrorOccurred;
 
             $this->log->linkToUserAccountException($e);
@@ -349,7 +351,7 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
-    private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): ?array
+    private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): array
     {
         $result = [];
 
@@ -357,8 +359,6 @@ class PatreonService implements PatreonServiceInterface
             if ((int)$tier['id'] === $tierId) {
                 // Found the tier, now match the benefits..
                 foreach ($tier['relationships']['benefits']['data'] as $benefitData) {
-                    /** @var $benefitData {array: id: string, type: string} */
-
                     // Search the list of benefits for a match, and if found add the title to the result array
                     foreach ($campaignBenefits as $campaignBenefit) {
                         if ($campaignBenefit['id'] === $benefitData['id']) {

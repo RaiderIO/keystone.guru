@@ -6,7 +6,6 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOIType;
 use App\Logic\MDT\Entity\MDTPatrol;
-use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
@@ -19,7 +18,6 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
@@ -139,15 +137,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of NPCs and update/save them
             $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
 
-            $characteristicsByName = Characteristic::all()->mapWithKeys(fn(Characteristic $characteristic) => [__($characteristic->name, [], 'en_US') => $characteristic]);
+            $npcsUpdated           = $npcsInserted = 0;
+            $npcSpellsAttributes   = [];
+            $npcDungeonsAttributes = [];
+            $affectedNpcIds        = [];
 
-            $npcsUpdated                  = $npcsInserted = 0;
-            $npcCharacteristicsAttributes = [];
-            $npcSpellsAttributes          = [];
-            $npcDungeonsAttributes        = [];
-            $affectedNpcIds               = [];
-
-            /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 if (in_array($mdtNpc->getId(), self::IGNORE_NPC_DATA_NPC_IDS)) {
                     $this->log->importNpcsDataFromMDTIgnoreNpc($mdtNpc->getId());
@@ -203,25 +197,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npcHealth->percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npcHealth->save();
 
-                // Save characteristics
-                foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
-                    if (!$enabled) {
-                        continue;
-                    }
-
-                    /** @var Characteristic|null $characteristic */
-                    $characteristic = $characteristicsByName->get($characteristicName);
-                    if ($characteristic === null) {
-                        $this->log->importNpcsDataFromMDTUnableToFindCharacteristicForNpc($npc->id, $characteristicName);
-                        continue;
-                    }
-
-                    $npcCharacteristicsAttributes[] = [
-                        'npc_id'            => $npc->id,
-                        'characteristic_id' => $characteristic->id,
-                    ];
-                }
-
                 // Save spells that we don't know of yet
                 foreach ($mdtNpc->getSpells() as $spellId => $obj) {
                     if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
@@ -263,30 +238,23 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
                 } catch (UniqueConstraintViolationException) {
-                    $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc?->id ?? 0);
+                    $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);
                 }
             }
 
-            // It's easier to delete/insert new ones than try to maintain the IDs which don't really mean anything anyway
-            // Clear characteristics/spells for all affected NPCs
-            $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing spells - we're only interested in new ones
-//            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
+//            $npcSpellsDeleted = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing dungeons - we're only interested in new ones
 //            $npcDungeonsDeleted = NpcDungeon::whereIn('npc_id', $affectedNpcIds)->delete();
 
-            // Insert new ones
-            NpcCharacteristic::insert($npcCharacteristicsAttributes);
             NpcSpell::insert($npcSpellsAttributes);
             NpcDungeon::insert($npcDungeonsAttributes);
 
             $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
                 $npcsUpdated,
                 $npcsInserted,
-                $npcCharacteristicsDeleted,
-                count($npcCharacteristicsAttributes),
                 0,
                 count($npcSpellsAttributes),
                 0,
@@ -310,7 +278,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $mdtSpells = $mdtNpc->getSpells();
 
                 foreach ($mdtSpells as $spellId => $spell) {
-                    /** @var Spell $existingSpell */
+                    /** @var Spell|null $existingSpell */
                     $existingSpell = $existingSpells->get($spellId);
                     // Ignore spells that we know of - we really only have IDs from MDT, so keep any data that was already there
                     if ($existingSpell !== null) {
@@ -390,8 +358,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @throws Exception
      */
-    private function importNpcs(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, GameVersion $gameVersion): void
-    {
+    private function importNpcs(
+        MappingVersion $newMappingVersion,
+        MDTDungeon     $mdtDungeon,
+        Dungeon        $dungeon,
+        GameVersion    $gameVersion,
+    ): void {
         try {
             $this->log->importNpcsStart();
 
@@ -585,7 +557,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             // Save enemy packs
             foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
-                /** @var $mdtEnemiesWithGroupsByEnemyPack Collection<Enemy> */
+                /** @var Collection<int, Enemy> $mdtEnemiesWithGroupsByEnemyPack */
                 $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
                     ->filter(static fn(
                         Enemy $enemy,
@@ -593,7 +565,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     ->keyBy('id');
 
                 // Enemies without a group - don't import that group, or no enemies assigned to the group
-                if (is_null($groupIndex) || $groupIndex === -1 || $mdtEnemiesWithGroupsByEnemyPack->isEmpty()) {
+                if ($groupIndex === -1 || $mdtEnemiesWithGroupsByEnemyPack->isEmpty()) {
                     continue;
                 }
 
@@ -622,10 +594,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     // 3. Create a new bounding box according to the new enemies lat/lngs
                     'vertices_json' => json_encode($this->getVerticesBoundingBoxFromEnemies($boundingBoxEnemies)),
                 ]);
-                if ($enemyPack === null) {
-                    throw new Exception('Unable to save enemy pack!');
-                }
-
                 $this->log->importEnemyPacksSaveNewEnemyPackOK($enemyPack->id, $mdtEnemiesWithGroupsByEnemyPack->count());
 
                 try {
@@ -754,11 +722,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // But make sure that the polyline is not attached to any model yet
                         'model_id' => -1,
                     ]));
-                    if ($polyLine !== null) {
-                        $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
-                    } else {
-                        throw new Exception('Unable to save polyline!');
-                    }
+                    $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
 
                     // MDT Polyline
                     $mdtPolyLine = Polyline::create([
@@ -771,11 +735,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // This polyline is not meant to be used for display, but rather to be used for MDT
                         'vertices_json' => $mdtPolylineVerticesJson,
                     ]);
-                    if ($mdtPolyLine !== null) {
-                        $this->log->importEnemyPatrolsSaveNewMdtPolyline($mdtPolyLine->id);
-                    } else {
-                        throw new Exception('Unable to save MDT polyline!');
-                    }
+                    $this->log->importEnemyPatrolsSaveNewMdtPolyline($mdtPolyLine->id);
 
                     // Enemy patrols
                     $enemyPatrol = EnemyPatrol::create([
@@ -788,11 +748,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'teeming'            => null,
                         'faction'            => Faction::FACTION_ANY,
                     ]);
-                    if ($enemyPatrol !== null) {
-                        $this->log->importEnemyPatrolsSaveNewEnemyPatrol($enemyPatrol->id);
-                    } else {
-                        throw new Exception('Unable to save enemy patrol!');
-                    }
+                    $this->log->importEnemyPatrolsSaveNewEnemyPatrol($enemyPatrol->id);
 
                     // Couple polyline to enemy patrol
                     $polyLineSaveResult = $polyLine->update(['model_id' => $enemyPatrol->id]);
@@ -840,7 +796,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                             $newMappingVersion,
                         );
 
-                        $this->log->importEnemyPatrolsClonedPatrolWithoutMdtPolyline($enemyPatrol->id);
+                        $this->log->importEnemyPatrolsClonedPatrolWithoutMdtPolyline(isset($enemyPatrol) ? $enemyPatrol->id : null);
                     }
                 }
             }
@@ -937,15 +893,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                                 'floor_id'           => $floor->id,
                                 'target_floor_id'    => $this->findFloorByMdtSubLevel($dungeon, $mdtMapPOI->getTarget())->id,
                             ], $latLng->toArray()));
-                            if ($dungeonFloorSwitchMarker !== null) {
-                                $this->log->importMapPOIsNewDungeonFloorSwitchMarkerOK(
-                                    $dungeonFloorSwitchMarker->id,
-                                    $dungeonFloorSwitchMarker->floor_id,
-                                    $dungeonFloorSwitchMarker->target_floor_id,
-                                );
-                            } else {
-                                throw new Exception('Unable to save dungeon floor switch marker!');
-                            }
+                            $this->log->importMapPOIsNewDungeonFloorSwitchMarkerOK(
+                                $dungeonFloorSwitchMarker->id,
+                                $dungeonFloorSwitchMarker->floor_id,
+                                $dungeonFloorSwitchMarker->target_floor_id,
+                            );
                         } else {
                             $this->log->importMapPOIsHaveExistingFloorSwitchMarkers(
                                 $currentMappingVersion->dungeonFloorSwitchMarkers->count(),

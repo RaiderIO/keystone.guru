@@ -6,12 +6,16 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Logic\CombatLog\CombatEvents\Prefixes\Spell as SpellPrefix;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -22,6 +26,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
 /**
+ * Processes raw combat log events into EnemyEngaged/EnemyKilled/PlayerDied result events by tracking which enemies
+ * are in combat (via accurateEnemySightings) and detecting their deaths, defeats, or charm-based removals.
+ *
  * @property Collection<BaseResultEvent> $resultEvents
  */
 abstract class BaseCombatFilter implements CombatLogParserInterface
@@ -112,10 +119,10 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection<int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
-    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
+    /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
     private readonly Collection $accurateEnemySightings;
 
-    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
+    /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
     private readonly Collection $lastKnownPlayerPositions;
 
     /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
@@ -171,7 +178,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                 if ($npc !== null) {
                     // Npc was found, now retrieve the relevant GUID of the boss
-                    /** @var CombatLogEvent $enemyEngagedEvent */
+                    /** @var CombatLogEvent|null $enemyEngagedEvent */
                     $enemyEngagedEvent = $this->accurateEnemySightings->first(fn($value, $key) => str_contains((string)$key, (string)$npc->id));
 
                     if ($enemyEngagedEvent !== null) {
@@ -189,9 +196,13 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } else {
+            } elseif ($combatLogEvent instanceof CombatLogEvent) {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
+            } else {
+                $this->log->parseInvalidCombatLogEvent($lineNr);
+
+                return false;
             }
 
             // And it's part of our current pull (it usually will be but doesn't have to be), and it also should not be killed already, AND also not summoned
@@ -228,9 +239,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             }
 
             // Push a new result event - we successfully killed this enemy, and it gave count!
-            $this->resultEvents->push((new EnemyEngaged($enemyEngagedEvent)));
+            $this->resultEvents->push(new EnemyEngaged($enemyEngagedEvent));
             // Kill this enemy as well. We push as 2 separate events, so we can keep track of combat state
-            $this->resultEvents->push((new EnemyKilled($combatLogEvent, $destGuid)));
+            $this->resultEvents->push(new EnemyKilled($combatLogEvent, $destGuid));
             // Speed up parsing by getting rid of the accurate enemy sighting - it's part of killed enemies now so won't get handled anymore
             $this->accurateEnemySightings->forget($destGuid->getGuid());
 
@@ -375,23 +386,18 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
     private function hasDeathAuraApplied(BaseEvent $combatLogEvent): bool
     {
-        return false;
+        if (!($combatLogEvent instanceof CombatLogEvent)) {
+            return false;
+        }
+        if (!($combatLogEvent->getSuffix() instanceof AuraAppliedInterface)) {
+            return false;
+        }
+        $prefix = $combatLogEvent->getPrefix();
+        if (!($prefix instanceof SpellPrefix)) {
+            return false;
+        }
 
-        //        if (!($combatLogEvent instanceof CombatLogEvent)) {
-        //            return false;
-        //        }
-        //        if (!($combatLogEvent->getSuffix() instanceof AuraApplied)) {
-        //            return false;
-        //        }
-        //        $prefix = $combatLogEvent->getPrefix();
-        //        if (!($prefix instanceof Spell)) {
-        //            return false;
-        //        }
-        //
-        //        return in_array($prefix->getSpellId(), [
-        //            // Recovering... (Uldaman: Legacy of Tyr first boss(es))
-        //            375339,
-        //        ]);
+        return in_array($prefix->getSpellId(), Spell::CHARM_SPELLS);
     }
 
     private function isEnemyDefeated(BaseEvent $combatLogEvent): bool

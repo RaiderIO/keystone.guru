@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Controller;
 
-use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use Illuminate\Support\Carbon;
+use Tests\Feature\Traits\GeneratesDungeonRoutes;
 use Tests\TestCases\AjaxPublicTestCase;
 
 abstract class DungeonRouteTestBase extends AjaxPublicTestCase
 {
+    use GeneratesDungeonRoutes;
+
     protected DungeonRoute $dungeonRoute;
 
     #[\Override]
@@ -16,10 +17,7 @@ abstract class DungeonRouteTestBase extends AjaxPublicTestCase
     {
         parent::setUp();
 
-        /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = DungeonRoute::factory()->make();
-
-        $this->dungeonRoute = $dungeonRoute;
+        $this->dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
         $this->dungeonRoute->save();
     }
 
@@ -29,24 +27,5 @@ abstract class DungeonRouteTestBase extends AjaxPublicTestCase
         $this->dungeonRoute->delete();
 
         parent::tearDown();
-    }
-
-    protected function createNonFacadeDungeonRoute(): DungeonRoute
-    {
-        $count = 0;
-        do {
-            if (++$count > 20) {
-                throw new \RuntimeException('Unable to find a non-facade dungeon');
-            }
-            /** @var Dungeon $dungeon */
-            $dungeon        = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
-        } while ($mappingVersion === null || $mappingVersion->facade_enabled || $dungeon->floors->isEmpty());
-
-        return DungeonRoute::factory()->create([
-            'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $mappingVersion->id,
-            'expires_at'         => Carbon::now()->addHours(2),
-        ]);
     }
 }

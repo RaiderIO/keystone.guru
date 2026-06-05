@@ -3,21 +3,24 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Models\CombatLog\CombatLogNpcSpellAssignment;
-use App\Models\CombatLog\CombatLogSpellUpdate;
+use App\Logic\Structs\LatLng;
+use App\Models\CombatLog\CombatLogNpcEvent;
+use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasLatLngInterface;
+use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
-use App\Models\Traits\HasLatLng;
-use App\Models\Traits\HasVertices;
 use App\Traits\SavesArrayToJsonFile;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -46,7 +49,7 @@ class Save extends Command
 
     /**
      * Execute the console command.
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(): int
     {
@@ -87,7 +90,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveMappingVersions(string $dungeonDataDir): void
     {
@@ -109,7 +112,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveMappingCommitLogs(string $dungeonDataDir): void
     {
@@ -131,7 +134,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveDungeons(string $dungeonDataDir): void
     {
@@ -193,8 +196,8 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $dungeonDataDir
-     * @throws \Exception
+     * @param  string    $dungeonDataDir
+     * @throws Exception
      */
     private function saveNpcs(string $dungeonDataDir): void
     {
@@ -233,8 +236,8 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $dungeonDataDir
-     * @throws \Exception
+     * @param  string    $dungeonDataDir
+     * @throws Exception
      */
     private function saveSpells(string $dungeonDataDir): void
     {
@@ -253,23 +256,23 @@ class Save extends Command
     }
 
     /**
-     * @param  string     $combatlogDir
+     * @param  string    $combatlogDir
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveCombatlogData(string $combatlogDir): void
     {
         // Save all spells
         $this->info('Saving Combatlog data');
 
-        $this->saveDataToJsonFile(CombatLogNpcSpellAssignment::all()->toArray(), $combatlogDir, 'combat_log_npc_spell_assignments.json');
-        $this->saveDataToJsonFile(CombatLogSpellUpdate::all()->toArray(), $combatlogDir, 'combat_log_spell_updates.json');
+        $this->saveDataToJsonFile(CombatLogNpcEvent::all()->toArray(), $combatlogDir, 'combat_log_npc_events.json');
+        $this->saveDataToJsonFile(CombatLogSpellEvent::all()->toArray(), $combatlogDir, 'combat_log_spell_events.json');
         $this->saveDataToJsonFile(ParsedCombatLog::all()->toArray(), $combatlogDir, 'parsed_combat_logs.json');
     }
 
     /**
-     * @param  string     $dungeonDataDir
-     * @throws \Exception
+     * @param  string    $dungeonDataDir
+     * @throws Exception
      */
     private function saveDungeonData(string $dungeonDataDir): void
     {
@@ -313,7 +316,7 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
@@ -458,46 +461,52 @@ class Save extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
-        $roundLatLngFn = static function (mixed $model) {
-            /** @var HasLatLng $model */
-            $model->lat = round($model->lat, 4);
-            $model->lng = round($model->lng, 4);
+        $roundLatLngFn = static function (Model&HasLatLngInterface $model) {
+            $latLng = $model->getLatLng();
+            $model->setLatLng(new LatLng(
+                round($latLng->getLat(), 4),
+                round($latLng->getLng(), 4),
+                $latLng->getFloor(),
+            ));
 
             return $model;
         };
 
-        $roundLatLngVerticesFn = static function (mixed $model) {
-            /** @var HasVertices $model */
+        $roundLatLngVerticesFn = static function (Model&HasVerticesInterface $model) {
             $decodedLatLngs = $model->getDecodedLatLngs();
             foreach ($decodedLatLngs as $latLng) {
                 $latLng->setLat(round($latLng->getLat(), 4));
                 $latLng->setLng(round($latLng->getLng(), 4));
             }
-            $model->vertices_json = json_encode($decodedLatLngs->toArray());
+            $model->setAttribute('vertices_json', json_encode($decodedLatLngs->toArray()));
 
             return $model;
         };
         $roundLatLngPolyLinesFn = static function (mixed $model) use ($roundLatLngVerticesFn) {
-            /** @var HasVertices $polyline */
+            /** @var Model&HasVerticesInterface $polyline */
             $polyline = $model->polyline;
 
             return $roundLatLngVerticesFn($polyline);
         };
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without([
-            'npc',
-            'type',
-        ])->get()->makeVisible(['mdt_scale'])->values()
+        $enemies = $floor->enemiesForExport()
+            ->without([
+                'npc',
+                'type',
+            ])
+            ->get()
+            ->makeVisible(['mdt_scale'])
+            ->values()
             ->each($roundLatLngFn);
 
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
-        $enemyPatrols = $floor->enemyPatrolsForExport->values()->makeVisible(['mdtPolyline'])->each($roundLatLngPolyLinesFn);
-        /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
+        $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
+        /** @var EloquentCollection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values()->each($roundLatLngFn);
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
         $dungeonFloorSwitchMarkers
@@ -510,7 +519,7 @@ class Save extends Command
             })
             ->each($roundLatLngFn);
 
-        /** @var \Illuminate\Database\Eloquent\Collection $mapIcons */
+        /** @var EloquentCollection $mapIcons */
         $mapIcons        = $floor->mapIconsForExport->values()->each($roundLatLngFn);
         $mountableAreas  = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
         $floorUnions     = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values()->each($roundLatLngFn);

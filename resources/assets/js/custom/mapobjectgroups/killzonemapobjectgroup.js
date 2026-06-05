@@ -65,6 +65,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         mapObject.unregister('killzone:enemyremoved', this);
         mapObject.unregister('killzone:enemyadded', this);
+        mapObject.unregister('killzone:enemieschanged', this);
         mapObject.unregister('killzone:obsoleteenemychanged', this);
         mapObject.unregister('killzone:overpulledenemyadded', this);
         mapObject.unregister('killzone:obsoleteenemychanged', this);
@@ -81,6 +82,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         mapObject.register('killzone:enemyremoved', this, this._onKillZoneEnemyRemoved.bind(this));
         mapObject.register('killzone:enemyadded', this, this._onKillZoneEnemyAdded.bind(this));
+        mapObject.register('killzone:enemieschanged', this, this._onKillZoneEnemiesChanged.bind(this));
         mapObject.register('killzone:overpulledenemyremoved', this, this._onKillZoneOverpulledEnemyRemoved.bind(this));
         mapObject.register('killzone:overpulledenemyadded', this, this._onKillZoneOverpulledEnemyAdded.bind(this));
         mapObject.register('killzone:obsoleteenemychanged', this, this._onKillZoneObsoleteEnemyChanged.bind(this));
@@ -102,6 +104,15 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
             enemy: killZoneEnemyAddedEvent.data.enemy
         });
         this.signal('killzone:changed', {killzone: killZoneEnemyAddedEvent.context});
+    }
+
+    _onKillZoneEnemiesChanged(killZoneEnemiesChangedEvent) {
+        this.signal('killzone:enemieschanged', {
+            killzone: killZoneEnemiesChangedEvent.context,
+            previousForces: killZoneEnemiesChangedEvent.data.previousForces,
+            newForces: killZoneEnemiesChangedEvent.data.newForces,
+        });
+        this.signal('killzone:changed', {killzone: killZoneEnemiesChangedEvent.context});
     }
 
     _onKillZoneOverpulledEnemyRemoved(killZoneEnemyRemovedEvent) {
@@ -214,6 +225,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
      */
     createNewPull(enemyIds = [], afterIndex = null) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
+
+        if (this.hasPendingObject()) {
+            console.warn('KillZoneMapObjectGroup: ignoring createNewPull, a pull is still being synced');
+            return null;
+        }
 
         let toSave = [];
         // If we're inserting it last - we don't affect existing killzones
@@ -413,7 +429,11 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
                     }
                 }
 
-                if (callback !== null) {
+                /** @type KillZonePathMapObjectGroup */
+                let killZonePathMapObjectGroup = self.manager.getByName(MAP_OBJECT_GROUP_KILLZONE_PATH);
+                killZonePathMapObjectGroup.refresh([]);
+
+                if (callback !== null && typeof callback === 'function') {
                     callback();
                 }
 

@@ -1,5 +1,12 @@
-class ProfileView extends InlineCode {
+/**
+ * @typedef {Object} ProfileViewOptions
+ * @property {Object} user
+ */
 
+/**
+ * @property {ProfileViewOptions} options
+ */
+class ProfileView extends InlineCode {
 
     activate() {
         super.activate();

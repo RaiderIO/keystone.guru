@@ -11,6 +11,7 @@ use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
@@ -20,6 +21,7 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 /**
  * This class is used as a filter to extract CombatLogEvents from Opensearch.
@@ -55,10 +57,11 @@ class CombatLogEventFilter implements Arrayable
     private ?int $minSamplesRequired = null;
 
     public function __construct(
-        private readonly SeasonServiceInterface  $seasonService,
-        private readonly Dungeon                 $dungeon,
-        private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType  $dataType,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private readonly Dungeon                          $dungeon,
+        private readonly CombatLogEventEventType          $eventType,
+        private readonly CombatLogEventDataType           $dataType,
     ) {
         $this->affixes                     = collect();
         $this->classes                     = collect();
@@ -441,15 +444,15 @@ class CombatLogEventFilter implements Arrayable
             $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
             if ($mostRecentSeason !== null) {
                 /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
-                $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
+                $weeklyAffixGroupsSinceStart = $this->seasonAffixGroupService->getWeeklyAffixGroupsSinceStart(
                     $mostRecentSeason,
                     GameServerRegion::getUserOrDefaultRegion(),
                 );
 
                 /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
-                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period);
+                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason->start_period);
                 /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
-                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period);
+                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(fn(WeeklyAffixGroup $weeklyAffixGroup) => $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason->start_period);
 
                 // Add a date range filter
                 $must[] = Range::make('start', [
@@ -471,11 +474,13 @@ class CombatLogEventFilter implements Arrayable
     }
 
     public static function fromHeatmapDataFilter(
-        SeasonServiceInterface $seasonService,
-        HeatmapDataFilter      $heatmapDataFilter,
+        SeasonServiceInterface           $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        HeatmapDataFilter                $heatmapDataFilter,
     ): CombatLogEventFilter {
         $combatLogEventFilter = new CombatLogEventFilter(
             $seasonService,
+            $seasonAffixGroupService,
             $heatmapDataFilter->getDungeon(),
             $heatmapDataFilter->getEventType(),
             $heatmapDataFilter->getDataType(),
@@ -499,8 +504,8 @@ class CombatLogEventFilter implements Arrayable
 
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
             $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
-            if ($timerSeconds === null) {
-                throw new \InvalidArgumentException('Mapping version does not have a timer max seconds value');
+            if ($timerSeconds === null) { // @phpstan-ignore identical.alwaysFalse
+                throw new InvalidArgumentException('Mapping version does not have a timer max seconds value');
             }
 
             $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);

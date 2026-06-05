@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class ExtraAttacks extends Suffix
 {
@@ -13,7 +14,7 @@ class ExtraAttacks extends Suffix
         return $this->amount;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

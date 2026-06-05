@@ -5,7 +5,6 @@ namespace App\SeederHelpers\RelationImport\Mapping;
 use App\SeederHelpers\RelationImport\Conditionals\ConditionalInterface;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\AttributeParserInterface;
 use App\SeederHelpers\RelationImport\Parsers\Relation\RelationParserInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -120,7 +119,7 @@ abstract class RelationMapping
     }
 
     /**
-     * @return Model|string
+     * @return class-string
      */
     public function getClass(): string
     {
@@ -130,5 +129,16 @@ abstract class RelationMapping
     public function isPersistent(): bool
     {
         return $this->persistent;
+    }
+
+    /**
+     * Columns whose values should be copied from the live table into the temp table before the swap,
+     * so that combat-log-derived data survives a re-seed.
+     *
+     * @return string[]
+     */
+    public function getPreservedColumns(): array
+    {
+        return [];
     }
 }

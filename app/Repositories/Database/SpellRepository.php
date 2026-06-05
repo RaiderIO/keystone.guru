@@ -20,7 +20,6 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->leftJoin('spells', 'npc_spells.spell_id', '=', 'spells.id')
             ->whereNull('spells.id') // Ensure spell doesn't exist in spells table
             ->distinct()
-            ->get()
             ->pluck('npc_spells.spell_id')
             ->toArray();
     }
@@ -29,6 +28,14 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
     {
         return Spell::query()
             ->whereIn('id', $spellIds)
+            ->get()
+            ->keyBy('id');
+    }
+
+    public function getAllWithCharacteristic(): Collection
+    {
+        return Spell::query()
+            ->whereNotNull('characteristic_id')
             ->get()
             ->keyBy('id');
     }

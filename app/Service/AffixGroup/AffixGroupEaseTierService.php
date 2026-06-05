@@ -8,8 +8,10 @@ use App\Models\AffixGroup\AffixGroupEaseTier;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Models\Dungeon;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Carbon\Exceptions\InvalidFormatException;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -40,6 +42,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     public function __construct(
         private readonly SeasonServiceInterface                    $seasonService,
+        private readonly SeasonAffixGroupServiceInterface          $seasonAffixGroupService,
         private readonly AffixGroupEaseTierServiceLoggingInterface $log,
     ) {
     }
@@ -72,7 +75,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     /**
      * {@inheritDoc}
-     * @throws \Exception
+     * @throws Exception
      */
     public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull
     {
@@ -81,8 +84,9 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixGroupString = $tierListsResponse['encounterTierList']['label'];
         // TWW S1 _kinda_ did away with affixes, but I still have them, Archon removed them
         // so I'm just subbing them with the current affix group if not set
-        $affixGroup = $affixGroupString === null
-            ? $this->seasonService->getCurrentSeason()?->getCurrentAffixGroup()
+        $currentSeason = $this->seasonService->getCurrentSeason();
+        $affixGroup    = $affixGroupString === null
+            ? ($currentSeason !== null ? $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null)
             : $this->getAffixGroupByString($affixGroupString);
 
         if ($affixGroup === null) {
@@ -131,7 +135,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                         /** @var array{id: int, name: string, url: string} $dungeon */
                         // If found
                         $archonDungeonName = $dungeon['name'];
-                        $dungeon           = $dungeonList->get($archonDungeonName);
+                        /** @var Dungeon|null $dungeon */
+                        $dungeon = $dungeonList->get($archonDungeonName);
 
                         if ($dungeon === null) {
                             $this->log->parseTierListUnknownDungeon($archonDungeonName);
@@ -195,7 +200,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
         $latestAffixGroupEaseTierPull = AffixGroupEaseTierPull::latest()->first();
         if ($latestAffixGroupEaseTierPull !== null) {
-            /** @var AffixGroupEaseTier|null $affixGroupEaseTier */
+            /** @var Collection<int, AffixGroupEaseTier> $result */
             $result = $latestAffixGroupEaseTierPull->affixGroupEaseTiers()
                 ->whereIn('affix_group_id', $affixGroups->pluck('id')->toArray())
                 ->get()
@@ -234,7 +239,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixes = collect(explode(', ', $affixString));
 
         // Filter out properties that don't have the correct amount of affixes
-        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
+        if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) { // @phpstan-ignore notIdentical.alwaysTrue
             // Check if there's any affixes in the list that we cannot find in our own database
             $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(
                 Affix $affix,

@@ -33,7 +33,8 @@ $showSiegeWarning  ??= false;
 $selected          ??= null;
 $ignoreGameVersion ??= false;
 $multiple          ??= false;
-$dungeonsSelect    = [];
+$dungeonsSelect   = [];
+$seasonDungeonIds = collect();
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
 if (!isset($dungeons)) {
@@ -84,6 +85,8 @@ if (!isset($dungeons)) {
             $dungeonsSelect[$showLongName && $season->id === $nextSeason->id ? $season->name_long : $season->name] = $season->dungeons
                 ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)])
                 ->toArray();
+
+            $seasonDungeonIds = $seasonDungeonIds->merge($season->dungeons->pluck('id'));
         }
     }
 
@@ -113,6 +116,12 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
                         'game_version_id',
                         $currentUserGameVersion->id
                     )
+                )
+            )
+            ->when(
+                $seasonDungeonIds->isNotEmpty(),
+                static fn(Collection $collection) => $collection->reject(
+                    static fn(Dungeon $dungeon) => $seasonDungeonIds->contains($dungeon->id)
                 )
             );
 

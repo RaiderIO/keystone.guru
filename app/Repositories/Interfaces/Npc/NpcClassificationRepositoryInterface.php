@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                          update(NpcClassification $model, array $attributes = [], array $options = [])
  * @method bool                          delete(NpcClassification $model)
  * @method Collection<NpcClassification> all()
+ * @method bool                          exists(array $columns)
  */
 interface NpcClassificationRepositoryInterface extends BaseRepositoryInterface
 {

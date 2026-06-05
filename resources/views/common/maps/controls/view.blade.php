@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
  * @var Collection<Floor> $floors
  * @var DungeonRoute|null $dungeonroute
  * @var bool              $isMobile
+ * @var bool              $facadeEnabled
  */
 ?>
 <nav
@@ -44,6 +45,10 @@ use Illuminate\Support\Collection;
         </div>
 
         <div id="view_route_misc_actions_container">
+            @if($facadeEnabled)
+                @include('common.maps.controls.elements.facadetoggle')
+            @endif
+
             @include('common.maps.controls.elements.labeltoggle')
         </div>
     </div>

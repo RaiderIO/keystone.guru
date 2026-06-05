@@ -7,10 +7,10 @@ use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc\NpcClassification;
 use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\Traits\RemembersToFile;
@@ -67,7 +67,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
-                    5 => $this->convertHtmlToMdtComment($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''),
+                    5 => $this->convertHtmlToMdtComment($mapIcon->comment ?? __($mapIcon->mapIconType?->name) ?? ''), // @phpstan-ignore nullsafe.neverNull, nullCoalesce.expr
                 ],
             ];
         }
@@ -182,9 +182,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $html = preg_replace_callback(
             '/<a\b[^>]*?href=(?:"([^"]+)"|\'([^\']+)\')[^>]*>.*?<\/a>/i',
             static function (array $matches): string {
-                $href = $matches[1] !== '' ? $matches[1] : ($matches[2] ?? '');
+                $href = $matches[1] !== '' ? $matches[1] : $matches[2];
 
-                return $href !== '' ? sprintf('(%s)', $href) : '';
+                return sprintf('(%s)', $href);
             },
             $html,
         );
@@ -201,6 +201,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
+        /** @var Collection<Enemy> $mdtEnemies */
         $mdtEnemies = new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon)
             ->getClonesAsEnemies($mappingVersion, $this->dungeonRoute->dungeon->floors);
 
@@ -233,13 +234,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If we couldn't find the enemy in MDT..
                 if ($mdtNpcIndex === -1) {
                     // Add a warning as long as it's not a boss - we don't particularly care since they have 0 count anyways
-                    if (!in_array(
-                        $enemy->npc->classification_id,
-                        [
-                            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                        ],
-                    )) {
+                    if (!$enemy->npc->isBoss()) {
                         $warnings->push(new ImportWarning(
                             sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
                             sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), __($enemy->npc->name), $enemy->id, $enemy->getMdtNpcId()),

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                   update(RaidMarker $model, array $attributes = [], array $options = [])
  * @method bool                   delete(RaidMarker $model)
  * @method Collection<RaidMarker> all()
+ * @method bool                   exists(array $columns)
  */
 interface RaidMarkerRepositoryInterface extends BaseRepositoryInterface
 {

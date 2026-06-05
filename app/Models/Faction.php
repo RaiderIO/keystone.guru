@@ -6,8 +6,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
@@ -16,8 +16,8 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property string $color
  *
- * @property Collection<CharacterRace> $races
- * @property Collection<DungeonRoute>  $dungeonRoutes
+ * @property EloquentCollection<int, CharacterRace> $races
+ * @property EloquentCollection<int, DungeonRoute>  $dungeonRoutes
  *
  * @mixin Eloquent
  */

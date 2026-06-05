@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                                         update(SimulationCraftRaidEventsOptions $model, array $attributes = [], array $options = [])
  * @method bool                                         delete(SimulationCraftRaidEventsOptions $model)
  * @method Collection<SimulationCraftRaidEventsOptions> all()
+ * @method bool                                         exists(array $columns)
  */
 interface SimulationCraftRaidEventsOptionsRepositoryInterface extends BaseRepositoryInterface
 {

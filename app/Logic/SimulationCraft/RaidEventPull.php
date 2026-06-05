@@ -171,7 +171,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      * that we cannot mount, and 1 means we can mount all the way through. The mountCasts value indicates how many times
      * the user was dismounted and needed to re-cast their mount spell, which takes some time.
      *
-     * @return array{array{factor: float, speed: int}, mountCasts: int}
+     * @return array{0: list<array{factor: float, speed: int}>, 1: int}
      */
     public function calculateMountedFactorAndMountCastsBetweenPoints(
         LatLng $latLngA,

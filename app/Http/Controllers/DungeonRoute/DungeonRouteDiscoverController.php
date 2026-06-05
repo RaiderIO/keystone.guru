@@ -15,6 +15,7 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -28,7 +29,7 @@ use Illuminate\View\View;
 class DungeonRouteDiscoverController extends Controller
 {
     /**
-     * @return Factory|View
+     * @return View
      */
     public function search(
         SeasonServiceInterface $seasonService,
@@ -37,10 +38,10 @@ class DungeonRouteDiscoverController extends Controller
         $nextSeason    = $seasonService->getNextSeasonOfExpansion();
 
         return view('dungeonroute.discover.search', [
-            'currentSeasonKeyLevelMin' => $currentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'currentSeasonKeyLevelMax' => $currentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-            'nextSeasonKeyLevelMin'    => $nextSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'nextSeasonKeyLevelMax'    => $nextSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+            'currentSeasonKeyLevelMin' => $currentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'currentSeasonKeyLevelMax' => $currentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
+            'nextSeasonKeyLevelMin'    => $nextSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'nextSeasonKeyLevelMax'    => $nextSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
         ]);
     }
 
@@ -75,9 +76,10 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverSeason(
-        GameVersion              $gameVersion,
-        string                   $seasonIndex,
-        DiscoverServiceInterface $discoverService,
+        GameVersion                      $gameVersion,
+        string                           $seasonIndex,
+        DiscoverServiceInterface         $discoverService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ) {
         // Redirect to the default game version (retail, which DOES have seasons and is active)
         if (!$gameVersion->has_seasons) {
@@ -95,8 +97,8 @@ class DungeonRouteDiscoverController extends Controller
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $season->getCurrentAffixGroupInRegion($userRegion);
-        $nextAffixGroup    = $season->getNextAffixGroupInRegion($userRegion);
+        $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion);
+        $nextAffixGroup    = $seasonAffixGroupService->getNextAffixGroupInRegion($season, $userRegion);
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.season',
@@ -117,7 +119,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -154,7 +156,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -196,8 +198,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @param  Dungeon                  $dungeon
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -238,7 +239,7 @@ class DungeonRouteDiscoverController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -339,13 +340,14 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverDungeon(
-        GameVersion                     $gameVersion,
-        Dungeon                         $dungeon,
-        DiscoverServiceInterface        $discoverService,
-        ExpansionServiceInterface       $expansionService,
-        SeasonServiceInterface          $seasonService,
-        DungeonServiceInterface         $dungeonService,
-        DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        DiscoverServiceInterface         $discoverService,
+        ExpansionServiceInterface        $expansionService,
+        SeasonServiceInterface           $seasonService,
+        DungeonServiceInterface          $dungeonService,
+        DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ): View {
         Gate::authorize('view', $gameVersion);
         Gate::authorize('view', $dungeon);
@@ -360,8 +362,8 @@ class DungeonRouteDiscoverController extends Controller
         $currentSeason = $seasonService->getCurrentSeason();
 
         if ($currentSeason->hasDungeon($dungeon)) {
-            $currentAffixGroup = $currentSeason->getCurrentAffixGroupInRegion($userRegion);
-            $nextAffixGroup    = $currentSeason->getNextAffixGroupInRegion($userRegion);
+            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($currentSeason, $userRegion);
+            $nextAffixGroup    = $seasonAffixGroupService->getNextAffixGroupInRegion($currentSeason, $userRegion);
 
             $discoverService = $discoverService->withSeason($currentSeason);
         } else {
@@ -516,12 +518,13 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverDungeonThisWeek(
-        GameVersion               $gameVersion,
-        Dungeon                   $dungeon,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService,
-        DungeonServiceInterface   $dungeonService,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        DiscoverServiceInterface         $discoverService,
+        ExpansionServiceInterface        $expansionService,
+        SeasonServiceInterface           $seasonService,
+        DungeonServiceInterface          $dungeonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ): View|RedirectResponse {
         if (!$gameVersion->has_seasons) {
             return redirect()->route('dungeonroutes');
@@ -534,7 +537,7 @@ class DungeonRouteDiscoverController extends Controller
         $currentSeason = $seasonService->getCurrentSeason(null, $userRegion);
 
         if ($currentSeason->hasDungeon($dungeon)) {
-            $currentAffixGroup = $currentSeason->getCurrentAffixGroupInRegion($userRegion);
+            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($currentSeason, $userRegion);
 
             $discoverService = $discoverService->withSeason($currentSeason);
         } else {
@@ -562,12 +565,13 @@ class DungeonRouteDiscoverController extends Controller
      * @throws Exception
      */
     public function discoverDungeonNextWeek(
-        GameVersion               $gameVersion,
-        Dungeon                   $dungeon,
-        DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService,
-        DungeonServiceInterface   $dungeonService,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        DiscoverServiceInterface         $discoverService,
+        ExpansionServiceInterface        $expansionService,
+        SeasonServiceInterface           $seasonService,
+        DungeonServiceInterface          $dungeonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ): View|RedirectResponse {
         if (!$gameVersion->has_seasons) {
             return redirect()->route('dungeonroutes');
@@ -580,7 +584,7 @@ class DungeonRouteDiscoverController extends Controller
         $currentSeason = $seasonService->getCurrentSeason($gameVersion->expansion, $userRegion);
 
         if ($currentSeason->hasDungeon($dungeon)) {
-            $nextAffixGroup = $currentSeason->getNextAffixGroupInRegion($userRegion);
+            $nextAffixGroup = $seasonAffixGroupService->getNextAffixGroupInRegion($currentSeason, $userRegion);
 
             $discoverService = $discoverService->withSeason($currentSeason);
         } else {

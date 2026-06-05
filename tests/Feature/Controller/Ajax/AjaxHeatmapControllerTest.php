@@ -9,6 +9,7 @@ use App\Models\Dungeon;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -100,6 +101,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     {
         $combatLogEventFilter = new CombatLogEventFilter(
             App::make(SeasonServiceInterface::class),
+            App::make(SeasonAffixGroupServiceInterface::class),
             $dungeon,
             self::EVENT_TYPE,
             self::DATA_TYPE,

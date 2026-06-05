@@ -33,28 +33,30 @@ trait SpellConstants
         self::SCHOOL_ARCANE   => 'arcane',
     ];
 
-    public const int MISS_TYPE_ABSORB  = 1;
-    public const int MISS_TYPE_BLOCK   = 2;
-    public const int MISS_TYPE_DEFLECT = 4;
-    public const int MISS_TYPE_DODGE   = 8;
-    public const int MISS_TYPE_EVADE   = 16;
-    public const int MISS_TYPE_IMMUNE  = 32;
-    public const int MISS_TYPE_MISS    = 64;
-    public const int MISS_TYPE_PARRY   = 128;
-    public const int MISS_TYPE_REFLECT = 256;
-    public const int MISS_TYPE_RESIST  = 512;
+    public const int MISS_TYPE_ABSORB    = 1;
+    public const int MISS_TYPE_BLOCK     = 2;
+    public const int MISS_TYPE_DEFLECT   = 4;
+    public const int MISS_TYPE_DODGE     = 8;
+    public const int MISS_TYPE_EVADE     = 16;
+    public const int MISS_TYPE_IMMUNE    = 32;
+    public const int MISS_TYPE_MISS      = 64;
+    public const int MISS_TYPE_PARRY     = 128;
+    public const int MISS_TYPE_REFLECT   = 256;
+    public const int MISS_TYPE_RESIST    = 512;
+    public const int MISS_TYPE_INTERRUPT = 1024;
 
     public const array ALL_MISS_TYPES = [
-        self::MISS_TYPE_ABSORB  => 'absorb',
-        self::MISS_TYPE_BLOCK   => 'block',
-        self::MISS_TYPE_DEFLECT => 'deflect',
-        self::MISS_TYPE_DODGE   => 'dodge',
-        self::MISS_TYPE_EVADE   => 'evade',
-        self::MISS_TYPE_IMMUNE  => 'immune',
-        self::MISS_TYPE_MISS    => 'miss',
-        self::MISS_TYPE_PARRY   => 'parry',
-        self::MISS_TYPE_REFLECT => 'reflect',
-        self::MISS_TYPE_RESIST  => 'resist',
+        self::MISS_TYPE_ABSORB    => 'absorb',
+        self::MISS_TYPE_BLOCK     => 'block',
+        self::MISS_TYPE_DEFLECT   => 'deflect',
+        self::MISS_TYPE_DODGE     => 'dodge',
+        self::MISS_TYPE_EVADE     => 'evade',
+        self::MISS_TYPE_IMMUNE    => 'immune',
+        self::MISS_TYPE_MISS      => 'miss',
+        self::MISS_TYPE_PARRY     => 'parry',
+        self::MISS_TYPE_REFLECT   => 'reflect',
+        self::MISS_TYPE_RESIST    => 'resist',
+        self::MISS_TYPE_INTERRUPT => 'interrupt',
     ];
 
     public const array GUID_MISS_TYPE_MAPPING = [
@@ -236,6 +238,13 @@ trait SpellConstants
     public const int SPELL_THUNDEROUS_DRUMS      = 444257;
     public const int SPELL_HARRIERS_CRY          = 466904;
     public const int SPELL_SHROUD_OF_CONCEALMENT = 114018;
+    public const int SPELL_CONTROL_UNDEAD        = 111673;
+    public const int SPELL_SUBJUGATE_DEMON       = 1098;
+
+    public const array CHARM_SPELLS = [
+        self::SPELL_CONTROL_UNDEAD,
+        self::SPELL_SUBJUGATE_DEMON,
+    ];
 
     public const array BLOODLUSTY_SPELLS = [
         self::SPELL_BLOODLUST,

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                         update(ReleaseChangelog $model, array $attributes = [], array $options = [])
  * @method bool                         delete(ReleaseChangelog $model)
  * @method Collection<ReleaseChangelog> all()
+ * @method bool                         exists(array $columns)
  */
 interface ReleaseChangelogRepositoryInterface extends BaseRepositoryInterface
 {

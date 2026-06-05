@@ -18,6 +18,9 @@ class DungeonSpeedrunRequiredNpcsControls extends MapControl {
             killZoneMapObjectGroup.register('killzone:enemyremoved', this, function (removedEvent) {
                 self._onEnemySelectionChanged(removedEvent);
             });
+            killZoneMapObjectGroup.register('killzone:enemieschanged', this, function (changedEvent) {
+                self._onEnemySelectionChanged(changedEvent);
+            });
             // killZoneMapObjectGroup.register('object:add', this, function (addEvent) {
             //     addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
             // });

@@ -1,5 +1,5 @@
 // https://www.wowhead.com/tooltips
-const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};
+const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: false};
 window.WH = new function () {
     this.REMOTE = !("." + location.hostname).endsWith(".wowhead.com") && location.hostname !== "wh-site" || location.pathname === "/widgets/power/demo.html";
     this.STATIC_URL = "https://wow.zamimg.com";

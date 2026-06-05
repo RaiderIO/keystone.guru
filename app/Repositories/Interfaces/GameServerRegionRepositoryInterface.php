@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                         update(GameServerRegion $model, array $attributes = [], array $options = [])
  * @method bool                         delete(GameServerRegion $model)
  * @method Collection<GameServerRegion> all()
+ * @method bool                         exists(array $columns)
  */
 interface GameServerRegionRepositoryInterface extends BaseRepositoryInterface
 {

@@ -11,7 +11,9 @@
 |
 */
 
+use App\Features\NpcCompendium;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
+use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
 use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
 use App\Http\Controllers\AdminTools\AdminToolsDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsEnemyForcesController;
@@ -56,6 +58,9 @@ use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Compendium\ClassCompendiumController;
+use App\Http\Controllers\Compendium\NpcCompendiumController;
+use App\Http\Controllers\Compendium\SpellCompendiumController;
 use App\Http\Controllers\Dungeon\DungeonController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
 use App\Http\Controllers\Dungeon\DungeonHeatmapController;
@@ -84,18 +89,19 @@ use App\Http\Controllers\SpellController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReportController;
-use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Webhook\GithubWebhookController;
+use App\Http\Controllers\Webhook\WowheadWebhookController;
 use App\Http\Middleware\WowheadCors;
 
 // Webhooks
 Route::prefix('webhook')->group(static function () {
-    Route::post('github', new WebhookController()->github(...))->name('webhook.github');
+    Route::post('github', new GithubWebhookController()->github(...))->name('webhook.github');
     Route::middleware([WowheadCors::class])->group(static function () {
-        Route::options('wowhead/spell', new WebhookController()->wowheadOptions(...));
-        Route::post('wowhead/spell', new WebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');
+        Route::options('wowhead/spell', new WowheadWebhookController()->wowheadOptions(...));
+        Route::post('wowhead/spell', new WowheadWebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');
 
-        Route::options('wowhead/npc', new WebhookController()->wowheadOptions(...));
-        Route::post('wowhead/npc', new WebhookController()->wowheadNpc(...))->name('webhook.wowhead.npc');
+        Route::options('wowhead/npc', new WowheadWebhookController()->wowheadOptions(...));
+        Route::post('wowhead/npc', new WowheadWebhookController()->wowheadNpc(...))->name('webhook.wowhead.npc');
     });
 });
 
@@ -151,6 +157,30 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');
     });
+
+    // Compendium
+    Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
+        ->prefix('compendium')->group(static function () {
+            Route::prefix('npc')->group(static function () {
+                Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
+                Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
+            });
+            Route::prefix('spell')->group(static function () {
+                Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
+                Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
+            });
+            Route::prefix('activity')->group(static function () {
+                Route::get('/', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
+                Route::prefix('{dungeon}')->group(static function () {
+                    Route::get('/', new NpcCompendiumController()->activity(...))->name('compendium.activity');
+                    Route::get('/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
+                });
+            });
+            Route::prefix('class')->group(static function () {
+                Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
+                Route::get('/{characterClass:key}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
+            });
+        });
 
     // Game version toggle
     Route::prefix('gameversion')->group(static function () {
@@ -435,6 +465,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Combat log
                 Route::get('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
                 Route::post('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
+                Route::get('combatlog/criteria', new AdminToolsCombatLogCriteriaController()->criteria(...))->name('admin.tools.combatlog.criteria.view');
+                Route::post('combatlog/criteria/reset', new AdminToolsCombatLogCriteriaController()->criteriaReset(...))->name('admin.tools.combatlog.criteria.reset');
+                Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
                     Route::get('string', new AdminToolsMdtController()->mdtview(...))->name('admin.tools.mdt.string.view');
@@ -464,6 +497,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 // Spells
                 Route::get('spells/missingdata', new AdminToolsSpellsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
+                Route::get('spells/savetoseeder', new AdminToolsSpellsController()->spellsSaveToSeeder(...))->name('admin.tools.spells.savetoseeder');
 
                 // NPCs
                 Route::get('npcs/missingdisplayid', new AdminToolsNpcController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
@@ -538,6 +572,17 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/', new AjaxMetricController()->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', new AjaxMetricController()->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });
+
+        // Compendium
+        Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
+            ->prefix('compendium')->group(static function () {
+                Route::prefix('npc')->group(static function () {
+                    Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
+                });
+                Route::prefix('spell')->group(static function () {
+                    Route::get('/', new SpellCompendiumController()->get(...))->name('ajax.spell.compendium.search');
+                });
+            });
 
         // Must be an admin to perform these actions
         Route::middleware(['auth', 'role:admin'])->group(static function () {
@@ -638,6 +683,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 Route::post('/publishedState', new AjaxDungeonRouteController()->publishedState(...))->name('api.dungeonroute.publishedstate');
 
+                Route::put('/scheduledPublish', new AjaxDungeonRouteController()->storeScheduledPublish(...))->name('api.dungeonroute.scheduledpublish.store');
+                Route::delete('/scheduledPublish', new AjaxDungeonRouteController()->destroyScheduledPublish(...))->name('api.dungeonroute.scheduledpublish.destroy');
+
                 Route::post('/rate', new AjaxDungeonRouteController()->rate(...))->name('api.dungeonroute.rate');
                 Route::delete('/rate', new AjaxDungeonRouteController()->rateDelete(...))->name('api.dungeonroute.rate.delete');
 
@@ -655,12 +703,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             // Teams
             Route::prefix('team/{team}')->group(static function () {
-                Route::put('/changedefaultrole', new AjaxTeamController()->changeDefaultRole(...));
-                Route::put('/changerole', new AjaxTeamController()->changeRole(...));
-                Route::post('/route/{dungeonroute}', new AjaxTeamController()->addRoute(...));
-                Route::delete('/member/{user}', new AjaxTeamController()->removeMember(...));
-                Route::delete('/route/{dungeonroute}', new AjaxTeamController()->removeRoute(...));
-                Route::get('/refreshlink', new AjaxTeamController()->refreshInviteLink(...));
+                Route::put('/changedefaultrole', (new AjaxTeamController())->changeDefaultRole(...));
+                Route::put('/routepublishing', (new AjaxTeamController())->changeRoutePublishing(...));
+                Route::put('/changerole', (new AjaxTeamController())->changeRole(...));
+                Route::post('/route/{dungeonroute}', (new AjaxTeamController())->addRoute(...));
+                Route::delete('/member/{user}', (new AjaxTeamController())->removeMember(...));
+                Route::delete('/route/{dungeonroute}', (new AjaxTeamController())->removeRoute(...));
+                Route::get('/refreshlink', (new AjaxTeamController())->refreshInviteLink(...));
                 // Ad-free giveaway
                 Route::post('/member/{user}/adfree', new AjaxTeamController()->addAdFreeGiveaway(...));
                 Route::delete('/member/{user}/adfree', new AjaxTeamController()->removeAdFreeGiveaway(...));

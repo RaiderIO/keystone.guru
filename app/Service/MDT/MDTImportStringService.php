@@ -39,6 +39,7 @@ use App\Service\MDT\Models\ImportStringDetails;
 use App\Service\MDT\Models\ImportStringObjects;
 use App\Service\MDT\Models\ImportStringPulls;
 use App\Service\MDT\Models\ImportStringRiftOffsets;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -66,6 +67,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     public function __construct(
         /** @var SeasonService Used for grabbing info about the current M+ season. */
         private readonly SeasonServiceInterface                 $seasonService,
+        private readonly SeasonAffixGroupServiceInterface       $seasonAffixGroupService,
         private readonly CacheServiceInterface                  $cacheService,
         private readonly CoordinatesServiceInterface            $coordinatesService,
         private readonly MDTImportStringServiceLoggingInterface $log,
@@ -87,7 +89,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         if ($importAsThisWeek || $affixGroup === null) {
             $activeSeason = $dungeon->getActiveSeason($this->seasonService);
             if ($activeSeason !== null) {
-                $affixGroup = $activeSeason->getCurrentAffixGroup();
+                $affixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($activeSeason);
             }
         }
 
@@ -345,7 +347,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $npcIndex          = (int)$mdtNpcIndex;
         $mdtClones         = $mdtNpcClones;
 
-        $totalEnemiesSelected += count($mdtClones);
+        $totalEnemiesSelected = (int)($totalEnemiesSelected + count($mdtClones));
         // Only if filled
         foreach ($mdtClones as $index => $cloneIndex) {
             // This comes in through as a double, cast to int
@@ -367,7 +369,6 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             // Find the matching enemy of the clones
-            /** @var Enemy $mdtEnemy */
             $mdtEnemy   = null;
             $isEmissary = false;
             if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
@@ -381,7 +382,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         break;
                     }
 
-                    /** @var $mdtEnemyCandidate Enemy */
+                    /** @var Enemy $mdtEnemyCandidate */
                     if ($mdtEnemyCandidate->mdt_id === $cloneIndex) {
                         // Found it
                         $mdtEnemy = $mdtEnemyCandidate;
@@ -406,12 +407,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             // We now know the MDT enemy that the user was trying to import. However, we need to know
             // our own enemy. Thus, try to find the enemy in our list which has the same npc_id and mdt_id.
-            /** @var Enemy $enemy */
             $enemy = null;
             // Only if we have the npc assigned at all
             if ($enemiesByNpcId->has($mdtEnemy->npc_id)) {
                 foreach ($enemiesByNpcId->get($mdtEnemy->npc_id) as $enemyCandidate) {
-                    /** @var $enemyCandidate Enemy */
+                    /** @var Enemy $enemyCandidate */
                     if ($enemyCandidate->mdt_id === $mdtEnemy->mdt_id) {
                         $enemy = $enemyCandidate;
                         break;
@@ -460,8 +460,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             $killZoneAttributes['killZoneEnemies'][] = [
-                'npc_id' => $enemy->npc_id,
-                'mdt_id' => $enemy->mdt_id,
+                'npc_id'   => $enemy->npc_id,
+                'mdt_id'   => $enemy->mdt_id,
+                'enemy_id' => $enemy->id,
                 // Cache for the hasFinalBoss check below - it's slow otherwise
                 'enemy' => $enemy,
             ];
@@ -472,7 +473,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             } elseif ($enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
                 $importStringPulls->addEnemyForces($importStringPulls->getMappingVersion()->enemy_forces_shrouded_zul_gamux);
             } else {
-                /** @var NpcEnemyForces $npcEnemyForces */
+                /** @var NpcEnemyForces|null $npcEnemyForces */
                 $npcEnemyForces = $enemyForcesByNpcIds->get($enemy->npc->id);
 
                 if ($npcEnemyForces !== null) {
@@ -646,7 +647,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Get the proper index of the floor, validated for length
                 $mdtSubLevel = ((int)$details[2]);
 
-                /** @var Floor $floor */
+                /** @var Floor|null $floor */
                 $floor = $floors->first(static fn(
                     Floor $floor,
                 ) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
@@ -880,17 +881,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                             $spellId = Spell::SPELL_BLOODLUST;
                         } elseif ($commentLower === 'heroism') {
                             $spellId = Spell::SPELL_HEROISM;
-                        } elseif ($commentLower === 'fury of the aspects') {
+                        } elseif ($commentLower === 'fury of the aspects') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_FURY_OF_THE_ASPECTS;
                         } elseif ($commentLower === 'time warp' || $commentLower === 'timewarp') {
                             $spellId = Spell::SPELL_TIME_WARP;
                         } elseif ($commentLower === 'ancient hysteria') {
                             $spellId = Spell::SPELL_ANCIENT_HYSTERIA;
-                        } elseif ($commentLower === 'drums') {
+                        } elseif ($commentLower === 'drums') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_THUNDEROUS_DRUMS;
-                        } elseif ($commentLower === 'primal rage') {
+                        } elseif ($commentLower === 'primal rage') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_PRIMAL_RAGE;
-                        } elseif ($commentLower === 'harriers cry') {
+                        } elseif ($commentLower === 'harriers cry') { // @phpstan-ignore identical.alwaysFalse
                             $spellId = Spell::SPELL_HARRIERS_CRY;
                         }
 
@@ -987,7 +988,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ), false);
 
             $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
-            $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
+            $currentAffixGroupForDungeon = $currentSeason !== null ? $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null;
 
             return new ImportStringDetails(
                 $warnings,
@@ -995,7 +996,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $dungeon,
                 collect([$affixGroup?->getTextAttribute() ?? '']),
                 $affixGroup !== null && $currentAffixGroupForDungeon !== null &&
-                $affixGroup->id === $currentAffixGroupForDungeon?->id,
+                $affixGroup->id === $currentAffixGroupForDungeon->id,
                 $importStringPulls->getKillZoneAttributes()->count(),
                 $importStringObjects->getPaths()->count(),
                 $importStringObjects->getLines()->count(),
@@ -1080,8 +1081,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 'teeming'    => boolval($decoded['value']['teeming'] ?? false),
                 'title'      => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $decoded['text'],
                 'difficulty' => 'Casual',
-                'level_min'  => $decoded['difficulty'] ?? $season?->key_level_min ?? 2,
-                'level_max'  => $decoded['difficulty'] ?? $season?->key_level_max ?? 2,
+                'level_min'  => $decoded['difficulty'] ?? $season?->key_level_min ?? 2, // @phpstan-ignore nullsafe.neverNull
+                'level_max'  => $decoded['difficulty'] ?? $season?->key_level_max ?? 2, // @phpstan-ignore nullsafe.neverNull
                 'expires_at' => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
             ]);
 

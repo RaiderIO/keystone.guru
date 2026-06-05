@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @method bool                update(Dungeon $model, array $attributes = [], array $options = [])
  * @method bool                delete(Dungeon $model)
  * @method Collection<Dungeon> all()
+ * @method bool                exists(array $columns)
  */
 interface DungeonRepositoryInterface extends BaseRepositoryInterface
 {

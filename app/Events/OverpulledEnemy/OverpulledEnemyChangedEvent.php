@@ -7,6 +7,7 @@ use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 class OverpulledEnemyChangedEvent extends ContextEvent
 {
@@ -21,7 +22,7 @@ class OverpulledEnemyChangedEvent extends ContextEvent
         parent::__construct($context, $user);
     }
 
-    #[\Override]
+    #[Override]
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [

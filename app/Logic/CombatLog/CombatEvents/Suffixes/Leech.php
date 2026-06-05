@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 /**
  * @TODO This seems to be a SpecialEvent that behaves like a regular SPELL_ event with a LEECH suffix. But in V22
@@ -37,7 +38,7 @@ class Leech extends Suffix
     /**
      * @return HasParameters|$this
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);

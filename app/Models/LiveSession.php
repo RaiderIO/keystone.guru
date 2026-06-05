@@ -7,12 +7,13 @@ use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
 use Carbon\CarbonInterface;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Override;
 
 /**
  * @property int    $id
@@ -20,10 +21,10 @@ use Illuminate\Support\Collection;
  * @property int    $user_id
  * @property string $public_key
  *
- * @property User                        $user
- * @property DungeonRoute                $dungeonRoute
- * @property Collection<OverpulledEnemy> $overpulledEnemies
- * @property Carbon                      $expires_at
+ * @property User                                     $user
+ * @property DungeonRoute|null                        $dungeonRoute
+ * @property EloquentCollection<int, OverpulledEnemy> $overpulledEnemies
+ * @property Carbon|null                              $expires_at
  *
  * @mixin Eloquent
  */
@@ -45,7 +46,7 @@ class LiveSession extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -70,9 +71,9 @@ class LiveSession extends Model
     }
 
     /**
-     * @return Collection<Enemy>
+     * @return EloquentCollection<int, Enemy>
      */
-    public function getEnemies(): Collection
+    public function getEnemies(): EloquentCollection
     {
         return Enemy::select('enemies.*')
             ->join('overpulled_enemies', static function (JoinClause $clause) {
@@ -102,7 +103,7 @@ class LiveSession extends Model
             now()->diffForHumans(Carbon::createFromTimeString($this->expires_at), CarbonInterface::DIFF_ABSOLUTE, true);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

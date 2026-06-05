@@ -10,7 +10,7 @@ parameters:
         - tests/
 
     # Level 9 is the highest level
-    level: 0
+    level: 4
 
     # I have no idea why this is necessary
     scanDirectories:
@@ -23,12 +23,48 @@ parameters:
         maximumNumberOfProcesses: 4
         minimumNumberOfJobsPerProcess: 2
 
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-
     excludePaths:
         # '#Keyword continue used outside of a loop or a switch statement#'
         - resources/views/admin/tools/mdt/dungeonmappingversionaccuracy.blade.php
-#
+        # Legacy migrations ran against old framework API (Blueprint::double with column/total args removed in L10+)
+        - database/migrations_legacy/
+        # Legacy Laravel 5-style factory file, superseded by class-based factories
+        - database/factories/ModelFactory.php
+
+    ignoreErrors:
+        # Blade templates use ??= as a pattern to set optional variable defaults
+        - identifier: nullCoalesce.variable
+          path: resources/views
+        # Blade templates use isset() for optional variables
+        - identifier: isset.variable
+          path: resources/views
+        # Blade foreach loop variables and view-composer-provided variables
+        - identifier: variable.undefined
+          path: resources/views
+        # Blade templates captured variables that phpstan thinks are unused
+        - identifier: closure.unusedUse
+          path: resources/views
+        # TrayLabs InfluxDB facade — writePoints() is a magic method not declared in the facade stub
+        # reportUnmatched: false — errors appear in CI (fresh vendor) but not locally (cached reflection)
+        - identifier: staticMethod.notFound
+          reportUnmatched: false
+          paths:
+            - app/Console/Commands/Traits/SavesToInfluxDB.php
+            - app/Console/Commands/Scheduler/Telemetry/Telemetry.php
+        # HasLatLng trait: @property annotations say nullable, but specific class contexts infer non-null.
+        # The null-guard is correct — the trait is used in both nullable and non-nullable contexts.
+        - identifier: booleanAnd.alwaysTrue
+          path: app/Models/Traits/HasLatLng.php
+        - identifier: notIdentical.alwaysTrue
+          path: app/Models/Traits/HasLatLng.php
+        # These traits exist for potential future use / are referenced dynamically
+        - identifier: trait.unused
+          path: app/Http/Controllers/Traits/ChecksForDuplicates.php
+        - identifier: trait.unused
+          path: app/Http/Controllers/Traits/ListsKillzones.php
+        - identifier: trait.unused
+          path: app/Logic/MapContext/Traits/DungeonRouteProperties.php
+        - identifier: trait.unused
+          path: app/Traits/CompressesImages.php
+
 #    checkMissingIterableValueType: false

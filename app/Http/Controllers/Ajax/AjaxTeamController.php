@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
+use App\Http\Requests\Team\TeamRoutePublishingFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
@@ -38,6 +39,18 @@ class AjaxTeamController extends Controller
         Gate::authorize('change-default-role', $team);
 
         $team->update(['default_role' => $request->get('default_role')]);
+
+        return response()->noContent();
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function changeRoutePublishing(TeamRoutePublishingFormRequest $request, Team $team): Response
+    {
+        Gate::authorize('change-route-publishing', $team);
+
+        $team->update(['route_publishing_enabled' => $request->get('enabled')]);
 
         return response()->noContent();
     }
@@ -166,7 +179,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return PatreonAdFreeGiveaway
      *
      * @throws AuthorizationException
      */
@@ -196,7 +209,7 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return Response
      *
      * @throws AuthorizationException
      */

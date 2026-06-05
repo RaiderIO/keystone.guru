@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                  update(Brushline $model, array $attributes = [], array $options = [])
  * @method bool                  delete(Brushline $model)
  * @method Collection<Brushline> all()
+ * @method bool                  exists(array $columns)
  */
 interface BrushlineRepositoryInterface extends BaseRepositoryInterface
 {

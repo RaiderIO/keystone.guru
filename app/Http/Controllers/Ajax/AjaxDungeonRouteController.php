@@ -15,6 +15,7 @@ use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
+use App\Http\Requests\DungeonRoute\ScheduledPublishFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -30,10 +31,12 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRouteRating;
+use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
@@ -44,15 +47,16 @@ use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -76,7 +80,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function get(Request $request, ThumbnailServiceInterface $thumbnailService)
+    public function get(Request $request, ThumbnailServiceInterface $thumbnailService, SeasonServiceInterface $seasonService, SeasonAffixGroupServiceInterface $seasonAffixGroupService)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -88,7 +92,7 @@ class AjaxDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with([
+        $withRelations = [
             'faction',
             'specializations',
             'classes',
@@ -101,7 +105,13 @@ class AjaxDungeonRouteController extends Controller
             'ratings',
             'metricAggregations',
             $tagsRelationshipName,
-        ])
+        ];
+
+        if ($teamPublicKey) {
+            $withRelations[] = 'scheduledPublish';
+        }
+
+        $routes = DungeonRoute::with($withRelations)
             ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -150,7 +160,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // If logged in
-        if ($user !== null) {
+        if ($user !== null) { // @phpstan-ignore notIdentical.alwaysTrue
             $mine = $request->get('mine', false);
 
             // Handle favorites
@@ -224,7 +234,7 @@ class AjaxDungeonRouteController extends Controller
             // Handles any searching/filtering based on dungeon
             new DungeonColumnHandler($dtHandler),
             // Handles any searching/filtering based on DR Affixes
-            new DungeonRouteAffixesColumnHandler($dtHandler),
+            new DungeonRouteAffixesColumnHandler($dtHandler, $seasonService, $seasonAffixGroupService),
             // Sort by the amount of attributes
             new DungeonRouteAttributesColumnHandler($dtHandler),
             // Allow sorting by author name
@@ -254,6 +264,7 @@ class AjaxDungeonRouteController extends Controller
         AjaxDungeonRouteSearchFormRequest $request,
         ExpansionServiceInterface         $expansionService,
         ThumbnailServiceInterface         $thumbnailService,
+        SeasonAffixGroupServiceInterface  $seasonAffixGroupService,
     ) {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -395,7 +406,7 @@ class AjaxDungeonRouteController extends Controller
             $thumbnailService->queueThumbnailRefreshIfMissing($result);
 
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $season?->getCurrentAffixGroupInRegion($userRegion) ??
+                'currentAffixGroup' => ($season !== null ? $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion) : null) ??
                         $expansionService->getCurrentAffixGroup($expansion, $userRegion) ??
                         null,
                 'dungeonroutes'    => $result,
@@ -600,12 +611,55 @@ class AjaxDungeonRouteController extends Controller
 
         $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
         if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
-            $dungeonRoute->published_at = date('Y-m-d H:i:s', time());
+            $dungeonRoute->published_at = now();
         }
 
         $dungeonRoute->save();
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
+
+        return response()->noContent();
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function storeScheduledPublish(ScheduledPublishFormRequest $request, DungeonRoute $dungeonRoute): Response
+    {
+        Gate::authorize('schedule-publish', $dungeonRoute);
+
+        $publishedState = $request->validated('published_state');
+
+        /** @var User $user */
+        $user = Auth::user();
+        if ($publishedState === PublishedState::WORLD_WITH_LINK) {
+            if (!$user->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES)) {
+                abort(422, 'The world_with_link publish state requires a Patreon subscription.');
+            }
+        }
+
+        DungeonRouteScheduledPublish::updateOrCreate(
+            ['dungeon_route_id' => $dungeonRoute->id],
+            [
+                'published_state' => $publishedState,
+                'publish_at'      => Carbon::parse(
+                    $request->validated('publish_at'),
+                    $user->timezone ?? config('app.timezone'),
+                )->setTimezone(config('app.timezone')),
+            ],
+        );
+
+        return response()->noContent();
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroyScheduledPublish(Request $request, DungeonRoute $dungeonRoute): Response
+    {
+        Gate::authorize('schedule-publish', $dungeonRoute);
+
+        $dungeonRoute->scheduledPublish?->delete();
 
         return response()->noContent();
     }
@@ -635,7 +689,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|Response
+     * @return Response
      *
      * @throws AuthorizationException
      */
@@ -815,6 +869,7 @@ class AjaxDungeonRouteController extends Controller
         $useCache = (int)$request->get('useCache', 1) === 1;
 
         try {
+            /** @var Collection<int, ImportWarning> $warnings */
             $warnings     = new Collection();
             $dungeonRoute = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)
@@ -822,7 +877,6 @@ class AjaxDungeonRouteController extends Controller
 
             $warningResult = [];
             foreach ($warnings as $warning) {
-                /** @var $warning ImportWarning */
                 $warningResult[] = $warning->toArray();
             }
 

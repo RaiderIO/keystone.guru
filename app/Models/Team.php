@@ -11,13 +11,14 @@ use App\Models\Traits\HasTags;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Override;
 
 /**
  * @property int    $id
@@ -26,13 +27,14 @@ use Illuminate\Support\Facades\Auth;
  * @property string $description
  * @property string $invite_code
  * @property string $default_role
+ * @property bool   $route_publishing_enabled
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property Collection<TeamUser>     $teamUsers
- * @property Collection<User>         $members
- * @property Collection<DungeonRoute> $dungeonRoutes
+ * @property EloquentCollection<int, TeamUser>     $teamUsers
+ * @property EloquentCollection<int, User>         $members
+ * @property EloquentCollection<int, DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -48,14 +50,21 @@ class Team extends Model
         'public_key',
     ];
 
-    protected $fillable = ['default_role'];
+    protected $fillable = [
+        'default_role',
+        'route_publishing_enabled',
+        'public_key',
+        'name',
+        'description',
+        'invite_code',
+    ];
 
     protected $with = ['iconfile'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -91,7 +100,8 @@ class Team extends Model
     /**
      * Checks if a user can add/remove a route to this team or not.
      *
-     * @param User $user
+     * @param  User $user
+     * @return bool
      */
     public function canAddRemoveRoute(User $user): bool
     {
@@ -150,7 +160,7 @@ class Team extends Model
      */
     public function getUserRole(User $user): ?string
     {
-        /** @var TeamUser $teamUser */
+        /** @var TeamUser|null $teamUser */
         $teamUser = $this->teamUsers()->where('user_id', $user->id)->first();
 
         return $teamUser?->role;
@@ -234,7 +244,7 @@ class Team extends Model
      */
     public function changeRole(User $user, string $role): void
     {
-        /** @var TeamUser $teamUser */
+        /** @var TeamUser|null $teamUser */
         $teamUser = $this->teamUsers()->where('user_id', $user->id)->first();
         $roles    = TeamUser::ALL_ROLES;
         // Only when user is part of the team, and when the role is a valid one.
@@ -382,8 +392,6 @@ class Team extends Model
      * @return User|null Null returned if there was no change in owner.
      *
      * @throws Exception
-     *
-     * @var User
      */
     public function getNewAdminUponAdminAccountDeletion(User $user): ?User
     {
@@ -421,7 +429,17 @@ class Team extends Model
         );
     }
 
-    #[\Override]
+    /**
+     * Gets all tags available for routes in this team.
+     */
+    public function getAvailableTags(): EloquentCollection
+    {
+        return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
+            ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
+            ->get();
+    }
+
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

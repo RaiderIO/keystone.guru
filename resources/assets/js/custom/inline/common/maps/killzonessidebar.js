@@ -1,8 +1,29 @@
+/**
+ * @typedef {Object} CommonMapsKillzonessidebarOptions
+ * @property {string} stateCookie
+ * @property {number} defaultState
+ * @property {boolean} hideOnMove
+ * @property {string} sidebarSelector
+ * @property {string} sidebarToggleSelector
+ * @property {string} sidebarScrollSelector
+ * @property {string} anchor
+ * @property {string} newKillZoneSelector
+ * @property {string} killZonesContainerSelector
+ * @property {string} killZonesPullsSettingsMapNumberStyleSelector
+ * @property {string} killZonesPullsSettingsNumberStyleSelector
+ * @property {string} killZonesPullsSettingsDeleteAllSelector
+ * @property {string} killZonesPullsSettingsPullsSidebarFloorSwitchVisibilitySelector
+ * @property {boolean} edit
+ */
+
+/**
+ * @property {CommonMapsKillzonessidebarOptions} options
+ */
 class CommonMapsKillzonessidebar extends InlineCode {
 
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
 
         this.sidebar = new Sidebar(options);
         this.pullWorkBench = new PullWorkBench(this);
@@ -322,7 +343,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             this._addKillZone(killZone);
 
             // Listen to changes in the killzone
-            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:spellschanged', 'object:changed'], this, function (killZoneChangedEvent) {
+            killZone.register(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:enemieschanged', 'killzone:spellschanged', 'object:changed'], this, function (killZoneChangedEvent) {
                 // Ignore killzones that haven't saved yet
                 if (killZoneChangedEvent.context.id <= 0) {
                     return;
@@ -463,6 +484,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         $(this.options.killZonesPullsSettingsDeleteAllSelector).unbind('click').bind('click', function () {
             showConfirmYesCancel(lang.get('js.killzone_sidebar_delete_all_pulls_confirm_label'), function () {
+                /** @type KillZoneMapObjectGroup */
                 let killZoneMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
                 killZoneMapObjectGroup.deleteAll();
@@ -509,7 +531,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
         killZoneMapObjectGroup.register(['object:add', 'save:success'], this, function (killZoneSaveSuccessEvent) {
             // Ignore killzones that haven't saved yet
-            if (killZoneSaveSuccessEvent.context.id <= 0) {
+            if (killZoneSaveSuccessEvent.data.object.id <= 0) {
                 return;
             }
 
@@ -529,7 +551,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             }
 
             // Stop listening to changes in the killzone
-            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'object:changed'], self);
+            killZone.unregister(['killzone:enemyadded', 'killzone:enemyremoved', 'killzone:enemieschanged', 'object:changed'], self);
         });
 
         killZoneMapObjectGroup.register([

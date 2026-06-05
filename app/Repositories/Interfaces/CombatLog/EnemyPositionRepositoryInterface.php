@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                      update(EnemyPosition $model, array $attributes = [], array $options = [])
  * @method bool                      delete(EnemyPosition $model)
  * @method Collection<EnemyPosition> all()
+ * @method bool                      exists(array $columns)
  */
 interface EnemyPositionRepositoryInterface extends BaseRepositoryInterface
 {

@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * 8/27/2024 20:59:34.5502  STAGGER_PREVENTED,Player-1084-0A912E3E,76280.429688
  * Retail 11.1.0 and up?
@@ -13,7 +15,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
  */
 class StaggerPrevented extends StaggerBase
 {
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 3;

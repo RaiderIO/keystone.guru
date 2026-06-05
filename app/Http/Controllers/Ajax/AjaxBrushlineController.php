@@ -14,6 +14,7 @@ use App\Models\Polyline;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,8 +41,7 @@ class AjaxBrushlineController extends Controller
         DungeonRoute                $dungeonRoute,
         ?Brushline                  $brushline = null,
     ) {
-        $test         = "";
-        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         Gate::authorize('edit', $dungeonRoute);
         Gate::authorize('addBrushline', $dungeonRoute);
@@ -62,7 +62,7 @@ class AjaxBrushlineController extends Controller
                     'floor_id'         => $validated['floor_id'],
                     'polyline_id'      => -1,
                 ]);
-                $success = $brushline instanceof Brushline;
+                $success = true;
             } else {
                 $success = $brushline->update([
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -83,13 +83,17 @@ class AjaxBrushlineController extends Controller
                         $validated['polyline'],
                     );
 
-                    // Something's updated; broadcast it
-                    if (Auth::check()) {
-                        broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
-                    }
-
                     // Touch the route so that the thumbnail gets updated
                     $dungeonRoute->touch();
+
+                    // Something's updated; broadcast it
+                    if (Auth::check()) {
+                        try {
+                            broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
+                        } catch (BroadcastException) {
+                            // We don't really care if the broadcast fails, so just catch the exception and move on
+                        }
+                    }
                 } else {
                     throw new Exception(__('controller.brushline.error.unable_to_save_brushline'));
                 }

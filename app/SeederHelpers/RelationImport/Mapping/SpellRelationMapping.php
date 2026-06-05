@@ -23,4 +23,9 @@ class SpellRelationMapping extends RelationMapping
             new SpellSpellDungeonsRelationParser(),
         ]));
     }
+
+    public function getPreservedColumns(): array
+    {
+        return ['aura', 'debuff', 'miss_types_mask', 'characteristic_id'];
+    }
 }

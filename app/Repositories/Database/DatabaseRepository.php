@@ -48,6 +48,11 @@ abstract class DatabaseRepository extends BaseRepository
         return $model->delete();
     }
 
+    public function exists(array $columns): bool
+    {
+        return $this->class::where($columns)->exists();
+    }
+
     public function all(): Collection
     {
         return $this->class::all();

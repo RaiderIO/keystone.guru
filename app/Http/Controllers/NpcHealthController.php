@@ -7,11 +7,10 @@ use App\Http\Requests\Npc\NpcHealthFormRequest;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 use Request;
 
 class NpcHealthController extends Controller
@@ -21,7 +20,7 @@ class NpcHealthController extends Controller
     /**
      * Show a page for creating a new npc.
      *
-     * @return Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function create(Npc $npc)
     {
@@ -54,9 +53,9 @@ class NpcHealthController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
-    public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): \Illuminate\View\View
+    public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): View
     {
         return view('admin.npchealth.edit', [
             'npc'                    => $npc,
@@ -84,7 +83,7 @@ class NpcHealthController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function delete(Request $request, Npc $npc, NpcHealth $npcHealth): RedirectResponse
     {

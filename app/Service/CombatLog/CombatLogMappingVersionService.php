@@ -115,7 +115,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         GameVersion     $gameVersion,
         ?MappingVersion $mappingVersion = null,
         bool            $enemyConnections = false,
-    ): ?MappingVersion {
+    ): MappingVersion {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
         $hasExistingMappingVersion = $mappingVersion !== null;
@@ -183,7 +183,6 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         $dungeon = $mappingVersion->dungeon;
                         $this->log->createMappingVersionFromCombatLogDungeonFromExistingMappingVersion($dungeon->id);
                     } else {
-                        /** @var Dungeon $dungeon */
                         foreach ($dungeon->floors as $floor) {
                             if ($floor->ingame_min_x === null || $floor->ingame_min_y === null || $floor->ingame_max_x === null || $floor->ingame_max_y === null) {
                                 throw new Exception(

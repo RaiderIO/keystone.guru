@@ -54,7 +54,7 @@ interface MappingServiceInterface
      *
      * This is useful for when the mapping changes - it determines if we need to insert a new version or not.
      *
-     * @return void
+     * @return MappingVersion
      */
     public function getMappingVersionOrNew(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
 }

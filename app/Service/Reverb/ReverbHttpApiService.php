@@ -95,7 +95,7 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
     {
         $result = [];
 
-        if ($this->client !== null) {
+        if ($this->client !== null) { // @phpstan-ignore notIdentical.alwaysTrue
             // Perform the API request with the correct auth key
             $query = $this->signedQuery('GET', $uri, [
                 // any extra query params for this endpoint go here, e.g. 'filter_by_prefix' => 'presence-'

@@ -80,15 +80,15 @@ class AjaxKillZoneController extends Controller
 
         Gate::authorize('addKillZone', $dungeonroute);
 
-        /** @var KillZone|null $beforeModel */
-        $beforeModel = $killZone === null ? null : clone $killZone;
+        $beforeModel = clone $killZone;
+
+        // Capture the before-state enemy IDs before any delete/insert
+        $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
 
         if (!$killZone->exists) {
             try {
                 $killZone = KillZone::create($data);
-                // We JUST created the KillZone - so it does not have enemies (yet)
-                $killZone->setEnemiesAttributeCache(collect());
-                $success = $killZone instanceof KillZone;
+                $success  = true;
             } catch (UniqueConstraintViolationException) {
                 // Race condition: another request created this kill zone between findOrNew and create.
                 // Re-load and re-authorize before updating to prevent cross-route hijacking.
@@ -96,13 +96,11 @@ class AjaxKillZoneController extends Controller
                 if ($killZone->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
                     Gate::authorize('edit', $killZone->dungeonRoute);
                 }
-                $beforeModel = clone $killZone;
-                $beforeModel->getEnemiesAttribute(true);
-                $success = $killZone->update($data);
+                $beforeModel    = clone $killZone;
+                $beforeEnemyIds = $beforeModel->killZoneEnemies->pluck('enemy_id');
+                $success        = $killZone->update($data);
             }
         } else {
-            // Set the cache on the before model to properly store the changes
-            $beforeModel->getEnemiesAttribute(true);
             $success = $killZone->update($data);
         }
 
@@ -116,7 +114,7 @@ class AjaxKillZoneController extends Controller
                 $killZoneEnemies = [];
                 $enemyModels     = $dungeonroute->mappingVersion->enemies()->whereIn('id', $enemyIds)->get();
                 foreach ($enemyIds as $enemyId) {
-                    /** @var Enemy $enemy */
+                    /** @var Enemy|null $enemy */
                     $enemy = $enemyModels->where('id', $enemyId)->first();
                     // Could be if someone decides to send an enemy ID that is not part of the current mapping version
                     if ($enemy === null) {
@@ -128,6 +126,7 @@ class AjaxKillZoneController extends Controller
                         'kill_zone_id' => $killZone->id,
                         'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                         'mdt_id'       => $enemy->mdt_id,
+                        'enemy_id'     => $enemy->id,
                     ];
                     $validEnemyIds[] = (int)$enemyId;
                 }
@@ -135,7 +134,8 @@ class AjaxKillZoneController extends Controller
                 // Bulk insert
                 KillZoneEnemy::insert($killZoneEnemies);
 
-                $killZone->setEnemiesAttributeCache(collect($validEnemyIds));
+                // Reload the relation so getEnemiesAttribute() returns accurate data
+                $killZone->load('enemies');
             }
 
             // May be null for mass request
@@ -161,9 +161,9 @@ class AjaxKillZoneController extends Controller
             $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (
                 array & $beforeAttributes,
                 array & $afterAttributes,
-            ) use ($beforeModel, $killZone) {
-                $beforeAttributes['enemies'] = $beforeModel?->getEnemiesAttribute() ?? [];
-                $afterAttributes['enemies']  = $killZone->getEnemiesAttribute();
+            ) use ($beforeEnemyIds, $killZone) {
+                $beforeAttributes['enemies'] = $beforeEnemyIds;
+                $afterAttributes['enemies']  = $killZone->enemies->pluck('id');
             });
 
             // If killzone has lat/lng set, convert it to facade location if it's not already
@@ -220,7 +220,7 @@ class AjaxKillZoneController extends Controller
         DungeonRoute                 $dungeonRoute,
         ?KillZone                    $killZone = null,
     ): KillZone {
-        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
 
         try {
             $data = $request->validated();
@@ -234,7 +234,7 @@ class AjaxKillZoneController extends Controller
                 $data['spells'] = [];
             }
 
-            $data['id'] = $killZone?->id ?? null;
+            $data['id'] = $killZone?->id ?? null; // @phpstan-ignore nullsafe.neverNull
 
             $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
             $result->setAttribute('killzone_paths', $this->getKillZonePaths($killZonePathService, $dungeonRoute));
@@ -297,12 +297,12 @@ class AjaxKillZoneController extends Controller
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {
-                        /** @var Enemy $enemy */
                         $enemy             = $enemies->get($killZoneDataEnemyId);
                         $killZoneEnemies[] = [
                             'kill_zone_id' => $killZoneData['id'],
-                            'npc_id'       => $enemy->npc_id,
+                            'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                             'mdt_id'       => $enemy->mdt_id,
+                            'enemy_id'     => $enemy->id,
                         ];
                     }
                 }

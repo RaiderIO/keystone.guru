@@ -2,19 +2,25 @@
 
 namespace App\Service\DungeonRoute;
 
+use App\Jobs\RefreshEnemyForces;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class DungeonRouteService implements DungeonRouteServiceInterface
+readonly class DungeonRouteService implements DungeonRouteServiceInterface
 {
     public function __construct(
-        private readonly DungeonRouteRepositoryInterface     $dungeonRouteRepository,
-        private readonly ThumbnailServiceInterface           $thumbnailService,
-        private readonly DungeonRouteServiceLoggingInterface $log,
+        private DungeonRouteRepositoryInterface     $dungeonRouteRepository,
+        private KillZoneEnemyRepositoryInterface    $killZoneEnemyRepository,
+        private ThumbnailServiceInterface           $thumbnailService,
+        private DungeonRouteServiceLoggingInterface $log,
     ) {
     }
 
@@ -127,7 +133,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->deleteOutdatedDungeonRoutesStart();
 
-            $dungeonRoutes = DungeonRoute::with([
+            DungeonRoute::with([
                 'brushlines',
                 'paths',
                 'killZones',
@@ -136,18 +142,17 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                 ->whereRaw('expires_at < NOW()')
                 ->where('expires_at', '!=', 0)
                 ->whereNotNull('expires_at')
-                ->get();
-
-            // Retrieve all routes and then delete them
-            foreach ($dungeonRoutes as $dungeonRoute) {
-                /** @var $dungeonRoute DungeonRoute */
-                try {
-                    $dungeonRoute->delete();
-                    $deletedRouteCount++;
-                } catch (Exception $ex) {
-                    $this->log->deleteOutdatedDungeonRouteException($dungeonRoute->id, $ex);
-                }
-            }
+                ->chunkById(100, function ($dungeonRoutes) use (&$deletedRouteCount) {
+                    foreach ($dungeonRoutes as $dungeonRoute) {
+                        /** @var DungeonRoute $dungeonRoute */
+                        try {
+                            $dungeonRoute->delete();
+                            $deletedRouteCount++;
+                        } catch (Exception $ex) {
+                            $this->log->deleteOutdatedDungeonRouteException($dungeonRoute->id, $ex);
+                        }
+                    }
+                });
         } finally {
             $this->log->deleteOutdatedDungeonRoutesEnd($deletedRouteCount);
         }
@@ -168,5 +173,82 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         }
 
         return $updatedRouteCount;
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function upgradeMappingVersion(DungeonRoute $dungeonRoute): void
+    {
+        $newMappingVersionId = $dungeonRoute->dungeon->getCurrentMappingVersion(
+            $dungeonRoute->mappingVersion->gameVersion,
+        )->id;
+
+        DB::transaction(function () use ($dungeonRoute, $newMappingVersionId): void {
+            $this->dungeonRouteRepository->update($dungeonRoute, ['mapping_version_id' => $newMappingVersionId]);
+
+            $killZoneIds = $dungeonRoute->killZones->pluck('id');
+
+            // Reset enemy_id so we don't keep stale references to the old mapping version
+            $this->killZoneEnemyRepository->resetEnemyIdByKillZoneIds($killZoneIds);
+
+            // Re-resolve enemy_id against the new mapping version
+            $this->killZoneEnemyRepository->updateEnemyIdsByMappingVersion($dungeonRoute->id, $newMappingVersionId);
+
+            // Remove enemies that do not exist in the new mapping version
+            $this->killZoneEnemyRepository->deleteOrphanedByKillZoneIds($killZoneIds);
+
+            // Refresh the enemy forces
+            new RefreshEnemyForces($dungeonRoute->id)->handle();
+        });
+
+        DungeonRoute::dropCaches($dungeonRoute->id);
+    }
+
+    public function publishScheduledDungeonRoutes(): int
+    {
+        $publishedCount = 0;
+
+        try {
+            $this->log->publishScheduledDungeonRoutesStart();
+
+            /** @var Collection<DungeonRouteScheduledPublish> $scheduledPublishes */
+            $scheduledPublishes = DungeonRouteScheduledPublish::query()
+                ->where('publish_at', '<=', now())
+                ->with(['dungeonRoute.dungeon', 'dungeonRoute.author'])
+                ->get();
+
+            foreach ($scheduledPublishes as $scheduledPublish) {
+                $dungeonRoute   = $scheduledPublish->dungeonRoute;
+                $publishedState = $scheduledPublish->published_state;
+
+                if ($publishedState === PublishedState::WORLD_WITH_LINK &&
+                    ($dungeonRoute->author === null || !$dungeonRoute->author->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES))) {
+                    $this->log->publishScheduledDungeonRouteSkippedNoPatreon($dungeonRoute->id, $scheduledPublish->id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
+
+                if ($publishedState === PublishedState::WORLD && !$dungeonRoute->dungeon->active) {
+                    $this->log->publishScheduledDungeonRouteSkippedInactiveDungeon($dungeonRoute->id, $dungeonRoute->dungeon_id, $scheduledPublish->id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
+
+                $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
+
+                if ($publishedState === PublishedState::WORLD) {
+                    $dungeonRoute->published_at = now();
+                }
+
+                $dungeonRoute->save();
+                $scheduledPublish->delete();
+                $publishedCount++;
+            }
+        } finally {
+            $this->log->publishScheduledDungeonRoutesEnd($publishedCount);
+        }
+
+        return $publishedCount;
     }
 }

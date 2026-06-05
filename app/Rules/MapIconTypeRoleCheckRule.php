@@ -19,7 +19,7 @@ class MapIconTypeRoleCheckRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if ($value !== null) {
-            /** @var MapIconType $mapIconType */
+            /** @var MapIconType|null $mapIconType */
             $mapIconType = MapIconType::where('id', $value)->first();
 
             // Only allow admins to save admin_only icons

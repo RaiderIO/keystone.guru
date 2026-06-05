@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                  update(Expansion $model, array $attributes = [], array $options = [])
  * @method bool                  delete(Expansion $model)
  * @method Collection<Expansion> all()
+ * @method bool                  exists(array $columns)
  */
 interface ExpansionRepositoryInterface extends BaseRepositoryInterface
 {

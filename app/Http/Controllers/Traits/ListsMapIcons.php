@@ -25,7 +25,7 @@ trait ListsMapIcons
         try {
             $dungeonRouteId = $dungeonRoute->id;
             $teamId         = $dungeonRoute->team_id;
-        } catch (Exception) {
+        } catch (Exception) { // @phpstan-ignore catch.neverThrown
             // this is okay, it can come from admin request
             $dungeonRouteId = null;
             $teamId         = -1;

@@ -23,5 +23,7 @@ interface BaseRepositoryInterface
 
     public function delete(Model $model): bool;
 
+    public function exists(array $columns): bool;
+
     public function all(): Collection;
 }

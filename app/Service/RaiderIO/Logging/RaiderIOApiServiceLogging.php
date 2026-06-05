@@ -21,4 +21,34 @@ class RaiderIOApiServiceLogging extends RollbarStructuredLogging implements Raid
     {
         $this->end(__METHOD__);
     }
+
+    public function searchAdvancedRunsStart(string $url): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function searchAdvancedRunsInvalidResponse(string $url, string $response): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function searchAdvancedRunsEnd(int $count): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
+
+    public function getCombatLogSegmentsForRunStart(int $runId): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function getCombatLogSegmentsForRunInvalidResponse(int $runId, string $url, string $response): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getCombatLogSegmentsForRunEnd(int $runId): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
 }

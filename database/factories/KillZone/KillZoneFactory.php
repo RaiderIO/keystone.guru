@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends Factory<Model>
+ * @extends Factory<KillZone>
  */
 class KillZoneFactory extends Factory
 {

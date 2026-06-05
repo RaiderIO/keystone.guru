@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Random\RandomException;
 
+/**
+ * @extends Factory<DungeonRoute>
+ */
 class DungeonRouteFactory extends Factory
 {
     protected $model = DungeonRoute::class;
@@ -24,7 +27,6 @@ class DungeonRouteFactory extends Factory
         /** @var SeasonServiceInterface $seasonService */
         $seasonService = app()->make(SeasonServiceInterface::class);
 
-        /** @var Dungeon $dungeon */
         $count    = 0;
         $maxCount = 10;
         do {
@@ -33,9 +35,10 @@ class DungeonRouteFactory extends Factory
                 throw new \Exception('Unable to find a dungeon to create a route for!');
             }
 
-            $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+            $dungeon               = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
             $count++;
-        } while ($dungeon->getCurrentMappingVersion() === null || $dungeon->floors->isEmpty());
+        } while ($currentMappingVersion === null || $dungeon->floors->isEmpty());
 
         $activeSeason = $dungeon->getActiveSeason($seasonService);
 
@@ -43,7 +46,7 @@ class DungeonRouteFactory extends Factory
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'author_id'          => 1,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $currentMappingVersion->id,
             'season_id'          => $activeSeason?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'team_id'            => null,
@@ -52,8 +55,8 @@ class DungeonRouteFactory extends Factory
             'clone_of'                   => null,
             'title'                      => $this->faker->sentence(),
             'description'                => $this->faker->paragraph(),
-            'level_min'                  => $activeSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'level_max'                  => $activeSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+            'level_min'                  => $activeSeason !== null ? $activeSeason->key_level_min : config('keystoneguru.keystone.levels.default_min'),
+            'level_max'                  => $activeSeason !== null ? $activeSeason->key_level_max : config('keystoneguru.keystone.levels.default_max'),
             'difficulty'                 => 'Casual',
             'seasonal_index'             => 0,
             'enemy_forces'               => 0,

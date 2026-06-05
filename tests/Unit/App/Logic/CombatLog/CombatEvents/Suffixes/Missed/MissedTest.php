@@ -84,7 +84,6 @@ class MissedTest extends PublicTestCase
         // Assert
         $this->assertInstanceOf(MissedV20::class, $missedEvent->getSuffix());
         $this->assertInstanceOf(MissedInterface::class, $missedEvent->getSuffix());
-        /** @var MissedInterface $missedSuffix */
         $missedSuffix = $missedEvent->getSuffix();
         $this->assertEquals($missType, $missedSuffix->getMissType());
         $this->assertEquals($offhand, $missedSuffix->isOffhand());
@@ -159,7 +158,6 @@ class MissedTest extends PublicTestCase
         // Assert
         $this->assertInstanceOf(MissedV22::class, $missedEvent->getSuffix());
         $this->assertInstanceOf(MissedInterface::class, $missedEvent->getSuffix());
-        /** @var MissedInterface $missedSuffix */
         $missedSuffix = $missedEvent->getSuffix();
         $this->assertEquals($missType, $missedSuffix->getMissType());
         $this->assertEquals($offhand, $missedSuffix->isOffhand());
@@ -292,7 +290,6 @@ class MissedTest extends PublicTestCase
         // Assert
         $this->assertInstanceOf(MissedV9SoD::class, $missedEvent->getSuffix());
         $this->assertInstanceOf(MissedInterface::class, $missedEvent->getSuffix());
-        /** @var MissedInterface $missedSuffix */
         $missedSuffix = $missedEvent->getSuffix();
         $this->assertEquals($missType, $missedSuffix->getMissType());
         $this->assertEquals($offhand, $missedSuffix->isOffhand());

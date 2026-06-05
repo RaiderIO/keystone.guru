@@ -48,20 +48,21 @@ use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -69,81 +70,84 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Override;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * @property int      $id
- * @property string   $public_key
- * @property int      $author_id
- * @property int      $dungeon_id
- * @property int      $mapping_version_id
- * @property int      $season_id
- * @property int      $faction_id
- * @property int|null $team_id
- * @property int      $published_state_id
- * @property string   $clone_of
- * @property string   $title
- * @property string   $description
- * @property int|null $level_min
- * @property int|null $level_max
- * @property string   $difficulty
- * @property int      $seasonal_index
- * @property int      $enemy_forces
- * @property bool     $teeming
- * @property bool     $demo
- * @property array    $setup                       Attribute
- * @property bool     $has_thumbnail               Attribute
- * @property string   $pull_gradient
- * @property bool     $pull_gradient_apply_always
- * @property int      $dungeon_difficulty
- * @property int      $views
- * @property int      $views_embed
- * @property int      $popularity
- * @property float    $rating
- * @property int      $rating_count
- * @property Carbon   $thumbnail_refresh_queued_at
- * @property Carbon   $thumbnail_updated_at
- * @property Carbon   $updated_at
- * @property Carbon   $created_at
- * @property Carbon   $published_at
- * @property Carbon   $expires_at
+ * @property int         $id
+ * @property string      $public_key
+ * @property int         $author_id
+ * @property int         $dungeon_id
+ * @property int         $mapping_version_id
+ * @property int         $season_id
+ * @property int         $faction_id
+ * @property int|null    $team_id
+ * @property int         $published_state_id
+ * @property string|null $clone_of
+ * @property string      $title
+ * @property string      $description
+ * @property int|null    $level_min
+ * @property int|null    $level_max
+ * @property string      $difficulty
+ * @property int         $seasonal_index
+ * @property int         $enemy_forces
+ * @property bool        $teeming
+ * @property bool        $demo
+ * @property array       $setup                       Attribute
+ * @property bool        $has_thumbnail               Attribute
+ * @property int         $has_enemy_forces            Computed column added by CoverageService::selectRaw()
+ * @property string      $pull_gradient
+ * @property bool        $pull_gradient_apply_always
+ * @property int         $dungeon_difficulty
+ * @property int         $views
+ * @property int         $views_embed
+ * @property int         $popularity
+ * @property float       $rating
+ * @property int         $rating_count
+ * @property Carbon      $thumbnail_refresh_queued_at
+ * @property Carbon      $thumbnail_updated_at
+ * @property Carbon      $updated_at
+ * @property Carbon      $created_at
+ * @property Carbon      $published_at
+ * @property Carbon|null $expires_at
  *
- * @property MappingVersion        $mappingVersion
- * @property Dungeon               $dungeon
- * @property Path                  $route
- * @property Season|null           $season
- * @property Faction               $faction
- * @property User|null             $author           Can be null in case of temporary route
- * @property MDTImport             $mdtImport
- * @property Team                  $team
- * @property PublishedState        $publishedState
- * @property ChallengeModeRun|null $challengeModeRun Is only set if route is created through API
+ * @property MappingVersion                    $mappingVersion
+ * @property Dungeon                           $dungeon
+ * @property Path                              $route
+ * @property Season|null                       $season
+ * @property Faction                           $faction
+ * @property User|null                         $author           Can be null in case of temporary route
+ * @property MDTImport                         $mdtImport
+ * @property Team|null                         $team
+ * @property PublishedState                    $publishedState
+ * @property DungeonRouteScheduledPublish|null $scheduledPublish
+ * @property ChallengeModeRun|null             $challengeModeRun Is only set if route is created through API
  *
- * @property Collection                              $specializations
- * @property Collection                              $classes
- * @property Collection                              $races
- * @property Collection                              $playerspecializations
- * @property Collection                              $playerclasses
- * @property Collection                              $playerraces
- * @property Collection<AffixGroup>                  $affixes
- * @property Collection<DungeonRouteAffixGroup>      $affixGroups
- * @property Collection<DungeonRouteRating>          $ratings
- * @property Collection<DungeonRouteFavorite>        $favorites
- * @property Collection<LiveSession>                 $livesessions
- * @property Collection<Brushline>                   $brushlines
- * @property Collection<Path>                        $paths
- * @property Collection<KillZone>                    $killZones
- * @property Collection<PridefulEnemy>               $pridefulEnemies
- * @property Collection<OverpulledEnemy>             $overpulledenemies
- * @property Collection<DungeonRouteEnemyRaidMarker> $enemyRaidMarkers
- * @property Collection<MapIcon>                     $mapicons
- * @property Collection<PageView>                    $pageviews
- * @property Collection<Tag>                         $tags
- * @property Collection<RouteAttribute>              $routeattributes
- * @property Collection<DungeonRouteAttribute>       $routeattributesraw
- * @property Collection<DungeonRouteThumbnailJob>    $dungeonRouteThumbnailJobs
- * @property Collection<DungeonRouteThumbnail>       $dungeonRouteThumbnails
- * @property Collection<File>                        $thumbnails
+ * @property EloquentCollection<int, CharacterClassSpecialization>     $specializations
+ * @property EloquentCollection<int, CharacterClass>                   $classes
+ * @property EloquentCollection<int, CharacterRace>                    $races
+ * @property EloquentCollection<int, DungeonRoutePlayerSpecialization> $playerspecializations
+ * @property EloquentCollection<int, DungeonRoutePlayerClass>          $playerclasses
+ * @property EloquentCollection<int, DungeonRoutePlayerRace>           $playerraces
+ * @property EloquentCollection<int, AffixGroup>                       $affixes
+ * @property EloquentCollection<int, DungeonRouteAffixGroup>           $affixGroups
+ * @property EloquentCollection<int, DungeonRouteRating>               $ratings
+ * @property EloquentCollection<int, DungeonRouteFavorite>             $favorites
+ * @property EloquentCollection<int, LiveSession>                      $livesessions
+ * @property EloquentCollection<int, Brushline>                        $brushlines
+ * @property EloquentCollection<int, Path>                             $paths
+ * @property EloquentCollection<int, KillZone>                         $killZones
+ * @property EloquentCollection<int, PridefulEnemy>                    $pridefulEnemies
+ * @property EloquentCollection<int, OverpulledEnemy>                  $overpulledenemies
+ * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
+ * @property EloquentCollection<int, MapIcon>                          $mapicons
+ * @property EloquentCollection<int, PageView>                         $pageviews
+ * @property EloquentCollection<int, Tag>                              $tags
+ * @property EloquentCollection<int, RouteAttribute>                   $routeattributes
+ * @property EloquentCollection<int, DungeonRouteAttribute>            $routeattributesraw
+ * @property EloquentCollection<int, DungeonRouteThumbnailJob>         $dungeonRouteThumbnailJobs
+ * @property EloquentCollection<int, DungeonRouteThumbnail>            $dungeonRouteThumbnails
+ * @property EloquentCollection<int, File>                             $thumbnails
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -166,7 +170,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = [
         'setup',
@@ -261,7 +265,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'public_key';
@@ -303,6 +307,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
@@ -378,6 +383,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsToMany(AffixGroup::class, 'dungeon_route_affix_groups');
     }
 
+    /** @return HasMany<KillZone, $this> */
     public function killZones(): HasMany
     {
         return $this->hasMany(KillZone::class)->orderBy('index');
@@ -442,13 +448,16 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function mapicons(): HasMany
     {
-        return $this->hasMany(MapIcon::class)
+        /** @var HasMany<MapIcon, $this> $query */
+        $query = $this->hasMany(MapIcon::class)
             ->when($this->team_id !== null, function ($query) {
                 $query->orWhere(function ($query) {
                     $query->where('map_icons.team_id', $this->team_id)
                         ->whereIn('map_icons.floor_id', $this->dungeon->floors->pluck('id'));
                 });
             });
+
+        return $query;
     }
 
     public function routeattributes(): BelongsToMany
@@ -472,6 +481,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsTo(Team::class);
     }
 
+    public function scheduledPublish(): HasOne
+    {
+        return $this->hasOne(DungeonRouteScheduledPublish::class);
+    }
+
     public function tagsteam(): HasMany
     {
         return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM]);
@@ -483,9 +497,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     private function convertVerticesForFacade(
-        CoordinatesServiceInterface $coordinatesService,
-        ConvertsVerticesInterface   $hasVertices,
-        Floor                       $floor,
+        CoordinatesServiceInterface     $coordinatesService,
+        ConvertsVerticesInterface&Model $hasVertices,
+        Floor                           $floor,
     ): Floor {
         $convertedLatLngs = collect();
 
@@ -498,10 +512,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        /** @noinspection PhpDynamicFieldDeclarationInspection */
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(
+        $hasVertices->setAttribute('vertices_json', json_encode($convertedLatLngs->map(static fn(
             LatLng $latLng,
-        ) => $latLng->toArray()));
+        ) => $latLng->toArray())));
 
         return $newFloor;
     }
@@ -510,29 +523,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         /** @var Collection<KillZone> $killZones */
         $killZones = $this->killZones()
-            ->with(['floor'])
+            ->with(['enemies', 'floor'])
             ->get();
-
-        if ($killZones->isNotEmpty()) {
-            $killZoneIds = $killZones->pluck('id');
-
-            $enemyIdsByKillZone = Enemy::select('enemies.id', 'kill_zone_enemies.kill_zone_id')
-                ->join('kill_zone_enemies', static function (JoinClause $clause) {
-                    $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
-                        ->on('kill_zone_enemies.mdt_id', 'enemies.mdt_id');
-                })
-                ->where('enemies.mapping_version_id', $this->mapping_version_id)
-                ->whereIn('kill_zone_enemies.kill_zone_id', $killZoneIds)
-                ->disableCache()
-                ->get()
-                ->groupBy('kill_zone_id');
-
-            foreach ($killZones as $killZone) {
-                $killZone->setEnemiesAttributeCache(
-                    ($enemyIdsByKillZone[$killZone->id] ?? collect())->pluck('id'),
-                );
-            }
-        }
 
         if ($useFacade) {
             foreach ($killZones as $killZone) {
@@ -638,8 +630,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         return $query->where('demo', false)
             ->whereHas('dungeon', static function ($dungeon) {
-                /** @var Dungeon $dungeon This uses the ActiveScope from the Dungeon; dungeon must be active for the route to show up */
-                $dungeon->active();
+                $dungeon->where('dungeons.active', 1);
             });
     }
 
@@ -852,10 +843,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->faction_id = 1;
 //        $this->difficulty     = 1;
         $this->seasonal_index = 0;
-        $this->teeming        = 0;
+        $this->teeming        = false;
 
         $this->pull_gradient              = '';
-        $this->pull_gradient_apply_always = 0;
+        $this->pull_gradient_apply_always = false;
 
         $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
         if ($this->dungeon_difficulty !== null && $dungeon->speedrun_enabled) {
@@ -868,22 +859,17 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
         if ($dungeonRouteLevel !== null) {
             $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-            $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
-            $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+            $this->level_min        = (int)$dungeonRouteLevelParts[0];
+            $this->level_max        = isset($dungeonRouteLevelParts[1]) ? (int)$dungeonRouteLevelParts[1] : null;
 
-            if ($this->level_min === null || $this->level_max === null) {
-                $this->level_min ??= $activeSeason?->key_level_min;
-                $this->level_max ??= $activeSeason?->key_level_max;
-            }
-            if ($this->level_min !== null) {
-                $this->level_min = (int)$this->level_min;
-            }
+            $this->level_max ??= $activeSeason?->key_level_max;
+
             if ($this->level_max !== null) {
                 $this->level_max = (int)$this->level_max;
             }
         }
 
-        $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
+        $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'));
 
         $saveResult = $this->save();
         if ($saveResult && $activeSeason !== null) {
@@ -900,7 +886,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      * @throws Exception
      */
     public function saveFromRequest(
-        Request                   $request,
+        FormRequest               $request,
         SeasonServiceInterface    $seasonService,
         ExpansionServiceInterface $expansionService,
         ThumbnailServiceInterface $thumbnailService,
@@ -917,7 +903,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $this->dungeon_id = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
         $dungeon          = Dungeon::findOrFail($this->dungeon_id);
         if ($new) {
-            $this->author_id  = $user?->id ?? -1;
+            $this->author_id  = $user?->id ?? -1; // @phpstan-ignore nullsafe.neverNull
             $this->public_key = DungeonRoute::generateRandomPublicKey();
             $this->setRelation('dungeon', $dungeon);
             $this->mapping_version_id = $this->dungeon->getCurrentMappingVersion()->id;
@@ -941,10 +927,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         $this->seasonal_index = (int)($validated['seasonal_index'] ?? [$this->seasonal_index])[0];
-        $this->teeming        = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
+        $this->teeming        = false; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
         $this->pull_gradient              = $request->get('pull_gradient', '');
-        $this->pull_gradient_apply_always = (int)$request->get('pull_gradient_apply_always', 0);
+        $this->pull_gradient_apply_always = (bool)$request->get('pull_gradient_apply_always', 0);
 
         // Sandbox routes have some fixed properties
         // Fetch the title if the user set anything
@@ -958,12 +944,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
         if ($dungeonRouteLevel !== null) {
             $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-            $this->level_min        = $dungeonRouteLevelParts[0] ?? $activeSeason?->key_level_min;
-            $this->level_max        = $dungeonRouteLevelParts[1] ?? $activeSeason?->key_level_max;
+            $this->level_min        = (int)$dungeonRouteLevelParts[0];
+            $this->level_max        = isset($dungeonRouteLevelParts[1]) ? (int)$dungeonRouteLevelParts[1] : ($activeSeason?->key_level_max);
 
-            if ($this->level_min !== null) {
-                $this->level_min = (int)$this->level_min;
-            }
             if ($this->level_max !== null) {
                 $this->level_max = (int)$this->level_max;
             }
@@ -1192,10 +1175,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     ]);
                 }
 
-                /** @var $model Model */
-                $model->id               = 0;
-                $model->exists           = false;
-                $model->dungeon_route_id = $dungeonRoute->id;
+                $model->setAttribute($model->getKeyName(), 0);
+                $model->exists = false;
+                $model->setAttribute('dungeon_route_id', $dungeonRoute->id);
                 $model->save();
 
                 // KillZone, save the enemies that were attached to them
@@ -1265,12 +1247,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         // Only if the seasonal type was valid and we could find the corresponding affix
         $seasonalTypeAffix = Affix::getAffixBySeasonalType($seasonalType);
         if ($seasonalTypeAffix !== null) {
-            /** @var Season $seasonOfSeasonalType */
+            /** @var Season|null $seasonOfSeasonalType */
             $seasonOfSeasonalType = Season::where('seasonal_affix_id', Affix::ALL[$seasonalTypeAffix])->first();
 
             if ($seasonOfSeasonalType !== null) {
                 try {
-                    $currentAffixGroup = $seasonOfSeasonalType->getCurrentAffixGroupInRegion($gameServerRegion);
+                    $currentAffixGroup = resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroupInRegion($seasonOfSeasonalType, $gameServerRegion);
                 } catch (Exception) {
                     // It's okay - we can recover in the next IF
                     logger()->error('Unable to find current affixgroup for seasonal type', [
@@ -1301,7 +1283,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         foreach ($this->killZones as $killZone) {
             foreach ($killZone->getEnemies() as $enemy) {
                 // Just in case the mapping was changed since then
-                if ($enemy === null) {
+                if ($enemy === null) { // @phpstan-ignore identical.alwaysFalse
                     continue;
                 }
 
@@ -1317,9 +1299,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                             Enemy $enemy,
                         ) => $enemy->id === $seasonalTypeEnemy->id)->isEmpty()) {
                             KillZoneEnemy::create([
-                                'npc_id'       => $seasonalTypeEnemy->npc_id,
+                                'npc_id'       => $seasonalTypeEnemy->mdt_npc_id ?? $seasonalTypeEnemy->npc_id,
                                 'mdt_id'       => $seasonalTypeEnemy->mdt_id,
                                 'kill_zone_id' => $killZone->id,
+                                'enemy_id'     => $seasonalTypeEnemy->id,
                             ]);
                         }
                     }
@@ -1343,7 +1326,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getRatingByCurrentUser(): ?float
     {
         $result = null;
-        /** @var User $user */
+        /** @var User|null $user */
         $user = Auth::user();
         if ($user !== null) {
             $result = DungeonRouteRating::where('dungeon_route_id', $this->id)
@@ -1487,7 +1470,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             ) => $affix->key === Affix::AFFIX_XALATATHS_GUILE);
 
             if ($xalAtathsGuile !== null) {
-                /** @var AffixGroupCoupling|null $affixCoupling */
                 $affixGroup->load(['affixGroupCouplings']);
                 $affixCoupling = $affixGroup->affixGroupCouplings->first(fn(
                     AffixGroupCoupling $affix,
@@ -1528,7 +1510,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             /** @var SeasonService $seasonService */
             $seasonService     = App::make(SeasonServiceInterface::class);
-            $currentAffixGroup = $seasonService->getCurrentSeason()->getCurrentAffixGroup();
+            $currentSeason     = $seasonService->getCurrentSeason();
+            $currentAffixGroup = $currentSeason !== null ? resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroup($currentSeason) : null;
 
             if ($currentAffixGroup !== null) {
                 foreach ($this->affixes as $affixGroup) {
@@ -1549,7 +1532,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getSubHeaderHtml(): string
     {
         // Only add the 'clone of' when the user cloned it from someone else as a form of credit
-        if (isset($model->clone_of) && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
+        if ($this->clone_of !== null && DungeonRoute::where('public_key', $this->clone_of)->where('author_id', $this->author_id)->count() === 0) {
             $subTitle = __('models.dungeonroute.subtitle_clone_of', [
                 // Can't use %s for the href since PhpStorm then complains >.>
                 'routeLink' => sprintf(
@@ -1607,11 +1590,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * {@inheritDoc}
      */
-    public function touch($attribute = null): void
+    public function touch($attribute = null): bool
     {
         DungeonRoute::dropCaches($this->id);
 
-        parent::touch($attribute);
+        return parent::touch($attribute);
     }
 
     /**
@@ -1627,7 +1610,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         if ($this->affixgroups()->count() === 0) {
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
-                'affix_group_id' => $activeSeason->getCurrentAffixGroup()?->id ??
+                'affix_group_id' => resolve(SeasonAffixGroupServiceInterface::class)->getCurrentAffixGroup($activeSeason)?->id ?? // @phpstan-ignore nullsafe.neverNull
                     $activeSeason->affixGroups->first()->id,
                 'dungeon_route_id' => $this->id,
             ]);
@@ -1697,7 +1680,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

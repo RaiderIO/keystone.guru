@@ -3,13 +3,14 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class HelperServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
      */
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         require_once app_path('Helpers/CustomHelper.php');

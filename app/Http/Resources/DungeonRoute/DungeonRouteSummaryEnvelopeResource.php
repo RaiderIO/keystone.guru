@@ -5,6 +5,7 @@ namespace App\Http\Resources\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Override;
 
 /**
  * @OA\Schema(schema="DungeonRouteSummaryEnvelope")
@@ -17,7 +18,7 @@ class DungeonRouteSummaryEnvelopeResource extends ResourceCollection
     /**
      * Transform the resource into an array.
      */
-    #[\Override]
+    #[Override]
     public function toArray(Request $request): array
     {
         return [

@@ -2,6 +2,8 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
+use Override;
+
 /**
  * @author Wouter
  *
@@ -16,7 +18,7 @@ class WorldMarkerRemoved extends SpecialEvent
         return $this->marker;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

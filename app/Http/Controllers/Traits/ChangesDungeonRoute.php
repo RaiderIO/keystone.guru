@@ -55,7 +55,7 @@ trait ChangesDungeonRoute
                 'user_id'          => $user?->id,
                 'team_id'          => $dungeonRoute->team_id,
                 'team_role'        => $user === null ? null : $dungeonRoute->team?->getUserRole($user),
-                'model_id'         => $beforeModel?->id ?? $afterModel->id,
+                'model_id'         => $beforeModel?->getKey() ?? $afterModel->getKey(),
                 'model_class'      => ($beforeModel ?? $afterModel)::class,
                 'before'           => $beforeModel !== null ? json_encode(array_intersect_key($beforeAttributes, $changedKeys)) : null,
                 'after'            => $afterModel !== null ? json_encode(array_intersect_key($afterAttributes, $changedKeys)) : null,

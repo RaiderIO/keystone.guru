@@ -31,6 +31,9 @@ use Illuminate\Support\Collection;
 use Random\RandomException;
 
 /**
+ * Converts the NPC timeline from a CombatLogRouteRequestModel into kill zones by walking engaged/died events
+ * in chronological order and grouping them into pulls using chain-pull detection.
+ *
  * @author Wouter
  *
  * @since 24/06/2023
@@ -51,11 +54,13 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         Spell::SPELL_FERAL_HIDE_DRUMS,
         Spell::SPELL_HARRIERS_CRY,
         Spell::SPELL_SHROUD_OF_CONCEALMENT,
+        Spell::SPELL_CONTROL_UNDEAD,
+        Spell::SPELL_SUBJUGATE_DEMON,
     ];
 
     private readonly CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
-    /** @var Collection<int> */
+    /** @var Collection<int, Spell> */
     protected Collection $validSpellsById;
 
     /**
@@ -160,7 +165,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         $firstEngagedAt      = null;
         $totalSpellsAssigned = 0;
         foreach ($npcEngagedAndDiedEvents as $event) {
-            /** @var $event array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} */
+            /** @var array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} $event */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
                 /** @var Floor|null $newFloor */
@@ -237,7 +242,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             } elseif ($event['type'] === 'died') {
                 // Find the pull that this enemy is part of
                 foreach ($this->activePullCollection as $activePull) {
-                    /** @var $activePull ActivePull */
+                    /** @var ActivePull $activePull */
                     if ($activePull->isEnemyInCombat($uniqueUid)) {
                         $activePull->enemyKilled($event['npc']->getUniqueId());
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
@@ -245,11 +250,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 // Handle spells and the actual creation of pulls
-                /** @var $firstActivePull ActivePull|null */
+                /** @var ActivePull|null $firstActivePull */
                 $firstActivePull          = $this->activePullCollection->first();
                 $firstActivePullCompleted = $firstActivePull?->isCompleted() ?? false;
                 foreach ($this->activePullCollection as $pullIndex => $activePull) {
-                    /** @var $activePull ActivePull */
+                    /** @var ActivePull $activePull */
                     if ($activePull->isCompleted()) {
                         if (!$firstActivePullCompleted) {
                             // Chain pulls are NEVER completed before the original pull! If they ARE, then it wasn't a

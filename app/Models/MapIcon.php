@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -36,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MapIcon extends Model implements MappingModelCloneableInterface, MappingModelInterface
+class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -140,6 +141,6 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor->dungeon_id;
     }
 }

@@ -12,7 +12,6 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
-use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
 use App\Logic\Structs\IngameXY;
@@ -72,6 +71,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Orchestrates combat log parsing: runs filters to produce result events, then builds a DungeonRoute with kill zones
+ * via CombatLogRouteDungeonRouteBuilder.
+ */
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
 {
     public function __construct(
@@ -333,7 +336,6 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         ),
                     );
                 } elseif ($resultEvent instanceof SpellCastResultEvent) {
-                    /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
                     $spells->push(
@@ -438,7 +440,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $oldChallengeModeRunData = ChallengeModeRunData::with('challengeModeRun')
                 ->firstWhere('run_id', $combatLogRoute->metadata->runId);
 
-            if ($oldChallengeModeRunData !== null && $oldChallengeModeRunData->challengeModeRun !== null) {
+            if ($oldChallengeModeRunData !== null && $oldChallengeModeRunData->challengeModeRun !== null) { // @phpstan-ignore notIdentical.alwaysTrue
                 $oldChallengeModeRunData->challengeModeRun->update([
                     'dungeon_route_id' => $dungeonRoute->id,
                 ]);
@@ -517,15 +519,15 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
-        /** @var Collection<Npc> $validNpcIds */
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Npc> $npcs */
         $npcs = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
-        /** @var Collection<int> $validNpcIds */
+        /** @var Collection<int, int> $validNpcIds */
         $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
-        /** @var Floor $previousFloor */
+        /** @var Floor|null $previousFloor */
         $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
         $latLngs       = [];
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
-            $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor;
+            $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
 
             if ($currentFloor === null) {
                 $this->log->generateMapIconsUnableToFindFloor($combatLogRouteNpc->getUniqueId());
@@ -544,14 +546,14 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
             /** @var Npc|null $npc */
             $npc     = $npcs->get($combatLogRouteNpc->npcId);
-            $comment = json_encode(['name' => __($npc?->name ?? 'Npc not found', [], 'en_US')] + $combatLogRouteNpc->toArray());
+            $comment = json_encode(['name' => __($npc?->name ?? 'Npc not found', [], 'en_US')] + $combatLogRouteNpc->toArray()); // @phpstan-ignore nullsafe.neverNull
 
             $hasResolvedEnemy = $combatLogRouteNpc->getResolvedEnemy() !== null;
 
             $mapIconAttributes[] = array_merge([
                 'mapping_version_id' => null,
                 'floor_id'           => $currentFloor->id,
-                'dungeon_route_id'   => $dungeonRoute?->id ?? null,
+                'dungeon_route_id'   => $dungeonRoute->id,
                 'team_id'            => null,
                 'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy && $validNpcIds->search($combatLogRouteNpc->npcId) !== false ?
                     MapIconType::MAP_ICON_TYPE_DOT_YELLOW :
@@ -562,7 +564,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
             if ($hasResolvedEnemy) {
                 $brushlineAttributes[] = [
-                    'dungeon_route_id' => $dungeonRoute?->id ?? null,
+                    'dungeon_route_id' => $dungeonRoute?->id ?? null, // @phpstan-ignore nullsafe.neverNull
                     'floor_id'         => $currentFloor->id,
                     'polyline_id'      => -1,
                     'created_at'       => $now,

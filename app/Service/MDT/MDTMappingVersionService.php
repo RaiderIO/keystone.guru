@@ -12,6 +12,7 @@ use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Exception;
 use Illuminate\Support\Collection;
 
 class MDTMappingVersionService implements MDTMappingVersionServiceInterface
@@ -25,7 +26,7 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
     /**
      * @throws InvalidMDTDungeonException
      * @throws InvalidMDTExpansionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMappingVersionAccuracy(MappingVersion $mappingVersion): ?Collection
     {
@@ -121,11 +122,6 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
         }
 
         return $totalAccuracy / $count;
-    }
-
-    private function getDistance(array $xy1, array $xy2): float
-    {
-        return sqrt($this->getDistanceSquared($xy1, $xy2));
     }
 
     private function getDistanceSquared(array $xy1, array $xy2): float

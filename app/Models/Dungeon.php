@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -15,6 +16,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
+use App\Models\Traits\HasCombatLogCriterion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -22,6 +24,7 @@ use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -31,6 +34,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Mockery\Exception;
+use Override;
 
 /**
  * @property int      $id                                 The ID of this Dungeon.
@@ -56,31 +60,32 @@ use Mockery\Exception;
  *
  * @property Expansion $expansion
  *
- * @property Collection<MappingVersion>             $mappingVersions
- * @property Collection<Floor>                      $floors
- * @property Collection<Floor>                      $activeFloors
- * @property Collection<DungeonRoute>               $dungeonRoutes
- * @property Collection<DungeonRoute>               $dungeonRoutesForExport
- * @property Collection<Npc>                        $npcs
- * @property Collection<Enemy>                      $enemies
- * @property Collection<EnemyPack>                  $enemyPacks
- * @property Collection<EnemyPatrol>                $enemyPatrols
- * @property Collection<MapIcon>                    $mapIcons
- * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
- * @property Collection<MountableArea>              $mountableAreas
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
- * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
- * @property Collection<Spell>                      $spells
+ * @property EloquentCollection<int, MappingVersion>             $mappingVersions
+ * @property EloquentCollection<int, Floor>                      $floors
+ * @property EloquentCollection<int, Floor>                      $activeFloors
+ * @property EloquentCollection<int, DungeonRoute>               $dungeonRoutes
+ * @property EloquentCollection<int, DungeonRoute>               $dungeonRoutesForExport
+ * @property EloquentCollection<int, Npc>                        $npcs
+ * @property EloquentCollection<int, Enemy>                      $enemies
+ * @property EloquentCollection<int, EnemyPack>                  $enemyPacks
+ * @property EloquentCollection<int, EnemyPatrol>                $enemyPatrols
+ * @property EloquentCollection<int, MapIcon>                    $mapIcons
+ * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
+ * @property EloquentCollection<int, MountableArea>              $mountableAreas
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
+ * @property EloquentCollection<int, Spell>                      $spells
  *
- * @method static Builder active()
- * @method static Builder inactive()
- * @method static Builder factionSelectionRequired()
+ * @method static Builder<Dungeon> active()
+ * @method static Builder<Dungeon> inactive()
+ * @method static Builder<Dungeon> factionSelectionRequired()
  *
  * @mixin Eloquent
  */
-class Dungeon extends CacheModel implements MappingModelInterface, TracksPageViewInterface
+class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, MappingModelInterface, TracksPageViewInterface
 {
     use DungeonConstants;
+    use HasCombatLogCriterion;
 
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON               = 1;
     public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED         = 2;
@@ -89,7 +94,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = [
         'floor_count',
@@ -141,12 +146,13 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     private ?Season $activeSeasonCache = null;
 
+    /** @var Collection<int, MappingVersion|null>|null  */
     private ?Collection $currentMappingVersionCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -178,12 +184,12 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         try {
             // Loop through all floors
             foreach ($this->npcs as $npc) {
-                /** @var $npc Npc */
-                if ($npc !== null && $npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                /** @var Npc $npc */
+                if ($npc->classification_id < NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
                     /** @var NpcEnemyForces|null $npcEnemyForces */
                     $npcEnemyForces = $npc->enemyForcesByMappingVersion();
 
-                    $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0;
+                    $npcs[$npc->id] = ($npcEnemyForces?->enemy_forces ?? -1) >= 0; // @phpstan-ignore nullsafe.neverNull
                 }
             }
         } catch (Exception $exception) {
@@ -212,6 +218,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->belongsTo(Expansion::class);
     }
 
+    /** @return HasMany<MappingVersion, $this> */
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
@@ -228,7 +235,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             return $this->currentMappingVersionCache->get($gameVersion->id);
         }
 
-        /** @var MappingVersion $mappingVersion */
+        /** @var MappingVersion|null $mappingVersion */
         $mappingVersion = $this->mappingVersions()
             ->where('game_version_id', $gameVersion->id)
             ->orderByDesc('mapping_versions.version')
@@ -276,6 +283,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
     }
 
+    /** @return HasMany<Floor, $this> */
     public function floors(): HasMany
     {
         return $this->hasMany(Floor::class)->orderBy('index');
@@ -291,6 +299,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->floors()->active();
     }
 
+    /** @return HasMany<Floor, $this> */
     public function floorsForMapFacade(MappingVersion $mappingVersion, ?bool $useFacade = null): HasMany
     {
         $useFacade ??= $mappingVersion->facade_enabled;
@@ -334,6 +343,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->hasMany(SeasonDungeon::class);
     }
 
+    /** @return BelongsToMany<Npc, $this> */
     public function npcs(): BelongsToMany
     {
         return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');
@@ -461,23 +471,6 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             $seasonService->getCurrentSeason($this->expansion);
     }
 
-    private function getNpcsHealthBuilderEnemyForcesDungeonExclusionList(): array
-    {
-        // Unpack all raids in a single array, see https://stackoverflow.com/a/46861938/771270
-        $allRaids = array_merge(...array_values(self::ALL_RAID));
-
-        return array_merge(
-            $allRaids,
-            // These expansions never had M+ so ignore exclusions based on enemy forces since they never had any
-            self::ALL[Expansion::EXPANSION_CLASSIC],
-            self::ALL[Expansion::EXPANSION_TBC],
-            self::ALL[Expansion::EXPANSION_WOTLK],
-            self::ALL[Expansion::EXPANSION_CATACLYSM],
-            self::ALL[Expansion::EXPANSION_MOP],
-            self::ALL[Expansion::EXPANSION_WOD],
-        );
-    }
-
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
         $result = $this->npcs()
@@ -544,6 +537,11 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         ]);
     }
 
+    public function getImageLink(): ?string
+    {
+        return $this->getImageUrl();
+    }
+
     public function getImageUrl(): string
     {
         return ksgAssetImage(sprintf('dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
@@ -603,7 +601,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $dungeonService->getDungeonContext(Auth::user());
     }
 
-    #[\Override]
+    #[Override]
     public static function boot(): void
     {
         parent::boot();

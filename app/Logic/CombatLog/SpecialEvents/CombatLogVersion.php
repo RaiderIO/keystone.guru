@@ -3,7 +3,10 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 use App\Logic\CombatLog\CombatLogVersion as CombatLogVersionConstant;
+use App\Logic\CombatLog\SpecialEvents\Interfaces\HasCombatLogVersionInterface;
+use App\Logic\CombatLog\SpecialEvents\Traits\ComputesVersionLong;
 use Exception;
+use Override;
 
 /**
  * COMBAT_LOG_VERSION,20,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,10.1.0,PROJECT_ID,1
@@ -13,8 +16,10 @@ use Exception;
  *
  * @since 26/05/2023
  */
-class CombatLogVersion extends SpecialEvent
+class CombatLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
 {
+    use ComputesVersionLong;
+
     private int $version;
 
     private bool $advancedLogEnabled;
@@ -43,26 +48,15 @@ class CombatLogVersion extends SpecialEvent
         return $this->projectID;
     }
 
-    /**
-     * Get the version as a long integer that incorporates the combat log version, major, minor and patch version
-     * @return int
-     */
-    public function getVersionLong(): int
+    protected function getVersionNumber(): int
     {
-        [
-            $major,
-            $minor,
-            $patch,
-        ] = explode('.', $this->buildVersion);
-
-        return ($this->version * 1_000_000_000) +
-            ((int)$major * 1_000_000) + ((int)($minor ?? 0) * 1_000) + (int)($patch ?? 0);
+        return $this->version;
     }
 
     /**
      * @throws Exception
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

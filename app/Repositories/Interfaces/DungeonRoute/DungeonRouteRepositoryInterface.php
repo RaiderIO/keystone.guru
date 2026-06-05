@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
  * @method bool                     update(DungeonRoute $model, array $attributes = [], array $options = [])
  * @method bool                     delete(DungeonRoute $model)
  * @method Collection<DungeonRoute> all()
+ * @method bool                     exists(array $columns)
  */
 interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 {
@@ -27,7 +28,7 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection;
 
-    /** @return Collection<string, Collection<WeeklyRoute>> */
+    /** @return Collection<string, Collection<int, WeeklyRoute>> */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection;
 
     /** @return Collection<SimilarDungeonRoute> */

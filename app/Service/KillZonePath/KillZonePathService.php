@@ -100,7 +100,7 @@ class KillZonePathService implements KillZonePathServiceInterface
         $edges = [];
 
         // --- Dungeon start node ---
-        if ($dungeonStart !== null && $dungeonStart->floor !== null) {
+        if ($dungeonStart !== null) {
             $startLatLng    = $dungeonStart->getLatLng();
             $nodes['start'] = new PathNode(
                 'start',
@@ -113,7 +113,7 @@ class KillZonePathService implements KillZonePathServiceInterface
         /** @var Collection<int, DungeonFloorSwitchMarker> $markersById */
         $markersById = $allMarkers->keyBy('id');
         foreach ($allMarkers as $marker) {
-            if ($marker->floor === null || $marker->floor->facade) {
+            if ($marker->floor->facade) {
                 continue;
             }
 
@@ -169,13 +169,17 @@ class KillZonePathService implements KillZonePathServiceInterface
             }
 
             // --- Cross-floor edges via linked floor-switch marker pairs (weight 0) ---
+            // A null linked_dungeon_floor_switch_marker_id indicates a one-way marker: no cross-floor
+            // edge is added, so pathfinding cannot traverse through it in that direction. To make a
+            // switch one-way in the admin map, set linked_dungeon_floor_switch_marker_id to null on
+            // the marker whose direction of travel should be blocked.
             foreach ($allMarkers as $marker) {
                 if ($marker->linked_dungeon_floor_switch_marker_id === null) {
                     continue;
                 }
 
                 $linkedMarker = $markersById->get($marker->linked_dungeon_floor_switch_marker_id);
-                if ($linkedMarker === null || $linkedMarker->floor === null) {
+                if ($linkedMarker === null) {
                     continue;
                 }
 

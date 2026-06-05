@@ -250,5 +250,77 @@
         "color_animated": null,
         "label": "Imported from MDT - group 19",
         "vertices_json": "[{\"lat\":-151.7955,\"lng\":176.0715},{\"lat\":-149.5654,\"lng\":176.0715},{\"lat\":-149.5654,\"lng\":187.204},{\"lat\":-151.7955,\"lng\":187.204}]"
+    },
+    {
+        "id": 23873,
+        "mapping_version_id": 765,
+        "floor_id": 297,
+        "group": 15,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 15",
+        "vertices_json": "[{\"lat\":-121.0036,\"lng\":129.3443},{\"lat\":-92.2387,\"lng\":129.3443},{\"lat\":-92.2387,\"lng\":158.4975},{\"lat\":-121.0036,\"lng\":158.4975}]"
+    },
+    {
+        "id": 23874,
+        "mapping_version_id": 765,
+        "floor_id": 297,
+        "group": 16,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 16",
+        "vertices_json": "[{\"lat\":-181.5231,\"lng\":129.0854},{\"lat\":-169.8728,\"lng\":129.0854},{\"lat\":-169.8728,\"lng\":139.7721},{\"lat\":-181.5231,\"lng\":139.7721}]"
+    },
+    {
+        "id": 23875,
+        "mapping_version_id": 765,
+        "floor_id": 297,
+        "group": 18,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 18",
+        "vertices_json": "[{\"lat\":-182.76,\"lng\":171.2535},{\"lat\":-172.7348,\"lng\":171.2535},{\"lat\":-172.7348,\"lng\":190.3537},{\"lat\":-182.76,\"lng\":190.3537}]"
+    },
+    {
+        "id": 23876,
+        "mapping_version_id": 765,
+        "floor_id": 297,
+        "group": 14,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 14",
+        "vertices_json": "[{\"lat\":-94.1524,\"lng\":128.6683},{\"lat\":-84.0409,\"lng\":128.6683},{\"lat\":-84.0409,\"lng\":139.7002},{\"lat\":-94.1524,\"lng\":139.7002}]"
+    },
+    {
+        "id": 23877,
+        "mapping_version_id": 765,
+        "floor_id": 297,
+        "group": 17,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 17",
+        "vertices_json": "[{\"lat\":-219.1465,\"lng\":129.6751},{\"lat\":-208.5029,\"lng\":129.6751},{\"lat\":-208.5029,\"lng\":140.7501},{\"lat\":-219.1465,\"lng\":140.7501}]"
+    },
+    {
+        "id": 23883,
+        "mapping_version_id": 765,
+        "floor_id": 297,
+        "group": 19,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 19",
+        "vertices_json": "[{\"lat\":-151.7955,\"lng\":176.0715},{\"lat\":-149.5654,\"lng\":176.0715},{\"lat\":-149.5654,\"lng\":187.204},{\"lat\":-151.7955,\"lng\":187.204}]"
     }
 ]

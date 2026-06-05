@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property string $model_class
- * @property Model  $model
+ * @property class-string $model_class
+ * @property Model        $model
  *
  * @mixin Model
  */

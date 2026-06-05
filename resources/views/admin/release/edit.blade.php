@@ -19,7 +19,13 @@ $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
     'title' => isset($release) ? __('view_admin.release.edit.title_edit') : __('view_admin.release.edit.title_new')
 ])
 @section('header-title', isset($release) ? __('view_admin.release.edit.header_edit') : __('view_admin.release.edit.header_new'))
-@include('common.general.inline', ['path' => 'admin/release/edit', 'options' => ['changelog' => $changelog, 'categories' => $categories]])
+@include('common.general.inline', ['path' => 'admin/release/edit', 'options' => [
+    'changelog' => $changelog,
+    'categories' => $categories,
+    'addChangeButtonSelector' => '#add_change_button',
+    'changesContainerSelector' => '#changes_container',
+    'changeDeleteBtnSelector' => '.change_delete_btn',
+]])
 
 @section('content')
     @isset($release)

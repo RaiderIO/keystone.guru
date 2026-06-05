@@ -102,7 +102,7 @@ $zoomToContents ??= false;
 // Show ads or not
 $showAds ??= true;
 // If this is an embedded route, do not show ads
-if ($embed || $dungeonroute?->demo === 1) {
+if ($embed || $dungeonroute?->demo === true) {
     $showAds = false;
 }
 
@@ -326,6 +326,7 @@ if ($isAdmin) {
             'selectedFloorId' => $floor->id,
             'dungeonroute' => $dungeonroute,
             'isMobile' => $isMobile,
+            'facadeEnabled' => $mappingVersion->facade_enabled,
         ])
     @elseif(isset($show['controls']['present']) && $show['controls']['present'])
         @include('common.maps.controls.present', [

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                         update(MappingChangeLog $model, array $attributes = [], array $options = [])
  * @method bool                         delete(MappingChangeLog $model)
  * @method Collection<MappingChangeLog> all()
+ * @method bool                         exists(array $columns)
  */
 interface MappingChangeLogRepositoryInterface extends BaseRepositoryInterface
 {

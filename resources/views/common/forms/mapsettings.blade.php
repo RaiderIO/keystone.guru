@@ -3,6 +3,7 @@
 use App\Models\User;
 
 $mapFacadeStyleChecked            = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+$killzonePathWeight               = User::getCurrentUserKillzonePathWeight();
 $mapZoomSpeed                     = $_COOKIE['map_zoom_speed'] ?? '50';
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
 $mapHeatmapShowTooltips           = $_COOKIE['map_heatmap_show_tooltips'] ?? 1;
@@ -14,34 +15,6 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 <div class="draw_settings_tools container">
 
     <h4>{{ __('view_common.forms.mapsettings.general') }}</h4>
-
-    <!-- Map facade style -->
-    <div class="form-group">
-        <div class="row">
-            <div class="col">
-                <label for="map_settings_map_facade_style">
-                    {{ __('view_common.forms.mapsettings.map_facade_style') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
-                       title="{{ __('view_common.forms.mapsettings.map_facade_style_title') }}"></i>
-                </label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <input id="map_settings_map_facade_style" type="checkbox"
-                       {{ $mapFacadeStyleChecked ? 'checked' : '' }}
-                       data-toggle="toggle" data-width="200px" data-height="20px"
-                       data-onstyle="primary" data-offstyle="primary"
-                       data-on="{{ __('view_common.forms.mapsettings.map_facade_style_facade_option') }}"
-                       data-off="{{ __('view_common.forms.mapsettings.map_facade_style_split_floors_option') }}">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                {{ __('view_common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}
-            </div>
-        </div>
-    </div>
 
     <!-- Map zoom speed -->
     <div class="form-group">
@@ -195,6 +168,30 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row no-gutters">
             <div class="col pr-2">
                 {{ html()->checkbox('map_settings_enemy_dangerous_border', $mapEnemyDangerousBorder, 1)->id('map_settings_enemy_dangerous_border')->class('form-control left_checkbox') }}
+            </div>
+        </div>
+    </div>
+
+    <h4>{{ __('view_common.forms.mapsettings.kill_zone_path') }}</h4>
+
+    <!-- Killzone path stroke width -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label for="map_settings_kill_zone_path_weight">
+                    {{ __('view_common.forms.mapsettings.kill_zone_path_weight') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('view_common.forms.mapsettings.kill_zone_path_weight_title') }}"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="map_settings_kill_zone_path_weight" class="form-control-range" type="range" min="1"
+                       max="5" value="{{ $killzonePathWeight }}">
+            </div>
+            <div class="col-auto value">
+                {{ $killzonePathWeight }}
             </div>
         </div>
     </div>

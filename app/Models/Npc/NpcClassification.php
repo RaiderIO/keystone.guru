@@ -5,8 +5,8 @@ namespace App\Models\Npc;
 use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int    $id
@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * @property string $key
  * @property string $color
  *
- * @property Collection<Npc> $npcs
+ * @property EloquentCollection<int, Npc> $npcs
  *
  * @mixin Eloquent
  */
@@ -29,13 +29,13 @@ class NpcClassification extends CacheModel
         'color',
     ];
 
-    public const NPC_CLASSIFICATION_NORMAL     = 'normal';
-    public const NPC_CLASSIFICATION_ELITE      = 'elite';
-    public const NPC_CLASSIFICATION_BOSS       = 'boss';
-    public const NPC_CLASSIFICATION_FINAL_BOSS = 'finalboss';
-    public const NPC_CLASSIFICATION_RARE       = 'rare';
+    public const string NPC_CLASSIFICATION_NORMAL     = 'normal';
+    public const string NPC_CLASSIFICATION_ELITE      = 'elite';
+    public const string NPC_CLASSIFICATION_BOSS       = 'boss';
+    public const string NPC_CLASSIFICATION_FINAL_BOSS = 'finalboss';
+    public const string NPC_CLASSIFICATION_RARE       = 'rare';
 
-    public const ALL = [
+    public const array ALL = [
         self::NPC_CLASSIFICATION_NORMAL     => 1,
         self::NPC_CLASSIFICATION_ELITE      => 2,
         self::NPC_CLASSIFICATION_BOSS       => 3,

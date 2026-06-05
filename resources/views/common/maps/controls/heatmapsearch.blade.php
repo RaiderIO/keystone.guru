@@ -25,7 +25,7 @@ use Illuminate\Support\Collection;
  * @var bool                                     $embed
  * @var string                                   $embedStyle
  * @var bool                                     $isMobile
- * @var integer                                  $defaultState
+ * @var integer|null                             $defaultState
  * @var bool                                     $hideOnMove
  * @var bool                                     $showAllEnabled
  * @var Collection<AffixGroup>                   $allAffixGroupsByActiveExpansion

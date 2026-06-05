@@ -9,7 +9,6 @@ use App\Http\Requests\DungeonRoute\DungeonRoutePreviewUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeFormRequest;
-use App\Jobs\RefreshEnemyForces;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -17,6 +16,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\User;
 use App\Models\UserReport;
+use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -27,6 +27,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -59,7 +60,7 @@ class DungeonRouteController extends Controller
         DungeonRoute                   $dungeonroute,
         ?string                        $title = null,
     ): RedirectResponse {
-        /** @var Floor $defaultFloor */
+        /** @var Floor|null $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->defaultOrFacade($dungeonroute->mappingVersion)
             ->first();
@@ -68,7 +69,7 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorIndex'   => $defaultFloor?->index ?? '1',
+            'floorIndex'   => $defaultFloor->index,
         ] + $request->validated());
     }
 
@@ -92,7 +93,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+        if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -113,13 +114,13 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_VIEW_ROUTE);
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
                 ->defaultOrFacade($dungeonroute->mappingVersion)
                 ->first();
@@ -128,7 +129,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor?->index ?? '1',
+                'floorIndex'   => $defaultFloor->index,
             ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -165,7 +166,7 @@ class DungeonRouteController extends Controller
         DungeonRoute                   $dungeonroute,
         ?string                        $title = null,
     ): RedirectResponse {
-        /** @var Floor $defaultFloor */
+        /** @var Floor|null $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->defaultOrFacade($dungeonroute->mappingVersion)
             ->first();
@@ -174,7 +175,7 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorIndex'   => $defaultFloor?->index ?? '1',
+            'floorIndex'   => $defaultFloor->index,
         ] + $request->validated());
     }
 
@@ -206,7 +207,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
+        if ($dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.present', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -216,13 +217,13 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE);
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
                 ->defaultOrFacade($dungeonroute->mappingVersion)
                 ->first();
@@ -231,7 +232,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor?->index ?? '1',
+                'floorIndex'   => $defaultFloor->index,
             ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -279,7 +280,7 @@ class DungeonRouteController extends Controller
         $zoomLevel = $request->get('z');
 
         $titleSlug = $dungeonroute->getTitleSlug();
-        if (!isset($title) || $titleSlug !== $title) {
+        if ($titleSlug !== $title) {
             return redirect()->route('dungeonroute.preview', [
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
@@ -375,7 +376,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
-     * @return Application|RedirectResponse|Redirector
+     * @return Application|RedirectResponse|Redirector|View
      *
      * @throws AuthorizationException
      */
@@ -431,7 +432,7 @@ class DungeonRouteController extends Controller
         DungeonRoute                   $dungeonroute,
         ?string                        $title = null,
     ): RedirectResponse {
-        /** @var Floor $defaultFloor */
+        /** @var Floor|null $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->defaultOrFacade($dungeonroute->mappingVersion)
             ->first();
@@ -440,7 +441,7 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorIndex'   => $defaultFloor?->index ?? '1',
+            'floorIndex'   => $defaultFloor->index,
         ] + $request->validated());
     }
 
@@ -474,13 +475,13 @@ class DungeonRouteController extends Controller
             ] + $request->validated());
         }
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
                 ->defaultOrFacade($dungeonroute->mappingVersion)
                 ->first();
@@ -489,7 +490,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor?->index ?? '1',
+                'floorIndex'   => $defaultFloor->index,
             ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -516,16 +517,16 @@ class DungeonRouteController extends Controller
                 'floor'        => $floor,
                 'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, User::getCurrentUserMapFacadeStyle()),
                 'floorIndex'   => $floorIndex,
-                'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-                'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+                'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
                 'parameters'   => $request->validated(),
             ]);
         }
     }
 
     /**
-     * @param  mixed                    $dungeonroute
-     * @return Application|Factory|View
+     * @param  mixed                             $dungeonroute
+     * @return Application|Factory|View|Response
      *
      * @throws AuthorizationException
      */
@@ -559,7 +560,7 @@ class DungeonRouteController extends Controller
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
             ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
             ->first();
@@ -694,29 +695,17 @@ class DungeonRouteController extends Controller
     /**
      * @throws AuthorizationException
      * @throws InvalidArgumentException
-     * @throws Exception
      */
     public function upgrade(
-        Request      $request,
-        Dungeon      $dungeon,
-        DungeonRoute $dungeonroute,
-        ?string      $title,
+        DungeonRouteServiceInterface $dungeonRouteService,
+        Dungeon                      $dungeon,
+        DungeonRoute                 $dungeonroute,
+        ?string                      $title,
     ): RedirectResponse {
         Gate::authorize('edit', $dungeonroute);
 
-        // Store it
-        $dungeonroute->update([
-            'mapping_version_id' => $dungeonroute->dungeon->getCurrentMappingVersion(
-                $dungeonroute->mappingVersion->gameVersion,
-            )->id,
-        ]);
+        $dungeonRouteService->upgradeMappingVersion($dungeonroute);
 
-        // Refresh the enemy forces
-        new RefreshEnemyForces($dungeonroute->id)->handle();
-
-        DungeonRoute::dropCaches($dungeonroute->id);
-
-        // Display the edit page
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,

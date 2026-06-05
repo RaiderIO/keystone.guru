@@ -639,8 +639,8 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
                 'id'         => MapIconType::ALL[$key],
                 'key'        => $key,
                 'name'       => $mapIconType['name'],
-                'width'      => $mapIconType['width'] ?? 32,
-                'height'     => $mapIconType['height'] ?? 32,
+                'width'      => $mapIconType['width'],
+                'height'     => $mapIconType['height'],
                 'admin_only' => $mapIconType['admin_only'] ?? 0,
             ];
         }

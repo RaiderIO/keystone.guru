@@ -69,10 +69,9 @@ use (
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(
-                static fn(AffixGroup $affixGroup
-                ) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null
-            );
+            $tierAffixGroup = $dungeonroute->affixes->filter(
+                static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id
+            )->isNotEmpty() ? $currentAffixGroup : null;
         }
     }
     // Attempt a default value if there's only one affix set
@@ -249,7 +248,9 @@ use (
 };
 
 if ($cache) {
-    $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
+    /** @var \App\Models\User|null $authUser */
+    $authUser          = Auth::user();
+    $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
 // Echo the result of this function
     echo $cacheService->remember(
         DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),

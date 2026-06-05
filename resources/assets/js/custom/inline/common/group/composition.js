@@ -1,3 +1,15 @@
+/**
+ * @typedef {Object} CommonGroupCompositionOptions
+ * @property {number} unspecifiedFactionId
+ * @property {Object[]} factions
+ * @property {Object[]} classDetails
+ * @property {Object[]} specializations
+ * @property {Object[]} races
+ */
+
+/**
+ * @property {CommonGroupCompositionOptions} options
+ */
 class CommonGroupComposition extends InlineCode {
     activate() {
         super.activate();

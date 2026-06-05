@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class RegenerateCombatLogRoute implements ShouldQueue
 {
@@ -47,7 +48,7 @@ class RegenerateCombatLogRoute implements ShouldQueue
             }
 
             $challengeModeRun = $dungeonRoute->challengeModeRun;
-            if ($challengeModeRun === null || $challengeModeRun->challengeModeRunData === null) {
+            if ($challengeModeRun === null || $challengeModeRun->challengeModeRunData === null) { // @phpstan-ignore identical.alwaysFalse
                 $log->handleChallengeModeRunNotSet();
 
                 return;
@@ -73,7 +74,7 @@ class RegenerateCombatLogRoute implements ShouldQueue
                 ]);
 
                 $result = true;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $log->handleRequestError($e->getMessage());
             }
         } finally {

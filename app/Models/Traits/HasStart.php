@@ -24,7 +24,7 @@ trait HasStart
         $start->startOfWeek();
         $start->addDays(($region ?? $userRegion)->reset_day_offset);
         $start->addHours(($region ?? $userRegion)->reset_hours_offset);
-        $start->setTimezone($region?->timezone ?? $this->getUserTimezone());
+        $start->setTimezone($region?->timezone ?? $this->getUserTimezone()); // @phpstan-ignore nullsafe.neverNull
 
         return $start;
     }

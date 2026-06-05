@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Prefixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class Swing extends Prefix
 {
@@ -11,7 +12,7 @@ class Swing extends Prefix
         return 0;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         return $this;

@@ -494,7 +494,7 @@ class DungeonMap extends Signalable {
         // If we selected an enemy
         if (getState().getMapContext() instanceof MapContextLiveSession) {
 
-        } else if (this.options.edit && EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
+        } else if (EditKillZoneEnemySelection.isEnemySelectable(enemy)) {
             let shiftKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.shiftKey;
             let ctrlKeyPressed = enemyClickedEvent.data.clickEvent.originalEvent.ctrlKey;
 
@@ -506,6 +506,9 @@ class DungeonMap extends Signalable {
             if (this.mapState === null && ctrlKeyPressed && this.options.edit) {
                 // Add it to a new pull
                 let newKillZone = killZoneMapObjectGroup.createNewPull([enemy.id]);
+                if (newKillZone === null) {
+                    return;
+                }
 
                 this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             } else if (selectedEnemyExistingKillZone instanceof KillZone && this.mapState === null && !shiftKeyPressed) {
@@ -517,7 +520,7 @@ class DungeonMap extends Signalable {
                 }
             }
             // Shift click creates a new pack always
-            else if (this.mapState === null || (this.mapState instanceof EditKillZoneEnemySelection && shiftKeyPressed)) {
+            else if (this.options.edit && (this.mapState === null || (this.mapState instanceof EditKillZoneEnemySelection && shiftKeyPressed))) {
                 // Create a new pack instead
 
                 // Add ourselves to this new pull
@@ -535,6 +538,9 @@ class DungeonMap extends Signalable {
                 // Create a new pull; all UI will update based on the events fired here.
                 let selectedKillZoneIndex = currentMapState instanceof EditKillZoneEnemySelection ? currentMapState.getMapObject().index : null;
                 let newKillZone = killZoneMapObjectGroup.createNewPull(enemyIds, selectedKillZoneIndex);
+                if (newKillZone === null) {
+                    return;
+                }
 
                 this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             }

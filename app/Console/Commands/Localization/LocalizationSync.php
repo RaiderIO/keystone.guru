@@ -138,6 +138,7 @@ class LocalizationSync extends Command
         $result      = $lemmas === false ? [] : '';
         $tree        = [null];
         $expects_key = false;
+        $segment     = '';
 
         while (strlen($content) > 0) {
             // whitespace, multiline comment, single line comment, initial return statement, final semicolon, array pair separator, array item separator, php opening tag, php closing tag

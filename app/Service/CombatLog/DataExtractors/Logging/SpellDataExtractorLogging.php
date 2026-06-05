@@ -40,19 +40,4 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
     {
         $this->end(__METHOD__);
     }
-
-    public function createSpellAndFetchInfoSpellDataResultIsNull(int $spellId): void
-    {
-        $this->warning(__METHOD__, get_defined_vars());
-    }
-
-    public function createSpellAndFetchInfoStart(int $spellId): void
-    {
-        $this->start(__METHOD__, get_defined_vars());
-    }
-
-    public function createSpellAndFetchInfoEnd(): void
-    {
-        $this->end(__METHOD__);
-    }
 }

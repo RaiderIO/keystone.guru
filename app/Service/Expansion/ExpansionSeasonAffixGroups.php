@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Illuminate\Support\Collection;
 
 class ExpansionSeasonAffixGroups
@@ -20,21 +21,25 @@ class ExpansionSeasonAffixGroups
     private Collection $allAffixGroups;
 
     public function __construct(
-        ExpansionServiceInterface $expansionService,
-        Expansion                 $expansion,
-        GameServerRegion          $gameServerRegion,
-        ExpansionSeason           $expansionSeason,
+        ExpansionServiceInterface        $expansionService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        Expansion                        $expansion,
+        GameServerRegion                 $gameServerRegion,
+        ExpansionSeason                  $expansionSeason,
     ) {
-        $this->featuredAffixes   = $expansionSeason->getSeason()?->getFeaturedAffixes() ?? collect();
+        $season = $expansionSeason->getSeason();
+
         $this->currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $gameServerRegion);
         $this->nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
 
-        if ($expansionSeason->getSeason() !== null) {
-            $this->allAffixGroups = $expansionSeason->getSeason()->affixGroups()
+        if ($season !== null) {
+            $this->featuredAffixes = $seasonAffixGroupService->getFeaturedAffixes($season);
+            $this->allAffixGroups  = $expansionSeason->getSeason()->affixGroups()
                 ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
                 ->get();
         } else {
-            $this->allAffixGroups = collect();
+            $this->featuredAffixes = collect();
+            $this->allAffixGroups  = collect();
         }
     }
 

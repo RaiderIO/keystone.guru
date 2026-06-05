@@ -4,10 +4,19 @@ return [
 
     'home' => [
         'front_page' => 'Keystone.guru',
-        'affixes'    => 'Affixes',
-        'about'      => 'About',
-        'credits'    => 'Credits',
-        'changelog'  => [
+        'compendium' => [
+            'npc'          => 'NPC Compendium',
+            'npc_show'     => ':name',
+            'spell'        => 'Spell Compendium',
+            'spell_show'   => ':name',
+            'activity'     => 'Compendium Activity',
+            'activity_day' => ':date',
+            'class'        => 'By Class',
+        ],
+        'affixes'   => 'Affixes',
+        'about'     => 'About',
+        'credits'   => 'Credits',
+        'changelog' => [
             'list'    => 'Changelog',
             'release' => [
                 'view' => 'Release :version',
@@ -73,6 +82,7 @@ return [
                 'npcs_missing_display_id'                    => 'NPCs missing display ID',
                 'thumbnails_regenerate'                      => 'Regenerate thumbnails',
                 'combat_log_regenerate'                      => 'Regenerate ARC routes',
+                'combat_log_criteria'                        => 'NPC Compendium parsing criteria',
                 'dungeonroute_view'                          => 'View dungeon route',
                 'dungeonroute_view_contents'                 => 'Route contents',
                 'dungeonroute_mapping_version_usage'         => 'Mapping version usage',

@@ -40,22 +40,23 @@ $id              ??= 'route_select_affixes';
 
 $allAffixGroupsWithSeasons = $allAffixGroups
     ->merge($currentSeason->affixGroups)
-    ->merge($nextSeason?->affixGroups ?? collect());
+    ->merge($nextSeason !== null ? $nextSeason->affixGroups : collect());
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
-    'dungeonroute'      => $dungeonroute ?? null,
-    'selectSelector'    => '#' . $id,
-    'dungeonSelector'   => $dungeonSelector,
-    'teemingSelector'   => $teemingSelector,
-    'modal'             => $modal ?? false,
-    'defaultSelected'   => $defaultSelected,
-    'allExpansions'     => $allExpansions,
-    'allAffixGroups'    => $allAffixGroups,
-    'dungeonExpansions' => $dungeonExpansions,
-    'currentAffixes'    => $currentAffixes,
-    'currentSeason'     => $currentSeason,
-    'nextSeason'        => $nextSeason,
+    'dungeonroute'          => $dungeonroute ?? null,
+    'selectSelector'        => '#' . $id,
+    'dungeonSelector'       => $dungeonSelector,
+    'teemingSelector'       => $teemingSelector,
+    'modal'                 => $modal ?? false,
+    'defaultSelected'       => $defaultSelected,
+    'allExpansions'         => $allExpansions,
+    'allAffixGroups'        => $allAffixGroups,
+    'dungeonExpansions'     => $dungeonExpansions,
+    'currentAffixes'        => $currentAffixes,
+    'currentSeason'         => $currentSeason,
+    'nextSeason'            => $nextSeason,
+    'seasonalIndexSelector' => '#seasonal_index',
 ]])
 
 <?php // @formatter:off ?>

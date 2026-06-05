@@ -3,7 +3,6 @@
 namespace App\Service\Wowhead;
 
 use App\Models\Dungeon;
-use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Traits\Curl;
 use App\Service\Wowhead\Logging\WowheadTranslationServiceLoggingInterface;
@@ -16,6 +15,7 @@ use PHPHtmlParser\Exceptions\LogicalException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 use PHPHtmlParser\Exceptions\StrictException;
 use PHPHtmlParser\Options;
+use Str;
 
 class WowheadTranslationService implements WowheadTranslationServiceInterface
 {
@@ -35,22 +35,6 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         'ru_RU' => 'ru/',
         'pt_BR' => 'pt/',
         'it_IT' => 'it/',
-    ];
-
-    private const array EXPANSION_URL_MAPPING = [
-        Expansion::EXPANSION_CLASSIC      => 'classic',
-        Expansion::EXPANSION_TBC          => 'burning-crusade',
-        Expansion::EXPANSION_WOTLK        => 'wrath',
-        Expansion::EXPANSION_CATACLYSM    => 'cataclysm',
-        Expansion::EXPANSION_MOP          => 'mists',
-        Expansion::EXPANSION_WOD          => 'warlords',
-        Expansion::EXPANSION_LEGION       => 'legion',
-        Expansion::EXPANSION_BFA          => 'bfa',
-        Expansion::EXPANSION_SHADOWLANDS  => 'shadowlands',
-        Expansion::EXPANSION_DRAGONFLIGHT => 'dragonflight',
-        Expansion::EXPANSION_TWW          => 'war-within',
-        Expansion::EXPANSION_MIDNIGHT     => 'midnight',
-        Expansion::EXPANSION_TLT          => 'last-titan',
     ];
 
     public function __construct(private WowheadTranslationServiceLoggingInterface $log)
@@ -104,7 +88,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
 
                     $result->put($locale, $result->get($locale, collect())
-                        ->put($npcId, $npcName ?? ''));
+                        ->put($npcId, $npcName));
                 }
             }
         }
@@ -190,7 +174,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
                     $response = $this->curlGet($url);
 
-                    $response = \Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
+                    $response = Str::replace('data.page.listPage.listviews', 'dataPageListPageListviews', $response);
 
                     $dom = new Dom();
                     $dom->loadStr($response, new Options()->setRemoveScripts(false));
@@ -257,82 +241,5 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
         }
 
         return collect($result);
-    }
-
-    /**
-     * The below is not valid JSON, this will need to be corrected.
-     *
-     * {
-     * template: 'zone',
-     * id: 'zones',
-     * extraCols: ['popularity'],
-     * sort: ["popularity"],
-     * maxPopularity: 481,
-     * hiddenCols: ['territory'],
-     * data: [{
-     *
-     * @param  string     $line
-     * @return array|null
-     */
-    private function correctMalformedJson(string $line): ?array
-    {
-        $jsObject = substr($line, strlen('<script'));
-        $jsObject = rtrim($jsObject, '</script>');
-
-        // This $jsObject contains some issues that we need to fix before we can decode it as JSON
-        // 1) Unquoted keys
-        // 2) Single quotes instead of double quotes
-
-        // Find the part that ends with "data: "
-        $dataPos = strpos($jsObject, 'data: ');
-        if ($dataPos === false) {
-            return null; // No data found, skip
-        }
-        $headersStr = substr($jsObject, 0, $dataPos);
-        // Remove the trailing comma
-        $headersStr = trim($headersStr, PHP_EOL . ', ');
-        // Append a closing brace to make it a "valid" JSON object
-        $headersStr .= '}';
-
-        $headersJson   = $this->jsObjectToJson($headersStr);
-        $parsedHeaders = json_decode($headersJson, true);
-
-        $dataStr    = substr($jsObject, $dataPos + strlen('data: '));
-        $parsedData = json_decode(sprintf('{"data": %s', $dataStr), true);
-
-        return array_merge($parsedHeaders, $parsedData);
-    }
-
-    private function jsObjectToJson(string $s): string
-    {
-        // 1) Quote unquoted object keys: foo: -> "foo":
-        $s = preg_replace('/([{\s,])([A-Za-z_][A-Za-z0-9_]*)\s*:/', '$1"$2":', $s);
-
-        // 2) Convert single-quoted strings to double-quoted, escaping inner quotes/backslashes.
-        $s = preg_replace_callback("/'([^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/", function ($m) {
-            $inner = $m[1];
-            // Unescape any escaped single quotes first, then escape backslashes and double quotes for JSON
-            $inner = str_replace([
-                "\\'",
-                "\\\\",
-            ], [
-                "'",
-                "\\\\",
-            ], $inner);
-            $inner = str_replace([
-                '\\',
-                '"',
-            ], [
-                '\\\\',
-                '\\"',
-            ], $inner);
-
-            return '"' . $inner . '"';
-        }, (string)$s);
-
-        // 3) Remove trailing commas before } or ] (common in JS, invalid in JSON)
-        $s = preg_replace('/,\s*([\]}])/', '$1', (string)$s);
-
-        return $s;
     }
 }

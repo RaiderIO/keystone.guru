@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool              update(Affix $model, array $attributes = [], array $options = [])
  * @method bool              delete(Affix $model)
  * @method Collection<Affix> all()
+ * @method bool              exists(array $columns)
  */
 interface AffixRepositoryInterface extends BaseRepositoryInterface
 {

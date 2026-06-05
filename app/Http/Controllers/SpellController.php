@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\SpellFormRequest;
+use App\Models\Characteristic;
 use App\Models\Spell\Spell;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -56,9 +57,10 @@ class SpellController extends Controller
             $mask |= (int)$school;
         }
 
-        $spell->schools_mask = $mask;
-        $spell->aura         = $validated['aura'] ?? false;
-        $spell->selectable   = $validated['selectable'] ?? false;
+        $spell->schools_mask      = $mask;
+        $spell->aura              = $validated['aura'] ?? false;
+        $spell->selectable        = $validated['selectable'] ?? false;
+        $spell->characteristic_id = $validated['characteristic_id'] ?? null;
 
         if ($spell->save()) {
             // Trigger mapping changed event so the mapping gets saved across all environments
@@ -74,7 +76,7 @@ class SpellController extends Controller
     /**
      * Show a page for creating a new spell.
      *
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -82,7 +84,7 @@ class SpellController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function edit(Request $request, Spell $spell): View
     {
@@ -131,7 +133,7 @@ class SpellController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {
@@ -141,7 +143,8 @@ class SpellController extends Controller
     private function getEditViewParams(): array
     {
         return [
-            'categories' => collect(Spell::ALL_CATEGORIES)->mapWithKeys(fn(string $category) => [
+            'allCharacteristics' => Characteristic::all(),
+            'categories'         => collect(Spell::ALL_CATEGORIES)->mapWithKeys(fn(string $category) => [
                 $category => __(sprintf('spellcategory.%s', $category)),
             ])->toArray(),
             'dispelTypes' => collect(Spell::ALL_DISPEL_TYPES)->mapWithKeys(fn(string $dispelType) => [

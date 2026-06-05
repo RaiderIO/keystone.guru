@@ -23,7 +23,6 @@ final class DamageSplitTest extends PublicTestCase
         $combatLogEntry = new CombatLogEntry($damageSplitEvent);
 
         // Act
-        /** @var DamageSplitInterface $parseEventResult */
         $parseEventResult = $combatLogEntry->parseEvent();
 
         // Assert

@@ -1,10 +1,33 @@
+/**
+ * @typedef {Object} DungeonrouteTableOptions
+ * @property {number} currentUserId
+ * @property {string} currentUserPublicKey
+ * @property {string} tableView
+ * @property {string} viewMode
+ * @property {string} tableSelector
+ * @property {string} filterButtonSelector
+ * @property {string} dungeonSelectId
+ * @property {string} affixSelectId
+ * @property {string} attributesSelectId
+ * @property {string} requirementsSelectId
+ * @property {string} tagsSelectId
+ * @property {string} tableListViewToggleSelector
+ * @property {string|null} teamPublicKey
+ * @property {Object[]} teams
+ * @property {Object[]} autoCompleteTags
+ */
+
+/**
+ * @property {DungeonrouteTableOptions} options
+ */
 class DungeonrouteTable extends InlineCode {
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
         this._viewMode = 'biglist';
         this._dt = null;
 
+        /** @type TableView */
         this._tableView = null;
         this._routeData = [];
         // Handles the displaying of tags inside the table
@@ -23,19 +46,32 @@ class DungeonrouteTable extends InlineCode {
         }
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
         let self = this;
 
-        $('#dungeonroute_filter').unbind('click').bind('click', function () {
+        $(this.options.filterButtonSelector).unbind('click').bind('click', function () {
+            // Build the search parameters
+            let dungeonId = $(self.options.dungeonSelectId).val();
+            let affixes = $(self.options.affixSelectId).val();
+            let attributes = $(self.options.attributesSelectId).val();
+
+            // Find wherever the columns are we're looking for, then filter using them
+            // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
+            $.each(self._dt.settings().init().columns, function (index, value) {
+                if (value.name === 'dungeon_id') {
+                    self._dt.column(index).search(dungeonId);
+                } else if (value.name === 'affixes.id') {
+                    self._dt.column(index).search(affixes);
+                } else if (value.name === 'routeattributes.name') {
+                    self._dt.column(index).search(attributes);
+                }
+            });
             self._dt.draw();
         });
 
-        $('.table_list_view_toggle').unbind('click').bind('click', function () {
+        $(this.options.tableListViewToggleSelector).unbind('click').bind('click', function () {
             // Display the correct table
             self.setViewMode($(this).data('viewmode'));
             self.refreshTable();
@@ -71,6 +107,10 @@ class DungeonrouteTable extends InlineCode {
                 this._tableView = new TeamTableView();
                 break;
             }
+            case 'team_route_publishing': {
+                this._tableView = new TeamRoutePublishingTableView();
+                break;
+            }
             case 'routes': {
                 this._tableView = new RoutesTableView();
                 break;
@@ -98,13 +138,13 @@ class DungeonrouteTable extends InlineCode {
         // Send cookie
         Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
 
-        let $element = $('#routes_table');
+        let $element = $(this.options.tableSelector);
 
-        // Set buttons to the correct state
-        $('.table_list_view_toggle').removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
+        // Set all to default
+        $(this.options.tableListViewToggleSelector).removeClass('btn-default').removeClass('btn-primary').addClass('btn-default');
 
         // This is now the selected button
-        $('#table_' + self._viewMode + '_btn').removeClass('btn-default').addClass('btn-primary');
+        $(`${this.options.tableListViewToggleSelector}.${self._viewMode}`).removeClass('btn-default').addClass('btn-primary');
 
         if (self._dt !== null) {
             self._dt.destroy();
@@ -119,25 +159,8 @@ class DungeonrouteTable extends InlineCode {
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {
-                    let dt = $element.DataTable();
-
-                    // Map columns to the html select elements that control them
-                    const searchMap = {
-                        'dungeon_id': $('#dungeonroute_search_dungeon_id').val(),
-                        'affixes.id': $('#affixes').val(),
-                        'routeattributes.name': $('#attributes').val()
-                    };
-
-                    dt.columns().every(function () {
-                        const column = this;
-                        const name = column.settings()[0].aoColumns[column.index()].name;
-
-                        if (searchMap[name] !== undefined) {
-                            d.columns[column.index()].search.value = searchMap[name];
-                        }
-                    });
-                    d.requirements = $('#dungeonroute_requirements_select').val();
-                    d.tags = $('#dungeonroute_tags_select').val();
+                    d.requirements = $(self.options.requirementsSelectId).val();
+                    d.tags = $(self.options.tagsSelectId).val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
                 },
                 'cache': false
@@ -198,6 +221,40 @@ class DungeonrouteTable extends InlineCode {
 
             let $deleteBtns = $('.dungeonroute-delete');
             $deleteBtns.unbind('click').bind('click', self._promptDeleteDungeonRouteClicked);
+
+            $('.scheduled-publish-save').unbind('click').bind('click', function () {
+                let $form     = $(this).closest('.scheduled-publish-form');
+                let publicKey = $form.data('public-key');
+
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/${publicKey}/scheduledPublish`,
+                    data: {
+                        published_state: $form.find('.scheduled-publish-state select').val(),
+                        publish_at: $form.find('.scheduled-publish-at').val()
+                    },
+                    dataType: 'json',
+                    success: function () {
+                        showSuccessNotification(lang.get('js.scheduled_publish_saved'));
+                        $(self.options.filterButtonSelector).trigger('click');
+                    }
+                });
+            });
+
+            $('.scheduled-publish-clear').unbind('click').bind('click', function () {
+                let $form     = $(this).closest('.scheduled-publish-form');
+                let publicKey = $form.data('public-key');
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/ajax/${publicKey}/scheduledPublish`,
+                    dataType: 'json',
+                    success: function () {
+                        showSuccessNotification(lang.get('js.scheduled_publish_cleared'));
+                        $(self.options.filterButtonSelector).trigger('click');
+                    }
+                });
+            });
 
             self.carouselHandler.refreshCarousel('', {autoWidth: false});
         });
@@ -398,9 +455,6 @@ class DungeonrouteTable extends InlineCode {
             actions: {
                 'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
-                    if (row.author.id !== self.options.currentUserId && !isUserAdmin) {
-                        return '';
-                    }
 
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
@@ -420,8 +474,9 @@ class DungeonrouteTable extends InlineCode {
                     }
 
                     // 9 = Shadowlands, 10 = Dragonflight
-                    let seasonId = row.affixes.length === 0 ? false : row.affixes[0].expansion_id;
-                    let isShadowlandsRoute = seasonId === 9;
+                    let expansion = row.dungeon.expansion.shortname;
+                    let isShadowlandsRoute = expansion === EXPANSION_SHADOWLANDS;
+                    // let isDragonflightRoute = expansion === EXPANSION_DRAGONFLIGHT;
 
                     let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
                     let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
@@ -452,6 +507,23 @@ class DungeonrouteTable extends InlineCode {
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
+                }
+            },
+            scheduling: {
+                'title': lang.get('js.scheduling_label'),
+                'render': function (data, type, row, meta) {
+                    let template = Handlebars.templates['team_dungeonroute_table_route_publishing_actions_template'];
+                    let scheduledPublish = row.scheduled_publish || {};
+                    let publishAt = scheduledPublish.publish_at || '';
+                    if (publishAt) {
+                        // datetime-local requires YYYY-MM-DDTHH:MM; normalize ISO strings and space-separated formats
+                        publishAt = publishAt.replace(' ', 'T').slice(0, 16);
+                    }
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
+                        public_key:              row.public_key,
+                        scheduled_publish_at:    publishAt,
+                        scheduled_publish_state: scheduledPublish.published_state || 'world',
+                    }));
                 }
             }
         };
@@ -534,6 +606,8 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _changePublishState(publicKey, value) {
+        let self = this;
+
         $.ajax({
             type: 'POST',
             url: `/ajax/${publicKey}/publishedState`,
@@ -544,7 +618,7 @@ class DungeonrouteTable extends InlineCode {
             success: function (json) {
                 showSuccessNotification(lang.get('js.route_published_state_changed'));
                 // Refresh the table
-                $('#dungeonroute_filter').trigger('click');
+                $(self.options.filterButtonSelector).trigger('click');
             }
         });
     }
@@ -555,6 +629,8 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _promptDeleteDungeonRouteClicked(clickEvent) {
+        let self = this;
+
         showConfirmYesCancel(lang.get('js.route_delete_confirm'), function () {
             let publicKey = $(clickEvent.target).data('publickey');
 
@@ -565,7 +641,7 @@ class DungeonrouteTable extends InlineCode {
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_delete_successful'));
                     // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
+                    $(self.options.filterButtonSelector).trigger('click');
                 }
             });
         });
@@ -598,12 +674,13 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _promptCloneToTeamClicked(clickEvent) {
+        let self = this;
         let publicKey = $(clickEvent.target).data('publickey');
         let template = Handlebars.templates['dungeonroute_table_profile_clone_to_team_template'];
 
         showConfirmYesCancel(template($.extend({}, getHandlebarsDefaultVariables(), {
             publicKey: publicKey,
-            teams: this.options.teams
+            teams: self.options.teams
         })), function () {
             let targetTeam = $(`input[type='radio'][name='clone-to-team-${publicKey}']:checked`).val();
 
@@ -619,7 +696,7 @@ class DungeonrouteTable extends InlineCode {
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_clone_successful'));
                     // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
+                    $(self.options.filterButtonSelector).trigger('click');
                 }
             });
         }, null, {closeWith: ['button']});
@@ -655,6 +732,7 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _migrateTo(clickEvent, affixName) {
+        let self = this;
         let publicKey = $(clickEvent.target).data('publickey');
 
         showConfirmYesCancel(lang.get(`js.route_migration_to_${affixName}_confirm_warning`), function () {
@@ -665,7 +743,7 @@ class DungeonrouteTable extends InlineCode {
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_migration_successful'));
                     // Refresh the table
-                    $('#dungeonroute_filter').trigger('click');
+                    $(self.options.filterButtonSelector).trigger('click');
                 }
             });
         }, null, {closeWith: ['button']});
@@ -680,11 +758,11 @@ class DungeonrouteTable extends InlineCode {
      * @private
      */
     _reset() {
-        $('#dungeonroute_search_dungeon_id').val(-1);
-        $('#affixes').val([]);
-        $('#attributes').val([]);
-        $('#dungeonroute_requirements_select').val([]);
-        $('#dungeonroute_tags_select').val([]);
+        $(this.options.dungeonSelectId).val(-1);
+        $(this.options.affixSelectId).val([]);
+        $(this.options.attributesSelectId).val([]);
+        $(this.options.requirementsSelectId).val([]);
+        $(this.options.tagsSelectId).val([]);
 
         refreshSelectPickers();
     }
@@ -700,16 +778,14 @@ class DungeonrouteTable extends InlineCode {
     overrideSelection(dungeonId, affixGroupIds = [], attributes = [], requirements = [], tags = []) {
         this._reset();
 
-        console.log(dungeonId, affixGroupIds, attributes, requirements, tags);
-
-        $('#dungeonroute_search_dungeon_id').val(dungeonId);
-        $('#affixes').val(affixGroupIds);
-        $('#attributes').val(attributes);
-        $('#dungeonroute_requirements_select').val(requirements);
-        $('#dungeonroute_tags_select').val(tags);
+        $(this.options.dungeonSelectId).val(dungeonId);
+        $(this.options.affixSelectId).val(affixGroupIds);
+        $(this.options.attributesSelectId).val(attributes);
+        $(this.options.requirementsSelectId).val(requirements);
+        $(this.options.tagsSelectId).val(tags);
 
         // Refresh the list of routes
-        $('#dungeonroute_filter').trigger('click');
+        $(this.options.filterButtonSelector).trigger('click');
     }
 
     /**

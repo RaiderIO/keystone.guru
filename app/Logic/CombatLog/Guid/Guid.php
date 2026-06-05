@@ -16,33 +16,36 @@ use Stringable;
 
 abstract class Guid implements Stringable
 {
-    private const GUID_TYPE_BATTLE_PET    = 'BattlePet';
-    private const GUID_TYPE_B_NET_ACCOUNT = 'BNetAccount';
-    private const GUID_TYPE_CAST          = 'Cast';
-    private const GUID_TYPE_CLIENT_ACTOR  = 'ClientActor';
-    private const GUID_TYPE_CREATURE      = 'Creature';
-    private const GUID_TYPE_FOLLOWER      = 'Follower';
-    private const GUID_TYPE_GAME_OBJECT   = 'GameObject';
-    private const GUID_TYPE_ITEM          = 'Item';
-    private const GUID_TYPE_PET           = 'Pet';
-    private const GUID_TYPE_PLAYER        = 'Player';
-    private const GUID_TYPE_VIGNETTE      = 'Vignette';
-    private const GUID_TYPE_VEHICLE       = 'Vehicle';
+    private const string GUID_TYPE_BATTLE_PET    = 'BattlePet';
+    private const string GUID_TYPE_B_NET_ACCOUNT = 'BNetAccount';
+    private const string GUID_TYPE_CAST          = 'Cast';
+    private const string GUID_TYPE_CLIENT_ACTOR  = 'ClientActor';
+    private const string GUID_TYPE_CREATURE      = 'Creature';
+    private const string GUID_TYPE_FOLLOWER      = 'Follower';
+    private const string GUID_TYPE_GAME_OBJECT   = 'GameObject';
+    private const string GUID_TYPE_ITEM          = 'Item';
+    private const string GUID_TYPE_PET           = 'Pet';
+    private const string GUID_TYPE_PLAYER        = 'Player';
+    private const string GUID_TYPE_VIGNETTE      = 'Vignette';
+    private const string GUID_TYPE_VEHICLE       = 'Vehicle';
 
     // This GUID is a bit of a hack because evading enemies have their InfoGUID set to EVADE. This ensures we can still
     // use strongly typed GUIDs while still supporting this
-    private const GUID_TYPE_ABSORB  = 'ABSORB';
-    private const GUID_TYPE_BLOCK   = 'BLOCK';
-    private const GUID_TYPE_DEFLECT = 'DEFLECT';
-    private const GUID_TYPE_DODGE   = 'DODGE';
-    private const GUID_TYPE_EVADE   = 'EVADE';
-    private const GUID_TYPE_IMMUNE  = 'IMMUNE';
-    private const GUID_TYPE_MISS    = 'MISS';
-    private const GUID_TYPE_PARRY   = 'PARRY';
-    private const GUID_TYPE_REFLECT = 'REFLECT';
-    private const GUID_TYPE_RESIST  = 'RESIST';
+    private const string GUID_TYPE_ABSORB  = 'ABSORB';
+    private const string GUID_TYPE_BLOCK   = 'BLOCK';
+    private const string GUID_TYPE_DEFLECT = 'DEFLECT';
+    private const string GUID_TYPE_DODGE   = 'DODGE';
+    private const string GUID_TYPE_EVADE   = 'EVADE';
+    private const string GUID_TYPE_IMMUNE  = 'IMMUNE';
+    private const string GUID_TYPE_MISS    = 'MISS';
+    private const string GUID_TYPE_PARRY   = 'PARRY';
+    private const string GUID_TYPE_REFLECT = 'REFLECT';
+    private const string GUID_TYPE_RESIST  = 'RESIST';
 
-    public const GUID_MISS_TYPES = [
+    /**
+     * @type array<string, class-string>
+     */
+    public const array GUID_MISS_TYPES = [
         self::GUID_TYPE_ABSORB  => Absorb::class,
         self::GUID_TYPE_BLOCK   => Block::class,
         self::GUID_TYPE_DEFLECT => Deflect::class,
@@ -55,7 +58,10 @@ abstract class Guid implements Stringable
         self::GUID_TYPE_RESIST  => Resist::class,
     ];
 
-    private const GUID_TYPE_CLASS_MAPPING = [
+    /**
+     * @type array<string, class-string>
+     */
+    private const array GUID_TYPE_CLASS_MAPPING = [
         self::GUID_TYPE_BATTLE_PET    => BattlePet::class,
         self::GUID_TYPE_B_NET_ACCOUNT => BNetAccount::class,
         self::GUID_TYPE_CAST          => Cast::class,
@@ -81,7 +87,8 @@ abstract class Guid implements Stringable
         self::GUID_TYPE_RESIST  => Resist::class,
     ];
 
-    protected function __construct(private readonly string $guid)
+    // @phpstan-ignore constructor.unusedParameter
+    protected function __construct(private readonly string $guid, array $parameters = [])
     {
     }
 

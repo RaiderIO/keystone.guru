@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                   update(CacheModel $model, array $attributes = [], array $options = [])
  * @method bool                   delete(CacheModel $model)
  * @method Collection<CacheModel> all()
+ * @method bool                   exists(array $columns)
  */
 interface CacheModelRepositoryInterface extends BaseRepositoryInterface
 {

@@ -26,6 +26,7 @@ final class AdminToolsBreadcrumbsTest extends TestCase
             'npc show missing display id'            => ['admin.tools.npc.showmissingdisplayid'],
             'thumbnails regenerate'                  => ['admin.tools.thumbnails.regenerate'],
             'combatlog regenerate'                   => ['admin.tools.combatlog.regenerate'],
+            'combatlog criteria'                     => ['admin.tools.combatlog.criteria'],
             'dungeonroute view'                      => ['admin.tools.dungeonroute.view'],
             'dungeonroute view contents'             => ['admin.tools.dungeonroute.viewcontents'],
             'dungeonroute mapping version usage'     => ['admin.tools.dungeonroute.mappingversions'],

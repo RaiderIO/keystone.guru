@@ -6,6 +6,7 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\DamageSupportInterface;
 use App\Logic\CombatLog\Guid\Guid;
+use Override;
 
 class DamageSupportV20 extends DamageV20 implements DamageSupportInterface
 {
@@ -16,7 +17,7 @@ class DamageSupportV20 extends DamageV20 implements DamageSupportInterface
         return $this->supportGuid;
     }
 
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
@@ -26,7 +27,7 @@ class DamageSupportV20 extends DamageV20 implements DamageSupportInterface
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getParameterCount(): int
     {
         return 11;

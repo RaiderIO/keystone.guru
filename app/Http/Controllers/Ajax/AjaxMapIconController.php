@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Override;
 use Teapot\StatusCode;
 use Teapot\StatusCode\Http;
 use Throwable;
@@ -31,13 +32,13 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use ChangesDungeonRoute;
 
-    #[\Override]
+    #[Override]
     protected function shouldCallMappingChanged(
         ?MappingModelInterface $beforeModel,
         ?MappingModelInterface $afterModel,
     ): bool {
-        /** @var MapIcon $beforeModel */
-        /** @var MapIcon $afterModel */
+        /** @var MapIcon|null $beforeModel */
+        /** @var MapIcon|null $afterModel */
         return $beforeModel?->dungeon_route_id === null || $afterModel?->dungeon_route_id === null;
     }
 
@@ -47,7 +48,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      * @param  MappingVersion|null         $mappingVersion     Set -> admin endpoint,
      * @param  DungeonRoute|null           $dungeonRoute       Set -> route edit endpoint
      * @param  MapIcon|null                $mapIcon
-     * @return MapIcon|Model
+     * @return MapIcon
      *
      * @throws AuthorizationException
      * @throws Throwable
@@ -59,7 +60,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         ?DungeonRoute               $dungeonRoute,
         ?MapIcon                    $mapIcon = null,
     ): MapIcon {
-        $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute;
+        $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
         $validated                     = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
 
@@ -80,6 +81,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;
 
+        /** @var MapIcon */
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,

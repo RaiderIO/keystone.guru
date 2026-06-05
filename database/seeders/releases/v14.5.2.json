@@ -37,6 +37,12 @@
                 "release_changelog_category_id": 5,
                 "ticket_id": 3199,
                 "change": "Improved performance of viewing routes (server-side)."
+            },
+            {
+                "release_changelog_id": 363,
+                "release_changelog_category_id": 10,
+                "ticket_id": 3168,
+                "change": "SimulationCraft integration now uses proper pathfinding to determine delay between pulls."
             }
         ]
     }

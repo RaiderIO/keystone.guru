@@ -7,12 +7,11 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tag\APITagFormRequest;
 use App\Http\Requests\Tag\APITagUpdateFormRequest;
-use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Interfaces\HasTagsInterface;
+use App\Models\Interfaces\TaggableInterface;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
-use App\Models\Traits\HasTags;
-use App\Models\Traits\Taggable;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -38,7 +37,7 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|Response
+     * @return Application|ResponseFactory|Response|Tag
      *
      * @throws AuthorizationException
      */
@@ -50,7 +49,7 @@ class AjaxTagController extends Controller
         $contextPublicKey = $validated['context'];
         $contextClass     = $validated['context_class'];
 
-        /** @var Model|HasTags $context */
+        /** @var Model&HasTagsInterface $context */
         $context = match ($contextClass) {
             'user'  => User::where('public_key', $contextPublicKey)->firstOrFail(),
             'team'  => Team::where('public_key', $contextPublicKey)->firstOrFail(),
@@ -65,19 +64,17 @@ class AjaxTagController extends Controller
 
         // Reconstruct the model that we're trying to tag
         /** @var Builder $query */
-        /** @noinspection PhpUndefinedMethodInspection */
         $query = $tagCategory->model_class::query();
         if (in_array($tagCategory->name, [
             TagCategory::DUNGEON_ROUTE_PERSONAL,
             TagCategory::DUNGEON_ROUTE_TEAM,
         ])) {
-            /** @var DungeonRoute $dungeonRoute */
             $query = $query->where('public_key', $modelId);
         } else {
             $query = $query->where('id', $modelId);
         }
 
-        /** @var Taggable|Model $model */
+        /** @var Model&TaggableInterface $model */
         $model = $query->firstOrFail();
 
         // Now that we know the category and created an instance of the model, check if we may actually do this
@@ -89,18 +86,18 @@ class AjaxTagController extends Controller
         //
         if (!$model->hasTag($tagCategory->id, $tagName)) {
             // Get the first tag that has the same name, under the same context, with the same category
-            /** @var Tag $similarTag */
+            /** @var Tag|null $similarTag */
             $similarTag = Tag::where('name', $tagName)
-                ->where('context_id', $context->id)
+                ->where('context_id', $context->getKey())
                 ->where('context_class', $context::class)
                 ->where('tag_category_id', $tagCategory->id)
                 ->first();
 
-            if ($tag = Tag::create([
-                'context_id'      => $context->id,
+            if ($tag = Tag::create([ // @phpstan-ignore if.alwaysTrue
+                'context_id'      => $context->getKey(),
                 'context_class'   => $context::class,
                 'tag_category_id' => $tagCategory->id,
-                'model_id'        => $model->id,
+                'model_id'        => $model->getKey(),
                 'model_class'     => $tagCategory->model_class,
                 'name'            => $tagName,
                 'color'           => $similarTag?->color,

@@ -3,6 +3,7 @@
 namespace App\Service\DungeonRoute\Logging;
 
 use App\Logging\RollbarStructuredLogging;
+use Exception;
 
 class DungeonRouteServiceLogging extends RollbarStructuredLogging implements DungeonRouteServiceLoggingInterface
 {
@@ -41,7 +42,7 @@ class DungeonRouteServiceLogging extends RollbarStructuredLogging implements Dun
         $this->start(__METHOD__);
     }
 
-    public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, \Exception $ex): void
+    public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, Exception $ex): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
@@ -59,5 +60,25 @@ class DungeonRouteServiceLogging extends RollbarStructuredLogging implements Dun
     public function touchRoutesForTeamEnd(int $teamId, int $updatedRouteCount): void
     {
         $this->end(__METHOD__, get_defined_vars());
+    }
+
+    public function publishScheduledDungeonRoutesStart(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    public function publishScheduledDungeonRoutesEnd(int $publishedCount): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
+
+    public function publishScheduledDungeonRouteSkippedNoPatreon(int $dungeonRouteId, int $scheduledPublishId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function publishScheduledDungeonRouteSkippedInactiveDungeon(int $dungeonRouteId, int $dungeonId, int $scheduledPublishId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
     }
 }

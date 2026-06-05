@@ -23,6 +23,9 @@ class EnemyForcesManager extends Signalable {
             killZoneMapObjectGroup.register('killzone:enemyremoved', this, function (removedEvent) {
                 self._setEnemyForces(self.enemyForces - removedEvent.data.enemy.getEnemyForces());
             });
+            killZoneMapObjectGroup.register('killzone:enemieschanged', this, function (changedEvent) {
+                self._setEnemyForces(self.enemyForces - changedEvent.data.previousForces + changedEvent.data.newForces);
+            });
             killZoneMapObjectGroup.register('object:add', this, function (addEvent) {
                 addEvent.data.object.register('killzone:changed', self, self._onKillZoneChanged.bind(self));
             });
@@ -136,5 +139,6 @@ class EnemyForcesManager extends Signalable {
         killzoneMapObjectGroup.unregister('object:add', this);
         killzoneMapObjectGroup.unregister('killzone:enemyremoved', this);
         killzoneMapObjectGroup.unregister('killzone:enemyadded', this);
+        killzoneMapObjectGroup.unregister('killzone:enemieschanged', this);
     }
 }

@@ -18,10 +18,18 @@ $appType = config('app.type');
 
 $commands = [];
 
+$commands[] = Schedule::command('combatlog:detectstaledata')->hourly();
+//if (in_array($appType, [
+//    'production',
+//])) {
+//    $commands[] = Schedule::command('combatlog:pollruns')->hourly();
+//}
+
 $commands[] = Schedule::command('dungeonroute:updatepopularity')->hourly();
 $commands[] = Schedule::command('dungeonroute:updaterating')->everyFifteenMinutes();
 
 $commands[] = Schedule::command('dungeonroute:deleteexpired')->hourly();
+$commands[] = Schedule::command('dungeonroute:publishscheduled')->everyFiveMinutes();
 $commands[] = Schedule::command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
 if (in_array($appType, [

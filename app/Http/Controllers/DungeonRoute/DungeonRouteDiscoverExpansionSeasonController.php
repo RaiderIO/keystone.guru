@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\DungeonRoute;
 
 use App\Http\Controllers\Controller;
-use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -17,6 +17,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 
 class DungeonRouteDiscoverExpansionSeasonController extends Controller
 {
@@ -27,9 +28,10 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
      * @throws Exception
      */
     public function discoverSeason(
-        Expansion                $expansion,
-        string                   $seasonIndex,
-        DiscoverServiceInterface $discoverService,
+        Expansion                        $expansion,
+        string                           $seasonIndex,
+        DiscoverServiceInterface         $discoverService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ) {
         $gameVersion = GameVersion::firstWhere('expansion_id', $expansion->id) ?? GameVersion::getDefaultGameVersion();
 
@@ -46,8 +48,8 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
 
         $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
-        $currentAffixGroup = $season->getCurrentAffixGroupInRegion($userRegion);
-        $nextAffixGroup    = $season->getNextAffixGroupInRegion($userRegion);
+        $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroupInRegion($season, $userRegion);
+        $nextAffixGroup    = $seasonAffixGroupService->getNextAffixGroupInRegion($season, $userRegion);
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.expansion.season',
@@ -69,7 +71,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -106,7 +108,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -148,8 +150,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @param  Dungeon                  $dungeon
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -190,7 +191,7 @@ class DungeonRouteDiscoverExpansionSeasonController extends Controller
     }
 
     /**
-     * @return Factory|RedirectResponse
+     * @return Factory|View|RedirectResponse
      *
      * @throws AuthorizationException
      */

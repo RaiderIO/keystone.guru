@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                           update(AffixGroupCoupling $model, array $attributes = [], array $options = [])
  * @method bool                           delete(AffixGroupCoupling $model)
  * @method Collection<AffixGroupCoupling> all()
+ * @method bool                           exists(array $columns)
  */
 interface AffixGroupCouplingRepositoryInterface extends BaseRepositoryInterface
 {

@@ -28,7 +28,7 @@ if (count($affixes) == 0) {
     <?php
     $defaultDescription = $dungeonroute->author === null ?
         sprintf(__('view_dungeonroute.view.linkpreview_default_description_sandbox'), __($dungeonroute->dungeon->name))
-        : sprintf(__('view_dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author?->name);
+        : sprintf(__('view_dungeonroute.view.linkpreview_default_description'), __($dungeonroute->dungeon->name), $dungeonroute->author->name);
     ?>
     @include('common.general.linkpreview', [
         'title' => sprintf(__('view_dungeonroute.view.linkpreview_title'), $dungeonroute->title),

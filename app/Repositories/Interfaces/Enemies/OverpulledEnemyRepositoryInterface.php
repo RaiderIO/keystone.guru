@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                        update(OverpulledEnemy $model, array $attributes = [], array $options = [])
  * @method bool                        delete(OverpulledEnemy $model)
  * @method Collection<OverpulledEnemy> all()
+ * @method bool                        exists(array $columns)
  */
 interface OverpulledEnemyRepositoryInterface extends BaseRepositoryInterface
 {

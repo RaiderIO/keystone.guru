@@ -18,6 +18,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
 /**
@@ -26,11 +27,12 @@ use App\Service\Season\SeasonServiceInterface;
 readonly class MapContextService implements MapContextServiceInterface
 {
     public function __construct(
-        private CacheServiceInterface           $cacheService,
-        private CoordinatesServiceInterface     $coordinatesService,
-        private KillZonePathServiceInterface    $killZonePathService,
-        private OverpulledEnemyServiceInterface $overpulledEnemyService,
-        private SeasonServiceInterface          $seasonService,
+        private CacheServiceInterface            $cacheService,
+        private CoordinatesServiceInterface      $coordinatesService,
+        private KillZonePathServiceInterface     $killZonePathService,
+        private OverpulledEnemyServiceInterface  $overpulledEnemyService,
+        private SeasonServiceInterface           $seasonService,
+        private SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ) {
     }
 
@@ -101,6 +103,7 @@ readonly class MapContextService implements MapContextServiceInterface
             $this->cacheService,
             $this->coordinatesService,
             $this->seasonService,
+            $this->seasonAffixGroupService,
             $dungeon,
             $mappingVersion,
             $mapFacadeStyle,
@@ -116,6 +119,7 @@ readonly class MapContextService implements MapContextServiceInterface
             $this->cacheService,
             $this->coordinatesService,
             $this->seasonService,
+            $this->seasonAffixGroupService,
             $dungeon,
             $mappingVersion,
             $mapFacadeStyle,

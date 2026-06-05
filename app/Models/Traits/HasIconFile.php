@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\UploadedFile;
 
 /**
- * @property File $iconfile
- * @property int  $icon_file_id
+ * @property File|null $iconfile
+ * @property int       $icon_file_id
  *
  * @mixin Model
  */

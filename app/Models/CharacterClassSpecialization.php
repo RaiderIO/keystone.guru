@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
+use App\Models\Traits\HasCombatLogCriterion;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
@@ -22,8 +24,9 @@ use Str;
  *
  * @mixin Eloquent
  */
-class CharacterClassSpecialization extends CacheModel
+class CharacterClassSpecialization extends CacheModel implements CombatLogCriterionModelInterface
 {
+    use HasCombatLogCriterion;
     use HasIconFile;
     use SeederModel;
 
@@ -55,6 +58,16 @@ class CharacterClassSpecialization extends CacheModel
             $className,
             Str::replace('_', '', $this->key),
         ));
+    }
+
+    public function getName(): string
+    {
+        return sprintf('%s - %s', __($this->class->name), __($this->name));
+    }
+
+    public function getImageLink(): ?string
+    {
+        return $this->icon_url;
     }
 
     public function class(): BelongsTo

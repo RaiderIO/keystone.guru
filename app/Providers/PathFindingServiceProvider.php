@@ -7,10 +7,11 @@ use App\Service\KillZonePath\KillZonePathServiceInterface;
 use App\Service\PathFinding\PathFindingService;
 use App\Service\PathFinding\PathFindingServiceInterface;
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class PathFindingServiceProvider extends ServiceProvider
 {
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         $this->app->bind(PathFindingServiceInterface::class, PathFindingService::class);

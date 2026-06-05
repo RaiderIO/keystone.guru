@@ -8,6 +8,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property int  $id
@@ -18,7 +19,7 @@ use Illuminate\Support\Carbon;
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
- * @property File         $file
+ * @property File|null    $file
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -56,7 +57,7 @@ class DungeonRouteThumbnail extends Model
         return $this->belongsTo(File::class);
     }
 
-    #[\Override]
+    #[Override]
     public static function booted(): void
     {
         parent::booted();

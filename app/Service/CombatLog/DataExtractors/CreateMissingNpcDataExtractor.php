@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 
 class CreateMissingNpcDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int>> */
+    /** @var Collection<int, int> */
     private readonly Collection $checkedNpcIds;
 
     private readonly CreateMissingNpcDataExtractorLoggingInterface $log;
@@ -106,13 +106,12 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
                 'display_id'        => null,
                 'name'              => $name,
-                'health_percentage' => null,
                 'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
                 'dangerous'         => 0,
                 'truesight'         => 0,
             ]);
 
-            if ($createdNpc instanceof Npc) {
+            if ($createdNpc instanceof Npc) { // @phpstan-ignore instanceof.alwaysTrue
                 // Determine health
                 if ($currentDungeon->keyLevel === null) {
                     $baseHealth = $parsedEvent->getAdvancedData()->getMaxHP();

@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Http\Requests\TeamFormRequest;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Tags\Tag;
@@ -19,14 +20,11 @@ use App\Models\TeamUser;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
@@ -56,6 +54,12 @@ class TeamController extends Controller
         $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
+        /** @var User $currentUser */
+        $currentUser = Auth::user();
+        if ($currentUser->hasRole(Role::ROLE_ADMIN)) {
+            $team->route_publishing_enabled = $request->boolean('route_publishing_enabled');
+        }
+
         // Update or insert it
         if ($team->save()) {
             $logo = $request->file('logo');
@@ -77,7 +81,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function create(): View
     {
@@ -85,7 +89,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|RedirectResponse|Response
+     * @return View
      *
      * @throws AuthorizationException
      */
@@ -100,7 +104,7 @@ class TeamController extends Controller
             'userHasAdFreeTeamMembersPatreonBenefit' => $user->hasPatreonBenefit(PatreonBenefit::AD_FREE_TEAM_MEMBERS),
             'userAdFreeTeamMembersRemaining'         => PatreonAdFreeGiveaway::getCountLeft($user),
             'userAdFreeTeamMembersMax'               => config('keystoneguru.patreon.ad_free_giveaways'),
-            'userIsModerator'                        => $team->isUserModerator($user),
+            'userIsModerator'                        => $team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN),
             'team'                                   => $team,
         ]);
     }
@@ -157,7 +161,7 @@ class TeamController extends Controller
     /**
      * Handles the viewing of a collection of items in a table.
      *
-     * @return Factory|
+     * @return View
      */
     public function get(): View
     {
@@ -167,11 +171,11 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function invite(Request $request, string $invitecode)
     {
-        /** @var Team $team */
+        /** @var Team|null $team */
         $team   = Team::where('invite_code', $invitecode)->first();
         $result = null;
 
@@ -192,7 +196,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function inviteaccept(Request $request, string $invitecode)
     {

@@ -3,7 +3,6 @@
 namespace App\Logging;
 
 use App\Logic\Utils\Stopwatch;
-use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
@@ -45,12 +44,12 @@ abstract class StructuredLogging implements StructuredLoggingInterface
      */
     private array $cachedConvertedFunctionNames = [];
 
-    /** @var LogManager[] */
+    /** @var LoggerInterface[] */
     private array $loggers = [];
 
     public function __construct()
     {
-        /** @var Application|Container $app */
+        /** @var Application $app */
         $app = app();
 
         if ($app->runningInConsole() && !$app->runningUnitTests() && config('app.type') === 'local') {

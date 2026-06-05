@@ -81,7 +81,7 @@ class AdminToolsMdtController extends Controller
 
             dd($dungeonRoute);
         } catch (InvalidMDTStringException) {
-            return abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
+            abort(400, __('controller.admintools.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
             // Different message based on our deployment settings
             if (config('app.debug')) {
@@ -90,10 +90,10 @@ class AdminToolsMdtController extends Controller
                 $message = __('controller.admintools.error.invalid_mdt_string');
             }
 
-            return abort(400, $message);
+            abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
+                abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
             }
 
             throw $error;
@@ -143,10 +143,10 @@ class AdminToolsMdtController extends Controller
                 $message = __('controller.admintools.error.invalid_mdt_string');
             }
 
-            return abort(400, $message);
+            abort(400, $message);
         } catch (Throwable $error) {
             if ($error->getMessage() === "Class 'Lua' not found") {
-                return abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
+                abort(500, __('controller.admintools.error.mdt_importer_not_configured'));
             }
 
             throw $error;
@@ -257,7 +257,7 @@ class AdminToolsMdtController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var Npc $npc */
+                /** @var Npc|null $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
@@ -334,7 +334,7 @@ class AdminToolsMdtController extends Controller
                                     __('controller.admintools.error.mdt_mismatched_enemy_count'),
                                     $mdtNpc->getId(),
                                     count($mdtNpc->getClones()),
-                                    $npc->enemies === null ? 0 : $npc->enemies->count(),
+                                    $npc->enemies->count(),
                                 ),
                                 [
                                     'mdt_npc' => (object)$mdtNpc->getRawMdtNpc(),

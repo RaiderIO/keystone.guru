@@ -14,8 +14,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
-    private const int LOCK_BLOCK_TIMEOUT = 20;
-
     private bool $cacheEnabled = true;
 
     /** @var bool Bypassing the cache means that the closure is always called and the result is never cached */

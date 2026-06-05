@@ -18,9 +18,7 @@ return new class extends Migration {
 
         $allNpcs = Npc::all();
         foreach (MappingVersion::all() as $mappingVersion) {
-            /** @var MappingVersion $mappingVersion */
             foreach ($allNpcs->whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id]) as $npc) {
-                /** @var \App\Models\Npc\Npc $npc */
                 NpcEnemyForces::create([
                     'npc_id'               => $npc->id,
                     'mapping_version_id'   => $mappingVersion->id,

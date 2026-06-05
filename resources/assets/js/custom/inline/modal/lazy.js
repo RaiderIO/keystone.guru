@@ -9,9 +9,6 @@
  */
 class ModalLazy extends InlineCode {
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -21,7 +18,7 @@ class ModalLazy extends InlineCode {
 
         // When the modal is shown
         $(this.options.id).on('shown.bs.modal', function () {
-            if(self.loaded) {
+            if (self.loaded) {
                 return;
             }
 

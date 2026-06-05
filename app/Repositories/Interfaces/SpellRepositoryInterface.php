@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool              update(Spell $model, array $attributes = [], array $options = [])
  * @method bool              delete(Spell $model)
  * @method Collection<Spell> all()
+ * @method bool              exists(array $columns)
  */
 interface SpellRepositoryInterface extends BaseRepositoryInterface
 {
@@ -28,4 +29,9 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<Spell>
      */
     public function findAllById(Collection $spellIds): Collection;
+
+    /**
+     * @return Collection<int, Spell> keyed by spell ID
+     */
+    public function getAllWithCharacteristic(): Collection;
 }

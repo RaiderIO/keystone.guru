@@ -1,15 +1,21 @@
+/**
+ * @typedef {Object} CommonMapsEmbedtopbarOptions
+ * @property {string} switchDungeonFloorSelect
+ * @property {number} defaultSelectedFloorId
+ * @property {boolean} mdtStringCopyEnabled
+ */
+
+/**
+ * @property {CommonMapsEmbedtopbarOptions} options
+ */
 class CommonMapsEmbedtopbar extends InlineCode {
 
-
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
 
         this.sidebar = new SidebarNavigation(options);
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -27,7 +33,6 @@ class CommonMapsEmbedtopbar extends InlineCode {
     }
 
     /**
-     *
      * @private
      */
     _fetchMdtExportStringAndCopy() {

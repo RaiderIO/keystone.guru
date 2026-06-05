@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -12,9 +13,9 @@ use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id
@@ -30,11 +31,11 @@ use Illuminate\Support\Collection;
  * @property string|null $mdt_x                         The X position that MDT assigned to this enemy on import.
  * @property string|null $mdt_y                         The Y position that MDT assigned to this enemy on import.
  * @property string      $seasonal_type                 The type of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
- * @property int         $seasonal_index                Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
+ * @property int|null    $seasonal_index                Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
  * @property int         $mdt_npc_index                 The index of the NPC in MDT (not saved in DB)
  * @property int         $enemy_id                      Only used for temp MDT enemies (not saved in DB)
  * @property bool        $is_mdt                        Only used for temp MDT enemies (not saved in DB)
- * @property string      $teeming
+ * @property string|null $teeming
  * @property string      $faction
  * @property bool        $required
  * @property bool        $skippable
@@ -46,17 +47,17 @@ use Illuminate\Support\Collection;
  * @property float       $lat
  * @property float       $lng
  *
- * @property EnemyPack|null              $enemyPack
- * @property Npc|null                    $npc
- * @property Floor                       $floor
- * @property EnemyPatrol|null            $enemyPatrol
- * @property Enemy|null                  $exclusiveEnemy
- * @property MappingVersion              $mappingVersion
- * @property Collection<EnemyActiveAura> $enemyActiveAuras
+ * @property EnemyPack|null                           $enemyPack
+ * @property Npc|null                                 $npc
+ * @property Floor                                    $floor
+ * @property EnemyPatrol|null                         $enemyPatrol
+ * @property Enemy|null                               $exclusiveEnemy
+ * @property MappingVersion                           $mappingVersion
+ * @property EloquentCollection<int, EnemyActiveAura> $enemyActiveAuras
  *
  * @mixin Eloquent
  */
-class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, HasLatLngInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -218,7 +219,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor->dungeon_id;
     }
 
     public function getUniqueKey(): string

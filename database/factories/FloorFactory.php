@@ -5,6 +5,9 @@ namespace Database\Factories;
 use App\Models\Floor\Floor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Floor>
+ */
 class FloorFactory extends Factory
 {
     protected $model = Floor::class;

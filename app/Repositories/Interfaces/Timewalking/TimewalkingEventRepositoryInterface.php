@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                         update(TimewalkingEvent $model, array $attributes = [], array $options = [])
  * @method bool                         delete(TimewalkingEvent $model)
  * @method Collection<TimewalkingEvent> all()
+ * @method bool                         exists(array $columns)
  */
 interface TimewalkingEventRepositoryInterface extends BaseRepositoryInterface
 {

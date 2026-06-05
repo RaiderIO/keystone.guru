@@ -11,6 +11,7 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Override;
 
 /**
  * @property int      $id
@@ -24,8 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string   $faction
  *
  * @property MappingVersion $mappingVersion
- * @property Floor          $floor
- * @property Polyline       $polyline
+ * @property Floor|null     $floor
+ * @property Polyline|null  $polyline
  * @property Polyline|null  $mdtPolyline
  *
  * @mixin Eloquent
@@ -96,17 +97,17 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor?->dungeon_id;
     }
 
     public function cloneForNewMappingVersion(
         MappingVersion         $mappingVersion,
         ?MappingModelInterface $newParent = null,
     ): EnemyPatrol {
-        /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
-        $clonedEnemyPatrol                     = clone $this;
-        $clonedEnemyPatrol->exists             = false;
-        $clonedEnemyPatrol->id                 = null;
+        /** @var static $clonedEnemyPatrol */
+        $clonedEnemyPatrol         = clone $this;
+        $clonedEnemyPatrol->exists = false;
+        unset($clonedEnemyPatrol->id);
         $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
         $clonedEnemyPatrol->save();
 
@@ -121,7 +122,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $clonedEnemyPatrol;
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

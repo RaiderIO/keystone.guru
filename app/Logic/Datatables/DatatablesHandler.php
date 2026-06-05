@@ -58,7 +58,7 @@ abstract class DatatablesHandler
         }
 
         foreach ($dtColumnHandlers as $handler) {
-            /** @var $handler DatatablesColumnHandler */
+            /** @var DatatablesColumnHandler $handler */
             $this->columnHandlers[$handler->getColumnName()] = $handler;
         }
 
@@ -72,6 +72,8 @@ abstract class DatatablesHandler
      */
     public function applyRequestToBuilder(): DatatablesHandler
     {
+        abort_if(!$this->request->exists('columns'), 422, 'columns parameter is required');
+
         // Set limits
         $this->builder->offset((int)$this->request->get('start'));
         $this->builder->limit((int)$this->request->get('length'));

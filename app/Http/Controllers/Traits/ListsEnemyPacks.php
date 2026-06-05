@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\EnemyPack;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 trait ListsEnemyPacks
@@ -21,7 +21,6 @@ trait ListsEnemyPacks
      */
     public function listEnemyPacks(int $floorId, bool $enemies = true, bool $teeming = false): Collection
     {
-        /** @var Builder $result */
         $fields = [
             'id',
             'floor_id',
@@ -32,7 +31,7 @@ trait ListsEnemyPacks
         if ($enemies) {
             $result = EnemyPack::with([
                 'enemies' => static function ($query) use ($teeming) {
-                    /** @var $query \Illuminate\Database\Query\Builder */
+                    /** @var Builder $query */
                     // Only include teeming enemies when requested
                     if (!$teeming) {
                         $query->whereNull('teeming');

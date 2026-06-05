@@ -5,23 +5,15 @@ namespace Database\Seeders;
 use App\Models\CharacterClass;
 use App\Models\Faction;
 use App\Models\File;
-use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 
 class CharacterClassesSeeder extends Seeder implements TableSeederInterface
 {
-    /**
-     * @throws Exception
-     */
     public function run(): void
     {
         $factionAllianceId = Faction::ALL[Faction::FACTION_ALLIANCE];
         $factionHordeId    = Faction::ALL[Faction::FACTION_HORDE];
-
-        if ($factionAllianceId === 0 || $factionHordeId === 0) {
-            throw new Exception('Unable to find factions');
-        }
 
         $characterClassesAttributes = [
             [

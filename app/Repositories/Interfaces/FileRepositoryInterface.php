@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool             update(File $model, array $attributes = [], array $options = [])
  * @method bool             delete(File $model)
  * @method Collection<File> all()
+ * @method bool             exists(array $columns)
  */
 interface FileRepositoryInterface extends BaseRepositoryInterface
 {

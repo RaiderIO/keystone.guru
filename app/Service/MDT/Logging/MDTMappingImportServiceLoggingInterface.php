@@ -39,8 +39,6 @@ interface MDTMappingImportServiceLoggingInterface
     public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
         int $npcsUpdated,
         int $npcsInserted,
-        int $npcCharacteristicsDeleted,
-        int $npcCharacteristicsInserted,
         int $npcSpellsDeleted,
         int $npcSpellsInserted,
         int $npcDungeonsDeleted,
@@ -64,8 +62,6 @@ interface MDTMappingImportServiceLoggingInterface
     public function importSpellDataFromMDTEnd(): void;
 
     public function importNpcsStart(): void;
-
-    public function importNpcsDataFromMDTUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void;
 
     public function importNpcsDataFromMDTSpellInExcludeList(): void;
 
@@ -137,7 +133,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsCoupleEnemiesToEnemyPatrol(int $enemyPatrolId): void;
 
-    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(int $newEnemyPatrolId): void;
+    public function importEnemyPatrolsClonedPatrolWithoutMdtPolyline(?int $newEnemyPatrolId): void;
 
     public function importEnemyPatrolsEnd(): void;
 

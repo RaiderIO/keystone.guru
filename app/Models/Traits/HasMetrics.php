@@ -5,12 +5,12 @@ namespace App\Models\Traits;
 use App\Models\Metrics\Metric;
 use App\Models\Metrics\MetricAggregation;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
- * @property Collection<Metric>            $metrics
- * @property Collection<MetricAggregation> $metricAggregations
+ * @property EloquentCollection<int, Metric>            $metrics
+ * @property EloquentCollection<int, MetricAggregation> $metricAggregations
  *
  * @mixin Eloquent
  */

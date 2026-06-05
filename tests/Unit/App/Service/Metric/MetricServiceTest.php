@@ -30,7 +30,6 @@ final class MetricServiceTest extends PublicTestCase
         $result = $metricService->groupMetrics($pendingMetrics, $seconds);
 
         // Assert
-        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         $this->assertCount(count($expectedResult), $result);
 
@@ -93,7 +92,7 @@ final class MetricServiceTest extends PublicTestCase
         string $createdAt,
         int    $modelId = 1,
         string $modelClass = User::class,
-        string $category = Metric::CATEGORY_API_CALL,
+        int    $category = Metric::CATEGORY_API_CALL,
         string $tag = 'GET /api/user',
     ): array {
         return [

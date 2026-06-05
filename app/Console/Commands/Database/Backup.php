@@ -33,7 +33,7 @@ class Backup extends Command
 
         // If we're not releasing, or we are releasing and the release asks for a backup. Do a backup by default, though, to be sure.
         $latestUnreleasedRelease = $releaseRepository->getLatestUnreleasedRelease();
-        if (!$release || ($latestUnreleasedRelease?->backup_db ?? true)) {
+        if (!$release || ($latestUnreleasedRelease?->backup_db ?? true)) { // @phpstan-ignore nullsafe.neverNull
             if ($latestUnreleasedRelease instanceof Release) {
                 $this->info(sprintf('Backing up MySQL database for release %d...', $latestUnreleasedRelease->id));
             }

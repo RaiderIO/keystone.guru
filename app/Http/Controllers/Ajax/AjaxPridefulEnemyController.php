@@ -32,7 +32,7 @@ class AjaxPridefulEnemyController extends Controller
     ): PridefulEnemy {
         Gate::authorize('edit', $dungeonRoute);
 
-        /** @var PridefulEnemy $pridefulEnemy */
+        /** @var PridefulEnemy|null $pridefulEnemy */
         $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
 
         if ($pridefulEnemy === null) {
@@ -71,7 +71,7 @@ class AjaxPridefulEnemyController extends Controller
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            /** @var PridefulEnemy $pridefulEnemy */
+            /** @var PridefulEnemy|null $pridefulEnemy */
             $pridefulEnemy = PridefulEnemy::where('dungeon_route_id', $dungeonRoute->id)->where('enemy_id', $enemy->id)->first();
             if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
                 /** @var User $user */

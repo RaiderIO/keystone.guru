@@ -8,6 +8,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use Override;
 
 /**
  * Class MapContextLiveSession
@@ -23,7 +24,7 @@ class MapContextLiveSession extends MapContextDungeonRoute
     public function __construct(
         CacheServiceInterface                            $cacheService,
         CoordinatesServiceInterface                      $coordinatesService,
-        private readonly KillZonePathServiceInterface    $killZonePathService,
+        KillZonePathServiceInterface                     $killZonePathService,
         private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
         private readonly LiveSession                     $liveSession,
         string                                           $mapFacadeStyle,
@@ -31,19 +32,19 @@ class MapContextLiveSession extends MapContextDungeonRoute
         parent::__construct($cacheService, $coordinatesService, $killZonePathService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
     }
 
-    #[\Override]
+    #[Override]
     public function getType(): string
     {
         return 'livesession';
     }
 
-    #[\Override]
+    #[Override]
     public function getEchoChannelName(): string
     {
         return sprintf('%s-live-session.%s', config('app.type'), $this->liveSession->getRouteKey());
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->liveSession);

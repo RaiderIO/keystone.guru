@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * @var string  $theme
  * @var bool    $hasNewChangelog
  * @var Release $latestRelease
- * @var Release $latestReleaseSpotlight
+ * @var Release|null $latestReleaseSpotlight
  */
 
 $cookieService = resolve(CookieServiceInterface::class);

@@ -46,7 +46,7 @@ div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-pag
     }
 }
 
-#routes_table .not_clickable {
+.routes_table .not_clickable {
     cursor: default !important;
 }
 

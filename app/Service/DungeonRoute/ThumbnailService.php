@@ -11,6 +11,7 @@ use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -164,7 +165,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 } else {
                     try {
                         // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
-                        $dungeonRoute->thumbnail_updated_at = Carbon::now()->toDateTimeString();
+                        $dungeonRoute->thumbnail_updated_at = Carbon::now();
                         // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
                         $dungeonRoute->timestamps = false;
                         $dungeonRoute->save();
@@ -242,7 +243,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        if ($dungeonRoute->mappingVersion === null) {
+        if ($dungeonRoute->mappingVersion === null) { // @phpstan-ignore identical.alwaysFalse
             $this->log->queueThumbnailRefreshMappingVersionNull($dungeonRoute->public_key);
             // Do not return - we just assume the thumbnail is generated. Otherwise this will keep spamming
             // the logs with this error when it really isn't that important.
@@ -401,13 +402,13 @@ class ThumbnailService implements ThumbnailServiceInterface
                     $thumbnailData,
                 );
 
-                if ($copiedThumbnail === null) {
+                if ($copiedThumbnail === null) { // @phpstan-ignore identical.alwaysFalse
                     // If we failed to copy the thumbnail, then we don't want to continue
                     continue;
                 }
 
                 $result->push($copiedThumbnail);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 // Could be thrown if the file does not exist, or if the disk is not available
                 $this->log->copyThumbnailsException(
                     $sourceDungeonRoute->public_key,
@@ -432,14 +433,13 @@ class ThumbnailService implements ThumbnailServiceInterface
         string       $target,
         string       $thumbnailData,
         bool         $isCustom = false,
-    ): ?DungeonRouteThumbnail {
+    ): DungeonRouteThumbnail {
         return DB::transaction(function () use (
             $dungeonRoute,
             $floorIndex,
             $isCustom,
             $target,
             $thumbnailData,
-            &$result
         ) {
             /** @var Floor $floor */
             $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
@@ -454,7 +454,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 })
                 ->get();
 
-            $disk ??= config('filesystems.default', 'public');
+            $disk                  = config('filesystems.default', 'public');
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,

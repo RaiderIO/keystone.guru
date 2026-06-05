@@ -50,11 +50,40 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Checks if Echo is enabled for the current session.
+     * @returns {boolean}
+     */
+    isEchoEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this.laravelEchoEnabled;
+    }
+
+    /**
      * @returns {String}
      */
     getLaravelEchoAppKey() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
         return this.laravelEchoAppKey;
+    }
+
+    /**
+     * Gets the EchoHandler instance used for Echo communication.
+     * @returns {EchoHandler}
+     */
+    getEchoHandler() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._echoHandler;
+    }
+
+    /**
+     * Get the context of the map we are editing at this point.
+     * @returns {MapContextMappingVersionEdit|MapContextDungeonRoute|MapContextLiveSession|MapContextDungeonExplore|MapContextDungeonRouteSearch}
+     */
+    getMapContext() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._mapContext;
     }
 
     /**
@@ -96,16 +125,16 @@ class StateManager extends Signalable {
         this._sanitizeAllowedDomains = allowedDomains;
     }
 
-    setDebug(debug) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        this._debug = debug;
-    }
-
     isDebug() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._debug;
+    }
+
+    setDebug(debug) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._debug = debug;
     }
 
     /**
@@ -129,6 +158,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Gets if the MDT mapping mode is currently enabled or not.
+     * @returns {boolean}
+     */
+    getMdtMappingModeEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._mdtMappingModeEnabled;
+    }
+
+    /**
      * Sets the MDT mapping mode to be enabled or not.
      * @param enabled {boolean}
      */
@@ -140,11 +178,36 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Checks if the patreon benefit is enabled for the user or not.
+     * @returns {boolean}
+     */
+    hasPatreonBenefit(patreonBenefit) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        let result = false;
+        for (let i = 0; i < this.patreonBenefits.length; i++) {
+            if (this.patreonBenefits[i] === patreonBenefit) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
      *
      * @param {Object} patreonBenefits
      */
     setPatreonBenefits(patreonBenefits) {
         this.patreonBenefits = patreonBenefits;
+    }
+
+    /**
+     * Gets the dungeon map if it's set before.
+     * @returns {DungeonMap}
+     */
+    getDungeonMap() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._map;
     }
 
     /**
@@ -200,6 +263,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Get the default visual to display for all enemies.
+     * @returns {string}
+     */
+    getEnemyDisplayType() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return this._enemyDisplayType;
+    }
+
+    /**
      * Sets the visual type that is currently being displayed.
      * @param {Number} enemyDisplayType
      */
@@ -226,6 +298,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Get the opacity at which unkilled enemies should be rendered at.
+     * @returns {string}
+     */
+    getUnkilledEnemyOpacity() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return Cookies.get('map_unkilled_enemy_opacity');
+    }
+
+    /**
      * Sets the opacity at which unkilled enemies should be rendered.
      * @param {Number} unkilledEnemyOpacity
      */
@@ -235,6 +316,15 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('unkilledenemyopacity:changed', {opacity: unkilledEnemyOpacity});
+    }
+
+    /**
+     * Get the opacity at which unkilled important enemies should be rendered at.
+     * @returns {string}
+     */
+    getUnkilledImportantEnemyOpacity() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return Cookies.get('map_unkilled_important_enemy_opacity');
     }
 
     /**
@@ -250,6 +340,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Get whether enemies should feature an aggressiveness border or not.
+     * @returns {boolean}
+     */
+    hasEnemyAggressivenessBorder() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return parseInt(Cookies.get('map_enemy_aggressiveness_border')) === 1;
+    }
+
+    /**
      * Sets whether enemies should feature an aggressiveness border or not.
      * @param {Boolean} visible
      */
@@ -262,6 +361,15 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Get whether enemies should feature a dangerous border or not.
+     * @returns {boolean}
+     */
+    hasEnemyDangerousBorder() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        return parseInt(Cookies.get('map_enemy_dangerous_border')) === 1;
+    }
+
+    /**
      * Sets whether enemies should feature a dangerous border or not.
      * @param {Boolean} visible
      */
@@ -271,6 +379,25 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('enemydangerousborder:changed', {visible: visible});
+    }
+
+    /**
+     * Gets the data of the currently selected floor
+     * @returns {boolean|{id: Number}}
+     */
+    getCurrentFloor() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        if (this._visibleFloorsByFloorId === null) {
+            this._visibleFloorsByFloorId = new Map();
+
+            let floors = this._mapContext.getVisibleFloors();
+            for (let i = 0; i < floors.length; i++) {
+                this._visibleFloorsByFloorId.set(Number(floors[i].id), floors[i]);
+            }
+        }
+
+        return this._visibleFloorsByFloorId?.get(Number(this._floorId)) ?? false;
     }
 
     /**
@@ -288,6 +415,16 @@ class StateManager extends Signalable {
     }
 
     /**
+     *
+     * @returns {number}
+     */
+    getMapZoomSpeed() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return parseInt(Cookies.get('map_zoom_speed'));
+    }
+
+    /**
      * @param zoomSpeed {Number}
      */
     setMapZoomSpeed(zoomSpeed) {
@@ -299,13 +436,12 @@ class StateManager extends Signalable {
     }
 
     /**
-     *
-     * @returns {number}
+     * Get the current map's zoom level.
+     * @returns {Number}
      */
-    getMapZoomSpeed() {
+    getMapZoomLevel() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return parseInt(Cookies.get('map_zoom_speed'));
+        return this._mapZoomLevel;
     }
 
     /**
@@ -329,6 +465,16 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Gets the currently logged-in user's name, or null if not logged in.
+     * @returns {*|null}
+     */
+    getUser() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._userData;
+    }
+
+    /**
      * Sets the data of the currently logged in user.
      * @param {Object|null} userData
      */
@@ -336,6 +482,30 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         this._userData = userData;
+    }
+
+    userHasRole(role) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        if (this._userData === null) {
+            return false;
+        }
+
+        let result = false;
+        for (let i = 0; i < this._userData.roles.length; i++) {
+            if (this._userData.roles[i].name === role) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     @returns {String}
+     */
+    getMapFacadeStyle() {
+        return Cookies.get('map_facade_style') ?? MAP_FACADE_STYLE_FACADE;
     }
 
     /**
@@ -349,6 +519,24 @@ class StateManager extends Signalable {
     }
 
     /**
+     * Checks if the current dungeon has facade enabled AND if we want to see it. False otherwise.
+     * @returns {number|boolean}
+     */
+    isCurrentDungeonFacadeEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._mapContext.getMappingVersion().facade_enabled &&
+            this.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE;
+    }
+
+    /**
+     * @returns {String}
+     */
+    getMapNumberStyle() {
+        return Cookies.get('map_number_style') ?? NUMBER_STYLE_PERCENTAGE;
+    }
+
+    /**
      *
      * @param {string} numberStyle
      */
@@ -356,6 +544,13 @@ class StateManager extends Signalable {
         Cookies.set('map_number_style', numberStyle, cookieDefaultAttributes);
 
         this.signal('mapnumberstyle:changed');
+    }
+
+    /**
+     * @returns {String}
+     */
+    getKillZonesNumberStyle() {
+        return Cookies.get('kill_zones_number_style') ?? NUMBER_STYLE_PERCENTAGE;
     }
 
     /**
@@ -369,6 +564,29 @@ class StateManager extends Signalable {
     }
 
     /**
+     * @returns {number}
+     */
+    getKillZonePathWeight() {
+        return parseInt(Cookies.get('kill_zone_path_weight'));
+    }
+
+    /**
+     * @param {number} weight
+     */
+    setKillZonePathWeight(weight) {
+        Cookies.set('kill_zone_path_weight', weight, cookieDefaultAttributes);
+
+        this.signal('killzonepathweight:changed', {weight: weight});
+    }
+
+    /**
+     * @returns {Boolean}
+     */
+    getPullsSidebarFloorSwitchVisibility() {
+        return parseInt(Cookies.get('pulls_sidebar_floor_switch_visibility')) === 1;
+    }
+
+    /**
      * Sets whether to show floor switches in the pull sidebar
      * @param {boolean} visible
      */
@@ -376,6 +594,14 @@ class StateManager extends Signalable {
         Cookies.set('pulls_sidebar_floor_switch_visibility', visible ? 1 : 0, cookieDefaultAttributes);
 
         this.signal('pullssidebarfloorswitchvisibility:changed');
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    getDungeonSpeedrunRequiredNpcsShowAllEnabled() {
+        return parseInt(Cookies.get('dungeon_speedrun_required_npcs_show_all')) === 1;
     }
 
     /**
@@ -390,59 +616,20 @@ class StateManager extends Signalable {
 
     /**
      *
+     * @returns {boolean}
+     */
+    getEchoCursorsEnabled() {
+        return parseInt(Cookies.get('echo_cursors_enabled')) === 1;
+    }
+
+    /**
+     *
      * @param {boolean} enabled
      */
     setEchoCursorsEnabled(enabled) {
         Cookies.set('echo_cursors_enabled', enabled ? 1 : 0, cookieDefaultAttributes);
 
         this.signal('echocursorsenabled:changed');
-    }
-
-    /**
-     * Checks if Echo is enabled for the current session.
-     * @returns {boolean}
-     */
-    isEchoEnabled() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this.laravelEchoEnabled;
-    }
-
-    /**
-     * Gets the EchoHandler instance used for Echo communication.
-     * @returns {EchoHandler}
-     */
-    getEchoHandler() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this._echoHandler;
-    }
-
-    /**
-     * Gets the dungeon map if it's set before.
-     * @returns {DungeonMap}
-     */
-    getDungeonMap() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._map;
-    }
-
-    /**
-     * Get the context of the map we are editing at this point.
-     * @returns {MapContextMappingVersionEdit|MapContextDungeonRoute|MapContextLiveSession|MapContextDungeonExplore|MapContextDungeonRouteSearch}
-     */
-    getMapContext() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._mapContext;
-    }
-
-    /**
-     * Gets if the MDT mapping mode is currently enabled or not.
-     * @returns {boolean}
-     */
-    getMdtMappingModeEnabled() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._mdtMappingModeEnabled;
     }
 
     /**
@@ -476,72 +663,11 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get the default visual to display for all enemies.
-     * @returns {string}
-     */
-    getEnemyDisplayType() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._enemyDisplayType;
-    }
-
-    /**
-     * Get the opacity at which unkilled enemies should be rendered at.
-     * @returns {string}
-     */
-    getUnkilledEnemyOpacity() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return Cookies.get('map_unkilled_enemy_opacity');
-    }
-
-    /**
-     * Get the opacity at which unkilled important enemies should be rendered at.
-     * @returns {string}
-     */
-    getUnkilledImportantEnemyOpacity() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return Cookies.get('map_unkilled_important_enemy_opacity');
-    }
-
-    /**
-     * Get whether enemies should feature an aggressiveness border or not.
-     * @returns {boolean}
-     */
-    hasEnemyAggressivenessBorder() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return parseInt(Cookies.get('map_enemy_aggressiveness_border')) === 1;
-    }
-
-    /**
-     * Get whether enemies should feature a dangerous border or not.
-     * @returns {boolean}
-     */
-    hasEnemyDangerousBorder() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return parseInt(Cookies.get('map_enemy_dangerous_border')) === 1;
-    }
-
-    /**
      * Get a list of all map icon types.
      * @returns {[]|*[]}
      */
     getMapIconTypes() {
         return this.mapIconTypes;
-    }
-
-    /**
-     * Checks if the patreon benefit is enabled for the user or not.
-     * @returns {boolean}
-     */
-    hasPatreonBenefit(patreonBenefit) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        let result = false;
-        for (let i = 0; i < this.patreonBenefits.length; i++) {
-            if (this.patreonBenefits[i] === patreonBenefit) {
-                result = true;
-                break;
-            }
-        }
-        return result;
     }
 
     /**
@@ -579,34 +705,6 @@ class StateManager extends Signalable {
     }
 
     /**
-     * Get the current map's zoom level.
-     * @returns {Number}
-     */
-    getMapZoomLevel() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        return this._mapZoomLevel;
-    }
-
-    /**
-     * Gets the data of the currently selected floor
-     * @returns {boolean|{id: Number}}
-     */
-    getCurrentFloor() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        if (this._visibleFloorsByFloorId === null) {
-            this._visibleFloorsByFloorId = new Map();
-
-            let floors = this._mapContext.getVisibleFloors();
-            for (let i = 0; i < floors.length; i++) {
-                this._visibleFloorsByFloorId.set(Number(floors[i].id), floors[i]);
-            }
-        }
-
-        return this._visibleFloorsByFloorId?.get(Number(this._floorId)) ?? false;
-    }
-
-    /**
      * Returns true if the map is currently in admin mode, false if not.
      * @returns {boolean}
      */
@@ -614,88 +712,6 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._mapContext instanceof MapContextMappingVersionEdit;
-    }
-
-    /**
-     * Gets the currently logged-in user's name, or null if not logged in.
-     * @returns {*|null}
-     */
-    getUser() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this._userData;
-    }
-
-    userHasRole(role) {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-        if (this._userData === null) {
-            return false;
-        }
-
-        let result = false;
-        for (let i = 0; i < this._userData.roles.length; i++) {
-            if (this._userData.roles[i].name === role) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Checks if the current dungeon has facade enabled AND if we want to see it. False otherwise.
-     * @returns {number|boolean}
-     */
-    isCurrentDungeonFacadeEnabled() {
-        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
-
-        return this._mapContext.getMappingVersion().facade_enabled &&
-            this.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE;
-    }
-
-    /**
-     @returns {String}
-     */
-    getMapFacadeStyle() {
-        return Cookies.get('map_facade_style') ?? MAP_FACADE_STYLE_FACADE;
-    }
-
-    /**
-     * @returns {String}
-     */
-    getMapNumberStyle() {
-        return Cookies.get('map_number_style') ?? NUMBER_STYLE_PERCENTAGE;
-    }
-
-    /**
-     * @returns {String}
-     */
-    getKillZonesNumberStyle() {
-        return Cookies.get('kill_zones_number_style') ?? NUMBER_STYLE_PERCENTAGE;
-    }
-
-    /**
-     * @returns {Boolean}
-     */
-    getPullsSidebarFloorSwitchVisibility() {
-        return parseInt(Cookies.get('pulls_sidebar_floor_switch_visibility')) === 1;
-    }
-
-    /**
-     *
-     * @returns {boolean}
-     */
-    getEchoCursorsEnabled() {
-        return parseInt(Cookies.get('echo_cursors_enabled')) === 1;
-    }
-
-    /**
-     *
-     * @returns {boolean}
-     */
-    getDungeonSpeedrunRequiredNpcsShowAllEnabled() {
-        return parseInt(Cookies.get('dungeon_speedrun_required_npcs_show_all')) === 1;
     }
 
     /**

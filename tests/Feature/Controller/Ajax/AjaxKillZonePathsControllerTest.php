@@ -24,7 +24,7 @@ final class AjaxKillZonePathsControllerTest extends DungeonRouteTestBase
         config(['broadcasting.default' => 'null']);
 
         $this->dungeonRoute->delete();
-        $this->dungeonRoute = $this->createNonFacadeDungeonRoute();
+        $this->dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
     }
 
     #[Test]

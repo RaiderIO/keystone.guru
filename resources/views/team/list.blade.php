@@ -19,7 +19,9 @@ $cookieService->setCookie('viewed_teams', true)
         <i class="fas fa-plus"></i> {{ __('view_team.list.create_team') }}
     </a>
 @endsection
-@include('common.general.inline', ['path' => 'team/list'])
+@include('common.general.inline', ['path' => 'team/list', 'options' => [
+    'tableSelector' => '#team_table',
+]])
 
 @section('content')
     <table id="team_table" class="tablesorter default_table table-striped">

@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Illuminate\Contracts\View\View;
@@ -78,7 +79,7 @@ class DungeonHeatmapController extends Controller
             return $redirect;
         }
 
-        /** @var Floor $defaultFloor */
+        /** @var Floor|null $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
             ->defaultOrFacade($currentMappingVersion)
             ->first();
@@ -86,7 +87,7 @@ class DungeonHeatmapController extends Controller
         return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
             'gameVersion' => $gameVersion,
             'dungeon'     => $dungeon,
-            'floorIndex'  => $defaultFloor?->index ?? '1',
+            'floorIndex'  => $defaultFloor->index,
         ]);
     }
 
@@ -102,13 +103,14 @@ class DungeonHeatmapController extends Controller
     }
 
     public function viewDungeonFloor(
-        HeatmapUrlFormRequest      $request,
-        MapContextServiceInterface $mapContextService,
-        SeasonServiceInterface     $seasonService,
-        DungeonServiceInterface    $dungeonService,
-        GameVersion                $gameVersion,
-        Dungeon                    $dungeon,
-        string                     $floorIndex = '1',
+        HeatmapUrlFormRequest            $request,
+        MapContextServiceInterface       $mapContextService,
+        SeasonServiceInterface           $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        DungeonServiceInterface          $dungeonService,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        string                           $floorIndex = '1',
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -125,13 +127,13 @@ class DungeonHeatmapController extends Controller
             $floorIndex = '1';
         }
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
                 ->defaultOrFacade($currentMappingVersion)
                 ->first();
@@ -139,7 +141,7 @@ class DungeonHeatmapController extends Controller
             return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor?->index ?? '1',
+                'floorIndex'  => $defaultFloor->index,
             ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -162,7 +164,7 @@ class DungeonHeatmapController extends Controller
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
-                    $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion)->filter(fn(Dungeon $dungeon) => $dungeon->heatmap_enabled),
             ]));
@@ -181,12 +183,13 @@ class DungeonHeatmapController extends Controller
     }
 
     public function embed(
-        HeatmapEmbedUrlFormRequest $request,
-        MapContextServiceInterface $mapContextService,
-        SeasonServiceInterface     $seasonService,
-        GameVersion                $gameVersion,
-        Dungeon                    $dungeon,
-        string                     $floorIndex = '1',
+        HeatmapEmbedUrlFormRequest       $request,
+        MapContextServiceInterface       $mapContextService,
+        SeasonServiceInterface           $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        GameVersion                      $gameVersion,
+        Dungeon                          $dungeon,
+        string                           $floorIndex = '1',
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
@@ -203,7 +206,7 @@ class DungeonHeatmapController extends Controller
         $mapFacadeStyle = $request->get('mapFacadeStyle', User::getCurrentUserMapFacadeStyle());
         User::forceMapFacadeStyle($mapFacadeStyle);
 
-        /** @var Floor $floor */
+        /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
             ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
@@ -211,7 +214,7 @@ class DungeonHeatmapController extends Controller
         $validated = $request->validated();
 
         if ($floor === null) {
-            /** @var Floor $defaultFloor */
+            /** @var Floor|null $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
                 ->defaultOrFacade($currentMappingVersion)
                 ->first();
@@ -219,7 +222,7 @@ class DungeonHeatmapController extends Controller
             return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
                 'gameVersion' => $gameVersion,
                 'dungeon'     => $dungeon,
-                'floorIndex'  => $defaultFloor?->index ?? '1',
+                'floorIndex'  => $defaultFloor->index,
             ] + $validated);
         } elseif ($floor->index !== (int)$floorIndex) {
             return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
@@ -272,7 +275,7 @@ class DungeonHeatmapController extends Controller
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
             'showHeatmapSearch'       => $heatmapActive,
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
-                $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'   => $validated,
             'defaultZoom'  => $defaultZoom,
@@ -297,10 +300,10 @@ class DungeonHeatmapController extends Controller
     private function getFilterSettings(?Season $season): array
     {
         return [
-            'keyLevelMin'           => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'keyLevelMax'           => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-            'itemLevelMin'          => $season?->item_level_min ?? 0,
-            'itemLevelMax'          => $season?->item_level_max ?? 0,
+            'keyLevelMin'           => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
+            'keyLevelMax'           => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
+            'itemLevelMin'          => $season?->item_level_min ?? 0, // @phpstan-ignore nullsafe.neverNull
+            'itemLevelMax'          => $season?->item_level_max ?? 0, // @phpstan-ignore nullsafe.neverNull
             'playerDeathsMin'       => 0,
             'playerDeathsMax'       => 99,
             'minSamplesRequiredMin' => 1,

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                    update(LiveSession $model, array $attributes = [], array $options = [])
  * @method bool                    delete(LiveSession $model)
  * @method Collection<LiveSession> all()
+ * @method bool                    exists(array $columns)
  */
 interface LiveSessionRepositoryInterface extends BaseRepositoryInterface
 {

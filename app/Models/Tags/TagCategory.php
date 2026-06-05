@@ -5,11 +5,12 @@ namespace App\Models\Tags;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 /**
- * @property int    $id
- * @property string $name
- * @property string $model_class
+ * @property int          $id
+ * @property string       $name
+ * @property class-string $model_class
  *
  * @mixin Eloquent
  */
@@ -37,7 +38,7 @@ class TagCategory extends Model
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
-    #[\Override]
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'name';

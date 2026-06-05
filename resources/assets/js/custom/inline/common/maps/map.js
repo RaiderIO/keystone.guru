@@ -1,7 +1,37 @@
+/**
+ * @typedef {Object} CommonMapsMapOptions
+ * @property {boolean} embed
+ * @property {boolean} edit
+ * @property {boolean} readonly
+ * @property {boolean} sandbox
+ * @property {string} defaultEnemyVisualType
+ * @property {boolean} defaultHeatmapShowTooltips
+ * @property {number} defaultUnkilledEnemyOpacity
+ * @property {number} defaultUnkilledImportantEnemyOpacity
+ * @property {boolean} defaultEnemyAggressivenessBorder
+ * @property {string} mapFacadeStyle
+ * @property {boolean} noUI
+ * @property {boolean} showControls
+ * @property {boolean} gestureHandling
+ * @property {boolean} zoomToContents
+ * @property {string[]} hiddenMapObjectGroups
+ * @property {number} defaultZoom
+ * @property {number} defaultZoomMax
+ * @property {boolean} showAttribution
+ * @property {Object|null} dungeonroute
+ * @property {string} assetsBaseUrl
+ * @property {string} tilesBaseUrl
+ * @property {Object} parameters
+ * @property {number} floorId
+ */
+
+/**
+ * @property {CommonMapsMapOptions} options
+ */
 class CommonMapsMap extends InlineCode {
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
         this._dungeonMap = null;
 
         this.settingsTabMap = new SettingsTabMap(options);
@@ -18,9 +48,6 @@ class CommonMapsMap extends InlineCode {
         return this._dungeonMap;
     }
 
-    /**
-     *
-     */
     activate() {
         super.activate();
 
@@ -79,6 +106,7 @@ class CommonMapsMap extends InlineCode {
             this._setupZoomControl();
             this._setupFavorite();
             this._setupLabelToggle();
+            this._setupFacadeToggle();
 
             // Sharing
             if (getState().getMapContext().getDungeon().mdt_supported) {
@@ -161,7 +189,8 @@ class CommonMapsMap extends InlineCode {
             map_enemy_dangerous_border: 1,
             enemy_display_type: 'enemy_portrait',
             echo_cursors_enabled: 1,
-            map_controls_show_hide_labels: 1
+            map_controls_show_hide_labels: 1,
+            kill_zone_path_weight: 5
         };
 
         for (let name in cookieDefaults) {
@@ -501,6 +530,38 @@ class CommonMapsMap extends InlineCode {
 
 
     /**
+     * @private
+     */
+    _setupFacadeToggle() {
+        let $btn = $('#map_controls_element_facade_toggle_btn');
+        if ($btn.length === 0) {
+            return;
+        }
+
+        $btn.unbind('click').bind('click', function () {
+            let current = $btn.data('current');
+            let newStyle = current === MAP_FACADE_STYLE_FACADE
+                ? MAP_FACADE_STYLE_SPLIT_FLOORS
+                : MAP_FACADE_STYLE_FACADE;
+
+            getState().setMapFacadeStyle(newStyle);
+
+            let user = getState().getUser();
+            if (user !== null) {
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/user/${user.public_key}`,
+                    dataType: 'json',
+                    data: {map_facade_style: newStyle, _method: 'PATCH'},
+                    complete: () => window.location.reload(),
+                });
+            } else {
+                window.location.reload();
+            }
+        });
+    }
+
+    /**
      * Called when the enemy context menu was triggered
      * @param enemyContextMenuEvent
      * @private
@@ -775,6 +836,7 @@ class CommonMapsMap extends InlineCode {
 
         // If the floor ID has changed we must also re-show/hide labels since the map controls get rebuilt
         this._setupLabelToggle();
+        this._setupFacadeToggle();
 
         // Make sure that the sidebar's select picker gets updated with the newly selected value
         refreshSelectPickers();

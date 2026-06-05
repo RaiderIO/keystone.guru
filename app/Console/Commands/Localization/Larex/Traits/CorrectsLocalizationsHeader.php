@@ -27,15 +27,15 @@ trait CorrectsLocalizationsHeader
 
     public function convertLocalizationHeaderToKsgFormat(): bool
     {
-        return $this->convertLocalizationHeader(array_flip(self::KSG_TO_CROWDIN_MAPPING));
+        return $this->convertLocalizationHeader(array_flip(self::KSG_TO_CROWDIN_MAPPING)) !== 0;
     }
 
     public function convertLocalizationHeaderToCrowdinFormat(): bool
     {
-        return $this->convertLocalizationHeader(self::KSG_TO_CROWDIN_MAPPING);
+        return $this->convertLocalizationHeader(self::KSG_TO_CROWDIN_MAPPING) !== 0;
     }
 
-    private function convertLocalizationHeader(array $mapping): bool
+    private function convertLocalizationHeader(array $mapping): int
     {
         // Fix the localization.csv file
         $contents = file_get_contents(base_path('lang/localization.csv'));

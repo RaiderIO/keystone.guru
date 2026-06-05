@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
+use Override;
 
 /**
  * Class MapContextDungeonRoute
@@ -66,7 +67,7 @@ class MapContextDungeonRoute extends MapContextBase
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         $useFacade = $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;

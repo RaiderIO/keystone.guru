@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
+use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
@@ -52,7 +53,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             throw new Exception(sprintf('Class %s is not a model!', $modelClass));
         }
 
-        /** @var Model $modelClass */
+        /** @var class-string<Model> $modelClass */
         return DB::transaction(function () use (
             $coordinatesService,
             $validated,
@@ -61,7 +62,7 @@ abstract class AjaxMappingModelBaseController extends Controller
             $onSaveSuccess,
             $echoContext
         ) {
-            /** @var Model|null $beforeModel */
+            /** @var MappingModelInterface|null $beforeModel */
             $beforeModel = $model === null ? null : clone $model;
 
             if ($model === null) {
@@ -88,7 +89,9 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-                    $echoContext ??= $model->floor->dungeon;
+                    /** @var Floor|null $floor */
+                    $floor = $model->getAttribute('floor');
+                    $echoContext ??= $floor?->dungeon;
                     broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));
                 }
 

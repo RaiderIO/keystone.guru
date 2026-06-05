@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property int $id
@@ -25,9 +26,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
- * @property DungeonRoute $dungeonRoute
- * @property Polyline     $polyline
- * @property Floor        $floor
+ * @property DungeonRoute  $dungeonRoute
+ * @property Polyline|null $polyline
+ * @property Floor         $floor
  *
  * @mixin Eloquent
  */
@@ -83,7 +84,7 @@ class Brushline extends Model
         return $this->belongsTo(Floor::class);
     }
 
-    #[\Override]
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

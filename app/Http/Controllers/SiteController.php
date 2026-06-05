@@ -18,6 +18,7 @@ use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
@@ -27,7 +28,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,13 +35,14 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Teapot\StatusCode;
+use Throwable;
 
 class SiteController extends Controller
 {
     /**
      * Show the application dashboard.
      *
-     * @return Application|Factory|View
+     * @return View
      */
     public function test(): View
     {
@@ -51,7 +52,7 @@ class SiteController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return Application|Factory|View
+     * @return View
      */
     public function index(
         CoverageServiceInterface        $coverageService,
@@ -129,7 +130,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return RedirectResponse|Redirector
+     * @return RedirectResponse
      */
     public function home(Request $request): RedirectResponse
     {
@@ -137,7 +138,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function credits(Request $request): View
     {
@@ -145,7 +146,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function about(Request $request): View
     {
@@ -153,7 +154,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function privacy(Request $request): View
     {
@@ -161,7 +162,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function terms(Request $request): View
     {
@@ -169,7 +170,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function cookies(Request $request): View
     {
@@ -191,7 +192,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function health(Request $request): View
     {
@@ -199,7 +200,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function mapping(Request $request): View
     {
@@ -207,7 +208,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      */
     public function timetest(Request $request): View
     {
@@ -215,7 +216,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Factory|View
+     * @return View
      *
      * @throws Exception
      */
@@ -223,6 +224,7 @@ class SiteController extends Controller
         Request                          $request,
         DiscoverServiceInterface         $discoverService,
         SeasonService                    $seasonService,
+        SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         ExpansionService                 $expansionService,
         TimewalkingEventServiceInterface $timewalkingEventService,
     ): View {
@@ -233,21 +235,24 @@ class SiteController extends Controller
         $offset    = (int)$request->get('offset', 0);
         $offset    = max(min($offset, $maxOffset), $minOffset);
 
+        $currentSeason = $seasonService->getCurrentSeason($currentExpansion);
+
         return view('misc.affixes', [
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
             'gameVersion'             => GameVersion::getDefaultGameVersion(),
             'seasonService'           => $seasonService,
+            'seasonAffixGroupService' => $seasonAffixGroupService,
             'offset'                  => $offset,
             'showPrevious'            => $offset > $minOffset,
             'showNext'                => $offset < $maxOffset,
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getCurrentAffixGroup()),
+                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getCurrentAffixGroup($currentSeason) : null),
                 'nextweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
-                    ->popularByAffixGroup($seasonService->getCurrentSeason($currentExpansion)->getNextAffixGroup()),
+                    ->popularByAffixGroup($currentSeason !== null ? $seasonAffixGroupService->getNextAffixGroup($currentSeason) : null),
             ],
         ]);
     }
@@ -277,13 +282,12 @@ class SiteController extends Controller
             DB::connection()->getPdo(); // ensure PDO established
             DB::select('SELECT 1');     // trivial round trip
             $checks['database']['ok'] = true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $checks['database']['error'] = $e->getMessage();
         }
 
         // Redis check: PING
         try {
-            /** @var Status $pong */
             $pong = Redis::connection()->client()->ping();
 
             // Some clients return "PONG" or true
@@ -291,7 +295,7 @@ class SiteController extends Controller
             if (!$checks['redis']['ok']) {
                 $checks['redis']['error'] = 'Unexpected PING response';
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $checks['redis']['error'] = $e->getMessage();
         }
 
@@ -312,7 +316,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Redirector|RedirectResponse
+     * @return RedirectResponse
      */
     public function dungeonroutes(Request $request): RedirectResponse
     {
@@ -325,7 +329,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function embed(Request $request, DungeonRoute $dungeonRoute): View
     {
@@ -336,7 +340,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function embedExplore(
         Request     $request,
@@ -353,7 +357,7 @@ class SiteController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @return View
      */
     public function embedHeatmap(
         Request     $request,

@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                        update(PatreonUserLink $model, array $attributes = [], array $options = [])
  * @method bool                        delete(PatreonUserLink $model)
  * @method Collection<PatreonUserLink> all()
+ * @method bool                        exists(array $columns)
  */
 interface PatreonUserLinkRepositoryInterface extends BaseRepositoryInterface
 {

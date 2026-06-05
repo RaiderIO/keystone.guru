@@ -3,10 +3,8 @@
 namespace App\SeederHelpers\RelationImport\Conditionals;
 
 use App\Models\Dungeon;
-use App\Models\Floor\Floor;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
 use Exception;
-use Illuminate\Support\Collection;
 
 /**
  * Determines if we can import this model based on its mapping version. If this model has a newer mapping version than
@@ -19,16 +17,6 @@ use Illuminate\Support\Collection;
  */
 class MappingVersionConditional implements ConditionalInterface
 {
-    private readonly Collection $floorCache;
-
-    private readonly Collection $dungeonCache;
-
-    public function __construct()
-    {
-        $this->floorCache   = collect();
-        $this->dungeonCache = collect();
-    }
-
     /**
      * @throws Exception
      */
@@ -54,29 +42,5 @@ class MappingVersionConditional implements ConditionalInterface
         //
         //        // Only import this model if it's a version upgrade
         //        return $modelMappingVersion->version > $dungeon->currentMappingVersion->version;
-    }
-
-    private function getFloorById(int $id): Floor
-    {
-        if ($this->floorCache->has($id)) {
-            $floor = $this->floorCache->get($id);
-        } else {
-            $floor = Floor::findOrFail($id);
-            $this->floorCache->put($id, $floor);
-        }
-
-        return $floor;
-    }
-
-    private function getDungeonById(int $id): Dungeon
-    {
-        if ($this->dungeonCache->has($id)) {
-            $dungeon = $this->dungeonCache->get($id);
-        } else {
-            $dungeon = Dungeon::findOrFail($id);
-            $this->dungeonCache->put($id, $dungeon);
-        }
-
-        return $dungeon;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -11,9 +12,9 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasVertices;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * @property int         $id
@@ -27,12 +28,12 @@ use Illuminate\Support\Collection;
  * @property string      $label
  * @property string      $vertices_json
  *
- * @property Floor             $floor
- * @property Collection<Enemy> $enemies
+ * @property Floor                          $floor
+ * @property EloquentCollection<int, Enemy> $enemies
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyPack extends CacheModel implements HasVerticesInterface, ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
@@ -77,21 +78,22 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return HasMany<Enemy, $this> */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
     }
 
     /**
-     * @return Collection<Enemy>
+     * @return EloquentCollection<int, Enemy>
      */
-    public function getEnemiesWithSeasonalType(string $seasonalType): Collection
+    public function getEnemiesWithSeasonalType(string $seasonalType): EloquentCollection
     {
         return $this->enemies()->where('seasonal_type', $seasonalType)->get();
     }
 
     public function getDungeonId(): ?int
     {
-        return $this->floor?->dungeon_id ?? null;
+        return $this->floor->dungeon_id;
     }
 }

@@ -7,8 +7,6 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class IngameXY implements Arrayable
 {
-    private ?LatLng $latLng = null;
-
     public function __construct(private float $x = 0, private float $y = 0, private ?Floor $floor = null)
     {
     }
@@ -68,13 +66,8 @@ class IngameXY implements Arrayable
         ];
     }
 
-    public function __clone()
+    public function __clone(): void
     {
-        return new IngameXY(
-            $this->x,
-            $this->y,
-            $this->floor,
-        );
     }
 
     public static function fromArray(array $ingameXY, ?Floor $floor): IngameXY

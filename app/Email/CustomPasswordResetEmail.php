@@ -4,6 +4,7 @@ namespace App\Email;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
+use Override;
 
 /**
  * Created by PhpStorm.
@@ -13,7 +14,7 @@ use Illuminate\Notifications\Messages\MailMessage;
  */
 class CustomPasswordResetEmail extends ResetPassword
 {
-    #[\Override]
+    #[Override]
     public function toMail($notifiable)
     {
         return new MailMessage()

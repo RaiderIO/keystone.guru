@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @method bool                       update(NpcEnemyForces $model, array $attributes = [], array $options = [])
  * @method bool                       delete(NpcEnemyForces $model)
  * @method Collection<NpcEnemyForces> all()
+ * @method bool                       exists(array $columns)
  */
 interface NpcEnemyForcesRepositoryInterface extends BaseRepositoryInterface
 {

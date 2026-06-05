@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => 'Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.',
             'highlight_dangerous_enemies'                   => 'Highlight dangerous enemies',
             'highlight_dangerous_enemies_title'             => 'Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru. These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.',
+            'kill_zone_path'                                => 'Pull path',
+            'kill_zone_path_weight'                         => 'Pull path stroke width',
+            'kill_zone_path_weight_title'                   => 'This controls the width of the line drawn between your pulls on the map. A higher value makes the line thicker.',
             'drawing'                                       => 'Drawing',
             'default_line_weight'                           => 'Default line weight',
             'default_line_weight_title'                     => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
@@ -251,6 +254,11 @@ return [
             'heatmaps'                => 'Heatmaps',
             'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
+            'compendium'              => 'Compendium',
+            'npc_compendium'          => 'NPCs',
+            'spell_compendium'        => 'Spells',
+            'compendium_activity'     => 'Activity',
+            'class_compendium'        => 'By Class',
         ],
         'nav' => [
             'user' => [
@@ -320,6 +328,10 @@ return [
                 ],
                 'labeltoggle' => [
                     'hide_labels' => 'Hide',
+                ],
+                'facadetoggle' => [
+                    'facade'       => 'MDT-style',
+                    'split_floors' => 'Blizzard-style',
                 ],
                 'mdtclones' => [
                     'mdt'        => 'Show MDT',
@@ -618,6 +630,11 @@ return [
             'title' => 'Upload logs',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => 'Boss',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => 'NEW',
@@ -639,14 +656,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => 'Name',
-            'description'     => 'Description',
-            'logo'            => 'Logo',
-            'current_logo'    => 'Current logo',
-            'team_logo_title' => 'Team logo',
-            'save'            => 'Save',
-            'submit'          => 'Submit',
-            'disband_team'    => 'Disband team',
+            'name'                     => 'Name',
+            'description'              => 'Description',
+            'logo'                     => 'Logo',
+            'current_logo'             => 'Current logo',
+            'team_logo_title'          => 'Team logo',
+            'save'                     => 'Save',
+            'submit'                   => 'Submit',
+            'disband_team'             => 'Disband team',
+            'route_publishing_enabled' => 'Route publishing enabled',
         ],
         'select' => [
             'select_team' => 'Select team...',

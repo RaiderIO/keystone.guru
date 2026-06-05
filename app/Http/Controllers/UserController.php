@@ -8,8 +8,6 @@ use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -34,7 +32,7 @@ class UserController extends Controller
 
     public function makeRole(Request $request, User $user, string $role): RedirectResponse
     {
-        /** @var User $currentUser */
+        /** @var User|null $currentUser */
         $currentUser = Auth::user();
 
         if ($currentUser !== null) {
@@ -125,7 +123,7 @@ class UserController extends Controller
     }
 
     /**
-     * @return Application|ResponseFactory|Response
+     * @return Response
      */
     public function storePatreonBenefits(Request $request, User $user): Response
     {

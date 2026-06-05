@@ -50,7 +50,7 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             }
 
             // Save the release last!
-            /** @var array{created_at: Carbon, updated_at: Carbon} $releaseAttribute */
+            /** @var array{id: int, created_at: Carbon, updated_at: Carbon, ...} $releaseAttribute */
             $releaseAttribute = array_filter($modelsData, function ($value) {
                 return !is_array($value);
             });
@@ -66,7 +66,7 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
                 $releaseAttribute['backup_db'] = $existingRelease->backup_db ?? 1;
             } else {
                 $releaseAttribute['released']  = 1; // Legacy thing - just set it to 1 always
-                $releaseAttribute['backup_db'] = $releaseAttribute['backup_db'] ?? 1;
+                $releaseAttribute['backup_db'] = 1;
             }
             $releaseAttributes[] = $releaseAttribute;
         }

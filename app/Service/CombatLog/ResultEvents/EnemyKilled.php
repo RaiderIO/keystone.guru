@@ -5,6 +5,10 @@ namespace App\Service\CombatLog\ResultEvents;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\Guid\Creature;
 
+/**
+ * Result event emitted when an enemy is killed (or charm-treated as killed); pairs with EnemyEngaged to form a
+ * complete NPC record that gets converted into a CombatLogRouteNpcRequestModel.
+ */
 class EnemyKilled extends BaseResultEvent
 {
     /**

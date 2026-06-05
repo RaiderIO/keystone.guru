@@ -41,7 +41,7 @@ abstract class StubRepository extends BaseRepository
 
     public function save(Model $model): bool
     {
-        $model->id = $this->id++;
+        $model->setAttribute($model->getKeyName(), $this->id++);
 
         return true;
     }
@@ -56,6 +56,11 @@ abstract class StubRepository extends BaseRepository
     }
 
     public function delete(Model $model): bool
+    {
+        return true;
+    }
+
+    public function exists(array $columns): bool
     {
         return true;
     }

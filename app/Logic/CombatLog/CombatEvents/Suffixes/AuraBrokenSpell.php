@@ -3,6 +3,7 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use Override;
 
 class AuraBrokenSpell extends Suffix
 {
@@ -38,7 +39,7 @@ class AuraBrokenSpell extends Suffix
     /**
      * @return HasParameters|$this
      */
-    #[\Override]
+    #[Override]
     public function setParameters(array $parameters): HasParameters
     {
         parent::setParameters($parameters);
