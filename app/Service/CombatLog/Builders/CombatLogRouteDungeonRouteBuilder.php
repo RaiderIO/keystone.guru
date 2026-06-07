@@ -9,7 +9,6 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
-use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -25,6 +24,7 @@ use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -68,21 +68,21 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
      * @throws RandomException
      */
     public function __construct(
-        private readonly SeasonServiceInterface       $seasonService,
-        CoordinatesServiceInterface                   $coordinatesService,
-        DungeonRouteRepositoryInterface               $dungeonRouteRepository,
-        DungeonRouteAffixGroupRepositoryInterface     $dungeonRouteAffixGroupRepository,
-        AffixGroupRepositoryInterface                 $affixGroupRepository,
-        KillZoneRepositoryInterface                   $killZoneRepository,
-        KillZoneEnemyRepositoryInterface              $killZoneEnemyRepository,
-        KillZoneSpellRepositoryInterface              $killZoneSpellRepository,
-        EnemyRepositoryInterface                      $enemyRepository,
-        NpcRepositoryInterface                        $npcRepository,
-        protected readonly SpellRepositoryInterface   $spellRepository,
-        protected readonly FloorRepositoryInterface   $floorRepository,
-        protected readonly DungeonRepositoryInterface $dungeonRepository,
-        protected readonly CombatLogRouteRequestModel $combatLogRoute,
-        ?int                                          $userId = null,
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        CoordinatesServiceInterface                       $coordinatesService,
+        DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
+        KillZoneRepositoryInterface                       $killZoneRepository,
+        KillZoneEnemyRepositoryInterface                  $killZoneEnemyRepository,
+        KillZoneSpellRepositoryInterface                  $killZoneSpellRepository,
+        EnemyRepositoryInterface                          $enemyRepository,
+        NpcRepositoryInterface                            $npcRepository,
+        protected readonly SpellRepositoryInterface       $spellRepository,
+        protected readonly FloorRepositoryInterface       $floorRepository,
+        protected readonly DungeonRepositoryInterface     $dungeonRepository,
+        protected readonly CombatLogRouteRequestModel     $combatLogRoute,
+        ?int                                              $userId = null,
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
 
@@ -96,8 +96,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $npcRepository,
             $this->combatLogRoute->createDungeonRoute(
                 $this->seasonService,
+                $this->seasonAffixGroupService,
                 $dungeonRouteRepository,
-                $affixGroupRepository,
                 $dungeonRouteAffixGroupRepository,
                 $this->dungeonRepository,
                 $userId,
