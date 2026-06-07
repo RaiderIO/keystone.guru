@@ -191,7 +191,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         // Construct a list of intersections from mountable areas.
         /** @var Collection<MountableAreaIntersection> $allMountableAreaIntersections */
         $allMountableAreaIntersections = collect();
-        foreach ($latLngA->getFloor()->mountableareas as $mountableArea) {
+        foreach ($latLngA->getFloor()->mountableAreas as $mountableArea) {
             // Determine from which mountable area the location started
             if ($startMountableArea === null && $mountableArea->contains($this->coordinatesService, $latLngA)) {
                 $startMountableArea = $mountableArea;
