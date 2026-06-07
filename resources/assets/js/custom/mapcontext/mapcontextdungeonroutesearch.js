@@ -44,6 +44,13 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
     /**
      * @returns {[]}
      */
+    getArrows() {
+        return this._options.dungeonRoute?.arrows ?? [];
+    }
+
+    /**
+     * @returns {[]}
+     */
     getKillZones() {
         return this._options.dungeonRoute?.killZones ?? [];
     }

@@ -25,6 +25,7 @@ class ImportStringDetails implements Arrayable
         private readonly int        $pulls,
         private readonly int        $paths,
         private readonly int        $lines,
+        private readonly int        $arrows,
         private readonly int        $notes,
         private readonly int        $enemyForces,
         private readonly int        $enemyForcesMax,
@@ -72,6 +73,11 @@ class ImportStringDetails implements Arrayable
         return $this->lines;
     }
 
+    public function getArrows(): int
+    {
+        return $this->arrows;
+    }
+
     public function getNotes(): int
     {
         return $this->notes;
@@ -108,6 +114,7 @@ class ImportStringDetails implements Arrayable
             'pulls'                      => $this->pulls,
             'paths'                      => $this->paths,
             'lines'                      => $this->lines,
+            'arrows'                     => $this->arrows,
             'notes'                      => $this->notes,
             'enemy_forces'               => $this->enemyForces,
             'enemy_forces_max'           => $this->enemyForcesMax,

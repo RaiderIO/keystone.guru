@@ -202,6 +202,15 @@ class DungeonRoutePolicy
         return $this->allow();
     }
 
+    public function addArrow(?User $user, DungeonRoute $dungeonRoute): Response
+    {
+        if ($dungeonRoute->arrows()->count() >= config('keystoneguru.dungeon_route_limits.arrows')) {
+            return $this->deny(__('policy.add_arrow_limit_reached', ['limit' => config('keystoneguru.dungeon_route_limits.arrows')]));
+        }
+
+        return $this->allow();
+    }
+
     public function addMapIcon(?User $user, DungeonRoute $dungeonRoute): Response
     {
         if ($dungeonRoute->mapicons()->count() >= config('keystoneguru.dungeon_route_limits.map_icons')) {

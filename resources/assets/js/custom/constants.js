@@ -23,6 +23,7 @@ const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
 const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
 const MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
 const MAP_OBJECT_GROUP_PATH = 'path';
+const MAP_OBJECT_GROUP_ARROW = 'arrow';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -35,6 +36,7 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_PATH,
     MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_BRUSHLINE,
+    MAP_OBJECT_GROUP_ARROW,
     MAP_OBJECT_GROUP_MAPICON,
     // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
@@ -499,6 +501,9 @@ let c = {
             }
         },
         path: {
+            defaultColor: polylineDefaultColor,
+        },
+        arrow: {
             defaultColor: polylineDefaultColor,
         },
         polyline: {

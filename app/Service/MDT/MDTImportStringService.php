@@ -12,6 +12,7 @@ use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -50,7 +51,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 
-/** * Class MDTImportStringService
+/**
+ * Class MDTImportStringService
  *
  * @author Wouter
  *
@@ -667,13 +669,45 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                 // Triangles (t = triangle)
                 // MethodDungeonTools.lua:2554
-                if (isset($object['t']) && $object['t']) {
-                    $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $object['l'], $object['t'][0]);
-                }
-                // If it's a line
-                // MethodDungeonTools.lua:2529
-                elseif (isset($object['l'])) {
-                    $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $object['l']);
+                if (isset($object['l'])) {
+                    $lineCount = count($object['l']);
+                    // Also, ignore lines which are less than 2 points, and those with uneven coordinates (malformed)
+                    if ($lineCount >= 4 && $lineCount % 2 === 0) {
+                        // Convert all the line points to LatLngs
+                        $dominantFloor = null;
+                        for ($i = 0; $i < $lineCount; $i += 2) {
+                            $latLng = Conversion::convertMDTCoordinateToLatLng(
+                                [
+                                    'x' => floatval($object['l'][$i]),
+                                    'y' => floatval($object['l'][$i + 1]),
+                                ],
+                                $floor,
+                            );
+
+                            if ($floor->facade) {
+                                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
+                                    $mappingVersion,
+                                    $latLng,
+                                    $dominantFloor,
+                                );
+
+                                // Attempt to set the dominant floor, or fall back to what was set before
+                                $dominantFloor ??= $latLng->getFloor();
+                            }
+
+                            $vertices[] = $latLng->toArray();
+                        }
+
+                        // Arrows
+                        if (isset($object['t']) && $object['t']) {
+                            $this->parseObjectTriangle($importStringObjects, $mappingVersion, $floor, $details, $vertices, $dominantFloor/*, $object['t'][0]*/);
+                        }
+                        // If it's a line
+                        // MethodDungeonTools.lua:2529
+                        else {
+                            $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $vertices, $dominantFloor);
+                        }
+                    }
                 }
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
@@ -693,48 +727,29 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         MappingVersion      $mappingVersion,
         Floor               $floor,
         array               $details,
-        array               $line,
-        float               $rotationRad,
+        array               $vertices,
+        ?Floor              $dominantFloor = null,
     ): void {
-        // Don't parse as paths, but as free-drawn instead
-        $details[6] = true;
+        $weight = min(5, max(1, (int)$details[0]));
 
-        // Create the main line
-        $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $line);
-
-        // Second to last and last point
-        $lastPoint = [
-            (float)$line[count($line) - 2],
-            (float)last($line),
-        ];
-
-        $lastPointLatLng = new LatLng($lastPoint[0], $lastPoint[1], $floor);
-        // Create the left part of the arrow
-        $leftPartLatLng = new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() + 5, $floor)->rotate(
-            $lastPointLatLng,
-            rad2deg(-$rotationRad),
-        );
-
-        $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
-            $lastPoint,
-            [
-                $leftPartLatLng->getLat(),
-                $leftPartLatLng->getLng(),
+        $importStringObjects->getArrows()->push([
+            'floor_id' => ($dominantFloor ?? $floor)->id,
+            'polyline' => [
+                'color'         => (!str_starts_with((string)$details[4], '#') ? '#' : '') . $details[4],
+                'weight'        => $weight,
+                'vertices_json' => json_encode($vertices),
+                'model_class'   => Arrow::class,
             ],
-        ));
+        ]);
 
-        // Create the right part of the arrow
-        $rightPartLatLng = new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() - 5, $floor)->rotate(
-            $lastPointLatLng,
-            rad2deg(-$rotationRad),
-        );
-        $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
-            $lastPoint,
-            [
-                $rightPartLatLng->getLat(),
-                $rightPartLatLng->getLng(),
-            ],
-        ));
+        if ($importStringObjects->getArrows()->count() > config('keystoneguru.dungeon_route_limits.arrows')) {
+            $importStringObjects->getErrors()->push(
+                new ImportError(
+                    __('services.mdt.io.import_string.category.arrows'),
+                    __('services.mdt.io.import_string.limit_reached_arrows', ['limit' => config('keystoneguru.dungeon_route_limits.arrows')]),
+                ),
+            );
+        }
     }
 
     private function parseObjectLine(
@@ -742,36 +757,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         MappingVersion      $mappingVersion,
         Floor               $floor,
         array               $details,
-        array               $line,
+        array               $vertices,
+        ?Floor              $dominantFloor = null,
     ): void {
         $isFreeDrawn = isset($details[6]) && $details[6];
-
-        $vertices      = [];
-        $lineCount     = count($line);
-        $dominantFloor = null;
-
-        for ($i = 0; $i < $lineCount; $i += 2) {
-            $latLng = Conversion::convertMDTCoordinateToLatLng(
-                [
-                    'x' => floatval($line[$i]),
-                    'y' => floatval($line[$i + 1]),
-                ],
-                $floor,
-            );
-
-            if ($floor->facade) {
-                $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
-                    $mappingVersion,
-                    $latLng,
-                    $dominantFloor,
-                );
-
-                // Attempt to set the dominant floor, or fall back to what was set before
-                $dominantFloor ??= $latLng->getFloor();
-            }
-
-            $vertices[] = $latLng->toArray();
-        }
 
         // Between 1 and 5
         $weight = min(5, max(1, (int)$details[0]));
@@ -1000,6 +989,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $importStringPulls->getKillZoneAttributes()->count(),
                 $importStringObjects->getPaths()->count(),
                 $importStringObjects->getLines()->count(),
+                $importStringObjects->getArrows()->count(),
                 $importStringObjects->getMapIcons()->count(),
                 $importStringPulls->getEnemyForces(),
                 $importStringPulls->isRouteTeeming() ?
@@ -1219,83 +1209,83 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ImportStringObjects $importStringObjects,
         DungeonRoute        $dungeonRoute,
     ): void {
-        $now                 = now();
-        $polyLinesAttributes = [];
+        $now = now();
 
-        $brushLinesAttributes = [];
-        foreach ($importStringObjects->getLines() as $line) {
-            $brushLinesAttributes[] = [
-                'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $line['floor_id'],
-                'polyline_id'      => -1,
-                'created_at'       => $now,
-                'updated_at'       => $now,
-            ];
-            $polyLinesAttributes[] = $line['polyline'];
-        }
-
-        Brushline::insert($brushLinesAttributes);
-
-        $pathsAttributes = [];
-        foreach ($importStringObjects->getPaths() as $path) {
-            $pathsAttributes[] = [
-                'dungeon_route_id' => $dungeonRoute->id,
-                'floor_id'         => $path['floor_id'],
-                'polyline_id'      => -1,
-                'created_at'       => $now,
-                'updated_at'       => $now,
-            ];
-            $polyLinesAttributes[] = $path['polyline'];
-        }
-
-        Path::insert($pathsAttributes);
-
-        // Load back the brushlines and paths so that we know the IDs
-        $dungeonRoute->load([
-            'brushlines',
-            'paths',
+        /**
+         * Each entry maps an ImportStringObjects collection to its model class and DungeonRoute relation name.
+         * This unified loop replaces the previous copy-pasted brushline/path blocks.
+         *
+         * @var Collection<int, array{objects: Collection, model: class-string, relation: string}> $typedObjects
+         */
+        $typedObjects = collect([
+            ['objects' => $importStringObjects->getLines(),  'model' => Brushline::class, 'relation' => 'brushlines'],
+            ['objects' => $importStringObjects->getPaths(),  'model' => Path::class,      'relation' => 'paths'],
+            ['objects' => $importStringObjects->getArrows(), 'model' => Arrow::class,     'relation' => 'arrows'],
         ]);
 
-        // Assign these IDs to their respective polylines
-        $polyLineIndex = 0;
-        foreach ($dungeonRoute->brushlines as $brushLine) {
-            $polyLinesAttributes[$polyLineIndex]['model_id'] = $brushLine->id;
+        $polyLinesAttributes = [];
 
-            $polyLineIndex++;
+        // 1. Insert each model type and collect polyline attributes in insertion order
+        foreach ($typedObjects as $type) {
+            $modelRows = [];
+
+            foreach ($type['objects'] as $obj) {
+                $modelRows[] = [
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'floor_id'         => $obj['floor_id'],
+                    'polyline_id'      => -1,
+                    'created_at'       => $now,
+                    'updated_at'       => $now,
+                ];
+                $polyLinesAttributes[] = $obj['polyline'];
+            }
+
+            if (!empty($modelRows)) {
+                $type['model']::insert($modelRows);
+            }
         }
 
-        foreach ($dungeonRoute->paths as $path) {
-            $polyLinesAttributes[$polyLineIndex]['model_id'] = $path->id;
+        // 2. Reload all three relations at once so we know their IDs
+        $dungeonRoute->load($typedObjects->map(fn($type) => $type['relation'])->values()->toArray());
 
-            $polyLineIndex++;
+        // 3. Assign model_id to each polyline attribute using the same insertion order
+        $polyLineIndex = 0;
+        foreach ($typedObjects as $type) {
+            foreach ($dungeonRoute->getRelation($type['relation']) as $model) {
+                $polyLinesAttributes[$polyLineIndex]['model_id'] = $model->id;
+                $polyLineIndex++;
+            }
         }
 
         Polyline::insert($polyLinesAttributes);
 
-        // Assign the polylines back to the brushlines/paths
-        $polyLines = Polyline::where(static function (Builder $builder) use ($dungeonRoute) {
-            $builder->where(static function (Builder $builder) use ($dungeonRoute) {
-                $builder->whereIn('model_id', $dungeonRoute->brushlines->pluck('id'))
-                    ->where('model_class', Brushline::class);
-            })->orWhere(static function (Builder $builder) use ($dungeonRoute) {
-                $builder->whereIn('model_id', $dungeonRoute->paths->pluck('id'))
-                    ->where('model_class', Path::class);
-            });
+        // 4. Query back the inserted polylines and link them to their owners
+        $polyLines = Polyline::where(static function (Builder $builder) use ($dungeonRoute, $typedObjects) {
+            foreach ($typedObjects as $type) {
+                $builder->orWhere(static function (Builder $builder) use ($dungeonRoute, $type) {
+                    $builder->whereIn('model_id', $dungeonRoute->getRelation($type['relation'])->pluck('id'))
+                        ->where('model_class', $type['model']);
+                });
+            }
+//            $builder->where(static function (Builder $builder) use ($dungeonRoute) {
+//                $builder->whereIn('model_id', $dungeonRoute->brushlines->pluck('id'))
+//                    ->where('model_class', Brushline::class);
+//            })->orWhere(static function (Builder $builder) use ($dungeonRoute) {
+//                $builder->whereIn('model_id', $dungeonRoute->paths->pluck('id'))
+//                    ->where('model_class', Path::class);
+//            })->orWhere(static function (Builder $builder) use ($dungeonRoute) {
+//                $builder->whereIn('model_id', $dungeonRoute->arrows->pluck('id'))
+//                    ->where('model_class', Arrow::class);
+//            });
         })->orderBy('id')
             ->get('id');
 
-        // Assign the polylines back to the brushlines/paths
         $polyLineIndex = 0;
-        foreach ($dungeonRoute->brushlines as $brushLine) {
-            $brushLine->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
-
-            $polyLineIndex++;
-        }
-
-        foreach ($dungeonRoute->paths as $path) {
-            $path->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
-
-            $polyLineIndex++;
+        foreach ($typedObjects as $type) {
+            foreach ($dungeonRoute->getRelation($type['relation']) as $model) {
+                $model->update(['polyline_id' => $polyLines->get($polyLineIndex)->id]);
+                $polyLineIndex++;
+            }
         }
 
         // Assign map objects to the route

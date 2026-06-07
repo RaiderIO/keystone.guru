@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
+use App\Http\Controllers\Traits\ListsArrows;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Controllers\Traits\ListsEnemyPacks;
@@ -67,6 +68,7 @@ use Throwable;
 
 class AjaxDungeonRouteController extends Controller
 {
+    use ListsArrows;
     use ListsBrushlines;
     use ListsDungeonFloorSwitchMarkers;
     use ListsEnemyPacks;

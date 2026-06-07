@@ -27,6 +27,7 @@ use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
 use App\Http\Controllers\Ajax\AjaxDungeonRouteController;
@@ -661,6 +662,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
             Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
             Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
+
+            Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
+            Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
+            Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
 
             Route::post('/raidmarker/{enemy}', new AjaxEnemyController()->setRaidMarker(...));
 

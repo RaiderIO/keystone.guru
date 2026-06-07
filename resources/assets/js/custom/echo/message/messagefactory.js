@@ -16,6 +16,13 @@ class MessageFactory {
             case BrushlineDeletedMessage.getName():
                 result = new BrushlineDeletedMessage(props);
                 break;
+            // Arrow
+            case ArrowChangedMessage.getName():
+                result = new ArrowChangedMessage(props);
+                break;
+            case ArrowDeletedMessage.getName():
+                result = new ArrowDeletedMessage(props);
+                break;
             // KillZone
             case KillZoneChangedMessage.getName():
                 result = new KillZoneChangedMessage(props);

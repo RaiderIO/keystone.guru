@@ -186,6 +186,7 @@ return [
         'kill_zones' => 50,
         'brushlines' => 150,
         'paths'      => 150,
+        'arrows'     => 150,
         'map_icons'  => 150,
     ],
 
