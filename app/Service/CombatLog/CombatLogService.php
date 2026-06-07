@@ -23,6 +23,7 @@ use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\DungeonRouteFilter;
 use App\Service\CombatLog\Filters\MappingVersion\CombatLogDungeonOrRaidFilter;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use File;
@@ -32,13 +33,14 @@ use InvalidArgumentException;
 use Throwable;
 use ZipArchive;
 
-class CombatLogService implements CombatLogServiceInterface
+readonly class CombatLogService implements CombatLogServiceInterface
 {
     public function __construct(
-        private readonly SeasonServiceInterface           $seasonService,
-        private readonly NpcRepositoryInterface           $npcRepository,
-        private readonly DungeonRepositoryInterface       $dungeonRepository,
-        private readonly CombatLogServiceLoggingInterface $log,
+        private SeasonServiceInterface           $seasonService,
+        private SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private NpcRepositoryInterface           $npcRepository,
+        private DungeonRepositoryInterface       $dungeonRepository,
+        private CombatLogServiceLoggingInterface $log,
     ) {
     }
 
@@ -216,7 +218,7 @@ class CombatLogService implements CombatLogServiceInterface
     ): Collection {
         try {
             $this->log->getResultEventsForChallengeModeStart($combatLogFilePath);
-            $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
+            $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService, $this->seasonAffixGroupService));
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             try {
@@ -264,7 +266,7 @@ class CombatLogService implements CombatLogServiceInterface
     ): Collection {
         try {
             $this->log->getResultEventsForDungeonOrRaidStart($combatLogFilePath);
-            $dungeonRouteFilter           = (new DungeonRouteFilter($this->seasonService));
+            $dungeonRouteFilter           = (new DungeonRouteFilter($this->seasonService, $this->seasonAffixGroupService));
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
             $this->parseCombatLogStreaming(

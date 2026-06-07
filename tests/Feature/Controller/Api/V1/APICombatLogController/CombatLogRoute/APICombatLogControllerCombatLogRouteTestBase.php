@@ -75,7 +75,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
 
             foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
                 /** @var Affix $affix */
-                $this->assertContains($affix->affix_id, $validAffixIds);
+                $this->assertContains($affix->affix_id, $validAffixIds, sprintf('Affix with key %s and id %d not found in response [%s]', $affix->key, $affix->affix_id, implode(', ', $validAffixIds)));
             }
         }
     }
