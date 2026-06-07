@@ -30,9 +30,9 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
 
         $pathsToKillZones = $this->killZonePathService->findPathsToKillZones($this->options->dungeonRoute);
 
-        // Load mountable areas for each floor, required later
-        /** @var Collection<int, Collection<int, MountableArea>> $mountableAreasCache */
         if ($this->options->use_mounts) {
+            // Load mountable areas for each floor, required later
+            /** @var Collection<int, Collection<int, MountableArea>> $mountableAreasCache */
             $mountableAreasCache = collect();
             foreach ($pathsToKillZones as $paths) {
                 foreach ($paths as $path) {
