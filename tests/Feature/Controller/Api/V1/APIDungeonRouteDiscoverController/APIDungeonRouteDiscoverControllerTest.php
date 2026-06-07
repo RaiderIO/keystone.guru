@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controller\Api\V1\APIDiscoverController;
+namespace Tests\Feature\Controller\Api\V1\APIDungeonRouteDiscoverController;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
@@ -14,8 +14,8 @@ use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('API')]
-#[Group('APIDiscover')]
-final class APIDiscoverControllerTest extends PublicTestCase
+#[Group('APIDungeonRouteDiscover')]
+final class APIDungeonRouteDiscoverControllerTest extends PublicTestCase
 {
     /**
      * @throws Exception

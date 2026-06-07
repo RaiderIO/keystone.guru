@@ -14,7 +14,7 @@ app/Http/Controllers/Api/V1/Public/{Group}/API{Name}Controller.php
 app/Http/Requests/Api/V1/{Group}/{Name}Request.php
 app/Http/Resources/{Group}/{Name}Resource.php          ← single item
 app/Http/Resources/{Group}/{Name}EnvelopeResource.php  ← collection wrapper
-routes/api.php                                          ← route registration
+routes/api.php                                         ← route registration
 tests/Feature/Controller/Api/V1/API{Name}Controller/API{Name}ControllerTest.php
 ```
 
@@ -35,7 +35,7 @@ For endpoints that take `offset` + `count` query params, use `APIOffsetPaginated
 
 ```php
 // routes/api.php
-Route::get('popular', new APIDiscoverController()->popular(...))->name('...');
+Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('...');
 
 // controller method signature
 public function popular(
@@ -78,14 +78,14 @@ Extends `App\Http\Controllers\Controller`. Services are injected as method param
 Route model binding parameters come **before** service parameters in the method signature, matching the order they appear in the route URL.
 
 ```php
-class APIDiscoverController extends Controller
+class APIDungeonRouteDiscoverController extends Controller
 {
     /**
      * @OA\Get(
-     *     operationId="getDiscoverPopular",
+     *     operationId="getRoutesByGameVersion",
      *     path="/api/v1/routes/{gameVersion}/popular",
      *     summary="...",
-     *     tags={"Discover"},
+     *     tags={"Route"},
      *     @OA\Parameter(name="gameVersion", in="path", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response=200, description="Successful operation",
      *         @OA\JsonContent(ref="#/components/schemas/DungeonRouteSummaryEnvelope")
@@ -116,12 +116,12 @@ class APIDiscoverController extends Controller
 Routes live in `routes/api.php` inside `Route::prefix('v1')`. Use the first-class callable syntax:
 
 ```php
-use App\Http\Controllers\Api\V1\Public\Discover\APIDiscoverController;
+use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
 
 Route::prefix('routes/{gameVersion}')->group(static function () {
-    Route::get('popular', new APIDiscoverController()->popular(...))->name('api.v1.discover.popular');
+    Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('api.v1.discover.popular');
     Route::prefix('{dungeon}')->group(static function () {
-        Route::get('popular', new APIDiscoverController()->dungeonPopular(...))->name('api.v1.discover.dungeon.popular');
+        Route::get('popular', new APIDungeonRouteDiscoverController()->dungeonPopular(...))->name('api.v1.discover.dungeon.popular');
     });
 });
 ```
@@ -184,15 +184,15 @@ private function mockDiscoverService(): MockObject&DiscoverServiceInterface
 
 Bind the mock via `app()->instance(Interface::class, $mock)` — not via constructor injection.
 
-Test naming: `methodName_givenCondition_shouldExpectedOutcome`.  
-Class attributes: `#[Group('Controller')]`, `#[Group('API')]`, `#[Group('API{Name}')]`.  
+Test naming: `methodName_givenCondition_shouldExpectedOutcome`.
+Class attributes: `#[Group('Controller')]`, `#[Group('API')]`, `#[Group('API{Name}')]`.
 Use `try/finally` to clean up any database records created inside a test.
 
 ```php
 #[Group('Controller')]
 #[Group('API')]
-#[Group('APIDiscover')]
-final class APIDiscoverControllerTest extends PublicTestCase
+#[Group('APIDungeonRouteDiscover')]
+final class APIDungeonRouteDiscoverControllerTest extends PublicTestCase
 {
     #[Test]
     public function popular_givenValidGameVersion_shouldReturnOk(): void
