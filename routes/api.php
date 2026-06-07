@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
+use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteThumbnailJobController;
 
@@ -40,6 +41,15 @@ Route::prefix('v1')->group(static function () {
 
     Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {
         Route::post('drop', new APICacheController()->drop(...))->name('api.v1.cache.drop');
+    });
+
+    Route::prefix('routes/{gameVersion}')->group(static function () {
+        Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('api.v1.discover.popular');
+        Route::get('new', new APIDungeonRouteDiscoverController()->new(...))->name('api.v1.discover.new');
+        Route::prefix('{dungeon}')->group(static function () {
+            Route::get('popular', new APIDungeonRouteDiscoverController()->dungeonPopular(...))->name('api.v1.discover.dungeon.popular');
+            Route::get('new', new APIDungeonRouteDiscoverController()->dungeonNew(...))->name('api.v1.discover.dungeon.new');
+        });
     });
 
     // Static data
