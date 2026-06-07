@@ -11,10 +11,6 @@ use App\Models\Team;
     <h4>
         {{ __('view_team.edittabs.routepublishing.title') }}
     </h4>
-    @component('common.general.alert', ['type' => 'warning', 'name' => 'team-route-publishing-warning'])
-        {{ __('view_team.edittabs.routepublishing.warning') }}
-    @endcomponent
-
     <div class="form-group">
         {{ __('view_team.edittabs.routepublishing.description') }}
     </div>
