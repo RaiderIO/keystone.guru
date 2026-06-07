@@ -2,26 +2,30 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
+        "development": "node build-concat.js && webpack --mode development",
+        "watch": "concurrently \"webpack --mode development --watch\" \"node build-concat.js --watch\"",
+        "watch-poll": "concurrently \"webpack --mode development --watch\" \"node build-concat.js --watch\"",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "node build-concat.js --production && webpack --mode production"
     },
     "resolutions": {
         "terser": "3.14.1"
     },
     "devDependencies": {
+        "@babel/core": "^7.26.0",
+        "@babel/preset-env": "^7.26.0",
         "axios": "^1.6.4",
+        "babel-loader": "^9.2.1",
+        "chokidar": "^3.6.0",
         "concurrently": "^9.0.1",
         "cross-env": "^7.0.3",
+        "css-loader": "^7.1.2",
         "git-revision-webpack-plugin": "^5.0.0",
         "jquery": "^3.6.0",
         "laravel-echo": "^2.2.6",
         "laravel-localization-loader": "^1.0.5",
-        "laravel-mix": "^6.0.49",
         "lodash": "^4.17.21",
+        "mini-css-extract-plugin": "^2.9.2",
         "node-sass-utils": "^1.1.3",
         "pusher-js": "^8.4.0",
         "resolve-url-loader": "^5.0.0",
@@ -29,7 +33,8 @@
         "sass-loader": "^13.0.0",
         "vue-template-compiler": "^2.6.14",
         "webpack": "^5.99.9",
-        "webpack-shell-plugin-next": "^2.2.2"
+        "webpack-cli": "^5.1.4",
+        "webpack-remove-empty-scripts": "^1.0.3"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
