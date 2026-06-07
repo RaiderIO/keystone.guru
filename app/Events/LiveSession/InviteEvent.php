@@ -56,7 +56,7 @@ class InviteEvent extends ContextEvent
                 'dungeon'      => $this->context->dungeonRoute->dungeon,
                 'title'        => Str::slug($this->context->dungeonRoute->title),
                 'dungeonroute' => $this->context->dungeonRoute,
-                'livesession'  => $this->context,
+                'liveSession'  => $this->context,
             ]),
         ]);
     }

@@ -7,11 +7,11 @@ use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 
-class RaidEventsService implements RaidEventsServiceInterface
+readonly class RaidEventsService implements RaidEventsServiceInterface
 {
     public function __construct(
-        private readonly CoordinatesServiceInterface  $coordinatesService,
-        private readonly KillZonePathServiceInterface $killZonePathService,
+        private CoordinatesServiceInterface  $coordinatesService,
+        private KillZonePathServiceInterface $killZonePathService,
     ) {
     }
 

@@ -61,7 +61,7 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, EnemyPatrol>                $enemypatrols
  * @property EloquentCollection<int, MapIcon>                    $mapIcons
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
- * @property EloquentCollection<int, MountableArea>              $mountableareas
+ * @property EloquentCollection<int, MountableArea>              $mountableAreas
  * @property EloquentCollection<int, FloorUnion>                 $floorUnions
  * @property EloquentCollection<int, FloorUnionArea>             $floorUnionAreas
  * @property EloquentCollection<int, Enemy>                      $enemiesForExport
