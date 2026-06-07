@@ -11,7 +11,7 @@ use App\Service\Cache\CacheServiceInterface;
 /**
  * @var CacheServiceInterface $cacheService
  * @var DungeonRoute          $dungeonroute
- * @var AffixGroup            $currentAffixGroup
+ * @var AffixGroup|null       $currentAffixGroup
  * @var AffixGroup|null       $tierAffixGroup
  * @var array                 $__env
  * @var boolean               $cache
@@ -70,7 +70,7 @@ use (
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
             $tierAffixGroup = $dungeonroute->affixes->filter(
-                static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id
+                static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup?->id
             )->isNotEmpty() ? $currentAffixGroup : null;
         }
     }
