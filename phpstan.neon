@@ -61,8 +61,6 @@ parameters:
         - identifier: trait.unused
           path: app/Http/Controllers/Traits/ChecksForDuplicates.php
         - identifier: trait.unused
-          path: app/Http/Controllers/Traits/ListsKillzones.php
-        - identifier: trait.unused
           path: app/Logic/MapContext/Traits/DungeonRouteProperties.php
         - identifier: trait.unused
           path: app/Traits/CompressesImages.php

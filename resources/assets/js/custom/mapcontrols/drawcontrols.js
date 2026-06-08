@@ -65,6 +65,15 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
     ];
 };
 
+// Prevent the editing of
+const _originalCreateMiddleMarker = L.Edit.PolyVerticesEdit.prototype._createMiddleMarker;
+L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = function (marker1, marker2) {
+    if (!this._poly.options.allowVertexCreationDuringEdit) {
+        return;
+    }
+    _originalCreateMiddleMarker.call(this, marker1, marker2);
+};
+
 // Add some new strings to the draw controls
 // https://github.com/Leaflet/Leaflet.draw#customizing-language-and-text-in-leafletdraw
 L.drawLocal = $.extend(L.drawLocal, lang.messages[`${lang.locale}.leafletdraw`]);
@@ -457,8 +466,6 @@ class DrawControls extends MapControl {
 
     _addControlSetupBrushlineButton() {
         let self = this;
-
-        let $container = $(this._mapControl.getContainer());
 
         // Add a special button for the Brushline
         let $brushlineButton = $('<a>', {

@@ -37,6 +37,7 @@ class Arrow extends Polyline {
         super(map, layer, {name: 'arrow', has_route_model_binding: true, ignore_mapping_version_suffix: true});
 
         this.label = 'Arrow';
+        this.layer.options.allowVertexCreationDuringEdit = false;
         this.decorator = null;
 
         this.setSynced(false);

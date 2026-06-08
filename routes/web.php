@@ -548,8 +548,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
         });
 
-        Route::get('/{publickey}/data', new AjaxDungeonRouteController()->data(...));
-
         Route::middleware('throttle:create-reports')->group(static function () {
             Route::post('userreport/dungeonroute/{dungeonroute}', new AjaxUserReportController()->dungeonrouteStore(...))->name('ajax.userreport.dungeonroute');
             Route::post('userreport/enemy/{enemy}', new AjaxUserReportController()->enemyStore(...))->name('ajax.userreport.enemy');
