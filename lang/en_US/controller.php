@@ -219,4 +219,14 @@ return [
         ],
     ],
 
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => 'Dungeon route updated successfully.',
+                'deleted' => 'Dungeon route deleted successfully.',
+                'claimed' => 'Dungeon route claimed successfully. You are now the owner.',
+            ],
+        ],
+    ],
+
 ];

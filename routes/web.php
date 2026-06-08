@@ -12,6 +12,7 @@
 */
 
 use App\Features\NpcCompendium;
+use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
@@ -436,6 +437,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             Route::get('users', new UserController()->get(...))->name('admin.users');
             Route::get('userreports', new UserReportController()->get(...))->name('admin.userreports');
+            // DungeonRoutes management
+            Route::get('dungeonroutes', new AdminDungeonRouteController()->index(...))->name('admin.dungeonroutes');
+            Route::prefix('dungeonroute')->group(static function () {
+                Route::get('{dungeonRoute:id}', new AdminDungeonRouteController()->edit(...))->name('admin.dungeonroute.edit');
+                Route::patch('{dungeonRoute:id}', new AdminDungeonRouteController()->update(...))->name('admin.dungeonroute.update');
+                Route::delete('{dungeonRoute:id}', new AdminDungeonRouteController()->destroy(...))->name('admin.dungeonroute.delete');
+                Route::post('{dungeonRoute:id}/claim', new AdminDungeonRouteController()->claim(...))->name('admin.dungeonroute.claim');
+            });
             Route::prefix('tools')->group(static function () {
                 Route::get('/', new AdminToolsController()->index(...))->name('admin.tools');
                 Route::get('/combatlog', new AdminToolsController()->combatlog(...))->name('admin.combatlog');
@@ -452,6 +461,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroute(...))->name('admin.tools.dungeonroute.view');
                 Route::post('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
                 Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
+                Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 
                 // Import enemy forces
                 Route::get('enemyforces/import', new AdminToolsEnemyForcesController()->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
