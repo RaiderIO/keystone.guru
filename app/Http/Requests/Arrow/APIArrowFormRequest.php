@@ -48,7 +48,7 @@ class APIArrowFormRequest extends FormRequest
             ],
             'polyline.vertices_json' => [
                 'json',
-                new JsonStringCountRule(2),
+                new JsonStringCountRule(minCount: 2, maxCount: 2),
             ],
         ];
     }

@@ -19,26 +19,26 @@ use Exception;
 
 class Conversion
 {
-    public const EXPANSION_NAME_MAPPING = [
-        Expansion::EXPANSION_CLASSIC      => 'ClassicEra',
-        Expansion::EXPANSION_TBC          => null,
-        Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
-        Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',
-        Expansion::EXPANSION_MOP          => 'MistsOfPandaria',
-        Expansion::EXPANSION_WOD          => 'Shadowlands',
+    public const array EXPANSION_NAME_MAPPING = [
+        Expansion::EXPANSION_CLASSIC   => 'ClassicEra',
+        Expansion::EXPANSION_TBC       => null,
+        Expansion::EXPANSION_WOTLK     => 'WrathOfTheLichKing',
+        Expansion::EXPANSION_CATACLYSM => 'Cataclysm',
+        Expansion::EXPANSION_MOP       => 'MistsOfPandaria',
+        Expansion::EXPANSION_WOD       => 'Shadowlands',
         // WoD dungeons are under Shadowlands for latest MDT
         Expansion::EXPANSION_LEGION       => 'Legion',
         Expansion::EXPANSION_BFA          => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
         // DF S1 has MoP/WoD dungeons under here
-        Expansion::EXPANSION_TWW          => 'TheWarWithin',
-        Expansion::EXPANSION_MIDNIGHT     => 'Midnight',
-        Expansion::EXPANSION_TLT          => 'TheLastTitan',
+        Expansion::EXPANSION_TWW      => 'TheWarWithin',
+        Expansion::EXPANSION_MIDNIGHT => 'Midnight',
+        Expansion::EXPANSION_TLT      => 'TheLastTitan',
     ];
 
     // @formatter:off
-    public const DUNGEON_NAME_MAPPING = [
+    public const array DUNGEON_NAME_MAPPING = [
         //        Expansion::EXPANSION_CLASSIC => [
         //            Dungeon::DUNGEON_BLACKFATHOM_DEEPS           => 'BlackfathomDeeps',
         //            Dungeon::DUNGEON_BLACKROCK_DEPTHS            => 'BlackrockDepths',
@@ -267,7 +267,7 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
+     * @param  string $dungeonKey
      * @return bool   True if MDT an expansion name for this dungeon, false if it has not.
      */
     public static function hasMDTExpansionName(string $dungeonKey): bool
@@ -281,7 +281,7 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
+     * @param  string $dungeonKey
      * @return bool   True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -290,7 +290,7 @@ class Conversion
     }
 
     /**
-     * @param string $dungeonKey
+     * @param  string      $dungeonKey
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
