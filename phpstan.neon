@@ -30,6 +30,8 @@ parameters:
         - database/migrations_legacy/
         # Legacy Laravel 5-style factory file, superseded by class-based factories
         - database/factories/ModelFactory.php
+        - database/seeders/combatlogs
+        - database/seeders/dungeondata
 
     ignoreErrors:
         # Blade templates use ??= as a pattern to set optional variable defaults
