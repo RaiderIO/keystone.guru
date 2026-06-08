@@ -58,3 +58,8 @@ Route::prefix('v1')->group(static function () {
         Route::get('/{dungeon}', new APIDungeonController()->show(...))->name('api.v1.combatlog.dungeon.show');
     });
 });
+
+Route::fallback(
+// Render your 404 page, but now with web middleware (sessions) active
+    fn() => response()->json(['error' => 'Not Found'], 404),
+)->middleware('web');
