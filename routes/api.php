@@ -60,6 +60,6 @@ Route::prefix('v1')->group(static function () {
 });
 
 Route::fallback(
-// Render your 404 page, but now with web middleware (sessions) active
+    // Render your 404 page, but now with web middleware (sessions) active
     fn() => response()->json(['error' => 'Not Found'], 404),
 )->middleware('web');

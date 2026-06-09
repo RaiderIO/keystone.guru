@@ -391,6 +391,13 @@ return [
                 'table_header_mapping_version_name' => 'Mapping Version',
                 'table_header_count'                => 'Dungeon Route #',
                 'table_header_actions'              => 'Actions',
+                'unused_header'                     => 'Unused mapping versions',
+                'unused_description'                => 'These mapping versions have no dungeon routes and can be safely removed from the codebase.',
+                'used_header'                       => 'Used mapping versions',
+                'used_description'                  => 'These mapping versions have dungeon routes. Upgrade all routes to the latest version before removing a mapping version.',
+                'action_upgrade_all'                => 'Upgrade all to latest',
+                'action_is_latest'                  => 'Latest',
+                'confirm_upgrade_all'               => 'Are you sure you want to queue an upgrade of all dungeon routes on this mapping version to the latest? This cannot be undone.',
             ],
         ],
         'enemyforces' => [
