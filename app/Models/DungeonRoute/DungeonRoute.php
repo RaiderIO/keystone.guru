@@ -7,6 +7,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupCoupling;
+use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
@@ -136,6 +137,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property EloquentCollection<int, LiveSession>                      $livesessions
  * @property EloquentCollection<int, Brushline>                        $brushlines
  * @property EloquentCollection<int, Path>                             $paths
+ * @property EloquentCollection<int, Arrow>                            $arrows
  * @property EloquentCollection<int, KillZone>                         $killZones
  * @property EloquentCollection<int, PridefulEnemy>                    $pridefulEnemies
  * @property EloquentCollection<int, OverpulledEnemy>                  $overpulledenemies
@@ -321,6 +323,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function paths(): HasMany
     {
         return $this->hasMany(Path::class)->orderBy('id');
+    }
+
+    public function arrows(): HasMany
+    {
+        return $this->hasMany(Arrow::class)->orderBy('id');
     }
 
     public function season(): BelongsTo
@@ -607,6 +614,27 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
 
         return $paths;
+    }
+
+    public function mapContextArrows(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    {
+        /** @var Collection<Arrow> $arrows */
+        $arrows = $this->arrows()->with(['floor'])->get();
+
+        if ($useFacade) {
+            $arrows = $arrows
+                ->filter(static fn(Arrow $arrow) => $arrow->polyline !== null)->map(function (
+                    Arrow $arrow,
+                ) use ($coordinatesService) {
+                    $newFloor = $this->convertVerticesForFacade($coordinatesService, $arrow->polyline, $arrow->floor);
+                    $arrow->setRelation('floor', $newFloor);
+                    $arrow->floor_id = $newFloor->id;
+
+                    return $arrow;
+                });
+        }
+
+        return $arrows;
     }
 
     public function getChallengeModeRun(): ?ChallengeModeRun
@@ -1085,6 +1113,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     $templateRoute?->cloneRelationsInto($this, [
                         $templateRoute->paths,
                         $templateRoute->brushlines,
+                        $templateRoute->arrows,
                         $templateRoute->killZones,
                         $templateRoute->enemyRaidMarkers,
                         $templateRoute->mapicons,
@@ -1138,6 +1167,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->affixGroups,
             $this->paths,
             $this->brushlines,
+            $this->arrows,
             $this->killZones,
             $this->pridefulEnemies,
             $this->enemyRaidMarkers,
@@ -1692,6 +1722,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 'dungeonRouteThumbnailJobs',
                 'brushlines',
                 'paths',
+                'arrows',
                 'killZones',
                 'livesessions',
             ]);
@@ -1726,6 +1757,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
             foreach ($dungeonRoute->paths as $path) {
                 $path->delete();
+            }
+
+            foreach ($dungeonRoute->arrows as $arrow) {
+                $arrow->delete();
             }
 
             foreach ($dungeonRoute->killZones as $killZone) {

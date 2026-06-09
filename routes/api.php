@@ -3,8 +3,8 @@
 use App\Http\Controllers\Api\V1\InternalTeam\Cache\APICacheController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
-use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
+use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteThumbnailJobController;
 
 /*
@@ -58,3 +58,8 @@ Route::prefix('v1')->group(static function () {
         Route::get('/{dungeon}', new APIDungeonController()->show(...))->name('api.v1.combatlog.dungeon.show');
     });
 });
+
+Route::fallback(
+// Render your 404 page, but now with web middleware (sessions) active
+    fn() => response()->json(['error' => 'Not Found'], 404),
+)->middleware('web');

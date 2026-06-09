@@ -2,7 +2,6 @@
 
 namespace App\Logic\MapContext\Map;
 
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
@@ -21,8 +20,6 @@ use Override;
  */
 class MapContextDungeonExplore extends MapContextMappingVersion
 {
-    use ListsEnemies;
-
     public function __construct(
         CacheServiceInterface                             $cacheService,
         CoordinatesServiceInterface                       $coordinatesService,

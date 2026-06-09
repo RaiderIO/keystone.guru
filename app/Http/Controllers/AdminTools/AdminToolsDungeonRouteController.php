@@ -11,6 +11,33 @@ use Illuminate\View\View;
 
 class AdminToolsDungeonRouteController extends Controller
 {
+    public function dungeonrouteView(DungeonRoute $dungeonRoute): View
+    {
+        $dungeonRoute->load([
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+            'affixes',
+            'brushlines',
+            'paths',
+            'author',
+            'killZones',
+            'pridefulEnemies',
+            'publishedstate',
+            'ratings',
+            'favorites',
+            'enemyraidmarkers',
+            'mapicons',
+            'mdtImport',
+            'team',
+        ]);
+
+        return view('admin.tools.dungeonroute.viewcontents', [
+            'dungeonroute' => $dungeonRoute,
+        ]);
+    }
+
     public function dungeonroute(): View
     {
         return view('admin.tools.dungeonroute.view');

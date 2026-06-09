@@ -83,6 +83,7 @@ class CommonFormsMdtimport extends InlineCode {
                 details.push({key: lang.get('js.mdt_pulls'), value: responseData.pulls});
                 details.push({key: lang.get('js.mdt_paths'), value: responseData.paths});
                 details.push({key: lang.get('js.mdt_drawn_lines'), value: responseData.lines});
+                details.push({key: lang.get('js.mdt_arrows'), value: responseData.arrows});
                 details.push({key: lang.get('js.mdt_notes'), value: responseData.notes});
                 details.push({
                     key: lang.get('js.mdt_enemy_forces'),

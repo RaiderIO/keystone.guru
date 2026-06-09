@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait ChangesDungeonRoute
 {
-    private const IGNORE_KEYS = [
+    private const array IGNORE_KEYS = [
         'index',
         // KillZone index upon mass change.. I don't care about this
         'updated_at',

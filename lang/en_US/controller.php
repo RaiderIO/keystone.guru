@@ -50,6 +50,12 @@ return [
             'unable_to_delete_brushline' => 'Unable to delete line',
         ],
     ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => 'Unable to save arrow',
+            'unable_to_delete_arrow' => 'Unable to delete arrow',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',
@@ -216,6 +222,16 @@ return [
             'user_is_not_a_patron'              => 'This user is not a Patron.',
             'all_benefits_granted_successfully' => 'All benefits granted successfully.',
             'error_granting_all_benefits'       => 'An error occurred while trying to grant all benefits.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => 'Dungeon route updated successfully.',
+                'deleted' => 'Dungeon route deleted successfully.',
+                'claimed' => 'Dungeon route claimed successfully. You are now the owner.',
+            ],
         ],
     ],
 
