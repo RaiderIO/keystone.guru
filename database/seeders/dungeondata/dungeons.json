@@ -8242,7 +8242,7 @@
         "map_id": 2526,
         "instance_id": 1201,
         "challenge_mode_id": 402,
-        "mdt_id": 45,
+        "mdt_id": 12345,
         "raid": 0,
         "key": "dragonacademy",
         "name": "dungeons.df.algeth_ar_academy.name",

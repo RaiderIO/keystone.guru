@@ -359,6 +359,7 @@ class Save extends Command
                 'brushlines',
                 'paths',
                 'killZones',
+                'killZones.enemies:id',
                 'enemyRaidMarkers',
                 'pridefulEnemies',
                 'mapicons',
