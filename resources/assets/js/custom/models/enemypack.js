@@ -184,6 +184,7 @@ class EnemyPack extends VersionableMapObject {
         console.assert(this instanceof EnemyPack, 'this is not an EnemyPack', this);
 
         let result = null;
+        let self = this;
 
         // Convert raw enemies to current enemies
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -212,6 +213,9 @@ class EnemyPack extends VersionableMapObject {
                     );
 
                     result = L.polygon([offsetLatLngs], c.map.enemypack.polygonOptions);
+                    result.on('click', function (clickEvent) {
+                        self.signal('enemypack:clicked', {clickEvent: clickEvent});
+                    });
                 } catch (error) {
                     // Not particularly interesting to spam the console with
                     console.error('Unable to create offset for pack', this.id, error);
