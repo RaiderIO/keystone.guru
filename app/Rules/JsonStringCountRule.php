@@ -7,8 +7,10 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class JsonStringCountRule implements ValidationRule
 {
-    public function __construct(private readonly int $count)
-    {
+    public function __construct(
+        private readonly int  $minCount,
+        private readonly ?int $maxCount = null,
+    ) {
     }
 
     /**
@@ -21,8 +23,10 @@ class JsonStringCountRule implements ValidationRule
     {
         $decoded = json_decode((string)$value, true);
 
-        if (!is_array($decoded) || count($decoded) < $this->count) {
-            $fail(__('rules.json_string_count_rule.message', ['count' => $this->count]));
+        if (!is_array($decoded) || count($decoded) < $this->minCount) {
+            $fail(__('rules.json_string_count_rule.message_min', ['min_count' => $this->minCount]));
+        } elseif ($this->maxCount !== null && count($decoded) > $this->maxCount) {
+            $fail(__('rules.json_string_count_rule.message_max', ['max_count' => $this->maxCount]));
         }
     }
 }

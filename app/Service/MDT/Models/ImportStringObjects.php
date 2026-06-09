@@ -13,6 +13,8 @@ class ImportStringObjects
 
     private readonly Collection $paths;
 
+    private readonly Collection $arrows;
+
     private readonly Collection $mapIcons;
 
     public function __construct(
@@ -24,6 +26,7 @@ class ImportStringObjects
     ) {
         $this->lines    = collect();
         $this->paths    = collect();
+        $this->arrows   = collect();
         $this->mapIcons = collect();
     }
 
@@ -66,6 +69,11 @@ class ImportStringObjects
     public function getPaths(): Collection
     {
         return $this->paths;
+    }
+
+    public function getArrows(): Collection
+    {
+        return $this->arrows;
     }
 
     public function getMapIcons(): Collection

@@ -50,6 +50,12 @@ return [
             'unable_to_delete_brushline' => 'Unable to delete line',
         ],
     ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => 'Unable to save arrow',
+            'unable_to_delete_arrow' => 'Unable to delete arrow',
+        ],
+    ],
     'dungeon' => [
         'flash' => [
             'dungeon_created' => 'Dungeon created',

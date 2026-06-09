@@ -2,7 +2,6 @@
 
 namespace App\Logic\MapContext\Map;
 
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
@@ -21,8 +20,6 @@ use Override;
  */
 class MapContextDungeonRoute extends MapContextBase
 {
-    use ListsEnemies;
-
     public function __construct(
         CacheServiceInterface                         $cacheService,
         CoordinatesServiceInterface                   $coordinatesService,
@@ -96,6 +93,7 @@ class MapContextDungeonRoute extends MapContextBase
             'mapIcons'         => $this->dungeonRoute->mapContextMapIcons($this->coordinatesService, $useFacade),
             'paths'            => $this->dungeonRoute->mapContextPaths($this->coordinatesService, $useFacade),
             'brushlines'       => $this->dungeonRoute->mapContextBrushlines($this->coordinatesService, $useFacade),
+            'arrows'           => $this->dungeonRoute->mapContextArrows($this->coordinatesService, $useFacade),
             'pridefulEnemies'  => $this->dungeonRoute->pridefulEnemies,
             'enemyRaidMarkers' => $this->dungeonRoute->enemyRaidMarkers->map(static fn(
                 DungeonRouteEnemyRaidMarker $drEnemyRaidMarker,
