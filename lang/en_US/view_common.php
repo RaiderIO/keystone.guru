@@ -272,7 +272,7 @@ return [
                 'view_npcs'          => 'View NPCs',
                 'view_spells'        => 'View spells',
                 'view_users'         => 'View users',
-                'view_dungeonroutes' => 'Manage routes',
+                'view_dungeonroutes' => 'View dungeonroutes',
                 'view_user_reports'  => 'View user reports',
                 'my_routes'          => 'My routes',
                 'my_favorites'       => 'My favorites',

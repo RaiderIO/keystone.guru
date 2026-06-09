@@ -374,8 +374,16 @@ return [
                 'submit'     => 'Submit',
             ],
             'viewcontents' => [
-                'title'  => 'View contents for :dungeonRouteTitle',
-                'header' => 'View contents for :dungeonRouteTitle',
+                'title'                                => 'View contents for :dungeonRouteTitle',
+                'header'                               => 'View contents for :dungeonRouteTitle',
+                'section_actions'                      => 'Actions',
+                'action_edit'                          => 'Edit route',
+                'action_edit_description'              => 'Open the admin edit page for this route.',
+                'action_mdt_import_string'             => 'MDT import string',
+                'action_mdt_import_string_description' => 'The MDT string used to originally import this route.',
+                'action_mdt_import_string_none'        => 'This route was not created from an MDT import.',
+                'action_copy'                          => 'Copy',
+                'section_debug'                        => 'Debug data',
             ],
             'mappingversions' => [
                 'title'                             => 'View mapping version usage',
@@ -720,6 +728,7 @@ return [
             'action_edit'                   => 'Edit',
             'action_admin_tools'            => 'Admin tools',
             'action_delete'                 => 'Delete',
+            'action_copy_mdt'               => 'Copy MDT import string',
             'confirm_delete'                => 'Are you sure you want to permanently delete this dungeon route? This cannot be undone.',
         ],
         'edit' => [

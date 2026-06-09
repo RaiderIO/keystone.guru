@@ -39,6 +39,13 @@ use Illuminate\Support\Collection;
                     e.preventDefault();
                 }
             });
+
+            $('.admin-dungeonroute-copy-mdt').on('click', function () {
+                const string = $(this).data('mdt-string');
+                navigator.clipboard.writeText(string).then(function () {
+                    showSuccessNotification(lang.get('js.copied_to_clipboard'));
+                });
+            });
         });
     </script>
 @endsection
@@ -122,7 +129,32 @@ use Illuminate\Support\Collection;
                 </td>
                 <td>{{ $dungeonRoute->author?->name ?? __('view_admin.dungeonroute.list.no_author') }}</td>
                 <td>{{ __($dungeonRoute->dungeon->name) }}</td>
-                <td>{{ $dungeonRoute->publishedState?->name ?? '-' }}</td>
+                <td>
+                    @php
+                        $publishedStateName = $dungeonRoute->publishedState?->name;
+                        $publishedStateIcon = match($publishedStateName) {
+                            'unpublished'    => 'fa-plane-arrival',
+                            'team'           => 'fa-users',
+                            'world_with_link' => 'fa-link',
+                            'world'          => 'fa-globe',
+                            default          => null,
+                        };
+                        $publishedStateTitle = match($publishedStateName) {
+                            'unpublished'    => __('js.publish_state_title_unpublished'),
+                            'team'           => __('js.publish_state_title_team'),
+                            'world_with_link' => __('js.publish_state_title_world_with_link'),
+                            'world'          => __('js.publish_state_title_world'),
+                            default          => '-',
+                        };
+                    @endphp
+                    @if($publishedStateIcon)
+                        <i class="fas {{ $publishedStateIcon }}"
+                           title="{{ $publishedStateTitle }}"
+                           data-toggle="tooltip"></i>
+                    @else
+                        -
+                    @endif
+                </td>
                 <td data-order="{{ $dungeonRoute->views }}">
                     {{ $dungeonRoute->views }}
                     @if($dungeonRoute->rating_count > 0)
@@ -161,6 +193,15 @@ use Illuminate\Support\Collection;
                        data-toggle="tooltip">
                         <i class="fas fa-hammer"></i>
                     </a>
+                    @if($dungeonRoute->mdtImport->isNotEmpty())
+                        <button type="button"
+                                class="btn btn-sm btn-secondary admin-dungeonroute-copy-mdt"
+                                data-mdt-string="{{ $dungeonRoute->mdtImport->first()->import_string }}"
+                                title="{{ __('view_admin.dungeonroute.list.action_copy_mdt') }}"
+                                data-toggle="tooltip">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    @endif
                     <form method="POST"
                           action="{{ route('admin.dungeonroute.delete', ['dungeonRoute' => $dungeonRoute->id]) }}"
                           class="d-inline">
