@@ -463,6 +463,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroute(...))->name('admin.tools.dungeonroute.view');
                 Route::post('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
                 Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
+                Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
                 Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
 
                 // Import enemy forces

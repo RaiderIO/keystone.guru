@@ -3,14 +3,17 @@
 namespace App\Service\DungeonRoute;
 
 use App\Jobs\RefreshEnemyForces;
+use App\Jobs\UpgradeDungeonRouteMappingVersion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -203,6 +206,26 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         });
 
         DungeonRoute::dropCaches($dungeonRoute->id);
+    }
+
+    public function upgradeMappingVersionBulk(MappingVersion $mappingVersion): int
+    {
+        if ($mappingVersion->isLatestForDungeon()) {
+            return 0;
+        }
+
+        $count = 0;
+
+        DungeonRoute::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->chunkById(100, function (EloquentCollection $dungeonRoutes) use (&$count): void {
+                foreach ($dungeonRoutes as $dungeonRoute) {
+                    UpgradeDungeonRouteMappingVersion::dispatch($dungeonRoute);
+                    $count++;
+                }
+            });
+
+        return $count;
     }
 
     public function publishScheduledDungeonRoutes(): int
