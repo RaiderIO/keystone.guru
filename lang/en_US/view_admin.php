@@ -666,6 +666,7 @@ return [
                 'elapsed'        => 'Elapsed',
                 'start'          => 'Prune unchecked seasons',
                 'pause'          => 'Pause',
+                'resume'         => 'Resume',
                 'stop'           => 'Stop',
             ],
         ],

@@ -77,13 +77,18 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
         ]);
         $this->createdRunDataIds[] = $ptrRow->id;
 
+        $minId = min($keepSeason->id, $pruneRow->id, $ptrRow->id);
+        $maxId = max($keepSeason->id, $pruneRow->id, $ptrRow->id);
+
         // Act — keep season-tww-3 and season-tww-3-ptr, prune season-tww-2
         $response = $this->postJson(route('admin.tools.combatlog.rundata.prune_batch'), [
             'seasons' => ['season-tww-3', 'season-tww-3-ptr'],
+            'min_id'  => $minId,
+            'max_id'  => $maxId,
         ]);
 
         // Assert
-        $response->assertOk()->assertJsonStructure(['pruned', 'remaining']);
+        $response->assertOk()->assertJsonStructure(['pruned']);
         $this->assertNotEmpty($keepSeason->fresh()->post_body);
         $this->assertNotEmpty($ptrRow->fresh()->post_body);
         $this->assertEmpty($pruneRow->fresh()->post_body);
@@ -111,14 +116,79 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
         ]);
         $this->createdRunDataIds[] = $ptrRow->id;
 
+        $minId = min($parentRow->id, $ptrRow->id);
+        $maxId = max($parentRow->id, $ptrRow->id);
+
         // Act — only keep season-tww-3, NOT season-tww-3-ptr
         $response = $this->postJson(route('admin.tools.combatlog.rundata.prune_batch'), [
             'seasons' => ['season-tww-3'],
+            'min_id'  => $minId,
+            'max_id'  => $maxId,
         ]);
 
         // Assert
-        $response->assertOk()->assertJsonStructure(['pruned', 'remaining']);
+        $response->assertOk()->assertJsonStructure(['pruned']);
         $this->assertNotEmpty($parentRow->fresh()->post_body);
         $this->assertEmpty($ptrRow->fresh()->post_body);
+    }
+
+    #[Test]
+    public function pruneBatch_givenIdRange_onlyPrunesRowsWithinRange(): void
+    {
+        // Arrange
+        $inRangeRow = ChallengeModeRunData::forceCreate([
+            'challenge_mode_run_id' => 0,
+            'run_id'                => 'season-tww-2 - logged: #20 - run: #20',
+            'correlation_id'        => 'test-in-range',
+            'post_body'             => '{"in_range":true}',
+            'processed'             => 0,
+        ]);
+        $this->createdRunDataIds[] = $inRangeRow->id;
+
+        $outOfRangeRow = ChallengeModeRunData::forceCreate([
+            'challenge_mode_run_id' => 0,
+            'run_id'                => 'season-tww-2 - logged: #21 - run: #21',
+            'correlation_id'        => 'test-out-of-range',
+            'post_body'             => '{"out_of_range":true}',
+            'processed'             => 0,
+        ]);
+        $this->createdRunDataIds[] = $outOfRangeRow->id;
+
+        // Act — only cover the first row's ID range
+        $response = $this->postJson(route('admin.tools.combatlog.rundata.prune_batch'), [
+            'seasons' => ['season-tww-3'],
+            'min_id'  => $inRangeRow->id,
+            'max_id'  => $inRangeRow->id,
+        ]);
+
+        // Assert
+        $response->assertOk()->assertJsonStructure(['pruned']);
+        $this->assertEmpty($inRangeRow->fresh()->post_body);
+        $this->assertNotEmpty($outOfRangeRow->fresh()->post_body);
+    }
+
+    #[Test]
+    public function pruneBatch_givenNullPostBody_prunesNullRows(): void
+    {
+        // Arrange — NULL post_body rows must be pruned (set to '') just like non-empty rows
+        $nullBodyRow = ChallengeModeRunData::forceCreate([
+            'challenge_mode_run_id' => 0,
+            'run_id'                => 'season-tww-2 - logged: #30 - run: #30',
+            'correlation_id'        => 'test-null-body',
+            'post_body'             => null,
+            'processed'             => 0,
+        ]);
+        $this->createdRunDataIds[] = $nullBodyRow->id;
+
+        // Act
+        $response = $this->postJson(route('admin.tools.combatlog.rundata.prune_batch'), [
+            'seasons' => ['season-tww-3'],
+            'min_id'  => $nullBodyRow->id,
+            'max_id'  => $nullBodyRow->id,
+        ]);
+
+        // Assert
+        $response->assertOk()->assertJsonStructure(['pruned']);
+        $this->assertSame('', $nullBodyRow->fresh()->post_body);
     }
 }

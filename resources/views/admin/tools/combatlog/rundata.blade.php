@@ -68,6 +68,9 @@
         <button id="rundata_pause_btn" class="btn btn-warning d-none">
             <i class="fas fa-pause"></i> {{ __('view_admin.tools.combatlog.rundata.pause') }}
         </button>
+        <button id="rundata_resume_btn" class="btn btn-warning d-none">
+            <i class="fas fa-play"></i> {{ __('view_admin.tools.combatlog.rundata.resume') }}
+        </button>
         <button id="rundata_stop_btn" class="btn btn-secondary d-none">
             <i class="fas fa-stop"></i> {{ __('view_admin.tools.combatlog.rundata.stop') }}
         </button>
@@ -79,14 +82,18 @@
 @endsection
 
 @include('common.general.inline', ['path' => 'admin/tools/combatlog/rundata', 'options' => [
-    'pruneBatchUrl'         => route('admin.tools.combatlog.rundata.prune_batch'),
-    'seasonsFormSelector'   => '.season-keep-checkbox:checked',
-    'progressBarSelector'   => '#rundata_progress_bar',
-    'progressLabelSelector' => '#rundata_progress_label',
-    'logSelector'           => '#rundata_log',
-    'startBtnSelector'      => '#rundata_start_btn',
-    'pauseBtnSelector'      => '#rundata_pause_btn',
-    'stopBtnSelector'       => '#rundata_stop_btn',
-    'timerSelector'         => '#rundata_timer',
+    'pruneBatchUrl'          => route('admin.tools.combatlog.rundata.prune_batch'),
+    'seasonsFormSelector'    => '.season-keep-checkbox:checked',
+    'minId'                  => $minId,
+    'maxId'                  => $maxId,
+    'chunkSize'              => 500,
+    'progressBarSelector'    => '#rundata_progress_bar',
+    'progressLabelSelector'  => '#rundata_progress_label',
+    'logSelector'            => '#rundata_log',
+    'startBtnSelector'       => '#rundata_start_btn',
+    'pauseBtnSelector'       => '#rundata_pause_btn',
+    'resumeBtnSelector'      => '#rundata_resume_btn',
+    'stopBtnSelector'        => '#rundata_stop_btn',
+    'timerSelector'          => '#rundata_timer',
     'remainingCountSelector' => '#rundata_remaining_count',
 ]])
