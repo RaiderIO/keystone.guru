@@ -18,6 +18,8 @@ class AdminToolsCombatLogRunDataPruneRequest extends FormRequest
         return [
             'seasons'   => ['required', 'array', 'min:1'],
             'seasons.*' => ['required', 'string', 'max:255'],
+            'min_id'    => ['required', 'integer', 'min:0'],
+            'max_id'    => ['required', 'integer', 'min:0'],
         ];
     }
 }
