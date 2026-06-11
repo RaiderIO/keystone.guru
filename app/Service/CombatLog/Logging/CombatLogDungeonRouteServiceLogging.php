@@ -15,14 +15,4 @@ class CombatLogDungeonRouteServiceLogging extends RollbarStructuredLogging imple
     {
         $this->end(__METHOD__);
     }
-
-    public function saveEnemyPositionFromResultEventsStart(): void
-    {
-        $this->start(__METHOD__, get_defined_vars());
-    }
-
-    public function saveEnemyPositionFromResultEventsEnd(): void
-    {
-        $this->end(__METHOD__);
-    }
 }

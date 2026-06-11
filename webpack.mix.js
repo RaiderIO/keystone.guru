@@ -356,6 +356,7 @@ let scripts = [
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',
     'resources/assets/js/custom/inline/inlinecode.js',
+    'resources/assets/js/custom/inline/inlinecodeajaxbatchprocessor.js',
 
     // All inline code last
     'resources/assets/js/custom/inline/*/**/*.js',

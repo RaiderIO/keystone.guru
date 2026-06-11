@@ -154,6 +154,10 @@
                         <a href="{{ route('admin.tools.combatlog.criteria.view') }}">{{ __('view_admin.tools.list.combatlog_criteria') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_criteria_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.rundata') }}">{{ __('view_admin.tools.list.combatlog_run_data') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_run_data_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
