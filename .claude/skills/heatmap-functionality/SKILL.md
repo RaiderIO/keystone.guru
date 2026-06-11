@@ -74,29 +74,68 @@ getState().getDungeonMap().pluginHeat.toggle(true);
 
 ### `setRawLatLngsPerFloor(rawLatLngsPerFloor, dataType, runCount, weightMax, gridSizeX, gridSizeY)`
 Stores data for all floors. Automatically renders data for the currently active floor.
-- For a simple admin view, pass `null` for `dataType`, `runCount`, `weightMax`, `gridSizeX`, `gridSizeY`.
+- `dataType` controls the interpolation radius (`weightCacheRadius[dataType]`): `5` for player position, `2` for enemy position. Pass `null` to disable interpolation (exact cell weights only — acceptable for admin-only views).
+- `runCount` is displayed in tooltips. Pass `null` if not applicable.
+- `weightMax` is used to normalise weights to a percentage in tooltips. Falls back to `Math.max(weightMaxByFloorId)` if null — safe to pass null, but passing the correct value is preferred.
+- **Do NOT pass null for `gridSizeX` / `gridSizeY`.** Passing null breaks the precomputation loop (`for (let x = 0; x < null; x++)` never executes, leaving the interpolation cache empty). Always pass the actual grid dimensions — use the config values `keystoneguru.heatmap.service.data.player.size_x` (300) and `size_y` (200).
 - Data is stored internally as `rawLatLngsByFloorId[floor_id]`.
 - Floor switches call `_applyLatLngsForFloor()` automatically.
 
-## API Response Format
+## Weight System — How the Heatmap Gets Its Gradient
 
-The JSON response consumed by `setRawLatLngsPerFloor` must use **snake_case `lat_lngs`**:
+**Weight = count of data points that fall in the same grid cell**, not a per-point constant.
 
+### Grid cell formula
+The HeatPlugin maps each `{ lat, lng }` to a 2D grid cell:
+```js
+gridX = Math.floor((lat / MAP_MAX_LAT) * gridSizeX)   // MAP_MAX_LAT = -256
+gridY = Math.floor((lng / MAP_MAX_LNG) * gridSizeY)   // MAP_MAX_LNG = 384
+```
+PHP equivalent (uses `CoordinatesService::MAP_MAX_LAT` / `MAP_MAX_LNG`):
+```php
+$gridX = (int)floor(($lat / CoordinatesService::MAP_MAX_LAT) * $gridSizeX);
+$gridY = (int)floor(($lng / CoordinatesService::MAP_MAX_LNG) * $gridSizeY);
+```
+
+### Backend responsibility
+The **backend** must aggregate raw records into grid cells before responding. Never return one entry per DB row with `weight = 1.0` — that makes every point equally "hot" and defeats the heatmap.
+
+Correct pattern:
+1. For each record compute `(gridX, gridY)`.
+2. Group by `floor_id`, then by `"$gridX,$gridY"` string key.
+3. `weight = count of records in that cell`.
+4. Return the grid-cell centre as the representative lat/lng:
+   ```php
+   $lat = round((($gridX + 0.5) / $gridSizeX) * CoordinatesService::MAP_MAX_LAT, 2);
+   $lng = round((($gridY + 0.5) / $gridSizeY) * CoordinatesService::MAP_MAX_LNG, 2);
+   ```
+
+See `CombatLogRouteEnemyFailureService::getEnemyFailureHeatmapData()` for a reference implementation.
+
+### Full response shape
 ```json
 {
   "data": [
     {
       "floor_id": 123,
       "lat_lngs": [
-        { "lat": 0.512, "lng": -0.234, "weight": 1.0 }
+        { "lat": -128.0, "lng": 192.0, "weight": 5 }
       ]
     }
-  ]
+  ],
+  "data_type": "combat_log_route_enemy_failure",
+  "weight_max": 15,
+  "failure_count": 100,
+  "grid_size_x": 300,
+  "grid_size_y": 200
 }
 ```
 
 Note: The property is `lat_lngs` (snake_case), **not** `latLngs`. The HeatPlugin reads
 `rawLatLngsOnFloor.lat_lngs[index].lat/lng/weight` directly (see `heatplugin.js:242`).
+
+The existing `CombatLogEventGridAggregationResult::toArray()` follows the same pattern using
+OpenSearch `doc_count` per grid bucket as the weight.
 
 ## SearchHandlerHeatmap
 

@@ -28,6 +28,7 @@ use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
 use App\Http\Controllers\AdminTools\AdminToolsThumbnailsController;
 use App\Http\Controllers\AdminTools\AdminToolsWagoGgController;
 use App\Http\Controllers\AdminToolsController;
+use App\Http\Controllers\Ajax\AjaxAdminCombatLogRouteController;
 use App\Http\Controllers\Ajax\AjaxArrowController;
 use App\Http\Controllers\Ajax\AjaxBrushlineController;
 use App\Http\Controllers\Ajax\AjaxDungeonFloorSwitchMarkerController;
@@ -640,6 +641,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::post('/floorunionarea', new AjaxFloorUnionAreaController()->store(...));
                     Route::put('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->store(...));
                     Route::delete('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->delete(...));
+                });
+
+                Route::prefix('combatlogroute')->group(static function () {
+                    Route::get('/enemy-failures', new AjaxAdminCombatLogRouteController()->getEnemyFailures(...))
+                        ->name('ajax.admin.combatlogroute.enemy_failures');
+                    Route::delete('/enemy-failures', new AjaxAdminCombatLogRouteController()->deleteEnemyFailures(...))
+                        ->name('ajax.admin.combatlogroute.enemy_failures.delete');
                 });
             });
             Route::put('/userreport/{userreport}/status', new AjaxUserReportController()->status(...));

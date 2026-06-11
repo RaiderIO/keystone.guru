@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Requests\Ajax;
+
+use App\Models\Dungeon;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class AjaxAdminCombatLogRouteDeleteEnemyFailuresFormRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function dungeon(): Dungeon
+    {
+        return once(fn() => Dungeon::findOrFail($this->validated('dungeon_id')));
+    }
+
+    public function rules(): array
+    {
+        return [
+            'dungeon_id' => ['required', 'integer', Rule::exists(Dungeon::class, 'id')],
+        ];
+    }
+}
