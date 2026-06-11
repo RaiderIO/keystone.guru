@@ -30,11 +30,15 @@ use App\Models\Mapping\MappingVersion;
             'edit'                  => false,
             'mapContext'            => $mapContext,
             'floor'                 => $floor,
+            'echo'                  => false,
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'path',
                 'killzone',
                 'killzonepath',
+                'floorunion',
+                'floorunionarea',
             ],
             'show'                  => [
                 'header'   => true,
