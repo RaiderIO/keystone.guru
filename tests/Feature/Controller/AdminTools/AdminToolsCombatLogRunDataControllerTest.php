@@ -189,6 +189,6 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk()->assertJsonStructure(['pruned']);
-        $this->assertSame('', $nullBodyRow->fresh()->post_body);
+        $this->assertSame(null, $nullBodyRow->fresh()->post_body);
     }
 }
