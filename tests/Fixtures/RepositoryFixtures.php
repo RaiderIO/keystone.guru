@@ -17,7 +17,6 @@ use App\Repositories\Interfaces\CharacterRaceRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ChallengeModeRunDataRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ChallengeModeRunRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
-use App\Repositories\Interfaces\CombatLog\EnemyPositionRepositoryInterface;
 use App\Repositories\Interfaces\DungeonFloorSwitchMarkerRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -199,19 +198,6 @@ class RepositoryFixtures
         array          $methodsToMock = [],
     ): MockObject|CombatLogEventRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(CombatLogEventRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    public static function getEnemyPositionRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|EnemyPositionRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(EnemyPositionRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

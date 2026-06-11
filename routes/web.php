@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogController;
 use App\Http\Controllers\AdminTools\AdminToolsCombatLogCriteriaController;
+use App\Http\Controllers\AdminTools\AdminToolsCombatLogRunDataController;
 use App\Http\Controllers\AdminTools\AdminToolsDataDumpController;
 use App\Http\Controllers\AdminTools\AdminToolsDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsEnemyForcesController;
@@ -480,6 +481,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('combatlog/criteria', new AdminToolsCombatLogCriteriaController()->criteria(...))->name('admin.tools.combatlog.criteria.view');
                 Route::post('combatlog/criteria/reset', new AdminToolsCombatLogCriteriaController()->criteriaReset(...))->name('admin.tools.combatlog.criteria.reset');
                 Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
+                Route::get('combatlog/rundata', new AdminToolsCombatLogRunDataController()->index(...))->name('admin.tools.combatlog.rundata');
+                Route::post('combatlog/rundata/prune-batch', new AdminToolsCombatLogRunDataController()->pruneBatch(...))->name('admin.tools.combatlog.rundata.prune_batch');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
                     Route::get('string', new AdminToolsMdtController()->mdtview(...))->name('admin.tools.mdt.string.view');

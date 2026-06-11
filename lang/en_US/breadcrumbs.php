@@ -83,6 +83,7 @@ return [
                 'thumbnails_regenerate'                       => 'Regenerate thumbnails',
                 'combat_log_regenerate'                       => 'Regenerate ARC routes',
                 'combat_log_criteria'                         => 'NPC Compendium parsing criteria',
+                'combat_log_run_data'                         => 'Prune combat log run data',
                 'dungeonroute_view'                           => 'View dungeon route',
                 'dungeonroute_view_contents'                  => 'Route contents',
                 'dungeonroute_mapping_version_usage'          => 'Mapping version usage',
