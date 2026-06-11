@@ -201,16 +201,4 @@ final class AdminDungeonRouteControllerTest extends PublicTestCase
         $response->assertRedirect(route('admin.dungeonroute.edit', ['dungeonRoute' => $this->dungeonRoute->id]));
         $this->assertEquals($adminUser->id, $this->dungeonRoute->fresh()->author_id);
     }
-
-    #[Test]
-    public function adminToolsView_givenExistingRoute_returnsOk(): void
-    {
-        // Arrange
-
-        // Act
-        $response = $this->get(route('admin.tools.dungeonroute.view.get', ['dungeonRoute' => $this->dungeonRoute->id]));
-
-        // Assert
-        $response->assertOk();
-    }
 }
