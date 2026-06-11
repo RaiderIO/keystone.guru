@@ -26,7 +26,6 @@ final class NpcCompendiumControllerActivityTest extends PublicTestCase
         Feature::define(NpcCompendium::class, true);
 
         $this->dungeon = Season::orderByDesc('id')->first()->dungeons()->first();
-//        dump($this->dungeon->name);
     }
 
     #[Test]

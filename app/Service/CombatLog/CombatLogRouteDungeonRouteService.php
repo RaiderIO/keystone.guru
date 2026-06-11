@@ -470,45 +470,6 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             'correlation_id'        => correlationId(),
             'post_body'             => json_encode($combatLogRoute),
         ]);
-
-//        $floorByUiMapId = Floor::where('dungeon_id', $dungeonRoute->dungeon_id)
-//            ->get()
-//            ->keyBy('ui_map_id');
-
-//        $invalidUiMapIds         = [];
-//        $enemyPositionAttributes = [];
-//        foreach ($combatLogRoute->npcs as $npc) {
-//            /** @var Floor $floor */
-//            $floor = $floorByUiMapId->get($npc->coord->uiMapId);
-//
-//            if ($floor === null) {
-//                if (!in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
-//                    $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
-//                    $invalidUiMapIds[] = $npc->coord->uiMapId;
-//                }
-//
-//                continue;
-//            }
-//
-//            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-//                new IngameXY($npc->coord->x, $npc->coord->y, $floor),
-//            );
-//
-//            $enemyPositionAttributes[] = array_merge([
-//                'challenge_mode_run_id' => $challengeModeRun->id,
-//                'floor_id'              => $floor->id,
-//                'npc_id'                => $npc->npcId,
-//                'guid'                  => $npc->getUniqueId(),
-//                'created_at'            => $now,
-//            ], $latLng->toArray());
-//        }
-
-//        if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
-//            // Then we don't want duplicates - get rid of the challenge mode run
-//            $challengeModeRun->update([
-//                'duplicate' => 1,
-//            ]);
-//        }
     }
 
     private function saveCombatLogRouteEnemyFailures(

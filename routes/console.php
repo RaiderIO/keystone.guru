@@ -59,6 +59,8 @@ if ($appType === 'production') {
 // https://laravel.com/docs/8.x/telescope#data-pruning
 $commands[] = Schedule::command('telescope:prune --hours=48')->daily();
 
+$commands[] = Schedule::command('page-views:prune')->daily();
+
 // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
 $commands[] = Schedule::command('patreon:refreshmembers')->hourly();
 
