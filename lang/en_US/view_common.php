@@ -394,6 +394,12 @@ return [
                     'pane'        => 'Pane',
                 ],
             ],
+            'combatlogrouteenemyfailures' => [
+                'npc_id_filter'             => 'NPC ID filter',
+                'npc_id_filter_placeholder' => 'Comma-separated NPC IDs',
+                'clear_failures'            => 'Clear failures',
+                'clear_failures_title'      => 'Delete all failure records for this dungeon',
+            ],
             'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',

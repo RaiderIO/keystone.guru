@@ -583,6 +583,8 @@ return [
             'combatlog_regenerate_description'                        => 'Re-process combat logs to rebuild ARC route suggestions.',
             'combatlog_criteria'                                      => 'NPC Compendium parsing criteria',
             'combatlog_criteria_description'                          => 'Configure NPC Compendium thresholds used during log parsing.',
+            'combatlog_route_enemy_failures'                          => 'CombatLogRoute enemy failure heatmap',
+            'combatlog_route_enemy_failures_description'              => 'Heatmap of positions where the CombatLogRoute builder could not resolve enemies.',
             'subheader_wagogg'                                        => 'Wago.gg',
             'wagogg_import_ingame_coordinates'                        => 'Import in-game coordinates',
             'wagogg_import_ingame_coordinates_description'            => 'Upload a Wago.tools CSV to update in-game map coordinates.',
@@ -650,6 +652,12 @@ return [
                 'version'             => 'Combat log version :version',
                 'section_dungeons'    => 'Dungeons',
                 'section_class_specs' => 'Class / Specializations',
+            ],
+            'route' => [
+                'enemy_failures' => [
+                    'title'  => 'CombatLogRoute enemy failure heatmap',
+                    'header' => 'CombatLogRoute enemy failure heatmap',
+                ],
             ],
         ],
         'wagogg' => [
