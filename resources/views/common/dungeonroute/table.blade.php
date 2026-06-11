@@ -166,7 +166,7 @@ if (Auth::check()) {
     </div>
     @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
-            {{ html()->label(sprintf('%s[]', $tagsSelectId), __('view_common.dungeonroute.table.tags')) }}
+            {{ html()->label(__('view_common.dungeonroute.table.tags'), sprintf('%s[]', $tagsSelectId)) }}
             {{
                 html()
                     ->multiselect(sprintf('%s[]', $tagsSelectId), $searchTags->pluck('name', 'name'))
