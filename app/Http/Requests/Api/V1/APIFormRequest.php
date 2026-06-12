@@ -7,10 +7,20 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Override;
+use Teapot\StatusCode;
 
 abstract class APIFormRequest extends FormRequest
 {
     protected abstract function getRequestModelClass(): ?string;
+
+    #[Override]
+    protected function failedAuthorization(): never
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => __('exceptions.handler.forbidden'),
+        ], StatusCode::FORBIDDEN));
+    }
 
     #[Override]
     protected function failedValidation(Validator $validator)

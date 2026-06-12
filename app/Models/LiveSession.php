@@ -6,11 +6,14 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
 use Carbon\CarbonInterface;
+use Database\Factories\LiveSessionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
 use Override;
@@ -30,18 +33,21 @@ use Override;
  */
 class LiveSession extends Model
 {
+    /** @use HasFactory<LiveSessionFactory> */
+    use HasFactory;
+    use GeneratesPublicKey;
+
     protected $fillable = [
         'dungeon_route_id',
         'user_id',
         'public_key',
+        'expires_at',
     ];
 
     protected $with = [
         'user',
         'dungeonRoute',
     ];
-
-    use GeneratesPublicKey;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -63,6 +69,11 @@ class LiveSession extends Model
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
+    }
+
+    public function combatLogBuffer(): HasOne
+    {
+        return $this->hasOne(LiveSessionCombatLogBuffer::class);
     }
 
     public function overpulledEnemies(): HasMany

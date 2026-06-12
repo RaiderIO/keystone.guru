@@ -70,6 +70,7 @@
         "ext-lua": "*",
         "ext-redis": "*",
         "ext-zip": "*",
+        "ext-zlib": "*",
         "akaunting/laravel-language": "^1.0",
         "aws/aws-sdk-php": "~3.0",
         "barryvdh/laravel-ide-helper": "^3.5",
