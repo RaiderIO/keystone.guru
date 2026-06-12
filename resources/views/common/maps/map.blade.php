@@ -78,8 +78,9 @@ $show['controls']['heatmapSearchSidebar'] ??= true;
 $show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
 $show['controls']['draw']                 ??= false;
 $show['controls']['view']                 ??= false;
-$show['controls']['present']              ??= false;
-$show['controls']['live']                 ??= false;
+$show['controls']['present']                       ??= false;
+$show['controls']['live']                          ??= false;
+$show['controls']['combatLogRouteEnemyFailures']   ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -367,6 +368,13 @@ if ($isAdmin) {
         ]))
     @endif
 
+
+    @if(isset($show['controls']['combatLogRouteEnemyFailures']) && $show['controls']['combatLogRouteEnemyFailures'])
+        @include('common.maps.controls.combatlogrouteenemyfailures', [
+            'dungeon'        => $dungeon,
+            'mappingVersion' => $mappingVersion,
+        ])
+    @endif
 
     @if(isset($show['controls']['raiderioKsgAttribution']) && $show['controls']['raiderioKsgAttribution'])
         @include('common.maps.controls.attribution')

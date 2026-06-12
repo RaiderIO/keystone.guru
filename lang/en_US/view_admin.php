@@ -590,6 +590,8 @@ return [
             'combatlog_regenerate_description'                        => 'Re-process combat logs to rebuild ARC route suggestions.',
             'combatlog_criteria'                                      => 'NPC Compendium parsing criteria',
             'combatlog_criteria_description'                          => 'Configure NPC Compendium thresholds used during log parsing.',
+            'combatlog_route_enemy_failures'                          => 'CombatLogRoute enemy failure heatmap',
+            'combatlog_route_enemy_failures_description'              => 'Heatmap of positions where the CombatLogRoute builder could not resolve enemies.',
             'combatlog_run_data'                                      => 'Prune combat log run data',
             'combatlog_run_data_description'                          => 'NULL post_body for old seasons to reclaim disk space.',
             'subheader_wagogg'                                        => 'Wago.gg',
@@ -659,6 +661,12 @@ return [
                 'version'             => 'Combat log version :version',
                 'section_dungeons'    => 'Dungeons',
                 'section_class_specs' => 'Class / Specializations',
+            ],
+            'route' => [
+                'enemy_failures' => [
+                    'title'  => 'CombatLogRoute enemy failure heatmap',
+                    'header' => 'CombatLogRoute enemy failure heatmap',
+                ],
             ],
             'rundata' => [
                 'title'          => 'Prune combat log run data',

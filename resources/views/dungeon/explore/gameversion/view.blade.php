@@ -59,6 +59,7 @@ use Illuminate\Support\Collection;
                 ])
             ])->put('more', route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion])),
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'path',
                 'killzone',

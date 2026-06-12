@@ -41,6 +41,8 @@ use App\Service\CombatLog\CombatLogParsingCriteriaService;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureService;
+use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitService;
@@ -255,6 +257,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CombatLogService, SeasonService, CoordinatesService
         $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);
+        $this->app->bind(CombatLogRouteEnemyFailureServiceInterface::class, CombatLogRouteEnemyFailureService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
 
         // Depends on all of the above - pretty much
