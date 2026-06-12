@@ -5,11 +5,14 @@
  * @property {String}   deleteUrl
  * @property {String}   filterNpcIdSelector
  * @property {String}   clearButtonSelector
+ * @property {String}   routesContainerSelector
+ * @property {String}   routesListSelector
+ * @property {String}   noMatchingRoutesText
  * @property {String[]} dependencies
  */
 
 class SearchHandlerCombatLogRouteEnemyFailures extends SearchHandler {
-    constructor() {
+    constructor(options) {
         super({
             loaderFn: function (isLoading, responseText) {
                 if (isLoading || responseText === null) {
@@ -21,6 +24,30 @@ class SearchHandlerCombatLogRouteEnemyFailures extends SearchHandler {
                         getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(
                             json.data, null, null, json.weight_max, json.grid_size_x, json.grid_size_y
                         );
+                    }
+
+                    if (json) {
+                        const $container = $(options.routesContainerSelector);
+                        const $list      = $(options.routesListSelector);
+                        const routes     = json.dungeon_routes ?? [];
+
+                        $list.empty();
+
+                        if (routes.length > 0) {
+                            routes.forEach(function (route) {
+                                $list.append(
+                                    $('<a>')
+                                        .addClass('d-block text-truncate mb-1')
+                                        .attr('href', route.url)
+                                        .attr('target', '_blank')
+                                        .attr('rel', 'noopener noreferrer')
+                                        .html('<i class="fas fa-external-link-alt mr-1"></i>' + $('<span>').text(route.title).html())
+                                );
+                            });
+                            $container.show();
+                        } else {
+                            $container.hide();
+                        }
                     }
                 } catch (e) {
                     console.error('CombatLogRouteEnemyFailures: failed to parse response', e);
@@ -47,7 +74,7 @@ class SearchHandlerCombatLogRouteEnemyFailures extends SearchHandler {
  */
 class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
     constructor(id, bladePath, options) {
-        super(new SearchHandlerCombatLogRouteEnemyFailures(), id, bladePath, options);
+        super(new SearchHandlerCombatLogRouteEnemyFailures(options), id, bladePath, options);
 
         this.filters = {
             'dungeon_id': new SearchFilterPassThrough(),
@@ -60,17 +87,14 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
 
         getState().getDungeonMap().pluginHeat.toggle(true);
 
-        $(this.options.filterNpcIdSelector)
-            .on('keydown', (e) => {
-                if (e.keyCode === 13) {
-                    this._search();
-                }
-            })
-            .on('focusout', () => this._search());
+        $(this.options.filterNpcIdSelector).on('changed.bs.select', () => this._search());
 
         $(this.options.clearButtonSelector).on('click', () => {
             $.ajax({type: 'DELETE', url: this.options.deleteUrl})
-                .done(() => this._search());
+                .done(() => {
+                    $(this.options.routesContainerSelector).hide();
+                    this._search();
+                });
         });
 
         this._search();
@@ -83,13 +107,10 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
      * @protected
      */
     _search(options = {}, queryParameters = {}, queryParametersUrlBlacklist = []) {
-        let inputVal = $(this.options.filterNpcIdSelector).val() || '';
-        let npcIds   = inputVal
-            .split(',')
-            .map((s) => s.trim())
-            .filter((s) => s.length > 0)
-            .map((s) => parseInt(s, 10))
-            .filter((n) => !isNaN(n));
+        let selectedVals = $(this.options.filterNpcIdSelector).val();
+        let npcIds       = selectedVals
+            ? (Array.isArray(selectedVals) ? selectedVals : [selectedVals]).map(Number).filter(Number.isFinite)
+            : [];
 
         if (npcIds.length > 0) {
             queryParameters = $.extend({}, queryParameters, {'npc_id': npcIds});

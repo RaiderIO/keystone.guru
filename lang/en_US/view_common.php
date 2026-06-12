@@ -395,10 +395,11 @@ return [
                 ],
             ],
             'combatlogrouteenemyfailures' => [
-                'npc_id_filter'             => 'NPC ID filter',
-                'npc_id_filter_placeholder' => 'Comma-separated NPC IDs',
-                'clear_failures'            => 'Clear failures',
-                'clear_failures_title'      => 'Delete all failure records for this dungeon',
+                'npc_filter'           => 'NPC filter',
+                'clear_failures'       => 'Clear failures',
+                'clear_failures_title' => 'Delete all failure records for this dungeon',
+                'matching_routes'      => 'Matching routes',
+                'no_matching_routes'   => 'No matching routes found',
             ],
             'header' => [
                 'toggle_navigation'              => 'Toggle navigation',
@@ -640,6 +641,9 @@ return [
     'npc' => [
         'link' => [
             'boss' => 'Boss',
+        ],
+        'select' => [
+            'npc' => 'NPC',
         ],
     ],
     'release' => [

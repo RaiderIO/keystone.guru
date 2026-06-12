@@ -500,6 +500,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 );
 
                 $failureAttributes[] = array_merge([
+                    'dungeon_route_id'   => $dungeonRoute->id,
                     'dungeon_id'         => $dungeonRoute->dungeon_id,
                     'floor_id'           => $currentFloor->id,
                     'mapping_version_id' => $mappingVersion->id,

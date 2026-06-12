@@ -14,10 +14,6 @@ use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
 use Tests\TestCases\AjaxPublicTestCase;
 
-/**
- * @group Controller
- * @group AjaxAdminCombatLogRoute
- */
 #[Group('Controller')]
 #[Group('AjaxAdminCombatLogRoute')]
 final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase

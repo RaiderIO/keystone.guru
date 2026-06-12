@@ -4,9 +4,9 @@ namespace Tests\Feature\App\Service\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Service\CombatLog\CombatLogRouteEnemyFailureService;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -29,10 +29,19 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
     {
         parent::setUp();
 
-        $this->service = new CombatLogRouteEnemyFailureService();
+        $this->service = app(CombatLogRouteEnemyFailureServiceInterface::class);
+
+        // CombatLogRouteEnemyFailure is on a separate DB connection, so fetch existing dungeon IDs first.
+        $dungeonIdsWithData = CombatLogRouteEnemyFailure::query()
+            ->distinct()
+            ->pluck('dungeon_id')
+            ->all();
 
         /** @var Dungeon $dungeon */
-        $dungeon       = Dungeon::inRandomOrder()->first();
+        $dungeon = Dungeon::query()
+            ->when(!empty($dungeonIdsWithData), fn($q) => $q->whereNotIn('id', $dungeonIdsWithData))
+            ->inRandomOrder()
+            ->first();
         $this->dungeon = $dungeon;
 
         /** @var Floor $floor */
@@ -72,7 +81,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
             // Act
             $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, null);
-            $array  = $result->toArray();
+            $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
             $floorData = collect($array['data'])->firstWhere('floor_id', $this->floor->id);
@@ -115,7 +124,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
             // Act
             $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, null);
-            $array  = $result->toArray();
+            $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
             $floorData = collect($array['data'])->firstWhere('floor_id', $this->floor->id);
@@ -165,7 +174,7 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 
             // Act
             $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [$targetNpcId]);
-            $array  = $result->toArray();
+            $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
             $allLatLngs = collect($array['data'])->flatMap(fn(array $entry) => $entry['lat_lngs']);
@@ -180,13 +189,135 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
     #[Test]
     public function getEnemyFailureHeatmapData_givenNoRecords_returnsEmptyData(): void
     {
-        // Act — use a dungeon that should have no combat log failures for a non-existent npc
-        $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [999999]);
-        $array  = $result->toArray();
+        // Act — PHP_INT_MAX as npc_id is guaranteed to not exist
+        $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [PHP_INT_MAX]);
+        $array  = $result->setUseFacade(false)->toArray();
 
         // Assert
         $this->assertEmpty($array['data']);
         $this->assertEquals(0, $array['weight_max']);
         $this->assertEquals(0, $array['failure_count']);
+    }
+
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenMatchingDungeonRoutes_returnsDungeonRoutes(): void
+    {
+        $createdFailures = [];
+        $createdRouteIds = [];
+
+        try {
+            // Arrange
+            $route = DungeonRoute::factory()->create([
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]);
+            $createdRouteIds[] = $route->id;
+
+            $targetNpcId = 99901;
+            $failure     = CombatLogRouteEnemyFailure::create([
+                'dungeon_route_id'   => $route->id,
+                'dungeon_id'         => $this->dungeon->id,
+                'floor_id'           => $this->floor->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => $targetNpcId,
+                'lat'                => -50.0,
+                'lng'                => 100.0,
+            ]);
+            $createdFailures[] = $failure->id;
+
+            // Act
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [$targetNpcId]);
+            $array  = $result->toArray();
+
+            // Assert
+            $this->assertArrayHasKey('dungeon_routes', $array);
+            $this->assertCount(1, $array['dungeon_routes']);
+            $this->assertEquals($route->public_key, $array['dungeon_routes'][0]['public_key']);
+            $this->assertEquals($route->title, $array['dungeon_routes'][0]['title']);
+            $this->assertNotEmpty($array['dungeon_routes'][0]['url']);
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $createdFailures)->delete();
+            DungeonRoute::whereIn('id', $createdRouteIds)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenMoreThanFiveRoutes_returnsMaxFiveRoutes(): void
+    {
+        $createdFailures = [];
+        $createdRouteIds = [];
+
+        try {
+            // Arrange — create 6 routes each with a failure for the same NPC
+            $targetNpcId = 99902;
+
+            for ($i = 0; $i < 6; $i++) {
+                $route = DungeonRoute::factory()->create([
+                    'dungeon_id'         => $this->dungeon->id,
+                    'mapping_version_id' => $this->mappingVersion->id,
+                ]);
+                $createdRouteIds[] = $route->id;
+
+                $failure = CombatLogRouteEnemyFailure::create([
+                    'dungeon_route_id'   => $route->id,
+                    'dungeon_id'         => $this->dungeon->id,
+                    'floor_id'           => $this->floor->id,
+                    'mapping_version_id' => $this->mappingVersion->id,
+                    'npc_id'             => $targetNpcId,
+                    'lat'                => -50.0,
+                    'lng'                => 100.0,
+                ]);
+                $createdFailures[] = $failure->id;
+            }
+
+            // Act
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, [$targetNpcId]);
+            $array  = $result->toArray();
+
+            // Assert
+            $this->assertArrayHasKey('dungeon_routes', $array);
+            $this->assertCount(5, $array['dungeon_routes']);
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $createdFailures)->delete();
+            DungeonRoute::whereIn('id', $createdRouteIds)->delete();
+        }
+    }
+
+    #[Test]
+    public function getEnemyFailureHeatmapData_givenNoNpcFilter_returnsDungeonRoutesEmpty(): void
+    {
+        $createdFailures = [];
+        $createdRouteIds = [];
+
+        try {
+            // Arrange
+            $route = DungeonRoute::factory()->create([
+                'dungeon_id'         => $this->dungeon->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+            ]);
+            $createdRouteIds[] = $route->id;
+
+            $failure = CombatLogRouteEnemyFailure::create([
+                'dungeon_route_id'   => $route->id,
+                'dungeon_id'         => $this->dungeon->id,
+                'floor_id'           => $this->floor->id,
+                'mapping_version_id' => $this->mappingVersion->id,
+                'npc_id'             => 99903,
+                'lat'                => -50.0,
+                'lng'                => 100.0,
+            ]);
+            $createdFailures[] = $failure->id;
+
+            // Act — no NPC filter
+            $result = $this->service->getEnemyFailureHeatmapData($this->dungeon, null);
+            $array  = $result->toArray();
+
+            // Assert — routes should be empty when no NPC filter is active
+            $this->assertArrayHasKey('dungeon_routes', $array);
+            $this->assertEmpty($array['dungeon_routes']);
+        } finally {
+            CombatLogRouteEnemyFailure::whereIn('id', $createdFailures)->delete();
+            DungeonRoute::whereIn('id', $createdRouteIds)->delete();
+        }
     }
 }

@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int      $id
+ * @property int|null $dungeon_route_id
  * @property int      $dungeon_id
  * @property int      $floor_id
  * @property int      $mapping_version_id
@@ -41,6 +42,7 @@ class CombatLogRouteEnemyFailure extends Model
     protected $connection = 'combatlog';
 
     protected $fillable = [
+        'dungeon_route_id',
         'dungeon_id',
         'floor_id',
         'mapping_version_id',

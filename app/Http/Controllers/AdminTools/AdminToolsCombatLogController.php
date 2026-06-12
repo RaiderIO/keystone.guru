@@ -11,6 +11,7 @@ use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -18,10 +19,18 @@ use Session;
 
 class AdminToolsCombatLogController extends Controller
 {
-    public function combatLogRouteEnemyFailures(MapContextServiceInterface $mapContextService): View
-    {
+    public function combatLogRouteEnemyFailures(
+        Request                    $request,
+        MapContextServiceInterface $mapContextService,
+    ): RedirectResponse|View {
         $dungeon        = Dungeon::getUserOrDefaultDungeon();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
+            return redirect()->route('admin.tools.combatlog.route.enemy_failures.view', [
+                'dungeon_id' => $dungeon->id,
+            ]);
+        }
 
         abort_if($mappingVersion === null, 404);
 
