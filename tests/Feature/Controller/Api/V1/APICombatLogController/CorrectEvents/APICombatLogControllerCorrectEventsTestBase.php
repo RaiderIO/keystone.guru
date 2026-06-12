@@ -11,7 +11,7 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControlle
 #[Group('CorrectEvents')]
 abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogControllerTestBase
 {
-    protected function executeTest(string $fixtureName, bool $rewriteFixtures = false): void
+    protected function executeTest(string $fixtureName, bool $rewriteFixtures = true): void
     {
         // Fill function
         if (!$this->hasJsonData(sprintf('%s_corrected', $fixtureName), '../../')) {

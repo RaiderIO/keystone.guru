@@ -33,6 +33,10 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
     {
         parent::setUp();
 
+        // Without Accept: application/json the ValidationException handler redirects (302)
+        // instead of returning a JSON 422 response.
+        $this->defaultHeaders['Accept'] = 'application/json';
+
         /** @var Dungeon $dungeon */
         $dungeon       = Dungeon::inRandomOrder()->first();
         $this->dungeon = $dungeon;
@@ -42,6 +46,26 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         $this->floor = $floor;
 
         $this->mappingVersion = $this->dungeon->getCurrentMappingVersion();
+    }
+
+    #[Test]
+    public function getEnemyFailures_givenNoDungeonId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->get(route('ajax.admin.combatlogroute.enemy_failures'));
+
+        // Assert
+        $response->assertUnprocessable();
+    }
+
+    #[Test]
+    public function deleteEnemyFailures_givenNoDungeonId_returnsValidationError(): void
+    {
+        // Act
+        $response = $this->delete(route('ajax.admin.combatlogroute.enemy_failures.delete'));
+
+        // Assert
+        $response->assertUnprocessable();
     }
 
     #[Test]

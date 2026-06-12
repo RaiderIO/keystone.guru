@@ -115,11 +115,9 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_spells_modal'])
         <div class="form-group">
-            <?php // @TODO Fix me ?>
             {!! html()->label(
-                'map_killzonessidebar_killzone_spells_modal_select',
                 __('view_common.maps.controls.pullsworkbench.modal.spells.label'),
-                ['id' => 'map_killzonessidebar_killzone_spells_modal_label']
+                'map_killzonessidebar_killzone_spells_modal_select',
             ) !!}
             @include('common.forms.select.imageselectcategories', [
                 'id' => 'map_killzonessidebar_killzone_spells_modal_select',

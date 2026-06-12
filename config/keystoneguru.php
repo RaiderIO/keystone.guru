@@ -202,6 +202,11 @@ return [
      */
     'view_time_threshold_mins' => 30,
 
+    'page_views' => [
+        /** The number of days page view records are kept before being pruned. Only the last X days are needed for popularity calculations. */
+        'retention_days' => 30,
+    ],
+
     'thumbnail' => [
         /**
          * A secret key that must be provided to get access to the preview routes (no other auth available)

@@ -327,6 +327,10 @@ Breadcrumbs::for('admin.tools.combatlog.criteria', static function (Generator $t
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_criteria'), route('admin.tools.combatlog.criteria.view'));
 });
+Breadcrumbs::for('admin.tools.combatlog.rundata', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.combat_log_run_data'), route('admin.tools.combatlog.rundata'));
+});
 Breadcrumbs::for('admin.tools.dungeonroute.view', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.dungeonroute_view'), route('admin.tools.dungeonroute.view'));
