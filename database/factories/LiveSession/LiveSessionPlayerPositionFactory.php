@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\LiveSession;
 
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionPlayerPosition;

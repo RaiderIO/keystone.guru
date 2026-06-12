@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
  * @var Season|null                $season Used for heatmap
  * @var MappingVersion             $mappingVersion
  * @var DungeonRoute|null          $dungeonroute
- * @var LiveSession|null           $livesession
+ * @var LiveSession|null           $liveSession
  * @var string|null                $headerTitle
  * @var bool|null                  $admin
  * @var bool|null                  $embed
@@ -61,7 +61,7 @@ $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
-$livesession         ??= null;
+$liveSession         ??= null;
 $mapBackgroundColor  ??= null;
 $controlOptions      ??= [];
 $parameters          ??= [];
@@ -74,13 +74,13 @@ $show['controls']['pulls']     ??= true;
 // This controls whether heatmaps are shown at all
 $show['controls']['heatmapSearch'] ??= false;
 // This allows you to show heatmaps, but not the sidebar to influence them. You'll have to do that through parameters then.
-$show['controls']['heatmapSearchSidebar'] ??= true;
-$show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']                 ??= false;
-$show['controls']['view']                 ??= false;
-$show['controls']['present']                       ??= false;
-$show['controls']['live']                          ??= false;
-$show['controls']['combatLogRouteEnemyFailures']   ??= false;
+$show['controls']['heatmapSearchSidebar']        ??= true;
+$show['controls']['enemyForces']                 = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']                        ??= false;
+$show['controls']['view']                        ??= false;
+$show['controls']['present']                     ??= false;
+$show['controls']['live']                        ??= false;
+$show['controls']['combatLogRouteEnemyFailures'] ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -248,9 +248,9 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                    @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                        <a class="map_faction_display_control map_controls_custom" href="#"
-                           data-faction="{{ strtolower($faction->key) }}"
+            @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
@@ -259,10 +259,10 @@ if ($isAdmin) {
                                  alt="Faction"/>
                         </a>
 
-                    @endforeach
-                </div>
-                <ul class="leaflet-draw-actions"></ul>
+            @endforeach
             </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
 
 
         </script>
@@ -286,7 +286,7 @@ if ($isAdmin) {
                 'floor' => $floor,
                 'headerTitle' => $headerTitle,
                 'dungeonroute' => $dungeonroute,
-                'livesession' => $livesession,
+                'liveSession' => $liveSession,
                 'mappingVersion' => $mappingVersion,
             ])
         </nav>

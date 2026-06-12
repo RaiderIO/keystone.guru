@@ -20,7 +20,7 @@ use App\Models\User;
  * @var Dungeon             $dungeon
  * @var Floor               $floor
  * @var DungeonRoute|null   $dungeonroute
- * @var LiveSession|null    $livesession
+ * @var LiveSession|null    $liveSession
  * @var MappingVersion|null $mappingVersion
  * @var bool                $edit
  */
@@ -115,7 +115,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
             @isset($dungeonroute)
                 @component('common.maps.controls.buttons.headerbutton')
                     @if( $mapContext instanceof MapContextLiveSession )
-                            <?php $stopped = $livesession->expires_at !== null; ?>
+                            <?php $stopped = $liveSession->expires_at !== null; ?>
                         @if(!$stopped)
                             <button id="stop_live_session" class="btn btn-danger btn-sm"
                                     data-toggle="modal" data-target="#stop_live_session_modal">
@@ -127,7 +127,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                             <div class="row">
                                 <div class="col">
                                         <span id="stopped_live_session_countdown">
-                                            {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
+                                            {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $liveSession->getExpiresInHoursSeconds()) : '' }}
                                         </span>
                                 </div>
                             </div>

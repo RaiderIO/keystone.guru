@@ -2,7 +2,7 @@
 
 namespace App\Models\LiveSession;
 
-use Database\Factories\LiveSessionPlayerPositionFactory;
+use Database\Factories\LiveSession\LiveSessionPlayerPositionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

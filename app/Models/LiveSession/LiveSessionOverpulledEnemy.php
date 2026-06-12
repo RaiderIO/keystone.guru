@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @property int         $id
- * @property int         $live_session_id
- * @property int         $kill_zone_id
- * @property int         $npc_id
- * @property int         $mdt_id
+ * @property int $id
+ * @property int $live_session_id
+ * @property int $kill_zone_id
+ * @property int $npc_id
+ * @property int $mdt_id
  *
  * @property LiveSession $liveSession
  * @property KillZone    $killZone

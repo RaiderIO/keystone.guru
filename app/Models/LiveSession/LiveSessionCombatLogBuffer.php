@@ -2,7 +2,7 @@
 
 namespace App\Models\LiveSession;
 
-use Database\Factories\LiveSessionCombatLogBufferFactory;
+use Database\Factories\LiveSession\LiveSessionCombatLogBufferFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

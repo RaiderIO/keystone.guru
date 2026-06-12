@@ -7,7 +7,7 @@ use App\Models\Enemy;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
 use Carbon\CarbonInterface;
-use Database\Factories\LiveSessionFactory;
+use Database\Factories\LiveSession\LiveSessionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +27,7 @@ use Override;
  *
  * @property User                                                $user
  * @property DungeonRoute|null                                   $dungeonRoute
+ * @property LiveSessionCombatLogBuffer                          $combatLogBuffer
  * @property EloquentCollection<int, LiveSessionOverpulledEnemy> $overpulledEnemies
  * @property EloquentCollection<int, LiveSessionKilledEnemy>     $killedEnemies
  * @property EloquentCollection<int, LiveSessionObsoleteEnemy>   $obsoleteEnemies
@@ -145,7 +146,8 @@ class LiveSession extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(static function (LiveSession $item) {
-            $item->overpulledenemies()->delete();
+            $item->combatLogBuffer->delete();
+            $item->overpulledEnemies()->delete();
             $item->killedEnemies()->delete();
             $item->obsoleteEnemies()->delete();
             $item->playerPositions()->delete();

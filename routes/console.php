@@ -81,6 +81,9 @@ $commands[] = Schedule::command('metric:savepending')->everyMinute();
 // Cleanup the generated custom thumbnails
 $commands[] = Schedule::command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
+// Cleanup relation data for expired live sessions
+$commands[] = Schedule::command('livesession:cleanup-expired')->hourly();
+
 foreach ($commands as $command) {
     // php://stdout is used to ensure that the output is always logged, even when running in a Docker container
     $command->appendOutputTo('/proc/1/fd/1');

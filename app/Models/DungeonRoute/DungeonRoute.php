@@ -140,7 +140,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property EloquentCollection<int, Arrow>                            $arrows
  * @property EloquentCollection<int, KillZone>                         $killZones
  * @property EloquentCollection<int, PridefulEnemy>                    $pridefulEnemies
- * @property EloquentCollection<int, LiveSessionOverpulledEnemy>       $overpulledenemies
+ * @property EloquentCollection<int, LiveSessionOverpulledEnemy>       $overpulledEnemies
  * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
  * @property EloquentCollection<int, MapIcon>                          $mapicons
  * @property EloquentCollection<int, PageView>                         $pageviews
