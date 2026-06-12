@@ -19,7 +19,7 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\User;
 
 $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dungeonRoute) {

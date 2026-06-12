@@ -1,16 +1,14 @@
 <?php
 
-use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
-use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
@@ -249,9 +247,9 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                <a class="map_faction_display_control map_controls_custom" href="#"
-                   data-faction="{{ strtolower($faction->key) }}"
+                    @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                        <a class="map_faction_display_control map_controls_custom" href="#"
+                           data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
@@ -260,10 +258,10 @@ if ($isAdmin) {
                                  alt="Faction"/>
                         </a>
 
-            @endforeach
+                    @endforeach
+                </div>
+                <ul class="leaflet-draw-actions"></ul>
             </div>
-            <ul class="leaflet-draw-actions"></ul>
-        </div>
 
 
         </script>

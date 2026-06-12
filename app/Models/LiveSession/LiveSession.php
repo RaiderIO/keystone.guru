@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\LiveSession;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemies\OverpulledEnemy;
+use App\Models\Enemy;
 use App\Models\Traits\GeneratesPublicKey;
+use App\Models\User;
 use Carbon\CarbonInterface;
 use Database\Factories\LiveSessionFactory;
 use Eloquent;
@@ -24,10 +25,13 @@ use Override;
  * @property int    $user_id
  * @property string $public_key
  *
- * @property User                                     $user
- * @property DungeonRoute|null                        $dungeonRoute
- * @property EloquentCollection<int, OverpulledEnemy> $overpulledEnemies
- * @property Carbon|null                              $expires_at
+ * @property User                                                $user
+ * @property DungeonRoute|null                                   $dungeonRoute
+ * @property EloquentCollection<int, LiveSessionOverpulledEnemy> $overpulledEnemies
+ * @property EloquentCollection<int, LiveSessionKilledEnemy>     $killedEnemies
+ * @property EloquentCollection<int, LiveSessionObsoleteEnemy>   $obsoleteEnemies
+ * @property EloquentCollection<int, LiveSessionPlayerPosition>  $playerPositions
+ * @property Carbon|null                                         $expires_at
  *
  * @mixin Eloquent
  */
@@ -36,6 +40,11 @@ class LiveSession extends Model
     /** @use HasFactory<LiveSessionFactory> */
     use HasFactory;
     use GeneratesPublicKey;
+
+    protected static function newFactory(): LiveSessionFactory
+    {
+        return LiveSessionFactory::new();
+    }
 
     protected $fillable = [
         'dungeon_route_id',
@@ -78,7 +87,22 @@ class LiveSession extends Model
 
     public function overpulledEnemies(): HasMany
     {
-        return $this->hasMany(OverpulledEnemy::class);
+        return $this->hasMany(LiveSessionOverpulledEnemy::class);
+    }
+
+    public function killedEnemies(): HasMany
+    {
+        return $this->hasMany(LiveSessionKilledEnemy::class);
+    }
+
+    public function obsoleteEnemies(): HasMany
+    {
+        return $this->hasMany(LiveSessionObsoleteEnemy::class);
+    }
+
+    public function playerPositions(): HasMany
+    {
+        return $this->hasMany(LiveSessionPlayerPosition::class);
     }
 
     /**
@@ -87,14 +111,14 @@ class LiveSession extends Model
     public function getEnemies(): EloquentCollection
     {
         return Enemy::select('enemies.*')
-            ->join('overpulled_enemies', static function (JoinClause $clause) {
-                $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
-                    ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
+            ->join('live_session_overpulled_enemies', static function (JoinClause $clause) {
+                $clause->on('live_session_overpulled_enemies.npc_id', 'enemies.npc_id')
+                    ->on('live_session_overpulled_enemies.mdt_id', 'enemies.mdt_id');
             })
-            ->join('live_sessions', 'live_sessions.id', 'overpulled_enemies.live_session_id')
+            ->join('live_sessions', 'live_sessions.id', 'live_session_overpulled_enemies.live_session_id')
             ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('overpulled_enemies.live_session_id', $this->id)
+            ->where('live_session_overpulled_enemies.live_session_id', $this->id)
             ->get();
     }
 
@@ -122,6 +146,9 @@ class LiveSession extends Model
         // Delete route properly if it gets deleted
         static::deleting(static function (LiveSession $item) {
             $item->overpulledenemies()->delete();
+            $item->killedEnemies()->delete();
+            $item->obsoleteEnemies()->delete();
+            $item->playerPositions()->delete();
         });
     }
 }

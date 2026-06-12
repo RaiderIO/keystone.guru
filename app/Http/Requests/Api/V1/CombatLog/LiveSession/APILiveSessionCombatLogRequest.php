@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Api\V1\CombatLog\LiveSession;
 
 use App\Http\Requests\Api\V1\APIFormRequest;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 
 class APILiveSessionCombatLogRequest extends APIFormRequest
 {

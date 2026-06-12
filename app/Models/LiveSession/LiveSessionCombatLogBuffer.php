@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\LiveSession;
 
 use Database\Factories\LiveSessionCombatLogBufferFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

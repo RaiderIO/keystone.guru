@@ -10,7 +10,7 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 
 /**
  * @var DungeonRoute $dungeonroute

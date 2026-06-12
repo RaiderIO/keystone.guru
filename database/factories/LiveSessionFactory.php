@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 

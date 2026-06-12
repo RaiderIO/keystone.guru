@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
-use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
+use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
@@ -43,8 +43,8 @@ class AjaxOverpulledEnemyController extends Controller
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         foreach ($enemies as $enemy) {
-            /** @var OverpulledEnemy $overpulledEnemy */
-            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
+            /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
+            $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
                 ->where('npc_id', $enemy->npc_id)
                 ->where('mdt_id', $enemy->mdt_id)
                 ->firstOrNew([
@@ -91,8 +91,8 @@ class AjaxOverpulledEnemyController extends Controller
 
         try {
             foreach ($enemies as $enemy) {
-                /** @var OverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
+                $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $livesession->id)
                     ->where('npc_id', $enemy->npc_id)
                     ->where('mdt_id', $enemy->mdt_id)
                     ->first();

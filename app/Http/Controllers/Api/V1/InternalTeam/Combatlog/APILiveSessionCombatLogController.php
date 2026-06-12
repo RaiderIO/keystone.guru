@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1\InternalTeam\Combatlog;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CombatLog\LiveSession\APILiveSessionCombatLogRequest;
-use App\Models\LiveSession;
-use App\Models\LiveSessionCombatLogBuffer;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use Illuminate\Http\JsonResponse;
 
 class APILiveSessionCombatLogController extends Controller

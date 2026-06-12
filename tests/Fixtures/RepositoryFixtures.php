@@ -29,7 +29,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerSpecializationRep
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\Enemies\LiveSessionOverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyActiveAuraRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
@@ -336,11 +336,11 @@ class RepositoryFixtures
         return $mockBuilder->getMock();
     }
 
-    public static function getOverpulledEnemyRepositoryMock(
+    public static function getLiveSessionOverpulledEnemyRepositoryMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
-    ): MockObject|OverpulledEnemyRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(OverpulledEnemyRepositoryInterface::class);
+    ): MockObject|LiveSessionOverpulledEnemyRepositoryInterface {
+        $mockBuilder = $testCase->getMockBuilderPublic(LiveSessionOverpulledEnemyRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

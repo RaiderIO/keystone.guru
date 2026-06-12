@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Models\Enemies;
+namespace App\Models\LiveSession;
 
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
-use App\Models\LiveSession;
 use App\Models\Npc\Npc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -17,14 +16,15 @@ use Illuminate\Database\Query\JoinClause;
  * @property int         $kill_zone_id
  * @property int         $npc_id
  * @property int         $mdt_id
- * @property LiveSession $livesession
- * @property KillZone    $killzone
+ *
+ * @property LiveSession $liveSession
+ * @property KillZone    $killZone
  * @property Npc         $npc
  * @property Enemy       $enemy
  *
  * @mixin Eloquent
  */
-class OverpulledEnemy extends Model
+class LiveSessionOverpulledEnemy extends Model
 {
     protected $fillable = [
         'live_session_id',
@@ -40,12 +40,12 @@ class OverpulledEnemy extends Model
 
     public $timestamps = false;
 
-    public function livesession(): BelongsTo
+    public function liveSession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
     }
 
-    public function killzone(): BelongsTo
+    public function killZone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
@@ -59,15 +59,15 @@ class OverpulledEnemy extends Model
     {
         /** @var Enemy $result */
         $result = Enemy::select('enemies.*')
-            ->join('overpulled_enemies', static function (JoinClause $clause) {
-                $clause->on('overpulled_enemies.npc_id', 'enemies.npc_id')
-                    ->on('overpulled_enemies.mdt_id', 'enemies.mdt_id');
+            ->join('live_session_overpulled_enemies', static function (JoinClause $clause) {
+                $clause->on('live_session_overpulled_enemies.npc_id', 'enemies.npc_id')
+                    ->on('live_session_overpulled_enemies.mdt_id', 'enemies.mdt_id');
             })
-            ->join('live_sessions', 'live_sessions.id', 'overpulled_enemies.live_session_id')
+            ->join('live_sessions', 'live_sessions.id', 'live_session_overpulled_enemies.live_session_id')
             ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('overpulled_enemies.npc_id', $this->npc_id)
-            ->where('overpulled_enemies.mdt_id', $this->mdt_id)
+            ->where('live_session_overpulled_enemies.npc_id', $this->npc_id)
+            ->where('live_session_overpulled_enemies.mdt_id', $this->mdt_id)
             ->first();
 
         return $result;

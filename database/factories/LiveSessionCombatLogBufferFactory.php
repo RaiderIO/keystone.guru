@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\LiveSession;
-use App\Models\LiveSessionCombatLogBuffer;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

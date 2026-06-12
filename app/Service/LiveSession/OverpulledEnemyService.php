@@ -3,7 +3,7 @@
 namespace App\Service\LiveSession;
 
 use App\Models\KillZone\KillZone;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +18,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 
         // Select a list of ordered kill zones based on overpulled enemies for this live session
         // While illogical, someone can say they overpulled enemy abc on pull 24, but then say they also overpulled
-        // enemy xyz on pull 23. The orders in the overpulled_enemies table cannot be trusted since it'd return (24, 23)
+        // enemy xyz on pull 23. The orders in the live_session_overpulled_enemies table cannot be trusted since it'd return (24, 23)
         // which will then throw a spanner in the works when trying to determine obsolete enemies
         $overpulledEnemyForces = $this->getOverpulledEnemyForces($liveSession);
 
@@ -116,9 +116,9 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                            ) AS SIGNED) as enemy_forces
                 from `live_sessions`
                          left join `dungeon_routes` on `dungeon_routes`.`id` = `live_sessions`.`id`
-                         left join `overpulled_enemies` on `overpulled_enemies`.`live_session_id` = `live_sessions`.`id`
-                         left join `kill_zones` on `kill_zones`.`id` = `overpulled_enemies`.`kill_zone_id`
-                         left join `enemies` on `enemies`.`id` = `overpulled_enemies`.`enemy_id`
+                         left join `live_session_overpulled_enemies` on `live_session_overpulled_enemies`.`live_session_id` = `live_sessions`.`id`
+                         left join `kill_zones` on `kill_zones`.`id` = `live_session_overpulled_enemies`.`kill_zone_id`
+                         left join `enemies` on `enemies`.`id` = `live_session_overpulled_enemies`.`enemy_id`
                          left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
                          left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
                          left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`

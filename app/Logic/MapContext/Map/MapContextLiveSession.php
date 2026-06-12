@@ -2,10 +2,11 @@
 
 namespace App\Logic\MapContext\Map;
 
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Override;
 
@@ -19,12 +20,13 @@ use Override;
 class MapContextLiveSession extends MapContextDungeonRoute
 {
     public function __construct(
-        CacheServiceInterface                            $cacheService,
-        CoordinatesServiceInterface                      $coordinatesService,
-        KillZonePathServiceInterface                     $killZonePathService,
-        private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
-        private readonly LiveSession                     $liveSession,
-        string                                           $mapFacadeStyle,
+        CacheServiceInterface                                   $cacheService,
+        CoordinatesServiceInterface                             $coordinatesService,
+        KillZonePathServiceInterface                            $killZonePathService,
+        private readonly OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        private readonly LiveSessionCombatStateServiceInterface $combatStateService,
+        private readonly LiveSession                            $liveSession,
+        string                                                  $mapFacadeStyle,
     ) {
         parent::__construct($cacheService, $coordinatesService, $killZonePathService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
     }
@@ -50,8 +52,13 @@ class MapContextLiveSession extends MapContextDungeonRoute
             'liveSessionPublicKey' => $this->liveSession->public_key,
             'expiresInSeconds'     => $this->liveSession->getExpiresInSeconds(),
             'overpulledEnemies'    => $this->liveSession->getEnemies()->pluck('id'),
-            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies(),
-            'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
+            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies()
+                ->merge($this->combatStateService->getObsoleteEnemyIds($this->liveSession))
+                ->unique()
+                ->values(),
+            'enemyForcesOverride' => $routeCorrection->getEnemyForces(),
+            'killedEnemies'       => $this->combatStateService->getKilledEnemyIds($this->liveSession),
+            'playerPositions'     => $this->combatStateService->getPlayerPositions($this->liveSession),
         ]);
     }
 }

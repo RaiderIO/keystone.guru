@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Controller\Api\V1\APILiveSessionCombatLogController;
 
-use App\Models\LiveSession;
-use App\Models\LiveSessionCombatLogBuffer;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

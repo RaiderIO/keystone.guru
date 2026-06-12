@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Models\LiveSession;
+
+use App\Models\Npc\Npc;
+use Database\Factories\Enemies\LiveSessionKilledEnemyFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * @property int $id
+ * @property int $live_session_id
+ * @property int $npc_id
+ * @property int $mdt_id
+ *
+ * @property LiveSession $liveSession
+ * @property Npc         $npc
+ *
+ * @mixin Eloquent
+ */
+class LiveSessionKilledEnemy extends Model
+{
+    /** @use HasFactory<LiveSessionKilledEnemyFactory> */
+    use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'live_session_id',
+        'npc_id',
+        'mdt_id',
+    ];
+
+    protected static function newFactory(): LiveSessionKilledEnemyFactory
+    {
+        return LiveSessionKilledEnemyFactory::new();
+    }
+
+    public function liveSession(): BelongsTo
+    {
+        return $this->belongsTo(LiveSession::class);
+    }
+
+    public function npc(): BelongsTo
+    {
+        return $this->belongsTo(Npc::class);
+    }
+}
