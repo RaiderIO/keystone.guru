@@ -18,6 +18,7 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
@@ -128,6 +129,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         )->build();
 
         $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
+        $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
 
         if ($combatLogRoute->settings->debugIcons) {
             $this->generateMapIcons(
@@ -468,6 +470,50 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             'correlation_id'        => correlationId(),
             'post_body'             => json_encode($combatLogRoute),
         ]);
+    }
+
+    private function saveCombatLogRouteEnemyFailures(
+        MappingVersion             $mappingVersion,
+        CombatLogRouteRequestModel $combatLogRoute,
+        DungeonRoute               $dungeonRoute,
+    ): void {
+        $now               = now();
+        $failureAttributes = [];
+
+        /** @var Floor|null $previousFloor */
+        $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
+
+        foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
+            $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
+
+            if ($currentFloor === null) {
+                continue;
+            }
+
+            if ($combatLogRouteNpc->getResolvedEnemy() === null) {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY(
+                        $combatLogRouteNpc->coord->x,
+                        $combatLogRouteNpc->coord->y,
+                        $currentFloor,
+                    ),
+                );
+
+                $failureAttributes[] = array_merge([
+                    'dungeon_route_id'   => $dungeonRoute->id,
+                    'dungeon_id'         => $dungeonRoute->dungeon_id,
+                    'floor_id'           => $currentFloor->id,
+                    'mapping_version_id' => $mappingVersion->id,
+                    'npc_id'             => $combatLogRouteNpc->npcId,
+                    'created_at'         => $now,
+                    'updated_at'         => $now,
+                ], $latLng->toArray());
+            }
+
+            $previousFloor = $currentFloor;
+        }
+
+        CombatLogRouteEnemyFailure::insert($failureAttributes);
     }
 
     private function generateMapIcons(

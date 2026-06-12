@@ -221,6 +221,7 @@ const COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL = 'player_spell';
 
 const COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION = 'player_position';
 const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION = 'enemy_position';
+const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_FAILURE = 'enemy_failure';
 
 // User roles
 const USER_ROLE_ADMIN = 'admin';

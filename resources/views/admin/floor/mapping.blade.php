@@ -43,6 +43,7 @@ use App\Models\User;
             'mapFacadeStyle' => User::MAP_FACADE_STYLE_SPLIT_FLOORS,
             'floor' => $floor,
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'path',
                 'killzone',

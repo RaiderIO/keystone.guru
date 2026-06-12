@@ -3,6 +3,7 @@ class SearchHandler {
         this.options = options;
 
         this.loading = false;
+        this._activeXhr = null;
     }
 
     /**
@@ -32,7 +33,12 @@ class SearchHandler {
 
         let self = this;
 
-        let xhr = $.ajax($.extend({}, {
+        if (self._activeXhr) {
+            self._activeXhr.abort();
+            self._activeXhr = null;
+        }
+
+        self._activeXhr = $.ajax($.extend({}, {
             type: 'GET',
             url: this.getSearchUrl(),
             dataType: 'html',
@@ -54,12 +60,16 @@ class SearchHandler {
                     options.success(html, textStatus, xhr);
                 }
             },
-            complete: function () {
+            complete: function (jqXHR, textStatus) {
+                self._activeXhr = null;
                 self.loading = false;
-                if (typeof self.options.loaderFn === 'function') {
-                    self.options.loaderFn(false, xhr.responseText);
-                } else if (typeof self.options.loaderSelector !== 'undefined') {
-                    $(self.options.loaderSelector).hide();
+
+                if (textStatus !== 'abort') {
+                    if (typeof self.options.loaderFn === 'function') {
+                        self.options.loaderFn(false, jqXHR.responseText);
+                    } else if (typeof self.options.loaderSelector !== 'undefined') {
+                        $(self.options.loaderSelector).hide();
+                    }
                 }
 
                 if (options.hasOwnProperty('complete')) {

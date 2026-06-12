@@ -75,6 +75,7 @@ $showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['
             'parameters' => $parameters,
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'floorunion',
                 'floorunionarea',

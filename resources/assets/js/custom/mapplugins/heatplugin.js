@@ -22,6 +22,7 @@ class HeatPlugin extends MapPlugin {
         this.weightCacheRadius = [];
         this.weightCacheRadius[COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION] = 5;
         this.weightCacheRadius[COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION] = 2;
+        this.weightCacheRadius[COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_FAILURE] = 2;
 
         /** The max weight that we have in the heatmap per floor, used for %-age calculations in the tooltip */
         this.weightMaxByFloorId = [];

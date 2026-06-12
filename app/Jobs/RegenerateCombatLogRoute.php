@@ -60,7 +60,6 @@ class RegenerateCombatLogRoute implements ShouldQueue
                 $bodyArr = json_decode($challengeModeRun->challengeModeRunData->post_body, true);
                 // Make sure we're regenerating this route!
                 $bodyArr['settings']['publicKey'] = $dungeonRoute->public_key;
-                $log->handleBody(json_encode($bodyArr));
 
                 $client->post(route('api.v1.combatlog.route.store'), [
                     'auth' => [
@@ -72,6 +71,7 @@ class RegenerateCombatLogRoute implements ShouldQueue
                         'Content-Type' => 'application/json',
                     ],
                 ]);
+                $log->handleSuccess();
 
                 $result = true;
             } catch (Throwable $e) {
