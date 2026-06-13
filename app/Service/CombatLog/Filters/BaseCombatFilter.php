@@ -116,7 +116,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         194181,
     ];
 
-    /** @var Collection<int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
+    /** @var Collection<int, int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
     /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
@@ -196,7 +196,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
                     return false;
                 }
-            } elseif ($combatLogEvent instanceof CombatLogEvent) {
+            } elseif ($combatLogEvent instanceof CombatLogEvent || $combatLogEvent instanceof UnitDied) {
+                // PARTY_KILL and UNIT_DIED extend UnitDied (a GenericSpecialEvent, not CombatLogEvent) but
+                // still carry generic data with the dying unit's GUID.
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
                 $this->log->parseUnitDied($lineNr, $destGuid->getGuid());
             } else {

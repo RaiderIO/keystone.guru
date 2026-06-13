@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\InternalTeam\Combatlog;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CombatLog\LiveSession\APILiveSessionCombatLogRequest;
+use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use Illuminate\Http\JsonResponse;
@@ -65,6 +66,8 @@ class APILiveSessionCombatLogController extends Controller
             $buffer->last_sequence = $batchSequence;
         }
         $buffer->save();
+
+        ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
 
         return response()->json(['message' => __('controller.api.live_session_combat_log.stored')]);
     }

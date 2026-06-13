@@ -27,7 +27,7 @@ use Override;
  *
  * @property User                                                $user
  * @property DungeonRoute|null                                   $dungeonRoute
- * @property LiveSessionCombatLogBuffer                          $combatLogBuffer
+ * @property LiveSessionCombatLogBuffer|null                     $combatLogBuffer
  * @property EloquentCollection<int, LiveSessionOverpulledEnemy> $overpulledEnemies
  * @property EloquentCollection<int, LiveSessionKilledEnemy>     $killedEnemies
  * @property EloquentCollection<int, LiveSessionObsoleteEnemy>   $obsoleteEnemies
@@ -146,7 +146,7 @@ class LiveSession extends Model
 
         // Delete route properly if it gets deleted
         static::deleting(static function (LiveSession $item) {
-            $item->combatLogBuffer->delete();
+            $item->combatLogBuffer?->delete();
             $item->overpulledEnemies()->delete();
             $item->killedEnemies()->delete();
             $item->obsoleteEnemies()->delete();
