@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Jobs\LiveSession;
 
+use App\Events\LiveSession\EnemyKilledEvent;
+use App\Events\LiveSession\PlayerMovedEvent;
 use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -11,6 +13,7 @@ use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -296,6 +299,178 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $chunkedSession->delete();
             $fullRoute->delete();
             $chunkedRoute->delete();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: processBuffer — event dispatching
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function processBuffer_givenRealPitOfSaronLog_dispatchesEnemyKilledEvent(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([EnemyKilledEvent::class]);
+
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+
+        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
+        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $liveSession->id,
+            'buffer'          => gzencode($rawLines, 6),
+            'last_sequence'   => 1,
+        ]);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert
+            Event::assertDispatched(EnemyKilledEvent::class);
+        } finally {
+            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $buffer->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenRealPitOfSaronLog_dispatchesPlayerMovedEvent(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([PlayerMovedEvent::class]);
+
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+
+        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
+        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $liveSession->id,
+            'buffer'          => gzencode($rawLines, 6),
+            'last_sequence'   => 1,
+        ]);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert
+            Event::assertDispatched(PlayerMovedEvent::class);
+        } finally {
+            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $buffer->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenSameBufferProcessedTwice_doesNotDispatchDuplicateEnemyKilledEvents(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+
+        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
+        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $liveSession->id,
+            'buffer'          => gzencode($rawLines, 6),
+            'last_sequence'   => 1,
+        ]);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+
+            // First run to populate the DB
+            $service->processBuffer($liveSession);
+            $countAfterFirst = LiveSessionKilledEnemy::query()
+                ->where('live_session_id', $liveSession->id)
+                ->count();
+
+            // Act — second run with Event::fake() to track only new dispatches
+            Event::fake([EnemyKilledEvent::class]);
+            $service->processBuffer($liveSession);
+
+            // Assert — no new EnemyKilledEvent should be dispatched because all enemies already persisted
+            Event::assertNotDispatched(EnemyKilledEvent::class);
+            $this->assertGreaterThan(0, $countAfterFirst);
+        } finally {
+            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $buffer->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
         }
     }
 

@@ -10,8 +10,10 @@ interface LiveSessionCombatStateServiceInterface
     /**
      * Record that an enemy (identified by npc_id + mdt_id) has been killed in this session.
      * If already present, the call is a no-op.
+     *
+     * @return bool True if the enemy was newly recorded, false if it already existed.
      */
-    public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): void;
+    public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): bool;
 
     /**
      * Resolve the killed-enemy rows back to live Enemy IDs via the route's mapping version.

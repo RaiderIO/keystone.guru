@@ -12,12 +12,14 @@ use App\Service\CombatLog\Dtos\CombatLogRouteEnemyFailureHeatmapResult;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\AjaxPublicTestCase;
 
 #[Group('Controller')]
 #[Group('AjaxAdminCombatLogRoute')]
 final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
 {
+    use ProvidesDungeon;
     private Dungeon $dungeon;
 
     private Floor $floor;
@@ -33,15 +35,10 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         // instead of returning a JSON 422 response.
         $this->defaultHeaders['Accept'] = 'application/json';
 
-        /** @var Dungeon $dungeon */
-        $dungeon       = Dungeon::inRandomOrder()->first();
-        $this->dungeon = $dungeon;
-
-        /** @var Floor $floor */
-        $floor       = $this->dungeon->floors()->where('facade', 0)->first();
-        $this->floor = $floor;
-
-        $this->mappingVersion = $this->dungeon->getCurrentMappingVersion();
+        $dungeon              = $this->getDungeonWithNonFacadeFloor();
+        $this->dungeon        = $dungeon;
+        $this->floor          = $dungeon->floors()->where('facade', 0)->first();
+        $this->mappingVersion = $dungeon->getCurrentMappingVersion();
     }
 
     #[Test]

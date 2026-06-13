@@ -16,13 +16,15 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     /**
      * {@inheritDoc}
      */
-    public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): void
+    public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): bool
     {
-        LiveSessionKilledEnemy::query()->firstOrCreate([
+        $model = LiveSessionKilledEnemy::query()->firstOrCreate([
             'live_session_id' => $liveSession->id,
             'npc_id'          => $npcId,
             'mdt_id'          => $mdtId,
         ]);
+
+        return $model->wasRecentlyCreated;
     }
 
     /**
@@ -94,14 +96,7 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     {
         return LiveSessionPlayerPosition::query()
             ->where('live_session_id', $liveSession->id)
-            ->get()
-            ->map(static fn(LiveSessionPlayerPosition $position) => [
-                'player_guid'    => $position->player_guid,
-                'character_name' => $position->character_name,
-                'lat'            => $position->lat,
-                'lng'            => $position->lng,
-                'floor_id'       => $position->floor_id,
-            ]);
+            ->get();
     }
 
     /**

@@ -193,6 +193,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/pathmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mapiconmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/usermousepositionmapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/playerpositionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/mountableareamapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionareamapobjectgroup.js',
@@ -221,7 +222,10 @@ let scripts = [
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/modelmessage.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/enemykilled.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/playermoved.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/deleted.js',
@@ -244,7 +248,10 @@ let scripts = [
 
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/enemykilled.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/playermoved.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/basemodelhandler.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/modelchangedhandler.js',
@@ -293,6 +300,7 @@ let scripts = [
     'resources/assets/js/custom/models/brushline.js',
     'resources/assets/js/custom/models/arrow.js',
     'resources/assets/js/custom/models/usermouseposition.js',
+    'resources/assets/js/custom/models/playerposition.js',
     'resources/assets/js/custom/models/mountablearea.js',
 
     'resources/assets/js/custom/input/usermousepositionplayer.js',

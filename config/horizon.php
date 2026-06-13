@@ -216,6 +216,13 @@ return [
                 'processes'  => 1,
                 'tries'      => 1,
             ],
+            'supervisor-live-session-process' => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-local-live-session-process', env('APP_TYPE'))],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 1,
+            ],
         ],
     ],
 ];

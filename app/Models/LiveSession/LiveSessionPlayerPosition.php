@@ -12,11 +12,11 @@ use Illuminate\Support\Carbon;
 /**
  * @property int    $id
  * @property int    $live_session_id
+ * @property int    $floor_id
  * @property string $player_guid
  * @property string $character_name
  * @property float  $lat
  * @property float  $lng
- * @property int    $floor_id
  * @property Carbon $updated_at
  *
  * @property LiveSession $liveSession
@@ -37,6 +37,11 @@ class LiveSessionPlayerPosition extends Model
         'lat',
         'lng',
         'floor_id',
+        'updated_at',
+    ];
+
+    protected $hidden = [
+        'live_session_id',
         'updated_at',
     ];
 

@@ -177,9 +177,9 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     }
                 }
 
-                // Assign obsolete enemies from cache
-                let obsoleteEnemiesData = getState().getMapContext().getObsoleteEnemies();
-                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
+                // Mark as obsolete if it is a route-correction enemy or a confirmed kill from the combat log
+                let obsoleteEnemiesData = mapContext.getObsoleteEnemies();
+                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id) || mapContext.isKilledEnemy(enemy.id));
             }
 
             if (mapContext instanceof MapContextDungeonRoute) {

@@ -54,6 +54,48 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function setKilledEnemy_givenNewEnemy_returnsTrue(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $result = $this->service->setKilledEnemy($liveSession, 12345, 7);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function setKilledEnemy_givenExistingEnemy_returnsFalse(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $this->service->setKilledEnemy($liveSession, 12345, 7);
+
+            // Act
+            $result = $this->service->setKilledEnemy($liveSession, 12345, 7);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function setKilledEnemy_givenDuplicateEnemy_doesNotCreateDuplicate(): void
     {
         // Arrange

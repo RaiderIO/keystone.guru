@@ -71,6 +71,15 @@ class MessageFactory {
             case LiveSessionStopMessage.getName():
                 result = new LiveSessionStopMessage(props);
                 break;
+            case EnemyKilledMessage.getName():
+                result = new EnemyKilledMessage(props);
+                break;
+            case PlayerMovedMessage.getName():
+                result = new PlayerMovedMessage(props);
+                break;
+            case RouteCorrectionMessage.getName():
+                result = new RouteCorrectionMessage(props);
+                break;
 
             // Whisper
             case MousePositionMessage.getName():
