@@ -2,8 +2,8 @@
 
 namespace App\Service\LiveSession;
 
-use App\Events\LiveSession\EnemyKilledEvent;
-use App\Events\LiveSession\PlayerMovedEvent;
+use App\Events\Models\LiveSession\EnemyKilledEvent;
+use App\Events\Models\LiveSession\PlayerMovedEvent;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Player;
@@ -117,7 +117,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 new IngameXY($advancedData->getPositionX(), $advancedData->getPositionY(), $floor),
             );
 
-            $this->combatStateService->setPlayerPosition(
+            $playerPosition = $this->combatStateService->setPlayerPosition(
                 $liveSession,
                 $guidStr,
                 $data['characterName'],
@@ -126,14 +126,13 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $floor->id,
             );
 
+            $playerPosition->setRelation('floor', $floor);
+
             broadcast(new PlayerMovedEvent(
+                $this->coordinatesService,
                 $liveSession,
                 $liveSession->user,
-                $guidStr,
-                $data['characterName'],
-                $latLng->getLat(),
-                $latLng->getLng(),
-                $floor->id,
+                $playerPosition,
             ));
         }
     }
@@ -179,7 +178,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $isNew = $this->combatStateService->setKilledEnemy($liveSession, $enemy->npc_id, $enemy->mdt_id);
 
                 if ($isNew) {
-                    broadcast(new EnemyKilledEvent($liveSession, $liveSession->user, $enemy));
+                    broadcast(new EnemyKilledEvent($this->coordinatesService, $liveSession, $liveSession->user, $enemy));
                 }
             }
         }

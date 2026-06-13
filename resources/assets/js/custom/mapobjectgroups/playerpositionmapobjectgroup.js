@@ -4,8 +4,6 @@ class PlayerPositionMapObjectGroup extends MapObjectGroup {
 
         /** @type {Object.<string, PlayerPosition>} */
         this._playerPositionsByGuid = {};
-
-        console.log(`player position map object group!`);
     }
 
     /**

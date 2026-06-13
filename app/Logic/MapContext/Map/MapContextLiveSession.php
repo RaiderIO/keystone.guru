@@ -3,6 +3,7 @@
 namespace App\Logic\MapContext\Map;
 
 use App\Models\LiveSession\LiveSession;
+use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
@@ -47,6 +48,7 @@ class MapContextLiveSession extends MapContextDungeonRoute
     public function toArray(): array
     {
         $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->liveSession);
+        $useFacade       = $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
 
         return array_merge(parent::toArray(), [
             'liveSessionPublicKey' => $this->liveSession->public_key,
@@ -57,8 +59,8 @@ class MapContextLiveSession extends MapContextDungeonRoute
                 ->unique()
                 ->values(),
             'enemyForcesOverride' => $routeCorrection->getEnemyForces(),
-            'killedEnemies'       => $this->combatStateService->getKilledEnemyIds($this->liveSession),
-            'playerPositions'     => $this->combatStateService->getPlayerPositions($this->liveSession),
+            'killedEnemies'       => $this->liveSession->mapContextKilledEnemyIds(),
+            'playerPositions'     => $this->liveSession->mapContextPlayerPositions($this->coordinatesService, $useFacade),
         ]);
     }
 }

@@ -1,4 +1,4 @@
-class PlayerMovedHandler extends MessageHandler {
+class PlayerMovedHandler extends ModelChangedHandler {
 
     constructor(echo) {
         super(echo, PlayerMovedMessage.getName());
@@ -26,10 +26,18 @@ class PlayerMovedHandler extends MessageHandler {
 
     /**
      * @param e {PlayerMovedMessage}
+     * @return boolean
      */
     onReceive(e) {
-        super.onReceive(e);
+        let shouldHandle = super.onReceive(e);
 
-        this._updatePlayerPosition(e.player_guid, e.character_name, e.lat, e.lng, e.floor_id);
+        if (shouldHandle) {
+            let coordinates = this._getCorrectLatLngFromEvent(e);
+            if (coordinates !== false) {
+                this._updatePlayerPosition(e.player_guid, e.character_name, coordinates.lat, coordinates.lng, coordinates.floor_id);
+            }
+        }
+
+        return shouldHandle;
     }
 }

@@ -70,8 +70,6 @@ class PlayerPosition extends MapObject {
         console.assert(this instanceof PlayerPosition, 'this is not a PlayerPosition', this);
 
         if (this.layer !== null) {
-            console.log('refreshing visual');
-
             this.layer.setIcon(L.divIcon({
                 html: `<div class="live-session-player-marker" style="width: 80px; height: 24px;"><span>${this.character_name}</span></div>`,
                 className: 'live-session-player-marker-container',

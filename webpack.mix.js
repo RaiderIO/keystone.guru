@@ -222,9 +222,7 @@ let scripts = [
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/modelmessage.js',
-    'resources/assets/js/custom/echo/message/listen/livesession/enemykilled.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
-    'resources/assets/js/custom/echo/message/listen/livesession/playermoved.js',
     'resources/assets/js/custom/echo/message/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/changed.js',
@@ -237,6 +235,8 @@ let scripts = [
     'resources/assets/js/custom/echo/message/listen/models/mapicon/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/npc/deleted.js',
+    'resources/assets/js/custom/echo/message/listen/models/livesession/enemykilled.js',
+    'resources/assets/js/custom/echo/message/listen/models/livesession/playermoved.js',
     'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/path/changed.js',
@@ -248,9 +248,7 @@ let scripts = [
 
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/livesession/enemykilled.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/livesession/playermoved.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/basemodelhandler.js',
@@ -266,6 +264,8 @@ let scripts = [
     'resources/assets/js/custom/echo/messagehandler/listen/models/mapicon/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/npc/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/npc/deleted.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/livesession/enemykilled.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/livesession/playermoved.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/path/changed.js',

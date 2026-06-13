@@ -2,6 +2,10 @@
 
 namespace App\Models\LiveSession;
 
+use App\Models\Floor\Floor;
+use App\Models\Interfaces\HasLatLngInterface;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Traits\HasLatLng;
 use Database\Factories\LiveSession\LiveSessionPlayerPositionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,14 +23,17 @@ use Illuminate\Support\Carbon;
  * @property float  $lng
  * @property Carbon $updated_at
  *
- * @property LiveSession $liveSession
+ * @property LiveSession    $liveSession
+ * @property Floor          $floor
+ * @property MappingVersion $mappingVersion
  *
  * @mixin Eloquent
  */
-class LiveSessionPlayerPosition extends Model
+class LiveSessionPlayerPosition extends Model implements HasLatLngInterface
 {
     /** @use HasFactory<LiveSessionPlayerPositionFactory> */
     use HasFactory;
+    use HasLatLng;
 
     public $timestamps = false;
 
@@ -57,8 +64,22 @@ class LiveSessionPlayerPosition extends Model
         return LiveSessionPlayerPositionFactory::new();
     }
 
+    /**
+     * Resolves the mapping version via the live session's dungeon route.
+     * Used by HasLatLng::getCoordinatesData() to perform facade coordinate conversion.
+     */
+    public function getMappingVersionAttribute(): ?MappingVersion
+    {
+        return $this->liveSession->dungeonRoute?->mappingVersion;
+    }
+
     public function liveSession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
+    }
+
+    public function floor(): BelongsTo
+    {
+        return $this->belongsTo(Floor::class);
     }
 }

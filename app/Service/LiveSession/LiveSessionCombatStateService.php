@@ -30,14 +30,6 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     /**
      * {@inheritDoc}
      */
-    public function getKilledEnemyIds(LiveSession $liveSession): Collection
-    {
-        return $this->resolveEnemyIds('live_session_killed_enemies', $liveSession);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function replaceObsoleteEnemies(LiveSession $liveSession, array $npcMdtPairs): void
     {
         DB::transaction(static function () use ($liveSession, $npcMdtPairs) {
@@ -73,8 +65,8 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
         float       $lat,
         float       $lng,
         int         $floorId,
-    ): void {
-        LiveSessionPlayerPosition::query()->updateOrCreate(
+    ): LiveSessionPlayerPosition {
+        $model = LiveSessionPlayerPosition::query()->updateOrCreate(
             [
                 'live_session_id' => $liveSession->id,
                 'player_guid'     => $playerGuid,
@@ -87,16 +79,10 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
                 'updated_at'     => now(),
             ],
         );
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getPlayerPositions(LiveSession $liveSession): Collection
-    {
-        return LiveSessionPlayerPosition::query()
-            ->where('live_session_id', $liveSession->id)
-            ->get();
+        $model->setRelation('liveSession', $liveSession);
+
+        return $model;
     }
 
     /**

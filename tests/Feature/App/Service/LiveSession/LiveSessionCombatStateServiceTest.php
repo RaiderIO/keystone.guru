@@ -6,6 +6,7 @@ use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\LiveSessionCombatStateService;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -129,7 +130,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         try {
             // Act
-            $result = $this->service->getKilledEnemyIds($liveSession);
+            $result = $liveSession->mapContextKilledEnemyIds();
 
             // Assert
             $this->assertTrue($result->isEmpty());
@@ -281,7 +282,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getPlayerPositions_givenMultiplePlayers_returnsAllPositions(): void
+    public function mapContextPlayerPositions_givenMultiplePlayers_returnsAllPositions(): void
     {
         // Arrange
         /** @var LiveSession $liveSession */
@@ -292,7 +293,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
             $this->service->setPlayerPosition($liveSession, 'Player-2-BBBBBBBB', 'Bob', -150.0, 30.0, 1);
 
             // Act
-            $positions = $this->service->getPlayerPositions($liveSession);
+            $positions = $liveSession->mapContextPlayerPositions(app(CoordinatesServiceInterface::class), false);
 
             // Assert
             $this->assertCount(2, $positions);
@@ -308,7 +309,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getPlayerPositions_givenNoPositions_returnsEmptyCollection(): void
+    public function mapContextPlayerPositions_givenNoPositions_returnsEmptyCollection(): void
     {
         // Arrange
         /** @var LiveSession $liveSession */
@@ -316,7 +317,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         try {
             // Act
-            $positions = $this->service->getPlayerPositions($liveSession);
+            $positions = $liveSession->mapContextPlayerPositions(app(CoordinatesServiceInterface::class), false);
 
             // Assert
             $this->assertTrue($positions->isEmpty());

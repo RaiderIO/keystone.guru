@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\CarbonInterface;
 use Database\Factories\LiveSession\LiveSessionFactory;
 use Eloquent;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Override;
 
 /**
@@ -104,6 +106,51 @@ class LiveSession extends Model
     public function playerPositions(): HasMany
     {
         return $this->hasMany(LiveSessionPlayerPosition::class);
+    }
+
+    /**
+     * @return Collection<int, LiveSessionPlayerPosition>
+     */
+    public function mapContextPlayerPositions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
+    {
+        /** @var Collection<int, LiveSessionPlayerPosition> $playerPositions */
+        $playerPositions = $this->playerPositions()->with('floor')->get();
+
+        if ($useFacade) {
+            foreach ($playerPositions as $playerPosition) {
+                if (!$playerPosition->hasValidLatLng()) {
+                    continue;
+                }
+
+                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                    $this->dungeonRoute->mappingVersion,
+                    $playerPosition->getLatLng(),
+                );
+
+                $playerPosition->setLatLng($convertedLatLng);
+            }
+        }
+
+        return $playerPositions;
+    }
+
+    /**
+     * Resolve the killed-enemy rows back to live Enemy IDs via the route's mapping version.
+     *
+     * @return Collection<int, int>
+     */
+    public function mapContextKilledEnemyIds(): Collection
+    {
+        return Enemy::select('enemies.id')
+            ->join('live_session_killed_enemies', static function (JoinClause $clause) {
+                $clause->on('live_session_killed_enemies.npc_id', 'enemies.npc_id')
+                    ->on('live_session_killed_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('live_sessions', 'live_sessions.id', 'live_session_killed_enemies.live_session_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
+            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('live_session_killed_enemies.live_session_id', $this->id)
+            ->pluck('enemies.id');
     }
 
     /**

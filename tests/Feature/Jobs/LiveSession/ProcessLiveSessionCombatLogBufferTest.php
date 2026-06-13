@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Jobs\LiveSession;
 
-use App\Events\LiveSession\EnemyKilledEvent;
-use App\Events\LiveSession\PlayerMovedEvent;
+use App\Events\Models\LiveSession\EnemyKilledEvent;
+use App\Events\Models\LiveSession\PlayerMovedEvent;
 use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
