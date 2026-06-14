@@ -10,12 +10,51 @@ let LeafletIconPlayerPositionMarker = L.Marker.extend({
     }
 });
 
+/**
+ * @param playerPosition {PlayerPosition}
+ * @returns {*}
+ */
+function getPlayerPositionIcon(playerPosition) {
+    let template = Handlebars.templates['map_player_position_visual_template'];
+
+    let width = c.map.mapicon.calculateSize(32);
+    let height = c.map.mapicon.calculateSize(32);
+    // 4 for padding
+    let textWidth = width - (4 + 18);
+    textWidth += (c.map.leafletSettings.maxNativeZoom - getState().getMapZoomLevel());
+
+    let characterName = playerPosition.character_name ?? '';
+    let initials = characterName.length > 0 ? characterName.substring(0, 2).toUpperCase() : '?';
+
+    let handlebarsData = $.extend({}, {
+        character_name: characterName,
+        initials: initials,
+        specialization_icon_url: playerPosition.specialization_icon_url ?? null,
+        width: width,
+        height: height,
+        textWidth: textWidth
+    });
+
+    return L.divIcon({
+        html: template(handlebarsData),
+        iconSize: [width, height],
+        iconAnchor: [width / 2, height / 2],
+        tooltipAnchor: [0, -(height / 2)],
+        popupAnchor: [0, -(height / 2)],
+        className: 'player_position'
+    });
+}
+
 class PlayerPosition extends MapObject {
     constructor(map, layer) {
         super(map, layer, {name: 'playerposition'});
 
+        /** @type {PlayerPositionPlayer|null} */
+        this.player = null;
+
         this.register('object:initialized', this, this._refreshVisual.bind(this));
         getState().register('floor:changed', this, this._onFloorChanged.bind(this));
+        getState().register('mapzoomlevel:changed', this, this._refreshVisual.bind(this));
     }
 
     /**
@@ -37,6 +76,12 @@ class PlayerPosition extends MapObject {
         }
 
         return this._cachedAttributes = super._getAttributes(force).concat([
+            new Attribute({
+                name: 'player_guid',
+                type: 'string',
+                default: '',
+                edit: false,
+            }),
             new Attribute({
                 name: 'character_name',
                 type: 'string',
@@ -60,6 +105,24 @@ class PlayerPosition extends MapObject {
                 type: 'int',
                 edit: false,
             }),
+            new Attribute({
+                name: 'class_id',
+                type: 'int',
+                default: null,
+                edit: false,
+            }),
+            new Attribute({
+                name: 'specialization_id',
+                type: 'int',
+                default: null,
+                edit: false,
+            }),
+            new Attribute({
+                name: 'specialization_icon_url',
+                type: 'string',
+                default: null,
+                edit: false,
+            }),
         ]);
     }
 
@@ -70,12 +133,7 @@ class PlayerPosition extends MapObject {
         console.assert(this instanceof PlayerPosition, 'this is not a PlayerPosition', this);
 
         if (this.layer !== null) {
-            this.layer.setIcon(L.divIcon({
-                html: `<div class="live-session-player-marker" style="width: 80px; height: 24px;"><span>${this.character_name}</span></div>`,
-                className: 'live-session-player-marker-container',
-                iconSize: [80, 24],
-                iconAnchor: [40, 12],
-            }));
+            this.layer.setIcon(getPlayerPositionIcon(this));
         }
     }
 
@@ -92,6 +150,65 @@ class PlayerPosition extends MapObject {
         this.floor_id = floorId;
 
         this.layer.setLatLng(L.latLng(lat, lng));
+        this._refreshVisual();
+    }
+
+    /**
+     * Applies a newly received position, smoothly gliding to it when on the same floor or jumping instantly when the
+     * player changed floors.
+     *
+     * @param lat {Number}
+     * @param lng {Number}
+     * @param floorId {Number}
+     */
+    moveTo(lat, lng, floorId) {
+        console.assert(this instanceof PlayerPosition, 'this is not a PlayerPosition', this);
+
+        // Don't interpolate across floors - that would glide the marker through invalid space
+        if (floorId !== this.floor_id) {
+            if (this.player !== null) {
+                this.player.stop();
+            }
+
+            this.setPosition(lat, lng, floorId);
+            return;
+        }
+
+        if (this.player === null) {
+            this.player = new PlayerPositionPlayer(this);
+        }
+
+        this.player.moveTo(lat, lng);
+    }
+
+    /**
+     * Lightweight per-frame setter used by the player while interpolating. Deliberately does not refresh the visual -
+     * rebuilding the icon every frame is far too heavy.
+     *
+     * @param lat {Number}
+     * @param lng {Number}
+     */
+    setInterpolatedPosition(lat, lng) {
+        console.assert(this instanceof PlayerPosition, 'this is not a PlayerPosition', this);
+
+        this.lat = lat;
+        this.lng = lng;
+
+        this.layer.setLatLng(L.latLng(lat, lng));
+    }
+
+    /**
+     * @param classId {Number|null}
+     * @param specializationId {Number|null}
+     * @param specializationIconUrl {String|null}
+     */
+    setClassSpecialization(classId, specializationId, specializationIconUrl) {
+        console.assert(this instanceof PlayerPosition, 'this is not a PlayerPosition', this);
+
+        this.class_id = classId ?? null;
+        this.specialization_id = specializationId ?? null;
+        this.specialization_icon_url = specializationIconUrl ?? null;
+
         this._refreshVisual();
     }
 
@@ -118,7 +235,12 @@ class PlayerPosition extends MapObject {
     cleanup() {
         super.cleanup();
 
+        if (this.player !== null) {
+            this.player.stop();
+        }
+
         getState().unregister('floor:changed', this);
+        getState().unregister('mapzoomlevel:changed', this);
         this.unregister('object:initialized', this);
     }
 }

@@ -65,19 +65,25 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
         float       $lat,
         float       $lng,
         int         $floorId,
+        ?int        $classId = null,
+        ?int        $specializationId = null,
     ): LiveSessionPlayerPosition {
         $model = LiveSessionPlayerPosition::query()->updateOrCreate(
             [
                 'live_session_id' => $liveSession->id,
                 'player_guid'     => $playerGuid,
             ],
-            [
-                'character_name' => $characterName,
-                'lat'            => $lat,
-                'lng'            => $lng,
-                'floor_id'       => $floorId,
-                'updated_at'     => now(),
-            ],
+            // Only overwrite the class/spec when we actually resolved them from a COMBATANT_INFO,
+            // so a later position update without one never wipes a previously-known specialization.
+            array_filter([
+                'class_id'          => $classId,
+                'specialization_id' => $specializationId,
+                'character_name'    => $characterName,
+                'lat'               => $lat,
+                'lng'               => $lng,
+                'floor_id'          => $floorId,
+                'updated_at'        => now(),
+            ]),
         );
 
         $model->setRelation('liveSession', $liveSession);

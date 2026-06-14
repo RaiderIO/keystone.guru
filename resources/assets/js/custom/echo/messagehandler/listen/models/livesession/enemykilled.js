@@ -4,6 +4,10 @@ class EnemyKilledHandler extends ModelChangedHandler {
         super(echo, EnemyKilledMessage.getName());
     }
 
+    _shouldHandleEchoEvent() {
+        return true;
+    }
+
     /**
      * @param e {EnemyKilledMessage}
      * @return boolean

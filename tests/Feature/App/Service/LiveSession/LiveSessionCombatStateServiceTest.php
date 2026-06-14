@@ -282,6 +282,59 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function setPlayerPosition_givenClassAndSpec_persistsThem(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $this->service->setPlayerPosition($liveSession, 'Player-1234-ABCDEF01', 'Testchar', -123.5, 45.2, 1, 7, 262);
+
+            // Assert
+            $this->assertDatabaseHas('live_session_player_positions', [
+                'live_session_id'   => $liveSession->id,
+                'player_guid'       => 'Player-1234-ABCDEF01',
+                'class_id'          => 7,
+                'specialization_id' => 262,
+            ]);
+        } finally {
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function setPlayerPosition_givenNullClassAndSpec_keepsExistingValues(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $this->service->setPlayerPosition($liveSession, 'Player-1234-ABCDEF01', 'Testchar', -100.0, 20.0, 1, 7, 262);
+
+            // Act — a later position update without a resolvable COMBATANT_INFO
+            $this->service->setPlayerPosition($liveSession, 'Player-1234-ABCDEF01', 'Testchar', -200.0, 50.0, 2);
+
+            // Assert — the previously-known class/spec is preserved
+            $this->assertDatabaseHas('live_session_player_positions', [
+                'live_session_id'   => $liveSession->id,
+                'player_guid'       => 'Player-1234-ABCDEF01',
+                'floor_id'          => 2,
+                'class_id'          => 7,
+                'specialization_id' => 262,
+            ]);
+        } finally {
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function mapContextPlayerPositions_givenMultiplePlayers_returnsAllPositions(): void
     {
         // Arrange

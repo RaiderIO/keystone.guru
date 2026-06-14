@@ -304,6 +304,7 @@ let scripts = [
     'resources/assets/js/custom/models/mountablearea.js',
 
     'resources/assets/js/custom/input/usermousepositionplayer.js',
+    'resources/assets/js/custom/input/playerpositionplayer.js',
 
     'resources/assets/js/custom/mapstate/mapstate.js',
     'resources/assets/js/custom/mapstate/editmapstate.js',

@@ -565,6 +565,47 @@ html, body, #map, #app, .wrapper {
     border-radius: 30px !important;
 }
 
+.player_position {
+    background-color: inherit;
+}
+
+.player_position .player_position_marker {
+    position: relative;
+}
+
+.player_position .inner,
+.player_position .inner img {
+    padding: 0 !important;
+    width: 30px;
+    height: 30px;
+    font-size: 1.15rem;
+    border-radius: 32px;
+}
+
+.player_position .inner {
+    background-color: black;
+    border-radius: 32px;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.player_position .player_position_name {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 2px;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;
+    pointer-events: none;
+}
+
 .map_ad_background {
     background-color: rgba(78, 93, 108, 0.75);
 }

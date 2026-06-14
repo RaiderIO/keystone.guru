@@ -10,9 +10,12 @@ class PlayerMovedHandler extends ModelChangedHandler {
      * @param lat {Number}
      * @param lng {Number}
      * @param floorId {Number}
+     * @param classId {Number|null}
+     * @param specializationId {Number|null}
+     * @param specializationIconUrl {String|null}
      * @private
      */
-    _updatePlayerPosition(playerGuid, characterName, lat, lng, floorId) {
+    _updatePlayerPosition(playerGuid, characterName, lat, lng, floorId, classId, specializationId, specializationIconUrl) {
         /** @type {PlayerPositionMapObjectGroup|boolean|MapObjectGroup} */
         let playerPositionMapObjectGroup = this.echo.map.mapObjectGroupManager
             .getByName(MAP_OBJECT_GROUP_PLAYER_POSITION);
@@ -21,7 +24,13 @@ class PlayerMovedHandler extends ModelChangedHandler {
             return;
         }
 
-        playerPositionMapObjectGroup.createOrUpdatePlayerPosition(playerGuid, characterName, lat, lng, floorId);
+        playerPositionMapObjectGroup.createOrUpdatePlayerPosition(
+            playerGuid, characterName, lat, lng, floorId, classId, specializationId, specializationIconUrl
+        );
+    }
+
+    _shouldHandleEchoEvent() {
+        return true;
     }
 
     /**
@@ -34,7 +43,16 @@ class PlayerMovedHandler extends ModelChangedHandler {
         if (shouldHandle) {
             let coordinates = this._getCorrectLatLngFromEvent(e);
             if (coordinates !== false) {
-                this._updatePlayerPosition(e.player_guid, e.character_name, coordinates.lat, coordinates.lng, coordinates.floor_id);
+                this._updatePlayerPosition(
+                    e.player_guid,
+                    e.character_name,
+                    coordinates.lat,
+                    coordinates.lng,
+                    coordinates.floor_id,
+                    e.class_id ?? null,
+                    e.specialization_id ?? null,
+                    e.specialization_icon_url ?? null
+                );
             }
         }
 

@@ -21,7 +21,7 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
 
     public int $timeout = 120;
 
-    public function __construct(private readonly int $liveSessionId)
+    public function __construct(public readonly int $liveSessionId)
     {
         $this->queue = sprintf('%s-%s-live-session-process', config('app.type'), config('app.env'));
     }

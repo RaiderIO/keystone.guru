@@ -49,9 +49,12 @@ class PlayerMovedEvent extends ModelChangedEvent
         return array_merge(
             parent::broadcastWith(),
             [
-                'player_guid'    => $model->player_guid,
-                'character_name' => $model->character_name,
-                'model_data'     => $modelData,
+                'player_guid'             => $model->player_guid,
+                'character_name'          => $model->character_name,
+                'class_id'                => $model->class_id,
+                'specialization_id'       => $model->specialization_id,
+                'specialization_icon_url' => $model->specialization_icon_url,
+                'model_data'              => $modelData,
             ],
         );
     }

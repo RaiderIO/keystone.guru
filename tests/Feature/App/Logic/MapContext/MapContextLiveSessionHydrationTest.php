@@ -130,13 +130,15 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
 
         try {
             LiveSessionPlayerPosition::query()->create([
-                'live_session_id' => $liveSession->id,
-                'player_guid'     => 'Player-9999-TESTTEST',
-                'character_name'  => 'Herochar',
-                'lat'             => -150.5,
-                'lng'             => 75.3,
-                'floor_id'        => 1,
-                'updated_at'      => now(),
+                'live_session_id'   => $liveSession->id,
+                'player_guid'       => 'Player-9999-TESTTEST',
+                'character_name'    => 'Herochar',
+                'lat'               => -150.5,
+                'lng'               => 75.3,
+                'floor_id'          => 1,
+                'class_id'          => 7,
+                'specialization_id' => 262,
+                'updated_at'        => now(),
             ]);
 
             // Act
@@ -150,6 +152,13 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
             $this->assertSame('Player-9999-TESTTEST', $position['player_guid']);
             $this->assertSame('Herochar', $position['character_name']);
             $this->assertSame(1, $position['floor_id']);
+            $this->assertSame(7, $position['class_id']);
+            $this->assertSame(262, $position['specialization_id']);
+
+            // The appended icon URL is resolved from the specialization id
+            $serialized = $position->toArray();
+            $this->assertArrayHasKey('specialization_icon_url', $serialized);
+            $this->assertNotNull($serialized['specialization_icon_url']);
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();

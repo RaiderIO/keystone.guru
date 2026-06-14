@@ -15,6 +15,7 @@ use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
+use App\Service\CombatLog\ResultEvents\CombatantInfo as CombatantInfoResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -82,19 +83,45 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             );
 
             $this->processKilledEnemies($liveSession, $mappingVersion, $combatLogDungeonRouteFilter);
-            $this->processPlayerPositions($liveSession, $mappingVersion, $lastKnownPlayerPositions);
+            $this->processPlayerPositions(
+                $liveSession,
+                $mappingVersion,
+                $lastKnownPlayerPositions,
+                $this->collectCombatantInfo($combatLogDungeonRouteFilter),
+            );
         } finally {
             @unlink($tmpFile);
         }
     }
 
     /**
+     * Index the most recent COMBATANT_INFO result event per player GUID.
+     *
+     * @return Collection<string, CombatantInfoResultEvent>
+     */
+    private function collectCombatantInfo(CombatLogDungeonRouteFilter $filter): Collection
+    {
+        /** @var Collection<string, CombatantInfoResultEvent> $combatantInfo */
+        $combatantInfo = collect();
+
+        foreach ($filter->getResultEvents() as $resultEvent) {
+            if ($resultEvent instanceof CombatantInfoResultEvent) {
+                $combatantInfo->put($resultEvent->getGuid()->getGuid(), $resultEvent);
+            }
+        }
+
+        return $combatantInfo;
+    }
+
+    /**
      * @param Collection<string, array{event: AdvancedCombatLogEvent, characterName: string}> $lastKnownPlayerPositions
+     * @param Collection<string, CombatantInfoResultEvent>                                    $combatantInfoByGuid
      */
     private function processPlayerPositions(
         LiveSession    $liveSession,
         MappingVersion $mappingVersion,
         Collection     $lastKnownPlayerPositions,
+        Collection     $combatantInfoByGuid,
     ): void {
         if ($lastKnownPlayerPositions->isEmpty()) {
             return;
@@ -117,6 +144,19 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 new IngameXY($advancedData->getPositionX(), $advancedData->getPositionY(), $floor),
             );
 
+            $classId          = null;
+            $specializationId = null;
+            $combatantInfo    = $combatantInfoByGuid->get($guidStr);
+            if ($combatantInfo !== null) {
+                try {
+                    $classId          = $combatantInfo->getClass()->class_id;
+                    $specializationId = $combatantInfo->getSpecialization()->specialization_id;
+                } catch (Throwable) {
+                    // SpecId is already null, reset class Id too for consistency
+                    $classId          = null;
+                }
+            }
+
             $playerPosition = $this->combatStateService->setPlayerPosition(
                 $liveSession,
                 $guidStr,
@@ -124,6 +164,8 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $latLng->getLat(),
                 $latLng->getLng(),
                 $floor->id,
+                $classId,
+                $specializationId,
             );
 
             $playerPosition->setRelation('floor', $floor);

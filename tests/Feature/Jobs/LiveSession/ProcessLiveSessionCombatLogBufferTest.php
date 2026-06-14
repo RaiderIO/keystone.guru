@@ -53,9 +53,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
             // Assert
             Queue::assertPushed(ProcessLiveSessionCombatLogBuffer::class, function (ProcessLiveSessionCombatLogBuffer $job) use ($liveSession) {
-                return (function () {
-                    return $this->liveSessionId;
-                })->call($job) === $liveSession->id;
+                return $job->liveSessionId === $liveSession->id;
             });
         } finally {
             LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
@@ -102,6 +100,10 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
+        // Persistence is what we assert here; faking the broadcasts keeps the test
+        // independent of a running Reverb/Pusher connection.
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class]);
+
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
@@ -151,6 +153,67 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     #[Test]
+    public function processBuffer_givenRealPitOfSaronLog_persistsPlayerClassAndSpecialization(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        // Persistence is what we assert here; faking the broadcasts keeps the test
+        // independent of a running Reverb/Pusher connection.
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class]);
+
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+
+        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
+        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $liveSession->id,
+            'buffer'          => gzencode($rawLines, 6),
+            'last_sequence'   => 1,
+        ]);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert: at least one player position was resolved with a class & specialization from COMBATANT_INFO
+            $withSpec = LiveSessionPlayerPosition::query()
+                ->where('live_session_id', $liveSession->id)
+                ->whereNotNull('class_id')
+                ->whereNotNull('specialization_id')
+                ->count();
+
+            $this->assertGreaterThan(0, $withSpec, 'Expected at least one player position to have a resolved class & specialization');
+        } finally {
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $buffer->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function processBuffer_givenSameBufferProcessedTwice_doesNotDuplicateKills(): void
     {
         if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
@@ -158,6 +221,10 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
+        // Persistence is what we assert here; faking the broadcasts keeps the test
+        // independent of a running Reverb/Pusher connection.
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class]);
+
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
@@ -219,6 +286,10 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
+        // Persistence is what we assert here; faking the broadcasts keeps the test
+        // independent of a running Reverb/Pusher connection.
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class]);
+
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
@@ -313,8 +384,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->markTestSkipped('Pit of Saron events file not found');
         }
 
-        // Arrange
-        Event::fake([EnemyKilledEvent::class]);
+        // Arrange — fake both broadcasts so neither needs a live Reverb/Pusher connection
+        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -367,8 +438,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->markTestSkipped('Pit of Saron events file not found');
         }
 
-        // Arrange
-        Event::fake([PlayerMovedEvent::class]);
+        // Arrange — fake both broadcasts so neither needs a live Reverb/Pusher connection
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -421,7 +492,9 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->markTestSkipped('Pit of Saron events file not found');
         }
 
-        // Arrange
+        // Arrange — fake both broadcasts so the first run does not need a live Reverb/Pusher connection
+        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class]);
+
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
 
@@ -458,8 +531,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 ->where('live_session_id', $liveSession->id)
                 ->count();
 
-            // Act — second run with Event::fake() to track only new dispatches
-            Event::fake([EnemyKilledEvent::class]);
+            // Act — reset the fake before the second run so we only track new dispatches
+            Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class]);
             $service->processBuffer($liveSession);
 
             // Assert — no new EnemyKilledEvent should be dispatched because all enemies already persisted

@@ -41,5 +41,7 @@ interface LiveSessionCombatStateServiceInterface
         float       $lat,
         float       $lng,
         int         $floorId,
+        ?int        $classId = null,
+        ?int        $specializationId = null,
     ): LiveSessionPlayerPosition;
 }

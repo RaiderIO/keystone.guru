@@ -26,6 +26,10 @@ class LiveSessionCombatLogBuffer extends Model
         'last_sequence',
     ];
 
+    protected $hidden = [
+        'buffer',
+    ];
+
     protected static function newFactory(): LiveSessionCombatLogBufferFactory
     {
         return LiveSessionCombatLogBufferFactory::new();

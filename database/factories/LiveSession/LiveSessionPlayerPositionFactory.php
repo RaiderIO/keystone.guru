@@ -27,4 +27,12 @@ class LiveSessionPlayerPositionFactory extends Factory
             'floor_id'        => 1,
         ];
     }
+
+    public function withSpecialization(int $classId = 7, int $specializationId = 262): self
+    {
+        return $this->state([
+            'class_id'          => $classId,
+            'specialization_id' => $specializationId,
+        ]);
+    }
 }

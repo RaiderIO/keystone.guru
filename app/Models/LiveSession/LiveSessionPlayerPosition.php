@@ -2,6 +2,7 @@
 
 namespace App\Models\LiveSession;
 
+use App\Models\CharacterClassSpecialization;
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\MappingVersion;
@@ -14,14 +15,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $live_session_id
- * @property int    $floor_id
- * @property string $player_guid
- * @property string $character_name
- * @property float  $lat
- * @property float  $lng
- * @property Carbon $updated_at
+ * @property int      $id
+ * @property int      $live_session_id
+ * @property int      $floor_id
+ * @property string   $player_guid
+ * @property string   $character_name
+ * @property float    $lat
+ * @property float    $lng
+ * @property int|null $class_id          Blizzard class ID
+ * @property int|null $specialization_id Blizzard specialization ID
+ * @property Carbon   $updated_at
+ *
+ * @property string|null $specialization_icon_url Appended
  *
  * @property LiveSession    $liveSession
  * @property Floor          $floor
@@ -44,6 +49,8 @@ class LiveSessionPlayerPosition extends Model implements HasLatLngInterface
         'lat',
         'lng',
         'floor_id',
+        'class_id',
+        'specialization_id',
         'updated_at',
     ];
 
@@ -52,11 +59,26 @@ class LiveSessionPlayerPosition extends Model implements HasLatLngInterface
         'updated_at',
     ];
 
+    protected $appends = [
+        'specialization_icon_url',
+    ];
+
     protected function casts(): array
     {
         return [
             'updated_at' => 'datetime',
         ];
+    }
+
+    public function getSpecializationIconUrlAttribute(): ?string
+    {
+        if ($this->specialization_id === null) {
+            return null;
+        }
+
+        return CharacterClassSpecialization::query()
+            ->where('specialization_id', $this->specialization_id)
+            ->first()?->icon_url;
     }
 
     protected static function newFactory(): LiveSessionPlayerPositionFactory
