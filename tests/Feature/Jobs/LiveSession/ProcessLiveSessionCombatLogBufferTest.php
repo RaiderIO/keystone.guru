@@ -373,6 +373,96 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function processBuffer_givenChunksAppendedToReducedBuffer_matchesFullLogKills(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class]);
+
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+
+        $allLines = explode("\n", file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE));
+
+        /** @var DungeonRoute $fullRoute */
+        $fullRoute = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $mappingVersion->id]);
+        /** @var LiveSession $fullSession */
+        $fullSession = LiveSession::factory()->create(['dungeon_route_id' => $fullRoute->id]);
+        $fullBuffer  = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $fullSession->id,
+            'buffer'          => gzencode(implode("\n", $allLines), 6),
+            'last_sequence'   => 1,
+        ]);
+
+        /** @var DungeonRoute $chunkedRoute */
+        $chunkedRoute = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $mappingVersion->id]);
+        /** @var LiveSession $chunkedSession */
+        $chunkedSession = LiveSession::factory()->create(['dungeon_route_id' => $chunkedRoute->id]);
+        $chunkedBuffer  = LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $chunkedSession->id,
+            'buffer'          => null,
+            'last_sequence'   => null,
+        ]);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+
+            // One-shot run
+            $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $service->processBuffer($fullSession);
+            $fullKillCount = $fullSession->killedEnemies()->count();
+
+            // Incremental run: feed the log in chunks, appending each new chunk to the *reduced* buffer
+            // that the previous processBuffer() left behind — exactly how the live controller appends raw
+            // batches. This is what proves a kill spanning chunks is not lost by the reduction.
+            $chunks = array_chunk($allLines, (int)ceil(count($allLines) / 5));
+            foreach ($chunks as $index => $chunk) {
+                $chunkedBuffer->refresh();
+                $existing = $chunkedBuffer->buffer !== null ? (gzdecode($chunkedBuffer->buffer) ?: '') : '';
+
+                $combined                     = $existing === '' ? implode("\n", $chunk) : $existing . "\n" . implode("\n", $chunk);
+                $chunkedBuffer->buffer        = gzencode($combined, 6);
+                $chunkedBuffer->last_sequence = $index + 1;
+                $chunkedBuffer->save();
+
+                $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+                $service->processBuffer($chunkedSession);
+            }
+
+            $chunkedKillCount = $chunkedSession->killedEnemies()->count();
+
+            // Assert
+            $this->assertGreaterThan(0, $fullKillCount);
+            $this->assertSame($fullKillCount, $chunkedKillCount);
+
+            // Player positions are persisted per chunk from the freshly ingested lines, so they survive
+            // even though player movement is never carried forward in the reduced buffer.
+            $this->assertGreaterThan(
+                0,
+                LiveSessionPlayerPosition::query()->where('live_session_id', $chunkedSession->id)->count(),
+                'Expected player positions to be persisted across chunked processing',
+            );
+        } finally {
+            LiveSessionKilledEnemy::query()->whereIn('live_session_id', [$fullSession->id, $chunkedSession->id])->delete();
+            LiveSessionPlayerPosition::query()->whereIn('live_session_id', [$fullSession->id, $chunkedSession->id])->delete();
+            $fullBuffer->delete();
+            $chunkedBuffer->delete();
+            $fullSession->delete();
+            $chunkedSession->delete();
+            $fullRoute->delete();
+            $chunkedRoute->delete();
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Service: processBuffer — event dispatching
     // -------------------------------------------------------------------------

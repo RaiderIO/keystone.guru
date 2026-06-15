@@ -84,6 +84,8 @@ use App\Service\Image\ImageService;
 use App\Service\Image\ImageServiceInterface;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
+use App\Service\LiveSession\LiveSessionCombatLogService;
+use App\Service\LiveSession\LiveSessionCombatLogServiceInterface;
 use App\Service\LiveSession\LiveSessionCombatStateService;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
@@ -240,6 +242,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(LiveSessionCombatStateServiceInterface::class, LiveSessionCombatStateService::class);
+        $this->app->bind(LiveSessionCombatLogServiceInterface::class, LiveSessionCombatLogService::class);
         $this->app->bind(LiveSessionBufferProcessingServiceInterface::class, LiveSessionBufferProcessingService::class);
 
         // Depends on SeasonService, TimewalkingEventService

@@ -66,12 +66,12 @@ class LiveSessionEnemy extends Enemy {
      * @returns {{iconClass: string, colorClass: string}|null}
      */
     getStateOverlay() {
-        if (this.killed) {
-            return {iconClass: 'fa-check-circle', colorClass: 'text-success'};
-        } else if (this.obsolete) {
+        if (this.obsolete) {
             return {iconClass: 'fa-times-circle', colorClass: 'text-danger'};
         } else if (this.overpulledKillZoneId !== null) {
             return {iconClass: 'fa-plus-circle', colorClass: 'text-warning'};
+        } else if (this.killed) {
+            return {iconClass: 'fa-check-circle', colorClass: 'text-success'};
         }
         return null;
     }

@@ -128,7 +128,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
         // State overlay icons require additional addition to keep them looking nice
         let stateOverlay = this.enemyvisual.enemy.getStateOverlay();
         if (stateOverlay !== null) {
-            width += 4;
+            width -= 4;
         }
 
         // Dangerous = less space

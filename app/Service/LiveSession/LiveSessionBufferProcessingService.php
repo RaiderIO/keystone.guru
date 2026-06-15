@@ -10,6 +10,7 @@ use App\Logic\CombatLog\Guid\Player;
 use App\Logic\Structs\IngameXY;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
@@ -26,6 +27,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
 {
     public function __construct(
         private readonly CombatLogServiceInterface              $combatLogService,
+        private readonly LiveSessionCombatLogServiceInterface   $liveSessionCombatLogService,
         private readonly NpcRepositoryInterface                 $npcRepository,
         private readonly EnemyRepositoryInterface               $enemyRepository,
         private readonly CoordinatesServiceInterface            $coordinatesService,
@@ -48,6 +50,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             return;
         }
 
+        // Captured before processing so the post-reduction write can be skipped if a newer batch arrived
+        // in the meantime (it would have bumped last_sequence), preventing us from clobbering those lines.
+        $lastSequenceAtRead = $buffer->last_sequence;
+
         $tmpFile = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
         file_put_contents($tmpFile, $decompressed);
 
@@ -59,6 +65,9 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
             $combatLogDungeonRouteFilter->setValidNpcIds($validNpcIds);
 
+            // Track the most recent position per player across the full buffer (reduced lines + the newly
+            // ingested ones). Only the latest is persisted, once per chunk - movement is not kept in the
+            // buffer, so this is the single source of truth for live player dots.
             /** @var Collection<string, array{event: AdvancedCombatLogEvent, characterName: string}> $lastKnownPlayerPositions */
             $lastKnownPlayerPositions = collect();
 
@@ -89,9 +98,40 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $lastKnownPlayerPositions,
                 $this->collectCombatantInfo($combatLogDungeonRouteFilter),
             );
+
+            $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $lastSequenceAtRead);
         } finally {
             @unlink($tmpFile);
         }
+    }
+
+    /**
+     * Shrink the stored buffer to the minimal set of lines needed to keep re-running the auto-route
+     * creator, so it does not grow unbounded with every batch. Player positions are persisted separately
+     * (see {@see processPlayerPositions()}), so player movement is intentionally not retained here.
+     *
+     * The write is conditional on `last_sequence` being unchanged since we read the buffer: if a newer
+     * batch was appended while this job ran, we leave the buffer alone and let the next job reduce it,
+     * so freshly ingested lines are never overwritten. Re-processing is idempotent, so nothing is lost.
+     *
+     * @param Collection<int, int> $validNpcIds
+     */
+    private function reduceBuffer(LiveSession $liveSession, string $tmpFile, Collection $validNpcIds, ?int $lastSequenceAtRead): void
+    {
+        $reducedLines = $this->liveSessionCombatLogService->reduceCombatLogForBuffer($tmpFile, $validNpcIds);
+        $compressed   = gzencode(implode("\n", $reducedLines), 6);
+        if ($compressed === false) {
+            return;
+        }
+
+        $query = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id);
+        if ($lastSequenceAtRead === null) {
+            $query->whereNull('last_sequence');
+        } else {
+            $query->where('last_sequence', $lastSequenceAtRead);
+        }
+
+        $query->update(['buffer' => $compressed]);
     }
 
     /**
@@ -153,7 +193,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     $specializationId = $combatantInfo->getSpecialization()->specialization_id;
                 } catch (Throwable) {
                     // SpecId is already null, reset class Id too for consistency
-                    $classId          = null;
+                    $classId = null;
                 }
             }
 
