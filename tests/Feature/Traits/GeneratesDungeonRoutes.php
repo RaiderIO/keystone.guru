@@ -34,7 +34,6 @@ trait GeneratesDungeonRoutes
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
-            'expires_at'         => Carbon::now()->addHours(2),
         ]);
     }
 
@@ -48,9 +47,7 @@ trait GeneratesDungeonRoutes
     {
         do {
             /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->make(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
+            $dungeonRoute = DungeonRoute::factory()->make($attributes);
 
             $dungeonRoute->load(['dungeon', 'mappingVersion']);
 
@@ -76,9 +73,7 @@ trait GeneratesDungeonRoutes
     {
         do {
             /** @var DungeonRoute $dungeonRoute */
-            $dungeonRoute = DungeonRoute::factory()->make(array_merge([
-                'expires_at' => now()->addHour(),
-            ], $attributes));
+            $dungeonRoute = DungeonRoute::factory()->make($attributes);
 
             $dungeonRoute->load(['dungeon', 'mappingVersion']);
 
