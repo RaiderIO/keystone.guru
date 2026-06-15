@@ -27,7 +27,7 @@ class EnemyKilledHandler extends ModelChangedHandler {
             let enemy = enemyMapObjectGroup.findMapObjectById(e.model.id);
 
             if (enemy !== null) {
-                enemy.setObsolete(true);
+                enemy.setKilled(true);
             } else {
                 console.warn(`Unable to find killed enemy ${e.model.id}`);
             }

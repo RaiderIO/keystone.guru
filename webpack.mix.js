@@ -287,6 +287,8 @@ let scripts = [
     'resources/assets/js/custom/models/versionablemapobject.js',
     'resources/assets/js/custom/models/polyline.js',
     'resources/assets/js/custom/models/enemy.js',
+    'resources/assets/js/custom/models/livesessionenemy.js',
+    'resources/assets/js/custom/models/searchenemy.js',
     'resources/assets/js/custom/models/pridefulenemy.js',
     'resources/assets/js/custom/models/enemypatrol.js',
     'resources/assets/js/custom/models/enemypack.js',

@@ -73,8 +73,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
+        let mapContext = getState().getMapContext();
         if (getState().isMapAdmin()) {
             return new AdminEnemy(this.manager.map, layer);
+        } else if (mapContext instanceof MapContextLiveSession) {
+            return new LiveSessionEnemy(this.manager.map, layer);
+        } else if (mapContext instanceof MapContextDungeonRouteSearch) {
+            return new SearchEnemy(this.manager.map, layer);
         } else if (options.hasOwnProperty('seasonalType') && options.seasonalType === 'prideful') {
             return new PridefulEnemy(this.manager.map, layer);
         } else {
@@ -177,9 +182,10 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                     }
                 }
 
-                // Mark as obsolete if it is a route-correction enemy or a confirmed kill from the combat log
+                // Mark as obsolete if it is a route-correction enemy
                 let obsoleteEnemiesData = mapContext.getObsoleteEnemies();
-                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id) || mapContext.isKilledEnemy(enemy.id));
+                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
+                enemy.setKilled(mapContext.isKilledEnemy(enemy.id));
             }
 
             if (mapContext instanceof MapContextDungeonRoute) {
