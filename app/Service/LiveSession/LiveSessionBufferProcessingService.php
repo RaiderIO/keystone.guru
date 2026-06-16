@@ -2,7 +2,6 @@
 
 namespace App\Service\LiveSession;
 
-use App\Events\Models\LiveSession\EnemyKilledEvent;
 use App\Events\Models\LiveSession\PlayerMovedEvent;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
@@ -26,12 +25,13 @@ use Throwable;
 class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingServiceInterface
 {
     public function __construct(
-        private readonly CombatLogServiceInterface              $combatLogService,
-        private readonly LiveSessionCombatLogServiceInterface   $liveSessionCombatLogService,
-        private readonly NpcRepositoryInterface                 $npcRepository,
-        private readonly EnemyRepositoryInterface               $enemyRepository,
-        private readonly CoordinatesServiceInterface            $coordinatesService,
-        private readonly LiveSessionCombatStateServiceInterface $combatStateService,
+        private readonly CombatLogServiceInterface                    $combatLogService,
+        private readonly LiveSessionCombatLogServiceInterface         $liveSessionCombatLogService,
+        private readonly NpcRepositoryInterface                       $npcRepository,
+        private readonly EnemyRepositoryInterface                     $enemyRepository,
+        private readonly CoordinatesServiceInterface                  $coordinatesService,
+        private readonly LiveSessionCombatStateServiceInterface       $combatStateService,
+        private readonly LiveSessionOverpullDetectionServiceInterface $overpullDetectionService,
     ) {
     }
 
@@ -230,6 +230,9 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         /** @var Collection<string, EnemyEngagedResultEvent> $pendingEngaged */
         $pendingEngaged = collect();
 
+        /** @var Collection<int, Enemy> $resolvedKills */
+        $resolvedKills = collect();
+
         foreach ($resultEvents as $resultEvent) {
             if ($resultEvent instanceof EnemyEngagedResultEvent) {
                 $pendingEngaged->put($resultEvent->getGuid()->getGuid(), $resultEvent);
@@ -256,14 +259,11 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 }
 
                 $availableEnemies->forget($enemy->id);
-
-                $isNew = $this->combatStateService->setKilledEnemy($liveSession, $enemy->npc_id, $enemy->mdt_id);
-
-                if ($isNew) {
-                    broadcast(new EnemyKilledEvent($this->coordinatesService, $liveSession, $liveSession->user, $enemy));
-                }
+                $resolvedKills->push($enemy);
             }
         }
+
+        $this->overpullDetectionService->processResolvedKills($liveSession, $resolvedKills);
     }
 
     /**

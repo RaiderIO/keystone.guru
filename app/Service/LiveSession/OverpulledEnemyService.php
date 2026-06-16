@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 {
+    public function __construct(
+        private readonly LiveSessionCombatStateServiceInterface $combatStateService,
+    ) {
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -23,6 +28,11 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
         $overpulledEnemyForces = $this->getOverpulledEnemyForces($liveSession);
 
         if ($overpulledEnemyForces->isNotEmpty()) {
+            // Enemies that have actually been killed can never be marked obsolete (you cannot "skip" an
+            // enemy you already killed). Excluding them keeps the correction budget honest and forces the
+            // algorithm to keep looking further down the route for genuinely-skippable replacements.
+            $killedEnemyIds = $this->combatStateService->getKilledEnemyIds($liveSession)->flip();
+
             $tooMuchEnemyForces = $liveSession->dungeonRoute->getEnemyForcesTooMuch();
 
             // Start with the first mistake that was made and work on trying to reduce the value of this until it is 0 or lower
@@ -38,13 +48,15 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                 /** @var Collection<KillZone> $availableKillZones */
                 $availableKillZones = KillZone::where('dungeon_route_id', $liveSession->dungeon_route_id)
                     ->where('index', '>', $overpulledEnemyForce['kill_zone']->index)
+                    ->orderBy('index')
                     ->get();
 
                 // Loop over all available kill zones from which we can still potentially subtract enemy forces
                 foreach ($availableKillZones as $availableKillZone) {
                     $availableKillZone->dungeonRoute = $liveSession->dungeonRoute;
 
-                    $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonRoute->teeming);
+                    $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonRoute->teeming)
+                        ->reject(static fn($row) => $killedEnemyIds->has($row->enemy_id));
 
                     // Contains a list of enemies, grouped by pack, with the -1 pack being enemies that are not assigned to a pack being LAST
                     $groupedBy = $skippableEnemyForces->groupBy('enemy_pack_id')->sortDesc();
@@ -94,6 +106,9 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
      */
     private function getOverpulledEnemyForces(LiveSession $liveSession): Collection
     {
+        // DB::select returns stdClass rows (kill_zones.* + the aggregated enemy_forces alias), not KillZone
+        // models - id is nullable because the overpulled-enemies join may produce an empty (no result) row.
+        /** @var array<int, object{id: int|null, enemy_forces: int}> $queryResult */
         $queryResult = DB::select('
                 select `kill_zones`.*,
                        CAST(IFNULL(
@@ -115,13 +130,12 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                                    ), 0
                            ) AS SIGNED) as enemy_forces
                 from `live_sessions`
-                         left join `dungeon_routes` on `dungeon_routes`.`id` = `live_sessions`.`id`
+                         left join `dungeon_routes` on `dungeon_routes`.`id` = `live_sessions`.`dungeon_route_id`
                          left join `live_session_overpulled_enemies` on `live_session_overpulled_enemies`.`live_session_id` = `live_sessions`.`id`
                          left join `kill_zones` on `kill_zones`.`id` = `live_session_overpulled_enemies`.`kill_zone_id`
-                         left join `enemies` on `enemies`.`id` = `live_session_overpulled_enemies`.`enemy_id`
+                         left join `enemies` on `enemies`.`npc_id` = `live_session_overpulled_enemies`.`npc_id` AND `enemies`.`mdt_id` = `live_session_overpulled_enemies`.`mdt_id` AND `enemies`.`mapping_version_id` = `dungeon_routes`.`mapping_version_id`
                          left join `npcs` on `npcs`.`id` = `enemies`.`npc_id`
                          left join `npc_enemy_forces` on `npcs`.`id` = `npc_enemy_forces`.`npc_id` AND `dungeon_routes`.`mapping_version_id` = `npc_enemy_forces`.`mapping_version_id`
-                         left join `dungeons` on `dungeons`.`id` = `dungeon_routes`.`dungeon_id`
                 where `live_sessions`.id = :id
                 group by `live_sessions`.id, `kill_zones`.id, `kill_zones`.`index`
                 order by `kill_zones`.`index`

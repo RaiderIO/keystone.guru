@@ -58,6 +58,14 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     /**
      * {@inheritDoc}
      */
+    public function getKilledEnemyIds(LiveSession $liveSession): Collection
+    {
+        return $this->resolveEnemyIds('live_session_killed_enemies', $liveSession);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setPlayerPosition(
         LiveSession $liveSession,
         string      $playerGuid,

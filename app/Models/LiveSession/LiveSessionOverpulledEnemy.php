@@ -34,7 +34,6 @@ class LiveSessionOverpulledEnemy extends Model
     ];
 
     protected $visible = [
-        'enemy_id',
         'kill_zone_id',
     ];
 

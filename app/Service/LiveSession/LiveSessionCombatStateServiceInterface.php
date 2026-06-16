@@ -31,6 +31,13 @@ interface LiveSessionCombatStateServiceInterface
     public function getObsoleteEnemyIds(LiveSession $liveSession): Collection;
 
     /**
+     * Resolve the killed-enemy rows back to live Enemy IDs via the route's mapping version.
+     *
+     * @return Collection<int, int>
+     */
+    public function getKilledEnemyIds(LiveSession $liveSession): Collection;
+
+    /**
      * Upsert the latest known position for a player/character within this session.
      * Returns the persisted model with the liveSession relation pre-loaded.
      */

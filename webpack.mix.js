@@ -202,6 +202,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
     'resources/assets/js/custom/enemyforces/enemyforcesmanager.js',
+    'resources/assets/js/custom/enemyforces/livesessionenemyforcesmanager.js',
 
     // Map Context
     'resources/assets/js/custom/mapcontext/mapcontext.js',
