@@ -2,13 +2,16 @@
 
 namespace Tests\Feature\App\Service\LiveSession;
 
+use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionInCombatEnemy;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\LiveSessionCombatStateService;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -222,6 +225,116 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
     }
 
     // -------------------------------------------------------------------------
+    // In-combat enemies
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function replaceInCombatEnemies_givenNewPairs_persistsRecords(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        /** @var Collection<int, Enemy> $enemies */
+        $enemies = Enemy::factory()->count(2)->create();
+
+        try {
+            // Act
+            $this->service->replaceInCombatEnemies($liveSession, $enemies);
+
+            // Assert
+            $this->assertSame(2, LiveSessionInCombatEnemy::query()
+                ->where('live_session_id', $liveSession->id)
+                ->count());
+        } finally {
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function replaceInCombatEnemies_givenExistingRecords_replacesFullSet(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        /** @var Collection<int, Enemy> $enemies */
+        $enemies = Enemy::factory()->count(2)->create();
+
+        try {
+            /** @var Enemy $oldEnemy */
+            $oldEnemy = Enemy::factory()->create();
+
+            $this->service->replaceInCombatEnemies($liveSession, collect([
+                $oldEnemy,
+            ]));
+
+            // Act — replace with a completely different set
+            $this->service->replaceInCombatEnemies($liveSession, $enemies);
+
+            // Assert — old record is gone, only new records remain
+            $this->assertDatabaseMissing('live_session_in_combat_enemies', [
+                'live_session_id' => $liveSession->id,
+                'npc_id'          => $oldEnemy->npc_id,
+            ]);
+            $this->assertSame($enemies->count(), LiveSessionInCombatEnemy::query()
+                ->where('live_session_id', $liveSession->id)
+                ->count());
+        } finally {
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function replaceInCombatEnemies_givenEmptyPairs_clearsExistingRecords(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $this->service->replaceInCombatEnemies($liveSession, collect([
+                Enemy::factory()->create(),
+            ]));
+
+            // Act
+            $this->service->replaceInCombatEnemies($liveSession, collect());
+
+            // Assert
+            $this->assertSame(0, LiveSessionInCombatEnemy::query()
+                ->where('live_session_id', $liveSession->id)
+                ->count());
+        } finally {
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function getInCombatEnemyIds_givenNoInCombatEnemies_returnsEmptyCollection(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $result = $this->service->getInCombatEnemyIds($liveSession);
+
+            // Assert
+            $this->assertTrue($result->isEmpty());
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Player positions
     // -------------------------------------------------------------------------
 
@@ -393,6 +506,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         $this->service->setKilledEnemy($liveSession, 12345, 1);
         $this->service->replaceObsoleteEnemies($liveSession, [['npc_id' => 99999, 'mdt_id' => 5]]);
+        $this->service->replaceInCombatEnemies($liveSession, collect([Enemy::factory()->create()]));
         $this->service->setPlayerPosition($liveSession, 'Player-1-AAAAAAAA', 'Alice', 0.0, 0.0, 1);
 
         $dungeonRoute = $liveSession->dungeonRoute;
@@ -404,10 +518,12 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
             // Assert
             $this->assertDatabaseMissing('live_session_killed_enemies', ['live_session_id' => $liveSession->id]);
             $this->assertDatabaseMissing('live_session_obsolete_enemies', ['live_session_id' => $liveSession->id]);
+            $this->assertDatabaseMissing('live_session_in_combat_enemies', ['live_session_id' => $liveSession->id]);
             $this->assertDatabaseMissing('live_session_player_positions', ['live_session_id' => $liveSession->id]);
         } finally {
             LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             $dungeonRoute?->delete();
         }

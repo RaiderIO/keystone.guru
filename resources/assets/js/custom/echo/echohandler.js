@@ -46,6 +46,7 @@ class EchoHandler extends Signalable {
             new EnemyKilledHandler(this),
             new PlayerMovedHandler(this),
             new RouteCorrectionHandler(this),
+            new InCombatEnemiesChangedHandler(this),
             // Path
             new PathChangedHandler(this),
             new PathDeletedHandler(this),

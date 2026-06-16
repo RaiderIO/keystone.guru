@@ -46,6 +46,13 @@ class MapContextLiveSession extends MapContextDungeonRoute {
     }
 
     /**
+     * @returns {Number[]}
+     */
+    getInCombatEnemies() {
+        return this._options.inCombatEnemies ?? [];
+    }
+
+    /**
      * @returns {Number}
      */
     getEnemyForcesOverride() {

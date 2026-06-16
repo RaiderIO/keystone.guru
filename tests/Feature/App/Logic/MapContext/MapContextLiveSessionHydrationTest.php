@@ -6,8 +6,10 @@ use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionInCombatEnemy;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionObsoleteEnemy;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
@@ -120,6 +122,91 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
     }
 
     #[Test]
+    public function toArray_givenOverpulledEnemy_includesEnemyIdAndKillZoneIdObject(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        /** @var Enemy|null $enemy */
+        $enemy = Enemy::query()
+            ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+            ->whereNotNull('npc_id')
+            ->whereNotNull('mdt_id')
+            ->first();
+
+        if ($enemy === null) {
+            $this->markTestSkipped('No enemy with npc_id+mdt_id found for this mapping version.');
+        }
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
+
+        try {
+            LiveSessionOverpulledEnemy::query()->create([
+                'live_session_id' => $liveSession->id,
+                'kill_zone_id'    => 4242,
+                'npc_id'          => $enemy->npc_id,
+                'mdt_id'          => $enemy->mdt_id,
+            ]);
+
+            // Act
+            $array = $this->makeContext($liveSession)->toArray();
+
+            // Assert — the frontend restores overpulled state from {enemy_id, kill_zone_id} objects
+            $this->assertArrayHasKey('overpulledEnemies', $array);
+            $this->assertContains(['enemy_id' => $enemy->id, 'kill_zone_id' => 4242], $array['overpulledEnemies']->all());
+
+            $entry = $array['overpulledEnemies']->first();
+            $this->assertIsInt($entry['enemy_id']);
+            $this->assertIsInt($entry['kill_zone_id']);
+        } finally {
+            LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenInCombatEnemy_includesResolvedEnemyIdInInCombatEnemies(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        /** @var Enemy|null $enemy */
+        $enemy = Enemy::query()
+            ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+            ->whereNotNull('npc_id')
+            ->whereNotNull('mdt_id')
+            ->first();
+
+        if ($enemy === null) {
+            $this->markTestSkipped('No enemy with npc_id+mdt_id found for this mapping version.');
+        }
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
+
+        try {
+            LiveSessionInCombatEnemy::query()->create([
+                'live_session_id' => $liveSession->id,
+                'npc_id'          => $enemy->npc_id,
+                'mdt_id'          => $enemy->mdt_id,
+            ]);
+
+            // Act
+            $array = $this->makeContext($liveSession)->toArray();
+
+            // Assert
+            $this->assertArrayHasKey('inCombatEnemies', $array);
+            $this->assertContains($enemy->id, $array['inCombatEnemies']->all());
+        } finally {
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function toArray_givenPlayerPosition_includesPositionInPlayerPositions(): void
     {
         // Arrange
@@ -182,8 +269,10 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
 
             // Assert
             $this->assertArrayHasKey('killedEnemies', $array);
+            $this->assertArrayHasKey('inCombatEnemies', $array);
             $this->assertArrayHasKey('playerPositions', $array);
             $this->assertTrue($array['killedEnemies']->isEmpty());
+            $this->assertTrue($array['inCombatEnemies']->isEmpty());
             $this->assertTrue($array['playerPositions']->isEmpty());
         } finally {
             $liveSession->delete();

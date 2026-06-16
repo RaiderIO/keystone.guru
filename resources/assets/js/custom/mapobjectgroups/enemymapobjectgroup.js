@@ -189,6 +189,7 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 // console.log(enemy.id, obsoleteEnemiesData, obsoleteEnemiesData.includes(enemy.id), mapContext.isKilledEnemy(enemy.id));
                 enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
                 enemy.setKilled(mapContext.isKilledEnemy(enemy.id));
+                enemy.setInCombat(mapContext.getInCombatEnemies().includes(enemy.id));
             }
 
             if (mapContext instanceof MapContextDungeonRoute) {

@@ -54,7 +54,7 @@ class EnemyVisual extends Signalable {
         });
 
         // Rebuild whenever these infrequently fired events are received (union covers all subclass state signals)
-        this.enemy.register(['overpulled:changed', 'obsolete:changed', 'killed:changed', 'included:changed', 'excluded:changed'], this, function (changedEvent) {
+        this.enemy.register(['overpulled:changed', 'obsolete:changed', 'killed:changed', 'incombat:changed', 'included:changed', 'excluded:changed'], this, function (changedEvent) {
             if (enemy.shouldBeVisible()) {
                 self.buildVisual();
             }
@@ -400,10 +400,12 @@ class EnemyVisual extends Signalable {
             // Set a default color which may be overridden by any visuals
             let borderThickness = getState().getMapZoomLevel();
             let border = `1px solid black`;
-            let hasKillZone = this.enemy.getKillZone() instanceof KillZone;
+
+            let killZone = this.enemy.getKillZone() ?? this.enemy.getOverpulledKillZone();
+            let hasKillZone = killZone instanceof KillZone;
             if (hasKillZone) {
                 // Either no border or a solid border in the color of the killzone
-                border = `${borderThickness}px solid ${this.enemy.getKillZone().color}`;
+                border = `${borderThickness}px solid ${killZone.color}`;
             } else if (!this._highlighted && !this.enemy.is_mdt && !isSelectable) {
                 // If not selected in a killzone, fade the enemy
                 data.root_classes = 'map_enemy_visual_fade';

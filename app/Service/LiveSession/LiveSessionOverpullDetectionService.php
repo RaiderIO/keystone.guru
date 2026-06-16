@@ -2,6 +2,7 @@
 
 namespace App\Service\LiveSession;
 
+use App\Events\LiveSession\InCombatEnemiesChangedEvent;
 use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
 use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Events\Models\LiveSession\EnemyKilledEvent;
@@ -24,20 +25,20 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
     /**
      * {@inheritDoc}
      */
-    public function processResolvedKills(LiveSession $liveSession, Collection $resolvedKillsInOrder): void
+    public function processResolvedKills(LiveSession $liveSession, Collection $resolvedKillsInOrder, Collection $inCombatEnemies): void
     {
-        if ($resolvedKillsInOrder->isEmpty()) {
-            return;
-        }
-
+        /** @var Collection<int, KillZone> $killZones */
         $killZones = KillZone::where('dungeon_route_id', $liveSession->dungeon_route_id)
             ->with('enemies')
+            ->orderBy('index')
             ->get();
 
         /** @var KillZone|null $firstKillZone */
-        $firstKillZone = $killZones->sortBy('index')->first();
+        $firstKillZone = $killZones->first();
 
-        // Map enemy_id → KillZone for fast on-route membership lookup
+        // Map enemy_id → KillZone for fast on-route membership lookup. Kill zones are walked in index order,
+        // so when an enemy somehow belongs to more than one, the highest-index (furthest-progress) zone wins
+        // - keeping the derived "current pull" deterministic regardless of DB row ordering.
         /** @var Collection<int, KillZone> $enemyIdToKillZone */
         $enemyIdToKillZone = collect();
         foreach ($killZones as $killZone) {
@@ -46,8 +47,23 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
             }
         }
 
-        /** @var KillZone|null $currentPullKillZone */
-        $currentPullKillZone = null;
+        // Persist the in-combat set first - this must happen before the off-route attribution loop because
+        // processOffRouteKill() uses firstOrCreate(), which freezes kill_zone_id on the pass an overpull
+        // first appears. The current pull is derived from this set, so it has to be current by then.
+        $this->persistAndBroadcastInCombat($liveSession, $inCombatEnemies);
+
+        if ($resolvedKillsInOrder->isEmpty()) {
+            $this->recomputeObsoleteIfNeeded($liveSession);
+
+            return;
+        }
+
+        // Seed the current pull from the live state instead of starting null: the leading edge is the
+        // highest-index kill zone we are currently in combat with, falling back to the highest-index kill
+        // zone we have already killed in, and finally the first kill zone. This keeps off-route attribution
+        // correct across buffer passes even when a chunk contains no on-route kill to anchor it.
+        $currentPullKillZone = $this->determineCurrentPullKillZone($liveSession, $inCombatEnemies, $enemyIdToKillZone)
+            ?? $firstKillZone;
 
         foreach ($resolvedKillsInOrder as $enemy) {
             if ($enemyIdToKillZone->has($enemy->id)) {
@@ -63,6 +79,79 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
             }
         }
 
+        $this->recomputeObsoleteIfNeeded($liveSession);
+    }
+
+    /**
+     * Persist the full current in-combat enemy set and broadcast it to clients only when it changed
+     * (avoids spamming an identical payload every buffer pass).
+     *
+     * @param Collection<int, Enemy> $inCombatEnemies
+     */
+    private function persistAndBroadcastInCombat(LiveSession $liveSession, Collection $inCombatEnemies): void
+    {
+        $previousInCombatEnemyIds = $this->combatStateService->getInCombatEnemyIds($liveSession)
+            ->map(static fn($id): int => (int)$id)
+            ->unique()
+            ->sort()
+            ->values();
+
+        $this->combatStateService->replaceInCombatEnemies($liveSession, $inCombatEnemies);
+
+        $currentInCombatEnemyIds = $inCombatEnemies
+            ->map(static fn(Enemy $enemy): int => (int)$enemy->id)
+            ->unique()
+            ->sort()
+            ->values();
+
+        if ($currentInCombatEnemyIds->all() !== $previousInCombatEnemyIds->all()) {
+            broadcast(new InCombatEnemiesChangedEvent($liveSession, $liveSession->user, $currentInCombatEnemyIds->all()));
+        }
+    }
+
+    /**
+     * The current pull is the highest-index kill zone among the on-route enemies we are currently in combat
+     * with; if nothing on-route is engaged, fall back to the highest-index kill zone we have already killed
+     * in. Returns null when neither yields a kill zone (the caller then defaults to the first kill zone).
+     *
+     * @param Collection<int, Enemy>    $inCombatEnemies
+     * @param Collection<int, KillZone> $enemyIdToKillZone
+     */
+    private function determineCurrentPullKillZone(
+        LiveSession $liveSession,
+        Collection  $inCombatEnemies,
+        Collection  $enemyIdToKillZone,
+    ): ?KillZone {
+        $inCombatKillZone = $this->highestIndexKillZone(
+            $inCombatEnemies->map(static fn(Enemy $enemy): int => (int)$enemy->id),
+            $enemyIdToKillZone,
+        );
+
+        if ($inCombatKillZone !== null) {
+            return $inCombatKillZone;
+        }
+
+        return $this->highestIndexKillZone(
+            $this->combatStateService->getKilledEnemyIds($liveSession),
+            $enemyIdToKillZone,
+        );
+    }
+
+    /**
+     * @param Collection<int, int>      $enemyIds
+     * @param Collection<int, KillZone> $enemyIdToKillZone
+     */
+    private function highestIndexKillZone(Collection $enemyIds, Collection $enemyIdToKillZone): ?KillZone
+    {
+        return $enemyIds
+            ->map(static fn(int $enemyId): ?KillZone => $enemyIdToKillZone->get($enemyId))
+            ->filter()
+            ->sortByDesc('index')
+            ->first();
+    }
+
+    private function recomputeObsoleteIfNeeded(LiveSession $liveSession): void
+    {
         // The obsolete set is dynamic: it must be re-derived on every chunk, not just when a new overpull
         // appears. Killing an enemy that was previously marked obsolete is an on-route kill (no new
         // overpull), yet it must drop out of the obsolete set and have a replacement marked further down.

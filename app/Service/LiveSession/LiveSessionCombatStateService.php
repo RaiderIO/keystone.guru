@@ -4,6 +4,7 @@ namespace App\Service\LiveSession;
 
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionInCombatEnemy;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
@@ -61,6 +62,38 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     public function getKilledEnemyIds(LiveSession $liveSession): Collection
     {
         return $this->resolveEnemyIds('live_session_killed_enemies', $liveSession);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function replaceInCombatEnemies(LiveSession $liveSession, Collection $inCombatEnemies): void
+    {
+        DB::transaction(static function () use ($liveSession, $inCombatEnemies) {
+            LiveSessionInCombatEnemy::query()
+                ->where('live_session_id', $liveSession->id)
+                ->delete();
+
+            foreach ($inCombatEnemies as $inCombatEnemy) {
+                LiveSessionInCombatEnemy::query()->upsert([
+                    'live_session_id' => $liveSession->id,
+                    'npc_id'          => $inCombatEnemy->npc_id,
+                    'mdt_id'          => $inCombatEnemy->mdt_id,
+                ], [
+                    'live_session_id',
+                    'npc_id',
+                    'mdt_id',
+                ]);
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInCombatEnemyIds(LiveSession $liveSession): Collection
+    {
+        return $this->resolveEnemyIds('live_session_in_combat_enemies', $liveSession);
     }
 
     /**

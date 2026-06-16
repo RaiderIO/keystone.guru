@@ -5,6 +5,7 @@ class LiveSessionEnemy extends Enemy {
         this.killed = false;
         this.obsolete = false;
         this.overpulledKillZoneId = null;
+        this.inCombat = false;
     }
 
     /**
@@ -62,16 +63,37 @@ class LiveSessionEnemy extends Enemy {
     }
 
     /**
-     * Precedence: killed (green check) → obsolete (red cross) → overpulled (orange plus).
+     * @returns {boolean}
+     */
+    isInCombat() {
+        return this.inCombat;
+    }
+
+    /**
+     * @param value {boolean}
+     */
+    setInCombat(value) {
+        console.assert(this instanceof LiveSessionEnemy, 'this is not a LiveSessionEnemy', this);
+        if (this.inCombat !== value) {
+            this.inCombat = value;
+            this.signal('incombat:changed');
+        }
+    }
+
+    /**
+     * Precedence: killed (green check) → obsolete (red cross) → overpulled (orange plus) → in combat
+     * (crosshairs). In-combat enemies are still alive, so they normally don't overlap the other states.
      * @returns {{iconClass: string, colorClass: string}|null}
      */
     getStateOverlay() {
-        if (this.obsolete) {
-            return {iconClass: 'fa-times-circle', colorClass: 'text-danger'};
-        } else if (this.overpulledKillZoneId !== null) {
+        if (this.overpulledKillZoneId !== null) {
             return {iconClass: 'fa-plus-circle', colorClass: 'text-warning'};
         } else if (this.killed) {
             return {iconClass: 'fa-check-circle', colorClass: 'text-success'};
+        } else if (this.inCombat) {
+            return {iconClass: 'fa-crosshairs', colorClass: 'text-danger'};
+        } else if (this.obsolete) {
+            return {iconClass: 'fa-times-circle', colorClass: 'text-danger'};
         }
         return null;
     }

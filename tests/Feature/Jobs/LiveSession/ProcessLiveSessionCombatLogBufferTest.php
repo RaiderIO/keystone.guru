@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Jobs\LiveSession;
 
+use App\Events\LiveSession\InCombatEnemiesChangedEvent;
 use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
 use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Events\Models\LiveSession\EnemyKilledEvent;
@@ -14,6 +15,7 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
+use App\Models\LiveSession\LiveSessionInCombatEnemy;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
@@ -116,7 +118,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -162,6 +164,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $buffer->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -176,7 +179,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -221,6 +224,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->assertGreaterThan(0, $withSpec, 'Expected at least one player position to have a resolved class & specialization');
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $buffer->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -235,7 +239,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -286,6 +290,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $buffer->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -300,7 +305,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -398,7 +403,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -497,7 +502,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange — fake all live-session broadcasts so neither needs a live Reverb/Pusher connection
-        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -539,6 +544,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $buffer->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -553,7 +559,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange — fake all live-session broadcasts so neither needs a live Reverb/Pusher connection
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -592,6 +598,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             Event::assertDispatched(PlayerMovedEvent::class);
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $buffer->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -606,7 +613,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange — fake all live-session broadcasts so the first run does not need a live Reverb/Pusher connection
-        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -647,7 +654,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 ->count();
 
             // Act — reset the fake before the second run so we only track new dispatches
-            Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+            Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
             $service->processBuffer($liveSession);
 
             // Assert — no new EnemyKilledEvent should be dispatched because all enemies already persisted
@@ -656,6 +663,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $buffer->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -747,6 +755,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         LiveSessionKilledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         LiveSessionOverpulledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         LiveSessionObsoleteEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
+        LiveSessionInCombatEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         KillZoneEnemy::query()->whereIn('kill_zone_id', $killZoneIds)->delete();
 
         foreach ($killZoneIds as $killZoneId) {

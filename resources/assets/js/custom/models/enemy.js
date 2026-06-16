@@ -1074,6 +1074,14 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
+     * Safe default — subclasses (LiveSessionEnemy) override.
+     * @returns {boolean}
+     */
+    isInCombat() {
+        return false;
+    }
+
+    /**
      * Returns an overlay descriptor for the visual layer, or null if no overlay should be shown.
      * Subclasses override this to provide their own state (killed, obsolete, overpulled, included, excluded).
      * @returns {{iconClass: string, colorClass: string}|null}

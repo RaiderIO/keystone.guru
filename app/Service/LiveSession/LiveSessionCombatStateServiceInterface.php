@@ -2,6 +2,7 @@
 
 namespace App\Service\LiveSession;
 
+use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use Illuminate\Support\Collection;
@@ -36,6 +37,20 @@ interface LiveSessionCombatStateServiceInterface
      * @return Collection<int, int>
      */
     public function getKilledEnemyIds(LiveSession $liveSession): Collection;
+
+    /**
+     * Replace the full set of persisted in-combat enemies for this session.
+     *
+     * @param Collection<int, Enemy> $inCombatEnemies
+     */
+    public function replaceInCombatEnemies(LiveSession $liveSession, Collection $inCombatEnemies): void;
+
+    /**
+     * Resolve the in-combat-enemy rows back to live Enemy IDs via the route's mapping version.
+     *
+     * @return Collection<int, int>
+     */
+    public function getInCombatEnemyIds(LiveSession $liveSession): Collection;
 
     /**
      * Upsert the latest known position for a player/character within this session.

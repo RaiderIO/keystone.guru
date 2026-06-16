@@ -80,6 +80,9 @@ class MessageFactory {
             case RouteCorrectionMessage.getName():
                 result = new RouteCorrectionMessage(props);
                 break;
+            case InCombatEnemiesChangedMessage.getName():
+                result = new InCombatEnemiesChangedMessage(props);
+                break;
 
             // Whisper
             case MousePositionMessage.getName():

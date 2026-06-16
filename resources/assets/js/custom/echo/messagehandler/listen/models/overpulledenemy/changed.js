@@ -14,7 +14,7 @@ class OverpulledEnemyChangedHandler extends MessageHandler {
 
         let enemyMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
-        /** @type {Enemy} */
+        /** @type {LiveSessionEnemy} */
         let enemy = enemyMapObjectGroup.findMapObjectById(e.enemy_id);
 
         if (enemy !== null) {
