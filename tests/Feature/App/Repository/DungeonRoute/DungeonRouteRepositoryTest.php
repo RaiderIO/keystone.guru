@@ -92,7 +92,8 @@ final class DungeonRouteRepositoryTest extends PublicTestCase
     {
         // Arrange
         $dungeonRoute = DungeonRoute::factory()->create([
-            'title' => 'UniqueTestRouteTitle12345',
+            'title'      => 'UniqueTestRouteTitle12345',
+            'expires_at' => null,
         ]);
 
         try {
