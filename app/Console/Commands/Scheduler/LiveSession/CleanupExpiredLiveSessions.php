@@ -22,6 +22,7 @@ class CleanupExpiredLiveSessions extends SchedulerCommand
                     $session->overpulledEnemies()->delete();
                     $session->killedEnemies()->delete();
                     $session->obsoleteEnemies()->delete();
+                    $session->inCombatEnemies()->delete();
                     $session->playerPositions()->delete();
                     $session->combatLogBuffer()->delete();
 

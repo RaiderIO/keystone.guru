@@ -13550,5 +13550,37 @@
         "extracted_data": 1,
         "created_at": "2026-05-31T20:01:03+00:00",
         "updated_at": "2026-05-31T20:01:03+00:00"
+    },
+    {
+        "id": 1707,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-06-14T19:35:45+00:00",
+        "updated_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1708,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace_events.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-06-14T19:35:46+00:00",
+        "updated_at": "2026-06-14T19:35:46+00:00"
+    },
+    {
+        "id": 1709,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-06-14T19:35:55+00:00",
+        "updated_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1710,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron_events.txt",
+        "run_id": null,
+        "extracted_data": 1,
+        "created_at": "2026-06-14T19:35:55+00:00",
+        "updated_at": "2026-06-14T19:35:55+00:00"
     }
 ]

@@ -87,7 +87,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
     {
         // Combat log versions yes please
         if ($combatLogEvent instanceof CombatLogVersion) {
-            $this->resultEvents->push((new CombatLogVersionResultEvent($combatLogEvent)));
+            $this->resultEvents->push(new CombatLogVersionResultEvent($combatLogEvent));
 
             return true;
         }
@@ -102,7 +102,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         // Zone changes yes please
         if ($combatLogEvent instanceof ZoneChange) {
             try {
-                $this->resultEvents->push((new ZoneChangeResultEvent($combatLogEvent)));
+                $this->resultEvents->push(new ZoneChangeResultEvent($combatLogEvent));
             } catch (DungeonNotSupportedException) {
                 // It's okay - we can ignore this
 //                if (!in_array($combatLogEvent->getZoneId(), self::IGNORE_MAP_IDS)) {
@@ -116,7 +116,7 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         // Map changes yes please
         if ($combatLogEvent instanceof MapChange) {
             try {
-                $this->resultEvents->push((new MapChangeResultEvent($combatLogEvent)));
+                $this->resultEvents->push(new MapChangeResultEvent($combatLogEvent));
             } catch (FloorNotSupportedException) {
                 // It's okay - we can ignore this
 //                if (!in_array($combatLogEvent->getUiMapID(), self::IGNORE_FLOOR_MAP_UI_IDS)) {

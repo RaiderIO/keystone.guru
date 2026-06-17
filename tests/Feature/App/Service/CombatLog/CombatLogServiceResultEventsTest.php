@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
 
 /**
- * Regression tests that verify BaseCombatFilter correctly detects enemy kills from real combat logs.
+ * Regression tests that verify CombatFilter correctly detects enemy kills from real combat logs.
  * These tests guard against the PhpStan regression (commit a3b5cfb47) where the kill-detection
  * else-branch was narrowed to CombatLogEvent, silently dropping PARTY_KILL/UNIT_DIED events that
  * extend GenericSpecialEvent rather than CombatLogEvent.

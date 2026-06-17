@@ -2,19 +2,16 @@
 
 namespace Tests\Feature\Controller\Api\V1\APILiveSessionCombatLogController;
 
+use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
 use Tests\TestCases\PublicTestCase;
 
-/**
- * @group Controller
- * @group API
- * @group APILiveSessionCombatLog
- */
 #[Group('Controller')]
 #[Group('API')]
 #[Group('APILiveSessionCombatLog')]
@@ -24,6 +21,8 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
     public function store_givenValidLinesAndActiveLiveSession_storesBufferAndReturnsOk(): void
     {
         // Arrange
+        Queue::fake();
+
         /** @var User $user */
         $user = User::findOrFail(1);
         $this->actingAs($user);
@@ -35,7 +34,12 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
             // Act
             $response = $this->postJson(
                 route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
-                ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000', '6/1 12:00:01.000  SPELL_DAMAGE,...']],
+                [
+                    'lines' => [
+                        '6/11/2026 22:23:00.0652  SPELL_CAST_START,Creature-0-3770-658-65522-229227-00002B191E,"Xal\'atath",0xa48,0x80000000,0000000000000000,nil,0x80000000,0x80000000,461870,"Xal\'atath\'s Bargain",0x20',
+                        '6/11/2026 22:23:06.5252  SPELL_CAST_START,Creature-0-3770-658-65522-252567-00052B191E,"Gloombound Shadebringer",0xa48,0x80000000,0000000000000000,nil,0x80000000,0x80000000,1258431,"Shadow Bolt",0x20',
+                    ],
+                ],
             );
 
             // Assert
@@ -53,8 +57,10 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
             $this->assertNotFalse($decoded);
             $lines = explode("\n", $decoded);
             $this->assertCount(2, $lines);
-            $this->assertSame('6/1 12:00:00.000  SPELL_CAST_START,Player-1-000', $lines[0]);
-            $this->assertSame('6/1 12:00:01.000  SPELL_DAMAGE,...', $lines[1]);
+            $this->assertSame('6/11/2026 22:23:00.0652  SPELL_CAST_START,Creature-0-3770-658-65522-229227-00002B191E,"Xal\'atath",0xa48,0x80000000,0000000000000000,nil,0x80000000,0x80000000,461870,"Xal\'atath\'s Bargain",0x20', $lines[0]);
+            $this->assertSame('6/11/2026 22:23:06.5252  SPELL_CAST_START,Creature-0-3770-658-65522-252567-00052B191E,"Gloombound Shadebringer",0xa48,0x80000000,0000000000000000,nil,0x80000000,0x80000000,1258431,"Shadow Bolt",0x20', $lines[1]);
+
+            Queue::assertPushed(ProcessLiveSessionCombatLogBuffer::class);
         } finally {
             LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
@@ -186,6 +192,8 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
     public function store_givenMultipleBatches_accumulatesBufferCorrectly(): void
     {
         // Arrange
+        Queue::fake();
+
         /** @var User $user */
         $user = User::findOrFail(1);
         $this->actingAs($user);
@@ -235,6 +243,8 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
     public function store_givenDuplicateBatchSequence_skipsAndReturnsOk(): void
     {
         // Arrange
+        Queue::fake();
+
         /** @var User $user */
         $user = User::findOrFail(1);
         $this->actingAs($user);

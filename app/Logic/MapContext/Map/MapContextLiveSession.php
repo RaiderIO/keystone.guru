@@ -53,13 +53,14 @@ class MapContextLiveSession extends MapContextDungeonRoute
         return array_merge(parent::toArray(), [
             'liveSessionPublicKey' => $this->liveSession->public_key,
             'expiresInSeconds'     => $this->liveSession->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->liveSession->getEnemies()->pluck('id'),
+            'overpulledEnemies'    => $this->liveSession->mapContextOverpulledEnemies(),
             'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies()
                 ->merge($this->combatStateService->getObsoleteEnemyIds($this->liveSession))
                 ->unique()
                 ->values(),
             'enemyForcesOverride' => $routeCorrection->getEnemyForces(),
             'killedEnemies'       => $this->liveSession->mapContextKilledEnemyIds(),
+            'inCombatEnemies'     => $this->liveSession->mapContextInCombatEnemyIds(),
             'playerPositions'     => $this->liveSession->mapContextPlayerPositions($this->coordinatesService, $useFacade),
         ]);
     }

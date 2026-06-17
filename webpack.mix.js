@@ -202,6 +202,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmanager.js',
     'resources/assets/js/custom/enemyforces/enemyforcesmanager.js',
+    'resources/assets/js/custom/enemyforces/livesessionenemyforcesmanager.js',
 
     // Map Context
     'resources/assets/js/custom/mapcontext/mapcontext.js',
@@ -222,6 +223,7 @@ let scripts = [
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/modelmessage.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/incombatchanged.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/message/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
@@ -248,6 +250,7 @@ let scripts = [
 
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/incombatchanged.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/routecorrection.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
@@ -287,6 +290,8 @@ let scripts = [
     'resources/assets/js/custom/models/versionablemapobject.js',
     'resources/assets/js/custom/models/polyline.js',
     'resources/assets/js/custom/models/enemy.js',
+    'resources/assets/js/custom/models/livesessionenemy.js',
+    'resources/assets/js/custom/models/searchenemy.js',
     'resources/assets/js/custom/models/pridefulenemy.js',
     'resources/assets/js/custom/models/enemypatrol.js',
     'resources/assets/js/custom/models/enemypack.js',

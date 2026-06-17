@@ -227,7 +227,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $this->isContextCached = true;
     }
 
-    private function shouldLog(Level $level): bool
+    protected function shouldLog(Level $level): bool
     {
         // Higher than does not include the level itself, so negate lower than instead
         return self::$ENABLED && !$level->isLowerThan(self::getLogLevel());

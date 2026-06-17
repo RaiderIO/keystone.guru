@@ -33,6 +33,7 @@ use Override;
  * @property EloquentCollection<int, LiveSessionOverpulledEnemy> $overpulledEnemies
  * @property EloquentCollection<int, LiveSessionKilledEnemy>     $killedEnemies
  * @property EloquentCollection<int, LiveSessionObsoleteEnemy>   $obsoleteEnemies
+ * @property EloquentCollection<int, LiveSessionInCombatEnemy>   $inCombatEnemies
  * @property EloquentCollection<int, LiveSessionPlayerPosition>  $playerPositions
  * @property Carbon|null                                         $expires_at
  *
@@ -103,6 +104,11 @@ class LiveSession extends Model
         return $this->hasMany(LiveSessionObsoleteEnemy::class);
     }
 
+    public function inCombatEnemies(): HasMany
+    {
+        return $this->hasMany(LiveSessionInCombatEnemy::class);
+    }
+
     public function playerPositions(): HasMany
     {
         return $this->hasMany(LiveSessionPlayerPosition::class);
@@ -154,6 +160,25 @@ class LiveSession extends Model
     }
 
     /**
+     * Resolve the in-combat-enemy rows back to live Enemy IDs via the route's mapping version.
+     *
+     * @return Collection<int, int>
+     */
+    public function mapContextInCombatEnemyIds(): Collection
+    {
+        return Enemy::select('enemies.id')
+            ->join('live_session_in_combat_enemies', static function (JoinClause $clause) {
+                $clause->on('live_session_in_combat_enemies.npc_id', 'enemies.npc_id')
+                    ->on('live_session_in_combat_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('live_sessions', 'live_sessions.id', 'live_session_in_combat_enemies.live_session_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
+            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('live_session_in_combat_enemies.live_session_id', $this->id)
+            ->pluck('enemies.id');
+    }
+
+    /**
      * @return EloquentCollection<int, Enemy>
      */
     public function getEnemies(): EloquentCollection
@@ -168,6 +193,30 @@ class LiveSession extends Model
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
             ->where('live_session_overpulled_enemies.live_session_id', $this->id)
             ->get();
+    }
+
+    /**
+     * Resolve the overpulled-enemy rows to live Enemy IDs (via the route's mapping version), each paired
+     * with the kill zone it was attributed to. The frontend restores overpulled state from this shape.
+     *
+     * @return Collection<int, array{enemy_id: int, kill_zone_id: int}>
+     */
+    public function mapContextOverpulledEnemies(): Collection
+    {
+        return Enemy::select('enemies.id', 'live_session_overpulled_enemies.kill_zone_id')
+            ->join('live_session_overpulled_enemies', static function (JoinClause $clause) {
+                $clause->on('live_session_overpulled_enemies.npc_id', 'enemies.npc_id')
+                    ->on('live_session_overpulled_enemies.mdt_id', 'enemies.mdt_id');
+            })
+            ->join('live_sessions', 'live_sessions.id', 'live_session_overpulled_enemies.live_session_id')
+            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
+            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
+            ->where('live_session_overpulled_enemies.live_session_id', $this->id)
+            ->get()
+            ->map(static fn(Enemy $enemy): array => [
+                'enemy_id'     => (int)$enemy->id,
+                'kill_zone_id' => (int)$enemy->getAttribute('kill_zone_id'),
+            ]);
     }
 
     public function isExpired(): bool
@@ -197,6 +246,7 @@ class LiveSession extends Model
             $item->overpulledEnemies()->delete();
             $item->killedEnemies()->delete();
             $item->obsoleteEnemies()->delete();
+            $item->inCombatEnemies()->delete();
             $item->playerPositions()->delete();
         });
     }

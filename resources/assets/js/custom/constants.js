@@ -671,7 +671,7 @@ let c = {
             // How often to send the mouse frequency, in milliseconds
             mouseSendFrequencyMs: 500,
             // The maximum time a received player position is allowed to glide to its new location, in milliseconds
-            playerPositionSmoothingMaxMs: 15000,
+            playerPositionSmoothingMaxMs: 10000,
             // The amount of users before an overflow is initiated
             userOverflowCount: 1
         },
