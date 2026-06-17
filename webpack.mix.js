@@ -297,6 +297,7 @@ let scripts = [
     'resources/assets/js/custom/models/enemypack.js',
     'resources/assets/js/custom/models/path.js',
     'resources/assets/js/custom/models/killzone.js',
+    'resources/assets/js/custom/models/livesessionkillzone.js',
     'resources/assets/js/custom/models/killzonepath.js',
     'resources/assets/js/custom/models/icon.js',
     'resources/assets/js/custom/models/mapicon.js',
@@ -324,7 +325,6 @@ let scripts = [
     'resources/assets/js/custom/mapstate/enemyselection/editkillzoneenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemypatrolenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
-    'resources/assets/js/custom/mapstate/enemyselection/selectkillzoneenemyselectionoverpull.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
     'resources/assets/js/custom/enemyvisuals/enemyvisual.js',
