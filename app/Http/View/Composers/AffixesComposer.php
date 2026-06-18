@@ -16,14 +16,14 @@ class AffixesComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
+        $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
         $view->with('allExpansions', $this->viewService->getAllExpansions()->pluck('id', 'shortname'));
         $view->with('dungeonExpansions', $this->viewService->getDungeonExpansions());
         $view->with('affixes', $this->viewService->getAllAffixes());
-        $view->with('currentSeason', $regionViewVariables['currentSeason']);
-        $view->with('nextSeason', $regionViewVariables['nextSeason']);
-        $view->with('allAffixGroups', $regionViewVariables['allAffixGroups']);
-        $view->with('expansionsData', $regionViewVariables['expansionsData']);
-        $view->with('currentAffixes', $regionViewVariables['allCurrentAffixes']);
+        $view->with('currentSeason', $this->viewService->getCurrentSeasonForRegion($gameServerRegion));
+        $view->with('nextSeason', $this->viewService->getNextSeasonForRegion($gameServerRegion));
+        $view->with('allAffixGroups', $this->viewService->getAllAffixGroupsForRegion($gameServerRegion));
+        $view->with('expansionsData', $this->viewService->getExpansionsData($gameServerRegion));
+        $view->with('currentAffixes', $this->viewService->getAllCurrentAffixesForRegion($gameServerRegion));
     }
 }

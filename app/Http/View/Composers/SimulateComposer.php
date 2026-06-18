@@ -20,9 +20,8 @@ class SimulateComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
         /** @var Season $currentSeason */
-        $currentSeason     = $regionViewVariables['currentSeason'];
+        $currentSeason     = $this->viewService->getCurrentSeasonForRegion($this->requestViewContext->getUserOrDefaultRegion());
         $currentAffixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
         $view->with('isThundering', $currentAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
     }

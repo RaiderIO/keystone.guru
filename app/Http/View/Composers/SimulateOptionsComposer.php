@@ -23,7 +23,6 @@ class SimulateOptionsComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
         $shroudedBountyTypes = [];
         foreach (SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {
             $shroudedBountyTypes[$bountyType] = __(sprintf('view_common.modal.simulate.shrouded_bounty_types.%s', $bountyType));
@@ -33,7 +32,7 @@ class SimulateOptionsComposer
             $affixes[$affix] = __(sprintf('view_common.modal.simulateoptions.default.affixes_map.%s', $affix));
         }
         /** @var Season $currentSeason */
-        $currentSeason     = $regionViewVariables['currentSeason'];
+        $currentSeason     = $this->viewService->getCurrentSeasonForRegion($this->requestViewContext->getUserOrDefaultRegion());
         $currentAffixGroup = $this->seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
         $view->with('shroudedBountyTypes', $shroudedBountyTypes);
         $view->with('affixes', $affixes);

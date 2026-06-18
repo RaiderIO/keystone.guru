@@ -16,10 +16,10 @@ class HeatmapSearchComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
+        $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
         $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
-        $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
-        $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
+        $view->with('allAffixGroupsByActiveExpansion', $this->viewService->getAllAffixGroupsByActiveExpansion($gameServerRegion));
+        $view->with('featuredAffixesByActiveExpansion', $this->viewService->getFeaturedAffixesByActiveExpansion($gameServerRegion));
 
         $view->with('characterClassSpecializations', $this->viewService->getCharacterClassSpecializations());
         $view->with('characterClasses', $this->viewService->getCharacterClasses());

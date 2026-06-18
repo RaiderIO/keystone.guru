@@ -18,11 +18,11 @@ class HomeComposer
     public function compose(View $view): void
     {
         $view->with('userCount', $this->viewService->getUserCount());
+        $view->with('demoRoutes', $this->viewService->getDemoRoutes());
         $view->with('demoRouteDungeons', $this->viewService->getDemoRouteDungeons());
         $view->with('demoRouteMapping', $this->viewService->getDemoRouteMapping());
 
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
-        $view->with('currentSeason', $regionViewVariables['currentSeason']);
+        $view->with('currentSeason', $this->viewService->getCurrentSeasonForRegion($this->requestViewContext->getUserOrDefaultRegion()));
         $view->with('defaultGameVersion', GameVersion::getDefaultGameVersion());
     }
 }

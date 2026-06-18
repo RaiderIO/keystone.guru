@@ -16,11 +16,11 @@ class DiscoverSearchComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
-        $view->with('currentExpansion', $regionViewVariables['currentExpansion']);
-        $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
-        $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
-        $view->with('currentSeason', $regionViewVariables['currentSeason']);
-        $view->with('nextSeason', $regionViewVariables['nextSeason']);
+        $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
+        $view->with('currentExpansion', $this->viewService->getCurrentExpansionForRegion($gameServerRegion));
+        $view->with('allAffixGroupsByActiveExpansion', $this->viewService->getAllAffixGroupsByActiveExpansion($gameServerRegion));
+        $view->with('featuredAffixesByActiveExpansion', $this->viewService->getFeaturedAffixesByActiveExpansion($gameServerRegion));
+        $view->with('currentSeason', $this->viewService->getCurrentSeasonForRegion($gameServerRegion));
+        $view->with('nextSeason', $this->viewService->getNextSeasonForRegion($gameServerRegion));
     }
 }

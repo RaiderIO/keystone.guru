@@ -19,17 +19,20 @@ class RouteCoverageAffixGroupComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
-        /** @var Season $selectedSeason */
-        $selectedSeason         = $regionViewVariables['currentSeason'];
+        $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
+        /** @var Season $currentSeason */
+        $currentSeason = $this->viewService->getCurrentSeasonForRegion($gameServerRegion);
+        $nextSeason    = $this->viewService->getNextSeasonForRegion($gameServerRegion);
+
+        $selectedSeason         = $currentSeason;
         $cookieSelectedSeasonId = isset($_COOKIE['dungeonroute_coverage_season_id']) ? (int)$_COOKIE['dungeonroute_coverage_season_id'] : 0;
-        if ($cookieSelectedSeasonId !== $regionViewVariables['currentSeason']->id &&
-            $regionViewVariables['nextSeason'] !== null &&
-            $cookieSelectedSeasonId === $regionViewVariables['nextSeason']->id) {
-            $selectedSeason = $regionViewVariables['nextSeason'];
+        if ($cookieSelectedSeasonId !== $currentSeason->id &&
+            $nextSeason !== null &&
+            $cookieSelectedSeasonId === $nextSeason->id) {
+            $selectedSeason = $nextSeason;
         }
-        $view->with('currentSeason', $regionViewVariables['currentSeason']);
-        $view->with('nextSeason', $regionViewVariables['nextSeason']);
+        $view->with('currentSeason', $currentSeason);
+        $view->with('nextSeason', $nextSeason);
         $view->with('selectedSeason', $selectedSeason);
         $view->with('currentAffixGroup', $this->seasonAffixGroupService->getCurrentAffixGroup($selectedSeason));
         $view->with('affixGroups', $selectedSeason->affixGroups);

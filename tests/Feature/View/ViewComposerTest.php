@@ -66,7 +66,7 @@ final class ViewComposerTest extends PublicTestCase
     public function globalComposer_givenView_setsRequestScopedKeys(): void
     {
         $this->assertComposerSetsKeys(GlobalComposer::class, 'home', [
-            'isMobile', 'isLocal', 'isMapping', 'isProduction', 'demoRoutes', 'viewName',
+            'isMobile', 'isLocal', 'isMapping', 'isProduction', 'viewName',
             'theme', 'isUserAdmin', 'adFree', 'userOrDefaultRegion', 'currentUserGameVersion', 'numUserReports',
         ]);
     }
@@ -75,7 +75,7 @@ final class ViewComposerTest extends PublicTestCase
     public function homeComposer_givenView_setsHomeKeys(): void
     {
         $this->assertComposerSetsKeys(HomeComposer::class, 'home', [
-            'userCount', 'demoRouteDungeons', 'demoRouteMapping', 'currentSeason', 'defaultGameVersion',
+            'userCount', 'demoRoutes', 'demoRouteDungeons', 'demoRouteMapping', 'currentSeason', 'defaultGameVersion',
         ]);
     }
 

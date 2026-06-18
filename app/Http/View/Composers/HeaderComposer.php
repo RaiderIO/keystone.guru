@@ -19,11 +19,11 @@ class HeaderComposer
 
     public function compose(View $view): void
     {
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
+        $gameServerRegion = $this->requestViewContext->getUserOrDefaultRegion();
 
         $view->with('activeExpansions', $this->viewService->getActiveExpansions());
-        $view->with('currentSeason', $regionViewVariables['currentSeason']);
-        $view->with('nextSeason', $regionViewVariables['nextSeason']);
+        $view->with('currentSeason', $this->viewService->getCurrentSeasonForRegion($gameServerRegion));
+        $view->with('nextSeason', $this->viewService->getNextSeasonForRegion($gameServerRegion));
         $view->with('allGameVersions', $this->viewService->getAllGameVersions());
 
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();

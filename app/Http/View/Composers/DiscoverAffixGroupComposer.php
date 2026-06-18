@@ -25,10 +25,10 @@ class DiscoverAffixGroupComposer
         $gameVersion->load(['expansion']);
 
         /** @var Expansion|null $expansion */
-        $expansion           = $view->getData()['expansion'] ?? null;
-        $regionViewVariables = $this->viewService->getGameServerRegionViewVariables($this->requestViewContext->getUserOrDefaultRegion());
+        $expansion = $view->getData()['expansion'] ?? null;
         /** @var ExpansionData $expansionsData */
-        $expansionsData = $regionViewVariables['expansionsData']->get(($expansion ?? $gameVersion->expansion)->shortname);
+        $expansionsData = $this->viewService->getExpansionsData($this->requestViewContext->getUserOrDefaultRegion())
+            ->get(($expansion ?? $gameVersion->expansion)->shortname);
         $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
         $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
     }

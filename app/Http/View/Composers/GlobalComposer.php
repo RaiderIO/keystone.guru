@@ -23,7 +23,6 @@ class GlobalComposer
         $view->with('isLocal', $this->viewService->isLocal());
         $view->with('isMapping', $this->viewService->isMapping());
         $view->with('isProduction', $this->viewService->isProduction());
-        $view->with('demoRoutes', $this->viewService->getDemoRoutes());
 
         // Don't include the viewName in the layouts - they must inherit from whatever calls it!
         if (!str_starts_with((string)$view->getName(), 'layouts')) {

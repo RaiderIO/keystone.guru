@@ -3,6 +3,7 @@
 namespace App\Service\View;
 
 use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
@@ -16,7 +17,9 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
+use App\Models\Season;
 use App\Models\Spell\Spell;
+use App\Service\Expansion\ExpansionData;
 use Illuminate\Support\Collection;
 
 interface ViewServiceInterface
@@ -156,6 +159,37 @@ interface ViewServiceInterface
     public function getAllSpeedrunDungeons(): Collection;
 
     public function warmGlobalCaches(): void;
+
+    public function getCurrentExpansionForRegion(GameServerRegion $gameServerRegion): Expansion;
+
+    public function getCurrentSeasonForRegion(GameServerRegion $gameServerRegion): ?Season;
+
+    public function getNextSeasonForRegion(GameServerRegion $gameServerRegion): ?Season;
+
+    /**
+     * @return Collection<string, ExpansionData>
+     */
+    public function getExpansionsData(GameServerRegion $gameServerRegion): Collection;
+
+    /**
+     * @return Collection<int, AffixGroup>
+     */
+    public function getAllAffixGroupsForRegion(GameServerRegion $gameServerRegion): Collection;
+
+    /**
+     * @return Collection<string, AffixGroup|null>
+     */
+    public function getAllCurrentAffixesForRegion(GameServerRegion $gameServerRegion): Collection;
+
+    /**
+     * @return Collection<string, Collection<int, AffixGroup>>
+     */
+    public function getAllAffixGroupsByActiveExpansion(GameServerRegion $gameServerRegion): Collection;
+
+    /**
+     * @return Collection<string, Collection<int, Affix>>
+     */
+    public function getFeaturedAffixesByActiveExpansion(GameServerRegion $gameServerRegion): Collection;
 
     /**
      * @param bool $useCache True to use the cache, false to regenerate it.

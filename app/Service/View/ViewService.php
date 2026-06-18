@@ -3,6 +3,7 @@
 namespace App\Service\View;
 
 use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
@@ -16,6 +17,7 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
+use App\Models\Season;
 use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
@@ -397,72 +399,176 @@ class ViewService implements ViewServiceInterface
         $this->forceRefresh = false;
     }
 
-    public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
+    public function getCurrentExpansionForRegion(GameServerRegion $gameServerRegion): Expansion
     {
-        $viewVariablesGameServerRegionKey = sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short);
+        return $this->cachedGlobal(
+            sprintf('current_expansion:%s', $gameServerRegion->short),
+            fn() => $this->expansionService->getCurrentExpansion($gameServerRegion),
+            3600,
+        );
+    }
 
-        // Lower cache duration since current/next expansion and season may change every hour
-        return $this->rememberLocal($viewVariablesGameServerRegionKey, 3600, fn() => $this->cacheService->setCacheEnabled($useCache)->remember(
-            $viewVariablesGameServerRegionKey,
+    public function getCurrentSeasonForRegion(GameServerRegion $gameServerRegion): ?Season
+    {
+        return $this->cachedGlobal(
+            sprintf('current_season:%s', $gameServerRegion->short),
+            fn() => $this->expansionService->getCurrentSeason($this->getCurrentExpansionForRegion($gameServerRegion), $gameServerRegion),
+            3600,
+        );
+    }
+
+    public function getNextSeasonForRegion(GameServerRegion $gameServerRegion): ?Season
+    {
+        return $this->cachedGlobal(
+            sprintf('next_season:%s', $gameServerRegion->short),
             function () use ($gameServerRegion) {
-                // So we're already caching the result of this function, Model Cache doesn't need to be involved at this time
-                // The results will likely explode the model cache (and redis usage as a result) so don't use it
-                $currentExpansion = $this->expansionService->getCurrentExpansion($gameServerRegion);
-                $currentSeason    = $this->expansionService->getCurrentSeason($currentExpansion, $gameServerRegion);
-
                 // Fall back to the current expansion if the next expansion is not known yet, then the next season
                 // is still part of the current expansion
-                $nextExpansion = $this->expansionService->getNextExpansion($gameServerRegion) ?? $currentExpansion;
-                $nextSeason    = $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
+                $nextExpansion = $this->expansionService->getNextExpansion($gameServerRegion) ?? $this->getCurrentExpansionForRegion($gameServerRegion);
 
+                return $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
+            },
+            3600,
+        );
+    }
+
+    /**
+     * @return Collection<string, ExpansionData>
+     */
+    public function getExpansionsData(GameServerRegion $gameServerRegion): Collection
+    {
+        return $this->cachedGlobal(
+            sprintf('expansions_data:%s', $gameServerRegion->short),
+            function () use ($gameServerRegion) {
                 $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
 
-                /** @var Collection<ExpansionData> $expansionsData */
+                /** @var Collection<string, ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
                     $expansionsData->put($expansion->shortname, $this->expansionService->getData($this->seasonAffixGroupService, $expansion, $gameServerRegion));
                 }
 
-                /** @var Collection<Expansion> $activeExpansions */
-                $activeExpansions = Expansion::active()->with('dungeonsAndRaids')->orderBy('released_at', 'desc')->get();
+                return $expansionsData;
+            },
+            3600,
+        );
+    }
 
-                // Build a list of all valid affix groups we may select across all currently active seasons
-                $allAffixGroups    = collect();
-                $allCurrentAffixes = collect();
-                foreach ($expansionsData as $expansionData) {
+    /**
+     * All valid affix groups we may select across all seasons (used by the create-route affix selector).
+     *
+     * @return Collection<int, AffixGroup>
+     */
+    public function getAllAffixGroupsForRegion(GameServerRegion $gameServerRegion): Collection
+    {
+        return $this->cachedGlobal(
+            sprintf('all_affix_groups:%s', $gameServerRegion->short),
+            function () use ($gameServerRegion) {
+                $allAffixGroups = collect();
+                foreach ($this->getExpansionsData($gameServerRegion) as $expansionData) {
                     $allAffixGroups = $allAffixGroups->merge($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                }
+
+                return $allAffixGroups;
+            },
+            3600,
+        );
+    }
+
+    /**
+     * The current affix group per expansion shortname (used by the create-route affix selector).
+     *
+     * @return Collection<string, AffixGroup|null>
+     */
+    public function getAllCurrentAffixesForRegion(GameServerRegion $gameServerRegion): Collection
+    {
+        return $this->cachedGlobal(
+            sprintf('all_current_affixes:%s', $gameServerRegion->short),
+            function () use ($gameServerRegion) {
+                $allCurrentAffixes = collect();
+                foreach ($this->getExpansionsData($gameServerRegion) as $expansionData) {
                     $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
                 }
 
-                // Gather all affix groups by active expansions
-                $allAffixGroupsByActiveExpansion  = collect();
-                $featuredAffixesByActiveExpansion = collect();
-                foreach ($activeExpansions as $activeExpansion) {
+                return $allCurrentAffixes;
+            },
+            3600,
+        );
+    }
+
+    /**
+     * All affix groups grouped by active expansion shortname (used by the discover/heatmap search filters).
+     *
+     * @return Collection<string, Collection<int, AffixGroup>>
+     */
+    public function getAllAffixGroupsByActiveExpansion(GameServerRegion $gameServerRegion): Collection
+    {
+        return $this->cachedGlobal(
+            sprintf('all_affix_groups_by_active_expansion:%s', $gameServerRegion->short),
+            function () use ($gameServerRegion) {
+                $expansionsData                  = $this->getExpansionsData($gameServerRegion);
+                $allAffixGroupsByActiveExpansion = collect();
+                foreach ($this->getActiveExpansions() as $activeExpansion) {
                     /** @var ExpansionData $expansionData */
                     $expansionData = $expansionsData->get($activeExpansion->shortname);
                     $allAffixGroupsByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                }
+
+                return $allAffixGroupsByActiveExpansion;
+            },
+            3600,
+        );
+    }
+
+    /**
+     * The featured affixes grouped by active expansion shortname (used by the discover/heatmap search filters).
+     *
+     * @return Collection<string, Collection<int, Affix>>
+     */
+    public function getFeaturedAffixesByActiveExpansion(GameServerRegion $gameServerRegion): Collection
+    {
+        return $this->cachedGlobal(
+            sprintf('featured_affixes_by_active_expansion:%s', $gameServerRegion->short),
+            function () use ($gameServerRegion) {
+                $expansionsData                   = $this->getExpansionsData($gameServerRegion);
+                $featuredAffixesByActiveExpansion = collect();
+                foreach ($this->getActiveExpansions() as $activeExpansion) {
+                    /** @var ExpansionData $expansionData */
+                    $expansionData = $expansionsData->get($activeExpansion->shortname);
                     $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
                 }
 
-                return [
-                    // Expansions/season data
-                    'expansionsData' => $expansionsData,
-
-                    'currentSeason'    => $currentSeason,
-                    'nextSeason'       => $nextSeason,
-                    'currentExpansion' => $currentExpansion,
-
-                    // Search
-                    'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,
-                    'featuredAffixesByActiveExpansion' => $featuredAffixesByActiveExpansion,
-
-                    // Create route
-                    'allAffixGroups'    => $allAffixGroups,
-                    'allCurrentAffixes' => $allCurrentAffixes,
-                ];
+                return $featuredAffixesByActiveExpansion;
             },
-            config('keystoneguru.cache.global_view_variables.ttl'),
-        ));
+            3600,
+        );
+    }
+
+    public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
+    {
+        $previousForceRefresh = $this->forceRefresh;
+        $this->forceRefresh   = $this->forceRefresh || !$useCache;
+
+        try {
+            return [
+                // Expansions/season data
+                'expansionsData' => $this->getExpansionsData($gameServerRegion),
+
+                'currentSeason'    => $this->getCurrentSeasonForRegion($gameServerRegion),
+                'nextSeason'       => $this->getNextSeasonForRegion($gameServerRegion),
+                'currentExpansion' => $this->getCurrentExpansionForRegion($gameServerRegion),
+
+                // Search
+                'allAffixGroupsByActiveExpansion'  => $this->getAllAffixGroupsByActiveExpansion($gameServerRegion),
+                'featuredAffixesByActiveExpansion' => $this->getFeaturedAffixesByActiveExpansion($gameServerRegion),
+
+                // Create route
+                'allAffixGroups'    => $this->getAllAffixGroupsForRegion($gameServerRegion),
+                'allCurrentAffixes' => $this->getAllCurrentAffixesForRegion($gameServerRegion),
+            ];
+        } finally {
+            $this->forceRefresh = $previousForceRefresh;
+        }
     }
 
     public function shouldLoadViewVariables(string $pathInfo): bool
@@ -492,14 +598,17 @@ class ViewService implements ViewServiceInterface
 
     /**
      * Memoizes (per request) and caches (per release) the result of $compute under its own cache key.
+     *
+     * Region/season-sensitive data should pass a shorter $localTtl (e.g. 3600) since the current/next
+     * expansion and season can change every hour.
      */
-    private function cachedGlobal(string $name, Closure $compute): mixed
+    private function cachedGlobal(string $name, Closure $compute, int $localTtl = 86400): mixed
     {
         $key = sprintf('view_data:%s:%s', $this->release, $name);
 
         return once(fn() => $this->rememberLocal(
             $key,
-            86400,
+            $localTtl,
             fn() => $this->cacheService->setCacheEnabled(!$this->forceRefresh)
                 ->remember($key, $compute, config('keystoneguru.cache.global_view_variables.ttl')),
         ));
