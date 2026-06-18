@@ -177,9 +177,11 @@ class CacheService implements CacheServiceInterface
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
             // Dungeon data used in MapContext
             sprintf('/%sdungeon_\d+_\d+_[a-z_]+/', $prefix),
-            sprintf('/%sview_variables:game_server_region:[a-z]+/', $prefix),
+            // Per-region view variables, keyed by release: view_variables:{release}:game_server_region:{short}
+            sprintf('/%sview_variables:[a-z0-9.]+:game_server_region:[a-z]+/', $prefix),
+            // Granular global view data, keyed by release: view_data:{release}:{name}
+            sprintf('/%sview_data:[a-z0-9.]+:[a-z_]+/', $prefix),
         ]);
-        $this->unset('view_variables:global');
     }
 
     public function clearIdleKeys(?int $seconds = null): int

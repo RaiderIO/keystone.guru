@@ -24,6 +24,8 @@ use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
+use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
@@ -48,6 +50,9 @@ class ViewService implements ViewServiceInterface
 
     private string $release;
 
+    /** @var bool When true, every cached getter bypasses the cache read and recomputes (used when warming). */
+    private bool $forceRefresh = false;
+
     public function __construct(
         private readonly CacheServiceInterface              $cacheService,
         private readonly ExpansionServiceInterface          $expansionService,
@@ -59,155 +64,337 @@ class ViewService implements ViewServiceInterface
         $this->release = file_get_contents(base_path('version')) ?: 'unknown';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getGlobalViewVariables(bool $useCache = true): array
+    public function isLocal(): bool
     {
-        $viewVariablesKey = sprintf('view_variables:%s:global', $this->release);
+        return config('app.env') === 'local';
+    }
 
-        return $this->rememberLocal($viewVariablesKey, 86400, fn() => $this->cacheService->setCacheEnabled($useCache)->remember($viewVariablesKey, function () {
-            // Build a list of some common
-            $demoRoutes = DungeonRoute::where('demo', true)
-                ->join('mapping_versions', 'mapping_versions.id', '=', 'dungeon_routes.mapping_version_id')
-                ->where('mapping_versions.game_version_id', GameVersion::getDefaultGameVersion()->id)
-                ->without(['thumbnails'])
-                ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
-                ->orderBy('dungeon_routes.dungeon_id')
-                ->get();
+    public function isMapping(): bool
+    {
+        return config('app.env') === 'mapping';
+    }
 
-            $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
+    public function isProduction(): bool
+    {
+        return config('app.env') === 'production';
+    }
 
-            $dungeonsSelectQuery = Dungeon::select('dungeons.*')
-                ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                ->orderByRaw('expansions.released_at DESC, dungeons.name');
-            $raidsSelectQuery = $dungeonsSelectQuery->clone()
-                ->where('dungeons.raid', true);
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
+    public function getDemoRoutes(): Collection
+    {
+        return $this->cachedGlobal('demo_routes', static fn() => DungeonRoute::where('demo', true)
+            ->join('mapping_versions', 'mapping_versions.id', '=', 'dungeon_routes.mapping_version_id')
+            ->where('mapping_versions.game_version_id', GameVersion::getDefaultGameVersion()->id)
+            ->without(['thumbnails'])
+            ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
+            ->orderBy('dungeon_routes.dungeon_id')
+            ->get());
+    }
 
-            $allDungeonsByExpansionId = $dungeonsSelectQuery
-                ->where('dungeons.raid', false)
-                ->get();
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getDemoRouteDungeons(): Collection
+    {
+        return $this->cachedGlobal('demo_route_dungeons', fn() => Dungeon::whereIn('id', $this->getDemoRoutes()->pluck(['dungeon_id']))->get());
+    }
 
-            $allRaidsByExpansionId = $raidsSelectQuery
-                ->get();
+    /**
+     * @return Collection<int, string>
+     */
+    public function getDemoRouteMapping(): Collection
+    {
+        return $this->cachedGlobal('demo_route_mapping', fn() => $this->getDemoRouteDungeons()
+            ->mapWithKeys(fn(Dungeon $dungeon) => [$dungeon->id => $this->getDemoRoutes()->where('dungeon_id', $dungeon->id)->first()->public_key]));
+    }
 
-            $activeDungeonsByExpansionId = $dungeonsSelectQuery
-                ->where('expansions.active', true)
-                ->where('dungeons.active', true)
-                ->get();
-
-            $activeRaidsByExpansionId = $raidsSelectQuery
-                ->where('expansions.active', true)
-                ->where('dungeons.active', true)
-                ->get();
-
+    public function getLatestRelease(): Release
+    {
+        return $this->cachedGlobal('latest_release', static function (): Release {
             /** @var Release $latestRelease */
             $latestRelease = Release::latest()->first();
-            /** @var Release $latestReleaseSpotlight */
-            $latestReleaseSpotlight = Release::where('spotlight', true)
-                ->whereDate(
-                    'created_at',
-                    '>',
-                    Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString(),
-                )->first();
 
-            $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::with([
-                'dungeons',
-                'raids',
-            ])->orderBy('released_at', 'desc')->get();
+            return $latestRelease;
+        });
+    }
 
-            /** @var Collection<Expansion> $activeExpansions */
-            $activeExpansions = Expansion::active()->with([
-                'dungeons',
-                'raids',
-            ])->orderBy('released_at', 'desc')->get();
+    public function getLatestReleaseSpotlight(): ?Release
+    {
+        return $this->cachedGlobal('latest_release_spotlight', static fn() => Release::where('spotlight', true)
+            ->whereDate(
+                'created_at',
+                '>',
+                Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString(),
+            )->first());
+    }
 
-            // Spells
-            $selectableSpellsByCategory = Spell::where('selectable', true)
-                ->orderByRaw("CASE WHEN category = 'spells.category.general' THEN 0 ELSE 1 END")
-                ->orderBy('category')
-                ->orderBy('name')
-                ->get()
-                ->groupBy('category')
-                // Do NOT localize the keys, they are used in the frontend which can have a different locale
-                ->mapWithKeys(static fn(Collection $spells, string $key) => [$key => $spells]);
-
+    /**
+     * @return array{version: string, revision: string, nameAndVersion: string}
+     */
+    public function getAppVersionInfo(): array
+    {
+        return $this->cachedGlobal('app_version_info', function (): array {
             $appRevision = trim(file_get_contents(base_path('version')));
+            $version     = $this->getLatestRelease()->version;
 
             return [
-                'isLocal'           => config('app.env') === 'local',
-                'isMapping'         => config('app.env') === 'mapping',
-                'isProduction'      => config('app.env') === 'production',
-                'demoRoutes'        => $demoRoutes,
-                'demoRouteDungeons' => $demoRouteDungeons,
-                'demoRouteMapping'  => $demoRouteDungeons
-                    ->mapWithKeys(static fn(
-                        Dungeon $dungeon,
-                    ) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
-                'latestRelease'          => $latestRelease,
-                'latestReleaseSpotlight' => $latestReleaseSpotlight,
-                'appVersion'             => $latestRelease->version,
-                'appRevision'            => $appRevision,
-                'appVersionAndName'      => sprintf(
+                'version'        => $version,
+                'revision'       => $appRevision,
+                'nameAndVersion' => sprintf(
                     '%s® © 2018-%d %s - %s (%s), MDT %s',
                     config('app.name'),
                     date('Y'),
                     'RaiderIO, Inc.',
-                    $latestRelease->version,
+                    $version,
                     substr($appRevision, 0, 6),
                     config('keystoneguru.mdt.version'),
                 ),
-
-                // Home
-                'userCount' => (int)(User::count() / 1000) * 1000,
-
-                // OAuth/register
-                'allRegions' => $allRegions,
-
-                // Composition
-                'allFactions' => Faction::all(),
-
-                // Changelog
-                'releaseChangelogCategories' => ReleaseChangelogCategory::all(),
-
-                // Map
-                'characterClassSpecializations' => CharacterClassSpecialization::with('class')->orderBy('name')->get(),
-                'characterClasses'              => CharacterClass::with('specializations')->orderBy('name')->get(),
-                // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'      => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
-                'allAffixes'                 => Affix::all(),
-                'allRouteAttributes'         => RouteAttribute::all(),
-                'allPublishedStates'         => PublishedState::all(),
-                'selectableSpellsByCategory' => $selectableSpellsByCategory,
-
-                // Misc
-                'allGameVersions'  => GameVersion::active()->get(),
-                'activeExpansions' => $activeExpansions,
-                // Show most recent expansions first
-                'allExpansions'             => $allExpansions,
-                'dungeonsByExpansionIdDesc' => $allDungeonsByExpansionId,
-                'raidsByExpansionIdDesc'    => $allRaidsByExpansionId,
-                // Take active expansions into account
-                'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
-                'activeRaidsByExpansionIdDesc'    => $activeRaidsByExpansionId,
-                'siegeOfBoralus'                  => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first(),
-
-                // Discover
-                'affixGroupEaseTiersByAffixGroup' => $this->easeTierService->getTiers()->groupBy([
-                    'affix_group_id',
-                    'dungeon_id',
-                ]),
-
-                // Create route
-                'dungeonExpansions' => $allDungeonsByExpansionId
-                    ->pluck('expansion_id', 'id')->mapWithKeys(static fn(
-                        int $expansionId,
-                        int $dungeonId,
-                    ) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
-                'allSpeedrunDungeons' => Dungeon::where('speedrun_enabled', true)->get(),
             ];
-        }, config('keystoneguru.cache.global_view_variables.ttl')));
+        });
+    }
+
+    public function getUserCount(): int
+    {
+        return $this->cachedGlobal('user_count', static fn() => (int)(User::count() / 1000) * 1000);
+    }
+
+    /**
+     * @return Collection<int, GameServerRegion>
+     */
+    public function getAllRegions(): Collection
+    {
+        return $this->cachedGlobal('all_regions', static fn() => GameServerRegion::all());
+    }
+
+    /**
+     * @return Collection<int, Faction>
+     */
+    public function getAllFactions(): Collection
+    {
+        return $this->cachedGlobal('all_factions', static fn() => Faction::all());
+    }
+
+    /**
+     * @return Collection<int, ReleaseChangelogCategory>
+     */
+    public function getReleaseChangelogCategories(): Collection
+    {
+        return $this->cachedGlobal('release_changelog_categories', static fn() => ReleaseChangelogCategory::all());
+    }
+
+    /**
+     * @return Collection<int, CharacterClassSpecialization>
+     */
+    public function getCharacterClassSpecializations(): Collection
+    {
+        return $this->cachedGlobal('character_class_specializations', static fn() => CharacterClassSpecialization::with('class')->orderBy('name')->get());
+    }
+
+    /**
+     * @return Collection<int, CharacterClass>
+     */
+    public function getCharacterClasses(): Collection
+    {
+        return $this->cachedGlobal('character_classes', static fn() => CharacterClass::with('specializations')->orderBy('name')->get());
+    }
+
+    /**
+     * @return Collection<int, CharacterRace>
+     */
+    public function getCharacterRacesClasses(): Collection
+    {
+        // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
+        return $this->cachedGlobal('character_races_classes', static fn() => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get());
+    }
+
+    /**
+     * @return Collection<int, Affix>
+     */
+    public function getAllAffixes(): Collection
+    {
+        return $this->cachedGlobal('all_affixes', static fn() => Affix::all());
+    }
+
+    /**
+     * @return Collection<int, RouteAttribute>
+     */
+    public function getAllRouteAttributes(): Collection
+    {
+        return $this->cachedGlobal('all_route_attributes', static fn() => RouteAttribute::all());
+    }
+
+    /**
+     * @return Collection<int, PublishedState>
+     */
+    public function getAllPublishedStates(): Collection
+    {
+        return $this->cachedGlobal('all_published_states', static fn() => PublishedState::all());
+    }
+
+    /**
+     * @return Collection<string, Collection<int, Spell>>
+     */
+    public function getSelectableSpellsByCategory(): Collection
+    {
+        return $this->cachedGlobal('selectable_spells_by_category', static fn() => Spell::where('selectable', true)
+            ->orderByRaw("CASE WHEN category = 'spells.category.general' THEN 0 ELSE 1 END")
+            ->orderBy('category')
+            ->orderBy('name')
+            ->get()
+            ->groupBy('category')
+            // Do NOT localize the keys, they are used in the frontend which can have a different locale
+            ->mapWithKeys(static fn(Collection $spells, string $key) => [$key => $spells]));
+    }
+
+    /**
+     * @return Collection<int, GameVersion>
+     */
+    public function getAllGameVersions(): Collection
+    {
+        return $this->cachedGlobal('all_game_versions', static fn() => GameVersion::active()->get());
+    }
+
+    /**
+     * @return Collection<int, Expansion>
+     */
+    public function getActiveExpansions(): Collection
+    {
+        return $this->cachedGlobal('active_expansions', static fn() => Expansion::active()->with([
+            'dungeons',
+            'raids',
+        ])->orderBy('released_at', 'desc')->get());
+    }
+
+    /**
+     * @return Collection<int, Expansion>
+     */
+    public function getAllExpansions(): Collection
+    {
+        return $this->cachedGlobal('all_expansions', static fn() => Expansion::with([
+            'dungeons',
+            'raids',
+        ])->orderBy('released_at', 'desc')->get());
+    }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getDungeonsByExpansionIdDesc(): Collection
+    {
+        return $this->cachedGlobal('dungeons_by_expansion_id_desc', fn() => $this->dungeonsByExpansionQuery()
+            ->where('dungeons.raid', false)
+            ->get());
+    }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getRaidsByExpansionIdDesc(): Collection
+    {
+        return $this->cachedGlobal('raids_by_expansion_id_desc', fn() => $this->dungeonsByExpansionQuery()
+            ->where('dungeons.raid', true)
+            ->get());
+    }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getActiveDungeonsByExpansionIdDesc(): Collection
+    {
+        return $this->cachedGlobal('active_dungeons_by_expansion_id_desc', fn() => $this->dungeonsByExpansionQuery()
+            ->where('dungeons.raid', false)
+            ->where('expansions.active', true)
+            ->where('dungeons.active', true)
+            ->get());
+    }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getActiveRaidsByExpansionIdDesc(): Collection
+    {
+        return $this->cachedGlobal('active_raids_by_expansion_id_desc', fn() => $this->dungeonsByExpansionQuery()
+            ->where('dungeons.raid', true)
+            ->where('expansions.active', true)
+            ->where('dungeons.active', true)
+            ->get());
+    }
+
+    public function getSiegeOfBoralus(): ?Dungeon
+    {
+        return $this->cachedGlobal('siege_of_boralus', static fn() => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first());
+    }
+
+    /**
+     * @return Collection<int, Collection<int, mixed>>
+     */
+    public function getAffixGroupEaseTiersByAffixGroup(): Collection
+    {
+        return $this->cachedGlobal('affix_group_ease_tiers_by_affix_group', fn() => $this->easeTierService->getTiers()->groupBy([
+            'affix_group_id',
+            'dungeon_id',
+        ]));
+    }
+
+    /**
+     * @return Collection<int, string>
+     */
+    public function getDungeonExpansions(): Collection
+    {
+        return $this->cachedGlobal('dungeon_expansions', fn() => $this->getDungeonsByExpansionIdDesc()
+            ->pluck('expansion_id', 'id')->mapWithKeys(fn(
+                int $expansionId,
+                int $dungeonId,
+            ) => [$dungeonId => $this->getAllExpansions()->where('id', $expansionId)->first()->shortname]));
+    }
+
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    public function getAllSpeedrunDungeons(): Collection
+    {
+        return $this->cachedGlobal('all_speedrun_dungeons', static fn() => Dungeon::where('speedrun_enabled', true)->get());
+    }
+
+    /**
+     * Warms every cached global getter by recomputing and writing it to cache, bypassing any cached read.
+     */
+    public function warmGlobalCaches(): void
+    {
+        $this->forceRefresh = true;
+
+        $this->getDemoRoutes();
+        $this->getDemoRouteDungeons();
+        $this->getDemoRouteMapping();
+        $this->getLatestRelease();
+        $this->getLatestReleaseSpotlight();
+        $this->getAppVersionInfo();
+        $this->getUserCount();
+        $this->getAllRegions();
+        $this->getAllFactions();
+        $this->getReleaseChangelogCategories();
+        $this->getCharacterClassSpecializations();
+        $this->getCharacterClasses();
+        $this->getCharacterRacesClasses();
+        $this->getAllAffixes();
+        $this->getAllRouteAttributes();
+        $this->getAllPublishedStates();
+        $this->getSelectableSpellsByCategory();
+        $this->getAllGameVersions();
+        $this->getActiveExpansions();
+        $this->getAllExpansions();
+        $this->getDungeonsByExpansionIdDesc();
+        $this->getRaidsByExpansionIdDesc();
+        $this->getActiveDungeonsByExpansionIdDesc();
+        $this->getActiveRaidsByExpansionIdDesc();
+        $this->getSiegeOfBoralus();
+        $this->getAffixGroupEaseTiersByAffixGroup();
+        $this->getDungeonExpansions();
+        $this->getAllSpeedrunDungeons();
+
+        $this->forceRefresh = false;
     }
 
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
@@ -291,5 +478,30 @@ class ViewService implements ViewServiceInterface
         }
 
         return true;
+    }
+
+    /**
+     * Base query shared by the dungeon/raid getters, ordered by most recent expansion then dungeon name.
+     */
+    private function dungeonsByExpansionQuery(): Builder
+    {
+        return Dungeon::select('dungeons.*')
+            ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+            ->orderByRaw('expansions.released_at DESC, dungeons.name');
+    }
+
+    /**
+     * Memoizes (per request) and caches (per release) the result of $compute under its own cache key.
+     */
+    private function cachedGlobal(string $name, Closure $compute): mixed
+    {
+        $key = sprintf('view_data:%s:%s', $this->release, $name);
+
+        return once(fn() => $this->rememberLocal(
+            $key,
+            86400,
+            fn() => $this->cacheService->setCacheEnabled(!$this->forceRefresh)
+                ->remember($key, $compute, config('keystoneguru.cache.global_view_variables.ttl')),
+        ));
     }
 }
