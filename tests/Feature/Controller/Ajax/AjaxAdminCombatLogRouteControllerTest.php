@@ -41,6 +41,14 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         $this->mappingVersion = $dungeon->getCurrentMappingVersion();
     }
 
+    #[\Override]
+    protected function tearDown(): void
+    {
+        User::forceMapFacadeStyle(null);
+
+        parent::tearDown();
+    }
+
     #[Test]
     public function getEnemyFailures_givenNoDungeonId_returnsValidationError(): void
     {

@@ -370,7 +370,7 @@ CREATE TABLE `dungeon_routes` (
   `level_max` int(11) DEFAULT NULL,
   `difficulty` enum('Casual','Dedicated','Hardcore') COLLATE utf8mb4_unicode_ci NOT NULL,
   `seasonal_index` int(11) NOT NULL DEFAULT '0',
-  `enemy_forces` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `enemy_forces` int(11) NOT NULL DEFAULT '0',
   `teeming` tinyint(1) NOT NULL,
   `demo` tinyint(1) NOT NULL DEFAULT '0',
   `pull_gradient` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,

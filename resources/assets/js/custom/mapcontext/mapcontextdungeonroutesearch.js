@@ -61,4 +61,11 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
     getMapIcons() {
         return super.getMapIcons().concat(this._options.dungeonRoute?.mapIcons ?? []);
     }
+
+    /**
+     * @returns {[]}
+     */
+    getKillZonePaths() {
+        return this._options.dungeonRoute?.killZonePaths ?? [];
+    }
 }
