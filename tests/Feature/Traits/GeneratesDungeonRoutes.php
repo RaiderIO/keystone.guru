@@ -9,7 +9,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 trait GeneratesDungeonRoutes
