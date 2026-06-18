@@ -14,7 +14,7 @@ use App\Models\LiveSession;
 
 /**
  * @var DungeonRoute $dungeonroute
- * @var LiveSession  $livesession
+ * @var LiveSession  $liveSession
  * @var Floor        $floor
  */
 
@@ -50,7 +50,7 @@ $dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
             'dungeon' => $dungeon,
             'dungeonroute' => $dungeonroute,
             'mappingVersion' => $dungeonroute->mappingVersion,
-            'livesession' => $livesession,
+            'livesession' => $liveSession,
             'edit' => false,
             'floor' => $floor,
             'show' => [
