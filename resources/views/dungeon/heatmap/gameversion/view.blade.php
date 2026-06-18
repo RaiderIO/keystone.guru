@@ -75,6 +75,7 @@ use Illuminate\Support\Collection;
                 ],
             ],
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'path',
                 'killzone',

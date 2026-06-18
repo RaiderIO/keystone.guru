@@ -73,6 +73,7 @@ use Illuminate\Support\Collection;
             'parameters' => $parameters,
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
+                'arrow',
                 'brushline',
                 'floorunion',
                 'floorunionarea',

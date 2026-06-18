@@ -18,6 +18,7 @@ use App\Logic\Structs\IngameXY;
 use App\Models\Brushline;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\CombatLogRouteEnemyFailure;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
@@ -25,7 +26,6 @@ use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Polyline;
-use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -36,7 +36,6 @@ use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
-use App\Repositories\Stub\AffixGroup\AffixGroupRepository as AffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
@@ -62,6 +61,8 @@ use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceStub;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
 use Auth;
@@ -84,7 +85,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly MapDrawingServiceInterface                        $mapDrawingService,
         protected readonly DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
         protected readonly DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
-        protected readonly AffixGroupRepositoryInterface                     $affixGroupRepository,
+        protected readonly SeasonAffixGroupServiceInterface                  $seasonAffixGroupService,
         protected readonly KillZoneRepositoryInterface                       $killZoneRepository,
         protected readonly KillZoneEnemyRepositoryInterface                  $killZoneEnemyRepository,
         protected readonly KillZoneSpellRepositoryInterface                  $killZoneSpellRepository,
@@ -111,10 +112,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     {
         $dungeonRoute = new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
+            $this->seasonAffixGroupService,
             $this->coordinatesService,
             $this->dungeonRouteRepository,
             $this->dungeonRouteAffixGroupRepository,
-            $this->affixGroupRepository,
             $this->killZoneRepository,
             $this->killZoneEnemyRepository,
             $this->killZoneSpellRepository,
@@ -128,6 +129,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         )->build();
 
         $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);
+        $this->saveCombatLogRouteEnemyFailures($dungeonRoute->mappingVersion, $combatLogRoute, $dungeonRoute);
 
         if ($combatLogRoute->settings->debugIcons) {
             $this->generateMapIcons(
@@ -148,10 +150,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     {
         $builder = new CombatLogRouteCombatLogEventsBuilder(
             $this->seasonService,
+            new SeasonAffixGroupServiceStub(),
             $this->coordinatesService,
             new DungeonRouteRepositoryStub(),
             new DungeonRouteAffixGroupRepositoryStub(),
-            new AffixGroupRepositoryStub(),
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
@@ -179,10 +181,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
         $builder = new CombatLogRouteCorrectionBuilder(
             new SeasonServiceStub(),
+            new SeasonAffixGroupServiceStub(),
             $this->coordinatesService,
             new DungeonRouteRepositoryStub(),
             new DungeonRouteAffixGroupRepositoryStub(),
-            new AffixGroupRepositoryStub(),
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
@@ -282,7 +284,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $npcEngagedEvents = collect();
             $spells           = collect();
             $playerDeaths     = collect();
-            /** @var Collection<CombatantInfoResultEvent> $mostRecentCombatantInfo */
+            /** @var Collection<string, CombatantInfoResultEvent> $mostRecentCombatantInfo */
             $mostRecentCombatantInfo        = collect();
             $mostRecentCombatantInfoIndexFn = static function (string $guid) use ($mostRecentCombatantInfo) {
                 $index = 0;
@@ -468,45 +470,50 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             'correlation_id'        => correlationId(),
             'post_body'             => json_encode($combatLogRoute),
         ]);
+    }
 
-//        $floorByUiMapId = Floor::where('dungeon_id', $dungeonRoute->dungeon_id)
-//            ->get()
-//            ->keyBy('ui_map_id');
+    private function saveCombatLogRouteEnemyFailures(
+        MappingVersion             $mappingVersion,
+        CombatLogRouteRequestModel $combatLogRoute,
+        DungeonRoute               $dungeonRoute,
+    ): void {
+        $now               = now();
+        $failureAttributes = [];
 
-//        $invalidUiMapIds         = [];
-//        $enemyPositionAttributes = [];
-//        foreach ($combatLogRoute->npcs as $npc) {
-//            /** @var Floor $floor */
-//            $floor = $floorByUiMapId->get($npc->coord->uiMapId);
-//
-//            if ($floor === null) {
-//                if (!in_array($npc->coord->uiMapId, $invalidUiMapIds)) {
-//                    $this->log->saveChallengeModeRunUnableToFindFloor($npc->coord->uiMapId);
-//                    $invalidUiMapIds[] = $npc->coord->uiMapId;
-//                }
-//
-//                continue;
-//            }
-//
-//            $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-//                new IngameXY($npc->coord->x, $npc->coord->y, $floor),
-//            );
-//
-//            $enemyPositionAttributes[] = array_merge([
-//                'challenge_mode_run_id' => $challengeModeRun->id,
-//                'floor_id'              => $floor->id,
-//                'npc_id'                => $npc->npcId,
-//                'guid'                  => $npc->getUniqueId(),
-//                'created_at'            => $now,
-//            ], $latLng->toArray());
-//        }
+        /** @var Floor|null $previousFloor */
+        $previousFloor = $dungeonRoute->dungeon->floors()->firstWhere('default', 1);
 
-//        if (EnemyPosition::insertOrIgnore($enemyPositionAttributes) === 0) {
-//            // Then we don't want duplicates - get rid of the challenge mode run
-//            $challengeModeRun->update([
-//                'duplicate' => 1,
-//            ]);
-//        }
+        foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
+            $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor; // @phpstan-ignore nullsafe.neverNull
+
+            if ($currentFloor === null) {
+                continue;
+            }
+
+            if ($combatLogRouteNpc->getResolvedEnemy() === null) {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY(
+                        $combatLogRouteNpc->coord->x,
+                        $combatLogRouteNpc->coord->y,
+                        $currentFloor,
+                    ),
+                );
+
+                $failureAttributes[] = array_merge([
+                    'dungeon_route_id'   => $dungeonRoute->id,
+                    'dungeon_id'         => $dungeonRoute->dungeon_id,
+                    'floor_id'           => $currentFloor->id,
+                    'mapping_version_id' => $mappingVersion->id,
+                    'npc_id'             => $combatLogRouteNpc->npcId,
+                    'created_at'         => $now,
+                    'updated_at'         => $now,
+                ], $latLng->toArray());
+            }
+
+            $previousFloor = $currentFloor;
+        }
+
+        CombatLogRouteEnemyFailure::insert($failureAttributes);
     }
 
     private function generateMapIcons(

@@ -183,6 +183,7 @@ let scripts = [
     'resources/assets/js/custom/mapobjectgroups/polygonmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/polylinemapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/brushlinemapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/arrowmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/dungeonfloorswitchmarkermapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemymapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/enemypackmapobjectgroup.js',
@@ -224,6 +225,8 @@ let scripts = [
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/deleted.js',
+    'resources/assets/js/custom/echo/message/listen/models/arrow/changed.js',
+    'resources/assets/js/custom/echo/message/listen/models/arrow/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/killzone/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/killzone/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/mapicon/changed.js',
@@ -248,6 +251,8 @@ let scripts = [
     'resources/assets/js/custom/echo/messagehandler/listen/models/modeldeletedhandler.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/brushline/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/brushline/deleted.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/arrow/changed.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/arrow/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/killzone/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/killzone/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/mapicon/changed.js',
@@ -286,6 +291,7 @@ let scripts = [
     'resources/assets/js/custom/models/mapiconawakenedobelisk.js',
     'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/models/brushline.js',
+    'resources/assets/js/custom/models/arrow.js',
     'resources/assets/js/custom/models/usermouseposition.js',
     'resources/assets/js/custom/models/mountablearea.js',
 
@@ -350,6 +356,7 @@ let scripts = [
     // Inline code
     'resources/assets/js/custom/inline/inlinemanager.js',
     'resources/assets/js/custom/inline/inlinecode.js',
+    'resources/assets/js/custom/inline/inlinecodeajaxbatchprocessor.js',
 
     // All inline code last
     'resources/assets/js/custom/inline/*/**/*.js',

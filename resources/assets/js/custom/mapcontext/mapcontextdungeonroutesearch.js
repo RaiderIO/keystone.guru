@@ -44,6 +44,13 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
     /**
      * @returns {[]}
      */
+    getArrows() {
+        return this._options.dungeonRoute?.arrows ?? [];
+    }
+
+    /**
+     * @returns {[]}
+     */
     getKillZones() {
         return this._options.dungeonRoute?.killZones ?? [];
     }
@@ -53,5 +60,12 @@ class MapContextDungeonRouteSearch extends MapContextDungeonExplore {
      */
     getMapIcons() {
         return super.getMapIcons().concat(this._options.dungeonRoute?.mapIcons ?? []);
+    }
+
+    /**
+     * @returns {[]}
+     */
+    getKillZonePaths() {
+        return this._options.dungeonRoute?.killZonePaths ?? [];
     }
 }

@@ -10,7 +10,7 @@ interface RegenerateCombatLogRouteLoggingInterface
 
     public function handleChallengeModeRunNotSet(): void;
 
-    public function handleBody(string $body): void;
+    public function handleSuccess(): void;
 
     public function handleRequestError(string $message): void;
 

@@ -2,7 +2,6 @@
 
 namespace App\Logic\MapContext\Map;
 
-use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\LiveSession;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -19,8 +18,6 @@ use Override;
  */
 class MapContextLiveSession extends MapContextDungeonRoute
 {
-    use ListsEnemies;
-
     public function __construct(
         CacheServiceInterface                            $cacheService,
         CoordinatesServiceInterface                      $coordinatesService,

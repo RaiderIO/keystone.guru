@@ -33,8 +33,8 @@
  * @property {DungeonRouteSearchOptions} options
  */
 class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
-    constructor(options) {
-        super(new SearchHandlerDungeonRouteSearch(options), options);
+    constructor(id, bladePath, options) {
+        super(new SearchHandlerDungeonRouteSearch(options), id, bladePath, options);
 
         this.sidebar = new Sidebar(options);
         this.initializing = true;

@@ -3,6 +3,7 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Mapping\MappingVersion;
 
 interface DungeonRouteServiceInterface
 {
@@ -17,6 +18,8 @@ interface DungeonRouteServiceInterface
     public function touchRoutesForTeam(int $teamId): int;
 
     public function upgradeMappingVersion(DungeonRoute $dungeonRoute): void;
+
+    public function upgradeMappingVersionBulk(MappingVersion $mappingVersion): int;
 
     public function publishScheduledDungeonRoutes(): int;
 }

@@ -163,7 +163,7 @@ class LiveSessionController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'livesession'  => $liveSession,
+                'liveSession'  => $liveSession,
                 'floor'        => $floor,
                 'mapContext'   => $mapContextService->createMapContextLiveSession($liveSession, User::getCurrentUserMapFacadeStyle()),
             ]);

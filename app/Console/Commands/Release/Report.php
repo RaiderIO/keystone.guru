@@ -4,7 +4,7 @@ namespace App\Console\Commands\Release;
 
 use App\Models\Release;
 use App\Models\ReleaseReportLog;
-use App\Service\Discord\DiscordApiService;
+use App\Service\Discord\DiscordApiServiceInterface;
 use App\Service\Reddit\RedditApiService;
 use Exception;
 use Illuminate\Console\Command;
@@ -41,7 +41,7 @@ class Report extends Command
      *
      * @throws Exception
      */
-    public function handle(DiscordApiService $discordApiService, RedditApiService $redditApiService): void
+    public function handle(DiscordApiServiceInterface $discordApiService, RedditApiService $redditApiService): void
     {
         $result   = false;
         $version  = $this->argument('version');

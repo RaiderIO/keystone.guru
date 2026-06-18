@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Override;
 
 /**
@@ -61,13 +62,19 @@ class Team extends Model
 
     protected $with = ['iconfile'];
 
-    /**
-     * https://stackoverflow.com/a/34485411/771270
-     */
     #[Override]
-    public function getRouteKeyName(): string
+    public function getRouteKey(): string
     {
-        return 'public_key';
+        return sprintf('%s-%s', $this->public_key, Str::slug($this->name));
+    }
+
+    #[Override]
+    public function resolveRouteBinding($value, $field = null): ?static
+    {
+        $publicKey = explode('-', (string)$value, 2)[0];
+
+        /** @var static|null */
+        return $this->where('public_key', $publicKey)->first();
     }
 
     public function teamUsers(): HasMany

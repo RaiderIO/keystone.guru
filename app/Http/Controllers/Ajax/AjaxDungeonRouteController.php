@@ -6,12 +6,6 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
-use App\Http\Controllers\Traits\ListsBrushlines;
-use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
-use App\Http\Controllers\Traits\ListsEnemyPacks;
-use App\Http\Controllers\Traits\ListsEnemyPatrols;
-use App\Http\Controllers\Traits\ListsMapIcons;
-use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
@@ -35,7 +29,6 @@ use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
 use App\Models\Season;
@@ -67,12 +60,6 @@ use Throwable;
 
 class AjaxDungeonRouteController extends Controller
 {
-    use ListsBrushlines;
-    use ListsDungeonFloorSwitchMarkers;
-    use ListsEnemyPacks;
-    use ListsEnemyPatrols;
-    use ListsMapIcons;
-    use ListsPaths;
     use ChangesDungeonRoute;
 
     /**
@@ -791,66 +778,6 @@ class AjaxDungeonRouteController extends Controller
         $dungeonRouteFavorite->delete();
 
         return response()->noContent();
-    }
-
-    /**
-     * @return array
-     *
-     * @throws Exception
-     */
-    public function data(Request $request, string $publickey)
-    {
-        // Init the fields we should get for this request
-        $fields = $request->get('fields', 'enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker');
-        $fields = explode(',', (string)$fields);
-
-        // Show enemies or raw data when fetching enemy packs
-        $enemyPackEnemies = (int)$request->get('enemyPackEnemies', true) === 1;
-        $teeming          = (int)$request->get('teeming', false) === 1;
-
-        // Start parsing
-        $result       = [];
-        $dungeonRoute = $publickey === 'admin' ? null : DungeonRoute::findOrFail($publickey);
-        if ($dungeonRoute !== null) {
-            // Fetch dungeon route specific properties
-            // Paths
-            if (in_array('path', $fields)) {
-                $result['path'] = $this->listPaths((int)$request->get('floor'), $dungeonRoute);
-            }
-
-            // Brushline
-            if (in_array('brushline', $fields)) {
-                $result['brushline'] = $this->listBrushlines((int)$request->get('floor'), $dungeonRoute);
-            }
-        }
-
-        // Enemy packs
-        if (in_array('enemypack', $fields)) {
-            // If logged in, and we're NOT an admin
-            if (Auth::check() && !Auth::user()->hasRole(Role::ROLE_ADMIN)) {
-                // Don't expose vertices
-                $enemyPackEnemies = true;
-            }
-
-            $result['enemypack'] = $this->listEnemyPacks((int)$request->get('floor'), $enemyPackEnemies, $teeming);
-        }
-
-        // Enemy patrols
-        if (in_array('enemypatrol', $fields)) {
-            $result['enemypatrol'] = $this->listEnemyPatrols((int)$request->get('floor'));
-        }
-
-        // Map icons
-        if (in_array('mapicon', $fields)) {
-            $result['mapicon'] = $this->listMapIcons((int)$request->get('floor'), $dungeonRoute);
-        }
-
-        // Dungeon floor switch markers
-        if (in_array('dungeonfloorswitchmarker', $fields)) {
-            $result['dungeonfloorswitchmarker'] = $this->listDungeonFloorSwitchMarkers((int)$request->get('floor'));
-        }
-
-        return $result;
     }
 
     /**

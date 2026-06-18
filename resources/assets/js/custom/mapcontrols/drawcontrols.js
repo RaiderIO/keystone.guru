@@ -22,6 +22,10 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             handler: new L.Draw.Brushline(map, this.options.brushline),
             title: this.options.brushline.title
         }, {
+            enabled: this.options.arrow,
+            handler: new L.Draw.Arrow(map, this.options.arrow),
+            title: this.options.arrow.title
+        }, {
             enabled: this.options.enemypack,
             handler: new L.Draw.EnemyPack(map, this.options.enemypack),
             title: this.options.enemypack.title
@@ -59,6 +63,15 @@ L.DrawToolbar.prototype.getModeHandlers = function (map) {
             title: this.options.floorunionarea.title
         },
     ];
+};
+
+// Prevent the editing of
+const _originalCreateMiddleMarker = L.Edit.PolyVerticesEdit.prototype._createMiddleMarker;
+L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = function (marker1, marker2) {
+    if (!this._poly.options.allowVertexCreationDuringEdit) {
+        return;
+    }
+    _originalCreateMiddleMarker.call(this, marker1, marker2);
 };
 
 // Add some new strings to the draw controls
@@ -297,6 +310,16 @@ class DrawControls extends MapControl {
                 //     faClass: 'fa-paint-brush',
                 //     title: 'Draw a line using a brush'
                 // },
+                arrow: {
+                    shapeOptions: {
+                        color: c.map.polyline.defaultColor(),
+                        weight: c.map.polyline.defaultWeight,
+                        opacity: 1.0
+                    },
+                    zIndexOffset: 1000,
+                    faClass: 'fa-arrow-right',
+                    title: lang.get('js.arrow_title'),
+                },
                 enemypack: false,
                 enemypatrol: false,
                 enemy: false,
@@ -443,8 +466,6 @@ class DrawControls extends MapControl {
 
     _addControlSetupBrushlineButton() {
         let self = this;
-
-        let $container = $(this._mapControl.getContainer());
 
         // Add a special button for the Brushline
         let $brushlineButton = $('<a>', {

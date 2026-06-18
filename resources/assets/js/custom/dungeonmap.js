@@ -112,6 +112,10 @@ class DungeonMap extends Signalable {
                 if (mapObject instanceof Enemy && !(self instanceof AdminDungeonMap)) {
                     mapObject.register('enemy:clicked', self, self._enemyClicked.bind(self));
                 }
+
+                if (mapObject instanceof EnemyPack && !(self instanceof AdminDungeonMap)) {
+                    mapObject.register('enemypack:clicked', self, self._enemyPackClicked.bind(self));
+                }
             });
 
             // Add and remove layers as they are added to the layer
@@ -163,6 +167,10 @@ class DungeonMap extends Signalable {
                 // Provide functionality for when an enemy gets clicked and we need to create a new killzone for it
                 if (object instanceof Enemy && !(self instanceof AdminDungeonMap)) {
                     object.unregister('enemy:clicked', self);
+                }
+
+                if (object instanceof EnemyPack && !(self instanceof AdminDungeonMap)) {
+                    object.unregister('enemypack:clicked', self);
                 }
             });
 
@@ -544,6 +552,41 @@ class DungeonMap extends Signalable {
 
                 this.setMapState(new EditKillZoneEnemySelection(this, newKillZone, this.getMapState()));
             }
+        }
+    }
+
+    /**
+     * Someone clicked on an enemy pack polygon
+     * @private
+     */
+    _enemyPackClicked(enemyPackClickedEvent) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        /** @type EnemyPack */
+        let enemyPack = enemyPackClickedEvent.context;
+        let clickEvent = enemyPackClickedEvent.data.clickEvent;
+
+        let enemyMapObjectGroup = this.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+        // Find the first visible enemy in the pack to act as a delegate for all click logic
+        let representativeEnemy = null;
+        for (let i = 0; i < enemyPack.rawEnemies.length; i++) {
+            let enemy = enemyMapObjectGroup.findMapObjectById(enemyPack.rawEnemies[i].id);
+            if (enemy !== null && enemy.shouldBeVisible()) {
+                representativeEnemy = enemy;
+                break;
+            }
+        }
+
+        if (representativeEnemy === null) {
+            return;
+        }
+
+        // Simulate the same click the enemy itself would have fired - all existing pull/overpull logic handles the rest
+        if (this.getMapState() instanceof EnemySelection && representativeEnemy.selectable && !clickEvent.originalEvent.shiftKey) {
+            representativeEnemy.signal('enemy:selected', {clickEvent: clickEvent});
+        } else {
+            representativeEnemy.signal('enemy:clicked', {clickEvent: clickEvent});
         }
     }
 

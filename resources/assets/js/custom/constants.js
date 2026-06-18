@@ -23,6 +23,7 @@ const MAP_OBJECT_GROUP_MAPICON = 'mapicon';
 const MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK = 'awakenedobeliskgatewaymapicon';
 const MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
 const MAP_OBJECT_GROUP_PATH = 'path';
+const MAP_OBJECT_GROUP_ARROW = 'arrow';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 
 const MAP_OBJECT_GROUP_NAMES = [
@@ -35,6 +36,7 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_PATH,
     MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER,
     MAP_OBJECT_GROUP_BRUSHLINE,
+    MAP_OBJECT_GROUP_ARROW,
     MAP_OBJECT_GROUP_MAPICON,
     // MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK is missing on purpose; it's an alias for MAPICON
     // Depends on MAP_OBJECT_GROUP_ENEMY, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER
@@ -219,6 +221,7 @@ const COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL = 'player_spell';
 
 const COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION = 'player_position';
 const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION = 'enemy_position';
+const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_FAILURE = 'enemy_failure';
 
 // User roles
 const USER_ROLE_ADMIN = 'admin';
@@ -499,6 +502,9 @@ let c = {
             }
         },
         path: {
+            defaultColor: polylineDefaultColor,
+        },
+        arrow: {
             defaultColor: polylineDefaultColor,
         },
         polyline: {

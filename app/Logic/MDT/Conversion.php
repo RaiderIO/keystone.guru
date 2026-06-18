@@ -14,12 +14,12 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\Season;
-use App\Service\Season\SeasonService;
+use App\Service\Season\SeasonServiceInterface;
 use Exception;
 
 class Conversion
 {
-    public const EXPANSION_NAME_MAPPING = [
+    public const array EXPANSION_NAME_MAPPING = [
         Expansion::EXPANSION_CLASSIC   => 'ClassicEra',
         Expansion::EXPANSION_TBC       => null,
         Expansion::EXPANSION_WOTLK     => 'WrathOfTheLichKing',
@@ -38,7 +38,7 @@ class Conversion
     ];
 
     // @formatter:off
-    public const DUNGEON_NAME_MAPPING = [
+    public const array DUNGEON_NAME_MAPPING = [
         //        Expansion::EXPANSION_CLASSIC => [
         //            Dungeon::DUNGEON_BLACKFATHOM_DEEPS           => 'BlackfathomDeeps',
         //            Dungeon::DUNGEON_BLACKROCK_DEPTHS            => 'BlackrockDepths',
@@ -364,9 +364,9 @@ class Conversion
      * @throws Exception
      */
     public static function convertWeekToAffixGroup(
-        SeasonService $seasonService,
-        Dungeon       $dungeon,
-        int           $mdtWeek,
+        SeasonServiceInterface $seasonService,
+        Dungeon                $dungeon,
+        int                    $mdtWeek,
     ): ?AffixGroup {
         if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;

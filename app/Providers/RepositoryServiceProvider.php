@@ -22,9 +22,9 @@ use App\Repositories\Database\CombatLog\CombatLogEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogNpcCharacteristicObservationRepository;
 use App\Repositories\Database\CombatLog\CombatLogNpcEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogParsingCriterionRepository;
+use App\Repositories\Database\CombatLog\CombatLogRouteEnemyFailureRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellPropertyObservationRepository;
-use App\Repositories\Database\CombatLog\EnemyPositionRepository;
 use App\Repositories\Database\CombatLog\ParsedCombatLogRepository;
 use App\Repositories\Database\DungeonFloorSwitchMarkerRepository;
 use App\Repositories\Database\DungeonRepository;
@@ -135,9 +135,9 @@ use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcCharacteristicObservationRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogParsingCriterionRepositoryInterface;
+use App\Repositories\Interfaces\CombatLog\CombatLogRouteEnemyFailureRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellPropertyObservationRepositoryInterface;
-use App\Repositories\Interfaces\CombatLog\EnemyPositionRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
 use App\Repositories\Interfaces\DungeonFloorSwitchMarkerRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -253,9 +253,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogNpcCharacteristicObservationRepositoryInterface::class, CombatLogNpcCharacteristicObservationRepository::class);
         $this->app->bind(CombatLogNpcEventRepositoryInterface::class, CombatLogNpcEventRepository::class);
         $this->app->bind(CombatLogParsingCriterionRepositoryInterface::class, CombatLogParsingCriterionRepository::class);
+        $this->app->bind(CombatLogRouteEnemyFailureRepositoryInterface::class, CombatLogRouteEnemyFailureRepository::class);
         $this->app->bind(CombatLogSpellEventRepositoryInterface::class, CombatLogSpellEventRepository::class);
         $this->app->bind(CombatLogSpellPropertyObservationRepositoryInterface::class, CombatLogSpellPropertyObservationRepository::class);
-        $this->app->bind(EnemyPositionRepositoryInterface::class, EnemyPositionRepository::class);
         $this->app->bind(ParsedCombatLogRepositoryInterface::class, ParsedCombatLogRepository::class);
 
         // DungeonRoute

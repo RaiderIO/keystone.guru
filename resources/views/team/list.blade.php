@@ -35,7 +35,7 @@ $cookieService->setCookie('viewed_teams', true)
 
         <tbody>
         @foreach ($models as $team)
-            <tr data-teamid="{{ $team->public_key }}">
+            <tr data-teamid="{{ $team->getRouteKey() }}">
                 <td class="clickable">
                     @isset($team->iconfile)
                         <img alt="Icon" class="mr-1" src="{{ $team->iconfile->getURL() }}"

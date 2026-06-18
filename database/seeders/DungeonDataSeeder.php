@@ -122,7 +122,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 continue;
             }
 
-            $this->parseRawFile($rootDir, $rootDirChild, 1);
+            $result = $this->parseRawFile($rootDirChild);
+            if ($result !== null) {
+                $this->command->info(sprintf('- Imported %d %s', $result['count'], $this->humanizeFileName($result['fileName'])));
+            }
         }
 
         $rootDirIterator->rewind();
@@ -148,7 +151,8 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
                 /** @var SplFileInfo $dungeonKeyDir */
-                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+                /** @var array<string, int> $counts */
+                $counts = [];
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
@@ -157,13 +161,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     if ($floorDirFile->getType() !== 'dir') {
                         continue;
                     }
-                    $this->command->info('-- Importing floor ' . basename($floorDirFile));
 
                     $importFileIterator = new FilesystemIterator($floorDirFile);
                     // For each file inside a floor
                     foreach ($importFileIterator as $importFile) {
                         // Floors first - parse dirs and only THEN files
-                        $this->parseRawFile($rootDir, $importFile, 3);
+                        $this->accumulateImportCount($counts, $this->parseRawFile($importFile));
                     }
                 }
 
@@ -180,8 +183,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     }
 
                     // npcs, dungeon_routes
-                    $this->parseRawFile($rootDir, $floorDirFile, 2);
+                    $this->accumulateImportCount($counts, $this->parseRawFile($floorDirFile));
                 }
+
+                $this->command->info(sprintf('- %s: %s', basename($dungeonKeyDir), $this->buildImportSummary($counts)));
             }
         }
     }
@@ -204,7 +209,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
             // For each dungeon inside an expansion dir
             foreach ($expansionDirIterator as $dungeonKeyDir) {
-                $this->command->info('- Importing dungeon ' . basename($dungeonKeyDir));
+                $count = 0;
 
                 $floorDirIterator = new FilesystemIterator($dungeonKeyDir);
                 // For each floor inside a dungeon dir
@@ -219,7 +224,11 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                     }
 
                     // npcs, dungeon_routes
-                    $this->parseRawFile($rootDir, $floorDirFile, 2);
+                    $count += $this->parseRawFile($floorDirFile)['count'] ?? 0;
+                }
+
+                if ($count > 0) {
+                    $this->command->info(sprintf('- %s: %d dungeon routes', basename($dungeonKeyDir), $count));
                 }
             }
         }
@@ -254,6 +263,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 ->map(fn(string $col) => sprintf('t.%s = orig.%s', $col, $col))
                 ->implode(', ');
 
+            /** @noinspection SqlWithoutWhere */
             DB::statement(sprintf(
                 'UPDATE %s t INNER JOIN %s orig ON orig.id = t.id SET %s',
                 $tempTable,
@@ -283,36 +293,63 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     }
 
     /**
+     * @return array{fileName: string, count: int}|null Null when no mapping matched the file.
+     *
      * @throws Exception
      */
-    private function parseRawFile(string $rootDir, string $filePath, int $depth = 1): void
+    private function parseRawFile(string $filePath): ?array
     {
-        $prefix = str_repeat('-', $depth) . ' ';
-
         $fileName = basename($filePath);
 
-        // Import file
-        $this->command->info($prefix . 'Importing ' . $fileName);
-        $found = false;
         foreach ($this->relationMapping as $mapping) {
             if ($mapping->getFileName() === $fileName) {
-                $count = $this->loadModelsFromFile($filePath, $mapping);
-                $this->command->info(sprintf(
-                    $prefix . 'Imported %s (%s from %s)',
-                    str_replace($rootDir, '', $fileName),
-                    $count,
-                    $fileName,
-                ));
-
-                $found = true;
-                break;
+                return ['fileName' => $fileName, 'count' => $this->loadModelsFromFile($filePath, $mapping)];
             }
         }
 
-        // Let the user know if something wrong happened
-        if (!$found) {
-            $this->command->error($prefix . 'Unable to find table->model mapping for file ' . $filePath);
+        $this->command->error('Unable to find table->model mapping for file ' . $filePath);
+
+        return null;
+    }
+
+    /**
+     * Turns "enemy_packs.json" into "enemy packs" for human-readable output.
+     */
+    private function humanizeFileName(string $fileName): string
+    {
+        return str_replace('_', ' ', basename($fileName, '.json'));
+    }
+
+    /**
+     * Builds "4 map icons, 192 enemies, 51 packs" from a fileName => count map,
+     * omitting zero counts and ordering parts by the configured relation mapping order.
+     *
+     * @param array<string, int> $counts
+     */
+    private function buildImportSummary(array $counts): string
+    {
+        $parts = [];
+        foreach ($this->relationMapping as $mapping) {
+            $count = $counts[$mapping->getFileName()] ?? 0;
+            if ($count > 0) {
+                $parts[] = sprintf('%d %s', $count, $this->humanizeFileName($mapping->getFileName()));
+            }
         }
+
+        return empty($parts) ? 'nothing imported' : implode(', ', $parts);
+    }
+
+    /**
+     * @param array<string, int>                       $counts
+     * @param array{fileName: string, count: int}|null $result
+     */
+    private function accumulateImportCount(array &$counts, ?array $result): void
+    {
+        if ($result === null) {
+            return;
+        }
+
+        $counts[$result['fileName']] = ($counts[$result['fileName']] ?? 0) + $result['count'];
     }
 
     /**

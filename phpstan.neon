@@ -30,6 +30,8 @@ parameters:
         - database/migrations_legacy/
         # Legacy Laravel 5-style factory file, superseded by class-based factories
         - database/factories/ModelFactory.php
+        - database/seeders/combatlogs
+        - database/seeders/dungeondata
 
     ignoreErrors:
         # Blade templates use ??= as a pattern to set optional variable defaults
@@ -60,8 +62,6 @@ parameters:
         # These traits exist for potential future use / are referenced dynamically
         - identifier: trait.unused
           path: app/Http/Controllers/Traits/ChecksForDuplicates.php
-        - identifier: trait.unused
-          path: app/Http/Controllers/Traits/ListsKillzones.php
         - identifier: trait.unused
           path: app/Logic/MapContext/Traits/DungeonRouteProperties.php
         - identifier: trait.unused

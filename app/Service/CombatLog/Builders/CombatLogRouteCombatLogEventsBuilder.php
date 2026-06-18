@@ -6,7 +6,6 @@ use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
-use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -19,6 +18,7 @@ use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteCombatLogEventsBuilderLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -37,10 +37,10 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
 
     public function __construct(
         SeasonServiceInterface                    $seasonService,
+        SeasonAffixGroupServiceInterface          $seasonAffixGroupService,
         CoordinatesServiceInterface               $coordinatesService,
         DungeonRouteRepositoryInterface           $dungeonRouteRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
-        AffixGroupRepositoryInterface             $affixGroupRepository,
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
@@ -57,10 +57,10 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
 
         parent::__construct(
             $seasonService,
+            $seasonAffixGroupService,
             $coordinatesService,
             $dungeonRouteRepository,
             $dungeonRouteAffixGroupRepository,
-            $affixGroupRepository,
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,

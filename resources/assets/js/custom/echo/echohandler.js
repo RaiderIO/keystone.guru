@@ -27,6 +27,9 @@ class EchoHandler extends Signalable {
             // Brushline
             new BrushlineChangedHandler(this),
             new BrushlineDeletedHandler(this),
+            // Arrow
+            new ArrowChangedHandler(this),
+            new ArrowDeletedHandler(this),
             // KillZone
             new KillZoneChangedHandler(this),
             new KillZoneDeletedHandler(this),

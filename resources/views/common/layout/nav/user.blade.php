@@ -53,6 +53,8 @@ $user = Auth::user();
                 <a class="dropdown-item"
                    href="{{ route('admin.users') }}">{{__('view_common.layout.nav.user.view_users')}}</a>
                 <a class="dropdown-item"
+                   href="{{ route('admin.dungeonroutes') }}">{{__('view_common.layout.nav.user.view_dungeonroutes')}}</a>
+                <a class="dropdown-item"
                    href="{{ route('admin.userreports') }}">{{__('view_common.layout.nav.user.view_user_reports') }}
                     @if($numUserReports > 0)
                         <span class="badge badge-warning badge-pill">{{ $numUserReports }}</span>

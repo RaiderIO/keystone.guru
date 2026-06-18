@@ -6,11 +6,11 @@ use App\Http\Models\Request\RequestModel;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
 use App\Models\PublishedState;
-use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
@@ -52,8 +52,8 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
      */
     public function createDungeonRoute(
         SeasonServiceInterface                    $seasonService,
+        SeasonAffixGroupServiceInterface          $seasonAffixGroupService,
         DungeonRouteRepositoryInterface           $dungeonRouteRepository,
-        AffixGroupRepositoryInterface             $affixGroupRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
         DungeonRepositoryInterface                $dungeonRepository,
         ?int                                      $userId = null,
@@ -107,20 +107,20 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         // Initially set the relation so we don't go fetching it from the database initially
         $dungeonRoute->setRelation('killZones', collect());
 
-        // Find the correct affix groups that match the affix combination the dungeon was started with
-        if ($currentSeasonForDungeon !== null) {
-            $affixIds            = collect($this->challengeMode->affixes);
-            $eligibleAffixGroups = $affixGroupRepository->getBySeasonId($currentSeasonForDungeon->id);
+        // Determine the affix group by timestamp — avoids failure when a dungeon only has a partial
+        // set of affixes active (e.g. a single Fortified for non-max-level dungeons).
+        if ($currentSeasonForDungeon !== null && $this->challengeMode->start !== null) {
+            $affixGroup = $seasonAffixGroupService->getAffixGroupAt(
+                $currentSeasonForDungeon,
+                Carbon::parse($this->challengeMode->start),
+                // Region is unknown here; null defaults to US, which is a best-guess approximation.
+            );
 
-            foreach ($eligibleAffixGroups as $eligibleAffixGroup) {
-                // If the affix group's affixes are all in $affixIds
-                if ($affixIds->diff($eligibleAffixGroup->affixes->pluck('affix_id'))->isEmpty()) {
-                    // Couple the affix group to the newly created dungeon route
-                    $dungeonRouteAffixGroupRepository->create([
-                        'dungeon_route_id' => $dungeonRoute->id,
-                        'affix_group_id'   => $eligibleAffixGroup->id,
-                    ]);
-                }
+            if ($affixGroup !== null) {
+                $dungeonRouteAffixGroupRepository->create([
+                    'dungeon_route_id' => $dungeonRoute->id,
+                    'affix_group_id'   => $affixGroup->id,
+                ]);
             }
         }
 

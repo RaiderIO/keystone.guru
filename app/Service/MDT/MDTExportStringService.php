@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -48,6 +49,30 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         // Lua is 1 based, not 0 based
         $currentObjectIndex = 1;
+
+        foreach ($this->extractMapIconObjects() as $item) {
+            $result[$currentObjectIndex++] = $item;
+        }
+
+        foreach ($this->extractLineObjects() as $item) {
+            $result[$currentObjectIndex++] = $item;
+        }
+
+        foreach ($this->extractArrowObjects() as $item) {
+            $result[$currentObjectIndex++] = $item;
+        }
+
+        foreach ($this->extractKillZoneDescriptionObjects() as $item) {
+            $result[$currentObjectIndex++] = $item;
+        }
+
+        return $result;
+    }
+
+    private function extractMapIconObjects(): array
+    {
+        $objects = [];
+
         foreach ($this->dungeonRoute->mapicons()->with(['floor'])->get() as $mapIcon) {
             /** @var MapIcon $mapIcon */
             $latLng = $mapIcon->getLatLng();
@@ -60,7 +85,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
 
-            $result[$currentObjectIndex++] = [
+            $objects[] = [
                 'n' => true,
                 'd' => [
                     1 => $mdtCoordinates['x'],
@@ -71,6 +96,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 ],
             ];
         }
+
+        return $objects;
+    }
+
+    private function extractLineObjects(): array
+    {
+        $objects = [];
 
         $lines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->merge(
             $this->dungeonRoute->paths()->with(['floor'])->get(),
@@ -123,10 +155,91 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 $previousMdtCoordinates = $mdtCoordinates;
             }
 
-            $result[$currentObjectIndex++] = $mdtLine;
+            $objects[] = $mdtLine;
         }
 
-        // For each killzone, ensure we extract the comments into something MDT understands
+        return $objects;
+    }
+
+    /**
+     * Export arrows as MDT triangle objects.
+     */
+    private function extractArrowObjects(): array
+    {
+        $objects = [];
+
+        foreach ($this->dungeonRoute->arrows()->with(['floor'])->get() as $arrow) {
+            /** @var Arrow $arrow */
+            if ($arrow->polyline === null) {
+                continue;
+            }
+
+            $verticesLatLngs = $arrow->polyline->getDecodedLatLngs($arrow->floor);
+
+            $mdtLine = [
+                'd' => [
+                    1 => $arrow->polyline->weight,
+                    2 => 1,
+                    3 => $arrow->floor->mdt_sub_level ?? $arrow->floor->index,
+                    4 => true,
+                    5 => str_starts_with($arrow->polyline->color, '#') ? substr($arrow->polyline->color, 1) : $arrow->polyline->color,
+                    6 => -8,
+                    7 => true,
+                ],
+                'l' => [],
+                't' => [],
+            ];
+
+            $vertexIndex            = 1;
+            $firstMdtCoordinates    = null;
+            $lastMdtCoordinates     = null;
+            $previousMdtCoordinates = null;
+
+            foreach ($verticesLatLngs as $vertexLatLng) {
+                if ($this->dungeonRoute->mappingVersion->facade_enabled) {
+                    $vertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                        $this->dungeonRoute->mappingVersion,
+                        $vertexLatLng,
+                    );
+
+                    $mdtLine['d'][3] = $vertexLatLng->getFloor()->mdt_sub_level ?? $vertexLatLng->getFloor()->index;
+                }
+
+                $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($vertexLatLng);
+
+                $firstMdtCoordinates ??= $mdtCoordinates;
+                $lastMdtCoordinates = $mdtCoordinates;
+
+                if ($previousMdtCoordinates !== null) {
+                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['x'];
+                    $mdtLine['l'][$vertexIndex++] = $previousMdtCoordinates['y'];
+                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['x'];
+                    $mdtLine['l'][$vertexIndex++] = $mdtCoordinates['y'];
+                }
+
+                $previousMdtCoordinates = $mdtCoordinates;
+            }
+
+            // Compute arrow direction from shaft: atan2(dy, dx) of the last segment
+            if ($firstMdtCoordinates !== null && $lastMdtCoordinates !== null) {
+                $dx              = $lastMdtCoordinates['x'] - $firstMdtCoordinates['x'];
+                $dy              = $lastMdtCoordinates['y'] - $firstMdtCoordinates['y'];
+                $mdtLine['t'][1] = atan2($dy, $dx);
+            }
+
+            $objects[] = $mdtLine;
+        }
+
+        return $objects;
+    }
+
+    /**
+     * For each kill zone, extract its description as an MDT note object.
+     */
+    private function extractKillZoneDescriptionObjects(): array
+    {
+        $objects = [];
+
         foreach ($this->dungeonRoute->killZones as $killZone) {
             if (!isset($killZone->description)) {
                 continue;
@@ -149,7 +262,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             $mdtCoordinates = Conversion::convertLatLngToMDTCoordinateString($latLng);
 
-            $result[$currentObjectIndex++] = [
+            $objects[] = [
                 'n' => true,
                 'd' => [
                     1 => $mdtCoordinates['x'],
@@ -162,7 +275,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             ];
         }
 
-        return $result;
+        return $objects;
     }
 
     /**

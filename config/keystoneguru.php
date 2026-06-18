@@ -186,6 +186,7 @@ return [
         'kill_zones' => 50,
         'brushlines' => 150,
         'paths'      => 150,
+        'arrows'     => 50,
         'map_icons'  => 150,
     ],
 
@@ -200,6 +201,11 @@ return [
      * the view is counted for a second time.
      */
     'view_time_threshold_mins' => 30,
+
+    'page_views' => [
+        /** The number of days page view records are kept before being pruned. Only the last X days are needed for popularity calculations. */
+        'retention_days' => 30,
+    ],
 
     'thumbnail' => [
         /**

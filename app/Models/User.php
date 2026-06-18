@@ -345,7 +345,7 @@ class User extends Authenticatable implements LaratrustUser
         return Auth::user()?->kill_zone_path_weight ?? (int)($_COOKIE['kill_zone_path_weight'] ?? self::DEFAULT_KILL_ZONE_PATH_WEIGHT); // @phpstan-ignore nullsafe.neverNull
     }
 
-    public static function forceMapFacadeStyle(string $mapFacadeStyle): void
+    public static function forceMapFacadeStyle(?string $mapFacadeStyle): void
     {
         self::$OVERRIDE_MAP_FACADE_STYLE = $mapFacadeStyle;
     }
