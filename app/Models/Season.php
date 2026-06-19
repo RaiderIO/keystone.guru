@@ -95,11 +95,7 @@ class Season extends CacheModel
         'item_level_max',
     ];
 
-    public $with = [
-        'expansion',
-        'affixGroups',
-        'dungeons',
-    ];
+    public $with = [];
 
     public $timestamps = false;
 

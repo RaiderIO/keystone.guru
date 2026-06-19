@@ -124,7 +124,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     public $with = [
         'expansion',
-        'floors',
     ];
 
     public $hidden = [
