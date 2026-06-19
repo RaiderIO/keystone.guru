@@ -21262,5 +21262,2565 @@
         "property": "miss_interrupt",
         "combat_log_path": null,
         "created_at": "2026-06-04T08:22:40+00:00"
+    },
+    {
+        "id": 2793,
+        "spell_id": 468962,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:44+00:00"
+    },
+    {
+        "id": 2794,
+        "spell_id": 1282055,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:44+00:00"
+    },
+    {
+        "id": 2795,
+        "spell_id": 1282050,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2796,
+        "spell_id": 1282051,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2797,
+        "spell_id": 1282053,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2798,
+        "spell_id": 468966,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2799,
+        "spell_id": 1255187,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2800,
+        "spell_id": 1254306,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2801,
+        "spell_id": 1252910,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2802,
+        "spell_id": 468966,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2803,
+        "spell_id": 1216858,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2804,
+        "spell_id": 468962,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2805,
+        "spell_id": 1270762,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2806,
+        "spell_id": 1254336,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2807,
+        "spell_id": 1254338,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2808,
+        "spell_id": 1254338,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2809,
+        "spell_id": 1254294,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2810,
+        "spell_id": 1254338,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2811,
+        "spell_id": 1279995,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2812,
+        "spell_id": 1255187,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2813,
+        "spell_id": 1254595,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2814,
+        "spell_id": 1214038,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2815,
+        "spell_id": 474345,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2816,
+        "spell_id": 1243905,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2817,
+        "spell_id": 474407,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2818,
+        "spell_id": 474414,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2819,
+        "spell_id": 1243905,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2820,
+        "spell_id": 1214081,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2821,
+        "spell_id": 1214038,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2822,
+        "spell_id": 1265561,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2823,
+        "spell_id": 1244907,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2824,
+        "spell_id": 1244907,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2825,
+        "spell_id": 1244907,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2826,
+        "spell_id": 1225792,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2827,
+        "spell_id": 1246446,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2828,
+        "spell_id": 1225015,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2829,
+        "spell_id": 1248689,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2830,
+        "spell_id": 1271317,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2831,
+        "spell_id": 1225201,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2832,
+        "spell_id": 1246446,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2833,
+        "spell_id": 1225135,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2834,
+        "spell_id": 1225792,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2835,
+        "spell_id": 1225796,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2836,
+        "spell_id": 1246446,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2837,
+        "spell_id": 1225205,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2838,
+        "spell_id": 1254246,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2839,
+        "spell_id": 1248015,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2840,
+        "spell_id": 1255434,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2841,
+        "spell_id": 1255462,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2842,
+        "spell_id": 1265977,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2843,
+        "spell_id": 1264693,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2844,
+        "spell_id": 1248327,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2845,
+        "spell_id": 1248327,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2846,
+        "spell_id": 1248327,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2847,
+        "spell_id": 1217087,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2848,
+        "spell_id": 1264687,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2849,
+        "spell_id": 1248138,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2850,
+        "spell_id": 1248229,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2851,
+        "spell_id": 1264687,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2852,
+        "spell_id": 1223936,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2853,
+        "spell_id": 1284958,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2854,
+        "spell_id": 1224104,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2855,
+        "spell_id": 1253707,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2856,
+        "spell_id": 1253709,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2857,
+        "spell_id": 1224299,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2858,
+        "spell_id": 1224299,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2859,
+        "spell_id": 1284958,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2860,
+        "spell_id": 1224104,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2861,
+        "spell_id": 1245068,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2862,
+        "spell_id": 1245068,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2863,
+        "spell_id": 1248229,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2864,
+        "spell_id": 1284627,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2865,
+        "spell_id": 1215897,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2866,
+        "spell_id": 1284633,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2867,
+        "spell_id": 1215897,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2868,
+        "spell_id": 1271066,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2869,
+        "spell_id": 1215897,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2870,
+        "spell_id": 1269631,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2871,
+        "spell_id": 1271066,
+        "event_type": "property_changed",
+        "property": "miss_deflect",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2872,
+        "spell_id": 1271066,
+        "event_type": "property_changed",
+        "property": "miss_dodge",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2873,
+        "spell_id": 1269631,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2874,
+        "spell_id": 1280119,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2875,
+        "spell_id": 1284633,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 2876,
+        "spell_id": 1258459,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2877,
+        "spell_id": 1258434,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2878,
+        "spell_id": 1258826,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2879,
+        "spell_id": 1258445,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2880,
+        "spell_id": 1258435,
+        "event_type": "property_changed",
+        "property": "miss_parry",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2881,
+        "spell_id": 1258435,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2882,
+        "spell_id": 1258431,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2883,
+        "spell_id": 1258431,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2884,
+        "spell_id": 1258798,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2885,
+        "spell_id": 1258435,
+        "event_type": "property_changed",
+        "property": "miss_miss",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2886,
+        "spell_id": 1258448,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2887,
+        "spell_id": 1258435,
+        "event_type": "property_changed",
+        "property": "miss_dodge",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2888,
+        "spell_id": 1258433,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2889,
+        "spell_id": 1258451,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2890,
+        "spell_id": 1271074,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2891,
+        "spell_id": 1259116,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2892,
+        "spell_id": 1258451,
+        "event_type": "property_changed",
+        "property": "miss_miss",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2893,
+        "spell_id": 1271479,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2894,
+        "spell_id": 1259132,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2895,
+        "spell_id": 1258802,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2896,
+        "spell_id": 1258802,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2897,
+        "spell_id": 1259116,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2898,
+        "spell_id": 1258435,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:54+00:00"
+    },
+    {
+        "id": 2899,
+        "spell_id": 1258434,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2900,
+        "spell_id": 1259116,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2901,
+        "spell_id": 1258451,
+        "event_type": "property_changed",
+        "property": "miss_dodge",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2902,
+        "spell_id": 1278950,
+        "event_type": "property_changed",
+        "property": "miss_dodge",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2903,
+        "spell_id": 1278950,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2904,
+        "spell_id": 1278950,
+        "event_type": "property_changed",
+        "property": "miss_parry",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2905,
+        "spell_id": 1278950,
+        "event_type": "property_changed",
+        "property": "miss_miss",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2906,
+        "spell_id": 1258464,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2907,
+        "spell_id": 1258464,
+        "event_type": "property_changed",
+        "property": "miss_miss",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2908,
+        "spell_id": 1258464,
+        "event_type": "property_changed",
+        "property": "miss_parry",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2909,
+        "spell_id": 1258436,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2910,
+        "spell_id": 1258437,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2911,
+        "spell_id": 1258445,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2912,
+        "spell_id": 1261806,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2913,
+        "spell_id": 1261808,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2914,
+        "spell_id": 1261315,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2915,
+        "spell_id": 1261286,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2916,
+        "spell_id": 1261299,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2917,
+        "spell_id": 1261540,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2918,
+        "spell_id": 1261799,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2919,
+        "spell_id": 1261799,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2920,
+        "spell_id": 1261315,
+        "event_type": "property_changed",
+        "property": "miss_dodge",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2921,
+        "spell_id": 1262029,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2922,
+        "spell_id": 1275687,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2923,
+        "spell_id": 1261315,
+        "event_type": "property_changed",
+        "property": "miss_parry",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2924,
+        "spell_id": 1261921,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2925,
+        "spell_id": 1261847,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2926,
+        "spell_id": 1261808,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2927,
+        "spell_id": 1261921,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2928,
+        "spell_id": 1258437,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2929,
+        "spell_id": 1258436,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2930,
+        "spell_id": 1264246,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2931,
+        "spell_id": 1271678,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2932,
+        "spell_id": 1264186,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2933,
+        "spell_id": 1278893,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2934,
+        "spell_id": 1264246,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2935,
+        "spell_id": 1264186,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2936,
+        "spell_id": 1279668,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2937,
+        "spell_id": 1258826,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2938,
+        "spell_id": 1259187,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2939,
+        "spell_id": 1259205,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2940,
+        "spell_id": 1259226,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2941,
+        "spell_id": 1278754,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2942,
+        "spell_id": 1258437,
+        "event_type": "property_changed",
+        "property": "miss_immune",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2943,
+        "spell_id": 1259202,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2944,
+        "spell_id": 1276648,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2945,
+        "spell_id": 1276648,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2946,
+        "spell_id": 1262596,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2947,
+        "spell_id": 1263756,
+        "event_type": "property_changed",
+        "property": "aura",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2948,
+        "spell_id": 1263766,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2949,
+        "spell_id": 1262930,
+        "event_type": "property_changed",
+        "property": "debuff",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2950,
+        "spell_id": 1263000,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2951,
+        "spell_id": 1262941,
+        "event_type": "property_changed",
+        "property": "miss_interrupt",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2952,
+        "spell_id": 1262582,
+        "event_type": "property_changed",
+        "property": "miss_absorb",
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 2961,
+        "spell_id": 474345,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2962,
+        "spell_id": 474407,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2963,
+        "spell_id": 1223936,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2964,
+        "spell_id": 1248015,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2965,
+        "spell_id": 1248229,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2966,
+        "spell_id": 1248689,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2967,
+        "spell_id": 1253707,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2968,
+        "spell_id": 1254246,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 2969,
+        "spell_id": 1254306,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2970,
+        "spell_id": 1254336,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2971,
+        "spell_id": 1255462,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2972,
+        "spell_id": 1258448,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2973,
+        "spell_id": 1258798,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2974,
+        "spell_id": 1259132,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2975,
+        "spell_id": 1259226,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2976,
+        "spell_id": 1261299,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2977,
+        "spell_id": 1261806,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2978,
+        "spell_id": 1262029,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2979,
+        "spell_id": 1263756,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2980,
+        "spell_id": 1265561,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2981,
+        "spell_id": 1265977,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2982,
+        "spell_id": 1271678,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2983,
+        "spell_id": 1279668,
+        "event_type": "property_removed",
+        "property": "aura",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2984,
+        "spell_id": 468966,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2985,
+        "spell_id": 1214038,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2986,
+        "spell_id": 1215897,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2987,
+        "spell_id": 1216858,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2988,
+        "spell_id": 1224104,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2989,
+        "spell_id": 1224299,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2990,
+        "spell_id": 1225015,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2991,
+        "spell_id": 1225135,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2992,
+        "spell_id": 1225205,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2993,
+        "spell_id": 1225792,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2994,
+        "spell_id": 1243905,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2995,
+        "spell_id": 1244907,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2996,
+        "spell_id": 1245068,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2997,
+        "spell_id": 1246446,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2998,
+        "spell_id": 1248138,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 2999,
+        "spell_id": 1248229,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3000,
+        "spell_id": 1253709,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3001,
+        "spell_id": 1254338,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3002,
+        "spell_id": 1255187,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3003,
+        "spell_id": 1258434,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3004,
+        "spell_id": 1258435,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3005,
+        "spell_id": 1258437,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3006,
+        "spell_id": 1258445,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3007,
+        "spell_id": 1258459,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3008,
+        "spell_id": 1258826,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3009,
+        "spell_id": 1259116,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3010,
+        "spell_id": 1259187,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3011,
+        "spell_id": 1259205,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3012,
+        "spell_id": 1261286,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3013,
+        "spell_id": 1261540,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3014,
+        "spell_id": 1261799,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3015,
+        "spell_id": 1261921,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3016,
+        "spell_id": 1262596,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3017,
+        "spell_id": 1262930,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3018,
+        "spell_id": 1263766,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3019,
+        "spell_id": 1264186,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3020,
+        "spell_id": 1264246,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3021,
+        "spell_id": 1264687,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3022,
+        "spell_id": 1269631,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3023,
+        "spell_id": 1270762,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3024,
+        "spell_id": 1275687,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3025,
+        "spell_id": 1276648,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3026,
+        "spell_id": 1282050,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3027,
+        "spell_id": 1282053,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3028,
+        "spell_id": 1282055,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3029,
+        "spell_id": 1284627,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3030,
+        "spell_id": 1284633,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3031,
+        "spell_id": 1284958,
+        "event_type": "property_removed",
+        "property": "debuff",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3032,
+        "spell_id": 468962,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3033,
+        "spell_id": 474414,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3034,
+        "spell_id": 1214081,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3035,
+        "spell_id": 1215897,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3036,
+        "spell_id": 1217087,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3037,
+        "spell_id": 1224299,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3038,
+        "spell_id": 1225201,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3039,
+        "spell_id": 1225792,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3040,
+        "spell_id": 1225796,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3041,
+        "spell_id": 1243905,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3042,
+        "spell_id": 1244907,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3043,
+        "spell_id": 1245068,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3044,
+        "spell_id": 1246446,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3045,
+        "spell_id": 1248327,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3046,
+        "spell_id": 1252910,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3047,
+        "spell_id": 1254338,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3048,
+        "spell_id": 1254595,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3049,
+        "spell_id": 1255434,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:05+00:00"
+    },
+    {
+        "id": 3050,
+        "spell_id": 1258431,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3051,
+        "spell_id": 1258433,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3052,
+        "spell_id": 1258434,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3053,
+        "spell_id": 1258435,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3054,
+        "spell_id": 1258436,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3055,
+        "spell_id": 1258437,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3056,
+        "spell_id": 1258445,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3057,
+        "spell_id": 1258451,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3058,
+        "spell_id": 1258464,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3059,
+        "spell_id": 1258802,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3060,
+        "spell_id": 1258826,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3061,
+        "spell_id": 1259116,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3062,
+        "spell_id": 1259202,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3063,
+        "spell_id": 1261315,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3064,
+        "spell_id": 1261799,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3065,
+        "spell_id": 1261808,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3066,
+        "spell_id": 1261847,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3067,
+        "spell_id": 1262582,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3068,
+        "spell_id": 1263000,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3069,
+        "spell_id": 1264246,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3070,
+        "spell_id": 1264687,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3071,
+        "spell_id": 1269631,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3072,
+        "spell_id": 1271066,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3073,
+        "spell_id": 1271317,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3074,
+        "spell_id": 1276648,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3075,
+        "spell_id": 1278754,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3076,
+        "spell_id": 1278950,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3077,
+        "spell_id": 1279995,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3078,
+        "spell_id": 1280119,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3079,
+        "spell_id": 1282051,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3080,
+        "spell_id": 1284633,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3081,
+        "spell_id": 1284958,
+        "event_type": "property_removed",
+        "property": "miss_absorb",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3082,
+        "spell_id": 1271066,
+        "event_type": "property_removed",
+        "property": "miss_deflect",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3083,
+        "spell_id": 1258435,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3084,
+        "spell_id": 1258451,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3085,
+        "spell_id": 1261315,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3086,
+        "spell_id": 1271066,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3087,
+        "spell_id": 1278950,
+        "event_type": "property_removed",
+        "property": "miss_dodge",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3088,
+        "spell_id": 1214038,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3089,
+        "spell_id": 1215897,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3090,
+        "spell_id": 1224104,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3091,
+        "spell_id": 1244907,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3092,
+        "spell_id": 1246446,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3093,
+        "spell_id": 1248327,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3094,
+        "spell_id": 1254338,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3095,
+        "spell_id": 1255187,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3096,
+        "spell_id": 1258437,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3097,
+        "spell_id": 1258802,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3098,
+        "spell_id": 1259116,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3099,
+        "spell_id": 1261808,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3100,
+        "spell_id": 1261921,
+        "event_type": "property_removed",
+        "property": "miss_immune",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3101,
+        "spell_id": 1258435,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3102,
+        "spell_id": 1258451,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3103,
+        "spell_id": 1258464,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3104,
+        "spell_id": 1278950,
+        "event_type": "property_removed",
+        "property": "miss_miss",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3105,
+        "spell_id": 1258435,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3106,
+        "spell_id": 1258464,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3107,
+        "spell_id": 1261315,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3108,
+        "spell_id": 1278950,
+        "event_type": "property_removed",
+        "property": "miss_parry",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3109,
+        "spell_id": 468962,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3110,
+        "spell_id": 468966,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3111,
+        "spell_id": 1248327,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3112,
+        "spell_id": 1254294,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3113,
+        "spell_id": 1258431,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3114,
+        "spell_id": 1258436,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3115,
+        "spell_id": 1262941,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3116,
+        "spell_id": 1264186,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3117,
+        "spell_id": 1264693,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3118,
+        "spell_id": 1271074,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3119,
+        "spell_id": 1271479,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
+    },
+    {
+        "id": 3120,
+        "spell_id": 1278893,
+        "event_type": "property_removed",
+        "property": "miss_interrupt",
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:06+00:00"
     }
 ]
