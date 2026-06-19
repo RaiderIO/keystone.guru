@@ -8,14 +8,18 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('CombatLog')]
 #[Group('CombatLogRouteEnemyFailureService')]
 final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
 {
+    use ProvidesDungeon;
+
     private CombatLogRouteEnemyFailureServiceInterface $service;
 
     private Dungeon $dungeon;
@@ -37,12 +41,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             ->pluck('dungeon_id')
             ->all();
 
-        /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::query()
-            ->when(!empty($dungeonIdsWithData), fn($q) => $q->whereNotIn('id', $dungeonIdsWithData))
-            ->inRandomOrder()
-            ->first();
-        $this->dungeon = $dungeon;
+        $this->dungeon = $this->getDungeonWithNonFacadeFloor(
+            fn(Builder $q) => $q->when(!empty($dungeonIdsWithData), fn(Builder $q) => $q->whereNotIn('id', $dungeonIdsWithData)),
+        );
 
         /** @var Floor $floor */
         $floor       = $this->dungeon->floors()->where('facade', 0)->first();
