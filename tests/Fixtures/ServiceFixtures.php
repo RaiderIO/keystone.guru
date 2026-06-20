@@ -24,6 +24,9 @@ use App\Service\CombatLogEvent\CombatLogEventService;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSaveService;
+use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Metric\MetricService;
@@ -268,6 +271,27 @@ class ServiceFixtures
                 $redisService ?? ServiceFixtures::createRedisService($testCase),
                 $log ?? LoggingFixtures::createCacheServiceLogging($testCase),
             ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getDungeonRouteSaveService(
+        PublicTestCase                           $testCase,
+        ?SeasonServiceInterface                  $seasonService = null,
+        ?ThumbnailServiceInterface               $thumbnailService = null,
+        ?DungeonRouteSaveServiceLoggingInterface $log = null,
+        array                                    $methodsToMock = [],
+    ): MockObject|DungeonRouteSaveService {
+        return $testCase
+            ->getMockBuilderPublic(DungeonRouteSaveService::class)
+            ->setConstructorArgs([
+                $seasonService ?? $testCase->createMockPublic(SeasonServiceInterface::class),
+                $thumbnailService ?? $testCase->createMockPublic(ThumbnailServiceInterface::class),
+                $log ?? LoggingFixtures::createDungeonRouteSaveServiceLogging($testCase),
+            ])
+            ->onlyMethods($methodsToMock)
             ->getMock();
     }
 
