@@ -37,11 +37,11 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
-use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
@@ -515,9 +515,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function store(
         AjaxDungeonRouteSubmitFormRequest $request,
-        SeasonService                     $seasonService,
-        ExpansionServiceInterface         $expansionService,
-        ThumbnailServiceInterface         $thumbnailService,
+        DungeonRouteSaveServiceInterface  $saveService,
         ?DungeonRoute                     $dungeonRoute = null,
     ): DungeonRoute {
         Gate::authorize('edit', $dungeonRoute);
@@ -531,7 +529,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonRoute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
+        if (!$saveService->saveFromRequest($dungeonRoute, $request)) {
             abort(500, 'Unable to save dungeonroute');
         }
 
@@ -655,10 +653,10 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function cloneToTeam(
-        Request                   $request,
-        ThumbnailServiceInterface $thumbnailService,
-        DungeonRoute              $dungeonRoute,
-        Team                      $team,
+        Request                          $request,
+        DungeonRouteSaveServiceInterface $saveService,
+        DungeonRoute                     $dungeonRoute,
+        Team                             $team,
     ): Response {
         Gate::authorize('clone', $dungeonRoute);
 
@@ -666,7 +664,7 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonRoute->cloneRoute($thumbnailService, false);
+            $newRoute = $saveService->cloneRoute($dungeonRoute, false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);

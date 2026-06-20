@@ -2,7 +2,6 @@
 
 namespace App\Models\DungeonRoute;
 
-use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
@@ -22,7 +21,6 @@ use App\Models\Faction;
 use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
-use App\Models\GameVersion\GameVersion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\KillZone\KillZone;
@@ -47,7 +45,6 @@ use App\Models\Traits\SerializesDates;
 use App\Models\Traits\Taggable;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
@@ -63,7 +60,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -842,351 +838,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
-     * @throws Exception
-     */
-    public function saveTemporaryFromRequest(
-        DungeonRouteSubmitTemporaryFormRequest $request,
-        SeasonServiceInterface                 $seasonService,
-        ExpansionServiceInterface              $expansionService,
-    ): bool {
-        $this->author_id  = Auth::id() ?? -1;
-        $this->public_key = DungeonRoute::generateRandomPublicKey();
-
-        $validated = $request->validated();
-
-        $this->dungeon_id         = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
-        $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
-        $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
-
-        $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $activeSeason    = null;
-        if ($userGameVersion->has_seasons) {
-            $activeSeason = $seasonService->getCurrentSeason(
-                $userGameVersion->expansion,
-            ) ?? $seasonService->getMostRecentSeasonForDungeon($dungeon);
-            // Can still be null if there are no seasons for this dungeon, like in Classic
-            $this->season_id = $activeSeason->id ?? null;
-        }
-
-        $this->faction_id = 1;
-//        $this->difficulty     = 1;
-        $this->seasonal_index = 0;
-        $this->teeming        = false;
-
-        $this->pull_gradient              = '';
-        $this->pull_gradient_apply_always = false;
-
-        $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
-        if ($this->dungeon_difficulty !== null && $dungeon->speedrun_enabled) {
-            $this->dungeon_difficulty = $dungeon->speedrun_difficulty_10_man_enabled ?
-                Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
-        }
-
-        $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
-
-        $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
-        if ($dungeonRouteLevel !== null) {
-            $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-            $this->level_min        = (int)$dungeonRouteLevelParts[0];
-            $this->level_max        = isset($dungeonRouteLevelParts[1]) ? (int)$dungeonRouteLevelParts[1] : null;
-
-            $this->level_max ??= $activeSeason?->key_level_max;
-
-            if ($this->level_max !== null) {
-                $this->level_max = (int)$this->level_max;
-            }
-        }
-
-        $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'));
-
-        $saveResult = $this->save();
-        if ($saveResult && $activeSeason !== null) {
-            $this->ensureAffixGroup($activeSeason);
-        }
-
-        return $saveResult;
-    }
-
-    /**
-     * Saves this DungeonRoute with information from the passed Request.
-     *
-     *
-     * @throws Exception
-     */
-    public function saveFromRequest(
-        FormRequest               $request,
-        SeasonServiceInterface    $seasonService,
-        ExpansionServiceInterface $expansionService,
-        ThumbnailServiceInterface $thumbnailService,
-    ): bool {
-        $result = false;
-
-        // Overwrite the author_id if it's not been set yet
-        $new = !isset($this->id);
-        /** @var User|null $user */
-        $user = Auth::user();
-
-        $validated = $request->validated();
-
-        $this->dungeon_id = (int)($validated['dungeon_id'] ?? $this->dungeon_id);
-        $dungeon          = Dungeon::findOrFail($this->dungeon_id);
-        if ($new) {
-            $this->author_id  = $user?->id ?? -1; // @phpstan-ignore nullsafe.neverNull
-            $this->public_key = DungeonRoute::generateRandomPublicKey();
-            $this->setRelation('dungeon', $dungeon);
-            $this->mapping_version_id = $this->dungeon->getCurrentMappingVersion()->id;
-        }
-
-        $teamIdFromRequest = (int)($validated['team_id'] ?? $this->team_id);
-        $this->team_id     = $teamIdFromRequest > 0 ? $teamIdFromRequest : null;
-
-        $this->faction_id = (int)($validated['faction_id'] ?? $this->faction_id);
-        // If it was empty just set Unspecified instead
-        $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
-
-        $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $activeSeason    = null;
-        if ($userGameVersion->has_seasons) {
-            $activeSeason = $seasonService->getUpcomingSeasonForDungeon($this->dungeon) ??
-                $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
-            // Can still be null if there are no seasons for this dungeon, like in Classic
-            $this->season_id = $activeSeason->id ?? null;
-            $this->setRelation('season', $activeSeason);
-        }
-
-        $this->seasonal_index = (int)($validated['seasonal_index'] ?? [$this->seasonal_index])[0];
-        $this->teeming        = false; // (int)$request->get('teeming', $this->teeming) ?? 0;
-
-        $this->pull_gradient              = $request->get('pull_gradient', '');
-        $this->pull_gradient_apply_always = (bool)$request->get('pull_gradient_apply_always', 0);
-
-        // Sandbox routes have some fixed properties
-        // Fetch the title if the user set anything
-        $this->title       = $validated['dungeon_route_title'] ?? $this->title;
-        $this->description = $validated['dungeon_route_description'] ?? ($this->description ?? '');
-        // Title slug CAN resolve to empty if they're just using special characters only
-        if (empty($this->title) || empty($this->getTitleSlug())) {
-            $this->title = __($this->dungeon->name);
-        }
-
-        $dungeonRouteLevel = $validated['dungeon_route_level'] ?? null;
-        if ($dungeonRouteLevel !== null) {
-            $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-            $this->level_min        = (int)$dungeonRouteLevelParts[0];
-            $this->level_max        = isset($dungeonRouteLevelParts[1]) ? (int)$dungeonRouteLevelParts[1] : ($activeSeason?->key_level_max);
-
-            if ($this->level_max !== null) {
-                $this->level_max = (int)$this->level_max;
-            }
-        }
-
-        if ($user?->hasRole(Role::ROLE_ADMIN)) {
-            $this->demo = intval($validated['demo'] ?? 0) > 0;
-        }
-
-        $this->dungeon_difficulty = $validated['dungeon_difficulty'] ?? null;
-        if ($this->dungeon_difficulty !== null && $dungeon->speedrun_enabled) {
-            $this->dungeon_difficulty = $dungeon->speedrun_difficulty_10_man_enabled ?
-                Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
-        }
-
-        // Remove all loaded relations - we have changed some IDs so the values should be re-fetched
-        $this->unsetRelations();
-
-        // Update or insert it
-        if ($this->save()) {
-            $newAttributes = $validated['attributes'] ?? [];
-            if (!empty($newAttributes)) {
-                // Remove old attributes
-                $this->routeattributesraw()->delete();
-                foreach ($newAttributes as $value) {
-                    // Only if they exist
-                    if (RouteAttribute::where('id', $value)->exists()) {
-                        DungeonRouteAttribute::create([
-                            'dungeon_route_id'   => $this->id,
-                            'route_attribute_id' => $value,
-                        ]);
-                    }
-                }
-            }
-
-            $newClasses = $validated['class'] ?? [];
-            if (!empty($newClasses)) {
-                // Remove old classes
-                $this->playerclasses()->delete();
-                foreach ($newClasses as $value) {
-                    if (CharacterClass::where('id', $value)->exists()) {
-                        DungeonRoutePlayerClass::create([
-                            'dungeon_route_id'   => $this->id,
-                            'character_class_id' => (int)$value,
-                        ]);
-                    }
-                }
-            }
-
-            $newSpecs = $validated['specialization'] ?? [];
-            if (!empty($newSpecs)) {
-                // Remove old specializations
-                $this->playerspecializations()->delete();
-                foreach ($newSpecs as $value) {
-                    // Only if they exist
-                    if (CharacterClassSpecialization::where('id', $value)->exists()) {
-                        DungeonRoutePlayerSpecialization::create([
-                            'dungeon_route_id'                  => $this->id,
-                            'character_class_specialization_id' => (int)$value,
-                        ]);
-                    }
-                }
-            }
-
-            $newRaces = $validated['race'] ?? [];
-            if (!empty($newRaces)) {
-                // Remove old races
-                $this->playerraces()->delete();
-
-                // We don't _really_ care if this doesn't get saved properly, they can just set it again when editing.
-                foreach ($newRaces as $value) {
-                    DungeonRoutePlayerRace::create([
-                        'dungeon_route_id'  => $this->id,
-                        'character_race_id' => (int)$value,
-                    ]);
-                }
-            }
-
-            $newAffixes = $validated['route_select_affixes'] ?? [];
-            if (!empty($newAffixes)) {
-                // Remove old affixgroups
-                $this->affixgroups()->delete();
-
-                if ($activeSeason !== null) {
-                    foreach ($newAffixes as $value) {
-                        $value = (int)$value;
-
-                        if ($activeSeason->affixGroups->filter(static fn(
-                            AffixGroup $affixGroup,
-                        ) => $affixGroup->id === $value)->isEmpty()) {
-                            // Attempted to assign an affix that the dungeon cannot have - abort it
-                            continue;
-                        }
-
-                        // Check disabled to support dungeons not being tied to expansions but to seasons instead.
-                        // Impact is that people could assign affixes to routes that don't make sense if they edit the request, meh w/e
-                        // Skip any affixes that don't exist, and don't match our current expansion
-                        // if (!AffixGroup::where('id', $value)->where('expansion_id', $this->dungeon->expansion_id)->exists()) {
-                        //     continue;
-                        // }
-
-                        /** @var AffixGroup $affixGroup */
-                        $affixGroup = AffixGroup::find($value);
-
-                        // Do not add affixes that do not belong to our Teeming selection
-                        if (($affixGroup->id > 0 && $this->teeming != $affixGroup->hasAffix(Affix::AFFIX_TEEMING))) {
-                            continue;
-                        }
-
-                        DungeonRouteAffixGroup::create([
-                            'dungeon_route_id' => $this->id,
-                            'affix_group_id'   => $affixGroup->id,
-                        ]);
-                    }
-
-                    // Reload the affixes relation
-                    $this->load('affixes');
-                }
-            } elseif ($new && $activeSeason !== null) {
-                $this->ensureAffixGroup($activeSeason);
-            }
-
-            // Instantly generate a placeholder thumbnail for new routes.
-            if ($new) {
-                $thumbnailService->queueThumbnailRefresh($this);
-
-                // If the user requested a template route..
-                if ($validated['template'] ?? false) {
-                    // Check if there's a route that we can use as a template..
-                    $templateRoute = DungeonRoute::where('demo', true)
-                        ->where('dungeon_id', $this->dungeon_id)
-                        ->where('teeming', $this->teeming)
-                        ->first();
-
-                    // Only if the route was found!
-                    $templateRoute?->cloneRelationsInto($this, [
-                        $templateRoute->paths,
-                        $templateRoute->brushlines,
-                        $templateRoute->arrows,
-                        $templateRoute->killZones,
-                        $templateRoute->enemyRaidMarkers,
-                        $templateRoute->mapicons,
-                    ]);
-                }
-            }
-
-            // Refresh the cards for this route
-            DungeonRoute::dropCaches($this->id);
-
-            $result = true;
-        }
-
-        return $result;
-    }
-
-    /**
-     *  Clones this route into another route, adding all of our killzones, drawables etc etc to it.
-     *
-     *
-     * @return DungeonRoute The newly cloned route.
-     */
-    public function cloneRoute(ThumbnailServiceInterface $thumbnailService, bool $unpublished = true): self
-    {
-        // Must save the new route first
-        $dungeonroute = DungeonRoute::create([
-            'public_key'         => DungeonRoute::generateRandomPublicKey(),
-            'clone_of'           => $this->public_key,
-            'author_id'          => Auth::id(),
-            'dungeon_id'         => $this->dungeon_id,
-            'mapping_version_id' => $this->mapping_version_id,
-            'season_id'          => $this->season_id,
-            'faction_id'         => $this->faction_id,
-            'published_state_id' => $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $this->published_state_id,
-
-            // Do not clone team_id, user assigns the team himself
-            'team_id'        => null,
-            'title'          => __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]),
-            'description'    => $this->description,
-            'seasonal_index' => $this->seasonal_index,
-            'teeming'        => $this->teeming,
-            'enemy_forces'   => $this->enemy_forces,
-            'level_min'      => $this->level_min,
-            'level_max'      => $this->level_max,
-        ]);
-
-        // Clone the relations of this route into the new route.
-        $this->cloneRelationsInto($dungeonroute, [
-            $this->playerraces,
-            $this->playerclasses,
-            $this->affixGroups,
-            $this->paths,
-            $this->brushlines,
-            $this->arrows,
-            $this->killZones,
-            $this->pridefulEnemies,
-            $this->enemyRaidMarkers,
-            $this->mapicons,
-            $this->routeattributesraw,
-        ]);
-
-        // Copy the thumbnails to this newly cloned route
-        if ($thumbnailService->copyThumbnails($this, $dungeonroute)?->isNotEmpty()) {
-            $dungeonroute->update([
-                'thumbnail_refresh_queued_at' => $this->thumbnail_refresh_queued_at,
-                'thumbnail_updated_at'        => $this->thumbnail_updated_at,
-            ]);
-        }
-
-        return $dungeonroute;
-    }
-
-    /**
      * Clone relations of this dungeon route into another dungeon route.
      *
      * @param DungeonRoute $dungeonRoute The RECEIVER of the target $relations
@@ -1634,7 +1285,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      *
      * @throws Exception
      */
-    private function ensureAffixGroup(
+    public function ensureAffixGroup(
         Season $activeSeason,
     ): void {
         if ($this->affixgroups()->count() === 0) {
