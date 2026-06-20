@@ -116,7 +116,7 @@ class DungeonRouteController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -219,7 +219,7 @@ class DungeonRouteController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -477,7 +477,7 @@ class DungeonRouteController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -562,7 +562,7 @@ class DungeonRouteController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            ->indexOrFacade($dungeonroute->mappingVersion, $floorIndex)
+            ->indexOrFacade($dungeonroute->mappingVersion, (int)$floorIndex)
             ->first();
 
         $validated = $request->validated();

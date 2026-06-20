@@ -21,7 +21,7 @@ $gameVersionsSelect = $allGameVersions
 
 $characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]])
     ->merge($allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
-        $c->id => [
+        (string)$c->id => [
             'icon_url' => ksgAssetImage(sprintf('spells/%s.jpg', $c->icon_name)),
             'name'     => __($c->name),
         ],

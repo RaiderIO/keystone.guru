@@ -61,8 +61,8 @@ class AjaxNpcController extends Controller
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations', static function (JoinClause $clause) {
-                $clause->on('translations.key', 'dungeons.name')
-                    ->on('translations.locale', DB::raw('"en_US"'));
+                $clause->on('translations.key', '=', 'dungeons.name')
+                    ->on('translations.locale', '=', DB::raw('"en_US"'));
             })
             ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
                 $clause->on('npc_name_translations.key', '=', 'npcs.name')

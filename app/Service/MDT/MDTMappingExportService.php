@@ -60,7 +60,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
 
         $zoneIds = $mappingVersion->dungeon->floors()
             ->where('facade', 0)
-            ->get('ui_map_id')
+            ->get(['ui_map_id'])
             ->pluck('ui_map_id')
             ->toArray();
 

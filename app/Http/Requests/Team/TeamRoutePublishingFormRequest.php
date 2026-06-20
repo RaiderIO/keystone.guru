@@ -24,7 +24,7 @@ class TeamRoutePublishingFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'enabled' => ['required', Rule::in(0, 1)],
+            'enabled' => ['required', Rule::in([0, 1])],
         ];
     }
 }

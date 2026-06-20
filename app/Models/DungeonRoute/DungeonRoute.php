@@ -1608,10 +1608,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $this->views_embed++;
             }
 
-            $this->update([
-                'views',
-                'views_embed',
-            ]);
+            $this->save();
         }
 
         return $result;

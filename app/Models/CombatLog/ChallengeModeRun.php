@@ -88,10 +88,10 @@ class ChallengeModeRun extends Model
             0,
             0,
             0,
-            $hours,
-            $minutes,
-            $seconds,
-            $milliseconds,
+            (int)$hours,
+            (int)$minutes,
+            (int)$seconds,
+            (int)$milliseconds,
         );
 
         if ($hours > 0) {

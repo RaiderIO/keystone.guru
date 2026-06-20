@@ -81,7 +81,7 @@ class MakeHotfix extends Command
     /**
      * Get a single file to create a hotfix for, validating that it exists.
      *
-     * @param  string $file
+     * @param  string    $file
      * @return array
      * @throws Exception
      */

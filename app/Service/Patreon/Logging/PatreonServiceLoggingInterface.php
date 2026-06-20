@@ -91,7 +91,7 @@ interface PatreonServiceLoggingInterface
 
     public function loadAdminUserExpiresInNotSet(array $tokens): void;
 
-    public function loadAdminUserUpdatedTokenSuccessfully(bool $date): void;
+    public function loadAdminUserUpdatedTokenSuccessfully(string $expiresAt): void;
 
     public function loadAdminUserEnd(): void;
 

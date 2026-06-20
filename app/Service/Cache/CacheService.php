@@ -134,8 +134,6 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string|null $ttl
-     *
      * @return bool
      * @throws InvalidArgumentException
      */

@@ -100,6 +100,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             // Check if it's valid
+            /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
             $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
             if (!$isValid) {
@@ -198,6 +199,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             // Check if it's valid
+            /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
             $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
             if (!$isValid) {

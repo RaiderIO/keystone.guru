@@ -136,7 +136,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, string>
      *
      * @throws Exception
      */

@@ -104,10 +104,10 @@ class Expansion extends CacheModel
         self::EXPANSION_TLT          => 13,
     ];
 
-    /** @var Collection<int, Season>|null  */
+    /** @var Collection<string, Season>|null  */
     private ?Collection $currentSeasonCache = null;
 
-    /** @var Collection<int, Season>|null  */
+    /** @var Collection<string, Season>|null  */
     private ?Collection $nextSeasonCache = null;
 
     /**
@@ -237,8 +237,10 @@ class Expansion extends CacheModel
     {
         $result = false;
 
-        $this->raids->load([
-            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        $this->raids->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'mappingVersions' => function (HasMany $query): void {
+                $query->without('dungeon');
+            },
         ]);
 
         foreach ($this->raids->filter($filterFn) as $raid) {
@@ -258,8 +260,10 @@ class Expansion extends CacheModel
         $filterFn ??= fn(Dungeon $dungeon) => true;
         $result = false;
 
-        $this->dungeons->load([
-            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        $this->dungeons->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'mappingVersions' => function (HasMany $query): void {
+                $query->without('dungeon');
+            },
         ]);
 
         foreach ($this->dungeons->filter($filterFn) as $dungeon) {

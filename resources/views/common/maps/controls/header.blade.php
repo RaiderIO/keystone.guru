@@ -27,7 +27,9 @@ use App\Models\User;
  */
 
 $echo               ??= false;
-$mayUserEdit        = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
+/** @var \App\Models\User|null $user */
+$user               = Auth::user();
+$mayUserEdit        = $dungeonroute?->mayUserEdit($user) ?? false;
 $showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
 $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 

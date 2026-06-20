@@ -28,8 +28,11 @@ class DungeonExploreController extends Controller
         Request                     $request,
         GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
         return redirect()->route('dungeon.explore.gameversion', [
-            'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
+            'gameVersion' => $gameVersionService->getGameVersion($user),
         ]);
     }
 
@@ -47,7 +50,10 @@ class DungeonExploreController extends Controller
         GameVersion                 $gameVersion,
         GameVersionServiceInterface $gameVersionService,
     ): View|RedirectResponse {
-        $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        $userOrDefaultGameVersion = $gameVersionService->getGameVersion($user);
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
             return redirect()->route('dungeon.explore.gameversion.select', [
                 'gameVersion' => $userOrDefaultGameVersion,
@@ -119,7 +125,7 @@ class DungeonExploreController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -146,7 +152,10 @@ class DungeonExploreController extends Controller
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
-            $dungeonService->setDungeonContext($dungeon, Auth::user());
+            /** @var \App\Models\User|null $user */
+            $user = Auth::user();
+
+            $dungeonService->setDungeonContext($dungeon, $user);
 
             return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
@@ -206,7 +215,7 @@ class DungeonExploreController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
             ->first();
 
         $validated = $request->validated();

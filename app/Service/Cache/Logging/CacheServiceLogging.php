@@ -3,16 +3,15 @@
 namespace App\Service\Cache\Logging;
 
 use App\Logging\RollbarStructuredLogging;
-use Exception;
 
 class CacheServiceLogging extends RollbarStructuredLogging implements CacheServiceLoggingInterface
 {
-    public function rememberFailedToSetCache(string $key, Exception $e): void
+    public function rememberFailedToSetCache(string $key, \Throwable $e): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function rememberFailedToAcquireLock(string $key, Exception $e): void
+    public function rememberFailedToAcquireLock(string $key, \Throwable $e): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

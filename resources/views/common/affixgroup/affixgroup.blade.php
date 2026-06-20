@@ -19,7 +19,7 @@ $count = $affixgroup->affixes->count();
 $cols  ??= $count;
 
 $chunkCount = ceil($count / $cols);
-$chunks     = $affixgroup->affixes->chunk($chunkCount);
+$chunks     = $affixgroup->affixes->chunk((int)$chunkCount);
 ?>
 @foreach($chunks as $chunk)
     <div class="row no-gutters px-1 affix_group_row {{ $isFirst ? '' : 'mt-2' }} {{ $class }}">

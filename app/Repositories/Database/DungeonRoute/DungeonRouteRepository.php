@@ -81,7 +81,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         $weeklyRouteTags = config('keystoneguru.raider_io.weekly_route.tags');
         $tagCategoryId   = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];
         $raiderIOTeamId  = config('keystoneguru.raider_io.team_id');
-        $tagsFilterFn    = function (HasMany|EloquentBuilder $query) use (
+        $tagsFilterFn    = function (HasMany $query) use (
             $weeklyRouteTags,
             $tagCategoryId,
             $raiderIOTeamId
@@ -92,7 +92,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         };
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
-            ->with([
+            ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
                 'author',
                 'dungeon',
                 'tags' => $tagsFilterFn,

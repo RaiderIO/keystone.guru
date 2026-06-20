@@ -54,9 +54,9 @@ class AdminToolsWagoGgController extends Controller
 
                     $floor->update([
                         'ingame_min_x' => round((float)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX], 2),
-                        'ingame_min_y' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY], 2),
-                        'ingame_max_x' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX], 2),
-                        'ingame_max_y' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY], 2),
+                        'ingame_min_y' => round((float)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY], 2),
+                        'ingame_max_x' => round((float)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX], 2),
+                        'ingame_max_y' => round((float)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY], 2),
                     ]);
 
                     dump(sprintf('Updated floor %s (id: %d, ui_map_id: %d) ', __($floor->name), $floor->id, $floor->ui_map_id));

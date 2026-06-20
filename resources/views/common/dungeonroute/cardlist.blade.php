@@ -5,7 +5,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<DungeonRoute>                   $dungeonroutes
+ * @var Collection<DungeonRoute> $dungeonroutes
  * @var AffixGroup|null                            $affixgroup
  * @var AffixGroup|null                            $currentAffixGroup
  * @var array                                      $__env
@@ -83,7 +83,9 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
     <?php
     // If it's grouped by something, add a loop
     if( $dungeonroutes->first() instanceof Collection ){
-        foreach($dungeonroutes as $header => $groupedDungeonRoutes ) {
+        /** @var Collection<string, Collection<int, DungeonRoute>> $groupedDungeonRoutesCollection */
+        $groupedDungeonRoutesCollection = $dungeonroutes;
+        foreach($groupedDungeonRoutesCollection as $header => $groupedDungeonRoutes ) {
             $renderDungeonRouteCollection($groupedDungeonRoutes, $header);
         }
     } else {

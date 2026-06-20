@@ -266,7 +266,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         // If we didn't find a mapping version for the given game version, fall back to the default game version
         if ($result === null) {
             $gameVersionService = app(GameVersionServiceInterface::class);
-            $result             = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion(Auth::user()))
+            /** @var \App\Models\User|null $user */
+            $user   = Auth::user();
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion($user))
                 // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
                 ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
                 // Fall back to the most recent mapping version if no mapping version was found for the default game version
@@ -598,7 +600,10 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         /** @var DungeonServiceInterface $dungeonService */
         $dungeonService = App::make(DungeonServiceInterface::class);
 
-        return $dungeonService->getDungeonContext(Auth::user());
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        return $dungeonService->getDungeonContext($user);
     }
 
     #[Override]

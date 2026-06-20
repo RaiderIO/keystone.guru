@@ -50,7 +50,7 @@ class SpellService implements SpellServiceInterface
             }
 
             if (isset($spellsAttributes[$spellId])) {
-                $this->log->importFromCsvSpellAlreadySet($spellId);
+                $this->log->importFromCsvSpellAlreadySet((int)$spellId);
 
                 continue;
             }

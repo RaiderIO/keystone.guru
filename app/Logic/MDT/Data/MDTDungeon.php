@@ -55,7 +55,8 @@ class MDTDungeon
      */
     public function getDungeonTotalCount(): array
     {
-        $lua               = $this->getLua();
+        $lua = $this->getLua();
+        /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
         $dungeonTotalCount = $lua->call('GetDungeonTotalCount');
 
         return [
@@ -72,6 +73,7 @@ class MDTDungeon
     {
         $lua = $this->getLua();
 
+        /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
         return $lua->call('GetDungeonIndex');
     }
 
@@ -87,7 +89,8 @@ class MDTDungeon
         return $this->cacheService->remember(sprintf('mdt_npcs_%s', $this->dungeon->key), function () {
             $mdtNpcs = new Collection();
 
-            $lua           = $this->getLua();
+            $lua = $this->getLua();
+            /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
             $rawMdtEnemies = $lua->call('GetDungeonEnemies');
 
             foreach ($rawMdtEnemies as $mdtNpcIndex => $mdtNpc) {
@@ -105,7 +108,8 @@ class MDTDungeon
      */
     public function getMDTMapPOIs(): Collection
     {
-        $lua           = $this->getLua();
+        $lua = $this->getLua();
+        /** @phpstan-ignore argument.type (Lua C extension uses string-based function name calling) */
         $rawMdtMapPOIs = $lua->call('GetMapPOIs');
         $result        = new Collection();
 

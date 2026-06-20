@@ -24,7 +24,7 @@ interface CombatLogServiceInterface
     public function getChallengeModes(string $filePath): Collection;
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, string>
      */
     public function getUiMapIds(string $filePath): Collection;
 

@@ -294,7 +294,7 @@ class CombatLogEvent extends OpensearchModel
             'wow_instance_id'   => $row['wow_instance_id'],
             'challenge_mode_id' => $row['challenge_mode_id'],
             'level'             => $row['level'],
-            'affix_ids'         => json_encode($row['affix_id'], true),
+            'affix_ids'         => json_encode($row['affix_id']),
             'success'           => $row['id'],
             'start'             => Carbon::createFromTimestamp($row['start']),
             'end'               => Carbon::createFromTimestamp($row['end']),
@@ -312,8 +312,8 @@ class CombatLogEvent extends OpensearchModel
             'event_type'         => $row['event_type'],
             'num_members'        => $row['num_members'],
             'average_item_level' => $row['average_item_level'],
-            'characters'         => json_encode($row['characters'], true),
-            'context'            => json_encode($row['context'], true),
+            'characters'         => json_encode($row['characters']),
+            'context'            => json_encode($row['context']),
         ]);
 
         return $this;

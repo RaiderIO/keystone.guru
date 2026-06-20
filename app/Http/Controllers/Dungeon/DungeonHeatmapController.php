@@ -31,8 +31,11 @@ class DungeonHeatmapController extends Controller
         Request                     $request,
         GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
         return redirect()->route('dungeon.heatmap.gameversion', [
-            'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
+            'gameVersion' => $gameVersionService->getGameVersion($user),
         ]);
     }
 
@@ -51,7 +54,10 @@ class DungeonHeatmapController extends Controller
         GameVersion                 $gameVersion,
         GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
-        $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        $userOrDefaultGameVersion = $gameVersionService->getGameVersion($user);
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
             return redirect()->route('dungeon.heatmap.gameversion.select', [
                 'gameVersion' => $userOrDefaultGameVersion,
@@ -129,7 +135,7 @@ class DungeonHeatmapController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
             ->first();
 
         if ($floor === null) {
@@ -154,7 +160,10 @@ class DungeonHeatmapController extends Controller
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
-            $dungeonService->setDungeonContext($dungeon, Auth::user());
+            /** @var \App\Models\User|null $user */
+            $user = Auth::user();
+
+            $dungeonService->setDungeonContext($dungeon, $user);
 
             return view('dungeon.heatmap.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
@@ -208,7 +217,7 @@ class DungeonHeatmapController extends Controller
 
         /** @var Floor|null $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, (int)$floorIndex)
             ->first();
 
         $validated = $request->validated();

@@ -16,7 +16,7 @@ final class ConversionTest extends TestCase
      */
     #[Test]
     #[DataProvider('checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider')]
-    #[Group('')]
+    #[Group('MDT')]
     public function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect(string $dungeonKey, string $expectedExpansionKey): void
     {
         // Test

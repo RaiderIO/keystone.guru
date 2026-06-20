@@ -167,7 +167,7 @@ class AdminToolsMdtController extends Controller
     ): void {
         $dungeon = Dungeon::findOrFail($request->get('dungeon_id'));
 
-        dd($mdtMappingService->getMDTMappingHash($dungeon->key));
+        dd($mdtMappingService->getMDTMappingHash($dungeon));
     }
 
     public function dungeonmappingversiontomdtmapping(): View

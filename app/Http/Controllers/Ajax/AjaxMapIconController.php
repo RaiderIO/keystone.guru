@@ -248,6 +248,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         User                        $user,
         MapIcon|Model               $model,
     ): ModelChangedEvent {
-        return new MapIconChangedEvent($coordinatesService, $context, Auth::getUser(), $model);
+        /** @var \App\Models\User $authUser */
+        $authUser = Auth::getUser();
+
+        return new MapIconChangedEvent($coordinatesService, $context, $authUser, $model);
     }
 }

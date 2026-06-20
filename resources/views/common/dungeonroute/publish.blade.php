@@ -9,7 +9,9 @@ use App\Models\PublishedState;
 use Illuminate\Support\Collection;
 
 $publishStates          = $allPublishedStates->pluck('name');
-$publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonroute, Auth::user());
+/** @var \App\Models\User|null $user */
+$user                   = Auth::user();
+$publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonroute, $user);
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeonroute/publish', 'options' => [

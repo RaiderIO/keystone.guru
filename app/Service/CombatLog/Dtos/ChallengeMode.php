@@ -28,4 +28,9 @@ class ChallengeMode
     {
         return $this->keyLevel;
     }
+
+    public function __toString(): string
+    {
+        return sprintf('%s (key +%d)', $this->dungeon->name, $this->keyLevel);
+    }
 }

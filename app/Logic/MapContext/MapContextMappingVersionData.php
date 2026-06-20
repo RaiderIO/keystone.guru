@@ -97,16 +97,17 @@ class MapContextMappingVersionData implements Arrayable
         $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, fn() => $this->cacheService->remember(
             $dungeonNpcDataKey,
             fn() => $this->dungeon->npcs()
-                ->with([
-                    'enemyForces' => fn(HasOne $q) => $q
-                        ->where('mapping_version_id', $this->mappingVersion->id)
-                        ->select([
-                            'id',
-                            'npc_id',
-                            'mapping_version_id',
-                            'enemy_forces',
-                            'enemy_forces_teeming',
-                        ]),
+                ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+                    'enemyForces' => function (HasOne $q): void {
+                        $q->where('mapping_version_id', $this->mappingVersion->id)
+                            ->select([
+                                'id',
+                                'npc_id',
+                                'mapping_version_id',
+                                'enemy_forces',
+                                'enemy_forces_teeming',
+                            ]);
+                    },
                 ])
                 ->disableCache()
                 ->get()

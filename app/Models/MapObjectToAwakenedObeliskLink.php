@@ -35,7 +35,7 @@ class MapObjectToAwakenedObeliskLink extends Model
 
     public function sourcemapobject(): HasOne
     {
-        return $this->hasOne($this->source_map_object_class_name, 'id', $this->source_map_object_id);
+        return $this->hasOne($this->source_map_object_class_name, 'id', (string)$this->source_map_object_id);
     }
 
     public function targetmapicon(): HasOne
