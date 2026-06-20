@@ -123,7 +123,7 @@
         "fruitcake/laravel-debugbar": "^4.2",
         "larastan/larastan": "^3.1",
         "laravel-lang/lang": "^15.2",
-        "laravel/boost": "^1.8",
+        "laravel/boost": "^2.0",
         "laravel/horizon": "^5.36",
         "laravel/pail": "^1.2.2",
         "lukasss93/laravel-larex": "^4.6",
