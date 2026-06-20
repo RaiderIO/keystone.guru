@@ -80,7 +80,7 @@
         "offset-polygon": "^0.9.2",
         "password-strength-meter": "^2.1.0",
         "popper.js": "^1.15.0",
-        "puppeteer": "^19.9.0",
+        "puppeteer": "^24.15.0",
         "simplebar": "^5.3.8",
         "zikes-circlemenu": "^0.1.1"
     }

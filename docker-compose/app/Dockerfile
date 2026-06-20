@@ -26,8 +26,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libonig-dev \
     libxml2-dev \
     libmagickwand-dev \
-    nodejs \
-    npm \
     sudo \
     libzip-dev \
     zip \
@@ -44,11 +42,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libasound2 \
  && rm -rf /var/lib/apt/lists/*
 
-# Install global packages
-RUN npm i -g handlebars puppeteer@19.9.0
+# Install Node.js 24 via NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
-# Have puppeteer download chromium (this really should be done when puppeteer is installed from npm..)
-RUN node /usr/local/lib/node_modules/puppeteer/install.js
+# Install global packages (puppeteer v21+ downloads Chrome automatically via postinstall)
+RUN npm i -g handlebars puppeteer@24
 
 # Install PHP extensions
 RUN pecl install redis imagick swoole && docker-php-ext-enable redis imagick swoole
