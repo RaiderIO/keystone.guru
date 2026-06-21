@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libonig-dev \
     libxml2-dev \
     libmagickwand-dev \
+    libssl-dev \
     sudo \
     libzip-dev \
     zip \
