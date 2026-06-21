@@ -49,6 +49,9 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIs . $dungeonEnemies;
     }
 
+    /**
+     * @param Collection<int, string> $translations
+     */
     private function getHeader(
         MappingVersion $mappingVersion,
         Collection     $translations,
@@ -122,6 +125,9 @@ MDT.dungeonMaps[dungeonIndex] = {
 }', implode(PHP_EOL, $dungeonMaps));
     }
 
+    /**
+     * @param Collection<int, string> $translations
+     */
     private function getDungeonSubLevels(MappingVersion $mappingVersion, Collection $translations): string
     {
         $subLevels = [];
@@ -161,7 +167,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     {
         $mapPOIs = [];
 
-        /** @var Collection<Floor> $floors */
+        /** @var Collection<int, Floor> $floors */
         $floors = $mappingVersion->dungeon->floorsForMapFacade($mappingVersion, false);
         //        $floors->each(function (Floor $floor) use ($mappingVersion) {
         //            $floor->setRelation('dungeon', $mappingVersion->dungeon);
@@ -234,12 +240,13 @@ MDT.mapPOIs[dungeonIndex] = {};
 
     /**
      * Takes a mapping version and outputs an array in the way MDT would read it
+     * @param Collection<int, string> $translations
      */
     private function getDungeonEnemies(MappingVersion $mappingVersion, Collection $translations, bool $forceEnemyPatrols = false): string
     {
         $dungeonEnemies = [];
 
-        /** @var Collection<Npc> $npcs */
+        /** @var Collection<int, Npc> $npcs */
         $npcs = Npc::with('npcEnemyForces')
             ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
             ->select('npcs.*')
@@ -272,7 +279,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             ->groupBy('npc_id');
 
         foreach ($enemiesByNpcId as $npcId => $enemies) {
-            /** @var Collection<Enemy> $enemies */
+            /** @var Collection<int, Enemy> $enemies */
             if (empty($npcId)) {
                 $this->log->getDungeonEnemiesEnemiesWithoutNpcIdFound($enemies->pluck('id')->toArray());
 
@@ -415,6 +422,9 @@ MDT.mapPOIs[dungeonIndex] = {};
         return new PhpArray2LuaTable()->toLuaTableString('MDT.dungeonEnemies[dungeonIndex]', $dungeonEnemies);
     }
 
+    /**
+     * @param Collection<int, string> $translations
+     */
     private function getTranslations(Collection $translations): string
     {
         // EOL at the start

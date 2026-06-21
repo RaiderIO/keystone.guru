@@ -12,6 +12,9 @@ use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<CombatLogEvent>
+ */
 class CombatLogEventFactory extends Factory
 {
     protected $model = CombatLogEvent::class;
@@ -49,6 +52,9 @@ class CombatLogEventFactory extends Factory
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function definitionFromState(Dungeon $dungeon, Floor $floor, AffixGroup $affixGroup): array
     {
         $runDurationMin = $this->faker->numberBetween(15, 45);

@@ -12,8 +12,8 @@ use Illuminate\Support\Collection;
  * @var array<string>                $categories
  * @var array<string>                $dispelTypes
  * @var array<string>                $cooldownGroups
- * @var Collection<GameVersion>      $allGameVersions
- * @var Collection<Characteristic>   $allCharacteristics
+ * @var Collection<int, GameVersion>      $allGameVersions
+ * @var Collection<int, Characteristic>   $allCharacteristics
  */
 
 $gameVersionsSelect = $allGameVersions

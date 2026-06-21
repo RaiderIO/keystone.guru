@@ -14,7 +14,7 @@ class APIDungeonRouteControllerService implements APIDungeonRouteControllerServi
     }
 
     /**
-     * @return Collection<DungeonRouteThumbnailJob>
+     * @return Collection<int, DungeonRouteThumbnailJob>
      */
     public function createThumbnails(
         DungeonRoute $dungeonRoute,

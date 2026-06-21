@@ -40,7 +40,7 @@ use Override;
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
- * @method static Builder active()
+ * @method static Builder<self> active()
  *
  * @mixin Eloquent
  */
@@ -137,11 +137,13 @@ class Expansion extends CacheModel
         return $this->hasMany(Dungeon::class)->orderBy('name');
     }
 
+    /** @return HasMany<Season, $this> */
     public function seasons(): HasMany
     {
         return $this->hasMany(Season::class);
     }
 
+    /** @return HasOne<TimewalkingEvent, $this> */
     public function timewalkingEvent(): HasOne
     {
         return $this->hasOne(TimewalkingEvent::class);
@@ -212,6 +214,9 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include active dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function active(Builder $query): Builder
@@ -221,6 +226,9 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include inactive dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function inactive(Builder $query): Builder

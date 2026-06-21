@@ -13,8 +13,16 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="specIds", type="array", @OA\Items(type="integer"))
  * @OA\Property(property="classIds", type="array", @OA\Items(type="integer"))
  */
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class CombatLogRouteRosterRequestModel extends RequestModel implements Arrayable
 {
+    /**
+     * @param array<int>|null $characterIds
+     * @param array<int>|null $specIds
+     * @param array<int>|null $classIds
+     */
     public function __construct(
         public ?int   $numMembers = null,
         public ?float $averageItemLevel = null,

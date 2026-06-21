@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var DungeonRoute         $dungeonRoute
- * @var Collection<string>   $publishedStates
+ * @var Collection<int, string>   $publishedStates
  */
 ?>
 

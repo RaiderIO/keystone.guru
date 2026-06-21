@@ -34,8 +34,8 @@ class ExportSpellNames extends Command
             $export = [];
         }
 
-        Spell::chunk(1000, function (Collection $spells) use (&$export) {
-            /** @var Collection<Spell> $spells */
+        Spell::chunk(1000, function (Collection $spells) use (&$export): void {
+            /** @var Collection<int, Spell> $spells */
             foreach ($spells as $spell) {
                 if (empty($spell->name) || Str::startsWith($spell->name, ['spells.'])) {
                     continue;

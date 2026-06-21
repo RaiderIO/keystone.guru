@@ -42,6 +42,7 @@ class UserReport extends Model
         'status',
     ];
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

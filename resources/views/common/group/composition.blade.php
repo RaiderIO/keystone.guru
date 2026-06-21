@@ -9,10 +9,10 @@ use Illuminate\Support\Collection;
 
 /**
  * @var DungeonRoute                             $model
- * @var Collection<CharacterClass>               $classes
- * @var Collection<CharacterClassSpecialization> $specializations
- * @var Collection<CharacterRace>                $racesClasses
- * @var Collection<Faction>                      $allFactions
+ * @var Collection<int, CharacterClass>               $classes
+ * @var Collection<int, CharacterClassSpecialization> $specializations
+ * @var Collection<int, CharacterRace>                $racesClasses
+ * @var Collection<int, Faction>                      $allFactions
  */
 
 $factions ??= $allFactions;

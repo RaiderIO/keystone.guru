@@ -11,6 +11,11 @@ use Illuminate\Support\Collection;
 
 interface SeasonServiceInterface
 {
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection;
 
     public function getFirstSeason(): Season;

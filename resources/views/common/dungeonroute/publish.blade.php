@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Collection<PublishedState> $allPublishedStates
+ * @var Collection<int, PublishedState> $allPublishedStates
  * @var DungeonRoute               $dungeonroute
  */
 

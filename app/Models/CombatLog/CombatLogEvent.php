@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Opensearch\OpensearchModel;
 use Codeart\OpensearchLaravel\Traits\HasOpenSearchDocuments;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -47,6 +48,7 @@ use Illuminate\Support\Carbon;
  */
 class CombatLogEvent extends OpensearchModel
 {
+    /** @use HasFactory<Factory> */
     use HasFactory, HasOpenSearchDocuments;
 
     protected $connection = 'combatlog';
@@ -84,16 +86,25 @@ class CombatLogEvent extends OpensearchModel
         'updated_at',
     ];
 
+    /**
+     * @return BelongsTo<Dungeon, $this>
+     */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class, 'challenge_mode_id', 'challenge_mode_id');
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class, 'ui_map_id', 'ui_map_id');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function openSearchMapping(): array
     {
         return [
@@ -231,6 +242,9 @@ class CombatLogEvent extends OpensearchModel
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function openSearchArray(): array
     {
         $context = json_decode($this->context, true);
@@ -277,6 +291,9 @@ class CombatLogEvent extends OpensearchModel
         ];
     }
 
+    /**
+     * @param array<string, mixed> $row
+     */
     public function openSearchArrayToModel(array $row): self
     {
 //        // POINT (355.730000 -91.230000);

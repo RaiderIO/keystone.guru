@@ -44,11 +44,13 @@ class AffixGroupEaseTierPull extends CacheModel
         ];
     }
 
+    /** @return BelongsTo<AffixGroup, $this> */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);
     }
 
+    /** @return HasMany<AffixGroupEaseTier, $this> */
     public function affixGroupEaseTiers(): HasMany
     {
         return $this->hasMany(AffixGroupEaseTier::class);

@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
  *
  * @var SeasonServiceInterface       $seasonService
  * @var DungeonRoute                 $model
- * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 $id ??= 'affixes';

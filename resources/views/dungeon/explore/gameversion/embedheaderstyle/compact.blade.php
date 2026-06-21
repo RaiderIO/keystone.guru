@@ -8,8 +8,8 @@ use App\Models\GameVersion\GameVersion;
  * @var GameVersion $gameVersion
  * @var Dungeon     $dungeon
  * @var Floor       $floor
- * @var array       $embedOptions
- * @var array       $parameters
+ * @var array<string, mixed>       $embedOptions
+ * @var array<string, mixed>       $parameters
  */
 
 $routeParams    = array_merge(['gameVersion' => $gameVersion, 'dungeon' => $dungeon, 'floorIndex' => $floor->index], $parameters);

@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon                 $dungeon
- * @var Collection<GameVersion> $allGameVersions
+ * @var Collection<int, GameVersion> $allGameVersions
  */
 ?>
 

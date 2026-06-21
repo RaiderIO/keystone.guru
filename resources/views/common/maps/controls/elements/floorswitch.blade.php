@@ -2,7 +2,7 @@
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection $floors
+ * @var Collection<int, \App\Models\Floor\Floor> $floors
  **/
 ?>
 <div class="row no-gutters">

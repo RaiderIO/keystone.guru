@@ -17,11 +17,21 @@ interface MappingServiceInterface
     /**
      * @return Collection A list of all changes to the mapping that have not been synchronized yet.
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getUnmergedMappingChanges(): Collection;
 
     /**
      * @return Collection<Dungeon> Gets a list of dungeons of which the mapping has changed since the last time a synchronization was done.
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getDungeonsWithUnmergedMappingChanges(): Collection;
 
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;

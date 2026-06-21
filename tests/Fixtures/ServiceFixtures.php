@@ -46,6 +46,10 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getAffixGroupEaseTierServiceMock(
         PublicTestCase                             $testCase,
         ?SeasonServiceInterface                    $seasonService = null,
@@ -65,6 +69,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getViewServiceMock(
@@ -87,6 +95,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getCombatLogServiceMock(
         PublicTestCase                   $testCase,
         CombatLogServiceLoggingInterface $log,
@@ -101,6 +113,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getResultEventDungeonRouteServiceMock(
         PublicTestCase                               $testCase,
         CombatLogService                             $combatLogService,
@@ -117,6 +133,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getExpansionServiceMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
@@ -126,6 +146,11 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string>           $methodsToMock
+     * @param  Collection<int, Season>|null $seasons
+     * @throws Exception
+     */
     public static function getSeasonServiceMock(
         PublicTestCase             $testCase,
         ?SeasonRepositoryInterface $seasonRepository = null,
@@ -156,6 +181,10 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getSeasonAffixGroupServiceMock(
         PublicTestCase                    $testCase,
         ?SeasonServiceInterface           $seasonService = null,
@@ -172,6 +201,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getCoordinatesServiceMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
@@ -183,6 +216,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getMetricServiceMock(
@@ -200,6 +237,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getSpellServiceMock(
@@ -221,6 +262,10 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getCombatLogEventServiceMock(
         PublicTestCase                         $testCase,
         array                                  $methodsToMock = [],
@@ -238,6 +283,7 @@ class ServiceFixtures
     }
 
     /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function createRedisService(
@@ -253,6 +299,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getCacheServiceMock(
@@ -272,6 +322,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getCloudflareServiceMock(

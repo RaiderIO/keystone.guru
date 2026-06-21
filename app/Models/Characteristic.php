@@ -89,6 +89,8 @@ class Characteristic extends CacheModel
 
     /**
      * Gets all derived NPCs from this classification.
+     *
+     * @return HasMany<Npc, $this>
      */
     public function npcs(): HasMany
     {

@@ -16,6 +16,9 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="realmType",type="string",description="The type of realm, such as 'live', 'beta' or 'ptr' etc.")
  * @OA\Property(property="wowInstanceId",type="integer",nullable=true)
  */
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class CombatLogRouteMetadataRequestModel extends RequestModel implements Arrayable
 {
     public function __construct(

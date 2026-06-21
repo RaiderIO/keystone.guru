@@ -4,7 +4,9 @@ $user = Auth::user();
 // Default local or user locale
 $currentUserLocale     = Auth::check() ? $user->locale : config('app.locale');
 $currentUserLocaleName = language()->getName($currentUserLocale);
-$allLanguages = collect(config('language.all'))->keyBy('long');
+/** @var array<int, array<string, mixed>> $allLanguagesConfig */
+$allLanguagesConfig = config('language.all', []);
+$allLanguages       = collect($allLanguagesConfig)->keyBy('long');
 ?>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"

@@ -24,11 +24,13 @@ class PatreonAdFreeGiveaway extends Model
         'receiver_user_id',
     ];
 
+    /** @return HasOne<User, $this> */
     public function giver(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'giver_user_id');
     }
 
+    /** @return HasOne<User, $this> */
     public function receiver(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'receiver_user_id');

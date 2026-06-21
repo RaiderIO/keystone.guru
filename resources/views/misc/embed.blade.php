@@ -5,7 +5,7 @@ use Illuminate\Support\Str;
 
 /**
  * @var DungeonRoute $model
- * @var array        $parameters
+ * @var array<string, mixed>        $parameters
  */
 
 $showStyle = 'regular';

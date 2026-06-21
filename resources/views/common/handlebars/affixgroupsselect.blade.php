@@ -13,7 +13,7 @@ use App\Models\AffixGroup\AffixGroup;
  *
  * @var SeasonServiceInterface      $seasonService
  * @var DungeonRoute                $model
- * @var Collection<AffixGroup>|null $affixgroups
+ * @var Collection<int, AffixGroup>|null $affixgroups
  */
 
 if (!isset($affixgroups)) {

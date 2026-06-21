@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 /**
  * @var string                   $newRouteStyle
  * @var GameVersion              $currentUserGameVersion
- * @var Collection<DungeonRoute> $dungeonRoutes
+ * @var Collection<int, DungeonRoute> $dungeonRoutes
  */
 ?>
 

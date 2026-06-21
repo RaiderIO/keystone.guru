@@ -14,6 +14,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
@@ -22,7 +23,8 @@ class AjaxNpcController extends Controller
 {
     use ChangesMapping;
 
-    public function delete(Request $request)
+    /** @return array<string, mixed> */
+    public function delete(Request $request): array|Response
     {
         try {
             /** @var Npc $npc */
@@ -48,6 +50,8 @@ class AjaxNpcController extends Controller
     }
 
     /**
+     * @return array<string, mixed>
+     *
      * @throws Exception
      */
     public function get(Request $request): array

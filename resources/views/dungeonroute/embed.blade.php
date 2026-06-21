@@ -9,8 +9,8 @@ use App\Models\User;
  * @var Dungeon      $dungeon
  * @var DungeonRoute $dungeonroute
  * @var Floor        $floor
- * @var array        $embedOptions
- * @var array        $parameters
+ * @var array<string, mixed>        $embedOptions
+ * @var array<string, mixed>        $parameters
  */
 
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');

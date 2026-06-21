@@ -6,6 +6,9 @@ use Illuminate\Support\Carbon;
 
 interface SpecialEventBuilderInterface
 {
+    /**
+     * @param array<int, mixed> $parameters
+     */
     public static function create(
         int    $combatLogVersion,
         Carbon $timestamp,

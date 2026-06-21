@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var DungeonRoute|null   $dungeonroute
- * @var Collection<Dungeon> $allSpeedrunDungeons
+ * @var Collection<int, Dungeon> $allSpeedrunDungeons
  * @var string              $dungeonSelectId
  **/
 

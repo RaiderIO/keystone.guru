@@ -13,6 +13,9 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MapContextDungeonData implements Arrayable
 {
     use RemembersToFile;
@@ -27,6 +30,7 @@ class MapContextDungeonData implements Arrayable
 
     /**
      * @throws InvalidArgumentException
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

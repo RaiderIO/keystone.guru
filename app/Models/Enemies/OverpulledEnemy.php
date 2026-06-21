@@ -40,16 +40,19 @@ class OverpulledEnemy extends Model
 
     public $timestamps = false;
 
+    /** @return BelongsTo<LiveSession, $this> */
     public function livesession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
     }
 
+    /** @return BelongsTo<KillZone, $this> */
     public function killzone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

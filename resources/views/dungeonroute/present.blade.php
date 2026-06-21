@@ -2,7 +2,7 @@
 /**
  * @var DungeonRoute $dungeonroute
  * @var Floor        $floor
- * @var array        $parameters
+ * @var array<string, mixed>        $parameters
  */
 
 use App\Models\DungeonRoute\DungeonRoute;

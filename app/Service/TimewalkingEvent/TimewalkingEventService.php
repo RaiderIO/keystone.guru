@@ -22,7 +22,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
     {
         $result = null;
 
-        /** @var Collection<TimewalkingEvent> $timewalkingEvents */
+        /** @var Collection<int, TimewalkingEvent> $timewalkingEvents */
         $timewalkingEvents = TimewalkingEvent::all();
 
         foreach ($timewalkingEvents as $timewalkingEvent) {

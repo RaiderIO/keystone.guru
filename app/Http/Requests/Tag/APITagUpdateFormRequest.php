@@ -16,9 +16,7 @@ class APITagUpdateFormRequest extends FormRequest
         return Auth::user()?->hasRole(Role::ROLE_ALL) ?? false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, array<int, string>|string> */
     public function rules(): array
     {
         return [

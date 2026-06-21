@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion         $gameVersion
  * @var Expansion           $expansion
- * @var Collection<Dungeon> $dungeons
+ * @var Collection<int, Dungeon> $dungeons
  * @var boolean             $useAbbreviation
  */
 

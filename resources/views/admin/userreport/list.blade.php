@@ -9,7 +9,7 @@
 use App\Models\UserReport;
 use Illuminate\Support\Collection;
 
-/** @var Collection $models */
+/** @var Collection<int, UserReport> $models */
 // eager load the classification
 //dd($models);
 ?>

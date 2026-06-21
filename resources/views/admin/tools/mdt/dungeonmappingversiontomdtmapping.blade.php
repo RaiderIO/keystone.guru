@@ -1,6 +1,6 @@
 <?php
 /**
- * @var array $mappingVersionsSelect
+ * @var array<int, string> $mappingVersionsSelect
  */
 ?>
 

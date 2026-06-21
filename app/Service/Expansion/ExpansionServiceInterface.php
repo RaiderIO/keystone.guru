@@ -34,11 +34,23 @@ interface ExpansionServiceInterface
 
     public function getNextSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season;
 
+    /**
+
+
+     * @return Collection<int, mixed>
+     */
+
     public function getActiveDungeons(Expansion $expansion): Collection;
 
     public function getCurrentAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
 
     public function getNextAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
+
+    /**
+
+
+     * @return Collection<int, mixed>
+     */
 
     public function getCurrentSeasonAffixGroups(
         Expansion         $expansion,

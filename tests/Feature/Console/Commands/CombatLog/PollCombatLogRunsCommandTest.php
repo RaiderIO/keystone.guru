@@ -301,6 +301,9 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         Bus::assertNotDispatched(FetchCombatLogRunFanout::class);
     }
 
+    /**
+     * @param array<int, int> $memberSpecIds
+     */
     private function makeRun(int $id, int $challengeModeId, array $memberSpecIds = [66, 70, 105, 250, 269]): SearchAdvancedRun
     {
         return new SearchAdvancedRun(

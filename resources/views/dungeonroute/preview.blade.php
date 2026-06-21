@@ -8,7 +8,7 @@ use App\Models\Floor\Floor;
  * @var Floor        $floor
  * @var float        $defaultZoom
  * @var string       $mapFacadeStyle
- * @var array        $parameters
+ * @var array<string, mixed>        $parameters
  */
 ?>
 

@@ -41,7 +41,7 @@ class SyncNpcNames extends BaseSyncCommand
         $npcNamesByLocale = $wowheadService->getNpcNames($gameVersion);
 
         foreach ($npcNamesByLocale as $locale => $npcNames) {
-            /** @var Collection $npcNames */
+            /** @var Collection<int, string> $npcNames */
             // Get the existing NPC names from the localization file and merge with the fetched names
             $existingNpcNames = __('npcs', [], $locale);
 

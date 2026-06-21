@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var User                       $user
- * @var Collection<CharacterClass> $allClasses
+ * @var Collection<int, CharacterClass> $allClasses
  */
 ?>
 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">

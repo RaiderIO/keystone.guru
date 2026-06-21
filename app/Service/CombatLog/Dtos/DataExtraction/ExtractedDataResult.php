@@ -4,6 +4,9 @@ namespace App\Service\CombatLog\Dtos\DataExtraction;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, int>
+ */
 class ExtractedDataResult implements Arrayable
 {
     private int $createdNpcs               = 0;

@@ -34,6 +34,9 @@ class TagCategorySeeder extends Seeder implements TableSeederInterface
         return [TagCategory::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

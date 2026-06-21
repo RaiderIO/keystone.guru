@@ -6,6 +6,9 @@ use App\Models\Floor\Floor;
 use App\Service\Coordinates\CoordinatesService;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class LatLng implements Arrayable
 {
     private const PI_OVER_180 = M_PI / 180;
@@ -97,6 +100,8 @@ class LatLng implements Arrayable
     /**
      * Only use this when saving the end result to models, please!
      * Trying to get rid of this structure as much as possible by using this class in the first place.
+     *
+     * @return array<string, float>
      */
     public function toArray(): array
     {
@@ -106,6 +111,9 @@ class LatLng implements Arrayable
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArrayWithFloor(): array
     {
         return [

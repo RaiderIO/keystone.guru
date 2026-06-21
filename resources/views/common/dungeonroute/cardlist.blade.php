@@ -5,10 +5,10 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<DungeonRoute> $dungeonroutes
+ * @var Collection<int, DungeonRoute>|Collection<string, Collection<int, DungeonRoute>> $dungeonroutes
  * @var AffixGroup|null                            $affixgroup
  * @var AffixGroup|null                            $currentAffixGroup
- * @var array                                      $__env
+ * @var array<string, mixed>                                      $__env
  * @var bool|null                                  $showDungeonImage
  * @var bool|null                                  $cache
  * @var string                                     $orientation
@@ -27,7 +27,7 @@ $i                         = 0;
 
 // @formatter:off
 $renderDungeonRouteCollection = static function (Collection $collection, ?string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env, &$renderedDungeonRouteCount, $cardHeaders) {
-    /** @var Collection<DungeonRoute> $collection */
+    /** @var Collection<int, DungeonRoute> $collection */
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
     <div class="row no-gutters">

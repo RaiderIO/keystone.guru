@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var MappingVersion|null     $mappingVersion
- * @var Collection<GameVersion> $allGameVersions
+ * @var Collection<int, GameVersion> $allGameVersions
  **/
 
 $gameVersionsSelect = $allGameVersions

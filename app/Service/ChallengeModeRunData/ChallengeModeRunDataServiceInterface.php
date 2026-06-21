@@ -13,6 +13,9 @@ interface ChallengeModeRunDataServiceInterface
 
     public function insertAllToOpensearch(int $count = 1000, ?callable $onProcess = null): bool;
 
+    /**
+     * @param Collection<int, \App\Models\CombatLog\CombatLogEvent> $combatLogEvents
+     */
     public function insertToOpensearch(
         Collection $combatLogEvents,
         int        $count = 1000,

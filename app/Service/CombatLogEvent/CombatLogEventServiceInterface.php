@@ -20,11 +20,22 @@ interface CombatLogEventServiceInterface
 
     public function getRunCount(CombatLogEventFilter $filters): int;
 
+    /**
+
+
+     * @return Collection<int, mixed>
+     */
+
     public function getRunCountPerDungeon(): Collection;
 
     public function getAvailableDateRange(CombatLogEventFilter $filters): ?CarbonPeriod;
 
     /** @return Collection<CombatLogEvent> */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function generateCombatLogEvents(
         Season                  $season,
         CombatLogEventEventType $type,

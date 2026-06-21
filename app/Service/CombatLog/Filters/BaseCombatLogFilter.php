@@ -11,10 +11,10 @@ use Illuminate\Support\Collection;
 
 abstract class BaseCombatLogFilter implements CombatLogParserInterface
 {
-    /** @var Collection<BaseResultEvent> */
+    /** @var Collection<int, BaseResultEvent> */
     protected Collection $resultEvents;
 
-    /** @var Collection<CombatLogParserInterface> */
+    /** @var Collection<int, CombatLogParserInterface> */
     private readonly Collection $filters;
 
     public function __construct()
@@ -40,7 +40,7 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
     }
 
     /**
-     * @return Collection<BaseResultEvent>
+     * @return Collection<int, BaseResultEvent>
      */
     public function getResultEvents(): Collection
     {

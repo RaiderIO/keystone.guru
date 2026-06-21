@@ -2,7 +2,7 @@
 /**
  * @var string       $id
  * @var string|null  $name
- * @var array        $valuesByCategory
+ * @var array<string, array<string, array{icon_url: string, name: string}>> $valuesByCategory
  * @var boolean|null $multiple
  * @var boolean|null $liveSearch
  */

@@ -8,7 +8,7 @@ use App\Models\Season;
  * @var String[]    $affixes
  * @var bool        $isShrouded
  * @var bool        $isThundering
- * @var array       $raidBuffsOptions
+ * @var array<string, mixed> $raidBuffsOptions
  */
 ?>
 

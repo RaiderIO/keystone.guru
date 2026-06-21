@@ -7,8 +7,8 @@ use Illuminate\Support\Collection;
 
 /**
  * @var User                         $user
- * @var Collection<CharacterClass>   $allClasses
- * @var Collection<GameServerRegion> $allRegions
+ * @var Collection<int, CharacterClass>   $allClasses
+ * @var Collection<int, GameServerRegion> $allRegions
  */
 
 $user      = Auth::getUser();

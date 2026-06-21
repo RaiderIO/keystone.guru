@@ -11,8 +11,8 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion            $currentUserGameVersion
  * @var Expansion              $currentExpansion
- * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
- * @var Collection<Affix>      $featuredAffixesByActiveExpansion
+ * @var Collection<string, Collection<int, AffixGroup>> $allAffixGroupsByActiveExpansion
+ * @var Collection<string, Collection<int, Affix>>      $featuredAffixesByActiveExpansion
  * @var SeasonService          $seasonService
  * @var Season                 $currentSeason
  * @var Season|null            $nextSeason
@@ -99,7 +99,7 @@ use Illuminate\Support\Collection;
                         </div>
 
                             <?php
-                            /** @var Collection<Affix> $featuredAffixes */
+                            /** @var Collection<int, Affix> $featuredAffixes */
                             $featuredAffixes = $featuredAffixesByActiveExpansion->get($expansion);
 
                             $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));

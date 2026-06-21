@@ -17,6 +17,9 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MapContextStaticData implements Arrayable
 {
     use RemembersToFile;

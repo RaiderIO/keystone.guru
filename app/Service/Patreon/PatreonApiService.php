@@ -13,7 +13,7 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array{errors: array|null, included: array|null}|null
+     * @return array<string, mixed>|null
      */
     public function getIdentity(string $accessToken): ?array
     {
@@ -54,6 +54,7 @@ class PatreonApiService implements PatreonApiServiceInterface
 
     /**
      * @example {"data":{"attributes":{},"id":"2102279","relationships":{"tiers":{"data":[{"id":"2971575","type":"tier"},{"id":"9068557","type":"tier"}]}},"type":"campaign"},"included":[{"attributes":{"title":"Supporter of Keystone.guru"},"id":"2971575","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"Advanced Simulation Features"},"id":"9068557","relationships":{"benefits":{"data":[{"id":"367345","type":"benefit"},{"id":"3348264","type":"benefit"},{"id":"367914","type":"benefit"},{"id":"11542092","type":"benefit"}]}},"type":"tier"},{"attributes":{"title":"ad-free"},"id":"367345","type":"benefit"},{"attributes":{"title":"animated-polylines"},"id":"3348264","type":"benefit"},{"attributes":{"title":"unlisted-routes"},"id":"367914","type":"benefit"},{"attributes":{"title":"advanced-simulation"},"id":"11542092","type":"benefit"}],"links":{"self":"https://www.patreon.com/api/oauth2/v2/campaigns/2102279"}}
+     * @return array<string, mixed>|null
      */
     public function getCampaignTiersAndBenefits(string $accessToken): ?array
     {
@@ -78,7 +79,7 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array{errors: ?array, data: array}|null Null whenever we couldn't authenticate with the accessToken provided
+     * @return array<string, mixed>|null Null whenever we couldn't authenticate with the accessToken provided
      */
     public function getCampaignMembers(string $accessToken): ?array
     {
@@ -102,7 +103,7 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array{errors: ?array, access_token: string, refresh_token: string, expires_in: int, scope: string, token_type: string, version: string}
+     * @return array<string, mixed>
      */
     public function getAccessTokenFromRefreshToken(string $refreshToken): array
     {
@@ -110,13 +111,16 @@ class PatreonApiService implements PatreonApiServiceInterface
     }
 
     /**
-     * @return array{errors: ?array, access_token: string, refresh_token: string, expires_in: int, scope: string, token_type: string, version: string}
+     * @return array<string, mixed>
      */
     public function getAccessTokenFromCode(string $code, string $redirectUrl): array
     {
         return $this->getOAuthClient()->get_tokens($code, $redirectUrl);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getAllPages(API $apiClient, string $suffix): array
     {
         $resultData = [];

@@ -30,14 +30,14 @@ use Illuminate\Support\Collection;
  * @var bool|null                  $embed
  * @var string|null                $embedStyle
  * @var bool|null                  $edit
- * @var array                      $show
- * @var array|null                 $controlOptions
+ * @var array<string, mixed>                      $show
+ * @var array<string, mixed>|null                 $controlOptions
  * @var bool                       $adFree
  * @var string|null                $mapBackgroundColor
  * @var string|null                $mapFacadeStyle
  * @var string                     $assetsBaseUrl
  * @var string                     $tilesBaseUrl
- * @var array|null                 $parameters
+ * @var array<string, mixed>|null                 $parameters
  * @var Collection<string, string> $dungeonContextLinks
  */
 

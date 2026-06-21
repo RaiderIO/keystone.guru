@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Release                               $release
- * @var Collection<ReleaseChangelogCategory> $categories
+ * @var Collection<int, ReleaseChangelogCategory> $categories
  */
 
 $changelog = isset($release) ? $release->changelog : new ReleaseChangelog();

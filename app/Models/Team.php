@@ -77,16 +77,25 @@ class Team extends Model
         return $this->where('public_key', $publicKey)->first();
     }
 
+    /**
+     * @return HasMany<TeamUser, $this>
+     */
     public function teamUsers(): HasMany
     {
         return $this->hasMany(TeamUser::class);
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_users');
     }
 
+    /**
+     * @return HasMany<DungeonRoute, $this>
+     */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
@@ -176,8 +185,9 @@ class Team extends Model
     /**
      * Get the roles that a user may assign to other users in this team.
      *
-     * @param User $user       The user attempting to change roles.
-     * @param User $targetUser The user that is targeted for a role change.
+     * @param  User                     $user       The user attempting to change roles.
+     * @param  User                     $targetUser The user that is targeted for a role change.
+     * @return array<int, string|false>
      */
     public function getAssignableRoles(User $user, User $targetUser): array
     {
@@ -438,6 +448,8 @@ class Team extends Model
 
     /**
      * Gets all tags available for routes in this team.
+     *
+     * @return EloquentCollection<int, Tag>
      */
     public function getAvailableTags(): EloquentCollection
     {

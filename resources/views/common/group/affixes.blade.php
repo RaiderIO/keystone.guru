@@ -13,17 +13,17 @@ use Illuminate\Support\Collection;
 
 /**
  * @var DungeonRoute              $dungeonroute
- * @var array                     $defaultSelected
+ * @var array<int, int>                     $defaultSelected
  * @var string|null               $dungeonSelector
- * @var Collection<Affix>         $affixes
- * @var Collection<ExpansionData> $expansionsData
- * @var Collection<AffixGroup>    $allAffixGroups
- * @var Collection<Expansion>     $allExpansions
- * @var Collection<AffixGroup>    $currentAffixes
- * @var array                     $dungeonExpansions
+ * @var Collection<int, Affix>         $affixes
+ * @var Collection<int, ExpansionData> $expansionsData
+ * @var Collection<int, AffixGroup>    $allAffixGroups
+ * @var Collection<int, Expansion>     $allExpansions
+ * @var Collection<int, AffixGroup>    $currentAffixes
+ * @var array<string, int>                     $dungeonExpansions
  * @var Season                    $currentSeason
  * @var Season|null               $nextSeason
- * @var Collection<AffixGroup>    $affixGroups
+ * @var Collection<int, AffixGroup>    $affixGroups
  */
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection
 if (isset($dungeonroute)) {

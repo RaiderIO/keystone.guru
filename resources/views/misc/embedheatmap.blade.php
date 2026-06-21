@@ -9,13 +9,13 @@ use Illuminate\Support\Collection;
  * @var GameVersion                              $gameVersion
  * @var Dungeon                                  $model
  * @var string                                   $floorIndex
- * @var array                                    $parameters
- * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
+ * @var array<string, mixed>                                    $parameters
+ * @var Collection<int, CharacterClassSpecialization> $characterClassSpecializations
  */
 
 $showStyle = 'regular';
 
-$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization) => __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization): string => (string) __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
     $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
         $characterClassSpecialization->specialization_id => [
             'icon_url' => $characterClassSpecialization->icon_url,

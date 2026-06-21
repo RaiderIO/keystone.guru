@@ -43,6 +43,9 @@ final class ChallengeModeEndTest extends PublicTestCase
         Assert::assertEquals($expectedUnknown2, $result->getUnknown2());
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function parseEvent_givenChallengeModeEndEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

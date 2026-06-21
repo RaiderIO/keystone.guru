@@ -60,6 +60,9 @@ class FactionsSeeder extends Seeder implements TableSeederInterface
         return [Faction::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

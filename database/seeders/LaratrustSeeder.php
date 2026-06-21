@@ -6,6 +6,7 @@ use App\Models\Laratrust\Permission;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -35,8 +36,11 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
         $this->command->info('Truncating User, Role and Permission tables');
         $this->truncateLaratrustTables();
 
-        $config        = config('laratrust_seeder.roles_structure');
-        $mapPermission = collect(config('laratrust_seeder.permissions_map'));
+        $config = config('laratrust_seeder.roles_structure');
+        /** @var array<string, array<int, string>|string> $permissionsMap */
+        $permissionsMap = config('laratrust_seeder.permissions_map');
+        /** @var Collection<string, array<int, string>|string> $mapPermission */
+        $mapPermission = collect($permissionsMap);
 
         foreach ($config as $key => $modules) {
             // Create a new role
@@ -108,6 +112,9 @@ class LaratrustSeeder extends Seeder implements TableSeederInterface
         return [];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

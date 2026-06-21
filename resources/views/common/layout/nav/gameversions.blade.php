@@ -5,7 +5,7 @@ use Illuminate\Support\Collection;
 /**
  * This is only visible for mobile users
  *
- * @var Collection<GameVersion> $allGameVersions
+ * @var Collection<int, GameVersion> $allGameVersions
  * @var GameVersion             $currentUserGameVersion
  */
 ?>

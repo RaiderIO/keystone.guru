@@ -3,6 +3,8 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
+use App\Logic\MDT\Exception\ImportError;
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
@@ -54,6 +56,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
+     * @param  Collection<int, ImportWarning> $warnings
+     * @param  array<string, mixed>           $decoded
      * @throws Exception
      */
     private function parseAffixes(
@@ -77,6 +81,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
     /**
      * Gets an array that represents the currently set MDT string.
+     * @return array<string, mixed>|null
      */
     public function getDecoded(): ?array
     {
@@ -84,6 +89,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     }
 
     /**
+     * @param  Collection<int, ImportWarning> $warnings
+     * @param  Collection<int, ImportError>   $errors
      * @throws InvalidMDTDungeonException
      * @throws InvalidMDTStringException
      * @throws MDTStringParseException
@@ -161,11 +168,13 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * Gets the dungeon route based on the currently encoded string.
      *
-     * @param               $warnings         Collection Collection that is passed by reference in which any warnings are stored.
-     * @param               $sandbox          boolean True to mark the dungeon as a sandbox route which will be automatically deleted at a later stage.
-     * @param               $save             bool True to save the route and all associated models, false to not save & couple.
-     * @param               $importAsThisWeek bool True to replace the imported affixes with this week's affixes instead
-     * @return DungeonRoute DungeonRoute if the route could be constructed
+     * @param                                 $warnings         Collection Collection that is passed by reference in which any warnings are stored.
+     * @param  Collection<int, ImportWarning> $warnings
+     * @param  Collection<int, ImportError>   $errors
+     * @param                                 $sandbox          boolean True to mark the dungeon as a sandbox route which will be automatically deleted at a later stage.
+     * @param                                 $save             bool True to save the route and all associated models, false to not save & couple.
+     * @param                                 $importAsThisWeek bool True to replace the imported affixes with this week's affixes instead
+     * @return DungeonRoute                   DungeonRoute if the route could be constructed
      *
      * @throws InvalidMDTStringException
      * @throws MDTStringParseException

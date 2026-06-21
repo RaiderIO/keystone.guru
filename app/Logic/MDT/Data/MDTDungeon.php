@@ -80,7 +80,7 @@ class MDTDungeon
     /**
      * Get a list of NPCs
      *
-     * @return Collection<MDTNpc>
+     * @return Collection<int, MDTNpc>
      *
      * @throws Exception
      */
@@ -102,7 +102,7 @@ class MDTDungeon
     }
 
     /**
-     * @return Collection<MDTMapPOI>
+     * @return Collection<int, MDTMapPOI>
      *
      * @throws Exception
      */
@@ -126,10 +126,9 @@ class MDTDungeon
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      *
-     * @param  Collection<Floor> $floors The floors that you want to get the clones for.
-     * @return Collection<Enemy>
+     * @param  \Illuminate\Database\Eloquent\Collection<int, Floor> $floors The floors that you want to get the clones for.
+     * @return Collection<int, Enemy>
      */
-    /** @param \Illuminate\Database\Eloquent\Collection<int, Floor> $floors */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
         return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use (
@@ -161,7 +160,7 @@ class MDTDungeon
             }
 
             $floors->load(['dungeon']);
-            /** @var Collection<Floor> $floors */
+            /** @var Collection<int, Floor> $floors */
             $floors = $floors->keyBy('id');
 
             // NPC_ID => list of clones

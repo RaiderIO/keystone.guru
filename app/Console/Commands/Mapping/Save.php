@@ -205,7 +205,7 @@ class Save extends Command
         $this->info('Saving NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
-        /** @var Collection<Npc> $npcs */
+        /** @var Collection<int, Npc> $npcs */
         $npcs = Npc::without([
             'characteristics',
             'spells',

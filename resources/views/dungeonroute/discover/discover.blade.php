@@ -20,8 +20,8 @@ use Illuminate\Support\Collection;
  * @var GameVersion              $gameVersion
  * @var Expansion                $expansion
  * @var Season|null              $season
- * @var Collection<Dungeon>      $gridDungeons
- * @var Collection<DungeonRoute> $dungeonroutes
+ * @var Collection<int, Dungeon>      $gridDungeons
+ * @var Collection<int, DungeonRoute> $dungeonroutes
  * @var AffixGroup               $currentAffixGroup
  * @var AffixGroup               $nextAffixGroup
  */

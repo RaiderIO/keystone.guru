@@ -39,6 +39,11 @@ interface CombatLogParsingCriteriaServiceInterface
      *
      * @return Collection<int, CombatLogParsingCriterion>
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getBelowThresholdCriteria(int $combatLogVersion, string $modelClass): Collection;
 
     /**
@@ -49,6 +54,11 @@ interface CombatLogParsingCriteriaServiceInterface
      * @param  class-string<CombatLogCriterionModelInterface>    $modelClass
      * @return Collection<int, CombatLogCriterionModelInterface>
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getAllModelsForCriteria(string $modelClass, Season $season): Collection;
 
     /**
@@ -59,5 +69,10 @@ interface CombatLogParsingCriteriaServiceInterface
      * @param  class-string<CombatLogCriterionModelInterface>    $modelClass
      * @return Collection<int, CombatLogCriterionModelInterface>
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season): Collection;
 }

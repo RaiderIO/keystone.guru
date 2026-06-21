@@ -84,7 +84,7 @@ class SpellService implements SpellServiceInterface
                 $updated++;
             } else {
                 if (Spell::create($spellAttributes)) { // @phpstan-ignore if.alwaysTrue
-                    $this->log->importFromCsvInsertNewSpell($spellId);
+                    $this->log->importFromCsvInsertNewSpell((int)$spellId);
                     $inserted++;
                 }
             }

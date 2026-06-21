@@ -3,7 +3,7 @@
  * @var AffixGroup               $currentAffixGroup
  * @var GameVersion              $gameVersion
  * @var Dungeon                  $dungeon
- * @var Collection<DungeonRoute> $dungeonroutes
+ * @var Collection<int, DungeonRoute> $dungeonroutes
  * @var string                   $category
  */
 

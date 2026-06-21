@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @var Model $model
- * @var array $exclude
+ * @var array<int, string> $exclude
  */
 
 $exclude ??= [];

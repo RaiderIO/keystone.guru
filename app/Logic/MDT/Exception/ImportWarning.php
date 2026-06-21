@@ -15,9 +15,14 @@ use Illuminate\Contracts\Support\Arrayable;
  * @author Wouter
  *
  * @since 05/01/2019
+ *
+ * @implements Arrayable<string, mixed>
  */
 class ImportWarning extends Exception implements Arrayable
 {
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(private readonly string $category, string $message, private readonly array $data = [])
     {
         parent::__construct($message);
@@ -28,6 +33,9 @@ class ImportWarning extends Exception implements Arrayable
         return $this->category;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getData(): array
     {
         return $this->data;
@@ -35,6 +43,8 @@ class ImportWarning extends Exception implements Arrayable
 
     /**
      * Get the data that is supposed to be echoed to the end user.
+     *
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

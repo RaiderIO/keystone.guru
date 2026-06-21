@@ -75,42 +75,42 @@ use Override;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * @property int         $id
- * @property string      $public_key
- * @property int         $author_id
- * @property int         $dungeon_id
- * @property int         $mapping_version_id
- * @property int         $season_id
- * @property int         $faction_id
- * @property int|null    $team_id
- * @property int         $published_state_id
- * @property string|null $clone_of
- * @property string      $title
- * @property string      $description
- * @property int|null    $level_min
- * @property int|null    $level_max
- * @property string      $difficulty
- * @property int         $seasonal_index
- * @property int         $enemy_forces
- * @property bool        $teeming
- * @property bool        $demo
- * @property array       $setup                       Attribute
- * @property bool        $has_thumbnail               Attribute
- * @property int         $has_enemy_forces            Computed column added by CoverageService::selectRaw()
- * @property string      $pull_gradient
- * @property bool        $pull_gradient_apply_always
- * @property int         $dungeon_difficulty
- * @property int         $views
- * @property int         $views_embed
- * @property int         $popularity
- * @property float       $rating
- * @property int         $rating_count
- * @property Carbon      $thumbnail_refresh_queued_at
- * @property Carbon      $thumbnail_updated_at
- * @property Carbon      $updated_at
- * @property Carbon      $created_at
- * @property Carbon      $published_at
- * @property Carbon|null $expires_at
+ * @property int                  $id
+ * @property string               $public_key
+ * @property int                  $author_id
+ * @property int                  $dungeon_id
+ * @property int                  $mapping_version_id
+ * @property int                  $season_id
+ * @property int                  $faction_id
+ * @property int|null             $team_id
+ * @property int                  $published_state_id
+ * @property string|null          $clone_of
+ * @property string               $title
+ * @property string               $description
+ * @property int|null             $level_min
+ * @property int|null             $level_max
+ * @property string               $difficulty
+ * @property int                  $seasonal_index
+ * @property int                  $enemy_forces
+ * @property bool                 $teeming
+ * @property bool                 $demo
+ * @property array<string, mixed> $setup                       Attribute
+ * @property bool                 $has_thumbnail               Attribute
+ * @property int                  $has_enemy_forces            Computed column added by CoverageService::selectRaw()
+ * @property string               $pull_gradient
+ * @property bool                 $pull_gradient_apply_always
+ * @property int                  $dungeon_difficulty
+ * @property int                  $views
+ * @property int                  $views_embed
+ * @property int                  $popularity
+ * @property float                $rating
+ * @property int                  $rating_count
+ * @property Carbon               $thumbnail_refresh_queued_at
+ * @property Carbon               $thumbnail_updated_at
+ * @property Carbon               $updated_at
+ * @property Carbon               $created_at
+ * @property Carbon               $published_at
+ * @property Carbon|null          $expires_at
  *
  * @property MappingVersion                    $mappingVersion
  * @property Dungeon                           $dungeon
@@ -151,14 +151,15 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property EloquentCollection<int, DungeonRouteThumbnail>            $dungeonRouteThumbnails
  * @property EloquentCollection<int, File>                             $thumbnails
  *
- * @method static Builder visible()
- * @method static Builder visibleWithUnlisted()
+ * @method static Builder<self> visible()
+ * @method static Builder<self> visibleWithUnlisted()
  *
  * @mixin Eloquent
  */
 class DungeonRoute extends Model implements TracksPageViewInterface
 {
     use GeneratesPublicKey;
+    /** @use HasFactory<\Database\Factories\DungeonRoute\DungeonRouteFactory> */
     use HasFactory;
     use HasMetrics;
     use Taggable;
@@ -274,7 +275,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
-     * @return array The setup as used in the front-end.
+     * @return array<string, mixed> The setup as used in the front-end.
      */
     public function getSetupAttribute(): array
     {
@@ -304,6 +305,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         );
     }
 
+    /** @return BelongsTo<MappingVersion, $this> */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
@@ -315,76 +317,91 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->belongsTo(Dungeon::class);
     }
 
+    /** @return HasMany<Brushline, $this> */
     public function brushlines(): HasMany
     {
         return $this->hasMany(Brushline::class)->orderBy('id');
     }
 
+    /** @return HasMany<Path, $this> */
     public function paths(): HasMany
     {
         return $this->hasMany(Path::class)->orderBy('id');
     }
 
+    /** @return HasMany<Arrow, $this> */
     public function arrows(): HasMany
     {
         return $this->hasMany(Arrow::class)->orderBy('id');
     }
 
+    /** @return BelongsTo<Season, $this> */
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);
     }
 
+    /** @return BelongsTo<Faction, $this> */
     public function faction(): BelongsTo
     {
         return $this->belongsTo(Faction::class);
     }
 
+    /** @return BelongsTo<User, $this> */
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return BelongsToMany<CharacterClassSpecialization, $this> */
     public function specializations(): BelongsToMany
     {
         return $this->belongsToMany(CharacterClassSpecialization::class, 'dungeon_route_player_specializations');
     }
 
+    /** @return HasMany<DungeonRoutePlayerSpecialization, $this> */
     public function playerspecializations(): HasMany
     {
         return $this->hasMany(DungeonRoutePlayerSpecialization::class);
     }
 
+    /** @return HasMany<DungeonRouteAttribute, $this> */
     public function routeattributesraw(): HasMany
     {
         return $this->hasMany(DungeonRouteAttribute::class);
     }
 
+    /** @return BelongsToMany<CharacterClass, $this> */
     public function classes(): BelongsToMany
     {
         return $this->belongsToMany(CharacterClass::class, 'dungeon_route_player_classes');
     }
 
+    /** @return HasMany<DungeonRoutePlayerClass, $this> */
     public function playerclasses(): HasMany
     {
         return $this->hasMany(DungeonRoutePlayerClass::class);
     }
 
+    /** @return BelongsToMany<CharacterRace, $this> */
     public function races(): BelongsToMany
     {
         return $this->belongsToMany(CharacterRace::class, 'dungeon_route_player_races');
     }
 
+    /** @return HasMany<DungeonRoutePlayerRace, $this> */
     public function playerraces(): HasMany
     {
         return $this->hasMany(DungeonRoutePlayerRace::class);
     }
 
+    /** @return HasMany<DungeonRouteAffixGroup, $this> */
     public function affixGroups(): HasMany
     {
         return $this->hasMany(DungeonRouteAffixGroup::class);
     }
 
+    /** @return BelongsToMany<AffixGroup, $this> */
     public function affixes(): BelongsToMany
     {
         return $this->belongsToMany(AffixGroup::class, 'dungeon_route_affix_groups');
@@ -396,11 +413,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $this->hasMany(KillZone::class)->orderBy('index');
     }
 
+    /** @return HasMany<PridefulEnemy, $this> */
     public function pridefulEnemies(): HasMany
     {
         return $this->hasMany(PridefulEnemy::class);
     }
 
+    /** @return BelongsTo<PublishedState, $this> */
     public function publishedState(): BelongsTo
     {
         return $this->belongsTo(PublishedState::class);
@@ -410,49 +429,57 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      * WARNING: requires you to set ->setConnection('combatlog') on the model before calling this method!
      * You then also need to call ->setConnection(null) to reset the connection to the default one.
      *
-     * @return HasOne
+     * @return HasOne<ChallengeModeRun, $this>
      */
     public function challengeModeRun(): HasOne
     {
         return $this->hasOne(ChallengeModeRun::class);
     }
 
+    /** @return HasMany<DungeonRouteRating, $this> */
     public function ratings(): HasMany
     {
         return $this->hasMany(DungeonRouteRating::class);
     }
 
+    /** @return HasMany<DungeonRouteFavorite, $this> */
     public function favorites(): HasMany
     {
         return $this->hasMany(DungeonRouteFavorite::class);
     }
 
+    /** @return HasMany<LiveSession, $this> */
     public function livesessions(): HasMany
     {
         return $this->hasMany(LiveSession::class);
     }
 
+    /** @return HasMany<DungeonRouteEnemyRaidMarker, $this> */
     public function enemyRaidMarkers(): HasMany
     {
         return $this->hasMany(DungeonRouteEnemyRaidMarker::class);
     }
 
+    /** @return HasMany<DungeonRouteThumbnailJob, $this> */
     public function dungeonRouteThumbnailJobs(): HasMany
     {
         return $this->hasMany(DungeonRouteThumbnailJob::class);
     }
 
+    /** @return HasMany<DungeonRouteThumbnail, $this> */
     public function dungeonRouteThumbnails(): HasMany
     {
         return $this->hasMany(DungeonRouteThumbnail::class);
     }
 
+    /** @return BelongsToMany<File, $this> */
     public function thumbnails(): BelongsToMany
     {
         return $this->belongsToMany(File::class, 'dungeon_route_thumbnails')
             ->where('dungeon_route_thumbnails.custom', false);
     }
 
+    /** @return HasMany<MapIcon, $this> */
     public function mapicons(): HasMany
     {
         /** @var HasMany<MapIcon, $this> $query */
@@ -467,37 +494,44 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $query;
     }
 
+    /** @return BelongsToMany<RouteAttribute, $this> */
     public function routeattributes(): BelongsToMany
     {
         return $this->belongsToMany(RouteAttribute::class, 'dungeon_route_attributes');
     }
 
+    /** @return HasMany<PageView, $this> */
     public function pageviews(): HasMany
     {
         return $this->hasMany(PageView::class, 'model_id')->where('model_class', static::class);
     }
 
+    /** @return HasMany<MDTImport, $this> */
     public function mdtImport(): HasMany
     {
         // Only set if the route was imported through an MDT string
         return $this->hasMany(MDTImport::class);
     }
 
+    /** @return BelongsTo<Team, $this> */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
+    /** @return HasOne<DungeonRouteScheduledPublish, $this> */
     public function scheduledPublish(): HasOne
     {
         return $this->hasOne(DungeonRouteScheduledPublish::class);
     }
 
+    /** @return HasMany<Tag, $this> */
     public function tagsteam(): HasMany
     {
         return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM]);
     }
 
+    /** @return HasMany<Tag, $this> */
     public function tagspersonal(): HasMany
     {
         return $this->tags(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL]);
@@ -526,9 +560,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $newFloor;
     }
 
+    /** @return Collection<int, KillZone> */
     public function mapContextKillZones(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection<KillZone> $killZones */
+        /** @var Collection<int, KillZone> $killZones */
         $killZones = $this->killZones()
             ->with(['enemies', 'floor'])
             ->get();
@@ -552,9 +587,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $killZones;
     }
 
+    /** @return Collection<int, MapIcon> */
     public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection<MapIcon> $mapIcons */
+        /** @var Collection<int, MapIcon> $mapIcons */
         $mapIcons = $this->mapicons()
             ->with(['floor'])
             ->get();
@@ -573,9 +609,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $mapIcons;
     }
 
+    /** @return Collection<int, Brushline> */
     public function mapContextBrushlines(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection<Brushline> $brushlines */
+        /** @var Collection<int, Brushline> $brushlines */
         $brushlines = $this->brushlines()->with(['floor'])->get();
 
         if ($useFacade) {
@@ -595,9 +632,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $brushlines;
     }
 
+    /** @return Collection<int, Path> */
     public function mapContextPaths(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection<Brushline> $paths */
+        /** @var Collection<int, Path> $paths */
         $paths = $this->paths()->with(['floor'])->get();
 
         if ($useFacade) {
@@ -616,9 +654,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $paths;
     }
 
+    /** @return Collection<int, Arrow> */
     public function mapContextArrows(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection<Arrow> $arrows */
+        /** @var Collection<int, Arrow> $arrows */
         $arrows = $this->arrows()->with(['floor'])->get();
 
         if ($useFacade) {
@@ -644,6 +683,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Scope a query to only include dungeon routes that are set in sandbox mode.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     public function scopeIsSandbox(Builder $query): Builder
     {
@@ -652,6 +694,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Scope a query to only include active dungeons and non-demo routes.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function visible(Builder $query): Builder
@@ -1192,6 +1237,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      * @param DungeonRoute $dungeonRoute The RECEIVER of the target $relations
      * @param array        $relations    The relations that you want to clone.
      */
+    /**
+     * @param array<int, mixed> $relations Collection of relations
+     */
     public function cloneRelationsInto(DungeonRoute $dungeonRoute, array $relations): void
     {
         // Link all relations to their new dungeon route
@@ -1617,6 +1665,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     /**
      * {@inheritDoc}
      */
+    /** @param array<int, string>|string|null $attribute */
     public function touch($attribute = null): bool
     {
         DungeonRoute::dropCaches($this->id);

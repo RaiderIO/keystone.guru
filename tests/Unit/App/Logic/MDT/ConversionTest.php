@@ -26,6 +26,9 @@ final class ConversionTest extends TestCase
         $this->assertEquals($expansionKey, $expectedExpansionKey);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function checkGetExpansionName_GivenDungeonKey_ShouldBeCorrect_Provider(): array
     {
         $expansions = [

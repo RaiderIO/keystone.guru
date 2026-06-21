@@ -21,14 +21,14 @@ class SetLocaleFixed
     {
         // Check if is allowed and set default locale if not
         if (!language()->allowed($locale)) {
-            $locale = config('app.locale');
+            $locale = (string)config('app.locale');
         }
 
         // Set app language
         App::setLocale($locale);
 
         // Remove AI suffix if it was there just for the Carbon/Date setLocale functions
-        $locale = Str::replace('_ai', '', $locale);
+        $locale = (string)Str::replace('_ai', '', $locale);
 
         // Set carbon language
         if (config('language.carbon')) {
@@ -73,6 +73,9 @@ class SetLocaleFixed
         }
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     */
     public function setSystemLocale($request): void
     {
         if ($request->session()->has('locale')) {

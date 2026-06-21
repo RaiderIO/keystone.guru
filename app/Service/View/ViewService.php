@@ -62,6 +62,11 @@ class ViewService implements ViewServiceInterface
     /**
      * {@inheritDoc}
      */
+    /**
+
+     * @return array<int, mixed>
+     */
+
     public function getGlobalViewVariables(bool $useCache = true): array
     {
         $viewVariablesKey = sprintf('view_variables:%s:global', $this->release);
@@ -117,7 +122,7 @@ class ViewService implements ViewServiceInterface
                 'raids',
             ])->orderBy('released_at', 'desc')->get();
 
-            /** @var Collection<Expansion> $activeExpansions */
+            /** @var Collection<int, Expansion> $activeExpansions */
             $activeExpansions = Expansion::active()->with([
                 'dungeons',
                 'raids',
@@ -210,6 +215,12 @@ class ViewService implements ViewServiceInterface
         }, config('keystoneguru.cache.global_view_variables.ttl')));
     }
 
+    /**
+
+
+     * @return array<int, mixed>
+     */
+
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
         $viewVariablesGameServerRegionKey = sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short);
@@ -230,13 +241,13 @@ class ViewService implements ViewServiceInterface
 
                 $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
 
-                /** @var Collection<ExpansionData> $expansionsData */
+                /** @var Collection<string, ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
                     $expansionsData->put($expansion->shortname, $this->expansionService->getData($this->seasonAffixGroupService, $expansion, $gameServerRegion));
                 }
 
-                /** @var Collection<Expansion> $activeExpansions */
+                /** @var Collection<int, Expansion> $activeExpansions */
                 $activeExpansions = Expansion::active()->with('dungeonsAndRaids')->orderBy('released_at', 'desc')->get();
 
                 // Build a list of all valid affix groups we may select across all currently active seasons

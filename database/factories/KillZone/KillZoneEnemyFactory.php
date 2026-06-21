@@ -5,6 +5,9 @@ namespace Database\Factories\KillZone;
 use App\Models\Enemy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Enemy>
+ */
 class KillZoneEnemyFactory extends Factory
 {
     public function definition(): array

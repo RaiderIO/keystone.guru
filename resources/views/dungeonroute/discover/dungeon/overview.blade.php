@@ -10,9 +10,9 @@ use Illuminate\Support\Collection;
  * @var boolean             $showAds
  * @var boolean             $isMobile
  * @var Dungeon             $dungeon
- * @var array               $dungeonroutes
+ * @var array<int, \App\Models\DungeonRoute\DungeonRoute> $dungeonroutes
  * @var GameVersion         $gameVersion
- * @var Collection<Dungeon> $gameVersionDungeons
+ * @var Collection<int, Dungeon> $gameVersionDungeons
  */
 
 $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;

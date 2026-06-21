@@ -36,6 +36,9 @@ class MissedTest extends PublicTestCase
         $this->assertInstanceOf(MissedInterface::class, $suffix);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider(): array
     {
         return [
@@ -93,6 +96,9 @@ class MissedTest extends PublicTestCase
         $this->assertNull($missedSuffix->getDamageType());
     }
 
+    /**
+     * @return array<string, array<string, Guid|bool|int|string|null>>
+     */
     public static function setParameters_givenCombatLogLineV20_shouldParseParametersCorrectly_dataProvider(): array
     {
         $guidChecks = [];
@@ -167,6 +173,9 @@ class MissedTest extends PublicTestCase
         $this->assertEquals($damageType, $missedSuffix->getDamageType());
     }
 
+    /**
+     * @return array<string, array<string, Guid|bool|int|string|null>>
+     */
     public static function setParameters_givenCombatLogLineV22_shouldParseParametersCorrectly_dataProvider(): array
     {
         $guidChecks = [];
@@ -299,6 +308,9 @@ class MissedTest extends PublicTestCase
         $this->assertEquals($damageType, $missedSuffix->getDamageType());
     }
 
+    /**
+     * @return array<string, array<string, Guid|bool|int|string|null>>
+     */
     public static function setParameters_givenCombatLogLineV9SoD_shouldParseParametersCorrectly_dataProvider(): array
     {
         $guidChecks = [];

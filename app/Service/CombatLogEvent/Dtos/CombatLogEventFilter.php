@@ -25,6 +25,8 @@ use InvalidArgumentException;
 
 /**
  * This class is used as a filter to extract CombatLogEvents from Opensearch.
+ *
+ * @implements Arrayable<string, mixed>
  */
 class CombatLogEventFilter implements Arrayable
 {
@@ -36,19 +38,19 @@ class CombatLogEventFilter implements Arrayable
     private ?int $playerDeathsMin = null;
     private ?int $playerDeathsMax = null;
 
-    /** @var Collection<Affix> */
+    /** @var Collection<int, Affix> */
     private Collection $affixes;
 
-    /** @var Collection<CharacterClass> */
+    /** @var Collection<int, CharacterClass> */
     private Collection $classes;
 
-    /** @var Collection<CharacterClassSpecialization> */
+    /** @var Collection<int, CharacterClassSpecialization> */
     private Collection $specializations;
 
-    /** @var Collection<CharacterClass> */
+    /** @var Collection<int, CharacterClass> */
     private Collection $classesPlayerDeaths;
 
-    /** @var Collection<CharacterClassSpecialization> */
+    /** @var Collection<int, CharacterClassSpecialization> */
     private Collection $specializationsPlayerDeaths;
     private ?int $periodMin          = null;
     private ?int $periodMax          = null;
@@ -170,7 +172,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection<Affix>
+     * @return Collection<int, Affix>
      */
     public function getAffixes(): Collection
     {
@@ -178,7 +180,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<Affix>    $affixes
+     * @param  Collection<int, Affix> $affixes
      * @return CombatLogEventFilter
      */
     public function setAffixes(Collection $affixes): CombatLogEventFilter
@@ -189,7 +191,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClass>
+     * @return Collection<int, CharacterClass>
      */
     public function getClasses(): Collection
     {
@@ -197,7 +199,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClass> $classes
+     * @param  Collection<int, CharacterClass> $classes
      * @return CombatLogEventFilter
      */
     public function setClasses(Collection $classes): CombatLogEventFilter
@@ -208,7 +210,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClassSpecialization>
+     * @return Collection<int, CharacterClassSpecialization>
      */
     public function getSpecializations(): Collection
     {
@@ -216,7 +218,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClassSpecialization> $specializations
+     * @param  Collection<int, CharacterClassSpecialization> $specializations
      * @return CombatLogEventFilter
      */
     public function setSpecializations(Collection $specializations): CombatLogEventFilter
@@ -227,7 +229,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClass>
+     * @return Collection<int, CharacterClass>
      */
     public function getClassesPlayerDeaths(): Collection
     {
@@ -235,7 +237,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClass> $classesPlayerDeaths
+     * @param  Collection<int, CharacterClass> $classesPlayerDeaths
      * @return CombatLogEventFilter
      */
     public function setClassesPlayerDeaths(Collection $classesPlayerDeaths): CombatLogEventFilter
@@ -246,7 +248,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClassSpecialization>
+     * @return Collection<int, CharacterClassSpecialization>
      */
     public function getSpecializationsPlayerDeaths(): Collection
     {
@@ -254,7 +256,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClassSpecialization> $specializationsPlayerDeaths
+     * @param  Collection<int, CharacterClassSpecialization> $specializationsPlayerDeaths
      * @return CombatLogEventFilter
      */
     public function setSpecializationsPlayerDeaths(Collection $specializationsPlayerDeaths): CombatLogEventFilter
@@ -327,6 +329,9 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return array_filter([
@@ -353,6 +358,10 @@ class CombatLogEventFilter implements Arrayable
         ]);
     }
 
+    /**
+     * @param  array<int, mixed>                                   $must
+     * @return array<int, \Codeart\OpensearchLaravel\Search\Query>
+     */
     public function toOpensearchQuery(array $must = []): array
     {
         $dungeon = $this->getDungeon();
@@ -443,7 +452,7 @@ class CombatLogEventFilter implements Arrayable
             // Add an AffixGroup filter
             $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
             if ($mostRecentSeason !== null) {
-                /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
+                /** @var Collection<int, WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
                 $weeklyAffixGroupsSinceStart = $this->seasonAffixGroupService->getWeeklyAffixGroupsSinceStart(
                     $mostRecentSeason,
                     GameServerRegion::getUserOrDefaultRegion(),

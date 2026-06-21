@@ -20,9 +20,9 @@ use Illuminate\Support\Collection;
  * @var int                          $itemLevelMax
  * @var int                          $playerDeathsMin
  * @var int                          $playerDeathsMax
- * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
- * @var array                        $embedOptions
- * @var array                        $parameters
+ * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var array<string, mixed>                        $embedOptions
+ * @var array<string, mixed>                        $parameters
  * @var float                        $defaultZoom
  */
 ?>

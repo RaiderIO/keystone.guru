@@ -22,6 +22,8 @@ abstract class OAuthLoginController extends LoginController
     abstract protected function getDriver(): string;
 
     /**
+     * @param  object $oauthUser
+     * @param  mixed  $oAuthId
      * @return mixed
      */
     abstract protected function getUser($oauthUser, $oAuthId);

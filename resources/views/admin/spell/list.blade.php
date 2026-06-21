@@ -4,7 +4,7 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Spell> $models
+ * @var Collection<int, Spell> $models
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.spell.list.title')])

@@ -7,8 +7,8 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc>   $npcs
- * @var Collection<Spell> $spells
+ * @var Collection<int, Npc>   $npcs
+ * @var Collection<int, Spell> $spells
  * @var Dungeon|null      $dungeon
  */
 ?>

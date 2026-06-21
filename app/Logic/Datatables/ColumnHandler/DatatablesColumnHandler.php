@@ -26,19 +26,19 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @param  Builder $subBuilder
-     * @param  Builder $orderBuilder
-     * @param          $columnData
-     * @param          $order
-     * @param          $generalSearch
+     * @param  Builder<\Illuminate\Database\Eloquent\Model> $subBuilder
+     * @param  Builder<\Illuminate\Database\Eloquent\Model> $orderBuilder
+     * @param  array<string, mixed>                         $columnData
+     * @param  array<string, mixed>|null                    $order
+     * @param  string|null                                  $generalSearch
      * @return void
      */
     abstract protected function applyFilter(
         Builder $subBuilder,
         Builder $orderBuilder,
-                $columnData,
-                $order,
-                $generalSearch,
+        array   $columnData,
+        ?array  $order,
+        ?string $generalSearch,
     ): void;
 
     public function getDtHandler(): DatatablesHandler
@@ -63,6 +63,8 @@ abstract class DatatablesColumnHandler
     }
 
     /**
+     * @param  Builder<\Illuminate\Database\Eloquent\Model> $subBuilder
+     * @param  Builder<\Illuminate\Database\Eloquent\Model> $orderBuilder
      * @return $this
      *
      * @throws Exception

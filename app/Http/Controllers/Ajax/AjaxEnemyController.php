@@ -103,11 +103,11 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws AuthorizationException
      */
-    public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy)
+    public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): array|ResponseFactory|Response
     {
         Gate::authorize('edit', $dungeonRoute);
 

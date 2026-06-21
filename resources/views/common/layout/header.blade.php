@@ -13,9 +13,9 @@ use Illuminate\Support\Str;
 
 /**
  * @var GameVersion                $currentUserGameVersion
- * @var Collection<GameVersion>    $allGameVersions
- * @var Collection<Expansion>      $activeExpansions
- * @var Collection<Dungeon>        $gameVersionDungeons
+ * @var Collection<int, GameVersion>    $allGameVersions
+ * @var Collection<int, Expansion>      $activeExpansions
+ * @var Collection<int, Dungeon>        $gameVersionDungeons
  * @var Season                     $currentSeason
  * @var Season|null                $nextSeason
  * @var bool                       $forceShrink

@@ -149,54 +149,65 @@ class Npc extends CacheModel implements MappingModelInterface
 
     /**
      * Gets all derived enemies from this Npc.
+     *
+     * @return HasMany<Enemy, $this>
      */
     public function enemies(): HasMany
     {
         return $this->hasMany(Enemy::class);
     }
 
+    /** @return HasMany<NpcBolsteringWhitelist, $this> */
     public function npcbolsteringwhitelists(): HasMany
     {
         return $this->hasMany(NpcBolsteringWhitelist::class);
     }
 
+    /** @return BelongsToMany<Dungeon, $this> */
     public function dungeons(): BelongsToMany
     {
         return $this->belongsToMany(Dungeon::class, 'npc_dungeons');
     }
 
+    /** @return HasMany<NpcDungeon, $this> */
     public function npcDungeons(): HasMany
     {
         return $this->hasMany(NpcDungeon::class);
     }
 
+    /** @return BelongsTo<NpcClassification, $this> */
     public function classification(): BelongsTo
     {
         return $this->belongsTo(NpcClassification::class);
     }
 
+    /** @return BelongsTo<NpcType, $this> */
     public function type(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcType::class, 'npc_type_id');
     }
 
+    /** @return BelongsTo<NpcClass, $this> */
     public function class(): BelongsTo
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcClass::class, 'npc_class_id');
     }
 
+    /** @return BelongsToMany<Characteristic, $this> */
     public function characteristics(): BelongsToMany
     {
         return $this->belongsToMany(Characteristic::class, 'npc_characteristics')->orderBy('characteristics.id');
     }
 
+    /** @return HasMany<NpcCharacteristic, $this> */
     public function npcCharacteristics(): HasMany
     {
         return $this->hasMany(NpcCharacteristic::class)->orderBy('characteristic_id');
     }
 
+    /** @return BelongsToMany<Spell, $this> */
     public function spells(bool $onlyVisibleOnMap = true): BelongsToMany
     {
         /** @var BelongsToMany<Spell, $this> $query */
@@ -207,21 +218,25 @@ class Npc extends CacheModel implements MappingModelInterface
         return $query;
     }
 
+    /** @return HasMany<NpcSpell, $this> */
     public function npcSpells(): HasMany
     {
         return $this->hasMany(NpcSpell::class)->orderBy('spell_id');
     }
 
+    /** @return HasMany<NpcEnemyForces, $this> */
     public function npcEnemyForces(): HasMany
     {
         return $this->hasMany(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
     }
 
+    /** @return HasOne<NpcEnemyForces, $this> */
     public function enemyForces(): HasOne
     {
         return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
     }
 
+    /** @return HasMany<NpcHealth, $this> */
     public function npcHealths(): HasMany
     {
         return $this->hasMany(NpcHealth::class);
@@ -313,6 +328,7 @@ class Npc extends CacheModel implements MappingModelInterface
         ]);
     }
 
+    /** @param array<int, string> $affixes */
     public function getScalingFactor(int $keyLevel, array $affixes = []): float
     {
         $keyLevelFactor = 1;
@@ -345,9 +361,7 @@ class Npc extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @param  int   $keyLevel
-     * @param  array $affixes  A list of Affix:: constants
-     * @return float
+     * @param array<int, string> $affixes A list of Affix:: string constants
      */
     public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = []): float
     {

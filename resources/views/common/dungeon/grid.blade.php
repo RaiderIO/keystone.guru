@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 /**
  * @var ExpansionService    $expansionService
  * @var Expansion           $expansion
- * @var Collection<Dungeon> $dungeons
+ * @var Collection<int, Dungeon> $dungeons
  * @var callable|null       $subtextFn
  * @var boolean             $useAbbreviation
  * @var int|null            $colCount

@@ -9,5 +9,10 @@ interface SpellServiceInterface
     /**
      * @return int[]
      */
+    /**
+
+     * @return array<int, mixed>
+     */
+
     public function getMissingSpellIds(): array;
 }

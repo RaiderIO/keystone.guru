@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\Splitters;
 
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
@@ -22,15 +23,17 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
     private readonly ZoneChangeSplitterLoggingInterface $log;
 
+    /** @var Collection<int, int> */
     private readonly Collection $validDungeonMapIds;
 
-    /** @var Collection<string> */
+    /** @var Collection<int, string> */
     private Collection $rawEvents;
 
     private ?string $lastCombatLogVersion = null;
 
     private ?ZoneChangeEvent $lastZoneChangeEvent = null;
 
+    /** @var Collection<int, string>|null */
     private ?Collection $result = null;
 
     private ?string $filePath = null;
@@ -51,6 +54,9 @@ class ZoneChangeSplitter extends CombatLogSplitter
         $this->validDungeonMapIds->put(2657, 2657);
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     public function splitCombatLog(string $filePath): Collection
     {
         $this->reset();
@@ -79,6 +85,9 @@ class ZoneChangeSplitter extends CombatLogSplitter
         return $this->result;
     }
 
+    /**
+     * @return BaseEvent|null
+     */
     private function parseCombatLogEvent(
         int    $combatLogVersion,
         bool   $advancedLoggingEnabled,

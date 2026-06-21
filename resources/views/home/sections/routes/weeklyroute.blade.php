@@ -6,8 +6,8 @@ use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Dungeon>                         $weeklyRouteDungeons
- * @var Collection<string, Collection<WeeklyRoute>> $weeklyRoutes
+ * @var Collection<int, Dungeon>                         $weeklyRouteDungeons
+ * @var Collection<string, Collection<int, WeeklyRoute>> $weeklyRoutes
  */
 ?>
 <div class="row no-gutters my-4 px-2">

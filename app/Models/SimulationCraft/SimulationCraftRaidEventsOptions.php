@@ -99,11 +99,13 @@ class SimulationCraftRaidEventsOptions extends Model
         self::AFFIX_TYRANNICAL,
     ];
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -134,6 +136,7 @@ class SimulationCraftRaidEventsOptions extends Model
         return in_array($affix, explode(',', $this->affix));
     }
 
+    /** @return array<int, string> */
     public function getAffixes(): array
     {
         $affixes        = [];

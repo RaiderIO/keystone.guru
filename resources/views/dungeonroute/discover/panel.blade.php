@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
  * @var string                   $title
  * @var string|null              $link
  * @var int                      $cols
- * @var Collection<DungeonRoute> $dungeonroutes
+ * @var Collection<int, DungeonRoute> $dungeonroutes
  * @var AffixGroup               $currentAffixGroup
  */
 

@@ -13,6 +13,9 @@ use Tests\TestCases\PublicTestCase;
 
 final class ChallengeModeStartTest extends PublicTestCase
 {
+    /**
+     * @param array<int, int> $expectedAffixIds
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('ChallengeModeStart')]
@@ -41,6 +44,9 @@ final class ChallengeModeStartTest extends PublicTestCase
         Assert::assertEquals($expectedAffixIds, $parseEventResult->getAffixIDs());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent_DataProvider(): array
     {
         return [

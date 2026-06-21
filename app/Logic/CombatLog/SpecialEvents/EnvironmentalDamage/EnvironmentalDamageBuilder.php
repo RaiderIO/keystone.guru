@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 class EnvironmentalDamageBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed> $parameters
      * @return SpecialEvent
      */
     public static function create(

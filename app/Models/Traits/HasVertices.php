@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 trait HasVertices
 {
     /**
-     * @return Collection<LatLng>
+     * @return Collection<int, LatLng>
      */
     public function getDecodedLatLngs(?Floor $floor = null): Collection
     {
@@ -32,6 +32,7 @@ trait HasVertices
         return $result;
     }
 
+    /** @return array<string, array<string, array<int, array<int, float>>>> */
     public function getCoordinatesData(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,

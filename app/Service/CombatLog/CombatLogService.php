@@ -45,7 +45,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection<BaseEvent>
+     * @return Collection<int, BaseEvent>
      *
      * @throws Exception
      */
@@ -96,7 +96,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, ChallengeMode>
      *
      * @throws Exception
      */
@@ -404,6 +404,9 @@ readonly class CombatLogService implements CombatLogServiceInterface
         }
     }
 
+    /**
+     * @param Collection<int, string> $rawEvents
+     */
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
     {
         $fileHandle = null;

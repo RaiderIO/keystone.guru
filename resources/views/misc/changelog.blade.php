@@ -6,8 +6,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * @var LengthAwarePaginator|Release[]       $releases
- * @var Collection<ReleaseChangelogCategory> $categories
+ * @var LengthAwarePaginator<int, Release>       $releases
+ * @var Collection<int, ReleaseChangelogCategory> $categories
  * @var boolean                              $isUserAdmin
  */
 ?>

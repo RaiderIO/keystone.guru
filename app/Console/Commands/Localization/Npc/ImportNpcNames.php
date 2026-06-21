@@ -37,8 +37,8 @@ class ImportNpcNames extends Command
         $updatedCount = 0;
         $progressBar  = $this->output->createProgressBar(Npc::count());
         $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
-        Npc::chunk(1000, function (Collection $npcs) use (&$npcNames, &$updatedCount, $progressBar) {
-            /** @var Collection<Npc> $npcs */
+        Npc::chunk(1000, function (Collection $npcs) use (&$npcNames, &$updatedCount, $progressBar): void {
+            /** @var Collection<int, Npc> $npcs */
             foreach ($npcs as $npc) {
                 if (empty($npc->name) || Str::startsWith($npc->name, 'npcs.')) {
                     $progressBar->advance();

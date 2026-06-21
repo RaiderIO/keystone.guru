@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 
 class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollectionInterface
 {
-    /** @var Collection<RaidEventPull> */
+    /** @var Collection<int, RaidEventPull> */
     private Collection $raidEventPulls;
 
     public function __construct(

@@ -12,7 +12,7 @@ use App\Service\Cache\CacheServiceInterface;
  * @var DungeonRoute          $dungeonroute
  * @var AffixGroup|null       $currentAffixGroup
  * @var AffixGroup|null       $tierAffixGroup
- * @var array                 $__env
+ * @var array<string, mixed>                 $__env
  * @var boolean               $cache
  */
 

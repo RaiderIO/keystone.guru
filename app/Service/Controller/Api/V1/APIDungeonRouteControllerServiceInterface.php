@@ -11,6 +11,11 @@ interface APIDungeonRouteControllerServiceInterface
     /**
      * @return Collection<DungeonRouteThumbnailJob>
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function createThumbnails(
         DungeonRoute $dungeonRoute,
         ?int         $viewportWidth = null,

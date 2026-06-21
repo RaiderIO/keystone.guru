@@ -294,6 +294,9 @@ class DungeonExploreController extends Controller
         ]));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getFilterSettings(?Season $season): array
     {
         return [

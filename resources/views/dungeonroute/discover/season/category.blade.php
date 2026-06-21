@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
  * @var AffixGroup               $currentAffixGroup
  * @var GameVersion              $gameVersion
  * @var Season                   $season
- * @var Collection<DungeonRoute> $dungeonroutes
+ * @var Collection<int, DungeonRoute> $dungeonroutes
  */
 
 $title      ??= sprintf('%s routes', __($season->name));

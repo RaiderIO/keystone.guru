@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Npc                          $npc
- * @var Collection<Characteristic>   $allCharacteristics
+ * @var Collection<int, Characteristic>   $allCharacteristics
  */
 ?>
 {{-- Characteristics --}}

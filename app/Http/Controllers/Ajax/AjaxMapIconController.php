@@ -161,11 +161,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws Exception
      */
-    public function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon)
+    public function delete(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon): array|ResponseFactory|Response
     {
         $dungeonRoute = $mapIcon->dungeonRoute;
 
@@ -233,11 +233,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws Exception
      */
-    public function adminDelete(Request $request, MappingVersion $mappingVersion, MapIcon $mapIcon)
+    public function adminDelete(Request $request, MappingVersion $mappingVersion, MapIcon $mapIcon): array|ResponseFactory|Response
     {
         return $this->delete($request, null, $mapIcon);
     }

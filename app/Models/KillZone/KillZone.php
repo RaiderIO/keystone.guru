@@ -46,6 +46,7 @@ use Override;
 class KillZone extends Model
 {
     use HasLatLng;
+    /** @use HasFactory<\Database\Factories\KillZone\KillZoneFactory> */
     use HasFactory;
 
     public $visible = [
@@ -91,32 +92,39 @@ class KillZone extends Model
 
     /**
      * Get the dungeon route that this killzone is attached to.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
      */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return HasMany<KillZoneEnemy, $this> */
     public function killZoneEnemies(): HasMany
     {
         return $this->hasMany(KillZoneEnemy::class);
     }
 
+    /** @return HasMany<KillZoneSpell, $this> */
     public function killZoneSpells(): HasMany
     {
         return $this->hasMany(KillZoneSpell::class);
     }
 
+    /** @return BelongsToMany<Enemy, $this> */
     public function enemies(): BelongsToMany
     {
         return $this->belongsToMany(Enemy::class, 'kill_zone_enemies', 'kill_zone_id', 'enemy_id');
     }
 
+    /** @return BelongsToMany<Spell, $this> */
     public function spells(): BelongsToMany
     {
         return $this->belongsToMany(Spell::class, 'kill_zone_spells');
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
@@ -203,7 +211,7 @@ class KillZone extends Model
     }
 
     /**
-     * @return array|null The coordinates of a rectangle that perfectly fits all enemies inside this pull.
+     * @return array<string, float|int>|null The coordinates of a rectangle that perfectly fits all enemies inside this pull.
      */
     public function getEnemiesBoundingBox(int $margin = 0): ?array
     {
@@ -268,6 +276,8 @@ class KillZone extends Model
 
     /**
      * Gets a list of enemy forces that this kill zone kills that may be skipped.
+     *
+     * @return Collection<int, \stdClass>
      */
     public function getSkippableEnemyForces(bool $teeming): Collection
     {

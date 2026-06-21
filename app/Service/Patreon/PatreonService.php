@@ -21,7 +21,7 @@ class PatreonService implements PatreonServiceInterface
     }
 
     /**
-     * @return array{array{id: int, type: string, attributes: array{title: string}}}|null
+     * @return array<int, array{id: int, type: string, attributes: array{title: string}}>|null
      */
     public function loadCampaignBenefits(): ?array
     {
@@ -48,7 +48,10 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(static fn(
+            /** @var array<int, mixed> $tiersAndBenefitsResponseIncluded */
+            $tiersAndBenefitsResponseIncluded = $tiersAndBenefitsResponse['included'];
+
+            return collect($tiersAndBenefitsResponseIncluded)->filter(static fn(
                 $included,
             ) => $included['type'] === 'benefit')->toArray();
         } finally {
@@ -57,7 +60,7 @@ class PatreonService implements PatreonServiceInterface
     }
 
     /**
-     * @return array{array{id: int, type: string, relationships: array}}|null
+     * @return array<int, array<string, mixed>>|null
      */
     public function loadCampaignTiers(): ?array
     {
@@ -84,7 +87,10 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(static fn(
+            /** @var array<int, mixed> $tiersAndBenefitsResponseIncluded */
+            $tiersAndBenefitsResponseIncluded = $tiersAndBenefitsResponse['included'];
+
+            return collect($tiersAndBenefitsResponseIncluded)->filter(static fn(
                 $included,
             ) => $included['type'] === 'tier')->toArray();
         } finally {
@@ -92,6 +98,9 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
+    /**
+     * @return array<int, array<string, mixed>>|null
+     */
     public function loadCampaignMembers(): ?array
     {
         if (($adminUser = $this->loadAdminUser()) === null) {
@@ -117,7 +126,10 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($membersResponse['data'])->filter(static fn(
+            /** @var array<int, mixed> $membersResponseData */
+            $membersResponseData = $membersResponse['data'];
+
+            return collect($membersResponseData)->filter(static fn(
                 $included,
             ) => $included['type'] === 'member')->toArray();
         } finally {
@@ -125,9 +137,13 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $campaignBenefits
+     * @param array<int, array<string, mixed>> $campaignTiers
+     * @param array<string, mixed>             $member
+     */
     public function applyPaidBenefitsForMember(array $campaignBenefits, array $campaignTiers, array $member): bool
     {
-        /** @var array{id: string, type: string, relationships: array, attributes: array{email: string}} $member */
         try {
             $this->log->applyPaidBenefitsForMemberStart($member['id']);
 
@@ -163,6 +179,7 @@ class PatreonService implements PatreonServiceInterface
             }
 
             // We now know which user this is - update the benefits of this user
+            /** @var \Illuminate\Support\Collection<int, string> $newBenefits */
             $newBenefits = collect();
             foreach ($member['relationships']['currently_entitled_tiers']['data'] as $currentlyEntitledTier) {
                 /** @var array{id: int, type: string} $currentlyEntitledTier */
@@ -254,8 +271,10 @@ class PatreonService implements PatreonServiceInterface
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
-                        /** @var array $member */
-                        $member = collect($identityResponse['included'])->filter(static fn(
+                        /** @var array<int, mixed> $identityResponseIncluded */
+                        $identityResponseIncluded = $identityResponse['included'];
+                        /** @var array<string, mixed>|null $member */
+                        $member = collect($identityResponseIncluded)->filter(static fn(
                             array $included,
                         ) => $included['type'] === 'member')->first();
 
@@ -351,6 +370,11 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
+    /**
+     * @param  array<int, array<string, mixed>> $campaignTiers
+     * @param  array<int, array<string, mixed>> $campaignBenefits
+     * @return array<int, string>
+     */
     private function getBenefitsByTierId(array $campaignTiers, array $campaignBenefits, int $tierId): array
     {
         $result = [];
@@ -375,6 +399,9 @@ class PatreonService implements PatreonServiceInterface
         return $result;
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
     {
         $existingPatreonUserLink = PatreonUserLink::where('email', $attributes['email'])->first();

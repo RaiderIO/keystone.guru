@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Spell           $spell
- * @var Collection<Npc> $npcs
+ * @var Collection<int, Npc> $npcs
  */
 ?>
 <div class="row mb-4">

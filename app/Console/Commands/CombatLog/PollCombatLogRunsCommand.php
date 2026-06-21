@@ -144,8 +144,10 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * @param  array<int, true> $existingRunIds
-     * @return bool             Whether the run was dispatched (false means the dungeon was not found)
+     * @param  array<int, true>                                     $existingRunIds
+     * @param  Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
+     * @param  Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @return bool                                                 Whether the run was dispatched (false means the dungeon was not found)
      */
     private function dispatchRun(
         SearchAdvancedRun $run,
@@ -229,8 +231,8 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * @param  int[]                                         $memberSpecIds
-     * @param  Collection<int, CharacterClassSpecialization> $specsByBlizzardId
+     * @param  int[]                                                $memberSpecIds
+     * @param  Collection<int|string, CharacterClassSpecialization> $specsByBlizzardId
      * @return CombatLogParsingCriterionCheck[]
      */
     private function buildSpecCriteria(array $memberSpecIds, Collection $specsByBlizzardId): array

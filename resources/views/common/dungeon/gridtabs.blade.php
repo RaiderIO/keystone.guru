@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @var GameVersion|null      $gameVersion
  * @var Season|null           $nextSeason
  * @var Season                $currentSeason
- * @var Collection<Expansion> $activeExpansions
+ * @var Collection<int, Expansion> $activeExpansions
  * @var string                $id
  * @var string                $tabsId
  * @var bool                  $selectable

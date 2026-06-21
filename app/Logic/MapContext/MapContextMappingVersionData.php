@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MapContextMappingVersionData implements Arrayable
 {
     use RemembersToFile;
@@ -28,6 +31,7 @@ class MapContextMappingVersionData implements Arrayable
 
     /**
      * @throws InvalidArgumentException
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -55,7 +59,7 @@ class MapContextMappingVersionData implements Arrayable
 
                 $auras = collect();
 
-                /** @var Collection<Enemy> $enemies */
+                /** @var Collection<int, Enemy> $enemies */
                 $enemies = $this->mappingVersion->enemies()
                     ->without('npc')
                     ->with(/*'npc', 'npc.type', 'npc.class',*/ 'floor')

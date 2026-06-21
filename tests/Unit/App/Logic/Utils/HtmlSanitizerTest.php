@@ -25,6 +25,9 @@ class HtmlSanitizerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function sanitize_dataProvider(): array
     {
         return [

@@ -22,22 +22,34 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
         // Just do something that is mostly unique
         return md5(uniqid());
     }
-
+    /**
+     * @param  Collection<int, DungeonRoute>|null $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     */
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
     {
         return $dungeonRoutes ?? collect();
     }
 
+    /**
+     * @return Collection<string, Collection<int, \App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute>>
+     */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
         return collect();
     }
 
+    /**
+     * @return Collection<int, \App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute>
+     */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection
     {
         return collect();
     }
 
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
     public function findRoutes(DungeonRouteSearchFilter $filter): Collection
     {
         return collect();

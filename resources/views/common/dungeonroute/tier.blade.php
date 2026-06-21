@@ -5,7 +5,7 @@ use App\Models\Dungeon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<AffixGroupEaseTier> $affixGroupEaseTiersByAffixGroup
+ * @var Collection<int, Collection<int, AffixGroupEaseTier>> $affixGroupEaseTiersByAffixGroup
  * @var string                         $tier
  * @var Dungeon                        $dungeon
  * @var AffixGroup                     $affixgroup

@@ -274,8 +274,8 @@ class ThumbnailService implements ThumbnailServiceInterface
     }
 
     /**
-     * @param  Collection<DungeonRoute> $dungeonRoutes
-     * @param  bool                     $force
+     * @param  Collection<int, DungeonRoute> $dungeonRoutes
+     * @param  bool                          $force
      * @return bool
      */
     public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool
@@ -368,6 +368,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return Collection<int, DungeonRouteThumbnail>|null
      */
     public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): ?Collection
     {
@@ -444,7 +446,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             /** @var Floor $floor */
             $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
 
-            /** @var Collection<DungeonRouteThumbnail> $existingThumbnailsToDelete */
+            /** @var Collection<int, DungeonRouteThumbnail> $existingThumbnailsToDelete */
             $existingThumbnailsToDelete = $isCustom ? collect() : DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)
                 // When the target floor is NOT a facade, we want to keep just this floor's thumbnail
                 // Routes with a facade will have a thumbnail for the facade, and nothing else, so this query will

@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 /**
  * @var CharacterClass                        $characterClass
  * @var Dungeon                               $contextDungeon
- * @var Collection<Spell>                     $spells
+ * @var Collection<int, Spell>                     $spells
  * @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId
  */
 ?>

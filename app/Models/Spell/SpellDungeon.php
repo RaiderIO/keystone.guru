@@ -30,11 +30,13 @@ class SpellDungeon extends CacheModel
         'dungeon_id',
     ];
 
+    /** @return BelongsTo<Spell, $this> */
     public function spell(): BelongsTo
     {
         return $this->belongsTo(Spell::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);

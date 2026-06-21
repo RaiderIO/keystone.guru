@@ -46,6 +46,9 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
         parent::tearDown();
     }
 
+    /**
+     * @return array<int, CombatLogParsingCriterionCheck>
+     */
     private function defaultCriteria(): array
     {
         return [

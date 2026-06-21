@@ -80,6 +80,9 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
         return [GameVersion::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

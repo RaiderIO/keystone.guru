@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 
 /**
- * @var Collection<CombatLogNpcEvent|CombatLogSpellEvent> $events
+ * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $events
  * @var string                                            $emptyKey Translation key for the empty-state message
  * @var bool                                              $showNpcSubject Whether to render the NPC icon+name before the description on NPC events
  * @var bool                                              $showSpellSubject Whether to render the Spell icon+name before the description on Spell events

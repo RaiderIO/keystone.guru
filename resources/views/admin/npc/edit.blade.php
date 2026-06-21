@@ -9,9 +9,9 @@ use App\Models\Spell\Spell;
 /**
  * @var Npc $npc
  * @var Floor $floor
- * @var array $classifications
+ * @var array<string, mixed> $classifications
  * @var Spell[] $spells
- * @var array $bolsteringNpcs
+ * @var array<int, int> $bolsteringNpcs
  */
 ?>
 

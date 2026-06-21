@@ -1,7 +1,7 @@
 <?php
 /**
  * @var DungeonRoute               $dungeonroute
- * @var Collection<RouteAttribute> $allRouteAttributes
+ * @var Collection<int, RouteAttribute> $allRouteAttributes
  */
 
 use App\Models\DungeonRoute\DungeonRoute;
@@ -25,7 +25,7 @@ $id               ??= 'attributes';
     @endif
     <?php
     $allRouteAttributeCount = $allRouteAttributes->count();
-    /** @var Collection<RouteAttribute> $routeAttributes */
+    /** @var Collection<string, Collection<int, RouteAttribute>> $routeAttributes */
     $routeAttributes = $allRouteAttributes->groupBy('category');
 
     if ($showNoAttributes) {
@@ -39,7 +39,7 @@ $id               ??= 'attributes';
         ]);
     }
 
-    /** @var Collection $routeAttributes */
+    /** @var Collection<string, Collection<int, RouteAttribute>> $routeAttributes */
     $selectedIds ??= !isset($dungeonroute) ? [] : $dungeonroute->routeattributes->pluck('id')->toArray();
     ?>
     <select multiple name="{{ sprintf('%s[]', $id) }}"

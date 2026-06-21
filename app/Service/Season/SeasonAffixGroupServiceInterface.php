@@ -60,6 +60,11 @@ interface SeasonAffixGroupServiceInterface
     /**
      * @return Collection<Affix>
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getFeaturedAffixes(Season $season): Collection;
 
     /**
@@ -67,6 +72,11 @@ interface SeasonAffixGroupServiceInterface
      *
      * @throws Exception
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
 
     /**
@@ -74,5 +84,10 @@ interface SeasonAffixGroupServiceInterface
      *
      * @throws Exception
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection;
 }

@@ -24,7 +24,7 @@ $chunks     = $affixgroup->affixes->chunk((int)$chunkCount);
 @foreach($chunks as $chunk)
     <div class="row no-gutters px-1 affix_group_row {{ $isFirst ? '' : 'mt-2' }} {{ $class }}">
             <?php
-            /** @var Collection $chunk */
+            /** @var Collection<int, \App\Models\Affix> $chunk */
             $affixIndex = 0;
         foreach ($chunk as $affix) {
             ?>

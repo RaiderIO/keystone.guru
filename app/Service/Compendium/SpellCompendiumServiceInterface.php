@@ -15,5 +15,10 @@ interface SpellCompendiumServiceInterface
      *
      * @return Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>
      */
+    /**
+
+     * @return Collection<int, mixed>
+     */
+
     public function buildEventFeed(Spell $spell): Collection;
 }

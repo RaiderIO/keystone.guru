@@ -14,7 +14,7 @@ use Tests\TestCase;
 trait CreatesCombatLogEvent
 {
     /**
-     * @return Collection<CombatLogEvent>
+     * @return Collection<int, CombatLogEvent>
      */
     public function createCombatLogEvents(Dungeon $dungeon, int $count): Collection
     {
@@ -32,6 +32,9 @@ trait CreatesCombatLogEvent
         return $result;
     }
 
+    /**
+     * @return array<int, array<string, int>>
+     */
     public function createGridAggregationResult(Dungeon $dungeon, int $rowCount): array
     {
         $result = collect();
@@ -57,13 +60,16 @@ trait CreatesCombatLogEvent
         return $result->toArray();
     }
 
+    /**
+     * @param array<string, mixed>|null $attributes
+     */
     public function createCombatLogEvent(?array $attributes = null): CombatLogEvent
     {
         return new CombatLogEvent($attributes ?? $this->getCombatLogEventDefaultAttributes());
     }
 
     /**
-     * @return int[]
+     * @return array<string, int>
      */
     public function getCombatLogEventDefaultAttributes(): array
     {
@@ -76,8 +82,8 @@ trait CreatesCombatLogEvent
     }
 
     /**
-     * @param  Floor $floor
-     * @return array
+     * @param  Floor              $floor
+     * @return array<string, int>
      */
     private function getRandomCoordinates(Floor $floor): array
     {

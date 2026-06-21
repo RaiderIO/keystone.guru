@@ -17,9 +17,14 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
+    /**
+     * @var Builder<\Illuminate\Database\Eloquent\Model>
+     */
     protected Builder $builder;
 
-    /** @var DatatablesColumnHandler[] */
+    /**
+     * @var array<string, DatatablesColumnHandler>
+     */
     protected array $columnHandlers;
 
     public function __construct(protected Request $request)
@@ -32,12 +37,17 @@ abstract class DatatablesHandler
         return $this->request;
     }
 
+    /**
+     * @return Builder<\Illuminate\Database\Eloquent\Model>
+     */
     public function getBuilder(): Builder
     {
         return $this->builder;
     }
 
     /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel> $builder
      * @return $this
      */
     public function setBuilder(Builder $builder): DatatablesHandler
@@ -48,10 +58,10 @@ abstract class DatatablesHandler
     }
 
     /**
-     * @param  DatatablesColumnHandler|array $dtColumnHandlers
+     * @param  DatatablesColumnHandler|array<int, DatatablesColumnHandler> $dtColumnHandlers
      * @return $this
      */
-    public function addColumnHandler($dtColumnHandlers = []): DatatablesHandler
+    public function addColumnHandler(DatatablesColumnHandler|array $dtColumnHandlers = []): DatatablesHandler
     {
         if (!is_array($dtColumnHandlers)) {
             $dtColumnHandlers = [$dtColumnHandlers];
@@ -100,6 +110,9 @@ abstract class DatatablesHandler
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getResult(): array
     {
         $isDev = config('app.env') !== 'production';

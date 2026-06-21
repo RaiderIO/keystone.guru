@@ -28,6 +28,9 @@ class ZoneChange extends SpecialEvent
     }
 
     #[Override]
+    /**
+     * @param array<int, mixed> $parameters
+     */
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

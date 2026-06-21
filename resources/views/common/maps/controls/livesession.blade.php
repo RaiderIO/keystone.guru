@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var boolean           $isAdmin
- * @var Collection<Floor> $floors
+ * @var Collection<int, Floor> $floors
  * @var bool              $isMobile
  */
 ?>

@@ -69,6 +69,9 @@ class DatabaseSeeder extends Seeder
      *
      * @throws Throwable
      */
+    /**
+     * @param array<int, class-string<TableSeederInterface>>|null $seederClasses
+     */
     public function run(CacheServiceInterface $cacheService, ?array $seederClasses = null): void
     {
         foreach ($seederClasses ?? [] as $seederClass) {

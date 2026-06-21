@@ -1,7 +1,7 @@
 <?php
 /**
- * @var  array $commit
- * @var array $lines
+ * @var  array<string, mixed> $commit
+ * @var array<int, string> $lines
  **/
 ?>
 @if(!empty($lines) > 0)

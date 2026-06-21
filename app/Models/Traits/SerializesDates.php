@@ -27,7 +27,8 @@ trait SerializesDates
         return $date->format(self::SERIALIZED_DATE_TIME_FORMAT);
     }
 
-    public function setCreatedAtAttribute($value): void
+    /** @param string|DateTimeInterface|int|null $value */
+    public function setCreatedAtAttribute(mixed $value): void
     {
         if (is_string($value)) {
             try {
@@ -40,7 +41,8 @@ trait SerializesDates
         }
     }
 
-    public function setUpdatedAtAttribute($value): void
+    /** @param string|DateTimeInterface|int|null $value */
+    public function setUpdatedAtAttribute(mixed $value): void
     {
         if (is_string($value)) {
             try {
