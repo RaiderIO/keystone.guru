@@ -151,8 +151,8 @@ class Save extends Command
         ])
             ->with([
                 'floors.floorcouplings',
-                'floors.dungeonSpeedrunRequiredNpcs10Man',
-                'floors.dungeonSpeedrunRequiredNpcs25Man',
+                'floors.dungeonSpeedrunRequiredNpcs10Man.dungeonSpeedrunRequiredNpcNpcs',
+                'floors.dungeonSpeedrunRequiredNpcs25Man.dungeonSpeedrunRequiredNpcNpcs',
             ])
             ->get();
 

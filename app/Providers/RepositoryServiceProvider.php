@@ -103,6 +103,7 @@ use App\Repositories\Database\RouteAttributeRepository;
 use App\Repositories\Database\SeasonDungeonRepository;
 use App\Repositories\Database\SeasonRepository;
 use App\Repositories\Database\SimulationCraft\SimulationCraftRaidEventsOptionsRepository;
+use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcNpcRepository;
 use App\Repositories\Database\Speedrun\DungeonSpeedrunRequiredNpcRepository;
 use App\Repositories\Database\Spell\SpellDungeonRepository;
 use App\Repositories\Database\SpellRepository;
@@ -216,6 +217,7 @@ use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
 use App\Repositories\Interfaces\SeasonDungeonRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Repositories\Interfaces\SimulationCraft\SimulationCraftRaidEventsOptionsRepositoryInterface;
+use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcNpcRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcRepositoryInterface;
 use App\Repositories\Interfaces\Spell\SpellDungeonRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
@@ -323,6 +325,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SimulationCraftRaidEventsOptionsRepositoryInterface::class, SimulationCraftRaidEventsOptionsRepository::class);
 
         // Speedrun
+        $this->app->bind(DungeonSpeedrunRequiredNpcNpcRepositoryInterface::class, DungeonSpeedrunRequiredNpcNpcRepository::class);
         $this->app->bind(DungeonSpeedrunRequiredNpcRepositoryInterface::class, DungeonSpeedrunRequiredNpcRepository::class);
 
         // Spell

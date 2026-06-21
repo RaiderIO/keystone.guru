@@ -39,7 +39,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 if (this.enemyvisual.enemy.enemyPatrol instanceof EnemyPatrol) {
                     mainVisualInnerStyle.push(`border-color: ${this.enemyvisual.enemy.enemyPatrol.polyline.color};`)
                 }
-            } else if (mapContext instanceof MapContextDungeonRoute &&
+            }
+
+            if (mapContext instanceof MapContextDungeonRoute &&
                 this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
                 let requiredNpcs = mapContext.getDungeonDifficulty() === DUNGEON_DIFFICULTY_10_MAN ?
                     mapContext.getDungeonSpeedrunRequiredNpcs10Man() :
@@ -47,13 +49,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
                 for (let index in requiredNpcs) {
                     let requiredNpc = requiredNpcs[index];
-                    if ([
-                        requiredNpc.npc_id,
-                        requiredNpc.npc2_id,
-                        requiredNpc.npc3_id,
-                        requiredNpc.npc4_id,
-                        requiredNpc.npc5_id,
-                    ].includes(this.enemyvisual.enemy.npc_id)) {
+                    if (requiredNpc.dungeon_speedrun_required_npc_npcs
+                        .map(e => e.npc_id)
+                        .includes(this.enemyvisual.enemy.npc_id)) {
                         mainVisualInnerClasses.push('required_npc');
                         break;
                     }

@@ -6621,101 +6621,104 @@
                     {
                         "id": 1,
                         "floor_id": 138,
-                        "npc_id": 16017,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 16
+                        "count": 16,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16017
+                            }
+                        ]
                     },
                     {
                         "id": 2,
                         "floor_id": 138,
-                        "npc_id": 16018,
-                        "npc2_id": 16029,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 11
+                        "count": 11,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16018
+                            },
+                            {
+                                "npc_id": 16029
+                            }
+                        ]
                     },
                     {
                         "id": 3,
                         "floor_id": 138,
-                        "npc_id": 16024,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16024
+                            }
+                        ]
                     },
                     {
                         "id": 4,
                         "floor_id": 138,
-                        "npc_id": 16021,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16021
+                            }
+                        ]
                     },
                     {
                         "id": 5,
                         "floor_id": 138,
-                        "npc_id": 16020,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 12
+                        "count": 12,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16020
+                            }
+                        ]
                     },
                     {
                         "id": 6,
                         "floor_id": 138,
-                        "npc_id": 16022,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 15
+                        "count": 15,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16022
+                            }
+                        ]
                     },
                     {
                         "id": 7,
                         "floor_id": 138,
-                        "npc_id": 16025,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 7
+                        "count": 7,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16025
+                            }
+                        ]
                     },
                     {
                         "id": 8,
                         "floor_id": 138,
-                        "npc_id": 30071,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 30071
+                            }
+                        ]
                     },
                     {
                         "id": 9,
                         "floor_id": 138,
-                        "npc_id": 30083,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 30083
+                            }
+                        ]
                     }
                 ]
             },
@@ -6764,79 +6767,82 @@
                     {
                         "id": 17,
                         "floor_id": 139,
-                        "npc_id": 15977,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 110
+                        "count": 110,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15977
+                            }
+                        ]
                     },
                     {
                         "id": 18,
                         "floor_id": 139,
-                        "npc_id": 15976,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15976
+                            }
+                        ]
                     },
                     {
                         "id": 20,
                         "floor_id": 139,
-                        "npc_id": 15974,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 22
+                        "count": 22,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15974
+                            }
+                        ]
                     },
                     {
                         "id": 21,
                         "floor_id": 139,
-                        "npc_id": 15975,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 21
+                        "count": 21,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15975
+                            }
+                        ]
                     },
                     {
                         "id": 22,
                         "floor_id": 139,
-                        "npc_id": 15978,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15978
+                            }
+                        ]
                     },
                     {
                         "id": 23,
                         "floor_id": 139,
-                        "npc_id": 15980,
-                        "npc2_id": 15981,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 32
+                        "count": 32,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15980
+                            },
+                            {
+                                "npc_id": 15981
+                            }
+                        ]
                     },
                     {
                         "id": 24,
                         "floor_id": 139,
-                        "npc_id": 15979,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15979
+                            }
+                        ]
                     }
                 ]
             },
@@ -6885,90 +6891,96 @@
                     {
                         "id": 25,
                         "floor_id": 140,
-                        "npc_id": 16145,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 15
+                        "count": 15,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16145
+                            }
+                        ]
                     },
                     {
                         "id": 26,
                         "floor_id": 140,
-                        "npc_id": 16146,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 24
+                        "count": 24,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16146
+                            }
+                        ]
                     },
                     {
                         "id": 27,
                         "floor_id": 140,
-                        "npc_id": 16156,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 22
+                        "count": 22,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16156
+                            }
+                        ]
                     },
                     {
                         "id": 28,
                         "floor_id": 140,
-                        "npc_id": 16193,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16193
+                            }
+                        ]
                     },
                     {
                         "id": 29,
                         "floor_id": 140,
-                        "npc_id": 16164,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16164
+                            }
+                        ]
                     },
                     {
                         "id": 30,
                         "floor_id": 140,
-                        "npc_id": 16165,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16165
+                            }
+                        ]
                     },
                     {
                         "id": 31,
                         "floor_id": 140,
-                        "npc_id": 16163,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 13
+                        "count": 13,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16163
+                            }
+                        ]
                     },
                     {
                         "id": 32,
                         "floor_id": 140,
-                        "npc_id": 16194,
-                        "npc2_id": 16215,
-                        "npc3_id": 16216,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16194
+                            },
+                            {
+                                "npc_id": 16215
+                            },
+                            {
+                                "npc_id": 16216
+                            }
+                        ]
                     }
                 ]
             },
@@ -7017,79 +7029,85 @@
                     {
                         "id": 10,
                         "floor_id": 141,
-                        "npc_id": 16168,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16168
+                            }
+                        ]
                     },
                     {
                         "id": 11,
                         "floor_id": 141,
-                        "npc_id": 16243,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16243
+                            }
+                        ]
                     },
                     {
                         "id": 12,
                         "floor_id": 141,
-                        "npc_id": 16244,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 9
+                        "count": 9,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16244
+                            }
+                        ]
                     },
                     {
                         "id": 13,
                         "floor_id": 141,
-                        "npc_id": 16034,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16034
+                            }
+                        ]
                     },
                     {
                         "id": 14,
                         "floor_id": 141,
-                        "npc_id": 16036,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16036
+                            }
+                        ]
                     },
                     {
                         "id": 15,
                         "floor_id": 141,
-                        "npc_id": 16037,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16037
+                            }
+                        ]
                     },
                     {
                         "id": 16,
                         "floor_id": 141,
-                        "npc_id": 16236,
-                        "npc2_id": 16056,
-                        "npc3_id": 16057,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16236
+                            },
+                            {
+                                "npc_id": 16056
+                            },
+                            {
+                                "npc_id": 16057
+                            }
+                        ]
                     }
                 ]
             },
@@ -7442,35 +7460,35 @@
                     {
                         "id": 33,
                         "floor_id": 167,
-                        "npc_id": 34069,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34069
+                            }
+                        ]
                     },
                     {
                         "id": 34,
                         "floor_id": 167,
-                        "npc_id": 34085,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34085
+                            }
+                        ]
                     },
                     {
                         "id": 35,
                         "floor_id": 167,
-                        "npc_id": 34086,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34086
+                            }
+                        ]
                     }
                 ]
             },
@@ -7512,114 +7530,114 @@
                     {
                         "id": 62,
                         "floor_id": 168,
-                        "npc_id": 34197,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34197
+                            }
+                        ]
                     },
                     {
                         "id": 63,
                         "floor_id": 168,
-                        "npc_id": 34190,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34190
+                            }
+                        ]
                     },
                     {
                         "id": 64,
                         "floor_id": 168,
-                        "npc_id": 34198,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34198
+                            }
+                        ]
                     },
                     {
                         "id": 69,
                         "floor_id": 168,
-                        "npc_id": 34199,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34199
+                            }
+                        ]
                     },
                     {
                         "id": 70,
                         "floor_id": 168,
-                        "npc_id": 34196,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34196
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 36,
                         "floor_id": 168,
-                        "npc_id": 34197,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34197
+                            }
+                        ]
                     },
                     {
                         "id": 37,
                         "floor_id": 168,
-                        "npc_id": 34190,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34190
+                            }
+                        ]
                     },
                     {
                         "id": 38,
                         "floor_id": 168,
-                        "npc_id": 34198,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34198
+                            }
+                        ]
                     },
                     {
                         "id": 42,
                         "floor_id": 168,
-                        "npc_id": 34199,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34199
+                            }
+                        ]
                     },
                     {
                         "id": 43,
                         "floor_id": 168,
-                        "npc_id": 34196,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34196
+                            }
+                        ]
                     }
                 ]
             },
@@ -7667,290 +7685,296 @@
                     {
                         "id": 66,
                         "floor_id": 169,
-                        "npc_id": 34133,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34133
+                            }
+                        ]
                     },
                     {
                         "id": 67,
                         "floor_id": 169,
-                        "npc_id": 34134,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34134
+                            }
+                        ]
                     },
                     {
                         "id": 68,
                         "floor_id": 169,
-                        "npc_id": 34135,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 9
+                        "count": 9,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34135
+                            }
+                        ]
                     },
                     {
                         "id": 71,
                         "floor_id": 169,
-                        "npc_id": 33699,
-                        "npc2_id": 33722,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33699
+                            },
+                            {
+                                "npc_id": 33722
+                            }
+                        ]
                     },
                     {
                         "id": 72,
                         "floor_id": 169,
-                        "npc_id": 33755,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33755
+                            }
+                        ]
                     },
                     {
                         "id": 73,
                         "floor_id": 169,
-                        "npc_id": 33754,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33754
+                            }
+                        ]
                     },
                     {
                         "id": 74,
                         "floor_id": 169,
-                        "npc_id": 33431,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33431
+                            }
+                        ]
                     },
                     {
                         "id": 75,
                         "floor_id": 169,
-                        "npc_id": 33430,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33430
+                            }
+                        ]
                     },
                     {
                         "id": 76,
                         "floor_id": 169,
-                        "npc_id": 33528,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33528
+                            }
+                        ]
                     },
                     {
                         "id": 77,
                         "floor_id": 169,
-                        "npc_id": 33526,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33526
+                            }
+                        ]
                     },
                     {
                         "id": 78,
                         "floor_id": 169,
-                        "npc_id": 33525,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33525
+                            }
+                        ]
                     },
                     {
                         "id": 79,
                         "floor_id": 169,
-                        "npc_id": 33527,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33527
+                            }
+                        ]
                     },
                     {
                         "id": 80,
                         "floor_id": 169,
-                        "npc_id": 33772,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33772
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 39,
                         "floor_id": 169,
-                        "npc_id": 34133,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34133
+                            }
+                        ]
                     },
                     {
                         "id": 40,
                         "floor_id": 169,
-                        "npc_id": 34134,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34134
+                            }
+                        ]
                     },
                     {
                         "id": 41,
                         "floor_id": 169,
-                        "npc_id": 34135,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 9
+                        "count": 9,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 34135
+                            }
+                        ]
                     },
                     {
                         "id": 44,
                         "floor_id": 169,
-                        "npc_id": 33699,
-                        "npc2_id": 33722,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33699
+                            },
+                            {
+                                "npc_id": 33722
+                            }
+                        ]
                     },
                     {
                         "id": 45,
                         "floor_id": 169,
-                        "npc_id": 33755,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33755
+                            }
+                        ]
                     },
                     {
                         "id": 46,
                         "floor_id": 169,
-                        "npc_id": 33754,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33754
+                            }
+                        ]
                     },
                     {
                         "id": 47,
                         "floor_id": 169,
-                        "npc_id": 33431,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33431
+                            }
+                        ]
                     },
                     {
                         "id": 48,
                         "floor_id": 169,
-                        "npc_id": 33430,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33430
+                            }
+                        ]
                     },
                     {
                         "id": 49,
                         "floor_id": 169,
-                        "npc_id": 33528,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33528
+                            }
+                        ]
                     },
                     {
                         "id": 50,
                         "floor_id": 169,
-                        "npc_id": 33526,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33526
+                            }
+                        ]
                     },
                     {
                         "id": 51,
                         "floor_id": 169,
-                        "npc_id": 33525,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33525
+                            }
+                        ]
                     },
                     {
                         "id": 52,
                         "floor_id": 169,
-                        "npc_id": 33527,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33527
+                            }
+                        ]
                     },
                     {
                         "id": 53,
                         "floor_id": 169,
-                        "npc_id": 33772,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33772
+                            }
+                        ]
                     }
                 ]
             },
@@ -7992,136 +8016,136 @@
                     {
                         "id": 81,
                         "floor_id": 170,
-                        "npc_id": 33818,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33818
+                            }
+                        ]
                     },
                     {
                         "id": 82,
                         "floor_id": 170,
-                        "npc_id": 33819,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33819
+                            }
+                        ]
                     },
                     {
                         "id": 83,
                         "floor_id": 170,
-                        "npc_id": 33822,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33822
+                            }
+                        ]
                     },
                     {
                         "id": 84,
                         "floor_id": 170,
-                        "npc_id": 33820,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33820
+                            }
+                        ]
                     },
                     {
                         "id": 85,
                         "floor_id": 170,
-                        "npc_id": 33824,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33824
+                            }
+                        ]
                     },
                     {
                         "id": 86,
                         "floor_id": 170,
-                        "npc_id": 33823,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33823
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": [
                     {
                         "id": 54,
                         "floor_id": 170,
-                        "npc_id": 33818,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 7
+                        "count": 7,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33818
+                            }
+                        ]
                     },
                     {
                         "id": 55,
                         "floor_id": 170,
-                        "npc_id": 33819,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33819
+                            }
+                        ]
                     },
                     {
                         "id": 56,
                         "floor_id": 170,
-                        "npc_id": 33822,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33822
+                            }
+                        ]
                     },
                     {
                         "id": 57,
                         "floor_id": 170,
-                        "npc_id": 33820,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33820
+                            }
+                        ]
                     },
                     {
                         "id": 58,
                         "floor_id": 170,
-                        "npc_id": 33824,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33824
+                            }
+                        ]
                     },
                     {
                         "id": 59,
                         "floor_id": 170,
-                        "npc_id": 33823,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 33823
+                            }
+                        ]
                     }
                 ]
             },
@@ -12904,24 +12928,33 @@
                     {
                         "id": 87,
                         "floor_id": 271,
-                        "npc_id": 6218,
-                        "npc2_id": 6219,
-                        "npc3_id": 6220,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6218
+                            },
+                            {
+                                "npc_id": 6219
+                            },
+                            {
+                                "npc_id": 6220
+                            }
+                        ]
                     },
                     {
                         "id": 88,
                         "floor_id": 271,
-                        "npc_id": 6223,
-                        "npc2_id": 6233,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 14
+                        "count": 14,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6223
+                            },
+                            {
+                                "npc_id": 6233
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -12964,46 +12997,46 @@
                     {
                         "id": 89,
                         "floor_id": 272,
-                        "npc_id": 6230,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6230
+                            }
+                        ]
                     },
                     {
                         "id": 90,
                         "floor_id": 272,
-                        "npc_id": 7603,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 28
+                        "count": 28,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 7603
+                            }
+                        ]
                     },
                     {
                         "id": 91,
                         "floor_id": 272,
-                        "npc_id": 6222,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6222
+                            }
+                        ]
                     },
                     {
                         "id": 92,
                         "floor_id": 272,
-                        "npc_id": 6224,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 11
+                        "count": 11,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6224
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -13040,24 +13073,33 @@
                     {
                         "id": 93,
                         "floor_id": 273,
-                        "npc_id": 6226,
-                        "npc2_id": 6227,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6226
+                            },
+                            {
+                                "npc_id": 6227
+                            }
+                        ]
                     },
                     {
                         "id": 94,
                         "floor_id": 273,
-                        "npc_id": 6212,
-                        "npc2_id": 6232,
-                        "npc3_id": 6234,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 6212
+                            },
+                            {
+                                "npc_id": 6232
+                            },
+                            {
+                                "npc_id": 6234
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -14084,90 +14126,96 @@
                     {
                         "id": 95,
                         "floor_id": 309,
-                        "npc_id": 11658,
-                        "npc2_id": 11659,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 11658
+                            },
+                            {
+                                "npc_id": 11659
+                            }
+                        ]
                     },
                     {
                         "id": 96,
                         "floor_id": 309,
-                        "npc_id": 11673,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 13
+                        "count": 13,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 11673
+                            }
+                        ]
                     },
                     {
                         "id": 97,
                         "floor_id": 309,
-                        "npc_id": 11666,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 7
+                        "count": 7,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 11666
+                            }
+                        ]
                     },
                     {
                         "id": 98,
                         "floor_id": 309,
-                        "npc_id": 11667,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 7
+                        "count": 7,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 11667
+                            }
+                        ]
                     },
                     {
                         "id": 100,
                         "floor_id": 309,
-                        "npc_id": 12076,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12076
+                            }
+                        ]
                     },
                     {
                         "id": 101,
                         "floor_id": 309,
-                        "npc_id": 12100,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12100
+                            }
+                        ]
                     },
                     {
                         "id": 102,
                         "floor_id": 309,
-                        "npc_id": 12101,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 11
+                        "count": 11,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12101
+                            }
+                        ]
                     },
                     {
                         "id": 103,
                         "floor_id": 309,
-                        "npc_id": 11665,
-                        "npc2_id": 11668,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 21
+                        "count": 21,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 11665
+                            },
+                            {
+                                "npc_id": 11668
+                            }
+                        ]
                     }
                 ]
             }
@@ -14263,35 +14311,35 @@
                     {
                         "id": 105,
                         "floor_id": 311,
-                        "npc_id": 12467,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12467
+                            }
+                        ]
                     },
                     {
                         "id": 106,
                         "floor_id": 311,
-                        "npc_id": 12458,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 9
+                        "count": 9,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12458
+                            }
+                        ]
                     },
                     {
                         "id": 107,
                         "floor_id": 311,
-                        "npc_id": 12468,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 11
+                        "count": 11,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12468
+                            }
+                        ]
                     }
                 ]
             },
@@ -14334,24 +14382,24 @@
                     {
                         "id": 108,
                         "floor_id": 312,
-                        "npc_id": 12459,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12459
+                            }
+                        ]
                     },
                     {
                         "id": 109,
                         "floor_id": 312,
-                        "npc_id": 12460,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 7
+                        "count": 7,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 12460
+                            }
+                        ]
                     }
                 ]
             },
@@ -15063,145 +15111,145 @@
                     {
                         "id": 110,
                         "floor_id": 332,
-                        "npc_id": 15262,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15262
+                            }
+                        ]
                     },
                     {
                         "id": 111,
                         "floor_id": 332,
-                        "npc_id": 15264,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15264
+                            }
+                        ]
                     },
                     {
                         "id": 112,
                         "floor_id": 332,
-                        "npc_id": 15247,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15247
+                            }
+                        ]
                     },
                     {
                         "id": 113,
                         "floor_id": 332,
-                        "npc_id": 15233,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 29
+                        "count": 29,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15233
+                            }
+                        ]
                     },
                     {
                         "id": 114,
                         "floor_id": 332,
-                        "npc_id": 15230,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15230
+                            }
+                        ]
                     },
                     {
                         "id": 115,
                         "floor_id": 332,
-                        "npc_id": 15240,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15240
+                            }
+                        ]
                     },
                     {
                         "id": 116,
                         "floor_id": 332,
-                        "npc_id": 15235,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15235
+                            }
+                        ]
                     },
                     {
                         "id": 117,
                         "floor_id": 332,
-                        "npc_id": 234830,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 234830
+                            }
+                        ]
                     },
                     {
                         "id": 118,
                         "floor_id": 332,
-                        "npc_id": 234800,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 14
+                        "count": 14,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 234800
+                            }
+                        ]
                     },
                     {
                         "id": 119,
                         "floor_id": 332,
-                        "npc_id": 234798,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 234798
+                            }
+                        ]
                     },
                     {
                         "id": 120,
                         "floor_id": 332,
-                        "npc_id": 234814,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 234814
+                            }
+                        ]
                     },
                     {
                         "id": 121,
                         "floor_id": 332,
-                        "npc_id": 15311,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15311
+                            }
+                        ]
                     },
                     {
                         "id": 122,
                         "floor_id": 332,
-                        "npc_id": 234762,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 234762
+                            }
+                        ]
                     }
                 ]
             },
@@ -15346,57 +15394,60 @@
                     {
                         "id": 123,
                         "floor_id": 334,
-                        "npc_id": 16017,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16017
+                            }
+                        ]
                     },
                     {
                         "id": 124,
                         "floor_id": 334,
-                        "npc_id": 16018,
-                        "npc2_id": 16029,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 11
+                        "count": 11,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16018
+                            },
+                            {
+                                "npc_id": 16029
+                            }
+                        ]
                     },
                     {
                         "id": 125,
                         "floor_id": 334,
-                        "npc_id": 16024,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16024
+                            }
+                        ]
                     },
                     {
                         "id": 126,
                         "floor_id": 334,
-                        "npc_id": 16021,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16021
+                            }
+                        ]
                     },
                     {
                         "id": 127,
                         "floor_id": 334,
-                        "npc_id": 16025,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 7
+                        "count": 7,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16025
+                            }
+                        ]
                     }
                 ]
             },
@@ -15445,68 +15496,71 @@
                     {
                         "id": 128,
                         "floor_id": 335,
-                        "npc_id": 15977,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 91
+                        "count": 91,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15977
+                            }
+                        ]
                     },
                     {
                         "id": 129,
                         "floor_id": 335,
-                        "npc_id": 15976,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15976
+                            }
+                        ]
                     },
                     {
                         "id": 130,
                         "floor_id": 335,
-                        "npc_id": 15980,
-                        "npc2_id": 15981,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 48
+                        "count": 48,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15980
+                            },
+                            {
+                                "npc_id": 15981
+                            }
+                        ]
                     },
                     {
                         "id": 131,
                         "floor_id": 335,
-                        "npc_id": 15978,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15978
+                            }
+                        ]
                     },
                     {
                         "id": 132,
                         "floor_id": 335,
-                        "npc_id": 15979,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15979
+                            }
+                        ]
                     },
                     {
                         "id": 144,
                         "floor_id": 335,
-                        "npc_id": 16453,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16453
+                            }
+                        ]
                     }
                 ]
             },
@@ -15555,101 +15609,107 @@
                     {
                         "id": 133,
                         "floor_id": 336,
-                        "npc_id": 16146,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 14
+                        "count": 14,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16146
+                            }
+                        ]
                     },
                     {
                         "id": 134,
                         "floor_id": 336,
-                        "npc_id": 16145,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 14
+                        "count": 14,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16145
+                            }
+                        ]
                     },
                     {
                         "id": 135,
                         "floor_id": 336,
-                        "npc_id": 16163,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 9
+                        "count": 9,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16163
+                            }
+                        ]
                     },
                     {
                         "id": 136,
                         "floor_id": 336,
-                        "npc_id": 16193,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16193
+                            }
+                        ]
                     },
                     {
                         "id": 137,
                         "floor_id": 336,
-                        "npc_id": 16154,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16154
+                            }
+                        ]
                     },
                     {
                         "id": 138,
                         "floor_id": 336,
-                        "npc_id": 16164,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16164
+                            }
+                        ]
                     },
                     {
                         "id": 139,
                         "floor_id": 336,
-                        "npc_id": 16165,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16165
+                            }
+                        ]
                     },
                     {
                         "id": 140,
                         "floor_id": 336,
-                        "npc_id": 16194,
-                        "npc2_id": 16215,
-                        "npc3_id": 16216,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16194
+                            },
+                            {
+                                "npc_id": 16215
+                            },
+                            {
+                                "npc_id": 16216
+                            }
+                        ]
                     },
                     {
                         "id": 145,
                         "floor_id": 336,
-                        "npc_id": 16861,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16861
+                            }
+                        ]
                     }
                 ]
             },
@@ -15698,35 +15758,35 @@
                     {
                         "id": 141,
                         "floor_id": 337,
-                        "npc_id": 16168,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16168
+                            }
+                        ]
                     },
                     {
                         "id": 142,
                         "floor_id": 337,
-                        "npc_id": 16243,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16243
+                            }
+                        ]
                     },
                     {
                         "id": 143,
                         "floor_id": 337,
-                        "npc_id": 16034,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16034
+                            }
+                        ]
                     }
                 ]
             },
@@ -15787,46 +15847,46 @@
                     {
                         "id": 146,
                         "floor_id": 338,
-                        "npc_id": 16446,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 8
+                        "count": 8,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16446
+                            }
+                        ]
                     },
                     {
                         "id": 147,
                         "floor_id": 338,
-                        "npc_id": 16447,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 24
+                        "count": 24,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16447
+                            }
+                        ]
                     },
                     {
                         "id": 148,
                         "floor_id": 338,
-                        "npc_id": 16449,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16449
+                            }
+                        ]
                     },
                     {
                         "id": 149,
                         "floor_id": 338,
-                        "npc_id": 16368,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 12
+                        "count": 12,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16368
+                            }
+                        ]
                     }
                 ]
             },
@@ -18918,13 +18978,16 @@
                     {
                         "id": 150,
                         "floor_id": 433,
-                        "npc_id": 15547,
-                        "npc2_id": 15548,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 12
+                        "count": 12,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 15547
+                            },
+                            {
+                                "npc_id": 15548
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19010,46 +19073,46 @@
                     {
                         "id": 151,
                         "floor_id": 435,
-                        "npc_id": 16407,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16407
+                            }
+                        ]
                     },
                     {
                         "id": 152,
                         "floor_id": 435,
-                        "npc_id": 16408,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16408
+                            }
+                        ]
                     },
                     {
                         "id": 153,
                         "floor_id": 435,
-                        "npc_id": 16409,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 65
+                        "count": 65,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16409
+                            }
+                        ]
                     },
                     {
                         "id": 154,
                         "floor_id": 435,
-                        "npc_id": 16415,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16415
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19104,57 +19167,57 @@
                     {
                         "id": 155,
                         "floor_id": 436,
-                        "npc_id": 16425,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16425
+                            }
+                        ]
                     },
                     {
                         "id": 156,
                         "floor_id": 436,
-                        "npc_id": 16424,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16424
+                            }
+                        ]
                     },
                     {
                         "id": 157,
                         "floor_id": 436,
-                        "npc_id": 16471,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16471
+                            }
+                        ]
                     },
                     {
                         "id": 158,
                         "floor_id": 436,
-                        "npc_id": 16472,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16472
+                            }
+                        ]
                     },
                     {
                         "id": 159,
                         "floor_id": 436,
-                        "npc_id": 16473,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16473
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19197,13 +19260,13 @@
                     {
                         "id": 160,
                         "floor_id": 437,
-                        "npc_id": 16470,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16470
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19252,13 +19315,16 @@
                     {
                         "id": 161,
                         "floor_id": 438,
-                        "npc_id": 16481,
-                        "npc2_id": 16482,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16481
+                            },
+                            {
+                                "npc_id": 16482
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19375,68 +19441,68 @@
                     {
                         "id": 162,
                         "floor_id": 441,
-                        "npc_id": 16485,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16485
+                            }
+                        ]
                     },
                     {
                         "id": 163,
                         "floor_id": 441,
-                        "npc_id": 16488,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 5
+                        "count": 5,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16488
+                            }
+                        ]
                     },
                     {
                         "id": 164,
                         "floor_id": 441,
-                        "npc_id": 16504,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16504
+                            }
+                        ]
                     },
                     {
                         "id": 165,
                         "floor_id": 441,
-                        "npc_id": 16491,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16491
+                            }
+                        ]
                     },
                     {
                         "id": 166,
                         "floor_id": 441,
-                        "npc_id": 16529,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16529
+                            }
+                        ]
                     },
                     {
                         "id": 167,
                         "floor_id": 441,
-                        "npc_id": 16525,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 18
+                        "count": 18,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16525
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19485,13 +19551,13 @@
                     {
                         "id": 168,
                         "floor_id": 442,
-                        "npc_id": 16540,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16540
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19571,24 +19637,27 @@
                     {
                         "id": 169,
                         "floor_id": 444,
-                        "npc_id": 16526,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16526
+                            }
+                        ]
                     },
                     {
                         "id": 170,
                         "floor_id": 444,
-                        "npc_id": 16544,
-                        "npc2_id": 16545,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16544
+                            },
+                            {
+                                "npc_id": 16545
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19662,24 +19731,24 @@
                     {
                         "id": 171,
                         "floor_id": 446,
-                        "npc_id": 16596,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16596
+                            }
+                        ]
                     },
                     {
                         "id": 172,
                         "floor_id": 446,
-                        "npc_id": 16595,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 1,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 16595
+                            }
+                        ]
                     }
                 ],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -19929,112 +19998,112 @@
                     {
                         "id": 179,
                         "floor_id": 452,
-                        "npc_id": 20031,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 11
+                        "count": 11,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20031
+                            }
+                        ]
                     },
                     {
                         "id": 180,
                         "floor_id": 452,
-                        "npc_id": 20032,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 3
+                        "count": 3,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20032
+                            }
+                        ]
                     },
                     {
                         "id": 181,
                         "floor_id": 452,
-                        "npc_id": 20036,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 12
+                        "count": 12,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20036
+                            }
+                        ]
                     },
                     {
                         "id": 182,
                         "floor_id": 452,
-                        "npc_id": 20037,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20037
+                            }
+                        ]
                     },
                     {
                         "id": 183,
                         "floor_id": 452,
-                        "npc_id": 20039,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20039
+                            }
+                        ]
                     },
                     {
                         "id": 184,
                         "floor_id": 452,
-                        "npc_id": 20040,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20040
+                            }
+                        ]
                     },
                     {
                         "id": 185,
                         "floor_id": 452,
-                        "npc_id": 20041,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 10
+                        "count": 10,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20041
+                            }
+                        ]
                     },
                     {
                         "id": 186,
                         "floor_id": 452,
-                        "npc_id": 20046,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 1
+                        "count": 1,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20046
+                            }
+                        ]
                     },
                     {
                         "id": 187,
                         "floor_id": 452,
-                        "npc_id": 20045,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 2
+                        "count": 2,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20045
+                            }
+                        ]
                     },
                     {
                         "id": 188,
                         "floor_id": 452,
-                        "npc_id": 20047,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 4
+                        "count": 4,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 20047
+                            }
+                        ]
                     }
                 ]
             }
@@ -20086,68 +20155,80 @@
                     {
                         "id": 173,
                         "floor_id": 453,
-                        "npc_id": 21251,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 21251
+                            }
+                        ]
                     },
                     {
                         "id": 174,
                         "floor_id": 453,
-                        "npc_id": 21301,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 14
+                        "count": 14,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 21301
+                            }
+                        ]
                     },
                     {
                         "id": 175,
                         "floor_id": 453,
-                        "npc_id": 21229,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 16
+                        "count": 16,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 21229
+                            }
+                        ]
                     },
                     {
                         "id": 176,
                         "floor_id": 453,
-                        "npc_id": 21299,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 21299
+                            }
+                        ]
                     },
                     {
                         "id": 177,
                         "floor_id": 453,
-                        "npc_id": 21224,
-                        "npc2_id": 21225,
-                        "npc3_id": 21226,
-                        "npc4_id": 21227,
-                        "npc5_id": 21228,
                         "difficulty": 2,
-                        "count": 20
+                        "count": 20,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 21224
+                            },
+                            {
+                                "npc_id": 21225
+                            },
+                            {
+                                "npc_id": 21226
+                            },
+                            {
+                                "npc_id": 21227
+                            },
+                            {
+                                "npc_id": 21228
+                            }
+                        ]
                     },
                     {
                         "id": 178,
                         "floor_id": 453,
-                        "npc_id": 21218,
-                        "npc2_id": null,
-                        "npc3_id": null,
-                        "npc4_id": null,
-                        "npc5_id": null,
                         "difficulty": 2,
-                        "count": 6
+                        "count": 6,
+                        "dungeon_speedrun_required_npc_npcs": [
+                            {
+                                "npc_id": 21218
+                            }
+                        ]
                     }
                 ]
             }

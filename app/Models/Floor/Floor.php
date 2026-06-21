@@ -73,7 +73,8 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, FloorUnion>                 $floorUnionsForExport
  * @property EloquentCollection<int, FloorUnionArea>             $floorUnionAreasForExport
  * @property EloquentCollection<int, FloorCoupling>              $floorcouplings
- * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonspeedrunrequirednpcs
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
  * @property EloquentCollection<int, Floor>                      $connectedFloors
  * @property EloquentCollection<int, Floor>                      $directConnectedFloors
  * @property EloquentCollection<int, Floor>                      $reverseConnectedFloors

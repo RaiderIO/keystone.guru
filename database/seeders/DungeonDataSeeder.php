@@ -24,6 +24,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
@@ -539,6 +540,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             FloorUnion::class,
             FloorUnionArea::class,
             DungeonSpeedrunRequiredNpc::class,
+            DungeonSpeedrunRequiredNpcNpc::class,
             // Do not truncate dungeons - we want to keep the active state of dungeons unique for each environment, if we truncate it it'd be reset
             // Dungeon::class,
             Floor::class,

@@ -46,8 +46,8 @@ class MapContextMappingVersionData implements Arrayable
 
                 $dungeon = $this->dungeon
                     ->load([
-                        'dungeonSpeedrunRequiredNpcs10Man',
-                        'dungeonSpeedrunRequiredNpcs25Man',
+                        'dungeonSpeedrunRequiredNpcs10Man.dungeonSpeedrunRequiredNpcNpcs',
+                        'dungeonSpeedrunRequiredNpcs25Man.dungeonSpeedrunRequiredNpcNpcs',
                     ])
                     ->unsetRelation('mapIcons')
                     ->unsetRelation('enemyPacks')
