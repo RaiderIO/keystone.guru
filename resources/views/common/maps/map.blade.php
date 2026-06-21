@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
  * @var Season|null                $season Used for heatmap
  * @var MappingVersion             $mappingVersion
  * @var DungeonRoute|null          $dungeonroute
- * @var LiveSession|null           $livesession
+ * @var LiveSession|null           $liveSession
  * @var string|null                $headerTitle
  * @var bool|null                  $admin
  * @var bool|null                  $embed
@@ -63,7 +63,7 @@ $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
-$livesession         ??= null;
+$liveSession         ??= null;
 $mapBackgroundColor  ??= null;
 $controlOptions      ??= [];
 $parameters          ??= [];
@@ -288,7 +288,7 @@ if ($isAdmin) {
                 'floor' => $floor,
                 'headerTitle' => $headerTitle,
                 'dungeonroute' => $dungeonroute,
-                'livesession' => $livesession,
+                'liveSession' => $liveSession,
                 'mappingVersion' => $mappingVersion,
             ])
         </nav>
@@ -300,7 +300,7 @@ if ($isAdmin) {
         {{--            'floor' => $floor,--}}
         {{--            'headerTitle' => $headerTitle,--}}
         {{--            'dungeonroute' => $dungeonroute,--}}
-        {{--            'livesession' => $livesession,--}}
+        {{--            'liveSession' => $liveSession,--}}
         {{--            'mappingVersion' => $mappingVersion,--}}
         {{--        ])--}}
     @endif

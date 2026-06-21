@@ -77,7 +77,7 @@ trait SavesPolylines
             'color_animated' => Auth::check() &&
                 Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ?
                     $data['color_animated'] : null,
-            'weight'        => (int)$data['weight'],
+            'weight'        => (int)($data['weight'] ?? 3),
             'vertices_json' => $data['vertices_json'],
         ]);
 
