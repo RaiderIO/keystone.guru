@@ -25,7 +25,7 @@ trait SavesPolylines
     use ChangesDungeonRoute;
 
     /**
-     * @param  array{color: string, color_animated: string, weight: int, vertices_json: string} $data
+     * @param  array{color: string, color_animated: string, weight?: int, vertices_json: string} $data
      * @throws Exception
      */
     private function savePolylineToModel(
