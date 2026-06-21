@@ -73,8 +73,7 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, FloorUnion>                 $floorUnionsForExport
  * @property EloquentCollection<int, FloorUnionArea>             $floorUnionAreasForExport
  * @property EloquentCollection<int, FloorCoupling>              $floorcouplings
- * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
- * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs
  * @property EloquentCollection<int, Floor>                      $connectedFloors
  * @property EloquentCollection<int, Floor>                      $directConnectedFloors
  * @property EloquentCollection<int, Floor>                      $reverseConnectedFloors
@@ -394,16 +393,9 @@ class Floor extends CacheModel implements MappingModelInterface
         return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor2_id', 'floor1_id');
     }
 
-    public function dungeonSpeedrunRequiredNpcs10Man(): HasMany
+    public function dungeonSpeedrunRequiredNpcs(): HasMany
     {
-        return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
-    }
-
-    public function dungeonSpeedrunRequiredNpcs25Man(): HasMany
-    {
-        return $this->hasMany(DungeonSpeedrunRequiredNpc::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+        return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
     }
 
     /**

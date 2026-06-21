@@ -72,8 +72,7 @@ use Override;
  * @property EloquentCollection<int, MapIcon>                    $mapIcons
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
  * @property EloquentCollection<int, MountableArea>              $mountableAreas
- * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs10Man
- * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs25Man
+ * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs
  * @property EloquentCollection<int, Spell>                      $spells
  *
  * @method static Builder<Dungeon> active()
@@ -381,16 +380,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->hasManyThrough(MountableArea::class, Floor::class);
     }
 
-    public function dungeonSpeedrunRequiredNpcs10Man(): HasManyThrough
+    public function dungeonSpeedrunRequiredNpcs(): HasManyThrough
     {
-        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
-    }
-
-    public function dungeonSpeedrunRequiredNpcs25Man(): HasManyThrough
-    {
-        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
-            ->where('difficulty', Dungeon::DIFFICULTY_25_MAN);
+        return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class);
     }
 
     /**
@@ -570,6 +562,14 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     public static function findExpansionByKey(string $key): ?string
     {
         return array_find_key(array_merge_recursive(self::ALL, self::ALL_RAID), fn($dungeonKeys) => in_array($key, $dungeonKeys));
+    }
+
+    /**
+     * Gets the human-readable, translated name of a difficulty (e.g. "10-man").
+     */
+    public static function getDifficultyName(int $difficulty): string
+    {
+        return __(sprintf('view_common.dungeon.difficulty.%s', self::DIFFICULTY_NAMES[$difficulty]));
     }
 
     public function getDungeonId(): ?int

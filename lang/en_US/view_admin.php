@@ -73,10 +73,8 @@ return [
     ],
     'dungeonspeedrunrequirednpc' => [
         'new' => [
-            'title_10_man'   => 'New 10-man Speedrun Required NPC',
-            'title_25_man'   => 'New 25-man Speedrun Required NPC',
-            'header_10_man'  => 'New 10-man Speedrun Required NPC for :dungeon',
-            'header_25_man'  => 'New 25-man Speedrun Required NPC for :dungeon',
+            'title'          => 'New %s Speedrun Required NPC',
+            'header'         => 'New :difficulty Speedrun Required NPC for :dungeon',
             'npc_id'         => 'Npc ID',
             'linked_npc_ids' => 'Linked NPCs (optional)',
             'count'          => 'Count',
@@ -153,9 +151,10 @@ return [
             ],
             'submit'                 => 'Submit',
             'speedrun_required_npcs' => [
-                'title_10_man'         => '10-man Speedrun Required Npcs',
-                'title_25_man'         => '25-man Speedrun Required Npcs',
+                'title'                => 'Speedrun Required Npcs',
                 'add_npc'              => 'Add NPC',
+                'add_npc_for'          => 'Add NPC (:difficulty)',
+                'no_npcs'              => 'No speedrun required NPCs yet. Use the Add NPC button to create one.',
                 'table_header_id'      => 'Id',
                 'table_header_npc'     => 'Npc',
                 'table_header_count'   => 'Count',

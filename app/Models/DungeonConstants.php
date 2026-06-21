@@ -18,6 +18,18 @@ trait DungeonConstants
         self::DIFFICULTY_40_MAN,
     ];
 
+    /**
+     * Maps a difficulty to its translation slug. Adding a new difficulty only requires a new entry here.
+     *
+     * @var array<int, string>
+     */
+    public const array DIFFICULTY_NAMES = [
+        self::DIFFICULTY_10_MAN => '10_man',
+        self::DIFFICULTY_25_MAN => '25_man',
+        self::DIFFICULTY_20_MAN => '20_man',
+        self::DIFFICULTY_40_MAN => '40_man',
+    ];
+
     // @formatter:off
     // Classic
     public const string DUNGEON_BLACKFATHOM_DEEPS           = 'blackfathom_deeps';     //blackfanthomdeeps

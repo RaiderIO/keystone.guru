@@ -145,14 +145,12 @@ class Save extends Command
         $dungeons = Dungeon::without([
             'expansion',
             'gameVersion',
-            'dungeonSpeedrunRequiredNpcs10Man',
-            'dungeonSpeedrunRequiredNpcs25Man',
+            'dungeonSpeedrunRequiredNpcs',
             'floors.floorUnions6',
         ])
             ->with([
                 'floors.floorcouplings',
-                'floors.dungeonSpeedrunRequiredNpcs10Man.dungeonSpeedrunRequiredNpcNpcs',
-                'floors.dungeonSpeedrunRequiredNpcs25Man.dungeonSpeedrunRequiredNpcNpcs',
+                'floors.dungeonSpeedrunRequiredNpcs.dungeonSpeedrunRequiredNpcNpcs',
             ])
             ->get();
 

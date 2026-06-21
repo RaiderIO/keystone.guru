@@ -43,9 +43,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
             if (mapContext instanceof MapContextDungeonRoute &&
                 this.enemyvisual.enemy.npc_id && mapContext.getDungeonDifficulty() !== null) {
-                let requiredNpcs = mapContext.getDungeonDifficulty() === DUNGEON_DIFFICULTY_10_MAN ?
-                    mapContext.getDungeonSpeedrunRequiredNpcs10Man() :
-                    mapContext.getDungeonSpeedrunRequiredNpcs25Man();
+                let requiredNpcs = mapContext.getDungeonSpeedrunRequiredNpcs(mapContext.getDungeonDifficulty());
 
                 for (let index in requiredNpcs) {
                     let requiredNpc = requiredNpcs[index];
