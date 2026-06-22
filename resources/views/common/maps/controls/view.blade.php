@@ -5,11 +5,11 @@ use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var boolean           $isAdmin
+ * @var boolean                $isAdmin
  * @var Collection<int, Floor> $floors
- * @var DungeonRoute|null $dungeonroute
- * @var bool              $isMobile
- * @var bool              $facadeEnabled
+ * @var DungeonRoute|null      $dungeonroute
+ * @var bool                   $isMobile
+ * @var bool                   $facadeEnabled
  */
 ?>
 <nav

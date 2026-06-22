@@ -12,16 +12,16 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
- * @var GameVersion                $currentUserGameVersion
- * @var Collection<int, GameVersion>    $allGameVersions
- * @var Collection<int, Expansion>      $activeExpansions
- * @var Collection<int, Dungeon>        $gameVersionDungeons
- * @var Season                     $currentSeason
- * @var Season|null                $nextSeason
- * @var bool                       $forceShrink
- * @var bool                       $showMore
- * @var bool                       $showDungeonContext
- * @var Collection<string, string> $dungeonContextLinks
+ * @var GameVersion                  $currentUserGameVersion
+ * @var Collection<int, GameVersion> $allGameVersions
+ * @var Collection<int, Expansion>   $activeExpansions
+ * @var Collection<int, Dungeon>     $gameVersionDungeons
+ * @var Season                       $currentSeason
+ * @var Season|null                  $nextSeason
+ * @var bool                         $forceShrink
+ * @var bool                         $showMore
+ * @var bool                         $showDungeonContext
+ * @var Collection<string, string>   $dungeonContextLinks
  */
 
 $navs                = [];

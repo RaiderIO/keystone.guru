@@ -5,7 +5,7 @@ use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var MappingVersion|null     $mappingVersion
+ * @var MappingVersion|null          $mappingVersion
  * @var Collection<int, GameVersion> $allGameVersions
  **/
 

@@ -4,8 +4,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Str;
 
 /**
- * @var DungeonRoute $model
- * @var array<string, mixed>        $parameters
+ * @var DungeonRoute         $model
+ * @var array<string, mixed> $parameters
  */
 
 $showStyle = 'regular';

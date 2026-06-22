@@ -1,8 +1,10 @@
 <?php
+
+use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<int, \App\Models\Floor\Floor> $floors
+ * @var Collection<int, Floor> $floors
  **/
 ?>
 <div class="row no-gutters">

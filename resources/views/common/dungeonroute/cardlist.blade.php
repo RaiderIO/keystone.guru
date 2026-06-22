@@ -6,13 +6,13 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, DungeonRoute>|Collection<string, Collection<int, DungeonRoute>> $dungeonroutes
- * @var AffixGroup|null                            $affixgroup
- * @var AffixGroup|null                            $currentAffixGroup
- * @var array<string, mixed>                                      $__env
- * @var bool|null                                  $showDungeonImage
- * @var bool|null                                  $cache
- * @var string                                     $orientation
- * @var Collection<integer, array<string, string>> $headers
+ * @var AffixGroup|null                                                                 $affixgroup
+ * @var AffixGroup|null                                                                 $currentAffixGroup
+ * @var array<string, mixed>                                                            $__env
+ * @var bool|null                                                                       $showDungeonImage
+ * @var bool|null                                                                       $cache
+ * @var string                                                                          $orientation
+ * @var Collection<integer, array<string, string>>                                      $headers
  */
 
 $cols             ??= 1;

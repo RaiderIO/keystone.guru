@@ -4,9 +4,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 
 /**
- * @var DungeonRoute $dungeonroute
- * @var Floor        $floor
- * @var array<string, mixed>        $parameters
+ * @var DungeonRoute         $dungeonroute
+ * @var Floor                $floor
+ * @var array<string, mixed> $parameters
  */
 
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');

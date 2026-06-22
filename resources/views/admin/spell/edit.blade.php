@@ -7,13 +7,13 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell                        $spell
- * @var Floor                        $floor
- * @var array<string>                $categories
- * @var array<string>                $dispelTypes
- * @var array<string>                $cooldownGroups
- * @var Collection<int, GameVersion>      $allGameVersions
- * @var Collection<int, Characteristic>   $allCharacteristics
+ * @var Spell                           $spell
+ * @var Floor                           $floor
+ * @var array<string>                   $categories
+ * @var array<string>                   $dispelTypes
+ * @var array<string>                   $cooldownGroups
+ * @var Collection<int, GameVersion>    $allGameVersions
+ * @var Collection<int, Characteristic> $allCharacteristics
  */
 
 $gameVersionsSelect = $allGameVersions

@@ -11,8 +11,8 @@ use App\Models\AffixGroup\AffixGroup;
 /**
  * This is the template for the Affix Selection when using it in a dropdown
  *
- * @var SeasonServiceInterface      $seasonService
- * @var DungeonRoute                $model
+ * @var SeasonServiceInterface           $seasonService
+ * @var DungeonRoute                     $model
  * @var Collection<int, AffixGroup>|null $affixgroups
  */
 

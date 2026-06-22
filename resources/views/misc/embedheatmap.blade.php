@@ -6,10 +6,10 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion                              $gameVersion
- * @var Dungeon                                  $model
- * @var string                                   $floorIndex
- * @var array<string, mixed>                                    $parameters
+ * @var GameVersion                                   $gameVersion
+ * @var Dungeon                                       $model
+ * @var string                                        $floorIndex
+ * @var array<string, mixed>                          $parameters
  * @var Collection<int, CharacterClassSpecialization> $characterClassSpecializations
  */
 

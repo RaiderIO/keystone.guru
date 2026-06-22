@@ -16,14 +16,14 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion              $currentUserGameVersion
- * @var GameVersion              $gameVersion
- * @var Expansion                $expansion
- * @var Season|null              $season
+ * @var GameVersion                   $currentUserGameVersion
+ * @var GameVersion                   $gameVersion
+ * @var Expansion                     $expansion
+ * @var Season|null                   $season
  * @var Collection<int, Dungeon>      $gridDungeons
  * @var Collection<int, DungeonRoute> $dungeonroutes
- * @var AffixGroup               $currentAffixGroup
- * @var AffixGroup               $nextAffixGroup
+ * @var AffixGroup                    $currentAffixGroup
+ * @var AffixGroup                    $nextAffixGroup
  */
 
 $season ??= null;

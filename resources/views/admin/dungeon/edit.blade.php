@@ -5,9 +5,9 @@ use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                                      $dungeon
- * @var Floor                                        $floor
- * @var Collection<string, mixed>                   $availableKeysSelect
+ * @var Dungeon                   $dungeon
+ * @var Floor                     $floor
+ * @var Collection<string, mixed> $availableKeysSelect
  */
 ?>
 

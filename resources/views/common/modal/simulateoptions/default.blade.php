@@ -3,11 +3,11 @@
 use App\Models\Season;
 
 /**
- * @var Season|null $season
- * @var String[]    $shroudedBountyTypes
- * @var String[]    $affixes
- * @var bool        $isShrouded
- * @var bool        $isThundering
+ * @var Season|null          $season
+ * @var String[]             $shroudedBountyTypes
+ * @var String[]             $affixes
+ * @var bool                 $isShrouded
+ * @var bool                 $isThundering
  * @var array<string, mixed> $raidBuffsOptions
  */
 ?>

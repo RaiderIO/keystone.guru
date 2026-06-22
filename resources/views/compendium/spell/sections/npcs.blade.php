@@ -5,7 +5,7 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell           $spell
+ * @var Spell                $spell
  * @var Collection<int, Npc> $npcs
  */
 ?>

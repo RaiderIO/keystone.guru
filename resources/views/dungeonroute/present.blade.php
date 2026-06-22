@@ -1,8 +1,8 @@
 <?php
 /**
- * @var DungeonRoute $dungeonroute
- * @var Floor        $floor
- * @var array<string, mixed>        $parameters
+ * @var DungeonRoute         $dungeonroute
+ * @var Floor                $floor
+ * @var array<string, mixed> $parameters
  */
 
 use App\Models\DungeonRoute\DungeonRoute;

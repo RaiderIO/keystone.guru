@@ -6,9 +6,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, Collection<int, AffixGroupEaseTier>> $affixGroupEaseTiersByAffixGroup
- * @var string                         $tier
- * @var Dungeon                        $dungeon
- * @var AffixGroup                     $affixgroup
+ * @var string                                               $tier
+ * @var Dungeon                                              $dungeon
+ * @var AffixGroup                                           $affixgroup
  */
 
 // Users may write their own tiers if they received it from a batch call for example

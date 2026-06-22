@@ -9,15 +9,15 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion                                                       $gameVersion
- * @var Season|null                                                       $season
+ * @var GameVersion                                                            $gameVersion
+ * @var Season|null                                                            $season
  * @var Collection<int, Dungeon>                                               $dungeons
- * @var AffixGroup|null                                                   $currentAffixGroup
- * @var AffixGroup|null                                                   $nextAffixGroup
+ * @var AffixGroup|null                                                        $currentAffixGroup
+ * @var AffixGroup|null                                                        $nextAffixGroup
  * @var Collection<string, Collection<int, array{href: string, text: string}>> $links
- * @var boolean                                                           $useAbbreviation
- * @var string|null                                                       $cardBodyClass
- * @var array<string, string>|null                                                        $imageLinks
+ * @var boolean                                                                $useAbbreviation
+ * @var string|null                                                            $cardBodyClass
+ * @var array<string, string>|null                                             $imageLinks
  */
 
 $colCount ??= 4;

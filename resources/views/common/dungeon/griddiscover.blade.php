@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion                $gameVersion
  * @var Season|null                $season
- * @var Collection<int, Dungeon>        $dungeons
+ * @var Collection<int, Dungeon>   $dungeons
  * @var AffixGroup|null            $currentAffixGroup
  * @var AffixGroup|null            $nextAffixGroup
  * @var Collection<string, string> $links

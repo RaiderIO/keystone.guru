@@ -7,8 +7,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                                           $contextDungeon
- * @var Carbon                                            $date
+ * @var Dungeon                                                $contextDungeon
+ * @var Carbon                                                 $date
  * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $events
  */
 ?>

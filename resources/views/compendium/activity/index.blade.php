@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                                                          $contextDungeon
+ * @var Dungeon                                                               $contextDungeon
  * @var LengthAwarePaginator<int, string>                                     $dates
  * @var array<string, Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>> $eventsByDay
  */

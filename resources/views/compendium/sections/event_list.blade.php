@@ -13,11 +13,11 @@ use Illuminate\Support\Carbon;
 
 /**
  * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $events
- * @var string                                            $emptyKey Translation key for the empty-state message
- * @var bool                                              $showNpcSubject Whether to render the NPC icon+name before the description on NPC events
- * @var bool                                              $showSpellSubject Whether to render the Spell icon+name before the description on Spell events
- * @var Dungeon|null                                      $contextDungeon When set, the timestamp becomes a link to the activity day page
- * @var string|null                                       $date Y-m-d date string, required when $contextDungeon is set
+ * @var string                                                 $emptyKey         Translation key for the empty-state message
+ * @var bool                                                   $showNpcSubject   Whether to render the NPC icon+name before the description on NPC events
+ * @var bool                                                   $showSpellSubject Whether to render the Spell icon+name before the description on Spell events
+ * @var Dungeon|null                                           $contextDungeon   When set, the timestamp becomes a link to the activity day page
+ * @var string|null                                            $date             Y-m-d date string, required when $contextDungeon is set
  */
 
 $showNpcSubject   ??= false;

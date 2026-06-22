@@ -1,11 +1,11 @@
 <?php
 /**
- * @var string       $id
- * @var string|null  $name
+ * @var string                                               $id
+ * @var string|null                                          $name
  * @var array<string, array{icon_url: string, name: string}> $values
- * @var boolean|null $multiple
- * @var boolean|null $liveSearch
- * @var mixed|null   $selected
+ * @var boolean|null                                         $multiple
+ * @var boolean|null                                         $liveSearch
+ * @var mixed|null                                           $selected
  */
 
 $multiple = $multiple ?? false;

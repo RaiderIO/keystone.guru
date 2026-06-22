@@ -5,11 +5,11 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 
 /**
- * @var GameVersion $gameVersion
- * @var Dungeon     $dungeon
- * @var Floor       $floor
- * @var array<string, mixed>       $embedOptions
- * @var array<string, mixed>       $parameters
+ * @var GameVersion          $gameVersion
+ * @var Dungeon              $dungeon
+ * @var Floor                $floor
+ * @var array<string, mixed> $embedOptions
+ * @var array<string, mixed> $parameters
  */
 
 $routeParams    = array_merge(['gameVersion' => $gameVersion, 'dungeon' => $dungeon, 'floorIndex' => $floor->index], $parameters);

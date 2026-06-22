@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion           $currentUserGameVersion
+ * @var GameVersion                $currentUserGameVersion
  * @var Collection<int, Dungeon>   $allDungeons
  * @var Collection<int, Dungeon>   $allRaids
  * @var Collection<int, Dungeon>   $allActiveDungeons
  * @var Collection<int, Dungeon>   $allActiveRaids
  * @var Collection<int, Expansion> $allExpansions
- * @var Dungeon               $siegeOfBoralus
- * @var Season                $currentSeason
- * @var Season|null           $nextSeason
+ * @var Dungeon                    $siegeOfBoralus
+ * @var Season                     $currentSeason
+ * @var Season|null                $nextSeason
  */
 
 $id                   ??= 'dungeon_id_select';
@@ -103,7 +103,7 @@ $dungeonsByExpansion = $dungeons->load([
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     /**
      * @var Collection<int, Dungeon> $dungeonsOfExpansion
-     * @var Expansion  $expansion
+     * @var Expansion                $expansion
      */
     $expansion = $allExpansions->where('id', $expansionId)->first();
 

@@ -1,15 +1,16 @@
 <?php
 /**
  * @var Collection<int, PublishedState> $allPublishedStates
- * @var DungeonRoute               $dungeonroute
+ * @var DungeonRoute                    $dungeonroute
  */
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 $publishStates          = $allPublishedStates->pluck('name');
-/** @var \App\Models\User|null $user */
+/** @var User|null $user */
 $user                   = Auth::user();
 $publishStatesAvailable = PublishedState::getAvailablePublishedStates($dungeonroute, $user);
 ?>

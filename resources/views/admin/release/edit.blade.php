@@ -6,7 +6,7 @@ use App\Models\ReleaseChangelogCategory;
 use Illuminate\Support\Collection;
 
 /**
- * @var Release                               $release
+ * @var Release                                   $release
  * @var Collection<int, ReleaseChangelogCategory> $categories
  */
 

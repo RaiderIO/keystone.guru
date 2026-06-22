@@ -5,9 +5,9 @@ use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var boolean           $isAdmin
+ * @var boolean                $isAdmin
  * @var Collection<int, Floor> $floors
- * @var bool              $isMobile
+ * @var bool                   $isMobile
  */
 ?>
 <nav

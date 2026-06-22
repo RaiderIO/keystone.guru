@@ -5,13 +5,13 @@ use App\Service\Cookies\CookieServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @var bool    $isLocal
- * @var bool    $isMapping
- * @var bool    $isProduction
- * @var string  $revision
- * @var string  $theme
- * @var bool    $hasNewChangelog
- * @var Release $latestRelease
+ * @var bool         $isLocal
+ * @var bool         $isMapping
+ * @var bool         $isProduction
+ * @var string       $revision
+ * @var string       $theme
+ * @var bool         $hasNewChangelog
+ * @var Release      $latestRelease
  * @var Release|null $latestReleaseSpotlight
  */
 

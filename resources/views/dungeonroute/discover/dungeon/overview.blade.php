@@ -2,16 +2,17 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var AffixGroup          $currentAffixGroup
- * @var boolean             $showAds
- * @var boolean             $isMobile
- * @var Dungeon             $dungeon
- * @var array<int, \App\Models\DungeonRoute\DungeonRoute> $dungeonroutes
- * @var GameVersion         $gameVersion
+ * @var AffixGroup               $currentAffixGroup
+ * @var boolean                  $showAds
+ * @var boolean                  $isMobile
+ * @var Dungeon                  $dungeon
+ * @var array<int, DungeonRoute> $dungeonroutes
+ * @var GameVersion              $gameVersion
  * @var Collection<int, Dungeon> $gameVersionDungeons
  */
 

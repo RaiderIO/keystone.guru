@@ -16,33 +16,33 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool                                     $showAds
- * @var bool                                     $showSidebar
- * @var bool|null                                $showDataSourceSnackbar
- * @var Dungeon                                  $dungeon
- * @var MappingVersion                           $mappingVersion
- * @var Season                                   $season
- * @var bool                                     $embed
- * @var string                                   $embedStyle
- * @var bool                                     $isMobile
- * @var integer|null                             $defaultState
- * @var bool                                     $hideOnMove
- * @var bool                                     $showAllEnabled
- * @var Collection<string, Collection<int, AffixGroup>>                   $allAffixGroupsByActiveExpansion
- * @var Collection<string, Collection<int, Affix>>                        $featuredAffixesByActiveExpansion
- * @var Collection<string, Collection<int, Spell>>                               $selectableSpellsByCategory
- * @var int                                      $keyLevelMin
- * @var int                                      $keyLevelMax
- * @var int                                      $itemLevelMin
- * @var int                                      $itemLevelMax
- * @var int                                      $playerDeathsMin
- * @var int                                      $playerDeathsMax
- * @var int                                      $minSamplesRequiredMin
- * @var int                                      $minSamplesRequiredMax
- * @var Collection<int, WeeklyAffixGroup>             $seasonWeeklyAffixGroups
- * @var Collection<int, CharacterClassSpecialization> $characterClassSpecializations
- * @var Collection<int, CharacterClass>               $characterClasses
- * @var Collection<int, GameServerRegion>             $allRegions
+ * @var bool                                            $showAds
+ * @var bool                                            $showSidebar
+ * @var bool|null                                       $showDataSourceSnackbar
+ * @var Dungeon                                         $dungeon
+ * @var MappingVersion                                  $mappingVersion
+ * @var Season                                          $season
+ * @var bool                                            $embed
+ * @var string                                          $embedStyle
+ * @var bool                                            $isMobile
+ * @var integer|null                                    $defaultState
+ * @var bool                                            $hideOnMove
+ * @var bool                                            $showAllEnabled
+ * @var Collection<string, Collection<int, AffixGroup>> $allAffixGroupsByActiveExpansion
+ * @var Collection<string, Collection<int, Affix>>      $featuredAffixesByActiveExpansion
+ * @var Collection<string, Collection<int, Spell>>      $selectableSpellsByCategory
+ * @var int                                             $keyLevelMin
+ * @var int                                             $keyLevelMax
+ * @var int                                             $itemLevelMin
+ * @var int                                             $itemLevelMax
+ * @var int                                             $playerDeathsMin
+ * @var int                                             $playerDeathsMax
+ * @var int                                             $minSamplesRequiredMin
+ * @var int                                             $minSamplesRequiredMax
+ * @var Collection<int, WeeklyAffixGroup>               $seasonWeeklyAffixGroups
+ * @var Collection<int, CharacterClassSpecialization>   $characterClassSpecializations
+ * @var Collection<int, CharacterClass>                 $characterClasses
+ * @var Collection<int, GameServerRegion>               $allRegions
  */
 
 // By default, show it if we're not mobile, but allow overrides

@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 
 /**
- * @var User                         $user
+ * @var User                              $user
  * @var Collection<int, CharacterClass>   $allClasses
  * @var Collection<int, GameServerRegion> $allRegions
  */

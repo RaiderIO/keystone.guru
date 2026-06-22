@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, Dungeon> $models
- * @var Floor               $floor
+ * @var Floor                    $floor
  */
 ?>
 

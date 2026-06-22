@@ -8,7 +8,7 @@ use App\Models\Faction;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRoute                             $model
+ * @var DungeonRoute                                  $model
  * @var Collection<int, CharacterClass>               $classes
  * @var Collection<int, CharacterClassSpecialization> $specializations
  * @var Collection<int, CharacterRace>                $racesClasses

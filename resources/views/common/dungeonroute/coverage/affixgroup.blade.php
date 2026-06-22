@@ -10,10 +10,10 @@ use Illuminate\Support\Collection;
  * @var Collection<int, Dungeon>      $dungeons
  * @var Collection<int, AffixGroup>   $affixGroups
  * @var Collection<int, DungeonRoute> $dungeonRoutes
- * @var AffixGroup|null          $currentAffixGroup
- * @var Season                   $currentSeason
- * @var Season|null              $nextSeason
- * @var Season|null              $selectedSeason
+ * @var AffixGroup|null               $currentAffixGroup
+ * @var Season                        $currentSeason
+ * @var Season|null                   $nextSeason
+ * @var Season|null                   $selectedSeason
  */
 
 if (!function_exists('getDungeonRoutesByDungeonIdAndAffixGroupId')) {

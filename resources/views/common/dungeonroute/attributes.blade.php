@@ -1,6 +1,6 @@
 <?php
 /**
- * @var DungeonRoute               $dungeonroute
+ * @var DungeonRoute                    $dungeonroute
  * @var Collection<int, RouteAttribute> $allRouteAttributes
  */
 

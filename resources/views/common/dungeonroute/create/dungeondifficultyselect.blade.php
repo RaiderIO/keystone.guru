@@ -5,9 +5,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRoute|null   $dungeonroute
+ * @var DungeonRoute|null        $dungeonroute
  * @var Collection<int, Dungeon> $allSpeedrunDungeons
- * @var string              $dungeonSelectId
+ * @var string                   $dungeonSelectId
  **/
 
 $id                  ??= 'dungeon_difficulty_select';

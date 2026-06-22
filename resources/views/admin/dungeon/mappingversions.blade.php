@@ -5,8 +5,8 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                 $dungeon
- * @var bool                    $hasUnmergedMappingVersion
+ * @var Dungeon                      $dungeon
+ * @var bool                         $hasUnmergedMappingVersion
  * @var Collection<int, GameVersion> $allGameVersions
  */
 $gameVersionsSelect = $allGameVersions

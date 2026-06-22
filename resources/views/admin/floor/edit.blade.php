@@ -1,7 +1,7 @@
 <?php
 /**
- * @var Dungeon                   $dungeon
- * @var Floor                     $floor
+ * @var Dungeon                        $dungeon
+ * @var Floor                          $floor
  * @var Collection<int, FloorCoupling> $floorCouplings
  */
 

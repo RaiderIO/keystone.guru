@@ -12,17 +12,17 @@ use Illuminate\Support\Collection;
 /** This is the display of affixes when selecting them when creating a new route */
 
 /**
- * @var DungeonRoute              $dungeonroute
- * @var array<int, int>                     $defaultSelected
- * @var string|null               $dungeonSelector
+ * @var DungeonRoute                   $dungeonroute
+ * @var array<int, int>                $defaultSelected
+ * @var string|null                    $dungeonSelector
  * @var Collection<int, Affix>         $affixes
  * @var Collection<int, ExpansionData> $expansionsData
  * @var Collection<int, AffixGroup>    $allAffixGroups
  * @var Collection<int, Expansion>     $allExpansions
  * @var Collection<int, AffixGroup>    $currentAffixes
- * @var array<string, int>                     $dungeonExpansions
- * @var Season                    $currentSeason
- * @var Season|null               $nextSeason
+ * @var array<string, int>             $dungeonExpansions
+ * @var Season                         $currentSeason
+ * @var Season|null                    $nextSeason
  * @var Collection<int, AffixGroup>    $affixGroups
  */
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection

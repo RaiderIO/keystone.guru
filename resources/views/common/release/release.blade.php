@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int, ReleaseChangelogCategory> $categories
- * @var Release                              $release
+ * @var Release                                   $release
  */
 
 $showHeader ??= true;
