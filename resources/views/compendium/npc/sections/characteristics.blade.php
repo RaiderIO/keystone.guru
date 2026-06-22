@@ -5,8 +5,8 @@ use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * @var Npc                          $npc
- * @var Collection<int, Characteristic>   $allCharacteristics
+ * @var Npc                             $npc
+ * @var Collection<int, Characteristic> $allCharacteristics
  */
 ?>
 {{-- Characteristics --}}

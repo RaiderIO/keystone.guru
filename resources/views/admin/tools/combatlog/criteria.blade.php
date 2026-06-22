@@ -9,8 +9,8 @@
     use Illuminate\Support\Collection;
 
     /**
-     * @var Collection<int, Collection<int, CombatLogParsingCriterion>>                                               $criteriaByVersion
-     * @var array<class-string, \Illuminate\Support\Collection<int, CombatLogCriterionModelInterface>> $modelsById
+     * @var Collection<int, Collection<int, CombatLogParsingCriterion>>            $criteriaByVersion
+     * @var array<class-string, Collection<int, CombatLogCriterionModelInterface>> $modelsById
      */
     ?>
 

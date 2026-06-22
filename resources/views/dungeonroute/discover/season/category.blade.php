@@ -7,9 +7,9 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var AffixGroup               $currentAffixGroup
- * @var GameVersion              $gameVersion
- * @var Season                   $season
+ * @var AffixGroup                    $currentAffixGroup
+ * @var GameVersion                   $gameVersion
+ * @var Season                        $season
  * @var Collection<int, DungeonRoute> $dungeonroutes
  */
 

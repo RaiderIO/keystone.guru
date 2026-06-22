@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
  * @var Collection<int, DungeonRoute> $models
  * @var Collection<int, string>       $publishedStates
  * @var array<string, mixed>          $filters
- * @var bool                     $limited
+ * @var bool                          $limited
  */
 ?>
 

@@ -1,5 +1,8 @@
 <?php
-/** @var \App\Models\User|null $user */
+
+use App\Models\User;
+
+/** @var User|null $user */
 $user = Auth::user();
 // Default local or user locale
 $currentUserLocale     = Auth::check() ? $user->locale : config('app.locale');

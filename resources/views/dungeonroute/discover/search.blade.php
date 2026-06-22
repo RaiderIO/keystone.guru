@@ -9,13 +9,13 @@ use App\Service\Season\SeasonService;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion            $currentUserGameVersion
- * @var Expansion              $currentExpansion
+ * @var GameVersion                                     $currentUserGameVersion
+ * @var Expansion                                       $currentExpansion
  * @var Collection<string, Collection<int, AffixGroup>> $allAffixGroupsByActiveExpansion
  * @var Collection<string, Collection<int, Affix>>      $featuredAffixesByActiveExpansion
- * @var SeasonService          $seasonService
- * @var Season                 $currentSeason
- * @var Season|null            $nextSeason
+ * @var SeasonService                                   $seasonService
+ * @var Season                                          $currentSeason
+ * @var Season|null                                     $nextSeason
  */
 
 ?>

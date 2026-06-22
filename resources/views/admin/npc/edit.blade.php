@@ -7,11 +7,11 @@ use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
 
 /**
- * @var Npc $npc
- * @var Floor $floor
+ * @var Npc                  $npc
+ * @var Floor                $floor
  * @var array<string, mixed> $classifications
- * @var Spell[] $spells
- * @var array<int, int> $bolsteringNpcs
+ * @var Spell[]              $spells
+ * @var array<int, int>      $bolsteringNpcs
  */
 ?>
 

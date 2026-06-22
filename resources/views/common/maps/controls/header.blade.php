@@ -27,7 +27,7 @@ use App\Models\User;
  */
 
 $echo               ??= false;
-/** @var \App\Models\User|null $user */
+/** @var User|null $user */
 $user               = Auth::user();
 $mayUserEdit        = $dungeonroute?->mayUserEdit($user) ?? false;
 $showShare          = !empty($show['share']) && in_array(true, $show['share'], true);
