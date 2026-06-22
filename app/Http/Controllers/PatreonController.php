@@ -60,7 +60,7 @@ class PatreonController extends Controller
      * This route is called after a) the user has clicked the link button, b) given the app permission to read their Patron data
      * c) this route is called to give me their info
      */
-    public function oauth_redirect(Request $request): void
+    public function oauthRedirect(Request $request): void
     {
     }
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use Exception;
+use Illuminate\Support\Collection;
 
 class PatreonService implements PatreonServiceInterface
 {
@@ -179,7 +180,7 @@ class PatreonService implements PatreonServiceInterface
             }
 
             // We now know which user this is - update the benefits of this user
-            /** @var \Illuminate\Support\Collection<int, string> $newBenefits */
+            /** @var Collection<int, string> $newBenefits */
             $newBenefits = collect();
             foreach ($member['relationships']['currently_entitled_tiers']['data'] as $currentlyEntitledTier) {
                 /** @var array{id: int, type: string} $currentlyEntitledTier */

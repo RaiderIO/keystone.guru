@@ -4,6 +4,7 @@ namespace App\Models\KillZone;
 
 use App\Models\Enemy;
 use App\Models\Npc\Npc;
+use Database\Factories\KillZone\KillZoneEnemyFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class KillZoneEnemy extends Model
 {
-    /** @use HasFactory<\Database\Factories\KillZone\KillZoneEnemyFactory> */
+    /** @use HasFactory<KillZoneEnemyFactory> */
     use HasFactory;
 
     public $hidden = [

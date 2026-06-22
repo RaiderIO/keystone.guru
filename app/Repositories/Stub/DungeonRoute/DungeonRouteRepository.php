@@ -5,6 +5,8 @@ namespace App\Repositories\Stub\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
@@ -32,7 +34,7 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     }
 
     /**
-     * @return Collection<string, Collection<int, \App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute>>
+     * @return Collection<string, Collection<int, WeeklyRoute>>
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
@@ -40,7 +42,7 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     }
 
     /**
-     * @return Collection<int, \App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute>
+     * @return Collection<int, SimilarDungeonRoute>
      */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection
     {

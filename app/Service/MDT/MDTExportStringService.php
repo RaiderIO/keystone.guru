@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -110,7 +111,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
         $objects = [];
 
-        /** @var \Illuminate\Support\Collection<int, Path|Brushline> $brushlines */
+        /** @var Collection<int, Path|Brushline> $brushlines */
         $brushlines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->toBase();
 
         $lines = $brushlines->merge(
@@ -423,7 +424,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 //        $lua = $this->_getLua();
 
                 $affixes = $this->dungeonRoute->affixes()->with(['season'])->get();
-                /** @var \App\Models\AffixGroup\AffixGroup|null $firstAffixGroup */
+                /** @var AffixGroup|null $firstAffixGroup */
                 $firstAffixGroup = $affixes->first();
 
                 $mdtObject = [

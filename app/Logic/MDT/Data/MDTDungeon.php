@@ -24,6 +24,7 @@ use App\Models\Npc\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Lua;
 
@@ -126,7 +127,7 @@ class MDTDungeon
     /**
      * Get all clones of this dungeon in the format of enemies (Keystone.guru style).
      *
-     * @param  \Illuminate\Database\Eloquent\Collection<int, Floor> $floors The floors that you want to get the clones for.
+     * @param  EloquentCollection<int, Floor> $floors The floors that you want to get the clones for.
      * @return Collection<int, Enemy>
      */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection

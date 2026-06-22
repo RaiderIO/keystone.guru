@@ -3,6 +3,7 @@
 namespace App\Service\ChallengeModeRunData;
 
 use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\CombatLogEvent;
 use Illuminate\Support\Collection;
 
 interface ChallengeModeRunDataServiceInterface
@@ -14,7 +15,7 @@ interface ChallengeModeRunDataServiceInterface
     public function insertAllToOpensearch(int $count = 1000, ?callable $onProcess = null): bool;
 
     /**
-     * @param Collection<int, \App\Models\CombatLog\CombatLogEvent> $combatLogEvents
+     * @param Collection<int, CombatLogEvent> $combatLogEvents
      */
     public function insertToOpensearch(
         Collection $combatLogEvents,

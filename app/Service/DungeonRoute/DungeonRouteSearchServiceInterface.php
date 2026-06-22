@@ -9,17 +9,12 @@ use Illuminate\Support\Collection;
 interface DungeonRouteSearchServiceInterface
 {
     /**
-
      * @return Collection<int, mixed>
      */
-
     public function findSimilarRoutes(DungeonRoute $route, int $limit = 5): Collection;
 
     /**
-
-
      * @return Collection<int, mixed>
      */
-
     public function search(DungeonRouteSearchFilter $filter): Collection;
 }

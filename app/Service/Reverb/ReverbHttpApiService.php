@@ -124,26 +124,16 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     **/
-    /**
-
      * @return array<string, mixed>
      */
-
     public function getHealth(): array
     {
         return $this->doRequest('up');
     }
 
     /**
-     * {@inheritDoc}
-     **/
-    /**
-
      * @return array<string, mixed>
      */
-
     public function getChannels(): array
     {
         return $this->doRequestForApp('channels')['channels'];

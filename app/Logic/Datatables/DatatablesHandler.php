@@ -12,13 +12,14 @@ use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\SimpleColumnHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
     /**
-     * @var Builder<\Illuminate\Database\Eloquent\Model>
+     * @var Builder<Model>
      */
     protected Builder $builder;
 
@@ -38,7 +39,7 @@ abstract class DatatablesHandler
     }
 
     /**
-     * @return Builder<\Illuminate\Database\Eloquent\Model>
+     * @return Builder<Model>
      */
     public function getBuilder(): Builder
     {
@@ -46,7 +47,7 @@ abstract class DatatablesHandler
     }
 
     /**
-     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @template TModel of Model
      * @param  Builder<TModel> $builder
      * @return $this
      */

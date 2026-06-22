@@ -11,6 +11,7 @@ namespace App\Logic\Datatables\ColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class DatatablesColumnHandler
 {
@@ -26,11 +27,11 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @param  Builder<\Illuminate\Database\Eloquent\Model> $subBuilder
-     * @param  Builder<\Illuminate\Database\Eloquent\Model> $orderBuilder
-     * @param  array<string, mixed>                         $columnData
-     * @param  array<string, mixed>|null                    $order
-     * @param  string|null                                  $generalSearch
+     * @param  Builder<Model>            $subBuilder
+     * @param  Builder<Model>            $orderBuilder
+     * @param  array<string, mixed>      $columnData
+     * @param  array<string, mixed>|null $order
+     * @param  string|null               $generalSearch
      * @return void
      */
     abstract protected function applyFilter(
@@ -63,8 +64,8 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @param  Builder<\Illuminate\Database\Eloquent\Model> $subBuilder
-     * @param  Builder<\Illuminate\Database\Eloquent\Model> $orderBuilder
+     * @param  Builder<Model> $subBuilder
+     * @param  Builder<Model> $orderBuilder
      * @return $this
      *
      * @throws Exception

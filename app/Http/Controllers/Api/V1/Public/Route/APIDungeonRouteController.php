@@ -124,7 +124,7 @@ class APIDungeonRouteController extends Controller
                 $model->viewportHeight,
                 $model->imageWidth,
                 $model->imageHeight,
-                $model->zoomLevel !== null ? (int)$model->zoomLevel : null,
+                $model->zoomLevel,
                 $model->quality,
             ),
         );

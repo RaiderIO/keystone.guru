@@ -359,8 +359,8 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param  array<int, mixed>                                   $must
-     * @return array<int, \Codeart\OpensearchLaravel\Search\Query>
+     * @param  array<int, mixed> $must
+     * @return array<int, Query>
      */
     public function toOpensearchQuery(array $must = []): array
     {

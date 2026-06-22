@@ -60,13 +60,8 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     */
-    /**
-
      * @return array<int, mixed>
      */
-
     public function getGlobalViewVariables(bool $useCache = true): array
     {
         $viewVariablesKey = sprintf('view_variables:%s:global', $this->release);
@@ -216,11 +211,8 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
-
-
      * @return array<int, mixed>
      */
-
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
         $viewVariablesGameServerRegionKey = sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short);

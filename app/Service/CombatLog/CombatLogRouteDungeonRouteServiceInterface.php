@@ -12,12 +12,9 @@ interface CombatLogRouteDungeonRouteServiceInterface
 {
     public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestModel $combatLogRoute): DungeonRoute;
 
-    /** @return Collection<CombatLogEvent> */
     /**
-
      * @return Collection<int, mixed>
      */
-
     public function convertCombatLogRouteToCombatLogEvents(CombatLogRouteRequestModel $combatLogRoute): Collection;
 
     public function correctCombatLogRoute(

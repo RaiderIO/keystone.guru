@@ -9,6 +9,7 @@ use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
+use Database\Factories\KillZone\KillZoneFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Override;
+use stdClass;
 
 /**
  * @property int        $id
@@ -46,7 +48,7 @@ use Override;
 class KillZone extends Model
 {
     use HasLatLng;
-    /** @use HasFactory<\Database\Factories\KillZone\KillZoneFactory> */
+    /** @use HasFactory<KillZoneFactory> */
     use HasFactory;
 
     public $visible = [
@@ -277,7 +279,7 @@ class KillZone extends Model
     /**
      * Gets a list of enemy forces that this kill zone kills that may be skipped.
      *
-     * @return Collection<int, \stdClass>
+     * @return Collection<int, stdClass>
      */
     public function getSkippableEnemyForces(bool $teeming): Collection
     {
@@ -351,7 +353,7 @@ class KillZone extends Model
      *
      * @return array<string, mixed>
      */
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         $array = parent::toArray();

@@ -19,10 +19,7 @@ interface DungeonServiceInterface
     ): void;
 
     /**
-
-
-     * @return Collection<int, mixed>
+     * @return Collection<int, Dungeon>
      */
-
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
 }

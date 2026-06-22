@@ -15,23 +15,13 @@ interface MappingServiceInterface
     public function shouldSynchronizeMapping(): bool;
 
     /**
-     * @return Collection A list of all changes to the mapping that have not been synchronized yet.
+     * @return Collection<int, mixed> A list of all changes to the mapping that have not been synchronized yet.
      */
-    /**
-
-     * @return Collection<int, mixed>
-     */
-
     public function getUnmergedMappingChanges(): Collection;
 
     /**
-     * @return Collection<Dungeon> Gets a list of dungeons of which the mapping has changed since the last time a synchronization was done.
+     * @return Collection<int, Dungeon> Gets a list of dungeons of which the mapping has changed since the last time a synchronization was done.
      */
-    /**
-
-     * @return Collection<int, mixed>
-     */
-
     public function getDungeonsWithUnmergedMappingChanges(): Collection;
 
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
@@ -60,7 +50,7 @@ interface MappingServiceInterface
     ): MappingVersion;
 
     /**
-     * Gets a mapping version of a dungeon, or creates a new one for this dungeon if the most recent version has been pushed.
+     * Gets a mapping version of a dungeon or creates a new one for this dungeon if the most recent version has been pushed.
      *
      * This is useful for when the mapping changes - it determines if we need to insert a new version or not.
      *
