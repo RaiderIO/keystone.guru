@@ -529,7 +529,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$saveService->saveFromRequest($dungeonRoute, $request)) {
+        if (!$saveService->save($dungeonRoute, $request->validated())) {
             abort(500, 'Unable to save dungeonroute');
         }
 

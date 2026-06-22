@@ -349,7 +349,7 @@ class DungeonRouteController extends Controller
         }
 
         // May fail
-        if (!$saveService->saveFromRequest($dungeonroute, $request)) {
+        if (!$saveService->save($dungeonroute, $request->validated())) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
@@ -366,7 +366,7 @@ class DungeonRouteController extends Controller
         $dungeonroute = new DungeonRoute();
 
         // May fail
-        if (!$saveService->saveTemporaryFromRequest($dungeonroute, $request)) {
+        if (!$saveService->saveTemporary($dungeonroute, $request->validated())) {
             abort(500, __('controller.dungeonroute.unable_to_save'));
         }
 
