@@ -50,6 +50,7 @@ class APIPathFormRequest extends FormRequest
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
             'polyline.weight' => [
+                'nullable',
                 'int',
             ],
             'polyline.vertices_json' => [
