@@ -67,7 +67,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): ?DungeonRouteThumbnail {
         try {
@@ -97,7 +97,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): ?DungeonRouteThumbnail {
         $result = null;
@@ -305,7 +305,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): Collection {
         $result = collect();

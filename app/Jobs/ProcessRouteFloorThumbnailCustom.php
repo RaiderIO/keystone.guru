@@ -65,7 +65,7 @@ class ProcessRouteFloorThumbnailCustom implements ShouldQueue
                     $this->dungeonRouteThumbnailJob->viewport_height,
                     $this->dungeonRouteThumbnailJob->image_width,
                     $this->dungeonRouteThumbnailJob->image_height,
-                    $this->dungeonRouteThumbnailJob->zoom_level !== null ? (int)$this->dungeonRouteThumbnailJob->zoom_level : null,
+                    $this->dungeonRouteThumbnailJob->zoom_level,
                     $this->dungeonRouteThumbnailJob->quality,
                 );
 

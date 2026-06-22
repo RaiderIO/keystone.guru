@@ -19,7 +19,10 @@ use Illuminate\Support\Collection;
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 
-$characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]])
+/** @var Collection<string, array{icon_url: string|null, name: array<string, string>|string}> $baseCharacteristicOptions */
+$baseCharacteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]]);
+
+$characteristicOptions = $baseCharacteristicOptions
     ->merge($allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
         (string)$c->id => [
             'icon_url' => ksgAssetImage(sprintf('spells/%s.jpg', $c->icon_name)),

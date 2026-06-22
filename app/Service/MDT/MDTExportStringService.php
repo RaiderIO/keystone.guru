@@ -110,8 +110,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
         $objects = [];
 
-        /** @var \Illuminate\Support\Collection<int, Path|Brushline> $lines */
-        $lines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->toBase()->merge(
+        /** @var \Illuminate\Support\Collection<int, Path|Brushline> $brushlines */
+        $brushlines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->toBase();
+
+        $lines = $brushlines->merge(
             $this->dungeonRoute->paths()->with(['floor'])->get()->toBase(),
         );
 
