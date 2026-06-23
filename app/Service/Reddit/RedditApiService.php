@@ -25,7 +25,7 @@ class RedditApiService implements RedditApiServiceInterface
                 'Content-Type: application/x-www-form-urlencoded',
                 'User-Agent: keystone.guru/v3.3',
             ],
-            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_RETURNTRANSFER => true,
         ]);
 
         /**
@@ -60,7 +60,7 @@ class RedditApiService implements RedditApiServiceInterface
                     'Content-Type: application/x-www-form-urlencoded',
                     'User-Agent: keystone.guru/v3.3',
                 ],
-                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_RETURNTRANSFER => true,
             ]);
 
             $response = json_decode(curl_exec($ch), true);

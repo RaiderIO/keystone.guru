@@ -21,7 +21,7 @@ final class GetSeasonsTest extends PublicTestCase
         $service = app(SeasonServiceInterface::class);
 
         // Act
-        /** @var Collection<Season> $result */
+        /** @var Collection<int, Season> $result */
         $result = $service->getSeasons();
 
         // Assert

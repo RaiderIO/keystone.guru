@@ -25,17 +25,21 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         'email',
     ];
 
-    public function __construct(DatatablesHandler $dtHandler, $columnName, $columnData = null)
+    public function __construct(DatatablesHandler $dtHandler, string $columnName, ?string $columnData = null)
     {
         parent::__construct($dtHandler, $columnName, $columnData);
     }
 
+    /**
+     * @param array<string, mixed>      $columnData
+     * @param array<string, mixed>|null $order
+     */
     protected function applyFilter(
         Builder $subBuilder,
         Builder $orderBuilder,
-                $columnData,
-                $order,
-                $generalSearch,
+        array   $columnData,
+        ?array  $order,
+        ?string $generalSearch,
     ): void {
         // If the column name is not valid, ignore it entirely
         if (!in_array($this->getColumnName(), self::VALID_COLUMN_NAMES)) {

@@ -14,6 +14,9 @@ final class MetricServiceTest extends PublicTestCase
 {
     /**
      * Scenario: Given a bunch of metrics - they should be grouped up properly before inserting them into the database.
+     *
+     * @param array<int, array<string, mixed>> $pendingMetrics
+     * @param array<int, array<string, mixed>> $expectedResult
      */
     #[Test]
     #[DataProvider('groupMetrics_GivenGroupableMetrics_ShouldReturnGroupedMetrics_Provider')]
@@ -39,6 +42,9 @@ final class MetricServiceTest extends PublicTestCase
         }
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function groupMetrics_GivenGroupableMetrics_ShouldReturnGroupedMetrics_Provider(): array
     {
         return [
@@ -87,6 +93,9 @@ final class MetricServiceTest extends PublicTestCase
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function createMetric(
         int    $value,
         string $createdAt,

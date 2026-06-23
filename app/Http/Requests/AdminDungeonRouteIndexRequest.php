@@ -16,10 +16,8 @@ class AdminDungeonRouteIndexRequest extends FormRequest
     public function authorize(): bool
     {
         return Auth::user()->hasRole(Role::ROLE_ADMIN);
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

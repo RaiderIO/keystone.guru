@@ -26,9 +26,7 @@ class CombatLogRouteRequest extends APIFormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         $dateFormat = sprintf('date_format:"%s"', CombatLogRouteRequestModel::DATE_TIME_FORMAT);

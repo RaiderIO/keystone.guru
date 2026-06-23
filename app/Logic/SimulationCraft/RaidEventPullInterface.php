@@ -22,6 +22,12 @@ interface RaidEventPullInterface
 
     public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB, bool $applyRangedCompensation = true): float;
 
+    /**
+
+
+     * @return array<int, mixed>
+     */
+
     public function calculateMountedFactorAndMountCastsBetweenPoints(
         LatLng $latLngA,
         LatLng $latLngB,

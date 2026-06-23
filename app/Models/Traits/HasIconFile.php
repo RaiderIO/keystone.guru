@@ -16,6 +16,7 @@ use Illuminate\Http\UploadedFile;
  */
 trait HasIconFile
 {
+    /** @return HasOne<File, $this> */
     public function iconfile(): HasOne
     {
         return $this->hasOne(File::class, 'model_id')->where('model_class', $this::class);

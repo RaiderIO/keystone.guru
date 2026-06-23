@@ -3,9 +3,14 @@
         "claude_code",
         "phpstorm"
     ],
+    "cloud": false,
     "editors": [
         "claude_code",
         "phpstorm"
     ],
-    "guidelines": []
+    "skills": [
+        "laravel-best-practices",
+        "pennant-development",
+        "phpstan-fixer"
+    ]
 }

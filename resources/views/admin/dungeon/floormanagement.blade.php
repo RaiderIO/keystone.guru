@@ -6,8 +6,8 @@ use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                 $dungeon
- * @var Collection<GameVersion> $allGameVersions
+ * @var Dungeon                      $dungeon
+ * @var Collection<int, GameVersion> $allGameVersions
  */
 ?>
 

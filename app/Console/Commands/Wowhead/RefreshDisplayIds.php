@@ -29,7 +29,7 @@ class RefreshDisplayIds extends Command
      */
     public function handle(WowheadServiceInterface $wowheadService): void
     {
-        /** @var Collection<Npc> $npcsToRefresh */
+        /** @var Collection<int, Npc> $npcsToRefresh */
         $npcsToRefresh = Npc::with('dungeons')->whereNull('display_id')->get();
 
         $this->info(sprintf('Refreshing display_ids for %d npcs..', $npcsToRefresh->count()));

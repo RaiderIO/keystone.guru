@@ -4,7 +4,7 @@ use App\Models\GameServerRegion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<GameServerRegion> $allRegions
+ * @var Collection<int, GameServerRegion> $allRegions
  */
 ?>
 <div class="form-group">

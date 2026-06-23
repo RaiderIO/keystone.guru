@@ -20,6 +20,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringObjects;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class ObjectImporter
 {
@@ -175,6 +176,10 @@ class ObjectImporter
         return $importStringObjects;
     }
 
+    /**
+     * @param array<int, mixed> $details
+     * @param array<int, mixed> $vertices
+     */
     private function parseObjectTriangle(
         ImportStringObjects $importStringObjects,
         MappingVersion      $mappingVersion,
@@ -205,6 +210,10 @@ class ObjectImporter
         }
     }
 
+    /**
+     * @param array<int, mixed> $details
+     * @param array<int, mixed> $vertices
+     */
     private function parseObjectLine(
         ImportStringObjects $importStringObjects,
         MappingVersion      $mappingVersion,
@@ -257,6 +266,9 @@ class ObjectImporter
         }
     }
 
+    /**
+     * @param array<int, mixed> $details
+     */
     private function parseObjectComment(
         ImportStringObjects $importStringObjects,
         MappingVersion      $mappingVersion,
@@ -382,7 +394,7 @@ class ObjectImporter
          * Each entry maps an ImportStringObjects collection to its model class and DungeonRoute relation name.
          * This unified loop replaces the previous copy-pasted brushline/path blocks.
          *
-         * @var \Illuminate\Support\Collection<int, array{objects: \Illuminate\Support\Collection, model: class-string, relation: string}> $typedObjects
+         * @var Collection<int, array{objects: Collection<int, mixed>, model: class-string, relation: string}> $typedObjects
          */
         $typedObjects = collect([
             ['objects' => $importStringObjects->getLines(),  'model' => Brushline::class, 'relation' => 'brushlines'],

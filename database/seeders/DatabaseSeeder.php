@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
 
     public const TEMP_TABLE_SUFFIX = '_temp';
 
+    /** @var array<int, class-string<TableSeederInterface>> */
     private const SEEDERS = [
         // Combatlog
         CombatLogSeeder::class,
@@ -68,6 +69,9 @@ class DatabaseSeeder extends Seeder
      *
      * @throws Throwable
      */
+    /**
+     * @param array<int, class-string<TableSeederInterface>>|null $seederClasses
+     */
     public function run(CacheServiceInterface $cacheService, ?array $seederClasses = null): void
     {
         foreach ($seederClasses ?? [] as $seederClass) {
@@ -87,7 +91,7 @@ class DatabaseSeeder extends Seeder
         // 3. Cleanup: Remove existing table, rename temporary table
 
         foreach ($seederClasses ?? self::SEEDERS as $seederClass) {
-            /** @var TableSeederInterface $seederClass */
+            /** @var class-string<TableSeederInterface> $seederClass */
             $affectedEnvironments = $seederClass::getAffectedEnvironments();
             if ($affectedEnvironments !== null && !in_array(app()->environment(), $affectedEnvironments)) {
                 $this->command->info(

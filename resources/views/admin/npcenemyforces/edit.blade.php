@@ -5,8 +5,8 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 
 /**
- * @var Npc                 $npc
- * @var NpcEnemyForces      $npcEnemyForces
+ * @var Npc            $npc
+ * @var NpcEnemyForces $npcEnemyForces
  */
 $npcEnemyForces ??= null;
 ?>

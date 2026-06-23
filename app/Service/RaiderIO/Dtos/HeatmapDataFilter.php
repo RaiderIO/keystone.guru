@@ -15,10 +15,12 @@ use Illuminate\Support\Collection;
 
 /**
  * Class that is used to represent the filter that is received from the browser.
+ *
+ * @implements Arrayable<string, mixed>
  */
 class HeatmapDataFilter implements Arrayable
 {
-    /** @var Collection<Spell> */
+    /** @var Collection<int, Spell> */
     private Collection $includePlayerSpellIds;
     private ?string $region       = null;
     private ?int $keyLevelMin     = null;
@@ -27,15 +29,15 @@ class HeatmapDataFilter implements Arrayable
     private ?int $itemLevelMax    = null;
     private ?int $playerDeathsMin = null;
     private ?int $playerDeathsMax = null;
-    /** @var Collection<Affix> */
+    /** @var Collection<int, Affix> */
     private Collection $includeAffixIds;
-    /** @var Collection<CharacterClass> */
+    /** @var Collection<int, CharacterClass> */
     private Collection $includeClassIds;
-    /** @var Collection<CharacterClassSpecialization> */
+    /** @var Collection<int, CharacterClassSpecialization> */
     private Collection $includeSpecIds;
-    /** @var Collection<CharacterClass> */
+    /** @var Collection<int, CharacterClass> */
     private Collection $includePlayerDeathClassIds;
-    /** @var Collection<CharacterClassSpecialization> */
+    /** @var Collection<int, CharacterClassSpecialization> */
     private Collection $includePlayerDeathSpecIds;
     private ?int $minPeriod          = null;
     private ?int $maxPeriod          = null;
@@ -80,7 +82,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @return Collection<Spell>
+     * @return Collection<int, Spell>
      */
     public function getIncludePlayerSpellIds(): Collection
     {
@@ -88,7 +90,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<Spell> $includePlayerSpellIds
+     * @param  Collection<int, Spell> $includePlayerSpellIds
      * @return $this
      */
     public function setIncludePlayerSpellIds(Collection $includePlayerSpellIds): HeatmapDataFilter
@@ -183,7 +185,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @return Collection<Affix>
+     * @return Collection<int, Affix>
      */
     public function getIncludeAffixIds(): Collection
     {
@@ -191,7 +193,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<Affix> $includeAffixIds
+     * @param  Collection<int, Affix> $includeAffixIds
      * @return HeatmapDataFilter
      */
     public function setIncludeAffixIds(Collection $includeAffixIds): HeatmapDataFilter
@@ -202,7 +204,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClass>
+     * @return Collection<int, CharacterClass>
      */
     public function getIncludeClassIds(): Collection
     {
@@ -210,7 +212,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClass> $includeClassIds
+     * @param  Collection<int, CharacterClass> $includeClassIds
      * @return HeatmapDataFilter
      */
     public function setIncludeClassIds(Collection $includeClassIds): HeatmapDataFilter
@@ -221,7 +223,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClassSpecialization>
+     * @return Collection<int, CharacterClassSpecialization>
      */
     public function getIncludeSpecIds(): Collection
     {
@@ -229,7 +231,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClassSpecialization> $includeSpecIds
+     * @param  Collection<int, CharacterClassSpecialization> $includeSpecIds
      * @return HeatmapDataFilter
      */
     public function setIncludeSpecIds(Collection $includeSpecIds): HeatmapDataFilter
@@ -240,7 +242,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClass>
+     * @return Collection<int, CharacterClass>
      */
     public function getIncludePlayerDeathClassIds(): Collection
     {
@@ -248,7 +250,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClass> $includePlayerDeathClassIds
+     * @param  Collection<int, CharacterClass> $includePlayerDeathClassIds
      * @return HeatmapDataFilter
      */
     public function setIncludePlayerDeathClassIds(Collection $includePlayerDeathClassIds): HeatmapDataFilter
@@ -259,7 +261,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @return Collection<CharacterClassSpecialization>
+     * @return Collection<int, CharacterClassSpecialization>
      */
     public function getIncludePlayerDeathSpecIds(): Collection
     {
@@ -267,7 +269,7 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
-     * @param  Collection<CharacterClassSpecialization> $includePlayerDeathSpecIds
+     * @param  Collection<int, CharacterClassSpecialization> $includePlayerDeathSpecIds
      * @return HeatmapDataFilter
      */
     public function setIncludePlayerDeathSpecIds(Collection $includePlayerDeathSpecIds): HeatmapDataFilter
@@ -432,7 +434,7 @@ class HeatmapDataFilter implements Arrayable
     /**
      * Converts the filter into an array that will be passed to the Raider.io API in the URL
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -537,7 +539,7 @@ class HeatmapDataFilter implements Arrayable
     /**
      * Populates a new HeatmapDataFilter object from the request array.
      *
-     * @param  array             $requestArray
+     * @param  array<string, mixed> $requestArray
      * @return HeatmapDataFilter
      */
     public static function fromArray(array $requestArray): HeatmapDataFilter

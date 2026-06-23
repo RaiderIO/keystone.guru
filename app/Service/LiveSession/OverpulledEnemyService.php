@@ -35,14 +35,14 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                 $enemyForcesLeftToCorrect += $overpulledEnemyForce['enemy_forces'];
 
                 // All the killzones that we can potentially take enemies from
-                /** @var Collection<KillZone> $availableKillZones */
+                /** @var Collection<int, KillZone> $availableKillZones */
                 $availableKillZones = KillZone::where('dungeon_route_id', $liveSession->dungeon_route_id)
                     ->where('index', '>', $overpulledEnemyForce['kill_zone']->index)
                     ->get();
 
                 // Loop over all available kill zones from which we can still potentially subtract enemy forces
                 foreach ($availableKillZones as $availableKillZone) {
-                    $availableKillZone->dungeonRoute = $liveSession->dungeonRoute;
+                    $availableKillZone->setRelation('dungeonRoute', $liveSession->dungeonRoute);
 
                     $skippableEnemyForces = $availableKillZone->getSkippableEnemyForces($liveSession->dungeonRoute->teeming);
 
@@ -50,7 +50,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                     $groupedBy = $skippableEnemyForces->groupBy('enemy_pack_id')->sortDesc();
 
                     foreach ($groupedBy as $enemyPackId => $enemies) {
-                        /** @var Collection $enemies */
+                        /** @var Collection<int, mixed> $enemies */
                         $enemies = $enemies->sortByDesc(static fn($row) => $row->enemy_forces);
 
                         if ($enemyPackId === -1) {

@@ -62,10 +62,8 @@ class APIMappingVersionFormRequest extends FormRequest
         $this->replace(collect($this->validated())
             ->except('timer_max_minutes')
             ->toArray());
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

@@ -4,7 +4,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
 
 /**
- * @var Npc          $npc
+ * @var Npc            $npc
  * @var NpcHealth|null $currentNpcHealth
  */
 ?>

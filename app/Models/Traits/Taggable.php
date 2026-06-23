@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 trait Taggable
 {
+    /** @return HasMany<Tag, $this> */
     public function tags(?int $tagCategoryId = null): HasMany
     {
         $result = $this->hasMany(Tag::class, 'model_id')

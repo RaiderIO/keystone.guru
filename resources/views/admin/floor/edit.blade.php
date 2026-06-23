@@ -1,8 +1,8 @@
 <?php
 /**
- * @var Dungeon                   $dungeon
- * @var Floor                     $floor
- * @var Collection<FloorCoupling> $floorCouplings
+ * @var Dungeon                        $dungeon
+ * @var Floor                          $floor
+ * @var Collection<int, FloorCoupling> $floorCouplings
  */
 
 use App\Models\Dungeon;

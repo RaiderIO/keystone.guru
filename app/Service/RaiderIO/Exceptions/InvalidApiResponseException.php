@@ -5,6 +5,9 @@ namespace App\Service\RaiderIO\Exceptions;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class InvalidApiResponseException extends Exception implements Arrayable
 {
     public function __construct(

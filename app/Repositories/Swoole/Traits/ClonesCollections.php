@@ -6,6 +6,11 @@ use Illuminate\Support\Collection;
 
 trait ClonesCollections
 {
+    /**
+     * @template T
+     * @param  Collection<int, T> $collection
+     * @return Collection<int, T>
+     */
     private function cloneCollection(Collection $collection): Collection
     {
         $result = collect();
@@ -18,6 +23,11 @@ trait ClonesCollections
         return $result;
     }
 
+    /**
+     * @template T
+     * @param  Collection<int, T> $collection
+     * @return Collection<int, T>
+     */
     private function copyCollection(Collection $collection): Collection
     {
         $result = collect();

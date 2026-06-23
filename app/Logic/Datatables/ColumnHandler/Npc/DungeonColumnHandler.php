@@ -35,8 +35,8 @@ class DungeonColumnHandler extends SimpleColumnHandler
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations', static function (JoinClause $clause) {
-                $clause->on('translations.key', 'dungeons.name')
-                    ->on('translations.locale', DB::raw('"en_US"'));
+                $clause->on('translations.key', '=', 'dungeons.name')
+                    ->on('translations.locale', '=', DB::raw('"en_US"'));
             })->orWhere('translations.translation', 'LIKE', sprintf('%%%s%%', $generalSearch));
     }
 }

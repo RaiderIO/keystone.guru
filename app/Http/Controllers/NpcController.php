@@ -135,7 +135,7 @@ class NpcController extends Controller
                 // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
                 $removedDungeonIds = array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray());
                 if (!empty($removedDungeonIds)) {
-                    /** @var Collection<Dungeon> $removedDungeons */
+                    /** @var Collection<int, Dungeon> $removedDungeons */
                     $removedDungeons = Dungeon::whereIn('id', $removedDungeonIds)->get();
                     // For each removed dungeon, delete the enemy forces for all mapping versions
                     // Any new dungeons assigned will have to have their enemy forces created again

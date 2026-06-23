@@ -21,6 +21,7 @@ class ReleaseReportLog extends CacheModel
         'platform',
     ];
 
+    /** @return BelongsTo<Release, $this> */
     public function release(): BelongsTo
     {
         return $this->belongsTo(Release::class);

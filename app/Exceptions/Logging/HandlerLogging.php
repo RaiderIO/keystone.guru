@@ -17,6 +17,9 @@ class HandlerLogging extends RollbarStructuredLogging implements HandlerLoggingI
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed>|null $body
+     */
     public function uncaughtException(
         string  $ip,
         string  $url,

@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class BitMasksTest extends TestCase
 {
-    private $bitMask;
+    private object $bitMask;
 
     #[\Override]
     protected function setUp(): void

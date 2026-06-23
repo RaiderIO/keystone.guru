@@ -165,6 +165,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         self::TEEMING_HIDDEN,
     ];
 
+    /** @return array<int, int> */
     public function getActiveAurasAttribute(): array
     {
         $result = [];
@@ -182,36 +183,43 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         return $this->mdt_npc_id ?? $this->npc_id;
     }
 
+    /** @return BelongsTo<MappingVersion, $this> */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /** @return BelongsTo<EnemyPack, $this> */
     public function enemyPack(): BelongsTo
     {
         return $this->belongsTo(EnemyPack::class);
     }
 
+    /** @return BelongsTo<EnemyPatrol, $this> */
     public function enemyPatrol(): BelongsTo
     {
         return $this->belongsTo(EnemyPatrol::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return HasMany<EnemyActiveAura, $this> */
     public function enemyActiveAuras(): HasMany
     {
         return $this->hasMany(EnemyActiveAura::class);
     }
 
+    /** @return BelongsTo<Enemy, $this> */
     public function exclusiveEnemy(): BelongsTo
     {
         return $this->belongsTo(Enemy::class, 'exclusive_enemy_id');

@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 class CombatantInfoBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed>                   $parameters
      * @return SpecialEvent&CombatantInfoInterface
      */
     public static function create(

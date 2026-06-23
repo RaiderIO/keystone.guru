@@ -35,6 +35,9 @@ class BrushlineChangedEvent extends ModelChangedEvent
         return 'brushline-changed';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

@@ -34,6 +34,10 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
         }
     }
 
+    /**
+     * @param  array<string, mixed> $extraParams
+     * @return array<string, mixed>
+     */
     private function signedQuery(string $method, string $path, array $extraParams = [], string $body = ''): array
     {
         $method = strtoupper($method);
@@ -81,6 +85,9 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
         return $params;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function doRequestForApp(string $uri): array
     {
         return $this->doRequest(
@@ -89,6 +96,7 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
     }
 
     /**
+     * @return array<string, mixed>
      * @throws Exception
      */
     private function doRequest(string $uri): array
@@ -116,16 +124,16 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     **/
+     * @return array<string, mixed>
+     */
     public function getHealth(): array
     {
         return $this->doRequest('up');
     }
 
     /**
-     * {@inheritDoc}
-     **/
+     * @return array<string, mixed>
+     */
     public function getChannels(): array
     {
         return $this->doRequestForApp('channels')['channels'];
@@ -133,16 +141,16 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
 
     /**
      * {@inheritDoc}
-     **/
-    public function getChannelInfo($channelName): array
+     */
+    public function getChannelInfo(string $channelName): array
     {
         return $this->doRequestForApp(sprintf('channels/%s', $channelName));
     }
 
     /**
      * {@inheritDoc}
-     **/
-    public function getChannelUsers($channelName): array
+     */
+    public function getChannelUsers(string $channelName): array
     {
         return $this->doRequestForApp(sprintf('channels/%s/users', $channelName))['users'];
     }

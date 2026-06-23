@@ -43,6 +43,7 @@ class DungeonRouteScheduledPublish extends Model
         ];
     }
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);

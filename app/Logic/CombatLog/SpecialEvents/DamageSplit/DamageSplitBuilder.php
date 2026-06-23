@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 class DamageSplitBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed>                 $parameters
      * @return SpecialEvent&DamageSplitInterface
      */
     public static function create(

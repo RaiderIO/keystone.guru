@@ -34,6 +34,9 @@ class EnemyChangedEvent extends ModelChangedEvent
         return 'enemy-changed';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

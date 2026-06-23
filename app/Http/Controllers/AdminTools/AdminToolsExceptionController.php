@@ -27,6 +27,8 @@ class AdminToolsExceptionController extends Controller
     /**
      * @throws TokenMismatchException
      * @throws Exception
+     *
+     * @return array<string, mixed>
      */
     public function exceptionselectsubmit(Request $request): array
     {

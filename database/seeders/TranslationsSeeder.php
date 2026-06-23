@@ -39,7 +39,13 @@ class TranslationsSeeder extends Seeder implements TableSeederInterface
         });
     }
 
-    private function insertTranslationsRecursive($translations, $locale, $prefix = ''): array
+    /**
+     * @param  array<string, mixed>              $translations
+     * @param  string                            $locale
+     * @param  string                            $prefix
+     * @return array<int, array<string, string>>
+     */
+    private function insertTranslationsRecursive(array $translations, string $locale, string $prefix = ''): array
     {
         $result = [];
         foreach ($translations as $key => $translation) {

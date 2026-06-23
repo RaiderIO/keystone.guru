@@ -63,7 +63,7 @@ class DungeonService implements DungeonServiceInterface
                 if ($dungeon->instance_id === null && $dungeon->update([
                     'instance_id' => $instanceId,
                 ])) {
-                    $this->log->importInstanceIdsFromCsvUpdatedZoneId($dungeon->key, $instanceId);
+                    $this->log->importInstanceIdsFromCsvUpdatedZoneId($dungeon->key, (int)$instanceId);
                 }
             }
         } finally {

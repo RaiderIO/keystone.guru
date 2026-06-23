@@ -37,6 +37,9 @@ final class ZoneChangeTest extends PublicTestCase
         Assert::assertEquals($expectedDifficultyId, $result->getDifficultyId());
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function parseEvent_givenZoneChangeEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

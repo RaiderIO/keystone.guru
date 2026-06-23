@@ -7,9 +7,9 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc>   $npcs
- * @var Collection<Spell> $spells
- * @var Dungeon|null      $dungeon
+ * @var Collection<int, Npc>   $npcs
+ * @var Collection<int, Spell> $spells
+ * @var Dungeon|null           $dungeon
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.npc.managespellvisibility.title')])

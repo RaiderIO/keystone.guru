@@ -40,7 +40,7 @@ use Override;
  *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
- * @method static Builder active()
+ * @method static Builder<self> active()
  *
  * @mixin Eloquent
  */
@@ -104,10 +104,10 @@ class Expansion extends CacheModel
         self::EXPANSION_TLT          => 13,
     ];
 
-    /** @var Collection<int, Season>|null  */
+    /** @var Collection<string, Season>|null  */
     private ?Collection $currentSeasonCache = null;
 
-    /** @var Collection<int, Season>|null  */
+    /** @var Collection<string, Season>|null  */
     private ?Collection $nextSeasonCache = null;
 
     /**
@@ -137,11 +137,13 @@ class Expansion extends CacheModel
         return $this->hasMany(Dungeon::class)->orderBy('name');
     }
 
+    /** @return HasMany<Season, $this> */
     public function seasons(): HasMany
     {
         return $this->hasMany(Season::class);
     }
 
+    /** @return HasOne<TimewalkingEvent, $this> */
     public function timewalkingEvent(): HasOne
     {
         return $this->hasOne(TimewalkingEvent::class);
@@ -212,6 +214,9 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include active dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function active(Builder $query): Builder
@@ -221,6 +226,9 @@ class Expansion extends CacheModel
 
     /**
      * Scope a query to only include inactive dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function inactive(Builder $query): Builder
@@ -237,8 +245,10 @@ class Expansion extends CacheModel
     {
         $result = false;
 
-        $this->raids->load([
-            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        $this->raids->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'mappingVersions' => function (HasMany $query): void {
+                $query->without('dungeon');
+            },
         ]);
 
         foreach ($this->raids->filter($filterFn) as $raid) {
@@ -258,8 +268,10 @@ class Expansion extends CacheModel
         $filterFn ??= fn(Dungeon $dungeon) => true;
         $result = false;
 
-        $this->dungeons->load([
-            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        $this->dungeons->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            'mappingVersions' => function (HasMany $query): void {
+                $query->without('dungeon');
+            },
         ]);
 
         foreach ($this->dungeons->filter($filterFn) as $dungeon) {

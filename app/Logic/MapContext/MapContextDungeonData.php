@@ -13,6 +13,9 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MapContextDungeonData implements Arrayable
 {
     use RemembersToFile;
@@ -27,6 +30,7 @@ class MapContextDungeonData implements Arrayable
 
     /**
      * @throws InvalidArgumentException
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -37,8 +41,8 @@ class MapContextDungeonData implements Arrayable
             fn() => $this->dungeon->npcs()
                 ->selectRaw('npcs.*, translations.translation as name')
                 ->leftJoin('translations', function (JoinClause $clause) {
-                    $clause->on('translations.key', 'npcs.name')
-                        ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                    $clause->on('translations.key', '=', 'npcs.name')
+                        ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
                 })
                 ->with([
                     // Return only spell IDs for each NPC
@@ -86,8 +90,8 @@ class MapContextDungeonData implements Arrayable
                 return Spell::query()
                     ->selectRaw('spells.*, translations.translation as name')
                     ->leftJoin('translations', function (JoinClause $clause) {
-                        $clause->on('translations.key', 'spells.name')
-                            ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                        $clause->on('translations.key', '=', 'spells.name')
+                            ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
                     })
                     ->whereIn('spells.id', $spellIds)
                     ->get()

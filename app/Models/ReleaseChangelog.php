@@ -31,11 +31,13 @@ class ReleaseChangelog extends CacheModel
 
     public $timestamps = false;
 
+    /** @return HasOne<Release, $this> */
     public function release(): HasOne
     {
         return $this->hasOne(Release::class);
     }
 
+    /** @return HasMany<ReleaseChangelogChange, $this> */
     public function changes(): HasMany
     {
         return $this->hasMany(ReleaseChangelogChange::class)->orderBy('release_changelog_category_id');

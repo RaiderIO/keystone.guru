@@ -2,6 +2,7 @@
 
 namespace App\Service\Expansion;
 
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -9,6 +10,9 @@ use Illuminate\Support\Collection;
 
 class ExpansionData
 {
+    /**
+     * @var Collection<int, Dungeon>
+     */
     private readonly Collection $activeDungeons;
 
     private readonly ExpansionSeason $expansionSeason;
@@ -33,6 +37,9 @@ class ExpansionData
         return $this->gameServerRegion;
     }
 
+    /**
+     * @return Collection<int, Dungeon>
+     */
     public function getActiveDungeons(): Collection
     {
         return $this->activeDungeons;

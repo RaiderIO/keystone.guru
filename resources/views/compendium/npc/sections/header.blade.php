@@ -5,7 +5,7 @@ use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcHealth;
 
 /**
- * @var Npc          $npc
+ * @var Npc            $npc
  * @var NpcHealth|null $currentNpcHealth
  */
 

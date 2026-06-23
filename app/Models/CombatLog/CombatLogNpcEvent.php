@@ -9,7 +9,6 @@ use App\Models\Traits\SerializesDates;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -50,13 +49,9 @@ class CombatLogNpcEvent extends Model
         ];
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
-    }
-
-    public function model(): HasOne
-    {
-        return $this->hasOne($this->model_class, 'id', 'model_id');
     }
 }

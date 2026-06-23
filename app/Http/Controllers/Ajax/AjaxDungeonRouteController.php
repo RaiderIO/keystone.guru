@@ -236,7 +236,9 @@ class AjaxDungeonRouteController extends Controller
 
         // Ensure that the resulting routes have their thumbnails refreshed if they are missing
         if (isset($result['data'])) {
-            $thumbnailService->queueThumbnailRefreshIfMissing(collect($result['data']));
+            /** @var array<int, mixed> $data */
+            $data = $result['data'];
+            $thumbnailService->queueThumbnailRefreshIfMissing(collect($data));
         }
 
         return $result;
@@ -696,7 +698,8 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function rate(Request $request, DungeonRoute $dungeonRoute)
+    /** @return array<string, float|int> */
+    public function rate(Request $request, DungeonRoute $dungeonRoute): array
     {
         Gate::authorize('rate', $dungeonRoute);
 
@@ -719,11 +722,11 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return array
+     * @return array<string, float|int>
      *
      * @throws Exception
      */
-    public function rateDelete(Request $request, DungeonRoute $dungeonRoute)
+    public function rateDelete(Request $request, DungeonRoute $dungeonRoute): array
     {
         Gate::authorize('rate', $dungeonRoute);
 
@@ -779,7 +782,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return array|void
+     * @return array<string, string|array<int, array<string, mixed>>>
      *
      * @throws AuthorizationException
      * @throws Throwable
@@ -788,7 +791,7 @@ class AjaxDungeonRouteController extends Controller
         Request                         $request,
         MDTExportStringServiceInterface $mdtExportStringService,
         DungeonRoute                    $dungeonRoute,
-    ) {
+    ): array {
         Gate::authorize('view', $dungeonRoute);
 
         $useCache = (int)$request->get('useCache', 1) === 1;
@@ -827,6 +830,8 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
+     * @return array<string, string>
+     *
      * @throws AuthorizationException
      * @throws RandomException
      */

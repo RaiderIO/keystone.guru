@@ -4,7 +4,7 @@ use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc> $npcs
+ * @var Collection<int, Npc> $npcs
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.npcs.showmissingdisplayid.title')])

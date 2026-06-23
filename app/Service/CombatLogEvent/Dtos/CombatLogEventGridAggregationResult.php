@@ -12,6 +12,8 @@ use Illuminate\Support\Collection;
 
 /**
  * This class is used as a DTO to store the result of a CombatLogEvent aggregation (response from Opensearch).
+ *
+ * @implements Arrayable<string, mixed>
  */
 class CombatLogEventGridAggregationResult implements Arrayable
 {
@@ -19,6 +21,9 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
     private ?MappingVersion $currentMappingVersion = null;
 
+    /**
+     * @param array<int, array<int|string, int>> $results
+     */
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventFilter        $combatLogEventFilter,
@@ -32,7 +37,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
     public function toArray(): array
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();
-        /** @var Collection<Floor> $floors */
+        /** @var Collection<int, Floor> $floors */
         $floors = $dungeon->floors->keyBy('id');
 
         $weightMax = 0;
@@ -145,6 +150,9 @@ class CombatLogEventGridAggregationResult implements Arrayable
 //        ];
     }
 
+    /**
+     * @return array<string, float>
+     */
     private function convertIngameLocationToLatLngArray(IngameXY $ingameXY): array
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();

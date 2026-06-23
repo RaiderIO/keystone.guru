@@ -172,6 +172,9 @@ class Affix extends CacheModel
         return ksgAssetImage(sprintf('affixes/%s.jpg', $this->getImageNameAttribute()));
     }
 
+    /**
+     * @return BelongsToMany<AffixGroup, $this>
+     */
     public function affixGroups(): BelongsToMany
     {
         return $this->belongsToMany(AffixGroup::class, 'affix_group_couplings');

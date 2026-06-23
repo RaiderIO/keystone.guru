@@ -37,8 +37,8 @@ class ImportSpellNames extends Command
         $updatedCount = 0;
         $progressBar  = $this->output->createProgressBar(Spell::count());
         $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
-        Spell::chunk(1000, function (Collection $spells) use (&$spellNames, &$updatedCount, $progressBar) {
-            /** @var Collection<Spell> $spells */
+        Spell::chunk(1000, function (Collection $spells) use (&$spellNames, &$updatedCount, $progressBar): void {
+            /** @var Collection<int, Spell> $spells */
             foreach ($spells as $spell) {
                 if (empty($spell->name) || Str::startsWith($spell->name, ['spells.'])) {
                     continue;

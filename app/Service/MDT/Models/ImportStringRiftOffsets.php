@@ -8,10 +8,20 @@ use Illuminate\Support\Collection;
 
 class ImportStringRiftOffsets
 {
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $mapIcons;
 
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $paths;
 
+    /**
+     * @param Collection<int, mixed> $warnings
+     * @param array<int, mixed>      $riftOffsets
+     */
     public function __construct(
         private readonly Collection     $warnings,
         private readonly Dungeon        $dungeon,
@@ -24,6 +34,9 @@ class ImportStringRiftOffsets
         $this->paths    = collect();
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getWarnings(): Collection
     {
         return $this->warnings;
@@ -44,6 +57,9 @@ class ImportStringRiftOffsets
         return $this->seasonalIndex;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getRiftOffsets(): array
     {
         return $this->riftOffsets;
@@ -54,11 +70,17 @@ class ImportStringRiftOffsets
         return $this->week;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getMapIcons(): Collection
     {
         return $this->mapIcons;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getPaths(): Collection
     {
         return $this->paths;

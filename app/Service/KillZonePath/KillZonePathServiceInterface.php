@@ -15,7 +15,7 @@ interface KillZonePathServiceInterface
      * of lat/lng/floor_id objects representing the shortest path between those
      * two kill-zones, passing through floor-switch markers as needed.
      *
-     * @return array<array<array{lat: float, lng: float, floor_id: int|null}>>
+     * @return array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>>
      */
     public function calculateForRoute(DungeonRoute $dungeonRoute, bool $useFacade): array;
 

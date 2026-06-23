@@ -94,11 +94,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
     public function getCombatLogRoute(): CombatLogRouteCorrectionRequestModel
     {
-        /** @var Collection<CombatLogRouteNpcRequestModel> $npcs */
+        /** @var Collection<int, CombatLogRouteNpcRequestModel> $npcs */
         $npcs = new Collection();
-        /** @var Collection<CombatLogRouteSpellRequestModel> $npcs */
+        /** @var Collection<int, CombatLogRouteSpellRequestModel> $spells */
         $spells = new Collection();
-        /** @var Collection<CombatLogRoutePlayerDeathRequestModel> $playerDeaths */
+        /** @var Collection<int, CombatLogRoutePlayerDeathRequestModel> $playerDeaths */
         $playerDeaths = new Collection();
 
         try {

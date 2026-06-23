@@ -42,11 +42,13 @@ class CombatLogNpcCharacteristicObservation extends Model
         ];
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Characteristic, $this> */
     public function characteristic(): BelongsTo
     {
         return $this->belongsTo(Characteristic::class);

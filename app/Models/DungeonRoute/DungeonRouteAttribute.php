@@ -25,11 +25,13 @@ class DungeonRouteAttribute extends Model
         'dungeon_route_id',
     ];
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<RouteAttribute, $this> */
     public function routeAttribute(): BelongsTo
     {
         return $this->belongsTo(RouteAttribute::class);

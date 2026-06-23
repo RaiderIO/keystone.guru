@@ -14,7 +14,9 @@ class KillZoneEnemyRepository extends StubRepository implements KillZoneEnemyRep
         parent::__construct(KillZoneEnemy::class);
     }
 
-    /** @param Collection<int> $killZoneIds */
+    /**
+     * @param Collection<int, int> $killZoneIds
+     */
     public function resetEnemyIdByKillZoneIds(Collection $killZoneIds): void
     {
     }
@@ -23,7 +25,9 @@ class KillZoneEnemyRepository extends StubRepository implements KillZoneEnemyRep
     {
     }
 
-    /** @param Collection<int> $killZoneIds */
+    /**
+     * @param Collection<int, int> $killZoneIds
+     */
     public function deleteOrphanedByKillZoneIds(Collection $killZoneIds): void
     {
     }

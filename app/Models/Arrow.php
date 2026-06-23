@@ -54,16 +54,19 @@ class Arrow extends Model
         ];
     }
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return HasOne<Polyline, $this> */
     public function polyline(): HasOne
     {
         return $this->hasOne(Polyline::class, 'model_id')->where('model_class', static::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);

@@ -39,6 +39,9 @@ final class ExtraAttacksTest extends PublicTestCase
         Assert::assertEquals($expectedAmount, $suffix->getAmount());
     }
 
+    /**
+     * @return array<string, array<int, int|string>>
+     */
     public static function parseEvent_givenExtraAttacksEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

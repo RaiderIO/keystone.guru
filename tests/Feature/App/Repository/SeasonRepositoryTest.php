@@ -86,8 +86,8 @@ final class SeasonRepositoryTest extends PublicTestCase
     {
         // Arrange — find a dungeon with at least two past seasons so we can confirm ordering
         /** @var Dungeon|null $dungeon */
-        $dungeon = Dungeon::whereHas('seasonDungeons', static function ($query) {
-            $query->whereHas('season', static function ($seasonQuery) {
+        $dungeon = Dungeon::whereHas('seasonDungeons', static function (\Illuminate\Database\Eloquent\Builder $query): void {
+            $query->whereHas('season', static function (\Illuminate\Database\Eloquent\Builder $seasonQuery): void {
                 $seasonQuery->where('start', '<=', now());
             });
         }, '>=', 2)->first();

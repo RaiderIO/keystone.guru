@@ -172,6 +172,9 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->warning(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $updatedFields
+     */
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -232,6 +235,9 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->start(__METHOD__);
     }
 
+    /**
+     * @param array<int, mixed> $mdtNpcClone
+     */
     public function importEnemyPatrolsUnableToFindAttachedEnemy(
         int   $mdtCloneIndex,
         array $mdtNpcClone,
@@ -316,6 +322,9 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $latLng
+     */
     public function importMapPOIsMapIconAlreadyExists(int $mapIconId, array $latLng, string $mdtMapPOIName): void
     {
         $this->info(__METHOD__, get_defined_vars());

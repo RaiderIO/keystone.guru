@@ -34,7 +34,7 @@ class FactionSelectionRequiredRule implements ValidationRule
         $factionId = $this->request->get('faction_id');
 
         $result = !empty($value);
-        /** @var Collection<Dungeon> $factionSelectionRequired */
+        /** @var Collection<int, Dungeon> $factionSelectionRequired */
         $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
         if (in_array(intval($dungeonId), $factionSelectionRequired->pluck('id')->toArray())) {

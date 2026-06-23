@@ -302,6 +302,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         // Cache some variables, so we don't continuously query data that never changes (unless there's a patch)
+        /** @var array<string, mixed> $globalViewVariables */
         $globalViewVariables = $viewService->getGlobalViewVariables();
 
         // All views
@@ -365,6 +366,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
             $view->with('demoRouteMapping', $globalViewVariables['demoRouteMapping']);
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('defaultGameVersion', GameVersion::getDefaultGameVersion());
@@ -413,6 +415,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
 
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
@@ -451,6 +454,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var Expansion|null $expansion */
             $expansion = $view->getData()['expansion'] ?? null;
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var ExpansionData $expansionsData */
             $expansionsData = $regionViewVariables['expansionsData']->get(($expansion ?? $gameVersion->expansion)->shortname);
@@ -464,6 +468,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentExpansion', $regionViewVariables['currentExpansion']);
             $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
@@ -490,6 +495,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'common.forms.createroutetemporary',
         ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
 
             /** @var Season $currentSeason */
@@ -529,6 +535,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('allExpansions', $globalViewVariables['allExpansions']->pluck('id', 'shortname'));
             $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
@@ -555,6 +562,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
@@ -579,6 +587,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
@@ -613,6 +622,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var Season $selectedSeason */
             $selectedSeason         = $regionViewVariables['currentSeason'];
@@ -637,6 +647,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
             $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
@@ -690,6 +701,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             &$userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
@@ -704,6 +716,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $userOrDefaultRegion
         ) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            /** @var array<string, mixed> $regionViewVariables */
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $shroudedBountyTypes = [];
             foreach (SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {

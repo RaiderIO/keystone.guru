@@ -1,16 +1,17 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Dungeon>                         $weeklyRouteDungeons
- * @var Collection<string, Collection<WeeklyRoute>> $weeklyRoutes
- * @var Collection<DungeonRoute>                    $popularDungeonRoutesByDungeon
- * @var bool                                        $adFree
- * @var bool                                        $isMobile
+ * @var Collection<int, Dungeon>                         $weeklyRouteDungeons
+ * @var Collection<string, Collection<int, WeeklyRoute>> $weeklyRoutes
+ * @var Collection<int, DungeonRoute>                    $popularDungeonRoutesByDungeon
+ * @var bool                                             $adFree
+ * @var bool                                             $isMobile
  */
 
 ?>

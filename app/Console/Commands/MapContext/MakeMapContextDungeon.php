@@ -34,7 +34,7 @@ class MakeMapContextDungeon extends Command
     ): int {
         $output = $this->option('output') ?? storage_path('mapcontext');
 
-        /** @var Collection<Dungeon> $dungeonsById */
+        /** @var Collection<int, Dungeon> $dungeonsById */
         $dungeonsById     = Dungeon::all()->keyBy('id');
         $allowedLanguages = language()->allowed();
 
