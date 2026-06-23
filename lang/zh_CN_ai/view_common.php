@@ -473,7 +473,7 @@ return [
             'horde'                                  => '部落',
             'new_mapping_version_header_title'       => '此地下城有新的映射版本',
             'new_mapping_version_header_description' => 'Keystone.guru 为每个地下城使用映射版本。每当暴雪对地图进行更改或修正错误时，都会创建一个新的映射版本。使用以前映射版本创建的路线不会自动更新到最新版本。此警告表示此路线使用的映射版本已过时，可能不代表游戏内的地图。',
-            'route' => '路线',
+            'route'                                  => '路线',
         ],
     ],
     'mappingversion' => [
@@ -567,7 +567,7 @@ return [
             'copy_to_clipboard'                => '复制到剪贴板',
         ],
         'simulate' => [
-            'intro' => '要使用模拟功能，请为您的角色生成一个SimulationCraft字符串，并将生成的Keystone.guru字符串粘贴到角色的输出字符串下。然后像往常一样点击模拟！如果您使用raidbots.com，通过插件或网站创建您角色的SimC字符串，选择高级选项，然后将Keystone.guru的输出粘贴到您角色的SimC字符串下。',
+            'intro'                      => '要使用模拟功能，请为您的角色生成一个SimulationCraft字符串，并将生成的Keystone.guru字符串粘贴到角色的输出字符串下。然后像往常一样点击模拟！如果您使用raidbots.com，通过插件或网站创建您角色的SimC字符串，选择高级选项，然后将Keystone.guru的输出粘贴到您角色的SimC字符串下。',
             'title'                      => '模拟路线',
             'get_simulationcraft_string' => '获取SimulationCraft字符串',
             'simulationcraft_string'     => 'Simulationcraft字符串',
@@ -618,12 +618,12 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '远程拉怪补偿码数',
                 'ranged_pull_compensation_yards_title' => '在进行M+跑时，您不会从一组跑到另一组并用身体拉怪 - 您大多数时候使用远程技能拉怪。此值允许您补偿远程技能并减少组之间的延迟。注意：这将减少行走距离，因此将其设置为您技能的最大范围可能不适合准确的模拟结果。除非您在组之间没有停顿地连续拉怪，否则应该设置为您技能最大范围的50%-75%。',
-                'use_mounts'        => '使用坐骑',
-                'use_mounts_title'  => '将尝试使用您的坐骑（如果更快且可用）来减少当前拉怪和下一个拉怪之间的距离。',
-                'patreon_link_text' => 'Patreon',
-                'patreon_only'      => '如果您订阅了Keystone.guru的:patreon，则可以使用高级模拟选项。',
-                'advanced_options'  => '高级选项',
-                'description'       => '高级选项旨在进一步提高生成的模拟工艺字符串的准确性，并使数字更接近于您在现实中会遇到的情况。',
+                'use_mounts'                           => '使用坐骑',
+                'use_mounts_title'                     => '将尝试使用您的坐骑（如果更快且可用）来减少当前拉怪和下一个拉怪之间的距离。',
+                'patreon_link_text'                    => 'Patreon',
+                'patreon_only'                         => '如果您订阅了Keystone.guru的:patreon，则可以使用高级模拟选项。',
+                'advanced_options'                     => '高级选项',
+                'description'                          => '高级选项旨在进一步提高生成的模拟工艺字符串的准确性，并使数字更接近于您在现实中会遇到的情况。',
             ],
         ],
         'uploadlogs' => [

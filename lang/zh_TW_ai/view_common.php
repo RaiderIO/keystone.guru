@@ -570,7 +570,7 @@ return [
             'copy_to_clipboard'                => '複製到剪貼板',
         ],
         'simulate' => [
-            'intro' => '要使用模擬功能，請為您的角色生成 SimulationCraft 字串，並將產生的 Keystone.guru 字串粘貼在角色的輸出字串下。然後像平常一樣點擊模擬！如果您使用 raidbots.com，請通過插件或網站創建您的角色 SimC 字串，選擇高級，然後在角色的 SimC 字串下粘貼 Keystone.guru 的輸出。',
+            'intro'                      => '要使用模擬功能，請為您的角色生成 SimulationCraft 字串，並將產生的 Keystone.guru 字串粘貼在角色的輸出字串下。然後像平常一樣點擊模擬！如果您使用 raidbots.com，請通過插件或網站創建您的角色 SimC 字串，選擇高級，然後在角色的 SimC 字串下粘貼 Keystone.guru 的輸出。',
             'title'                      => '模擬路線',
             'get_simulationcraft_string' => '獲取 SimulationCraft 字串',
             'simulationcraft_string'     => 'Simulationcraft 字串',
@@ -621,12 +621,12 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '遠程拉怪補償碼',
                 'ranged_pull_compensation_yards_title' => '進行 M+ 運行時，您從不從一群怪跑到另一群怪並身體拉怪——大多數時候您使用遠程技能來拉怪。此值允許您補償遠程技能，並減少群怪之間的延遲。注意：這將減少行走距離，因此不建議將其設置為技能的最大範圍以獲得準確的模擬結果。除非您在沒有間隙的情況下連續拉怪，否則應在技能最大範圍的 50%-75% 之間。',
-                'use_mounts'        => '使用坐騎',
-                'use_mounts_title'  => '將嘗試使用您的坐騎（如果更快且可用）來減少當前拉怪和下一次拉怪之間的距離。',
-                'patreon_link_text' => 'Patreon',
-                'patreon_only'      => '如果您訂閱 Keystone.guru 的 :patreon，則可使用高級模擬選項。',
-                'advanced_options'  => '高級選項',
-                'description'       => '高級選項旨在進一步提高生成的模擬製作字串的準確性，使數字更接近您在現實中會體驗到的情況。',
+                'use_mounts'                           => '使用坐騎',
+                'use_mounts_title'                     => '將嘗試使用您的坐騎（如果更快且可用）來減少當前拉怪和下一次拉怪之間的距離。',
+                'patreon_link_text'                    => 'Patreon',
+                'patreon_only'                         => '如果您訂閱 Keystone.guru 的 :patreon，則可使用高級模擬選項。',
+                'advanced_options'                     => '高級選項',
+                'description'                          => '高級選項旨在進一步提高生成的模擬製作字串的準確性，使數字更接近您在現實中會體驗到的情況。',
             ],
         ],
         'uploadlogs' => [

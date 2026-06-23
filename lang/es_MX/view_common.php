@@ -473,7 +473,7 @@ return [
             'horde'                                  => '',
             'new_mapping_version_header_title'       => '',
             'new_mapping_version_header_description' => '',
-            'route' => '',
+            'route'                                  => '',
         ],
     ],
     'mappingversion' => [
@@ -567,7 +567,7 @@ return [
             'copy_to_clipboard'                => '',
         ],
         'simulate' => [
-            'intro' => '',
+            'intro'                      => '',
             'title'                      => '',
             'get_simulationcraft_string' => '',
             'simulationcraft_string'     => '',
@@ -618,12 +618,12 @@ return [
             'advanced' => [
                 'ranged_pull_compensation_yards'       => '',
                 'ranged_pull_compensation_yards_title' => '',
-                'use_mounts'        => '',
-                'use_mounts_title'  => '',
-                'patreon_link_text' => '',
-                'patreon_only'      => '',
-                'advanced_options'  => '',
-                'description'       => '',
+                'use_mounts'                           => '',
+                'use_mounts_title'                     => '',
+                'patreon_link_text'                    => '',
+                'patreon_only'                         => '',
+                'advanced_options'                     => '',
+                'description'                          => '',
             ],
         ],
         'uploadlogs' => [
