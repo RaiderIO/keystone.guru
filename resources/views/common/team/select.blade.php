@@ -4,7 +4,7 @@ use App\Models\Team;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Team> $teams
+ * @var Collection<int, Team> $teams
  **/
 
 $id         ??= 'team_id_select';

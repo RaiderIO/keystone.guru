@@ -57,10 +57,9 @@ class HtmlSanitizer
     }
 
     /**
-     * @param  DOMNode $element
-     * @param  array   $allowedTags
-     * @param  array   $allowedDomains
-     * @return void
+     * @param DOMNode            $element
+     * @param array<int, string> $allowedTags
+     * @param array<int, string> $allowedDomains
      */
     private function sanitizeNode(DOMNode $element, array $allowedTags, array $allowedDomains): void
     {

@@ -263,7 +263,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 $challengeMode = new CombatLogRouteChallengeModeRequestModel(
                     $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
                     $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
-                    $challengeModeEndEvent->getSuccess(),
+                    (bool)$challengeModeEndEvent->getSuccess(),
                     $challengeModeEndEvent->getTotalTimeMS(),
                     $challengeModeEndEvent->getTotalTimeMS(),
                     $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?

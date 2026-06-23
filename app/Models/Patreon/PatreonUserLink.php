@@ -56,16 +56,19 @@ class PatreonUserLink extends Model
         return $this->refresh_token === self::PERMANENT_TOKEN;
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return HasMany<PatreonUserBenefit, $this> */
     public function patreonUserBenefits(): HasMany
     {
         return $this->hasMany(PatreonUserBenefit::class);
     }
 
+    /** @return BelongsToMany<PatreonBenefit, $this> */
     public function patreonBenefits(): BelongsToMany
     {
         return $this->belongsToMany(PatreonBenefit::class, 'patreon_user_benefits');

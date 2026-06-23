@@ -9,6 +9,10 @@ use App\Models\Mapping\MappingVersion;
  */
 readonly class DungeonRouteSearchFilter
 {
+    /**
+     * @param array<int, int>|null $includedEnemies
+     * @param array<int, int>|null $excludedEnemies
+     */
     public function __construct(
         public MappingVersion $mappingVersion,
         public int            $offset = 0,
@@ -22,6 +26,9 @@ readonly class DungeonRouteSearchFilter
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(
         MappingVersion $mappingVersion,
         array          $data,

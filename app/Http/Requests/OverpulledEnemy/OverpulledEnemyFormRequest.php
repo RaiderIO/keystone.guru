@@ -14,9 +14,7 @@ class OverpulledEnemyFormRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, array<int, string>|string> */
     public function rules(): array
     {
         return [

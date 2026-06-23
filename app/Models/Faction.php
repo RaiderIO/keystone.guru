@@ -54,11 +54,13 @@ class Faction extends CacheModel
         self::FACTION_ALLIANCE    => 3,
     ];
 
+    /** @return HasMany<CharacterRace, $this> */
     public function races(): HasMany
     {
         return $this->hasMany(CharacterRace::class);
     }
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);

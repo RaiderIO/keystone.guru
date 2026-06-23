@@ -134,8 +134,6 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @param string|null $ttl
-     *
      * @return bool
      * @throws InvalidArgumentException
      */
@@ -205,6 +203,9 @@ class CacheService implements CacheServiceInterface
         return Cache::lock($key, 10, 'default')->block($waitFor, $callable);
     }
 
+    /**
+     * @param array<int, string> $regexes
+     */
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int
     {
         if (empty($regexes)) {
@@ -236,6 +237,9 @@ class CacheService implements CacheServiceInterface
         return $totalDeletedCount;
     }
 
+    /**
+     * @param array<int, string> $regexes
+     */
     private function deleteKeysByPatternOnConnection(
         Connection $redis,
         array      $regexes,

@@ -4,6 +4,9 @@ namespace App\Service\Traits;
 
 trait Curl
 {
+    /**
+     * @param array<string, mixed> $options
+     */
     public function curlGet(string $url, array $options = []): string
     {
         $ch = curl_init();
@@ -51,6 +54,10 @@ trait Curl
         return file_put_contents($filePath, $rawImage) !== false;
     }
 
+    /**
+     * @param array<string, mixed>  $postBody
+     * @param array<string, string> $headers
+     */
     public function curlPost(string $url, array $postBody = [], array $headers = []): string
     {
         // https://stackoverflow.com/questions/51747829/how-to-send-a-embedded-webhook-using-php-discord

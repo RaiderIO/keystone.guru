@@ -52,6 +52,7 @@ class LiveSession extends Model
         return 'public_key';
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -59,12 +60,15 @@ class LiveSession extends Model
 
     /**
      * Get the dungeon route that this live session is attached to.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
      */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return HasMany<OverpulledEnemy, $this> */
     public function overpulledEnemies(): HasMany
     {
         return $this->hasMany(OverpulledEnemy::class);

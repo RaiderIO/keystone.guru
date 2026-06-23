@@ -48,6 +48,9 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
         $this->assertCount(10, $result);
     }
 
+    /**
+     * @return array<string, list<int>>
+     */
     public static function getDisplayedAffixGroups_GivenOffset_ShouldReturnCorrectCount_dataProvider(): array
     {
         return [

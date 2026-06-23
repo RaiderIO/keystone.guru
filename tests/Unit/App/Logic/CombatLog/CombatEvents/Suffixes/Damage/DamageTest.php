@@ -32,6 +32,9 @@ class DamageTest extends PublicTestCase
         $this->assertInstanceOf(DamageInterface::class, $suffix);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider(): array
     {
         return [

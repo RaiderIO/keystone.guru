@@ -50,7 +50,7 @@ class SpellService implements SpellServiceInterface
             }
 
             if (isset($spellsAttributes[$spellId])) {
-                $this->log->importFromCsvSpellAlreadySet($spellId);
+                $this->log->importFromCsvSpellAlreadySet((int)$spellId);
 
                 continue;
             }
@@ -84,7 +84,7 @@ class SpellService implements SpellServiceInterface
                 $updated++;
             } else {
                 if (Spell::create($spellAttributes)) { // @phpstan-ignore if.alwaysTrue
-                    $this->log->importFromCsvInsertNewSpell($spellId);
+                    $this->log->importFromCsvInsertNewSpell((int)$spellId);
                     $inserted++;
                 }
             }

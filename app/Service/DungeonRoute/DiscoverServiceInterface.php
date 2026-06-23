@@ -57,32 +57,46 @@ interface DiscoverServiceInterface
     |
     */
 
+    /** @return Collection<int, mixed> */
     public function popular(): Collection;
 
+    /** @return Collection<string, mixed> */
     public function popularGroupedByDungeon(): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<string, mixed> */
     public function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularByDungeon(Dungeon $dungeon): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularBySeason(Season $season): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<int, mixed> */
     public function new(): Collection;
 
+    /** @return Collection<int, mixed> */
     public function newByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<int, mixed> */
     public function newByDungeon(Dungeon $dungeon): Collection;
 
+    /** @return Collection<int, mixed> */
     public function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<int, mixed> */
     public function newBySeason(Season $season): Collection;
 
+    /** @return Collection<int, mixed> */
     public function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection;
 
     /*
@@ -94,11 +108,15 @@ interface DiscoverServiceInterface
     |
     */
 
+    /** @return Collection<int, mixed> */
     public function popularUsers(): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularUsersByAffixGroup(AffixGroupBase $affixGroup): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularUsersByDungeon(Dungeon $dungeon): Collection;
 
+    /** @return Collection<int, mixed> */
     public function popularUsersByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection;
 }

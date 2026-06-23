@@ -33,16 +33,19 @@ class DungeonRouteEnemyRaidMarker extends Model
 
     public $timestamps = false;
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<RaidMarker, $this> */
     public function raidMarker(): BelongsTo
     {
         return $this->belongsTo(RaidMarker::class);
     }
 
+    /** @return BelongsTo<Enemy, $this> */
     public function enemy(): BelongsTo
     {
         return $this->belongsTo(Enemy::class);

@@ -36,6 +36,7 @@ class ChallengeModeRunData extends Model
         'processed',
     ];
 
+    /** @return BelongsTo<ChallengeModeRun, $this> */
     public function challengeModeRun(): BelongsTo
     {
         return $this->belongsTo(ChallengeModeRun::class);

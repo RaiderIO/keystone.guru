@@ -46,6 +46,7 @@ class CombatLogSpellEvent extends Model
         ];
     }
 
+    /** @return BelongsTo<Spell, $this> */
     public function spell(): BelongsTo
     {
         return $this->belongsTo(Spell::class);

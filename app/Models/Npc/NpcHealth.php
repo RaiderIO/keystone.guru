@@ -34,11 +34,13 @@ class NpcHealth extends CacheModel
         'percentage',
     ];
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<GameVersion, $this> */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);

@@ -8,6 +8,9 @@ use Illuminate\Support\Collection;
 
 interface MDTMappingVersionServiceInterface
 {
+    /**
+     * @return Collection<int, float>|null
+     */
     public function getMappingVersionAccuracy(MappingVersion $mappingVersion): ?Collection;
 
     /**

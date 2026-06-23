@@ -55,16 +55,16 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 {
     private const DUNGEON_DATA_DIR = 'seeders/dungeondata/';
 
-    /** @var Collection<array> */
-    private Collection $importedModels;
+    /** @var array<string, Collection<int, array<string, mixed>>> */
+    private array $importedModels;
 
-    /** @var Collection<RelationMapping> */
-    private Collection $relationMapping;
+    /** @var array<int, RelationMapping> */
+    private array $relationMapping;
 
     public function __construct()
     {
-        $this->importedModels  = collect();
-        $this->relationMapping = collect([
+        $this->importedModels  = [];
+        $this->relationMapping = [
             // Loose files
             new MappingVersionRelationMapping(),
             new MappingCommitLogRelationMapping(),
@@ -83,7 +83,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             new MountableAreaRelationMapping(),
             new FloorUnionRelationMapping(),
             new FloorUnionAreaRelationMapping(),
-        ]);
+        ];
 
         $this->resetImportedModels();
     }
@@ -238,7 +238,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     {
         // Init the place where we store all models so we can insert them all at once
         foreach ($this->relationMapping as $relationMapping) {
-            $this->importedModels->put($relationMapping->getClass(), collect());
+            $this->importedModels[$relationMapping->getClass()] = collect();
         }
     }
 
@@ -256,10 +256,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                 continue;
             }
 
-            $instance   = new ($mapping->getClass())();
-            $liveTable  = $instance->getTable();
-            $tempTable  = DatabaseSeeder::getTempTableName($mapping->getClass());
-            $setClauses = collect($preservedColumns)
+            $instance  = new ($mapping->getClass())();
+            $liveTable = $instance->getTable();
+            $tempTable = DatabaseSeeder::getTempTableName($mapping->getClass());
+            /** @var Collection<int, string> $columns */
+            $columns    = collect($preservedColumns);
+            $setClauses = $columns
                 ->map(fn(string $col) => sprintf('t.%s = orig.%s', $col, $col))
                 ->implode(', ');
 
@@ -277,7 +279,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
     {
         foreach ($this->importedModels as $class => $models) {
             /** @var class-string<Model> $class */
-            /** @var Collection $models */
+            /** @var Collection<int, array<string, mixed>> $models */
             if ($models->isEmpty()) {
                 continue;
             }
@@ -475,12 +477,9 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Bulk save the models that did not need any post-attribute parsing
         if ($modelsToSave->isNotEmpty()) {
-            /** @var Collection $importedModels */
-            $importedModels = $this->importedModels->get($mapping->getClass());
-            $this->importedModels->put(
-                $mapping->getClass(),
-                $importedModels->merge($modelsToSave),
-            );
+            /** @var Collection<int, array<string, mixed>> $importedModels */
+            $importedModels                             = $this->importedModels[$mapping->getClass()] ?? collect();
+            $this->importedModels[$mapping->getClass()] = $importedModels->merge($modelsToSave);
         }
 
         // $this->command->info('OK _loadModelsFromFile ' . $filePath . ' ' . $modelClassName);
@@ -492,7 +491,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->command->warn('Truncating all relevant data...');
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        /** @var Collection<DungeonRoute> $demoRoutes */
+        /** @var Collection<int, DungeonRoute> $demoRoutes */
         $demoRoutes = DungeonRoute::with([
             'brushlines',
             'paths',

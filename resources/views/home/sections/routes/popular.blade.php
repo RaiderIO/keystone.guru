@@ -5,7 +5,7 @@ use Illuminate\Support\Collection;
 use App\Models\DungeonRoute\DungeonRoute;
 
 /**
- * @var Collection<DungeonRoute> $dungeonRoutes
+ * @var Collection<int, DungeonRoute> $dungeonRoutes
  */
 ?>
 <div class="row my-4 px-2">

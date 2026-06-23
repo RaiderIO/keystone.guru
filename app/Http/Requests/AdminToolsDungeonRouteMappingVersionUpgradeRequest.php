@@ -13,6 +13,7 @@ class AdminToolsDungeonRouteMappingVersionUpgradeRequest extends FormRequest
         return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
+    /** @return array<string, array<int, string>|string> */
     public function rules(): array
     {
         return [];

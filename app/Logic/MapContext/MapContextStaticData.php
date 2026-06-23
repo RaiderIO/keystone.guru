@@ -17,6 +17,9 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MapContextStaticData implements Arrayable
 {
     use RemembersToFile;
@@ -39,8 +42,8 @@ class MapContextStaticData implements Arrayable
             $selectableSpells = Spell::where('selectable', true)
                 ->selectRaw('spells.*, translations.translation as name')
                 ->leftJoin('translations', function (JoinClause $clause) {
-                    $clause->on('translations.key', 'spells.name')
-                        ->on('translations.locale', DB::raw(sprintf('"%s"', $this->locale)));
+                    $clause->on('translations.key', '=', 'spells.name')
+                        ->on('translations.locale', '=', DB::raw(sprintf('"%s"', $this->locale)));
                 })
                 ->get()
                 ->makeHidden([

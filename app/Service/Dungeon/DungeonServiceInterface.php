@@ -18,5 +18,8 @@ interface DungeonServiceInterface
         ?User   $user = null,
     ): void;
 
+    /**
+     * @return Collection<int, Dungeon>
+     */
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
 }

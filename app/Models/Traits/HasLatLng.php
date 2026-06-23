@@ -33,6 +33,7 @@ trait HasLatLng
         return $this;
     }
 
+    /** @return array<string, array<string, mixed>> */
     public function getCoordinatesData(CoordinatesServiceInterface $coordinatesService): array
     {
         if (!$this->hasValidLatLng()) {

@@ -8,13 +8,13 @@ use Illuminate\Support\Collection;
 use App\Models\User;
 
 /**
- * @var Collection<DungeonRoute> $demoRoutes
- * @var Collection<Dungeon>      $demoRouteDungeons
- * @var array                    $demoRouteMapping
- * @var int                      $userCount
- * @var string                   $theme
- * @var Season                   $currentSeason
- * @var GameVersion              $defaultGameVersion
+ * @var Collection<int, DungeonRoute> $demoRoutes
+ * @var Collection<int, Dungeon>      $demoRouteDungeons
+ * @var array<int, string>            $demoRouteMapping
+ * @var int                           $userCount
+ * @var string                        $theme
+ * @var Season                        $currentSeason
+ * @var GameVersion                   $defaultGameVersion
  */
 
 $dungeonSelectId    = 'demo_dungeon_id';

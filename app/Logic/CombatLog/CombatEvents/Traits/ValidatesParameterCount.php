@@ -15,6 +15,9 @@ trait ValidatesParameterCount
         return 0;
     }
 
+    /**
+     * @param array<int, mixed> $parameters
+     */
     public function validateParameters(array $parameters): void
     {
         $parameterCount = count($parameters);

@@ -22,6 +22,9 @@ class ChallengeModeStart extends SpecialEvent implements HasCombatLogDungeonCont
 
     private int $keystoneLevel;
 
+    /**
+     * @var array<int, int>
+     */
     private array $affixIDs = [];
 
     public function getZoneName(): string
@@ -49,12 +52,18 @@ class ChallengeModeStart extends SpecialEvent implements HasCombatLogDungeonCont
         return $this->getKeystoneLevel();
     }
 
+    /**
+     * @return array<int, int>|null
+     */
     public function getAffixIDs(): ?array
     {
         return $this->affixIDs;
     }
 
     #[Override]
+    /**
+     * @param array<int, mixed> $parameters
+     */
     public function setParameters(array $parameters): self
     {
         parent::setParameters($parameters);

@@ -28,11 +28,13 @@ class DungeonRoutePlayerClass extends Model
 
     public $timestamps = false;
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<CharacterClass, $this> */
     public function characterClass(): BelongsTo
     {
         return $this->belongsTo(CharacterClass::class);

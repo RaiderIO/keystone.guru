@@ -51,6 +51,9 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, string> $guids
+     */
     public function buildKillZonesCreateNewFinalPull(array $guids): void
     {
         $this->debug(__METHOD__, get_defined_vars());

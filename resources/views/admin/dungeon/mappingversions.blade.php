@@ -5,9 +5,9 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                 $dungeon
- * @var bool                    $hasUnmergedMappingVersion
- * @var Collection<GameVersion> $allGameVersions
+ * @var Dungeon                      $dungeon
+ * @var bool                         $hasUnmergedMappingVersion
+ * @var Collection<int, GameVersion> $allGameVersions
  */
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);

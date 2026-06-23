@@ -7,6 +7,9 @@ use Exception;
 
 class CombatLogEventServiceLogging extends StructuredLogging implements CombatLogEventServiceLoggingInterface
 {
+    /**
+     * @param array<string, mixed> $filters
+     */
     public function getCombatLogEventsStart(array $filters): void
     {
         $this->start(__METHOD__, get_defined_vars());
@@ -22,6 +25,9 @@ class CombatLogEventServiceLogging extends StructuredLogging implements CombatLo
         $this->end(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed> $filters
+     */
     public function getGeotileGridAggregationStart(array $filters): void
     {
         $this->start(__METHOD__, get_defined_vars());
@@ -47,6 +53,9 @@ class CombatLogEventServiceLogging extends StructuredLogging implements CombatLo
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, int> $runCount
+     */
     public function getRunCountPerDungeonResult(array $runCount): void
     {
         $this->debug(__METHOD__, get_defined_vars());

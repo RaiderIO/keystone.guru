@@ -38,6 +38,11 @@ final class AdvancedDataTest extends PublicTestCase
 
     /**
      * @throws \Exception
+     *
+     * @param array<int, mixed> $expectedPowerType
+     * @param array<int, mixed> $expectedCurrentPower
+     * @param array<int, mixed> $expectedMaxPower
+     * @param array<int, mixed> $expectedPowerCost
      */
     #[Test]
     #[Group('CombatLog')]
@@ -91,6 +96,9 @@ final class AdvancedDataTest extends PublicTestCase
         Assert::assertEquals($expectedLevel, $advancedData->getLevel());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_ShouldReturnAdvancedRangeDamageEvent_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [
@@ -112,6 +120,9 @@ final class AdvancedDataTest extends PublicTestCase
         ];
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_ShouldReturnValidAdvancedData_GivenAdvancedRangeDamageEvent_DataProvider(): array
     {
         return [

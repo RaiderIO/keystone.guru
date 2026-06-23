@@ -12,11 +12,19 @@ class DungeonRoutePlayerClassRelationParser implements RelationParserInterface
         return $modelClassName === DungeonRoute::class;
     }
 
+    /**
+     * @param array<string, mixed> $value
+     */
     public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'playerclasses';
     }
 
+    /**
+     * @param  array<string, mixed> $modelData
+     * @param  array<string, mixed> $value
+     * @return array<string, mixed>
+     */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $playerClass) {

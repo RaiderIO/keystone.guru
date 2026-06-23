@@ -16,8 +16,10 @@ class GameVersionController extends Controller
         GameVersion                 $gameVersion,
         GameVersionServiceInterface $gameVersionService,
     ): RedirectResponse {
-        $previousGameVersion = $gameVersionService->getGameVersion(Auth::user());
-        $gameVersionService->setGameVersion($gameVersion, Auth::user());
+        /** @var \App\Models\User|null $user */
+        $user                = Auth::user();
+        $previousGameVersion = $gameVersionService->getGameVersion($user);
+        $gameVersionService->setGameVersion($gameVersion, $user);
 
         // If the referer page's route contains "dungeonroutes" we redirect to the "dungeonroutes" route instead
         $referer = $request->headers->get('referer');

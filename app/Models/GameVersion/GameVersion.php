@@ -30,7 +30,7 @@ use Override;
  * @property Expansion                               $expansion
  * @property EloquentCollection<int, MappingVersion> $mappingVersions
  *
- * @method static Builder active()
+ * @method static Builder<GameVersion> active()
  */
 class GameVersion extends CacheModel
 {
@@ -88,6 +88,8 @@ class GameVersion extends CacheModel
 
     /**
      * Scope a query to only include active dungeons.
+     * @param  Builder<GameVersion> $query
+     * @return Builder<GameVersion>
      */
     #[Scope]
     protected function active(Builder $query): Builder
@@ -95,16 +97,25 @@ class GameVersion extends CacheModel
         return $query->where('game_versions.active', 1);
     }
 
+    /**
+     * @return BelongsTo<Expansion, $this>
+     */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
     }
 
+    /**
+     * @return HasMany<MappingVersion, $this>
+     */
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class);
     }
 
+    /**
+     * @return Collection<int, MappingVersion>
+     */
     public function getDungeonsWithHeatmapsEnabled(): Collection
     {
         return $this->mappingVersions->filter(fn(

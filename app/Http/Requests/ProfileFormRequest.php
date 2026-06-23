@@ -19,9 +19,7 @@ class ProfileFormRequest extends FormRequest
         //return Auth::user()?->hasRole(Role::ROLE_ALL) ?? false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         /** @var User $user */

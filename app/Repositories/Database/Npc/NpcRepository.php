@@ -16,7 +16,9 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
     {
         parent::__construct(Npc::class);
     }
-
+    /**
+     * @return Collection<int, Npc>
+     */
     public function getInUseNpcs(MappingVersion $mappingVersion): Collection
     {
         $mappingVersion->load('dungeon');
@@ -128,6 +130,11 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             ->get();
     }
 
+    /**
+    /**
+     * @param  Collection<int, Npc>|null $inUseNpcs
+     * @return Collection<int, int>
+     */
     public function getInUseNpcIds(MappingVersion $mappingVersion, ?Collection $inUseNpcs = null): Collection
     {
         return ($inUseNpcs ?? $this->getInUseNpcs($mappingVersion))

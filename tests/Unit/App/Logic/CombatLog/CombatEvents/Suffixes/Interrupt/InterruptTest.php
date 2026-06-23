@@ -43,6 +43,9 @@ final class InterruptTest extends PublicTestCase
         Assert::assertEquals($expectedExtraSchool, $suffix->getExtraSchool());
     }
 
+    /**
+     * @return array<string, array<int, int|string>>
+     */
     public static function parseEvent_givenInterruptEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

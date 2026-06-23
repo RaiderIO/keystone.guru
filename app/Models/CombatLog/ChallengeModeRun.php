@@ -53,16 +53,19 @@ class ChallengeModeRun extends Model
         'challengeModeRunData',
     ];
 
+    /** @return HasOne<Dungeon, $this> */
     public function dungeon(): HasOne
     {
         return $this->hasOne(Dungeon::class);
     }
 
+    /** @return HasOne<DungeonRoute, $this> */
     public function dungeonRoute(): HasOne
     {
         return $this->hasOne(DungeonRoute::class);
     }
 
+    /** @return HasOne<ChallengeModeRunData, $this> */
     public function challengeModeRunData(): HasOne
     {
         return $this->hasOne(ChallengeModeRunData::class);
@@ -88,10 +91,10 @@ class ChallengeModeRun extends Model
             0,
             0,
             0,
-            $hours,
-            $minutes,
-            $seconds,
-            $milliseconds,
+            (int)$hours,
+            (int)$minutes,
+            (int)$seconds,
+            (int)$milliseconds,
         );
 
         if ($hours > 0) {

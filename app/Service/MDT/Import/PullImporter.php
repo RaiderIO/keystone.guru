@@ -46,7 +46,7 @@ class PullImporter
         }
 
         $floors = $importStringPulls->getDungeon()->floors;
-        /** @var Collection<Enemy> $enemies */
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = $importStringPulls->getMappingVersion()->enemies->each(static function (Enemy $enemy) {
             $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
         });
@@ -136,7 +136,11 @@ class PullImporter
     }
 
     /**
-     * @param string|array $mdtNpcClones
+     * @param Collection<int|string, Collection<int, Enemy>> $mdtEnemiesByMdtNpcIndex
+     * @param Collection<int|string, Collection<int, Enemy>> $enemiesByNpcId
+     * @param Collection<int, NpcEnemyForces>                $enemyForcesByNpcIds
+     * @param array<int|string, mixed>                       $killZoneAttributes
+     * @param string|array<int, mixed>                       $mdtNpcClones
      */
     private function parseMdtNpcClonesInPull(
         ImportStringPulls $importStringPulls,

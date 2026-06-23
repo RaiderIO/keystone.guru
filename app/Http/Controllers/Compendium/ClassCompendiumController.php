@@ -33,7 +33,7 @@ class ClassCompendiumController extends Controller
 
         $characteristicIds = $spells->pluck('characteristic_id')->unique()->filter();
 
-        /** @var Collection<int, Collection<Npc>> $npcsByCharacteristicId */
+        /** @var Collection<int, Collection<int, Npc>> $npcsByCharacteristicId */
         $npcsByCharacteristicId = collect();
 
         if ($characteristicIds->isNotEmpty()) {

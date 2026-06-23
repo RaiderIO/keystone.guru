@@ -18,6 +18,8 @@ use Exception;
 class MappingVersionConditional implements ConditionalInterface
 {
     /**
+     * @param array<string, mixed> $modelData
+     *
      * @throws Exception
      */
     public function shouldParseModel(RelationMapping $relationMapping, array $modelData): bool

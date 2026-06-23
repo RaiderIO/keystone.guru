@@ -14,6 +14,7 @@ class APIOffsetPaginatedRequest extends APIFormRequest
         return true;
     }
 
+    /** @return array<string, array<int, string>|string> */
     public function rules(): array
     {
         return [

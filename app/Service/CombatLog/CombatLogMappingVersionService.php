@@ -135,7 +135,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor = null;
-        /** @var Collection<Npc> $npcs */
+        /** @var Collection<int, Npc> $npcs */
         $npcs = collect();
 
         $enemiesAttributes          = [];
