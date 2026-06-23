@@ -544,6 +544,9 @@ class ViewService implements ViewServiceInterface
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
         $previousForceRefresh = $this->forceRefresh;
@@ -588,6 +591,8 @@ class ViewService implements ViewServiceInterface
 
     /**
      * Base query shared by the dungeon/raid getters, ordered by most recent expansion then dungeon name.
+     *
+     * @return Builder<Dungeon>
      */
     private function dungeonsByExpansionQuery(): Builder
     {
