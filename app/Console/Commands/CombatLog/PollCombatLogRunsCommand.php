@@ -92,8 +92,10 @@ class PollCombatLogRunsCommand extends Command
             return self::SUCCESS;
         }
 
+        /** @var Collection<int|string, Dungeon> $dungeonsByChallengeModeId */
         $dungeonsByChallengeModeId = $allModelsByClass[Dungeon::class]->keyBy('challenge_mode_id');
-        $allSpecsByBlizzardId      = $allModelsByClass[CharacterClassSpecialization::class]->keyBy('specialization_id');
+        /** @var Collection<int|string, CharacterClassSpecialization> $allSpecsByBlizzardId */
+        $allSpecsByBlizzardId = $allModelsByClass[CharacterClassSpecialization::class]->keyBy('specialization_id');
 
         $totalDispatched       = 0;
         $totalSkippedParsed    = 0;
@@ -240,6 +242,7 @@ class PollCombatLogRunsCommand extends Command
         $criteria = [];
 
         foreach ($memberSpecIds as $blizzardSpecId) {
+            /** @var CharacterClassSpecialization $spec */
             $spec = $specsByBlizzardId->get($blizzardSpecId);
 
             if ($spec !== null) {

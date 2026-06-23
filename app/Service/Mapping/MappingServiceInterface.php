@@ -4,6 +4,7 @@ namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
@@ -15,7 +16,7 @@ interface MappingServiceInterface
     public function shouldSynchronizeMapping(): bool;
 
     /**
-     * @return Collection<int, mixed> A list of all changes to the mapping that have not been synchronized yet.
+     * @return Collection<int, MappingChangeLog> A list of all changes to the mapping that have not been synchronized yet.
      */
     public function getUnmergedMappingChanges(): Collection;
 

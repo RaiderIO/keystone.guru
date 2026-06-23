@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog;
 
+use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
@@ -36,7 +37,7 @@ interface CombatLogParsingCriteriaServiceInterface
     /**
      * Returns all criteria rows for today where count < threshold for the given model class.
      *
-     * @return Collection<int, mixed>
+     * @return Collection<int, CombatLogParsingCriterion>
      */
     public function getBelowThresholdCriteria(int $combatLogVersion, string $modelClass): Collection;
 
@@ -45,8 +46,8 @@ interface CombatLogParsingCriteriaServiceInterface
      * - Dungeon: all dungeons belonging to the given season
      * - CharacterClassSpecialization: all specializations
      *
-     * @param  class-string<CombatLogCriterionModelInterface> $modelClass
-     * @return Collection<int, mixed>
+     * @param  class-string<CombatLogCriterionModelInterface>    $modelClass
+     * @return Collection<int, CombatLogCriterionModelInterface>
      */
     public function getAllModelsForCriteria(string $modelClass, Season $season): Collection;
 
@@ -55,8 +56,8 @@ interface CombatLogParsingCriteriaServiceInterface
      * models with no row yet (implicit count = 0) and models with count < threshold.
      * Models with count >= threshold are excluded.
      *
-     * @param  class-string<CombatLogCriterionModelInterface> $modelClass
-     * @return Collection<int, mixed>
+     * @param  class-string<CombatLogCriterionModelInterface>    $modelClass
+     * @return Collection<int, CombatLogCriterionModelInterface>
      */
     public function getModelsEligibleForPolling(int $combatLogVersion, string $modelClass, Season $season): Collection;
 }

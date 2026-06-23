@@ -13,7 +13,7 @@ interface CombatLogRouteDungeonRouteServiceInterface
     public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestModel $combatLogRoute): DungeonRoute;
 
     /**
-     * @return Collection<int, mixed>
+     * @return Collection<int, CombatLogEvent>
      */
     public function convertCombatLogRouteToCombatLogEvents(CombatLogRouteRequestModel $combatLogRoute): Collection;
 
