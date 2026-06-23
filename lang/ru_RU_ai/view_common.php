@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => 'Включение этого параметра отобразит всех врагов рамкой, указывающей на их агрессивность. Красный для агрессивных врагов, желтый для нейтральных врагов, зеленый для дружественных врагов и т. Д.',
             'highlight_dangerous_enemies'                   => 'Выделите опасных врагов',
             'highlight_dangerous_enemies_title'             => 'Опасные враги отмечены оранжевой внутренней границей. Keystone.guru отбирает этих врагов вручную. Эти враги - мини-боссы, обладающие большим здоровьем по сравнению с другими, использующими опасные способности или требующие особого подхода.',
+            'kill_zone_path'                                => '',
+            'kill_zone_path_weight'                         => '',
+            'kill_zone_path_weight_title'                   => '',
             'drawing'                                       => 'Рисование',
             'default_line_weight'                           => 'Толщина линии по умолчанию',
             'default_line_weight_title'                     => 'Это контролирует ширину всех линий по умолчанию, которые вы создаете на карте, например, контуров и свободных линий.',
@@ -251,27 +254,33 @@ return [
             'heatmaps'                => 'Тепловые карты',
             'explore'                 => 'Исследовать подземелья',
             'new'                     => 'Новые',
+            'compendium'              => '',
+            'npc_compendium'          => '',
+            'spell_compendium'        => '',
+            'compendium_activity'     => '',
+            'class_compendium'        => '',
         ],
         'nav' => [
             'user' => [
-                'login'             => 'Вход',
-                'register'          => 'Регистрация',
-                'telescope'         => 'Телескоп',
-                'tools'             => 'Инструменты',
-                'view_releases'     => 'Просмотр выпусков',
-                'view_expansions'   => 'Просмотр дополнений',
-                'view_dungeons'     => 'Просмотр подземелий',
-                'view_npcs'         => 'Просмотр НПС',
-                'view_spells'       => 'Просмотр заклинаний',
-                'view_users'        => 'Просмотр пользователей',
-                'view_user_reports' => 'Просмотр отчётов пользователей',
-                'my_routes'         => 'Мои маршруты',
-                'my_favorites'      => 'Мои избранные',
-                'my_tags'           => 'Мои теги',
-                'my_teams'          => 'Мои команды',
-                'my_profile'        => 'Мой публичный профиль',
-                'account_settings'  => 'Настройки аккаунта',
-                'logout'            => 'Выход',
+                'login'              => 'Вход',
+                'register'           => 'Регистрация',
+                'telescope'          => 'Телескоп',
+                'tools'              => 'Инструменты',
+                'view_releases'      => 'Просмотр выпусков',
+                'view_expansions'    => 'Просмотр дополнений',
+                'view_dungeons'      => 'Просмотр подземелий',
+                'view_npcs'          => 'Просмотр НПС',
+                'view_spells'        => 'Просмотр заклинаний',
+                'view_users'         => 'Просмотр пользователей',
+                'view_dungeonroutes' => '',
+                'view_user_reports'  => 'Просмотр отчётов пользователей',
+                'my_routes'          => 'Мои маршруты',
+                'my_favorites'       => 'Мои избранные',
+                'my_tags'            => 'Мои теги',
+                'my_teams'           => 'Мои команды',
+                'my_profile'         => 'Мой публичный профиль',
+                'account_settings'   => 'Настройки аккаунта',
+                'logout'             => 'Выход',
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Загрузите логи, чтобы улучшить Keystone.guru',
@@ -321,6 +330,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => 'Скрыть',
                 ],
+                'facadetoggle' => [
+                    'facade'       => '',
+                    'split_floors' => '',
+                ],
                 'mdtclones' => [
                     'mdt'        => 'MDT',
                     'auto_solve' => 'Авто решение',
@@ -331,20 +344,17 @@ return [
                     'your_rating'              => 'Ваш рейтинг',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => 'Информация о враге',
-                'report_an_issue' => 'Сообщить о проблеме',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => 'Настройки карты',
                 'enabled'                => 'Включено',
                 'disabled'               => 'Отключено',
                 'event_type'             => 'Тип события',
                 'data_type'              => 'Тип данных',
+                'data_type_title'        => 'Позиция врага использует исходное положение врага, с которым вступили в бой (на основе Auto-Route Creator), позиция игрока использует положение игрока при вступлении в бой с врагом (позиция из боевого лога).',
+                'player_spells'          => '',
                 'npc_death_alt'          => 'Смерть врага',
                 'player_death_alt'       => 'Смерть игрока',
-                'bloodlust_alt'          => 'Кровожадность',
-                'data_type_title'        => 'Позиция врага использует исходное положение врага, с которым вступили в бой (на основе Auto-Route Creator), позиция игрока использует положение игрока при вступлении в бой с врагом (позиция из боевого лога).',
+                'spell_casts_alt'        => '',
                 'filter'                 => 'Фильтр',
                 'key_level'              => 'Уровень ключа',
                 'item_level'             => 'Уровень предмета',
@@ -383,6 +393,13 @@ return [
                     'gradient'    => 'Градиент',
                     'pane'        => 'Панель',
                 ],
+            ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => '',
+                'clear_failures'       => '',
+                'clear_failures_title' => '',
+                'matching_routes'      => '',
+                'no_matching_routes'   => '',
             ],
             'header' => [
                 'toggle_navigation'              => 'Включить навигацию',
@@ -469,12 +486,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => 'Создать маршрут',
+            'create_temporary_route' => 'Создать временный маршрут',
+            'import_from_mdt'        => 'Импорт из MDT',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => 'Маршрут удален',
                 'description'  => 'Ваш маршрут был удален и больше не может быть просмотрен/отредактирован. Это может произойти, если ваш маршрут был временным и автоматически очищен или если вы удалили маршрут в другой вкладке браузера.',
                 'back_to_home' => 'Вернуться на главную',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => '',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +518,6 @@ return [
                 'contact_by_email_guest' => 'Свяжитесь со мной по электронной почте, для дальнейшего разбирательства (добавьте свой адрес электронной почты в форму жалобы)',
                 'submit'                 => 'Отправить',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => 'Создать маршрут',
-            'create_temporary_route' => 'Создать временный маршрут',
-            'import_from_mdt'        => 'Импорт из MDT',
         ],
         'legal' => [
             'welcome_back_agree' => 'С возвращением! Чтобы продолжить, вы должны согласиться с нашими %s, %s и %s.',
@@ -618,6 +638,14 @@ return [
             'title' => 'Загрузить логи',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => '',
+        ],
+        'select' => [
+            'npc' => '',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => 'Новые',
@@ -639,14 +667,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => 'Название',
-            'description'     => 'Описание',
-            'logo'            => 'Логотип',
-            'current_logo'    => 'Создать логотип',
-            'team_logo_title' => 'Логотип команды',
-            'save'            => 'Сохранить',
-            'submit'          => 'Подтвердить',
-            'disband_team'    => 'Распустить команду',
+            'name'                     => 'Название',
+            'description'              => 'Описание',
+            'logo'                     => 'Логотип',
+            'current_logo'             => 'Создать логотип',
+            'team_logo_title'          => 'Логотип команды',
+            'save'                     => 'Сохранить',
+            'submit'                   => 'Подтвердить',
+            'disband_team'             => 'Распустить команду',
+            'route_publishing_enabled' => '',
         ],
         'select' => [
             'select_team' => 'Выбрать команду...',

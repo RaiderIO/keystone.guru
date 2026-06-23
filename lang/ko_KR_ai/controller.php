@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => '잘못된 카테고리',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => '메시지 배너가 성공적으로 설정되었습니다',
-            'thumbnail_regenerate_result'       => ':total 경로를 위한 :success 작업이 배포되었습니다. :failed 실패했습니다.',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => '캐시가 성공적으로 삭제되었습니다',
-            'releases_exported'                 => '릴리스가 내보내졌습니다',
-            'exception'                         => '관리자 패널에서 예외 발생',
-            'feature_toggle_activated'          => '기능 :feature이(가) 이제 활성화되었습니다',
-            'feature_toggle_deactivated'        => '기능 :feature이(가) 이제 비활성화되었습니다',
-            'feature_forgotten'                 => '기능 :feature이(가) 성공적으로 잊혀졌습니다',
-            'read_only_mode_disabled'           => '읽기 전용 모드 비활성화됨',
-            'read_only_mode_enabled'            => '읽기 전용 모드 활성화됨',
+            'message_banner_set_successfully'        => '메시지 배너가 성공적으로 설정되었습니다',
+            'thumbnail_regenerate_result'            => ':total 경로를 위한 :success 작업이 배포되었습니다. :failed 실패했습니다.',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => '캐시가 성공적으로 삭제되었습니다',
+            'releases_exported'                      => '릴리스가 내보내졌습니다',
+            'exception'                              => '관리자 패널에서 예외 발생',
+            'feature_toggle_activated'               => '기능 :feature이(가) 이제 활성화되었습니다',
+            'feature_toggle_deactivated'             => '기능 :feature이(가) 이제 비활성화되었습니다',
+            'feature_forgotten'                      => '기능 :feature이(가) 성공적으로 잊혀졌습니다',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => '읽기 전용 모드 비활성화됨',
+            'read_only_mode_enabled'                 => '읽기 전용 모드 활성화됨',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => '선을 저장할 수 없습니다',
             'unable_to_delete_brushline' => '선을 삭제할 수 없습니다',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => '계정이 성공적으로 삭제되었습니다.',
             'error_deleting_account'           => '오류가 발생했습니다. 다시 시도하십시오.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => '이 사용자는 후원자가 아닙니다.',
             'all_benefits_granted_successfully' => '모든 혜택이 성공적으로 부여되었습니다.',
             'error_granting_all_benefits'       => '모든 혜택을 부여하는 동안 오류가 발생했습니다.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

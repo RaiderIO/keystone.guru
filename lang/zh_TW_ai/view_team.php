@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => '感謝您訂閱 Keystone.guru 的 :patreon！您可以將 :current 次免廣告體驗贈送給 Keystone.guru 的任何團隊成員。',
         ],
         'overview' => [
-            'title' => '概覽',
+            'title'   => '概覽',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => '路線發布',
+            'title'            => '路線發布',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => '路線列表',

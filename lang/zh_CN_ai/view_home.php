@@ -37,8 +37,8 @@ return [
     'sections'                                     => [
         'routes' => [
             'weeklyroute' => [
-                'header'    => 'Raider.IO 每周路线',
-                'subheader' => '<a href=":weekly_route_url">Raider.IO 每周路线 <i class="fas fa-external-link-alt"></i></a> 每周根据在 <a href=":heatmaps_url">秘境+ 热图</a> 中显示的拉怪模式进行更新，
+                'header'       => 'Raider.IO 每周路线',
+                'subheader'    => '<a href=":weekly_route_url">Raider.IO 每周路线 <i class="fas fa-external-link-alt"></i></a> 每周根据在 <a href=":heatmaps_url">秘境+ 热图</a> 中显示的拉怪模式进行更新，
                                         以及其他观察/经验。Raider.IO 消除了猜测，提供经过验证的路线。',
                 'pug_friendly' => '适合 Pug',
                 'expert'       => '专家',

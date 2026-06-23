@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => 'Não é possível adicionar mais de :limit grupos a uma única rota.',
     'add_brushline_limit_reached'             => 'Não é possível adicionar mais de :limit linhas desenhadas livremente a uma única rota.',
     'add_path_limit_reached'                  => 'Não é possível adicionar mais de :limit caminhos a uma única rota.',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => 'Não é possível adicionar mais de :limit ícones de mapa a uma única rota.',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];
