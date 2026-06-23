@@ -41,3 +41,5 @@ docker-compose/mysql
 docker-compose/mysql-combatlog
 !docker-compose/mysql-combatlog/.gitkeep
 docker-compose/redis-data
+
+.ladebugermcp/

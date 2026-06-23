@@ -26,6 +26,7 @@ final class GetSeasonsTest extends PublicTestCase
 
         // Assert
         foreach ($result as $season) {
+            $season->loadMissing('expansion.timewalkingEvent');
             $this->assertNull($season->expansion->timewalkingEvent);
         }
     }
