@@ -30,7 +30,6 @@ interface CombatLogServiceInterface
 
     public function getBoundsFromEvents(string $filePath, Dungeon $dungeon): MapBounds;
 
-
     /**
      * @return Collection<int, BaseResultEvent>
      */

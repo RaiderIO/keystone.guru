@@ -67,6 +67,9 @@ class DungeonRouteSubmitFormRequest extends FormRequest
             'teeming'  => 'nullable|int',
             'template' => 'nullable|int',
 
+            'pull_gradient'              => 'nullable|string|max:2000',
+            'pull_gradient_apply_always' => 'nullable|boolean',
+
             // Array since there's potentially a seasonal index per expansion
             'seasonal_index'   => 'nullable|array',
             'seasonal_index.*' => 'nullable|numeric',
