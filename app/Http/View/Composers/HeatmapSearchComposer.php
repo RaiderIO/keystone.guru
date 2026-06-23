@@ -6,11 +6,11 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
-class HeatmapSearchComposer
+readonly class HeatmapSearchComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface        $viewService,
-        private readonly RequestViewContextInterface $requestViewContext,
+        private ViewServiceInterface        $viewService,
+        private RequestViewContextInterface $requestViewContext,
     ) {
     }
 

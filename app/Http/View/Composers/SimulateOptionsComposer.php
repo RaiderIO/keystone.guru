@@ -12,12 +12,12 @@ use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 use Str;
 
-class SimulateOptionsComposer
+readonly class SimulateOptionsComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface             $viewService,
-        private readonly RequestViewContextInterface      $requestViewContext,
-        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private ViewServiceInterface             $viewService,
+        private RequestViewContextInterface      $requestViewContext,
+        private SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ) {
     }
 

@@ -7,12 +7,12 @@ use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
-class AppLayoutComposer
+readonly class AppLayoutComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface          $viewService,
-        private readonly MessageBannerServiceInterface $messageBannerService,
-        private readonly ReadOnlyModeServiceInterface  $readOnlyModeService,
+        private ViewServiceInterface          $viewService,
+        private MessageBannerServiceInterface $messageBannerService,
+        private ReadOnlyModeServiceInterface  $readOnlyModeService,
     ) {
     }
 

@@ -5,10 +5,10 @@ namespace App\Http\View\Composers;
 use App\Service\MessageBanner\MessageBannerServiceInterface;
 use Illuminate\View\View;
 
-class AdminMessageBannerComposer
+readonly class AdminMessageBannerComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly MessageBannerServiceInterface $messageBannerService,
+        private MessageBannerServiceInterface $messageBannerService,
     ) {
     }
 

@@ -8,12 +8,12 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
-class HeaderComposer
+readonly class HeaderComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface        $viewService,
-        private readonly RequestViewContextInterface $requestViewContext,
-        private readonly DungeonServiceInterface     $dungeonService,
+        private ViewServiceInterface        $viewService,
+        private RequestViewContextInterface $requestViewContext,
+        private DungeonServiceInterface     $dungeonService,
     ) {
     }
 

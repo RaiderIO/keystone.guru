@@ -5,10 +5,10 @@ namespace App\Http\View\Composers;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
-class ChangelogFlagComposer
+readonly class ChangelogFlagComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface $viewService,
+        private ViewServiceInterface $viewService,
     ) {
     }
 

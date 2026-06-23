@@ -4,7 +4,7 @@ namespace App\Http\View\Composers;
 
 use Illuminate\View\View;
 
-class ProfileNewRouteStyleComposer
+readonly class ProfileNewRouteStyleComposer implements ViewComposerInterface
 {
     public function compose(View $view): void
     {

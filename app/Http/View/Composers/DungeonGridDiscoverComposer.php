@@ -6,10 +6,10 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use Illuminate\View\View;
 
-class DungeonGridDiscoverComposer
+readonly class DungeonGridDiscoverComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
+        private AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
     ) {
     }
 

@@ -6,10 +6,10 @@ use App\Models\Dungeon;
 use App\Service\Mapping\MappingServiceInterface;
 use Illuminate\View\View;
 
-class AdminDungeonEditComposer
+readonly class AdminDungeonEditComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly MappingServiceInterface $mappingService,
+        private MappingServiceInterface $mappingService,
     ) {
     }
 

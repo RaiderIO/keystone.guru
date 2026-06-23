@@ -9,11 +9,11 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
-class DiscoverAffixGroupComposer
+readonly class DiscoverAffixGroupComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface        $viewService,
-        private readonly RequestViewContextInterface $requestViewContext,
+        private ViewServiceInterface        $viewService,
+        private RequestViewContextInterface $requestViewContext,
     ) {
     }
 

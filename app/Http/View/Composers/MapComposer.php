@@ -4,7 +4,7 @@ namespace App\Http\View\Composers;
 
 use Illuminate\View\View;
 
-class MapComposer
+readonly class MapComposer implements ViewComposerInterface
 {
     public function compose(View $view): void
     {

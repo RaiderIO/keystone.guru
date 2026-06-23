@@ -8,12 +8,12 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\View\View;
 
-class RouteCoverageAffixGroupComposer
+readonly class RouteCoverageAffixGroupComposer implements ViewComposerInterface
 {
     public function __construct(
-        private readonly ViewServiceInterface             $viewService,
-        private readonly RequestViewContextInterface      $requestViewContext,
-        private readonly SeasonAffixGroupServiceInterface $seasonAffixGroupService,
+        private ViewServiceInterface             $viewService,
+        private RequestViewContextInterface      $requestViewContext,
+        private SeasonAffixGroupServiceInterface $seasonAffixGroupService,
     ) {
     }
 
