@@ -325,6 +325,7 @@ class ServiceFixtures
     }
 
     /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getDungeonRouteSaveService(

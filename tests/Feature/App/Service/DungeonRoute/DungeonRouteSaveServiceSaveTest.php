@@ -35,6 +35,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     /**
      * A season service whose edit-path lookups (`getUpcomingSeasonForDungeon` /
      * `getMostRecentSeasonForDungeon`) both resolve to no season.
+     *
+     * @return MockObject&SeasonServiceInterface
      */
     private function noSeasonService(): MockObject
     {
@@ -47,6 +49,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
 
     /**
      * A season service whose edit-path lookup resolves to the given season.
+     *
+     * @return MockObject&SeasonServiceInterface
      */
     private function seasonServiceReturning(Season $season): MockObject
     {
@@ -249,6 +253,9 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         ];
     }
 
+    /**
+     * @param array<int, int> $inputSeasonalIndex
+     */
     #[Test]
     #[DataProvider('seasonalIndexProvider')]
     public function save_givenSeasonalIndex_storesParsedIndex(array $inputSeasonalIndex, int $expectedIndex): void

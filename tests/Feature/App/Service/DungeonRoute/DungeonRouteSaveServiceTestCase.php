@@ -32,6 +32,8 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
     /**
      * A thumbnail service that accepts (and reports success for) thumbnail refresh queueing,
      * for tests that don't care about the thumbnail interaction itself.
+     *
+     * @return MockObject&ThumbnailServiceInterface
      */
     protected function thumbnailServiceAllowingRefresh(): MockObject
     {

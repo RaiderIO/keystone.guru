@@ -13,6 +13,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 #[Group('DungeonRouteSaveService')]
 final class DungeonRouteSaveServiceSaveTemporaryTest extends DungeonRouteSaveServiceTestCase
 {
+    /**
+     * @return MockObject&SeasonServiceInterface
+     */
     private function noSeasonService(): MockObject
     {
         $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
