@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -67.2599,
         "lng": 289.3124,
-        "comment": "Adds will spawn once you start the boss encounter. Boss jumps from platform to platform. On each platform, tag the boss to start spawning the adds.",
+        "comment": "mapping.map_icons.wotlk.the_oculus.eregos_platform_adds",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

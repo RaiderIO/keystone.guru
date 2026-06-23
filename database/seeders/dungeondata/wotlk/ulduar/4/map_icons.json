@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -151.8085,
         "lng": 258.477,
-        "comment": "Teleporter: The Prison of Yogg-Saron",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_prison_of_yogg_saron",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -151.8085,
         "lng": 258.477,
-        "comment": "Teleporter: The Prison of Yogg-Saron",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_prison_of_yogg_saron",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -618,7 +618,7 @@
         "map_icon_type_id": 18,
         "lat": -147.3438,
         "lng": 242.9063,
-        "comment": "Cursed Spire of Ny'alotha",
+        "comment": "mapping.map_icons.bfa.mechagon_junkyard.cursed_spire_nyalotha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

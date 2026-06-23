@@ -7,7 +7,7 @@
         "map_icon_type_id": 42,
         "lat": -59.4375,
         "lng": 148.8438,
-        "comment": "This pack patrols across the stairs across all floors.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.stair_patrol",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 42,
         "lat": -59.0625,
         "lng": 218.8438,
-        "comment": "This pack patrols across the stairs across all floors.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.stair_patrol",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

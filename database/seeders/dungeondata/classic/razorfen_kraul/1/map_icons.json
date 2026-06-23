@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -174.7188,
         "lng": 259.2813,
-        "comment": "Enemies here can be one of Razorfen Warrior, Razorfen Handler (and Tamed Battleboar) or Razorfen Geomancer (and Stone Rumbler).",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.warrior_handler_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -148.5402,
         "lng": 328.0105,
-        "comment": "Enemies here can be one of Razorfen Beastmaster (and Tamed Hyena), Razorfen Groundshaker or Razorfen Defender.",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.beastmaster_groundshaker_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 42,
         "lat": -70.7177,
         "lng": 278.655,
-        "comment": "Warning: Razorfen Stalkers are stealthed!",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.stalkers_stealthed_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -72.8018,
         "lng": 291.1597,
-        "comment": "Enemies here can be one of Razorfen Defender, Razorfen Totemic, Razorfen Stalker or Death's Head Acolyte.",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.defender_totemic_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 2,
         "lat": -104.1008,
         "lng": 215.8117,
-        "comment": "Enemies here can be one of Death's Head Sage or Razorfen Beastmaster (and Tamed Hyena)",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.deaths_head_sage_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 6,
         "lat": -149.6259,
         "lng": 23.396,
-        "comment": "Defeat the Death's Head Ward Keepers to lower the barrier.",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.deaths_head_ward_keepers",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 2,
         "lat": -105.2813,
         "lng": 60.6563,
-        "comment": "Enemies can be one of Razorfen Beast Tamer (and Tamed Battleboar), Razorfen Earthbreaker, Razorfen Totemic, Razorfen Stalker or Quilguard Champion.",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.beast_tamer_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 2,
         "lat": -147.9936,
         "lng": 196.7444,
-        "comment": "For the entirety of the ditch, enemies can be one of Agam'ar, Rotting Agam'ar, or Raging Agam'ar.",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.agamar_ditch_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 2,
         "lat": -182.125,
         "lng": 208.3438,
-        "comment": "Enemies here may be one of Razorfen Quilguard, Razorfen Handler (and Tamed Battleboar) or Razorfen Warrior.",
+        "comment": "mapping.map_icons.classic.razorfen_kraul.quilguard_handler_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

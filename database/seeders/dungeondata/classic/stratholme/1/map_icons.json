@@ -20,7 +20,7 @@
         "map_icon_type_id": 10,
         "lat": -225.4726,
         "lng": 255.1801,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.stratholme.living_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 44,
         "lat": -179.3756,
         "lng": 206.2796,
-        "comment": "Ezra Grimm's Postbox",
+        "comment": "mapping.map_icons.classic.stratholme.ezra_grimm_postbox",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 44,
         "lat": -64.5601,
         "lng": 270.2238,
-        "comment": "Market Row Postbox",
+        "comment": "mapping.map_icons.classic.stratholme.market_row_postbox",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -161.4639,
         "lng": 240.5805,
-        "comment": "Ghostly Citizens spawn in and out of existence and patrol, be wairy!",
+        "comment": "mapping.map_icons.classic.stratholme.ghostly_citizens",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 42,
         "lat": -108.1212,
         "lng": 230.2422,
-        "comment": "Rats attack you when you enter. WARNING: this event can respawn, never go here alone!",
+        "comment": "mapping.map_icons.classic.stratholme.rat_attack",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 2,
         "lat": -60.155,
         "lng": 153.561,
-        "comment": "Enemies in Crusader's Square can be one of Conjuror, Initiate or Guardsman.",
+        "comment": "mapping.map_icons.classic.stratholme.crusaders_square_enemies",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 2,
         "lat": -102.2161,
         "lng": 87.8642,
-        "comment": "The amount of enemies per pack may vary between 3 to 4 throughout the Scarlet Bastion.",
+        "comment": "mapping.map_icons.classic.stratholme.pack_size_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 42,
         "lat": -115.6681,
         "lng": 98.5216,
-        "comment": "Two more enemies will spawn if you kill all enemies in this room.",
+        "comment": "mapping.map_icons.classic.stratholme.more_enemies_spawn",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 6,
         "lat": -131.441,
         "lng": 75.6437,
-        "comment": "Hoard Door: Requires The Scarlet Key.",
+        "comment": "mapping.map_icons.classic.stratholme.hoard_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 42,
         "lat": -87.3729,
         "lng": 111.2084,
-        "comment": "Skeletal Berserkers will attack you in the back continuously as you advance in the Scarlet Bastion.",
+        "comment": "mapping.map_icons.classic.stratholme.gauntlet_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 37,
         "lat": -194.6875,
         "lng": 104.8438,
-        "comment": "Of Love and Family painting.",
+        "comment": "mapping.map_icons.classic.stratholme.of_love_and_family_painting",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -176,7 +176,7 @@
         "map_icon_type_id": 42,
         "lat": -213.8108,
         "lng": 72.6597,
-        "comment": "As soon as Grand Crusader Dathrohan is defeated, skeletons take over the halls you have just cleared.",
+        "comment": "mapping.map_icons.classic.stratholme.grand_crusader_dathrohan",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 42,
         "lat": -118.4154,
         "lng": 50.2555,
-        "comment": "Crimson Hammersmith spawns when you pick up the Blacksmithing Plans.",
+        "comment": "mapping.map_icons.classic.stratholme.crimson_hammersmith",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
