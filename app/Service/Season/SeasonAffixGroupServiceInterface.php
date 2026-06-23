@@ -63,7 +63,7 @@ interface SeasonAffixGroupServiceInterface
     public function getFeaturedAffixes(Season $season): Collection;
 
     /**
-     * @return Collection<int, AffixGroup>
+     * @return Collection<int, array{date_start: Carbon, affix_group: AffixGroup}>
      * @throws Exception
      */
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
