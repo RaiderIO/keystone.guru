@@ -242,7 +242,7 @@ class PollCombatLogRunsCommand extends Command
         $criteria = [];
 
         foreach ($memberSpecIds as $blizzardSpecId) {
-            /** @var CharacterClassSpecialization $spec */
+            /** @var CharacterClassSpecialization|null $spec */
             $spec = $specsByBlizzardId->get($blizzardSpecId);
 
             if ($spec !== null) {
