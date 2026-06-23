@@ -12,7 +12,8 @@ return [
         'message' => 'Sie müssen eine Fraktion für diesen Dungeon auswählen.',
     ],
     'json_string_count_rule' => [
-        'message' => 'Json-String muss mindestens :count Elemente haben.',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Dieser Kartensymboltyp ist für Ihr Zugriffslevel nicht verfügbar.',

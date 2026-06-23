@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -38.0506,
         "lng": 128.726,
-        "comment": "Enemies can be one of Withered Spearhide, Death's Head Geomancer or Withered Warrior.",
+        "comment": "mapping.map_icons.classic.razorfen_downs.withered_spearhide_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -77.7278,
         "lng": 183.9701,
-        "comment": "Enemies may be one of Withered Quilguard, Withered Reaver or Withered Necromancer (and Skeletal Servant).",
+        "comment": "mapping.map_icons.classic.razorfen_downs.withered_quilguard_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 49,
         "lat": -74.9375,
         "lng": 235.2813,
-        "comment": "Gong - when activated, spawns Tomb Fiends. When activated again, spawns 4 Tomb Reavers. When activated a final time, Tuten'kash appears.",
+        "comment": "mapping.map_icons.classic.razorfen_downs.gong",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 3,
         "lat": -56.2144,
         "lng": 280.4978,
-        "comment": "Holding Pen",
+        "comment": "mapping.map_icons.classic.razorfen_downs.holding_pen",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 3,
         "lat": -48.0299,
         "lng": 300.3846,
-        "comment": "Holding Pen",
+        "comment": "mapping.map_icons.classic.razorfen_downs.holding_pen",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 3,
         "lat": -47.2402,
         "lng": 305.9845,
-        "comment": "Holding Pen",
+        "comment": "mapping.map_icons.classic.razorfen_downs.holding_pen",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 3,
         "lat": -55.5683,
         "lng": 312.0152,
-        "comment": "Holding Pen",
+        "comment": "mapping.map_icons.classic.razorfen_downs.holding_pen",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 3,
         "lat": -65.763,
         "lng": 317.3997,
-        "comment": "Holding Pen",
+        "comment": "mapping.map_icons.classic.razorfen_downs.holding_pen",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 2,
         "lat": -70.9071,
         "lng": 121.9205,
-        "comment": "Enemies here can be one of Freezing Spirit, Boneflayer Ghoul, Splinterbone Centurion or Skeletal Summoner.",
+        "comment": "mapping.map_icons.classic.razorfen_downs.freezing_spirit_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 2,
         "lat": -107.513,
         "lng": 146.2525,
-        "comment": "Enemies here can be one of Freezing Spirit, Thorn Eater Ghoul, Boneflayer Ghoul, Splinterbone Centurion, Skeletal Frostweaver or Skeletal Summoner.",
+        "comment": "mapping.map_icons.classic.razorfen_downs.thorn_eater_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => '',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => '',
-            'thumbnail_regenerate_result'       => '',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => '',
-            'releases_exported'                 => '',
-            'exception'                         => '',
-            'feature_toggle_activated'          => '',
-            'feature_toggle_deactivated'        => '',
-            'feature_forgotten'                 => '',
-            'read_only_mode_disabled'           => '',
-            'read_only_mode_enabled'            => '',
+            'message_banner_set_successfully'        => '',
+            'thumbnail_regenerate_result'            => '',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => '',
+            'releases_exported'                      => '',
+            'exception'                              => '',
+            'feature_toggle_activated'               => '',
+            'feature_toggle_deactivated'             => '',
+            'feature_forgotten'                      => '',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => '',
+            'read_only_mode_enabled'                 => '',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => '',
             'unable_to_delete_brushline' => '',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => '',
             'error_deleting_account'           => '',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => '',
             'all_benefits_granted_successfully' => '',
             'error_granting_all_benefits'       => '',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -199.75,
         "lng": 290.0625,
-        "comment": "All Gordok Mastiff packs can contain 4 or 5 enemies.",
+        "comment": "mapping.map_icons.classic.dire_maul_north.gordok_mastiff_pack_size",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 6,
         "lat": -210.5,
         "lng": 241.5313,
-        "comment": "Requires Crescent Key.",
+        "comment": "mapping.map_icons.classic.dire_maul_north.requires_crescent_key",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 93,
         "lat": -200.375,
         "lng": 189.875,
-        "comment": "Fengus's Chest: contains Gordok Courtyard Key.",
+        "comment": "mapping.map_icons.classic.dire_maul_north.fengus_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 6,
         "lat": -200.122,
         "lng": 157.7293,
-        "comment": "Gordok Courtyard Door: Requires Gordok Courtyard Key.",
+        "comment": "mapping.map_icons.classic.dire_maul_north.gordok_courtyard_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 6,
         "lat": -167.7818,
         "lng": 113.434,
-        "comment": "Gordok Inner Door: Requires Gordok Inner Door Key. Drops from Guard Mol'dar.",
+        "comment": "mapping.map_icons.classic.dire_maul_north.gordok_inner_door",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

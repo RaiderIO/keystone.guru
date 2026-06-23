@@ -81,6 +81,12 @@ return [
                     'end'   => 'Klicken/Ziehen Sie weiter. Wenn Sie fertig sind, drücken Sie die Schaltfläche \'Fertig\' in der Symbolleiste, um Ihre Linie zu vervollständigen.',
                 ],
             ],
+            'arrow' => [
+                'tooltip' => [
+                    'start' => '',
+                    'cont'  => '',
+                ],
+            ],
         ],
     ],
     'edit' => [
