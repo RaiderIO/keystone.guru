@@ -172,6 +172,8 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     /**
      * Gets the amount of enemy forces that this dungeon has mapped (non-zero enemy_forces on NPCs)
+     *
+     * @return array<string, int|array<int, bool>|float>
      */
     public function getEnemyForcesMappedStatusAttribute(): array
     {
@@ -212,6 +214,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $result;
     }
 
+    /** @return BelongsTo<Expansion, $this> */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
@@ -265,7 +268,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         // If we didn't find a mapping version for the given game version, fall back to the default game version
         if ($result === null) {
             $gameVersionService = app(GameVersionServiceInterface::class);
-            $result             = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion(Auth::user()))
+            /** @var \App\Models\User|null $user */
+            $user   = Auth::user();
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion($user))
                 // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
                 ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
                 // Fall back to the most recent mapping version if no mapping version was found for the default game version
@@ -288,11 +293,13 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->hasMany(Floor::class)->orderBy('index');
     }
 
+    /** @return BelongsToMany<Spell, $this> */
     public function spells(): BelongsToMany
     {
         return $this->belongsToMany(Spell::class, 'spell_dungeons');
     }
 
+    /** @return HasMany<Floor, $this> */
     public function activeFloors(): HasMany
     {
         return $this->floors()->active();
@@ -322,11 +329,13 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
             ->orderBy('index');
     }
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutesForExport(): HasMany
     {
         return $this->dungeonRoutes()->where('demo', true);
@@ -335,7 +344,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     /**
      * This relationship is a bit backwards but it's useful for finding routes in a current season.
      *
-     * @return HasMany
+     * @return HasMany<SeasonDungeon, $this>
      */
     public function seasonDungeons(): HasMany
     {
@@ -348,21 +357,25 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');
     }
 
+    /** @return HasManyThrough<Enemy, Floor, $this> */
     public function enemies(): HasManyThrough
     {
         return $this->hasManyThrough(Enemy::class, Floor::class);
     }
 
+    /** @return HasManyThrough<EnemyPack, Floor, $this> */
     public function enemyPacks(): HasManyThrough
     {
         return $this->hasManyThrough(EnemyPack::class, Floor::class);
     }
 
+    /** @return HasManyThrough<EnemyPatrol, Floor, $this> */
     public function enemyPatrols(): HasManyThrough
     {
         return $this->hasManyThrough(EnemyPatrol::class, Floor::class);
     }
 
+    /** @return HasManyThrough<MapIcon, Floor, $this> */
     public function mapIcons(): HasManyThrough
     {
         return $this->hasManyThrough(MapIcon::class, Floor::class)
@@ -370,22 +383,26 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
                 ->whereNull('dungeon_route_id'));
     }
 
+    /** @return HasManyThrough<DungeonFloorSwitchMarker, Floor, $this> */
     public function dungeonFloorSwitchMarkers(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonFloorSwitchMarker::class, Floor::class);
     }
 
+    /** @return HasManyThrough<MountableArea, Floor, $this> */
     public function mountableAreas(): HasManyThrough
     {
         return $this->hasManyThrough(MountableArea::class, Floor::class);
     }
 
+    /** @return HasManyThrough<DungeonSpeedrunRequiredNpc, Floor, $this> */
     public function dungeonSpeedrunRequiredNpcs10Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
             ->where('difficulty', Dungeon::DIFFICULTY_10_MAN);
     }
 
+    /** @return HasManyThrough<DungeonSpeedrunRequiredNpc, Floor, $this> */
     public function dungeonSpeedrunRequiredNpcs25Man(): HasManyThrough
     {
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class)
@@ -394,6 +411,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     /**
      * Scope a query to only the Siege of Boralus dungeon.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function factionSelectionRequired(Builder $query): Builder
@@ -405,6 +425,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     /**
      * Scope a query to only include active dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function active(Builder $query): Builder
@@ -414,6 +437,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     /**
      * Scope a query to only include inactive dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function inactive(Builder $query): Builder
@@ -423,6 +449,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
 
     /**
      * Scope a query to only include active dungeons.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function forGameVersion(Builder $query, GameVersion $gameVersion): Builder
@@ -470,6 +499,9 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
             $seasonService->getCurrentSeason($this->expansion);
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
         $result = $this->npcs()
@@ -521,7 +553,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     }
 
     /**
-     * @return Collection<GameVersion>
+     * @return Collection<int, GameVersion>
      */
     public function getMappingVersionGameVersions(): Collection
     {
@@ -597,7 +629,10 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         /** @var DungeonServiceInterface $dungeonService */
         $dungeonService = App::make(DungeonServiceInterface::class);
 
-        return $dungeonService->getDungeonContext(Auth::user());
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        return $dungeonService->getDungeonContext($user);
     }
 
     #[Override]

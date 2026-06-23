@@ -5,7 +5,7 @@ use App\Service\Cookies\CookieServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Team> $models
+ * @var Collection<int, Team> $models
  */
 
 $cookieService = resolve(CookieServiceInterface::class);

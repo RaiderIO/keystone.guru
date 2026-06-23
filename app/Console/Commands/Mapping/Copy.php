@@ -62,7 +62,7 @@ class Copy extends Command
             $sourceDungeonFloors = $sourceDungeon->floors()->orderBy('index')->get()->keyBy('index');
             $targetDungeonFloors = $targetDungeon->floors()->orderBy('index')->get()->keyBy('index');
 
-            /** @var Collection<Floor> $floorIdMapping */
+            /** @var Collection<int, int> $floorIdMapping */
             $floorIdMapping = $sourceDungeonFloors->mapWithKeys(function (Floor $floor) use ($targetDungeonFloors) {
                 /** @var Floor $targetFloor */
                 $targetFloor = $targetDungeonFloors->get($floor->index);
@@ -88,7 +88,7 @@ class Copy extends Command
 
             foreach ($relations as $relation) {
                 $this->info(sprintf('Copying %s...', $relation));
-                /** @var Collection<Model> $entities */
+                /** @var Collection<int, Model> $entities */
                 $entities = $newMappingVersion->getRelation($relation);
 
                 foreach ($entities as $entity) {

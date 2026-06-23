@@ -6,6 +6,12 @@ use App\Models\DungeonRoute\DungeonRoute;
 
 interface MapDrawingServiceInterface
 {
+    /**
+     * @param array<int, mixed>                    $latLngs
+     * @param array<string, mixed>                 $connectionAttributes
+     * @param array<string, mixed>                 $polylineAttributes
+     * @param array<int, array<int|string, mixed>> $gradient
+     */
     public function drawConnections(
         DungeonRoute $dungeonRoute,
         array        $latLngs,

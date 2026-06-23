@@ -118,7 +118,10 @@ class AjaxArrowController extends Controller
         try {
             if ($arrow->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ArrowDeletedEvent($dungeonRoute, Auth::getUser(), $arrow));
+                    /** @var \App\Models\User $user */
+                    $user = Auth::getUser();
+
+                    broadcast(new ArrowDeletedEvent($dungeonRoute, $user, $arrow));
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $arrow, null);

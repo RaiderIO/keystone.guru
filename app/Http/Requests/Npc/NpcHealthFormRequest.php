@@ -33,10 +33,8 @@ class NpcHealthFormRequest extends FormRequest
                 '.',
             ], '', (string)$this->input('health')),
         ]);
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

@@ -67,36 +67,43 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
 
     public $timestamps = false;
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return BelongsTo<Dungeon, Floor> */
     public function dungeon(): BelongsTo
     {
         return $this->floor->dungeon();
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc2(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc3(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc4(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc5(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

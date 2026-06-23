@@ -41,11 +41,13 @@ class ReleaseChangelogChange extends CacheModel
 
     public $timestamps = false;
 
+    /** @return BelongsTo<ReleaseChangelogCategory, $this> */
     public function category(): BelongsTo
     {
         return $this->belongsTo(ReleaseChangelogCategory::class, 'release_changelog_category_id');
     }
 
+    /** @return HasOne<ReleaseChangelog, $this> */
     public function changelog(): HasOne
     {
         return $this->hasOne(ReleaseChangelog::class, 'release_changelog_id');

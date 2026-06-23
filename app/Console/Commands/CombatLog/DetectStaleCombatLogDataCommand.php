@@ -23,6 +23,7 @@ class DetectStaleCombatLogDataCommand extends Command
 
     protected $description = 'Removes stale NPC characteristics and spell properties that have no recent observation, and prunes old observation rows.';
 
+    /** @var Collection<int, int>|null */
     private ?Collection $currentSeasonDungeonIds = null;
 
     public function __construct(private readonly SeasonServiceInterface $seasonService)
@@ -46,6 +47,9 @@ class DetectStaleCombatLogDataCommand extends Command
         return config('keystoneguru.combat_log_staleness.observation_window_days');
     }
 
+    /**
+     * @return Collection<int, int>|null
+     */
     private function getCurrentSeasonDungeonIds(): ?Collection
     {
         if ($this->currentSeasonDungeonIds !== null) {
@@ -140,6 +144,9 @@ class DetectStaleCombatLogDataCommand extends Command
         $this->info(sprintf('combatlog:detectstaledata — spell_properties total_removed=%d', $removedCount));
     }
 
+    /**
+     * @param Collection<int, int> $currentSeasonDungeonIds
+     */
     private function removeStaleSpellProperty(SpellProperty $property, string $cutoff, Collection $currentSeasonDungeonIds): int
     {
         $query = Spell::query()

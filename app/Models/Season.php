@@ -134,11 +134,13 @@ class Season extends CacheModel
         return GameServerRegion::getUserOrDefaultRegion()->getKeystoneLeaderboardPeriod($this->start);
     }
 
+    /** @return BelongsTo<Expansion, $this> */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
     }
 
+    /** @return HasMany<AffixGroup, $this> */
     public function affixGroups(): HasMany
     {
         return $this->hasMany(AffixGroup::class);
@@ -150,6 +152,7 @@ class Season extends CacheModel
         return $this->belongsToMany(Dungeon::class, 'season_dungeons')->orderBy('season_dungeons.id');
     }
 
+    /** @return HasMany<SeasonDungeon, $this> */
     public function seasonDungeons(): HasMany
     {
         return $this->hasMany(SeasonDungeon::class);

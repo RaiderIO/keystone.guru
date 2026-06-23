@@ -1,15 +1,17 @@
 <?php
 
 /**
- * @var \Illuminate\Database\Eloquent\Model&\App\Models\Interfaces\HasTagsInterface $context
- * @var string  $category
- * @var string  $theme
+ * @var Model&HasTagsInterface $context
+ * @var string                 $category
+ * @var string                 $theme
  */
 
+use App\Models\Interfaces\HasTagsInterface;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 $tagCategoryNameMapping = [
     1 => __('view_common.tag.manager.route_personal'),

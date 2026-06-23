@@ -238,7 +238,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     /**
      * Get a list of unique affixes found in this season.
      *
-     * @return Collection<Affix>
+     * @return Collection<int, Affix>
      */
     public function getFeaturedAffixes(Season $season): Collection
     {
@@ -252,8 +252,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     }
 
     /**
-     * @return Collection<array{ date_start: Carbon, affix_group: AffixGroup}>
-     *
+     * @return Collection<int, AffixGroup>
      * @throws Exception
      * @todo This can be further improved with some mathy things, but for now it's quick enough
      */
@@ -303,8 +302,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     }
 
     /**
-     * @return Collection<WeeklyAffixGroup>
-     *
+     * @return Collection<int, WeeklyAffixGroup>
      * @throws Exception
      */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection

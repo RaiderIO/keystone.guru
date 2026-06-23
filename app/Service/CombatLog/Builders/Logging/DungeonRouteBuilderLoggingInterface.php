@@ -20,6 +20,9 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function createPullNoEnemiesPullDeleted(): void;
 
+    /**
+     * @param array<int, int> $spellIds
+     */
     public function createPullSpellsAttachedToKillZone(int $killZoneId, array $spellIds, int $spellCount): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationMappingToDifferentNpcId(int $npcId, int $targetNpcId): void;
@@ -28,6 +31,9 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
+    /**
+     * @param array<int, bool> $preferredGroups
+     */
     public function findUnkilledEnemyForNpcAtIngameLocationStart(
         int    $npcId,
         float  $ingameX,
@@ -59,6 +65,9 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 
+    /**
+     * @param array<int, bool> $preferredGroups
+     */
     public function findClosestEnemyInPreferredGroupsStart(array $preferredGroups): void;
 
     public function findClosestEnemyInPreferredGroupsEnd(): void;
@@ -93,6 +102,10 @@ interface DungeonRouteBuilderLoggingInterface
         float $distanceBetweenLastPullAndEnemy,
     ): void;
 
+    /**
+     * @param array<int, float> $enemyXY
+     * @param array<int, float> $targetEnemyXY
+     */
     public function findClosestEnemyAndDistanceDistanceBetweenEnemies(
         array $enemyXY,
         array $targetEnemyXY,

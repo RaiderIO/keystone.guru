@@ -26,6 +26,9 @@ abstract class MDTBaseService
         return $lua;
     }
 
+    /**
+     * @param array<string, mixed> $contents
+     */
     protected function encode(array $contents): string
     {
         Artisan::call('mdt:encode', ['string' => json_encode($contents)]);
@@ -40,7 +43,7 @@ abstract class MDTBaseService
     }
 
     /**
-     * @return array|null Null if the string could not be decoded
+     * @return array<string, mixed>|null Null if the string could not be decoded
      */
     protected function decode(string $string): ?array
     {

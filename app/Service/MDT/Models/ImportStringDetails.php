@@ -8,13 +8,17 @@ use App\Models\Dungeon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class ImportStringDetails implements Arrayable
 {
     private ?string $faction = null;
 
     /**
-     * @param Collection<ImportWarning> $warnings
-     * @param Collection<string>        $affixes
+     * @param Collection<int, ImportWarning> $warnings
+     * @param Collection<int, ImportError>   $errors
+     * @param Collection<int, string>        $affixes
      */
     public function __construct(
         private readonly Collection $warnings,
@@ -33,7 +37,7 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @return Collection<ImportWarning>
+     * @return Collection<int, ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -41,7 +45,7 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @return Collection<ImportError>
+     * @return Collection<int, ImportError>
      */
     public function getErrors(): Collection
     {

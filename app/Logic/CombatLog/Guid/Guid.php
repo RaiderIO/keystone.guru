@@ -87,8 +87,11 @@ abstract class Guid implements Stringable
         self::GUID_TYPE_RESIST  => Resist::class,
     ];
 
-    // @phpstan-ignore constructor.unusedParameter
-    protected function __construct(private readonly string $guid, array $parameters = [])
+    /**
+     * @param array<int, mixed> $_parameters Passed by subclasses when instantiated dynamically via createFromGuidString()
+     * @phpstan-ignore constructor.unusedParameter
+     */
+    protected function __construct(private readonly string $guid, array $_parameters = [])
     {
     }
 

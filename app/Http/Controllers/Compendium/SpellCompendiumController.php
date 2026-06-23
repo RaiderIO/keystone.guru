@@ -45,6 +45,9 @@ class SpellCompendiumController extends Controller
         ]);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function get(SpellCompendiumRequest $request): array
     {
         $dungeon = $request->dungeon();

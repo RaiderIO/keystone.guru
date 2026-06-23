@@ -65,6 +65,7 @@ use Override;
  */
 class MappingVersion extends Model
 {
+    /** @use HasFactory<\MappingVersionFactory> */
     use HasFactory;
     use SeederModel;
 
@@ -112,6 +113,7 @@ class MappingVersion extends Model
     /** @var Collection<int, EloquentCollection<int, FloorUnion>>|null */
     private ?Collection $cachedFloorUnionsOnFloor = null;
 
+    /** @var Collection<int, EloquentCollection<int, FloorUnion>>|null */
     private ?Collection $cachedFloorUnionsForFloor = null;
 
     private ?bool $isLatestForDungeonCache = null;
@@ -138,21 +140,25 @@ class MappingVersion extends Model
         return $mostRecentlyMergedMappingCommitLog !== null && $mostRecentlyMergedMappingCommitLog->created_at->gte($this->created_at);
     }
 
+    /** @return BelongsTo<GameVersion, $this> */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
 
+    /** @return HasMany<DungeonFloorSwitchMarker, $this> */
     public function dungeonFloorSwitchMarkers(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class);
@@ -164,21 +170,25 @@ class MappingVersion extends Model
         return $this->hasMany(Enemy::class)->orderBy('id');
     }
 
+    /** @return HasMany<EnemyPack, $this> */
     public function enemyPacks(): HasMany
     {
         return $this->hasMany(EnemyPack::class);
     }
 
+    /** @return HasMany<EnemyPatrol, $this> */
     public function enemyPatrols(): HasMany
     {
         return $this->hasMany(EnemyPatrol::class);
     }
 
+    /** @return HasMany<MapIcon, $this> */
     public function mapIcons(): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNotNull('mapping_version_id');
     }
 
+    /** @return HasMany<MountableArea, $this> */
     public function mountableAreas(): HasMany
     {
         return $this->hasMany(MountableArea::class);
@@ -190,11 +200,13 @@ class MappingVersion extends Model
         return $this->hasMany(FloorUnion::class);
     }
 
+    /** @return HasMany<FloorUnionArea, $this> */
     public function floorUnionAreas(): HasMany
     {
         return $this->hasMany(FloorUnionArea::class);
     }
 
+    /** @return HasMany<NpcEnemyForces, $this> */
     public function npcEnemyForces(): HasMany
     {
         return $this->hasMany(NpcEnemyForces::class);
@@ -489,11 +501,13 @@ class MappingVersion extends Model
         return $mountableAreas;
     }
 
+    /** @return EloquentCollection<int, FloorUnion> */
     public function mapContextFloorUnions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): EloquentCollection
     {
         return $this->floorUnions;
     }
 
+    /** @return EloquentCollection<int, FloorUnionArea> */
     public function mapContextFloorUnionAreas(
         CoordinatesServiceInterface $coordinatesService,
         bool                        $useFacade,
@@ -538,7 +552,7 @@ class MappingVersion extends Model
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-            /** @var Collection<int, MappingModelInterface> $previousMapping */
+            /** @var Collection<int, MappingModelInterface|DungeonFloorSwitchMarker|Enemy|EnemyPack|EnemyPatrol|MapIcon|MountableArea|FloorUnion|FloorUnionArea|NpcEnemyForces> $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
                 ->merge($previousMappingVersion->enemies)
@@ -566,7 +580,7 @@ class MappingVersion extends Model
                 /** @var Model&CloneForNewMappingVersionInterface $model */
                 $newModel = $model->cloneForNewMappingVersion($newMappingVersion);
 
-                /** @var Collection $modelMapping */
+                /** @var Collection<int, array{oldModel: Model, newModel: Model}> $modelMapping */
                 $modelMapping = $idMapping->get($model::class);
                 $modelMapping->push([
                     'oldModel' => $model,

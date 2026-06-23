@@ -63,7 +63,7 @@ class LoginController extends Controller implements HasMiddleware
     /**
      * The user has been authenticated.
      */
-    protected function authenticated(Request $request, mixed $user)
+    protected function authenticated(Request $request, mixed $user): void
     {
         $this->redirectTo = $request->get('redirect', '/');
     }

@@ -9,7 +9,9 @@ use Illuminate\Support\Collection;
 abstract class StubRepository extends BaseRepository
 {
     private int $id = 1;
-
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function create(array $attributes): Model
     {
         $attributes['id'] = $this->id++;
@@ -17,11 +19,17 @@ abstract class StubRepository extends BaseRepository
         return new $this->class($attributes);
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function insert(array $attributes): bool
     {
         return true;
     }
 
+    /**
+     * @param array<int, string>|string $columns
+     */
     public function find(int $id, string|array $columns = ['*']): Model
     {
         return new $this->class([
@@ -29,11 +37,17 @@ abstract class StubRepository extends BaseRepository
         ]);
     }
 
+    /**
+     * @param array<int, string>|string $columns
+     */
     public function findOrFail(int $id, string|array $columns = ['*']): Model
     {
         return $this->find($id, $columns);
     }
 
+    /**
+     * @param array<int, string>|string $columns
+     */
     public function findOrNew(int $id, string|array $columns = ['*']): Model
     {
         return $this->find($id, $columns);
@@ -46,6 +60,10 @@ abstract class StubRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     * @param array<string, mixed> $options
+     */
     public function update(Model $model, array $attributes = [], array $options = []): bool
     {
         foreach ($attributes as $key => $value) {
@@ -60,11 +78,17 @@ abstract class StubRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param array<string, mixed> $columns
+     */
     public function exists(array $columns): bool
     {
         return true;
     }
 
+    /**
+     * @return Collection<int, Model>
+     */
     public function all(): Collection
     {
         return collect();

@@ -11,13 +11,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
- * @var SeasonService              $seasonService
- * @var Collection<Tag>            $searchTags
- * @var Collection<Tag>            $autoCompleteTags
- * @var Collection<RouteAttribute> $allRouteAttributes
- * @var string|null                $inlineId
- * @var Team|null                  $team
- * @var DungeonRoute               $model
+ * @var SeasonService                   $seasonService
+ * @var Collection<int, Tag>            $searchTags
+ * @var Collection<int, Tag>            $autoCompleteTags
+ * @var Collection<int, RouteAttribute> $allRouteAttributes
+ * @var string|null                     $inlineId
+ * @var Team|null                       $team
+ * @var DungeonRoute                    $model
  */
 
 if (!isset($affixgroups)) {

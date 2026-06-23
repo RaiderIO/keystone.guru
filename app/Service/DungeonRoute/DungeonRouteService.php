@@ -235,7 +235,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->publishScheduledDungeonRoutesStart();
 
-            /** @var Collection<DungeonRouteScheduledPublish> $scheduledPublishes */
+            /** @var Collection<int, DungeonRouteScheduledPublish> $scheduledPublishes */
             $scheduledPublishes = DungeonRouteScheduledPublish::query()
                 ->where('publish_at', '<=', now())
                 ->with(['dungeonRoute.dungeon', 'dungeonRoute.author'])

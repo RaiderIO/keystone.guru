@@ -23,7 +23,10 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->pluck('npc_spells.spell_id')
             ->toArray();
     }
-
+    /**
+     * @param  Collection<int, int>|Collection<int, Spell> $spellIds
+     * @return Collection<int, Spell>
+     */
     public function findAllById(Collection $spellIds): Collection
     {
         return Spell::query()
@@ -32,6 +35,9 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->keyBy('id');
     }
 
+    /**
+     * @return Collection<int, Spell>
+     */
     public function getAllWithCharacteristic(): Collection
     {
         return Spell::query()

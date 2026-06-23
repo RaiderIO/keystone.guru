@@ -4,9 +4,9 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 
 /**
- * @var  int     $difficulty
- * @var  Dungeon $dungeon
- * @var  Floor   $floor
+ * @var int     $difficulty
+ * @var Dungeon $dungeon
+ * @var Floor   $floor
  */
 ?>
 

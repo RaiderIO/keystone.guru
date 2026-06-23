@@ -24,6 +24,9 @@ use App\Service\CombatLogEvent\CombatLogEventService;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSaveService;
+use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
+use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Metric\MetricService;
@@ -44,6 +47,10 @@ use Tests\TestCases\PublicTestCase;
 class ServiceFixtures
 {
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getAffixGroupEaseTierServiceMock(
@@ -67,6 +74,10 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getViewServiceMock(
         PublicTestCase                      $testCase,
         ?CacheServiceInterface              $cacheService = null,
@@ -87,6 +98,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getCombatLogServiceMock(
         PublicTestCase                   $testCase,
         CombatLogServiceLoggingInterface $log,
@@ -101,6 +116,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getResultEventDungeonRouteServiceMock(
         PublicTestCase                               $testCase,
         CombatLogService                             $combatLogService,
@@ -117,6 +136,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getExpansionServiceMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
@@ -126,6 +149,11 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string>           $methodsToMock
+     * @param  Collection<int, Season>|null $seasons
+     * @throws Exception
+     */
     public static function getSeasonServiceMock(
         PublicTestCase             $testCase,
         ?SeasonRepositoryInterface $seasonRepository = null,
@@ -156,6 +184,10 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getSeasonAffixGroupServiceMock(
         PublicTestCase                    $testCase,
         ?SeasonServiceInterface           $seasonService = null,
@@ -172,6 +204,10 @@ class ServiceFixtures
             ->getMock();
     }
 
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getCoordinatesServiceMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],
@@ -183,6 +219,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getMetricServiceMock(
@@ -200,6 +240,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getSpellServiceMock(
@@ -221,6 +265,10 @@ class ServiceFixtures
     /**
      * @throws Exception
      */
+    /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
     public static function getCombatLogEventServiceMock(
         PublicTestCase                         $testCase,
         array                                  $methodsToMock = [],
@@ -238,6 +286,7 @@ class ServiceFixtures
     }
 
     /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function createRedisService(
@@ -253,6 +302,10 @@ class ServiceFixtures
     }
 
     /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getCacheServiceMock(
@@ -272,6 +325,32 @@ class ServiceFixtures
     }
 
     /**
+     * @param  array<int, string> $methodsToMock
+     * @throws Exception
+     */
+    public static function getDungeonRouteSaveService(
+        PublicTestCase                           $testCase,
+        ?SeasonServiceInterface                  $seasonService = null,
+        ?ThumbnailServiceInterface               $thumbnailService = null,
+        ?DungeonRouteSaveServiceLoggingInterface $log = null,
+        array                                    $methodsToMock = [],
+    ): MockObject|DungeonRouteSaveService {
+        return $testCase
+            ->getMockBuilderPublic(DungeonRouteSaveService::class)
+            ->setConstructorArgs([
+                $seasonService ?? $testCase->createMockPublic(SeasonServiceInterface::class),
+                $thumbnailService ?? $testCase->createMockPublic(ThumbnailServiceInterface::class),
+                $log ?? LoggingFixtures::createDungeonRouteSaveServiceLogging($testCase),
+            ])
+            ->onlyMethods($methodsToMock)
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    /**
+     * @param  array<int, string> $methodsToMock
      * @throws Exception
      */
     public static function getCloudflareServiceMock(

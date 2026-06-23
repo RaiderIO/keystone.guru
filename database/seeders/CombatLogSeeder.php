@@ -22,6 +22,7 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
         foreach (self::getAffectedModelClasses() as $modelClass) {
             $fileName   = Str::snake(class_basename($modelClass)) . 's';
             $modelsData = json_decode(file_get_contents(sprintf('%s%s.json', $rootDir, $fileName)), true);
+            /** @var array<int, array<string, mixed>> $modelsData */
 
             foreach ($modelsData as &$modelData) {
                 if (!isset($modelData['created_at'])) {
@@ -36,7 +37,9 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
             }
             unset($modelData);
 
-            collect($modelsData)->chunk(1000)->each(function (Collection $chunk) use ($modelClass) {
+            /** @var Collection<int, array<string, mixed>> $collected */
+            $collected = collect($modelsData);
+            $collected->chunk(1000)->each(function (Collection $chunk) use ($modelClass) {
                 $modelClass::from(DatabaseSeeder::getTempTableName($modelClass))
                     ->insert($chunk->toArray());
             });
@@ -55,6 +58,9 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
         ];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // Skip staging since it will collide with testing - testing will always run,

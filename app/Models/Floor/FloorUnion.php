@@ -72,21 +72,33 @@ class FloorUnion extends CacheModel implements HasLatLngInterface, MappingModelC
         ];
     }
 
+    /**
+     * @return BelongsTo<MappingVersion, $this>
+     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function targetFloor(): BelongsTo
     {
         return $this->belongsTo(Floor::class, 'target_floor_id');
     }
 
+    /**
+     * @return HasMany<FloorUnionArea, $this>
+     */
     public function floorUnionAreas(): HasMany
     {
         return $this->hasMany(FloorUnionArea::class);

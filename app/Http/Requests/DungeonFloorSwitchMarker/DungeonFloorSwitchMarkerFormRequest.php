@@ -29,10 +29,8 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
             'linked_dungeon_floor_switch_marker_id' => (int)$this->linked_dungeon_floor_switch_marker_id === -1 ? null : $this->linked_dungeon_floor_switch_marker_id,
             'direction'                             => (int)$this->direction === -1 ? null : $this->direction,
         ]);
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

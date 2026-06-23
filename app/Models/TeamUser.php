@@ -19,7 +19,7 @@ use Illuminate\Support\Carbon;
  * @property Team   $team
  * @property User   $user
  *
- * @method static Builder isModerator(int $userId)
+ * @method static Builder<TeamUser> isModerator(int $userId)
  *
  * @mixin Eloquent
  */
@@ -48,6 +48,10 @@ class TeamUser extends Model
 
     protected $with = ['user'];
 
+    /**
+     * @param  Builder<TeamUser> $query
+     * @return Builder<TeamUser>
+     */
     #[Scope]
     protected function isModerator(Builder $query, int $userId): Builder
     {
@@ -57,11 +61,17 @@ class TeamUser extends Model
         ]);
     }
 
+    /**
+     * @return BelongsTo<Team, $this>
+     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

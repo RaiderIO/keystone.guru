@@ -3,6 +3,7 @@
 namespace App\Service\Expansion;
 
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
@@ -34,12 +35,18 @@ interface ExpansionServiceInterface
 
     public function getNextSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season;
 
+    /**
+     * @return Collection<int, Dungeon>
+     */
     public function getActiveDungeons(Expansion $expansion): Collection;
 
     public function getCurrentAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
 
     public function getNextAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
 
+    /**
+     * @return Collection<int, AffixGroup>
+     */
     public function getCurrentSeasonAffixGroups(
         Expansion         $expansion,
         ?GameServerRegion $gameServerRegion = null,

@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion           $currentUserGameVersion
- * @var Collection<Dungeon>   $allDungeons
- * @var Collection<Dungeon>   $allRaids
- * @var Collection<Dungeon>   $allActiveDungeons
- * @var Collection<Dungeon>   $allActiveRaids
- * @var Collection<Expansion> $allExpansions
- * @var Dungeon               $siegeOfBoralus
- * @var Season                $currentSeason
- * @var Season|null           $nextSeason
+ * @var GameVersion                $currentUserGameVersion
+ * @var Collection<int, Dungeon>   $allDungeons
+ * @var Collection<int, Dungeon>   $allRaids
+ * @var Collection<int, Dungeon>   $allActiveDungeons
+ * @var Collection<int, Dungeon>   $allActiveRaids
+ * @var Collection<int, Expansion> $allExpansions
+ * @var Dungeon                    $siegeOfBoralus
+ * @var Season                     $currentSeason
+ * @var Season|null                $nextSeason
  */
 
 $id                   ??= 'dungeon_id_select';
@@ -102,8 +102,8 @@ $dungeonsByExpansion = $dungeons->load([
 // @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     /**
-     * @var Collection $dungeonsOfExpansion
-     * @var Expansion  $expansion
+     * @var Collection<int, Dungeon> $dungeonsOfExpansion
+     * @var Expansion                $expansion
      */
     $expansion = $allExpansions->where('id', $expansionId)->first();
 

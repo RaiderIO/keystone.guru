@@ -11439,12 +11439,516 @@
         "created_at": "2026-06-04T08:22:30+00:00"
     },
     {
-        "id": 1591,
+        "id": 1692,
+        "npc_id": 232369,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1693,
+        "npc_id": 234124,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1694,
+        "npc_id": 234486,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1695,
+        "npc_id": 234486,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 24,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1696,
+        "npc_id": 259387,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1697,
+        "npc_id": 232106,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1698,
+        "npc_id": 234065,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1699,
+        "npc_id": 234069,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1700,
+        "npc_id": 255376,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1701,
+        "npc_id": 249086,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1702,
+        "npc_id": 234065,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1703,
+        "npc_id": 231864,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_magisters-terrace.zip",
+        "created_at": "2026-06-14T19:35:45+00:00"
+    },
+    {
+        "id": 1704,
+        "npc_id": 252565,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1705,
+        "npc_id": 252558,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1706,
+        "npc_id": 252559,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1707,
+        "npc_id": 252561,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1708,
+        "npc_id": 252567,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1709,
+        "npc_id": 252603,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1710,
+        "npc_id": 252602,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1711,
+        "npc_id": 252551,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1712,
+        "npc_id": 252557,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1713,
+        "npc_id": 252561,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1714,
+        "npc_id": 252563,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1715,
+        "npc_id": 252555,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1716,
+        "npc_id": 252566,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1717,
+        "npc_id": 252648,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1718,
+        "npc_id": 254684,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1719,
+        "npc_id": 254691,
+        "event_type": "characteristic_added",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": "tmp\/WoWCombatLog-061126_213150_10_pit-of-saron.zip",
+        "created_at": "2026-06-14T19:35:55+00:00"
+    },
+    {
+        "id": 1730,
+        "npc_id": 231864,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1731,
+        "npc_id": 232106,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1732,
+        "npc_id": 232369,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1733,
+        "npc_id": 234065,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1734,
+        "npc_id": 234065,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1735,
+        "npc_id": 234069,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1736,
+        "npc_id": 234124,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1737,
+        "npc_id": 234486,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1738,
+        "npc_id": 234486,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 24,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1739,
+        "npc_id": 249086,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1740,
+        "npc_id": 252551,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1741,
+        "npc_id": 252555,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1742,
+        "npc_id": 252557,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1743,
+        "npc_id": 252558,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1744,
+        "npc_id": 252559,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1745,
+        "npc_id": 252561,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1746,
+        "npc_id": 252561,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1747,
+        "npc_id": 252563,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1748,
+        "npc_id": 252565,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1749,
+        "npc_id": 252566,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1750,
+        "npc_id": 252567,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1751,
+        "npc_id": 252602,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1752,
+        "npc_id": 252603,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1753,
+        "npc_id": 252648,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1754,
+        "npc_id": 254684,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1755,
+        "npc_id": 254691,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 1,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1756,
+        "npc_id": 255376,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1757,
+        "npc_id": 259387,
+        "event_type": "characteristic_removed",
+        "model_class": "App\\Models\\Characteristic",
+        "model_id": 18,
+        "combat_log_path": null,
+        "created_at": "2026-06-18T17:29:04+00:00"
+    },
+    {
+        "id": 1810,
         "npc_id": 9995099,
         "event_type": "spell_assigned",
         "model_class": "App\\Models\\Spell\\Spell",
         "model_id": 9995099,
         "combat_log_path": null,
-        "created_at": "2026-06-08T15:05:00+00:00"
+        "created_at": "2026-06-19T17:14:49+00:00"
     }
 ]

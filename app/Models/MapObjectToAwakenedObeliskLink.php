@@ -33,11 +33,14 @@ class MapObjectToAwakenedObeliskLink extends Model
         'target_map_icon_seasonal_index',
     ];
 
+    /** @return HasOne<Model, $this> */
     public function sourcemapobject(): HasOne
     {
-        return $this->hasOne($this->source_map_object_class_name, 'id', $this->source_map_object_id);
+        /** @phpstan-ignore argument.templateType */
+        return $this->hasOne($this->source_map_object_class_name, 'id', (string)$this->source_map_object_id);
     }
 
+    /** @return HasOne<MapIcon, $this> */
     public function targetmapicon(): HasOne
     {
         return $this->hasOne(MapIcon::class)

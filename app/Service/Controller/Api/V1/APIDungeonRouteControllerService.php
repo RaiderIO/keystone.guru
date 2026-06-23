@@ -14,7 +14,7 @@ class APIDungeonRouteControllerService implements APIDungeonRouteControllerServi
     }
 
     /**
-     * @return Collection<DungeonRouteThumbnailJob>
+     * @return Collection<int, DungeonRouteThumbnailJob>
      */
     public function createThumbnails(
         DungeonRoute $dungeonRoute,
@@ -22,7 +22,7 @@ class APIDungeonRouteControllerService implements APIDungeonRouteControllerServi
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): Collection {
         return $this->thumbnailService->queueThumbnailRefreshForApi(

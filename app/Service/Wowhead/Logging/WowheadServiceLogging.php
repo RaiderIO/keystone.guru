@@ -37,6 +37,9 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $json
+     */
     public function getSpellDataIconNameSpellIdDoesNotMatch(string $line, array $json, int $spellId): void
     {
         $this->warning(__METHOD__, get_defined_vars());

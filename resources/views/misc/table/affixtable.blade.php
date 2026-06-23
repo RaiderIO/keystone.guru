@@ -9,14 +9,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var TimewalkingEventService                                        $timewalkingEventService
- * @var SeasonServiceInterface                                         $seasonService
- * @var AffixGroup                                                     $currentAffixGroup
- * @var AffixGroup                                                     $nextAffixGroup
- * @var int                                                            $offset
- * @var Expansion                                                      $expansion
- * @var Collection<array{date_start: Carbon, affix_group: AffixGroup}> $affixGroups
- * @var bool                                                           $isNewSeason
+ * @var TimewalkingEventService                                             $timewalkingEventService
+ * @var SeasonServiceInterface                                              $seasonService
+ * @var AffixGroup                                                          $currentAffixGroup
+ * @var AffixGroup                                                          $nextAffixGroup
+ * @var int                                                                 $offset
+ * @var Expansion                                                           $expansion
+ * @var Collection<int, array{date_start: Carbon, affix_group: AffixGroup}> $affixGroups
+ * @var bool                                                                $isNewSeason
  */
 // Juuusstt to be sure
 if ($affixGroups->isEmpty()) {

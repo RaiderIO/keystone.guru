@@ -53,6 +53,9 @@ class NpcClassificationsSeeder extends Seeder implements TableSeederInterface
         return [NpcClassification::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

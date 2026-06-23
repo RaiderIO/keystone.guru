@@ -31,11 +31,13 @@ class AffixGroupCoupling extends CacheModel
         'key_level',
     ];
 
+    /** @return HasOne<Affix, $this> */
     public function affix(): HasOne
     {
         return $this->hasOne(Affix::class);
     }
 
+    /** @return HasOne<AffixGroup, $this> */
     public function affixGroup(): HasOne
     {
         return $this->hasOne(AffixGroup::class);

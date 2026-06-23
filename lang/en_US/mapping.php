@@ -5,6 +5,7 @@ return [
     'map_icons' => [
         'mdt' => [
             'witherbark_prisoner' => 'Witherbark Prisoner',
+            'captive'             => 'Captive',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

@@ -73,22 +73,34 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         ];
     }
 
+    /**
+     * @return BelongsTo<MappingVersion, $this>
+     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return HasOne<Polyline, $this>
+     */
     public function polyline(): HasOne
     {
         return $this->hasOne(Polyline::class, 'model_id')
             ->where('model_class', static::class);
     }
 
+    /**
+     * @return HasOne<Polyline, $this>
+     */
     public function mdtPolyline(): HasOne
     {
         return $this->hasOne(Polyline::class, 'model_id')

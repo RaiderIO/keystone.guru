@@ -5,6 +5,9 @@ namespace App\Logic\MDT\Entity;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MDTMapPOI implements Arrayable
 {
     private readonly MDTMapPOITemplate $template;
@@ -26,6 +29,7 @@ class MDTMapPOI implements Arrayable
     private readonly float $y;
 
     /**
+     * @param  array<string, mixed> $rawMapPOI
      * @throws Exception
      */
     public function __construct(private readonly int $subLevel, private readonly array $rawMapPOI)
@@ -133,11 +137,17 @@ class MDTMapPOI implements Arrayable
         return $this->y;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRawMapPOI(): array
     {
         return $this->rawMapPOI;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

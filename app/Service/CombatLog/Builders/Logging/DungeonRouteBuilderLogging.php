@@ -42,6 +42,9 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__);
     }
 
+    /**
+     * @param array<int, int> $spellIds
+     */
     public function createPullSpellsAttachedToKillZone(int $killZoneId, array $spellIds, int $spellCount): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -62,6 +65,9 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->critical(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, bool> $preferredGroups
+     */
     public function findUnkilledEnemyForNpcAtIngameLocationStart(
         int    $npcId,
         float  $ingameX,
@@ -91,6 +97,9 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, bool> $preferredGroups
+     */
     public function findClosestEnemyInPreferredGroupsStart(array $preferredGroups): void
     {
         $this->start(__METHOD__, get_defined_vars());
@@ -168,6 +177,10 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, float> $enemyXY
+     * @param array<int, float> $targetEnemyXY
+     */
     public function findClosestEnemyAndDistanceDistanceBetweenEnemies(
         array $enemyXY,
         array $targetEnemyXY,

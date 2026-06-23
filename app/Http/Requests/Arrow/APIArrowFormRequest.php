@@ -25,6 +25,7 @@ class APIArrowFormRequest extends FormRequest
         $this->castInputData($this, Polyline::class, 'polyline');
     }
 
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [

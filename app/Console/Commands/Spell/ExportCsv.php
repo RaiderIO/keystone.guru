@@ -78,6 +78,10 @@ class ExportCsv extends Command
         return 0;
     }
 
+    /**
+     * @param array<int, string> $headers
+     * @param array<int, mixed>  $data
+     */
     private function outputToCsv(string $filePath, array $headers, array $data): bool
     {
         $file = null;

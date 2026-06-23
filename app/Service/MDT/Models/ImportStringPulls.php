@@ -12,8 +12,16 @@ class ImportStringPulls
 {
     private int $enemyForces = 0;
 
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $killZoneAttributes;
 
+    /**
+     * @param Collection<int, ImportWarning> $warnings
+     * @param Collection<int, ImportError>   $errors
+     * @param array<int, mixed>              $mdtPulls
+     */
     public function __construct(
         private readonly Collection     $warnings,
         private readonly Collection     $errors,
@@ -27,7 +35,7 @@ class ImportStringPulls
     }
 
     /**
-     * @return Collection<ImportWarning>
+     * @return Collection<int, ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -35,7 +43,7 @@ class ImportStringPulls
     }
 
     /**
-     * @return Collection<ImportError>
+     * @return Collection<int, ImportError>
      */
     public function getErrors(): Collection
     {
@@ -62,6 +70,9 @@ class ImportStringPulls
         return $this->seasonalIndex;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getMdtPulls(): array
     {
         return $this->mdtPulls;
@@ -74,6 +85,9 @@ class ImportStringPulls
         return $this;
     }
 
+    /**
+     * @param array<int, mixed> $attributes
+     */
     public function addKillZoneAttributes(array $attributes): self
     {
         $this->killZoneAttributes->push($attributes);
@@ -86,6 +100,9 @@ class ImportStringPulls
         return $this->enemyForces;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getKillZoneAttributes(): Collection
     {
         return $this->killZoneAttributes;

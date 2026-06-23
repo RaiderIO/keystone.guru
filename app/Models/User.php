@@ -77,6 +77,7 @@ class User extends Authenticatable implements LaratrustUser
     use HasRolesAndPermissions;
     use Notifiable;
     use HasTags;
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
     public const string MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
@@ -175,41 +176,49 @@ class User extends Authenticatable implements LaratrustUser
         return $this->hasMany(DungeonRoute::class, 'author_id');
     }
 
+    /** @return HasMany<UserReport, $this> */
     public function reports(): HasMany
     {
         return $this->hasMany(UserReport::class);
     }
 
+    /** @return HasOne<PatreonUserLink, $this> */
     public function patreonUserLink(): HasOne
     {
         return $this->hasOne(PatreonUserLink::class);
     }
 
+    /** @return BelongsTo<GameServerRegion, $this> */
     public function gameServerRegion(): BelongsTo
     {
         return $this->belongsTo(GameServerRegion::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
 
+    /** @return BelongsTo<GameVersion, $this> */
     public function gameVersion(): BelongsTo
     {
         return $this->belongsTo(GameVersion::class);
     }
 
+    /** @return BelongsToMany<Team, $this> */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'team_users');
     }
 
+    /** @return HasOne<PatreonAdFreeGiveaway, $this> */
     public function patreonAdFreeGiveaway(): HasOne
     {
         return $this->hasOne(PatreonAdFreeGiveaway::class, 'receiver_user_id');
     }
 
+    /** @return HasMany<UserIpAddress, $this> */
     public function ipAddresses(): HasMany
     {
         return $this->hasMany(UserIpAddress::class);
@@ -241,6 +250,8 @@ class User extends Authenticatable implements LaratrustUser
 
     /**
      * Get a list of tiers that this User has access to.
+     *
+     * @return Collection<int, string>
      */
     public function getPatreonBenefits(): Collection
     {
@@ -301,6 +312,8 @@ class User extends Authenticatable implements LaratrustUser
 
     /**
      * Gets a list of consequences that will happen when this user tries to delete their account.
+     *
+     * @return array<string, array<int|string, mixed>>
      */
     public function getDeleteConsequences(): array
     {

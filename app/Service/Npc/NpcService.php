@@ -10,6 +10,7 @@ class NpcService implements NpcServiceInterface
 {
     /**
      * {@inheritDoc}
+     * @param Collection<int, \App\Models\Dungeon> $dungeons
      */
     public function getNpcsForDropdown(Collection $dungeons): Collection
     {

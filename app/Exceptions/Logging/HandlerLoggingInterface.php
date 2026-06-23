@@ -14,6 +14,9 @@ interface HandlerLoggingInterface
         Throwable $throwable,
     ): void;
 
+    /**
+     * @param array<string, mixed>|null $body
+     */
     public function uncaughtException(
         string  $ip,
         string  $url,

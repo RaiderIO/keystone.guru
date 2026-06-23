@@ -44,7 +44,7 @@ class SpellCreationCollector implements SpellDataCollectorInterface
             return;
         }
 
-        $createdSpell = $this->createSpellModel($result, $spellId, $prefix->getSpellName(), $prefix->getSpellSchool());
+        $createdSpell = $this->createSpellModel($result, $spellId, $prefix->getSpellName(), (int)$prefix->getSpellSchool());
         $this->allSpells->put($spellId, $createdSpell);
         $this->pendingNewSpells->put($spellId, $createdSpell);
 

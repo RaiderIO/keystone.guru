@@ -5,11 +5,14 @@ namespace App\Service\RaiderIO\Dtos\HeatmapDataResponse;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class HeatmapDataFloorData implements Arrayable
 {
     private int $floorId;
 
-    /** @var Collection<HeatmapDataLatLng> */
+    /** @var Collection<int, HeatmapDataLatLng> */
     private Collection $latLngs;
 
     private function __construct()
@@ -25,7 +28,7 @@ class HeatmapDataFloorData implements Arrayable
     }
 
     /**
-     * @return Collection<HeatmapDataLatLng>
+     * @return Collection<int, HeatmapDataLatLng>
      */
     public function getLatLngs(): Collection
     {
@@ -40,6 +43,9 @@ class HeatmapDataFloorData implements Arrayable
         ];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         $model = new self();

@@ -295,7 +295,7 @@ class WowheadService implements WowheadServiceInterface
                 if (str_contains($duration, 'n/a')) {
                     $duration = null;
                 } else {
-                    $duration = CarbonInterval::fromString($duration)->totalMilliseconds;
+                    $duration = (int)CarbonInterval::fromString($duration)->totalMilliseconds;
                 }
                 $durationFound = false;
                 $durationSet   = true;

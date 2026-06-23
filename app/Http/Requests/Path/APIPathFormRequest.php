@@ -28,9 +28,7 @@ class APIPathFormRequest extends FormRequest
         $this->castInputData($this, Polyline::class, 'polyline');
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [
@@ -50,6 +48,7 @@ class APIPathFormRequest extends FormRequest
                 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
             ],
             'polyline.weight' => [
+                'nullable',
                 'int',
             ],
             'polyline.vertices_json' => [

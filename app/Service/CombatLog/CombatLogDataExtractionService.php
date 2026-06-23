@@ -41,7 +41,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         // Earth Spirit
     ];
 
-    /** @var Collection<DataExtractorInterface> */
+    /** @var Collection<int, DataExtractorInterface> */
     private readonly Collection $dataExtractors;
 
     public function __construct(
@@ -52,13 +52,15 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         private readonly ParsedCombatLogRepositoryInterface             $parsedCombatLogRepository,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log,
     ) {
-        $this->dataExtractors = collect([
+        /** @var Collection<int, DataExtractorInterface> $extractors */
+        $extractors = collect([
             new CreateMissingNpcDataExtractor(),
             new NpcUpdateDataExtractor(),
             new FloorDataExtractor($this->floorRepository),
             new SpellDataExtractor(),
             new NpcCharacteristicDataExtractor($this->spellRepository),
         ]);
+        $this->dataExtractors = $extractors;
     }
 
     public function extractData(
@@ -166,7 +168,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $season     = $dungeon->getActiveSeason($this->seasonService);
             if ($season !== null && $affixIds !== null) {
                 /** @var AffixGroup|null $affixGroup */
-                $affixGroup = AffixGroup::findMatchingAffixGroupsForAffixIds($season, collect($affixIds))->first();
+                $affixGroup = AffixGroup::findMatchingAffixGroupsForAffixIds($season, collect($affixIds)->values())->first();
             }
 
             $result = new DataExtractionCurrentDungeon($dungeon, $keyLevel, $affixGroup);

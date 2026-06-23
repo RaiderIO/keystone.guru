@@ -21,23 +21,23 @@ use Illuminate\Support\Collection;
  * @var MapContextBase             $mapContext
  * @var Dungeon                    $dungeon
  * @var Floor                      $floor
- * @var Season|null                $season Used for heatmap
+ * @var Season|null                $season              Used for heatmap
  * @var MappingVersion             $mappingVersion
  * @var DungeonRoute|null          $dungeonroute
- * @var LiveSession|null           $livesession
+ * @var LiveSession|null           $liveSession
  * @var string|null                $headerTitle
  * @var bool|null                  $admin
  * @var bool|null                  $embed
  * @var string|null                $embedStyle
  * @var bool|null                  $edit
- * @var array                      $show
- * @var array|null                 $controlOptions
+ * @var array<string, mixed>       $show
+ * @var array<string, mixed>|null  $controlOptions
  * @var bool                       $adFree
  * @var string|null                $mapBackgroundColor
  * @var string|null                $mapFacadeStyle
  * @var string                     $assetsBaseUrl
  * @var string                     $tilesBaseUrl
- * @var array|null                 $parameters
+ * @var array<string, mixed>|null  $parameters
  * @var Collection<string, string> $dungeonContextLinks
  */
 
@@ -63,7 +63,7 @@ $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
-$livesession         ??= null;
+$liveSession         ??= null;
 $mapBackgroundColor  ??= null;
 $controlOptions      ??= [];
 $parameters          ??= [];
@@ -288,7 +288,7 @@ if ($isAdmin) {
                 'floor' => $floor,
                 'headerTitle' => $headerTitle,
                 'dungeonroute' => $dungeonroute,
-                'livesession' => $livesession,
+                'liveSession' => $liveSession,
                 'mappingVersion' => $mappingVersion,
             ])
         </nav>
@@ -300,7 +300,7 @@ if ($isAdmin) {
         {{--            'floor' => $floor,--}}
         {{--            'headerTitle' => $headerTitle,--}}
         {{--            'dungeonroute' => $dungeonroute,--}}
-        {{--            'livesession' => $livesession,--}}
+        {{--            'liveSession' => $liveSession,--}}
         {{--            'mappingVersion' => $mappingVersion,--}}
         {{--        ])--}}
     @endif

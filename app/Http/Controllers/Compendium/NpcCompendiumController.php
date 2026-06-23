@@ -108,6 +108,9 @@ class NpcCompendiumController extends Controller
         ]);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function get(NpcCompendiumRequest $request): array
     {
         $mappingVersion = $request->dungeon()->getCurrentMappingVersion();

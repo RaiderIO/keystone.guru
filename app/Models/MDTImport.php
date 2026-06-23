@@ -33,6 +33,8 @@ class MDTImport extends Model
 
     /**
      * Get the dungeon route that this import created.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
      */
     public function dungeonRoute(): BelongsTo
     {

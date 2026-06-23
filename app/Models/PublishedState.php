@@ -45,13 +45,14 @@ class PublishedState extends CacheModel
         self::WORLD           => 4,
     ];
 
+    /** @return HasMany<DungeonRoute, $this> */
     public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
 
     /**
-     * @return Collection<string>
+     * @return Collection<int, string>
      */
     public static function getAvailablePublishedStates(DungeonRoute $dungeonRoute, ?User $user = null): Collection
     {

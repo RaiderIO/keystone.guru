@@ -29,11 +29,11 @@ use Illuminate\Support\Facades\App;
  * Processes raw combat log events into EnemyEngaged/EnemyKilled/PlayerDied result events by tracking which enemies
  * are in combat (via accurateEnemySightings) and detecting their deaths, defeats, or charm-based removals.
  *
- * @property Collection<BaseResultEvent> $resultEvents
+ * @property Collection<int, BaseResultEvent> $resultEvents
  */
 abstract class BaseCombatFilter implements CombatLogParserInterface
 {
-    /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
+    /** @var array<int, float> The percentage (between 0 and 1) when certain enemies are considered defeated */
     private const array DEFEATED_PERCENTAGE = [
         // Grim Batol: Valiona is defeated at 50%
         40320 => 0.51,
@@ -110,13 +110,13 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         247572 => 0.02,
     ];
 
-    /** @var array Some enemies are summoned that we DO want to track in the route */
+    /** @var array<int, int> Some enemies are summoned that we DO want to track in the route */
     private const array SUMMONED_NPC_ID_WHITELIST = [
         // Vexamus, Algeth'ar Academy is a boss that gets summoned
         194181,
     ];
 
-    /** @var Collection<int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
+    /** @var Collection<int, int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
     /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
@@ -125,14 +125,17 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
     private readonly Collection $lastKnownPlayerPositions;
 
-    /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
+    /** @var Collection<int, string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
     private readonly Collection $summonedEnemies;
 
-    /** @var Collection<string> List of GUIDs for all enemies that we have killed since the start. */
+    /** @var Collection<int, string> List of GUIDs for all enemies that we have killed since the start. */
     private readonly Collection $killedEnemies;
 
     private readonly BaseCombatFilterLoggingInterface $log;
 
+    /**
+     * @param Collection<int, BaseResultEvent> $resultEvents
+     */
     public function __construct(private readonly Collection $resultEvents)
     {
         $this->validNpcIds              = collect();
@@ -146,6 +149,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $this->log = $log;
     }
 
+    /**
+     * @param Collection<int, int> $validNpcIds
+     */
     public function setValidNpcIds(Collection $validNpcIds): void
     {
         $this->validNpcIds = $validNpcIds;

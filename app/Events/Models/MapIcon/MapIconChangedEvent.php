@@ -34,6 +34,9 @@ class MapIconChangedEvent extends ModelChangedEvent
         return 'mapicon-changed';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

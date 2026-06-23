@@ -5,8 +5,8 @@ use App\Models\PublishedState;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRoute         $dungeonRoute
- * @var Collection<string>   $publishedStates
+ * @var DungeonRoute            $dungeonRoute
+ * @var Collection<int, string> $publishedStates
  */
 ?>
 

@@ -470,5 +470,8 @@ if (typeof module !== 'undefined' && module.exports) {
         getDistanceSquared,
         getLatLngDistance,
         getLatLngDistanceSquared,
+        rotateLatLng,
+        getCenteroid,
+        getQueryParams,
     };
 }

@@ -20,6 +20,7 @@ class GameIcon extends Model
 {
     public $timestamps = false;
 
+    /** @return BelongsTo<File, $this> */
     public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);

@@ -11,12 +11,12 @@ use App\Models\Polyline;
 class MapDrawingService implements MapDrawingServiceInterface
 {
     /**
-     * @param  DungeonRoute  $dungeonRoute
-     * @param  array<LatLng> $latLngs
-     * @param  array         $connectionAttributes
-     * @param  array         $polylineAttributes
-     * @param  bool          $drawAsPatrols
-     * @param  array         $gradient
+     * @param  DungeonRoute                         $dungeonRoute
+     * @param  array<int, LatLng>                   $latLngs
+     * @param  array<string, mixed>                 $connectionAttributes
+     * @param  array<string, mixed>                 $polylineAttributes
+     * @param  bool                                 $drawAsPatrols
+     * @param  array<int, array<int|string, mixed>> $gradient
      * @return void
      */
     public function drawConnections(

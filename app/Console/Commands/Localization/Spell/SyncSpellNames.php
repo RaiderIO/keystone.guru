@@ -41,7 +41,7 @@ class SyncSpellNames extends BaseSyncCommand
         $spellNamesByLocale = $wowheadTranslationService->getSpellNames($gameVersion);
 
         foreach ($spellNamesByLocale as $locale => $spellNames) {
-            /** @var Collection $spellNames */
+            /** @var Collection<int, string> $spellNames */
             // Get the existing spell names from the localization file and merge with the fetched names
             $existingSpellNames = __('spells', [], $locale);
             if (!is_array($existingSpellNames) || empty($existingSpellNames)) {

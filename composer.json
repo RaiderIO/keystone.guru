@@ -30,14 +30,14 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "6.1.4",
+                "version": "6.1.18",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "c1a58cb2629e6d83211767a4d9139a27c33553e2"
+                    "reference": "de0d74d0a80ab0720168682f9d858bcb8caf62f5"
                 },
                 "dist": {
-                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/c1a58cb2629e6d83211767a4d9139a27c33553e2.zip",
+                    "url": "https://github.com/Wotuu/MythicDungeonTools/archive/de0d74d0a80ab0720168682f9d858bcb8caf62f5.zip",
                     "type": "zip"
                 }
             }
@@ -123,7 +123,7 @@
         "fruitcake/laravel-debugbar": "^4.2",
         "larastan/larastan": "^3.1",
         "laravel-lang/lang": "^15.2",
-        "laravel/boost": "^1.8",
+        "laravel/boost": "^2.0",
         "laravel/horizon": "^5.36",
         "laravel/pail": "^1.2.2",
         "lukasss93/laravel-larex": "^4.6",

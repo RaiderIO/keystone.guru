@@ -21,10 +21,22 @@ class CloudflareService implements CloudflareServiceInterface
     ) {
     }
 
+    /**
+
+
+     * @return array<int, mixed>
+     */
+
     public function getIpRanges(bool $useCache = true): array
     {
         return array_merge($this->getIpRangesV4($useCache), $this->getIpRangesV6($useCache));
     }
+
+    /**
+
+
+     * @return array<int, mixed>
+     */
 
     public function getIpRangesV4(bool $useCache = true): array
     {
@@ -35,6 +47,12 @@ class CloudflareService implements CloudflareServiceInterface
         });
     }
 
+    /**
+
+
+     * @return array<int, mixed>
+     */
+
     public function getIpRangesV6(bool $useCache = true): array
     {
         return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip-ranges-v6', function () {
@@ -44,6 +62,9 @@ class CloudflareService implements CloudflareServiceInterface
         });
     }
 
+    /**
+     * @return array<int, string>
+     */
     private function validateIpAddressRanges(string $ipAddresses, int $options): array
     {
         $result = [];

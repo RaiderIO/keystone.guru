@@ -21,6 +21,9 @@ class PatreonApiServiceLogging extends RollbarStructuredLogging implements Patre
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $identityResponse
+     */
     public function getIdentityEnd(array $identityResponse): void
     {
         $this->end(__METHOD__, get_defined_vars());
@@ -31,6 +34,9 @@ class PatreonApiServiceLogging extends RollbarStructuredLogging implements Patre
         $this->start(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed>|null $result
+     */
     public function getCampaignTiersAndBenefitsEnd(?array $result): void
     {
         $this->end(__METHOD__, get_defined_vars());
@@ -41,6 +47,9 @@ class PatreonApiServiceLogging extends RollbarStructuredLogging implements Patre
         $this->start(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed>|null $result
+     */
     public function getCampaignMembersEnd(?array $result): void
     {
         $this->end(__METHOD__, get_defined_vars());
@@ -51,11 +60,17 @@ class PatreonApiServiceLogging extends RollbarStructuredLogging implements Patre
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param mixed $response
+     */
     public function getAllPagesUnknownResponse($response): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $errors
+     */
     public function getAllPagesError(array $errors): void
     {
         $this->error(__METHOD__, get_defined_vars());

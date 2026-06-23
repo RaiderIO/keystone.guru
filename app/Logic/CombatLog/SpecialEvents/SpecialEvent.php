@@ -130,6 +130,9 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_COMBATANT_INFO         => CombatantInfoBuilder::class,
     ];
 
+    /**
+     * @param array<int, mixed> $parameters
+     */
     public function __construct(
         int    $combatLogVersion,
         Carbon $timestamp,
@@ -143,6 +146,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     }
 
     /**
+     * @param  array<int, mixed> $parameters
      * @return self
      */
     public function setParameters(array $parameters): HasParameters
@@ -153,6 +157,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     }
 
     /**
+     * @param  array<int, mixed> $parameters
      * @throws Exception
      */
     public static function createFromEventName(

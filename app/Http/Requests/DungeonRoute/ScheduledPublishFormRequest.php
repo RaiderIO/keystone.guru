@@ -13,6 +13,12 @@ class ScheduledPublishFormRequest extends FormRequest
         return true;
     }
 
+    /**
+
+
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
+
     public function rules(): array
     {
         return [

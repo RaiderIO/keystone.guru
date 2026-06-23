@@ -11,9 +11,9 @@ trait CastInputData
     /**
      * Cast request input data based on the target model's casts property.
      *
-     * @param  Request $request
-     * @param  string  $model
-     * @return array
+     * @param  Request              $request
+     * @param  string               $model
+     * @return array<string, mixed>
      */
     protected function castInputData(Request $request, string $model, ?string $subModel = null): array
     {
