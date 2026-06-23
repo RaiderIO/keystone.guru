@@ -261,6 +261,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         $seasons = Season::selectRaw('seasons.*')
             ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
             ->whereNull('timewalking_events.id')
+            ->with('affixGroups')
             ->orderBy('start')
             ->get();
 
