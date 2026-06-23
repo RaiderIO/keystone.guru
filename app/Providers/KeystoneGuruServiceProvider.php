@@ -483,6 +483,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allSpeedrunDungeons', $globalViewVariables['allSpeedrunDungeons']);
         });
 
+        view()->composer('common.dungeonroute.create.dungeonstartselect', static function (View $view) use (
+            $globalViewVariables
+        ) {
+            $view->with('dungeonStartsByDungeonId', $globalViewVariables['dungeonStartsByDungeonId']);
+        });
+
         view()->composer([
             'common.forms.oauth',
             'common.forms.register',

@@ -12,6 +12,8 @@ use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
@@ -135,6 +137,34 @@ class ViewService implements ViewServiceInterface
 
             $appRevision = trim(file_get_contents(base_path('version')));
 
+            // Dungeons that have more than one dungeon start in their current mapping version, so the
+            // route create/settings forms can offer a dropdown to choose which start the route uses.
+            // Keyed by dungeon id => list of ['id' => mapIconId, 'text' => translated comment label].
+            $currentMappingVersionIdByDungeonId = Dungeon::all()
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $dungeon->getCurrentMappingVersion()?->id])
+                ->filter();
+            $dungeonStartsByCurrentMappingVersionId = MapIcon::where(
+                'map_icon_type_id',
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            )
+                ->whereIn('mapping_version_id', $currentMappingVersionIdByDungeonId->values())
+                ->get(['id', 'mapping_version_id', 'comment'])
+                ->groupBy('mapping_version_id');
+
+            $dungeonStartsByDungeonId = $currentMappingVersionIdByDungeonId
+                ->mapWithKeys(static function (int $mappingVersionId, int $dungeonId) use ($dungeonStartsByCurrentMappingVersionId) {
+                    $mapIcons = $dungeonStartsByCurrentMappingVersionId->get($mappingVersionId);
+
+                    return [$dungeonId => $mapIcons ?? collect()];
+                })
+                ->filter(static fn(Collection $mapIcons) => $mapIcons->count() > 1)
+                ->map(static fn(Collection $mapIcons) => $mapIcons->values()->map(static fn(MapIcon $mapIcon, int $index) => [
+                    'id'   => $mapIcon->id,
+                    'text' => ($mapIcon->comment ?? '') !== '' ?
+                        (string)__($mapIcon->comment) :
+                        sprintf('%s #%d', __('mapicontypes.dungeon_start'), $index + 1),
+                ]));
+
             return [
                 'isLocal'           => config('app.env') === 'local',
                 'isMapping'         => config('app.env') === 'mapping',
@@ -205,7 +235,8 @@ class ViewService implements ViewServiceInterface
                         int $expansionId,
                         int $dungeonId,
                     ) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
-                'allSpeedrunDungeons' => Dungeon::where('speedrun_enabled', true)->get(),
+                'allSpeedrunDungeons'      => Dungeon::where('speedrun_enabled', true)->get(),
+                'dungeonStartsByDungeonId' => $dungeonStartsByDungeonId,
             ];
         }, config('keystoneguru.cache.global_view_variables.ttl')));
     }
