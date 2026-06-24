@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -153.1347,
         "lng": 167.5814,
-        "comment": "Teleporter: Spark of Imagination",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_spark_of_imagination",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -153.1347,
         "lng": 167.5814,
-        "comment": "Teleporter: Spark of Imagination",
+        "comment": "mapping.map_icons.wotlk.ulduar.teleporter_spark_of_imagination",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

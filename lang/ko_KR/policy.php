@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => '',
     'add_brushline_limit_reached'             => '',
     'add_path_limit_reached'                  => '',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => '',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

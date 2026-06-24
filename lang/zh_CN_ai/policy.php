@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => '无法在单一路线上添加超过 :limit 个击杀区域。',
     'add_brushline_limit_reached'             => '无法在单一路线上添加超过 :limit 条手绘线。',
     'add_path_limit_reached'                  => '无法在单一路线上添加超过 :limit 条路径。',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => '无法在单一路线上添加超过 :limit 个地图图标。',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

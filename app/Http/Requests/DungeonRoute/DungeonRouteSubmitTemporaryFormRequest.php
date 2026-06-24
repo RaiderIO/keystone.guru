@@ -30,6 +30,9 @@ class DungeonRouteSubmitTemporaryFormRequest extends FormRequest
             ],
             'dungeon_difficulty'  => Rule::in(array_values(Dungeon::DIFFICULTY_ALL)),
             'dungeon_route_level' => new DungeonRouteLevelRule(),
+
+            // Verified against the dungeon's mapping version in DungeonRouteSaveService
+            'dungeon_start_map_icon_id' => 'nullable|integer',
         ];
 
         // Validate demo state, optional or numeric

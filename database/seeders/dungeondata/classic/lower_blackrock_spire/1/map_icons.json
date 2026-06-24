@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -113.8208,
         "lng": 213.1476,
-        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.one_way_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -127.7465,
         "lng": 189.3698,
-        "comment": "Enemies here may be one of Firebrand Darkweaver, Firebrand Grunt, Firebrand Invoker.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.firebrand_darkweaver_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 2,
         "lat": -196.4063,
         "lng": 216.8125,
-        "comment": "Enemies may be one of Firebrand Pyromancer, Firebrand Legionnaire, Firebrand Dreadweaver.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.firebrand_pyromancer_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 2,
         "lat": -113.8208,
         "lng": 213.1476,
-        "comment": "Keystone.guru: Only if you jump down - you cannot actually go up here.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.one_way_down",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -127.7465,
         "lng": 189.3698,
-        "comment": "Enemies here may be one of Firebrand Darkweaver, Firebrand Grunt, Firebrand Invoker.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.firebrand_darkweaver_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 2,
         "lat": -196.4063,
         "lng": 216.8125,
-        "comment": "Enemies may be one of Firebrand Pyromancer, Firebrand Legionnaire, Firebrand Dreadweaver.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.firebrand_pyromancer_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
