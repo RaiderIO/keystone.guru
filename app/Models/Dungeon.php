@@ -139,6 +139,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         'mdt_id',
         'zone_id',
         'instance_id',
+        'pivot',
     ];
 
     public $timestamps = false;
