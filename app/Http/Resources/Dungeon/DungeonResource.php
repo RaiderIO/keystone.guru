@@ -26,8 +26,7 @@ use Override;
  *     @OA\Property(property="heatmapEnabled", type="boolean", example=0, description="Whether a heatmap is available for this dungeon"),
  *     @OA\Property(property="combinedViewEnabled", type="boolean", example=0, description="Whether a combined view (MDT-style) is available for this dungeon"),
  *     @OA\Property(property="speedrunEnabled", type="boolean", example=0, description="Whether speedrun is enabled for this dungeon"),
- *     @OA\Property(property="speedrunDifficulty10ManEnabled", type="boolean", example=0, description="Whether 10-man difficulty is enabled for speedrunning"),
- *     @OA\Property(property="speedrunDifficulty25ManEnabled", type="boolean", example=0, description="Whether 25-man difficulty is enabled for speedrunning"),
+ *     @OA\Property(property="speedrunDifficulties", type="array", @OA\Items(type="string"), example={"10_man", "25_man"}, description="The difficulty slugs that are enabled for speedrunning on this dungeon"),
  *     @OA\Property(
  *         property="floors",
  *         type="array",
@@ -55,22 +54,24 @@ class DungeonResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'                             => $this->id,
-            'expansion'                      => $this->expansion->shortname,
-            'name'                           => __($this->name, [], 'en_US'),
-            'slug'                           => $this->slug,
-            'key'                            => $this->key,
-            'zoneId'                         => $this->zone_id,
-            'mapId'                          => $this->map_id,
-            'instanceId'                     => $this->instance_id,
-            'challengeModeId'                => $this->challenge_mode_id,
-            'raid'                           => $this->raid,
-            'heatmapEnabled'                 => $this->heatmap_enabled,
-            'combinedViewEnabled'            => (int)$this->floors->contains(fn(Floor $floor) => $floor->facade),
-            'speedrunEnabled'                => $this->speedrun_enabled,
-            'speedrunDifficulty10ManEnabled' => $this->speedrun_difficulty_10_man_enabled,
-            'speedrunDifficulty25ManEnabled' => $this->speedrun_difficulty_25_man_enabled,
-            'floors'                         => $this->floors
+            'id'                   => $this->id,
+            'expansion'            => $this->expansion->shortname,
+            'name'                 => __($this->name, [], 'en_US'),
+            'slug'                 => $this->slug,
+            'key'                  => $this->key,
+            'zoneId'               => $this->zone_id,
+            'mapId'                => $this->map_id,
+            'instanceId'           => $this->instance_id,
+            'challengeModeId'      => $this->challenge_mode_id,
+            'raid'                 => $this->raid,
+            'heatmapEnabled'       => $this->heatmap_enabled,
+            'combinedViewEnabled'  => (int)$this->floors->contains(fn(Floor $floor) => $floor->facade),
+            'speedrunEnabled'      => $this->speedrun_enabled,
+            'speedrunDifficulties' => collect(Dungeon::DIFFICULTY_ALL)
+                ->filter(fn(int $id) => in_array($id, $this->getEnabledSpeedrunDifficulties(), true))
+                ->keys()
+                ->all(),
+            'floors' => $this->floors
                 ->filter(static fn(Floor $floor) => !$floor->facade)
                 ->map(static fn(Floor $floor) => new FloorResource($floor))
                 ->toArray(),

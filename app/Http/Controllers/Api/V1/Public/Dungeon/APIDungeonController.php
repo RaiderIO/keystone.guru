@@ -27,7 +27,7 @@ class APIDungeonController extends Controller
     public function index(Request $request): DungeonEnvelopeResource
     {
         return new DungeonEnvelopeResource(
-            Dungeon::active()->with('floors')->get(),
+            Dungeon::active()->with(['floors', 'dungeonSpeedrunDifficulties'])->get(),
         );
     }
 
@@ -58,7 +58,7 @@ class APIDungeonController extends Controller
     public function show(Dungeon $dungeon): DungeonResource
     {
         return new DungeonResource(
-            $dungeon->load('floors'),
+            $dungeon->load(['floors', 'dungeonSpeedrunDifficulties']),
         );
     }
 }

@@ -183,7 +183,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             'pull_gradient_apply_always' => (bool)($validated['pull_gradient_apply_always'] ?? false),
             'title'                      => $title,
             'description'                => $validated['dungeon_route_description'] ?? ($dungeonRoute->description ?? ''),
-            'dungeon_difficulty'         => $this->resolveDungeonDifficulty($dungeon, $validated['dungeon_difficulty'] ?? null),
+            'dungeon_difficulty'         => $this->resolveDungeonDifficulty($dungeon, isset($validated['dungeon_difficulty']) ? (int)$validated['dungeon_difficulty'] : null),
             'dungeon_start_map_icon_id'  => $this->resolveDungeonStartMapIconId($mappingVersionId, $validated['dungeon_start_map_icon_id'] ?? null),
         ] + $this->levelRangeAttributes($validated['dungeon_route_level'] ?? null, $activeSeason?->key_level_max);
 
@@ -254,7 +254,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             'teeming'                    => false,
             'pull_gradient'              => '',
             'pull_gradient_apply_always' => false,
-            'dungeon_difficulty'         => $this->resolveDungeonDifficulty($dungeon, $validated['dungeon_difficulty'] ?? null),
+            'dungeon_difficulty'         => $this->resolveDungeonDifficulty($dungeon, isset($validated['dungeon_difficulty']) ? (int)$validated['dungeon_difficulty'] : null),
             'dungeon_start_map_icon_id'  => $this->resolveDungeonStartMapIconId($mappingVersionId, $validated['dungeon_start_map_icon_id'] ?? null),
             'title'                      => __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($dungeon->name)]),
             'expires_at'                 => Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours')),
@@ -435,13 +435,19 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
     }
 
     /**
-     * Resolves the dungeon difficulty, overriding it for speedrun-enabled dungeons.
+     * Resolves the dungeon difficulty for speedrun-enabled dungeons: keeps the chosen difficulty when it is one of the
+     * dungeon's enabled speedrun difficulties, otherwise falls back to the first enabled difficulty.
      */
-    private function resolveDungeonDifficulty(Dungeon $dungeon, mixed $difficulty): mixed
+    private function resolveDungeonDifficulty(Dungeon $dungeon, ?int $difficulty): ?int
     {
         if ($difficulty !== null && $dungeon->speedrun_enabled) {
-            return $dungeon->speedrun_difficulty_10_man_enabled ?
-                Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
+            $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+
+            if (in_array($difficulty, $enabledDifficulties, true)) {
+                return $difficulty;
+            }
+
+            return $enabledDifficulties[0] ?? $difficulty;
         }
 
         return $difficulty;

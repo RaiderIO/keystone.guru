@@ -3,6 +3,12 @@
 return [
 
     'dungeon' => [
+        'difficulty' => [
+            '10_man' => '10-man',
+            '25_man' => '25-man',
+            '20_man' => '20-man',
+            '40_man' => '40-man',
+        ],
         'griddiscover' => [
             'popular'   => 'Popular',
             'this_week' => 'This week',
