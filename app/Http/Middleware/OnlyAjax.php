@@ -16,7 +16,7 @@ class OnlyAjax
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->ajax()) {
+        if (!$request->ajax() && config('app.env') !== 'local') {
             return response('Forbidden', 403);
         }
 
