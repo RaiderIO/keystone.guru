@@ -14,7 +14,9 @@ class EnemyRepository extends DatabaseRepository implements EnemyRepositoryInter
     {
         parent::__construct(Enemy::class);
     }
-
+    /**
+     * @return Collection<int, Enemy>
+     */
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection
     {
         return $mappingVersion->enemies()->with([

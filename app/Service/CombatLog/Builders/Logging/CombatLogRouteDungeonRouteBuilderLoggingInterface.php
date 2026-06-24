@@ -25,6 +25,9 @@ interface CombatLogRouteDungeonRouteBuilderLoggingInterface extends DungeonRoute
 
     public function buildKillZonesNotAllSpellsAssigned(int $totalAssignedSpells, int $totalSpells): void;
 
+    /**
+     * @param array<int, string> $guids
+     */
     public function buildKillZonesCreateNewFinalPull(array $guids): void;
 
     public function determineSpellsCastBetweenInvalidSpellIdBetween(int $spellId): void;

@@ -19,9 +19,7 @@ class DungeonRouteSubmitTemporaryFormRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         $rules = [
@@ -30,7 +28,7 @@ class DungeonRouteSubmitTemporaryFormRequest extends FormRequest
                 'required',
                 Rule::exists(Dungeon::class, 'id')->where('active', '1'),
             ],
-            'dungeon_difficulty'  => Rule::in(Dungeon::DIFFICULTY_ALL),
+            'dungeon_difficulty'  => Rule::in(array_values(Dungeon::DIFFICULTY_ALL)),
             'dungeon_route_level' => new DungeonRouteLevelRule(),
         ];
 

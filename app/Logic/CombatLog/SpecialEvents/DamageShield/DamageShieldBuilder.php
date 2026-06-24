@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 class DamageShieldBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed>                  $parameters
      * @return SpecialEvent&DamageShieldInterface
      */
     public static function create(

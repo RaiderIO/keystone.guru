@@ -52,11 +52,18 @@ class Tag extends Model
 
     protected $with = ['tagCategory'];
 
+    /**
+     * @return BelongsTo<TagCategory, $this>
+     */
     public function tagCategory(): BelongsTo
     {
         return $this->belongsTo(TagCategory::class);
     }
 
+    /**
+     * @param  Builder<Tag> $query
+     * @return Builder<Tag>
+     */
     #[Scope]
     protected function unique(Builder $query, ?int $categoryId = null): Builder
     {
@@ -67,6 +74,9 @@ class Tag extends Model
         return $query->groupBy('name');
     }
 
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
     public function getUsageByName(): Collection
     {
         return match ($this->tagCategory->name) {

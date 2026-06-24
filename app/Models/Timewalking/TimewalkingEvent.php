@@ -37,11 +37,13 @@ class TimewalkingEvent extends CacheModel
     public const TIMEWALKING_EVENT_BFA         = 'bfa';
     public const TIMEWALKING_EVENT_SHADOWLANDS = 'sl';
 
+    /** @return BelongsTo<Expansion, $this> */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
     }
 
+    /** @return BelongsTo<Season, $this> */
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);

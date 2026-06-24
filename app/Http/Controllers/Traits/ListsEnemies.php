@@ -24,6 +24,8 @@ trait ListsEnemies
     /**
      * Lists all enemies for a specific floor.
      *
+     * @return array<string, mixed>|null
+     *
      * @throws InvalidArgumentException
      * @throws InvalidMDTDungeonException
      */
@@ -33,7 +35,7 @@ trait ListsEnemies
         MappingVersion              $mappingVersion,
         bool                        $showMdtEnemies = false,
     ): ?array {
-        /** @var Collection<Enemy> $enemies */
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::with('npc', 'npc.type', 'npc.class')
             ->selectRaw('enemies.*')
             ->join('floors', 'enemies.floor_id', '=', 'floors.id')

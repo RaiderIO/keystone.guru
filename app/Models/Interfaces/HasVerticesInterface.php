@@ -16,6 +16,7 @@ interface HasVerticesInterface
     /** @return Collection<int, LatLng> */
     public function getDecodedLatLngs(?Floor $floor = null): Collection;
 
+    /** @return array<string, mixed> */
     public function getCoordinatesData(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,

@@ -4,7 +4,7 @@ use App\Models\CharacterClass;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<CharacterClass> $characterClasses
+ * @var Collection<int, CharacterClass> $characterClasses
  */
 ?>
 @extends('layouts.sitepage', ['title' => __('view_compendium.class.index.title')])

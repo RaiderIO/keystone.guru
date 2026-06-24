@@ -10,6 +10,8 @@ use TrayLabs\InfluxDB\Facades\InfluxDB;
 trait SavesToInfluxDB
 {
     /**
+     * @param  array<string, string> $tags
+     * @param  array<string, mixed>  $fields
      * @throws Exception
      * @throws Database\Exception
      */
@@ -24,6 +26,9 @@ trait SavesToInfluxDB
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function getTags()
     {
         return config('keystoneguru.influxdb.default_tags');

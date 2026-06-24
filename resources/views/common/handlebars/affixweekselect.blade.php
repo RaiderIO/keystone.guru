@@ -11,9 +11,9 @@ use Illuminate\Support\Collection;
 /**
  * This is the template for the week selection, featuring the affix of that week, when using it in a dropdown
  *
- * @var SeasonServiceInterface       $seasonService
- * @var DungeonRoute                 $model
- * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var SeasonServiceInterface            $seasonService
+ * @var DungeonRoute                      $model
+ * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 $id ??= 'affixes';

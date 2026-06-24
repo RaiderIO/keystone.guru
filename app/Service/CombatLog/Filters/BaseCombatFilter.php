@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\App;
  * Processes raw combat log events into EnemyEngaged/EnemyKilled/PlayerDied result events by tracking which enemies
  * are in combat (via accurateEnemySightings) and detecting their deaths, defeats, or charm-based removals.
  *
- * @property Collection<BaseResultEvent> $resultEvents
+ * @property Collection<int, BaseResultEvent> $resultEvents
  */
 abstract class BaseCombatFilter implements CombatLogParserInterface
 {
@@ -44,16 +44,19 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection<string, CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
     private readonly Collection $lastKnownPlayerPositions;
 
-    /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
+    /** @var Collection<int, string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
     private readonly Collection $summonedEnemies;
 
-    /** @var Collection<string> List of GUIDs for all enemies that we have killed since the start. */
+    /** @var Collection<int, string> List of GUIDs for all enemies that we have killed since the start. */
     private readonly Collection $killedEnemies;
 
     private readonly UnitDefeatedFilter $unitDefeatedFilter;
 
     private readonly BaseCombatFilterLoggingInterface $log;
 
+    /**
+     * @param Collection<int, BaseResultEvent> $resultEvents
+     */
     public function __construct(private readonly Collection $resultEvents)
     {
         $this->validNpcIds              = collect();
@@ -69,6 +72,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $this->log = $log;
     }
 
+    /**
+     * @param Collection<int, int> $validNpcIds
+     */
     public function setValidNpcIds(Collection $validNpcIds): void
     {
         $this->validNpcIds = $validNpcIds;

@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 
 /**
@@ -13,7 +14,7 @@ use App\Service\Cache\CacheServiceInterface;
  * @var DungeonRoute          $dungeonroute
  * @var AffixGroup|null       $currentAffixGroup
  * @var AffixGroup|null       $tierAffixGroup
- * @var array                 $__env
+ * @var array<string, mixed>  $__env
  * @var boolean               $cache
  */
 
@@ -248,12 +249,12 @@ use (
 };
 
 if ($cache) {
-    /** @var \App\Models\User|null $authUser */
+    /** @var User|null $authUser */
     $authUser          = Auth::user();
     $currentUserLocale = Auth::check() ? $authUser->locale : 'en_US';
 // Echo the result of this function
     echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showAffixes, $showDungeonImage, (int)$isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

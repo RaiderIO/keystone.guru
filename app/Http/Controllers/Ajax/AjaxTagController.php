@@ -29,9 +29,9 @@ use Teapot\StatusCode\Http;
 class AjaxTagController extends Controller
 {
     /**
-     * @return Collection<Tag>
+     * @return Collection<int, Tag>
      */
-    public function all(Request $request)
+    public function all(Request $request): Collection
     {
         return Tag::all();
     }
@@ -63,7 +63,7 @@ class AjaxTagController extends Controller
         $tagName = $request->get('name');
 
         // Reconstruct the model that we're trying to tag
-        /** @var Builder $query */
+        /** @var Builder<Model> $query */
         $query = $tagCategory->model_class::query();
         if (in_array($tagCategory->name, [
             TagCategory::DUNGEON_ROUTE_PERSONAL,
@@ -152,11 +152,11 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws Exception
      */
-    public function delete(Request $request, Tag $tag)
+    public function delete(Request $request, Tag $tag): array|ResponseFactory|Response
     {
         if ($tag->delete()) {
             $result = response()->noContent();

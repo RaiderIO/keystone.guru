@@ -89,21 +89,33 @@ class CharacterClass extends CacheModel
         return ksgAssetImage(sprintf('/classes/%s.png', Str::replace('_', '', $this->key)));
     }
 
+    /**
+     * @return HasMany<CharacterClassSpecialization, $this>
+     */
     public function specializations(): HasMany
     {
         return $this->hasMany(CharacterClassSpecialization::class);
     }
 
+    /**
+     * @return BelongsToMany<CharacterRace, $this>
+     */
     public function races(): BelongsToMany
     {
         return $this->belongsToMany(CharacterRace::class, 'character_race_class_couplings');
     }
 
+    /**
+     * @return BelongsToMany<DungeonRoutePlayerClass, $this>
+     */
     public function dungeonRoutePlayerClasses(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerClass::class);
     }
 
+    /**
+     * @return BelongsToMany<DungeonRoutePlayerRace, $this>
+     */
     public function dungeonRoutePlayerRaces(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerRace::class);

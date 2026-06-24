@@ -107,21 +107,33 @@ class CharacterRace extends CacheModel
         'faction_id',
     ];
 
+    /**
+     * @return BelongsTo<Faction, $this>
+     */
     public function faction(): BelongsTo
     {
         return $this->belongsTo(Faction::class);
     }
 
+    /**
+     * @return BelongsToMany<CharacterClass, $this>
+     */
     public function classes(): BelongsToMany
     {
         return $this->belongsToMany(CharacterClass::class, 'character_race_class_couplings');
     }
 
+    /**
+     * @return HasMany<CharacterClassSpecialization, $this>
+     */
     public function specializations(): HasMany
     {
-        return $this->hasMany(CharacterClass::class);
+        return $this->hasMany(CharacterClassSpecialization::class);
     }
 
+    /**
+     * @return HasMany<DungeonRoutePlayerRace, $this>
+     */
     public function dungeonRoutePlayerRace(): HasMany
     {
         return $this->hasMany(DungeonRoutePlayerRace::class);

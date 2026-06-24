@@ -145,14 +145,13 @@ class Save extends Command
         $dungeons = Dungeon::without([
             'expansion',
             'gameVersion',
-            'dungeonSpeedrunRequiredNpcs10Man',
-            'dungeonSpeedrunRequiredNpcs25Man',
+            'dungeonSpeedrunRequiredNpcs',
             'floors.floorUnions6',
         ])
             ->with([
                 'floors.floorcouplings',
-                'floors.dungeonSpeedrunRequiredNpcs10Man',
-                'floors.dungeonSpeedrunRequiredNpcs25Man',
+                'floors.dungeonSpeedrunRequiredNpcs.dungeonSpeedrunRequiredNpcNpcs',
+                'dungeonSpeedrunDifficulties',
             ])
             ->get();
 
@@ -185,8 +184,6 @@ class Save extends Command
                 'raid',
                 'heatmap_enabled',
                 'speedrun_enabled',
-                'speedrun_difficulty_10_man_enabled',
-                'speedrun_difficulty_25_man_enabled',
             ])
                 ->makeHidden(['floor_count'])
                 ->toArray(),
@@ -205,7 +202,7 @@ class Save extends Command
         $this->info('Saving NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
-        /** @var Collection<Npc> $npcs */
+        /** @var Collection<int, Npc> $npcs */
         $npcs = Npc::without([
             'characteristics',
             'spells',
@@ -495,36 +492,40 @@ class Save extends Command
         };
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()
+        /** @var EloquentCollection<int, Model&HasLatLngInterface> $enemiesCollection */
+        $enemiesCollection = $floor->enemiesForExport()
             ->without([
                 'npc',
                 'type',
             ])
             ->get()
             ->makeVisible(['mdt_scale'])
-            ->values()
-            ->each($roundLatLngFn);
+            ->values();
+        $enemies = $enemiesCollection->each($roundLatLngFn);
 
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
         $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
-        /** @var EloquentCollection $dungeonFloorSwitchMarkers */
+        /** @var EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values()->each($roundLatLngFn);
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
-        $dungeonFloorSwitchMarkers
+        /** @var EloquentCollection<int, DungeonFloorSwitchMarker&HasLatLngInterface> $mappedSwitchMarkers */
+        $mappedSwitchMarkers = $dungeonFloorSwitchMarkers
             ->makeHidden(['floorCouplingDirection'])
             ->map(static function (DungeonFloorSwitchMarker $dungeonFloorSwitchMarker) {
                 $dungeonFloorSwitchMarker->direction = $dungeonFloorSwitchMarker->direction === '' ?
                     null : $dungeonFloorSwitchMarker->direction;
 
                 return $dungeonFloorSwitchMarker;
-            })
-            ->each($roundLatLngFn);
+            });
+        $mappedSwitchMarkers->each($roundLatLngFn);
 
-        /** @var EloquentCollection $mapIcons */
-        $mapIcons        = $floor->mapIconsForExport->values()->each($roundLatLngFn);
-        $mountableAreas  = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
-        $floorUnions     = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values()->each($roundLatLngFn);
-        $floorUnionAreas = $floor->floorUnionAreasForExport->values()->each($roundLatLngVerticesFn);
+        /** @var EloquentCollection<int, Model&HasLatLngInterface> $mapIcons */
+        $mapIcons       = $floor->mapIconsForExport->values()->each($roundLatLngFn);
+        $mountableAreas = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
+        /** @var EloquentCollection<int, Model&HasLatLngInterface> $floorUnionsCollection */
+        $floorUnionsCollection = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values();
+        $floorUnions           = $floorUnionsCollection->each($roundLatLngFn);
+        $floorUnionAreas       = $floor->floorUnionAreasForExport->values()->each($roundLatLngVerticesFn);
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.
@@ -548,7 +549,7 @@ class Save extends Command
 //                $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
 //            }
 
-            $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
+            $this->saveDataToJsonFile($categoryData->toArray(), sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }
     }
 }

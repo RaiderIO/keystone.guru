@@ -7,9 +7,9 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell                                               $spell
- * @var Collection<Npc>                                     $npcs
- * @var Collection<CombatLogNpcEvent|CombatLogSpellEvent>   $eventFeed
+ * @var Spell                                                  $spell
+ * @var Collection<int, Npc>                                   $npcs
+ * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $eventFeed
  */
 ?>
 @extends('layouts.sitepage', [

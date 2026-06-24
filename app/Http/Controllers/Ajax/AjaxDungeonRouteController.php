@@ -37,11 +37,11 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
-use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
 use Exception;
@@ -236,7 +236,9 @@ class AjaxDungeonRouteController extends Controller
 
         // Ensure that the resulting routes have their thumbnails refreshed if they are missing
         if (isset($result['data'])) {
-            $thumbnailService->queueThumbnailRefreshIfMissing(collect($result['data']));
+            /** @var array<int, mixed> $data */
+            $data = $result['data'];
+            $thumbnailService->queueThumbnailRefreshIfMissing(collect($data));
         }
 
         return $result;
@@ -515,9 +517,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function store(
         AjaxDungeonRouteSubmitFormRequest $request,
-        SeasonService                     $seasonService,
-        ExpansionServiceInterface         $expansionService,
-        ThumbnailServiceInterface         $thumbnailService,
+        DungeonRouteSaveServiceInterface  $saveService,
         ?DungeonRoute                     $dungeonRoute = null,
     ): DungeonRoute {
         Gate::authorize('edit', $dungeonRoute);
@@ -531,7 +531,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Update or insert it
-        if (!$dungeonRoute->saveFromRequest($request, $seasonService, $expansionService, $thumbnailService)) {
+        if (!$saveService->save($dungeonRoute, $request->validated())) {
             abort(500, 'Unable to save dungeonroute');
         }
 
@@ -655,10 +655,10 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function cloneToTeam(
-        Request                   $request,
-        ThumbnailServiceInterface $thumbnailService,
-        DungeonRoute              $dungeonRoute,
-        Team                      $team,
+        Request                          $request,
+        DungeonRouteSaveServiceInterface $saveService,
+        DungeonRoute                     $dungeonRoute,
+        Team                             $team,
     ): Response {
         Gate::authorize('clone', $dungeonRoute);
 
@@ -666,7 +666,7 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         if ($user->canCreateDungeonRoute() && $team->canAddRemoveRoute($user)) {
-            $newRoute = $dungeonRoute->cloneRoute($thumbnailService, false);
+            $newRoute = $saveService->cloneRoute($dungeonRoute, false);
             $team->addRoute($newRoute);
 
             return response('', Http::NO_CONTENT);
@@ -698,7 +698,8 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function rate(Request $request, DungeonRoute $dungeonRoute)
+    /** @return array<string, float|int> */
+    public function rate(Request $request, DungeonRoute $dungeonRoute): array
     {
         Gate::authorize('rate', $dungeonRoute);
 
@@ -721,11 +722,11 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return array
+     * @return array<string, float|int>
      *
      * @throws Exception
      */
-    public function rateDelete(Request $request, DungeonRoute $dungeonRoute)
+    public function rateDelete(Request $request, DungeonRoute $dungeonRoute): array
     {
         Gate::authorize('rate', $dungeonRoute);
 
@@ -781,7 +782,7 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
-     * @return array|void
+     * @return array<string, string|array<int, array<string, mixed>>>
      *
      * @throws AuthorizationException
      * @throws Throwable
@@ -790,7 +791,7 @@ class AjaxDungeonRouteController extends Controller
         Request                         $request,
         MDTExportStringServiceInterface $mdtExportStringService,
         DungeonRoute                    $dungeonRoute,
-    ) {
+    ): array {
         Gate::authorize('view', $dungeonRoute);
 
         $useCache = (int)$request->get('useCache', 1) === 1;
@@ -829,6 +830,8 @@ class AjaxDungeonRouteController extends Controller
     }
 
     /**
+     * @return array<string, string>
+     *
      * @throws AuthorizationException
      * @throws RandomException
      */

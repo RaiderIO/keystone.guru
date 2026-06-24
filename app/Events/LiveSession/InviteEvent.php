@@ -21,10 +21,13 @@ use Override;
  */
 class InviteEvent extends ContextEvent
 {
+    /** @var array<int, mixed> */
     protected array $invitees;
 
     /**
      * Create a new event instance.
+     *
+     * @param Collection<int, User> $invitees
      */
     public function __construct(LiveSession $liveSession, User $user, Collection $invitees)
     {
@@ -36,7 +39,7 @@ class InviteEvent extends ContextEvent
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array
+     * @return array<int, PresenceChannel>
      */
     #[Override]
     public function broadcastOn(): array
@@ -46,6 +49,11 @@ class InviteEvent extends ContextEvent
         ];
     }
 
+    /**
+     * Get the data to broadcast with the event.
+     *
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

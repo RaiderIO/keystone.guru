@@ -6,6 +6,10 @@ use App\Models\User;
 
 class GoogleLoginController extends OAuthLoginController
 {
+    /**
+     * @param object $oauthUser
+     * @param mixed  $oAuthId
+     */
     protected function getUser($oauthUser, $oAuthId): User
     {
         return new User([

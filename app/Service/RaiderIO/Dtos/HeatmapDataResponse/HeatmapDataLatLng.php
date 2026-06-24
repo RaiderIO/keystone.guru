@@ -4,6 +4,9 @@ namespace App\Service\RaiderIO\Dtos\HeatmapDataResponse;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class HeatmapDataLatLng implements Arrayable
 {
     private float $lat;
@@ -38,6 +41,9 @@ class HeatmapDataLatLng implements Arrayable
         ];
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         $instance         = new self();

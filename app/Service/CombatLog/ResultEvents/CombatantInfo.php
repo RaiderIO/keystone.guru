@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\ResultEvents;
 
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoInterface as CombatantInfoEvent;
 use App\Models\CharacterClass;
@@ -11,7 +12,7 @@ class CombatantInfo extends BaseResultEvent
 {
     private CharacterClassSpecialization $characterClassSpecialization;
 
-    public function __construct(CombatantInfoEvent $combatantInfoEvent)
+    public function __construct(CombatantInfoEvent&BaseEvent $combatantInfoEvent)
     {
         parent::__construct($combatantInfoEvent);
     }

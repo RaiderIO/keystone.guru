@@ -36,7 +36,7 @@ trait HasTags
     }
 
     /**
-     * @return Collection<string>
+     * @return Collection<int, string>
      */
     public function getUniqueTagNames(?int $categoryId = null): Collection
     {

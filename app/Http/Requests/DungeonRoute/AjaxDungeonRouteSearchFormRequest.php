@@ -32,10 +32,8 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
         throw new HttpResponseException(
             response()->json(['data' => $errors], 422),
         );
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

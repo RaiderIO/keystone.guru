@@ -1,8 +1,8 @@
 <?php
 /**
- * @var Dungeon                   $dungeon
- * @var Floor                     $floor
- * @var Collection<FloorCoupling> $floorCouplings
+ * @var Dungeon                        $dungeon
+ * @var Floor                          $floor
+ * @var Collection<int, FloorCoupling> $floorCouplings
  */
 
 use App\Models\Dungeon;
@@ -137,10 +137,7 @@ $floor ??= null;
 
     @isset($floor)
         <div class="form-group">
-            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => Dungeon::DIFFICULTY_10_MAN, 'floor' => $floor])
-        </div>
-        <div class="form-group">
-            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => Dungeon::DIFFICULTY_25_MAN, 'floor' => $floor])
+            @include('admin.floor.speedrunrequirednpcs', ['dungeon' => $dungeon, 'floor' => $floor])
         </div>
     @endisset
 @endsection

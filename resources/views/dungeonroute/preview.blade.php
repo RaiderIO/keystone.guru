@@ -4,11 +4,11 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 
 /**
- * @var DungeonRoute $dungeonroute
- * @var Floor        $floor
- * @var float        $defaultZoom
- * @var string       $mapFacadeStyle
- * @var array        $parameters
+ * @var DungeonRoute         $dungeonroute
+ * @var Floor                $floor
+ * @var float                $defaultZoom
+ * @var string               $mapFacadeStyle
+ * @var array<string, mixed> $parameters
  */
 ?>
 

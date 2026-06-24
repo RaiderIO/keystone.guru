@@ -28,6 +28,9 @@ abstract class MapContextMappingVersion extends MapContextBase
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function toArray(): array
     {

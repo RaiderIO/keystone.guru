@@ -65,6 +65,9 @@ final class EncounterEndTest extends PublicTestCase
         Assert::assertInstanceOf(EncounterEndV9::class, $result);
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function parseEvent_givenEncounterEndEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

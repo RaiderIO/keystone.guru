@@ -19,7 +19,7 @@ use Illuminate\Support\Collection;
  * @var MapContextBase             $mapContext
  * @var Dungeon                    $dungeon
  * @var Floor                      $floor
- * @var Season|null                $season Used for heatmap
+ * @var Season|null                $season              Used for heatmap
  * @var MappingVersion             $mappingVersion
  * @var DungeonRoute|null          $dungeonroute
  * @var LiveSession|null           $liveSession
@@ -28,14 +28,14 @@ use Illuminate\Support\Collection;
  * @var bool|null                  $embed
  * @var string|null                $embedStyle
  * @var bool|null                  $edit
- * @var array                      $show
- * @var array|null                 $controlOptions
+ * @var array<string, mixed>       $show
+ * @var array<string, mixed>|null  $controlOptions
  * @var bool                       $adFree
  * @var string|null                $mapBackgroundColor
  * @var string|null                $mapFacadeStyle
  * @var string                     $assetsBaseUrl
  * @var string                     $tilesBaseUrl
- * @var array|null                 $parameters
+ * @var array<string, mixed>|null  $parameters
  * @var Collection<string, string> $dungeonContextLinks
  */
 
@@ -298,7 +298,7 @@ if ($isAdmin) {
         {{--            'floor' => $floor,--}}
         {{--            'headerTitle' => $headerTitle,--}}
         {{--            'dungeonroute' => $dungeonroute,--}}
-        {{--            'livesession' => $livesession,--}}
+        {{--            'liveSession' => $liveSession,--}}
         {{--            'mappingVersion' => $mappingVersion,--}}
         {{--        ])--}}
     @endif

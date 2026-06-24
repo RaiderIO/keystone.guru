@@ -26,7 +26,7 @@ use Teapot\StatusCode\Http;
 class AjaxOverpulledEnemyController extends Controller
 {
     /**
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws AuthorizationException
      */
@@ -42,7 +42,7 @@ class AjaxOverpulledEnemyController extends Controller
 
         $validated = $request->validated();
 
-        /** @var Collection<Enemy> $enemies */
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         foreach ($enemies as $enemy) {
@@ -85,7 +85,7 @@ class AjaxOverpulledEnemyController extends Controller
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws AuthorizationException
      */
@@ -103,7 +103,7 @@ class AjaxOverpulledEnemyController extends Controller
 
         $validated = $request->validated();
 
-        /** @var Collection<Enemy> $enemies */
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         try {

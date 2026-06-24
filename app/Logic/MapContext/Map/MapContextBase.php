@@ -9,6 +9,9 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 abstract class MapContextBase implements Arrayable
 {
     use ListsEnemies;
@@ -26,10 +29,19 @@ abstract class MapContextBase implements Arrayable
 
     protected abstract function getEchoChannelName(): string;
 
+    /**
+     * @return array<string, mixed>|null
+     */
     protected abstract function getEnemies(): ?array;
 
+    /**
+     * @return array<string, mixed>
+     */
     protected abstract function getVisibleFloors(): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         // Enemies may be null - filter them out

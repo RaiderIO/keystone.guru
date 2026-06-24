@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Service\MDT;
 
+use App\Logic\MDT\Exception\ImportWarning;
 use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -15,11 +16,17 @@ abstract class MDTImportStringServiceTestBase extends MDTExportStringServiceTest
 {
     use GeneratesDungeonRoutes;
 
+    /**
+     * @param Collection<int, ImportWarning>|null $warnings
+     */
     protected function exportDungeonRouteToString(DungeonRoute $dungeonRoute, ?Collection $warnings = null): string
     {
+        /** @var Collection<int, ImportWarning> $warningsCollection */
+        $warningsCollection = $warnings ?? new Collection();
+
         return app()->make(MDTExportStringServiceInterface::class)
             ->setDungeonRoute($dungeonRoute)
-            ->getEncodedString($warnings ?? new Collection());
+            ->getEncodedString($warningsCollection);
     }
 
     protected function importStringToDungeonRoute(string $encodedString, bool $assignNotesToPulls = false): DungeonRoute

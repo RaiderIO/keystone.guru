@@ -11,8 +11,14 @@ interface PatreonServiceLoggingInterface
 
     public function loadCampaignBenefitsStart(): void;
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignBenefitsRetrieveTiersErrors(array $tiersAndBenefitsResponse): void;
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignBenefitsRetrieveTiersIncludedNotSet(array $tiersAndBenefitsResponse): void;
 
     public function loadCampaignBenefitsEnd(): void;
@@ -21,8 +27,14 @@ interface PatreonServiceLoggingInterface
 
     public function loadCampaignTiersStart(): void;
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignTiersRetrieveTiersAndBenefitsErrors(array $tiersAndBenefitsResponse): void;
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignTiersRetrieveMembersIncludedNotSet(array $tiersAndBenefitsResponse): void;
 
     public function loadCampaignTiersEnd(): void;
@@ -31,8 +43,14 @@ interface PatreonServiceLoggingInterface
 
     public function loadCampaignMembersStart(): void;
 
+    /**
+     * @param array<string, mixed> $membersResponse
+     */
     public function loadCampaignTiersRetrieveMembersErrors(array $membersResponse): void;
 
+    /**
+     * @param array<string, mixed> $membersResponse
+     */
     public function loadCampaignTiersRetrieveMembersDataNotSet(array $membersResponse): void;
 
     public function loadCampaignMembersEnd(): void;
@@ -57,12 +75,21 @@ interface PatreonServiceLoggingInterface
 
     public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void;
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function linkToUserAccountTokens(array $tokens): void;
 
     public function linkToUserAccountAdminUser(): void;
 
+    /**
+     * @param array<string, mixed>|null $identityResponse
+     */
     public function linkToUserAccountIdentityResponse(?array $identityResponse): void;
 
+    /**
+     * @param array<int, mixed> $errors
+     */
     public function linkToUserAccountIdentityError(array $errors): void;
 
     public function linkToUserAccountIdentityIncludedNotSet(): void;
@@ -83,15 +110,27 @@ interface PatreonServiceLoggingInterface
 
     public function loadAdminUserTokenExpired(): void;
 
+    /**
+     * @param array<string, mixed> $errors
+     */
     public function loadAdminUserTokenRefreshError(array $errors): void;
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function loadAdminUserAccessTokenNotSet(array $tokens): void;
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function loadAdminUserRefreshTokenNotSet(array $tokens): void;
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function loadAdminUserExpiresInNotSet(array $tokens): void;
 
-    public function loadAdminUserUpdatedTokenSuccessfully(bool $date): void;
+    public function loadAdminUserUpdatedTokenSuccessfully(string $expiresAt): void;
 
     public function loadAdminUserEnd(): void;
 

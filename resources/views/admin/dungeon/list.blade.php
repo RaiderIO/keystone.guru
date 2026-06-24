@@ -17,8 +17,8 @@ use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Dungeon> $models
- * @var Floor               $floor
+ * @var Collection<int, Dungeon> $models
+ * @var Floor                    $floor
  */
 ?>
 

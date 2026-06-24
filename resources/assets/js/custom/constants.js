@@ -695,3 +695,16 @@ let c = {
         }
     }
 };
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        c,
+        polylineDefaultColor,
+        AFFIX_FORTIFIED,
+        AFFIX_TYRANNICAL,
+        AFFIX_THUNDERING,
+        AFFIX_XALATATHS_GUILE,
+    };
+}

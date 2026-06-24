@@ -30,11 +30,13 @@ class KillZoneSpell extends Model
         'spell_id',
     ];
 
+    /** @return BelongsTo<KillZone, $this> */
     public function killzone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
 
+    /** @return BelongsTo<Spell, $this> */
     public function spell(): BelongsTo
     {
         return $this->belongsTo(Spell::class);

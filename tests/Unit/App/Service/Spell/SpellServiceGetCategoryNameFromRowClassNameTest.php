@@ -15,7 +15,7 @@ use Tests\TestCases\PublicTestCase;
 
 class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 {
-    /** @var Collection<CharacterClass> */
+    /** @var Collection<string, CharacterClass> */
     private Collection $characterClasses;
 
     #[\Override]
@@ -68,6 +68,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         Assert::assertEquals($expected, $result);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidClassBasedRowClassName_DataProvider(): array
     {
         return [
@@ -179,6 +182,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         Assert::assertEquals($expected, $result);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName_DataProvider(): array
     {
         return [

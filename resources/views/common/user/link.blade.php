@@ -4,7 +4,7 @@ use App\Models\Laratrust\Role;
 use App\Models\User;
 
 /**
- * @var User $user
+ * @var User    $user
  * @var boolean $isRaiderIOStaff
  */
 $isRaiderIOStaff ??= false;

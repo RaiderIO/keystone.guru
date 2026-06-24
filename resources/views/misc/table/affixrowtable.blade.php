@@ -7,16 +7,16 @@ use Illuminate\Support\Carbon;
 
 /**
  * @var TimewalkingEvent|null $timewalkingEvent
- * @var Season           $season
- * @var AffixGroup       $affixGroup
- * @var Carbon|null      $startDate
- * @var boolean          $showStartDate
- * @var boolean          $isCurrentWeek
- * @var boolean          $isFirst
- * @var boolean          $isLast
- * @var boolean          $showTopBorder
- * @var boolean          $showBottomBorder
- * @var boolean          $isOdd
+ * @var Season                $season
+ * @var AffixGroup            $affixGroup
+ * @var Carbon|null           $startDate
+ * @var boolean               $showStartDate
+ * @var boolean               $isCurrentWeek
+ * @var boolean               $isFirst
+ * @var boolean               $isLast
+ * @var boolean               $showTopBorder
+ * @var boolean               $showBottomBorder
+ * @var boolean               $isOdd
  */
 
 $startDate        ??= null;

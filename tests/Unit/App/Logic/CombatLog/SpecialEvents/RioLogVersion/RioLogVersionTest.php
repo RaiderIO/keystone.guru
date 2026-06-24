@@ -81,6 +81,9 @@ final class RioLogVersionTest extends PublicTestCase
         Assert::assertEquals(CombatLogVersion::RETAIL_12_0_5, $result->getVersionLong());
     }
 
+    /**
+     * @return array<string, list<bool|int|string|null>>
+     */
     public static function parseEvent_givenRioLogVersionEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

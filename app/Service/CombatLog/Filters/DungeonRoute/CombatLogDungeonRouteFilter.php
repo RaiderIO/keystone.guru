@@ -29,6 +29,9 @@ class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
         $this->addFilter($this->spellFilter);
     }
 
+    /**
+     * @param Collection<int, int> $validNpcIds
+     */
     public function setValidNpcIds(Collection $validNpcIds): self
     {
         $this->combatFilter->setValidNpcIds($validNpcIds);

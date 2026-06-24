@@ -4,6 +4,7 @@ namespace App\Models\KillZone;
 
 use App\Models\Enemy;
 use App\Models\Npc\Npc;
+use Database\Factories\KillZone\KillZoneEnemyFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class KillZoneEnemy extends Model
 {
+    /** @use HasFactory<KillZoneEnemyFactory> */
     use HasFactory;
 
     public $hidden = [
@@ -50,16 +52,25 @@ class KillZoneEnemy extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<KillZone, $this>
+     */
     public function killZone(): BelongsTo
     {
         return $this->belongsTo(KillZone::class);
     }
 
+    /**
+     * @return BelongsTo<Npc, $this>
+     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /**
+     * @return BelongsTo<Enemy, $this>
+     */
     public function enemy(): BelongsTo
     {
         return $this->belongsTo(Enemy::class);

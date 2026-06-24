@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 
 class DungeonRouteCorrection
 {
+    /** @var Collection<int, int> */
     private Collection $obsoleteEnemies;
 
     private int $enemyForces;
@@ -20,6 +21,9 @@ class DungeonRouteCorrection
         $this->enemyForces     = $liveSession->dungeonRoute->enemy_forces;
     }
 
+    /**
+     * @return Collection<int, int>
+     */
     public function getObsoleteEnemies(): Collection
     {
         return $this->obsoleteEnemies;
@@ -30,6 +34,9 @@ class DungeonRouteCorrection
         $this->obsoleteEnemies->push($enemyId);
     }
 
+    /**
+     * @param Collection<int, int> $enemies
+     */
     public function addObsoleteEnemies(Collection $enemies): void
     {
         $this->obsoleteEnemies = $this->obsoleteEnemies->merge($enemies);
@@ -47,6 +54,9 @@ class DungeonRouteCorrection
         return $this;
     }
 
+    /**
+     * @return array<string, Collection<int, int>|int>
+     */
     public function toArray(): array
     {
         return [

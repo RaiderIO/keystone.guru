@@ -22,6 +22,7 @@ class Role extends LaratrustRole
         self::ROLE_ADMIN,
     ];
 
+    /** @param array<int, string> $roles */
     public static function roles(array $roles): string
     {
         return implode('|', $roles);

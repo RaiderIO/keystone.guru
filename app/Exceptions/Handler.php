@@ -133,6 +133,10 @@ class Handler extends ExceptionHandler
         return str_starts_with($request->decodedPath(), 'api/');
     }
 
+    /**
+     * @param  array<string, mixed>|null $array
+     * @return array<string, mixed>|null
+     */
     private function maskSensitiveVariables(?array $array): ?array
     {
         if ($array === null) {

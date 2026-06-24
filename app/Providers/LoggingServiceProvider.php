@@ -74,6 +74,8 @@ use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLogging;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLogging;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
+use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLogging;
+use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLogging;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLogging;
@@ -168,6 +170,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(DungeonServiceLoggingInterface::class, DungeonServiceLogging::class);
 
         // DungeonRoute
+        $this->app->bind(DungeonRouteSaveServiceLoggingInterface::class, DungeonRouteSaveServiceLogging::class);
         $this->app->bind(DungeonRouteServiceLoggingInterface::class, DungeonRouteServiceLogging::class);
         $this->app->bind(ThumbnailServiceLoggingInterface::class, ThumbnailServiceLogging::class);
 

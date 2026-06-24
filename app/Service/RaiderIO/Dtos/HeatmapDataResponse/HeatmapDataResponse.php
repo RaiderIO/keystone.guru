@@ -6,8 +6,12 @@ use App\Models\CombatLog\CombatLogEventDataType;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class HeatmapDataResponse implements Arrayable
 {
+    /** @var Collection<int, HeatmapDataFloorData> */
     private Collection $data;
     private CombatLogEventDataType $dataType;
     private int $runCount;
@@ -20,6 +24,9 @@ class HeatmapDataResponse implements Arrayable
     {
     }
 
+    /**
+     * @return Collection<int, HeatmapDataFloorData>
+     */
     public function getData(): Collection
     {
         return $this->data;
@@ -70,6 +77,9 @@ class HeatmapDataResponse implements Arrayable
         ];
     }
 
+    /**
+     * @param array<string, mixed> $response
+     */
     public static function fromArray(array $response): HeatmapDataResponse
     {
         $result = new self();

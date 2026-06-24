@@ -62,6 +62,8 @@ class Brushline extends Model
 
     /**
      * Get the dungeon route that this brushline is attached to.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
      */
     public function dungeonRoute(): BelongsTo
     {
@@ -70,6 +72,8 @@ class Brushline extends Model
 
     /**
      * Get the dungeon route that this brushline is attached to.
+     *
+     * @return HasOne<Polyline, $this>
      */
     public function polyline(): HasOne
     {
@@ -78,6 +82,8 @@ class Brushline extends Model
 
     /**
      * Get the floor that this polyline is drawn on.
+     *
+     * @return BelongsTo<Floor, $this>
      */
     public function floor(): BelongsTo
     {

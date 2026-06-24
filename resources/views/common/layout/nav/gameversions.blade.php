@@ -5,8 +5,8 @@ use Illuminate\Support\Collection;
 /**
  * This is only visible for mobile users
  *
- * @var Collection<GameVersion> $allGameVersions
- * @var GameVersion             $currentUserGameVersion
+ * @var Collection<int, GameVersion> $allGameVersions
+ * @var GameVersion                  $currentUserGameVersion
  */
 ?>
 <li class="nav-item dropdown d-lg-none d-block">

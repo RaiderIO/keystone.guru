@@ -976,7 +976,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .required_npc {
-    border: 3px solid #ffd500;
+    border: 3px solid #ffd500 !important;
 }
 
 .awakened {

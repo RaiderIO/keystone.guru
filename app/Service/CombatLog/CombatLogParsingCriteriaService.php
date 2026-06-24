@@ -5,9 +5,9 @@ namespace App\Service\CombatLog;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\Dungeon;
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -84,7 +84,7 @@ class CombatLogParsingCriteriaService implements CombatLogParsingCriteriaService
             ->flip()
             ->all();
 
-        return $allModels->filter(fn(Model $model) => !isset($atThresholdModelIds[$model->getKey()]));
+        return $allModels->filter(fn(CombatLogCriterionModelInterface $model) => !isset($atThresholdModelIds[$model->getKey()]));
     }
 
     private function findOrCreate(

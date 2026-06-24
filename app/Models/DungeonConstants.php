@@ -4,18 +4,21 @@ namespace App\Models;
 
 trait DungeonConstants
 {
-    public const int DIFFICULTY_10_MAN = 1;
+    public const string DIFFICULTY_10_MAN = '10_man';
+    public const string DIFFICULTY_25_MAN = '25_man';
+    public const string DIFFICULTY_20_MAN = '20_man';
+    public const string DIFFICULTY_40_MAN = '40_man';
 
-    public const int DIFFICULTY_25_MAN = 2;
-    public const int DIFFICULTY_20_MAN = 3;
-
-    public const int DIFFICULTY_40_MAN = 4;
-
+    /**
+     * Maps a difficulty slug to its database ID. Adding a new difficulty only requires a new entry here.
+     *
+     * @var array<string, int>
+     */
     public const array DIFFICULTY_ALL = [
-        self::DIFFICULTY_10_MAN,
-        self::DIFFICULTY_25_MAN,
-        self::DIFFICULTY_20_MAN,
-        self::DIFFICULTY_40_MAN,
+        self::DIFFICULTY_10_MAN => 1,
+        self::DIFFICULTY_25_MAN => 2,
+        self::DIFFICULTY_20_MAN => 3,
+        self::DIFFICULTY_40_MAN => 4,
     ];
 
     // @formatter:off

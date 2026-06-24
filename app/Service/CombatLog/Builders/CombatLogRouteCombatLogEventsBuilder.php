@@ -73,6 +73,9 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
         );
     }
 
+    /**
+     * @return Collection<int, CombatLogEvent>
+     */
     public function getCombatLogEvents(): Collection
     {
         $result = collect();
@@ -153,6 +156,9 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
         return $result;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getBaseCombatLogEventAttributes(
         CombatLogRouteRequestModel $correctedCombatLogRoute,
         Carbon                     $now,

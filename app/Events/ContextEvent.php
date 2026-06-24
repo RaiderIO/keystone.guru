@@ -29,7 +29,7 @@ abstract class ContextEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array
+     * @return array<int, PresenceChannel>
      */
     public function broadcastOn(): array
     {
@@ -59,6 +59,9 @@ abstract class ContextEvent implements ShouldBroadcast
         return $result;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function broadcastWith(): array
     {
         return [

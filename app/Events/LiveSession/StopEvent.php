@@ -32,6 +32,9 @@ class StopEvent extends ContextEvent
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

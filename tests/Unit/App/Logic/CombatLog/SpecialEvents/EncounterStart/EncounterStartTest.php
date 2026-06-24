@@ -63,6 +63,9 @@ final class EncounterStartTest extends PublicTestCase
         Assert::assertInstanceOf(EncounterStartV9::class, $result);
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function parseEvent_givenEncounterStartEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

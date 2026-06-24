@@ -79,7 +79,7 @@ class KillZonePathService implements KillZonePathServiceInterface
     {
         $dungeonRoute->loadMissing(['dungeon', 'mappingVersion']);
 
-        /** @var Collection<DungeonFloorSwitchMarker> $allMarkers */
+        /** @var Collection<int, DungeonFloorSwitchMarker> $allMarkers */
         $allMarkers = DungeonFloorSwitchMarker::where('mapping_version_id', $dungeonRoute->mapping_version_id)
             ->with('floor')
             ->get();

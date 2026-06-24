@@ -15,7 +15,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private static int $GROUPED_CONTEXT_COUNT = 0;
 
-    /** @var array|string[] Precalculated padding to ensure the log lines line up nicely with some padding at the start */
+    /** @var array<int, string> Precalculated padding to ensure the log lines line up nicely with some padding at the start */
     private static array $START_PADDING = [
         Level::Debug->value     => '  ',
         Level::Notice->value    => ' ',
@@ -29,22 +29,22 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private static ?string $CHANNEL = null;
 
-    /** @var array Every begin call that was made, a new key => [] is added to this array. */
+    /** @var array<string, array<string, mixed>> Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
 
-    /** @var array Upon calling begin() or end(), this array is a flattened version of to make it quicker to write logs to disk */
+    /** @var array<string, mixed> Upon calling begin() or end(), this array is a flattened version of to make it quicker to write logs to disk */
     private array $cachedContext = [];
 
     /** @var bool Optimization to only cache the context when we're actually going to log something - not when adding the context yet */
     private bool $isContextCached = false;
 
-    /** @var array When logging, we make conversions like this:
+    /** @var array<string, string> When logging, we make conversions like this:
      * App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
      * This array caches these conversions to make it quicker to log
      */
     private array $cachedConvertedFunctionNames = [];
 
-    /** @var LoggerInterface[] */
+    /** @var array<int, LoggerInterface> */
     private array $loggers = [];
 
     public function __construct()
@@ -61,6 +61,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         }
     }
 
+    /** @param array<string, mixed> ...$context */
     public function addContext(string $key, array ...$context): void
     {
         if (!isset($this->groupedContexts[$key])) {
@@ -80,6 +81,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         }
     }
 
+    /** @param array<string, mixed> $context */
     protected function start(string $functionName, array $context = [], bool $addContext = true): void
     {
         $level = Level::Info;
@@ -106,6 +108,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $this->log($level, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function end(string $functionName, array $context = []): void
     {
         $level = Level::Info;
@@ -131,46 +134,55 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $this->removeContext($targetKey);
     }
 
+    /** @param array<string, mixed> $context */
     protected function debug(string $functionName, array $context = []): void
     {
         $this->log(Level::Debug, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function notice(string $functionName, array $context = []): void
     {
         $this->log(Level::Notice, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function info(string $functionName, array $context = []): void
     {
         $this->log(Level::Info, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function warning(string $functionName, array $context = []): void
     {
         $this->log(Level::Warning, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function error(string $functionName, array $context = []): void
     {
         $this->log(Level::Error, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function critical(string $functionName, array $context = []): void
     {
         $this->log(Level::Critical, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function alert(string $functionName, array $context = []): void
     {
         $this->log(Level::Alert, $functionName, $context);
     }
 
+    /** @param array<string, mixed> $context */
     protected function emergency(string $functionName, array $context = []): void
     {
         $this->log(Level::Emergency, $functionName, $context);
     }
 
+    /** @return array<int, LoggerInterface> */
     protected function getDefaultLoggers(): array
     {
         return [
@@ -183,6 +195,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $this->loggers[] = $logger;
     }
 
+    /** @param array<string, mixed> $context */
     private function log(Level $level, string $functionName, array $context = []): void
     {
         if (!$this->shouldLog($level)) {

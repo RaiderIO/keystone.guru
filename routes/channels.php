@@ -33,7 +33,9 @@ $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dung
         $dungeonRoute->author_id !== $user->id &&
         // If the route is now not part of a team, OR if we're not a member of the team, we're anonymous
         ($dungeonRoute->team === null || (!$dungeonRoute->team->isUserMember($user)))) {
-        $randomName = collect(config('keystoneguru.reverb.randomsuffixes'))->random();
+        /** @var array<int, string> $suffixes */
+        $suffixes   = config('keystoneguru.reverb.randomsuffixes');
+        $randomName = collect($suffixes)->random();
 
         $result = [
             'public_key' => $user->public_key,
