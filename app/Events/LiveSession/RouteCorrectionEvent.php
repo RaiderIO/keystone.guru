@@ -9,6 +9,9 @@ use Override;
 
 class RouteCorrectionEvent extends ContextEvent
 {
+    /**
+     * @param array<int, int> $enemy_ids
+     */
     public function __construct(
         Model           $context,
         User            $user,

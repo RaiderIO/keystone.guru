@@ -71,6 +71,7 @@ class LiveSession extends Model
         return 'public_key';
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -78,37 +79,45 @@ class LiveSession extends Model
 
     /**
      * Get the dungeon route that this live session is attached to.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
      */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return HasOne<LiveSessionCombatLogBuffer, $this> */
     public function combatLogBuffer(): HasOne
     {
         return $this->hasOne(LiveSessionCombatLogBuffer::class);
     }
 
+    /** @return HasMany<LiveSessionOverpulledEnemy, $this> */
     public function overpulledEnemies(): HasMany
     {
         return $this->hasMany(LiveSessionOverpulledEnemy::class);
     }
 
+    /** @return HasMany<LiveSessionKilledEnemy, $this> */
     public function killedEnemies(): HasMany
     {
         return $this->hasMany(LiveSessionKilledEnemy::class);
     }
 
+    /** @return HasMany<LiveSessionObsoleteEnemy, $this> */
     public function obsoleteEnemies(): HasMany
     {
         return $this->hasMany(LiveSessionObsoleteEnemy::class);
     }
 
+    /** @return HasMany<LiveSessionInCombatEnemy, $this> */
     public function inCombatEnemies(): HasMany
     {
         return $this->hasMany(LiveSessionInCombatEnemy::class);
     }
 
+    /** @return HasMany<LiveSessionPlayerPosition, $this> */
     public function playerPositions(): HasMany
     {
         return $this->hasMany(LiveSessionPlayerPosition::class);

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Enemy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/** @extends Factory<Enemy> */
 class EnemyFactory extends Factory
 {
     protected $model = Enemy::class;

@@ -95,11 +95,13 @@ class LiveSessionPlayerPosition extends Model implements HasLatLngInterface
         return $this->liveSession->dungeonRoute?->mappingVersion;
     }
 
+    /** @return BelongsTo<LiveSession, $this> */
     public function liveSession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);

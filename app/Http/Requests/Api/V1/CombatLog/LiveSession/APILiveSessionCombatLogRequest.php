@@ -20,6 +20,7 @@ class APILiveSessionCombatLogRequest extends APIFormRequest
         return $this->user()?->can('view', $liveSession) ?? false;
     }
 
+    /** @return array<string, array<int, string>> */
     public function rules(): array
     {
         return [

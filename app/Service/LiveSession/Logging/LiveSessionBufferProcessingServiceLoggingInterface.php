@@ -40,8 +40,14 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 
     public function resolveInCombatEnemiesNewestEventTimestampNull(): void;
 
+    /**
+     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
+     */
     public function resolveInCombatEnemiesTimedOut(array $sighting): void;
 
+    /**
+     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
+     */
     public function resolveInCombatEnemiesUnableToResolveEnemy(array $sighting): void;
 
     public function resolveInCombatEnemiesEnd(int $count): void;

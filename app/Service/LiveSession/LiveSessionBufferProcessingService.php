@@ -402,8 +402,8 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
 
         /** @var Collection<int, Enemy> $resolved */
         $resolved = collect();
-        try {
 
+        try {
             if ($newestEventTimestamp === null) {
                 $this->log->resolveInCombatEnemiesNewestEventTimestampNull();
 

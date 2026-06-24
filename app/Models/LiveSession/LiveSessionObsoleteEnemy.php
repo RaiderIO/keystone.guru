@@ -38,11 +38,13 @@ class LiveSessionObsoleteEnemy extends Model
         return LiveSessionObsoleteEnemyFactory::new();
     }
 
+    /** @return BelongsTo<LiveSession, $this> */
     public function liveSession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

@@ -35,6 +35,7 @@ class LiveSessionCombatLogBuffer extends Model
         return LiveSessionCombatLogBufferFactory::new();
     }
 
+    /** @return BelongsTo<LiveSession, $this> */
     public function liveSession(): BelongsTo
     {
         return $this->belongsTo(LiveSession::class);

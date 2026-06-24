@@ -74,11 +74,17 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->warning(__METHOD__);
     }
 
+    /**
+     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
+     */
     public function resolveInCombatEnemiesTimedOut(array $sighting): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
+     */
     public function resolveInCombatEnemiesUnableToResolveEnemy(array $sighting): void
     {
         $this->warning(__METHOD__, get_defined_vars());

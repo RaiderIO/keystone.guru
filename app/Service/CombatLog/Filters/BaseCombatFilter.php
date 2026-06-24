@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\App;
  */
 abstract class BaseCombatFilter implements CombatLogParserInterface
 {
-    /** @var array Some enemies are summoned that we DO want to track in the route */
+    /** @var array<int, int> Some enemies are summoned that we DO want to track in the route */
     private const array SUMMONED_NPC_ID_WHITELIST = [
         // Vexamus, Algeth'ar Academy is a boss that gets summoned
         194181,
