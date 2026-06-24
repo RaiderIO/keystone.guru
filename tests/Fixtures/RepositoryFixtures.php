@@ -87,6 +87,7 @@ use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
 use App\Repositories\Interfaces\SeasonDungeonRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Repositories\Interfaces\SimulationCraft\SimulationCraftRaidEventsOptionsRepositoryInterface;
+use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcNpcRepositoryInterface;
 use App\Repositories\Interfaces\Speedrun\DungeonSpeedrunRequiredNpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
@@ -782,6 +783,22 @@ class RepositoryFixtures
         array          $methodsToMock = [],
     ): MockObject|SimulationCraftRaidEventsOptionsRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(SimulationCraftRaidEventsOptionsRepositoryInterface::class);
+
+        if (!empty($methodsToMock)) {
+            $mockBuilder->onlyMethods($methodsToMock);
+        }
+
+        return $mockBuilder->getMock();
+    }
+
+    /**
+     * @param array<int, string> $methodsToMock
+     */
+    public static function getDungeonSpeedrunRequiredNpcNpcRepositoryMock(
+        PublicTestCase $testCase,
+        array          $methodsToMock = [],
+    ): MockObject|DungeonSpeedrunRequiredNpcNpcRepositoryInterface {
+        $mockBuilder = $testCase->getMockBuilderPublic(DungeonSpeedrunRequiredNpcNpcRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

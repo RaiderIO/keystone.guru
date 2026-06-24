@@ -91,7 +91,7 @@ class DungeonRouteSubmitFormRequest extends FormRequest
 
             'unlisted' => 'nullable|int',
 
-            'dungeon_difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
+            'dungeon_difficulty' => Rule::in(array_values(Dungeon::DIFFICULTY_ALL)),
         ];
 
         // Validate demo state, optional or numeric

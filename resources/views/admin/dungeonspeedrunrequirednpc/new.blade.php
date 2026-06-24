@@ -14,19 +14,15 @@ use App\Models\Floor\Floor;
     'breadcrumbsParams' => [$dungeon, $floor, $difficulty],
     'showAds' => false,
     'title' => sprintf(
-        $difficulty === Dungeon::DIFFICULTY_10_MAN ?
-        __('view_admin.dungeonspeedrunrequirednpc.new.title_10_man') :
-        __('view_admin.dungeonspeedrunrequirednpc.new.title_25_man')
-        ,
-        __($dungeon->name)
+        __('view_admin.dungeonspeedrunrequirednpc.new.title'),
+        Dungeon::getDifficultyName($difficulty)
     )]
 )
 @section('header-title')
-    @if($difficulty === Dungeon::DIFFICULTY_10_MAN )
-        {{ __('view_admin.dungeonspeedrunrequirednpc.new.header_10_man', ['dungeon' => __($dungeon->name)]) }}
-    @else
-        {{ __('view_admin.dungeonspeedrunrequirednpc.new.header_25_man', ['dungeon' => __($dungeon->name)]) }}
-    @endif
+    {{ __('view_admin.dungeonspeedrunrequirednpc.new.header', [
+        'difficulty' => Dungeon::getDifficultyName($difficulty),
+        'dungeon'    => __($dungeon->name),
+    ]) }}
 @endsection
 
 @section('content')

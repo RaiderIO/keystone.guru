@@ -336,11 +336,14 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     }
 
     #[Test]
-    public function save_givenSpeedrunDungeonWithDifficulty_overridesDifficulty(): void
+    public function save_givenSpeedrunDungeonWithEnabledDifficulty_keepsChosenDifficulty(): void
     {
-        // Arrange
-        $dungeon  = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->where('speedrun_enabled', true));
-        $expected = $dungeon->speedrun_difficulty_10_man_enabled ? Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
+        // Arrange — pick a speedrun dungeon that has at least one enabled speedrun difficulty
+        $dungeon = $this->getDungeonWithNonFacadeFloor(
+            fn(Builder $query) => $query->where('speedrun_enabled', true)->whereHas('dungeonSpeedrunDifficulties'),
+        );
+        $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+        $chosenDifficulty    = $enabledDifficulties[0];
 
         $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
         $route     = new DungeonRoute();
@@ -348,8 +351,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             'dungeon_id'          => $dungeon->id,
             'faction_id'          => 1,
             'dungeon_route_title' => 'Speedrun Test',
-            // Any non-null difficulty triggers the speedrun override
-            'dungeon_difficulty' => Dungeon::DIFFICULTY_10_MAN,
+            // A difficulty that is enabled for this dungeon should be respected
+            'dungeon_difficulty' => $chosenDifficulty,
         ];
 
         try {
@@ -357,7 +360,44 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             $service->save($route, $validated);
 
             // Assert
-            $this->assertEquals($expected, $route->dungeon_difficulty);
+            $this->assertEquals($chosenDifficulty, $route->dungeon_difficulty);
+        } finally {
+            if ($route->exists) {
+                $this->cleanupRoute($route);
+            }
+        }
+    }
+
+    #[Test]
+    public function save_givenSpeedrunDungeonWithDisabledDifficulty_fallsBackToFirstEnabled(): void
+    {
+        // Arrange — pick a speedrun dungeon that has at least one enabled speedrun difficulty
+        $dungeon = $this->getDungeonWithNonFacadeFloor(
+            fn(Builder $query) => $query->where('speedrun_enabled', true)->whereHas('dungeonSpeedrunDifficulties'),
+        );
+        $enabledDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+        // A difficulty that is NOT enabled for this dungeon
+        $disabledDifficulty = collect(Dungeon::DIFFICULTY_ALL)
+            ->values()
+            ->first(fn(int $difficulty) => !in_array($difficulty, $enabledDifficulties, true));
+
+        $this->assertNotNull($disabledDifficulty, 'Expected a dungeon that does not enable every difficulty');
+
+        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
+        $route     = new DungeonRoute();
+        $validated = [
+            'dungeon_id'          => $dungeon->id,
+            'faction_id'          => 1,
+            'dungeon_route_title' => 'Speedrun Fallback Test',
+            'dungeon_difficulty'  => $disabledDifficulty,
+        ];
+
+        try {
+            // Act
+            $service->save($route, $validated);
+
+            // Assert — falls back to the first enabled difficulty
+            $this->assertEquals($enabledDifficulties[0], $route->dungeon_difficulty);
         } finally {
             if ($route->exists) {
                 $this->cleanupRoute($route);
@@ -378,7 +418,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             'dungeon_id'          => $dungeon->id,
             'faction_id'          => 1,
             'dungeon_route_title' => 'Difficulty Passthrough Test',
-            'dungeon_difficulty'  => Dungeon::DIFFICULTY_25_MAN,
+            'dungeon_difficulty'  => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
         ];
 
         try {
@@ -386,7 +426,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             $service->save($route, $validated);
 
             // Assert
-            $this->assertEquals(Dungeon::DIFFICULTY_25_MAN, $route->dungeon_difficulty);
+            $this->assertEquals(Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN], $route->dungeon_difficulty);
         } finally {
             if ($route->exists) {
                 $this->cleanupRoute($route);

@@ -145,14 +145,13 @@ class Save extends Command
         $dungeons = Dungeon::without([
             'expansion',
             'gameVersion',
-            'dungeonSpeedrunRequiredNpcs10Man',
-            'dungeonSpeedrunRequiredNpcs25Man',
+            'dungeonSpeedrunRequiredNpcs',
             'floors.floorUnions6',
         ])
             ->with([
                 'floors.floorcouplings',
-                'floors.dungeonSpeedrunRequiredNpcs10Man',
-                'floors.dungeonSpeedrunRequiredNpcs25Man',
+                'floors.dungeonSpeedrunRequiredNpcs.dungeonSpeedrunRequiredNpcNpcs',
+                'dungeonSpeedrunDifficulties',
             ])
             ->get();
 
@@ -185,8 +184,6 @@ class Save extends Command
                 'raid',
                 'heatmap_enabled',
                 'speedrun_enabled',
-                'speedrun_difficulty_10_man_enabled',
-                'speedrun_difficulty_25_man_enabled',
             ])
                 ->makeHidden(['floor_count'])
                 ->toArray(),
