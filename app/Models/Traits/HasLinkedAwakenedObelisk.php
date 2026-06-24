@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 trait HasLinkedAwakenedObelisk
 {
+    /** @return HasMany<MapObjectToAwakenedObeliskLink, $this> */
     public function linkedawakenedobelisks(): HasMany
     {
         return $this->hasMany(MapObjectToAwakenedObeliskLink::class, 'source_map_object_id')

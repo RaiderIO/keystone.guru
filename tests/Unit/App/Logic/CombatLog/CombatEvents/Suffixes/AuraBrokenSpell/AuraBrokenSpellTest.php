@@ -45,6 +45,9 @@ final class AuraBrokenSpellTest extends PublicTestCase
         Assert::assertEquals($expectedAuraType, $suffix->getAuraType());
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function parseEvent_givenAuraBrokenSpellEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

@@ -252,6 +252,9 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $this->distanceBetweenPoints($ingameXYA->getX(), $ingameXYB->getX(), $ingameXYA->getY(), $ingameXYB->getY());
     }
 
+    /**
+     * @param array<int, mixed> $polygon
+     */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
     {
         if ($polygon[0] != $polygon[count($polygon) - 1]) {

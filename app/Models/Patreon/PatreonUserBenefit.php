@@ -20,11 +20,13 @@ class PatreonUserBenefit extends Model
         'patreon_benefit_id',
     ];
 
+    /** @return BelongsTo<PatreonUserLink, $this> */
     public function patreonuserlink(): BelongsTo
     {
         return $this->belongsTo(PatreonUserLink::class);
     }
 
+    /** @return BelongsTo<PatreonBenefit, $this> */
     public function patreonbenefit(): BelongsTo
     {
         return $this->belongsTo(PatreonBenefit::class);

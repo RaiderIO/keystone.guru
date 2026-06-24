@@ -4,8 +4,8 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 
 /**
- * @var  Dungeon $dungeon
- * @var  Floor   $floor
+ * @var Dungeon $dungeon
+ * @var Floor   $floor
  */
 
 $npcsByDifficulty     = $floor->dungeonSpeedrunRequiredNpcs->groupBy('difficulty');

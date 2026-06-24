@@ -27,6 +27,12 @@ class SpellCompendiumRequest extends FormRequest
             : null);
     }
 
+    /**
+
+
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
+
     public function rules(): array
     {
         return [

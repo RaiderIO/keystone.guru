@@ -31,7 +31,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
     ];
 
     private readonly ChallengeModeSplitterLoggingInterface $log;
-    /** @var Collection<string> */
+    /** @var Collection<int, string> */
     private Collection $rawEvents;
     private ?CombatLogVersionEvent $lastCombatLogVersionEvent     = null;
     private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
@@ -39,9 +39,10 @@ class ChallengeModeSplitter extends CombatLogSplitter
     private ?ZoneChangeEvent $lastZoneChangeEvent                 = null;
     private ?MapChangeEvent $lastMapChangeEvent                   = null;
     private ?Carbon $lastTimestamp                                = null;
-    private ?Collection $result                                   = null;
-    private ?string $filePath                                     = null;
-    private bool $isInWrongZone                                   = false;
+    /** @var Collection<int, string>|null */
+    private ?Collection $result = null;
+    private ?string $filePath   = null;
+    private bool $isInWrongZone = false;
 
     public function __construct(
         private readonly CombatLogServiceInterface $combatLogService,
@@ -53,6 +54,9 @@ class ChallengeModeSplitter extends CombatLogSplitter
         parent::__construct($this->log);
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     public function splitCombatLog(string $filePath): Collection
     {
         $this->reset();

@@ -24,6 +24,7 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
     }
 
     /**
+     * @return Collection<int, float>|null
      * @throws InvalidMDTDungeonException
      * @throws InvalidMDTExpansionException
      * @throws Exception
@@ -65,7 +66,7 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
         // Max size the enemy can be off before we consider it 0% accurate. Which is 10 units
         $maxOffsetSquared = 10 * 10;
 
-        /** @var Collection<Enemy> $enemies */
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = $mappingVersion->enemies()
             ->where('floor_id', $floor->id)
             ->with('floor')
@@ -124,6 +125,10 @@ class MDTMappingVersionService implements MDTMappingVersionServiceInterface
         return $totalAccuracy / $count;
     }
 
+    /**
+     * @param array<string, float> $xy1
+     * @param array<string, float> $xy2
+     */
     private function getDistanceSquared(array $xy1, array $xy2): float
     {
         return ($xy1['x'] - $xy2['x']) ** 2 + ($xy1['y'] - $xy2['y']) ** 2;

@@ -29,6 +29,9 @@ final class CombatLogServiceTest extends PublicTestCase
 //        gc_collect_cycles();
 //    }
 //
+    /**
+     * @return array<int, mixed>
+     */
 //    public static function parseCombatLogToEvents_GivenCombatLog_ShouldParseEventsWithoutErrors_DataProvider(): array
 //    {
 //        return [

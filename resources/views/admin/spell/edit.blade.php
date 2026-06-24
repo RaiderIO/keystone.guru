@@ -7,21 +7,24 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell                        $spell
- * @var Floor                        $floor
- * @var array<string>                $categories
- * @var array<string>                $dispelTypes
- * @var array<string>                $cooldownGroups
- * @var Collection<GameVersion>      $allGameVersions
- * @var Collection<Characteristic>   $allCharacteristics
+ * @var Spell                           $spell
+ * @var Floor                           $floor
+ * @var array<string>                   $categories
+ * @var array<string>                   $dispelTypes
+ * @var array<string>                   $cooldownGroups
+ * @var Collection<int, GameVersion>    $allGameVersions
+ * @var Collection<int, Characteristic> $allCharacteristics
  */
 
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 
-$characteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]])
+/** @var Collection<string, array{icon_url: string|null, name: array<string, string>|string}> $baseCharacteristicOptions */
+$baseCharacteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]]);
+
+$characteristicOptions = $baseCharacteristicOptions
     ->merge($allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
-        $c->id => [
+        (string)$c->id => [
             'icon_url' => ksgAssetImage(sprintf('spells/%s.jpg', $c->icon_name)),
             'name'     => __($c->name),
         ],

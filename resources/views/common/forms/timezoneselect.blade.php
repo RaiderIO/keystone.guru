@@ -17,7 +17,7 @@ foreach ($regions as $name => $mask) {
     $zones = DateTimeZone::listIdentifiers($mask);
     foreach ($zones as $timezone) {
         // Lets sample the time there right now
-        $time = new DateTime(NULL, new DateTimeZone($timezone));
+        $time = new DateTime('now', new DateTimeZone($timezone));
         // Us dumb Americans can't handle military time
         $ampm = $time->format('H') > 12 ? ' (' . $time->format('g:i a') . ')' : '';
         // Remove region name and add a sample time

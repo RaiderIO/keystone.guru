@@ -16,7 +16,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        /** @var Collection<Expansion> $expansions */
+        /** @var Collection<string, int|string> $expansions */
         $expansions = Expansion::all()
             ->mapWithKeys(function (Expansion $expansion) {
                 return [$expansion->shortname => $expansion->id];

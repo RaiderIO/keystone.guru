@@ -5,6 +5,7 @@ namespace App\Models\Speedrun;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -46,16 +47,19 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
 
     public $timestamps = false;
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return BelongsTo<Dungeon, Floor> */
     public function dungeon(): BelongsTo
     {
         return $this->floor->dungeon();
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function dungeonSpeedrunRequiredNpcNpcs(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpcNpc::class);

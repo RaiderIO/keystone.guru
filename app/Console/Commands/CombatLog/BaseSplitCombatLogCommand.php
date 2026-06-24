@@ -25,7 +25,7 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        /** @var Collection<string> $resultingFiles */
+        /** @var Collection<int, string> $resultingFiles */
         $resultingFiles = $splitCombatLogCallable($filePath);
         foreach ($resultingFiles as $resultingFile) {
             $this->comment(sprintf('- Created file %s', $resultingFile));

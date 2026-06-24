@@ -6,8 +6,8 @@ use App\Models\ReleaseChangelogChange;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<ReleaseChangelogCategory> $categories
- * @var Release                              $release
+ * @var Collection<int, ReleaseChangelogCategory> $categories
+ * @var Release                                   $release
  */
 
 $showHeader ??= true;

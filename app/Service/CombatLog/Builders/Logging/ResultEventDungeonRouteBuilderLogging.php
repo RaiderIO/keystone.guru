@@ -39,6 +39,9 @@ class ResultEventDungeonRouteBuilderLogging extends DungeonRouteBuilderLogging i
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, string> $guids
+     */
     public function buildCreateNewFinalPull(array $guids): void
     {
         $this->debug(__METHOD__, get_defined_vars());

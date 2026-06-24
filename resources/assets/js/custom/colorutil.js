@@ -176,5 +176,9 @@ if (typeof module !== 'undefined' && module.exports) {
         rgbToHex,
         parseRgba,
         pickHexFromHandlers,
+        hsv2rgb,
+        rgb2hsv,
+        rgb2hex,
+        hex2name,
     };
 }

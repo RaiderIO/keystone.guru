@@ -4,16 +4,16 @@ use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
- * @var string                              $id
- * @var string|null                         $name
- * @var string|false                        $label
- * @var Collection<int, Npc>               $npcs         Flat list (mutually exclusive with $npcsByGroup)
- * @var Collection<string, Collection<int, Npc>> $npcsByGroup  Grouped (mutually exclusive with $npcs)
- * @var mixed|null                          $selected
- * @var bool                                $multiple
- * @var bool                                $required
- * @var bool                                $liveSearch
- * @var bool                                $showId       Show NPC ID alongside name as "<name> (<id>)"
+ * @var string                                   $id
+ * @var string|null                              $name
+ * @var string|false                             $label
+ * @var Collection<int, Npc>                     $npcs        Flat list (mutually exclusive with $npcsByGroup)
+ * @var Collection<string, Collection<int, Npc>> $npcsByGroup Grouped (mutually exclusive with $npcs)
+ * @var mixed|null                               $selected
+ * @var bool                                     $multiple
+ * @var bool                                     $required
+ * @var bool                                     $liveSearch
+ * @var bool                                     $showId      Show NPC ID alongside name as "<name> (<id>)"
  */
 
 $id         ??= 'npc_id_select';

@@ -58,16 +58,19 @@ class DungeonRouteThumbnailJob extends Model
         'floor',
     ];
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /** @return BelongsTo<File, $this> */
     public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);

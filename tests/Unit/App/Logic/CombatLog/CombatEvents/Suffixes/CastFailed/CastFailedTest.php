@@ -39,6 +39,9 @@ final class CastFailedTest extends PublicTestCase
         Assert::assertEquals($expectedFailedType, $suffix->getFailedType());
     }
 
+    /**
+     * @return array<string, list<string>>
+     */
     public static function parseEvent_givenCastFailedEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

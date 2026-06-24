@@ -7,7 +7,7 @@ interface SpellServiceInterface
     public function importFromCsv(string $filePath): bool;
 
     /**
-     * @return int[]
+     * @return array<int, int>
      */
     public function getMissingSpellIds(): array;
 }

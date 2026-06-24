@@ -84,7 +84,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
-            $floorData = collect($array['data'])->firstWhere('floor_id', $this->floor->id);
+            /** @var array<int, array<string, mixed>> $data */
+            $data      = $array['data'];
+            $floorData = collect($data)->firstWhere('floor_id', $this->floor->id);
             $this->assertNotNull($floorData);
             $this->assertCount(1, $floorData['lat_lngs']);
             $this->assertEquals(2, $floorData['lat_lngs'][0]['weight']);
@@ -127,7 +129,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
-            $floorData = collect($array['data'])->firstWhere('floor_id', $this->floor->id);
+            /** @var array<int, array<string, mixed>> $data */
+            $data      = $array['data'];
+            $floorData = collect($data)->firstWhere('floor_id', $this->floor->id);
             $this->assertNotNull($floorData);
             $this->assertCount(2, $floorData['lat_lngs']);
 
@@ -177,7 +181,9 @@ final class CombatLogRouteEnemyFailureServiceTest extends PublicTestCase
             $array  = $result->setUseFacade(false)->toArray();
 
             // Assert
-            $allLatLngs = collect($array['data'])->flatMap(fn(array $entry) => $entry['lat_lngs']);
+            /** @var array<int, array<string, mixed>> $data */
+            $data       = $array['data'];
+            $allLatLngs = collect($data)->flatMap(fn(array $entry): array => $entry['lat_lngs']);
             $this->assertCount(1, $allLatLngs);
             $this->assertEquals(1, $allLatLngs->first()['weight']);
             $this->assertEquals(1, $array['failure_count']);

@@ -109,9 +109,9 @@ class MetricService implements MetricServiceInterface
     }
 
     /**
-     * @param  array{array{model_id: int, model_class: string, category: string, tag: string, value: int, created_at: string, updated_at: string}} $pendingMetrics
-     * @param  int                                                                                                                                 $seconds
-     * @return array
+     * @param  array<int, array{model_id: int, model_class: string, category: string, tag: string, value: int, created_at: string, updated_at: string}> $pendingMetrics
+     * @param  int                                                                                                                                      $seconds
+     * @return list<array<string, mixed>>
      */
     public function groupMetrics(array $pendingMetrics, int $seconds = 30): array
     {

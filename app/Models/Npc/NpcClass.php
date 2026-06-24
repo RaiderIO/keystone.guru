@@ -65,6 +65,8 @@ class NpcClass extends CacheModel
 
     /**
      * Gets all derived NPCs from this class.
+     *
+     * @return HasMany<Npc, $this>
      */
     public function npcs(): HasMany
     {

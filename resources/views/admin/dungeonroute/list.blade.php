@@ -5,10 +5,10 @@ use App\Models\PublishedState;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<DungeonRoute> $models
- * @var Collection<string>       $publishedStates
- * @var array                    $filters
- * @var bool                     $limited
+ * @var Collection<int, DungeonRoute> $models
+ * @var Collection<int, string>       $publishedStates
+ * @var array<string, mixed>          $filters
+ * @var bool                          $limited
  */
 ?>
 

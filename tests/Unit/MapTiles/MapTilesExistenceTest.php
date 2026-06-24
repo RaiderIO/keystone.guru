@@ -19,7 +19,7 @@ final class MapTilesExistenceTest extends PublicTestCase
     {
         // Arrange
         $zoomLevels = 5;
-        /** @var Collection<Dungeon> $dungeons */
+        /** @var Collection<int, Dungeon> $dungeons */
         $dungeons = Dungeon::all();
 
         // Act & Assert

@@ -6,12 +6,12 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion              $gameVersion
- * @var string                   $title
- * @var string|null              $link
- * @var int                      $cols
- * @var Collection<DungeonRoute> $dungeonroutes
- * @var AffixGroup               $currentAffixGroup
+ * @var GameVersion                   $gameVersion
+ * @var string                        $title
+ * @var string|null                   $link
+ * @var int                           $cols
+ * @var Collection<int, DungeonRoute> $dungeonroutes
+ * @var AffixGroup                    $currentAffixGroup
  */
 
 $dungeon          ??= null;

@@ -3,11 +3,11 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 
 /**
- * @var Dungeon $dungeon
- * @var Floor $floor
- * @var array $npcIds
- * @var array $npcIdsWithNullable
- * @var int $difficulty
+ * @var Dungeon              $dungeon
+ * @var Floor                $floor
+ * @var array<int, int>      $npcIds
+ * @var array<int, int|null> $npcIdsWithNullable
+ * @var int                  $difficulty
  */
 ?>
 @extends('layouts.sitepage', [

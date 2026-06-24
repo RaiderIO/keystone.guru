@@ -7,10 +7,10 @@ use App\Service\Expansion\ExpansionService;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion         $gameVersion
- * @var Expansion           $expansion
- * @var Collection<Dungeon> $dungeons
- * @var boolean             $useAbbreviation
+ * @var GameVersion              $gameVersion
+ * @var Expansion                $expansion
+ * @var Collection<int, Dungeon> $dungeons
+ * @var boolean                  $useAbbreviation
  */
 
 $dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();

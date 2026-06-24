@@ -18,8 +18,8 @@ class DefaultFloorTest extends TestCase
     {
         // Arrange
         $zoomLevels = 5;
-        /** @var Collection<Dungeon> $dungeons */
-        $dungeons = Dungeon::all();
+        /** @var Collection<int, Dungeon> $dungeons */
+        $dungeons = Dungeon::with('floors')->get();
 
         // Act & Assert
         foreach ($dungeons as $dungeon) {

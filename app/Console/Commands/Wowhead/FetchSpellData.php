@@ -53,7 +53,7 @@ class FetchSpellData extends Command
                 ->get();
         }
 
-        /** @var Collection<Spell> $spells */
+        /** @var Collection<int, Spell> $spells */
 
         // If it's just one.. whatever
         if ($spells->count() > 1) {

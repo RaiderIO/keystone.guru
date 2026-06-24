@@ -32,6 +32,9 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getVisibleFloors(): array
     {
         return $this->dungeon->floorsForMapFacade(
@@ -50,12 +53,18 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         return sprintf('%s-dungeon-explore.%s', config('app.type'), $this->dungeon->getRouteKey());
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getEnemies(): ?array
     {
         // Do not override the enemies
         return null;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function toArray(): array
     {

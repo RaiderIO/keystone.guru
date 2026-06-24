@@ -81,6 +81,7 @@ class Release extends CacheModel
         return 'version';
     }
 
+    /** @return HasOne<ReleaseChangelog, $this> */
     public function changelog(): HasOne
     {
         return $this->hasOne(ReleaseChangelog::class);
@@ -148,6 +149,7 @@ class Release extends CacheModel
         );
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getDiscordEmbeds(): array
     {
         //        $result = [];
@@ -239,6 +241,7 @@ class Release extends CacheModel
         return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->patch < $this->getSymVer()->patch;
     }
 
+    /** @param array<string, mixed> $params */
     private function publicRoute(string $name, array $params = [], string $host = 'https://keystone.guru'): string
     {
         return rtrim($host, '/') . route($name, $params, false);

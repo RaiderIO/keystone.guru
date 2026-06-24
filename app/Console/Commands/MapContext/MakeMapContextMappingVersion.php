@@ -36,9 +36,9 @@ class MakeMapContextMappingVersion extends Command
     ): int {
         $output = $this->option('output') ?? storage_path('mapcontext');
 
-        /** @var Collection<Dungeon> $dungeonsById */
+        /** @var Collection<int, Dungeon> $dungeonsById */
         $dungeonsById = Dungeon::all()->keyBy('id');
-        /** @var Collection<MappingVersion> $mappingVersions */
+        /** @var Collection<int, MappingVersion> $mappingVersions */
         $mappingVersions = MappingVersion::all();
         $mapFacadeStyles = User::MAP_FACADE_STYLE_ALL;
 

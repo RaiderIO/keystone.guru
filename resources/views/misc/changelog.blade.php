@@ -6,9 +6,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 /**
- * @var LengthAwarePaginator|Release[]       $releases
- * @var Collection<ReleaseChangelogCategory> $categories
- * @var boolean                              $isUserAdmin
+ * @var LengthAwarePaginator<int, Release>        $releases
+ * @var Collection<int, ReleaseChangelogCategory> $categories
+ * @var boolean                                   $isUserAdmin
  */
 ?>
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.changelog.title')])

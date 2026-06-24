@@ -37,9 +37,17 @@ class CombatantInfoV22 extends SpecialEvent implements CombatantInfoInterface
     private int $versatilityDamageTaken;
     private int $armor;
     private int $currentSpecId;
+    /** @var array<int, mixed> */
+
     private array $talents;
+    /** @var array<int, mixed> */
+
     private array $pvpTalents;
+    /** @var array<int, mixed> */
+
     private array $equippedItems;
+    /** @var array<int, mixed> */
+
     private array $interestingAuras;
     private int $honorLevel;
     private int $season;

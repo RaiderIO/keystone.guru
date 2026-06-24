@@ -41,6 +41,9 @@ final class CombatLogEntryTest extends PublicTestCase
         Assert::assertEquals($expectedMilliseconds, $combatLogEntry->getParsedTimestamp()->millisecond);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_ShouldParseTimestamp_GivenRawLogLine_DataProvider(): array
     {
         return [

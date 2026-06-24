@@ -164,6 +164,22 @@ return [
             //            'persistent'   => false, // or true if you use connection pooling
         ],
 
+        // Dedicated connection for sessions (see SESSION_CONNECTION). Kept on its own database so the
+        // redis:clearidlekeys maintenance task - which only scans default/model_cache/cache - can never
+        // delete active sessions and log idle users out.
+        'session' => [
+            'url'          => env('REDIS_URL'),
+            'host'         => env('REDIS_HOST', '127.0.0.1'),
+            'username'     => env('REDIS_USERNAME'),
+            'password'     => env('REDIS_PASSWORD'),
+            'port'         => env('REDIS_PORT', '6379'),
+            'database'     => env('REDIS_DB_SESSION', env('REDIS_DB', '0')),
+            'read_timeout' => 1.0,
+            'timeout'      => 1.0,
+            'scheme'       => env('REDIS_SCHEME', 'tcp'),
+            //            'persistent'   => false, // or true if you use connection pooling
+        ],
+
     ],
 
 ];

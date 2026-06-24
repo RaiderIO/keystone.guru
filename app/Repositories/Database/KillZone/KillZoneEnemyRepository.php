@@ -15,7 +15,9 @@ class KillZoneEnemyRepository extends DatabaseRepository implements KillZoneEnem
         parent::__construct(KillZoneEnemy::class);
     }
 
-    /** @param Collection<int> $killZoneIds */
+    /**
+     * @param Collection<int, int> $killZoneIds
+     */
     public function resetEnemyIdByKillZoneIds(Collection $killZoneIds): void
     {
         KillZoneEnemy::whereIn('kill_zone_id', $killZoneIds)->update(['enemy_id' => null]);
@@ -35,7 +37,9 @@ class KillZoneEnemyRepository extends DatabaseRepository implements KillZoneEnem
         ', [$mappingVersionId, $dungeonRouteId]);
     }
 
-    /** @param Collection<int> $killZoneIds */
+    /**
+     * @param Collection<int, int> $killZoneIds
+     */
     public function deleteOrphanedByKillZoneIds(Collection $killZoneIds): void
     {
         KillZoneEnemy::whereIn('kill_zone_id', $killZoneIds)->whereNull('enemy_id')->delete();

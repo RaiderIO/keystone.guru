@@ -37,6 +37,9 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         );
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     private function splitCombatLogUsingSplitter(string $filePath, CombatLogSplitterInterface $splitter): Collection
     {
         $this->log->splitCombatLogUsingSplitterStart($filePath, $splitter::class);

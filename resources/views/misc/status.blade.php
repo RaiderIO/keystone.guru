@@ -1,5 +1,5 @@
 <?php
-/** @var array $checks */
+/** @var array<string, array{ok: bool, error: string}> $checks */
 $title = 'Application Status';
 ?>
 <!DOCTYPE html>

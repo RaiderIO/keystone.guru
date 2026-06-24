@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 trait Reportable
 {
+    /** @return HasMany<UserReport, $this> */
     public function userreports(): HasMany
     {
         return $this->hasMany(UserReport::class, 'model_id')->where('model_class', $this::class);

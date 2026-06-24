@@ -30,6 +30,7 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
 
     /**
      * @inheritDoc
+     * @return Collection<int, Npc>
      */
     #[Override]
     public function getInUseNpcs(MappingVersion $mappingVersion): Collection
@@ -47,6 +48,8 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
 
     /**
      * @inheritDoc
+     * @param  Collection<int, Npc>|null $inUseNpcs
+     * @return Collection<int, int>
      */
     #[Override]
     public function getInUseNpcIds(?MappingVersion $mappingVersion = null, ?Collection $inUseNpcs = null): Collection

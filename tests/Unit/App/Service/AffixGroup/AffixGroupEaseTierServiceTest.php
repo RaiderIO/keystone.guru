@@ -69,6 +69,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertEquals('761ba5dc6a6bc38ca8158a814c9ed6c1', $hash);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getResponse(string $fileName = 'response'): array
     {
         return json_decode(file_get_contents(sprintf('%s/Fixtures/%s.json', __DIR__, $fileName)), true);

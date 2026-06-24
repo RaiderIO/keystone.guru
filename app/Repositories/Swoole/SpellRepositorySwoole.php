@@ -10,8 +10,14 @@ use Override;
 
 class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySwooleInterface
 {
+    /**
+     * @var Collection<int, Spell>
+     */
     private Collection $allSpellsById;
 
+    /**
+     * @var Collection<int, Spell>|null
+     */
     private ?Collection $spellsWithCharacteristics = null;
 
     public function __construct()
@@ -23,6 +29,8 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
 
     /**
      * @inheritDoc
+     * @param  Collection<int, int>|Collection<int, Spell> $spellIds
+     * @return Collection<int, Spell>
      */
     #[Override]
     public function findAllById(Collection $spellIds): Collection
@@ -55,6 +63,10 @@ class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySw
         return $result;
     }
 
+    /**
+     * @inheritDoc
+     * @return Collection<int, Spell>
+     */
     #[Override]
     public function getAllWithCharacteristic(): Collection
     {

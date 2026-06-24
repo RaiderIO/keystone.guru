@@ -16,7 +16,7 @@ class CharacterClassSpecializationsSeeder extends Seeder implements TableSeederI
      */
     public function run(): void
     {
-        /** @var Collection<CharacterClass> $characterClasses */
+        /** @var Collection<string, CharacterClass> $characterClasses */
         $characterClasses = CharacterClass::all()->keyBy('key');
 
         // @formatter:off
@@ -299,6 +299,9 @@ class CharacterClassSpecializationsSeeder extends Seeder implements TableSeederI
         ];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

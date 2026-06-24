@@ -14,13 +14,13 @@ class ActivePull
 
     protected ?Carbon $endTime;
 
-    /** @var Collection<ActivePullEnemy> */
+    /** @var Collection<string, ActivePullEnemy> */
     protected Collection $enemiesInCombat;
 
-    /** @var Collection<ActivePullEnemy> */
+    /** @var Collection<string, ActivePullEnemy> */
     protected Collection $enemiesKilled;
 
-    /** @var Collection<int> */
+    /** @var Collection<int, int> */
     protected Collection $spellsCast;
 
     /**
@@ -66,7 +66,7 @@ class ActivePull
     }
 
     /**
-     * @return Collection<ActivePullEnemy>
+     * @return Collection<string, ActivePullEnemy>
      */
     public function getEnemiesInCombat(): Collection
     {
@@ -74,7 +74,7 @@ class ActivePull
     }
 
     /**
-     * @return Collection<ActivePullEnemy>
+     * @return Collection<string, ActivePullEnemy>
      */
     public function getEnemiesKilled(): Collection
     {
@@ -82,7 +82,7 @@ class ActivePull
     }
 
     /**
-     * @return Collection<int>
+     * @return Collection<int, int>
      */
     public function getSpellsCast(): Collection
     {
@@ -146,6 +146,9 @@ class ActivePull
         $this->enemiesKilled   = $this->enemiesKilled->merge($activePull->enemiesKilled);
     }
 
+    /**
+     * @return array<string, int|float>
+     */
     public function getAvgLatLng(): array
     {
         $result = [

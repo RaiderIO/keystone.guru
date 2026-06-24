@@ -27,11 +27,13 @@ class DungeonRouteAffixGroup extends Model
 
     public $timestamps = false;
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<AffixGroup, $this> */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);

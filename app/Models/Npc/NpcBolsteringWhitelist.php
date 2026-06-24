@@ -30,11 +30,13 @@ class NpcBolsteringWhitelist extends CacheModel
 
     public $with = ['whitelistnpc'];
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function whitelistnpc(): BelongsTo
     {
         // Without to prevent infinite recursion

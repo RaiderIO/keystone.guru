@@ -12,31 +12,31 @@ use Illuminate\Support\Collection;
 interface CombatLogServiceInterface
 {
     /**
-     * @return Collection<BaseEvent>
+     * @return Collection<int, BaseEvent>
      */
     public function parseCombatLogToEvents(string $filePath): Collection;
 
     public function parseCombatLogStreaming(string $filePath, callable $callable): void;
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, ChallengeMode>
      */
     public function getChallengeModes(string $filePath): Collection;
 
     /**
-     * @return Collection<ChallengeMode>
+     * @return Collection<int, string>
      */
     public function getUiMapIds(string $filePath): Collection;
 
     public function getBoundsFromEvents(string $filePath, Dungeon $dungeon): MapBounds;
 
     /**
-     * @return Collection<BaseResultEvent>
+     * @return Collection<int, BaseResultEvent>
      */
     public function getResultEventsForChallengeMode(string $combatLogFilePath): Collection;
 
     /**
-     * @return Collection<BaseResultEvent>
+     * @return Collection<int, BaseResultEvent>
      */
     public function getResultEventsForDungeonOrRaid(string $combatLogFilePath): Collection;
 
@@ -49,5 +49,8 @@ interface CombatLogServiceInterface
      */
     public function parseCombatLog(string $filePath, callable $callback): void;
 
+    /**
+     * @param Collection<int, string> $rawEvents
+     */
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool;
 }

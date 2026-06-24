@@ -5,8 +5,8 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Spell            $spell
- * @var Collection<Dungeon> $spell->dungeons
+ * @var Spell                    $spell
+ * @var Collection<int, Dungeon> $spell ->dungeons
  */
 ?>
 <div class="row mb-4">

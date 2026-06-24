@@ -100,6 +100,9 @@ final class GetSeasonFromShortStringTest extends PublicTestCase
         $this->assertEquals($expectedSeasonId, $result->id);
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function getSeasonFromShortString_GivenValidStrings_ShouldReturnCorrectSeason_dataProvider(): array
     {
         return [

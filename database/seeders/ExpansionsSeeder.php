@@ -119,6 +119,9 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
         return [Expansion::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

@@ -39,21 +39,34 @@ class AffixGroup extends AffixGroupBase
         return 'affix_group_couplings';
     }
 
+    /**
+     * @return BelongsTo<Season, $this>
+     */
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);
     }
 
+    /**
+     * @return BelongsTo<Expansion, $this>
+     */
     public function expansion(): BelongsTo
     {
         return $this->belongsTo(Expansion::class);
     }
 
+    /**
+     * @return HasMany<AffixGroupEaseTier, $this>
+     */
     public function easetiers(): HasMany
     {
         return $this->hasMany(AffixGroupEaseTier::class);
     }
 
+    /**
+     * @param  Collection<int, int>        $affixIds
+     * @return Collection<int, AffixGroup>
+     */
     public static function findMatchingAffixGroupsForAffixIds(Season $season, Collection $affixIds): Collection
     {
         $result = collect();

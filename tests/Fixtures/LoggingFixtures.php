@@ -8,6 +8,7 @@ use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
+use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Log\LogManager;
 use PHPUnit\Framework\MockObject\Exception;
@@ -89,5 +90,14 @@ class LoggingFixtures
         PublicTestCase $testCase,
     ): MockObject|CacheServiceLoggingInterface {
         return $testCase->createMockPublic(CacheServiceLoggingInterface::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createDungeonRouteSaveServiceLogging(
+        PublicTestCase $testCase,
+    ): MockObject|DungeonRouteSaveServiceLoggingInterface {
+        return $testCase->createMockPublic(DungeonRouteSaveServiceLoggingInterface::class);
     }
 }

@@ -36,6 +36,7 @@ abstract class AjaxMappingModelBaseController extends Controller
     }
 
     /**
+     * @param  array<string, mixed> $validated
      * @throws Throwable
      */
     protected function storeModel(

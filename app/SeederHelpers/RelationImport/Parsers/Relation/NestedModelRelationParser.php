@@ -10,11 +10,19 @@ class NestedModelRelationParser implements RelationParserInterface
         return true;
     }
 
+    /**
+     * @param array<string, mixed> $value
+     */
     public function canParseRelation(string $name, array $value): bool
     {
         return isset($value['id']);
     }
 
+    /**
+     * @param  array<string, mixed> $modelData
+     * @param  array<string, mixed> $value
+     * @return array<string, mixed>
+     */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         // Converts a relation like this: enemy: { id: 1, <otherattributes> } to enemy_id: 1 for saving

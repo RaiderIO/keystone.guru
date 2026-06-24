@@ -7,18 +7,18 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                      $dungeon
- * @var Floor                        $floor
- * @var string                       $title
- * @var MapContextBase               $mapContext
- * @var int                          $keyLevelMin
- * @var int                          $keyLevelMax
- * @var int                          $itemLevelMin
- * @var int                          $itemLevelMax
- * @var int                          $playerDeathsMin
- * @var int                          $playerDeathsMax
- * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
- * @var Collection<Dungeon>          $gameVersionDungeons
+ * @var Dungeon                           $dungeon
+ * @var Floor                             $floor
+ * @var string                            $title
+ * @var MapContextBase                    $mapContext
+ * @var int                               $keyLevelMin
+ * @var int                               $keyLevelMax
+ * @var int                               $itemLevelMin
+ * @var int                               $itemLevelMax
+ * @var int                               $playerDeathsMin
+ * @var int                               $playerDeathsMax
+ * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<int, Dungeon>          $gameVersionDungeons
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])

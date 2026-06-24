@@ -51,21 +51,33 @@ class CombatLogRouteEnemyFailure extends Model
         'lng',
     ];
 
+    /**
+     * @return BelongsTo<Dungeon, $this>
+     */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return BelongsTo<MappingVersion, $this>
+     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<Npc, $this>
+     */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

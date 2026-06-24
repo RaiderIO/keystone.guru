@@ -23,9 +23,8 @@ RUN git config --global --add safe.directory /var/www/html && \
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
-# Install NPM packages
-RUN npm install && \
-    node node_modules/puppeteer/install.js
+# Install NPM packages (puppeteer v21+ downloads Chrome automatically via postinstall)
+RUN npm install
 
 # Generate Swagger related files
 RUN php artisan l5-swagger:generate --all && \

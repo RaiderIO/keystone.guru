@@ -78,14 +78,15 @@ use Illuminate\Support\Collection;
  * @property EloquentCollection<int, Floor>                      $directConnectedFloors
  * @property EloquentCollection<int, Floor>                      $reverseConnectedFloors
  *
- * @method static Builder active()
- * @method static Builder indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)
- * @method static Builder defaultOrFacade(MappingVersion $mappingVersion)
+ * @method static Builder<self> active()
+ * @method static Builder<self> indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)
+ * @method static Builder<self> defaultOrFacade(MappingVersion $mappingVersion)
  *
  * @mixin Eloquent
  */
 class Floor extends CacheModel implements MappingModelInterface
 {
+    /** @use HasFactory<\Database\Factories\FloorFactory> */
     use HasFactory;
     use HasLatLng;
     use SeederModel;
@@ -271,97 +272,115 @@ class Floor extends CacheModel implements MappingModelInterface
         'enemy_engagement_max_range_patrols',
     ];
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
     }
 
+    /** @return HasMany<Enemy, $this> */
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
             ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
+    /** @return HasMany<EnemyPack, $this> */
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
             ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
+    /** @return HasMany<EnemyPatrol, $this> */
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
             ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
+    /** @return HasMany<MapIcon, $this> */
     public function mapIcons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
             ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
+    /** @return HasMany<MountableArea, $this> */
     public function mountableAreas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
             ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
+    /** @return HasMany<DungeonFloorSwitchMarker, $this> */
     public function dungeonFloorSwitchMarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
             ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
+    /** @return HasMany<Enemy, $this> */
     public function enemiesForExport(): HasMany
     {
         return $this->hasMany(Enemy::class)->orderBy('id');
     }
 
+    /** @return HasMany<EnemyPack, $this> */
     public function enemyPacksForExport(): HasMany
     {
         return $this->hasMany(EnemyPack::class)->orderBy('id');
     }
 
+    /** @return HasMany<EnemyPatrol, $this> */
     public function enemyPatrolsForExport(): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)->with('mdtPolyline')->orderBy('id');
     }
 
+    /** @return HasMany<MapIcon, $this> */
     public function mapIconsForExport(): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNotNull('mapping_version_id')->orderBy('id');
     }
 
+    /** @return HasMany<MountableArea, $this> */
     public function mountableAreasForExport(): HasMany
     {
         return $this->hasMany(MountableArea::class)->orderBy('id');
     }
 
+    /** @return HasMany<FloorUnion, $this> */
     public function floorUnionsForExport(): HasMany
     {
         return $this->hasMany(FloorUnion::class)->orderBy('id');
     }
 
+    /** @return HasMany<FloorUnionArea, $this> */
     public function floorUnionAreasForExport(): HasMany
     {
         return $this->hasMany(FloorUnionArea::class)->orderBy('id');
     }
 
+    /** @return HasMany<DungeonFloorSwitchMarker, $this> */
     public function dungeonFloorSwitchMarkersForExport(): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)->orderBy('id');
     }
 
+    /** @return HasMany<FloorCoupling, $this> */
     public function floorcouplings(): HasMany
     {
         return $this->hasMany(FloorCoupling::class, 'floor1_id');
     }
 
+    /** @return HasMany<FloorUnion, $this> */
     public function floorUnions(): HasMany
     {
         return $this->hasMany(FloorUnion::class);
     }
 
+    /** @return HasMany<FloorUnionArea, $this> */
     public function floorUnionAreas(): HasMany
     {
         return $this->hasMany(FloorUnionArea::class);
@@ -370,29 +389,33 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * If this floor is in a union to another floor (this floor will not contain enemies and delegates it to this other floor instead)
      */
+    /** @return HasOne<FloorUnion, $this> */
     public function floorUnion(): HasOne
     {
         return $this->hasOne(FloorUnion::class, 'target_floor_id');
     }
 
     /**
-     * @return Collection<Floor> A list of all connected floors, regardless of direction
+     * @return Collection<int, Floor> A list of all connected floors, regardless of direction
      */
     public function connectedFloors(): Collection
     {
         return $this->directConnectedFloors->merge($this->reverseConnectedFloors);
     }
 
+    /** @return BelongsToMany<Floor, $this> */
     public function directConnectedFloors(): BelongsToMany
     {
         return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor1_id', 'floor2_id');
     }
 
+    /** @return BelongsToMany<Floor, $this> */
     public function reverseConnectedFloors(): BelongsToMany
     {
         return $this->belongsToMany(Floor::class, 'floor_couplings', 'floor2_id', 'floor1_id');
     }
 
+    /** @return HasMany<DungeonSpeedrunRequiredNpc, $this> */
     public function dungeonSpeedrunRequiredNpcs(): HasMany
     {
         return $this->hasMany(DungeonSpeedrunRequiredNpc::class);
@@ -400,6 +423,9 @@ class Floor extends CacheModel implements MappingModelInterface
 
     /**
      * Scope a query to only include active floors.
+     *
+     * @param  Builder<self> $query
+     * @return Builder<self>
      */
     #[Scope]
     protected function active(Builder $query): Builder
@@ -407,6 +433,10 @@ class Floor extends CacheModel implements MappingModelInterface
         return $query->where('floors.active', 1);
     }
 
+    /**
+     * @param  Builder<self> $builder
+     * @return Builder<self>
+     */
     #[Scope]
     protected function indexOrFacade(
         Builder        $builder,
@@ -445,6 +475,10 @@ class Floor extends CacheModel implements MappingModelInterface
             ->limit(1);
     }
 
+    /**
+     * @param  Builder<self> $builder
+     * @return Builder<self>
+     */
     #[Scope]
     protected function defaultOrFacade(Builder $builder, MappingVersion $mappingVersion): Builder
     {
@@ -464,7 +498,7 @@ class Floor extends CacheModel implements MappingModelInterface
     ): ?DungeonFloorSwitchMarker {
         $result = null;
 
-        /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
+        /** @var Collection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
             ->where('target_floor_id', $targetFloorId)->get();
 

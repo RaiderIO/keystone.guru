@@ -131,7 +131,8 @@ class LocalizationSync extends Command
      * If lemmas are given substitute them in the content
      * Otherwise extract lemmas from content
      *
-     * @param false|array $lemmas
+     * @param  array<string, string>|false        $lemmas
+     * @return array<string, string>|string|false
      */
     public function parse(string $targetLang, string $content, mixed $lemmas = false): mixed
     {

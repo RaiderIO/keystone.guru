@@ -13,6 +13,9 @@ abstract class RequestModel
      */
     abstract public function __construct();
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         $result = [];
@@ -33,6 +36,9 @@ abstract class RequestModel
         return $result;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function createFromArray(array $data): static
     {
         $object = new static();
@@ -57,7 +63,9 @@ abstract class RequestModel
                             }
                         } else {
                             // If no item type is defined, just populate the collection directly
-                            $collection = collect($value);
+                            /** @var array<int, mixed> $valueArray */
+                            $valueArray = is_array($value) ? $value : [];
+                            $collection = collect($valueArray);
                         }
 
                         $object->$key = $collection;

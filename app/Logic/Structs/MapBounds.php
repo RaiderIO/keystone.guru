@@ -4,6 +4,9 @@ namespace App\Logic\Structs;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, float>
+ */
 readonly class MapBounds implements Arrayable
 {
     public function __construct(
@@ -34,6 +37,9 @@ readonly class MapBounds implements Arrayable
         return $this->maxIngameY;
     }
 
+    /**
+     * @return array<string, float>
+     */
     public function toArray(): array
     {
         return [

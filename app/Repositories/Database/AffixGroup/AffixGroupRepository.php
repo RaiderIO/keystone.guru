@@ -13,7 +13,9 @@ class AffixGroupRepository extends DatabaseRepository implements AffixGroupRepos
     {
         parent::__construct(AffixGroup::class);
     }
-
+    /**
+     * @return Collection<int, AffixGroup>
+     */
     public function getBySeasonId(int $id): Collection
     {
         return AffixGroup::where('season_id', $id)->get();

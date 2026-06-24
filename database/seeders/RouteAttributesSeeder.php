@@ -48,6 +48,9 @@ class RouteAttributesSeeder extends Seeder implements TableSeederInterface
         return [RouteAttribute::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

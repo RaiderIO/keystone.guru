@@ -87,7 +87,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
         }
 
-        /** @var Collection<Expansion> $expansions */
+        /** @var Collection<string, int|string> $expansions */
         $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
             return [$expansion->shortname => $expansion->id];
         });
@@ -352,6 +352,9 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         ];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

@@ -33,6 +33,9 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function scale_givenPositiveMapCoordinates_shouldScaleLatLng_DataProvider(): array
     {
         return [
@@ -68,6 +71,9 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function scale_givenRealisticMapCoordinates_shouldScaleLatLng_DataProvider(): array
     {
         return [
@@ -97,6 +103,9 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function rotate_givenPositiveMapCoordinates_shouldRotateLatLng_DataProvider(): array
     {
         return [
@@ -138,6 +147,9 @@ final class LatLngTest extends PublicTestCase
         Assert::assertEquals($expected->getLng(), $result->getLng());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function rotate_givenScaledMapCoordinates_shouldRotateLatLng_DataProvider(): array
     {
         return [

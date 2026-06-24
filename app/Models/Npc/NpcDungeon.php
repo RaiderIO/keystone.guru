@@ -32,11 +32,13 @@ class NpcDungeon extends CacheModel
 
     public $with = ['dungeon'];
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);

@@ -18,8 +18,14 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="numDeaths",type="integer")
  * @OA\Property(property="affixes",type="array", @OA\Items(type="integer"))
  */
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class CombatLogRouteChallengeModeRequestModel extends RequestModel implements Arrayable
 {
+    /**
+     * @param array<int>|null $affixes
+     */
     public function __construct(
         public ?string $start = null,
         public ?string $end = null,

@@ -11,10 +11,13 @@ interface ThumbnailServiceInterface
 {
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool;
 
+    /**
+     * @param Collection<int, DungeonRoute> $dungeonRoutes
+     */
     public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool;
 
     /**
-     * @return Collection<DungeonRouteThumbnailJob>
+     * @return Collection<int, DungeonRouteThumbnailJob>
      */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,
@@ -22,7 +25,7 @@ interface ThumbnailServiceInterface
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): Collection;
 
@@ -40,10 +43,13 @@ interface ThumbnailServiceInterface
         ?int         $viewportHeight = null,
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
-        ?int         $zoomLevel = null,
+        ?float       $zoomLevel = null,
         ?int         $quality = null,
     ): ?DungeonRouteThumbnail;
 
+    /**
+     * @return Collection<int, DungeonRouteThumbnail>|null
+     */
     public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): ?Collection;
 
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool;
