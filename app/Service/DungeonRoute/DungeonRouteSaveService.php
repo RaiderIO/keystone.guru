@@ -14,12 +14,11 @@ use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
-use App\Models\MapIcon;
-use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\RouteAttribute;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -36,6 +35,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         private SeasonServiceInterface                  $seasonService,
         private ThumbnailServiceInterface               $thumbnailService,
         private DungeonRouteSaveServiceLoggingInterface $log,
+        private MapIconRepositoryInterface              $mapIconRepository,
     ) {
     }
 
@@ -458,10 +458,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             return null;
         }
 
-        return MapIcon::where('id', $id)
-            ->where('mapping_version_id', $mappingVersionId)
-            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
-            ->exists() ? (int)$id : null;
+        return $this->mapIconRepository->isDungeonStart((int)$id, $mappingVersionId) ? (int)$id : null;
     }
 
     /**

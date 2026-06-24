@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveService;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -24,11 +25,13 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
         ?SeasonServiceInterface                  $seasonService = null,
         ?ThumbnailServiceInterface               $thumbnailService = null,
         ?DungeonRouteSaveServiceLoggingInterface $log = null,
+        ?MapIconRepositoryInterface              $mapIconRepository = null,
     ): DungeonRouteSaveService {
         return new DungeonRouteSaveService(
             $seasonService ?? $this->createMockPublic(SeasonServiceInterface::class),
             $thumbnailService ?? $this->createMockPublic(ThumbnailServiceInterface::class),
             $log ?? $this->createMockPublic(DungeonRouteSaveServiceLoggingInterface::class),
+            $mapIconRepository ?? app(MapIconRepositoryInterface::class),
         );
     }
 
@@ -75,7 +78,7 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
         ]);
     }
 
-    protected function createDungeonStartMapIcon(int $mappingVersionId, int $floorId): MapIcon
+    protected function createDungeonStartMapIcon(int $mappingVersionId, int $floorId, ?string $comment = 'mapping.start.east'): MapIcon
     {
         return MapIcon::create([
             'mapping_version_id' => $mappingVersionId,
@@ -85,7 +88,7 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
             'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
             'lat'                => -100.0,
             'lng'                => 100.0,
-            'comment'            => 'mapping.start.east',
+            'comment'            => $comment,
             'permanent_tooltip'  => false,
             'seasonal_index'     => 0,
         ]);
