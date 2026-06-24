@@ -28,6 +28,7 @@ use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
@@ -357,7 +358,9 @@ class ViewService implements ViewServiceInterface
      */
     public function getAllSpeedrunDungeons(): Collection
     {
-        return $this->cachedGlobal('all_speedrun_dungeons', static fn() => Dungeon::where('speedrun_enabled', true)->get());
+        return $this->cachedGlobal('all_speedrun_dungeons', static fn() => Dungeon::where('speedrun_enabled', true)
+            ->with('dungeonSpeedrunDifficulties')
+            ->get());
     }
 
     /**
@@ -596,6 +599,7 @@ class ViewService implements ViewServiceInterface
      */
     private function dungeonsByExpansionQuery(): Builder
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return Dungeon::select('dungeons.*')
             ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
             ->orderByRaw('expansions.released_at DESC, dungeons.name');

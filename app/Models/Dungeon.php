@@ -14,6 +14,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
+use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasCombatLogCriterion;
@@ -37,26 +38,24 @@ use Mockery\Exception;
 use Override;
 
 /**
- * @property int      $id                                 The ID of this Dungeon.
- * @property int      $expansion_id                       The linked expansion to this dungeon.
- * @property int      $zone_id                            The ID of the location that WoW has given this dungeon.
- * @property int      $map_id                             The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int|null $instance_id                        The ID of the instance (used internally in the game, used for MDT mapping export purposes)
- * @property int|null $challenge_mode_id                  The ID of the M+ for this dungeon (used internally in the game, used for ARC)
- * @property int      $mdt_id                             The ID that MDT has given this dungeon.
- * @property bool     $raid                               True if the dungeon is actually a raid, false if it is not.
- * @property string   $name                               The name of the dungeon.
- * @property string   $abbreviation                       HOV for Halls of Valor, GAMBIT for Tazavesh: Gambit etc.
- * @property string   $slug                               The url friendly slug of the dungeon.
- * @property string   $key                                Shorthand key of the dungeon.
- * @property bool     $heatmap_enabled                    True if this dungeon has a heatmap enabled, false if it does not.
- * @property bool     $speedrun_enabled                   True if this dungeon has a speedrun enabled, false if it does not.
- * @property bool     $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
- * @property bool     $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
- * @property int      $views                              The number of views this dungeon has had.
- * @property bool     $active                             True if this dungeon is active, false if it is not.
- * @property bool     $has_wallpaper                      True if this dungeon has a wallpaper to show as a background.
- * @property bool     $mdt_supported                      True if MDT is supported for this dungeon, false if it is not.
+ * @property int      $id                The ID of this Dungeon.
+ * @property int      $expansion_id      The linked expansion to this dungeon.
+ * @property int      $zone_id           The ID of the location that WoW has given this dungeon.
+ * @property int      $map_id            The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int|null $instance_id       The ID of the instance (used internally in the game, used for MDT mapping export purposes)
+ * @property int|null $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int      $mdt_id            The ID that MDT has given this dungeon.
+ * @property bool     $raid              True if the dungeon is actually a raid, false if it is not.
+ * @property string   $name              The name of the dungeon.
+ * @property string   $abbreviation      HOV for Halls of Valor, GAMBIT for Tazavesh: Gambit etc.
+ * @property string   $slug              The url friendly slug of the dungeon.
+ * @property string   $key               Shorthand key of the dungeon.
+ * @property bool     $heatmap_enabled   True if this dungeon has a heatmap enabled, false if it does not.
+ * @property bool     $speedrun_enabled  True if this dungeon has a speedrun enabled, false if it does not.
+ * @property int      $views             The number of views this dungeon has had.
+ * @property bool     $active            True if this dungeon is active, false if it is not.
+ * @property bool     $has_wallpaper     True if this dungeon has a wallpaper to show as a background.
+ * @property bool     $mdt_supported     True if MDT is supported for this dungeon, false if it is not.
  *
  * @property Expansion $expansion
  *
@@ -73,6 +72,7 @@ use Override;
  * @property EloquentCollection<int, DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
  * @property EloquentCollection<int, MountableArea>              $mountableAreas
  * @property EloquentCollection<int, DungeonSpeedrunRequiredNpc> $dungeonSpeedrunRequiredNpcs
+ * @property EloquentCollection<int, DungeonSpeedrunDifficulty>  $dungeonSpeedrunDifficulties
  * @property EloquentCollection<int, Spell>                      $spells
  *
  * @method static Builder<Dungeon> active()
@@ -107,8 +107,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         'raid',
         'heatmap_enabled',
         'speedrun_enabled',
-        'speedrun_difficulty_10_man_enabled',
-        'speedrun_difficulty_25_man_enabled',
         'zone_id',
         'map_id',
         'instance_id',
@@ -131,8 +129,6 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         'challenge_mode_id',
         'heatmap_enabled',
         'speedrun_enabled',
-        'speedrun_difficulty_10_man_enabled',
-        'speedrun_difficulty_25_man_enabled',
         'views',
         'active',
         'mdt_id',
@@ -401,6 +397,12 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
         return $this->hasManyThrough(DungeonSpeedrunRequiredNpc::class, Floor::class);
     }
 
+    /** @return HasMany<DungeonSpeedrunDifficulty, $this> */
+    public function dungeonSpeedrunDifficulties(): HasMany
+    {
+        return $this->hasMany(DungeonSpeedrunDifficulty::class);
+    }
+
     /**
      * Scope a query to only the Siege of Boralus dungeon.
      *
@@ -601,6 +603,19 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
     public static function getDifficultyName(int $difficulty): string
     {
         return __(sprintf('view_common.dungeon.difficulty.%s', array_search($difficulty, self::DIFFICULTY_ALL, true)));
+    }
+
+    /**
+     * Gets the list of speedrun difficulty IDs (see {@see Dungeon::DIFFICULTY_ALL}) that are enabled for this dungeon.
+     *
+     * @return list<int>
+     */
+    public function getEnabledSpeedrunDifficulties(): array
+    {
+        return $this->dungeonSpeedrunDifficulties
+            ->pluck('difficulty')
+            ->values()
+            ->all();
     }
 
     public function getDungeonId(): ?int

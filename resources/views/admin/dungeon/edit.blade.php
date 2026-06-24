@@ -48,28 +48,28 @@ use Illuminate\Support\Collection;
                 @include('common.forms.form-error', ['key' => 'heatmap_enabled'])
             </div>
 
-            <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.speedrun_enabled'), 'speedrun_enabled') }}
-                {{ html()->checkbox('speedrun_enabled', $dungeon?->speedrun_enabled ?? 0, 1)->class('form-control left_checkbox') }}
-                @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
-            </div>
-
-            <div class="col {{ $errors->has('speedrun_difficulty_10_man_enabled') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.speedrun_difficulty_10_man_enabled'), 'speedrun_difficulty_10_man_enabled') }}
-                {{ html()->checkbox('speedrun_difficulty_10_man_enabled', $dungeon?->speedrun_difficulty_10_man_enabled ?? 0, 1)->class('form-control left_checkbox') }}
-                @include('common.forms.form-error', ['key' => 'speedrun_difficulty_10_man_enabled'])
-            </div>
-
-            <div class="col {{ $errors->has('speedrun_difficulty_25_man_enabled') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.speedrun_difficulty_25_man_enabled'), 'speedrun_difficulty_25_man_enabled') }}
-                {{ html()->checkbox('speedrun_difficulty_25_man_enabled', $dungeon?->speedrun_difficulty_25_man_enabled ?? 0, 1)->class('form-control left_checkbox') }}
-                @include('common.forms.form-error', ['key' => 'speedrun_difficulty_25_man_enabled'])
-            </div>
-
             <div class="col {{ $errors->has('has_wallpaper') ? ' has-error' : '' }}">
                 {{ html()->label(__('view_admin.dungeon.edit.has_wallpaper'), 'has_wallpaper') }}
                 {{ html()->checkbox('has_wallpaper', $dungeon?->has_wallpaper ?? 0, 1)->class('form-control left_checkbox') }}
                 @include('common.forms.form-error', ['key' => 'has_wallpaper'])
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <div class="col-auto {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
+                        {{ html()->label(__('view_admin.dungeon.edit.speedrun_enabled'), 'speedrun_enabled') }}
+                        {{ html()->checkbox('speedrun_enabled', $dungeon?->speedrun_enabled ?? 0, 1)->id('speedrun_enabled')->class('form-control left_checkbox') }}
+                        @include('common.forms.form-error', ['key' => 'speedrun_enabled'])
+                    </div>
+
+                    <div class="col {{ $errors->has('speedrun_difficulties') ? ' has-error' : '' }}">
+                        @php($difficultiesSelect = collect(Dungeon::DIFFICULTY_ALL)->mapWithKeys(fn($id, $slug) => [$id => Dungeon::getDifficultyName($id)])->toArray())
+                        @php($enabledSpeedrunDifficulties = $dungeon?->getEnabledSpeedrunDifficulties() ?? [])
+                        {{ html()->label(__('view_admin.dungeon.edit.speedrun_difficulties'), 'speedrun_difficulties') }}
+                        {{ html()->multiselect('speedrun_difficulties[]', $difficultiesSelect, $enabledSpeedrunDifficulties)->id('speedrun_difficulties')->class('form-control selectpicker') }}
+                        @include('common.forms.form-error', ['key' => 'speedrun_difficulties'])
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -128,11 +128,11 @@ use Illuminate\Support\Collection;
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
 
-            <div class="form-group{{ $errors->has('abbreviation') ? ' has-error' : '' }}">
-                {{ html()->label(__('view_admin.dungeon.edit.abbreviation'), 'abbreviation') }}
-                {{ html()->text('abbreviation')->class('form-control') }}
-                @include('common.forms.form-error', ['key' => 'abbreviation'])
-            </div>
+        <div class="form-group{{ $errors->has('abbreviation') ? ' has-error' : '' }}">
+            {{ html()->label(__('view_admin.dungeon.edit.abbreviation'), 'abbreviation') }}
+            {{ html()->text('abbreviation')->class('form-control') }}
+            @include('common.forms.form-error', ['key' => 'abbreviation'])
+        </div>
 
         <div class="form-group{{ $errors->has('slug') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.slug'), 'slug') }}
@@ -157,4 +157,22 @@ use Illuminate\Support\Collection;
     @endisset
 
     @endisset
+@endsection
+
+@section('scripts')
+    @parent
+
+    <script type="text/javascript">
+        $(function () {
+            var $speedrunEnabled = $('#speedrun_enabled');
+            var $speedrunDifficulties = $('#speedrun_difficulties');
+
+            function updateSpeedrunDifficulties() {
+                $speedrunDifficulties.prop('disabled', !$speedrunEnabled.is(':checked')).selectpicker('refresh');
+            }
+
+            $speedrunEnabled.on('change', updateSpeedrunDifficulties);
+            updateSpeedrunDifficulties();
+        });
+    </script>
 @endsection

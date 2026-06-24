@@ -22,19 +22,19 @@ class DungeonFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'active'                             => 'nullable|boolean',
-            'has_wallpaper'                      => 'nullable|boolean',
-            'raid'                               => 'nullable|boolean',
-            'heatmap_enabled'                    => 'nullable|boolean',
-            'speedrun_enabled'                   => 'nullable|boolean',
-            'speedrun_difficulty_10_man_enabled' => 'nullable|boolean',
-            'speedrun_difficulty_25_man_enabled' => 'nullable|boolean',
-            'zone_id'                            => 'int',
-            'map_id'                             => 'int',
-            'instance_id'                        => 'nullable|int',
-            'challenge_mode_id'                  => 'nullable|int',
-            'mdt_id'                             => 'int',
-            'name'                               => [
+            'active'                  => 'nullable|boolean',
+            'has_wallpaper'           => 'nullable|boolean',
+            'raid'                    => 'nullable|boolean',
+            'heatmap_enabled'         => 'nullable|boolean',
+            'speedrun_enabled'        => 'nullable|boolean',
+            'speedrun_difficulties'   => 'nullable|array',
+            'speedrun_difficulties.*' => ['integer', Rule::in(array_values(Dungeon::DIFFICULTY_ALL))],
+            'zone_id'                 => 'int',
+            'map_id'                  => 'int',
+            'instance_id'             => 'nullable|int',
+            'challenge_mode_id'       => 'nullable|int',
+            'mdt_id'                  => 'int',
+            'name'                    => [
                 'required',
                 Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name'),
             ],

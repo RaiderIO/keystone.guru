@@ -37,8 +37,9 @@ class DungeonController extends Controller
         $validated['raid'] ??= 0;
         $validated['heatmap_enabled'] ??= 0;
         $validated['speedrun_enabled'] ??= 0;
-        $validated['speedrun_difficulty_10_man_enabled'] ??= 0;
-        $validated['speedrun_difficulty_25_man_enabled'] ??= 0;
+
+        $speedrunDifficulties = $validated['speedrun_difficulties'] ?? [];
+        unset($validated['speedrun_difficulties']);
 
         $beforeDungeon = null;
         if ($dungeon === null) {
@@ -50,6 +51,8 @@ class DungeonController extends Controller
         }
 
         if ($saveResult) {
+            $this->syncSpeedrunDifficulties($dungeon, $speedrunDifficulties);
+
             $this->mappingChanged($beforeDungeon, $dungeon);
         } else {
             abort(500, 'Unable to save dungeon');
@@ -161,5 +164,19 @@ class DungeonController extends Controller
 //        }
 
         return Redirect::back();
+    }
+
+    /**
+     * Replaces the dungeon's enabled speedrun difficulties with the given list.
+     *
+     * @param list<int> $difficulties
+     */
+    private function syncSpeedrunDifficulties(Dungeon $dungeon, array $difficulties): void
+    {
+        $dungeon->dungeonSpeedrunDifficulties()->delete();
+
+        foreach (array_unique($difficulties) as $difficulty) {
+            $dungeon->dungeonSpeedrunDifficulties()->create(['difficulty' => $difficulty]);
+        }
     }
 }

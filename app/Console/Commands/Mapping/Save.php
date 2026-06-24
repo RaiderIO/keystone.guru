@@ -151,6 +151,7 @@ class Save extends Command
             ->with([
                 'floors.floorcouplings',
                 'floors.dungeonSpeedrunRequiredNpcs.dungeonSpeedrunRequiredNpcNpcs',
+                'dungeonSpeedrunDifficulties',
             ])
             ->get();
 
@@ -183,8 +184,6 @@ class Save extends Command
                 'raid',
                 'heatmap_enabled',
                 'speedrun_enabled',
-                'speedrun_difficulty_10_man_enabled',
-                'speedrun_difficulty_25_man_enabled',
             ])
                 ->makeHidden(['floor_count'])
                 ->toArray(),
