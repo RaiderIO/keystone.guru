@@ -161,7 +161,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ## Test Enforcement
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
+- For *how* to write and run tests in this project — file creation, structure, naming, factories, database cleanup, test groups, data providers, running commands, and the Dungeon/MappingVersion/Floor random-data pitfall (and the traits that already solve it) — see the `writing-tests` skill.
 
 === laravel/core rules ===
 
@@ -212,9 +212,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Use environment variables only in configuration files - never use the `env()` function directly outside of config files. Always use `config('app.name')`, not `env('APP_NAME')`.
 
 ### Testing
-- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
-- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
+- See the `writing-tests` skill for this project's test conventions (factories and states, Faker, feature vs unit, and file creation — note this project creates test files directly rather than via `php artisan make:test`).
 
 ### Vite Error
 - If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
@@ -259,21 +257,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## PHPUnit
 
-- This application uses PHPUnit for testing. All tests must be written as PHPUnit classes. Use `php artisan make:test --phpunit {name}` to create a new test.
-- If you see a test using "Pest", convert it to PHPUnit.
-- Every time a test has been updated, run that singular test.
-- When the tests relating to your feature are passing, ask the user if they would like to also run the entire test suite to make sure everything is still passing.
-- Tests should test all of the happy paths, failure paths, and weird paths.
-- You must not remove any tests or test files from the tests directory without approval. These are not temporary or helper files; these are core to the application.
-- Structure every test using the Arrange-Act-Assert pattern. Arrange all necessary preconditions and inputs, Act on the object or method under test, and Assert that the expected results have occurred.
-- Every test name should follow the pattern of `[functionname]_given[Condition]_returns[ExpectedResult]`. For example: `myFunction_givenValidDate_returnsTrue` or `myFunction_givenInvalidDate_throwsInvalidArgumentException`.
-- Any created database records must be cleaned up using try...finally.
-- Test groups should be placed in the test class docblock, not the method docblock. For example: a `CombatLog` group for all tests in the `CombatLog` folder, a `EncounterStart` for all tests in the `EncounterStart` file.
-- A DataProvider should be placed right below the last test using it, not at the top or the bottom of the class.
-
-### Running Tests
-- Run the minimal number of tests, using an appropriate filter, before finalizing.
-- To run all tests: `php artisan test --compact`.
-- To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
-- To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
+- This application uses PHPUnit for all tests (never Pest). You must not remove any tests or test files from the `tests/` directory without approval — these are core to the application, not temporary or helper files.
+- After updating a test, run that singular test. When the tests relating to your feature pass, ask the user whether to also run the entire suite.
+- See the `writing-tests` skill for the full convention: how to create a test, PHPUnit-class structure, the `[functionName]_given[Condition]_returns[ExpectedResult]` naming pattern, Arrange-Act-Assert, database cleanup with `try/finally`, happy/failure/weird path coverage, test groups, data providers, and how to run tests.
 </laravel-boost-guidelines>
