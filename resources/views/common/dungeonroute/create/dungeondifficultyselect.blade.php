@@ -13,13 +13,13 @@ use Illuminate\Support\Collection;
 $id                  ??= 'dungeon_difficulty_select';
 $dungeonroute        ??= null;
 $difficultySelect    = collect([
-    Dungeon::DIFFICULTY_10_MAN => __('dungeons.difficulty.1'),
-    Dungeon::DIFFICULTY_25_MAN => __('dungeons.difficulty.2'),
+    Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN] => __('dungeons.difficulty.1'),
+    Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN] => __('dungeons.difficulty.2'),
 ]);
 $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
     $dungeon->id => [
-        Dungeon::DIFFICULTY_10_MAN => $dungeon->speedrun_difficulty_10_man_enabled,
-        Dungeon::DIFFICULTY_25_MAN => $dungeon->speedrun_difficulty_25_man_enabled,
+        Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN] => $dungeon->speedrun_difficulty_10_man_enabled,
+        Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN] => $dungeon->speedrun_difficulty_25_man_enabled,
     ],
 ]);
 ?>
@@ -76,5 +76,5 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) =>
             __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty_title')
              }}"></i>
     </label>
-    {{ html()->select('dungeon_difficulty', [], $dungeonroute?->difficulty ?? Dungeon::DIFFICULTY_25_MAN)->id($id)->class('form-control selectpicker') }}
+    {{ html()->select('dungeon_difficulty', [], $dungeonroute?->difficulty ?? Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN])->id($id)->class('form-control selectpicker') }}
 </div>

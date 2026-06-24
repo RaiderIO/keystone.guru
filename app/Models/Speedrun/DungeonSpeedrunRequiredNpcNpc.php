@@ -43,11 +43,13 @@ class DungeonSpeedrunRequiredNpcNpc extends CacheModel
         'npc',
     ];
 
+    /** @return BelongsTo<DungeonSpeedrunRequiredNpc, $this> */
     public function dungeonSpeedrunRequiredNpc(): BelongsTo
     {
         return $this->belongsTo(DungeonSpeedrunRequiredNpc::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

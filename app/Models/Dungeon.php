@@ -600,7 +600,7 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
      */
     public static function getDifficultyName(int $difficulty): string
     {
-        return __(sprintf('view_common.dungeon.difficulty.%s', self::DIFFICULTY_NAMES[$difficulty]));
+        return __(sprintf('view_common.dungeon.difficulty.%s', array_search($difficulty, self::DIFFICULTY_ALL, true)));
     }
 
     public function getDungeonId(): ?int

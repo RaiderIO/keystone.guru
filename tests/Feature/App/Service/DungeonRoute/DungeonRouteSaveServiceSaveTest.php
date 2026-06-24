@@ -340,7 +340,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     {
         // Arrange
         $dungeon  = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->where('speedrun_enabled', true));
-        $expected = $dungeon->speedrun_difficulty_10_man_enabled ? Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
+        $expected = $dungeon->speedrun_difficulty_10_man_enabled ? Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN] : Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN];
 
         $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
         $route     = new DungeonRoute();
@@ -349,7 +349,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             'faction_id'          => 1,
             'dungeon_route_title' => 'Speedrun Test',
             // Any non-null difficulty triggers the speedrun override
-            'dungeon_difficulty' => Dungeon::DIFFICULTY_10_MAN,
+            'dungeon_difficulty' => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN],
         ];
 
         try {
@@ -378,7 +378,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             'dungeon_id'          => $dungeon->id,
             'faction_id'          => 1,
             'dungeon_route_title' => 'Difficulty Passthrough Test',
-            'dungeon_difficulty'  => Dungeon::DIFFICULTY_25_MAN,
+            'dungeon_difficulty'  => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN],
         ];
 
         try {
@@ -386,7 +386,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             $service->save($route, $validated);
 
             // Assert
-            $this->assertEquals(Dungeon::DIFFICULTY_25_MAN, $route->dungeon_difficulty);
+            $this->assertEquals(Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN], $route->dungeon_difficulty);
         } finally {
             if ($route->exists) {
                 $this->cleanupRoute($route);

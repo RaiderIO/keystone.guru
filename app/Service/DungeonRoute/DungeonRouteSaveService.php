@@ -430,7 +430,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
     {
         if ($difficulty !== null && $dungeon->speedrun_enabled) {
             return $dungeon->speedrun_difficulty_10_man_enabled ?
-                Dungeon::DIFFICULTY_10_MAN : Dungeon::DIFFICULTY_25_MAN;
+                Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN] : Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN];
         }
 
         return $difficulty;

@@ -56,7 +56,7 @@ final class SpeedrunRequiredNpcsTest extends PublicTestCase
             $this->fail('No seeded floor without speedrun required NPCs found.');
         }
 
-        $createdNpcs = collect([Dungeon::DIFFICULTY_10_MAN, Dungeon::DIFFICULTY_40_MAN])
+        $createdNpcs = collect([Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_10_MAN], Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_40_MAN]])
             ->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([
                 'floor_id'   => $floor->id,
                 'difficulty' => $difficulty,

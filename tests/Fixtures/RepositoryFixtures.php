@@ -791,6 +791,9 @@ class RepositoryFixtures
         return $mockBuilder->getMock();
     }
 
+    /**
+     * @param array<int, string> $methodsToMock
+     */
     public static function getDungeonSpeedrunRequiredNpcNpcRepositoryMock(
         PublicTestCase $testCase,
         array          $methodsToMock = [],

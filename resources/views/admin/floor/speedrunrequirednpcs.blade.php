@@ -9,10 +9,10 @@ use App\Models\Floor\Floor;
  */
 
 $npcsByDifficulty     = $floor->dungeonSpeedrunRequiredNpcs->groupBy('difficulty');
-$difficultiesWithData = array_values(array_filter(
+$difficultiesWithData = array_filter(
     Dungeon::DIFFICULTY_ALL,
     static fn(int $difficulty): bool => $npcsByDifficulty->has($difficulty),
-));
+);
 ?>
 
 @section('scripts')
@@ -60,15 +60,14 @@ $difficultiesWithData = array_values(array_filter(
     <p class="text-muted">{{ __('view_admin.floor.edit.speedrun_required_npcs.no_npcs') }}</p>
 @else
     <ul id="admin_speedrun_required_npcs_tabs" class="nav nav-tabs" role="tablist">
-        @foreach ($difficultiesWithData as $index => $difficulty)
-            <?php $difficultyName = Dungeon::DIFFICULTY_NAMES[$difficulty]; ?>
+        @foreach ($difficultiesWithData as $difficultyName => $difficulty)
             <li class="nav-item">
                 <a id="admin_speedrun_required_npcs_{{ $difficultyName }}_tab"
-                   class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                   class="nav-link {{ $loop->first ? 'active' : '' }}"
                    href="#admin_speedrun_required_npcs_{{ $difficultyName }}_content"
                    role="tab"
                    aria-controls="admin_speedrun_required_npcs_{{ $difficultyName }}_content"
-                   aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
+                   aria-selected="{{ $loop->first ? 'true' : 'false' }}"
                    data-toggle="tab">
                     {{ Dungeon::getDifficultyName($difficulty) }}
                 </a>
@@ -77,10 +76,9 @@ $difficultiesWithData = array_values(array_filter(
     </ul>
 
     <div class="tab-content">
-        @foreach ($difficultiesWithData as $index => $difficulty)
-            <?php $difficultyName = Dungeon::DIFFICULTY_NAMES[$difficulty]; ?>
+        @foreach ($difficultiesWithData as $difficultyName => $difficulty)
             <div id="admin_speedrun_required_npcs_{{ $difficultyName }}_content"
-                 class="tab-pane fade show {{ $index === 0 ? 'active' : '' }}"
+                 class="tab-pane fade show {{ $loop->first ? 'active' : '' }}"
                  role="tabpanel"
                  aria-labelledby="admin_speedrun_required_npcs_{{ $difficultyName }}_tab">
                 <table id="admin_speedrun_required_npcs_{{ $difficultyName }}_table"

@@ -26,7 +26,7 @@ final class DungeonSpeedrunRequiredNpcsRelationTest extends PublicTestCase
 
             // Assert
             $this->assertEqualsCanonicalizing(
-                Dungeon::DIFFICULTY_ALL,
+                array_values(Dungeon::DIFFICULTY_ALL),
                 $requiredNpcs->whereIn('id', $createdNpcs->pluck('id'))->pluck('difficulty')->all(),
             );
         } finally {
@@ -47,7 +47,7 @@ final class DungeonSpeedrunRequiredNpcsRelationTest extends PublicTestCase
 
             // Assert
             $this->assertEqualsCanonicalizing(
-                Dungeon::DIFFICULTY_ALL,
+                array_values(Dungeon::DIFFICULTY_ALL),
                 $requiredNpcs->whereIn('id', $createdNpcs->pluck('id'))->pluck('difficulty')->all(),
             );
         } finally {
@@ -71,7 +71,7 @@ final class DungeonSpeedrunRequiredNpcsRelationTest extends PublicTestCase
      */
     private function createRequiredNpcForEachDifficulty(int $floorId): Collection
     {
-        return collect(Dungeon::DIFFICULTY_ALL)->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([
+        return collect(array_values(Dungeon::DIFFICULTY_ALL))->map(static fn(int $difficulty): DungeonSpeedrunRequiredNpc => DungeonSpeedrunRequiredNpc::create([
             'floor_id'   => $floorId,
             'difficulty' => $difficulty,
             'count'      => 1,
