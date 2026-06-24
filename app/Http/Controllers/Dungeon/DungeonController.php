@@ -51,7 +51,7 @@ class DungeonController extends Controller
         }
 
         if ($saveResult) {
-            $this->syncSpeedrunDifficulties($dungeon, $speedrunDifficulties);
+            $dungeon->syncSpeedrunDifficulties($speedrunDifficulties);
 
             $this->mappingChanged($beforeDungeon, $dungeon);
         } else {
@@ -164,19 +164,5 @@ class DungeonController extends Controller
 //        }
 
         return Redirect::back();
-    }
-
-    /**
-     * Replaces the dungeon's enabled speedrun difficulties with the given list.
-     *
-     * @param list<int> $difficulties
-     */
-    private function syncSpeedrunDifficulties(Dungeon $dungeon, array $difficulties): void
-    {
-        $dungeon->dungeonSpeedrunDifficulties()->delete();
-
-        foreach (array_unique($difficulties) as $difficulty) {
-            $dungeon->dungeonSpeedrunDifficulties()->create(['difficulty' => $difficulty]);
-        }
     }
 }

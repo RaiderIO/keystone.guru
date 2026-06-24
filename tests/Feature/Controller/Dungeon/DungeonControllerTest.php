@@ -23,7 +23,7 @@ final class DungeonControllerTest extends PublicTestCase
     }
 
     /**
-     * @param  list<int>            $difficulties
+     * @param  list<int>              $difficulties
      * @return TestResponse<Response>
      */
     private function updateDungeon(Dungeon $dungeon, array $difficulties): TestResponse

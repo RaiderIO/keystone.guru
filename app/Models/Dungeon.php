@@ -618,6 +618,20 @@ class Dungeon extends CacheModel implements CombatLogCriterionModelInterface, Ma
             ->all();
     }
 
+    /**
+     * Replaces the dungeon's enabled speedrun difficulties with the given list.
+     *
+     * @param list<int> $difficulties
+     */
+    public function syncSpeedrunDifficulties(array $difficulties): void
+    {
+        $this->dungeonSpeedrunDifficulties()->delete();
+
+        foreach (array_unique($difficulties) as $difficulty) {
+            $this->dungeonSpeedrunDifficulties()->create(['difficulty' => $difficulty]);
+        }
+    }
+
     public function getDungeonId(): ?int
     {
         return $this->id;

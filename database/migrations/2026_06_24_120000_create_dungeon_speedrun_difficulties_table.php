@@ -53,7 +53,7 @@ return new class extends Migration {
             ->groupBy('dungeon_id');
 
         foreach ($difficultiesByDungeon as $dungeonId => $entries) {
-            $difficulties = $entries->pluck('difficulty');
+            $difficulties = collect($entries)->pluck('difficulty');
 
             DB::table('dungeons')
                 ->where('id', $dungeonId)

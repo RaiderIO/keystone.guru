@@ -26,7 +26,7 @@ use Override;
  *     @OA\Property(property="heatmapEnabled", type="boolean", example=0, description="Whether a heatmap is available for this dungeon"),
  *     @OA\Property(property="combinedViewEnabled", type="boolean", example=0, description="Whether a combined view (MDT-style) is available for this dungeon"),
  *     @OA\Property(property="speedrunEnabled", type="boolean", example=0, description="Whether speedrun is enabled for this dungeon"),
- *     @OA\Property(property="speedrunDifficulties", type="array", @OA\Items(type="integer"), example={1, 2}, description="The difficulty IDs that are enabled for speedrunning on this dungeon"),
+ *     @OA\Property(property="speedrunDifficulties", type="array", @OA\Items(type="string"), example={"10_man", "25_man"}, description="The difficulty slugs that are enabled for speedrunning on this dungeon"),
  *     @OA\Property(
  *         property="floors",
  *         type="array",
@@ -67,8 +67,11 @@ class DungeonResource extends JsonResource
             'heatmapEnabled'       => $this->heatmap_enabled,
             'combinedViewEnabled'  => (int)$this->floors->contains(fn(Floor $floor) => $floor->facade),
             'speedrunEnabled'      => $this->speedrun_enabled,
-            'speedrunDifficulties' => $this->getEnabledSpeedrunDifficulties(),
-            'floors'               => $this->floors
+            'speedrunDifficulties' => collect(Dungeon::DIFFICULTY_ALL)
+                ->filter(fn(int $id) => in_array($id, $this->getEnabledSpeedrunDifficulties(), true))
+                ->keys()
+                ->all(),
+            'floors' => $this->floors
                 ->filter(static fn(Floor $floor) => !$floor->facade)
                 ->map(static fn(Floor $floor) => new FloorResource($floor))
                 ->toArray(),
