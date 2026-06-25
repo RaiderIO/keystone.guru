@@ -17,8 +17,6 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="level",type="integer")
  * @OA\Property(property="numDeaths",type="integer")
  * @OA\Property(property="affixes",type="array", @OA\Items(type="integer"))
- */
-/**
  * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteChallengeModeRequestModel extends RequestModel implements Arrayable

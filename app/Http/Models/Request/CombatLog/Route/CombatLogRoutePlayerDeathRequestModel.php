@@ -14,8 +14,6 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="itemLevel",type="number",format="float")
  * @OA\Property(property="diedAt",type="string",format="date-time")
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
- */
-/**
  * @implements Arrayable<string, mixed>
  */
 class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arrayable

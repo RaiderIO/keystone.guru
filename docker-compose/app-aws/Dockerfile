@@ -1,6 +1,6 @@
 ARG STAGE=staging
 
-FROM keystone.guru
+FROM keystone.guru-app
 
 ENV DEBIAN_FRONTEND=noninteractive
 
