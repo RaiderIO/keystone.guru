@@ -68,15 +68,10 @@ ARG uid
 # Runtime dependencies only (no -dev headers, no compilers).
 # - First line: CLI tooling used by the app / deploy scripts.
 # - Second line: shared libraries the compiled PHP extensions link against.
-# - Remaining lines: headless Chrome runtime libraries (Puppeteer thumbnail generation).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl default-mysql-client gettext zip unzip sudo nano ca-certificates \
     libpng16-16 libonig5 libxml2 libzip5 liblua5.3-0 libmagickwand-7.q16-10 \
     libfftw3-double3 liblcms2-2 liblqr-1-0 libfreetype6 libfontconfig1 \
-    fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libcairo2 libcups2 \
-    libdbus-1-3 libdrm2 libgbm1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 \
-    libpango-1.0-0 libx11-6 libxcb1 libxcomposite1 libxdamage1 libxext6 libxfixes3 \
-    libxi6 libxkbcommon0 libxrandr2 libxrender1 libxss1 libxtst6 \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 24 via NodeSource
@@ -89,10 +84,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
 # as ENV so it also applies to app-aws's `npm install`, which re-resolves the same cache.
 ENV PUPPETEER_SKIP_CHROME_HEADLESS_SHELL_DOWNLOAD=true
 
-# Install global packages. Puppeteer's postinstall downloads the Chrome binary into
-# /root/.cache/puppeteer, which local dev relies on (the repo - including node_modules -
-# is bind-mounted, but that cache is not). handlebars is the asset compiler CLI.
-RUN npm i -g handlebars puppeteer@24
+# Install global packages. handlebars is the asset compiler CLI.
+# Puppeteer + Chrome live in the worker image (keystone.guru-worker) only.
+RUN npm i -g handlebars
 
 # Copy the compiled PHP extensions (.so) and their enable .ini files from the builder.
 # Both stages share the php:8.4-fpm base, so sonames and the extension_dir path match.
