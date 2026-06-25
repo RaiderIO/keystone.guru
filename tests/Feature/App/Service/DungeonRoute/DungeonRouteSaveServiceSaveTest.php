@@ -409,8 +409,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     public function save_givenNonSpeedrunDungeonWithDifficulty_keepsDifficulty(): void
     {
         // Arrange — retail M+ dungeons are not speedrun-enabled
-        $dungeon = $this->getRetailDungeon();
-        $this->assertFalse((bool)$dungeon->speedrun_enabled, 'Expected a non-speedrun retail dungeon');
+        $dungeon = $this->getNonSpeedrunDungeon();
+        $this->assertFalse((bool)$dungeon->speedrun_enabled, 'Expected a non-speedrun retail dungeon ' . $dungeon->key);
 
         $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
         $route     = new DungeonRoute();

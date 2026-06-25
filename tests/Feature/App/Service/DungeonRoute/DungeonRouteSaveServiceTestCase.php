@@ -49,6 +49,11 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
         return $thumbnailService;
     }
 
+    protected function getNonSpeedrunDungeon(): Dungeon
+    {
+        return $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->where('speedrun_enabled', false));
+    }
+
     protected function getRetailDungeon(): Dungeon
     {
         return $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
