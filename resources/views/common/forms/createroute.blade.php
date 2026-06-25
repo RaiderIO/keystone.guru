@@ -52,6 +52,11 @@ $dungeonSelectId = 'dungeon_id_select';
         'dungeonroute' => $dungeonroute
     ])
 
+    @include('common.dungeonroute.create.dungeonstartselect', [
+        'dungeonSelectId' => $dungeonSelectId,
+        'dungeonroute' => $dungeonroute
+    ])
+
 
     <div class="form-group">
         <label for="dungeon_route_title">

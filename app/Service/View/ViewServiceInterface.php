@@ -158,6 +158,11 @@ interface ViewServiceInterface
      */
     public function getAllSpeedrunDungeons(): Collection;
 
+    /**
+     * @return Collection<int, Collection<int, array{id: int, text: string}>>
+     */
+    public function getDungeonStartsByDungeonId(): Collection;
+
     public function warmGlobalCaches(): void;
 
     public function getCurrentExpansionForRegion(GameServerRegion $gameServerRegion): Expansion;

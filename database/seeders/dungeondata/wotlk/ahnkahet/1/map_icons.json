@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -76.1372,
         "lng": 191.6531,
-        "comment": "Ancient Nerubian Device",
+        "comment": "mapping.map_icons.wotlk.ahn_kahet_the_old_kingdom.ancient_nerubian_device",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -61.9179,
         "lng": 217.148,
-        "comment": "Ancient Nerubian Device",
+        "comment": "mapping.map_icons.wotlk.ahn_kahet_the_old_kingdom.ancient_nerubian_device",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

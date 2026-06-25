@@ -18,6 +18,7 @@ use App\Models\PublishedState;
 use App\Models\RouteAttribute;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\MapIconRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteSaveServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -34,6 +35,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         private SeasonServiceInterface                  $seasonService,
         private ThumbnailServiceInterface               $thumbnailService,
         private DungeonRouteSaveServiceLoggingInterface $log,
+        private MapIconRepositoryInterface              $mapIconRepository,
     ) {
     }
 
@@ -97,6 +99,8 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
                 'season_id'          => $source->season_id,
                 'faction_id'         => $source->faction_id,
                 'published_state_id' => $unpublished ? PublishedState::ALL[PublishedState::UNPUBLISHED] : $source->published_state_id,
+                // Clone keeps the source's mapping version, so the start map icon id stays valid
+                'dungeon_start_map_icon_id' => $source->dungeon_start_map_icon_id,
 
                 // Do not clone team_id, user assigns the team himself
                 'team_id'        => null,
@@ -165,6 +169,9 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             $title = __($dungeon->name);
         }
 
+        // New routes get the dungeon's current mapping version; existing routes keep their own
+        $mappingVersionId = $new ? $dungeon->getCurrentMappingVersion()->id : $dungeonRoute->mapping_version_id;
+
         $attributes = [
             'dungeon_id' => $dungeonId,
             'team_id'    => $teamId > 0 ? $teamId : null,
@@ -177,6 +184,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             'title'                      => $title,
             'description'                => $validated['dungeon_route_description'] ?? ($dungeonRoute->description ?? ''),
             'dungeon_difficulty'         => $this->resolveDungeonDifficulty($dungeon, isset($validated['dungeon_difficulty']) ? (int)$validated['dungeon_difficulty'] : null),
+            'dungeon_start_map_icon_id'  => $this->resolveDungeonStartMapIconId($mappingVersionId, $validated['dungeon_start_map_icon_id'] ?? null),
         ] + $this->levelRangeAttributes($validated['dungeon_route_level'] ?? null, $activeSeason?->key_level_max);
 
         if ($new) {
@@ -233,11 +241,13 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $activeSeason = $userGameVersion->has_seasons ? $this->resolveSeasonForTemporary($userGameVersion, $dungeon) : null;
 
+        $mappingVersionId = $dungeon->getCurrentMappingVersion()->id;
+
         $attributes = [
             'author_id'                  => Auth::id() ?? -1,
             'public_key'                 => DungeonRoute::generateRandomPublicKey(),
             'dungeon_id'                 => $dungeonId,
-            'mapping_version_id'         => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id'         => $mappingVersionId,
             'season_id'                  => $activeSeason?->id,
             'faction_id'                 => 1,
             'seasonal_index'             => 0,
@@ -245,6 +255,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             'pull_gradient'              => '',
             'pull_gradient_apply_always' => false,
             'dungeon_difficulty'         => $this->resolveDungeonDifficulty($dungeon, isset($validated['dungeon_difficulty']) ? (int)$validated['dungeon_difficulty'] : null),
+            'dungeon_start_map_icon_id'  => $this->resolveDungeonStartMapIconId($mappingVersionId, $validated['dungeon_start_map_icon_id'] ?? null),
             'title'                      => __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($dungeon->name)]),
             'expires_at'                 => Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours')),
         ] + $this->levelRangeAttributes($validated['dungeon_route_level'] ?? null, $activeSeason?->key_level_max);
@@ -440,6 +451,20 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         }
 
         return $difficulty;
+    }
+
+    /**
+     * Resolves the chosen dungeon start map icon, returning the id only when it is a dungeon start
+     * icon that belongs to the given mapping version. Anything else (a different type, another
+     * dungeon's icon, a stale mapping version) resolves to null, which later falls back to the first start.
+     */
+    private function resolveDungeonStartMapIconId(int $mappingVersionId, mixed $id): ?int
+    {
+        if ($id === null) {
+            return null;
+        }
+
+        return $this->mapIconRepository->isDungeonStart((int)$id, $mappingVersionId) ? (int)$id : null;
     }
 
     /**

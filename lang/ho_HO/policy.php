@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => 'Hodor',
     'add_brushline_limit_reached'             => 'Hodor',
     'add_path_limit_reached'                  => 'Hodor',
+    'add_arrow_limit_reached'                 => 'Hodor',
     'add_map_icon_limit_reached'              => 'Hodor',
+    'schedule_publish_route_not_in_team'      => 'Hodor',
 
 ];

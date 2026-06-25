@@ -19,17 +19,21 @@ return [
             'mdt_invalid_category'                => 'Catégorie invalide',
         ],
         'flash' => [
-            'message_banner_set_successfully'   => 'Bannière de message définie avec succès',
-            'thumbnail_regenerate_result'       => ':success tâches envoyées pour :total itinéraires. :failed a échoué.',
-            'combatlog_route_regenerate_result' => '',
-            'caches_dropped_successfully'       => 'Caches supprimées avec succès',
-            'releases_exported'                 => 'Versions exportées',
-            'exception'                         => 'Exception lancée dans le panneau d\'administration',
-            'feature_toggle_activated'          => 'La fonctionnalité :feature est maintenant activée',
-            'feature_toggle_deactivated'        => 'La fonctionnalité :feature est maintenant désactivée',
-            'feature_forgotten'                 => 'Fonctionnalité :feature oubliée avec succès',
-            'read_only_mode_disabled'           => 'Mode lecture seule désactivé',
-            'read_only_mode_enabled'            => 'Mode lecture seule activé',
+            'message_banner_set_successfully'        => 'Bannière de message définie avec succès',
+            'thumbnail_regenerate_result'            => ':success tâches envoyées pour :total itinéraires. :failed a échoué.',
+            'combatlog_route_regenerate_result'      => '',
+            'combatlog_criteria_reset'               => '',
+            'combatlog_criteria_thresholds_updated'  => '',
+            'caches_dropped_successfully'            => 'Caches supprimées avec succès',
+            'releases_exported'                      => 'Versions exportées',
+            'exception'                              => 'Exception lancée dans le panneau d\'administration',
+            'feature_toggle_activated'               => 'La fonctionnalité :feature est maintenant activée',
+            'feature_toggle_deactivated'             => 'La fonctionnalité :feature est maintenant désactivée',
+            'feature_forgotten'                      => 'Fonctionnalité :feature oubliée avec succès',
+            'mapping_version_upgrade_queued'         => '',
+            'mapping_version_upgrade_already_latest' => '',
+            'read_only_mode_disabled'                => 'Mode lecture seule désactivé',
+            'read_only_mode_enabled'                 => 'Mode lecture seule activé',
         ],
     ],
     'apidungeonroute' => [
@@ -46,6 +50,12 @@ return [
         'error' => [
             'unable_to_save_brushline'   => 'Impossible de sauvegarder la ligne',
             'unable_to_delete_brushline' => 'Impossible de supprimer la ligne',
+        ],
+    ],
+    'arrow' => [
+        'error' => [
+            'unable_to_save_arrow'   => '',
+            'unable_to_delete_arrow' => '',
         ],
     ],
     'dungeon' => [
@@ -176,6 +186,13 @@ return [
             'account_deleted_successfully'     => 'Compte supprimé avec succès.',
             'error_deleting_account'           => 'Une erreur s\'est produite. Veuillez réessayer.',
         ],
+        'error' => [
+            'add_ad_free_giveaway_limit_reached'        => '',
+            'add_ad_free_giveaway_already_ad_free'      => '',
+            'add_ad_free_giveaway_already_has_giveaway' => '',
+            'remove_ad_free_giveaway_not_found'         => '',
+            'remove_ad_free_giveaway_not_yours'         => '',
+        ],
     ],
     'spell' => [
         'error' => [
@@ -207,6 +224,16 @@ return [
             'user_is_not_a_patron'              => 'Cet utilisateur n\'est pas un Patron.',
             'all_benefits_granted_successfully' => 'Tous les avantages ont été accordés avec succès.',
             'error_granting_all_benefits'       => 'Une erreur s\'est produite lors de la tentative d\'attribution de tous les avantages.',
+        ],
+    ],
+
+    'admin' => [
+        'dungeonroute' => [
+            'flash' => [
+                'updated' => '',
+                'deleted' => '',
+                'claimed' => '',
+            ],
         ],
     ],
 

@@ -13,6 +13,8 @@ use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
@@ -363,6 +365,41 @@ class ViewService implements ViewServiceInterface
     }
 
     /**
+     * Dungeons that have more than one dungeon start in their current mapping version, so the
+     * route create/settings forms can offer a dropdown to choose which start the route uses.
+     *
+     * @return Collection<int, Collection<int, array{id: int, text: string}>>
+     */
+    public function getDungeonStartsByDungeonId(): Collection
+    {
+        return $this->cachedGlobal('dungeon_starts_by_dungeon_id', static function (): Collection {
+            $currentMappingVersionIdByDungeonId = Dungeon::all()
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $dungeon->getCurrentMappingVersion()?->id])
+                ->filter();
+
+            $dungeonStartsByCurrentMappingVersionId = MapIcon::where(
+                'map_icon_type_id',
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            )
+                ->whereIn('mapping_version_id', $currentMappingVersionIdByDungeonId->values())
+                ->get(['id', 'mapping_version_id', 'comment'])
+                ->groupBy('mapping_version_id');
+
+            return $currentMappingVersionIdByDungeonId
+                ->mapWithKeys(static function (int $mappingVersionId, int $dungeonId) use ($dungeonStartsByCurrentMappingVersionId) {
+                    return [$dungeonId => $dungeonStartsByCurrentMappingVersionId->get($mappingVersionId) ?? collect()];
+                })
+                ->filter(static fn(Collection $mapIcons) => $mapIcons->count() > 1)
+                ->map(static fn(Collection $mapIcons) => $mapIcons->values()->map(static fn(MapIcon $mapIcon, int $index) => [
+                    'id'   => $mapIcon->id,
+                    'text' => ($mapIcon->comment ?? '') !== '' ?
+                        (string)__($mapIcon->comment) :
+                        sprintf('%s #%d', __('mapicontypes.dungeon_start'), $index + 1),
+                ]));
+        });
+    }
+
+    /**
      * Warms every cached global getter by recomputing and writing it to cache, bypassing any cached read.
      */
     public function warmGlobalCaches(): void
@@ -397,6 +434,7 @@ class ViewService implements ViewServiceInterface
         $this->getAffixGroupEaseTiersByAffixGroup();
         $this->getDungeonExpansions();
         $this->getAllSpeedrunDungeons();
+        $this->getDungeonStartsByDungeonId();
 
         $this->forceRefresh = false;
     }

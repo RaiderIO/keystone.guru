@@ -20,7 +20,7 @@
         "map_icon_type_id": 42,
         "lat": -132.8182,
         "lng": 184.0789,
-        "comment": "Weaver and Dreamscythe spawn when Jammal'an the Prophet is defeated.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.weaver_dreamscythe_spawn",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 42,
         "lat": -223.9244,
         "lng": 269.5851,
-        "comment": "Shade of Eranikus can only be engaged if the shield is lowered by defeating the mini-bosses in the Hall of the Cursed.\n\nWarning: Attacking Shade of Eranikus causes all green dragons on this floor to aggro.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.shade_of_eranikus_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -75.5418,
         "lng": 206.7504,
-        "comment": "Many enemies can be either a Nightmare Whelp, Nightmare Wanderer, Nightmare Scalebane or Nightmare Wyrmkin.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.nightmare_whelp_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 6,
         "lat": -143.7439,
         "lng": 292.4359,
-        "comment": "You can remove the shield by defeating the mini-bosses in the Hall of the Cursed.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.remove_shield_note",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 42,
         "lat": -89.0959,
         "lng": 299.3795,
-        "comment": "Warning: Attacking Jammal'an the Prophet causes all enemies in this room to aggro.",
+        "comment": "mapping.map_icons.classic.the_temple_of_atal_hakkar.jammalaan_aggro_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

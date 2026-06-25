@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -147.5359,
         "lng": 183.5046,
-        "comment": "Keystone.guru: Only if you jump down.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.jump_down_only",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 42,
         "lat": -137.0776,
         "lng": 223.3787,
-        "comment": "These two adds spawn during the fight.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.adds_spawn_during_fight",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -147.5359,
         "lng": 183.5046,
-        "comment": "Keystone.guru: Only if you jump down.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.jump_down_only",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 42,
         "lat": -137.0776,
         "lng": 223.3787,
-        "comment": "These two adds spawn during the fight.",
+        "comment": "mapping.map_icons.classic.lower_blackrock_spire.adds_spawn_during_fight",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

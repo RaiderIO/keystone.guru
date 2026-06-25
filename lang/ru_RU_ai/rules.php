@@ -12,7 +12,8 @@ return [
         'message' => 'Вам нужно выбрать фракцию для этого подземелья.',
     ],
     'json_string_count_rule' => [
-        'message' => 'Строка Json должна иметь как минимум :count элементов.',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Этот тип иконки карты недоступен для вашего уровня доступа.',

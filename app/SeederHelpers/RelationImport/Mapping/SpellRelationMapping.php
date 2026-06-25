@@ -26,6 +26,6 @@ class SpellRelationMapping extends RelationMapping
 
     public function getPreservedColumns(): array
     {
-        return ['aura', 'debuff', 'miss_types_mask', 'characteristic_id'];
+        return ['aura', 'debuff', 'miss_types_mask'];
     }
 }

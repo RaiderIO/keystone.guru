@@ -85,6 +85,8 @@ return [
             'title_title'                                    => 'Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.',
             'dungeon_speedrun_required_npc_difficulty'       => 'Raid size',
             'dungeon_speedrun_required_npc_difficulty_title' => '10-man and 25-man raids can have different enemies to kill for completing a speedrun. Select your raid size to toggle between the enemy sets.',
+            'dungeon_start'                                  => 'Dungeon start',
+            'dungeon_start_title'                            => 'This dungeon has multiple entrances. Select which one your route starts from; this affects the calculated path from the start to your first pull.',
             'description'                                    => 'Description',
             'description_title'                              => 'An optional description of your route. The description will be visible to others once you choose to publish your route. You can always edit your description later.',
             'key_levels'                                     => 'Key levels',

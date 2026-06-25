@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => 'Keystone.guru의 :patreon에 가입해 주셔서 감사합니다! Keystone.guru에 :current 이상의 광고 없는 경험을 팀 멤버에게 제공할 수 있습니다.',
         ],
         'overview' => [
-            'title' => '개요',
+            'title'   => '개요',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => '경로 게시',
+            'title'            => '경로 게시',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => '경로 목록',

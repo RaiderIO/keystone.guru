@@ -409,8 +409,8 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     public function save_givenNonSpeedrunDungeonWithDifficulty_keepsDifficulty(): void
     {
         // Arrange — retail M+ dungeons are not speedrun-enabled
-        $dungeon = $this->getRetailDungeon();
-        $this->assertFalse((bool)$dungeon->speedrun_enabled, 'Expected a non-speedrun retail dungeon');
+        $dungeon = $this->getNonSpeedrunDungeon();
+        $this->assertFalse((bool)$dungeon->speedrun_enabled, 'Expected a non-speedrun retail dungeon ' . $dungeon->key);
 
         $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
         $route     = new DungeonRoute();
@@ -995,6 +995,97 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
             $this->assertEquals($originalDungeonId, $route->dungeon_id);
         } finally {
             $this->cleanupRoute($route);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // save — dungeon start map icon
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function save_givenValidDungeonStartMapIcon_storesDungeonStartMapIconId(): void
+    {
+        // Arrange — a dungeon start icon belonging to the dungeon's current mapping version
+        $dungeon   = $this->getRetailDungeon();
+        $mapIcon   = $this->createDungeonStartMapIcon($dungeon->getCurrentMappingVersion()->id, $dungeon->floors->first()->id);
+        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
+        $route     = new DungeonRoute();
+        $validated = [
+            'dungeon_id'                => $dungeon->id,
+            'faction_id'                => 1,
+            'dungeon_route_title'       => 'Dungeon Start Test',
+            'dungeon_start_map_icon_id' => $mapIcon->id,
+        ];
+
+        try {
+            // Act
+            $service->save($route, $validated);
+
+            // Assert
+            $this->assertEquals($mapIcon->id, $route->dungeon_start_map_icon_id);
+        } finally {
+            if ($route->exists) {
+                $this->cleanupRoute($route);
+            }
+            $mapIcon->delete();
+        }
+    }
+
+    #[Test]
+    public function save_givenForeignDungeonStartMapIcon_storesNull(): void
+    {
+        // Arrange — an id that does not exist as a dungeon start of the dungeon's mapping version
+        $dungeon   = $this->getRetailDungeon();
+        $service   = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
+        $route     = new DungeonRoute();
+        $validated = [
+            'dungeon_id'                => $dungeon->id,
+            'faction_id'                => 1,
+            'dungeon_route_title'       => 'Foreign Dungeon Start Test',
+            'dungeon_start_map_icon_id' => PHP_INT_MAX,
+        ];
+
+        try {
+            // Act
+            $service->save($route, $validated);
+
+            // Assert
+            $this->assertNull($route->dungeon_start_map_icon_id);
+        } finally {
+            if ($route->exists) {
+                $this->cleanupRoute($route);
+            }
+        }
+    }
+
+    #[Test]
+    public function save_givenExistingRouteOnNonCurrentMappingVersion_storesStartFromRoutesMappingVersion(): void
+    {
+        // Arrange — an existing route on a now-outdated mapping version. The chosen start belongs to
+        // the route's own mapping version, so it must be validated against that (not the current one).
+        $dungeon    = $this->getRetailDungeon();
+        $existingMV = $dungeon->getCurrentMappingVersion();
+        $newerMV    = $this->createNewerMappingVersion($dungeon, $existingMV);
+        $route      = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
+        $mapIcon    = $this->createDungeonStartMapIcon($existingMV->id, $dungeon->floors->first()->id);
+
+        $service   = $this->buildService(seasonService: $this->noSeasonService());
+        $validated = [
+            'dungeon_id'                => $dungeon->id,
+            'faction_id'                => $route->faction_id,
+            'dungeon_start_map_icon_id' => $mapIcon->id,
+        ];
+
+        try {
+            // Act
+            $service->save($route, $validated);
+
+            // Assert
+            $this->assertEquals($mapIcon->id, $route->dungeon_start_map_icon_id);
+        } finally {
+            $this->cleanupRoute($route);
+            $mapIcon->delete();
+            $newerMV->delete();
         }
     }
 
