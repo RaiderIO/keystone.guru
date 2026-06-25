@@ -3,8 +3,8 @@
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @var Model $model
- * @var array $exclude
+ * @var Model              $model
+ * @var array<int, string> $exclude
  */
 
 $exclude ??= [];

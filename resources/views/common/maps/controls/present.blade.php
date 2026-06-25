@@ -6,9 +6,9 @@ use App\Models\Floor\Floor;
 use Illuminate\Support\Collection;
 
 /**
- * @var boolean           $isAdmin
- * @var Collection<Floor> $floors
- * @var DungeonRoute|null $dungeonroute
+ * @var boolean                $isAdmin
+ * @var Collection<int, Floor> $floors
+ * @var DungeonRoute|null      $dungeonroute
  */
 ?>
 <nav class="route_sidebar left row no-gutters map_fade_out top presenter {{ $isMobile ? 'mobile' : '' }}">

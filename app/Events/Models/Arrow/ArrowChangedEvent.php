@@ -28,6 +28,9 @@ class ArrowChangedEvent extends ModelChangedEvent
         return 'arrow-changed';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

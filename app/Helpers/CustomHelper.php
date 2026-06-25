@@ -62,14 +62,14 @@ function isValidBase64(string $string): bool
 }
 
 /**
- * @return array|array[][]|false[][]|string[][]|string[][][]
+ * @return array<int, array<int, string>>
  */
 function str_getcsv_assoc(
     string $csv_string,
     string $delimiter = ',',
     bool   $skip_empty_lines = true,
     bool   $trim_fields = true,
-) {
+): array {
     $enc = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
     $enc = preg_replace_callback(
         '/"(.*?)"/s',
@@ -136,6 +136,10 @@ function ksgAssetImage(string $path = ''): string
  * Insert an associative array after a specific key (string-keyed arrays).
  * If $afterKey isn't found, the $insert array is appended at the end.
  * For duplicate keys, values from $insert take precedence.
+ *
+ * @param  array<string, mixed> $array
+ * @param  array<string, mixed> $insert
+ * @return array<string, mixed>
  */
 function array_insert_after(array $array, string $afterKey, array $insert): array
 {

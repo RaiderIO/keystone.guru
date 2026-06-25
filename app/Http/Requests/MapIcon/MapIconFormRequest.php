@@ -30,9 +30,7 @@ class MapIconFormRequest extends FormRequest
         $this->merge($this->castInputData($this, MapIcon::class));
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
+    /** @return array<string, mixed> */
     public function rules(): array
     {
         return [

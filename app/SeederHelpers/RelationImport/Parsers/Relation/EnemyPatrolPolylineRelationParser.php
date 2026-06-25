@@ -12,11 +12,19 @@ class EnemyPatrolPolylineRelationParser implements RelationParserInterface
         return $modelClassName === EnemyPatrol::class;
     }
 
+    /**
+     * @param array<string, mixed> $value
+     */
     public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'polyline';
     }
 
+    /**
+     * @param  array<string, mixed> $modelData
+     * @param  array<string, mixed> $value
+     * @return array<string, mixed>
+     */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         // Make sure the polyline's relation with the model is restored.

@@ -118,8 +118,7 @@ return [
                 'edit_floor' => 'Edit floor',
             ],
             'dungeonspeedrunrequirednpc' => [
-                'new_dungeonspeedrunrequirednpc10man' => 'New 10-man Dungeon Speedrun Required NPC',
-                'new_dungeonspeedrunrequirednpc25man' => 'New 25-man Dungeon Speedrun Required NPC',
+                'new_dungeonspeedrunrequirednpc' => 'New :difficulty Dungeon Speedrun Required NPC',
             ],
             'npcs' => [
                 'npcs'     => 'NPCs',

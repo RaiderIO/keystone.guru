@@ -37,7 +37,7 @@ class Cache extends SchedulerCommand
                 Stopwatch::start('cache');
 
                 // This caches the data that is used in all views
-                $viewService->getGlobalViewVariables(false);
+                $viewService->warmGlobalCaches();
 
                 foreach (GameServerRegion::all() as $gameServerRegion) {
                     $viewService->getGameServerRegionViewVariables($gameServerRegion, false);

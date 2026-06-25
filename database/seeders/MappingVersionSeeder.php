@@ -99,7 +99,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             ])
             ->whereNull('mapping_version_id')
             ->chunk(100, function (Collection $dungeonRoutes) use (&$count) {
-                /** @var Collection<DungeonRoute> $dungeonRoutes */
+                /** @var Collection<int, DungeonRoute> $dungeonRoutes */
                 foreach ($dungeonRoutes as $dungeonRoute) {
                     $dungeonRoute->update(['mapping_version_id' => $dungeonRoute->dungeon->getCurrentMappingVersion()->id]);
                 }

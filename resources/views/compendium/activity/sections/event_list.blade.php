@@ -6,9 +6,9 @@ use App\Models\Dungeon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<CombatLogNpcEvent|CombatLogSpellEvent> $events
- * @var string                                            $date Y-m-d string
- * @var Dungeon                                           $contextDungeon
+ * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $events
+ * @var string                                                 $date           Y-m-d string
+ * @var Dungeon                                                $contextDungeon
  */
 ?>
 @include('compendium.sections.event_list', [

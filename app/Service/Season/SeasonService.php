@@ -23,7 +23,9 @@ class SeasonService implements SeasonServiceInterface
 {
     use UserCurrentTime;
 
-    /** @var Collection<Season> */
+    /**
+     * @var Collection<int, Season>
+     */
     private Collection $seasonCache;
 
     private ?Season $firstSeasonCache = null;
@@ -37,7 +39,7 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * @return Collection<Season>
+     * @return Collection<int, Season>
      */
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {

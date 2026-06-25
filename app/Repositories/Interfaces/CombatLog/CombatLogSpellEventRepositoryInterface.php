@@ -7,15 +7,15 @@ use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @method CombatLogSpellEvent             create(array $attributes)
- * @method CombatLogSpellEvent|null        find(int $id, array|string $columns = ['*'])
- * @method CombatLogSpellEvent             findOrFail(int $id, array|string $columns = ['*'])
- * @method CombatLogSpellEvent             findOrNew(int $id, array|string $columns = ['*'])
- * @method bool                            save(CombatLogSpellEvent $model)
- * @method bool                            update(CombatLogSpellEvent $model, array $attributes = [], array $options = [])
- * @method bool                            delete(CombatLogSpellEvent $model)
- * @method Collection<CombatLogSpellEvent> all()
- * @method bool                            exists(array $columns)
+ * @method CombatLogSpellEvent                  create(array<string, mixed> $attributes)
+ * @method CombatLogSpellEvent|null             find(int $id, array<int, string>|string $columns = ['*'])
+ * @method CombatLogSpellEvent                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
+ * @method CombatLogSpellEvent                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
+ * @method bool                                 save(CombatLogSpellEvent $model)
+ * @method bool                                 update(CombatLogSpellEvent $model, array<string, mixed> $attributes = [], array<string, mixed> $options = [])
+ * @method bool                                 delete(CombatLogSpellEvent $model)
+ * @method Collection<int, CombatLogSpellEvent> all()
+ * @method bool                                 exists(array<int, string> $columns)
  */
 interface CombatLogSpellEventRepositoryInterface extends BaseRepositoryInterface
 {

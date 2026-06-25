@@ -22,6 +22,11 @@ class AjaxDungeonRouteInlineSearchFormRequest extends DungeonRouteBaseUrlFormReq
      * Get the validation rules that apply to the request.
      */
     #[Override]
+    /**
+
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
+
     public function rules(): array
     {
         // @formatter:off

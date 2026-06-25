@@ -49,7 +49,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @return Collection<DungeonRoute>
+     * @return Collection<int, DungeonRoute>
      *
      * @throws InvalidArgumentException           If combat log does not exist
      * @throws AdvancedLogNotEnabledException
@@ -137,7 +137,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection<BaseResultEvent> $resultEvents
+     * @param Collection<int, BaseResultEvent> $resultEvents
      */
     private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
@@ -164,7 +164,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection<BaseResultEvent> $resultEvents
+     * @param Collection<int, BaseResultEvent> $resultEvents
      */
     private function generateMapIconsFromEvents(
         MappingVersion $mappingVersion,

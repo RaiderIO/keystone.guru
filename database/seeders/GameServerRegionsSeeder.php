@@ -79,6 +79,9 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
         return [GameServerRegion::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

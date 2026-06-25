@@ -4,7 +4,7 @@ use App\Models\MDTImport;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<MDTImport> $mdtImports
+ * @var Collection<int, MDTImport> $mdtImports
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.mdt.list.title')])

@@ -256,7 +256,7 @@ class Conversion
     /**
      * Rounds a number to the nearest two decimals.
      */
-    private static function round($nr): float
+    private static function round(float|int $nr): float
     {
         return ((int)($nr * 100)) / 100;
     }
@@ -336,6 +336,8 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     *
+     * @return array{x: string, y: string}
      */
     public static function convertLatLngToMDTCoordinateString(LatLng $latLng): array
     {
@@ -348,6 +350,8 @@ class Conversion
 
     /**
      * Converts an array with lat/lng keys set to an array with x/y set, converted to MDT coordinate system.
+     *
+     * @return array{x: float, y: float}
      */
     public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {

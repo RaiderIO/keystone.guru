@@ -26,8 +26,10 @@ class ReadOnlyMode
      */
     public function handle(Request $request, Closure $next): Response
     {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
         if ($request->method() !== 'GET' &&
-            $this->readOnlyModeService->isReadOnlyForUser(Auth::user()) &&
+            $this->readOnlyModeService->isReadOnlyForUser($user) &&
             // Some routes are allowed to be accessed in read-only mode
             !in_array($request->path(), self::ROUTE_WHITELIST)
         ) {

@@ -10,6 +10,9 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
 {
     protected const FIXTURES_ROOT_DIR = '../../';
 
+    /**
+     * @param array<string, mixed> $response
+     */
     protected function validateResponseStaticData(array $response): void
     {
         // Author
@@ -28,12 +31,18 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         }
     }
 
+    /**
+     * @param array<string, mixed> $response
+     */
     protected function validateDungeon(array $response): void
     {
         $this->assertEquals($this->dungeon->id, $response['data']['dungeonId']);
         $this->assertEquals(__($this->dungeon->name, [], 'en_US'), $response['data']['title']);
     }
 
+    /**
+     * @param array<string, mixed> $responseArr
+     */
     protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
     {
         $this->assertCount($pulls, $responseArr['data']['pulls']);
@@ -45,6 +54,10 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->assertEquals($mappingVersion->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
     }
 
+    /**
+     * @param array<string, mixed> $responseArr
+     * @param array<int, int>      $mustHaveSpells
+     */
     protected function validateSpells(array $responseArr, int $spellCount, array $mustHaveSpells = []): void
     {
         $responseSpellCount = 0;
@@ -64,6 +77,9 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->assertEmpty($mustHaveSpells, implode(', ', $mustHaveSpells));
     }
 
+    /**
+     * @param array<string, mixed> $responseArr
+     */
     protected function validateAffixes(array $responseArr, string ...$affixes): void
     {
         // AffixGroups

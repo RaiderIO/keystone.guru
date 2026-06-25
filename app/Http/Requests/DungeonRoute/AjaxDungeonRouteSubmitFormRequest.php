@@ -8,6 +8,8 @@ class AjaxDungeonRouteSubmitFormRequest extends DungeonRouteSubmitFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, array<int, string>|string>
      */
     #[Override]
     public function rules(): array

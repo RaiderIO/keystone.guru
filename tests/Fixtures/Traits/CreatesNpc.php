@@ -10,13 +10,16 @@ use Tests\TestCase;
  */
 trait CreatesNpc
 {
+    /**
+     * @param array<string, mixed>|null $attributes
+     */
     public function createNpc(?array $attributes = null): Npc
     {
         return new Npc($attributes ?? $this->getNpcDefaultAttributes());
     }
 
     /**
-     * @return int[]
+     * @return array<string, int>
      */
     public function getNpcDefaultAttributes(): array
     {

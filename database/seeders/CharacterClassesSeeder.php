@@ -114,7 +114,7 @@ class CharacterClassesSeeder extends Seeder implements TableSeederInterface
         CharacterClass::from(DatabaseSeeder::getTempTableName(CharacterClass::class))->insert($characterClassesAttributes);
 
         // Set icons for each inserted class
-        /** @var Collection<CharacterClass> $characterClasses */
+        /** @var Collection<int, CharacterClass> $characterClasses */
         $characterClasses = CharacterClass::from(DatabaseSeeder::getTempTableName(CharacterClass::class))->get();
         foreach ($characterClasses as $characterClass) {
             $icon = File::create([
@@ -136,6 +136,9 @@ class CharacterClassesSeeder extends Seeder implements TableSeederInterface
         ];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

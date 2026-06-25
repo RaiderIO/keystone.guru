@@ -9,6 +9,7 @@
         "faction_id": 1,
         "team_id": null,
         "published_state_id": 3,
+        "dungeon_start_map_icon_id": null,
         "title": "The Deadmines",
         "description": "",
         "level_min": 10,

@@ -14,7 +14,7 @@
 @endsection
 
 <?php
-/** @var  Collection<Npc> $models */
+/** @var  Collection<int, Npc> $models */
 // eager load the classification
 ?>
 

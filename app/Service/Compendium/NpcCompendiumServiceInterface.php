@@ -23,7 +23,7 @@ interface NpcCompendiumServiceInterface
     /**
      * Get paginated list of distinct dates that have activity events for the given dungeon, sorted descending.
      *
-     * @return LengthAwarePaginator<string>
+     * @return LengthAwarePaginator<int, string>
      */
     public function getActivityDates(int $perPage = 10, ?Dungeon $dungeon = null): LengthAwarePaginator;
 

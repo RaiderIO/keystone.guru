@@ -12,7 +12,7 @@ use App\Service\Cache\CacheServiceInterface;
  * @var DungeonRoute          $dungeonroute
  * @var AffixGroup|null       $currentAffixGroup
  * @var AffixGroup|null       $tierAffixGroup
- * @var array                 $__env
+ * @var array<string, mixed>  $__env
  * @var boolean               $cache
  */
 
@@ -238,7 +238,7 @@ if ($cache) {
     $currentUserLocale = app()->getLocale();
 // Echo the result of this function
     echo $cacheService->remember(
-        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal', $currentUserLocale, $showAffixes, $showDungeonImage, (int)$isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

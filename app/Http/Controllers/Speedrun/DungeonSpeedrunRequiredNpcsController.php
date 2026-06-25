@@ -7,6 +7,7 @@ use App\Http\Requests\Speedrun\DungeonSpeedrunRequiredNpcsFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -43,12 +44,28 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         Floor                                  $floor,
         int                                    $difficulty,
     ): RedirectResponse {
-        $validated            = $request->validated();
-        $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
-        $validated['npc3_id'] = (int)$validated['npc3_id'] === -1 ? null : $validated['npc3_id'];
-        $validated['npc4_id'] = (int)$validated['npc4_id'] === -1 ? null : $validated['npc4_id'];
-        $validated['npc5_id'] = (int)$validated['npc5_id'] === -1 ? null : $validated['npc5_id'];
-        DungeonSpeedrunRequiredNpc::create($validated);
+        $validated = $request->validated();
+
+        $parent = DungeonSpeedrunRequiredNpc::create([
+            'floor_id'   => $validated['floor_id'],
+            'difficulty' => $validated['difficulty'],
+            'count'      => $validated['count'],
+        ]);
+
+        $npcIds = array_filter([
+            $validated['npc_id'],
+            (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'],
+            (int)$validated['npc3_id'] === -1 ? null : $validated['npc3_id'],
+            (int)$validated['npc4_id'] === -1 ? null : $validated['npc4_id'],
+            (int)$validated['npc5_id'] === -1 ? null : $validated['npc5_id'],
+        ]);
+
+        foreach ($npcIds as $npcId) {
+            DungeonSpeedrunRequiredNpcNpc::create([
+                'dungeon_speedrun_required_npc_id' => $parent->id,
+                'npc_id'                           => $npcId,
+            ]);
+        }
 
         Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_added_successfully'));
 

@@ -38,6 +38,10 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         }
     }
 
+    /**
+     * @param  Collection<int, DungeonRoute>|null $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     */
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
     {
         return DungeonRoute::where('author_id', '>', '0')
@@ -92,7 +96,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         };
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
-            ->with([
+            ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
                 'author',
                 'dungeon',
                 'tags' => $tagsFilterFn,
@@ -122,6 +126,9 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             });
     }
 
+    /**
+     * @return Collection<int, SimilarDungeonRoute>
+     */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection
     {
         $limit = 5;
@@ -196,11 +203,17 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
             });
     }
 
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
     public function findRoutes(DungeonRouteSearchFilter $filter): Collection
     {
-        return $this->findRoutesBuilder($filter)
+        /** @var Collection<int, DungeonRoute> $result */
+        $result = $this->findRoutesBuilder($filter)
             ->limit(5)
             ->get();
+
+        return $result;
     }
 
     public function findCombatLogRouteByPublicKey(?string $publicKey): ?DungeonRoute
@@ -224,6 +237,9 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         return $dungeonRoute;
     }
 
+    /**
+     * @return EloquentBuilder<DungeonRoute>
+     */
     private function findRoutesBuilder(
         DungeonRouteSearchFilter $filter,
         ?DungeonRoute            $excludeDungeonRoute = null,
@@ -317,12 +333,16 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
      * @param  array<int, string>             $values like ["165529;5", ...]
      * @return array<int, array{0:int,1:int}> like [[165529, 5], ...]
      */
+    /**
+     * @param  array<int, int|string>      $values
+     * @return array<int, array<int, int>>
+     */
     private function parseEnemyPairs(array $values): array
     {
         $result = [];
 
         foreach ($values as $value) {
-            if (!is_string($value)) { // @phpstan-ignore function.alreadyNarrowedType
+            if (!is_string($value)) {
                 continue;
             }
 

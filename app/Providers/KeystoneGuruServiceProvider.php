@@ -2,22 +2,47 @@
 
 namespace App\Providers;
 
+use App\Http\View\Composers\AdminDungeonEditComposer;
+use App\Http\View\Composers\AdminDungeonMappingVersionsComposer;
+use App\Http\View\Composers\AdminMessageBannerComposer;
+use App\Http\View\Composers\AdminNpcHealthEditComposer;
+use App\Http\View\Composers\AdminSpellEditComposer;
+use App\Http\View\Composers\AffixesComposer;
+use App\Http\View\Composers\AppLayoutComposer;
+use App\Http\View\Composers\ChangelogFlagComposer;
+use App\Http\View\Composers\CompositionComposer;
+use App\Http\View\Composers\CreateRouteFormComposer;
+use App\Http\View\Composers\DiscoverAffixGroupComposer;
+use App\Http\View\Composers\DiscoverSearchComposer;
+use App\Http\View\Composers\DungeonDifficultySelectComposer;
+use App\Http\View\Composers\DungeonGridDiscoverComposer;
+use App\Http\View\Composers\DungeonGridTabsComposer;
+use App\Http\View\Composers\DungeonSelectComposer;
+use App\Http\View\Composers\DungeonStartSelectComposer;
+use App\Http\View\Composers\EmbedComposer;
+use App\Http\View\Composers\GameVersionsNavComposer;
+use App\Http\View\Composers\GlobalComposer;
+use App\Http\View\Composers\HeaderComposer;
+use App\Http\View\Composers\HeatmapSearchComposer;
+use App\Http\View\Composers\HomeComposer;
+use App\Http\View\Composers\MapComposer;
+use App\Http\View\Composers\MappingVersionComposer;
+use App\Http\View\Composers\OAuthRegisterFormComposer;
+use App\Http\View\Composers\ProfileEditComposer;
+use App\Http\View\Composers\ProfileNewRouteStyleComposer;
+use App\Http\View\Composers\PullsComposer;
+use App\Http\View\Composers\PullsWorkbenchComposer;
+use App\Http\View\Composers\ReleaseComposer;
+use App\Http\View\Composers\RollbarComposer;
+use App\Http\View\Composers\RouteAttributesComposer;
+use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
+use App\Http\View\Composers\RoutePublishComposer;
+use App\Http\View\Composers\RouteTierComposer;
+use App\Http\View\Composers\SimulateComposer;
+use App\Http\View\Composers\SimulateOptionsComposer;
+use App\Http\View\Composers\TeamSelectComposer;
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
-use App\Models\Affix;
-use App\Models\AffixGroup\AffixGroup;
-use App\Models\Dungeon;
-use App\Models\Expansion;
-use App\Models\GameServerRegion;
-use App\Models\GameVersion\GameVersion;
-use App\Models\Laratrust\Role;
-use App\Models\Patreon\PatreonBenefit;
-use App\Models\Release;
-use App\Models\Season;
-use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
-use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
-use App\Models\User;
-use App\Models\UserReport;
 use App\Service\AdProvider\AdProviderService;
 use App\Service\AdProvider\AdProviderServiceInterface;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
@@ -67,6 +92,8 @@ use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteSaveService;
+use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteSearchService;
 use App\Service\DungeonRoute\DungeonRouteSearchServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteService;
@@ -75,7 +102,6 @@ use App\Service\DungeonRoute\MapDrawingService;
 use App\Service\DungeonRoute\MapDrawingServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
-use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionService;
@@ -131,6 +157,8 @@ use App\Service\TimewalkingEvent\TimewalkingEventService;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\User\UserService;
 use App\Service\User\UserServiceInterface;
+use App\Service\View\RequestViewContext;
+use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
 use App\Service\Wowhead\WowheadService;
@@ -140,13 +168,9 @@ use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\View;
-use Jenssegers\Agent\Agent;
 use Override;
-use Str;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
@@ -194,6 +218,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
+        $this->app->bind(DungeonRouteSaveServiceInterface::class, DungeonRouteSaveService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
         $this->app->bind(DungeonRouteSearchServiceInterface::class, DungeonRouteSearchService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
@@ -260,6 +285,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on all of the above - pretty much
         $this->app->bind(ViewServiceInterface::class, ViewService::class);
 
+        // Request-scoped so per-request memoized values are reset between requests under Octane
+        $this->app->scoped(RequestViewContextInterface::class, RequestViewContext::class);
+
         // Depends on CombatLogService, SeasonService, WowheadService
         $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
     }
@@ -267,17 +295,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      */
-    public function boot(
-        ViewServiceInterface               $viewService,
-        ExpansionServiceInterface          $expansionService,
-        AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
-        MappingServiceInterface            $mappingService,
-        GameVersionServiceInterface        $gameVersionService,
-        MessageBannerServiceInterface      $messageBannerService,
-        ReadOnlyModeServiceInterface       $readOnlyModeService,
-        DungeonServiceInterface            $dungeonService,
-        SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
-    ): void {
+    public function boot(ViewServiceInterface $viewService): void
+    {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
             if (app()->runningInConsole()) {
@@ -298,139 +317,35 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // https://laravel.com/docs/8.x/upgrade#pagination
         Paginator::useBootstrap();
 
-        // Cache some variables, so we don't continuously query data that never changes (unless there's a patch)
-        $globalViewVariables = $viewService->getGlobalViewVariables();
-
-        // All views
-        view()->share('isMobile', new Agent()->isMobile());
-        view()->share('isLocal', $globalViewVariables['isLocal']);
-        view()->share('isMapping', $globalViewVariables['isMapping']);
-        view()->share('isProduction', $globalViewVariables['isProduction']);
-        view()->share('demoRoutes', $globalViewVariables['demoRoutes']);
-
-        $isUserAdmin            = null;
-        $adFree                 = null;
-        $userOrDefaultRegion    = null;
-        $currentUserGameVersion = null;
-        $currentExpansion       = null;
-
-        // Can use the Auth() global here!
-        view()->composer('*', static function (View $view) use (
-            $gameVersionService,
-            $expansionService,
-            &$isUserAdmin,
-            &
-            $adFree,
-            &$userOrDefaultRegion,
-            &$currentUserGameVersion,
-            &$currentExpansion
-        ) {
-            // Only set these once - then cache the result for any subsequent calls, don't perform these queries for ALL views
-            /** @var User|null $user */
-            $user = Auth::getUser();
-            if ($isUserAdmin === null) {
-                $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
-            }
-            if ($adFree === null) {
-                $adFree = $user?->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
-                    $user?->hasAdFreeGiveaway();
-            }
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $currentUserGameVersion ??= $gameVersionService->getGameVersion($user);
-            $currentExpansion ??= $expansionService->getCurrentExpansion($userOrDefaultRegion);
-            // Don't include the viewName in the layouts - they must inherit from whatever calls it!
-            if (!str_starts_with((string)$view->getName(), 'layouts')) {
-                $view->with('viewName', $view->getName());
-            } elseif (!isset($view->getData()['viewName'])) {
-                $view->with('viewName', 'home');
-            }
-            $view->with('theme', $_COOKIE['theme'] ?? User::DEFAULT_THEME);
-            $view->with('isUserAdmin', $isUserAdmin);
-            $view->with('adFree', $adFree);
-            $view->with('userOrDefaultRegion', $userOrDefaultRegion);
-            $view->with('currentUserGameVersion', $currentUserGameVersion);
-            $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 2);
-        });
+        // Register a dedicated composer class per view; each pulls only the data its view needs,
+        // lazily resolved from the granular cached getters instead of one eager multi-MB blob.
+        view()->composer('*', GlobalComposer::class);
 
         // Home page
-        view()->composer('home', static function (View $view) use (
-            $viewService,
-            $globalViewVariables,
-            &$userOrDefaultRegion
-        ) {
-            $view->with('userCount', $globalViewVariables['userCount']);
-            $view->with('demoRouteDungeons', $globalViewVariables['demoRouteDungeons']);
-            $view->with('demoRouteMapping', $globalViewVariables['demoRouteMapping']);
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('defaultGameVersion', GameVersion::getDefaultGameVersion());
-        });
+        view()->composer('home', HomeComposer::class);
 
         // Main view
-        view()->composer(
-            [
-                'layouts.app',
-                'layouts.sitepage',
-                'layouts.map',
-            ],
-            static function (View $view) use ($globalViewVariables, $messageBannerService, $readOnlyModeService) {
-                $view->with('version', $globalViewVariables['appVersion']);
-                $view->with('revision', $globalViewVariables['appRevision']);
-                $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
-                $view->with('latestRelease', $globalViewVariables['latestRelease']);
-                $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
-                $view->with('messageBanner', $messageBannerService->getMessage());
-                $view->with('readOnlyEnabled', $readOnlyModeService->isReadOnly());
-            },
-        );
+        view()->composer([
+            'layouts.app',
+            'layouts.sitepage',
+            'layouts.map',
+        ], AppLayoutComposer::class);
 
-        view()->composer(['common.maps.map'], static function (View $view) {
-            $view->with('assetsBaseUrl', config('keystoneguru.assets_base_url'));
-            $view->with('tilesBaseUrl', config('keystoneguru.tiles_base_url'));
-        });
+        view()->composer('common.maps.map', MapComposer::class);
 
         view()->composer([
             'layouts.app',
             'common.layout.footer',
-        ], static function (View $view) use ($globalViewVariables) {
-            $view->with(
-                'hasNewChangelog',
-                isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release'],
-            );
-        });
+        ], ChangelogFlagComposer::class);
 
-        view()->composer('common.layout.nav.gameversions', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
+        view()->composer('common.layout.nav.gameversions', GameVersionsNavComposer::class);
 
-        view()->composer('common.layout.header', static function (View $view) use (
-            $viewService,
-            $globalViewVariables,
-            &$userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-
-            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
-
-        view()->composer(['common.layout.header'], static function (View $view) use (
-            $dungeonService,
-        ) {
-            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
-            $view->with('gameVersionDungeons', $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion));
-        });
+        view()->composer('common.layout.header', HeaderComposer::class);
 
         view()->composer([
             'misc.embedexplore',
             'misc.embedheatmap',
-        ], static function (View $view) use ($globalViewVariables) {
-            $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
-        });
+        ], EmbedComposer::class);
 
         view()->composer([
             'dungeonroute.discover.category',
@@ -439,317 +354,95 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             'misc.affixes',
             'dungeonroute.discover.discover',
             'dungeonroute.discover.dungeon.overview',
-        ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
-            /** @var GameVersion $gameVersion */
-            $gameVersion = $view->getData()['gameVersion'];
-            // @TODO Should be loaded but it's not??
-            $gameVersion->load(['expansion']);
-
-            /** @var Expansion|null $expansion */
-            $expansion = $view->getData()['expansion'] ?? null;
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            /** @var ExpansionData $expansionsData */
-            $expansionsData = $regionViewVariables['expansionsData']->get(($expansion ?? $gameVersion->expansion)->shortname);
-            $view->with('currentAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
-            $view->with('nextAffixGroup', $expansionsData->getExpansionSeason()->getAffixGroups()->getNextAffixGroup());
-        });
+        ], DiscoverAffixGroupComposer::class);
 
         // Dungeon grid view
-        view()->composer('dungeonroute.discover.search', static function (View $view) use (
-            $viewService,
-            &$userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $view->with('currentExpansion', $regionViewVariables['currentExpansion']);
-            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
-            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-        });
+        view()->composer('dungeonroute.discover.search', DiscoverSearchComposer::class);
 
-        view()->composer('common.dungeonroute.create.dungeondifficultyselect', static function (View $view) use (
-            $globalViewVariables
-        ) {
-            $view->with('allSpeedrunDungeons', $globalViewVariables['allSpeedrunDungeons']);
-        });
+        view()->composer('common.dungeonroute.create.dungeondifficultyselect', DungeonDifficultySelectComposer::class);
+
+        view()->composer('common.dungeonroute.create.dungeonstartselect', DungeonStartSelectComposer::class);
 
         view()->composer([
             'common.forms.oauth',
             'common.forms.register',
-        ], static function (View $view) use ($globalViewVariables) {
-            $view->with('allRegions', $globalViewVariables['allRegions']);
-        });
+        ], OAuthRegisterFormComposer::class);
 
         view()->composer([
             'common.forms.createroute',
             'common.forms.createroutetemporary',
-        ], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-
-            /** @var Season $currentSeason */
-            $currentSeason = $regionViewVariables['currentSeason'];
-
-            $seasonLoader = fn(?Season $season) => $season
-                ?->load([
-                    'seasonDungeons' => static function ($query) {
-                        $query->without([
-                            'season',
-                            'dungeon',
-                        ]);
-                    },
-                ])
-                ->makeHidden([
-                    'expansion',
-                    'dungeons',
-                ])
-                ->makeVisible(['seasonDungeons']);
-
-            $view->with('routeKeyLevelFrom', $currentSeason->key_level_min);
-            $view->with('routeKeyLevelTo', $currentSeason->key_level_max);
-            $view->with('currentSeason', $seasonLoader($regionViewVariables['currentSeason']));
-            $view->with('nextSeason', $seasonLoader($regionViewVariables['nextSeason']));
-        });
+        ], CreateRouteFormComposer::class);
 
         // Displaying a release
-        view()->composer('common.release.release', static function (View $view) use ($globalViewVariables) {
-            $view->with('categories', $globalViewVariables['releaseChangelogCategories']);
-        });
+        view()->composer('common.release.release', ReleaseComposer::class);
 
         // Displaying affixes
-        view()->composer('common.group.affixes', static function (View $view) use (
-            $viewService,
-            $globalViewVariables,
-            &
-            $userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $view->with('allExpansions', $globalViewVariables['allExpansions']->pluck('id', 'shortname'));
-            $view->with('dungeonExpansions', $globalViewVariables['dungeonExpansions']);
-            $view->with('affixes', $globalViewVariables['allAffixes']);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-            $view->with('allAffixGroups', $regionViewVariables['allAffixGroups']);
-            $view->with('expansionsData', $regionViewVariables['expansionsData']);
-            $view->with('currentAffixes', $regionViewVariables['allCurrentAffixes']);
-        });
+        view()->composer('common.group.affixes', AffixesComposer::class);
 
-        // Displaying a release
-        view()->composer('common.group.composition', static function (View $view) use ($globalViewVariables) {
-            $view->with('specializations', $globalViewVariables['characterClassSpecializations']);
-            $view->with('classes', $globalViewVariables['characterClasses']);
-            $view->with('racesClasses', $globalViewVariables['characterRacesClasses']);
-            $view->with('allFactions', $globalViewVariables['allFactions']);
-        });
+        // Displaying a composition
+        view()->composer('common.group.composition', CompositionComposer::class);
 
         // Dungeon grid display
-        view()->composer('common.dungeon.gridtabs', static function (View $view) use (
-            $viewService,
-            $globalViewVariables,
-            &$userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-        });
+        view()->composer('common.dungeon.gridtabs', DungeonGridTabsComposer::class);
 
-        view()->composer('common.dungeon.griddiscover', static function (View $view) use ($affixGroupEaseTierService) {
-            /** @var AffixGroup|null $currentAffixGroup */
-            $currentAffixGroup = $view->getData()['currentAffixGroup'];
-            /** @var AffixGroup|null $nextAffixGroup */
-            $nextAffixGroup = $view->getData()['nextAffixGroup'];
-            $view->with('tiers', $affixGroupEaseTierService->getTiersByAffixGroups(collect([
-                $currentAffixGroup,
-                $nextAffixGroup,
-            ])));
-        });
+        view()->composer('common.dungeon.griddiscover', DungeonGridDiscoverComposer::class);
 
         // Dungeon selector
-        view()->composer('common.dungeon.select', static function (View $view) use (
-            $viewService,
-            $globalViewVariables,
-            &$userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-            $view->with('allExpansions', $globalViewVariables['allExpansions']);
-            $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
-            $view->with('allRaids', $globalViewVariables['raidsByExpansionIdDesc']);
-            $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
-            $view->with('allActiveRaids', $globalViewVariables['activeRaidsByExpansionIdDesc']);
-            $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
-        });
+        view()->composer('common.dungeon.select', DungeonSelectComposer::class);
 
         // Dungeonroute attributes selector, Dungeonroute table
         view()->composer([
             'common.dungeonroute.attributes',
             'common.dungeonroute.table',
-        ], static function (View $view) use ($globalViewVariables) {
-            $view->with('allRouteAttributes', $globalViewVariables['allRouteAttributes']);
-        });
+        ], RouteAttributesComposer::class);
 
-        view()->composer('common.dungeonroute.publish', static function (View $view) use ($globalViewVariables) {
-            $view->with('allPublishedStates', $globalViewVariables['allPublishedStates']);
-        });
+        view()->composer('common.dungeonroute.publish', RoutePublishComposer::class);
 
-        view()->composer('common.dungeonroute.tier', static function (View $view) use ($globalViewVariables) {
-            $view->with('affixGroupEaseTiersByAffixGroup', $globalViewVariables['affixGroupEaseTiersByAffixGroup']);
-        });
+        view()->composer('common.dungeonroute.tier', RouteTierComposer::class);
 
-        view()->composer('common.dungeonroute.coverage.affixgroup', static function (View $view) use (
-            $viewService,
-            $seasonAffixGroupService,
-            &
-            $userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            /** @var Season $selectedSeason */
-            $selectedSeason         = $regionViewVariables['currentSeason'];
-            $cookieSelectedSeasonId = isset($_COOKIE['dungeonroute_coverage_season_id']) ? (int)$_COOKIE['dungeonroute_coverage_season_id'] : 0;
-            if ($cookieSelectedSeasonId !== $regionViewVariables['currentSeason']->id &&
-                $regionViewVariables['nextSeason'] !== null &&
-                $cookieSelectedSeasonId === $regionViewVariables['nextSeason']->id) {
-                $selectedSeason = $regionViewVariables['nextSeason'];
-            }
-            $view->with('currentSeason', $regionViewVariables['currentSeason']);
-            $view->with('nextSeason', $regionViewVariables['nextSeason']);
-            $view->with('selectedSeason', $selectedSeason);
-            $view->with('currentAffixGroup', $seasonAffixGroupService->getCurrentAffixGroup($selectedSeason));
-            $view->with('affixGroups', $selectedSeason->affixGroups);
-            $view->with('dungeons', $selectedSeason->dungeons);
-        });
+        view()->composer('common.dungeonroute.coverage.affixgroup', RouteCoverageAffixGroupComposer::class);
 
         // Maps
-        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use (
-            $viewService,
-            $globalViewVariables,
-            &$userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
-            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
-            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
+        view()->composer('common.maps.controls.heatmapsearch', HeatmapSearchComposer::class);
 
-            $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
-            $view->with('characterClasses', $globalViewVariables['characterClasses']);
-            $view->with('selectableSpellsByCategory', $globalViewVariables['selectableSpellsByCategory']);
-            $view->with('allRegions', $globalViewVariables['allRegions']);
-        });
-        view()->composer('common.maps.controls.pulls', static function (View $view) {
-            $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
-        });
+        view()->composer('common.maps.controls.pulls', PullsComposer::class);
 
-        view()->composer('common.maps.controls.pullsworkbench', static function (View $view) use (
-            $globalViewVariables
-        ) {
-            $view->with('spellsSelect', $globalViewVariables['selectableSpellsByCategory']);
-        });
+        view()->composer('common.maps.controls.pullsworkbench', PullsWorkbenchComposer::class);
 
         // Admin
-        view()->composer('admin.dungeon.edit', static function (View $view) use (
-            $mappingService,
-        ) {
-            /** @var Dungeon|null $dungeon */
-            $dungeon = $view->getData()['dungeon'] ?? null;
-            $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
-        });
-        view()->composer('admin.dungeon.mappingversions', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
-        view()->composer('admin.npchealth.edit', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
-        view()->composer('admin.spell.edit', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
-        view()->composer('admin.tools.messagebanner.set', static function (View $view) use ($messageBannerService) {
-            $view->with('messageBanner', $messageBannerService->getMessage());
-        });
+        view()->composer('admin.dungeon.edit', AdminDungeonEditComposer::class);
+
+        view()->composer('admin.dungeon.mappingversions', AdminDungeonMappingVersionsComposer::class);
+
+        view()->composer('admin.npchealth.edit', AdminNpcHealthEditComposer::class);
+
+        view()->composer('admin.spell.edit', AdminSpellEditComposer::class);
+
+        view()->composer('admin.tools.messagebanner.set', AdminMessageBannerComposer::class);
 
         // Team selector
-        view()->composer('common.team.select', static function (View $view) {
-            $view->with('teams', Auth::check() ? Auth::user()->teams : collect());
-        });
+        view()->composer('common.team.select', TeamSelectComposer::class);
 
         // Simulation
-        view()->composer('common.modal.simulate', static function (View $view) use (
-            $viewService,
-            $seasonAffixGroupService,
-            &$userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            /** @var Season $currentSeason */
-            $currentSeason     = $regionViewVariables['currentSeason'];
-            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
-            $view->with('isThundering', $currentAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false);
-        });
+        view()->composer('common.modal.simulate', SimulateComposer::class);
 
-        view()->composer('common.modal.simulateoptions.default', static function (View $view) use (
-            $viewService,
-            $seasonAffixGroupService,
-            &
-            $userOrDefaultRegion
-        ) {
-            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
-            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
-            $shroudedBountyTypes = [];
-            foreach (SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES as $bountyType) {
-                $shroudedBountyTypes[$bountyType] = __(sprintf('view_common.modal.simulate.shrouded_bounty_types.%s', $bountyType));
-            }
-            $affixes = [];
-            foreach (SimulationCraftRaidEventsOptions::ALL_AFFIXES as $affix) {
-                $affixes[$affix] = __(sprintf('view_common.modal.simulateoptions.default.affixes_map.%s', $affix));
-            }
-            /** @var Season $currentSeason */
-            $currentSeason     = $regionViewVariables['currentSeason'];
-            $currentAffixGroup = $seasonAffixGroupService->getCurrentAffixGroup($currentSeason);
-            $view->with('shroudedBountyTypes', $shroudedBountyTypes);
-            $view->with('affixes', $affixes);
-            $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
-            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(
-                SimulationCraftRaidBuffs $raidBuff,
-            ) => [
-                $raidBuff->value => __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
-            ])->toArray());
-        });
+        view()->composer('common.modal.simulateoptions.default', SimulateOptionsComposer::class);
 
-        view()->composer('common.modal.mappingversion', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
-
-        view()->composer('common.mappingversion.select', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
+        view()->composer([
+            'common.modal.mappingversion',
+            'common.mappingversion.select',
+        ], MappingVersionComposer::class);
 
         // Thirdparty
-        view()->composer('common.thirdparty.rollbar.rollbar', static function (View $view) use ($globalViewVariables) {
-            /** @var Release $latestRelease */
-            $latestRelease = $globalViewVariables['latestRelease'];
-            $view->with('latestRelease', $latestRelease);
-        });
+        view()->composer('common.thirdparty.rollbar.rollbar', RollbarComposer::class);
 
         // Profile pages
-        view()->composer('profile.edit', static function (View $view) use ($globalViewVariables) {
-            $view->with('allClasses', $globalViewVariables['characterClasses']);
-            $view->with('allRegions', $globalViewVariables['allRegions']);
-        });
+        view()->composer('profile.edit', ProfileEditComposer::class);
 
         view()->composer([
             'profile.overview',
             'common.dungeonroute.coverage.affixgroup',
-        ], static function (View $view) {
-            $view->with('newRouteStyle', $_COOKIE['route_coverage_new_route_style'] ?? 'search');
-        });
+        ], ProfileNewRouteStyleComposer::class);
 
         // Custom blade directives
         $expressionToStringContentsParser = static function ($expression, $callback) {

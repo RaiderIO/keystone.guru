@@ -20,10 +20,10 @@ class CharacterRaceClassesSeeder extends Seeder implements TableSeederInterface
         $factionAllianceId = Faction::ALL[Faction::FACTION_ALLIANCE];
         $factionHordeId    = Faction::ALL[Faction::FACTION_HORDE];
 
-        /** @var Collection<CharacterRace> $characterRaces */
+        /** @var Collection<string, CharacterRace> $characterRaces */
         $characterRaces = CharacterRace::all()->keyBy('key');
         // Set icons for each inserted class
-        /** @var Collection<CharacterClass> $characterClasses */
+        /** @var Collection<string, CharacterClass> $characterClasses */
         $characterClasses = CharacterClass::all()->keyBy('key');
 
         if ($characterRaces->count() === 0 || $characterClasses->count() === 0) {
@@ -104,6 +104,9 @@ class CharacterRaceClassesSeeder extends Seeder implements TableSeederInterface
         ];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

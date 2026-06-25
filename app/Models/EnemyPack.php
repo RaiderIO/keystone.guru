@@ -68,11 +68,13 @@ class EnemyPack extends CacheModel implements HasVerticesInterface, ConvertsVert
         ];
     }
 
+    /** @return BelongsTo<MappingVersion, $this> */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);

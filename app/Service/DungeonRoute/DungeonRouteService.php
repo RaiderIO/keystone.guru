@@ -6,6 +6,8 @@ use App\Jobs\RefreshEnemyForces;
 use App\Jobs\UpgradeDungeonRouteMappingVersion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
+use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\PublishedState;
@@ -187,8 +189,14 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             $dungeonRoute->mappingVersion->gameVersion,
         )->id;
 
-        DB::transaction(function () use ($dungeonRoute, $newMappingVersionId): void {
-            $this->dungeonRouteRepository->update($dungeonRoute, ['mapping_version_id' => $newMappingVersionId]);
+        // Carry the chosen dungeon start over to the new mapping version (matched by comment)
+        $newDungeonStartMapIconId = $this->remapDungeonStartMapIconId($dungeonRoute, $newMappingVersionId);
+
+        DB::transaction(function () use ($dungeonRoute, $newMappingVersionId, $newDungeonStartMapIconId): void {
+            $this->dungeonRouteRepository->update($dungeonRoute, [
+                'mapping_version_id'        => $newMappingVersionId,
+                'dungeon_start_map_icon_id' => $newDungeonStartMapIconId,
+            ]);
 
             $killZoneIds = $dungeonRoute->killZones->pluck('id');
 
@@ -206,6 +214,31 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         });
 
         DungeonRoute::dropCaches($dungeonRoute->id);
+    }
+
+    /**
+     * Finds the dungeon start map icon in the new mapping version that matches the route's currently
+     * chosen start, matched by the map_icons.comment field. Returns null when the route has no chosen
+     * start, the old icon is gone, it has no comment to match on, or no matching icon exists in the
+     * new mapping version (which later falls back to the first dungeon start).
+     */
+    private function remapDungeonStartMapIconId(DungeonRoute $dungeonRoute, int $newMappingVersionId): ?int
+    {
+        if ($dungeonRoute->dungeon_start_map_icon_id === null) {
+            return null;
+        }
+
+        $oldMapIcon = MapIcon::find($dungeonRoute->dungeon_start_map_icon_id);
+        if ($oldMapIcon === null || empty($oldMapIcon->comment)) {
+            return null;
+        }
+
+        $newMapIconId = MapIcon::where('mapping_version_id', $newMappingVersionId)
+            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
+            ->where('comment', $oldMapIcon->comment)
+            ->value('id');
+
+        return $newMapIconId !== null ? (int)$newMapIconId : null;
     }
 
     public function upgradeMappingVersionBulk(MappingVersion $mappingVersion): int
@@ -235,7 +268,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->publishScheduledDungeonRoutesStart();
 
-            /** @var Collection<DungeonRouteScheduledPublish> $scheduledPublishes */
+            /** @var Collection<int, DungeonRouteScheduledPublish> $scheduledPublishes */
             $scheduledPublishes = DungeonRouteScheduledPublish::query()
                 ->where('publish_at', '<=', now())
                 ->with(['dungeonRoute.dungeon', 'dungeonRoute.author'])

@@ -7,9 +7,12 @@ interface TableSeederInterface
     public function run(): void;
 
     /**
-     * @return class-string[]
+     * @return array<int, class-string>
      */
     public static function getAffectedModelClasses(): array;
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array;
 }

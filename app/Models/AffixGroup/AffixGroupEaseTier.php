@@ -30,16 +30,19 @@ class AffixGroupEaseTier extends CacheModel
 
     public $timestamps = false;
 
+    /** @return BelongsTo<AffixGroupEaseTierPull, $this> */
     public function affixGroupEaseTierPull(): BelongsTo
     {
         return $this->belongsTo(AffixGroupEaseTierPull::class);
     }
 
+    /** @return BelongsTo<AffixGroup, $this> */
     public function affixGroup(): BelongsTo
     {
         return $this->belongsTo(AffixGroup::class);
     }
 
+    /** @return BelongsTo<Dungeon, $this> */
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);

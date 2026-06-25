@@ -17,6 +17,9 @@ class GroupFilteringLaravelImporter implements Importer
         return 'Import data from Laravel localization files to CSV (with group include/exclude)';
     }
 
+    /**
+     * @return Collection<int, array<string, string>>
+     */
     public function handle(LarexImportCommand $command): Collection
     {
         $includeGroups = Str::of($command->option('include'))->explode(',')->reject(fn($i) => empty($i));

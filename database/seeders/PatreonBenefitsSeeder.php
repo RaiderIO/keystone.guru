@@ -29,6 +29,9 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
         return [PatreonBenefit::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

@@ -18,6 +18,12 @@ class AjaxAdminCombatLogRouteDeleteEnemyFailuresFormRequest extends FormRequest
         return once(fn() => Dungeon::findOrFail($this->validated('dungeon_id')));
     }
 
+    /**
+
+
+     * @return array<string, array<int, string|Rule>|string|Rule>
+     */
+
     public function rules(): array
     {
         return [

@@ -87,6 +87,9 @@ class CombatantInfoV21Test extends PublicTestCase
         Assert::assertEquals($expectedTier, $parseEventResult->getTier());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_GivenCombatantInfoEvent_ShouldValidateBasicStats_DataProvider(): array
     {
         return [
@@ -124,6 +127,9 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
+    /**
+     * @param array<int, mixed> $expectedTalents
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
@@ -144,6 +150,9 @@ class CombatantInfoV21Test extends PublicTestCase
         Assert::assertEquals($expectedTalents, $parseEventResult->getTalents());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_GivenCombatantInfoEvent_ShouldValidateTalents_DataProvider(): array
     {
         return [
@@ -224,6 +233,9 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
+    /**
+     * @param array<int, mixed> $expectedTalents
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
@@ -244,6 +256,9 @@ class CombatantInfoV21Test extends PublicTestCase
         Assert::assertEquals($expectedTalents, $parseEventResult->getPvpTalents());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_GivenCombatantInfoEvent_ShouldValidatePvpTalents_DataProvider(): array
     {
         return [
@@ -256,6 +271,9 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
+    /**
+     * @param array<int, mixed> $expectedEquippedItems
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
@@ -276,6 +294,9 @@ class CombatantInfoV21Test extends PublicTestCase
         Assert::assertEquals($expectedEquippedItems, $parseEventResult->getEquippedItems());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_GivenCombatantInfoEvent_ShouldValidateEquippedItems_DataProvider(): array
     {
         return [
@@ -305,6 +326,9 @@ class CombatantInfoV21Test extends PublicTestCase
         ];
     }
 
+    /**
+     * @param array<int, mixed> $expectedInterestingAuras
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatantInfo')]
@@ -325,6 +349,9 @@ class CombatantInfoV21Test extends PublicTestCase
         Assert::assertEquals($expectedInterestingAuras, $parseEventResult->getInterestingAuras());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_GivenCombatantInfoEvent_ShouldValidateInterestingAuras_DataProvider(): array
     {
         return [

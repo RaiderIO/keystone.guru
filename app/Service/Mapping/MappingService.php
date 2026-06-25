@@ -27,7 +27,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @return Collection<MappingChangeLog>
+     * @return Collection<int, MappingChangeLog>
      */
     public function getUnmergedMappingChanges(): Collection
     {
@@ -44,7 +44,7 @@ class MappingService implements MappingServiceInterface
     }
 
     /**
-     * @return Collection<Dungeon>
+     * @return Collection<int, Dungeon>
      */
     public function getDungeonsWithUnmergedMappingChanges(): Collection
     {

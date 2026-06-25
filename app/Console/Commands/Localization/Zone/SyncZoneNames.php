@@ -62,6 +62,9 @@ class SyncZoneNames extends Command
         $this->saveTranslationsToDisk($updatedTranslations);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function syncDungeonNames(WowheadTranslationServiceInterface $wowheadTranslationService): array
     {
         $dungeonNamesByLocale = $wowheadTranslationService->getDungeonNames();
@@ -107,6 +110,10 @@ class SyncZoneNames extends Command
         return $updatedTranslations;
     }
 
+    /**
+     * @param  array<string, mixed> $existingTranslationsByLocale
+     * @return array<string, mixed>
+     */
     private function syncFloorNames(WowheadTranslationServiceInterface $wowheadTranslationService, array $existingTranslationsByLocale): array
     {
         $floorNamesByLocale = $wowheadTranslationService->getFloorNames();
@@ -212,7 +219,7 @@ class SyncZoneNames extends Command
 
         // 3. Based on this mapping, we can now construct the translation array for each locale and save it to disk
         foreach ($floorNamesByLocale as $locale => $floorNamesForLocale) {
-            /** @var array $floorNamesForLocale */
+            /** @var array<int, array<int, string>> $floorNamesForLocale */
 
             // Now match the zone IDs to the dungeon and construct the translation array
             $updatedTranslations = [];
@@ -272,10 +279,13 @@ class SyncZoneNames extends Command
         return $existingTranslationsByLocale;
     }
 
+    /**
+     * @param array<string, mixed> $updatedTranslations
+     */
     private function saveTranslationsToDisk(array $updatedTranslations): void
     {
         foreach ($updatedTranslations as $locale => $newTranslations) {
-            /** @var array $longToShort */
+            /** @var array<string, string> $longToShort */
             $longToShort = array_flip(config('language.short_to_long', ''));
             $aiLocale    = sprintf('%s_ai', $locale);
             if (isset($longToShort[$aiLocale])) {

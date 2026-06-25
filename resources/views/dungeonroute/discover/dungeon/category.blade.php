@@ -1,10 +1,10 @@
 <?php
 /**
- * @var AffixGroup               $currentAffixGroup
- * @var GameVersion              $gameVersion
- * @var Dungeon                  $dungeon
- * @var Collection<DungeonRoute> $dungeonroutes
- * @var string                   $category
+ * @var AffixGroup                    $currentAffixGroup
+ * @var GameVersion                   $gameVersion
+ * @var Dungeon                       $dungeon
+ * @var Collection<int, DungeonRoute> $dungeonroutes
+ * @var string                        $category
  */
 
 use App\Models\AffixGroup\AffixGroup;

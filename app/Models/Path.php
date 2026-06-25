@@ -67,12 +67,15 @@ class Path extends Model
 
     /**
      * Get the dungeon route that this route is attached to.
+     *
+     * @return BelongsTo<DungeonRoute, $this>
      */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return HasOne<Polyline, $this> */
     public function polyline(): HasOne
     {
         return $this->hasOne(Polyline::class, 'model_id')->where('model_class', static::class);
@@ -80,6 +83,8 @@ class Path extends Model
 
     /**
      * Get the floor that this polyline is drawn on.
+     *
+     * @return BelongsTo<Floor, $this>
      */
     public function floor(): BelongsTo
     {

@@ -35,6 +35,9 @@ class AjaxKillZoneController extends Controller
 {
     use ChangesDungeonRoute;
 
+    /**
+     * @return array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>>
+     */
     private function getKillZonePaths(KillZonePathServiceInterface $killZonePathService, DungeonRoute $dungeonRoute): array
     {
         $useFacade = $dungeonRoute->mappingVersion->facade_enabled &&
@@ -43,6 +46,9 @@ class AjaxKillZoneController extends Controller
         return $killZonePathService->calculateForRoute($dungeonRoute, $useFacade);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function paths(
         KillZonePathServiceInterface $killZonePathService,
         DungeonRoute                 $dungeonRoute,
@@ -56,6 +62,8 @@ class AjaxKillZoneController extends Controller
 
     /**
      * @throws \Exception
+     *
+     * @param array<string, mixed> $data
      */
     private function saveKillZone(
         CoordinatesServiceInterface $coordinatesService,
@@ -246,7 +254,7 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * @return array|ResponseFactory|Response|null
+     * @return array<string, mixed>|ResponseFactory|Response|null
      *
      * @throws AuthorizationException
      */
@@ -331,7 +339,7 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws \Exception
      */
@@ -380,7 +388,7 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * @return array|Application|ResponseFactory|Response
+     * @return array<string, mixed>|Application|ResponseFactory|Response
      *
      * @throws AuthorizationException
      */

@@ -6,11 +6,11 @@ use App\Models\Npc\NpcHealth;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion             $currentUserGameVersion
- * @var Npc                     $npc
- * @var NpcHealth|null          $npcHealth
- * @var Collection<GameVersion> $allGameVersions
- * @var Collection<Npc>         $npcHealthsAutoComplete
+ * @var GameVersion                  $currentUserGameVersion
+ * @var Npc                          $npc
+ * @var NpcHealth|null               $npcHealth
+ * @var Collection<int, GameVersion> $allGameVersions
+ * @var Collection<int, Npc>         $npcHealthsAutoComplete
  */
 
 $npcHealth            ??= null;

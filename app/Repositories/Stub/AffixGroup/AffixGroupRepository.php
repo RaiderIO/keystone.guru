@@ -13,7 +13,9 @@ class AffixGroupRepository extends StubRepository implements AffixGroupRepositor
     {
         parent::__construct(AffixGroup::class);
     }
-
+    /**
+     * @return Collection<int, AffixGroup>
+     */
     public function getBySeasonId(int $id): Collection
     {
         return collect();

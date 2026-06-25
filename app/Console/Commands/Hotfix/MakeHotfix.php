@@ -81,8 +81,7 @@ class MakeHotfix extends Command
     /**
      * Get a single file to create a hotfix for, validating that it exists.
      *
-     * @param  string $file
-     * @return array
+     * @return array<int, string>
      * @throws Exception
      */
     private function getSingleFile(string $file): array
@@ -97,7 +96,7 @@ class MakeHotfix extends Command
     /**
      * Get the list of changed files from Git
      *
-     * @return array
+     * @return array<int, string>
      * @throws Exception
      */
     private function getChangedFiles(): array
@@ -118,9 +117,7 @@ class MakeHotfix extends Command
     /**
      * Upload files to S3
      *
-     * @param  array     $files
-     * @param  string    $version
-     * @return void
+     * @param  array<int, string> $files
      * @throws Exception
      */
     private function uploadFilesToS3(array $files, string $version): void

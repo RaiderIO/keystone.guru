@@ -132,6 +132,9 @@ return [
             'show_aggressiveness_border_title'              => '啟用此設置將為所有敵人渲染一個邊框以指示其侵略性。紅色表示侵略性敵人，黃色表示中立敵人，綠色表示友好敵人等。',
             'highlight_dangerous_enemies'                   => '突出顯示危險敵人',
             'highlight_dangerous_enemies_title'             => '危險的敵人用虛線橙色內邊框標記。這些敵人由 Keystone.guru 精選。這些敵人是小首領、健康值較高的敵人、使用危險能力或需要特別處理的敵人。',
+            'kill_zone_path'                                => '',
+            'kill_zone_path_weight'                         => '',
+            'kill_zone_path_weight_title'                   => '',
             'drawing'                                       => '繪圖',
             'default_line_weight'                           => '預設線條粗細',
             'default_line_weight_title'                     => '這控制您在地圖上創建的任何線條的預設粗細（寬度），如路徑和自由繪製的線條。',
@@ -251,27 +254,33 @@ return [
             'heatmaps'                => '熱圖',
             'explore'                 => '探索地城',
             'new'                     => '新',
+            'compendium'              => '',
+            'npc_compendium'          => '',
+            'spell_compendium'        => '',
+            'compendium_activity'     => '',
+            'class_compendium'        => '',
         ],
         'nav' => [
             'user' => [
-                'login'             => '登入',
-                'register'          => '註冊',
-                'telescope'         => '望遠鏡',
-                'tools'             => '工具',
-                'view_releases'     => '查看版本',
-                'view_expansions'   => '查看擴展包',
-                'view_dungeons'     => '查看地城',
-                'view_npcs'         => '查看NPC',
-                'view_spells'       => '查看法術',
-                'view_users'        => '查看用戶',
-                'view_user_reports' => '查看用戶報告',
-                'my_routes'         => '我的路線',
-                'my_favorites'      => '我的收藏',
-                'my_tags'           => '我的標籤',
-                'my_teams'          => '我的隊伍',
-                'my_profile'        => '我的公共資料',
-                'account_settings'  => '帳戶設置',
-                'logout'            => '登出',
+                'login'              => '登入',
+                'register'           => '註冊',
+                'telescope'          => '望遠鏡',
+                'tools'              => '工具',
+                'view_releases'      => '查看版本',
+                'view_expansions'    => '查看擴展包',
+                'view_dungeons'      => '查看地城',
+                'view_npcs'          => '查看NPC',
+                'view_spells'        => '查看法術',
+                'view_users'         => '查看用戶',
+                'view_dungeonroutes' => '',
+                'view_user_reports'  => '查看用戶報告',
+                'my_routes'          => '我的路線',
+                'my_favorites'       => '我的收藏',
+                'my_tags'            => '我的標籤',
+                'my_teams'           => '我的隊伍',
+                'my_profile'         => '我的公共資料',
+                'account_settings'   => '帳戶設置',
+                'logout'             => '登出',
             ],
             'uploadlogs' => [
                 'upload_logs' => '上傳日誌以改進 Keystone.guru',
@@ -321,6 +330,10 @@ return [
                 'labeltoggle' => [
                     'hide_labels' => '隱藏',
                 ],
+                'facadetoggle' => [
+                    'facade'       => '',
+                    'split_floors' => '',
+                ],
                 'mdtclones' => [
                     'mdt'        => '顯示 MDT',
                     'auto_solve' => '自動解決',
@@ -331,20 +344,17 @@ return [
                     'your_rating'              => '您的評分',
                 ],
             ],
-            'enemyinfo' => [
-                'enemy_info'      => '敵人資訊',
-                'report_an_issue' => '回報問題',
-            ],
             'heatmapsearch' => [
                 'settings_title'         => '地圖設置',
                 'enabled'                => '已啟用',
                 'disabled'               => '已禁用',
                 'event_type'             => '事件類型',
                 'data_type'              => '數據類型',
+                'data_type_title'        => '敵人位置使用被攻擊時的原始位置（由自動路線創建者提供動力），玩家位置使用敵人被攻擊時玩家的位置（戰鬥日誌位置）。',
+                'player_spells'          => '',
                 'npc_death_alt'          => '敵人死亡',
                 'player_death_alt'       => '玩家死亡',
-                'bloodlust_alt'          => '嗜血',
-                'data_type_title'        => '敵人位置使用被攻擊時的原始位置（由自動路線創建者提供動力），玩家位置使用敵人被攻擊時玩家的位置（戰鬥日誌位置）。',
+                'spell_casts_alt'        => '',
                 'filter'                 => '篩選',
                 'key_level'              => '鑰石等級',
                 'item_level'             => '物品等級',
@@ -383,6 +393,13 @@ return [
                     'gradient'    => '漸層',
                     'pane'        => '面板',
                 ],
+            ],
+            'combatlogrouteenemyfailures' => [
+                'npc_filter'           => '',
+                'clear_failures'       => '',
+                'clear_failures_title' => '',
+                'matching_routes'      => '',
+                'no_matching_routes'   => '',
             ],
             'header' => [
                 'toggle_navigation'              => '切換導航',
@@ -469,12 +486,20 @@ return [
         ],
     ],
     'modal' => [
+        'createroute' => [
+            'create_route'           => '創建路線',
+            'create_temporary_route' => '創建臨時路線',
+            'import_from_mdt'        => '從 MDT 匯入',
+        ],
         'dungeonroute' => [
             'removed' => [
                 'title'        => '路線已移除',
                 'description'  => '您的路線已被移除，無法再查看／編輯。如果您的路線是臨時路線並已自動清理，或者您在不同的瀏覽器標籤中刪除了路線，可能會發生此情況。',
                 'back_to_home' => '返回主頁',
             ],
+        ],
+        'enemydetails' => [
+            'report_an_issue' => '',
         ],
         'userreport' => [
             'dungeonroute' => [
@@ -493,11 +518,6 @@ return [
                 'contact_by_email_guest' => '若需進一步調查，請通過電子郵件聯繫我（在報告正文中添加您的電子郵件地址）',
                 'submit'                 => '提交',
             ],
-        ],
-        'createroute' => [
-            'create_route'           => '創建路線',
-            'create_temporary_route' => '創建臨時路線',
-            'import_from_mdt'        => '從 MDT 匯入',
         ],
         'legal' => [
             'welcome_back_agree' => '歡迎回來！為了繼續，您必須同意我們的 %s、%s 和 %s。',
@@ -613,6 +633,14 @@ return [
             'title' => '上傳日誌',
         ],
     ],
+    'npc' => [
+        'link' => [
+            'boss' => '',
+        ],
+        'select' => [
+            'npc' => '',
+        ],
+    ],
     'release' => [
         'release' => [
             'new' => '新',
@@ -634,14 +662,15 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'            => '名稱',
-            'description'     => '描述',
-            'logo'            => '標誌',
-            'current_logo'    => '當前標誌',
-            'team_logo_title' => '隊伍標誌',
-            'save'            => '保存',
-            'submit'          => '提交',
-            'disband_team'    => '解散隊伍',
+            'name'                     => '名稱',
+            'description'              => '描述',
+            'logo'                     => '標誌',
+            'current_logo'             => '當前標誌',
+            'team_logo_title'          => '隊伍標誌',
+            'save'                     => '保存',
+            'submit'                   => '提交',
+            'disband_team'             => '解散隊伍',
+            'route_publishing_enabled' => '',
         ],
         'select' => [
             'select_team' => '選擇隊伍...',

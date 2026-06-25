@@ -29,6 +29,9 @@ final class DamageSplitTest extends PublicTestCase
         Assert::assertInstanceOf(DamageSplitInterface::class, $combatLogEntry->getParsedEvent());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_ShouldReturnDamageSplitEvent_GivenDamageSplitEvent_DataProvider(): array
     {
         return [

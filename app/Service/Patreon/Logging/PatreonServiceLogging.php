@@ -18,11 +18,17 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->start(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignBenefitsRetrieveTiersErrors(array $tiersAndBenefitsResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignBenefitsRetrieveTiersIncludedNotSet(array $tiersAndBenefitsResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
@@ -43,11 +49,17 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->start(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignTiersRetrieveTiersAndBenefitsErrors(array $tiersAndBenefitsResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $tiersAndBenefitsResponse
+     */
     public function loadCampaignTiersRetrieveMembersIncludedNotSet(array $tiersAndBenefitsResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
@@ -68,11 +80,17 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->start(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed> $membersResponse
+     */
     public function loadCampaignTiersRetrieveMembersErrors(array $membersResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $membersResponse
+     */
     public function loadCampaignTiersRetrieveMembersDataNotSet(array $membersResponse): void
     {
         $this->error(__METHOD__, get_defined_vars());
@@ -133,6 +151,9 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function linkToUserAccountTokens(array $tokens): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -143,11 +164,17 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->debug(__METHOD__);
     }
 
+    /**
+     * @param array<string, mixed>|null $identityResponse
+     */
     public function linkToUserAccountIdentityResponse(?array $identityResponse): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<int, mixed> $errors
+     */
     public function linkToUserAccountIdentityError(array $errors): void
     {
         $this->error(__METHOD__, get_defined_vars());
@@ -198,27 +225,39 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $errors
+     */
     public function loadAdminUserTokenRefreshError(array $errors): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function loadAdminUserAccessTokenNotSet(array $tokens): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function loadAdminUserRefreshTokenNotSet(array $tokens): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
+    /**
+     * @param array<string, mixed> $tokens
+     */
     public function loadAdminUserExpiresInNotSet(array $tokens): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function loadAdminUserUpdatedTokenSuccessfully(bool $date): void
+    public function loadAdminUserUpdatedTokenSuccessfully(string $expiresAt): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

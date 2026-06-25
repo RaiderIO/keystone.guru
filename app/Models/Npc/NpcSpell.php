@@ -35,11 +35,13 @@ class NpcSpell extends CacheModel
         'npc_id',
     ];
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
+    /** @return BelongsTo<Spell, $this> */
     public function spell(): BelongsTo
     {
         return $this->belongsTo(Spell::class);

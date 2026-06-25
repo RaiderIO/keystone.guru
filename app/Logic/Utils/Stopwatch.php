@@ -7,7 +7,7 @@ use Debugbar;
 class Stopwatch
 {
     /**
-     * @var array The start times of the StopWatches
+     * @var array<string, array{start: float, count: int, end?: float}> The start times of the StopWatches
      */
     private static array $timers = [];
 
@@ -124,6 +124,9 @@ class Stopwatch
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getAll(): array
     {
         $result = [];

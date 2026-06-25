@@ -37,8 +37,9 @@ class DungeonController extends Controller
         $validated['raid'] ??= 0;
         $validated['heatmap_enabled'] ??= 0;
         $validated['speedrun_enabled'] ??= 0;
-        $validated['speedrun_difficulty_10_man_enabled'] ??= 0;
-        $validated['speedrun_difficulty_25_man_enabled'] ??= 0;
+
+        $speedrunDifficulties = $validated['speedrun_difficulties'] ?? [];
+        unset($validated['speedrun_difficulties']);
 
         $beforeDungeon = null;
         if ($dungeon === null) {
@@ -50,6 +51,8 @@ class DungeonController extends Controller
         }
 
         if ($saveResult) {
+            $dungeon->syncSpeedrunDifficulties($speedrunDifficulties);
+
             $this->mappingChanged($beforeDungeon, $dungeon);
         } else {
             abort(500, 'Unable to save dungeon');

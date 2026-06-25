@@ -1,9 +1,9 @@
 <?php
 /**
- * @var boolean $isMobile
+ * @var boolean          $isMobile
  * @var non-falsy-string $id
- * @var string $type
- * @var bool $map
+ * @var string           $type
+ * @var bool             $map
  */
 
 $id   = 'nitropay-' . $id;

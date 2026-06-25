@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => '',
         ],
         'overview' => [
-            'title' => '',
+            'title'   => '',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => '',
+            'title'            => '',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => '',

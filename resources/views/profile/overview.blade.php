@@ -7,9 +7,9 @@ use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
- * @var string                   $newRouteStyle
- * @var GameVersion              $currentUserGameVersion
- * @var Collection<DungeonRoute> $dungeonRoutes
+ * @var string                        $newRouteStyle
+ * @var GameVersion                   $currentUserGameVersion
+ * @var Collection<int, DungeonRoute> $dungeonRoutes
  */
 ?>
 

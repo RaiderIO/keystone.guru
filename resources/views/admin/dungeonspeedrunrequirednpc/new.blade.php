@@ -3,30 +3,26 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 
 /**
- * @var Dungeon $dungeon
- * @var Floor $floor
- * @var array $npcIds
- * @var array $npcIdsWithNullable
- * @var int $difficulty
+ * @var Dungeon              $dungeon
+ * @var Floor                $floor
+ * @var array<int, int>      $npcIds
+ * @var array<int, int|null> $npcIdsWithNullable
+ * @var int                  $difficulty
  */
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$dungeon, $floor, $difficulty],
     'showAds' => false,
     'title' => sprintf(
-        $difficulty === Dungeon::DIFFICULTY_10_MAN ?
-        __('view_admin.dungeonspeedrunrequirednpc.new.title_10_man') :
-        __('view_admin.dungeonspeedrunrequirednpc.new.title_25_man')
-        ,
-        __($dungeon->name)
+        __('view_admin.dungeonspeedrunrequirednpc.new.title'),
+        Dungeon::getDifficultyName($difficulty)
     )]
 )
 @section('header-title')
-    @if($difficulty === Dungeon::DIFFICULTY_10_MAN )
-        {{ __('view_admin.dungeonspeedrunrequirednpc.new.header_10_man', ['dungeon' => __($dungeon->name)]) }}
-    @else
-        {{ __('view_admin.dungeonspeedrunrequirednpc.new.header_25_man', ['dungeon' => __($dungeon->name)]) }}
-    @endif
+    {{ __('view_admin.dungeonspeedrunrequirednpc.new.header', [
+        'difficulty' => Dungeon::getDifficultyName($difficulty),
+        'dungeon'    => __($dungeon->name),
+    ]) }}
 @endsection
 
 @section('content')

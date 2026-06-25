@@ -20,10 +20,8 @@ class APIEnemyFormRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {
@@ -71,7 +69,7 @@ class APIEnemyFormRequest extends FormRequest
             'enemy_forces_override'         => 'nullable|int',
             'enemy_forces_override_teeming' => 'nullable|int',
             'dungeon_difficulty'            => [
-                Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, [
+                Rule::in(array_merge(array_values(Dungeon::DIFFICULTY_ALL), [
                     '-1',
                     '',
                     null,

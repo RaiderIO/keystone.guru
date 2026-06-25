@@ -5,10 +5,10 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 
 /**
- * @var DungeonRoute $dungeonRoute
- * @var Dungeon      $dungeon
- * @var Floor        $floor
- * @var array        $embedOptions
+ * @var DungeonRoute         $dungeonRoute
+ * @var Dungeon              $dungeon
+ * @var Floor                $floor
+ * @var array<string, mixed> $embedOptions
  */
 
 $routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];

@@ -27,15 +27,21 @@ use Override;
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeath"}, nullable=true)
  *
- * @property Collection<CombatLogRouteNpcRequestModel>|null         $npcs
- * @property Collection<CombatLogRouteSpellRequestModel>|null       $spells
- * @property Collection<CombatLogRoutePlayerDeathRequestModel>|null $playerDeaths
+ * @property Collection<int, CombatLogRouteNpcRequestModel>|null         $npcs
+ * @property Collection<int, CombatLogRouteSpellRequestModel>|null       $spells
+ * @property Collection<int, CombatLogRoutePlayerDeathRequestModel>|null $playerDeaths
+ * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
+    /**
+     * @param Collection<int, CombatLogRouteNpcRequestModel>|null         $npcs
+     * @param Collection<int, CombatLogRouteSpellRequestModel>|null       $spells
+     * @param Collection<int, CombatLogRoutePlayerDeathRequestModel>|null $playerDeaths
+     */
     public function __construct(
         public ?CombatLogRouteMetadataRequestModel      $metadata = null,
         public ?CombatLogRouteSettingsRequestModel      $settings = null,

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var array $exceptions
+ * @var array<string, string> $exceptions
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.exception.select.title')])

@@ -319,7 +319,7 @@
         "map_icon_type_id": 50,
         "lat": -119.7007,
         "lng": 311.0042,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -332,7 +332,7 @@
         "map_icon_type_id": 50,
         "lat": -224.7109,
         "lng": 282.4937,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -345,7 +345,7 @@
         "map_icon_type_id": 50,
         "lat": -173.4572,
         "lng": 218.8346,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 50,
         "lat": -119.7007,
         "lng": 311.0042,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -423,7 +423,7 @@
         "map_icon_type_id": 50,
         "lat": -224.7109,
         "lng": 282.4937,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -436,7 +436,7 @@
         "map_icon_type_id": 50,
         "lat": -173.4572,
         "lng": 218.8346,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -501,7 +501,7 @@
         "map_icon_type_id": 50,
         "lat": -119.7007,
         "lng": 311.0042,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -514,7 +514,7 @@
         "map_icon_type_id": 50,
         "lat": -224.7109,
         "lng": 282.4937,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -527,7 +527,7 @@
         "map_icon_type_id": 50,
         "lat": -173.4572,
         "lng": 218.8346,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -592,7 +592,7 @@
         "map_icon_type_id": 50,
         "lat": -119.7007,
         "lng": 311.0042,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -605,7 +605,7 @@
         "map_icon_type_id": 50,
         "lat": -224.7109,
         "lng": 282.4937,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -618,7 +618,7 @@
         "map_icon_type_id": 50,
         "lat": -173.4572,
         "lng": 218.8346,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -683,7 +683,7 @@
         "map_icon_type_id": 50,
         "lat": -119.7007,
         "lng": 311.0042,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -696,7 +696,7 @@
         "map_icon_type_id": 50,
         "lat": -224.7109,
         "lng": 282.4937,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -709,7 +709,7 @@
         "map_icon_type_id": 50,
         "lat": -173.4572,
         "lng": 218.8346,
-        "comment": "Crumbling Rock Vein: loot a Lost Tome of Tyr, granting you a stackable 10% out-of-combat movement speed boost. Requires 25 Dragonflight Mining to use.",
+        "comment": "mapping.map_icons.df.uldaman_legacy_of_tyr.crumbling_rock_vein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

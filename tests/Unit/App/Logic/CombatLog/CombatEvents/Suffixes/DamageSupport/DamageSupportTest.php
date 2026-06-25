@@ -34,6 +34,9 @@ class DamageSupportTest extends PublicTestCase
         $this->assertInstanceOf(DamageSupportInterface::class, $suffix);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function createFromEventName_givenCombatLogVersion_returnsCorrectSuffix_dataProvider(): array
     {
         return [
@@ -56,6 +59,9 @@ class DamageSupportTest extends PublicTestCase
         ];
     }
 
+    /**
+     * @param array<string, mixed> $expectedValues
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('Suffix')]
@@ -79,6 +85,9 @@ class DamageSupportTest extends PublicTestCase
         $this->assertEquals($expectedValues['supportGuid'], $suffix->getSupportGuid());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function setParameters_givenValidEvent_shouldReturnCorrectValues_dataProvider(): array
     {
         return [

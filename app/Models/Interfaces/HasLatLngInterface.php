@@ -19,5 +19,6 @@ interface HasLatLngInterface
 
     public function setLatLng(LatLng $latLng): self;
 
+    /** @return array<string, mixed> */
     public function getCoordinatesData(CoordinatesServiceInterface $coordinatesService): array;
 }

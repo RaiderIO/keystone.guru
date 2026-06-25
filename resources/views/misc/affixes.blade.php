@@ -38,7 +38,7 @@ foreach ($seasonAffixGroupService->getDisplayedAffixGroups($offset) as $affixGro
         $affixGroupsBySeason->put($affixGroup->season_id, collect());
     }
 
-    /** @var Collection<AffixGroup> $currentSeasonAffixGroups */
+    /** @var Collection<int, AffixGroup> $currentSeasonAffixGroups */
     $currentSeasonAffixGroups = $affixGroupsBySeason->get($affixGroup->season_id);
     $currentSeasonAffixGroups->push($affixGroupArr);
 }

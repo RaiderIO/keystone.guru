@@ -87,6 +87,9 @@ class CombatantInfoV9SoDTest extends PublicTestCase
         Assert::assertEquals($expectedRating, $parseEventResult->getRating());
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public static function parseEvent_GivenCombatantInfoEvent_ShouldValidateBasicStats_DataProvider(): array
     {
         return [

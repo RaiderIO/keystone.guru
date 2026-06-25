@@ -15,6 +15,9 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="diedAt", type="string", format="date-time")
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class CombatLogRouteNpcRequestModel extends RequestModel implements Arrayable
 {
     private Carbon $engagedAtCarbon;

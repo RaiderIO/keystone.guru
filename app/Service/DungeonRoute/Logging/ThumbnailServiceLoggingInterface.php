@@ -19,7 +19,7 @@ interface ThumbnailServiceLoggingInterface
         ?int   $viewportHeight,
         ?int   $imageWidth,
         ?int   $imageHeight,
-        ?int   $zoomLevel,
+        ?float $zoomLevel,
         ?int   $quality,
     ): void;
 
@@ -33,7 +33,7 @@ interface ThumbnailServiceLoggingInterface
         ?int   $viewportHeight,
         ?int   $imageWidth,
         ?int   $imageHeight,
-        ?int   $zoomLevel,
+        ?float $zoomLevel,
         ?int   $quality,
     ): void;
 

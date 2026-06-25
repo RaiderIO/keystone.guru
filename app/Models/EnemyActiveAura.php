@@ -28,11 +28,13 @@ class EnemyActiveAura extends CacheModel
 
     public $timestamps = false;
 
+    /** @return BelongsTo<Enemy, $this> */
     public function enemy(): BelongsTo
     {
         return $this->belongsTo(Enemy::class);
     }
 
+    /** @return BelongsTo<Spell, $this> */
     public function spell(): BelongsTo
     {
         return $this->belongsTo(Spell::class);

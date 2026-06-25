@@ -28,6 +28,9 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
         return [ReleaseChangelogCategory::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

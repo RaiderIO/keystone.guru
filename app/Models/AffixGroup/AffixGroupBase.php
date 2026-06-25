@@ -33,6 +33,7 @@ abstract class AffixGroupBase extends CacheModel
 
     abstract protected function getAffixGroupCouplingsTableName(): string;
 
+    /** @return BelongsToMany<Affix, $this> */
     public function affixes(): BelongsToMany
     {
         // I don't know why this suddenly needs an order by. After adding indexes to the database somehow the order of this was done by affix_id

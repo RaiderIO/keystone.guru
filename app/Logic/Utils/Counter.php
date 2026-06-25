@@ -5,11 +5,11 @@ namespace App\Logic\Utils;
 class Counter
 {
     /**
-     * @var array The start times of the StopWatches
+     * @var array<string, int> The start times of the StopWatches
      */
     private static array $counters = [];
 
-    private static function getCountString($counterName): string
+    private static function getCountString(string $counterName): string
     {
         return sprintf('%s %dx', $counterName, self::$counters[$counterName]);
     }
@@ -45,6 +45,9 @@ class Counter
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getAll(): array
     {
         $result = [];

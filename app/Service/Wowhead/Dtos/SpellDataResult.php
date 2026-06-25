@@ -4,6 +4,9 @@ namespace App\Service\Wowhead\Dtos;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class SpellDataResult implements Arrayable
 {
     public function __construct(

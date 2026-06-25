@@ -14,6 +14,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
@@ -22,7 +23,8 @@ class AjaxNpcController extends Controller
 {
     use ChangesMapping;
 
-    public function delete(Request $request)
+    /** @return array<string, mixed> */
+    public function delete(Request $request): array|Response
     {
         try {
             /** @var Npc $npc */
@@ -48,6 +50,8 @@ class AjaxNpcController extends Controller
     }
 
     /**
+     * @return array<string, mixed>
+     *
      * @throws Exception
      */
     public function get(Request $request): array
@@ -61,8 +65,8 @@ class AjaxNpcController extends Controller
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations', static function (JoinClause $clause) {
-                $clause->on('translations.key', 'dungeons.name')
-                    ->on('translations.locale', DB::raw('"en_US"'));
+                $clause->on('translations.key', '=', 'dungeons.name')
+                    ->on('translations.locale', '=', DB::raw('"en_US"'));
             })
             ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
                 $clause->on('npc_name_translations.key', '=', 'npcs.name')

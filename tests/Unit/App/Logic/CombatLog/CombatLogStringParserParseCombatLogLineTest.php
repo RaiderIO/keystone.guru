@@ -10,6 +10,9 @@ use Tests\TestCases\PublicTestCase;
 
 class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
 {
+    /**
+     * @param array<int, mixed> $expected
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatLogStringParser')]
@@ -20,6 +23,9 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
         $this->assertEquals($expected, CombatLogStringParser::parseCombatLogLine($line));
     }
 
+    /**
+     * @return array<string, array<string, list<string>|string>>
+     */
     public static function parseCombatLogLine_GivenLine_ShouldParseCorrectly_DataProvider(): array
     {
         return [
@@ -121,6 +127,9 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
         CombatLogStringParser::parseCombatLogLine($line);
     }
 
+    /**
+     * @return array<string, array<string, string>>
+     */
     public static function parseCombatLogLine_GivenInvalidLine_ShouldThrowInvalidArgumentException_DataProvider(): array
     {
         return [

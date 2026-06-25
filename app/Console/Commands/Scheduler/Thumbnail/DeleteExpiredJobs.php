@@ -32,8 +32,8 @@ class DeleteExpiredJobs extends SchedulerCommand
                 ->where('status', '<>', DungeonRouteThumbnailJob::STATUS_EXPIRED)
                 ->where('created_at', '<', Carbon::now()->subSeconds(
                     config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds'),
-                ))->chunk(100, static function (Collection $rows) use (&$count) {
-                    /** @var Collection<DungeonRouteThumbnailJob> $rows */
+                ))->chunk(100, static function (Collection $rows) use (&$count): void {
+                    /** @var Collection<int, DungeonRouteThumbnailJob> $rows */
                     foreach ($rows as $row) {
                         $row->expire();
                     }

@@ -34,6 +34,9 @@ final class CombatLogVersionTest extends PublicTestCase
         Assert::assertEquals($expectedVersionLong, $result->getVersionLong());
     }
 
+    /**
+     * @return array<string, list<int|string>>
+     */
     public static function getVersionLong_givenCombatLogVersionEvent_returnsCorrectVersionLong_DataProvider(): array
     {
         return [
