@@ -1,0 +1,31 @@
+name: PHPStan
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+    branches:
+      - development
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+        with:
+          run-migrations: 'false'
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=1G

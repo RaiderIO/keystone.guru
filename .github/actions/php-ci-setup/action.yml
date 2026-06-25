@@ -1,6 +1,12 @@
 name: "PHP CI Setup"
 description: "Common setup for Keystone.guru CI"
 
+inputs:
+  run-migrations:
+    description: 'Whether to run database migrations and seeding'
+    required: false
+    default: 'true'
+
 runs:
   using: "composite"
   steps:
@@ -88,6 +94,7 @@ runs:
       shell: bash
 
     - name: Migrate & seed
+      if: ${{ inputs.run-migrations == 'true' }}
       run: |
         php artisan migrate --database=migrate --force
         php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
