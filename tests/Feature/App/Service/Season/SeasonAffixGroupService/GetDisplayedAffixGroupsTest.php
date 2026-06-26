@@ -354,6 +354,7 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
         $now    = Carbon::now();
 
         return Season::selectRaw('seasons.*')
+            ->with(['expansion', 'expansion.timewalkingEvent', 'affixGroups'])
             ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
             ->whereNull('timewalking_events.id')
             ->orderBy('start', 'desc')

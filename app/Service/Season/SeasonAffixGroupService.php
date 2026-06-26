@@ -182,7 +182,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
                 'region'    => $region->short,
             ]);
 
-            throw new Exception('Error getting current affix group');
+            throw $exception;
         }
     }
 
