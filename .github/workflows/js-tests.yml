@@ -1,4 +1,4 @@
-name: Tests & Static Analysis
+name: JavaScript Tests
 
 on:
   push:
@@ -13,18 +13,12 @@ permissions:
   contents: read
 
 jobs:
-  tests:
-    uses: ./.github/workflows/_ci-base.yml
-    with:
-      mode: tests
-    secrets: inherit
-
   js-tests:
-    name: JavaScript Tests
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
         uses: actions/setup-node@v4

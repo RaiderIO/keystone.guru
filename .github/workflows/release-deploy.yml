@@ -1,0 +1,119 @@
+name: Release Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: 868970774940.dkr.ecr.us-east-1.amazonaws.com
+
+jobs:
+  build-push-images:
+    name: Build & Push Release Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # The base image build substitutes GIT_TOKEN into the composer auth.json.
+      # All composer repositories are public, so the built-in token is sufficient.
+      - name: Prepare base image build context
+        run: echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" > docker-compose/app/.env
+
+      - name: Build base app image
+        run: docker build -t keystone.guru docker-compose/app
+
+      # GIT_REF pins the in-image checkout to the released tag for reproducibility.
+      - name: Build production app image
+        run: |
+          docker build --no-cache \
+            --build-arg STAGE=production \
+            --build-arg GIT_REF=${{ github.ref_name }} \
+            -t keystone.guru-app:${{ github.ref_name }} \
+            docker-compose/app-aws/
+
+      - name: Tag & push app image to ECR
+        run: |
+          for repo in ksg-php-fpm ksg-reverb ksg-swoole ksg-queue-worker; do
+            docker tag keystone.guru-app:${{ github.ref_name }} \
+              "${ECR_REGISTRY}/${repo}:${{ github.ref_name }}"
+            docker push "${ECR_REGISTRY}/${repo}:${{ github.ref_name }}"
+          done
+
+      - name: Build base cron image
+        run: docker build -t keystone.guru-cron docker-compose/cron
+
+      - name: Build production cron image
+        run: |
+          docker build --no-cache \
+            --build-arg STAGE=production \
+            --build-arg GIT_REF=${{ github.ref_name }} \
+            -t keystone.guru-cron:${{ github.ref_name }} \
+            docker-compose/cron-aws/
+
+      - name: Tag & push cron image to ECR
+        run: |
+          docker tag keystone.guru-cron:${{ github.ref_name }} \
+            "${ECR_REGISTRY}/ksg-cron:${{ github.ref_name }}"
+          docker push "${ECR_REGISTRY}/ksg-cron:${{ github.ref_name }}"
+
+  # Staging deploys automatically once the release images exist in ECR. The
+  # actual deploy runs in RaiderIO/keystoneguru-infra (it owns the CDK app); we
+  # trigger it via repository_dispatch with the released version. Cross-repo
+  # dispatch needs a token with access to that repo, stored as the
+  # INFRA_DISPATCH_TOKEN secret (the default GITHUB_TOKEN cannot dispatch
+  # cross-repo).
+  deploy-staging:
+    name: Deploy to Staging
+    needs: build-push-images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch staging deploy to keystoneguru-infra
+        env:
+          INFRA_DISPATCH_TOKEN: ${{ secrets.INFRA_DISPATCH_TOKEN }}
+        run: |
+          curl -sSf -X POST \
+            -H "Authorization: Bearer ${INFRA_DISPATCH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/RaiderIO/keystoneguru-infra/dispatches \
+            -d "$(jq -nc --arg v "${{ github.ref_name }}" \
+              '{event_type:"deploy-staging", client_payload:{version:$v}}')"
+
+  # Production is gated by the `production` GitHub Environment: configure a
+  # required reviewer on that environment so this job blocks until a human
+  # approves (after they have validated staging). On approval it dispatches the
+  # same infra deploy for the production stage.
+  deploy-production:
+    name: Deploy to Production
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Dispatch production deploy to keystoneguru-infra
+        env:
+          INFRA_DISPATCH_TOKEN: ${{ secrets.INFRA_DISPATCH_TOKEN }}
+        run: |
+          curl -sSf -X POST \
+            -H "Authorization: Bearer ${INFRA_DISPATCH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/RaiderIO/keystoneguru-infra/dispatches \
+            -d "$(jq -nc --arg v "${{ github.ref_name }}" \
+              '{event_type:"deploy-production", client_payload:{version:$v}}')"

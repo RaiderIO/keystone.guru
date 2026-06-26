@@ -1,11 +1,17 @@
 name: "PHP CI Setup"
 description: "Common setup for Keystone.guru CI"
 
+inputs:
+  run-migrations:
+    description: 'Whether to run database migrations and seeding'
+    required: false
+    default: 'true'
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
@@ -17,7 +23,7 @@ runs:
         coverage: pcov
 
     - name: Cache composer
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.composer/cache/files
         key: composer-${{ hashFiles('**/composer.lock') }}
@@ -54,7 +60,7 @@ runs:
 
     - name: Restore cli_weakauras_parser cache
       id: cache-cli-weakauras-parser
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.cargo/bin/cli_weakauras_parser
         key: cli-weakauras-parser-rust-1.91.1
@@ -88,6 +94,7 @@ runs:
       shell: bash
 
     - name: Migrate & seed
+      if: ${{ inputs.run-migrations == 'true' }}
       run: |
         php artisan migrate --database=migrate --force
         php artisan migrate --database=combatlog --path=database/migrations_combatlog --force
