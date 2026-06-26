@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => 'Спасибо за подписку на :patreon от Keystone.guru! Вы можете подарить :current больше безрекламных впечатлений любому участнику команды.',
         ],
         'overview' => [
-            'title' => 'Обзор',
+            'title'   => 'Обзор',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => 'Публикация маршрутов',
+            'title'            => 'Публикация маршрутов',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => 'Список маршрутов',

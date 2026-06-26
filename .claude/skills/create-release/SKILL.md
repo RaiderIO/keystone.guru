@@ -80,8 +80,26 @@ gh issue view <NNNN> --repo RaiderIO/keystone.guru --json title,labels,body
 ```
 
 Use the issue title/body to write a clear, user-facing `change` line (full sentence, ending
-with a period — match the tone of existing releases). Assign **one category** per change.
-Category ids come from `App\Models\ReleaseChangelogCategory::ALL`:
+<<<<<<< HEAD
+with a period — match the tone of existing releases). Fetch all issues in parallel for speed.
+
+**Only include user-facing changes.** Omit anything the user doesn't care about:
+- Test fixes or new test infrastructure
+- Dependency upgrades (Node, PHP packages, PHPStan level, etc.)
+- Internal refactors with no visible behaviour change (unless they produce a measurable
+  user-facing improvement, e.g. a refactor that also makes the site faster → mention the
+  speed improvement, not the refactor)
+- Developer tooling / CI changes
+
+For changes that survive this filter: write longer, more explanatory lines rather than terse
+summaries. The goal is for the user to immediately understand what changed and why it matters
+to them. For example, prefer:
+> "For dungeons that have multiple entrances, you can now select which entrance you want your
+> route to start at."
+over:
+> "Added support for multiple dungeon starts."
+
+Assign **one category** per change. Category ids come from `App\Models\ReleaseChangelogCategory::ALL`:
 
 | id | key | id | key |
 |----|-----|----|-----|
@@ -96,6 +114,11 @@ Category ids come from `App\Models\ReleaseChangelogCategory::ALL`:
 Infer from the issue's labels/title (e.g. a `bug` label → `bugfixes` (5); API work →
 `api_changes` (12); MDT import → `mdt_importer_changes` (6); mapping data → `mapping_changes`
 (4)). When nothing fits, default to `general_changes` (1).
+
+**Before writing the JSON, present the user with a table** of all proposed changes (ticket,
+category, change line) and ask them to confirm or request edits. This avoids rewriting the
+file multiple times.
+
 
 **Adding a new category (only if genuinely needed):** extend `ReleaseChangelogCategory::ALL`
 (next id), add the key to `lang/en_US/releasechangelogcategories.php`, and add it to
@@ -142,10 +165,13 @@ Then stage it: `git add database/seeders/releases/vX.X.X.json`.
 
 ## Step 6 — Seed the release locally
 
-So the site/DB reflect the new release (Steps 7–8 read it from the DB):
+So the site/DB reflect the new release (Steps 7–8 read it from the DB). Use `db:seedone`
+— it wraps `DatabaseSeeder` with just the one seeder class, handling the temp-table
+create/swap/cleanup that `ReleasesSeeder` requires. Running `db:seed --class=ReleasesSeeder`
+directly will fail because the `releases_temp` table won't exist.
 
 ```
-docker compose exec -T app php artisan db:seed --class=ReleasesSeeder
+docker compose exec -T app php artisan db:seedone ReleasesSeeder
 ```
 
 ## Step 7 — Create the GitHub release issue

@@ -38,7 +38,7 @@ class DungeonSpeedrunRequiredNpcsFormRequest extends FormRequest
             'npc3_id'    => Rule::in($npcIdsWithNullable),
             'npc4_id'    => Rule::in($npcIdsWithNullable),
             'npc5_id'    => Rule::in($npcIdsWithNullable),
-            'difficulty' => Rule::in(Dungeon::DIFFICULTY_ALL),
+            'difficulty' => Rule::in(array_values(Dungeon::DIFFICULTY_ALL)),
             'count'      => 'required|int',
         ];
     }

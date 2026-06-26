@@ -33,7 +33,7 @@
         "map_icon_type_id": 10,
         "lat": -218.8734,
         "lng": 61.8519,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.dire_maul_east.south_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 10,
         "lat": -131.75,
         "lng": 365.75,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.dire_maul_east.east_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 10,
         "lat": -100.9839,
         "lng": 26.5518,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.dire_maul_east.west_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

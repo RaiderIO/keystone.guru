@@ -444,9 +444,9 @@ Breadcrumbs::for('admin.floor.edit', static function (Generator $trail, Dungeon 
 Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Generator $trail, Dungeon $dungeon, Floor $floor, int $difficulty) {
     $trail->parent('admin.floor.edit', $dungeon, $floor);
     $trail->push(
-        $difficulty === Dungeon::DIFFICULTY_10_MAN ?
-            __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man') :
-            __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
+        __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc', [
+            'difficulty' => Dungeon::getDifficultyName($difficulty),
+        ]),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]),
     );
 });

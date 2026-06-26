@@ -66,7 +66,7 @@ class DiscoverService extends BaseDiscoverService
                 'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
-                ]),
+                ])->with('expansion'),
             ])
             ->without([
                 'faction',
@@ -149,7 +149,7 @@ class DiscoverService extends BaseDiscoverService
                 'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
-                ]),
+                ])->with('expansion'),
             ])
             ->without([
                 'faction',

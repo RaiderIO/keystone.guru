@@ -7,7 +7,7 @@
         "map_icon_type_id": 44,
         "lat": -96.489,
         "lng": 166.0931,
-        "comment": "Crystal of Immol'Thar",
+        "comment": "mapping.map_icons.classic.dire_maul_west.crystal_of_immolthar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 44,
         "lat": -198.421,
         "lng": 162.9592,
-        "comment": "Crystal of Immol'Thar",
+        "comment": "mapping.map_icons.classic.dire_maul_west.crystal_of_immolthar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -147.455,
         "lng": 162.2995,
-        "comment": "Break all Crystals of Immol'Thar to gain access to Immol'Thar.",
+        "comment": "mapping.map_icons.classic.dire_maul_west.break_crystals_immolthar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 44,
         "lat": -87.0551,
         "lng": 172.9131,
-        "comment": "Crystal of Immol'Thar",
+        "comment": "mapping.map_icons.classic.dire_maul_west.crystal_of_immolthar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 44,
         "lat": -207.6576,
         "lng": 175.3296,
-        "comment": "Crystal of Immol'Thar",
+        "comment": "mapping.map_icons.classic.dire_maul_west.crystal_of_immolthar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -147.455,
         "lng": 162.2995,
-        "comment": "Break all Crystals of Immol'Thar to gain access to Immol'Thar.",
+        "comment": "mapping.map_icons.classic.dire_maul_west.break_crystals_immolthar",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 6,
         "lat": -73.9968,
         "lng": 231.1312,
-        "comment": "Requires Crescent Key.",
+        "comment": "mapping.map_icons.classic.dire_maul_west.requires_crescent_key",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

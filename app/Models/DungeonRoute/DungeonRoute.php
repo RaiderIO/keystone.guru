@@ -28,6 +28,7 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\MapIcon;
+use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\PageView;
@@ -49,6 +50,7 @@ use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
+use Database\Factories\DungeonRoute\DungeonRouteFactory;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -80,6 +82,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int                  $faction_id
  * @property int|null             $team_id
  * @property int                  $published_state_id
+ * @property int|null             $dungeon_start_map_icon_id
  * @property string|null          $clone_of
  * @property string               $title
  * @property string               $description
@@ -155,7 +158,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 class DungeonRoute extends Model implements TracksPageViewInterface
 {
     use GeneratesPublicKey;
-    /** @use HasFactory<\Database\Factories\DungeonRoute\DungeonRouteFactory> */
+    /** @use HasFactory<DungeonRouteFactory> */
     use HasFactory;
     use HasMetrics;
     use Taggable;
@@ -214,6 +217,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'faction_id',
         'team_id',
         'published_state_id',
+        'dungeon_start_map_icon_id',
         'teeming',
         'title',
         'description',
@@ -488,6 +492,23 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             });
 
         return $query;
+    }
+
+    /**
+     * Resolves the dungeon start map icon for this route. When a specific start was chosen
+     * (dungeon_start_map_icon_id) it is returned directly; otherwise falls back to the first
+     * dungeon start of the route's mapping version.
+     */
+    public function getDungeonStartMapIcon(): ?MapIcon
+    {
+        if ($this->dungeon_start_map_icon_id !== null) {
+            return MapIcon::find($this->dungeon_start_map_icon_id);
+        }
+
+        return MapIcon::where('mapping_version_id', $this->mapping_version_id)
+            ->where('map_icon_type_id', MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START])
+            ->with('floor')
+            ->first();
     }
 
     /** @return BelongsToMany<RouteAttribute, $this> */
