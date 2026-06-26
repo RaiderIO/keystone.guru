@@ -1,6 +1,6 @@
 ARG STAGE=staging
 
-FROM keystone.guru-app
+FROM keystone.guru-worker
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -10,15 +10,11 @@ WORKDIR /var/www/html
 RUN apt-get update && apt-get install -y awscli
 
 ARG STAGE
-# GIT_REF optionally pins the checkout to a specific tag/commit (e.g. a release tag),
-# falling back to the branch matching STAGE when not provided.
-ARG GIT_REF
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \
     BRANCH=$([ "${STAGE}" = "production" ] && echo "master" || echo "development") && \
-    REF="${GIT_REF:-$BRANCH}" && \
-    echo "Using ref: $REF" && \
-    git clone --depth 1 --branch "$REF" https://github.com/RaiderIO/keystone.guru.git . && \
+    echo "Using branch: $BRANCH" && \
+    git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
     git rev-list HEAD -1 > version && \
     cat version; \
     rm -rf .git
@@ -27,8 +23,8 @@ RUN git config --global --add safe.directory /var/www/html && \
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
-# Install NPM packages. Chrome is not needed in the web image; skip its download.
-ENV PUPPETEER_SKIP_DOWNLOAD=true
+# Install NPM packages. Chrome is already in /root/.cache/puppeteer from the worker
+# base image; puppeteer's postinstall detects the cached binary and skips re-download.
 RUN npm install
 
 # Generate Swagger related files
@@ -38,6 +34,3 @@ RUN php artisan l5-swagger:generate --all && \
 # Ensure that storage and bootstrap/cache are writable for the web server
 RUN chmod o+w ./storage/ -R && \
       chown -R www-data:www-data storage bootstrap/cache
-
-COPY /usr/local/etc/php-fpm.d/zz-overrides.conf /usr/local/etc/php-fpm.d/zz-overrides.conf
-
