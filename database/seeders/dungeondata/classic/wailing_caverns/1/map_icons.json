@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -125.9466,
         "lng": 144.893,
-        "comment": "Raptors can be either Ravager or Guardian.",
+        "comment": "mapping.map_icons.classic.wailing_caverns.raptor_variant",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 2,
         "lat": -176.7231,
         "lng": 371.8716,
-        "comment": "Enemy behaviour in this area can be erratic, beware!",
+        "comment": "mapping.map_icons.classic.wailing_caverns.erratic_enemy_warning",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 42,
         "lat": -119.6082,
         "lng": 116.5929,
-        "comment": "Lady Anacondras can spawn in any of the 4 corners of the Screaming Gully. She will replace a Druid of the Fang in all cases.",
+        "comment": "mapping.map_icons.classic.wailing_caverns.lady_anacondra_location",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

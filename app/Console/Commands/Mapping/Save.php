@@ -10,9 +10,12 @@ use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Interfaces\HasVerticesInterface;
+use App\Models\MapIcon;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -145,14 +148,13 @@ class Save extends Command
         $dungeons = Dungeon::without([
             'expansion',
             'gameVersion',
-            'dungeonSpeedrunRequiredNpcs10Man',
-            'dungeonSpeedrunRequiredNpcs25Man',
+            'dungeonSpeedrunRequiredNpcs',
             'floors.floorUnions6',
         ])
             ->with([
                 'floors.floorcouplings',
-                'floors.dungeonSpeedrunRequiredNpcs10Man',
-                'floors.dungeonSpeedrunRequiredNpcs25Man',
+                'floors.dungeonSpeedrunRequiredNpcs.dungeonSpeedrunRequiredNpcNpcs',
+                'dungeonSpeedrunDifficulties',
             ])
             ->get();
 
@@ -185,8 +187,6 @@ class Save extends Command
                 'raid',
                 'heatmap_enabled',
                 'speedrun_enabled',
-                'speedrun_difficulty_10_man_enabled',
-                'speedrun_difficulty_25_man_enabled',
             ])
                 ->makeHidden(['floor_count'])
                 ->toArray(),
@@ -502,6 +502,7 @@ class Save extends Command
                 'type',
             ])
             ->get()
+            ->each(static fn(Enemy $enemy) => $enemy->setRelation('floor', $floor))
             ->makeVisible(['mdt_scale'])
             ->values();
         $enemies = $enemiesCollection->each($roundLatLngFn);
@@ -509,7 +510,10 @@ class Save extends Command
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
         $enemyPatrols = $floor->enemyPatrolsForExport->makeVisible(['mdtPolyline'])->values()->each($roundLatLngPolyLinesFn);
         /** @var EloquentCollection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
-        $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values()->each($roundLatLngFn);
+        $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport
+            ->each(static fn(DungeonFloorSwitchMarker $item) => $item->setRelation('floor', $floor))
+            ->values()
+            ->each($roundLatLngFn);
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder
         /** @var EloquentCollection<int, DungeonFloorSwitchMarker&HasLatLngInterface> $mappedSwitchMarkers */
         $mappedSwitchMarkers = $dungeonFloorSwitchMarkers
@@ -523,12 +527,17 @@ class Save extends Command
         $mappedSwitchMarkers->each($roundLatLngFn);
 
         /** @var EloquentCollection<int, Model&HasLatLngInterface> $mapIcons */
-        $mapIcons       = $floor->mapIconsForExport->values()->each($roundLatLngFn);
+        $mapIcons = $floor->mapIconsForExport
+            ->each(static fn(MapIcon $item) => $item->setRelation('floor', $floor))
+            ->values()
+            ->each($roundLatLngFn);
         $mountableAreas = $floor->mountableAreasForExport->values()->each($roundLatLngVerticesFn);
         /** @var EloquentCollection<int, Model&HasLatLngInterface> $floorUnionsCollection */
-        $floorUnionsCollection = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()->values();
-        $floorUnions           = $floorUnionsCollection->each($roundLatLngFn);
-        $floorUnionAreas       = $floor->floorUnionAreasForExport->values()->each($roundLatLngVerticesFn);
+        $floorUnionsCollection = $floor->floorUnionsForExport()->without(['floorUnionAreas'])->get()
+            ->each(static fn(FloorUnion $item) => $item->setRelation('floor', $floor))
+            ->values();
+        $floorUnions     = $floorUnionsCollection->each($roundLatLngFn);
+        $floorUnionAreas = $floor->floorUnionAreasForExport->values()->each($roundLatLngVerticesFn);
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.

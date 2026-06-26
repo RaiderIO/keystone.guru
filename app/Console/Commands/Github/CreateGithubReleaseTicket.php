@@ -36,67 +36,65 @@ class CreateGithubReleaseTicket extends Command
     public function handle(
         ReleaseRepositoryInterface $releaseRepository,
     ): int {
-        $result = 0;
-
         $version = $this->argument('version');
         $release = $releaseRepository->findReleaseByVersion($version);
 
         $this->info(sprintf('>> Creating Github ticket for %s', $version));
 
-        if ($release !== null) {
-            $username        = config('keystoneguru.github_username');
-            $repositoryOwner = config('keystoneguru.github_repository_owner');
-            $repository      = config('keystoneguru.github_repository');
-
-            /** @var Issue $githubIssueClient */
-            // @phpstan-ignore staticMethod.notFound
-            $githubIssueClient = GitHub::issues();
-            // May throw an exception if it doesn't exist
-            $existingIssueId = 0;
-            $issueTitle      = sprintf('Release %s', $release->version);
-
-            // Only gets the first page - but good enough
-            foreach ($githubIssueClient->all($repositoryOwner, $repository, [
-                'filter' => 'all',
-                'state'  => 'all',
-                'labels' => 'release',
-            ]) as $githubIssue) {
-                if (str_starts_with((string)$githubIssue['title'], $issueTitle) && !isset($githubIssue['pull_request'])) {
-                    $existingIssueId = $githubIssue['number'];
-                    break;
-                }
-            }
-
-            // Append the release title here so that we don't match on it earlier
-            $issueTitle .= !empty($release->title) ? sprintf(' - %s', $release->title) : '';
-
-            $params = [
-                'title'  => $issueTitle,
-                'body'   => $release->github_body,
-                'labels' => [
-                    'release',
-                ],
-                'type'      => 'task',
-                'assignees' => [
-                    $username,
-                ],
-            ];
-
-            if ($existingIssueId === 0) {
-                $githubIssueClient->create($repositoryOwner, $repository, $params);
-                $this->info(sprintf('Successfully created GitHub issue %s', $version));
-                $result = 1;
-            } else {
-                $githubIssueClient->update($repositoryOwner, $repository, $existingIssueId, $params);
-                $this->info(sprintf('Successfully updated GitHub issue %s', $version));
-                $result = 2;
-            }
-        } else {
+        if ($release === null) {
             $this->error(sprintf('Unable to find release %s', $version));
+
+            return self::FAILURE;
+        }
+
+        $username        = config('keystoneguru.github_username');
+        $repositoryOwner = config('keystoneguru.github_repository_owner');
+        $repository      = config('keystoneguru.github_repository');
+
+        /** @var Issue $githubIssueClient */
+        // @phpstan-ignore staticMethod.notFound
+        $githubIssueClient = GitHub::issues();
+        // May throw an exception if it doesn't exist
+        $existingIssueId = 0;
+        $issueTitle      = sprintf('Release %s', $release->version);
+
+        // Only gets the first page - but good enough
+        foreach ($githubIssueClient->all($repositoryOwner, $repository, [
+            'filter' => 'all',
+            'state'  => 'all',
+            'labels' => 'release',
+        ]) as $githubIssue) {
+            if (str_starts_with((string)$githubIssue['title'], $issueTitle) && !isset($githubIssue['pull_request'])) {
+                $existingIssueId = $githubIssue['number'];
+                break;
+            }
+        }
+
+        // Append the release title here so that we don't match on it earlier
+        $issueTitle .= !empty($release->title) ? sprintf(' - %s', $release->title) : '';
+
+        $params = [
+            'title'  => $issueTitle,
+            'body'   => $release->github_body,
+            'labels' => [
+                'release',
+            ],
+            'type'      => 'task',
+            'assignees' => [
+                $username,
+            ],
+        ];
+
+        if ($existingIssueId === 0) {
+            $githubIssueClient->create($repositoryOwner, $repository, $params);
+            $this->info(sprintf('Successfully created GitHub issue %s', $version));
+        } else {
+            $githubIssueClient->update($repositoryOwner, $repository, $existingIssueId, $params);
+            $this->info(sprintf('Successfully updated GitHub issue %s', $version));
         }
 
         $this->info(sprintf('OK Creating Github issue for %s', $version));
 
-        return $result;
+        return self::SUCCESS;
     }
 }

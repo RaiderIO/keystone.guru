@@ -7,7 +7,7 @@
         "map_icon_type_id": 94,
         "lat": -222.384,
         "lng": 184.9648,
-        "comment": "Large Iron Bound Chest (Locked)",
+        "comment": "mapping.map_icons.classic.shadowfang_keep.large_iron_bound_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

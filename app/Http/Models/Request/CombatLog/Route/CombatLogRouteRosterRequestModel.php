@@ -12,8 +12,6 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(property="characterIds", type="array", @OA\Items(type="integer"))
  * @OA\Property(property="specIds", type="array", @OA\Items(type="integer"))
  * @OA\Property(property="classIds", type="array", @OA\Items(type="integer"))
- */
-/**
  * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteRosterRequestModel extends RequestModel implements Arrayable

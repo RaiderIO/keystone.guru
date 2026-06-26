@@ -12,7 +12,8 @@ return [
         'message' => 'Vous devez sélectionner une faction pour ce donjon.',
     ],
     'json_string_count_rule' => [
-        'message' => 'La chaîne Json doit avoir au moins :count éléments.',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Ce type d\'icône de carte n\'est pas disponible pour votre niveau d\'accès.',

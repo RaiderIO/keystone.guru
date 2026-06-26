@@ -12,7 +12,8 @@ return [
         'message' => 'Necesitas seleccionar una facción para este calabozo.',
     ],
     'json_string_count_rule' => [
-        'message' => 'La cadena JSON debe tener al menos :count elementos.',
+        'message_min' => '',
+        'message_max' => '',
     ],
     'map_icon_type_role_check_rule' => [
         'message' => 'Ese tipo de icono de mapa no está disponible para tu nivel de acceso.',

@@ -10,6 +10,8 @@ return [
     'add_kill_zone_limit_reached'             => '無法在單一路線中添加超過 :limit 次拉怪。',
     'add_brushline_limit_reached'             => '無法在單一路線中添加超過 :limit 條手繪線。',
     'add_path_limit_reached'                  => '無法在單一路徑中新增超過 :limit 條路徑。',
+    'add_arrow_limit_reached'                 => '',
     'add_map_icon_limit_reached'              => '無法在單一路線中添加超過 :limit 個地圖圖標。',
+    'schedule_publish_route_not_in_team'      => '',
 
 ];

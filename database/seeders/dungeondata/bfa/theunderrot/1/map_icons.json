@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -267,7 +267,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -358,7 +358,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -384,7 +384,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -475,7 +475,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -501,7 +501,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -592,7 +592,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -618,7 +618,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -709,7 +709,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -735,7 +735,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -826,7 +826,7 @@
         "map_icon_type_id": 2,
         "lat": -161,
         "lng": 244.625,
-        "comment": "Keystone Guru: There's one column on the map, there's two in-game.",
+        "comment": "mapping.map_icons.bfa.the_underrot.map_column_discrepancy",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -852,7 +852,7 @@
         "map_icon_type_id": 23,
         "lat": -132,
         "lng": 218.5,
-        "comment": "Skip unlocks after killing Sporecaller Zancha",
+        "comment": "mapping.map_icons.bfa.the_underrot.skip_sporecaller_zancha",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

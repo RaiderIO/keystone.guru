@@ -7,7 +7,7 @@
         "map_icon_type_id": 48,
         "lat": -214.0002,
         "lng": 254.1667,
-        "comment": "Matrix Punchograph 3005-D",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_d",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 48,
         "lat": -223.5625,
         "lng": 241.6563,
-        "comment": "Matrix Punchograph 3005-D",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_d",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 48,
         "lat": -221.3125,
         "lng": 239.75,
-        "comment": "Matrix Punchograph 3005-D",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.matrix_punchograph_d",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 3,
         "lat": -115.3724,
         "lng": 111.3519,
-        "comment": "The Final Chamber",
+        "comment": "mapping.map_icons.classic.gnomeregan_sod.the_final_chamber",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

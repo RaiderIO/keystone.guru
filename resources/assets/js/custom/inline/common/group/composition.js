@@ -58,10 +58,10 @@ class CommonGroupComposition extends InlineCode {
             self._loadDungeonRouteDefaults();
         });
 
-        // this._fillFactions();
-        // this._fillSpecializations();
-        // this._fillClasses();
-        // this._fillRaces();
+        this._fillFactions();
+        this._fillSpecializations();
+        this._fillClasses();
+        this._fillRaces();
     }
 
     setDefaults(oldFaction, oldRaces, oldClasses, oldSpecializations) {
@@ -574,16 +574,6 @@ class CommonGroupComposition extends InlineCode {
         let $racesSelects = $(".raceselect select");
         let $classSelects = $(".classselect select");
 
-        // @TODO cherry-pick Removing this ecf23e798c5cfa3860d10774eb8f2590a0bee00e
-        // For each specialization
-        for (let i = 0; i < this._oldSpecializations.length; i++) {
-            let characterSpecialization = this._oldSpecializations[i];
-            let $specializationSelect = $($specializationsSelects[i]);
-            $specializationSelect.val(characterSpecialization.id);
-            // Have to manually trigger change..
-            $specializationSelect.trigger('change');
-        }
-
         // For each class
         for (let i = 0; i < this._oldClasses.length; i++) {
             let characterClass = this._oldClasses[i];
@@ -593,9 +583,9 @@ class CommonGroupComposition extends InlineCode {
             $classSelect.trigger('change');
         }
 
-        // For each specialization
-        for (let i = 0; i < _oldSpecializations.length; i++) {
-            let characterSpecialization = _oldSpecializations[i];
+        // For each specialization - applied after classes so class change events don't override the selection
+        for (let i = 0; i < this._oldSpecializations.length; i++) {
+            let characterSpecialization = this._oldSpecializations[i];
             let $specializationSelect = $($specializationsSelects[i]);
             $specializationSelect.val(characterSpecialization.id);
             // Have to manually trigger change..

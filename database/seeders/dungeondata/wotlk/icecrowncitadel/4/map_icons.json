@@ -7,7 +7,7 @@
         "map_icon_type_id": 2,
         "lat": -169.3612,
         "lng": 109.0546,
-        "comment": "Wave 1",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.wave_1",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 2,
         "lat": -143.8745,
         "lng": 140.7873,
-        "comment": "Wave 2",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.wave_2",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 2,
         "lat": -171.5868,
         "lng": 166.4177,
-        "comment": "Wave 3",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.wave_3",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 2,
         "lat": -169.3612,
         "lng": 109.0546,
-        "comment": "Wave 1",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.wave_1",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 2,
         "lat": -143.8745,
         "lng": 140.7873,
-        "comment": "Wave 2",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.wave_2",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 2,
         "lat": -171.5868,
         "lng": 166.4177,
-        "comment": "Wave 3",
+        "comment": "mapping.map_icons.wotlk.icecrown_citadel.wave_3",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

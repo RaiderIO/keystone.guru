@@ -33,7 +33,7 @@
         "map_icon_type_id": 93,
         "lat": -103.4989,
         "lng": 111.4984,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.shadowfang_keep.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

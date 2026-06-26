@@ -81,6 +81,12 @@ return [
                     'end'   => '',
                 ],
             ],
+            'arrow' => [
+                'tooltip' => [
+                    'start' => '',
+                    'cont'  => '',
+                ],
+            ],
         ],
     ],
     'edit' => [

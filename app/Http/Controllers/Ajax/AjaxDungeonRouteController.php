@@ -85,6 +85,7 @@ class AjaxDungeonRouteController extends Controller
             'classes',
             'races',
             'dungeon',
+            'dungeon.floors',
             'affixes',
             'thumbnails',
             'author',
