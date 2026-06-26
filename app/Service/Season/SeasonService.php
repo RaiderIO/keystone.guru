@@ -202,6 +202,7 @@ class SeasonService implements SeasonServiceInterface
     {
         if ($this->seasonCache->empty()) { // @phpstan-ignore if.alwaysTrue
             $this->seasonCache = Season::selectRaw('seasons.*')
+                ->with('affixGroups')
                 ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
                 ->whereNull('timewalking_events.id')
                 ->orderBy('seasons.start')
