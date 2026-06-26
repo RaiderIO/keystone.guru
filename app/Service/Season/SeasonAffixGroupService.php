@@ -266,17 +266,10 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     {
         $region = GameServerRegion::getUserOrDefaultRegion();
 
-        /** @var Collection<int, Season> $seasons */
-        $seasons = Season::selectRaw('seasons.*')
-            ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
-            ->whereNull('timewalking_events.id')
-            ->orderBy('start')
-            ->get();
-
         $affixGroups = new Collection();
 
         $now           = Carbon::now();
-        $currentSeason = $this->findSeasonAt($seasons, $now, $region);
+        $currentSeason = $this->seasonService->findSeasonWithAffixGroupsAt($now, $region);
 
         if ($currentSeason === null || $currentSeason->affix_group_count <= 0) {
             return $affixGroups;
@@ -292,7 +285,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         // Show the full iteration, plus one week before and one week after for context.
         for ($week = $anchorWeek - 1; $week <= $anchorWeek + $count; $week++) {
             $date   = $currentSeasonStart->copy()->addWeeks($week);
-            $season = $this->findSeasonAt($seasons, $date, $region);
+            $season = $this->seasonService->findSeasonWithAffixGroupsAt($date, $region);
 
             if ($season === null || $season->affix_group_count <= 0) {
                 continue;
@@ -312,36 +305,6 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
         }
 
         return $affixGroups;
-    }
-
-    /**
-     * Find the season that is active at a specific date across all expansions (latest season started on or
-     * before the date that actually has affix groups). Unlike SeasonService::getSeasonAt this is not limited
-     * to a single expansion, so it correctly resolves dates that span expansion boundaries. Seasons that are
-     * already registered but do not have their affix groups defined yet are skipped, so an upcoming season's
-     * placeholder never blanks the overview - the previous season's rotation simply carries on, matching the
-     * legacy behaviour.
-     *
-     * @param  Collection<int, Season> $seasons Seasons ordered ascending by start.
-     * @return Season|null
-     */
-    private function findSeasonAt(Collection $seasons, Carbon $date, GameServerRegion $region): ?Season
-    {
-        $result = null;
-
-        foreach ($seasons as $season) {
-            if ($season->start($region)->gt($date)) {
-                break;
-            }
-
-            if ($season->affix_group_count <= 0 || $season->affixGroups->isEmpty()) {
-                continue;
-            }
-
-            $result = $season;
-        }
-
-        return $result;
     }
 
     /**
