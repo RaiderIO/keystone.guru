@@ -80,6 +80,7 @@ gh issue view <NNNN> --repo RaiderIO/keystone.guru --json title,labels,body
 ```
 
 Use the issue title/body to write a clear, user-facing `change` line (full sentence, ending
+<<<<<<< HEAD
 with a period — match the tone of existing releases). Fetch all issues in parallel for speed.
 
 **Only include user-facing changes.** Omit anything the user doesn't care about:
@@ -117,6 +118,7 @@ Infer from the issue's labels/title (e.g. a `bug` label → `bugfixes` (5); API 
 **Before writing the JSON, present the user with a table** of all proposed changes (ticket,
 category, change line) and ask them to confirm or request edits. This avoids rewriting the
 file multiple times.
+
 
 **Adding a new category (only if genuinely needed):** extend `ReleaseChangelogCategory::ALL`
 (next id), add the key to `lang/en_US/releasechangelogcategories.php`, and add it to
