@@ -13,6 +13,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -38,7 +39,7 @@ foreach ($seasonAffixGroupService->getDisplayedAffixGroups($offset) as $affixGro
         $affixGroupsBySeason->put($affixGroup->season_id, collect());
     }
 
-    /** @var Collection<int, AffixGroup> $currentSeasonAffixGroups */
+    /** @var Collection<int, array{date_start: Carbon, affix_group: AffixGroup}> $currentSeasonAffixGroups */
     $currentSeasonAffixGroups = $affixGroupsBySeason->get($affixGroup->season_id);
     $currentSeasonAffixGroups->push($affixGroupArr);
 }
