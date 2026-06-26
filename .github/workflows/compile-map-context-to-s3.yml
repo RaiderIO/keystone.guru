@@ -7,10 +7,47 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   mapcontext:
-    uses: ./.github/workflows/_ci-base.yml
-    with:
-      mode: mapcontext
-    secrets: inherit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --wait
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+
+      - name: Generate Map Context JS
+        run: |
+          mkdir -p storage/mapcontext
+          php artisan make:mapcontextstatic --output=storage/mapcontext
+          php artisan make:mapcontextdungeon --output=storage/mapcontext
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext
+          ls -la storage/mapcontext
+
+      - name: Configure AWS (keys)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload Map Context JS files
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
+          aws s3 cp storage/mapcontext "s3://${S3_BUCKET}/compiled" \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
