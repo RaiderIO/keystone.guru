@@ -39,7 +39,7 @@ $showHeader ??= true;
     <?php
     /** @var ReleaseChangelogCategory $category */
     ?>
-    @foreach ($release->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $groupedChange)
+    @foreach ($release->changelog->changes()->public()->get()->groupBy('release_changelog_category_id') as $categoryId => $groupedChange)
         <p>
                 <?php /** @var ReleaseChangelogChange $change */ ?>
             {{ __($categories->where('id', $categoryId)->first()->name) }}:

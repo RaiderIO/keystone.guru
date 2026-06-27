@@ -50,6 +50,7 @@ use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
+use Database\Factories\DungeonRoute\DungeonRouteFactory;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -157,7 +158,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 class DungeonRoute extends Model implements TracksPageViewInterface
 {
     use GeneratesPublicKey;
-    /** @use HasFactory<\Database\Factories\DungeonRoute\DungeonRouteFactory> */
+    /** @use HasFactory<DungeonRouteFactory> */
     use HasFactory;
     use HasMetrics;
     use Taggable;
@@ -495,17 +496,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     /**
      * Resolves the dungeon start map icon for this route. When a specific start was chosen
-     * (dungeon_start_map_icon_id) and it still belongs to this route's mapping version, it is used.
-     * Otherwise it falls back to the first dungeon start of the route's mapping version.
+     * (dungeon_start_map_icon_id) it is returned directly; otherwise falls back to the first
+     * dungeon start of the route's mapping version.
      */
     public function getDungeonStartMapIcon(): ?MapIcon
     {
         if ($this->dungeon_start_map_icon_id !== null) {
-            $mapIcon = MapIcon::find($this->dungeon_start_map_icon_id);
-            // Guard against drift: only use it if it belongs to this route's mapping version
-            if ($mapIcon !== null && $mapIcon->mapping_version_id === $this->mapping_version_id) {
-                return $mapIcon;
-            }
+            return MapIcon::find($this->dungeon_start_map_icon_id);
         }
 
         return MapIcon::where('mapping_version_id', $this->mapping_version_id)

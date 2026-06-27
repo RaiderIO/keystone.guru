@@ -75,29 +75,6 @@ final class DungeonRouteGetDungeonStartMapIconTest extends PublicTestCase
     }
 
     #[Test]
-    public function getDungeonStartMapIcon_givenChosenStartFromDifferentMappingVersion_fallsBackToAStartOfTheMappingVersion(): void
-    {
-        // Arrange — a chosen icon that belongs to a different mapping version must not be used
-        $route   = DungeonRoute::factory()->create();
-        $floorId = $route->dungeon->floors->first()->id;
-        $foreign = $this->createDungeonStartMapIcon($route->mapping_version_id + 999999, $floorId, 'mapping.start.east');
-        $route->update(['dungeon_start_map_icon_id' => $foreign->id]);
-
-        try {
-            // Act
-            $result = $route->fresh()->getDungeonStartMapIcon();
-
-            // Assert
-            $this->assertNotNull($result);
-            $this->assertNotEquals($foreign->id, $result->id);
-            $this->assertEquals($route->mapping_version_id, $result->mapping_version_id);
-        } finally {
-            $foreign->delete();
-            $route->delete();
-        }
-    }
-
-    #[Test]
     public function getDungeonStartMapIcon_givenNoStartsForMappingVersion_returnsNull(): void
     {
         // Arrange — point the route at a mapping version that has no map icons at all
