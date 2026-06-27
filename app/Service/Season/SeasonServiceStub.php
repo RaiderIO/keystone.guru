@@ -23,6 +23,11 @@ class SeasonServiceStub implements SeasonServiceInterface
         return collect();
     }
 
+    public function getAllSeasons(): Collection
+    {
+        return collect();
+    }
+
     public function getFirstSeason(): Season
     {
         return new Season();
@@ -59,6 +64,11 @@ class SeasonServiceStub implements SeasonServiceInterface
     }
 
     public function getSeasonFromShortString(string $season): ?Season
+    {
+        return null;
+    }
+
+    public function findSeasonWithAffixGroupsAt(Carbon $date, GameServerRegion $region): ?Season
     {
         return null;
     }
