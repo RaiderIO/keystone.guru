@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -13,8 +14,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int                      $release_changelog_category_id
  * @property int                      $ticket_id
  * @property string                   $change
+ * @property bool                     $is_public
  * @property ReleaseChangelogCategory $category
  * @property ReleaseChangelog         $changelog
+ *
  *
  * @mixin Eloquent
  */
@@ -28,6 +31,7 @@ class ReleaseChangelogChange extends CacheModel
         'release_changelog_category_id',
         'ticket_id',
         'change',
+        'is_public',
     ];
 
     protected $visible = [
@@ -35,6 +39,7 @@ class ReleaseChangelogChange extends CacheModel
         'change',
         'release_changelog_category_id',
         'release_changelog_id',
+        'is_public',
     ];
 
     protected $with = ['category'];
@@ -51,5 +56,14 @@ class ReleaseChangelogChange extends CacheModel
     public function changelog(): HasOne
     {
         return $this->hasOne(ReleaseChangelog::class, 'release_changelog_id');
+    }
+
+    /**
+     * @param  EloquentBuilder<ReleaseChangelogChange> $query
+     * @return EloquentBuilder<ReleaseChangelogChange>
+     */
+    public function scopePublic(EloquentBuilder $query): EloquentBuilder
+    {
+        return $query->where('is_public', true);
     }
 }

@@ -34,9 +34,10 @@ commands for seeding, the GitHub release issue, and the dev→master MR.
 
 - If the user gave an explicit `vX.X.X`, use it.
 - Otherwise propose the next semver from the previous version (Step 2) and the nature of the
-  changes (Step 4): **patch** if it's only bugfixes/maintenance, **minor** if it includes
-  user-facing features/changes, **major** only if the user says so. **Confirm the version
-  with the user before writing files.**
+  **public** (`is_public: 1`) changes only: **patch** if they are only bugfixes/maintenance,
+  **minor** if they include user-facing features/changes, **major** only if the user says so.
+  Non-public changes (CI, tests, tooling) do not influence semver. **Confirm the version with
+  the user before writing files.**
 
 ## Step 2 — Find the previous release and the id counters
 
@@ -71,7 +72,7 @@ ask the user for the previous release commit/tag. For each commit, parse the **l
 line. Commits with no `#NNNN` → `ticket_id: 0`; surface them to the user, as they usually
 need a manual decision.
 
-## Step 4 — Enrich each line and assign a category
+## Step 4 — Enrich each line, assign a category, and set is_public
 
 For each `ticket_id`:
 
@@ -79,24 +80,24 @@ For each `ticket_id`:
 gh issue view <NNNN> --repo RaiderIO/keystone.guru --json title,labels,body
 ```
 
-Use the issue title/body to write a clear, user-facing `change` line (full sentence,
-ending with a period — match the tone of existing releases). Fetch all issues in parallel for speed.
+Fetch all issues in parallel for speed.
 
-**Only include user-facing changes.** Omit anything the user doesn't care about:
-- Test fixes or new test infrastructure
-- Dependency upgrades (Node, PHP packages, PHPStan level, etc.)
-- Internal refactors with no visible behaviour change (unless they produce a measurable
-  user-facing improvement, e.g. a refactor that also makes the site faster → mention the
-  speed improvement, not the refactor)
-- Developer tooling / CI changes
+**Include ALL commits** — but mark them with the appropriate `is_public` value:
 
-For changes that survive this filter: write longer, more explanatory lines rather than terse
-summaries. The goal is for the user to immediately understand what changed and why it matters
-to them. For example, prefer:
-> "For dungeons that have multiple entrances, you can now select which entrance you want your
-> route to start at."
-over:
-> "Added support for multiple dungeon starts."
+- **`is_public: 1` (public)** — user-facing changes that appear on the site, Discord, and
+  GitHub Release. Write a clear, descriptive `change` line (full sentence ending with a
+  period). Longer and more explanatory is better. E.g.:
+  > "For dungeons that have multiple entrances, you can now select which entrance you want
+  > your route to start at."
+
+- **`is_public: 0` (non-public)** — internal changes that appear only in the GitHub release
+  ticket and PR (for internal tracking). These include:
+  - Test fixes or new test infrastructure
+  - Dependency upgrades (Node, PHP packages, PHPStan level, etc.)
+  - Internal refactors with no visible behaviour change
+  - Developer tooling / CI / deployment pipeline changes
+
+  For non-public changes, a short `change` line is fine (the commit subject is acceptable).
 
 Assign **one category** per change. Category ids come from `App\Models\ReleaseChangelogCategory::ALL`:
 
@@ -115,8 +116,8 @@ Infer from the issue's labels/title (e.g. a `bug` label → `bugfixes` (5); API 
 (4)). When nothing fits, default to `general_changes` (1).
 
 **Before writing the JSON, present the user with a table** of all proposed changes (ticket,
-category, change line) and ask them to confirm or request edits. This avoids rewriting the
-file multiple times.
+`is_public`, category, change line) and ask them to confirm or request edits. This avoids
+rewriting the file multiple times.
 
 **Adding a new category (only if genuinely needed):** extend `ReleaseChangelogCategory::ALL`
 (next id), add the key to `lang/en_US/releasechangelogcategories.php`, and add it to
@@ -126,8 +127,11 @@ file multiple times.
 
 Write `database/seeders/releases/vX.X.X.json` with the Write tool. Use ISO8601 timestamps
 (`date -u +%Y-%m-%dT%H:%M:%S+00:00` for now). **`changes[]` entries have no `id` field.**
-`title` is a short summary of the release (optional — `null` if none). Defaults:
-`backup_db: 0`, `silent: 0`, `spotlight: 0`, `released: 1`.
+`title` is a short summary of the release (optional — empty string if none, `title` is not nullable).
+Defaults: `backup_db: 0`, `silent: 0`, `spotlight: 0`, `released: 1`.
+
+Each entry in `changes[]` requires an `is_public` field (`1` = shown publicly on site /
+Discord / GitHub Release; `0` = shown only in the GitHub release ticket and PR).
 
 ```json
 {
@@ -150,7 +154,15 @@ Write `database/seeders/releases/vX.X.X.json` with the Write tool. Use ISO8601 t
                 "release_changelog_id": 367,
                 "release_changelog_category_id": 5,
                 "ticket_id": 3321,
+                "is_public": 1,
                 "change": "redis:clearidlekeys no longer removes sessions from localhost."
+            },
+            {
+                "release_changelog_id": 367,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3320,
+                "is_public": 0,
+                "change": "Updated CI workflows to use OIDC for AWS credentials."
             }
         ]
     }

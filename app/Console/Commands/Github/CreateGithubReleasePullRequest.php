@@ -81,7 +81,7 @@ class CreateGithubReleasePullRequest extends Command
 
         $params = [
             'title'  => $pullRequestTitle,
-            'body'   => $release->github_body,
+            'body'   => $release->github_pr_body,
             'labels' => [
                 'release',
             ],
