@@ -37,7 +37,7 @@ jobs:
         run: echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" > docker-compose/app/.env
 
       - name: Build base app image
-        run: docker build -t keystone.guru docker-compose/app
+        run: docker build -t keystone.guru-app docker-compose/app
 
       # GIT_REF pins the in-image checkout to the released tag for reproducibility.
       - name: Build production app image
