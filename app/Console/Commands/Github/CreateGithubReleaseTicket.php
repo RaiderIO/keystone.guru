@@ -75,7 +75,7 @@ class CreateGithubReleaseTicket extends Command
 
         $params = [
             'title'  => $issueTitle,
-            'body'   => $release->github_body,
+            'body'   => $release->github_full_body,
             'labels' => [
                 'release',
             ],
