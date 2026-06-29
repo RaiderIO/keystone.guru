@@ -263,6 +263,7 @@ return [
             'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
             'compendium'              => 'Compendium',
+            'compendium_overview'     => 'Overview',
             'npc_compendium'          => 'NPCs',
             'spell_compendium'        => 'Spells',
             'compendium_activity'     => 'Activity',
