@@ -22,6 +22,7 @@ $loadMoreOffset   ??= 0;
 $showDungeonImage ??= false;
 $affixgroup       ??= null;
 $cache            ??= true;
+$orientation      ??= 'vertical';
 ?>
 <div class="discover_panel px-xl-2">
     <div class="row mt-4">
@@ -60,6 +61,7 @@ $cache            ??= true;
                     'dungeonroutes' => $dungeonroutes,
                     'showDungeonImage' => $showDungeonImage,
                     'cache' => $cache,
+                    'orientation' => $orientation,
                 ])
             </div>
         </div>

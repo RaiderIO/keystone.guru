@@ -59,6 +59,10 @@ return [
         'rating' => [
             'nr_of_votes' => '%s vote(s)',
         ],
+        'poster' => [
+            'views'     => '%s views',
+            'favorites' => '%s favorites',
+        ],
         'table' => [
             'team'                  => 'Team',
             'affixes'               => 'Affixes',
