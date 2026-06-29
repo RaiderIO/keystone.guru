@@ -73,6 +73,52 @@ ul.light-slider {
     text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
 }
 
+/** Poster card - map demoted to scrimmed background, metadata in the foreground */
+.card_dungeonroute.poster {
+    position: relative;
+    height: 16rem;
+    border-radius: 6px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card_dungeonroute.poster:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+}
+
+.card_dungeonroute.poster .poster_scrim {
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0) 30%,
+        rgba(0, 0, 0, 0.5) 70%,
+        rgba(0, 0, 0, 0.85) 100%);
+}
+
+.card_dungeonroute.poster .title a,
+.card_dungeonroute.poster .poster_enemy_forces {
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.card_dungeonroute.poster .poster_enemy_forces {
+    font-weight: bold;
+}
+
+.card_dungeonroute.poster .menu_actions_btn i,
+.card_dungeonroute.poster .poster_top .text-warning {
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.card_dungeonroute.poster .poster_trust_badge:empty {
+    display: none;
+}
+
 /** Light Slider */
 @media (min-width: 1200px) {
     /* Container is required for the page load to have a proper width */

@@ -1,10 +1,12 @@
 <?php
 
+use App\Features\DungeonRouteListRework;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
 
 /**
  * @var AffixGroup               $currentAffixGroup
@@ -17,6 +19,7 @@ use Illuminate\Support\Collection;
  */
 
 $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVersion::GAME_VERSION_RETAIL;
+$cardOrientation     = Feature::active(DungeonRouteListRework::class) ? 'poster' : 'vertical';
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',
@@ -64,6 +67,7 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         'dungeonroutes' => $dungeonroutes['popular'],
         'showMore' => $dungeonroutes['popular']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
+        'orientation' => $cardOrientation,
     ])
 
     @if( !$adFree && !$isMobile)
@@ -118,6 +122,7 @@ $showRoutesByAffixes = $gameVersion->has_seasons && $gameVersion->key !== GameVe
         'dungeonroutes' => $dungeonroutes['new'],
         'showMore' => $dungeonroutes['new']->count() >= config('keystoneguru.discover.limits.overview'),
         'showDungeonImage' => $gameVersion->showDiscoverRoutesCardDungeonImage(),
+        'orientation' => $cardOrientation,
     ])
 
     @if( !$adFree && !$isMobile)
