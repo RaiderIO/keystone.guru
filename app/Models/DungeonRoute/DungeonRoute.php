@@ -13,7 +13,6 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\Expansion;
@@ -26,7 +25,8 @@ use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -139,7 +139,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property EloquentCollection<int, Arrow>                            $arrows
  * @property EloquentCollection<int, KillZone>                         $killZones
  * @property EloquentCollection<int, PridefulEnemy>                    $pridefulEnemies
- * @property EloquentCollection<int, OverpulledEnemy>                  $overpulledenemies
+ * @property EloquentCollection<int, LiveSessionOverpulledEnemy>       $overpulledEnemies
  * @property EloquentCollection<int, DungeonRouteEnemyRaidMarker>      $enemyRaidMarkers
  * @property EloquentCollection<int, MapIcon>                          $mapicons
  * @property EloquentCollection<int, PageView>                         $pageviews

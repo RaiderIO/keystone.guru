@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

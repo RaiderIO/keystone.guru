@@ -237,4 +237,11 @@ return [
         ],
     ],
 
+    'api' => [
+        'live_session_combat_log' => [
+            'stored'          => 'Combat log lines stored successfully.',
+            'duplicate_batch' => 'Duplicate batch sequence number, skipped.',
+        ],
+    ],
+
 ];

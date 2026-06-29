@@ -29,6 +29,7 @@ class HandlerLogging extends RollbarStructuredLogging implements HandlerLoggingI
         string  $exceptionClass,
         string  $message,
     ): void {
+        unset($body['lines']);
         $this->error(__METHOD__, get_defined_vars());
     }
 }

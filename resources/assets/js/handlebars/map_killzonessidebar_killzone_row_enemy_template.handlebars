@@ -3,17 +3,10 @@
         <div class="col">
             <img src="{{enemy_portrait_url}}"
                  style="height: 37px; width: 37px; border-radius: 30px; border: 2px solid {{pull_color}}"/>
-            {{#if overpulled}}
-                <div class="text-center text-success" style="position: relative; margin-top: -37px;">
+            {{#if state_overlay}}
+                <div class="text-center {{state_overlay.colorClass}}" style="position: relative; margin-top: -37px;">
                     <span style="font-size: 24px; background-color: black; border-radius: 100px">
-                        <i class="fa fa-plus-circle"></i>
-                    </span>
-                </div>
-            {{/if}}
-            {{#if obsolete}}
-                <div class="text-center text-danger" style="position: relative; margin-top: -37px;">
-                    <span style="font-size: 24px; background-color: black; border-radius: 100px">
-                        <i class="fa fa-times-circle"></i>
+                        <i class="fa {{state_overlay.iconClass}}"></i>
                     </span>
                 </div>
             {{/if}}

@@ -1,16 +1,14 @@
 <?php
 
-use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
 use App\Logic\MapContext\Map\MapContextDungeonRoute;
-use App\Logic\MapContext\Map\MapContextLiveSession;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
@@ -76,13 +74,13 @@ $show['controls']['pulls']     ??= true;
 // This controls whether heatmaps are shown at all
 $show['controls']['heatmapSearch'] ??= false;
 // This allows you to show heatmaps, but not the sidebar to influence them. You'll have to do that through parameters then.
-$show['controls']['heatmapSearchSidebar'] ??= true;
-$show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']                 ??= false;
-$show['controls']['view']                 ??= false;
-$show['controls']['present']                       ??= false;
-$show['controls']['live']                          ??= false;
-$show['controls']['combatLogRouteEnemyFailures']   ??= false;
+$show['controls']['heatmapSearchSidebar']        ??= true;
+$show['controls']['enemyForces']                 = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']                        ??= false;
+$show['controls']['view']                        ??= false;
+$show['controls']['present']                     ??= false;
+$show['controls']['live']                        ??= false;
+$show['controls']['combatLogRouteEnemyFailures'] ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;

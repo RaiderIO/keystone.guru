@@ -40,7 +40,7 @@ use App\Repositories\Database\DungeonRoute\DungeonRouteRatingRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailJobRepository;
 use App\Repositories\Database\DungeonRoute\DungeonRouteThumbnailRepository;
-use App\Repositories\Database\Enemies\OverpulledEnemyRepository;
+use App\Repositories\Database\Enemies\LiveSessionOverpulledEnemyRepository;
 use App\Repositories\Database\Enemies\PridefulEnemyRepository;
 use App\Repositories\Database\EnemyActiveAuraRepository;
 use App\Repositories\Database\EnemyPackRepository;
@@ -155,7 +155,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRatingRepositoryInterfa
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailJobRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteThumbnailRepositoryInterface;
-use App\Repositories\Interfaces\Enemies\OverpulledEnemyRepositoryInterface;
+use App\Repositories\Interfaces\Enemies\LiveSessionOverpulledEnemyRepositoryInterface;
 use App\Repositories\Interfaces\Enemies\PridefulEnemyRepositoryInterface;
 use App\Repositories\Interfaces\EnemyActiveAuraRepositoryInterface;
 use App\Repositories\Interfaces\EnemyPackRepositoryInterface;
@@ -277,7 +277,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DungeonRouteThumbnailRepositoryInterface::class, DungeonRouteThumbnailRepository::class);
 
         // Enemies
-        $this->app->bind(OverpulledEnemyRepositoryInterface::class, OverpulledEnemyRepository::class);
+        $this->app->bind(LiveSessionOverpulledEnemyRepositoryInterface::class, LiveSessionOverpulledEnemyRepository::class);
         $this->app->bind(PridefulEnemyRepositoryInterface::class, PridefulEnemyRepository::class);
 
         // Floor

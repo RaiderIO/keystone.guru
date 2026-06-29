@@ -121,17 +121,18 @@ class EnemyVisualMain extends EnemyVisualIcon {
             width -= 10;
         }
 
-        // Obsolete enemies require additional addition to keep it looking nice
-        if (this.enemyvisual.enemy.isObsolete()) {
-            width += 4;
+        // State overlay icons require additional addition to keep them looking nice
+        let stateOverlay = this.enemyvisual.enemy.getStateOverlay();
+        if (stateOverlay !== null) {
+            width -= 4;
         }
 
         // Dangerous = less space
         if ((this.enemyvisual.enemy.npc !== null && this.enemyvisual.enemy.npc.dangerous) || this.enemyvisual.enemy.isImportant() || this.enemyvisual.enemy.enemy_patrol_id !== null) {
             width -= 2;
 
-            // Obsolete enemies require additional subtraction to keep it looking nice
-            if (this.enemyvisual.enemy.isObsolete()) {
+            // State overlay icons require additional subtraction to keep them looking nice
+            if (stateOverlay !== null) {
                 width -= 1;
             }
         }

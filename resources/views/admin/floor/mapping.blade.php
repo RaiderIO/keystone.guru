@@ -48,6 +48,7 @@ use App\Models\User;
                 'path',
                 'killzone',
                 'killzonepath',
+                'playerposition'
             ],
             'show' => [
                 'header' => true,

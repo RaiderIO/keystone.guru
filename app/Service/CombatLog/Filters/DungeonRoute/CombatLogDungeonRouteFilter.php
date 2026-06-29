@@ -5,6 +5,9 @@ namespace App\Service\CombatLog\Filters\DungeonRoute;
 use App\Service\CombatLog\Filters\BaseCombatLogFilter;
 use Illuminate\Support\Collection;
 
+/**
+ * Collects all information required to create a dungeon route.
+ */
 class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
 {
     private readonly SpecialEventsFilter $specialEventsFilter;

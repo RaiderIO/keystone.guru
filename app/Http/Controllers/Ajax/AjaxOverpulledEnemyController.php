@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
-use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
+use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyDeletedEvent;
+use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -29,10 +31,11 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonRoute,
-        LiveSession                     $liveSession,
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        OverpulledEnemyFormRequest             $request,
+        DungeonRoute                           $dungeonRoute,
+        LiveSession                            $liveSession,
     ) {
         Gate::authorize('view', $dungeonRoute);
         Gate::authorize('view', $liveSession);
@@ -43,8 +46,8 @@ class AjaxOverpulledEnemyController extends Controller
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         foreach ($enemies as $enemy) {
-            /** @var OverpulledEnemy $overpulledEnemy */
-            $overpulledEnemy = OverpulledEnemy::where('live_session_id', $liveSession->id)
+            /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
+            $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
                 ->where('npc_id', $enemy->npc_id)
                 ->where('mdt_id', $enemy->mdt_id)
                 ->firstOrNew([
@@ -65,7 +68,20 @@ class AjaxOverpulledEnemyController extends Controller
             }
         }
 
-        return $overpulledEnemyService->getRouteCorrection($liveSession)->toArray();
+        $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
+
+        if (Auth::check()) {
+            /** @var User $user */
+            $user     = Auth::getUser();
+            $enemyIds = $routeCorrection->getObsoleteEnemies()
+                ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
+                ->unique()
+                ->values()
+                ->toArray();
+            broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
+        }
+
+        return $routeCorrection->toArray();
     }
 
     /**
@@ -74,13 +90,14 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function delete(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonroute,
-        LiveSession                     $livesession,
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        OverpulledEnemyFormRequest             $request,
+        DungeonRoute                           $dungeonRoute,
+        LiveSession                            $liveSession,
     ) {
-        Gate::authorize('view', $dungeonroute);
-        Gate::authorize('view', $livesession);
+        Gate::authorize('view', $dungeonRoute);
+        Gate::authorize('view', $liveSession);
 
         $result = response()->noContent();
 
@@ -91,8 +108,8 @@ class AjaxOverpulledEnemyController extends Controller
 
         try {
             foreach ($enemies as $enemy) {
-                /** @var OverpulledEnemy $overpulledEnemy */
-                $overpulledEnemy = OverpulledEnemy::where('live_session_id', $livesession->id)
+                /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
+                $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
                     ->where('npc_id', $enemy->npc_id)
                     ->where('mdt_id', $enemy->mdt_id)
                     ->first();
@@ -100,11 +117,25 @@ class AjaxOverpulledEnemyController extends Controller
                 if ($overpulledEnemy && $overpulledEnemy->delete() && Auth::check()) { // @phpstan-ignore booleanAnd.leftAlwaysTrue
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new OverpulledEnemyDeletedEvent($livesession, $user, $enemy));
+                    broadcast(new OverpulledEnemyDeletedEvent($liveSession, $user, $enemy));
                 }
 
                 // Optionally, don't calculate the return value
-                $result = $validated['no_result'] === true ? $result : $overpulledEnemyService->getRouteCorrection($livesession)->toArray();
+                if ($validated['no_result'] !== true) {
+                    $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
+                    $result          = $routeCorrection->toArray();
+
+                    if (Auth::check()) {
+                        /** @var User $user */
+                        $user     = Auth::getUser();
+                        $enemyIds = $routeCorrection->getObsoleteEnemies()
+                            ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
+                            ->unique()
+                            ->values()
+                            ->toArray();
+                        broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
+                    }
+                }
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);

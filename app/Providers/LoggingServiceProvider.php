@@ -80,6 +80,8 @@ use App\Service\DungeonRoute\Logging\DungeonRouteServiceLogging;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLogging;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
+use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLogging;
+use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLogging;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
@@ -160,6 +162,9 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Combat log event
         $this->app->bind(CombatLogEventServiceLoggingInterface::class, CombatLogEventServiceLogging::class);
+
+        // Live session
+        $this->app->bind(LiveSessionBufferProcessingServiceLoggingInterface::class, LiveSessionBufferProcessingServiceLogging::class);
 
         // Dungeon
         $this->app->bind(DungeonServiceLoggingInterface::class, DungeonServiceLogging::class);

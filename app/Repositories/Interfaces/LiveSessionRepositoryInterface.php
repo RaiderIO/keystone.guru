@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
