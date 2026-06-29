@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\DungeonRoute;
 
+use App\Features\DungeonOverview;
 use App\Http\Controllers\Controller;
 use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\Team;
+use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
@@ -21,13 +25,34 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
 
 class DungeonRouteDiscoverController extends Controller
 {
+    /**
+     * Relations a dungeon route card needs eager-loaded to render without lazy-loading violations.
+     * Mirrors what the DiscoverService loads for its own route collections.
+     *
+     * @var array<int, string>
+     */
+    private const ROUTE_CARD_RELATIONS = [
+        'author',
+        'affixes',
+        'ratings',
+        'mappingVersion',
+        'thumbnails',
+        'dungeon',
+        'season.expansion',
+    ];
+
     /**
      * @return View
      */
@@ -375,6 +400,33 @@ class DungeonRouteDiscoverController extends Controller
 
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 
+        if (Feature::active(DungeonOverview::class)) {
+            /** @var Collection<int, WeeklyRoute> $weeklyRoutesForDungeon */
+            $weeklyRoutesForDungeon = $weeklyRoutes[$dungeon->key] ?? collect();
+            EloquentCollection::make(
+                $weeklyRoutesForDungeon
+                    ->map(fn(WeeklyRoute $weeklyRoute) => $weeklyRoute->dungeonRoute)
+                    ->filter()
+                    ->values(),
+            )->load(self::ROUTE_CARD_RELATIONS);
+
+            return view('dungeonroute.discover.dungeon.landing', [
+                // No breadcrumbs on the landing itself - the trail's last crumb just duplicates the page
+                // title. Breadcrumbs reappear (with this dungeon as a clickable parent) on nested pages.
+                'breadcrumbs'       => '',
+                'gameVersion'       => $gameVersion,
+                'dungeon'           => $dungeon,
+                'currentAffixGroup' => $currentAffixGroup,
+                'weeklyRoutes'      => $weeklyRoutesForDungeon,
+                'popularRoutes'     => $discoverService
+                    ->withLimit(config('keystoneguru.discover.limits.dungeon_overview_popular'))
+                    ->popularByDungeon($dungeon),
+                'userRoutes'          => $this->getUserRoutesForDungeon($dungeon),
+                'dungeonStats'        => $this->getDungeonStats($dungeon, $gameVersion),
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
+            ]);
+        }
+
         return view('dungeonroute.discover.dungeon.overview', [
             'breadcrumbs'       => 'dungeonroutes.discoverdungeon',
             'gameVersion'       => $gameVersion,
@@ -633,5 +685,69 @@ class DungeonRouteDiscoverController extends Controller
                 ->newByDungeon($dungeon),
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
         ]);
+    }
+
+    /**
+     * The current user's own (non-demo, non-sandbox) routes for a dungeon, most recently edited first.
+     *
+     * @return Collection<int, DungeonRoute>
+     */
+    private function getUserRoutesForDungeon(Dungeon $dungeon): Collection
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if ($user === null) {
+            return collect();
+        }
+
+        return $user->dungeonRoutes()
+            ->where('dungeon_id', $dungeon->id)
+            ->whereNull('expires_at')
+            ->where('demo', false)
+            ->with(self::ROUTE_CARD_RELATIONS)
+            ->orderByDesc('updated_at')
+            ->limit(config('keystoneguru.discover.limits.per_dungeon'))
+            ->get();
+    }
+
+    /**
+     * Cached headline stats for the dungeon overview: compendium counts plus pull/enemy stats for the
+     * dungeon's current mapping version.
+     *
+     * @return array{npc: int, spell: int, pull_count: int, avg_enemies_per_pull: float}
+     */
+    private function getDungeonStats(Dungeon $dungeon, GameVersion $gameVersion): array
+    {
+        $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+
+        return Cache::remember(
+            sprintf('dungeon.overview.stats.%d.%d', $dungeon->id, $gameVersion->id),
+            now()->addHour(),
+            static function () use ($dungeon, $mappingVersion): array {
+                $pullCount  = 0;
+                $enemyCount = 0;
+
+                if ($mappingVersion !== null) {
+                    $pullCount = $dungeon->enemyPacks()
+                        ->where('enemy_packs.mapping_version_id', $mappingVersion->id)
+                        ->count();
+
+                    $enemyCount = $dungeon->enemies()
+                        ->where('enemies.mapping_version_id', $mappingVersion->id)
+                        ->where(static function (Builder $query) {
+                            $query->whereNull('enemies.seasonal_type')
+                                ->orWhere('enemies.seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+                        })
+                        ->count();
+                }
+
+                return [
+                    'npc'                  => $dungeon->npcs()->count(),
+                    'spell'                => $dungeon->spells()->count(),
+                    'pull_count'           => $pullCount,
+                    'avg_enemies_per_pull' => $pullCount > 0 ? round($enemyCount / $pullCount, 1) : 0.0,
+                ];
+            },
+        );
     }
 }
