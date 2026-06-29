@@ -10,6 +10,7 @@ use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\CombatantInfo as CombatantInfoResultEvent;
 use App\Service\CombatLog\ResultEvents\CombatLogVersion as CombatLogVersionResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
@@ -74,6 +75,9 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
 //        2343,
 //    ];
 
+    /**
+     * @param Collection<int, BaseResultEvent> $resultEvents
+     */
     public function __construct(protected Collection $resultEvents)
     {
     }

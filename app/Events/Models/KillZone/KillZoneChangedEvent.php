@@ -25,6 +25,9 @@ class KillZoneChangedEvent extends ModelChangedEvent
         return 'killzone-changed';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {

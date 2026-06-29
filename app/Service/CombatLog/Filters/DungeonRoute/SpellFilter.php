@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Spell as SpellPrefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
 use App\Models\Spell\Spell;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast;
 use Illuminate\Support\Collection;
 
@@ -16,8 +17,12 @@ use Illuminate\Support\Collection;
  */
 class SpellFilter implements CombatLogParserInterface
 {
+    /** @var Collection<int, int> */
     private readonly Collection $spellsToTrack;
 
+    /**
+     * @param Collection<int, BaseResultEvent> $resultEvents
+     */
     public function __construct(private readonly Collection $resultEvents)
     {
         $this->spellsToTrack = Spell::where('selectable', true)->get()->pluck('id');

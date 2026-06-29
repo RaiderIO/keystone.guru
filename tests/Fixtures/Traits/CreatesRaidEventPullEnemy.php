@@ -16,6 +16,7 @@ use Tests\TestCase;
 trait CreatesRaidEventPullEnemy
 {
     /**
+     * @param  array<int, string>            $methodsToMock
      * @return RaidEventPullEnemy|MockObject
      */
     public function createRaidEventPullEnemy(array $methodsToMock = [], ?SimulationCraftRaidEventsOptions $options = null, ?Enemy $enemy = null, int $enemyIndexInPull = 0)

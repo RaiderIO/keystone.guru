@@ -109,7 +109,7 @@ class InlineManager {
      * @param options {object}
      */
     init(id, bladePath, options) {
-        console.log(bladePath, id, options);
+        console.log(id, bladePath, options);
 
         let explode = bladePath.split('/');
         // Upper case all sections
@@ -186,8 +186,14 @@ class InlineManager {
                 // Attempt to activate everything that depended on it now that we're activated
                 for (let index in dependencies) {
                     if (dependencies.hasOwnProperty(index)) {
-                        console.log(`Attempting load of ${dependencies[index]} since dependency ${id} is now loaded`);
-                        this.activate(dependencies[index]);
+                        let dependentBladePath = dependencies[index];
+                        console.log(`Attempting load of ${dependentBladePath} since dependency ${code.bladePath} (${id}) is now loaded`);
+                        // Find all inline code instances with this bladePath and activate by their ID
+                        for (let codeId in this._inlineCode) {
+                            if (this._inlineCode[codeId].bladePath === dependentBladePath) {
+                                this.activate(codeId);
+                            }
+                        }
                     }
                 }
             }
@@ -207,4 +213,10 @@ class InlineManager {
             console.warn(`Not loading ${code.bladePath}, dependencies not loaded`, this._dependencies, this._dependenciesById);
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {InlineManager};
 }

@@ -54,6 +54,8 @@ class RegisterController extends Controller implements HasMiddleware
 
     /**
      * Get a validator for an incoming registration request.
+     *
+     * @param array<string, mixed> $data
      */
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
@@ -72,6 +74,8 @@ class RegisterController extends Controller implements HasMiddleware
     /**
      * Create a new user instance after a valid registration.
      * @throws RandomException
+     *
+     * @param array<string, mixed> $data
      */
     protected function create(array $data): User
     {

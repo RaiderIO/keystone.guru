@@ -11,9 +11,14 @@ use Override;
 
 class DungeonRepositorySwoole extends DungeonRepository implements DungeonRepositorySwooleInterface
 {
-    /** @var Collection<Dungeon> */
+    /**
+     * @var Collection<int, Dungeon>
+     */
     private Collection $dungeonsByChallengeModeId;
 
+    /**
+     * @var Collection<int, Collection<int, MappingVersion>>
+     */
     private readonly Collection $dungeonMappingVersions;
 
     public function __construct()
@@ -49,7 +54,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
             $this->dungeonMappingVersions->put($dungeon->id, $dungeon->mappingVersions()->get());
         }
 
-        /** @var Collection<MappingVersion> $mappingVersions */
+        /** @var Collection<int, MappingVersion> $mappingVersions */
         $mappingVersions = $this->dungeonMappingVersions->get($dungeon->id);
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = $mappingVersions->firstWhere('version', $version);

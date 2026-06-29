@@ -35,6 +35,9 @@ trait CorrectsLocalizationsHeader
         return $this->convertLocalizationHeader(self::KSG_TO_CROWDIN_MAPPING) !== 0;
     }
 
+    /**
+     * @param array<string, string> $mapping
+     */
     private function convertLocalizationHeader(array $mapping): int
     {
         // Fix the localization.csv file

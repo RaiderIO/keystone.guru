@@ -47,6 +47,9 @@ class FloorUnionArea extends CacheModel implements HasVerticesInterface, Convert
         'floor',
     ];
 
+    /**
+     * @var array<int, mixed>|null
+     */
     private ?array $cachedVertices = null;
 
     protected function casts(): array
@@ -58,16 +61,25 @@ class FloorUnionArea extends CacheModel implements HasVerticesInterface, Convert
         ];
     }
 
+    /**
+     * @return BelongsTo<MappingVersion, $this>
+     */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /**
+     * @return BelongsTo<Floor, $this>
+     */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
     }
 
+    /**
+     * @return BelongsTo<FloorUnion, $this>
+     */
     public function floorUnion(): BelongsTo
     {
         return $this->belongsTo(FloorUnion::class);

@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed>                   $parameters
      * @return SpecialEvent&SpellAbsorbedInterface
      */
     public static function create(

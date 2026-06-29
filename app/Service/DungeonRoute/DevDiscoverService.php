@@ -14,6 +14,8 @@ class DevDiscoverService extends BaseDiscoverService
 {
     /**
      * Gets a builder that provides a template for popular routes.
+     *
+     * @return Builder<DungeonRoute>
      */
     private function popularBuilder(): Builder
     {
@@ -32,7 +34,7 @@ class DevDiscoverService extends BaseDiscoverService
                 'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
-                ]),
+                ])->with('expansion'),
             ])
             ->without([
                 'faction',
@@ -56,6 +58,8 @@ class DevDiscoverService extends BaseDiscoverService
 
     /**
      * Gets a builder that provides a template for popular routes.
+     *
+     * @return Builder<DungeonRoute>
      */
     private function newBuilder(): Builder
     {
@@ -74,7 +78,7 @@ class DevDiscoverService extends BaseDiscoverService
                 'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
-                ]),
+                ])->with('expansion'),
             ])
             ->without([
                 'faction',
@@ -131,9 +135,11 @@ class DevDiscoverService extends BaseDiscoverService
 
     /**
      * {@inheritDoc}
+     * @return Collection<string, mixed>
      */
     public function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
+        /** @var Collection<string, mixed> */
         return $this->popularBuilder()->get();
     }
 

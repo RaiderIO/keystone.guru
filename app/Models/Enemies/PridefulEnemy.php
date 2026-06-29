@@ -45,16 +45,19 @@ class PridefulEnemy extends Model
         'lng',
     ];
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<Enemy, $this> */
     public function enemy(): BelongsTo
     {
         return $this->belongsTo(Enemy::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);

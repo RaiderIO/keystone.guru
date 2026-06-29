@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Arrow;
 use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -43,6 +44,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     ) {
     }
 
+    /**
+     * @param  Collection<int, ImportWarning> $warnings
+     * @return array<int, mixed>
+     */
     private function extractObjects(Collection $warnings): array
     {
         $result = [];
@@ -69,6 +74,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         return $result;
     }
 
+    /** @return array<int, mixed> */
     private function extractMapIconObjects(): array
     {
         $objects = [];
@@ -100,12 +106,16 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         return $objects;
     }
 
+    /** @return array<int, mixed> */
     private function extractLineObjects(): array
     {
         $objects = [];
 
-        $lines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->merge(
-            $this->dungeonRoute->paths()->with(['floor'])->get(),
+        /** @var Collection<int, Path|Brushline> $brushlines */
+        $brushlines = $this->dungeonRoute->brushlines()->with(['floor'])->get()->toBase();
+
+        $lines = $brushlines->merge(
+            $this->dungeonRoute->paths()->with(['floor'])->get()->toBase(),
         );
 
         foreach ($lines as $line) {
@@ -163,6 +173,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
     /**
      * Export arrows as MDT triangle objects.
+     *
+     * @return array<int, mixed>
      */
     private function extractArrowObjects(): array
     {
@@ -222,8 +234,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             // Compute arrow direction from shaft: atan2(dy, dx) of the last segment
             if ($firstMdtCoordinates !== null && $lastMdtCoordinates !== null) {
-                $dx              = $lastMdtCoordinates['x'] - $firstMdtCoordinates['x'];
-                $dy              = $lastMdtCoordinates['y'] - $firstMdtCoordinates['y'];
+                $dx              = (float)$lastMdtCoordinates['x'] - (float)$firstMdtCoordinates['x'];
+                $dy              = (float)$lastMdtCoordinates['y'] - (float)$firstMdtCoordinates['y'];
                 $mdtLine['t'][1] = atan2($dy, $dx);
             }
 
@@ -235,6 +247,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
     /**
      * For each kill zone, extract its description as an MDT note object.
+     *
+     * @return array<int, mixed>
      */
     private function extractKillZoneDescriptionObjects(): array
     {
@@ -307,6 +321,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     }
 
     /**
+     * @param  Collection<int, ImportWarning> $warnings
+     * @return array<int, mixed>
+     *
      * @throws InvalidArgumentException
      */
     private function extractPulls(MappingVersion $mappingVersion, Collection $warnings): array
@@ -314,13 +331,13 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
         $result = [];
 
         // Get a list of MDT enemies as Keystone.guru enemies - we need this to know how to convert
-        /** @var Collection<Enemy> $mdtEnemies */
+        /** @var Collection<int, Enemy> $mdtEnemies */
         $mdtEnemies = new MDTDungeon($this->cacheService, $this->coordinatesService, $this->dungeonRoute->dungeon)
             ->getClonesAsEnemies($mappingVersion, $this->dungeonRoute->dungeon->floors);
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
-        /** @var Collection<KillZone> $killZones */
+        /** @var Collection<int, KillZone> $killZones */
         $killZones = $this->dungeonRoute->killZones()->get();
         foreach ($killZones as $killZone) {
             $pull = [];
@@ -389,6 +406,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /**
      * Gets the MDT encoded string based on the currently set DungeonRoute.
      *
+     * @param  Collection<int, ImportWarning> $warnings
      * @throws Exception
      */
     public function getEncodedString(Collection $warnings, bool $useCache = true): string
@@ -406,14 +424,16 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 //        $lua = $this->_getLua();
 
                 $affixes = $this->dungeonRoute->affixes()->with(['season'])->get();
+                /** @var AffixGroup|null $firstAffixGroup */
+                $firstAffixGroup = $affixes->first();
 
                 $mdtObject = [
                     //
                     'objects' => $this->extractObjects($warnings),
                     // M+ level
                     'difficulty' => $this->dungeonRoute->level_min,
-                    'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() ? 1 :
-                        Conversion::convertAffixGroupToWeek($affixes->first()),
+                    'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() || $firstAffixGroup === null ? 1 :
+                        Conversion::convertAffixGroupToWeek($firstAffixGroup),
                     'value' => [
                         'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
                         'selection'         => [],

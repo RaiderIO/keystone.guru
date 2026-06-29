@@ -47,6 +47,10 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
     ) {
     }
 
+    /**
+     * @param array<string, mixed>  $tierList
+     * @param array<string, string> $dungeonNameMapping
+     */
     public function getTiersHash(array $tierList, array $dungeonNameMapping): string
     {
         $affixes        = $tierList['encounterTierList']['label'];
@@ -75,6 +79,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     /**
      * {@inheritDoc}
+     * @param  array<string, mixed> $tierListsResponse
      * @throws Exception
      */
     public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull
@@ -117,16 +122,17 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 'last_updated_at' => $lastUpdatedAt,
             ]);
 
-            $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon) {
+            /** @var Collection<string, Dungeon> $dungeonList */
+            $dungeonList = Dungeon::active()->get()->keyBy(static function (Dungeon $dungeon): string {
                 // Translate the name of the dungeon to English (from a key), and then match it
-                $ksgDungeonName = __($dungeon->name, [], 'en_US');
+                $ksgDungeonName = (string)__($dungeon->name, [], 'en_US');
 
                 return self::DUNGEON_NAME_MAPPING[$ksgDungeonName] ?? $ksgDungeonName;
             });
 
             $affixGroupEaseTiersAttributes = [];
             foreach ($tierListsResponse['encounterTierList']['tierLists'][0]['tiers'] as $tierList) {
-                /** @var array{tier: string, entries: array} $tierList */
+                /** @var array{tier: string, entries: array<int, mixed>} $tierList */
                 try {
                     $tier = $tierList['tier'];
                     $this->log->parseTierListParseTierStart($affixGroupString, $tier, count($tierList['entries']));
@@ -193,6 +199,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     /**
      * {@inheritDoc}
+     * @param Collection<int, AffixGroup> $affixGroups
      */
     public function getTiersByAffixGroups(Collection $affixGroups): Collection
     {

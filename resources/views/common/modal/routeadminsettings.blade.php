@@ -3,7 +3,7 @@
 use App\Models\DungeonRoute\DungeonRoute;
 
 /**
- * @var  DungeonRoute|null $dungeonRoute
+ * @var DungeonRoute|null $dungeonRoute
  */
 
 $challengeModeRun = $dungeonRoute->getChallengeModeRun();

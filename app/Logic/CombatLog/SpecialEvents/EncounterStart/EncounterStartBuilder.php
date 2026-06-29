@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 class EncounterStartBuilder implements SpecialEventBuilderInterface
 {
     /**
+     * @param  array<int, mixed>                    $parameters
      * @return SpecialEvent&EncounterStartInterface
      */
     public static function create(

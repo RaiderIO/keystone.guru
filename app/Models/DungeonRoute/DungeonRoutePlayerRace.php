@@ -31,16 +31,19 @@ class DungeonRoutePlayerRace extends Model
 
     public $timestamps = false;
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<CharacterRace, $this> */
     public function characterRace(): BelongsTo
     {
         return $this->belongsTo(CharacterRace::class);
     }
 
+    /** @return BelongsToMany<DungeonRoutePlayerRace, $this> */
     public function races(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');

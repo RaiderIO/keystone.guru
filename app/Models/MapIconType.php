@@ -291,6 +291,7 @@ class MapIconType extends CacheModel
         return ksgAssetImage(sprintf('mapicon/%s.png', $this->key));
     }
 
+    /** @return HasMany<MapIcon, $this> */
     public function mapIcons(): HasMany
     {
         return $this->hasMany(MapIcon::class);

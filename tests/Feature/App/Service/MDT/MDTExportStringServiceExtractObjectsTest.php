@@ -73,6 +73,7 @@ class MDTExportStringServiceExtractObjectsTest extends MDTExportStringServiceTes
                     'description' => sprintf('some string <a href="%s">link text</a>', $url),
                 ]);
 
+                /** @var KillZoneEnemy $killZoneEnemy */
                 $killZoneEnemy = KillZoneEnemy::factory()->create([
                     'kill_zone_id' => $killZone->id,
                     'npc_id'       => $randomEnemy->npc_id,

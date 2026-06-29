@@ -18,6 +18,9 @@ interface WowheadServiceLoggingInterface
 
     public function getSpellDataIconNameNotFound(string $line, string $jsonString): void;
 
+    /**
+     * @param array<string, mixed> $json
+     */
     public function getSpellDataIconNameSpellIdDoesNotMatch(string $line, array $json, int $spellId): void;
 
     public function getSpellDataSpellSchoolNotFound(string $schoolsStr, string $school): void;

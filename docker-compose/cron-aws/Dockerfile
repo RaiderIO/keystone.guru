@@ -13,10 +13,14 @@ COPY etc/cron.d /etc/cron.d
 RUN apt-get update && apt-get install -y awscli
 
 ARG STAGE
+# GIT_REF optionally pins the checkout to a specific tag/commit (e.g. a release tag),
+# falling back to the branch matching STAGE when not provided.
+ARG GIT_REF
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \
     BRANCH=$([ "$STAGE" = "production" ] && echo "master" || echo "development") && \
-    git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
+    REF="${GIT_REF:-$BRANCH}" && \
+    git clone --depth 1 --branch "$REF" https://github.com/RaiderIO/keystone.guru.git . && \
     git rev-list HEAD -1 > version; \
     rm -rf .git
 

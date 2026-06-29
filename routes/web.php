@@ -158,7 +158,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 
     Route::get('patreon-link', new PatreonController()->link(...))->name('patreon.link');
-    Route::get('patreon-oauth', new PatreonController()->oauth_redirect(...))->name('patreon.oauth.redirect');
+    Route::get('patreon-oauth', new PatreonController()->oauthRedirect(...))->name('patreon.oauth.redirect');
     Route::get('dungeonroutes', new SiteController()->dungeonroutes(...));
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');

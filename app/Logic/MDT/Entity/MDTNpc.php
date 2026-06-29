@@ -4,10 +4,19 @@ namespace App\Logic\MDT\Entity;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class MDTNpc implements Arrayable
 {
+    /**
+     * @var array<int, mixed>
+     */
     private array $clones;
-    private int $id             = 0;
+    private int $id = 0;
+    /**
+     * @var array<int, mixed>
+     */
     private array $spells       = [];
     private float $scale        = 0.0;
     private bool $stealthDetect = false;
@@ -21,8 +30,14 @@ class MDTNpc implements Arrayable
     private int $level  = 0;
     private int $health = 0;
     private readonly ?int $healthPercentage;
+    /**
+     * @var array<int, mixed>
+     */
     private array $characteristics = [];
 
+    /**
+     * @param array<string, mixed> $rawMdtNpc
+     */
     public function __construct(private readonly int $index, private array $rawMdtNpc)
     {
         // We need to do this ksort magic because php arrays that we get from Lua are in a random order - this makes it consistent
@@ -76,6 +91,9 @@ class MDTNpc implements Arrayable
         }
     }
 
+    /**
+     * @param array<int|string, mixed> $array
+     */
     private function recur_ksort(&$array): bool
     {
         foreach ($array as &$value) {
@@ -126,11 +144,17 @@ class MDTNpc implements Arrayable
         return $this->index;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRawMdtNpc(): array
     {
         return $this->rawMdtNpc;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getClones(): array
     {
         return $this->clones;
@@ -142,7 +166,7 @@ class MDTNpc implements Arrayable
     }
 
     /**
-     * @return array<int, array>
+     * @return array<int, mixed>
      */
     public function getSpells(): array
     {
@@ -209,11 +233,17 @@ class MDTNpc implements Arrayable
         return $this->healthPercentage;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getCharacteristics(): array
     {
         return $this->characteristics;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

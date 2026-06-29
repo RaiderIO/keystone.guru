@@ -20,7 +20,7 @@
         "map_icon_type_id": 10,
         "lat": -231.8929,
         "lng": 252.5685,
-        "comment": null,
+        "comment": "mapping.map_icons.classic.stratholme.undead_entrance",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 42,
         "lat": -91.464,
         "lng": 224.6576,
-        "comment": "Plagued Insects attack you when you enter. WARNING: this event can respawn, never go here alone!",
+        "comment": "mapping.map_icons.classic.stratholme.plagued_insects",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 42,
         "lat": -77.1121,
         "lng": 164.7868,
-        "comment": "After defeating Ramstein the Gorder, Mindless Undead will swarm your party.",
+        "comment": "mapping.map_icons.classic.stratholme.after_ramstein",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 42,
         "lat": -135.8125,
         "lng": 281.0938,
-        "comment": "Black Guard Swordsmith spawns if you pick up the Blacksmithing plans on the floor.",
+        "comment": "mapping.map_icons.classic.stratholme.black_guard_swordsmith",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

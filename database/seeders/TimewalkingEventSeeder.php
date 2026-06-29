@@ -50,6 +50,9 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
         return [TimewalkingEvent::class];
     }
 
+    /**
+     * @return array<int, string>|null
+     */
     public static function getAffectedEnvironments(): ?array
     {
         // All environments

@@ -7,7 +7,7 @@
         "map_icon_type_id": 21,
         "lat": -81.5313,
         "lng": 184.2168,
-        "comment": "Taxi",
+        "comment": "mapping.map_icons.bfa.mechagon_workshop.taxi",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 21,
         "lat": -219.2494,
         "lng": 121.4999,
-        "comment": "Taxi",
+        "comment": "mapping.map_icons.bfa.mechagon_workshop.taxi",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 21,
         "lat": -81.5313,
         "lng": 184.2168,
-        "comment": "Taxi",
+        "comment": "mapping.map_icons.bfa.mechagon_workshop.taxi",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 21,
         "lat": -219.2494,
         "lng": 121.4999,
-        "comment": "Taxi",
+        "comment": "mapping.map_icons.bfa.mechagon_workshop.taxi",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 21,
         "lat": -81.5313,
         "lng": 184.2168,
-        "comment": "Taxi",
+        "comment": "mapping.map_icons.bfa.mechagon_workshop.taxi",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 21,
         "lat": -219.2494,
         "lng": 121.4999,
-        "comment": "Taxi",
+        "comment": "mapping.map_icons.bfa.mechagon_workshop.taxi",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -65,6 +65,9 @@ class ImageService implements ImageServiceInterface
         return file_exists($targetFilePath);
     }
 
+    /**
+     * @return array<int, array{x: float, y: float}>
+     */
     private function getHexagonPoints(int $width, int $height, int $margin = 0): array
     {
         $width  = $width - ($margin * 2);

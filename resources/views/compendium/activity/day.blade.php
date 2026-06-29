@@ -7,9 +7,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                                           $contextDungeon
- * @var Carbon                                            $date
- * @var Collection<CombatLogNpcEvent|CombatLogSpellEvent> $events
+ * @var Dungeon                                                $contextDungeon
+ * @var Carbon                                                 $date
+ * @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> $events
  */
 ?>
 @extends('layouts.sitepage', [

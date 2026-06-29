@@ -65,10 +65,16 @@ interface CombatantInfoInterface
      */
     public function getTalents(): array;
 
+    /**
+     * @return array<int, int>
+     */
     public function getPvpTalents(): array;
 
     public function getAverageItemLevel(): float;
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getInterestingAuras(): array;
 
     public function getHonorLevel(): int;
@@ -78,6 +84,12 @@ interface CombatantInfoInterface
     public function getRating(): int;
 
     public function getTier(): int;
+
+    /**
+
+
+     * @return array<int, mixed>
+     */
 
     public function getEquippedItems(): array;
 }

@@ -66,6 +66,11 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
         'dungeonSelectId' => $dungeonSelectId
     ])
 
+    @include('common.dungeonroute.create.dungeonstartselect', [
+        'id' => 'dungeon_start_map_icon_id_temporary',
+        'dungeonSelectId' => $dungeonSelectId
+    ])
+
     <div class="col-lg-12">
         <div class="form-group">
             {{ html()->input('submit')->value(__('view_common.forms.createroutetemporary.create_route'))->class('btn btn-info col-md-auto') }}

@@ -10,6 +10,9 @@ use Tests\TestCases\PublicTestCase;
 
 class CombatLogStringParserParseBracketedStringTest extends PublicTestCase
 {
+    /**
+     * @param array<int, string> $expected
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatLogStringParser')]
@@ -20,6 +23,9 @@ class CombatLogStringParserParseBracketedStringTest extends PublicTestCase
         $this->assertSame($expected, CombatLogStringParser::parseBracketedString($input));
     }
 
+    /**
+     * @return array<string, array<string, list<int|list<int|list<int|list<int>>|string>|string>|string>>
+     */
     public static function parseBracketedString_GivenInput_ShouldSplitValuesProperly_DataProvider(): array
     {
         return [

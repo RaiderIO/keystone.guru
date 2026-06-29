@@ -37,6 +37,9 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
         return sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->dungeon->getRouteKey());
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getEnemies(): ?array
     {
         try {
@@ -46,6 +49,9 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getVisibleFloors(): array
     {
         return $this->dungeon->floors->toArray();

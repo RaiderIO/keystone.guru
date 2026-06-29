@@ -70,6 +70,7 @@ class CharacterClassSpecialization extends CacheModel implements CombatLogCriter
         return $this->icon_url;
     }
 
+    /** @return BelongsTo<CharacterClass, $this> */
     public function class(): BelongsTo
     {
         return $this->belongsTo(CharacterClass::class, 'character_class_id');

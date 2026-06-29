@@ -9,7 +9,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 trait GeneratesDungeonRoutes
@@ -42,6 +41,8 @@ trait GeneratesDungeonRoutes
      * Facade dungeons convert random factory coordinates through a facade-to-floor
      * projection that can fail for arbitrary lat/lng values, causing intermittent
      * floor-matching failures during import.
+     *
+     * @param array<string, mixed> $attributes
      */
     protected function getMDTCompatibleNonFacadeDungeonRoute(array $attributes = []): DungeonRoute
     {
@@ -68,6 +69,8 @@ trait GeneratesDungeonRoutes
      * Returns an MDT-compatible route that has at least $enemyCount enemies guaranteed to
      * survive an import round-trip. Filters out teeming-only enemies, MDT placeholders,
      * and seasonally restricted enemies that the import service would skip.
+     *
+     * @param array<string, mixed> $attributes
      */
     protected function getMDTCompatibleDungeonRouteWithSafeEnemies(int $enemyCount = 1, array $attributes = []): DungeonRoute
     {

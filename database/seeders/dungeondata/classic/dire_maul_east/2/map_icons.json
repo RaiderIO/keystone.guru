@@ -33,7 +33,7 @@
         "map_icon_type_id": 42,
         "lat": -70.5732,
         "lng": 205.4734,
-        "comment": "During the fight, Alzzin the Wildshaper breaks the entrance to the cave and Whip Lashers come pouring out to assist him.\n\nAfter defeating Alzzin the Wildshaper, you can use the cave to exit the instance.",
+        "comment": "mapping.map_icons.classic.dire_maul_east.alzzin_cave_exit",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 9,
         "lat": -142.335,
         "lng": 107.6218,
-        "comment": "This \"entrance\" is an exit only.",
+        "comment": "mapping.map_icons.classic.dire_maul_east.exit_only",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

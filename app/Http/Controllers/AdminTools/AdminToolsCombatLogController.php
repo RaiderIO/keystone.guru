@@ -58,7 +58,7 @@ class AdminToolsCombatLogController extends Controller
             ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->chunkById(200, function (Collection $dungeonRoutes) use (&$count) {
                 $dungeonRoutes = $dungeonRoutes->keyBy('id');
-                /** @var Collection<ChallengeModeRun> $challengeModes */
+                /** @var Collection<int, ChallengeModeRun> $challengeModes */
                 $challengeModes = ChallengeModeRun::whereIn('dungeon_route_id', $dungeonRoutes->pluck('id'))
                     ->get();
 

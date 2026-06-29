@@ -45,6 +45,9 @@ final class HealTest extends PublicTestCase
         Assert::assertEquals($expectedIsCritical, $suffix->isCritical());
     }
 
+    /**
+     * @return array<string, list<bool|int|string>>
+     */
     public static function parseEvent_givenSpellHealEvent_returnsCorrectValues_DataProvider(): array
     {
         return [

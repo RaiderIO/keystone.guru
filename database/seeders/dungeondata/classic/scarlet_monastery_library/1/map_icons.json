@@ -20,7 +20,7 @@
         "map_icon_type_id": 93,
         "lat": -99.5778,
         "lng": 155.9358,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_library.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 93,
         "lat": -158.3768,
         "lng": 307.7794,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_library.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 93,
         "lat": -210.499,
         "lng": 323.9329,
-        "comment": "Doan's Strongbox",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_library.doans_strongbox",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 93,
         "lat": -99.5778,
         "lng": 155.9358,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_library.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 93,
         "lat": -158.3768,
         "lng": 307.7794,
-        "comment": "Large Solid Chest",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_library.large_solid_chest",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 93,
         "lat": -210.499,
         "lng": 323.9329,
-        "comment": "Doan's Strongbox",
+        "comment": "mapping.map_icons.classic.scarlet_monastery_library.doans_strongbox",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

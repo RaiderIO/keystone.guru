@@ -4,11 +4,23 @@ namespace App\Service\Reverb;
 
 interface ReverbHttpApiServiceInterface
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function getHealth(): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getChannels(): array;
 
-    public function getChannelInfo($channelName): array;
+    /**
+     * @return array<string, mixed>
+     */
+    public function getChannelInfo(string $channelName): array;
 
-    public function getChannelUsers($channelName): array;
+    /**
+     * @return array<string, mixed>
+     */
+    public function getChannelUsers(string $channelName): array;
 }

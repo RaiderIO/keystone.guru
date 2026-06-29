@@ -27,7 +27,7 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
     /** @var Collection<int, Npc|false> */
     private Collection $npcCache;
 
-    /** @var Collection<string> */
+    /** @var Collection<int, string> */
     private Collection $addedCharacteristics;
 
     /**

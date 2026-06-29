@@ -22,7 +22,7 @@ return new class extends Migration {
             '
             UPDATE `dungeon_speedrun_required_npcs` SET mode = :mode
             ',
-            ['mode' => Dungeon::DIFFICULTY_25_MAN],
+            ['mode' => Dungeon::DIFFICULTY_ALL[Dungeon::DIFFICULTY_25_MAN]],
         );
     }
 

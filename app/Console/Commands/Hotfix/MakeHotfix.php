@@ -15,7 +15,8 @@ class MakeHotfix extends Command
      *
      * @var string
      */
-    protected $signature = 'make:hotfix {version? : The version to create a hotfix for}';
+    protected $signature = 'make:hotfix {version? : The version to create a hotfix for}
+                                        {--file= : Optionally create a hotfix for a single file instead of all changed files}';
 
     /**
      * The console command description.
@@ -44,8 +45,14 @@ class MakeHotfix extends Command
         $this->info("Creating hotfix for release: {$release->version}");
 
         try {
-            // Get changed files from Git
-            $changedFiles = $this->getChangedFiles();
+            $file = $this->option('file');
+
+            if ($file !== null) {
+                $changedFiles = $this->getSingleFile($file);
+            } else {
+                // Get changed files from Git
+                $changedFiles = $this->getChangedFiles();
+            }
 
             if (empty($changedFiles)) {
                 $this->warn('No changed files found!');
@@ -72,9 +79,24 @@ class MakeHotfix extends Command
     }
 
     /**
+     * Get a single file to create a hotfix for, validating that it exists.
+     *
+     * @return array<int, string>
+     * @throws Exception
+     */
+    private function getSingleFile(string $file): array
+    {
+        if (!file_exists(base_path($file))) {
+            throw new Exception("File not found: {$file}");
+        }
+
+        return [$file];
+    }
+
+    /**
      * Get the list of changed files from Git
      *
-     * @return array
+     * @return array<int, string>
      * @throws Exception
      */
     private function getChangedFiles(): array
@@ -95,9 +117,7 @@ class MakeHotfix extends Command
     /**
      * Upload files to S3
      *
-     * @param  array     $files
-     * @param  string    $version
-     * @return void
+     * @param  array<int, string> $files
      * @throws Exception
      */
     private function uploadFilesToS3(array $files, string $version): void

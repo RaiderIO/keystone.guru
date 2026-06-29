@@ -3,7 +3,7 @@
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<string> $features
+ * @var Collection<int, string> $features
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.features.list.title')])

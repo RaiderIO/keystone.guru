@@ -202,6 +202,9 @@ class Repository extends Command
         return str_replace($modelNamespace, '', implode('\\', $modelClassParts));
     }
 
+    /**
+     * @param array<string, string> $replace
+     */
     private function getTemplate(string $template, array $replace): string
     {
         $template = file_get_contents(sprintf('%s/Templates/%s.txt', __DIR__, $template));

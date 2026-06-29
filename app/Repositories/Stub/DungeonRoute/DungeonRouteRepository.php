@@ -5,6 +5,8 @@ namespace App\Repositories\Stub\DungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
+use App\Repositories\Database\DungeonRoute\Dtos\SimilarDungeonRoute;
+use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
@@ -22,22 +24,34 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
         // Just do something that is mostly unique
         return md5(uniqid());
     }
-
+    /**
+     * @param  Collection<int, DungeonRoute>|null $dungeonRoutes
+     * @return Collection<int, DungeonRoute>
+     */
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
     {
         return $dungeonRoutes ?? collect();
     }
 
+    /**
+     * @return Collection<string, Collection<int, WeeklyRoute>>
+     */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
         return collect();
     }
 
+    /**
+     * @return Collection<int, SimilarDungeonRoute>
+     */
     public function findSimilarRoutes(DungeonRoute $dungeonRoute, int $limit = 5): Collection
     {
         return collect();
     }
 
+    /**
+     * @return Collection<int, DungeonRoute>
+     */
     public function findRoutes(DungeonRouteSearchFilter $filter): Collection
     {
         return collect();

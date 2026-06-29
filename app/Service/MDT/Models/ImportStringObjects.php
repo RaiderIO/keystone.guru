@@ -9,14 +9,32 @@ use Illuminate\Support\Collection;
 
 class ImportStringObjects
 {
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $lines;
 
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $paths;
 
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $arrows;
 
+    /**
+     * @var Collection<int, mixed>
+     */
     private readonly Collection $mapIcons;
 
+    /**
+     * @param Collection<int, ImportWarning> $warnings
+     * @param Collection<int, ImportError>   $errors
+     * @param Collection<int, mixed>         $killZoneAttributes
+     * @param array<int, mixed>              $mdtObjects
+     */
     public function __construct(
         private readonly Collection $warnings,
         private readonly Collection $errors,
@@ -31,7 +49,7 @@ class ImportStringObjects
     }
 
     /**
-     * @return Collection<ImportWarning>
+     * @return Collection<int, ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -39,7 +57,7 @@ class ImportStringObjects
     }
 
     /**
-     * @return Collection<ImportError>
+     * @return Collection<int, ImportError>
      */
     public function getErrors(): Collection
     {
@@ -51,31 +69,49 @@ class ImportStringObjects
         return $this->dungeon;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getKillZoneAttributes(): Collection
     {
         return $this->killZoneAttributes;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getMdtObjects(): array
     {
         return $this->mdtObjects;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getLines(): Collection
     {
         return $this->lines;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getPaths(): Collection
     {
         return $this->paths;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getArrows(): Collection
     {
         return $this->arrows;
     }
 
+    /**
+     * @return Collection<int, mixed>
+     */
     public function getMapIcons(): Collection
     {
         return $this->mapIcons;

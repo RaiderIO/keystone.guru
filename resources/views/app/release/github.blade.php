@@ -4,7 +4,8 @@ use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 
 /**
- * @var Release $model
+ * @var Release                                                          $model
+ * @var \Illuminate\Support\Collection<int, \App\Models\ReleaseChangelogChange> $changes
  **/
 ?>
 @isset($model->changelog->description)
@@ -12,7 +13,7 @@ use App\Models\ReleaseChangelogCategory;
 
 @endisset
 <?php // @formatter:off ?>
-@foreach($model->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $changes)
+@foreach($changes->groupBy('release_changelog_category_id') as $categoryId => $changes)
 {{ __(ReleaseChangelogCategory::findOrFail($categoryId)->name) }}:
 @foreach($changes as $change)
   * @isset($change->ticket_id)#{{$change->ticket_id}}@endisset {!! $change->change !!}

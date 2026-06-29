@@ -70,7 +70,10 @@ class ProcessCombatLogFromS3 implements ShouldQueue
         }
     }
 
-    public function writeResourceToDisk($resource, $destination): int|false
+    /**
+     * @param resource $resource
+     */
+    public function writeResourceToDisk($resource, string $destination): int|false
     {
         return file_put_contents($destination, $resource);
     }

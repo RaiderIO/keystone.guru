@@ -5,6 +5,9 @@ namespace App\Logic\Structs;
 use App\Models\Floor\Floor;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class IngameXY implements Arrayable
 {
     public function __construct(private float $x = 0, private float $y = 0, private ?Floor $floor = null)
@@ -49,6 +52,9 @@ class IngameXY implements Arrayable
         return $this;
     }
 
+    /**
+     * @return array<string, float>
+     */
     public function toArray(): array
     {
         return [
@@ -57,6 +63,9 @@ class IngameXY implements Arrayable
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArrayWithFloor(): array
     {
         return [
@@ -70,6 +79,9 @@ class IngameXY implements Arrayable
     {
     }
 
+    /**
+     * @param array<string, float> $ingameXY
+     */
     public static function fromArray(array $ingameXY, ?Floor $floor): IngameXY
     {
         return new IngameXY($ingameXY['x'], $ingameXY['y'], $floor);

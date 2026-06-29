@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
+use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use Database\Seeders\DatabaseSeeder;
 
 class DungeonFloorsRelationParser implements RelationParserInterface
@@ -15,11 +16,19 @@ class DungeonFloorsRelationParser implements RelationParserInterface
         return $modelClassName === Dungeon::class;
     }
 
+    /**
+     * @param array<string, mixed> $value
+     */
     public function canParseRelation(string $name, array $value): bool
     {
         return $name === 'floors';
     }
 
+    /**
+     * @param  array<string, mixed> $modelData
+     * @param  array<string, mixed> $value
+     * @return array<string, mixed>
+     */
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
         foreach ($value as $floor) {
@@ -29,25 +38,22 @@ class DungeonFloorsRelationParser implements RelationParserInterface
                 FloorCoupling::from(DatabaseSeeder::getTempTableName(FloorCoupling::class))->insert($floorcoupling);
             }
 
-            foreach ($floor['dungeon_speedrun_required_npcs10_man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
-                if (!isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
-                    $dungeonSpeedrunRequiredNpc['difficulty'] = Dungeon::DIFFICULTY_25_MAN;
+            foreach ($floor['dungeon_speedrun_required_npcs'] ?? [] as $dungeonSpeedrunRequiredNpc) {
+                $npcEntries = $dungeonSpeedrunRequiredNpc['dungeon_speedrun_required_npc_npcs'] ?? [];
+                unset($dungeonSpeedrunRequiredNpc['dungeon_speedrun_required_npc_npcs']);
+
+                DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))
+                    ->insert($dungeonSpeedrunRequiredNpc);
+
+                foreach ($npcEntries as $npcEntry) {
+                    $npcEntry['dungeon_speedrun_required_npc_id'] = $dungeonSpeedrunRequiredNpc['id'];
+                    DungeonSpeedrunRequiredNpcNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpcNpc::class))
+                        ->insert($npcEntry);
                 }
-
-                DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))->insert($dungeonSpeedrunRequiredNpc);
-            }
-
-            foreach ($floor['dungeon_speedrun_required_npcs25_man'] ?? [] as $dungeonSpeedrunRequiredNpc) {
-                if (!isset($dungeonSpeedrunRequiredNpc['difficulty'])) {
-                    $dungeonSpeedrunRequiredNpc['difficulty'] = Dungeon::DIFFICULTY_25_MAN;
-                }
-
-                DungeonSpeedrunRequiredNpc::from(DatabaseSeeder::getTempTableName(DungeonSpeedrunRequiredNpc::class))->insert($dungeonSpeedrunRequiredNpc);
             }
 
             unset($floor['floorcouplings']);
-            unset($floor['dungeon_speedrun_required_npcs10_man']);
-            unset($floor['dungeon_speedrun_required_npcs25_man']);
+            unset($floor['dungeon_speedrun_required_npcs']);
 
             Floor::from(DatabaseSeeder::getTempTableName(Floor::class))->insert($floor);
         }

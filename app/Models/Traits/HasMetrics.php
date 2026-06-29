@@ -37,12 +37,14 @@ trait HasMetrics
         return $metricAggregation->value;
     }
 
+    /** @return HasMany<Metric, $this> */
     public function metrics(): HasMany
     {
         return $this->hasMany(Metric::class, 'model_id')
             ->where('model_class', $this::class);
     }
 
+    /** @return HasMany<MetricAggregation, $this> */
     public function metricAggregations(): HasMany
     {
         return $this->hasMany(MetricAggregation::class, 'model_id')

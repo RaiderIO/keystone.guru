@@ -8,6 +8,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogParsingCriterion;
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
+use App\Models\Interfaces\CombatLogCriterionModelInterface;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogParsingCriteriaServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogParsingCriterionCheck;
@@ -17,7 +18,6 @@ use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -92,8 +92,10 @@ class PollCombatLogRunsCommand extends Command
             return self::SUCCESS;
         }
 
+        /** @var Collection<int|string, Dungeon> $dungeonsByChallengeModeId */
         $dungeonsByChallengeModeId = $allModelsByClass[Dungeon::class]->keyBy('challenge_mode_id');
-        $allSpecsByBlizzardId      = $allModelsByClass[CharacterClassSpecialization::class]->keyBy('specialization_id');
+        /** @var Collection<int|string, CharacterClassSpecialization> $allSpecsByBlizzardId */
+        $allSpecsByBlizzardId = $allModelsByClass[CharacterClassSpecialization::class]->keyBy('specialization_id');
 
         $totalDispatched       = 0;
         $totalSkippedParsed    = 0;
@@ -144,8 +146,10 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * @param  array<int, true> $existingRunIds
-     * @return bool             Whether the run was dispatched (false means the dungeon was not found)
+     * @param  array<int, true>                                     $existingRunIds
+     * @param  Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
+     * @param  Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
+     * @return bool                                                 Whether the run was dispatched (false means the dungeon was not found)
      */
     private function dispatchRun(
         SearchAdvancedRun $run,
@@ -178,24 +182,25 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
-     * @param  class-string             $modelClass
-     * @param  Model                    $model
-     * @param  Season                   $season
-     * @param  Carbon                   $completedAtFrom
-     * @param  int                      $mythicLevelMin
-     * @param  int                      $limit
+     * @param  class-string                     $modelClass
+     * @param  CombatLogCriterionModelInterface $model
+     * @param  Season                           $season
+     * @param  Carbon                           $completedAtFrom
+     * @param  int                              $mythicLevelMin
+     * @param  int                              $limit
      * @return SearchAdvancedRunsFilter
      */
     private function buildFilterForCriterion(
-        string $modelClass,
-        Model  $model,
-        Season $season,
-        Carbon $completedAtFrom,
-        int    $mythicLevelMin,
-        int    $limit,
+        string                           $modelClass,
+        CombatLogCriterionModelInterface $model,
+        Season                           $season,
+        Carbon                           $completedAtFrom,
+        int                              $mythicLevelMin,
+        int                              $limit,
     ): SearchAdvancedRunsFilter {
-        return match ($modelClass) {
-            Dungeon::class => new SearchAdvancedRunsFilter(
+        if ($modelClass === Dungeon::class) {
+            /** @var Dungeon $model */
+            return new SearchAdvancedRunsFilter(
                 dungeon:         $model,
                 season:          $season,
                 specs:           collect(),
@@ -204,25 +209,32 @@ class PollCombatLogRunsCommand extends Command
                 mythicLevelMin:  $mythicLevelMin,
                 limit:           $limit,
                 offset:          0,
-            ),
+            );
+        }
+
+        if ($modelClass === CharacterClassSpecialization::class) {
             /** @var CharacterClassSpecialization $model */
-            CharacterClassSpecialization::class => new SearchAdvancedRunsFilter(
+            /** @var Collection<int, CharacterClassSpecialization> $specs */
+            $specs = collect([$model]);
+
+            return new SearchAdvancedRunsFilter(
                 dungeon:         null,
                 season:          $season,
-                specs:           collect([$model]),
+                specs:           $specs,
                 completedAtFrom: $completedAtFrom,
                 completedAtTo:   null,
                 mythicLevelMin:  $mythicLevelMin,
                 limit:           $limit,
                 offset:          0,
-            ),
-            default => throw new \UnexpectedValueException(sprintf('Unknown model class: %s', $modelClass)),
-        };
+            );
+        }
+
+        throw new \UnexpectedValueException(sprintf('Unknown model class: %s', $modelClass));
     }
 
     /**
-     * @param  int[]                                         $memberSpecIds
-     * @param  Collection<int, CharacterClassSpecialization> $specsByBlizzardId
+     * @param  int[]                                                $memberSpecIds
+     * @param  Collection<int|string, CharacterClassSpecialization> $specsByBlizzardId
      * @return CombatLogParsingCriterionCheck[]
      */
     private function buildSpecCriteria(array $memberSpecIds, Collection $specsByBlizzardId): array
@@ -230,6 +242,7 @@ class PollCombatLogRunsCommand extends Command
         $criteria = [];
 
         foreach ($memberSpecIds as $blizzardSpecId) {
+            /** @var CharacterClassSpecialization|null $spec */
             $spec = $specsByBlizzardId->get($blizzardSpecId);
 
             if ($spec !== null) {

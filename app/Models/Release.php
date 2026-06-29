@@ -26,6 +26,8 @@ use Throwable;
  * @property Carbon $created_at
  *
  * @property string $github_body
+ * @property string $github_full_body
+ * @property string $github_pr_body
  * @property string $discord_body
  * @property string $reddit_body
  *
@@ -55,6 +57,8 @@ class Release extends CacheModel
 
     protected $appends = [
         'github_body',
+        'github_full_body',
+        'github_pr_body',
         'discord_body',
         'reddit_body',
     ];
@@ -63,6 +67,8 @@ class Release extends CacheModel
         'reddit_body',
         'discord_body',
         'github_body',
+        'github_full_body',
+        'github_pr_body',
     ];
 
     /**
@@ -81,6 +87,7 @@ class Release extends CacheModel
         return 'version';
     }
 
+    /** @return HasOne<ReleaseChangelog, $this> */
     public function changelog(): HasOne
     {
         return $this->hasOne(ReleaseChangelog::class);
@@ -91,7 +98,35 @@ class Release extends CacheModel
      */
     public function getGithubBodyAttribute(): string
     {
-        return trim(view('app.release.github', ['model' => $this])->render());
+        return trim(view('app.release.github', [
+            'model'   => $this,
+            'changes' => $this->changelog->changes()->public()->get(),
+        ])->render());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getGithubFullBodyAttribute(): string
+    {
+        return trim(view('app.release.github', [
+            'model'   => $this,
+            'changes' => $this->changelog->changes,
+        ])->render());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getGithubPrBodyAttribute(): string
+    {
+        $body    = $this->github_full_body;
+        $closers = $this->changelog->changes
+            ->filter(static fn(ReleaseChangelogChange $c) => !empty($c->ticket_id))
+            ->map(static fn(ReleaseChangelogChange $c) => sprintf('Closes #%d', $c->ticket_id))
+            ->join("\n");
+
+        return empty($closers) ? $body : sprintf("%s\n\n%s", $body, $closers);
     }
 
     /**
@@ -148,6 +183,7 @@ class Release extends CacheModel
         );
     }
 
+    /** @return array<int, array<string, mixed>> */
     public function getDiscordEmbeds(): array
     {
         //        $result = [];
@@ -239,6 +275,7 @@ class Release extends CacheModel
         return $this->id === 1 || $this->getPreviousRelease()->getSymVer()->patch < $this->getSymVer()->patch;
     }
 
+    /** @param array<string, mixed> $params */
     private function publicRoute(string $name, array $params = [], string $host = 'https://keystone.guru'): string
     {
         return rtrim($host, '/') . route($name, $params, false);

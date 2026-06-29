@@ -17,10 +17,16 @@ return [
             'ad_free_giveaway_description_available'     => '感谢您订阅Keystone.guru的:patreon！您可以将:current次无广告体验赠送给Keystone.guru的任何团队成员。',
         ],
         'overview' => [
-            'title' => '概览',
+            'title'   => '概览',
+            'routes'  => '',
+            'members' => '',
         ],
         'routepublishing' => [
-            'title' => '路线发布',
+            'title'            => '路线发布',
+            'description'      => '',
+            'enabled'          => '',
+            'timezone_warning' => '',
+            'profile_link'     => '',
         ],
         'routes' => [
             'title'                  => '路线列表',

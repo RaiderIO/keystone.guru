@@ -39,11 +39,13 @@ class NpcEnemyForces extends CacheModel implements MappingModelCloneableInterfac
         'enemy_forces_teeming',
     ];
 
+    /** @return BelongsTo<MappingVersion, $this> */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /** @return BelongsTo<Npc, $this> */
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

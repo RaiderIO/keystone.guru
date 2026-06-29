@@ -4,7 +4,7 @@ use App\Models\Tags\Tag;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Tag> $tags
+ * @var Collection<int, Tag> $tags
  **/
 
 $edit ??= false;

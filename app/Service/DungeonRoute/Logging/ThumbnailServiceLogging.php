@@ -26,7 +26,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         ?int   $viewportHeight,
         ?int   $imageWidth,
         ?int   $imageHeight,
-        ?int   $zoomLevel,
+        ?float $zoomLevel,
         ?int   $quality,
     ): void {
         $this->start(__METHOD__, get_defined_vars());
@@ -45,7 +45,7 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         ?int   $viewportHeight,
         ?int   $imageWidth,
         ?int   $imageHeight,
-        ?int   $zoomLevel,
+        ?float $zoomLevel,
         ?int   $quality,
     ): void {
         $this->start(__METHOD__, get_defined_vars());

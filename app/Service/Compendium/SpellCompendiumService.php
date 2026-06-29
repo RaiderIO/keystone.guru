@@ -38,7 +38,7 @@ class SpellCompendiumService implements SpellCompendiumServiceInterface
         }
 
         /** @var Collection<int, CombatLogNpcEvent|CombatLogSpellEvent> */
-        return $spellEvents->merge($npcEvents)
+        return $spellEvents->merge($npcEvents) // @phpstan-ignore argument.type (intentional merge of related combat log event collections sharing the same DB table)
             ->sortByDesc('created_at')
             ->take(50)
             ->values();

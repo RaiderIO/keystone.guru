@@ -45,11 +45,13 @@ class MountableArea extends CacheModel implements HasVerticesInterface, Converts
         'floor',
     ];
 
+    /** @return BelongsTo<MappingVersion, $this> */
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
     }
 
+    /** @return BelongsTo<Floor, $this> */
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);

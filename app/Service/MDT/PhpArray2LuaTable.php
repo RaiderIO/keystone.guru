@@ -24,6 +24,9 @@ class PhpArray2LuaTable
 
     private const int INDENT_SIZE = 2;
 
+    /**
+     * @param array<int|string, mixed> $contents
+     */
     public function toLuaTableString(string $tableName, array $contents): string
     {
         return sprintf(
@@ -35,6 +38,10 @@ class PhpArray2LuaTable
         );
     }
 
+    /**
+     * @param  array<int|string, mixed> $array
+     * @return array<int, string>
+     */
     private function arrayToLuaTokens(array $array, int $indent = 0): array
     {
         $indent++;
@@ -67,6 +74,10 @@ class PhpArray2LuaTable
         return $tokens;
     }
 
+    /**
+     * @param  int|string         $key
+     * @return array<int, string>
+     */
     private function renderArrayKey($key, int $indent): array
     {
         return [
@@ -77,6 +88,10 @@ class PhpArray2LuaTable
         ];
     }
 
+    /**
+     * @param  mixed              $value
+     * @return array<int, string>
+     */
     private function renderValue($value, int $indent): array
     {
         if (is_string($value)) {

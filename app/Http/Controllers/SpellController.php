@@ -140,6 +140,9 @@ class SpellController extends Controller
         return view('admin.spell.list', ['models' => Spell::all()]);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getEditViewParams(): array
     {
         return [

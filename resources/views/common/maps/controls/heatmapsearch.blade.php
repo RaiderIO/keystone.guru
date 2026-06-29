@@ -16,33 +16,33 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool                                     $showAds
- * @var bool                                     $showSidebar
- * @var bool|null                                $showDataSourceSnackbar
- * @var Dungeon                                  $dungeon
- * @var MappingVersion                           $mappingVersion
- * @var Season                                   $season
- * @var bool                                     $embed
- * @var string                                   $embedStyle
- * @var bool                                     $isMobile
- * @var integer|null                             $defaultState
- * @var bool                                     $hideOnMove
- * @var bool                                     $showAllEnabled
- * @var Collection<AffixGroup>                   $allAffixGroupsByActiveExpansion
- * @var Collection<Affix>                        $featuredAffixesByActiveExpansion
- * @var Collection                               $selectableSpellsByCategory
- * @var int                                      $keyLevelMin
- * @var int                                      $keyLevelMax
- * @var int                                      $itemLevelMin
- * @var int                                      $itemLevelMax
- * @var int                                      $playerDeathsMin
- * @var int                                      $playerDeathsMax
- * @var int                                      $minSamplesRequiredMin
- * @var int                                      $minSamplesRequiredMax
- * @var Collection<WeeklyAffixGroup>             $seasonWeeklyAffixGroups
- * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
- * @var Collection<CharacterClass>               $characterClasses
- * @var Collection<GameServerRegion>             $allRegions
+ * @var bool                                            $showAds
+ * @var bool                                            $showSidebar
+ * @var bool|null                                       $showDataSourceSnackbar
+ * @var Dungeon                                         $dungeon
+ * @var MappingVersion                                  $mappingVersion
+ * @var Season                                          $season
+ * @var bool                                            $embed
+ * @var string                                          $embedStyle
+ * @var bool                                            $isMobile
+ * @var integer|null                                    $defaultState
+ * @var bool                                            $hideOnMove
+ * @var bool                                            $showAllEnabled
+ * @var Collection<string, Collection<int, AffixGroup>> $allAffixGroupsByActiveExpansion
+ * @var Collection<string, Collection<int, Affix>>      $featuredAffixesByActiveExpansion
+ * @var Collection<string, Collection<int, Spell>>      $selectableSpellsByCategory
+ * @var int                                             $keyLevelMin
+ * @var int                                             $keyLevelMax
+ * @var int                                             $itemLevelMin
+ * @var int                                             $itemLevelMax
+ * @var int                                             $playerDeathsMin
+ * @var int                                             $playerDeathsMax
+ * @var int                                             $minSamplesRequiredMin
+ * @var int                                             $minSamplesRequiredMax
+ * @var Collection<int, WeeklyAffixGroup>               $seasonWeeklyAffixGroups
+ * @var Collection<int, CharacterClassSpecialization>   $characterClassSpecializations
+ * @var Collection<int, CharacterClass>                 $characterClasses
+ * @var Collection<int, GameServerRegion>               $allRegions
  */
 
 // By default, show it if we're not mobile, but allow overrides
@@ -54,9 +54,9 @@ $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
-/** @var Collection<AffixGroup> $affixGroups */
+/** @var Collection<int, AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
-/** @var Collection<Affix> $featuredAffixes */
+/** @var Collection<int, Affix> $featuredAffixes */
 $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->shortname);
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
@@ -68,8 +68,8 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     return $a->id <=> $b->id;
 });
 
-$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization) {
-    return __($characterClassSpecialization->class->name);
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization): string {
+    return (string) __($characterClassSpecialization->class->name);
 })->mapWithKeys(function (Collection $specializations, string $className) {
     return [
         $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {

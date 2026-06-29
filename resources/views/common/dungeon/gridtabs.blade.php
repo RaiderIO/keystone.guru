@@ -7,16 +7,16 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion           $currentUserGameVersion
- * @var GameVersion|null      $gameVersion
- * @var Season|null           $nextSeason
- * @var Season                $currentSeason
- * @var Collection<Expansion> $activeExpansions
- * @var string                $id
- * @var string                $tabsId
- * @var bool                  $selectable
- * @var callable|null         $subtextFn
- * @var callable|null         $filterFn
+ * @var GameVersion                $currentUserGameVersion
+ * @var GameVersion|null           $gameVersion
+ * @var Season|null                $nextSeason
+ * @var Season                     $currentSeason
+ * @var Collection<int, Expansion> $activeExpansions
+ * @var string                     $id
+ * @var string                     $tabsId
+ * @var bool                       $selectable
+ * @var callable|null              $subtextFn
+ * @var callable|null              $filterFn
  */
 
 $gameVersion           ??= $currentUserGameVersion;

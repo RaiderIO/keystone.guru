@@ -130,11 +130,11 @@ class ProfileController extends Controller
 
                     // If it's a route edit page
                     if (str_contains((string)$name, 'route-edit')) {
-                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
+                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', (string)$name);
                         /** @var DungeonRoute $context */
                         $context = DungeonRoute::where('public_key', $routeKey)->first();
                     } elseif (str_contains((string)$name, 'live-session')) {
-                        $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
+                        $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', (string)$name);
                         /** @var LiveSession $context */
                         $context = LiveSession::where('public_key', $routeKey)->first();
                     }

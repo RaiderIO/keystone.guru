@@ -41,7 +41,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         EnemyRepositoryInterface         $enemyRepository,
         NpcRepositoryInterface           $npcRepository,
         DungeonRoute                     $dungeonRoute,
-        /** @var Collection<BaseResultEvent> */
+        /** @var Collection<int, BaseResultEvent> */
         private readonly Collection      $resultEvents,
     ) {
         $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);

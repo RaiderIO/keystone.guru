@@ -43,7 +43,7 @@ class WowheadWebhookController extends Controller
 
         $spellDataResult = $wowheadService->getSpellData(
             $gameVersion = $retail,
-            $spellId,
+            (int)$spellId,
             $validated['html'],
         );
 

@@ -3,7 +3,7 @@
 /**
  * @return float[]|int[]
  */
-function hsv2rgb($h, $s, $v): array
+function hsv2rgb(float $h, float $s, float $v): array
 {
     $f = static function ($n, $k = null) use ($h, $s, $v) {
         if ($k === null) {
@@ -20,7 +20,8 @@ function hsv2rgb($h, $s, $v): array
     ];
 }
 
-function rgb2hsv($r, $g, $b): array
+/** @return array<int, float> */
+function rgb2hsv(float $r, float $g, float $b): array
 {
     $v = max($r, $g, $b);
     $n = $v - min($r, $g, $b);
@@ -137,11 +138,11 @@ $GLOBALS['clrLkp'] = [
 ];
 
 /**
- * @return array|float[]|int[]
+ * @return array<int, int>
  *
  * @throws Exception
  */
-function hex2rgb($hex): array
+function hex2rgb(string $hex): array
 {
     $parts = str_split(substr((string)$hex, 1), 2);
     if (!$parts || count($parts) < 3) {
@@ -152,9 +153,9 @@ function hex2rgb($hex): array
 }
 
 /**
- * @return mixed|null
+ * @return string|null
  */
-function hsv2name($h, $s, $v)
+function hsv2name(float $h, float $s, float $v): ?string
 {
     $result = null;
     foreach ($GLOBALS['clrLkp'] as [$clr, $val]) {
@@ -168,11 +169,11 @@ function hsv2name($h, $s, $v)
 }
 
 /**
- * @return mixed
+ * @return string|null
  *
  * @throws Exception
  */
-function hex2name($hex)
+function hex2name(string $hex): ?string
 {
     $rgb = hex2rgb($hex);
     $hsv = rgb2hsv(...$rgb);
@@ -192,7 +193,7 @@ function hex2name($hex)
 /**
  * @return string
  */
-function pad($v)
+function pad(string $v): string
 {
     return substr($v . '0', 0, 2);
 }
@@ -200,7 +201,7 @@ function pad($v)
 /**
  * @return string
  */
-function rgb2hex($r, $g, $b)
+function rgb2hex(float $r, float $g, float $b): string
 {
     return sprintf('#%02x%02x%02x', round($r), round($g), round($b));
 }
@@ -231,6 +232,7 @@ function randomHexColorNoMapColors(): string
     return $result;
 }
 
+/** @param array<int, array{float, string}> $handlers */
 function pickHexFromHandlers(array $handlers, float $weight): string
 {
     assert(count($handlers) > 1, 'Handlers.length <= 1!');

@@ -168,6 +168,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         try {
             $this->log->getGeotileGridAggregationStart($filters->toArray());
 
+            /** @var array<int, array<int|string, int>> $gridResult */
             $gridResult = [];
 
             // #2641
@@ -292,7 +293,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     }
 
     /**
-     * @return Collection<int>
+     * @return Collection<int, int>
      */
     public function getRunCountPerDungeon(): Collection
     {
@@ -321,7 +322,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 //            }
             // </editor-fold>
 
-            /** @var Collection<Dungeon> $allDungeons */
+            /** @var Collection<int, Dungeon> $allDungeons */
             $allDungeons = Dungeon::whereNotNull('challenge_mode_id')
                 ->get()
                 ->keyBy('challenge_mode_id');
@@ -421,11 +422,11 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     }
 
     /**
-     * @param  Season                    $season
-     * @param  CombatLogEventEventType   $type
-     * @param  int                       $runCount
-     * @param  int                       $eventsPerRun
-     * @return Collection
+     * @param  Season                          $season
+     * @param  CombatLogEventEventType         $type
+     * @param  int                             $runCount
+     * @param  int                             $eventsPerRun
+     * @return Collection<int, CombatLogEvent>
      * @throws OpenSearchCreateException
      */
     public function generateCombatLogEvents(

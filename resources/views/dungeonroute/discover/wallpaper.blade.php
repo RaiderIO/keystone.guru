@@ -8,8 +8,8 @@ use App\Models\GameVersion\GameVersion;
 // ^ important - it BREAKS the display of wallpapers when the contents of url('') get a new line..
 /**
  * @var GameVersion|null $gameVersion
- * @var Expansion|null $expansion
- * @var Dungeon|null $dungeon
+ * @var Expansion|null   $expansion
+ * @var Dungeon|null     $dungeon
  */
 
 $wallpaperUrl = null;

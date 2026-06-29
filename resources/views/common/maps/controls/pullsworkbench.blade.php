@@ -4,7 +4,7 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 // map_killzonessidebar_killzone_description_modal_supported_html_tags
-/** @var Collection $spellsSelect */
+/** @var Collection<string, Collection<int, Spell>> $spellsSelect */
 
 $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string $categoryName) => [
     __($categoryName) => $spells->mapWithKeys(

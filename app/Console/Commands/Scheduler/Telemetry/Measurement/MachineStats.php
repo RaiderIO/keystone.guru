@@ -58,6 +58,7 @@ class MachineStats extends Measurement
 
     /**
      * @see https://github.com/dimitar-kunchev/proc-meminfo/blob/master/ProcMeminfo.php
+     * @return array<string, int>
      */
     public function getMemStats(): array
     {

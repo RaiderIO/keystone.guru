@@ -8,25 +8,26 @@ use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @method Npc             create(array $attributes)
- * @method Npc|null        find(int $id, array|string $columns = ['*'])
- * @method Npc             findOrFail(int $id, array|string $columns = ['*'])
- * @method Npc             findOrNew(int $id, array|string $columns = ['*'])
- * @method bool            save(Npc $model)
- * @method bool            update(Npc $model, array $attributes = [], array $options = [])
- * @method bool            delete(Npc $model)
- * @method Collection<Npc> all()
- * @method bool            exists(array $columns)
+ * @method Npc                  create(array<string, mixed> $attributes)
+ * @method Npc|null             find(int $id, array<int, string>|string $columns = ['*'])
+ * @method Npc                  findOrFail(int $id, array<int, string>|string $columns = ['*'])
+ * @method Npc                  findOrNew(int $id, array<int, string>|string $columns = ['*'])
+ * @method bool                 save(Npc $model)
+ * @method bool                 update(Npc $model, array<string, mixed> $attributes = [], array<string, mixed> $options = [])
+ * @method bool                 delete(Npc $model)
+ * @method Collection<int, Npc> all()
+ * @method bool                 exists(array<string, mixed> $columns)
  */
 interface NpcRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * @return Collection<Npc>
+     * @return Collection<int, Npc>
      */
     public function getInUseNpcs(MappingVersion $mappingVersion): Collection;
 
     /**
-     * @return Collection<int>
+     * @param  Collection<int, Npc>|null $inUseNpcs
+     * @return Collection<int, int>
      */
     public function getInUseNpcIds(MappingVersion $mappingVersion, ?Collection $inUseNpcs = null): Collection;
 }

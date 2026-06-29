@@ -7,7 +7,7 @@
         "map_icon_type_id": 6,
         "lat": -127.0026,
         "lng": 228.7697,
-        "comment": "Unlocks after defeating Wolf Master Nandos.",
+        "comment": "mapping.map_icons.classic.shadowfang_keep.unlocks_after_nandos",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

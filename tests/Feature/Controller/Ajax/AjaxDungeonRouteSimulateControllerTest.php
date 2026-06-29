@@ -62,6 +62,9 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
         }
     }
 
+    /**
+     * @param array<string, mixed> $override
+     */
     #[Test]
     #[DataProvider('simulate_givenInvalidField_returnsUnprocessableEntity_dataProvider')]
     public function simulate_givenInvalidField_returnsUnprocessableEntity(array $override): void
@@ -83,6 +86,9 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
         $response->assertUnprocessable();
     }
 
+    /**
+     * @return array<string, list<array<string, int|list<string>|string|null>>>
+     */
     public static function simulate_givenInvalidField_returnsUnprocessableEntity_dataProvider(): array
     {
         // raid_buffs_mask max = 2 ** (count(SimulationCraftRaidBuffs::cases()) - 1) = 2 ** 9 = 512

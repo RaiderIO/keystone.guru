@@ -92,6 +92,7 @@ final class AjaxKillZonePathsControllerTest extends DungeonRouteTestBase
         $unpublishedRoute = DungeonRoute::factory()->create([
             'author_id'          => 1,
             'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            'expires_at'         => null,
         ]);
 
         try {

@@ -7,9 +7,10 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '24'
 
 jobs:
   build-and-upload:
@@ -17,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -37,13 +38,10 @@ jobs:
           ASSETS_BASE_URL: https://assets.keystone.guru/
         run: npm --output_version=${{ env.GIT_VERSION }} run production
 
-      # ---- Choose ONE of the following credential steps ----
-      # Option A: (Quick) Use access keys stored as GitHub Secrets:
-      - name: Configure AWS (access keys)
+      - name: Configure AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Install AWS CLI v2

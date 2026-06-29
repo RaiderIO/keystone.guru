@@ -28,16 +28,19 @@ class DungeonRoutePlayerSpecialization extends Model
 
     public $timestamps = false;
 
+    /** @return BelongsTo<DungeonRoute, $this> */
     public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
 
+    /** @return BelongsTo<CharacterClassSpecialization, $this> */
     public function characterclassspecialization(): BelongsTo
     {
         return $this->belongsTo(CharacterClassSpecialization::class);
     }
 
+    /** @return BelongsToMany<DungeonRoutePlayerSpecialization, $this> */
     public function specializations(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerSpecialization::class, 'dungeon_route_player_specializations');

@@ -24,10 +24,8 @@ class APIKillZoneFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge($this->castInputData($this, KillZone::class));
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+    }    /**
+     * @return array<string, array<int, string|Rule>|string|Rule>
      */
     public function rules(): array
     {

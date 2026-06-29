@@ -36,6 +36,7 @@ class DiscoverService extends BaseDiscoverService
 
     /**
      * Gets a builder that provides a template for popular routes.
+     * @return Builder<DungeonRoute>
      */
     private function popularBuilder(): Builder
     {
@@ -65,7 +66,7 @@ class DiscoverService extends BaseDiscoverService
                 'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
-                ]),
+                ])->with('expansion'),
             ])
             ->without([
                 'faction',
@@ -130,6 +131,7 @@ class DiscoverService extends BaseDiscoverService
 
     /**
      * Gets a builder that provides a template for popular routes.
+     * @return Builder<DungeonRoute>
      */
     private function newBuilder(): Builder
     {
@@ -147,7 +149,7 @@ class DiscoverService extends BaseDiscoverService
                 'season'  => fn(BelongsTo $query) => $query->without([
                     'affixGroups',
                     'dungeons',
-                ]),
+                ])->with('expansion'),
             ])
             ->without([
                 'faction',
@@ -181,6 +183,8 @@ class DiscoverService extends BaseDiscoverService
     /**
      * Adds a penalty to the affix group count - more affixes assigned to your route will cause it to drop in popularity
      * to prevent having routes assigned to every affix from always dominating the rankings
+     * @param  Builder<DungeonRoute> $builder
+     * @return Builder<DungeonRoute>
      */
     private function applyAffixGroupCountPenalty(Builder $builder): Builder
     {
@@ -224,7 +228,7 @@ class DiscoverService extends BaseDiscoverService
             function () {
                 $result = collect();
 
-                /** @var Collection<Dungeon> $activeDungeons */
+                /** @var Collection<int, Dungeon> $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : ($this->expansion ?? $this->gameVersion->expansion)->dungeonsAndRaids())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries
@@ -273,7 +277,7 @@ class DiscoverService extends BaseDiscoverService
             function () use ($affixGroup) {
                 $result = collect();
 
-                /** @var Collection<Dungeon> $activeDungeons */
+                /** @var Collection<int, Dungeon> $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : ($this->expansion ?? $this->gameVersion->expansion)->dungeonsAndRaids())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries

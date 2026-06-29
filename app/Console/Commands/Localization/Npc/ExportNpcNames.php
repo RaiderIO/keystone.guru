@@ -34,8 +34,8 @@ class ExportNpcNames extends Command
             $export = [];
         }
 
-        Npc::chunk(1000, function (Collection $npcs) use (&$export) {
-            /** @var Collection<Npc> $npcs */
+        Npc::chunk(1000, function (Collection $npcs) use (&$export): void {
+            /** @var Collection<int, Npc> $npcs */
             foreach ($npcs as $npc) {
                 if (empty($npc->name) || Str::startsWith($npc->name, ['npcs.'])) {
                     continue;

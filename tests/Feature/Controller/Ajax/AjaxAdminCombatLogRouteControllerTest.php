@@ -33,6 +33,11 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         // instead of returning a JSON 422 response.
         $this->defaultHeaders['Accept'] = 'application/json';
 
+        // The default facade style collapses all heatmap data onto the facade floor, which makes
+        // assertions on a specific (non-facade) floor_id non-deterministic depending on the dungeon
+        // picked below. Force split floors so real floor ids are preserved in the response.
+        User::forceMapFacadeStyle(User::MAP_FACADE_STYLE_SPLIT_FLOORS);
+
         /** @var Dungeon $dungeon */
         $dungeon       = Dungeon::inRandomOrder()->first();
         $this->dungeon = $dungeon;
@@ -42,6 +47,14 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         $this->floor = $floor;
 
         $this->mappingVersion = $this->dungeon->getCurrentMappingVersion();
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        User::forceMapFacadeStyle(null);
+
+        parent::tearDown();
     }
 
     #[Test]
@@ -111,7 +124,9 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $this->assertGreaterThan(0, $body['grid_size_x']);
             $this->assertGreaterThan(0, $body['grid_size_y']);
 
-            $floorEntry = collect($body['data'])->firstWhere('floor_id', $this->floor->id);
+            /** @var array<int, array<string, mixed>> $bodyData */
+            $bodyData   = $body['data'];
+            $floorEntry = collect($bodyData)->firstWhere('floor_id', $this->floor->id);
             $this->assertNotNull($floorEntry);
 
             foreach ($floorEntry['lat_lngs'] as $latLng) {
@@ -165,8 +180,10 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             // Assert
             $response->assertOk();
 
-            $body    = json_decode($response->content(), true);
-            $latLngs = collect($body['data'])->flatMap(fn(array $entry) => $entry['lat_lngs']);
+            $body = json_decode($response->content(), true);
+            /** @var array<int, array<string, mixed>> $bodyData2 */
+            $bodyData2 = $body['data'];
+            $latLngs   = collect($bodyData2)->flatMap(fn(array $entry): array => $entry['lat_lngs']);
 
             $this->assertCount(1, $latLngs);
             $this->assertEquals(1, $latLngs->first()['weight']);

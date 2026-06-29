@@ -9,6 +9,9 @@ use Illuminate\Console\Command;
  */
 trait ExportsTranslations
 {
+    /**
+     * @param array<string, mixed> $data
+     */
     public function exportTranslations(
         string $locale,
         string $fileName,
@@ -49,6 +52,9 @@ trait ExportsTranslations
      * - Keys aligned per array level
      * - Trailing commas
      * - Single-quoted strings with proper escaping
+     */
+    /**
+     * @param array<string|int, mixed> $data
      */
     private function arrayToPhpCode(array $data, int $indentLevel = 0): string
     {
@@ -116,6 +122,9 @@ trait ExportsTranslations
         return implode("\n", $lines);
     }
 
+    /**
+     * @param string|int $key
+     */
     private function formatPhpKey($key): string
     {
         if (is_int($key)) {
@@ -126,6 +135,9 @@ trait ExportsTranslations
         return "'" . $this->escapePhpSingleQuoted((string)$key) . "'";
     }
 
+    /**
+     * @param mixed $value
+     */
     private function formatPhpValue($value, int $indentLevel): string
     {
         if (is_array($value)) {

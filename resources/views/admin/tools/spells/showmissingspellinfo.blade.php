@@ -7,7 +7,7 @@ use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Spell> $spells
+ * @var Collection<int, Spell> $spells
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.spells.showmissingspellinfo.title')])

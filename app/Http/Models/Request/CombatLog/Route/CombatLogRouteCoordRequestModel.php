@@ -10,6 +10,7 @@ use Illuminate\Contracts\Support\Arrayable;
  * @OA\Property(type="number",format="float",property="x")
  * @OA\Property(type="number",format="float",property="y")
  * @OA\Property(type="integer",property="uiMapId")
+ * @implements Arrayable<string, mixed>
  */
 class CombatLogRouteCoordRequestModel extends RequestModel implements Arrayable
 {

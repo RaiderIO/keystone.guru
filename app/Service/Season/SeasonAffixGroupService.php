@@ -182,7 +182,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
                 'region'    => $region->short,
             ]);
 
-            throw new Exception('Error getting current affix group');
+            throw $exception;
         }
     }
 
@@ -238,7 +238,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     /**
      * Get a list of unique affixes found in this season.
      *
-     * @return Collection<Affix>
+     * @return Collection<int, Affix>
      */
     public function getFeaturedAffixes(Season $season): Collection
     {
@@ -252,58 +252,63 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     }
 
     /**
-     * @return Collection<array{ date_start: Carbon, affix_group: AffixGroup}>
+     * Get the affix groups to display on the affix overview page for the given iteration offset.
      *
+     * The list is anchored to a full affix iteration of the current season (all `affix_group_count` weeks),
+     * plus one spillover week before and one after, so the previous and next week are always visible without
+     * paging. As weeks pass, the current week walks through the iteration and resets when the next iteration
+     * begins. Each row shows the authoritative affix for its date, so it matches the page's "current affix".
+     *
+     * @return Collection<int, array{date_start: Carbon, affix_group: AffixGroup}>
      * @throws Exception
-     * @todo This can be further improved with some mathy things, but for now it's quick enough
      */
     public function getDisplayedAffixGroups(int $iterationOffset): Collection
     {
-        $seasons = Season::selectRaw('seasons.*')
-            ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
-            ->whereNull('timewalking_events.id')
-            ->orderBy('start')
-            ->get();
+        $region = GameServerRegion::getUserOrDefaultRegion();
 
-        /** @var Season $currentSeason */
-        $currentSeason = $seasons->shift();
-        /** @var Season $nextSeason */
-        $nextSeason = $seasons->shift();
+        $affixGroups = new Collection();
 
-        $affixesToDisplay = 10;
+        $now           = Carbon::now();
+        $currentSeason = $this->seasonService->findSeasonWithAffixGroupsAt($now, $region);
 
-        $firstSeasonStart = $currentSeason->start();
+        if ($currentSeason === null || $currentSeason->affix_group_count <= 0) {
+            return $affixGroups;
+        }
 
-        $beginDate           = Carbon::now()->addWeeks($iterationOffset * $affixesToDisplay)->maximum($firstSeasonStart);
-        $weeksSinceBeginning = $this->getWeeksSinceStartAt($currentSeason, $beginDate);
+        $count              = $currentSeason->affix_group_count;
+        $currentSeasonStart = $currentSeason->start($region);
 
-        $affixGroups          = new Collection();
-        $simulatedTime        = $firstSeasonStart->copy();
-        $totalWeeksToSimulate = $weeksSinceBeginning + 1;
-        for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
-            if ($nextSeason !== null && $nextSeason->affixGroups->isNotEmpty()) {
-                if ($simulatedTime->gte($nextSeason->start())) {
-                    $currentSeason = $nextSeason;
-                    $nextSeason    = $seasons->shift();
-                }
+        $weeksSinceStart = (int)$currentSeasonStart->diffInWeeks($now, true);
+        $iterationIndex  = intdiv($weeksSinceStart, $count) + $iterationOffset;
+        $anchorWeek      = $iterationIndex * $count;
+
+        // Show the full iteration, plus one week before and one week after for context.
+        for ($week = $anchorWeek - 1; $week <= $anchorWeek + $count; $week++) {
+            $date   = $currentSeasonStart->copy()->addWeeks($week);
+            $season = $this->seasonService->findSeasonWithAffixGroupsAt($date, $region);
+
+            if ($season === null || $season->affix_group_count <= 0) {
+                continue;
             }
 
-            if (($totalWeeksToSimulate - $i) <= $affixesToDisplay) {
-                $affixGroups->push([
-                    'date_start'  => $simulatedTime->copy(),
-                    'affix_group' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
-                ]);
+            $elapsedWeeks = (int)$season->start($region)->diffInWeeks($date, true);
+            $index        = ($season->start_affix_group_index + $elapsedWeeks) % $season->affix_group_count;
+
+            if ($index >= $season->affixGroups->count()) {
+                continue;
             }
 
-            $simulatedTime->addWeek();
+            $affixGroups->push([
+                'date_start'  => $date,
+                'affix_group' => $season->affixGroups[$index],
+            ]);
         }
 
         return $affixGroups;
     }
 
     /**
-     * @return Collection<WeeklyAffixGroup>
-     *
+     * @return Collection<int, WeeklyAffixGroup>
      * @throws Exception
      */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection

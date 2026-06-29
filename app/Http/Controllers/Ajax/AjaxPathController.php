@@ -108,11 +108,11 @@ class AjaxPathController extends Controller
     }
 
     /**
-     * @return array|ResponseFactory|Response
+     * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws AuthorizationException
      */
-    public function delete(Request $request, DungeonRoute $dungeonRoute, Path $path)
+    public function delete(Request $request, DungeonRoute $dungeonRoute, Path $path): array|ResponseFactory|Response
     {
         $dungeonRoute = $path->dungeonRoute;
 

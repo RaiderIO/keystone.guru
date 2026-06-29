@@ -34,6 +34,9 @@ class PridefulEnemyChangedEvent extends ModelChangedEvent
         return 'pridefulenemy-changed';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function broadcastWith(): array
     {
