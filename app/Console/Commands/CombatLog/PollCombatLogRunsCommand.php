@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Jobs\CombatLog\FetchCombatLogRunFanout;
+use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogParsingCriterion;
@@ -178,7 +178,7 @@ class PollCombatLogRunsCommand extends Command
             $existingRunIds[$run->id] = true;
         }
 
-        FetchCombatLogRunFanout::dispatch($season, $run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
+        ProcessCombatLogSegments::dispatch($season, $run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
 
         return true;
     }

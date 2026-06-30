@@ -75,8 +75,6 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             return null;
         }
 
-        $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
-
         $currentDungeon = null;
 
         $result = new ExtractedDataResult();
@@ -85,7 +83,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $dataExtractor->beforeExtract($result, $filePath);
         }
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (
+        $this->combatLogService->parseCombatLog($filePath, function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
             string $rawEvent,

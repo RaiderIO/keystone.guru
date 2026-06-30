@@ -68,7 +68,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
                 challengeModeId: $challengeModeId,
                 dungeonZoneId:   $dungeonZoneId,
                 memberSpecIds:   $memberSpecIds,
-                mythicLevel:     0,
+                mythicLevel:     $filter->mythicLevelMin,
                 affixes:         [],
             );
         }

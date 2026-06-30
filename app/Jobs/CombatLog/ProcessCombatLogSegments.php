@@ -5,10 +5,12 @@ namespace App\Jobs\CombatLog;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
+use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Traits\Curl;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,7 +18,14 @@ use Illuminate\Queue\SerializesModels;
 use RuntimeException;
 use Throwable;
 
-class ProcessCombatLogSegments implements ShouldQueue
+/**
+ * Resolves the Raider.IO combat log segments for a run and processes them in a single execution.
+ *
+ * The segment download URLs are presigned and short-lived (5 minutes), so they must be resolved and
+ * downloaded within the same job run rather than handed off across the queue. Each part is processed
+ * independently; they do not need to be combined into a single file.
+ */
+class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -26,10 +35,15 @@ class ProcessCombatLogSegments implements ShouldQueue
 
     public int $timeout = 1800;
 
+    public int $tries = 3;
+
+    public int $uniqueFor = 7200;
+
     public function __construct(
-        private readonly Season $season,
-        private readonly int    $runId,
-        private readonly int    $combatLogVersion,
+        private readonly Season                        $season,
+        private readonly int                           $runId,
+        private readonly int                           $combatLogVersion,
+        private readonly ?CombatLogRunContextInterface $runContext = null,
     ) {
         $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
     }
@@ -42,9 +56,8 @@ class ProcessCombatLogSegments implements ShouldQueue
         $log->handleStart($this->runId, $this->combatLogVersion);
 
         /** @var string[] $tempFiles */
-        $tempFiles    = [];
-        $combinedPath = null;
-        $result       = false;
+        $tempFiles = [];
+        $result    = false;
 
         try {
             $segmentsResponse = $raiderIOApiService->getCombatLogSegmentsForRun($this->season, $this->runId);
@@ -58,6 +71,7 @@ class ProcessCombatLogSegments implements ShouldQueue
             $segments = $segmentsResponse->segments;
             usort($segments, fn(CombatLogSegment $a, CombatLogSegment $b): int => $a->id <=> $b->id);
 
+            // Download every part first while the presigned URLs are still fresh, then extract each.
             foreach ($segments as $segment) {
                 $tempPath = sprintf('%s/run_%d_segment_%d.txt', sys_get_temp_dir(), $this->runId, $segment->id);
                 $log->handleDownloadingSegment($this->runId, $segment->id, $segment->downloadUrl, $tempPath);
@@ -73,24 +87,10 @@ class ProcessCombatLogSegments implements ShouldQueue
                 $tempFiles[] = $tempPath;
             }
 
-            $combinedPath = sprintf('%s/run_%d_combined.txt', sys_get_temp_dir(), $this->runId);
-            $log->handleJoiningSegments($this->runId, count($segments), $combinedPath);
-
-            try {
-                $combined = fopen($combinedPath, 'w');
-                foreach ($tempFiles as $tempFile) {
-                    try {
-                        $segmentHandle = fopen($tempFile, 'r');
-                        stream_copy_to_stream($segmentHandle, $combined);
-                    } finally {
-                        fclose($segmentHandle);
-                    }
-                }
-            } finally {
-                fclose($combined);
+            foreach ($tempFiles as $tempFile) {
+                $extractionService->extractData($tempFile, runContext: $this->runContext);
             }
 
-            $extractionService->extractData($combinedPath);
             $result = true;
         } catch (RuntimeException $e) {
             // Re-throw download failures so the job can be retried with fresh one-time URLs.
@@ -103,10 +103,20 @@ class ProcessCombatLogSegments implements ShouldQueue
                     unlink($tempFile);
                 }
             }
-            if ($combinedPath !== null && file_exists($combinedPath)) {
-                unlink($combinedPath);
-            }
             $log->handleEnd($this->runId, $result);
         }
+    }
+
+    public function uniqueId(): string
+    {
+        return (string)$this->runId;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function backoff(): array
+    {
+        return [30, 120];
     }
 }
