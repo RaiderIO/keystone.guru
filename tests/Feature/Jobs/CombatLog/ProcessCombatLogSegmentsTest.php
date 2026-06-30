@@ -4,6 +4,7 @@ namespace Tests\Feature\Jobs\CombatLog;
 
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
+use App\Models\Season;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
@@ -41,7 +42,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->expects($this->once())
             ->method('getCombatLogSegmentsForRun')
-            ->with(self::RUN_ID)
+            ->with($this->isInstanceOf(Season::class), self::RUN_ID)
             ->willReturn($segmentsResponse);
         app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
 
@@ -60,7 +61,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
-            ->setConstructorArgs([self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['curlSaveToFile'])
             ->getMock();
 
@@ -101,7 +102,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
 
         // Act
-        app()->call([new ProcessCombatLogSegments(self::RUN_ID, self::COMBAT_LOG_VERSION), 'handle']);
+        app()->call([new ProcessCombatLogSegments(new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION), 'handle']);
 
         // Assert — handled by mock expectations above
     }
@@ -129,7 +130,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
 
         // Act
-        app()->call([new ProcessCombatLogSegments(self::RUN_ID, self::COMBAT_LOG_VERSION), 'handle']);
+        app()->call([new ProcessCombatLogSegments(new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION), 'handle']);
 
         // Assert — handled by mock expectations above
     }
@@ -160,7 +161,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
 
         $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
-            ->setConstructorArgs([self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
             ->onlyMethods(['curlSaveToFile'])
             ->getMock();
 

@@ -3,6 +3,7 @@
 namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\FetchCombatLogRunFanoutLoggingInterface;
+use App\Models\Season;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -24,6 +25,7 @@ class FetchCombatLogRunFanout implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
+        private readonly Season                        $season,
         private readonly int                           $runId,
         private readonly int                           $combatLogVersion,
         private readonly ?CombatLogRunContextInterface $runContext = null,
@@ -38,7 +40,7 @@ class FetchCombatLogRunFanout implements ShouldQueue
         $log->handleStart($this->runId, $this->combatLogVersion);
 
         try {
-            $download = $raiderIOApiService->getCombatLogSegmentsForRun($this->runId);
+            $download = $raiderIOApiService->getCombatLogSegmentsForRun($this->season, $this->runId);
 
             if ($download === null) {
                 $log->handleDownloadNotAvailable($this->runId);

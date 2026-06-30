@@ -124,7 +124,7 @@ class PollCombatLogRunsCommand extends Command
                         break;
                     }
 
-                    $dispatched = $this->dispatchRun($run, $combatLogVersion, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force);
+                    $dispatched = $this->dispatchRun($run, $season, $combatLogVersion, $dungeonsByChallengeModeId, $allSpecsByBlizzardId, $existingRunIds, $force);
 
                     if ($dispatched) {
                         $totalDispatched++;
@@ -146,6 +146,7 @@ class PollCombatLogRunsCommand extends Command
     }
 
     /**
+     * @param  Season                                               $season
      * @param  array<int, true>                                     $existingRunIds
      * @param  Collection<string|int, Dungeon>                      $dungeonsByChallengeModeId
      * @param  Collection<string|int, CharacterClassSpecialization> $allSpecsByBlizzardId
@@ -153,6 +154,7 @@ class PollCombatLogRunsCommand extends Command
      */
     private function dispatchRun(
         SearchAdvancedRun $run,
+        Season            $season,
         int               $combatLogVersion,
         Collection        $dungeonsByChallengeModeId,
         Collection        $allSpecsByBlizzardId,
@@ -176,7 +178,7 @@ class PollCombatLogRunsCommand extends Command
             $existingRunIds[$run->id] = true;
         }
 
-        FetchCombatLogRunFanout::dispatch($run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
+        FetchCombatLogRunFanout::dispatch($season, $run->id, $combatLogVersion, new CombatLogRunContext($run->mythicLevel, $run->affixes));
 
         return true;
     }

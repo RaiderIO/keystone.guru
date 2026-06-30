@@ -3,6 +3,7 @@
 namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
+use App\Models\Season;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
@@ -26,8 +27,9 @@ class ProcessCombatLogSegments implements ShouldQueue
     public int $timeout = 1800;
 
     public function __construct(
-        private readonly int $runId,
-        private readonly int $combatLogVersion,
+        private readonly Season $season,
+        private readonly int    $runId,
+        private readonly int    $combatLogVersion,
     ) {
         $this->queue = sprintf('%s-%s-combat-log-process', config('app.type'), config('app.env'));
     }
@@ -45,7 +47,7 @@ class ProcessCombatLogSegments implements ShouldQueue
         $result       = false;
 
         try {
-            $segmentsResponse = $raiderIOApiService->getCombatLogSegmentsForRun($this->runId);
+            $segmentsResponse = $raiderIOApiService->getCombatLogSegmentsForRun($this->season, $this->runId);
 
             if ($segmentsResponse === null || empty($segmentsResponse->segments)) {
                 $log->handleSegmentsNotAvailable($this->runId);
@@ -74,13 +76,19 @@ class ProcessCombatLogSegments implements ShouldQueue
             $combinedPath = sprintf('%s/run_%d_combined.txt', sys_get_temp_dir(), $this->runId);
             $log->handleJoiningSegments($this->runId, count($segments), $combinedPath);
 
-            $combined = fopen($combinedPath, 'w');
-            foreach ($tempFiles as $tempFile) {
-                $segmentHandle = fopen($tempFile, 'r');
-                stream_copy_to_stream($segmentHandle, $combined);
-                fclose($segmentHandle);
+            try {
+                $combined = fopen($combinedPath, 'w');
+                foreach ($tempFiles as $tempFile) {
+                    try {
+                        $segmentHandle = fopen($tempFile, 'r');
+                        stream_copy_to_stream($segmentHandle, $combined);
+                    } finally {
+                        fclose($segmentHandle);
+                    }
+                }
+            } finally {
+                fclose($combined);
             }
-            fclose($combined);
 
             $extractionService->extractData($combinedPath);
             $result = true;
