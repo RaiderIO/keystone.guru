@@ -85,6 +85,54 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         // Assert — handled by mock expectations above
     }
 
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenZipAndPlainTextSegments_savesZipAsArchiveAndRestAsText(): void
+    {
+        // Arrange — only a `.zip` URL needs extracting; the `.txt.gz`-named Raider.IO segments arrive already
+        // decompressed (via content encoding) and are saved as plain `.txt` so they are parsed as-is.
+        $segmentsResponse = new CombatLogSegmentsResponse(
+            sourceUserId: 1,
+            segments:     [
+                new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: 'https://s3.example.com/WoWCombatLog-1.zip?X-Amz-Signature=abc'),
+                new CombatLogSegment(id: 2, type: 'combat_log', downloadUrl: 'https://s3.example.com/02_boss.txt.gz?X-Amz-Signature=def'),
+            ],
+        );
+
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')->willReturn($segmentsResponse);
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $extractedPaths    = [];
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->method('extractData')
+            ->willReturnCallback(function (string $filePath) use (&$extractedPaths): null {
+                $extractedPaths[] = $filePath;
+
+                return null;
+            });
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+        $job->method('curlSaveToFile')->willReturn(true);
+
+        // Act
+        app()->call([$job, 'handle']);
+
+        // Assert
+        $this->assertCount(2, $extractedPaths);
+        $this->assertStringEndsWith('.zip', $extractedPaths[0]);
+        $this->assertStringEndsWith('.txt', $extractedPaths[1]);
+    }
+
     #[Test]
     public function uniqueId_givenRun_returnsRunIdAndJobIsUnique(): void
     {

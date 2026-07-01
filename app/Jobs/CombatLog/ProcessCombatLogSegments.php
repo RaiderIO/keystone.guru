@@ -73,7 +73,13 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
 
             // Download every part first while the presigned URLs are still fresh, then extract each.
             foreach ($segments as $segment) {
-                $tempPath = sprintf('%s/run_%d_segment_%d.txt', sys_get_temp_dir(), $this->runId, $segment->id);
+                $tempPath = sprintf(
+                    '%s/run_%d_segment_%d.%s',
+                    sys_get_temp_dir(),
+                    $this->runId,
+                    $segment->id,
+                    $this->resolveSegmentExtension($segment->downloadUrl),
+                );
                 $log->handleDownloadingSegment($this->runId, $segment->id, $segment->downloadUrl, $tempPath);
 
                 if (!$this->curlSaveToFile($segment->downloadUrl, $tempPath)) {
@@ -110,6 +116,19 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     public function uniqueId(): string
     {
         return (string)$this->runId;
+    }
+
+    /**
+     * Derive the file extension from the (presigned) download URL. The extraction service relies on the
+     * `.zip` extension to know it must unzip the archive before parsing; without it the raw archive bytes
+     * are fed to the parser. Other downloads (e.g. the `.txt.gz`-named Raider.IO segments, whose bodies
+     * arrive already decompressed via the request's content encoding) are plain text and saved as `.txt`.
+     */
+    private function resolveSegmentExtension(string $downloadUrl): string
+    {
+        $path = (string)parse_url($downloadUrl, PHP_URL_PATH);
+
+        return str_ends_with($path, '.zip') ? 'zip' : 'txt';
     }
 
     /**
