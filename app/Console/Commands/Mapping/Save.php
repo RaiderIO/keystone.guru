@@ -4,9 +4,6 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Logic\Structs\LatLng;
-use App\Models\CombatLog\CombatLogNpcEvent;
-use App\Models\CombatLog\CombatLogSpellEvent;
-use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -60,14 +57,12 @@ class Save extends Command
         $this->call('modelCache:clear');
 
         $dungeonDataDir = database_path('seeders/dungeondata/');
-        $combatLogDir   = database_path('seeders/combatlogs/');
 
         $this->saveMappingVersions($dungeonDataDir);
         $this->saveMappingCommitLogs($dungeonDataDir);
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
-        $this->saveCombatlogData($combatLogDir);
         $this->saveDungeonData($dungeonDataDir);
 
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
@@ -212,8 +207,6 @@ class Save extends Command
             'enemyForces',
         ])
             ->with([
-                'npcCharacteristics',
-                'npcSpells',
                 'npcEnemyForces',
                 'npcDungeons',
             ])
@@ -244,30 +237,20 @@ class Save extends Command
         // Save all spells
         $this->info('Saving Spells');
 
-        $spells = Spell::with('spellDungeons')->get();
+        $spells = Spell::all();
         foreach ($spells as $spell) {
+            // aura, debuff and miss_types_mask are combat-log-derived behavior - they must not round-trip
+            // through the git seeders; they are re-applied per environment from the combatlog pipeline.
             $spell->makeHidden([
                 'icon_url',
                 'wowhead_url',
-            ])->makeVisible(['spellDungeons']);
+                'aura',
+                'debuff',
+                'miss_types_mask',
+            ]);
         }
 
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
-    }
-
-    /**
-     * @param  string    $combatlogDir
-     * @return void
-     * @throws Exception
-     */
-    private function saveCombatlogData(string $combatlogDir): void
-    {
-        // Save all spells
-        $this->info('Saving Combatlog data');
-
-        $this->saveDataToJsonFile(CombatLogNpcEvent::all()->toArray(), $combatlogDir, 'combat_log_npc_events.json');
-        $this->saveDataToJsonFile(CombatLogSpellEvent::all()->toArray(), $combatlogDir, 'combat_log_spell_events.json');
-        $this->saveDataToJsonFile(ParsedCombatLog::all()->toArray(), $combatlogDir, 'parsed_combat_logs.json');
     }
 
     /**
