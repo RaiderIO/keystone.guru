@@ -4,9 +4,6 @@ namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Logic\Structs\LatLng;
-use App\Models\CombatLog\CombatLogNpcEvent;
-use App\Models\CombatLog\CombatLogSpellEvent;
-use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -18,8 +15,7 @@ use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc\Npc;
-use App\Models\Spell\Spell;
+use App\Service\Mapping\MappingExportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Exception;
 use Illuminate\Console\Command;
@@ -50,6 +46,11 @@ class Save extends Command
      */
     protected $description = 'Saves the current mapping to a file';
 
+    public function __construct(private readonly MappingExportServiceInterface $mappingExportService)
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      * @throws Exception
@@ -60,14 +61,12 @@ class Save extends Command
         $this->call('modelCache:clear');
 
         $dungeonDataDir = database_path('seeders/dungeondata/');
-        $combatLogDir   = database_path('seeders/combatlogs/');
 
         $this->saveMappingVersions($dungeonDataDir);
         $this->saveMappingCommitLogs($dungeonDataDir);
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
-        $this->saveCombatlogData($combatLogDir);
         $this->saveDungeonData($dungeonDataDir);
 
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
@@ -204,35 +203,7 @@ class Save extends Command
         // Save NPC data in the root of folder
         $this->info('Saving NPCs');
 
-        // Save all NPCs which aren't directly tied to a dungeon
-        /** @var Collection<int, Npc> $npcs */
-        $npcs = Npc::without([
-            'characteristics',
-            'spells',
-            'enemyForces',
-        ])
-            ->with([
-                'npcCharacteristics',
-                'npcSpells',
-                'npcEnemyForces',
-                'npcDungeons',
-            ])
-            ->get()
-            ->values();
-
-        foreach ($npcs as $npc) {
-            $npc->makeHidden([
-                'type',
-                'class',
-                'enemy_portrait_url',
-            ]);
-            $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
-            foreach ($npc->npcDungeons as $npcDungeon) {
-                $npcDungeon->makeHidden(['dungeon']);
-            }
-        }
-
-        $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
+        $this->saveDataToJsonFile($this->mappingExportService->serializeNpcs(), $dungeonDataDir, 'npcs.json');
     }
 
     /**
@@ -244,30 +215,7 @@ class Save extends Command
         // Save all spells
         $this->info('Saving Spells');
 
-        $spells = Spell::with('spellDungeons')->get();
-        foreach ($spells as $spell) {
-            $spell->makeHidden([
-                'icon_url',
-                'wowhead_url',
-            ])->makeVisible(['spellDungeons']);
-        }
-
-        $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
-    }
-
-    /**
-     * @param  string    $combatlogDir
-     * @return void
-     * @throws Exception
-     */
-    private function saveCombatlogData(string $combatlogDir): void
-    {
-        // Save all spells
-        $this->info('Saving Combatlog data');
-
-        $this->saveDataToJsonFile(CombatLogNpcEvent::all()->toArray(), $combatlogDir, 'combat_log_npc_events.json');
-        $this->saveDataToJsonFile(CombatLogSpellEvent::all()->toArray(), $combatlogDir, 'combat_log_spell_events.json');
-        $this->saveDataToJsonFile(ParsedCombatLog::all()->toArray(), $combatlogDir, 'parsed_combat_logs.json');
+        $this->saveDataToJsonFile($this->mappingExportService->serializeSpells(), $dungeonDataDir, 'spells.json');
     }
 
     /**

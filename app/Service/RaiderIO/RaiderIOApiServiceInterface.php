@@ -2,6 +2,7 @@
 
 namespace App\Service\RaiderIO;
 
+use App\Models\Season;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
@@ -21,5 +22,5 @@ interface RaiderIOApiServiceInterface
     /**
      * Returns null if the API returns an invalid response.
      */
-    public function getCombatLogSegmentsForRun(int $runId): ?CombatLogSegmentsResponse;
+    public function getCombatLogSegmentsForRun(Season $season, int $runId): ?CombatLogSegmentsResponse;
 }

@@ -378,6 +378,10 @@ return [
         ],
     ],
 
+    'raiderio' => [
+        'api_key' => env('RAIDERIO_API_KEY'),
+    ],
+
     'patreon' => [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
