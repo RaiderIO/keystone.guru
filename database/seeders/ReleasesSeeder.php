@@ -42,6 +42,10 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
 
                 // Save the changes for each changelog
                 foreach ($changelogData['changes'] as $changeData) {
+                    // Older release files predate the is_public column; default it so every row shares the
+                    // same key set, otherwise the bulk insert below fails with a column-count mismatch.
+                    $changeData['is_public'] ??= 1;
+
                     // Changelog changes
                     $releaseChangeLogChangesAttributes[] = array_filter($changeData, function ($value) {
                         return !is_array($value);

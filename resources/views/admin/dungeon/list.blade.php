@@ -71,7 +71,7 @@ use Illuminate\Support\Collection;
                     </td>
                 @endif
                 <td data-order="{{ $dungeon->expansion_id }}">
-                    <img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $dungeon->expansion->shortname)) }}"
+                    <img src="{{ $dungeon->expansion->getIconUrl() }}"
                          alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
                          data-toggle="tooltip"

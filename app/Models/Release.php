@@ -111,7 +111,7 @@ class Release extends CacheModel
     {
         return trim(view('app.release.github', [
             'model'   => $this,
-            'changes' => $this->changelog->changes,
+            'changes' => $this->changelog->changes()->get(),
         ])->render());
     }
 
@@ -121,7 +121,7 @@ class Release extends CacheModel
     public function getGithubPrBodyAttribute(): string
     {
         $body    = $this->github_full_body;
-        $closers = $this->changelog->changes
+        $closers = $this->changelog->changes()->get()
             ->filter(static fn(ReleaseChangelogChange $c) => !empty($c->ticket_id))
             ->map(static fn(ReleaseChangelogChange $c) => sprintf('Closes #%d', $c->ticket_id))
             ->join("\n");

@@ -18,16 +18,13 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcBolsteringWhitelist;
-use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
-use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunDifficulty;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
-use App\Models\Spell\SpellDungeon;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
@@ -524,14 +521,14 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingVersion::class,
             MappingCommitLog::class,
             Spell::class,
-            SpellDungeon::class,
+            // SpellDungeon, NpcCharacteristic and NpcSpell are combat-log-derived behavior and are
+            // intentionally omitted: they are not exported to the seeders, so their live tables must
+            // survive a re-seed untouched instead of being rebuilt (and wiped) from the JSON files.
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
             NpcDungeon::class,
-            NpcCharacteristic::class,
             NpcHealth::class,
-            NpcSpell::class,
             Enemy::class,
             EnemyPack::class,
             EnemyPatrol::class,
