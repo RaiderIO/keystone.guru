@@ -15,8 +15,7 @@ use App\Models\Interfaces\HasVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc\Npc;
-use App\Models\Spell\Spell;
+use App\Service\Mapping\MappingExportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Exception;
 use Illuminate\Console\Command;
@@ -46,6 +45,11 @@ class Save extends Command
      * @var string
      */
     protected $description = 'Saves the current mapping to a file';
+
+    public function __construct(private readonly MappingExportServiceInterface $mappingExportService)
+    {
+        parent::__construct();
+    }
 
     /**
      * Execute the console command.
@@ -199,33 +203,7 @@ class Save extends Command
         // Save NPC data in the root of folder
         $this->info('Saving NPCs');
 
-        // Save all NPCs which aren't directly tied to a dungeon
-        /** @var Collection<int, Npc> $npcs */
-        $npcs = Npc::without([
-            'characteristics',
-            'spells',
-            'enemyForces',
-        ])
-            ->with([
-                'npcEnemyForces',
-                'npcDungeons',
-            ])
-            ->get()
-            ->values();
-
-        foreach ($npcs as $npc) {
-            $npc->makeHidden([
-                'type',
-                'class',
-                'enemy_portrait_url',
-            ]);
-            $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
-            foreach ($npc->npcDungeons as $npcDungeon) {
-                $npcDungeon->makeHidden(['dungeon']);
-            }
-        }
-
-        $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
+        $this->saveDataToJsonFile($this->mappingExportService->serializeNpcs(), $dungeonDataDir, 'npcs.json');
     }
 
     /**
@@ -237,20 +215,7 @@ class Save extends Command
         // Save all spells
         $this->info('Saving Spells');
 
-        $spells = Spell::all();
-        foreach ($spells as $spell) {
-            // aura, debuff and miss_types_mask are combat-log-derived behavior - they must not round-trip
-            // through the git seeders; they are re-applied per environment from the combatlog pipeline.
-            $spell->makeHidden([
-                'icon_url',
-                'wowhead_url',
-                'aura',
-                'debuff',
-                'miss_types_mask',
-            ]);
-        }
-
-        $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
+        $this->saveDataToJsonFile($this->mappingExportService->serializeSpells(), $dungeonDataDir, 'spells.json');
     }
 
     /**

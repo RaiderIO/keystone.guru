@@ -10,10 +10,12 @@ use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
+use App\Service\Mapping\MappingExportServiceInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class AdminToolsNpcController extends Controller
@@ -169,6 +171,14 @@ class AdminToolsNpcController extends Controller
     {
         return view('admin.tools.npc.showmissingdisplayid', [
             'npcs' => Npc::whereNull('display_id')->get(),
+        ]);
+    }
+
+    public function npcsSaveToSeeder(MappingExportServiceInterface $mappingExportService): Response
+    {
+        return response(json_encode($mappingExportService->serializeNpcs(), JSON_PRETTY_PRINT), 200, [
+            'Content-Type'        => 'application/json',
+            'Content-Disposition' => 'attachment; filename="npcs.json"',
         ]);
     }
 }

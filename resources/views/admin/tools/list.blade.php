@@ -39,6 +39,10 @@
                         <a href="{{ route('admin.tools.npcs.showmissingdisplayid') }}">{{ __('view_admin.tools.list.show_missing_npc_display_id') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.show_missing_npc_display_id_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.npcs.savetoseeder') }}">{{ __('view_admin.tools.list.download_npcs_seeder') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.download_npcs_seeder_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -238,6 +242,10 @@
                     <li class="list-group-item">
                         <a href="{{ route('admin.tools.spells.showmissingspellinfo') }}">{{ __('view_admin.tools.list.show_missing_spell_info') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.show_missing_spell_info_description') }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.spells.savetoseeder') }}">{{ __('view_admin.tools.list.download_spells_seeder') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.download_spells_seeder_description') }}</small>
                     </li>
                 </ul>
             </div>
