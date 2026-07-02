@@ -115,7 +115,6 @@
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {
-        "deployer/deployer": "^7.5",
         "driftingly/rector-laravel": "^2.1",
         "erickskrauch/php-cs-fixer-custom-fixers": "^1.3",
         "filp/whoops": "^2.8",
