@@ -40,7 +40,6 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     <td class="first_column {{ $currentWeekClass . $topBorderClass . $bottomBorderClass }}">
         <div class="affix_row">
             @if($timewalkingEvent !== null)
-                {{--                <img src="{{ $timewalkingEvent->expansion->iconfile->getURL() }}" style="width: 32px; height: 32px;"/>--}}
                 {{ sprintf(__('view_misc.table.affixrowtable.expansion_timewalking'), __($timewalkingEvent->expansion->name)) }}
             @else
                 <span>

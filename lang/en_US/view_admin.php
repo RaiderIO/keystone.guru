@@ -89,7 +89,6 @@ return [
             'active'        => 'Active',
             'name'          => 'Name',
             'shortname'     => 'Shortname',
-            'icon'          => 'Icon',
             'current_image' => 'Current image',
             'color'         => 'Color',
             'edit'          => 'Edit',

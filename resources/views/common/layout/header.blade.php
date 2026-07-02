@@ -64,7 +64,7 @@ $expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
     $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
-            ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)),
+            $expansion->getIconUrl(),
             __($expansion->name),
             __('view_common.layout.header.routes', ['expansion' => __($expansion->name)])
         );

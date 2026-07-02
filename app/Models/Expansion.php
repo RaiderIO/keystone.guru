@@ -5,11 +5,9 @@ namespace App\Models;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Timewalking\TimewalkingEvent;
-use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -22,7 +20,6 @@ use Override;
 
 /**
  * @property int    $id
- * @property int    $icon_file_id
  * @property bool   $active
  * @property bool   $has_wallpaper
  * @property string $name
@@ -46,13 +43,11 @@ use Override;
  */
 class Expansion extends CacheModel
 {
-    use HasIconFile;
     use SeederModel;
     use UserCurrentTime;
 
     public $fillable = [
         'active',
-        'icon_file_id',
         'name',
         'shortname',
         'color',
@@ -61,7 +56,6 @@ class Expansion extends CacheModel
 
     public $hidden = [
         'id',
-        'icon_file_id',
         'created_at',
         'updated_at',
     ];
@@ -292,48 +286,22 @@ class Expansion extends CacheModel
         return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));
     }
 
+    public function getIconUrl(): string
+    {
+        return ksgAssetImage(sprintf('expansions/%s.png', $this->shortname));
+    }
+
     /**
      * Saves an expansion with the data from a Request.
-     *
-     *
-     * @throws Exception
      */
-    public function saveFromRequest(Request $request, string $fileUploadDirectory = 'uploads'): bool
+    public function saveFromRequest(Request $request): bool
     {
-        $new = isset($this->id);
+        $this->active    = $request->boolean('active');
+        $this->name      = $request->get('name');
+        $this->shortname = $request->get('shortname');
+        $this->color     = $request->get('color');
 
-        $file = $request->file('icon');
-
-        $this->icon_file_id = -1;
-        $this->active       = $request->get('active');
-        $this->name         = $request->get('name');
-        $this->shortname    = $request->get('shortname');
-        $this->color        = $request->get('color');
-
-        // Update or insert it
-        if ($this->save()) {
-            // Save was successful, now do any file handling that may be necessary
-            if ($file !== null) {
-                try {
-                    $icon = File::saveFileToDB($file, $this, $fileUploadDirectory, 'local_public');
-
-                    // Update the expansion to reflect the new file ID
-                    $this->icon_file_id = $icon->id;
-                    $this->save();
-                } catch (Exception $ex) {
-                    if ($new) {
-                        // Roll back the saving of the expansion since something went wrong with the file.
-                        $this->delete();
-                    }
-
-                    throw $ex;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
+        return $this->save();
     }
     protected function casts(): array
     {
