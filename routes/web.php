@@ -64,6 +64,7 @@ use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Compendium\ClassCompendiumController;
+use App\Http\Controllers\Compendium\CompendiumController;
 use App\Http\Controllers\Compendium\NpcCompendiumController;
 use App\Http\Controllers\Compendium\SpellCompendiumController;
 use App\Http\Controllers\Dungeon\DungeonController;
@@ -166,6 +167,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     // Compendium
     Route::middleware(sprintf('feature_active:%s', NpcCompendium::class))
         ->prefix('compendium')->group(static function () {
+            Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
             Route::prefix('npc')->group(static function () {
                 Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
                 Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
@@ -519,6 +521,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 // NPCs
                 Route::get('npcs/missingdisplayid', new AdminToolsNpcController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
+                Route::get('npcs/savetoseeder', new AdminToolsNpcController()->npcsSaveToSeeder(...))->name('admin.tools.npcs.savetoseeder');
 
                 // Wago.gg
                 Route::get('wagogg/importingamecoordinates', new AdminToolsWagoGgController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');

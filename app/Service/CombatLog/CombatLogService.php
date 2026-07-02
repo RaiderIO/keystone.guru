@@ -308,6 +308,15 @@ readonly class CombatLogService implements CombatLogServiceInterface
                 throw new InvalidArgumentException('File is not a valid .zip file');
             }
 
+            // Use the archive's own entry name rather than guessing it from the outer file name; the two no
+            // longer match once the download is saved under a generated temp name (e.g. run_0_segment_1.zip).
+            $entryName = $zip->getNameIndex(0);
+            if ($entryName === false) {
+                $this->log->extractCombatLogInvalidZipFile();
+
+                throw new InvalidArgumentException('Zip archive does not contain any entries');
+            }
+
             $storageDestinationPath = '/tmp';
             if (!File::exists($storageDestinationPath)) {
                 File::makeDirectory($storageDestinationPath, 0755, true);
@@ -315,7 +324,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
 
             $zip->extractTo($storageDestinationPath);
 
-            $extractedFilePath = sprintf('%s/%s.txt', $storageDestinationPath, basename($filePath, '.zip'));
+            $extractedFilePath = sprintf('%s/%s', $storageDestinationPath, $entryName);
             $this->log->extractCombatLogExtractedArchive($extractedFilePath);
         } finally {
             $zip->close();
