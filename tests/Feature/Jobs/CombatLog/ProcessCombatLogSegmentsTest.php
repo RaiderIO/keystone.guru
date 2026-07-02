@@ -5,12 +5,15 @@ namespace Tests\Feature\Jobs\CombatLog;
 use App\Jobs\CombatLog\ProcessCombatLogSegments;
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
+use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContext;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Constraint\IsType;
@@ -131,6 +134,64 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $this->assertCount(2, $extractedPaths);
         $this->assertStringEndsWith('.zip', $extractedPaths[0]);
         $this->assertStringEndsWith('.txt', $extractedPaths[1]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenParseException_recordsParseFailureWithLineInfo(): void
+    {
+        // Arrange
+        $raiderIOApiService = $this->createMockPublic(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->method('getCombatLogSegmentsForRun')
+            ->willReturn(new CombatLogSegmentsResponse(
+                sourceUserId: 1,
+                segments:     [new CombatLogSegment(id: 1, type: 'combat_log', downloadUrl: self::DOWNLOAD_URL_1)],
+            ));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        $parseException = new CombatLogParseException(
+            lineNumber: 257080,
+            rawLine:    'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+            message:    'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+            previous:   new InvalidArgumentException('Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa'),
+        );
+
+        $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
+        $extractionService->method('extractData')->willThrowException($parseException);
+        app()->instance(CombatLogDataExtractionServiceInterface::class, $extractionService);
+
+        // The parse error is swallowed and persisted (not re-thrown), so the run is not retried.
+        $parseFailureRepository = $this->createMockPublic(CombatLogParseFailureRepositoryInterface::class);
+        $parseFailureRepository->expects($this->once())
+            ->method('recordFailure')
+            ->with(
+                self::RUN_ID,
+                $this->isNull(),
+                self::COMBAT_LOG_VERSION,
+                257080,
+                'SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+                'Unbalanced quotes in string SPELL_DAMAGE,Player-1084-0B4087DE,"Pa',
+                InvalidArgumentException::class,
+            );
+        app()->instance(CombatLogParseFailureRepositoryInterface::class, $parseFailureRepository);
+
+        $log = $this->createMockPublic(ProcessCombatLogSegmentsLoggingInterface::class);
+        $log->expects($this->once())->method('handleParseError');
+        $log->expects($this->once())->method('handleEnd')->with(self::RUN_ID, false);
+        app()->instance(ProcessCombatLogSegmentsLoggingInterface::class, $log);
+
+        $job = $this->getMockBuilder(ProcessCombatLogSegments::class)
+            ->setConstructorArgs([new Season(), self::RUN_ID, self::COMBAT_LOG_VERSION])
+            ->onlyMethods(['curlSaveToFile'])
+            ->getMock();
+        $job->method('curlSaveToFile')->willReturn(true);
+
+        // Act
+        app()->call([$job, 'handle']);
+
+        // Assert — handled by mock expectations above
     }
 
     #[Test]

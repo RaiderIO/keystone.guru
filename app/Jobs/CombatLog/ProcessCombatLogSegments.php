@@ -4,8 +4,10 @@ namespace App\Jobs\CombatLog;
 
 use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Models\Season;
+use App\Repositories\Interfaces\CombatLog\CombatLogParseFailureRepositoryInterface;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\Dtos\CombatLogRunContextInterface;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Traits\Curl;
@@ -51,6 +53,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     public function handle(
         RaiderIOApiServiceInterface              $raiderIOApiService,
         CombatLogDataExtractionServiceInterface  $extractionService,
+        CombatLogParseFailureRepositoryInterface $parseFailureRepository,
         ProcessCombatLogSegmentsLoggingInterface $log,
     ): void {
         $log->handleStart($this->runId, $this->combatLogVersion);
@@ -103,6 +106,16 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
             throw $e;
         } catch (Throwable $e) {
             $log->handleParseError($this->runId, $this->combatLogVersion, $e->getMessage(), $e::class);
+
+            $parseFailureRepository->recordFailure(
+                $this->runId,
+                $this->season->id,
+                $this->combatLogVersion,
+                $e instanceof CombatLogParseException ? $e->lineNumber : null,
+                $e instanceof CombatLogParseException ? $e->rawLine : null,
+                $e->getMessage(),
+                $e instanceof CombatLogParseException ? $e->getOriginalExceptionClass() : $e::class,
+            );
         } finally {
             foreach ($tempFiles as $tempFile) {
                 if (file_exists($tempFile)) {
