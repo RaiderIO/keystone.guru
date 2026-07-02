@@ -18,6 +18,7 @@ use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\DungeonRouteFilter;
@@ -401,7 +402,7 @@ readonly class CombatLogService implements CombatLogServiceInterface
         } catch (Exception $exception) {
             $this->log->parseCombatLogParseEventsException(sprintf('%d: %s', $lineNr, $rawEvent), $exception);
 
-            throw $exception;
+            throw new CombatLogParseException($lineNr, trim($rawEvent), $exception->getMessage(), $exception);
         } finally {
             $this->log->parseCombatLogParseEventsEnd();
 

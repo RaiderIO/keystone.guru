@@ -17,6 +17,8 @@ return [
             'mdt_mismatched_enemy_count'          => 'NPC %s has mismatched enemy count, MDT: %s, KG: %s',
             'mdt_mismatched_enemy_type'           => 'NPC %s has mismatched enemy type, MDT: %s, KG: %s',
             'mdt_invalid_category'                => 'Invalid category',
+            'combatlog_parse_failure_no_season'   => 'This failure has no associated season, so the download links cannot be re-fetched.',
+            'combatlog_parse_failure_no_segments' => 'No combat log segments are available for this run.',
         ],
         'flash' => [
             'message_banner_set_successfully'        => 'Message banner set successfully',
@@ -34,6 +36,7 @@ return [
             'mapping_version_upgrade_already_latest' => 'This mapping version is already the latest for its dungeon — no routes were queued.',
             'read_only_mode_disabled'                => 'Read-only mode disabled',
             'read_only_mode_enabled'                 => 'Read-only mode enabled',
+            'combatlog_parse_failure_resolved'       => 'Parse failure marked as resolved.',
         ],
     ],
     'apidungeonroute' => [
