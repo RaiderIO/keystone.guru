@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Override;
@@ -291,18 +290,6 @@ class Expansion extends CacheModel
         return ksgAssetImage(sprintf('expansions/%s.png', $this->shortname));
     }
 
-    /**
-     * Saves an expansion with the data from a Request.
-     */
-    public function saveFromRequest(Request $request): bool
-    {
-        $this->active    = $request->boolean('active');
-        $this->name      = $request->get('name');
-        $this->shortname = $request->get('shortname');
-        $this->color     = $request->get('color');
-
-        return $this->save();
-    }
     protected function casts(): array
     {
         return [

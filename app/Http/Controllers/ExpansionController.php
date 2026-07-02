@@ -12,23 +12,19 @@ use Session;
 
 class ExpansionController extends Controller
 {
-    /**
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    public function store(ExpansionFormRequest $request, ?Expansion $expansion = null)
+    public function store(ExpansionFormRequest $request, ?Expansion $expansion = null): Expansion
     {
-        if ($new = ($expansion === null)) {
-            $expansion = new Expansion();
-        }
+        Expansion::upsert([
+            [
+                'id'        => $expansion?->id,
+                'active'    => $request->boolean('active'),
+                'name'      => $request->validated('name'),
+                'shortname' => $request->validated('shortname'),
+                'color'     => $request->validated('color'),
+            ],
+        ], uniqueBy: ['id'], update: ['active', 'name', 'shortname', 'color']);
 
-        // Something went wrong with saving
-        if (!$expansion->saveFromRequest($request)) {
-            abort(500, __('controller.expansion.flash.unable_to_save_expansion'));
-        }
-
-        return $expansion;
+        return Expansion::where('shortname', $request->validated('shortname'))->firstOrFail();
     }
 
     /**
