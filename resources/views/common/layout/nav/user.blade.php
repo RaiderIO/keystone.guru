@@ -60,6 +60,12 @@ $user = Auth::user();
                         <span class="badge badge-warning badge-pill">{{ $numUserReports }}</span>
                     @endif
                 </a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.tools.combatlog.parsefailures.view') }}">{{__('view_common.layout.nav.user.view_combat_log_parse_failures') }}
+                    @if($numCombatLogParseFailures > 0)
+                        <span class="badge badge-warning badge-pill">{{ $numCombatLogParseFailures }}</span>
+                    @endif
+                </a>
                 <div class="dropdown-divider"></div>
             @endif
             <a class="dropdown-item" href="{{ route('profile.routes') }}">

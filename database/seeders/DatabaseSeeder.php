@@ -19,9 +19,6 @@ class DatabaseSeeder extends Seeder
 
     /** @var array<int, class-string<TableSeederInterface>> */
     private const SEEDERS = [
-        // Combatlog
-        CombatLogSeeder::class,
-
         // Seeders that don't depend on anything else
         ExpansionsSeeder::class,
         GameServerRegionsSeeder::class,
