@@ -40,29 +40,33 @@ gh issue view NNNN --repo RaiderIO/keystone.guru --json title,number
 
 Always pass `--repo RaiderIO/keystone.guru` explicitly — without it `gh` resolves to whatever the cwd repo is, which may differ. Batch all unique issue numbers in a single loop. Keep each full title for the Description column.
 
+Sessions from a related repo reference **that repo's** issue numbers (e.g. an infra session citing `keystoneguru-infra#22`). Fetch those with `--repo RaiderIO/keystoneguru-infra` and prefix the description with the repo name so the two issue-number spaces don't collide.
+
 ## Step 3 — Extract Claude session timestamps
 
-Find all `.jsonl` files (excluding `subagents/` subdirectories) modified within the date range across **all** project paths:
+Find all `.jsonl` files (excluding `subagents/` subdirectories) modified within the date range across **all** project paths. Use `find -newermt` rather than parsing `ls` output — it is robust and needs no month/day string-matching:
 
 ```bash
 find ~/.claude/projects/ -name "*.jsonl" -not -path "*/subagents/*" \
-  | xargs ls -la \
-  | awk '{print $6, $7, $8, $9}' \
-  | grep -E "Mon DD|..." \
-  | sort
+  -newermt "YYYY-MM-DD" ! -newermt "YYYY-MM-DD 23:59:59" \
+  | xargs ls -la | sort -k6,7
 ```
 
-(Adjust the `grep` pattern to match the target month/day abbreviations shown by `ls -la`, e.g. `"Jun 2[0-5]"` for June 20–25.)
+The lower bound is the start date; the upper bound is the day **after** the end date (or the end date with ` 23:59:59`). This is an mtime pre-filter only — the authoritative session start/end comes from the JSONL content parsed below, so a file touched late but started earlier is still placed correctly.
 
-For each matching file, extract the first meaningful user message and the last any-type message timestamp using Python (jq is not installed):
+`~/.claude/projects/` may contain **several repos** for the same client (e.g. the app repo and an `-infra-` CDK repo). Include them all in the scan; in Step 4, ask the user whether related repos should be folded under the same Toggl project or split out.
+
+For each matching file, extract the first meaningful user message plus **every** event timestamp (not just first/last) using Python (jq is not installed). The full timestamp list is what Step 4 uses to measure active time:
 
 ```python
 import json
+from datetime import datetime
 
 def extract_session(path):
+    """Return (first_user_text, events) where events is a sorted list of
+    datetimes for every message/tool event in the session."""
     first_user_text = None
-    first_ts = None
-    last_ts = None
+    events = []
     with open(path) as f:
         for line in f:
             try:
@@ -71,7 +75,7 @@ def extract_session(path):
                 continue
             ts = obj.get('timestamp', '')
             if ts:
-                last_ts = ts
+                events.append(datetime.fromisoformat(ts.replace('Z', '+00:00')))
             if obj.get('type') == 'user' and first_user_text is None:
                 content = obj.get('message', {}).get('content', '')
                 if isinstance(content, list):
@@ -82,19 +86,49 @@ def extract_session(path):
                 # Skip system caveat / slash-command-only messages
                 if not text.strip().startswith(('<local-command', '<command-name', '/')):
                     first_user_text = text[:200]
-                    first_ts = ts
-    return first_ts, first_user_text, last_ts
+    events.sort()
+    return first_user_text, events
 ```
 
 All JSONL timestamps are UTC (suffix `Z`). Determine the local UTC offset from `date +%z` and apply it before displaying times to the user.
 
-Use the **first user message text** to identify which issue was being worked on. Use **first_ts / last_ts** as the session start/end. Do not deduplicate overlapping sessions — parallel open conversations represent real simultaneous work.
+Use the **first user message text** to identify which issue was being worked on. Do not deduplicate overlapping sessions from the *same* machine — parallel open conversations represent real simultaneous work.
 
-## Step 4 — Build the raw timesheet
+## Step 4 — Split sessions into active-work segments
 
-Correlate sessions with commits to assign issue numbers. Produce one row per logical work session per issue. Use `???` for any start/end time that cannot be determined from the data.
+The wall-clock span of a session (`first → last`) is **not** time worked — it includes gaps where the user finished the task, walked away, sat in a meeting, or worked in another session. Logging the full span overstates hours; a flat cap (e.g. "2 h max") is a crude patch that mismeasures the real cause. Measure the **gaps** directly instead.
 
-Present as a markdown table:
+Rule: **a gap longer than `GAP` (~15 min) between consecutive events means the user stepped away.** Split the session at every such gap. Each resulting segment contains only sub-`GAP` intervals, so `end − start` of a segment *is* active time — no cap, no arbitrary discount. A continuous 3-hour session (events every few minutes) stays one honest 3-hour segment; a 15-minute task smeared across an afternoon becomes one 15-minute segment, not an hour.
+
+```python
+from datetime import timedelta
+
+GAP = timedelta(minutes=15)  # tunable: longest pause still counted as continuous work
+
+def segments(events, gap=GAP):
+    """Split sorted event datetimes into continuous work segments.
+    Returns a list of (start, end); end - start is active time."""
+    if not events:
+        return []
+    segs = []
+    seg_start = prev = events[0]
+    for cur in events[1:]:
+        if cur - prev > gap:
+            segs.append((seg_start, prev))
+            seg_start = cur
+        prev = cur
+    segs.append((seg_start, prev))
+    return segs
+```
+
+Emit **one timesheet row per segment**, each with its true start/end (converted to local time). This also disposes of two former special cases for free:
+
+- **Cross-day / resumed sessions** produce a huge gap, so they split into separate same-day segments automatically — no `???`, no manual cap.
+- **The trailing idle gap** (task done at 10:15, user returns at 11:00) exceeds `GAP` and is simply never inside a segment, so it contributes nothing. Time spent in *another* session during that gap is captured by that session's own segments — nothing real is lost, nothing idle is invented.
+
+Assign each segment the issue from its session's first user message, correlating with commits from Step 1. A segment with only one or two events and no substantive user text (a lone `ping`, keepalive, or cache-poke) is **not work** — drop it rather than letting it round up to 15 min.
+
+Present as a markdown table for review:
 
 ```
 | Start | End | Date | Issue |
@@ -102,7 +136,7 @@ Present as a markdown table:
 | 09:29 | 10:07 | 2026-06-20 | #3240 Increase PhpStan level (level 5 exploration) |
 ```
 
-Ask the user to supply values for every `???` before proceeding to Step 5.
+Use `???` only when an issue **number** cannot be determined; segment times always come from the data.
 
 ## Step 5 — Round to nearest 15 minutes
 
@@ -134,6 +168,6 @@ Match the Toggl export format exactly — all fields quoted, columns in this ord
 ## Caveats to surface to the user
 
 - **Existing Toggl entries**: if the user provides an existing export, scan it for entries on the same dates and flag overlaps before importing.
-- **Other machine**: the user has a second machine whose sessions are not in `~/.claude/`. Rows backed only by a commit (no matching local session) likely originated there — mark those start times `???`.
-- **Subagent background work**: report long-running sessions conservatively — use the user's first/last active message time, not the wall-clock span of background subagents.
-- **Duplicate start times**: Toggl merges entries with identical start date+time — tell the user to offset conflicting rows by 1 minute after import if needed.
+- **Other machine**: the user works across two machines, each with its own `~/.claude/`. This skill only sees the local one. Commit-only work (a commit with no matching local session) was likely done on the other machine — generate a CSV on **each** machine, then combine them with the companion `toggl-timesheet-merge` skill, which reconciles cross-machine overlaps. Do not invent `???` rows for the other machine's work; let its own run capture it.
+- **Subagent background work**: a long-running background subagent emits tool-event timestamps, so the gap logic in Step 4 already keeps those minutes inside a segment. Do not additionally pad a session for a subagent that ran while the user was away — if the user sent no messages during that span, the gap split handles it.
+- **Duplicate start times**: Toggl merges entries with identical start date+time. After rounding, two short back-to-back sessions can collide on the same slot. Prefer resolving it **in the CSV** — shift the later row to the next free 15-minute slot (adjusting its end/duration to match) — rather than leaving it for a manual post-import fix. Only fall back to "offset by 1 minute after import" when no clean slot is available.
