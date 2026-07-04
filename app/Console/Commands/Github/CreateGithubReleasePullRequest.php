@@ -62,14 +62,19 @@ class CreateGithubReleasePullRequest extends Command
         $existingPullRequestId = 0;
         $pullRequestTitle      = sprintf('Release %s', $release->version);
 
+        // This is a same-repo release PR, so instead of reconstructing and string-matching the
+        // owner/repo, just confirm it's not a fork and check the branch refs. Case-insensitive
+        // because the GitHub API normalizes repo full_names to lowercase.
+        $expectedRepo = strtolower(sprintf('%s/%s', $repositoryOwner, $repository));
+
         // Only gets the first page - but good enough
         foreach ($githubPullRequestClient->all($repositoryOwner, $repository, [
             'state'  => 'open',
             'labels' => 'release',
         ]) as $githubPullRequest) {
-            if (str_starts_with((string)$githubPullRequest['head']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
+            if (strtolower((string)$githubPullRequest['head']['repo']['full_name']) === $expectedRepo &&
+                strtolower((string)$githubPullRequest['base']['repo']['full_name']) === $expectedRepo &&
                 $githubPullRequest['head']['ref'] === $sourceBranch &&
-                str_starts_with((string)$githubPullRequest['base']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
                 $githubPullRequest['base']['ref'] === $targetBranch) {
                 $existingPullRequestId = $githubPullRequest['number'];
                 break;
