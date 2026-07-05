@@ -73,9 +73,11 @@ services:
 
   horizon:
     build:
-      context: docker-compose/app
+      context: docker-compose/app-worker
       dockerfile: Dockerfile
-    image: keystone.guru
+      args:
+        BASE_IMAGE: keystone.guru
+    image: keystone.guru-worker
     container_name: keystone.guru-horizon
     depends_on:
       - db

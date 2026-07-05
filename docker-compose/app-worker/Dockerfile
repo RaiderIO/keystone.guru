@@ -1,7 +1,8 @@
-FROM keystone.guru
+ARG BASE_IMAGE=keystone.guru-app
+FROM ${BASE_IMAGE}
 
 # Chrome runtime libraries required by Puppeteer for thumbnail generation.
-# These are intentionally absent from the slim keystone.guru base image.
+# These are intentionally absent from the slim base app image (docker-compose/app).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libcairo2 libcups2 \
     libdbus-1-3 libdrm2 libgbm1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 \
