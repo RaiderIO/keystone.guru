@@ -12,18 +12,121 @@ permissions:
 env:
   AWS_REGION: us-east-1
   ECR_REGISTRY: 868970774940.dkr.ecr.us-east-1.amazonaws.com
+  NODE_VERSION: '24'
 
 jobs:
+  # Frontend assets are keyed by the release tag (e.g. v15.2.2) so they land at
+  # compiled/<tag>/... — matching the `version` file baked into the app image.
+  # Runs in parallel with the image build; deploy jobs wait on it.
+  build-assets:
+    name: Build & Upload Frontend Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build assets
+        # NOTE: pass flags *after* `--` so they reach your npm script
+        env:
+          ASSETS_BASE_URL: https://assets.keystone.guru/
+        run: npm --output_version=${{ github.ref_name }} run production
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS CLI v2
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload JS
+        run: |
+          aws s3 cp public/js s3://${{ secrets.S3_BUCKET }}/compiled/${{ github.ref_name }}/js \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
+      - name: Upload CSS
+        run: |
+          aws s3 cp public/css s3://${{ secrets.S3_BUCKET }}/compiled/${{ github.ref_name }}/css \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
+      - name: Upload Webfonts
+        run: |
+          aws s3 cp public/webfonts s3://${{ secrets.S3_BUCKET }}/compiled/${{ github.ref_name }}/webfonts \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
+
+  # Map context JS is generated from the DB/seeders and is also keyed by the
+  # `version` file. We override that file with the release tag so the output
+  # lands at compiled/<tag>/mapcontext/... matching the image. Runs in parallel.
+  build-map-context:
+    name: Generate & Upload Map Context
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --wait
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+
+      - name: Key map context by the release tag
+        run: printf '%s' "${{ github.ref_name }}" > version
+
+      - name: Generate Map Context JS
+        run: |
+          mkdir -p storage/mapcontext
+          php artisan make:mapcontextstatic --output=storage/mapcontext
+          php artisan make:mapcontextdungeon --output=storage/mapcontext
+          php artisan make:mapcontextmappingversion --output=storage/mapcontext
+          ls -la storage/mapcontext
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS CLI
+        uses: unfor19/install-aws-cli-action@v1
+
+      - name: Upload Map Context JS files
+        env:
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: |
+          aws s3 cp storage/mapcontext "s3://${S3_BUCKET}/compiled" \
+            --recursive \
+            --cache-control "public,max-age=31536000,immutable" \
+            --no-progress
+
   build-push-images:
     name: Build & Push Release Images
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configure AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
           aws-region: ${{ env.AWS_REGION }}
@@ -37,7 +140,7 @@ jobs:
         run: echo "GIT_TOKEN=${{ secrets.GITHUB_TOKEN }}" > docker-compose/app/.env
 
       - name: Build base app image
-        run: docker build -t keystone.guru docker-compose/app
+        run: docker build -t keystone.guru-app docker-compose/app
 
       # GIT_REF pins the in-image checkout to the released tag for reproducibility.
       - name: Build production app image
@@ -73,7 +176,8 @@ jobs:
             "${ECR_REGISTRY}/ksg-cron:${{ github.ref_name }}"
           docker push "${ECR_REGISTRY}/ksg-cron:${{ github.ref_name }}"
 
-  # Staging deploys automatically once the release images exist in ECR. The
+  # Staging deploys automatically once the release images, frontend assets and
+  # map context all exist for the tag (gated via `needs` below). The
   # actual deploy runs in RaiderIO/keystoneguru-infra (it owns the CDK app); we
   # trigger it via repository_dispatch with the released version. Cross-repo
   # dispatch needs a token with access to that repo, stored as the
@@ -81,7 +185,7 @@ jobs:
   # cross-repo).
   deploy-staging:
     name: Deploy to Staging
-    needs: build-push-images
+    needs: [build-push-images, build-assets, build-map-context]
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch staging deploy to keystoneguru-infra

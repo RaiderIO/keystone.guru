@@ -6,14 +6,12 @@ use App\Exceptions\Logging\HandlerLogging;
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
-use App\Jobs\Logging\FetchCombatLogRunFanoutLogging;
-use App\Jobs\Logging\FetchCombatLogRunFanoutLoggingInterface;
 use App\Jobs\Logging\ProcessCombatLogFanoutLogging;
 use App\Jobs\Logging\ProcessCombatLogFanoutLoggingInterface;
 use App\Jobs\Logging\ProcessCombatLogPartLogging;
 use App\Jobs\Logging\ProcessCombatLogPartLoggingInterface;
-use App\Jobs\Logging\ProcessCombatLogSegmentFromUrlLogging;
-use App\Jobs\Logging\ProcessCombatLogSegmentFromUrlLoggingInterface;
+use App\Jobs\Logging\ProcessCombatLogSegmentsLogging;
+use App\Jobs\Logging\ProcessCombatLogSegmentsLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
@@ -170,10 +168,9 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(ThumbnailServiceLoggingInterface::class, ThumbnailServiceLogging::class);
 
         // Jobs
-        $this->app->bind(FetchCombatLogRunFanoutLoggingInterface::class, FetchCombatLogRunFanoutLogging::class);
         $this->app->bind(ProcessCombatLogFanoutLoggingInterface::class, ProcessCombatLogFanoutLogging::class);
         $this->app->bind(ProcessCombatLogPartLoggingInterface::class, ProcessCombatLogPartLogging::class);
-        $this->app->bind(ProcessCombatLogSegmentFromUrlLoggingInterface::class, ProcessCombatLogSegmentFromUrlLogging::class);
+        $this->app->bind(ProcessCombatLogSegmentsLoggingInterface::class, ProcessCombatLogSegmentsLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailLoggingInterface::class, ProcessRouteFloorThumbnailLogging::class);
         $this->app->bind(ProcessRouteFloorThumbnailCustomLoggingInterface::class, ProcessRouteFloorThumbnailCustomLogging::class);
         $this->app->bind(RegenerateCombatLogRouteLoggingInterface::class, RegenerateCombatLogRouteLogging::class);

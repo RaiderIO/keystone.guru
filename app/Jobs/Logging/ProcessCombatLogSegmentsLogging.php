@@ -26,11 +26,6 @@ class ProcessCombatLogSegmentsLogging extends StructuredLogging implements Proce
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function handleJoiningSegments(int $runId, int $segmentCount, string $combinedPath): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
     public function handleParseError(int $runId, int $combatLogVersion, string $message, string $class): void
     {
         $this->error(__METHOD__, get_defined_vars());
