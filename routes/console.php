@@ -33,7 +33,9 @@ $commands[] = Schedule::command('dungeonroute:publishscheduled')->everyFiveMinut
 $commands[] = Schedule::command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
 // If thumbnails are needed locally, move this command
-$commands[] = Schedule::command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
+if (!app()->environment('local')) {
+    $commands[] = Schedule::command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
+}
 
 $commands[] = Schedule::command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
