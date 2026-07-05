@@ -9,7 +9,21 @@ Branch formats are as follows:
 
 - The project is under Git version control.
 - Any newly created files should be staged.
-- Commits should not be done unless explicitly asked.
+- In the main checkout, commits should not be done unless explicitly asked (see the worktree
+  exception below).
+
+### Git worktrees
+- By default, do every task from an isolated git worktree with its own Docker `app` stack, created
+  with `sh/worktree.sh create <issue>-<slug>`. Run all commands (artisan, tests, `composer run
+  fix`/`analyse`) through that worktree's `app` container from inside the worktree dir, and tear it
+  down with `sh/worktree.sh remove <issue>-<slug>` when done. Only skip this when the user says to
+  work directly in the main checkout.
+- **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
+  Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
+  password is prompted), and open the MR to `development` with `gh`. This autonomy applies only to a
+  worktree you created — in the main checkout, still ask before committing.
+- The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
+  run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
 
 ## Github
 
