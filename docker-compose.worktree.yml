@@ -1,0 +1,35 @@
+# Minimal per-worktree stack (app + nginx) for running an isolated checkout alongside the main
+# stack. Managed by sh/worktree.sh — see the `worktree-docker` skill for the full workflow.
+#
+# Design notes:
+# - No `container_name` here on purpose: Compose auto-names containers `<project>-<service>-1`,
+#   so each worktree (unique COMPOSE_PROJECT_NAME) gets its own non-colliding names.
+# - Reuses the prebuilt `keystone.guru` image (no `build:`), so starting a worktree never rebuilds.
+# - Runs on its OWN private default network. The worktree app is deliberately NOT placed on the
+#   main shared network — sh/worktree.sh instead attaches the shared service containers (db, redis,
+#   reverb, ...) INTO this private network with their DNS aliases. That keeps `nginx -> app`
+#   resolving to the worktree's own app and leaves the main stack completely untouched.
+# - nginx resolves every upstream in docker-compose/nginx/keystone.guru.conf at startup (app,
+#   reverb, app-swoole), so sh/worktree.sh attaches all of them. Note: the couple of octane-only
+#   endpoints proxied to `app-swoole` hit the MAIN stack's octane (main code), not the worktree —
+#   fine for browsing, but test swoole-endpoint changes by running your own octane if needed.
+services:
+  app:
+    image: keystone.guru
+    restart: "no"
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ~/.ssh:/root/.ssh
+
+  nginx:
+    image: nginx:alpine
+    restart: "no"
+    working_dir: /var/www/
+    depends_on:
+      - app
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    ports:
+      - "${WORKTREE_HTTP_PORT}:80"
