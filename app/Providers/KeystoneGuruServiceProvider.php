@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Http\View\Composers\AdminDungeonEditComposer;
 use App\Http\View\Composers\AdminDungeonMappingVersionsComposer;
 use App\Http\View\Composers\AdminMessageBannerComposer;
 use App\Http\View\Composers\AdminNpcHealthEditComposer;
@@ -413,8 +412,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.maps.controls.pullsworkbench', PullsWorkbenchComposer::class);
 
         // Admin
-        view()->composer('admin.dungeon.edit', AdminDungeonEditComposer::class);
-
         view()->composer('admin.dungeon.mappingversions', AdminDungeonMappingVersionsComposer::class);
 
         view()->composer('admin.npchealth.edit', AdminNpcHealthEditComposer::class);
