@@ -107,7 +107,7 @@ class FloorUnionArea extends CacheModel implements HasVerticesInterface, Convert
         $clone->exists = false;
         unset($clone->id);
         $clone->mapping_version_id = $mappingVersion->id;
-        $clone->floor_union_id     = $newParent?->id ?? 0; // @phpstan-ignore nullsafe.neverNull
+        $clone->floor_union_id     = $newParent instanceof FloorUnion ? $newParent->id : 0;
         $clone->save();
 
         return $clone;
