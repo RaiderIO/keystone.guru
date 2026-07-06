@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -102,8 +101,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->importDungeonRoutes();
         $this->flushModels();
         $this->preserveColumns();
-
-        Stopwatch::dumpAll();
     }
 
     /**
