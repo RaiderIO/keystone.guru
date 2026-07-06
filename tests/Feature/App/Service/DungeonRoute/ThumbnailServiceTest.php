@@ -83,7 +83,11 @@ final class ThumbnailServiceTest extends PublicTestCase
     public function attachThumbnailToDungeonRoute_givenExistingThumbnailForNonFacadeFloor_deletesOldThumbnailBeforeAttachingNew(): void
     {
         // Arrange
+        // The old thumbnail's file lives on s3_user_uploads; the new one is written to the
+        // default disk (attachThumbnailToDungeonRoute uses config('filesystems.default')),
+        // so fake both to keep the test off any real disk regardless of FILESYSTEM_DISK.
         Storage::fake('s3_user_uploads');
+        Storage::fake(config('filesystems.default'));
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
         $mappingVersion = $dungeon->getCurrentMappingVersion();

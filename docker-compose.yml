@@ -77,6 +77,13 @@ services:
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: keystone.guru
+      # The worker Dockerfile builds FROM the app image. `depends_on` does not order *builds*,
+      # so on a cold machine a parallel `docker compose build` would fail before the app image
+      # exists. This named context makes compose build the app service first and resolves
+      # `FROM keystone.guru` to its result. Note: building the app image requires
+      # docker-compose/app/.env (GIT_TOKEN=...) to exist, same as in CI.
+      additional_contexts:
+        keystone.guru: service:app
     image: keystone.guru-worker
     container_name: keystone.guru-horizon
     depends_on:
