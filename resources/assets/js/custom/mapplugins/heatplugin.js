@@ -6,6 +6,8 @@ class HeatPlugin extends MapPlugin {
 
         this.hidden = false;
         this.heatLayer = null;
+        /** The requestAnimationFrame handle used while we wait for the map container to gain a non-zero size */
+        this._deferredAddHeatLayerRafId = null;
         this.draw = false;
         /** A grid of weights for each coordinate for each floor - used for the tooltips */
         this.weightByFloorIdGrid = [];
@@ -147,6 +149,13 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
+        // The heat layer may not exist yet when its addition was deferred until the map container
+        // gained a non-zero size. The data is retained in rawLatLngsByFloorId and re-applied once
+        // the layer is created (see _deferAddHeatLayer).
+        if (this.heatLayer === null) {
+            return;
+        }
+
         let result = [];
         if (this.rawLatLngsByFloorId.hasOwnProperty(floorId)) {
             result = this.rawLatLngsByFloorId[floorId];
@@ -167,9 +176,15 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
-        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
-
-        this.heatLayer.addTo(this.map.leafletMap);
+        // The #map container may still have zero width when the map initializes (for example when it
+        // was hidden and then shown). Leaflet.heat sizes its canvas to the map's size; a zero width makes
+        // simpleheat call getImageData(0, ...) which throws an IndexSizeError. Only add the layer once the
+        // map has a non-zero size, deferring until the container has been laid out if necessary.
+        if (this.map.leafletMap.getSize().x > 0) {
+            this._addHeatLayer();
+        } else {
+            this._deferAddHeatLayer();
+        }
         // let self = this;
         // Debug function that adds latLngs to your mouse location as you move around
         // this.map.leafletMap.on({
@@ -187,8 +202,48 @@ class HeatPlugin extends MapPlugin {
         // });
     }
 
+    _addHeatLayer() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
+
+        this.heatLayer.addTo(this.map.leafletMap);
+    }
+
+    _deferAddHeatLayer() {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        // Guard against stacking multiple deferrals if addToMap() is somehow called again while one is pending.
+        if (this._deferredAddHeatLayerRafId !== null) {
+            window.cancelAnimationFrame(this._deferredAddHeatLayerRafId);
+        }
+
+        let self = this;
+        let attempt = function () {
+            self._deferredAddHeatLayerRafId = null;
+
+            // Leaflet caches the map size and only recomputes it on invalidateSize(), so polling getSize()
+            // would keep returning the stale zero. Read the container width directly to detect when the
+            // container has actually been laid out, then force Leaflet to re-measure before adding the layer.
+            if (self.map.leafletMap.getContainer().clientWidth > 0) {
+                self.map.leafletMap.invalidateSize();
+                self._addHeatLayer();
+                // The floor data may have arrived while we were waiting, so (re)apply it now.
+                self._applyLatLngsForFloor(getState().getCurrentFloor().id);
+            } else {
+                self._deferredAddHeatLayerRafId = window.requestAnimationFrame(attempt);
+            }
+        };
+
+        this._deferredAddHeatLayerRafId = window.requestAnimationFrame(attempt);
+    }
+
     setOptions(options) {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        if (this.heatLayer === null) {
+            return;
+        }
 
         this.heatLayer.setOptions(options);
     }
@@ -198,6 +253,13 @@ class HeatPlugin extends MapPlugin {
 
         if (!this.isEnabled()) {
             return;
+        }
+
+        // Cancel any pending deferred add so a queued frame doesn't add an orphaned layer after removal.
+        // refreshLeafletMap() removes and re-adds all plugins, which can otherwise leave duplicate layers.
+        if (this._deferredAddHeatLayerRafId !== null) {
+            window.cancelAnimationFrame(this._deferredAddHeatLayerRafId);
+            this._deferredAddHeatLayerRafId = null;
         }
 
         if (this.heatLayer !== null) {
@@ -277,4 +339,10 @@ class HeatPlugin extends MapPlugin {
 
         this.setLatLngs([]);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HeatPlugin;
 }
