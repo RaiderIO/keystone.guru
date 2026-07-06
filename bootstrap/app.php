@@ -46,8 +46,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn() => route('login'));
         $middleware->redirectUsersTo('/home');
 
+        // Only the external webhook endpoints (called by GitHub / Wowhead without a session)
+        // are exempt from CSRF verification; every other route sends a token.
         $middleware->validateCsrfTokens(except: [
-            '*',
+            'webhook/*',
         ]);
 
         $middleware->append([

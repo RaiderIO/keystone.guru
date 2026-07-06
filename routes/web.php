@@ -361,7 +361,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
                     Route::get('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
-                    Route::get('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
+                    Route::delete('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
                 });
                 // Floors
                 Route::prefix('{dungeon}/floor')->group(static function () {
@@ -375,7 +375,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                         Route::prefix('speedrunrequirednpcs')->group(static function () {
                             Route::get('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->create(...))->name('admin.dungeonspeedrunrequirednpc.new');
                             Route::post('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->createSave(...))->name('admin.dungeonspeedrunrequirednpc.savenew');
-                            Route::get('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
+                            Route::delete('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
                         });
                     });
                 });
