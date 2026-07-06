@@ -253,7 +253,11 @@ project-specific configs: `laratrust.php`, `laravel-model-caching.php`, `larex.p
 ## Related skills
 
 - **repository-pattern** — adding a repository for a new model
+- **creating-a-service** — the service interface/binding/logging-companion runbook
 - **structured-logging** — the `{Service}Logging` companion-class pattern
+- **mapping-versioned-models** — the MappingVersion clone lifecycle and wiring checklist
+- **ajax-map-editor-crud** — the Ajax controller layer + broadcast events
+- **artisan-command-conventions** — command base classes and the scheduler
 - **seeder-load / seeder-save** — importing/exporting mapping models via the dungeon JSON seeders
 - **api-endpoint** — writing a new public API v1 endpoint
 - **admin-tools-page / admin-batch-page** — new admin pages

@@ -1,4 +1,9 @@
-# Skill: Expose an Artisan Command in the Admin Panel
+---
+name: admin-artisan-command
+description: Expose an existing Artisan command in the admin panel's "Artisan Commands" tools section — whitelist entry, chunked-AJAX Inline Code JS, blade view, route, breadcrumb, translations, and tests. Use when asked to make an artisan command runnable from the admin panel. Not for building a whole new admin page (admin-tools-page) or a bespoke batch operation page (admin-batch-page).
+---
+
+# Expose an Artisan Command in the Admin Panel
 
 Use this skill when asked to make an artisan command runnable from the admin panel.
 

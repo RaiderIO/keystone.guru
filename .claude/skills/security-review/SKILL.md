@@ -1,4 +1,4 @@
-`---
+---
 name: security-review
 description: The backend security model of keystone.guru and how to review it — authentication (Laratrust, Basic-auth API), authorization (Gate/policies on the write surface), CSRF posture, request-input safety, and the areas already verified safe so they are not re-investigated. Use when doing a security review, adding an endpoint, or touching auth/CSRF/SQL/authorization. Not for front-end security or dependency CVEs.
 ---
