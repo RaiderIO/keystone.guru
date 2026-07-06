@@ -18,6 +18,8 @@ class StructuredLoggingTest extends PublicTestCase
     public function start_GivenStartCalled_ShouldKeepContextPersistent(): void
     {
         // Arrange
+        config(['app.log_level' => 'debug']);
+
         $logger            = LoggingFixtures::createLogManager($this);
         $log               = new TestableStructuredLogging($logger);
         $persistentContext = ['test' => 'test'];
@@ -26,13 +28,22 @@ class StructuredLoggingTest extends PublicTestCase
         $logger
             ->expects($this->exactly(3))
             ->method('log')
-            ->willReturnCallback(function (string $level, string $methodName, array $context = []) {
+            ->willReturnCallback(function (string $level, string $message, array $context = []) {
                 self::assertArrayHasKey('test', $context);
 
-                if ($methodName === 'startStart') {
-                    self::assertArrayNotHasKey('test2', $context);
-                } elseif ($methodName === 'log') {
-                    self::assertArrayHasKey('test2', $context);
+                // The message is prefixed with padding and one dash per open context group
+                switch (trim($message)) {
+                    case '- firstStart':
+                        self::assertArrayNotHasKey('test2', $context);
+                        break;
+                    case '- log':
+                        self::assertArrayHasKey('test2', $context);
+                        break;
+                    case '- firstEnd':
+                        self::assertArrayNotHasKey('test2', $context);
+                        break;
+                    default:
+                        self::fail(sprintf('Unexpected log message: %s', $message));
                 }
             });
 
@@ -49,10 +60,12 @@ class StructuredLoggingTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
-    #[Group('StructuredLogging2')]
+    #[Group('StructuredLogging')]
     public function start_GivenNestedStartCalled_ShouldKeepContextPersistent(): void
     {
         // Arrange
+        config(['app.log_level' => 'debug']);
+
         $logger                  = LoggingFixtures::createLogManager($this);
         $log                     = new TestableStructuredLogging($logger);
         $persistentContext       = ['test' => 'test'];
@@ -62,18 +75,33 @@ class StructuredLoggingTest extends PublicTestCase
         $logger
             ->expects($this->exactly(5))
             ->method('log')
-            ->willReturnCallback(function (string $level, string $methodName, array $context = []) {
+            ->willReturnCallback(function (string $level, string $message, array $context = []) {
                 self::assertArrayHasKey('test', $context);
 
-                if ($methodName === 'firstStart') {
-                    self::assertArrayNotHasKey('nested', $context);
-                    self::assertArrayNotHasKey('test2', $context);
-                } elseif ($methodName === 'nestedStart') {
-                    self::assertArrayHasKey('nested', $context);
-                    self::assertArrayNotHasKey('test2', $context);
-                } elseif ($methodName === 'log') {
-                    self::assertArrayHasKey('nested', $context);
-                    self::assertArrayHasKey('test2', $context);
+                // The message is prefixed with padding and one dash per open context group
+                switch (trim($message)) {
+                    case '- firstStart':
+                        self::assertArrayNotHasKey('nested', $context);
+                        self::assertArrayNotHasKey('test2', $context);
+                        break;
+                    case '-- nestedStart':
+                        self::assertArrayHasKey('nested', $context);
+                        self::assertArrayNotHasKey('test2', $context);
+                        break;
+                    case '-- log':
+                        self::assertArrayHasKey('nested', $context);
+                        self::assertArrayHasKey('test2', $context);
+                        break;
+                    case '-- nestedEnd':
+                        self::assertArrayHasKey('nested', $context);
+                        self::assertArrayNotHasKey('test2', $context);
+                        break;
+                    case '- firstEnd':
+                        self::assertArrayNotHasKey('nested', $context);
+                        self::assertArrayNotHasKey('test2', $context);
+                        break;
+                    default:
+                        self::fail(sprintf('Unexpected log message: %s', $message));
                 }
             });
 
@@ -96,17 +124,21 @@ class StructuredLoggingTest extends PublicTestCase
     public function start_GivenStartAndEndCalled_ShouldLogElapsedTime(): void
     {
         // Arrange
+        config(['app.log_level' => 'debug']);
+
         $logger            = LoggingFixtures::createLogManager($this);
         $log               = new TestableStructuredLogging($logger);
         $persistentContext = ['test' => 'test'];
         $context           = ['test2' => 'test2'];
+        $endLogged         = false;
 
         $logger
             ->expects($this->exactly(3))
             ->method('log')
-            ->willReturnCallback(function (string $level, string $methodName, array $context = []) {
-                if ($methodName === 'myLogEnd') {
-                    self::assertArrayHasKey('elapsed', $context);
+            ->willReturnCallback(function (string $level, string $message, array $context = []) use (&$endLogged) {
+                if (trim($message) === '- myLogEnd') {
+                    self::assertArrayHasKey('elapsedMS', $context);
+                    $endLogged = true;
                 }
             });
 
@@ -116,5 +148,6 @@ class StructuredLoggingTest extends PublicTestCase
         $log->end('myLogEnd');
 
         // Assert
+        self::assertTrue($endLogged);
     }
 }

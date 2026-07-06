@@ -856,10 +856,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         $result = false;
         $result = match ($this->published_state_id) {
-            PublishedState::ALL[PublishedState::UNPUBLISHED] => $this->mayUserEdit($user),
-            PublishedState::ALL[PublishedState::TEAM]        => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
+            PublishedState::ALL[PublishedState::UNPUBLISHED]                                                 => $this->mayUserEdit($user),
+            PublishedState::ALL[PublishedState::TEAM]                                                        => ($this->team !== null && $this->team->isUserMember($user)) || ($user !== null && $user->hasRole(Role::ROLE_ADMIN)),
             PublishedState::ALL[PublishedState::WORLD_WITH_LINK], PublishedState::ALL[PublishedState::WORLD] => true,
-            default => $result,
+            default                                                                                          => $result,
         };
 
         return $result;
