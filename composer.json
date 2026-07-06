@@ -79,7 +79,7 @@
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^10.0",
         "fakerphp/faker": "^1.23",
-        "genealabs/laravel-model-caching": "^12.0",
+        "genealabs/laravel-model-caching": "12.0.3",
         "graham-campbell/github": "^13.0",
         "guzzlehttp/guzzle": "^7.8",
         "haydenpierce/class-finder": "^0.5.3",

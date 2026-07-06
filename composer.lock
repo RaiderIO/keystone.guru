@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bea4876ae73fba6a27b3740c0313e533",
+    "content-hash": "397a6b59e857758c0802369e868f9037",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -2071,16 +2071,16 @@
         },
         {
             "name": "genealabs/laravel-model-caching",
-            "version": "12.0.4",
+            "version": "12.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mike-bronner/laravel-model-caching.git",
-                "reference": "0f384b51980fddf6fc54845747937e5786233cad"
+                "reference": "ae605a862d0d3d23463edc46c67d58e0b4faec6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/0f384b51980fddf6fc54845747937e5786233cad",
-                "reference": "0f384b51980fddf6fc54845747937e5786233cad",
+                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/ae605a862d0d3d23463edc46c67d58e0b4faec6c",
+                "reference": "ae605a862d0d3d23463edc46c67d58e0b4faec6c",
                 "shasum": ""
             },
             "require": {
@@ -2133,10 +2133,10 @@
             "description": "Automatic caching for Eloquent models.",
             "support": {
                 "issues": "https://github.com/mike-bronner/laravel-model-caching/issues",
-                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/12.0.4"
+                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/12.0.3"
             },
             "abandoned": "mike-bronner/laravel-model-caching",
-            "time": "2026-02-21T14:51:35+00:00"
+            "time": "2026-02-17T23:07:25+00:00"
         },
         {
             "name": "graham-campbell/bounded-cache",
