@@ -177,6 +177,9 @@ class HeatPlugin extends MapPlugin {
         this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
 
         this.heatLayer.addTo(this.map.leafletMap);
+        // The map defers plugin loading until it has a non-zero size, so floor data may have already
+        // arrived (and been stored but not rendered while heatLayer was still null); (re)apply it now.
+        this._applyLatLngsForFloor(getState().getCurrentFloor().id);
         // let self = this;
         // Debug function that adds latLngs to your mouse location as you move around
         // this.map.leafletMap.on({

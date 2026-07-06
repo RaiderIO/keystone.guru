@@ -77,6 +77,17 @@ describe('HeatPlugin.addToMap', () => {
         expect(heatLayer.addTo).toHaveBeenCalledWith(leafletMap);
         expect(plugin.heatLayer).toBe(heatLayer);
     });
+
+    it('addToMap_givenDataArrivedWhileDeferred_reAppliesFloorData', () => {
+        const {plugin, heatLayer} = createHeatPlugin();
+
+        // Simulate floor data that arrived (and was stored) while the map deferred plugin loading.
+        plugin.rawLatLngsByFloorId[1] = [[1, 2, 3]];
+
+        plugin.addToMap();
+
+        expect(heatLayer.setLatLngs).toHaveBeenCalledWith([[1, 2, 3]]);
+    });
 });
 
 describe('HeatPlugin null-layer guards', () => {
