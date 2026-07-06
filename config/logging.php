@@ -1,6 +1,7 @@
 <?php
 
 use App\Logging\Handlers\ColoredLineFormatter;
+use App\Logging\Handlers\DeduplicateHandlers;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
@@ -71,6 +72,8 @@ return [
             'url'    => env('APP_LOG_DISCORD_WEBHOOK'),
             'via'    => MarvinLabs\DiscordLogger\Logger::class,
             'level'  => 'error',
+            // The same error repeated within the dedup window is sent to Discord only once
+            'tap' => [DeduplicateHandlers::class],
             //            'formatter' => Monolog\Formatter\LineFormatter::class,
             //            'formatter_with' => [
             //                'format' => "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n",

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiRole;
 use App\Http\Middleware\DebugBarMessageLogger;
@@ -49,6 +50,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             '*',
         ]);
+
+        // Prepend so every log line of the request - including those of other global middleware - carries the trace_id
+        $middleware->prepend(AddsTraceIdToContext::class);
 
         $middleware->append([
             ServerTimingMiddleware::class,
