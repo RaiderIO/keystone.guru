@@ -53,14 +53,12 @@ class DungeonMap extends Signalable {
 
         if (!(mapContext instanceof MapContextLiveSession)) {
             if (state.isMapAdmin()) {
-                if (mapContext.getMappingVersion().merged) {
-                    let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
+                if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
+                    let template = Handlebars.templates['map_controls_snackbar_mapping_version_outdated'];
 
                     let data = $.extend({}, getHandlebarsDefaultVariables(), {});
 
                     state.addSnackbar(template(data));
-
-                    this.options.readonly = true;
                 }
             } else if (this.options.edit && mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
                 let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];

@@ -204,23 +204,6 @@
             </div>
         </div>
 
-        {{-- Mapping (conditional) --}}
-        @if(config('app.type') === 'mapping')
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <i class="fas fa-map"></i> {{ __('view_admin.tools.list.subheader_mapping') }}
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="{{ route('admin.tools.mapping.forcesync') }}">{{ __('view_admin.tools.list.force_sync_mapping') }}</a>
-                            <small class="text-muted d-block">{{ __('view_admin.tools.list.force_sync_mapping_description') }}</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        @endif
-
         {{-- Misc --}}
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">

@@ -42,7 +42,6 @@ use Override;
  * @property int         $timer_max_seconds               The maximum timer (in seconds) that you have to complete the dungeon.
  * @property string|null $mdt_mapping_hash
  * @property bool        $facade_enabled                  True if this mapping version uses facades, false if it does not.
- * @property bool        $merged                          Not saved in the database
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -81,7 +80,6 @@ class MappingVersion extends Model
         'timer_max_seconds',
         'facade_enabled',
         'mdt_mapping_hash',
-        'merged',
     ];
 
     protected $fillable = [
@@ -97,10 +95,6 @@ class MappingVersion extends Model
         'mdt_mapping_hash',
         'updated_at',
         'created_at',
-    ];
-
-    protected $appends = [
-        'merged',
     ];
 
     protected $with = [
@@ -131,13 +125,6 @@ class MappingVersion extends Model
             'timer_max_seconds'               => 'integer',
             'facade_enabled'                  => 'integer',
         ];
-    }
-
-    public function getMergedAttribute(): bool
-    {
-        $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
-
-        return $mostRecentlyMergedMappingCommitLog !== null && $mostRecentlyMergedMappingCommitLog->created_at->gte($this->created_at);
     }
 
     /** @return BelongsTo<GameVersion, $this> */
@@ -235,7 +222,7 @@ class MappingVersion extends Model
             __($this->gameVersion->name),
             __($this->dungeon->name),
             $this->version,
-            $this->merged ? 'readonly, ' : '',
+            !$this->isLatestForDungeon() ? 'previous version, ' : '',
             $this->id,
             $this->created_at,
         );

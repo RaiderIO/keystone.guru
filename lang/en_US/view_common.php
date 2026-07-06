@@ -491,7 +491,7 @@ return [
     ],
     'mappingversion' => [
         'select' => [
-            'mapping_version_readonly' => ':gameVersion version :version (readonly)',
+            'mapping_version_previous' => ':gameVersion version :version (previous version)',
             'mapping_version'          => ':gameVersion version :version',
         ],
     ],

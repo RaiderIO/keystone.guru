@@ -47,7 +47,7 @@ return [
                 'add_mapping_version'      => 'Add mapping version',
                 'delete'                   => 'Delete',
                 'table_header'             => [
-                    'merged'       => 'Merged',
+                    'merged'       => 'Current',
                     'facade'       => 'Facade',
                     'id'           => 'Id',
                     'game_version' => 'Game version',
@@ -601,9 +601,6 @@ return [
             'subheader_features'                                      => 'Features',
             'manage_features'                                         => 'Manage features',
             'manage_features_description'                             => 'Enable or disable feature flags across the application.',
-            'subheader_mapping'                                       => 'Mapping',
-            'force_sync_mapping'                                      => 'Force sync mapping',
-            'force_sync_mapping_description'                          => 'Immediately push local mapping data to the mapping server.',
             'subheader_misc'                                          => 'Misc',
             'throw_an_exception'                                      => 'Throw an exception',
             'throw_an_exception_description'                          => 'Trigger a test exception to verify error tracking.',
