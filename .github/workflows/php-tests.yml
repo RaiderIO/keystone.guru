@@ -15,9 +15,12 @@ jobs:
 
     # The suite is split into shards that run concurrently on separate runners, each with its own
     # MySQL, so wall-clock time is the slowest shard instead of the sum. The heavy APICombatLog suite
-    # (its subgroups CombatLogRoute + CorrectEvents together equal the whole APICombatLog group) is
-    # isolated into its own shards; everything else runs in the "rest" shard. Coverage is NOT computed
-    # here (it is instrumentation overhead) — see php-coverage.yml for the nightly/release coverage run.
+    # (its subgroups CombatLogRoute + CorrectEvents together equal the whole APICombatLog group) gets
+    # a shard per subgroup; the remaining Feature and Unit suites are one shard each. The four shards
+    # are disjoint and together equal the full run minus MapTiles (571 + 308 + 46 + 32 = 957). Using
+    # --testsuite (not a positional path) keeps the Unit suite's phpunit.xml <exclude> entries honoured
+    # and auto-covers newly added test files. Coverage is NOT computed here (it is instrumentation
+    # overhead) — see php-coverage.yml for the nightly/release coverage run.
     strategy:
       fail-fast: false
       matrix:
@@ -26,8 +29,10 @@ jobs:
             phpunit-args: "--group=CombatLogRoute"
           - shard: correct-events
             phpunit-args: "--group=CorrectEvents"
-          - shard: rest
-            phpunit-args: "--exclude-group=APICombatLog,MapTiles"
+          - shard: feature
+            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=APICombatLog --exclude-group=MapTiles"
+          - shard: unit
+            phpunit-args: "--testsuite \"Unit Tests\" --exclude-group=MapTiles"
 
     name: php-tests (${{ matrix.shard }})
 
