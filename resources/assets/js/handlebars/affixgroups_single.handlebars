@@ -1,7 +1,7 @@
 {{#affixgroups}}
     <div class="affix_list_row row g-0">
         {{#affixes}}
-            <div class="affix_row float-start">
+            <div class="affix_row col-auto">
                 <div class="select_icon affix_icon_{{class}} me-2" style="height: 24px;" data-bs-toggle="tooltip"
                      title="{{name}}">
                     &nbsp;
@@ -9,7 +9,7 @@
             </div>
         {{/affixes}}
         {{#if seasonal_index}}
-            <div class="affix_row float-start">
+            <div class="affix_row col-auto">
             {{seasonal_index}}
             </div>
         {{/if}}
