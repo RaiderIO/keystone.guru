@@ -129,6 +129,7 @@ class Npc extends CacheModel implements MappingModelInterface
         ];
     }
 
+    #[\Override]
     public function resolveRouteBinding($value, $field = null): ?static
     {
         $id = (int)explode('-', (string)$value, 2)[0];
@@ -137,6 +138,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->where('id', $id)->first();
     }
 
+    #[\Override]
     public function getRouteKey(): string
     {
         return sprintf('%d-%s', $this->id, Str::slug(__($this->name)));

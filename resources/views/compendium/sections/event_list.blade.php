@@ -25,16 +25,9 @@ $showSpellSubject ??= false;
 $contextDungeon   ??= null;
 $date             ??= null;
 
-$shouldShowSubject = static function (CombatLogNpcEvent|CombatLogSpellEvent $event) use (
-    $showNpcSubject,
-    $showSpellSubject
-): bool {
-    return $event instanceof CombatLogNpcEvent ? $showNpcSubject : $showSpellSubject;
-};
+$shouldShowSubject = (static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): bool => $event instanceof CombatLogNpcEvent ? $showNpcSubject : $showSpellSubject);
 
-$eventTypeIcon = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
-    return $event instanceof CombatLogNpcEvent ? 'fas fa-dragon' : 'fas fa-magic';
-};
+$eventTypeIcon = (static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => $event instanceof CombatLogNpcEvent ? 'fas fa-dragon' : 'fas fa-magic');
 
 $eventBadgeClass = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
     if ($event instanceof CombatLogNpcEvent) {
@@ -103,11 +96,9 @@ $eventDescription = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
     };
 };
 
-$eventAnchorId = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
-    return $event instanceof CombatLogNpcEvent
-        ? sprintf('npc-event-%d', $event->id)
-        : sprintf('spell-event-%d', $event->id);
-};
+$eventAnchorId = (static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => $event instanceof CombatLogNpcEvent
+    ? sprintf('npc-event-%d', $event->id)
+    : sprintf('spell-event-%d', $event->id));
 
 $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): string {
     if ($event instanceof CombatLogNpcEvent) {

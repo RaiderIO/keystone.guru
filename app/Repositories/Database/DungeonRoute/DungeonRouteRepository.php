@@ -80,7 +80,7 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
      */
     public function getWeeklyRoutes(?Dungeon $dungeon = null, ?Season $season = null): Collection
     {
-        $season = $season ?? $this->seasonService->getCurrentSeason();
+        $season ??= $this->seasonService->getCurrentSeason();
 
         $weeklyRouteTags = config('keystoneguru.raider_io.weekly_route.tags');
         $tagCategoryId   = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM];

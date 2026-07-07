@@ -202,7 +202,7 @@ final class MDTMapPOITest extends TestCase
         ];
 
         // Act
-        $result = (new MDTMapPOI(1, $raw))->toArray();
+        $result = new MDTMapPOI(1, $raw)->toArray();
 
         // Assert
         $this->assertSame('genericAssignablePOI', $result['type']);

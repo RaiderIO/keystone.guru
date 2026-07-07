@@ -20,13 +20,10 @@ Branch formats are as follows:
   work directly in the main checkout.
 - **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
   Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
-  password is prompted), and open the MR to `development` with `gh`. Reference the issue in the MR
-  body (e.g. `Closes #<issue>`) — this creates a timeline cross-reference, but note it does NOT
-  create the "Development" panel linked-PR or auto-close the issue, because the MR targets
-  `development` rather than the default branch, and there is no API to create that link (see the
-  `worktree-docker` skill); tell the user they must add it manually in the GitHub UI if they want it.
-  This autonomy applies only to a worktree you created — in the main checkout, still ask before
-  committing.
+  password is prompted), and open the MR to `master` (the default branch) with `gh`. Start the MR
+  body with `Closes #<issue>` — because it targets the default branch it auto-links the issue and
+  closes it on merge. This autonomy applies only to a worktree you created — in the main checkout,
+  still ask before committing.
 - The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
   run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
 

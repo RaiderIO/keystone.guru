@@ -174,6 +174,22 @@ class SeasonService implements SeasonServiceInterface
         return $this->seasonRepository->getUpcomingSeasonForDungeon($dungeon);
     }
 
+    public function getCurrentSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        if (!$dungeon->hasMappingVersionWithSeasons()) {
+            return null;
+        }
+
+        $currentSeason = $this->getCurrentSeason();
+        if ($currentSeason === null) {
+            return null;
+        }
+
+        return $currentSeason->dungeons()->where('dungeons.id', $dungeon->id)->exists()
+            ? $currentSeason
+            : null;
+    }
+
     public function getSeasonFromShortString(?string $season): ?Season
     {
         if ($season === null) {

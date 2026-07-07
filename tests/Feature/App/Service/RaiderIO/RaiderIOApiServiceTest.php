@@ -29,6 +29,7 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     /**
      * @throws Exception
      */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

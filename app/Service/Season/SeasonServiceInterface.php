@@ -35,6 +35,12 @@ interface SeasonServiceInterface
 
     public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season;
 
+    /**
+     * The current season, but only if the given dungeon is part of it. Returns null for dungeons
+     * that are not in the currently active season (such as legacy dungeons).
+     */
+    public function getCurrentSeasonForDungeon(Dungeon $dungeon): ?Season;
+
     public function getSeasonFromShortString(string $season): ?Season;
 
     /**

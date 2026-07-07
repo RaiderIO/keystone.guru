@@ -22,6 +22,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
 {
     private RaiderIOKeystoneGuruApiService $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
