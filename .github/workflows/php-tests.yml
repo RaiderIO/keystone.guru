@@ -14,13 +14,18 @@ jobs:
     runs-on: ubuntu-latest
 
     # The suite is split into shards that run concurrently on separate runners, each with its own
-    # MySQL, so wall-clock time is the slowest shard instead of the sum. The heavy APICombatLog suite
-    # (its subgroups CombatLogRoute + CorrectEvents together equal the whole APICombatLog group) gets
-    # a shard per subgroup; the remaining Feature and Unit suites are one shard each. The four shards
-    # are disjoint and together equal the full run minus MapTiles (571 + 308 + 46 + 32 = 957). Using
-    # --testsuite (not a positional path) keeps the Unit suite's phpunit.xml <exclude> entries honoured
-    # and auto-covers newly added test files. Coverage is NOT computed here (it is instrumentation
-    # overhead) — see php-coverage.yml for the nightly/release coverage run.
+    # MySQL, so wall-clock time is the slowest shard instead of the sum:
+    #   - combatlog-route / correct-events : the two subgroups of the heavy APICombatLog suite
+    #     (together they equal the whole APICombatLog group).
+    #   - feature-controller / feature-other : the Feature suite, split by the Controller group. Since
+    #     "--group=Controller" and "--exclude-group=Controller" are exact complements, the two shards
+    #     are guaranteed to cover the whole Feature suite with no overlap and no dropped tests, while
+    #     staying roughly time-balanced (Controller tests are fewer but slower HTTP-stack tests).
+    #   - unit : the Unit suite.
+    # The five shards are disjoint and together equal the full run minus MapTiles
+    # (162 + 409 + 46 + 32 + 308 = 957). Using --testsuite (not a positional path) keeps the Unit
+    # suite's phpunit.xml <exclude> entries honoured and auto-covers newly added test files. Coverage
+    # is NOT computed here (it is instrumentation overhead) — see php-coverage.yml for the coverage run.
     strategy:
       fail-fast: false
       matrix:
@@ -29,8 +34,10 @@ jobs:
             phpunit-args: "--group=CombatLogRoute"
           - shard: correct-events
             phpunit-args: "--group=CorrectEvents"
-          - shard: feature
-            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=APICombatLog --exclude-group=MapTiles"
+          - shard: feature-controller
+            phpunit-args: "--testsuite \"Feature Tests\" --group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
+          - shard: feature-other
+            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
           - shard: unit
             phpunit-args: "--testsuite \"Unit Tests\" --exclude-group=MapTiles"
 
