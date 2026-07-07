@@ -37,7 +37,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
-        "@shopify/draggable": "^1.0.0-beta.12",
+        "@shopify/draggable": "^1.2.1",
         "@simonwep/pickr": "^1.8.2",
         "ajv": "^8.18.0",
         "bootstrap": "^4.3.1",
