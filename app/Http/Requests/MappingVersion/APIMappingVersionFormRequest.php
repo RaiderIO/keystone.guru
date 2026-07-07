@@ -34,8 +34,9 @@ class APIMappingVersionFormRequest extends FormRequest
             $this->merge([
                 'timer_max_seconds' => (int)$minutes * 60,
             ]);
-        } elseif ($minutes !== null && $seconds !== null) {
-            // Both provided: pick the one that changed compared to current model
+        } elseif ($minutes !== null) {
+            // Both provided ($seconds !== null is implied by the branch above): pick the one that
+            // changed compared to current model
             if ($currentSeconds !== null) {
                 $minutesAsSeconds = (int)$minutes * 60;
                 $pickSeconds      = (int)$seconds !== $currentSeconds;

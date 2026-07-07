@@ -71,8 +71,8 @@ final class CreateGithubReleasePullRequestTest extends PublicTestCase
 
         /** @var Mockery\MockInterface&PullRequest $pullRequestClient */
         $pullRequestClient = Mockery::mock(PullRequest::class);
-        // @phpstan-ignore method.notFound
         $pullRequestClient->shouldReceive('all')
+            // @phpstan-ignore method.notFound
             ->once()
             ->with('RaiderIO', 'Keystone.guru', ['state' => 'open', 'labels' => 'release'])
             // The GitHub API normalizes the repo full_name's case, which used to break the
@@ -90,8 +90,8 @@ final class CreateGithubReleasePullRequestTest extends PublicTestCase
                     ],
                 ],
             ]);
-        // @phpstan-ignore method.notFound
         $pullRequestClient->shouldReceive('update')
+            // @phpstan-ignore method.notFound
             ->once()
             ->with('RaiderIO', 'Keystone.guru', $existingPullRequestNumber, Mockery::type('array'))
             ->andReturn([]);
@@ -112,13 +112,13 @@ final class CreateGithubReleasePullRequestTest extends PublicTestCase
 
         /** @var Mockery\MockInterface&PullRequest $pullRequestClient */
         $pullRequestClient = Mockery::mock(PullRequest::class);
-        // @phpstan-ignore method.notFound
         $pullRequestClient->shouldReceive('all')
+            // @phpstan-ignore method.notFound
             ->once()
             ->with('RaiderIO', 'Keystone.guru', ['state' => 'open', 'labels' => 'release'])
             ->andReturn([]);
-        // @phpstan-ignore method.notFound
         $pullRequestClient->shouldReceive('create')
+            // @phpstan-ignore method.notFound
             ->once()
             ->with('RaiderIO', 'Keystone.guru', Mockery::type('array'))
             ->andReturn(['id' => 555, 'number' => 42]);
@@ -126,8 +126,8 @@ final class CreateGithubReleasePullRequestTest extends PublicTestCase
 
         /** @var Mockery\MockInterface&Issue $issueClient */
         $issueClient = Mockery::mock(Issue::class);
-        // @phpstan-ignore method.notFound
         $issueClient->shouldReceive('update')
+            // @phpstan-ignore method.notFound
             ->once()
             ->with('RaiderIO', 'Keystone.guru', 42, Mockery::type('array'));
 

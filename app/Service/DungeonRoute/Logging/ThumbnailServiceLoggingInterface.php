@@ -39,6 +39,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailMaintenanceMode(): void;
 
+    public function doCreateThumbnailSkippedLocalEnvironment(): void;
+
     public function doCreateThumbnailProcessStart(string $commandLine): void;
 
     public function doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium(string $tmpFile): void;

@@ -153,11 +153,30 @@ jobs:
 
       - name: Tag & push app image to ECR
         run: |
-          for repo in ksg-php-fpm ksg-reverb ksg-swoole ksg-queue-worker; do
+          for repo in ksg-php-fpm ksg-reverb ksg-swoole; do
             docker tag keystone.guru-app:${{ github.ref_name }} \
               "${ECR_REGISTRY}/${repo}:${{ github.ref_name }}"
             docker push "${ECR_REGISTRY}/${repo}:${{ github.ref_name }}"
           done
+
+      # Puppeteer/Chrome live only in this image (docker-compose/app-worker), so the
+      # thumbnail-generation queue workers get a browser; the web-facing images above don't.
+      - name: Build base worker image
+        run: docker build -t keystone.guru-worker docker-compose/app-worker
+
+      - name: Build production worker image
+        run: |
+          docker build --no-cache \
+            --build-arg STAGE=production \
+            --build-arg GIT_REF=${{ github.ref_name }} \
+            -t keystone.guru-worker:${{ github.ref_name }} \
+            docker-compose/app-worker-aws/
+
+      - name: Tag & push worker image to ECR
+        run: |
+          docker tag keystone.guru-worker:${{ github.ref_name }} \
+            "${ECR_REGISTRY}/ksg-queue-worker:${{ github.ref_name }}"
+          docker push "${ECR_REGISTRY}/ksg-queue-worker:${{ github.ref_name }}"
 
       - name: Build base cron image
         run: docker build -t keystone.guru-cron docker-compose/cron
