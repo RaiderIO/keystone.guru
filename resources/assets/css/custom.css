@@ -320,6 +320,15 @@ ul.light-slider {
     margin-right: 16px;
 }
 
+/*
+ * bootstrap-select wraps data-content in an inline-block span.text; the affix icon rows (.row with
+ * .col children) collapse inside a shrink-to-fit box. Making it block lets them lay out correctly on
+ * the first render, so the menu height bootstrap-select measures is right and no dead space remains.
+ */
+.affixselect.bootstrap-select .dropdown-menu li a span.text {
+    display: block;
+}
+
 .affixes_overview_table tr.timewalking.legion {
     background-position-x: center;
     background-position-y: -437px;

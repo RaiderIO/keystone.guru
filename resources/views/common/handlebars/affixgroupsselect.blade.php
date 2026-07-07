@@ -67,14 +67,10 @@ $id ??= 'Affixes';
 
         let $affixSelect = $(affixSelectSelector);
         $affixSelect.on('shown.bs.select', function () {
-            // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
-            // So remove the span
-            $('.affixselect.bootstrap-select .text').each(function (index, el) {
-                let $el = $(el);
-                let $ours = $el.children();
-                $el.parent().append($ours);
-                $el.remove();
-            });
+            // The span.text wrapper that bootstrap-select puts around our data-content is made
+            // display: block in custom.css so the affix rows lay out correctly from the first
+            // render; that also keeps the menu height measurement correct so no dead space remains.
+
             // Fix the layout so there's no longer a huge gap at the bottom
             $('.affixselect.bootstrap-select .dropdown-menu.show').css('min-height', 'unset');
             $('.affixselect.bootstrap-select .inner.show').css('min-height', 'unset');
