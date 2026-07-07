@@ -1,3 +1,15 @@
+/** BOOTSTRAP 5 COMPAT */
+/*
+ * Bootstrap 4 gave every column `position: relative`; Bootstrap 5 removed it. Absolutely positioned
+ * overlays across the site (e.g. the dungeon card titles over their images) anchor to their column,
+ * so restore the Bootstrap 4 behavior.
+ */
+.col,
+[class^="col-"],
+[class*=" col-"] {
+    position: relative;
+}
+
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;
