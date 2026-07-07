@@ -1,0 +1,55 @@
+name: PHP Coverage
+
+# Coverage is deliberately kept out of the per-PR "PHP Tests" workflow (instrumentation is pure
+# overhead there). Instead the full suite runs with coverage nightly and on release PRs (-> master),
+# where we want maximum signal.
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  php-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout for local actions
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Start services
+        run: docker compose -f docker-compose.ci.yml up -d --wait
+
+      - name: Common PHP/Laravel setup
+        uses: ./.github/actions/php-ci-setup
+
+      - name: Switch APP_ENV to testing
+        run: echo "APP_ENV=testing" >> .env
+
+      - name: Seed users
+        run: php artisan db:seed --class=LaratrustSeeder --database=migrate
+
+      - name: Run PHPUnit with coverage
+        run: |
+          set -o pipefail
+          ./vendor/bin/phpunit --exclude-group=MapTiles \
+            --coverage-text \
+            --coverage-clover=coverage.xml \
+            | tee phpunit-output.txt
+          echo "## Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -A 5 "Summary:" phpunit-output.txt >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-report
+          path: coverage.xml
+          if-no-files-found: warn
