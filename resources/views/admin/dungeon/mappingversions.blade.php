@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon                      $dungeon
- * @var bool                         $hasUnmergedMappingVersion
  * @var Collection<int, GameVersion> $allGameVersions
  */
 $gameVersionsSelect = $allGameVersions
@@ -81,7 +80,7 @@ $gameVersionsSelect = $allGameVersions
     @foreach ($dungeon->loadMappingVersions()->mappingVersions as $mappingVersion)
         <tr>
             <td>
-                <i class="fas {{ $mappingVersion->merged ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
+                <i class="fas {{ $mappingVersion->isLatestForDungeon() ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
             </td>
             <td>
                 <i class="fas {{ $mappingVersion->facade_enabled ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>

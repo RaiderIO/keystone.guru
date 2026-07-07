@@ -52,7 +52,7 @@ use App\Models\Npc\NpcEnemyForces;
             <td>{{ $npcEnemyForces->mappingVersion->getPrettyName() }}</td>
             <td>{{ $npcEnemyForces->enemy_forces }}</td>
             <td>
-                @if($npcEnemyForces->mappingVersion->merged)
+                @if(!$npcEnemyForces->mappingVersion->isLatestForDungeon())
                     {{ __('view_admin.npc.npcenemyforces.mapping_version_read_only') }}
                 @else
                     <div class="row no-gutters">

@@ -45,6 +45,8 @@ class DungeonMap extends Signalable {
 
         /** @type Boolean */
         this._refreshingMap = false;
+        /** @type {?Number} requestAnimationFrame handle used while waiting for the map container to gain a non-zero size */
+        this._mapSizedRafId = null;
 
         this.options = options;
 
@@ -53,14 +55,12 @@ class DungeonMap extends Signalable {
 
         if (!(mapContext instanceof MapContextLiveSession)) {
             if (state.isMapAdmin()) {
-                if (mapContext.getMappingVersion().merged) {
-                    let template = Handlebars.templates['map_controls_snackbar_mapping_version_readonly'];
+                if (mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
+                    let template = Handlebars.templates['map_controls_snackbar_mapping_version_outdated'];
 
                     let data = $.extend({}, getHandlebarsDefaultVariables(), {});
 
                     state.addSnackbar(template(data));
-
-                    this.options.readonly = true;
                 }
             } else if (this.options.edit && mapContext.getMappingVersion().version < mapContext.getDungeonLatestMappingVersion().version) {
                 let template = Handlebars.templates['map_controls_snackbar_mapping_version_upgrade'];
@@ -690,11 +690,44 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Create instances of all controls that will be added to the map (UI on the map itself)
-     * @param editableLayers
-     * @returns {*[]}
+     * Runs the callback once the Leaflet map has a non-zero size, forcing a re-measure when the
+     * container was not laid out yet. Runs synchronously when the map is already sized.
+     * @param callback {Function}
      * @private
      */
+    _whenMapSized(callback) {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        // Cancel a gate still pending from a previous refresh so a stale callback never runs.
+        if (this._mapSizedRafId !== null) {
+            window.cancelAnimationFrame(this._mapSizedRafId);
+            this._mapSizedRafId = null;
+        }
+
+        // Fast path: Leaflet already knows a non-zero size (e.g. a floor change after first load).
+        if (this.leafletMap.getSize().x > 0) {
+            callback();
+
+            return;
+        }
+
+        let self = this;
+        let attempt = function () {
+            self._mapSizedRafId = null;
+
+            // Leaflet caches its size and only recomputes on invalidateSize(), so poll the container
+            // width directly to detect when the browser has actually laid the map out.
+            if (self.leafletMap.getContainer().clientWidth > 0) {
+                self.leafletMap.invalidateSize();
+                callback();
+            } else {
+                self._mapSizedRafId = window.requestAnimationFrame(attempt);
+            }
+        };
+
+        this._mapSizedRafId = window.requestAnimationFrame(attempt);
+    }
+
     _addMapControls(editableLayers) {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
@@ -837,13 +870,18 @@ class DungeonMap extends Signalable {
             $('.leaflet-control-attribution').hide();
         }
 
-        for (let index in this.mapPlugins) {
-            this.mapPlugins[index].removeFromMap();
-        }
+        // Plugins such as the heatmap size their Leaflet layers to the map container. On first load the
+        // map initializes synchronously (DOMContentLoaded) before #map is laid out, so its size can be 0 —
+        // a canvas sized to 0 crashes (IndexSizeError). Defer (re)loading plugins until the map is sized.
+        this._whenMapSized(() => {
+            for (let index in this.mapPlugins) {
+                this.mapPlugins[index].removeFromMap();
+            }
 
-        for (let index in this.mapPlugins) {
-            this.mapPlugins[index].addToMap();
-        }
+            for (let index in this.mapPlugins) {
+                this.mapPlugins[index].addToMap();
+            }
+        });
 
         // Add new controls; we're all loaded now and user should now be able to edit their route
         this._addMapControls(this.editableLayers);
@@ -963,6 +1001,12 @@ class DungeonMap extends Signalable {
             );
         }
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = DungeonMap;
 }
 
 

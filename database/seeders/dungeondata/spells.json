@@ -11764,6 +11764,23 @@
         "fetched_data_at": "2026-05-18T17:12:43+00:00"
     },
     {
+        "id": 89808,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Magie versengen",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 90355,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -11813,6 +11830,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:20:58+00:00"
+    },
+    {
+        "id": 98021,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Spirit Link",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 98374,
@@ -13139,6 +13173,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-08-29T21:00:11+00:00"
+    },
+    {
+        "id": 114942,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "\u0426\u0435\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043f\u0440\u0438\u043b\u0438\u0432",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 115078,
@@ -15385,6 +15436,23 @@
         "fetched_data_at": "2025-04-20T12:22:34+00:00"
     },
     {
+        "id": 163177,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "\u7384\u725b\u96d5\u50cf",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 163334,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -16964,6 +17032,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:23:29+00:00"
+    },
+    {
+        "id": 169650,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Mounted",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 169657,
@@ -22659,6 +22744,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:25:06+00:00"
+    },
+    {
+        "id": 198533,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Soothing Mist",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 198589,
@@ -37092,6 +37194,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:31:21+00:00"
+    },
+    {
+        "id": 262485,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Power Leech",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 262513,
@@ -53686,6 +53805,23 @@
         "fetched_data_at": "2025-04-20T12:40:56+00:00"
     },
     {
+        "id": 325174,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Spirit Link Totem",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 325197,
         "game_version_id": 1,
         "category": "spellcategory.monk",
@@ -60518,6 +60654,23 @@
         "hidden_on_map": true,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:44:23+00:00"
+    },
+    {
+        "id": 343727,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Power Leech",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 344003,
@@ -82127,6 +82280,23 @@
         "fetched_data_at": "2025-04-20T12:55:09+00:00"
     },
     {
+        "id": 410089,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Prescience",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 410234,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -84114,6 +84284,23 @@
         "hidden_on_map": true,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:56:09+00:00"
+    },
+    {
+        "id": 413984,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Shifting Sands",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 414032,
@@ -91067,6 +91254,23 @@
         "hidden_on_map": true,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T12:59:44+00:00"
+    },
+    {
+        "id": 428866,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Kraft der Natur",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 428868,
@@ -98226,6 +98430,23 @@
         "fetched_data_at": "2025-08-26T16:34:44+00:00"
     },
     {
+        "id": 447433,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Chain Heal",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 447439,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -101964,6 +102185,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2025-04-20T13:05:04+00:00"
+    },
+    {
+        "id": 458357,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Chain Heal",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 458820,
@@ -118694,6 +118932,23 @@
         "fetched_data_at": "2026-04-01T21:39:18+00:00"
     },
     {
+        "id": 1257086,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Molten Exhaust",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 1257088,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -120513,6 +120768,23 @@
         "fetched_data_at": "2026-04-01T21:41:20+00:00"
     },
     {
+        "id": 1261966,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Orebreaker",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 1262029,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -122111,6 +122383,23 @@
         "fetched_data_at": "2026-04-01T21:45:12+00:00"
     },
     {
+        "id": 1265577,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Transfusion",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
+    },
+    {
         "id": 1265589,
         "game_version_id": 1,
         "category": "spellcategory.unknown",
@@ -122483,6 +122772,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2026-04-01T21:45:23+00:00"
+    },
+    {
+        "id": 1267745,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Stormstream Totem",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 1268598,
@@ -123112,6 +123418,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2026-04-01T21:46:22+00:00"
+    },
+    {
+        "id": 1271679,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Bombe d\u2019ombre",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 1271956,
@@ -123809,6 +124132,23 @@
         "hidden_on_map": false,
         "characteristic_id": null,
         "fetched_data_at": "2026-04-01T21:47:12+00:00"
+    },
+    {
+        "id": 1280457,
+        "game_version_id": 1,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Mind Sear",
+        "schools_mask": 0,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "characteristic_id": null,
+        "fetched_data_at": null
     },
     {
         "id": 1281396,
@@ -124658,6 +124998,6 @@
         "selectable": false,
         "hidden_on_map": true,
         "characteristic_id": null,
-        "fetched_data_at": "2026-06-21T00:00:00+00:00"
+        "fetched_data_at": "2026-06-23T00:00:00+00:00"
     }
 ]

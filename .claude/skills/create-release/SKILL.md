@@ -133,6 +133,9 @@ Defaults: `backup_db: 0`, `silent: 0`, `spotlight: 0`, `released: 1`.
 Each entry in `changes[]` requires an `is_public` field (`1` = shown publicly on site /
 Discord / GitHub Release; `0` = shown only in the GitHub release ticket and PR).
 
+If there are no changes that are `is_public` = `1`, mark the release as `silent` = `1`. This
+will prevent users from being notified of the release being published on the production site.
+
 ```json
 {
     "id": 360,

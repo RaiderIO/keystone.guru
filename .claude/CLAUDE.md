@@ -9,7 +9,26 @@ Branch formats are as follows:
 
 - The project is under Git version control.
 - Any newly created files should be staged.
-- Commits should not be done unless explicitly asked.
+- In the main checkout, commits should not be done unless explicitly asked (see the worktree
+  exception below).
+
+### Git worktrees
+- By default, do every task from an isolated git worktree with its own Docker `app` stack, created
+  with `sh/worktree.sh create <issue>-<slug>`. Run all commands (artisan, tests, `composer run
+  fix`/`analyse`) through that worktree's `app` container from inside the worktree dir, and tear it
+  down with `sh/worktree.sh remove <issue>-<slug>` when done. Only skip this when the user says to
+  work directly in the main checkout.
+- **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
+  Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
+  password is prompted), and open the MR to `development` with `gh`. Reference the issue in the MR
+  body (e.g. `Closes #<issue>`) — this creates a timeline cross-reference, but note it does NOT
+  create the "Development" panel linked-PR or auto-close the issue, because the MR targets
+  `development` rather than the default branch, and there is no API to create that link (see the
+  `worktree-docker` skill); tell the user they must add it manually in the GitHub UI if they want it.
+  This autonomy applies only to a worktree you created — in the main checkout, still ask before
+  committing.
+- The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
+  run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
 
 ## Github
 
@@ -37,6 +56,7 @@ For example:
 
 ## Finishing up your work
 - After completing your work, ensure you run `composer run fix` to run PhpCsFixer and `composer run analyse` to run PhpStan to verify your work.
+- `composer run fix` reformats any files with pre-existing style drift, not just the ones you changed. After running it, stage only the files you actually intended to touch (`git checkout -- <other files>` to discard the unrelated reformats) so your diff/PR stays focused.
 
 # Project-specific conventions
 
@@ -102,7 +122,7 @@ For example:
 
 ## Localization
 - Use the `__()` helper function for localization and translation of strings. Use translation keys. For example: `__('view_common.my.folder.structure.welcome_to_the_website')`.
-- The language folder exists in the root of the project. Translation files are located in `lang/{locale}/` and should be organized by relevant class name (such as `Spell` -> `spells.php`) or folder structure for views (such as `view_common` or `view_dungeon`). For example: `lang/en/auth.php`, `lang/en/dashboard.php`, etc.
+- The language folder exists in the root of the project. Translation files are located in `lang/{locale}/` and should be organized by relevant class name (such as `Spell` -> `spells.php`) or folder structure for views (such as `view_common` or `view_dungeon`). For example: `lang/en_US/auth.php`, `lang/en_US/dashboard.php`, etc.
 - Only ever edit localization files in the `lang/en_US` directory. All other languages are handled externally.
 - For blade.php files, the translation keys matches exactly the file structure and name. For example, `resources/views/common/footer.blade.php` would have translation keys like `view_common.footer.copyright`.
 
@@ -110,5 +130,5 @@ For example:
 - Structure every test using the Arrange-Act-Assert pattern. Arrange all necessary preconditions and inputs, Act on the object or method under test, and Assert that the expected results have occurred.
 - Every test name should follow the pattern of `[functionname]_given[Condition]_returns[ExpectedResult]`. For example: `myFunction_givenValidDate_returnsTrue` or `myFunction_givenInvalidDate_throwsInvalidArgumentException`.
 - Any created database records must be cleaned up using try...finally.
-- Test groups should be placed in the test class docblock, not the method docblock. For example: a `CombatLog` group for all tests in the `CombatLog` folder, a `EncounterStart` for all tests in the `EncounterStart` file.
+- Test groups should be applied with the `#[Group('...')]` attribute at the class level, not the method level (doc-comment `@group` metadata is deprecated and triggers a PHPUnit warning). For example: a `#[Group('CombatLog')]` for all tests in the `CombatLog` folder, a `#[Group('EncounterStart')]` for all tests in the `EncounterStart` file. See the `writing-tests` skill for the full testing conventions.
 - A DataProvider should be placed right below the last test using it, not at the top or the bottom of the class.

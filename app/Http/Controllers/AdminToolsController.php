@@ -91,11 +91,6 @@ class AdminToolsController extends Controller
         return redirect()->route('admin.tools');
     }
 
-    public function mappingForceSync(Request $request): void
-    {
-        Artisan::call('mapping:sync', ['--force' => true]);
-    }
-
     public function exportreleases(Request $request): View
     {
         Artisan::call('release:save');
