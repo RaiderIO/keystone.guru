@@ -445,7 +445,8 @@ if ($isAdmin) {
     @endif
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
-        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
+        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'] ||
+        isset($show['controls']['dungeonRouteSearch']) && $show['controls']['dungeonRouteSearch'])
         @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
             @include('common.modal.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
         @endcomponent
