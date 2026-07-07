@@ -110,7 +110,6 @@ window.Grapick = require('grapick');
 window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
-window.autocomplete = require('bootstrap-4-autocomplete');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 window.jarallax = require('jarallax/dist/jarallax.min');
 window.swipe = require('jquery-touchswipe');

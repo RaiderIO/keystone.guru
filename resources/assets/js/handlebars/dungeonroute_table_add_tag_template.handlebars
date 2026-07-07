@@ -21,9 +21,10 @@
     </div>
 </div>
 <div class="row no-gutters mt-1">
-    <div class="col">
+    <div class="col position-relative">
         <input id="new_tag_input" type="text" class="form-control"
                                                   placeholder="{{ placeholder_new_tag_label }}"/>
+        <ul id="new_tag_autocomplete" class="dropdown-menu w-100"></ul>
     </div>
     <div class="col-auto">
         <button id="new_tag_submit" class="btn btn-success">
