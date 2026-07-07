@@ -554,11 +554,15 @@ $jscomp.polyfill("Array.prototype.find", function (a) {
                 a.stopPropagation();
                 a.preventDefault()
             });
-            b.carousel({keyboard: !1})
+            b.each(function () {
+                bootstrap.Carousel.getOrCreateInstance(this, {keyboard: !1})
+            })
         }).on("slid.bs.carousel", function () {
             c.unbind("click");
             d.unbind("click");
-            b.carousel({keyboard: !0});
+            b.each(function () {
+                bootstrap.Carousel.getOrCreateInstance(this, {keyboard: !0})
+            });
             1 < b.find(".carousel-item.active").length && (b.find(".carousel-item.active").eq(1).removeClass("active"), b.find(".carousel-control li.active").eq(1).removeClass("active"))
         })
     }));

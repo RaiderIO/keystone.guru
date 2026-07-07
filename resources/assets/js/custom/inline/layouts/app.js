@@ -160,7 +160,10 @@ function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
  * @private
  */
 function _hideTooltips() {
-    $(this).tooltip('hide');
+    let tooltip = bootstrap.Tooltip.getInstance(this);
+    if (tooltip !== null) {
+        tooltip.hide();
+    }
 }
 
 /**
@@ -174,10 +177,16 @@ function refreshTooltips($element = null) {
             refreshTooltips($('[data-tooltip="tooltip"]'));
         } else {
             $('.tooltip').remove();
-            $element.unbind('click', _hideTooltips.bind(this))
-                .bind('click', _hideTooltips.bind(this))
-                .tooltip('_fixTitle')
-                .tooltip({trigger: 'manual'});
+            $element.each(function () {
+                // Dispose and recreate so a changed title attribute is re-read (BS4 _fixTitle equivalent)
+                let existingTooltip = bootstrap.Tooltip.getInstance(this);
+                if (existingTooltip !== null) {
+                    existingTooltip.dispose();
+                }
+                new bootstrap.Tooltip(this);
+            });
+            $element.unbind('click', _hideTooltips)
+                .bind('click', _hideTooltips);
         }
     }
     return $element;
@@ -201,8 +210,13 @@ function toggleTooltips(enabled = true, $element = null) {
             disableTooltips($('[data-tooltip="tooltip"]'));
         } else {
             $('.tooltip').remove();
-            $element.unbind('click', _hideTooltips.bind(this))
-                .tooltip(enabled ? 'enable' : 'disable');
+            $element.unbind('click', _hideTooltips)
+                .each(function () {
+                    let tooltip = bootstrap.Tooltip.getInstance(this);
+                    if (tooltip !== null) {
+                        enabled ? tooltip.enable() : tooltip.disable();
+                    }
+                });
         }
     }
 }

@@ -123,7 +123,8 @@ class CommonMapsMap extends InlineCode {
             $('#map_enemy_visuals_mdt_auto_solve').unbind('click').bind('click', this._mdtAutoSolve.bind(this));
 
             // Trigger info popover
-            $('#map_dungeon_route_info_popover').popover().on('inserted.bs.popover', function () {
+            bootstrap.Popover.getOrCreateInstance(document.getElementById('map_dungeon_route_info_popover'));
+            $('#map_dungeon_route_info_popover').on('inserted.bs.popover', function () {
                 $('#view_dungeonroute_affixes').html(
                     handlebarsAffixGroupsParse(self.options.dungeonroute.affixes)
                 );
@@ -588,9 +589,9 @@ class CommonMapsMap extends InlineCode {
             $('#enemy_report_username').val('');
             $('#enemy_report_message').val('');
             $('#enemy_report_contact_ok').prop('checked', false);
-            $('#enemy_report_collapse').collapse('hide');
+            bootstrap.Collapse.getOrCreateInstance(document.getElementById('enemy_report_collapse'), {toggle: false}).hide();
 
-            $('#enemy_details_modal').modal('show');
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('enemy_details_modal')).show();
         }
     }
 
@@ -616,7 +617,7 @@ class CommonMapsMap extends InlineCode {
                 $('#userreport_enemy_modal_saving').show();
             },
             success: function () {
-                $('#enemy_report_collapse').collapse('hide');
+                bootstrap.Collapse.getOrCreateInstance(document.getElementById('enemy_report_collapse'), {toggle: false}).hide();
                 showSuccessNotification(lang.get('js.user_report_enemy_success'));
             },
             complete: function () {

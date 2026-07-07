@@ -232,7 +232,9 @@ if ($cache) {
 <script type="application/javascript">
     $(function () {
         // Set content right before it opens
-        $('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle').popover().on('show.bs.popover', function () {
+        document.querySelectorAll('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle')
+            .forEach((el) => bootstrap.Popover.getOrCreateInstance(el));
+        $('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle').on('show.bs.popover', function () {
             // Wrap the rendered HTML in a container div and assign to data-content
             const html = '<div>' + handlebarsAffixGroupsParse({!!
                 $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {

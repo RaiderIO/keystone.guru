@@ -61,7 +61,7 @@
                 // Delete the container, it was only a placeholder
                 $rowContainer.remove();
 
-                $targetTooltip.tooltip();
+                bootstrap.Tooltip.getOrCreateInstance($targetTooltip[0]);
             } else {
                 $targetTooltip.remove();
             }

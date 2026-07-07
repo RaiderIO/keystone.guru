@@ -5,6 +5,6 @@ class HomeLayout extends InlineCode {
         (new CarouselHandler()).refreshCarousel();
         (new ThumbnailRefresh()).refreshHandlers();
 
-        $('[data-bs-toggle="popover"]').popover();
+        document.querySelectorAll('[data-bs-toggle="popover"]').forEach((el) => bootstrap.Popover.getOrCreateInstance(el));
     }
 }

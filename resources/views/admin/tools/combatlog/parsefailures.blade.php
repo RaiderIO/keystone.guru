@@ -109,7 +109,7 @@
 
                 $runId.text($(this).data('run-id'));
                 $body.html('<i class="fas fa-spinner fa-spin"></i>');
-                $modal.modal('show');
+                bootstrap.Modal.getOrCreateInstance($modal[0]).show();
 
                 $.getJSON(url)
                     .done(function (response) {
