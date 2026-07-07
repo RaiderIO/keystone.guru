@@ -68,6 +68,7 @@ class DiscoverService extends BaseDiscoverService
                     'dungeons',
                 ])->with('expansion'),
             ])
+            ->withCount('favorites')
             ->without([
                 'faction',
                 'specializations',
@@ -151,6 +152,7 @@ class DiscoverService extends BaseDiscoverService
                     'dungeons',
                 ])->with('expansion'),
             ])
+            ->withCount('favorites')
             ->without([
                 'faction',
                 'specializations',
