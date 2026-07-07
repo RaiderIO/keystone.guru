@@ -17,6 +17,7 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
     /** @var array<int> */
     private array $createdRunDataIds = [];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,6 +25,7 @@ final class AdminToolsCombatLogRunDataControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

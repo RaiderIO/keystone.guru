@@ -46,7 +46,7 @@ class SpellDataExtractor implements DataExtractorInterface
      *
      * @var list<SpellDataCollectorInterface>
      */
-    private array $collectors;
+    private readonly array $collectors;
 
     public function __construct()
     {

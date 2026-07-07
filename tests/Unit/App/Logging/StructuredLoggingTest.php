@@ -36,19 +36,12 @@ class StructuredLoggingTest extends PublicTestCase
                 self::assertArrayHasKey('test', $context);
 
                 // The message is prefixed with padding and one dash per open context group
-                switch (trim($message)) {
-                    case '- firstStart':
-                        self::assertArrayNotHasKey('test2', $context);
-                        break;
-                    case '- log':
-                        self::assertArrayHasKey('test2', $context);
-                        break;
-                    case '- firstEnd':
-                        self::assertArrayNotHasKey('test2', $context);
-                        break;
-                    default:
-                        self::fail(sprintf('Unexpected log message: %s', $message));
-                }
+                match (trim($message)) {
+                    '- firstStart' => self::assertArrayNotHasKey('test2', $context),
+                    '- log'        => self::assertArrayHasKey('test2', $context),
+                    '- firstEnd'   => self::assertArrayNotHasKey('test2', $context),
+                    default        => self::fail(sprintf('Unexpected log message: %s', $message)),
+                };
             });
 
         // Act

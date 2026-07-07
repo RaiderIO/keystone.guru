@@ -8,7 +8,7 @@
 
 $id    ??= null;
 $title ??= null;
-$hidden = $hidden ?? false;
+$hidden ??= false;
 ?>
 <div @if($id !== null) id="{{ $id }}" @endif class="form-group" @if($hidden) style="display: none;" @endif >
     <div class="row">

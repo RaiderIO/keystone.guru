@@ -21,6 +21,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('Compendium')]
 final class ClassCompendiumControllerTest extends PublicTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -68,29 +68,21 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     return $a->id <=> $b->id;
 });
 
-$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization): string {
-    return (string) __($characterClassSpecialization->class->name);
-})->mapWithKeys(function (Collection $specializations, string $className) {
-    return [
-        $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {
-            return [
-                $characterClassSpecialization->specialization_id => [
-                    'icon_url' => $characterClassSpecialization->icon_url,
-                    'name' => __($characterClassSpecialization->name),
-                ]
-            ];
-        })
-    ];
-})->toArray();
-
-$characterClassSelectOptions = $characterClasses->mapWithKeys(function (CharacterClass $characterClass) {
-    return [
-        $characterClass->class_id => [
-            'icon_url' => $characterClass->icon_url,
-            'name' => __($characterClass->name),
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(fn(CharacterClassSpecialization $characterClassSpecialization): string => (string) __($characterClassSpecialization->class->name))->mapWithKeys(fn(Collection $specializations, string $className) => [
+    $className => $specializations->mapWithKeys(fn(CharacterClassSpecialization $characterClassSpecialization) => [
+        $characterClassSpecialization->specialization_id => [
+            'icon_url' => $characterClassSpecialization->icon_url,
+            'name' => __($characterClassSpecialization->name),
         ]
-    ];
-})->toArray();
+    ])
+])->toArray();
+
+$characterClassSelectOptions = $characterClasses->mapWithKeys(fn(CharacterClass $characterClass) => [
+    $characterClass->class_id => [
+        'icon_url' => $characterClass->icon_url,
+        'name' => __($characterClass->name),
+    ]
+])->toArray();
 
 $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn(Collection $spells, string $categoryName) => [
     __($categoryName) => $spells->mapWithKeys(

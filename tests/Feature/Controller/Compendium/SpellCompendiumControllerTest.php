@@ -29,6 +29,7 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         ],
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
