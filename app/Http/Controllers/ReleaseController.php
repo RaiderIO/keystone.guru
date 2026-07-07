@@ -78,7 +78,6 @@ class ReleaseController extends Controller
 
             try {
                 Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
-                Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
             } catch (Exception $exception) {
                 Session::flash('status', __('controller.release.flash.github_exception', ['message' => $exception->getMessage()]));
             }
