@@ -89,6 +89,11 @@ window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
 window.bootstrapselect = require('bootstrap-select');
+
+// Fix bootstrap-select 1.14.0-beta3 duplicating all options on every .selectpicker('refresh')
+const {applyBootstrapSelectRefreshFix} = require('./bootstrapselectrefreshfix');
+applyBootstrapSelectRefreshFix($.fn.selectpicker.Constructor);
+
 window.Handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
 window.polylinedecorator = require('leaflet-polylinedecorator');
