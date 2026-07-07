@@ -3,7 +3,6 @@ name: PHPStan
 on:
   pull_request:
     branches:
-      - development
       - master
 
 permissions:

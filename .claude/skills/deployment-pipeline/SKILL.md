@@ -69,9 +69,10 @@ There is **no** push-to-branch deploy. Deploys only happen on a tag (and the inf
 
 ## Full happy path
 
-1. Merge the `development`→`master` release MR (see `create-release` for authoring it).
-2. `make:githubrelease v<X.Y.Z>` cuts the tag **on master** (do this AFTER the merge — the
-   tag runs `release-deploy.yml` *as it exists at the tagged commit*).
+1. Ensure the release-notes changelog is committed on `master` (see `create-release` for authoring
+   it). Feature work is already on `master` — there is no release MR to merge under the trunk model.
+2. `make:githubrelease v<X.Y.Z>` cuts the tag **on master** (the tag runs `release-deploy.yml`
+   *as it exists at the tagged commit*).
 3. Tag push → 3 build jobs in parallel → `deploy-staging` auto → staging ECS rolls (~5-6 min).
 4. Approve the `production` environment gate when staging looks good → production deploys the
    same image + assets.
@@ -97,9 +98,9 @@ curl -s https://staging.keystone.guru/ | grep -oE "compiled/[^/\"']+/js/app-[^\"
   So **never re-cut an existing tag** with different content, and a **JS/CSS change requires a
   new release** (new tag). The PHP-only hotfix path (mirror files into S3 and overwrite on the
   running container, no tag change) does **not** refresh compiled JS/CSS.
-- **Dry-run without burning a version:** push a throwaway `v<X.Y.Z>-rc1` tag off `development`
+- **Dry-run without burning a version:** push a throwaway `v<X.Y.Z>-rc1` tag off `master`
   (it already carries the current `release-deploy.yml`). It also auto-deploys to staging.
-- **Ordering:** cut the real tag only after the MR is on `master`, else the tag runs master's
+- **Ordering:** cut the real tag only after the changelog commit is on `master`, else the tag runs master's
   older workflow (missing the asset/map-context jobs).
 - **Pushing workflow changes:** the `gh` OAuth token lacks `workflow` scope, so an HTTPS push
   that touches `.github/workflows/*` is rejected. The user must push over SSH (`! git push ...`),
