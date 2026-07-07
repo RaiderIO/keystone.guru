@@ -21,7 +21,7 @@ Abstract class every concrete Logging class ultimately extends (through `Rollbar
 
 `debug`, `notice`, `info`, `warning`, `error`, `critical`, `alert`, `emergency` — all `protected`, all with signature `(string $functionName, array $context = [])`. Concrete Logging classes wrap these in one public method per log event.
 
-Messages are the fully qualified method name (`__METHOD__`), shortened to `ClassName::method` when written. Lines are padded per level and prefixed with one `-` per open `start()` group so nested operations indent visually.
+Messages are the fully qualified method name (`__METHOD__`), shortened to `ClassName::method` when written. On local (`APP_TYPE=local`) lines are padded per level and prefixed with one `-` per open `start()` group so nested operations indent visually; everywhere else the message stays bare (stable and grep/parse-able) and the nesting depth is emitted as a `depth` context field instead.
 
 ### start() / end() — grouped, persistent context
 
@@ -31,12 +31,40 @@ protected function end(string $functionName, array $context = []): void;
 ```
 
 - `start('...Start', $context)` logs at **info**, starts a `Stopwatch` (`app/Logic/Utils/Stopwatch.php`), and registers `$context` as *persistent* context: every subsequent log line from this instance — at any level — automatically includes it, until the matching `end()`.
-- The group key is the method name lowercased with the trailing `start`/`end` stripped, so `importStringStart` and `importStringEnd` pair automatically. **Start/End method names must match exactly apart from the suffix.**
+- The group key is the method name lowercased with the trailing `start`/`end` stripped, so `importStringStart` and `importStringEnd` pair automatically. **Start/End method names must match exactly apart from the suffix.** When `app.debug` is on, a function name that doesn't end in the literal `Start`/`End` throws a `LogicException` (a name like `restart` would silently mispair to group `re`).
 - `end('...End')` logs at **info** with an `elapsedMS` context key (from the Stopwatch), then removes the persistent context.
-- `start()` on an already-open key or `end()` on a never-opened key logs an **error** (which goes to Discord) — so unbalanced pairs surface loudly. Always call `end()` in a `finally` block.
-- Nesting is supported: a second `start()` inside an open group stacks its context on top; log lines get an extra `-` prefix per nesting level.
+- `start()` on an already-open key or `end()` on a never-opened key logs an **error** (which goes to Discord) — so unbalanced pairs surface loudly. Always call `end()` in a `finally` block, or better: use `wrapLog()` (below), which guarantees the pairing.
+- Nesting is supported: a second `start()` inside an open group stacks its context on top; log lines get an extra `-` prefix per nesting level (locally) / a higher `depth` context value (elsewhere).
 - Pass `addContext: false` to `start()` to log the context once without attaching it to subsequent lines.
 - `addContext(string $key, array ...$context)` / `removeContext(string $key)` (the `StructuredLoggingInterface`) manage persistent context manually, outside a start/end pair.
+
+### wrapLog() — guaranteed start/end pairing
+
+```php
+protected function wrapLog(string $functionName, array $context, Closure $callback): mixed;
+```
+
+Runs `start()`, the callback, and `end()` in a try/finally, returning the callback result — so a throwing callback can never leave an unbalanced group. `$functionName` is the base name *without* the Start/End suffix; the suffixes are appended internally. Closures in `$context` (the callback that `get_defined_vars()` picks up) are filtered out automatically. The Logging class exposes one public wrapper method, and the service wraps its operation in it:
+
+```php
+// In the Logging class (+ its interface, both annotated with @template T / Closure(): T / @return T):
+public function getDisplayIdRequest(int $npcId, Closure $callback): mixed
+{
+    return $this->wrapLog(__METHOD__, get_defined_vars(), $callback);
+}
+
+// In the service:
+return $this->log->getDisplayIdRequest($npcId, function () use ($npcId): ?int {
+    // ... work; every log line in here carries npcId ...
+});
+```
+
+Prefer `wrapLog()` for new code; migrate manual start/try/finally/end call sites opportunistically.
+
+### Cross-service tracing via Laravel Context
+
+- Persistent `start()` context is mirrored into `Illuminate\Support\Facades\Context` under a `structured:{classname}::{method}` key and removed again on `end()`. Laravel appends Context to **every** log line process-wide, so when ServiceA calls ServiceB, ServiceB's error lines (= Discord alerts) still carry ServiceA's identifying context. Context is also dehydrated into queued job payloads.
+- Every request gets a `trace_id` UUID via the `AddsTraceIdToContext` middleware (prepended globally in `bootstrap/app.php`); console commands get theirs from a `CommandStarting` listener in `AppServiceProvider`. One grep on a `trace_id` over `storage/logs/laravel.log` reconstructs the full narrative of a request/command across services and queued jobs.
 
 ### Filtering, channels, kill switch
 
