@@ -6,7 +6,7 @@
 # See the `worktree-docker` skill for the full workflow and rationale.
 #
 # Usage:
-#   sh/worktree.sh create <issue>-<slug> [base-ref]   # default base-ref: origin/development
+#   sh/worktree.sh create <issue>-<slug> [base-ref]   # default base-ref: origin/master
 #   sh/worktree.sh down   <issue>-<slug>              # stop the stack, keep the checkout
 #   sh/worktree.sh remove <issue>-<slug>              # stop the stack and remove the worktree
 #   sh/worktree.sh list                               # list worktrees and their stacks
@@ -81,7 +81,7 @@ worktree_network() {
 
 cmd_create() {
     local branch="${1:-}"
-    local base="${2:-origin/development}"
+    local base="${2:-origin/master}"
     [ -n "$branch" ] || die "usage: worktree.sh create <issue>-<slug> [base-ref]"
 
     local project wt_path net port
@@ -298,7 +298,7 @@ main() {
             cat >&2 <<EOF
 usage: worktree.sh <command> [args]
 
-  create <issue>-<slug> [base-ref]   create a worktree + isolated Docker stack (base: origin/development)
+  create <issue>-<slug> [base-ref]   create a worktree + isolated Docker stack (base: origin/master)
   down   <issue>-<slug>              stop the stack, keep the checkout
   remove <issue>-<slug>              stop the stack and remove the worktree
   push   [git-push-args...]          push the current branch via the scoped deploy key
