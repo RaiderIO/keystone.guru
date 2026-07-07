@@ -33,7 +33,7 @@
         "vitest": "^3.2.6",
         "vue-template-compiler": "^2.6.14",
         "webpack": "~5.99.9",
-        "webpack-shell-plugin-next": "^2.2.2"
+        "webpack-shell-plugin-next": "^2.3.3"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
