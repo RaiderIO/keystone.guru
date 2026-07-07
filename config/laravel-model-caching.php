@@ -1,9 +1,5 @@
 <?php
 
-// Using deployer - this will be the release number
-// base_path() will be /var/www/html/<project name>/releases/350
-// realpath will ensure symlinks are resolved
-// basename will get the last part of the path which is 350
 $release = file_get_contents(base_path('version')) ?: 'unknown';
 
 // This may give a double release number, but it is not a problem for now

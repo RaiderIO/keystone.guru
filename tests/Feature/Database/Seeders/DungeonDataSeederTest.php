@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Database\Seeders;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
@@ -104,5 +105,24 @@ final class DungeonDataSeederTest extends PublicTestCase
             NpcCharacteristic::query()->where('npc_id', self::SENTINEL_NPC_ID)->delete();
             SpellDungeon::query()->where('spell_id', self::SENTINEL_SPELL_ID)->delete();
         }
+    }
+
+    #[Test]
+    public function run_givenDemoDungeonRoutes_preservesDemoFlagAcrossReseed(): void
+    {
+        // Arrange - rollback() deletes every demo = true route and rebuilds them from the JSON files,
+        // which do contain demo routes, so a healthy re-seed must leave demo routes behind.
+
+        // Act
+        $this->artisan('db:seedone', ['className' => 'DungeonDataSeeder'])->assertSuccessful();
+
+        // Assert - the rebuild uses forceCreate() so the demo column (deliberately kept out of
+        // $fillable) is imported verbatim. With a plain create() mass assignment would drop demo and
+        // every rebuilt route would land as demo = false, dropping this count to zero (#3376).
+        $this->assertGreaterThan(
+            0,
+            DungeonRoute::query()->where('demo', true)->count(),
+            'Demo dungeon routes must survive a re-seed with demo = true',
+        );
     }
 }

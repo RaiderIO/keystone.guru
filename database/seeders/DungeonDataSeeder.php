@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -102,8 +101,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         $this->importDungeonRoutes();
         $this->flushModels();
         $this->preserveColumns();
-
-        Stopwatch::dumpAll();
     }
 
     /**
@@ -439,7 +436,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             elseif ($mapping->getPostSaveRelationParsers()->isNotEmpty()) {
                 /** @var class-string<Model> $mappingClass */
                 $mappingClass = $mapping->getClass();
-                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->create($modelData);
+                // forceCreate (not create) so non-$fillable columns exported by mapping:save are imported
+                // verbatim. DungeonRoute keeps demo, pull_gradient etc. out of $fillable to block user-facing
+                // mass assignment; dropping them here would silently reset demo routes to demo = false.
+                $createdModel = $mappingClass::from(DatabaseSeeder::getTempTableName($mappingClass))->forceCreate($modelData);
                 $updatedModels++;
             } // We don't need to do post-processing, add it to the list to be saved
             else {
