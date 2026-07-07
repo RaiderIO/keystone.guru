@@ -5,7 +5,7 @@ class DungeonrouteDiscoverDiscover extends InlineCode {
         (new CarouselHandler()).refreshCarousel();
         (new ThumbnailRefresh()).refreshHandlers();
 
-        $('[data-toggle="popover"]').popover();
+        $('[data-bs-toggle="popover"]').popover();
     }
 
     cleanup() {

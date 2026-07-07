@@ -111,7 +111,7 @@ $breadcrumbsParams ??= [];
                             @foreach($menuItems as $index => $menuItem)
                                 <li class="nav-item">
                                     <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
-                                       data-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
+                                       data-bs-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
                                        aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
                                         <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
                                     </a>

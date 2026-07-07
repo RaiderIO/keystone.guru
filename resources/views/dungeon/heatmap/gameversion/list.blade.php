@@ -43,7 +43,7 @@ use App\Models\GameVersion\GameVersion;
                     <div class="col">
                     </div>
                     <div class="col-auto px-2">
-                        <i class="fas fa-fire text-danger" data-toggle="tooltip" title="'
+                        <i class="fas fa-fire text-danger" data-bs-toggle="tooltip" title="'
                         . __('view_dungeon.heatmap.gameversion.list.heatmap_available') .
                         '"></i>
                     </div>

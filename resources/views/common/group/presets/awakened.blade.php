@@ -20,7 +20,7 @@ $shortname = $expansion->shortname;
 <div class="form-group {{ $shortname }} presets">
     {{ html()->label(__('view_common.group.affixes.awakened_enemy_set'), 'seasonal_index') }}
     <span class="form-required">*</span>
-    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
     __('view_common.group.affixes.awakened_enemy_set_title')
      }}"></i>
     {{ html()->select('seasonal_index[]', $presets, isset($dungeonroute) ? $dungeonroute->seasonal_index : 0)->class('form-control selectpicker') }}

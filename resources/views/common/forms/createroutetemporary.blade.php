@@ -35,7 +35,7 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
         <div class="form-group">
             <label for="dungeon_route_level">
                 {{ __('view_common.forms.createroutetemporary.key_levels') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip"
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                    title="{{ __('view_common.forms.createroutetemporary.key_levels_title') }}"></i>
             </label>
             {{ html()->text('dungeon_route_level', sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo))->id('temporary_dungeon_route_level')->class('form-control')->style('display: none;') }}

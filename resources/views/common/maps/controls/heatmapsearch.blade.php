@@ -190,16 +190,16 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
          ">
     <div class="bg-header">
         @if($showSidebar)
-            <div id="heatmap_search_sidebar_trigger" class="handle" data-toggle="tooltip">
+            <div id="heatmap_search_sidebar_trigger" class="handle" data-bs-toggle="tooltip">
                 <i class="fas {{ $isHeatmapSearchSidebarDefaultVisible ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
             </div>
         @endif
 
         <div class="p-1">
             <div class="row pr-2 mb-2 no-gutters">
-                <div class="col-auto" data-toggle="tooltip"
+                <div class="col-auto" data-bs-toggle="tooltip"
                      title="{{ __('view_common.maps.controls.heatmapsearch.settings_title') }}">
-                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                    <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                         <i class='fas fa-cog'></i>
                     </button>
                 </div>
@@ -406,7 +406,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                         <div class="col">
                                             <div
                                                 class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable m-auto"
-                                                data-toggle="tooltip" data-id="{{ $affix->affix_id }}"
+                                                data-bs-toggle="tooltip" data-id="{{ $affix->affix_id }}"
                                                 title="{{ __($affix->description) }}"
                                                 style="height: 24px;">
                                             </div>

@@ -99,7 +99,7 @@ class SearchHandlerDungeonRoute extends SearchHandler {
         (new ThumbnailRefresh()).refreshHandlers();
 
         // Init the affix popovers
-        $(`.${containerClass} [data-toggle="popover"]`).popover();
+        $(`.${containerClass} [data-bs-toggle="popover"]`).popover();
         refreshTooltips();
     }
 }

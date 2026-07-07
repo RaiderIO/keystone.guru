@@ -60,7 +60,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                             <img class="select_icon mr-1"
                                  src="{{ ksgAssetImage(sprintf('affixes/%s.jpg', $seasonalAffixKey)) }}"
                                  alt="{{ __('view_common.maps.controls.header.seasonal_affix') }}"
-                                 data-toggle="tooltip"
+                                 data-bs-toggle="tooltip"
                                  title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
                             />
                         </div>
@@ -95,7 +95,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                     @elseif(isset($dungeonroute) && !$dungeonroute->mappingVersion->isLatestForDungeon())
                         <div class="row">
                             <div class="col d-flex align-items-center">
-                            <span data-toggle="tooltip"
+                            <span data-bs-toggle="tooltip"
                                   title="{{ __('view_common.maps.map.new_mapping_version_header_description') }}">
                                     <span class="text-warning">
                                         <i class="fas fa-exclamation-triangle"></i>
@@ -121,7 +121,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                             <?php $stopped = $liveSession->expires_at !== null; ?>
                         @if(!$stopped)
                             <button id="stop_live_session" class="btn btn-danger btn-sm"
-                                    data-toggle="modal" data-target="#stop_live_session_modal">
+                                    data-bs-toggle="modal" data-bs-target="#stop_live_session_modal">
                                 <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
                             </button>
                         @endif
@@ -152,7 +152,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                         </div>
                     @else
                         <button class="btn btn-success btn-sm w-100"
-                                data-toggle="modal" data-target="#start_live_session_modal">
+                                data-bs-toggle="modal" data-bs-target="#start_live_session_modal">
                             <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
                         </button>
                     @endif
@@ -178,7 +178,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                 @if($isUserAdmin)
                     @component('common.maps.controls.buttons.headerbutton')
                         <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm w-100"
-                                data-toggle="modal" data-target="#edit_route_admin_settings_modal">
+                                data-bs-toggle="modal" data-bs-target="#edit_route_admin_settings_modal">
                             <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
                         </button>
                     @endcomponent
@@ -186,7 +186,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
                 @component('common.maps.controls.buttons.headerbutton')
                     <button id="simulate_route_button" class="btn btn-info btn-sm w-100"
-                            data-toggle="modal" data-target="#simulate_modal">
+                            data-bs-toggle="modal" data-bs-target="#simulate_modal">
                         <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
                     </button>
                 @endcomponent
@@ -194,7 +194,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                 @if(!$dungeonroute->isSandbox() && $edit)
                     @component('common.maps.controls.buttons.headerbutton')
                         <button id="edit_route_settings_button" class="btn btn-info btn-sm w-100"
-                                data-toggle="modal" data-target="#edit_route_settings_modal">
+                                data-bs-toggle="modal" data-bs-target="#edit_route_settings_modal">
                             <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
                         </button>
                     @endcomponent
@@ -216,7 +216,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
             @if( $mapContext instanceof MapContextMappingVersionEdit )
                 @component('common.maps.controls.buttons.headerbutton')
                     <button id="edit_mapping_version_button" class="btn btn-info btn-sm w-100"
-                            data-toggle="modal" data-target="#edit_mapping_version_modal">
+                            data-bs-toggle="modal" data-bs-target="#edit_mapping_version_modal">
                         <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
                     </button>
                 @endcomponent
@@ -226,7 +226,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
             @if($showShare)
                 @component('common.maps.controls.buttons.headerbutton')
                     <button class="btn btn-info btn-sm w-100"
-                            data-toggle="modal" data-target="#share_modal">
+                            data-bs-toggle="modal" data-bs-target="#share_modal">
                         <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
                     </button>
                 @endcomponent
@@ -323,7 +323,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
         <div class="row form-group">
             <div class="col">
-                <button data-dismiss="modal" class="btn btn-outline-info w-100">
+                <button data-bs-dismiss="modal" class="btn btn-outline-info w-100">
                     <i class="fas fa-chart-line"></i> {{ __('view_common.maps.controls.header.review_live_session') }}
                 </button>
             </div>

@@ -11,7 +11,7 @@ $currentUserRating = $dungeonroute->getRatingByCurrentUser();
     <!-- Rating -->
 <div class="row no-gutters">
     <div class="col btn-group dropright">
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+        <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <i class="{{ $currentUserRating !== null ? 'fas' : 'far' }} fa-star"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">

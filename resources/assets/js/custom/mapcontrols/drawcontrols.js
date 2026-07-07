@@ -406,7 +406,7 @@ class DrawControls extends MapControl {
             $.each($buttons, function (index, button) {
                 let $button = $(button);
                 let $row = $($button.children()[0]);
-                $row.attr('data-toggle', 'tooltip');
+                $row.attr('data-bs-toggle', 'tooltip');
                 $row.attr('data-placement', 'right');
                 $row.attr('title', $button.attr('title'));
             });

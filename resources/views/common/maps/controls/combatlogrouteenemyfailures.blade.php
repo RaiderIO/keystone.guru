@@ -43,7 +43,7 @@ $npcs = Npc::query()->whereIn('id', $npcIds)->orderBy('name')->get();
 
         <button id="combatlogroute_enemy_failures_clear"
                 class="btn btn-danger w-100 mt-2"
-                data-toggle="tooltip"
+                data-bs-toggle="tooltip"
                 title="{{ __('view_common.maps.controls.combatlogrouteenemyfailures.clear_failures_title') }}">
             <i class="fas fa-trash"></i>
             {{ __('view_common.maps.controls.combatlogrouteenemyfailures.clear_failures') }}

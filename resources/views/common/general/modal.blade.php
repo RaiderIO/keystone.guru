@@ -11,14 +11,14 @@ $showClose ??= true;
     ]])
 @endif
 
-<div class="modal fade" id="{{ $id }}" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+<div class="modal fade" id="{{ $id }}" tabindex="-1" role="dialog" aria-hidden="true" data-bs-keyboard="false"
      @if($static)
-         data-backdrop="static"
+         data-bs-backdrop="static"
     @endif>
     <div class="{{ $class }} modal-dialog modal-{{$size}} vertical-align-center">
         <div class="modal-content">
             @if($showClose)
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">
                     <i class="fas fa-times"></i>
                 </button>
             @endif

@@ -18,7 +18,7 @@ $size ??= 20;
     @if($npc->isBoss())
         <img src="{{ ksgAssetImage(sprintf('mapicon/%s.png', MapIconType::MAP_ICON_TYPE_RAID_MARKER_SKULL))}}"
              alt="__('view_common.npc.link.boss')" width="16" height="16" class="mr-1"
-             title="{{ __('view_common.npc.link.boss') }}" data-toggle="tooltip"/>
+             title="{{ __('view_common.npc.link.boss') }}" data-bs-toggle="tooltip"/>
     @endif
     {{ __($npc->name) }}
 </a>

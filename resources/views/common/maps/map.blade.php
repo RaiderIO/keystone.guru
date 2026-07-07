@@ -257,7 +257,7 @@ if ($isAdmin) {
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
                             <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
-                                 data-toggle="tooltip" title="{{ __($faction->name) }}"
+                                 data-bs-toggle="tooltip" title="{{ __($faction->name) }}"
                                  alt="Faction"/>
                         </a>
 

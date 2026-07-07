@@ -15,7 +15,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
             <div class="col">
                 {{ __('view_common.forms.pullsettings.pull_number_style') }}
                 <i class="fas fa-info-circle"
-                   data-toggle="tooltip"
+                   data-bs-toggle="tooltip"
                    title="{{ __('view_common.forms.pullsettings.pull_number_style_title') }}">
 
                 </i>
@@ -38,7 +38,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
             <div class="col">
                 {{ __('view_common.forms.pullsettings.show_floor_breakdown') }}
                 <i class="fas fa-info-circle"
-                   data-toggle="tooltip"
+                   data-bs-toggle="tooltip"
                    title="{{ __('view_common.forms.pullsettings.show_floor_breakdown_title') }}"></i>
             </div>
         </div>
@@ -55,7 +55,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
                 <div class="col">
                     {{ __('view_common.forms.pullsettings.pull_color_gradient') }}
                     <i class="fas fa-info-circle"
-                       data-toggle="tooltip"
+                       data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.pullsettings.pull_color_gradient_title') }}">
 
                     </i>
@@ -68,7 +68,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
                 <div class="col-2">
                     <button id="edit_route_freedraw_options_gradient_apply_to_pulls"
                             class="btn btn-success"
-                            data-toggle="tooltip"
+                            data-bs-toggle="tooltip"
                             title="{{ __('view_common.forms.pullsettings.apply_now_title') }}">
                         {{ __('view_common.forms.pullsettings.apply_now_title') }}
                     </button>
@@ -87,7 +87,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
                     <label for="pull_gradient_apply_always">
                         {{ __('view_common.forms.pullsettings.always_apply_on_pull_change') }}
                         <i class="fas fa-info-circle"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{{ __('view_common.forms.pullsettings.always_apply_on_pull_change_title') }}">
 
                         </i>

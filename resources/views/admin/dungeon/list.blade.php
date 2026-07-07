@@ -74,7 +74,7 @@ use Illuminate\Support\Collection;
                     <img src="{{ $dungeon->expansion->getIconUrl() }}"
                          alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>
                 <td>{{ __($dungeon->name) }}</td>

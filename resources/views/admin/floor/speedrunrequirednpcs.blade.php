@@ -26,7 +26,7 @@ $difficultiesWithData = array_filter(
             });
 
             // Recalculate column widths when a tab becomes visible, otherwise DataTables misaligns headers
-            $('#admin_speedrun_required_npcs_tabs a[data-toggle="tab"]').on('shown.bs.tab', function () {
+            $('#admin_speedrun_required_npcs_tabs a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 $tables.DataTable().columns.adjust();
             });
         });
@@ -40,7 +40,7 @@ $difficultiesWithData = array_filter(
     <div class="col-auto">
         <div class="dropdown">
             <button class="btn btn-success text-white dropdown-toggle" type="button"
-                    id="admin_speedrun_required_npcs_add_dropdown" data-toggle="dropdown"
+                    id="admin_speedrun_required_npcs_add_dropdown" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-plus"></i> {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc') }}
             </button>
@@ -68,7 +68,7 @@ $difficultiesWithData = array_filter(
                    role="tab"
                    aria-controls="admin_speedrun_required_npcs_{{ $difficultyName }}_content"
                    aria-selected="{{ $loop->first ? 'true' : 'false' }}"
-                   data-toggle="tab">
+                   data-bs-toggle="tab">
                     {{ Dungeon::getDifficultyName($difficulty) }}
                 </a>
             </li>

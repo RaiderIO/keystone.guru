@@ -170,7 +170,7 @@ function refreshTooltips($element = null) {
     // console.warn('refreshing tooltips', $element);
     if (!isMobile()) {
         if ($element === null) {
-            refreshTooltips($('[data-toggle="tooltip"]'));
+            refreshTooltips($('[data-bs-toggle="tooltip"]'));
             refreshTooltips($('[data-tooltip="tooltip"]'));
         } else {
             $('.tooltip').remove();
@@ -197,7 +197,7 @@ $.fn.refreshTooltips = function () {
 function toggleTooltips(enabled = true, $element = null) {
     if (!isMobile()) {
         if ($element === null) {
-            disableTooltips($('[data-toggle="tooltip"]'));
+            disableTooltips($('[data-bs-toggle="tooltip"]'));
             disableTooltips($('[data-tooltip="tooltip"]'));
         } else {
             $('.tooltip').remove();

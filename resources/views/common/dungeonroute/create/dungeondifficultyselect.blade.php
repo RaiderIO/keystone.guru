@@ -36,7 +36,7 @@ $difficultyByDungeon = $allSpeedrunDungeons->mapWithKeys(fn(Dungeon $dungeon) =>
      style="display: {{ isset($dungeonroute) && $dungeonroute->dungeon->speedrun_enabled ? '' : 'none' }} ">
     <label for="{{ $id }}">
         {{ __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
             __('view_common.forms.createroute.dungeon_speedrun_required_npc_difficulty_title')
              }}"></i>
     </label>

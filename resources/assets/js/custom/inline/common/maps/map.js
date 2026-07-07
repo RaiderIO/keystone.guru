@@ -581,7 +581,7 @@ class CommonMapsMap extends InlineCode {
             let template = Handlebars.templates['map_sidebar_enemy_info_template'];
             $('#enemy_details_modal_body').html(template(visualData));
 
-            refreshTooltips($('#enemy_details_modal_body [data-toggle="tooltip"]'));
+            refreshTooltips($('#enemy_details_modal_body [data-bs-toggle="tooltip"]'));
 
             // Reset report form
             $('#enemy_report_enemy_id').val(enemy.id);

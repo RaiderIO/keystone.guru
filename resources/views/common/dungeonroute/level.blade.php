@@ -28,7 +28,7 @@ $minAnchorKeyLevelWidth ??= 1;
         @endif
         <div class="progress-bar text-center bg-success px-1" role="progressbar" aria-valuenow="{{ $levelMin }}"
              aria-valuemin="{{ $levelMin }}" aria-valuemax="{{ $levelMax }}"
-             data-toggle="tooltip"
+             data-bs-toggle="tooltip"
              title="{{ $levelMax === $levelMin ? sprintf('+%d', $levelMax) : sprintf('+%d - +%d', $levelMin, $levelMax) }}"
              style="width: {{ (($levelMax - $levelMin) / ($max - $min)) * 100 }}%">
             <?php // Make sure there's space to render the values ?>

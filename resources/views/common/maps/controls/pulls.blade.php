@@ -51,7 +51,7 @@ $showAds                ??= true;
      {{ $showAds ? 'ad_loaded' : '' }}
          ">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
-        <div id="pulls_sidebar_trigger" class="handle" data-toggle="tooltip">
+        <div id="pulls_sidebar_trigger" class="handle" data-bs-toggle="tooltip">
             <i class="fas {{ $shouldShowPullsSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 
@@ -67,9 +67,9 @@ $showAds                ??= true;
             @if($edit)
                 <div class="p-1">
                     <div class="row pr-2 mb-2 no-gutters">
-                        <div class="col-auto" data-toggle="tooltip"
+                        <div class="col-auto" data-bs-toggle="tooltip"
                              title="{{ __('view_common.maps.controls.pulls.settings_title') }}">
-                            <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                            <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                                 <i class='fas fa-cog'></i>
                             </button>
                         </div>
@@ -78,7 +78,7 @@ $showAds                ??= true;
                                 <i class="fas fa-plus"></i> {{__('view_common.maps.controls.pulls.new_pull')}}
                             </div>
                         </div>
-                        <div class="col-auto" data-toggle="tooltip"
+                        <div class="col-auto" data-bs-toggle="tooltip"
                              title="{{ __('view_common.maps.controls.pulls.delete_all_pulls_title') }}">
                             <button id="killzones_pulls_settings_delete_all" class="btn btn-danger w-100">
                                 <i class="fas fa-trash"></i>
@@ -94,9 +94,9 @@ $showAds                ??= true;
                 @endif
             @else
                 <div class="row p-1 pr-2 mb-2 no-gutters">
-                    <div class="col-auto" data-toggle="tooltip"
+                    <div class="col-auto" data-bs-toggle="tooltip"
                          title="{{ __('view_common.maps.controls.pulls.settings_title') }}">
-                        <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                        <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                             <i class='fas fa-cog'></i>
                         </button>
                     </div>

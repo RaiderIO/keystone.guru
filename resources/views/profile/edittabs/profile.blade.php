@@ -38,7 +38,7 @@ use Illuminate\Support\Collection;
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
             <label for="name">
                 {{ __('view_profile.edit.username') }}
-                <i class="fas fa-info-circle" data-toggle="tooltip"
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                    title="{{ __('view_profile.edit.username_title') }}"></i>
             </label>
             {{ html()->text('name')->class('form-control') }}
@@ -69,7 +69,7 @@ use Illuminate\Support\Collection;
     <div class="form-group{{ $errors->has('echo_anonymous') ? ' has-error' : '' }}">
         <label for="echo_anonymous">
             {{ __('view_profile.edit.show_as_anonymous') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                title="{{ __('view_profile.edit.show_as_anonymous_title') }}"></i>
         </label>
         {{ html()->checkbox('echo_anonymous', $user->echo_anonymous, 1)->class('form-control left_checkbox') }}
@@ -78,7 +78,7 @@ use Illuminate\Support\Collection;
     <div class="form-group{{ $errors->has('echo_color') ? ' has-error' : '' }}">
         <label for="echo_color">
             {{ __('view_profile.edit.echo_color') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                title="{{ __('view_profile.edit.echo_color_title') }}"></i>
         </label>
         {{ html()->input('color', 'echo_color')->id('echo_color')->class('form-control') }}

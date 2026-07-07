@@ -13,13 +13,13 @@ $id               ??= 'attributes';
 ?>
 <div class="form-group">
     @if($showNoAttributes)
-        <label for="attributes" data-toggle="tooltip"
+        <label for="attributes" data-bs-toggle="tooltip"
                title="{{ __('view_common.dungeonroute.attributes.no_attributes_title') }}">
             {{ __('view_common.dungeonroute.attributes.attributes') }}
         </label>
     @else
         <label for="attributes">{{ __('view_common.dungeonroute.attributes.attributes') }}</label>
-        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
         __('view_common.dungeonroute.attributes.select_attributes_title')
          }}"></i>
     @endif

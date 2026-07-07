@@ -40,7 +40,7 @@ $floor ??= null;
 
         <div class="col {{ $errors->has('default') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.floor.edit.default'), 'default')->class('font-weight-bold') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.default_title')
                  }}"></i>
             {{ html()->checkbox('default', $floor?->default ?? (int) ($dungeon->floors()->count() === 0), 1)->class('form-control left_checkbox') }}
@@ -49,7 +49,7 @@ $floor ??= null;
 
         <div class="col {{ $errors->has('facade') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.floor.edit.facade'), 'facade')->class('font-weight-bold') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.facade_title')
                  }}"></i>
             {{ html()->checkbox('facade', $floor?->facade, 1)->class('form-control left_checkbox') }}

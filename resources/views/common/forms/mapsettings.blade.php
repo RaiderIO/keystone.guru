@@ -22,7 +22,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             <div class="col">
                 <label for="map_settings_zoom_speed">
                     {{ __('view_common.forms.mapsettings.zoom_speed') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.zoom_speed_title') }}">
 
                     </i>
@@ -49,7 +49,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 <label for="map_settings_heatmap_show_tooltips">
                     {{ __('view_common.forms.mapsettings.show_heatmap_tooltips') }}
                     <i class="fas fa-info-circle"
-                       data-toggle="tooltip"
+                       data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.show_heatmap_tooltips_title') }}"></i>
                 </label>
             </div>
@@ -69,7 +69,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             <div class="col">
                 <label for="killzones_pulls_settings_map_number_style">
                     {{ __('view_common.forms.mapsettings.enemy_number_style') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.enemy_number_style_title') }}"></i>
                 </label>
             </div>
@@ -92,7 +92,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             <div class="col">
                 <label for="map_settings_unkilled_enemy_opacity">
                     {{ __('view_common.forms.mapsettings.unkilled_enemy_opacity') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.unkilled_enemy_opacity_title') }}">
 
                     </i>
@@ -116,7 +116,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             <div class="col">
                 <label for="map_settings_unkilled_important_enemy_opacity">
                     {{ __('view_common.forms.mapsettings.unkilled_important_enemy_opacity') }} <i
-                        class="fas fa-info-circle" data-toggle="tooltip"
+                        class="fas fa-info-circle" data-bs-toggle="tooltip"
                         title="{{ __('view_common.forms.mapsettings.unkilled_important_enemy_opacity_title') }}"></i>
                 </label>
             </div>
@@ -139,7 +139,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 <label for="map_settings_enemy_aggressiveness_border">
                     {{ __('view_common.forms.mapsettings.show_aggressiveness_border') }}
                     <i class="fas fa-info-circle"
-                       data-toggle="tooltip"
+                       data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.show_aggressiveness_border_title') }}"></i>
                 </label>
             </div>
@@ -158,7 +158,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 <label for="map_settings_enemy_dangerous_border">
                     {{ __('view_common.forms.mapsettings.highlight_dangerous_enemies') }}
                     <i class="fas fa-info-circle"
-                       data-toggle="tooltip"
+                       data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.highlight_dangerous_enemies_title') }}">
 
                     </i>
@@ -180,7 +180,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
             <div class="col">
                 <label for="map_settings_kill_zone_path_weight">
                     {{ __('view_common.forms.mapsettings.kill_zone_path_weight') }}
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                        title="{{ __('view_common.forms.mapsettings.kill_zone_path_weight_title') }}"></i>
                 </label>
             </div>
@@ -205,7 +205,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                     <label for="edit_route_freedraw_options_weight">
                         {{ __('view_common.forms.mapsettings.default_line_weight') }}
                         <i class="fas fa-info-circle"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{{ __('view_common.forms.mapsettings.default_line_weight_title') }}">
                         </i>
                     </label>
@@ -222,7 +222,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                     <label for="edit_route_freedraw_options_weight">
                         {{ __('view_common.forms.mapsettings.default_line_color') }}
                         <i class="fas fa-info-circle"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{{ __('view_common.forms.mapsettings.default_line_color_title') }}">
                         </i>
                     </label>

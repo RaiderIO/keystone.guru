@@ -23,7 +23,7 @@ use App\Models\Team;
                     </button>
                 @else
                     <button id="add_route_btn" class="btn btn-success" disabled
-                            data-toggle="tooltip" title="{{ __('view_team.edit.add_route_no_moderator') }}">
+                            data-bs-toggle="tooltip" title="{{ __('view_team.edit.add_route_no_moderator') }}">
                         <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
                     </button>
                 @endif

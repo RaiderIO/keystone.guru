@@ -75,16 +75,16 @@ $showAds                                   ??= true;
          ">
     <div class="bg-header">
         @if($showSidebar)
-            <div id="dungeonroute_search_sidebar_trigger" class="handle" data-toggle="tooltip">
+            <div id="dungeonroute_search_sidebar_trigger" class="handle" data-bs-toggle="tooltip">
                 <i class="fas {{ $isDungeonRouteSearchSidebarDefaultVisible ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
             </div>
         @endif
 
         <div class="p-1">
             <div class="row pr-2 mb-2 no-gutters">
-                <div class="col-auto" data-toggle="tooltip"
+                <div class="col-auto" data-bs-toggle="tooltip"
                      title="{{ __('view_common.maps.controls.dungeonroutesearch.settings_title') }}">
-                    <button class="btn btn-info w-100" data-toggle="modal" data-target="#map_settings_modal">
+                    <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
                         <i class='fas fa-cog'></i>
                     </button>
                 </div>

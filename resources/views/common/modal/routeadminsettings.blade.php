@@ -13,13 +13,13 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
         <a class="nav-link active"
-           id="dungeon_route_info_tab" data-toggle="tab" href="#route-info" role="tab"
+           id="dungeon_route_info_tab" data-bs-toggle="tab" href="#route-info" role="tab"
            aria-controls="dungeon_route_info_tab" aria-selected="false">
             {{ __('view_common.modal.routeadminsettings.dungeon_route_info') }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="combatlog_info_tab" data-toggle="tab" href="#combatlog-info"
+        <a class="nav-link" id="combatlog_info_tab" data-bs-toggle="tab" href="#combatlog-info"
            role="tab"
            aria-controls="combatlog_info_tab" aria-selected="false">
             {{ __('view_common.modal.routeadminsettings.combatlog_info') }}

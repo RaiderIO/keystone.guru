@@ -59,8 +59,8 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 route('dungeonroutes') }}">
                             <i class="fas fa-binoculars"></i>&nbsp;{{ __('view_home.discover_routes') }}
                         </a>
-                        <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
-                           data-target="#create_route_modal">
+                        <a class="display-4 btn btn-accent" href="#" data-bs-toggle="modal"
+                           data-bs-target="#create_route_modal">
                             <i class="fas fa-plus"></i>&nbsp;{{__('view_home.create_route')}}
                         </a>
                     </div>
@@ -130,7 +130,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                         </h3>
                         <p class="mbr-text mbr-fonts-style display-7">
                             {!! __('view_home.create_your_own_routes_description',
-                                    ['createANewRoute' => sprintf('<a href="#" data-toggle="modal" data-target="#create_route_modal">%s</a>', __('create a new route'))]) !!}
+                                    ['createANewRoute' => sprintf('<a href="#" data-bs-toggle="modal" data-bs-target="#create_route_modal">%s</a>', __('create a new route'))]) !!}
                         </p>
                     </div>
                 </div>
@@ -328,8 +328,8 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 {{ sprintf(__('view_home.join_other_users'), $userCount) }}
                             </p>
                             <div class="mbr-section-btn mt-3">
-                                <a class="display-4 btn btn-accent" href="#" data-toggle="modal"
-                                   data-target="#create_route_modal">
+                                <a class="display-4 btn btn-accent" href="#" data-bs-toggle="modal"
+                                   data-bs-target="#create_route_modal">
                                     <i class="fas fa-plus"></i>&nbsp;{{__('view_home.create_route')}}
                                 </a>
                             </div>

@@ -144,8 +144,8 @@ $isActiveRoute = function (string $route) {
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#mainNavbar"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
                 aria-controls="mainNavbar" aria-expanded="false"
                 aria-label="{{ __('view_common.layout.header.toggle_navigation_title') }}">
             <span class="navbar-toggler-icon"></span>
@@ -155,7 +155,7 @@ $isActiveRoute = function (string $route) {
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item px-3">
                     <a class="btn btn-accent" href="#"
-                       data-toggle="modal" data-target="#create_route_modal">
+                       data-bs-toggle="modal" data-bs-target="#create_route_modal">
                         <i class="fas fa-plus"></i> {{__('view_common.layout.header.create_route')}}
                     </a>
                 </li>
@@ -197,7 +197,7 @@ $isActiveRoute = function (string $route) {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ $hasCompendiumSubActive }}" href="#"
                            id="{{ $compendiumDropdownId }}" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-book-open"></i>
                             {{ $compendiumHeaderText }}
                         </a>
@@ -225,7 +225,7 @@ $isActiveRoute = function (string $route) {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ $hasSubItemActive }}" href="#" id="{{ $dropdownId }}"
                        role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-stream"></i>
                         {{ $headerText }}
                     </a>

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 ?>
 <li class="nav-item dropdown d-lg-none d-block">
     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
-       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @include('common.gameversion.gameversionnav', ['gameVersion' => $currentUserGameVersion])
     </a>
     <div class="dropdown-menu text-center text-xl-left" aria-labelledby="languageDropdown">

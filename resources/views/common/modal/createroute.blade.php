@@ -1,21 +1,21 @@
 <ul class="nav nav-tabs" role="tablist">
     @auth
         <li class="nav-item">
-            <a class="nav-link active" id="create_route_tab" data-toggle="tab" href="#create" role="tab"
+            <a class="nav-link active" id="create_route_tab" data-bs-toggle="tab" href="#create" role="tab"
                aria-controls="create_route" aria-selected="true">
                 {{ __('view_common.modal.createroute.create_route') }}
             </a>
         </li>
     @endauth
     <li class="nav-item">
-        <a class="nav-link {{ Auth::check() ? '' : 'active'}} " id="create_temporary_route_tab" data-toggle="tab"
+        <a class="nav-link {{ Auth::check() ? '' : 'active'}} " id="create_temporary_route_tab" data-bs-toggle="tab"
            href="#create-temporary" role="tab"
            aria-controls="create_temporary_route_tab" aria-selected="false">
             {{ __('view_common.modal.createroute.create_temporary_route') }}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="create_route_import_mdt_tab" data-toggle="tab" href="#import" role="tab"
+        <a class="nav-link" id="create_route_import_mdt_tab" data-bs-toggle="tab" href="#import" role="tab"
            aria-controls="create_route_import_mdt" aria-selected="false">
             {{ __('view_common.modal.createroute.import_from_mdt') }}
         </a>

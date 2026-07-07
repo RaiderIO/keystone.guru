@@ -28,13 +28,13 @@ use App\Models\TeamUser;
                     {{ html()->text('team_members_invite_link', route('team.invite', ['invitecode' => $team->invite_code]))->id('team_members_invite_link')->class('form-control')->isReadonly() }}
                     <div class="input-group-append">
                         <button id="team_invite_link_copy_to_clipboard" class="btn btn-info"
-                                data-toggle="tooltip"
+                                data-bs-toggle="tooltip"
                                 title="{{ __('view_team.edittabs.members.copy_to_clipboard_title') }}">
                             <i class="far fa-copy"></i>
                         </button>
                         @if($userIsModerator)
                             <button id="team_invite_link_refresh" class="btn btn-info"
-                                    data-toggle="tooltip"
+                                    data-bs-toggle="tooltip"
                                     title="{{ __('view_team.edittabs.members.refresh_invite_link_title') }}">
                                 <i class="fa fa-sync"></i>
                             </button>

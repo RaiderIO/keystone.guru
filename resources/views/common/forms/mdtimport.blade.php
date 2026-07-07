@@ -10,7 +10,7 @@
             {{ html()->label(__('view_common.forms.mdtimport.paste_mdt_export_string') . '<span class="form-required">*</span>', 'import_string') }}
         </div>
         <div class="col-auto import_mdt_string_reset_btn" style="display: none;">
-            <div class="btn btn-outline-warning" data-toggle="tooltip"
+            <div class="btn btn-outline-warning" data-bs-toggle="tooltip"
                  title="{{ __('view_common.forms.mdtimport.reset_title') }}">
                 <i class="fas fa-undo"></i>
             </div>
@@ -34,7 +34,7 @@
     <div class="form-group">
         <label for="mdt_import_sandbox">
             {{ __('view_common.forms.mdtimport.temporary_route') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+            <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 sprintf(
                     __('view_common.forms.mdtimport.temporary_route_title'),
                     config('keystoneguru.sandbox_dungeon_route_expires_hours')

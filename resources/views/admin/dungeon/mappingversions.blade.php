@@ -90,7 +90,7 @@ $gameVersionsSelect = $allGameVersions
                 <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $mappingVersion->gameVersion->key)) }}"
                      alt="{{ __($mappingVersion->gameVersion->name) }}"
                      title="{{ __($mappingVersion->gameVersion->name) }}"
-                     data-toggle="tooltip"
+                     data-bs-toggle="tooltip"
                      style="width: 50px;"/>
             </td>
             <td>{{ $mappingVersion->version }}</td>

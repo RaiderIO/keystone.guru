@@ -7,10 +7,10 @@
         </div>
         <div class="col-auto">
             <div class="card-header p-0 border-0" id="enemy_report_heading">
-                <button class="btn btn-warning w-100 collapsed" type="button" data-toggle="collapse"
-                        data-target="#enemy_report_collapse" aria-expanded="false"
+                <button class="btn btn-warning w-100 collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#enemy_report_collapse" aria-expanded="false"
                         aria-controls="enemy_report_collapse">
-                    <i class="fa fa-bug" data-toggle="tooltip"
+                    <i class="fa fa-bug" data-bs-toggle="tooltip"
                        title="{{ __('view_common.modal.enemydetails.report_an_issue') }}"></i>
                 </button>
             </div>
@@ -25,7 +25,7 @@
     <div class="accordion mt-3" id="enemy_details_accordion">
         <div class="card">
             <div id="enemy_report_collapse" class="collapse" aria-labelledby="enemy_report_heading"
-                 data-parent="#enemy_details_accordion">
+                 data-bs-parent="#enemy_details_accordion">
                 <div class="card-body p-0 mt-3">
                     {{ html()->hidden('enemy_report_category', 'enemy')->id('enemy_report_category')->class('form-control') }}
                     {{ html()->hidden('enemy_report_enemy_id', -1)->id('enemy_report_enemy_id')->class('form-control') }}

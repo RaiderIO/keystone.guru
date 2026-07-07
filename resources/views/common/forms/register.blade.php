@@ -41,7 +41,7 @@ $errors   ??= collect();
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_name" class="control-label">
                     {{ __('view_common.forms.register.username') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                        title="{{__('view_common.forms.register.username_title')}}"></i>
                 </label>
 
@@ -54,7 +54,7 @@ $errors   ??= collect();
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_email" class="control-label">
                     {{ __('view_common.forms.register.email_address') }} <span class="form-required">*</span>
-                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                        title="{{__('view_common.forms.register.email_address_title')}}">
 
                     </i>

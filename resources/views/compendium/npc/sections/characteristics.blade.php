@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
                 <h4>{{ __('view_compendium.npc.sections.characteristics.title') }}</h4>
             </div>
             <div class="col ml-1">
-                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top"
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
                    title="{{ __('view_compendium.npc.sections.characteristics.tooltip') }}"></i>
             </div>
         </div>
@@ -27,7 +27,7 @@ use Illuminate\Support\Collection;
                 <?php /** @var Characteristic $characteristic */ ?>
                 <?php $hasCharacteristic = $npcCharacteristicIds->has($characteristic->id); ?>
                 <div class="mr-2 mb-2 text-center" style="width: 48px;"
-                     data-toggle="tooltip" data-placement="top" title="{{ __($characteristic->name) }}">
+                     data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __($characteristic->name) }}">
                     <img src="{{ ksgAssetImage(sprintf('spells/%s.jpg', $characteristic->icon_name)) }}"
                          width="36" height="36"
                          loading="lazy"

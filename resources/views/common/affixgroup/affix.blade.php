@@ -11,7 +11,7 @@ $dungeon  ??= null;
 <div class="row no-gutters">
     <div
         class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }} {{ $showText ? '' : 'mx-1' }} m-auto"
-        data-toggle="tooltip"
+        data-bs-toggle="tooltip"
         title="{{ __($affix->description) }}"
         style="height: 24px;">
     </div>

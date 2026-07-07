@@ -32,7 +32,7 @@ class DungeonrouteDiscoverSearch extends SearchInlineBase {
         let self = this;
 
         // Whenever the tab is changed, apply the new filter
-        let $tabs = $('#search_dungeon_select_tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+        let $tabs = $('#search_dungeon_select_tabs a[data-bs-toggle="tab"]').on('show.bs.tab', function (e) {
             let expansion = $(e.target).data('expansion');
 
             if (typeof expansion !== 'undefined') {

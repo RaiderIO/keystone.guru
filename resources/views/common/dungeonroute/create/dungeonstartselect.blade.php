@@ -27,7 +27,7 @@ $selectedId   = $dungeonroute?->dungeon_start_map_icon_id;
 <div id="{{ $id }}_container" class="form-group" style="display: none;">
     <label for="{{ $id }}">
         {{ __('view_common.forms.createroute.dungeon_start') }}
-        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
             __('view_common.forms.createroute.dungeon_start_title')
              }}"></i>
     </label>

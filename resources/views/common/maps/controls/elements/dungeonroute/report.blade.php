@@ -8,7 +8,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 ?>
 <div class="row no-gutters">
     <div class="col">
-        <a href="#" data-toggle="modal" data-target="#userreport_dungeonroute_modal"
+        <a href="#" data-bs-toggle="modal" data-bs-target="#userreport_dungeonroute_modal"
            class="btn btn-info {{ isset($current_report) ? 'disabled' : '' }}">
             <i class="fas fa-flag"></i>
             <span class="map_controls_element_label_toggle" style="display: none;">

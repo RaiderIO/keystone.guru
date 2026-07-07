@@ -57,7 +57,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
         <div class="row">
             <div class="col">
                 {!! sprintf(__('view_common.modal.share.review_route_settings'),
-                    sprintf('<a href="#" data-toggle="modal" data-target="#edit_route_settings_modal">%s</a>', __('view_common.modal.share.route_settings'))
+                    sprintf('<a href="#" data-bs-toggle="modal" data-bs-target="#edit_route_settings_modal">%s</a>', __('view_common.modal.share.route_settings'))
                 ) !!}
             </div>
         </div>
@@ -73,7 +73,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
                 {{ html()->text('map_shareable_link', $shareLink)->id('map_shareable_link')->class('form-control')->isReadonly() }}
                 <div class="input-group-append">
                     <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip"
+                            data-bs-toggle="tooltip"
                             title="{{ __('view_common.modal.share.copy_shareable_link_to_clipboard') }}">
                         <i class="far fa-copy"></i>
                     </button>
@@ -90,7 +90,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
                 {{ html()->text('map_shareable_short_link', $shareLinkShort)->id('map_shareable_short_link')->class('form-control')->isReadonly() }}
                 <div class="input-group-append">
                     <button id="map_shareable_short_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip"
+                            data-bs-toggle="tooltip"
                             title="{{ __('view_common.modal.share.copy_shareable_link_to_clipboard') }}">
                         <i class="far fa-copy"></i>
                     </button>
@@ -119,7 +119,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
                 {{ html()->text('map_embeddable_link', sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>', route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])))->id('map_embeddable_link')->class('form-control')->isReadonly() }}
                 <div class="input-group-append">
                     <button id="map_embeddable_link_copy_to_clipboard" class="btn btn-info"
-                            data-toggle="tooltip"
+                            data-bs-toggle="tooltip"
                             title="{{ __('view_common.modal.share.copy_embed_code_to_clipboard') }}">
                         <i class="far fa-copy"></i>
                     </button>

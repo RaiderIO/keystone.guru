@@ -107,7 +107,7 @@ use (
                     <div class="col-auto">
                         <i class="fas fa-exclamation-triangle text-warning"
                            title="{{ __('view_common.dungeonroute.card.outdated_mapping_version') }}"
-                           data-toggle="tooltip"></i>
+                           data-bs-toggle="tooltip"></i>
                     </div>
                 @endif
             </div>
@@ -154,7 +154,7 @@ use (
                                 {{--                            @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
                                 {{--                        @endif--}}
                                 -
-                                <span data-toggle="tooltip"
+                                <span data-bs-toggle="tooltip"
                                       title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
                                     {{ sprintf(__('view_common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
                                 </span>
@@ -164,10 +164,10 @@ use (
                         @if( $showAffixes )
                             <div class="col-auto pl-1 pr-0">
                                 @if($seasonalAffix !== null)
-                                    <div class="row no-gutters affix_toggle" data-container="body" data-toggle="popover"
-                                         data-placement="bottom"
-                                         data-html="true"
-                                         data-content="&nbsp;" style="cursor: pointer;">
+                                    <div class="row no-gutters affix_toggle" data-bs-container="body" data-bs-toggle="popover"
+                                         data-bs-placement="bottom"
+                                         data-bs-html="true"
+                                         data-bs-content="&nbsp;" style="cursor: pointer;">
                                         <div class="col ml-1">
                                             <img class="select_icon"
                                                  src="{{ url($seasonalAffix->image_url) }}"
@@ -189,12 +189,12 @@ use (
                 <div class="col-auto bg-card-footer px-2">
                     <button id="route_menu_button_{{ $dungeonroute->public_key }}"
                             class="btn btn-sm menu_actions_btn py-1"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-ellipsis-v text-muted"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="route_menu_button_{{ $dungeonroute->public_key }}">
-                        <a class="dropdown-item" href="#" data-toggle="modal"
-                           data-target="#userreport_dungeonroute_modal"
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                           data-bs-target="#userreport_dungeonroute_modal"
                            data-publickey="{{ $dungeonroute->public_key }}">
                             <i class="fas fa-flag"></i> {{ __('view_common.dungeonroute.card.report') }}
                         </a>
