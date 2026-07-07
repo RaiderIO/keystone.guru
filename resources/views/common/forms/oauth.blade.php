@@ -7,14 +7,14 @@ use Illuminate\Support\Collection;
  * @var Collection<int, GameServerRegion> $allRegions
  */
 ?>
-<div class="form-group">
+<div class="mb-3">
     <div class="row">
         <div class="col">
             <img alt="Battle.net" src="{{ ksgAssetImage('oauth/battlenet_logo.png') }}" class="mx-auto d-block"/>
         </div>
     </div>
 </div>
-<div class="form-group">
+<div class="mb-3">
     <div class="row g-0">
         @foreach($allRegions as $region)
             <div class="col">
@@ -28,7 +28,7 @@ use Illuminate\Support\Collection;
 </div>
 <hr>
 
-<div class="form-group">
+<div class="mb-3">
     <div class="row">
         <div class="col">
             <a href="{{ route('login.discord') }}">
@@ -41,7 +41,7 @@ use Illuminate\Support\Collection;
 
 <hr>
 
-<div class="form-group">
+<div class="mb-3">
     <div class="row">
         <div class="col">
             <a href="{{ route('login.google') }}">

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 $showNoAttributes ??= false;
 $id               ??= 'attributes';
 ?>
-<div class="form-group">
+<div class="mb-3">
     @if($showNoAttributes)
         <label for="attributes" data-bs-toggle="tooltip"
                title="{{ __('view_common.dungeonroute.attributes.no_attributes_title') }}">

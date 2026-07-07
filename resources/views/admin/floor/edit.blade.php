@@ -31,7 +31,7 @@ $floor ??= null;
         {{ html()->form('POST', route('admin.floor.savenew', $dungeon->slug))->open() }}
     @endisset
 
-    <div class="row form-group">
+    <div class="row mb-3">
         <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.floor.edit.active'), 'active')->class('fw-bold') }}
             {{ html()->checkbox('active', $floor?->active, 1)->class('form-control left_checkbox') }}
@@ -57,77 +57,77 @@ $floor ??= null;
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('index') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('index') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.index'), 'index')->class('fw-bold') }}
         <span class="form-required">*</span>
         {{ html()->text('index', $floor?->index ?? $dungeon->floors()->count() + 1)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'index'])
     </div>
 
-    <div class="form-group{{ $errors->has('mdt_sub_level') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('mdt_sub_level') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.mdt_sub_level'), 'mdt_sub_level')->class('fw-bold') }}
         <span class="form-required">*</span>
         {{ html()->text('mdt_sub_level', $floor?->mdt_sub_level)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'mdt_sub_level'])
     </div>
 
-    <div class="form-group{{ $errors->has('ui_map_id') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('ui_map_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.ui_map_id'), 'ui_map_id')->class('fw-bold') }}
         <span class="form-required">*</span>
         {{ html()->text('ui_map_id', $floor?->ui_map_id)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'ui_map_id'])
     </div>
 
-    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.name'), 'name')->class('fw-bold') }}
         <span class="form-required">*</span>
         {{ html()->text('name')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'name'])
     </div>
 
-    <div class="form-group{{ $errors->has('map_name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('map_name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.map_name'), 'map_name')->class('fw-bold') }}
         {{ html()->text('map_name')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'map_name'])
     </div>
 
-    <div class="form-group{{ $errors->has('min_enemy_size') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('min_enemy_size') ? ' has-error' : '' }}">
         {{ html()->label(sprintf(__('view_admin.floor.edit.min_enemy_size'), config('keystoneguru.min_enemy_size_default')), 'min_enemy_size')->class('fw-bold') }}
         {{ html()->number('min_enemy_size')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'min_enemy_size'])
     </div>
 
-    <div class="form-group{{ $errors->has('max_enemy_size') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('max_enemy_size') ? ' has-error' : '' }}">
         {{ html()->label(sprintf(__('view_admin.floor.edit.max_enemy_size'), config('keystoneguru.max_enemy_size_default')), 'max_enemy_size')->class('fw-bold') }}
         {{ html()->number('max_enemy_size')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'max_enemy_size'])
     </div>
 
-    <div class="form-group{{ $errors->has('enemy_engagement_max_range') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('enemy_engagement_max_range') ? ' has-error' : '' }}">
         {{ html()->label(sprintf(__('view_admin.floor.edit.enemy_engagement_max_range'), config('keystoneguru.enemy_engagement_max_range_default')), 'enemy_engagement_max_range')->class('fw-bold') }}
         {{ html()->number('enemy_engagement_max_range', $floor?->enemy_engagement_max_range)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range'])
     </div>
 
-    <div class="form-group{{ $errors->has('enemy_engagement_max_range_patrols') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('enemy_engagement_max_range_patrols') ? ' has-error' : '' }}">
         {{ html()->label(sprintf(__('view_admin.floor.edit.enemy_engagement_max_range_patrols'), config('keystoneguru.enemy_engagement_max_range_patrols_default')), 'enemy_engagement_max_range_patrols')->class('fw-bold') }}
         {{ html()->number('enemy_engagement_max_range_patrols', $floor?->enemy_engagement_max_range_patrols)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range_patrols'])
     </div>
 
-    <div class="form-group{{ $errors->has('percentage_display_zoom') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('percentage_display_zoom') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.floor.edit.percentage_display_zoom'), 'percentage_display_zoom')->class('fw-bold') }}
         {{ html()->number('percentage_display_zoom')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'percentage_display_zoom'])
     </div>
 
-    <div class="form-group{{ $errors->has('zoom_max') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('zoom_max') ? ' has-error' : '' }}">
         {{ html()->label(sprintf(__('view_admin.floor.edit.zoom_max'), config('keystoneguru.zoom_max_default')), 'zoom_max')->class('fw-bold') }}
         {{ html()->number('zoom_max')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'zoom_max'])
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         @include('admin.floor.connectedfloors', ['floor' => $floor])
 
         {{ html()->input('submit')->value(__('view_admin.floor.edit.submit'))->class('btn btn-info') }}
@@ -136,7 +136,7 @@ $floor ??= null;
     </div>
 
     @isset($floor)
-        <div class="form-group">
+        <div class="mb-3">
             @include('admin.floor.speedrunrequirednpcs', ['dungeon' => $dungeon, 'floor' => $floor])
         </div>
     @endisset

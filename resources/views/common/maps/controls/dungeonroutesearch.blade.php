@@ -133,7 +133,7 @@ $showAds                                   ??= true;
                     <input id="filter_username" type="text" class="form-control" name="username" value="{{ old('username') }}"/>
                 @endcomponent
 
-                <div id="dungeonroute_search_routes_container" class="form-group">
+                <div id="dungeonroute_search_routes_container" class="mb-3">
 
                 </div>
             </div>

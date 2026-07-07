@@ -17,24 +17,24 @@ use Illuminate\Support\Facades\Auth;
 @endisset
 
 @if(!isset($model))
-    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
         {{ html()->label(__('view_common.team.details.name') . '<span class="form-required">*</span>', 'name') }}
         {{ html()->text('name')->class('form-control') }}
     </div>
 @endif
 
-<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+<div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.team.details.description'), 'description') }}
     {{ html()->text('description')->class('form-control') }}
 </div>
 
-<div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
+<div class="mb-3{{ $errors->has('logo') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.team.details.logo'), 'logo') }}
     {{ html()->file('logo')->class('form-control') }}
 </div>
 
 @if(isset($model) && isset($model->iconfile))
-    <div class="form-group">
+    <div class="mb-3">
         {{__('view_common.team.details.current_logo') }}: <img src="{{ $model->iconfile->getURL() }}"
                                                                alt="{{ __('view_common.team.details.team_logo_title') }}"
                                                                style="max-width: 48px"/>
@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\Auth;
 @endif
 
 @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) && isset($model))
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->label(__('view_common.team.details.route_publishing_enabled'), 'route_publishing_enabled') }}
         {{ html()->checkbox('route_publishing_enabled', $model->route_publishing_enabled, 1)->class('form-control left_checkbox') }}
     </div>

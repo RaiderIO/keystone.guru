@@ -29,7 +29,7 @@ use Illuminate\Support\Collection;
             {{ html()->form('POST', route('admin.dungeon.savenew'))->open() }}
         @endisset
 
-        <div class="row form-group">
+        <div class="row mb-3">
             <div class="col {{ $errors->has('active') ? ' has-error' : '' }}">
                 {{ html()->label(__('view_admin.dungeon.edit.active'), 'active') }}
                 {{ html()->checkbox('active', $dungeon?->active ?? 1, 1)->class('form-control left_checkbox') }}
@@ -73,7 +73,7 @@ use Illuminate\Support\Collection;
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('key') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.key'), 'key') }}
             @isset($dungeon)
                 {{ html()->text('key')->class('form-control')->disabled() }}
@@ -85,56 +85,56 @@ use Illuminate\Support\Collection;
         </div>
 
         @isset($dungeon)
-            <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('id') ? ' has-error' : '' }}">
                 {{ html()->label(__('view_admin.dungeon.edit.id'), 'id') }}
                 {{ html()->number('id')->class('form-control')->attribute('disabled', 'disabled') }}
                 @include('common.forms.form-error', ['key' => 'id'])
             </div>
         @endisset
 
-        <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('zone_id') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.zone_id'), 'zone_id') }}
             {{ html()->number('zone_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'zone_id'])
         </div>
 
-        <div class="form-group{{ $errors->has('map_id') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('map_id') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.map_id'), 'map_id') }}
             {{ html()->number('map_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'map_id'])
         </div>
 
-        <div class="form-group{{ $errors->has('instance_id') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('instance_id') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.instance_id'), 'instance_id') }}
             {{ html()->number('instance_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'instance_id'])
         </div>
 
-        <div class="form-group{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.challenge_mode_id'), 'challenge_mode_id') }}
             {{ html()->number('challenge_mode_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'challenge_mode_id'])
         </div>
 
-        <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.mdt_id'), 'mdt_id') }}
             {{ html()->number('mdt_id')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'mdt_id'])
         </div>
 
-        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.name'), 'name') }}
             {{ html()->text('name')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
 
-        <div class="form-group{{ $errors->has('abbreviation') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('abbreviation') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.abbreviation'), 'abbreviation') }}
             {{ html()->text('abbreviation')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'abbreviation'])
         </div>
 
-        <div class="form-group{{ $errors->has('slug') ? ' has-error' : '' }}">
+        <div class="mb-3{{ $errors->has('slug') ? ' has-error' : '' }}">
             {{ html()->label(__('view_admin.dungeon.edit.slug'), 'slug') }}
             {{ html()->text('slug')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'slug'])
@@ -147,11 +147,11 @@ use Illuminate\Support\Collection;
     </div>
 
     @isset($dungeon)
-        <div class="form-group">
+        <div class="mb-3">
             @include('admin.dungeon.floormanagement', ['dungeon' => $dungeon])
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             @include('admin.dungeon.mappingversions', ['dungeon' => $dungeon])
         </div>
     @endisset

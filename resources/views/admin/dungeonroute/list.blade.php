@@ -67,7 +67,7 @@ use Illuminate\Support\Collection;
                 ])
             </div>
 
-            <div class="col-md-3 form-group">
+            <div class="col-md-3 mb-3">
                 <label for="published_state_id">{{ __('view_admin.dungeonroute.list.filter_published_state') }}</label>
                 <select name="published_state_id" id="published_state_id" class="form-control">
                     <option value="">{{ __('view_admin.dungeonroute.list.filter_all') }}</option>
@@ -77,21 +77,21 @@ use Illuminate\Support\Collection;
                 </select>
             </div>
 
-            <div class="col-md-2 form-group">
+            <div class="col-md-2 mb-3">
                 <label for="author">{{ __('view_admin.dungeonroute.list.filter_author') }}</label>
                 <input type="text" name="author" id="author" class="form-control"
                        value="{{ $filters['author'] }}"
                        placeholder="{{ __('view_admin.dungeonroute.list.filter_author_placeholder') }}">
             </div>
 
-            <div class="col-md-2 form-group">
+            <div class="col-md-2 mb-3">
                 <label for="public_key">{{ __('view_admin.dungeonroute.list.filter_public_key') }}</label>
                 <input type="text" name="public_key" id="public_key" class="form-control"
                        value="{{ $filters['public_key'] }}"
                        placeholder="{{ __('view_admin.dungeonroute.list.filter_public_key_placeholder') }}">
             </div>
 
-            <div class="col-md-2 form-group d-flex align-items-end">
+            <div class="col-md-2 mb-3 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
                     <i class="fas fa-filter"></i> {{ __('view_admin.dungeonroute.list.filter_apply') }}
                 </button>

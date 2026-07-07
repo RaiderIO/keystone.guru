@@ -39,11 +39,11 @@
                     <td>{{ $failure->created_at }}</td>
                     <td>
                         @if($failure->resolved_at !== null)
-                            <span class="badge badge-success rounded-pill">
+                            <span class="badge text-bg-success rounded-pill">
                                 {{ __('view_admin.tools.combatlog.parsefailures.status_resolved') }}
                             </span>
                         @else
-                            <span class="badge badge-warning rounded-pill">
+                            <span class="badge text-bg-warning rounded-pill">
                                 {{ __('view_admin.tools.combatlog.parsefailures.status_open') }}
                             </span>
                         @endif
@@ -80,7 +80,7 @@
                         {{ __('view_admin.tools.combatlog.parsefailures.segments_modal_title') }}
                         <span id="parsefailures_segments_run_id"></span>
                     </h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="dismiss-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

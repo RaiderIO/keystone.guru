@@ -88,13 +88,13 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
     @parent
 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_description_modal'])
-        <div class="form-group">
+        <div class="mb-3">
             <h4>
                 {{ html()->label(__('view_common.maps.controls.pullsworkbench.modal.description.label'), 'map_killzonessidebar_killzone_description_modal_textarea')->id('map_killzonessidebar_killzone_description_modal_label') }}
             </h4>
-            <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
+            <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="mb-3">
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 {{ __('view_common.maps.controls.pullsworkbench.modal.supported_domains') }}
                 <span id="map_killzonessidebar_killzone_description_modal_supported_domains" class="fas fa-info-circle"
                       data-bs-toggle="tooltip" data-bs-html="true">
@@ -102,11 +102,11 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
                 </span>
             </div>
             <div id="map_killzonessidebar_killzone_description_modal_remaining_characters"
-                 class="form-group text-warning" style="display: none;">
+                 class="mb-3 text-warning" style="display: none;">
             </div>
             {{ html()->textarea('map_killzonessidebar_killzone_description_modal_textarea', '')->class('form-control')->id('map_killzonessidebar_killzone_description_modal_textarea') }}
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <div id="map_killzonessidebar_killzone_description_modal_save" class="btn btn-primary" data-bs-dismiss="modal">
                 {{ __('view_common.maps.controls.pullsworkbench.modal.description.save') }}
             </div>
@@ -114,7 +114,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
     @endcomponent
 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_spells_modal'])
-        <div class="form-group">
+        <div class="mb-3">
             {!! html()->label(
                 __('view_common.maps.controls.pullsworkbench.modal.spells.label'),
                 'map_killzonessidebar_killzone_spells_modal_select',
@@ -126,7 +126,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
                 'liveSearch' => true,
             ])
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <div id="map_killzonessidebar_killzone_spells_modal_save" class="btn btn-primary" data-bs-dismiss="modal">
                 {{ __('view_common.maps.controls.pullsworkbench.modal.spells.save') }}
             </div>

@@ -49,7 +49,7 @@ $dungeonAccuracyByFloor = $dungeonAccuracyByFloor->sortBy(function (Collection $
                 <h2 class="mt-4 mb-3">{{ __($expansion->name) }}</h2>
             @endif
 
-            <div class="form-group">
+            <div class="mb-3">
                 <h3 class="mt-3">{{ __($dungeon->name) }}</h3>
                 @foreach($dungeon->floors as $floor)
                     @php

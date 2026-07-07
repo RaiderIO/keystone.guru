@@ -290,7 +290,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
             <?php // You cannot rate your own routes ?>
         @if($dungeonroute->author_id !== Auth::id())
                 <?php $currentRating = $dungeonroute->getRatingByCurrentUser() ?>
-            <div class="form-group">
+            <div class="mb-3">
                 <h5>
                     <label for="rating_select">
                         {{ __('view_common.maps.controls.header.rate_this_route') }}
@@ -307,21 +307,21 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
             </div>
 
             @if($currentRating === null)
-                <div class="form-group">
+                <div class="mb-3">
                     <p>
                         {{ __('view_common.maps.controls.header.rate_this_route_explanation') }}
                     </p>
                 </div>
             @endif
         @else
-            <div class="form-group">
+            <div class="mb-3">
                 <p>
                     {{ __('view_common.maps.controls.header.you_cannot_rate_your_own_route') }}
                 </p>
             </div>
         @endif
 
-        <div class="row form-group">
+        <div class="row mb-3">
             <div class="col">
                 <button data-bs-dismiss="modal" class="btn btn-outline-info w-100">
                     <i class="fas fa-chart-line"></i> {{ __('view_common.maps.controls.header.review_live_session') }}

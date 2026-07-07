@@ -31,7 +31,7 @@
             @csrf
 
             @foreach($criteriaByVersion as $version => $versionCriteria)
-                <div class="form-group">
+                <div class="mb-3">
                     <h3 class="mt-4">{{ __('view_admin.tools.combatlog.criteria.version', ['version' => number_format(num: $version, thousands_separator: '.')]) }}</h3>
 
                     @foreach(array_keys(CombatLogParsingCriterion::VALID_CRITERIA) as $modelClass)

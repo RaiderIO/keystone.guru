@@ -38,7 +38,7 @@ $errors   ??= collect();
                 {{ __('view_common.forms.register.register') }}
             </h3>
 
-            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_name" class="control-label">
                     {{ __('view_common.forms.register.username') }} <span class="form-required">*</span>
                     <i class="fas fa-info-circle" data-bs-toggle="tooltip"
@@ -51,7 +51,7 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_email" class="control-label">
                     {{ __('view_common.forms.register.email_address') }} <span class="form-required">*</span>
                     <i class="fas fa-info-circle" data-bs-toggle="tooltip"
@@ -65,7 +65,7 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group{{ $errors->has('region') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('region') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_region" class="control-label">
                     {{ __('view_common.forms.register.region') }}
                 </label>
@@ -78,7 +78,7 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+            <div class="mb-3{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="{{ $modalClass }}register_password" class="control-label">
                     {{ __('view_common.forms.register.password') }} <span class="form-required">*</span>
                 </label>
@@ -89,7 +89,7 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="{{ $modalClass }}register_password-confirm"
                        class="control-label">
                     {{ __('view_common.forms.register.confirm_password') }} <span class="form-required">*</span>
@@ -101,7 +101,7 @@ $errors   ??= collect();
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="{{ $modalClass }}legal_agreed" class="control-label">
                     {!! sprintf(__('view_common.forms.register.legal_agree'),
                      '<a href="' . route('legal.terms') . '">' . __('view_common.forms.register.terms_of_service') . '</a>',
@@ -113,7 +113,7 @@ $errors   ??= collect();
                 {{ html()->hidden('legal_agreed_ms', -1)->id($modalClass . 'legal_agreed_ms') }}
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <div class="col-md-12">
                     <button type="submit" class="btn btn-primary">
                         {{ __('view_common.forms.register.register') }}

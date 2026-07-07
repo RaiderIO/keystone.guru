@@ -33,6 +33,25 @@ body {
     margin: 0 0.75em;
   }
 
+  /* Project-owned close button for modals/alerts (Bootstrap 5 removed .close; we keep the FontAwesome icon design) */
+  .dismiss-close {
+    float: right;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var($--theme-text-contrast);
+    opacity: .5;
+
+    &:hover, &:focus {
+      color: var($--theme-text-contrast);
+      text-decoration: none;
+      opacity: .75;
+    }
+  }
+
   /* Weird offset because of theme */
   .bootstrap-select.form-control {
     padding: 0;

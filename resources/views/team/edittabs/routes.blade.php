@@ -9,7 +9,7 @@ use App\Models\Team;
  */
 ?>
 <div class="tab-pane fade" id="routes" role="tabpanel" aria-labelledby="routes-tab">
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 <h4>

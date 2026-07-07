@@ -30,7 +30,7 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
 <div class="tab-content">
     <div id="route-info" class="tab-pane fade show active mt-3"
          role="tabpanel" aria-labelledby="dungeon_route_info_tab">
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_common.modal.routeadminsettings.links') }}
             </h5>
@@ -42,13 +42,13 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
                 {{ __('view_common.modal.routeadminsettings.edit_mapping_version') }}
             </a>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             @dump($dungeonRoute)
         </div>
     </div>
     <div id="combatlog-info" class="tab-pane fade mt-3" role="tabpanel"
          aria-labelledby="combatlog_info_tab">
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_common.modal.routeadminsettings.challenge_mode_run') }}
             </h5>
@@ -58,7 +58,7 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
                 {{ __('view_common.modal.routeadminsettings.route_not_created_from_combat_log') }}
             @endif
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <h5>
                 {{ __('view_common.modal.routeadminsettings.challenge_mode_run_data') }}
             </h5>

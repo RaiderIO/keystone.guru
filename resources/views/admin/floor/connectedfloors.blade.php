@@ -30,7 +30,7 @@ $connectedFloorCandidates = $dungeon->floors;
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
             <?php
         foreach ($connectedFloorCandidates as $connectedFloorCandidate){
             /** @var FloorCoupling $floorCoupling */

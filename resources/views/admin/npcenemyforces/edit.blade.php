@@ -26,7 +26,7 @@ $npcEnemyForces ??= null;
         {{ html()->modelForm($npc, 'POST', route('admin.npc.npcenemyforces.savenew', $npc))->attribute('autocomplete', 'off')->open() }}
     @endisset
 
-    <div class="form-group{{ $errors->has('mapping_version_id') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('mapping_version_id') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npcenemyforces.edit.mapping_version'), 'mapping_version_id') }}
         <span class="form-required">*</span>
         @include('common.mappingversion.select', [
@@ -37,20 +37,20 @@ $npcEnemyForces ??= null;
         @include('common.forms.form-error', ['key' => 'mapping_version_id'])
     </div>
 
-    <div class="form-group{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('enemy_forces') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npcenemyforces.edit.enemy_forces'), 'enemy_forces') }}
         <span class="form-required">*</span>
         {{ html()->number('enemy_forces', $npcEnemyForces?->enemy_forces)->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'enemy_forces'])
     </div>
 
-    <div class="form-group{{ $errors->has('enemy_forces_teeming') ? ' has-error' : '' }}">
+    <div class="mb-3{{ $errors->has('enemy_forces_teeming') ? ' has-error' : '' }}">
         {{ html()->label(__('view_admin.npcenemyforces.edit.enemy_forces_teeming'), 'enemy_forces_teeming') }}
         {{ html()->number('enemy_forces_teeming', $npcEnemyForces?->enemy_forces_teeming ?? '')->class('form-control') }}
         @include('common.forms.form-error', ['key' => 'enemy_forces_teeming'])
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         {{ html()->input('submit')->value(__('view_admin.npcenemyforces.edit.submit'))->class('btn btn-info')->name('submit') }}
     </div>
 

@@ -7,13 +7,13 @@ $name      ??= 'default';
 $type      ??= '';
 $dismiss   ??= true;
 $rootClass ??= '';
-$align     ??= 'left';
+$align     ??= 'start';
 ?>
 @if(!isAlertDismissed($name))
     <div class="alert alert-{{ $type }} text-{{$align}} mt-4 {{ $dismiss ? 'alert-dismissable' : '' }} {{ $rootClass }}"
          role="alert">
         @if($dismiss)
-            <a href="#" class="close" data-bs-dismiss="alert" aria-label="close" data-alert-dismiss-id="{{ $name }}">
+            <a href="#" class="dismiss-close" data-bs-dismiss="alert" aria-label="close" data-alert-dismiss-id="{{ $name }}">
                 <i class="fas fa-times"></i>
             </a>
         @endif

@@ -7,7 +7,7 @@ use App\Models\Team;
  */
 ?>
 <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-    <div class="form-group">
+    <div class="mb-3">
         <h4>
             {{ sprintf(__('view_team.edittabs.overview.title'), $team->name) }}
         </h4>

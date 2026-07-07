@@ -31,7 +31,7 @@ use App\Models\Mapping\MappingVersion;
     <h4>{{ __('view_admin.tools.dungeonroute.mappingversions.used_header') }}</h4>
     <p class="text-muted">{{ __('view_admin.tools.dungeonroute.mappingversions.used_description') }}</p>
 
-    <div class="form-group">
+    <div class="mb-3">
         <table id="admin_dungeon_route_mapping_versions_used_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>
@@ -47,7 +47,7 @@ use App\Models\Mapping\MappingVersion;
                     <td>{{ $mappingVersion->dungeon_routes_count }}</td>
                     <td>
                         @if($mappingVersion->isLatestForDungeon())
-                            <span class="badge badge-success">
+                            <span class="badge text-bg-success">
                                 {{ __('view_admin.tools.dungeonroute.mappingversions.action_is_latest') }}
                             </span>
                         @else
@@ -69,7 +69,7 @@ use App\Models\Mapping\MappingVersion;
     <h4 class="mt-4">{{ __('view_admin.tools.dungeonroute.mappingversions.unused_header') }}</h4>
     <p class="text-muted">{{ __('view_admin.tools.dungeonroute.mappingversions.unused_description') }}</p>
 
-    <div class="form-group">
+    <div class="mb-3">
         <table id="admin_dungeon_route_mapping_versions_unused_table" class="tablesorter default_table table-striped">
             <thead>
             <tr>

@@ -18,27 +18,27 @@ use App\Models\Spell\Spell;
         <h2 class="mb-1">{{ __($spell->name) }}</h2>
         <div>
             @if($spell->schools_mask > 0)
-                <span class="badge badge-secondary me-1">
+                <span class="badge text-bg-secondary me-1">
                     {{ Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask, 'spellschools') }}
                 </span>
             @endif
             @if($spell->dispel_type)
-                <span class="badge badge-secondary me-1">
+                <span class="badge text-bg-secondary me-1">
                     {{ __($spell->dispel_type) }}
                 </span>
             @endif
             @if($spell->mechanic)
-                <span class="badge badge-secondary me-1">
+                <span class="badge text-bg-secondary me-1">
                     {{ __($spell->mechanic) }}
                 </span>
             @endif
             @if($spell->aura)
-                <span class="badge badge-info me-1">
+                <span class="badge text-bg-info me-1">
                     {{ __('view_compendium.spell.sections.header.aura') }}
                 </span>
             @endif
             @if($spell->debuff)
-                <span class="badge badge-danger me-1">
+                <span class="badge text-bg-danger me-1">
                     {{ __('view_compendium.spell.sections.header.debuff') }}
                 </span>
             @endif

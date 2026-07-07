@@ -10,7 +10,7 @@ $killZonesNumberStyleChecked       = ($_COOKIE['kill_zones_number_style'] ?? 'pe
 $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visibility'] ?? '1') === '1';
 ?>
 <div class="pull_settings_tools container">
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 {{ __('view_common.forms.pullsettings.pull_number_style') }}
@@ -33,7 +33,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 {{ __('view_common.forms.pullsettings.show_floor_breakdown') }}
@@ -50,7 +50,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
     </div>
 
     @if(isset($dungeonroute) && $edit)
-        <div class="form-group">
+        <div class="mb-3">
             <div class="row view_dungeonroute_details_row mt-2">
                 <div class="col">
                     {{ __('view_common.forms.pullsettings.pull_color_gradient') }}
@@ -81,7 +81,7 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <div class="row g-0 view_dungeonroute_details_row">
                 <div class="col pe-2">
                     <label for="pull_gradient_apply_always">

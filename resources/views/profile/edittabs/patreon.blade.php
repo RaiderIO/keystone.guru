@@ -71,7 +71,7 @@ use App\Models\User;
                 {{ __('view_profile.edit.ad_free_giveaway.title') }}
             </h4>
 
-            <div class="form-group">
+            <div class="mb-3">
                 @php($maxAdFreeGiveaways = config('keystoneguru.patreon.ad_free_giveaways'))
                 @php($countLeft = PatreonAdFreeGiveaway::getCountLeft($user))
                 @if($countLeft > 0)

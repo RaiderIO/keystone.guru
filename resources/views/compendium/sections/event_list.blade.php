@@ -144,7 +144,7 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                 <span class="text-muted me-1" style="min-width: 14px; text-align: center;">
                     <i class="{{ $eventTypeIcon($event) }}" style="font-size: .75rem;"></i>
                 </span>
-                <span class="badge badge-{{ $eventBadgeClass($event) }} me-2 mt-1" style="min-width: 20px;">
+                <span class="badge text-bg-{{ $eventBadgeClass($event) }} me-2 mt-1" style="min-width: 20px;">
                     <i class="{{ $eventIcon($event) }}"></i>
                 </span>
                 <div>

@@ -597,7 +597,7 @@ $jscomp.polyfill("Array.prototype.find", function (a) {
         }))
     });
     a(document).on("change", 'input[type="range"]', function (b) {
-        a(b.target).parents(".form-group").find(".value")[0].innerHTML = b.target.value
+        a(b.target).parents(".mb-3").find(".value")[0].innerHTML = b.target.value
     })
 })(jQuery);
 document.getElementsByTagName("body")[0].setAttribute("style", "z-index: 0");

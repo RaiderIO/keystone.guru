@@ -17,7 +17,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <h4>{{ __('view_common.forms.mapsettings.general') }}</h4>
 
     <!-- Map zoom speed -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 <label for="map_settings_zoom_speed">
@@ -43,7 +43,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <h4>{{ __('view_common.forms.mapsettings.heatmap') }}</h4>
 
     <!-- Heatmap tooltips -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row g-0">
             <div class="col pe-2">
                 <label for="map_settings_heatmap_show_tooltips">
@@ -64,7 +64,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <h4>{{ __('view_common.forms.mapsettings.enemies') }}</h4>
 
     <!-- Enemy number style -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 <label for="killzones_pulls_settings_map_number_style">
@@ -87,7 +87,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     </div>
 
     <!-- Unkilled enemy opacity -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 <label for="map_settings_unkilled_enemy_opacity">
@@ -111,7 +111,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     </div>
 
     <!-- Unkilled important enemy opacity -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 <label for="map_settings_unkilled_important_enemy_opacity">
@@ -133,7 +133,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     </div>
 
     <!-- Aggressiveness border -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row g-0">
             <div class="col pe-2">
                 <label for="map_settings_enemy_aggressiveness_border">
@@ -152,7 +152,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     </div>
 
     <!-- Dangerous enemies -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row g-0">
             <div class="col pe-2">
                 <label for="map_settings_enemy_dangerous_border">
@@ -175,7 +175,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     <h4>{{ __('view_common.forms.mapsettings.kill_zone_path') }}</h4>
 
     <!-- Killzone path stroke width -->
-    <div class="form-group">
+    <div class="mb-3">
         <div class="row">
             <div class="col">
                 <label for="map_settings_kill_zone_path_weight">
@@ -199,7 +199,7 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
     @if($edit)
         <h4 class="mt-4">{{ __('view_common.forms.mapsettings.drawing') }}</h4>
         <!-- Default line weight -->
-        <div class="form-group">
+        <div class="mb-3">
             <div class="row">
                 <div class="col">
                     <label for="edit_route_freedraw_options_weight">

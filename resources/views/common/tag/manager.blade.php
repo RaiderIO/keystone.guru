@@ -24,7 +24,7 @@ $isDarkTheme = User::isThemeDark($theme);
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
 
 @foreach($tags as $categoryId => $categoryTags)
-    <div class="form-group">
+    <div class="mb-3">
         <h5>
             {{ $tagCategoryNameMapping[$categoryId] }}
         </h5>
@@ -89,7 +89,7 @@ $isDarkTheme = User::isThemeDark($theme);
 @endif
 
 
-<div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
+<div class="mb-3{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
     {{ html()->label(__('view_common.tag.manager.create_tag'), 'tag_name_new') }}
     {{ html()->text('tag_name_new')->class('form-control') }}
     @include('common.forms.form-error', ['key' => 'tag_name_new'])

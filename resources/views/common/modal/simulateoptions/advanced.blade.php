@@ -1,7 +1,7 @@
 <?php
 $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\Models\Patreon\PatreonBenefit::ADVANCED_SIMULATION);
 ?>
-<div class="form-group">
+<div class="mb-3">
     <div id="simulate_route">
         <div class="card">
             <div class="card-header" id="simulate_route_advanced_heading">
@@ -30,7 +30,7 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                         {!! __('view_common.modal.simulateoptions.advanced.description') !!}
                     @endcomponent
 
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="simulate_hp_percent">
                             {{ __('view_common.modal.simulateoptions.advanced.ranged_pull_compensation_yards') }}
                             <i class="fas fa-info-circle" data-bs-toggle="tooltip"
@@ -49,7 +49,7 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="mb-3">
                         <label for="simulate_use_mounts">
                             {{ __('view_common.modal.simulateoptions.advanced.use_mounts') }}
                             <i class="fas fa-info-circle" data-bs-toggle="tooltip"

@@ -160,7 +160,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     @endsection
 @endif
 
-<div class="form-group">
+<div class="mb-3">
     @if($label !== false)
         {{ html()->label($label . ($required ? '<span class="form-required">*</span>' : ''), $id) }}
     @endif

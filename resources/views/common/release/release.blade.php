@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 
 $showHeader ??= true;
 ?>
-<div class="form-group">
+<div class="mb-3">
     @if($showHeader)
         <div class="row g-0">
             <div class="col">

@@ -17,7 +17,7 @@ for ($i = 0; $i < $season->presets; ++$i) {
 $shortname = $expansion->shortname;
 ?>
 
-<div class="form-group {{ $shortname }} presets">
+<div class="mb-3 {{ $shortname }} presets">
     {{ html()->label(__('view_common.group.affixes.awakened_enemy_set'), 'seasonal_index') }}
     <span class="form-required">*</span>
     <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{

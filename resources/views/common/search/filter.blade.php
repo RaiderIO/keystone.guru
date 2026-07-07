@@ -8,7 +8,7 @@
 $expanded ??= true;
 $title    ??= null;
 ?>
-<div class="form-group">
+<div class="mb-3">
     <div id="filter_accordeon_{{ $key }}">
         <div class="card">
             <div class="card-header p-0" id="filter_heading_{{ $key }}">

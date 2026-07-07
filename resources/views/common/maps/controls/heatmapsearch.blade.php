@@ -227,32 +227,31 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
         <div class="data_container explore p-2" data-simplebar>
             <div id="heatmap_search_options_container" class="px-1">
 
-                <div class="form-group">
-                    <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100"
-                         data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::NpcDeath->value }}"
-                                   value="{{ CombatLogEventEventType::NpcDeath->value }}"
-                                   checked>
+                <div class="mb-3">
+                    <div id="filter_event_type_container" class="btn-group w-100" role="group">
+                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}"
+                               class="btn-check {{ CombatLogEventEventType::NpcDeath->value }}"
+                               value="{{ CombatLogEventEventType::NpcDeath->value }}"
+                               checked>
+                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}">
                             <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.npc_death') }}
                         </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::PlayerDeath->value }}"
-                                   value="{{ CombatLogEventEventType::PlayerDeath->value }}">
+                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}"
+                               class="btn-check {{ CombatLogEventEventType::PlayerDeath->value }}"
+                               value="{{ CombatLogEventEventType::PlayerDeath->value }}">
+                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}">
                             <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_death') }}
                         </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::PlayerSpell->value }}"
-                                   value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}"
+                               class="btn-check {{ CombatLogEventEventType::PlayerSpell->value }}"
+                               value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}">
                             <img src="{{ ksgAssetImage('spells/spell_nature_lightning.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.spell_casts_alt') }}"
                                  class="filter_event_type_icon">
@@ -268,19 +267,18 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
                     'hidden' => true,
                 ])
-                    <div class="btn-group btn-group-toggle w-100 mb-1"
-                         data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="data_type"
-                                   class="{{ CombatLogEventDataType::PlayerPosition->value }}"
-                                   value="{{ CombatLogEventDataType::PlayerPosition->value }}"
-                                   checked>
+                    <div class="btn-group w-100 mb-1" role="group">
+                        <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}"
+                               class="btn-check {{ CombatLogEventDataType::PlayerPosition->value }}"
+                               value="{{ CombatLogEventDataType::PlayerPosition->value }}"
+                               checked>
+                        <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}">
                             <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
                         </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="data_type"
-                                   class="{{ CombatLogEventDataType::EnemyPosition->value }}"
-                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
+                        <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}"
+                               class="btn-check {{ CombatLogEventDataType::EnemyPosition->value }}"
+                               value="{{ CombatLogEventDataType::EnemyPosition->value }}">
+                        <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}">
                             <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
                         </label>
                     </div>
@@ -302,19 +300,18 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                 @endcomponent
 
 
-                <div class="form-group">
-                    <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
-                         data-toggle="buttons">
+                <div class="mb-3">
+                    <div id="filter_region_container" class="btn-group w-100" role="group">
                         <?php
                         $defaultRegion = GameServerRegion::WORLD;
                         ?>
                         @foreach($allRegions as $region)
-                            <label class="btn btn-secondary {{ $region->short === $defaultRegion ? 'active' : '' }}">
-                                <input type="radio" name="region"
-                                       class="{{ $region->short }}"
-                                       value="{{ $region->short }}"
-                                    {{ $region->short === $defaultRegion ? 'checked' : '' }}
-                                >
+                            <input type="radio" name="region" id="filter_region_{{ $region->short }}"
+                                   class="btn-check {{ $region->short }}"
+                                   value="{{ $region->short }}"
+                                {{ $region->short === $defaultRegion ? 'checked' : '' }}
+                            >
+                            <label class="btn btn-secondary" for="filter_region_{{ $region->short }}">
                                 <img src="{{ ksgAssetImage(sprintf('flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
                                      class="filter_region_icon">
