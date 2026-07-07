@@ -181,7 +181,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
 
 <!--suppress HtmlFormInputWithoutLabel -->
 <nav id="heatmap_search_sidebar"
-     class="route_sidebar top right row no-gutters map_fade_out
+     class="route_sidebar top right row g-0 map_fade_out
      {{ $embed ? 'embed' : '' }}
      {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
@@ -196,7 +196,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
         @endif
 
         <div class="p-1">
-            <div class="row pr-2 mb-2 no-gutters">
+            <div class="row pe-2 mb-2 g-0">
                 <div class="col-auto" data-bs-toggle="tooltip"
                      title="{{ __('view_common.maps.controls.heatmapsearch.settings_title') }}">
                     <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
@@ -400,7 +400,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                                 $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));
                                 ?>
                             @foreach($chunkedFeaturedAffixes as $affixRow)
-                                <div class="row mt-2 pl-2 featured_affixes">
+                                <div class="row mt-2 ps-2 featured_affixes">
                                     @foreach($affixRow as $affix)
                                             <?php /** @var Affix $affix */ ?>
                                         <div class="col">

@@ -48,12 +48,12 @@
                                 @endphp
                                 <div class="d-flex align-items-center mb-2">
                                     @if($imageLink !== null)
-                                        <img src="{{ $imageLink }}" alt="{{ $label }}" style="height: 48px; width: auto; object-fit: cover;" class="mr-3 rounded flex-shrink-0">
+                                        <img src="{{ $imageLink }}" alt="{{ $label }}" style="height: 48px; width: auto; object-fit: cover;" class="me-3 rounded flex-shrink-0">
                                     @endif
                                     <div class="flex-grow-1">
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <span>{{ $label }}</span>
-                                            <div class="d-flex align-items-center ml-3" style="gap: 4px;">
+                                            <div class="d-flex align-items-center ms-3" style="gap: 4px;">
                                                 <small class="text-muted">{{ $criterion->count }} /</small>
                                                 <input
                                                     type="number"

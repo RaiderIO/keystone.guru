@@ -24,15 +24,15 @@ $cssClasses ??= '';
     foreach ($affixGroup->affixes as $affix){
         $last = count($affixGroup->affixes) - 1 === $count;
         ?>
-    <div class="col col-md pr-0 affix_row">
-        <div class="row no-gutters">
+    <div class="col col-md pe-0 affix_row">
+        <div class="row g-0">
             <div class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }}"
                  data-bs-toggle="tooltip"
                  title="{{ __($affix->description) }}"
                  style="height: 24px;">
             </div>
             @if($names)
-                <div class="col d-md-block d-none pl-1">
+                <div class="col d-md-block d-none ps-1">
                     @if($last && $affixGroup->seasonal_index !== null)
                         {{ sprintf(__('affixes.seasonal_index_preset'), __($affix->name), $affixGroup->seasonal_index + 1) }}
                     @else
@@ -45,7 +45,7 @@ $cssClasses ??= '';
         <?php ++$count;
     }
     ?>
-    <span class="col col-md-auto text-right pl-0">
+    <span class="col col-md-auto text-end ps-0">
         <span class="check" style="visibility: hidden;">
             <i class="fas fa-check"></i>
         </span>

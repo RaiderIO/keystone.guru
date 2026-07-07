@@ -89,7 +89,7 @@ $breadcrumbsParams ??= [];
                 @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
                 <div class="row">
-                    <div class="col-xl-2 bg-secondary p-3 rounded-left">
+                    <div class="col-xl-2 bg-secondary p-3 rounded-start">
                         <h4>{{ $menuTitle }}</h4>
                         <hr>
                         @isset($menuModels)
@@ -119,7 +119,7 @@ $breadcrumbsParams ??= [];
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-xl-10 bg-secondary ml-0 mt-xl-0 mt-3 p-3 rounded-right">
+                    <div class="col-xl-10 bg-secondary ms-0 mt-xl-0 mt-3 p-3 rounded-end">
                         @yield('content')
                     </div>
                 </div>
@@ -127,7 +127,7 @@ $breadcrumbsParams ??= [];
 
         @else
             <div
-                class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
+                class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill ps-lg-3 pe-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
                 @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams, 'classes' => 'mx-2'])
 
@@ -137,7 +137,7 @@ $breadcrumbsParams ??= [];
                             <div class="col text-center">
                                 <h4>@yield('header-title')</h4>
                             </div>
-                            <div class="ml-auto">
+                            <div class="ms-auto">
                                 @yield('header-addition')
                             </div>
                         @else

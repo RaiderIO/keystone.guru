@@ -85,7 +85,7 @@ use Illuminate\Support\Collection;
 
         <?php
         foreach ($allClasses->chunk(13) as $chunk) { ?>
-        <div class="row no-gutters pt-1">
+        <div class="row g-0 pt-1">
                 <?php foreach ($chunk as $class) { ?>
             <div class="col-md profile_class_color border-dark"
                  data-color="{{ $class->color }}"

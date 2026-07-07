@@ -423,7 +423,7 @@ class DrawControls extends MapControl {
 
             // Put the draw actions in a different div
             let $drawActions = $container.find('.leaflet-draw-actions');
-            $originalDrawActions.removeClass('row no-gutters').addClass('row no-gutters')
+            $originalDrawActions.removeClass('row g-0').addClass('row g-0')
                 .find('li').removeClass('col btn btn-info mx-2 p-0').addClass('col btn btn-info mx-2 p-0')
                 .find('a').removeClass('d-inline-block w-100 h-100').addClass('d-inline-block w-100 h-100');
 
@@ -505,7 +505,7 @@ class DrawControls extends MapControl {
 
             // Finished button container
             let $drawActions = $('<ul>', {
-                class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom row no-gutters',
+                class: 'leaflet-draw-actions-pather leaflet-draw-actions leaflet-draw-actions-bottom row g-0',
             });
             // Create the button
             let $button = $('<a>', {

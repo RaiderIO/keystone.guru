@@ -44,8 +44,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 
     <!-- Heatmap tooltips -->
     <div class="form-group">
-        <div class="row no-gutters">
-            <div class="col pr-2">
+        <div class="row g-0">
+            <div class="col pe-2">
                 <label for="map_settings_heatmap_show_tooltips">
                     {{ __('view_common.forms.mapsettings.show_heatmap_tooltips') }}
                     <i class="fas fa-info-circle"
@@ -54,8 +54,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 </label>
             </div>
         </div>
-        <div class="row no-gutters">
-            <div class="col pr-2">
+        <div class="row g-0">
+            <div class="col pe-2">
                 {{ html()->checkbox('map_settings_heatmap_show_tooltips', $mapHeatmapShowTooltips, 1)->id('map_settings_heatmap_show_tooltips')->class('form-control left_checkbox') }}
             </div>
         </div>
@@ -134,8 +134,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 
     <!-- Aggressiveness border -->
     <div class="form-group">
-        <div class="row no-gutters">
-            <div class="col pr-2">
+        <div class="row g-0">
+            <div class="col pe-2">
                 <label for="map_settings_enemy_aggressiveness_border">
                     {{ __('view_common.forms.mapsettings.show_aggressiveness_border') }}
                     <i class="fas fa-info-circle"
@@ -144,8 +144,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 </label>
             </div>
         </div>
-        <div class="row no-gutters">
-            <div class="col pr-2">
+        <div class="row g-0">
+            <div class="col pe-2">
                 {{ html()->checkbox('map_settings_enemy_aggressiveness_border', $mapEnemyAggressivenessBorder, 1)->id('map_settings_enemy_aggressiveness_border')->class('form-control left_checkbox') }}
             </div>
         </div>
@@ -153,8 +153,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 
     <!-- Dangerous enemies -->
     <div class="form-group">
-        <div class="row no-gutters">
-            <div class="col pr-2">
+        <div class="row g-0">
+            <div class="col pe-2">
                 <label for="map_settings_enemy_dangerous_border">
                     {{ __('view_common.forms.mapsettings.highlight_dangerous_enemies') }}
                     <i class="fas fa-info-circle"
@@ -165,8 +165,8 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
                 </label>
             </div>
         </div>
-        <div class="row no-gutters">
-            <div class="col pr-2">
+        <div class="row g-0">
+            <div class="col pe-2">
                 {{ html()->checkbox('map_settings_enemy_dangerous_border', $mapEnemyDangerousBorder, 1)->id('map_settings_enemy_dangerous_border')->class('form-control left_checkbox') }}
             </div>
         </div>

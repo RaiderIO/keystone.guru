@@ -48,7 +48,7 @@ use App\Models\DungeonRoute\DungeonRoute;
                             <small class="text-muted d-block">{{ __('view_admin.tools.dungeonroute.viewcontents.action_mdt_import_string_description') }}</small>
                         </div>
                         <button type="button"
-                                class="btn btn-sm btn-secondary ml-3 admin-dungeonroute-copy-mdt"
+                                class="btn btn-sm btn-secondary ms-3 admin-dungeonroute-copy-mdt"
                                 data-mdt-string="{{ $dungeonroute->mdtImport->first()->import_string }}">
                             <i class="fas fa-copy"></i> {{ __('view_admin.tools.dungeonroute.viewcontents.action_copy') }}
                         </button>

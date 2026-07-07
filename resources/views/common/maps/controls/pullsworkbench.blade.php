@@ -18,7 +18,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
 ])->toArray();
 ?>
 <div id="pull_sidebar_workbench" class="pull_workbench p-2" style="display: none;">
-    <div class="row no-gutters pull_workbench_row pull_workbench_header">
+    <div class="row g-0 pull_workbench_row pull_workbench_header">
         <div class="col">
             <h5 id="pull_sidebar_workbench_header" class="text-center mt-1">
 
@@ -26,7 +26,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
         </div>
     </div>
 
-    <div class="row no-gutters pull_workbench_row">
+    <div class="row g-0 pull_workbench_row">
         <div class="col">
             <div data-bs-toggle="tooltip"
                  title="{{ __('view_common.maps.controls.pullsworkbench.description') }}">
@@ -38,7 +38,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
         </div>
     </div>
 
-    <div class="row no-gutters pull_workbench_row">
+    <div class="row g-0 pull_workbench_row">
         <div class="col">
             <div data-bs-toggle="tooltip"
                  title="{{ __('view_common.maps.controls.pullsworkbench.spells') }}">
@@ -50,7 +50,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
         </div>
     </div>
 
-    <div class="row no-gutters pull_workbench_row">
+    <div class="row g-0 pull_workbench_row">
         <div class="col">
             <div id="map_killzonessidebar_killzone_kill_area_label"
                  data-bs-toggle="tooltip" title="">
@@ -62,7 +62,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
         </div>
     </div>
 
-    <div class="row no-gutters pull_workbench_row">
+    <div class="row g-0 pull_workbench_row">
         <div class="col">
             <button id="map_killzonessidebar_killzone_color"
                     class="btn map_killzonessidebar_color_btn w-100">
@@ -71,7 +71,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
         </div>
     </div>
 
-    <div class="row no-gutters pull_workbench_row">
+    <div class="row g-0 pull_workbench_row">
         <div class="col">
             <div data-bs-toggle="tooltip"
                  title="{{ __('view_common.maps.controls.pullsworkbench.delete_killzone') }}">

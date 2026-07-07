@@ -44,7 +44,7 @@ $difficultiesWithData = array_filter(
                     aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-plus"></i> {{ __('view_admin.floor.edit.speedrun_required_npcs.add_npc') }}
             </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="admin_speedrun_required_npcs_add_dropdown">
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="admin_speedrun_required_npcs_add_dropdown">
                 @foreach (Dungeon::DIFFICULTY_ALL as $difficulty)
                     <a class="dropdown-item"
                        href="{{ route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]) }}">

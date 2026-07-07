@@ -142,7 +142,7 @@ $factions ??= $allFactions;
     <?php for ($i = 1;
                $i <= config('keystoneguru.party_size');
                ++$i){ ?>
-    <div class="col-md pl-1 pr-1">
+    <div class="col-md ps-1 pe-1">
 
         <div class="form-group">
             {{ html()->label(sprintf(__('view_common.group.composition.party_member_nr'), $i), 'class[]') }}

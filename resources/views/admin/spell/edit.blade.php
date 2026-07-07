@@ -122,7 +122,7 @@ $characteristicOptions = $baseCharacteristicOptions
     <div>
         {{ html()->input('submit')->value(__('view_admin.spell.edit.submit'))->class('btn btn-info')->name('submit') }}
         @isset($spell)
-            <div class="float-right">
+            <div class="float-end">
                 {{ html()->input('submit')->value(__('view_admin.spell.edit.save_as_new_spell'))->class('btn btn-info')->name('submit') }}
             </div>
         @endisset

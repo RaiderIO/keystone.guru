@@ -8,7 +8,7 @@ $showText ??= true;
 $dungeon  ??= null;
 ?>
 
-<div class="row no-gutters">
+<div class="row g-0">
     <div
         class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }} {{ $showText ? '' : 'mx-1' }} m-auto"
         data-bs-toggle="tooltip"
@@ -16,7 +16,7 @@ $dungeon  ??= null;
         style="height: 24px;">
     </div>
     @if($showText)
-        <div class="col d-{{ $media }}-block d-none pl-1">
+        <div class="col d-{{ $media }}-block d-none ps-1">
             {{ __($affix->name) }}
         </div>
     @endif

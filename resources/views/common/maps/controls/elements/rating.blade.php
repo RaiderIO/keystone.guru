@@ -9,8 +9,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 $currentUserRating = $dungeonroute->getRatingByCurrentUser();
 ?>
     <!-- Rating -->
-<div class="row no-gutters">
-    <div class="col btn-group dropright">
+<div class="row g-0">
+    <div class="col btn-group dropend">
         <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             <i class="{{ $currentUserRating !== null ? 'fas' : 'far' }} fa-star"></i>

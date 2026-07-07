@@ -82,7 +82,7 @@ $deleteConsequences = $user->getDeleteConsequences();
             </ul>
         </div>
     @endif
-    <div class="text-danger font-weight-bold">
+    <div class="text-danger fw-bold">
         {{ __('view_profile.edit.account_delete_warning') }}
     </div>
     {{ html()->form('POST', route('profile.delete'))->open() }}

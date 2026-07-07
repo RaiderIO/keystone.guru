@@ -272,7 +272,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             </div>
 
             <div class="align-center container mb-4">
-                <div class="row justify-content-center no-gutters">
+                <div class="row justify-content-center g-0">
                     <div class="col-xl-4">
                         @include('common.dungeon.select', [
                             'id'          => $dungeonSelectId,
@@ -288,7 +288,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 
             <div class="demo-map" style="position: relative;">
                 <div class="demo-loader text-center h-100" style="display: none;">
-                    <div class="row h-100 justify-content-center align-items-center no-gutters">
+                    <div class="row h-100 justify-content-center align-items-center g-0">
                         <div class="col">
                             <h2 style="opacity: 1;">
                                 <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_home.loading') }}

@@ -141,18 +141,18 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                 <?php /** @var CombatLogNpcEvent|CombatLogSpellEvent $event */ ?>
                 <?php $anchorId = $eventAnchorId($event); ?>
             <li @if($contextDungeon) id="{{ $anchorId }}" @endif class="d-flex align-items-start mb-2">
-                <span class="text-muted mr-1" style="min-width: 14px; text-align: center;">
+                <span class="text-muted me-1" style="min-width: 14px; text-align: center;">
                     <i class="{{ $eventTypeIcon($event) }}" style="font-size: .75rem;"></i>
                 </span>
-                <span class="badge badge-{{ $eventBadgeClass($event) }} mr-2 mt-1" style="min-width: 20px;">
+                <span class="badge badge-{{ $eventBadgeClass($event) }} me-2 mt-1" style="min-width: 20px;">
                     <i class="{{ $eventIcon($event) }}"></i>
                 </span>
                 <div>
                     @if($shouldShowSubject($event))
-                        <span class="mr-1">{!! $eventSubjectHtml($event) !!}</span>
+                        <span class="me-1">{!! $eventSubjectHtml($event) !!}</span>
                     @endif
                     <span>{{ $eventDescription($event) }}</span>
-                    <small class="text-muted ml-1">
+                    <small class="text-muted ms-1">
                         -
                         @if($contextDungeon)
                             <a href="{{ route('compendium.activity.day', ['dungeon' => $contextDungeon, 'date' => $date]) }}#{{ $anchorId }}"

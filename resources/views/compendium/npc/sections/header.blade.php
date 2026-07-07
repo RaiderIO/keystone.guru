@@ -35,34 +35,34 @@ foreach (['dangerous', 'truesight', /*'bursting', 'bolstering', 'sanguine',*/ 'r
     <div class="col">
         <h2 class="mb-1">{{ __($npc->name) }}</h2>
         <div>
-            <span class="badge {{ $classificationBadge }} mr-1">
+            <span class="badge {{ $classificationBadge }} me-1">
                 {{ __($npc->classification->name) }}
             </span>
             @if($npc->level)
-                <span class="badge badge-secondary mr-1">
+                <span class="badge badge-secondary me-1">
                     {{ __('view_compendium.npc.sections.header.level') }} {{ $npc->level }}
                 </span>
             @endif
             @if($currentNpcHealth)
-                <span class="badge badge-secondary mr-1">
+                <span class="badge badge-secondary me-1">
                     {{ number_format($currentNpcHealth->health) }} HP
                 </span>
             @endif
-            <span class="badge badge-secondary mr-1">
+            <span class="badge badge-secondary me-1">
                 {{ __(sprintf('npcaggressiveness.%s', $npc->aggressiveness)) }}
             </span>
             @if($npc->type)
-                <span class="badge badge-secondary mr-1">
+                <span class="badge badge-secondary me-1">
                     {{ $npc->type->type }}
                 </span>
             @endif
 {{--            @if($npc->class)--}}
-{{--                <span class="badge badge-secondary mr-1">--}}
+{{--                <span class="badge badge-secondary me-1">--}}
 {{--                    {{ __(sprintf('npcclasses.%s', $npc->class->key)) }}--}}
 {{--                </span>--}}
 {{--            @endif--}}
             @foreach($flags as $flag)
-                <span class="badge badge-warning mr-1">{{ $flag }}</span>
+                <span class="badge badge-warning me-1">{{ $flag }}</span>
             @endforeach
         </div>
     </div>

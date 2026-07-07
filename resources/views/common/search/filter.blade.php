@@ -27,7 +27,7 @@ $title    ??= null;
                     </div>
                     @if( $title !== null )
                         <div class="col-auto">
-                            <i class="fas fa-info-circle pr-2" data-bs-toggle="tooltip" title="{{$title}}"
+                            <i class="fas fa-info-circle pe-2" data-bs-toggle="tooltip" title="{{$title}}"
                                style="padding-top: 0.75rem !important;"></i>
                         </div>
                     @endif

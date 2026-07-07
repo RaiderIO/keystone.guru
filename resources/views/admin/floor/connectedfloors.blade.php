@@ -13,7 +13,7 @@ $floorCouplings ??= collect();
 $connectedFloorCandidates = $dungeon->floors;
 ?>
 @if($connectedFloorCandidates->isNotEmpty())
-    {{ html()->label(__('view_admin.floor.edit.connected_floors'), 'connectedfloors[]')->class('font-weight-bold') }}
+    {{ html()->label(__('view_admin.floor.edit.connected_floors'), 'connectedfloors[]')->class('fw-bold') }}
     <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
                 __('view_admin.floor.edit.connected_floors_title')
                  }}"></i>

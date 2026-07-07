@@ -36,11 +36,11 @@ $gameVersionsSelect = $allGameVersions
     <div class="col-auto">
         <form method="GET"
               action="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}">
-            <div class="row no-gutters">
-                <div class="col pr-1">
+            <div class="row g-0">
+                <div class="col pe-1">
                     {{ html()->select('game_version', $gameVersionsSelect)->class('form-control selectpicker') }}
                 </div>
-                <div class="col-auto pr-1">
+                <div class="col-auto pe-1">
                     {{ html()->input('submit')->value(__('view_admin.dungeon.edit.mapping_versions.add_mapping_version'))->class('form-control')->name('action') }}
                 </div>
                 <div class="col-auto">
@@ -51,13 +51,13 @@ $gameVersionsSelect = $allGameVersions
     </div>
 {{--    <div class="col-auto">--}}
 {{--        <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"--}}
-{{--           class="btn btn-success text-white pull-right" role="button">--}}
+{{--           class="btn btn-success text-white float-end" role="button">--}}
 {{--            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}--}}
 {{--        </a>--}}
 {{--    </div>--}}
 {{--    <div class="col-auto">--}}
 {{--        <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"--}}
-{{--           class="btn btn-success text-white pull-right" role="button">--}}
+{{--           class="btn btn-success text-white float-end" role="button">--}}
 {{--            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}--}}
 {{--        </a>--}}
 {{--    </div>--}}

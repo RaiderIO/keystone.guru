@@ -155,7 +155,7 @@ $gameVersionsSelect   = $allGameVersions
                             <td>{{ number_format($autoCompleteNpcHealth->health) }}</td>
                             <td>{{ $autoCompleteNpcHealth->percentage }}</td>
                             <td>
-                                <div class="row no-gutters">
+                                <div class="row g-0">
                                     <div class="col">
                                         <a class="btn btn-success apply-health"
                                            data-health="{{ $autoCompleteNpcHealth->health }}">

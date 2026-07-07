@@ -84,7 +84,7 @@ use (
     ob_start();
     ?>
 <div id="dungeonroute_card_vertical_{{ $uniqueString }}"
-     class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
+     class="row g-0 m-xl-1 mx-0 my-3 card_dungeonroute vertical {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col">
         <div class="row">
             <div class="col">
@@ -114,7 +114,7 @@ use (
                          style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
                     @endif
                 >
-                    <div class="row no-gutters pt-2 px-2 header">
+                    <div class="row g-0 pt-2 px-2 header">
                         <div class="col">
                             <h4 class="mb-0 title">
                                 <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
@@ -130,7 +130,7 @@ use (
                             </div>
                         @endif
                     </div>
-                    <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
+                    <div class="row g-0 px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                         <div class="col">
                             @if(empty($dungeonroute->description))
                                 &nbsp;
@@ -139,7 +139,7 @@ use (
                             @endif
                         </div>
                     </div>
-                    <div class="row no-gutters p-2 enemy_forces">
+                    <div class="row g-0 p-2 enemy_forces">
                         <div class="col-auto">
                             @if( $enemyForcesWarning )
                                 <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
@@ -167,7 +167,7 @@ use (
                             @endif
                         </div>
                     </div>
-                    <div class="row no-gutters footer">
+                    <div class="row g-0 footer">
                         <div class="col bg-card-footer px-2 py-1">
                             <div class="row">
                                 <div class="col">
@@ -187,15 +187,15 @@ use (
                                 </div>
 
                                 @if( $showAffixes )
-                                    <div class="col-auto pl-1 pr-0">
+                                    <div class="col-auto ps-1 pe-0">
                                         @if($seasonalAffix !== null)
-                                            <div class="row no-gutters affix_toggle" data-bs-container="body"
+                                            <div class="row g-0 affix_toggle" data-bs-container="body"
                                                  data-bs-toggle="popover"
                                                  data-bs-placement="bottom"
                                                  data-bs-html="true"
                                                  data-bs-content="&nbsp;" style="cursor: pointer;">
                                                 <div class="col-auto">
-                                                    <img class="select_icon mr-1"
+                                                    <img class="select_icon me-1"
                                                          src="{{ url($seasonalAffix->image_url) }}"
                                                          alt="{{ __('view_common.dungeonroute.card.seasonal_affix') }}"
                                                          data-bs-toggle="tooltip"
@@ -207,7 +207,7 @@ use (
                                     </div>
                                     <div class="col-auto px-1">
                                         @if($tierAffixGroup !== null)
-                                            <h4 class="font-weight-bold px-1 m-0">
+                                            <h4 class="fw-bold px-1 m-0">
                                                 @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
                                             </h4>
                                         @endif

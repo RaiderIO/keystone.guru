@@ -122,7 +122,7 @@ $errors   ??= collect();
             </div>
         </form>
     </div>
-    <div class="col border-left border-white">
+    <div class="col border-start border-white">
         <h3>
             {{ __('view_common.forms.register.register_through_oauth2') }}
         </h3>

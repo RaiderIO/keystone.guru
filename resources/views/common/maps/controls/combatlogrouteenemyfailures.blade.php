@@ -28,7 +28,7 @@ $npcs = Npc::query()->whereIn('id', $npcIds)->orderBy('name')->get();
     'dependencies'            => ['common/maps/map'],
 ]])
 
-<nav id="combatlogroute_enemy_failures_sidebar" class="route_sidebar top right row no-gutters map_fade_out active">
+<nav id="combatlogroute_enemy_failures_sidebar" class="route_sidebar top right row g-0 map_fade_out active">
     <div class="bg-header p-2">
         <h5 class="mb-3">{{ __($dungeon->name) }}</h5>
 

@@ -46,7 +46,7 @@ use Illuminate\Support\Collection;
                     <dd class="col-sm-9">
                         <code>{{ $dungeonRoute->public_key }}</code>
                         <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()]) }}"
-                           target="_blank" class="ml-2">
+                           target="_blank" class="ms-2">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </dd>

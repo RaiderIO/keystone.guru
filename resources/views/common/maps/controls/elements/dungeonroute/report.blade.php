@@ -6,7 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
  * @var DungeonRoute $dungeonroute
  **/
 ?>
-<div class="row no-gutters">
+<div class="row g-0">
     <div class="col">
         <a href="#" data-bs-toggle="modal" data-bs-target="#userreport_dungeonroute_modal"
            class="btn btn-info {{ isset($current_report) ? 'disabled' : '' }}">

@@ -58,7 +58,7 @@ use (
     ob_start();
     ?>
 <div id="dungeonroute_card_horizontal_row_{{ $uniqueString }}"
-     class="row no-gutters align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
+     class="row g-0 align-items-center m-0 card_dungeonroute horizontal border-1 border-dark {{ $showDungeonImage ? 'dungeon_image' : '' }}"
      data-publickey="{{ $dungeonroute->public_key }}"
 >
     <div class="col-auto cursor-pointer p-1 apply_route_radio">
@@ -83,13 +83,13 @@ use (
     {{--            </ul>--}}
     {{--        </div>--}}
     {{--    </div>--}}
-    <div class="col border-left border-dark ">
+    <div class="col border-start border-dark ">
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
             @endif
         >
-            <div class="row no-gutters p-2 header">
+            <div class="row g-0 p-2 header">
                 <div class="col">
                     <h4 class="apply_route mb-0">
                         <a href="#">
@@ -112,13 +112,13 @@ use (
                 @endif
             </div>
             @if(!empty($dungeonroute->description))
-                <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
+                <div class="row g-0 px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                     <div class="col d-flex d-xl-none">
                         {!! (new HtmlSanitizer())->sanitize($dungeonroute->description, false) !!}
                     </div>
                 </div>
             @endif
-            <div class="row no-gutters p-2 enemy_forces">
+            <div class="row g-0 p-2 enemy_forces">
                 <div class="col-auto">
                     @if( $enemyForcesWarning )
                         <span class="text-warning"> <i class="fas fa-exclamation-triangle"></i> </span>
@@ -142,7 +142,7 @@ use (
                     @endif
                 </div>
             </div>
-            <div class="row no-gutters footer">
+            <div class="row g-0 footer">
                 <div class="col bg-card-footer px-2 py-1">
                     <div class="row">
                         <div class="col">
@@ -162,13 +162,13 @@ use (
                         </div>
 
                         @if( $showAffixes )
-                            <div class="col-auto pl-1 pr-0">
+                            <div class="col-auto ps-1 pe-0">
                                 @if($seasonalAffix !== null)
-                                    <div class="row no-gutters affix_toggle" data-bs-container="body" data-bs-toggle="popover"
+                                    <div class="row g-0 affix_toggle" data-bs-container="body" data-bs-toggle="popover"
                                          data-bs-placement="bottom"
                                          data-bs-html="true"
                                          data-bs-content="&nbsp;" style="cursor: pointer;">
-                                        <div class="col ml-1">
+                                        <div class="col ms-1">
                                             <img class="select_icon"
                                                  src="{{ url($seasonalAffix->image_url) }}"
                                                  alt="{{ __($seasonalAffix->name) }}"/>
@@ -178,7 +178,7 @@ use (
                             </div>
                             <div class="col-auto px-1">
                                 @if($tierAffixGroup !== null)
-                                    <h4 class="font-weight-bold px-1 m-0">
+                                    <h4 class="fw-bold px-1 m-0">
                                         @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
                                     </h4>
                                 @endif

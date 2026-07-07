@@ -36,15 +36,15 @@ $showCreateRouteBtn = isset($dungeonroute) && $dungeonroute->isSandbox();
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
 <div class="navbar-third fixed-top d-none d-lg-block {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
-    <div class="container bg-header text-center text-xl-left px-1 rounded">
-        <div class="row no-gutters">
+    <div class="container bg-header text-center text-xl-start px-1 rounded">
+        <div class="row g-0">
             <div class="col-auto">
-                <div class="row no-gutters d-flex align-items-center">
+                <div class="row g-0 d-flex align-items-center">
                     @auth
                         @isset($dungeonroute)
                                 <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
                             <div class="col-auto">
-                                <h5 class="mb-0 mr-2 pt-1">
+                                <h5 class="mb-0 me-2 pt-1">
                                     <i id="route_favorited" class="fas fa-star favorite_star favorited"
                                        style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
                                     <i id="route_not_favorited" class="far fa-star favorite_star"
@@ -57,7 +57,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                     @if($seasonalAffix !== null)
                         @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
                         <div class="col-auto">
-                            <img class="select_icon mr-1"
+                            <img class="select_icon me-1"
                                  src="{{ ksgAssetImage(sprintf('affixes/%s.jpg', $seasonalAffixKey)) }}"
                                  alt="{{ __('view_common.maps.controls.header.seasonal_affix') }}"
                                  data-bs-toggle="tooltip"
@@ -66,7 +66,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                         </div>
                     @endif
                     <div class="col">
-                        <h5 id="route_title" class="mb-0 mr-2">
+                        <h5 id="route_title" class="mb-0 me-2">
                             @isset($headerTitle)
                                 {!! $headerTitle !!}
                             @else
@@ -125,7 +125,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                 <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
                             </button>
                         @endif
-                        <div id="stopped_live_session_container" class="row no-gutters"
+                        <div id="stopped_live_session_container" class="row g-0"
                              style="display: {{ $stopped ? 'inherit' : 'none' }}">
                             <div class="row">
                                 <div class="col">

@@ -21,7 +21,7 @@ $user = Auth::user();
            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
         </a>
-        <div class="dropdown-menu text-center text-xl-left" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu text-center text-xl-start" aria-labelledby="navbarDropdown">
             @if($user->hasRole(Role::ROLE_ADMIN))
                 @if( config('telescope.enabled') )
                     <a class="dropdown-item"
@@ -57,13 +57,13 @@ $user = Auth::user();
                 <a class="dropdown-item"
                    href="{{ route('admin.userreports') }}">{{__('view_common.layout.nav.user.view_user_reports') }}
                     @if($numUserReports > 0)
-                        <span class="badge badge-warning badge-pill">{{ $numUserReports }}</span>
+                        <span class="badge badge-warning rounded-pill">{{ $numUserReports }}</span>
                     @endif
                 </a>
                 <a class="dropdown-item"
                    href="{{ route('admin.tools.combatlog.parsefailures.view') }}">{{__('view_common.layout.nav.user.view_combat_log_parse_failures') }}
                     @if($numCombatLogParseFailures > 0)
-                        <span class="badge badge-warning badge-pill">{{ $numCombatLogParseFailures }}</span>
+                        <span class="badge badge-warning rounded-pill">{{ $numCombatLogParseFailures }}</span>
                     @endif
                 </a>
                 <div class="dropdown-divider"></div>

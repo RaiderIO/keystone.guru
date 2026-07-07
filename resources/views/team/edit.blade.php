@@ -63,7 +63,7 @@ foreach ($team->teamUsers as $teamUser) {
 @section('header-title', $title)
 @section('header-addition')
     <!--suppress HtmlDeprecatedAttribute -->
-    <a href="{{ route('team.list') }}" class="btn btn-info text-white float-right" role="button">
+    <a href="{{ route('team.list') }}" class="btn btn-info text-white float-end" role="button">
         <i class="fas fa-backward"></i> {{ __('view_team.edit.to_team_list') }}
     </a>
 @endsection

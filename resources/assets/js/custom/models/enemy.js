@@ -577,7 +577,7 @@ class Enemy extends VersionableMapObject {
                 let customTemplate = Handlebars.templates['map_sidebar_enemy_info_custom_template'];
 
                 result.custom.push({
-                    html: customTemplate({html: `<span class="font-weight-bold">${lang.get('js.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
+                    html: customTemplate({html: `<span class="fw-bold">${lang.get('js.sidebar_enemy_bolstering_whitelist_npcs_label')}:</span>`}) +
                         customTemplate({html: npcBolsteringWhitelistHtml})
                 });
             }
@@ -605,7 +605,7 @@ class Enemy extends VersionableMapObject {
                 let spellTableTemplate = Handlebars.templates['spell_table_template'];
 
                 result.custom.push({
-                    html: `<div class="mt-3"><span class="font-weight-bold">${lang.get('js.sidebar_enemy_spell_label')}:</span></div>` +
+                    html: `<div class="mt-3"><span class="fw-bold">${lang.get('js.sidebar_enemy_spell_label')}:</span></div>` +
                         spellTableTemplate({
                             spells: spells,
                             spell_header_name: lang.get('js.npc_name_label'),

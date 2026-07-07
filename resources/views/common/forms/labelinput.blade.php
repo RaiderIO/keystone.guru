@@ -19,7 +19,7 @@ $hidden = $hidden ?? false;
         </div>
         @if( $title !== null )
             <div class="col-auto">
-                <i class="fas fa-info-circle pr-2" data-bs-toggle="tooltip" title="{{$title}}"></i>
+                <i class="fas fa-info-circle pe-2" data-bs-toggle="tooltip" title="{{$title}}"></i>
             </div>
         @endif
     </div>

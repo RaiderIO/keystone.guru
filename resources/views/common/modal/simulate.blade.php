@@ -46,7 +46,7 @@ use App\Models\DungeonRoute\DungeonRoute;
         <div class="simulationcraft_export_loader_container" style="display: none;">
             <div class="d-flex justify-content-center">
                 <div class="spinner-border" role="status">
-                    <span class="sr-only">{{ __('view_common.modal.simulate.loading') }}</span>
+                    <span class="visually-hidden">{{ __('view_common.modal.simulate.loading') }}</span>
                 </div>
             </div>
         </div>

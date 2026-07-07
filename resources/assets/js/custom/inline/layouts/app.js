@@ -279,7 +279,7 @@ function showConfirmYesCancel(text, yesCallback, noCallback, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('js.yes_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.yes_label'), 'btn btn-success me-1', function (n) {
                     if (typeof yesCallback === 'function') {
                         yesCallback();
                     }
@@ -308,7 +308,7 @@ function showConfirmFinished(text, doneCallback = null, opts = {}) {
             type: 'confirm',
             text: text,
             buttons: [
-                Noty.button(lang.get('js.finished_label'), 'btn btn-success mr-1', function (n) {
+                Noty.button(lang.get('js.finished_label'), 'btn btn-success me-1', function (n) {
                     if (typeof doneCallback === 'function') {
                         doneCallback();
                     }

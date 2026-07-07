@@ -74,7 +74,7 @@ use App\Models\Season;
     @endif
 </div>
 
-<div class="form-group row no-gutters">
+<div class="form-group row g-0">
     <div class="col">
         <label for="simulate_raid_buffs">
             {{ __('view_common.modal.simulateoptions.default.raid_buffs') }}

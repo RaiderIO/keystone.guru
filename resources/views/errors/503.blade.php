@@ -146,7 +146,7 @@
             margin-right: auto
         }
 
-        .ml-1 {
+        .ms-1 {
             margin-left: .25rem
         }
 
@@ -154,11 +154,11 @@
             margin-top: .5rem
         }
 
-        .mr-2 {
+        .me-2 {
             margin-right: .5rem
         }
 
-        .ml-2 {
+        .ms-2 {
             margin-left: .5rem
         }
 
@@ -166,7 +166,7 @@
             margin-top: 1rem
         }
 
-        .ml-4 {
+        .ms-4 {
             margin-left: 1rem
         }
 
@@ -429,7 +429,7 @@
                 height: 5rem
             }
 
-            .sm\:ml-0 {
+            .sm\:ms-0 {
                 margin-left: 0
             }
 
@@ -442,11 +442,11 @@
                 padding-top: 0
             }
 
-            .sm\:text-left {
+            .sm\:text-start {
                 text-align: left
             }
 
-            .sm\:text-right {
+            .sm\:text-end {
                 text-align: right
             }
         }
@@ -516,7 +516,7 @@
         sm:pt-0">
             <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider"> 503</div>
             <div
-                class="ml-4 text-lg text-gray-500 uppercase tracking-wider"> {{ __('view_errors.503.message') }}
+                class="ms-4 text-lg text-gray-500 uppercase tracking-wider"> {{ __('view_errors.503.message') }}
             </div>
         </div>
     </div>

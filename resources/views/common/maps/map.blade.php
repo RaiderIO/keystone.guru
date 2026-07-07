@@ -415,7 +415,7 @@ if ($isAdmin) {
     {{--                @include('common.thirdparty.adunit', ['id' => 'map_sidebar_right', 'type' => 'sidebar_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
     {{--            </footer>--}}
     {{--        @elseif(!$dungeon->speedrun_enabled)--}}
-    {{--            <footer class="fixed-bottom container p-0 m-0 mr-2 map_ad_unit_footer_right">--}}
+    {{--            <footer class="fixed-bottom container p-0 m-0 me-2 map_ad_unit_footer_right">--}}
     {{--                @include('common.thirdparty.adunit', ['id' => 'map_footer_right', 'type' => 'footer_map_right', 'class' => 'map_ad_background', 'map' => true])--}}
     {{--            </footer>--}}
     {{--        @endif--}}

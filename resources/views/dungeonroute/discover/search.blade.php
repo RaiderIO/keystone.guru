@@ -105,7 +105,7 @@ use Illuminate\Support\Collection;
                             $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));
                             ?>
                         @foreach($chunkedFeaturedAffixes as $affixRow)
-                            <div class="row mt-2 pl-2 featured_affixes">
+                            <div class="row mt-2 ps-2 featured_affixes">
                                 @foreach($affixRow as $affix)
                                         <?php /** @var Affix $affix */ ?>
                                     <div class="col px-xl-1">

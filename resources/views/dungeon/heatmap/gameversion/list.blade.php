@@ -39,7 +39,7 @@ use App\Models\GameVersion\GameVersion;
             $result = '';
 
             if( $dungeon->heatmap_enabled ) {
-                echo '<div class="row no-gutters">
+                echo '<div class="row g-0">
                     <div class="col">
                     </div>
                     <div class="col-auto px-2">

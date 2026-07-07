@@ -29,16 +29,16 @@ $isDarkTheme = User::isThemeDark($theme);
             {{ $tagCategoryNameMapping[$categoryId] }}
         </h5>
         <div class="row">
-            <div class="col-6 col-lg-3 font-weight-bold">
+            <div class="col-6 col-lg-3 fw-bold">
                 {{ __('view_common.tag.manager.name') }}
             </div>
-            <div class="col-4 col-lg-3 font-weight-bold">
+            <div class="col-4 col-lg-3 fw-bold">
                 {{ __('view_common.tag.manager.color') }}
             </div>
-            <div class="col-lg-4 d-none d-lg-block font-weight-bold">
+            <div class="col-lg-4 d-none d-lg-block fw-bold">
                 {{ __('view_common.tag.manager.usage') }}
             </div>
-            <div class="col-2 col-lg-2 font-weight-bold">
+            <div class="col-2 col-lg-2 fw-bold">
                 {{ __('view_common.tag.manager.actions') }}
             </div>
         </div>

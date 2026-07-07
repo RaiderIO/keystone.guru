@@ -28,7 +28,7 @@ use App\Models\Team;
                                          alt="{{ __('view_team.edit.icon_image_alt') }}"
                                          style="max-width: 128px; max-height: 128px;">
                                 </div>
-                                <div class="col text-left pl-0">
+                                <div class="col text-start ps-0">
                                     {{ $team->description }}
                                 </div>
                                 <div class="col">

@@ -41,7 +41,7 @@ class SearchHandlerCombatLogRouteEnemyFailures extends SearchHandler {
                                         .attr('href', route.url)
                                         .attr('target', '_blank')
                                         .attr('rel', 'noopener noreferrer')
-                                        .html('<i class="fas fa-external-link-alt mr-1"></i>' + $('<span>').text(route.title).html())
+                                        .html('<i class="fas fa-external-link-alt me-1"></i>' + $('<span>').text(route.title).html())
                                 );
                             });
                             $container.show();

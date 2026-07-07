@@ -10,4 +10,4 @@ $size ??= 20;
 ?>
 <a href="{{ route('spell.compendium.show', $spell) }}"><img src="{{ $spell->icon_url }}"
          width="{{ $size }}" height="{{ $size }}"
-         class="mr-1" loading="lazy" alt=""/>{{ __($spell->name) }}</a>
+         class="me-1" loading="lazy" alt=""/>{{ __($spell->name) }}</a>

@@ -1,6 +1,6 @@
 {{#each info}}
     <div class="row">
-        <div class="col-5 pr-0">
+        <div class="col-5 pe-0">
             {{key}}:
         </div>
         <div class="col-5 p-0">
@@ -15,11 +15,11 @@
             {{/ifCond}}
         </div>
         {{#if info}}
-            <div class="col-2 text-right" data-bs-toggle="tooltip" title="{{ info }}">
+            <div class="col-2 text-end" data-bs-toggle="tooltip" title="{{ info }}">
                 <i class="fas fa-info-circle text-info"></i>
             </div>
         {{else if warning}}
-            <div class="col-2 text-right" data-bs-toggle="tooltip" title="{{ warning }}">
+            <div class="col-2 text-end" data-bs-toggle="tooltip" title="{{ warning }}">
                 <i class="fas fa-exclamation-circle text-warning"></i>
             </div>
         {{/if}}

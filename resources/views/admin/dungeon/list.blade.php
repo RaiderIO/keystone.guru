@@ -5,7 +5,7 @@
 @endsection
 {{--Disabled since dungeons should only be created through seeders--}}
 @section('header-addition')
-    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-right" role="button">
+    <a href="{{ route('admin.dungeon.new') }}" class="btn btn-success text-white float-end" role="button">
         <i class="fas fa-plus"></i> {{ __('Create dungeon') }}
     </a>
 @endsection

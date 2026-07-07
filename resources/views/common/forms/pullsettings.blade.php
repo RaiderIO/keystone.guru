@@ -82,8 +82,8 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
         </div>
 
         <div class="form-group">
-            <div class="row no-gutters view_dungeonroute_details_row">
-                <div class="col pr-2">
+            <div class="row g-0 view_dungeonroute_details_row">
+                <div class="col pe-2">
                     <label for="pull_gradient_apply_always">
                         {{ __('view_common.forms.pullsettings.always_apply_on_pull_change') }}
                         <i class="fas fa-info-circle"
@@ -94,8 +94,8 @@ $pullsSidebarFloorSwitchVisibility = ($_COOKIE['pulls_sidebar_floor_switch_visib
                     </label>
                 </div>
             </div>
-            <div class="row no-gutters view_dungeonroute_details_row">
-                <div class="col pr-2">
+            <div class="row g-0 view_dungeonroute_details_row">
+                <div class="col pe-2">
                     {{ html()->checkbox('pull_gradient_apply_always', $dungeonroute->pull_gradient_apply_always, 1)->id('pull_gradient_apply_always')->class('form-control left_checkbox') }}
                 </div>
             </div>

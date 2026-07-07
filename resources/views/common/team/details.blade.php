@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\Auth;
     </div>
     <div class="col">
         @if(isset($model) && $model->getUserRole(Auth::user()) === TeamUser::ROLE_ADMIN)
-            <button id="delete_team" class="btn btn-danger float-right">
+            <button id="delete_team" class="btn btn-danger float-end">
                 <i class="fas fa-trash"></i> {{ __('view_common.team.details.disband_team') }}
             </button>
         @endif

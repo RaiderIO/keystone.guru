@@ -103,7 +103,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
             <div class="col-auto">
                 {{ html()->checkbox('map_include_location', null, 1)->id('map_include_location_checkbox')->class('form-control')->style('width: 23px; height: 23px;') }}
             </div>
-            <div class="col pl-0">
+            <div class="col ps-0">
                 {{ html()->label(__('view_common.modal.share.include_location_in_link'), 'map_include_location') }}
             </div>
         </div>
@@ -138,7 +138,7 @@ $shareLinkShort = route('dungeonroute.viewold', ['dungeonRoute' => $dungeonroute
             <div class="mdt_export_loader_container">
                 <div class="d-flex justify-content-center">
                     <div class="spinner-border" role="status">
-                        <span class="sr-only">{{ __('view_common.modal.share.loading') }}</span>
+                        <span class="visually-hidden">{{ __('view_common.modal.share.loading') }}</span>
                     </div>
                 </div>
             </div>

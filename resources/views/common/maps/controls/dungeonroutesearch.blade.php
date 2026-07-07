@@ -66,7 +66,7 @@ $showAds                                   ??= true;
 
 <!--suppress HtmlFormInputWithoutLabel -->
 <nav id="dungeonroute_search_sidebar"
-     class="route_sidebar top right row no-gutters map_fade_out
+     class="route_sidebar top right row g-0 map_fade_out
      {{ $embed ? 'embed' : '' }}
      {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
@@ -81,7 +81,7 @@ $showAds                                   ??= true;
         @endif
 
         <div class="p-1">
-            <div class="row pr-2 mb-2 no-gutters">
+            <div class="row pe-2 mb-2 g-0">
                 <div class="col-auto" data-bs-toggle="tooltip"
                      title="{{ __('view_common.maps.controls.dungeonroutesearch.settings_title') }}">
                     <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#map_settings_modal">
