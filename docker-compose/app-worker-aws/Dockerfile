@@ -1,6 +1,6 @@
 ARG STAGE=staging
 
-FROM keystone.guru-app
+FROM keystone.guru-worker
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -11,7 +11,9 @@ RUN apt-get update && apt-get install -y awscli
 
 ARG STAGE
 # GIT_REF optionally pins the checkout to a specific tag/commit (e.g. a release tag),
-# falling back to the branch matching STAGE when not provided.
+# falling back to the branch matching STAGE when not provided. It is also written to the
+# `version` file so the worker shares the web images' cache namespace and compiled/<tag>
+# asset keying (laravel-model-caching and ksgCompiledAsset both read this file).
 ARG GIT_REF
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \
@@ -27,8 +29,10 @@ RUN git config --global --add safe.directory /var/www/html && \
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
-# Install NPM packages. Chrome is not needed in the web image; skip its download.
-ENV PUPPETEER_SKIP_DOWNLOAD=true
+# Install NPM packages. The worker base image bakes Chrome into /root/.cache/puppeteer via a
+# global puppeteer@24 install; as long as the repo's puppeteer resolves the same Chrome build,
+# its postinstall detects the cached binary and skips the download. When the versions drift it
+# downloads that version's Chrome as well — still correct, just image bloat.
 RUN npm install
 
 # Generate Swagger related files
@@ -38,6 +42,3 @@ RUN php artisan l5-swagger:generate --all && \
 # Ensure that storage and bootstrap/cache are writable for the web server
 RUN chmod o+w ./storage/ -R && \
       chown -R www-data:www-data storage bootstrap/cache
-
-COPY /usr/local/etc/php-fpm.d/zz-overrides.conf /usr/local/etc/php-fpm.d/zz-overrides.conf
-

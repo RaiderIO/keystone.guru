@@ -313,6 +313,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $affixGroupAttributes          = [];
         $affixGroupCouplingsAttributes = [];
         $affixGroupId                  = 1;
+        /** @var array{season_id: int, expansion_id: int|string|null, seasonal_index?: int, confirmed?: bool, affixes: array<int, string>, key_levels: array<int, int>} $groupArr */
         foreach ($groups as $groupArr) {
             $keyLevels = $groupArr['key_levels'];
             unset($groupArr['key_levels']);
