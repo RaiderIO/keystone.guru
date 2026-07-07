@@ -1,14 +1,12 @@
 name: PHP Coverage
 
 # Coverage is deliberately kept out of the per-PR "PHP Tests" workflow (instrumentation is pure
-# overhead there). Instead the full suite runs with coverage nightly and on release PRs (-> master),
-# where we want maximum signal.
+# overhead there, and it would gate release MRs for ~10 minutes). The full suite runs with
+# coverage nightly; use workflow_dispatch for an on-demand run.
 on:
   schedule:
     - cron: '0 3 * * *'
-  pull_request:
-    branches:
-      - master
+  workflow_dispatch:
 
 permissions:
   contents: read
