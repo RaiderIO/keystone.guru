@@ -31,6 +31,10 @@ runs:
 
     - name: Install system clients (mysql + redis CLI)
       run: |
+        # Drop the Microsoft apt repos preinstalled on the runner image (azure-cli, microsoft-prod);
+        # nothing here installs from them, and their recurring CDN outages fail `apt-get update`
+        # with "Clearsigned file isn't valid, got 'NOSPLIT'" (#3441).
+        grep -lr "packages.microsoft.com" /etc/apt/sources.list.d/ | xargs -r sudo rm -f
         sudo apt-get update
         sudo apt-get install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
       shell: bash
