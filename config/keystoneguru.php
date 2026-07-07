@@ -252,11 +252,12 @@ return [
     'discover' => [
         /** Limits for how much dungeonroutes to display on certain pages */
         'limits' => [
-            'overview'       => 12,
-            'category'       => 12,
-            'affix_overview' => 12,
-            'search'         => 24,
-            'per_dungeon'    => 8,
+            'overview'                 => 12,
+            'dungeon_overview_popular' => 24,
+            'category'                 => 12,
+            'affix_overview'           => 12,
+            'search'                   => 24,
+            'per_dungeon'              => 8,
         ],
         /** How many routes to load more when the user uses the infinite scroll */
         'loadmore' => [
