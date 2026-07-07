@@ -90,8 +90,29 @@ The worktree and its branch are yours — commit as you go, then push and open a
 git add -A && git commit -m "#<issue> <what changed>"
 sh/worktree.sh push                         # pushes the current branch via the scoped deploy key
 gh pr create --repo RaiderIO/keystone.guru --base development --head <issue>-<slug> \
-  --title "#<issue> <title>" --body "..."
+  --title "#<issue> <title>" \
+  --body "Closes #<issue>
+
+<summary of what changed and why>"
 ```
+
+**Reference the issue in the MR body**, e.g. start the `--body` with `Closes #<issue>`. Be aware of
+what this does and does *not* do, because MRs target `development`, not the default branch `master`:
+
+- ✅ It creates a **cross-reference** in the issue timeline ("referenced in #<pr>") — useful for
+  navigation.
+- ❌ It does **not** create the formal **linked PR under the issue's "Development" panel**
+  (`ConnectedEvent` / `closingIssuesReferences`), and it does **not** auto-close the issue on merge.
+  GitHub only honours closing keywords for PRs that target the **default branch**; for any other base
+  the keyword is silently ignored.
+
+**There is no `gh`/REST/GraphQL API to create the Development-panel link for a non-default-branch
+PR** — this is a known, acknowledged GitHub limitation (only `createLinkedBranch`/`deleteLinkedBranch`
+exist; there is no "link existing PR to issue" mutation). So the proper linked-PR entry can only be
+added **manually in the GitHub UI** (the issue's or PR's "Development" sidebar). After opening the
+MR, surface this to the user: the cross-reference is in place, but if they want the formal
+Development link they need to add it in the UI. Do not claim the issue is linked/auto-closing when it
+is not.
 
 `sh/worktree.sh push` uses a passphraseless **write deploy key** scoped to this repo
 (`~/.ssh/keystone_worktree_ed25519`, override with `KSG_WORKTREE_DEPLOY_KEY`) so no password is
