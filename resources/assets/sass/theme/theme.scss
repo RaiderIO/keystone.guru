@@ -3,10 +3,6 @@
 @import 'variables';
 @import 'mixins';
 
-:root.superhero {
-  @include spread-map($theme-map-superhero);
-}
-
 :root.darkly {
   @include spread-map($theme-map-darkly);
 }
@@ -24,7 +20,7 @@ body {
   background-color: var($--theme-darker) !important;
 }
 
-/* Required to give these things a bump over the .darkly and .superhero selectors */
+/* Required to give these things a bump over the .darkly and .lux selectors */
 .theme {
   /** BOOTSTRAP **/
   .bootstrap-select .btn {

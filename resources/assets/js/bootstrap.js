@@ -7,10 +7,13 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
-window.Popper = require('popper.js').default;
 window.offsetPolygon = require('offset-polygon').default;
 
-require('bootstrap');
+// Bootstrap 5 no longer registers jQuery plugins; expose the API globally because the
+// concatenated scripts in custom-*.js rely on globals (window.bootstrap.Modal etc.).
+// This assignment MUST happen before require('bootstrap-select') further down — that
+// plugin reads bootstrap.Dropdown at module scope for its version detection.
+window.bootstrap = require('bootstrap');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -108,7 +111,7 @@ window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 window.autocomplete = require('bootstrap-4-autocomplete');
-window.toggle = require('bootstrap4-toggle');
+require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 window.jarallax = require('jarallax/dist/jarallax.min');
 window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
