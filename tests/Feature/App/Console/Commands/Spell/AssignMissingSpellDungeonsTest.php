@@ -21,6 +21,7 @@ final class AssignMissingSpellDungeonsTest extends PublicTestCase
     private const int SPELL_ID   = 9995096;
     private const int DUNGEON_ID = 1;
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

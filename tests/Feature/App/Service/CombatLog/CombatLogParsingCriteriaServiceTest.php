@@ -24,6 +24,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
 
     private CombatLogParsingCriteriaServiceInterface $service;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,6 +36,7 @@ final class CombatLogParsingCriteriaServiceTest extends PublicTestCase
             ->delete();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         CombatLogParsingCriterion::query()

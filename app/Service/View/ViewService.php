@@ -386,9 +386,7 @@ class ViewService implements ViewServiceInterface
                 ->groupBy('mapping_version_id');
 
             return $currentMappingVersionIdByDungeonId
-                ->mapWithKeys(static function (int $mappingVersionId, int $dungeonId) use ($dungeonStartsByCurrentMappingVersionId) {
-                    return [$dungeonId => $dungeonStartsByCurrentMappingVersionId->get($mappingVersionId) ?? collect()];
-                })
+                ->mapWithKeys(static fn(int $mappingVersionId, int $dungeonId) => [$dungeonId => $dungeonStartsByCurrentMappingVersionId->get($mappingVersionId) ?? collect()])
                 ->filter(static fn(Collection $mapIcons) => $mapIcons->count() > 1)
                 ->map(static fn(Collection $mapIcons) => $mapIcons->values()->map(static fn(MapIcon $mapIcon, int $index) => [
                     'id'   => $mapIcon->id,

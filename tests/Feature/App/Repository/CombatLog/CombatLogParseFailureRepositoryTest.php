@@ -24,6 +24,7 @@ final class CombatLogParseFailureRepositoryTest extends PublicTestCase
         $this->repository = new CombatLogParseFailureRepository();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

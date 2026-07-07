@@ -8,9 +8,9 @@
  * @var mixed|null                                           $selected
  */
 
-$multiple = $multiple ?? false;
-$liveSearch = $liveSearch ?? false;
-$selected = $selected ?? null;
+$multiple ??= false;
+$liveSearch ??= false;
+$selected ??= null;
 ?>
 <select id="{{ $id }}"
         @isset($name)

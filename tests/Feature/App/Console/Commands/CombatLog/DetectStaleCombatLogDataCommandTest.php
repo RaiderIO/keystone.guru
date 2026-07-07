@@ -31,6 +31,7 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     private const int NPC_ID   = 9995099;
     private const int SPELL_ID = 9995098;
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

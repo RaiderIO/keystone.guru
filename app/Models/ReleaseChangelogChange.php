@@ -62,7 +62,8 @@ class ReleaseChangelogChange extends CacheModel
      * @param  EloquentBuilder<ReleaseChangelogChange> $query
      * @return EloquentBuilder<ReleaseChangelogChange>
      */
-    public function scopePublic(EloquentBuilder $query): EloquentBuilder
+    #[\Illuminate\Database\Eloquent\Attributes\Scope]
+    protected function public(EloquentBuilder $query): EloquentBuilder
     {
         return $query->where('is_public', true);
     }

@@ -124,15 +124,15 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
             }
 
             $wowheadLocale = match ($locale) {
-                'ko_KR'          => '1',
-                'fr_FR'          => '2',
-                'de_DE'          => '3',
+                'ko_KR' => '1',
+                'fr_FR' => '2',
+                'de_DE' => '3',
                 'zh_CN', 'zh_TW' => '4',
                 'es_ES', 'es_MX' => '6',
-                'ru_RU'          => '7',
-                'pt_BR'          => '8',
-                'it_IT'          => '9',
-                default          => '0', // en_US, uk_UA
+                'ru_RU' => '7',
+                'pt_BR' => '8',
+                'it_IT' => '9',
+                default => '0', // en_US, uk_UA
             };
 
             $data = $this->curlGet(sprintf('https://nether.wowhead.com/data/spell-names?dataEnv=%d&locale=%d', $env, $wowheadLocale));
@@ -201,9 +201,9 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     } else {
                         $this->log->getDungeonNamesInvalidJson();
                     }
-                } catch (CircularException|ContentLengthException|LogicalException|StrictException $e) {
+                } catch (CircularException|ContentLengthException|LogicalException|StrictException) {
                     $this->log->getDungeonNamesMalformedHtml();
-                } catch (ChildNotFoundException|NotLoadedException $e) {
+                } catch (ChildNotFoundException|NotLoadedException) {
                     $this->log->getDungeonNamesElementNotFound();
                 } finally {
                     $this->log->getDungeonNamesLocaleEnd();

@@ -37,6 +37,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 
     private DataExtractionCurrentDungeon $currentDungeon;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -56,6 +57,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         $this->currentDungeon = new DataExtractionCurrentDungeon($dungeon);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {
@@ -86,7 +88,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
 
     private function parsedEvent(): BaseEvent
     {
-        return (new CombatLogEntry(self::RAW_EVENT))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
+        return new CombatLogEntry(self::RAW_EVENT)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
     }
 
     /**
@@ -169,7 +171,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         // Arrange
         $this->createTestNpc();
         $rawEvent    = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"TestPlayer",0x512,0x0,Creature-0-2085-2290-22744-9995011-00012D4051,"TestNpc",0xa48,0x0,9999999,"Unknown",0x1,DEBUFF';
-        $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
+        $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
 
         // Act
         $this->runExtract([$parsedEvent]);
@@ -199,7 +201,7 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         $this->createTestNpc();
         // Destination is a Player GUID, not a Creature
         $rawEvent    = '8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Player-4184-005B8B04,"Caster",0x512,0x0,Player-4184-00AABBCC,"Target",0x512,0x0,118,"Polymorph",0x40,DEBUFF';
-        $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
+        $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], CombatLogVersion::RETAIL_11_0_5);
 
         // Act
         $this->runExtract([$parsedEvent]);

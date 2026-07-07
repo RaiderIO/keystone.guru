@@ -23,6 +23,7 @@ final class CreateGithubReleasePullRequestTest extends PublicTestCase
 
     private ?int $releaseChangelogId = null;
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

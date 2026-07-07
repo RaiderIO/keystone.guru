@@ -23,6 +23,7 @@ final class AdminToolsDungeonRouteControllerTest extends PublicTestCase
     private const int OLD_MAPPING_VERSION_ID    = 612;
     private const int LATEST_MAPPING_VERSION_ID = 628;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
