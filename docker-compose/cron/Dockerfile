@@ -2,7 +2,9 @@ FROM keystone.guru-app
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get -y install cron
+# procps provides pgrep, which the ECS container health check runs (`pgrep cron`). The lean
+# runtime image (#3320) no longer carries procps transitively, so install it explicitly.
+RUN apt-get update && apt-get -y install cron procps
 
 # Copy hello-cron file to the cron.d directory
 COPY etc/cron.d /etc/cron.d
