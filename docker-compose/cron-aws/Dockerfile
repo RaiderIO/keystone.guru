@@ -14,14 +14,16 @@ RUN apt-get update && apt-get install -y awscli
 
 ARG STAGE
 # GIT_REF optionally pins the checkout to a specific tag/commit (e.g. a release tag),
-# falling back to the branch matching STAGE when not provided.
+# falling back to the branch matching STAGE when not provided. It is also written to the
+# `version` file so the cron image shares the web images' cache namespace and compiled/<tag>
+# asset keying (laravel-model-caching and ksgCompiledAsset both read this file).
 ARG GIT_REF
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \
     BRANCH=$([ "$STAGE" = "production" ] && echo "master" || echo "development") && \
     REF="${GIT_REF:-$BRANCH}" && \
     git clone --depth 1 --branch "$REF" https://github.com/RaiderIO/keystone.guru.git . && \
-    git rev-list HEAD -1 > version; \
+    printf '%s' "${GIT_REF:-$(git rev-list HEAD -1)}" > version; \
     rm -rf .git
 
 # Install composer packages (token is already configured in main image)

@@ -20,8 +20,10 @@ Branch formats are as follows:
   work directly in the main checkout.
 - **The worktree and its branch are yours: you may commit, push, and open a MR without asking.**
   Commit as you go, push the branch with `sh/worktree.sh push` (uses a scoped write deploy key so no
-  password is prompted), and open the MR to `development` with `gh`. This autonomy applies only to a
-  worktree you created — in the main checkout, still ask before committing.
+  password is prompted), and open the MR to `master` (the default branch) with `gh`. Start the MR
+  body with `Closes #<issue>` — because it targets the default branch it auto-links the issue and
+  closes it on merge. This autonomy applies only to a worktree you created — in the main checkout,
+  still ask before committing.
 - The worktree shares the main stack's database/redis, so keep migrations non-destructive and never
   run `migrate:fresh`/`migrate:refresh` in a worktree. See the `worktree-docker` skill for details.
 

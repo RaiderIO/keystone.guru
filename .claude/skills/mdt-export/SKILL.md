@@ -1,4 +1,9 @@
-# Skill: MDT Export String Service
+---
+name: mdt-export
+description: How MDTExportStringService converts a DungeonRoute into a compressed MDT-importable string — object structure, Lua serialization, and export tests. Use when adding new exportable object types, debugging export output, or writing/modifying export tests. Not for the import direction (mdt-import) and not for bumping the MDT composer package (update-mdt-package).
+---
+
+# MDT Export String Service
 
 Use this skill when working on the MDT (MythicDungeonTools) export pipeline — adding new exportable object types, debugging export output, or writing/modifying export tests.
 

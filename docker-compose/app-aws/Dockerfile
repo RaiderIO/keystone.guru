@@ -27,7 +27,8 @@ RUN git config --global --add safe.directory /var/www/html && \
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
-# Install NPM packages (puppeteer v21+ downloads Chrome automatically via postinstall)
+# Install NPM packages. Chrome is not needed in the web image; skip its download.
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm install
 
 # Generate Swagger related files

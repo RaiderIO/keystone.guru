@@ -120,6 +120,15 @@ class ThumbnailService implements ThumbnailServiceInterface
                 return null;
             }
 
+            // Local dev's FILESYSTEM_DISK points at the real S3 bucket (so existing thumbnails
+            // display correctly), so generating one here would create/delete real production
+            // files. Refuse instead of letting local runs mutate production storage.
+            if (app()->environment('local')) {
+                $this->log->doCreateThumbnailSkippedLocalEnvironment();
+
+                return null;
+            }
+
             $viewportWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
             $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
             $imageWidth ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
@@ -452,7 +461,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                 // Routes with a facade will have a thumbnail for the facade, and nothing else, so this query will
                 // in that case delete all thumbnails for the route before attaching the new one
                 ->when(!$floor->facade, function (Builder $query) use ($floor) {
-                    $query->where('floor_id', $floor->index);
+                    $query->where('floor_id', $floor->id);
                 })
                 ->get();
 

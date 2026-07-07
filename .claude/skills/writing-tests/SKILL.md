@@ -1,6 +1,6 @@
 ---
 name: writing-tests
-description: Conventions for writing PHPUnit tests in keystone.guru — which base test case to extend, the persistent seeded test DB (no RefreshDatabase; clean up with try/finally), creating admin/non-admin users, factory gotchas, the #[Group]/#[Test] attributes, naming, and running tests in Docker. Use when writing or editing any test (Feature or Unit). Not for generic PHPUnit questions unrelated to this project's setup.
+description: Conventions for writing PHPUnit tests in keystone.guru — which base test case to extend, the persistent seeded test DB (no RefreshDatabase; clean up with try/finally), creating admin/non-admin users, factory gotchas, the Group/Test PHP attributes, naming, and running tests in Docker. Use when writing or editing any test (Feature or Unit). Not for generic PHPUnit questions unrelated to this project's setup.
 ---
 
 # Writing Tests
