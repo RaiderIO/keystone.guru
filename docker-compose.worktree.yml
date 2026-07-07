@@ -33,3 +33,14 @@ services:
       - ./docker-compose/nginx:/etc/nginx/conf.d
     ports:
       - "${WORKTREE_HTTP_PORT}:80"
+
+  # Headless Chrome for in-browser verification (layout/JS bugs, screenshots). Behind a profile so
+  # the normal stack is unaffected; start on demand with: docker compose --profile chrome up -d chrome
+  # Reach it from the app container via CDP on chrome:9222; pages see the site as http://nginx.
+  # No published ports, so multiple worktree stacks can run it simultaneously.
+  chrome:
+    image: chromedp/headless-shell:latest
+    restart: "no"
+    profiles: ["chrome"]
+    # Chrome exhausts the compose default 64MB /dev/shm (ERR_INSUFFICIENT_RESOURCES on image-heavy pages)
+    shm_size: 1gb
