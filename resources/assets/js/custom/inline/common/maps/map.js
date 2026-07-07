@@ -122,8 +122,11 @@ class CommonMapsMap extends InlineCode {
 
             $('#map_enemy_visuals_mdt_auto_solve').unbind('click').bind('click', this._mdtAutoSolve.bind(this));
 
-            // Trigger info popover
-            bootstrap.Popover.getOrCreateInstance(document.getElementById('map_dungeon_route_info_popover'));
+            // Trigger info popover (only rendered on maps with a dungeon route, not e.g. the admin mapping pages)
+            let dungeonRouteInfoPopover = document.getElementById('map_dungeon_route_info_popover');
+            if (dungeonRouteInfoPopover !== null) {
+                bootstrap.Popover.getOrCreateInstance(dungeonRouteInfoPopover);
+            }
             $('#map_dungeon_route_info_popover').on('inserted.bs.popover', function () {
                 $('#view_dungeonroute_affixes').html(
                     handlebarsAffixGroupsParse(self.options.dungeonroute.affixes)
@@ -571,7 +574,10 @@ class CommonMapsMap extends InlineCode {
         let enemy = enemyContextMenuEvent.context;
         let visualData = enemy.getVisualData();
 
-        if (visualData !== null) {
+        // The modal is only rendered on route/explore maps - on e.g. the admin mapping pages this is a no-op
+        let enemyDetailsModal = document.getElementById('enemy_details_modal');
+
+        if (visualData !== null && enemyDetailsModal !== null) {
             let $title = $('#enemy_details_modal_title_text').html(lang.get(enemy.npc.name));
             if (getState().isMapAdmin()) {
                 $title.empty().append(
@@ -591,7 +597,7 @@ class CommonMapsMap extends InlineCode {
             $('#enemy_report_contact_ok').prop('checked', false);
             bootstrap.Collapse.getOrCreateInstance(document.getElementById('enemy_report_collapse'), {toggle: false}).hide();
 
-            bootstrap.Modal.getOrCreateInstance(document.getElementById('enemy_details_modal')).show();
+            bootstrap.Modal.getOrCreateInstance(enemyDetailsModal).show();
         }
     }
 
