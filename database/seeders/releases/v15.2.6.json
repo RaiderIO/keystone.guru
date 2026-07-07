@@ -1,6 +1,6 @@
 {
-    "id": 365,
-    "release_changelog_id": 372,
+    "id": 366,
+    "release_changelog_id": 373,
     "version": "v15.2.5",
     "title": "MDT v6.1.20, heatmap fix",
     "backup_db": 0,
@@ -10,8 +10,8 @@
     "created_at": "2026-07-07T10:26:27+00:00",
     "updated_at": "2026-07-07T10:26:27+00:00",
     "changelog": {
-        "id": 372,
-        "release_id": 365,
+        "id": 373,
+        "release_id": 366,
         "description": null,
         "changes": [
             {
