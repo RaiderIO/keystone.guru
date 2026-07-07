@@ -66,10 +66,12 @@ ARG user
 ARG uid
 
 # Runtime dependencies only (no -dev headers, no compilers).
-# - First line: CLI tooling used by the app / deploy scripts.
+# - First line: CLI tooling used by the app / deploy scripts. procps provides pgrep, which
+#   EVERY ECS container health check runs (php-fpm/swoole/reverb/queue-worker/cron in
+#   keystoneguru-infra) — removing it makes all services fail health checks and deploys hang.
 # - Second line: shared libraries the compiled PHP extensions link against.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl default-mysql-client gettext zip unzip sudo nano ca-certificates \
+    git curl default-mysql-client gettext zip unzip sudo nano ca-certificates procps \
     libpng16-16 libonig5 libxml2 libzip5 liblua5.3-0 libmagickwand-7.q16-10 \
     libfftw3-double3 liblcms2-2 liblqr-1-0 libfreetype6 libfontconfig1 \
  && rm -rf /var/lib/apt/lists/*
