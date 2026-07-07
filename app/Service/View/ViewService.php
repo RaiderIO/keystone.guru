@@ -146,17 +146,28 @@ class ViewService implements ViewServiceInterface
             return [
                 'version'        => $version,
                 'revision'       => $appRevision,
-                'nameAndVersion' => sprintf(
-                    '%s® © 2018-%d %s - %s (%s), MDT %s',
-                    config('app.name'),
-                    date('Y'),
-                    'RaiderIO, Inc.',
-                    $version,
-                    substr($appRevision, 0, 6),
-                    config('keystoneguru.mdt.version'),
-                ),
+                'nameAndVersion' => $this->formatAppNameAndVersion($version, $appRevision),
             ];
         });
+    }
+
+    /**
+     * The version file contains a release tag in deployed images (#3320) but a commit hash in dev/CI.
+     * Tags are shown in full (omitted entirely when they duplicate the release version); hashes are shortened.
+     */
+    public function formatAppNameAndVersion(string $version, string $appRevision): string
+    {
+        $revisionDisplay = str_starts_with($appRevision, 'v') ? $appRevision : substr($appRevision, 0, 6);
+
+        return sprintf(
+            '%s® © 2018-%d %s - %s%s, MDT %s',
+            config('app.name'),
+            date('Y'),
+            'RaiderIO, Inc.',
+            $version,
+            $revisionDisplay === $version ? '' : sprintf(' (%s)', $revisionDisplay),
+            config('keystoneguru.mdt.version'),
+        );
     }
 
     public function getUserCount(): int
