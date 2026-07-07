@@ -678,10 +678,6 @@
     -webkit-justify-content: center;
   }
 
-  .form-inline {
-    display: -webkit-flex;
-  }
-
   .card-wrapper {
     -webkit-flex: 1;
   }
@@ -693,14 +689,6 @@
 
   .carousel-controls {
     display: -webkit-flex;
-  }
-
-  .media {
-    display: -webkit-flex;
-  }
-
-  .form-group:focus {
-    outline: none;
   }
 
   .jq-selectbox__select {
@@ -913,10 +901,6 @@
 
   textarea.form-control {
     line-height: 1.5rem !important;
-  }
-
-  .form-group {
-    margin-bottom: 1.2rem;
   }
 
   .form-control,
