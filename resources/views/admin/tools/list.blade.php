@@ -39,6 +39,10 @@
                         <a href="{{ route('admin.tools.npcs.showmissingdisplayid') }}">{{ __('view_admin.tools.list.show_missing_npc_display_id') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.show_missing_npc_display_id_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.npcs.savetoseeder') }}">{{ __('view_admin.tools.list.download_npcs_seeder') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.download_npcs_seeder_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -162,6 +166,10 @@
                         <a href="{{ route('admin.tools.combatlog.route.enemy_failures.view') }}">{{ __('view_admin.tools.list.combatlog_route_enemy_failures') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_route_enemy_failures_description') }}</small>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.combatlog.parsefailures.view') }}">{{ __('view_admin.tools.list.combatlog_parse_failures') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.combatlog_parse_failures_description') }}</small>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -196,23 +204,6 @@
             </div>
         </div>
 
-        {{-- Mapping (conditional) --}}
-        @if(config('app.type') === 'mapping')
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <i class="fas fa-map"></i> {{ __('view_admin.tools.list.subheader_mapping') }}
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="{{ route('admin.tools.mapping.forcesync') }}">{{ __('view_admin.tools.list.force_sync_mapping') }}</a>
-                            <small class="text-muted d-block">{{ __('view_admin.tools.list.force_sync_mapping_description') }}</small>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        @endif
-
         {{-- Misc --}}
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
@@ -238,6 +229,10 @@
                     <li class="list-group-item">
                         <a href="{{ route('admin.tools.spells.showmissingspellinfo') }}">{{ __('view_admin.tools.list.show_missing_spell_info') }}</a>
                         <small class="text-muted d-block">{{ __('view_admin.tools.list.show_missing_spell_info_description') }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.spells.savetoseeder') }}">{{ __('view_admin.tools.list.download_spells_seeder') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.download_spells_seeder_description') }}</small>
                     </li>
                 </ul>
             </div>

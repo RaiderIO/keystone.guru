@@ -4,9 +4,8 @@ description: >
   Use when the user asks to "create a release", "cut a release", "make a new release",
   or generate a release changelog from commit history. Builds the
   database/seeders/releases/vX.X.X.json file from squash-merged commits since the last
-  release, seeds it locally, creates the GitHub release issue, and opens the
-  development→master MR. NOT for cutting the git tag (that is make:githubrelease, done
-  after the MR is merged) and NOT the legacy PHP-Deployer flow.
+  release, seeds it locally, and creates the GitHub release issue. NOT for cutting the git
+  tag (that is make:githubrelease) and NOT the legacy PHP-Deployer flow.
 ---
 
 # Create a release from commit history
@@ -14,7 +13,7 @@ description: >
 Procedural runbook for cutting a new release. It replaces the old manual process (create
 the release in the site admin UI, copy-paste its JSON into a hand-made file) by generating
 `database/seeders/releases/vX.X.X.json` directly, then driving the existing artisan
-commands for seeding, the GitHub release issue, and the dev→master MR.
+commands for seeding and the GitHub release issue.
 
 > **Why a skill and not `release:export`?** `release:export` / `release:save` only run
 > inside Docker, so the JSON they write is owned by `root:root` on the host — unusable.
@@ -27,7 +26,7 @@ commands for seeding, the GitHub release issue, and the dev→master MR.
 - **Run artisan inside Docker:** `docker compose exec -T app php artisan …`.
 - Repo for `gh`: always pass `--repo RaiderIO/keystone.guru`.
 - **Do not commit.** `git add` the new JSON file (project rule: stage new files), but leave
-  committing to the user. Don't merge the MR or close the issue yourself.
+  committing to the user. Don't close the release issue yourself.
 - Keep a running summary of the commits included and the category assigned to each.
 
 ## Step 1 — Determine the target version
@@ -58,9 +57,9 @@ The JSON files carry **hardcoded sequential ids**; the new release continues the
 
 ## Step 3 — Collect the commits since the previous release
 
-Commits are squash-merged onto `development`, one per issue, formatted `#NNNN <description>`
+Commits are squash-merged onto `master`, one per issue, formatted `#NNNN <description>`
 (often with a trailing `(#PR)`). The previous release's tag `v<prev>` lives on `master`;
-`development` is ahead of it.
+`master` is ahead of it with the commits merged since.
 
 ```
 git log "v<prev>..HEAD" --no-merges --pretty=format:'%H%x09%s'
@@ -133,6 +132,9 @@ Defaults: `backup_db: 0`, `silent: 0`, `spotlight: 0`, `released: 1`.
 Each entry in `changes[]` requires an `is_public` field (`1` = shown publicly on site /
 Discord / GitHub Release; `0` = shown only in the GitHub release ticket and PR).
 
+If there are no changes that are `is_public` = `1`, mark the release as `silent` = `1`. This
+will prevent users from being notified of the release being published on the production site.
+
 ```json
 {
     "id": 360,
@@ -192,18 +194,12 @@ docker compose exec -T app php artisan make:githubreleaseticket vX.X.X
 Creates/updates a `release`-labelled issue titled `Release vX.X.X - <title>`, body rendered
 from the seeded release. (Reads the release from the DB — hence after Step 6.)
 
-## Step 8 — Open the development → master MR
+## Step 8 — Wrap up
 
-```
-docker compose exec -T app php artisan make:githubreleasepullrequest vX.X.X
-```
-Creates/updates the `development`→`master` PR (`release` label), body rendered from the
-release.
-
-## Step 9 — Wrap up
+Under the trunk model there is no release PR — feature work is already on `master`, so the
+release-notes JSON just needs to land on `master` (commit it, or open a small PR for it).
 
 Summarise to the user: the version, each included change with its category and ticket, the
-issue + MR URLs, and any commits without an issue number or any new category you added.
-Remind them the actual deploy is triggered later by `make:githubrelease vX.X.X` (the tag)
-once the MR is merged to `master` — see the deployment-pipeline roadmap (issues #3327–#3329).
-Leave the JSON staged but uncommitted.
+issue URL, and any commits without an issue number or any new category you added. Remind them
+the actual deploy is triggered later by `make:githubrelease vX.X.X` (the tag on `master`) —
+see the deployment-pipeline roadmap (issues #3327–#3329). Leave the JSON staged but uncommitted.

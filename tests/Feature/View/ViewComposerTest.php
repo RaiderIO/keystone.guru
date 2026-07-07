@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\View;
 
-use App\Http\View\Composers\AdminDungeonEditComposer;
 use App\Http\View\Composers\AdminDungeonMappingVersionsComposer;
 use App\Http\View\Composers\AdminMessageBannerComposer;
 use App\Http\View\Composers\AdminNpcHealthEditComposer;
@@ -41,7 +40,6 @@ use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Contracts\View\View as ViewContract;
 use PHPUnit\Framework\Attributes\Group;
@@ -373,20 +371,6 @@ final class ViewComposerTest extends PublicTestCase
 
         // Assert
         $this->assertViewHasKeys($view, ['tiers']);
-    }
-
-    #[Test]
-    public function adminDungeonEditComposer_givenDungeonData_setsHasUnmergedMappingVersion(): void
-    {
-        // Arrange
-        $dungeon = Dungeon::firstOrFail();
-        $view    = view('admin.dungeon.edit', ['dungeon' => $dungeon]);
-
-        // Act
-        app(AdminDungeonEditComposer::class)->compose($view);
-
-        // Assert
-        $this->assertViewHasKeys($view, ['hasUnmergedMappingVersion']);
     }
 
     /**

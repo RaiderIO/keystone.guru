@@ -1,0 +1,89 @@
+{
+    "id": 366,
+    "release_changelog_id": 373,
+    "version": "v15.2.6",
+    "title": "MDT v6.1.20, heatmap fix",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-07-07T10:26:27+00:00",
+    "updated_at": "2026-07-07T10:26:27+00:00",
+    "changelog": {
+        "id": 373,
+        "release_id": 366,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3370,
+                "is_public": 1,
+                "change": "MDT updated to v6.1.20 - all dungeon mapping brought up-to-date."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2947,
+                "is_public": 1,
+                "change": "Fixed the heatmap sometimes not loading on the weekly route page."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3368,
+                "is_public": 0,
+                "change": "make:githubreleasepullrequest can now update an existing release PR (owner/case mismatch fixed)."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3366,
+                "is_public": 0,
+                "change": "Improved deployment/release skills."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3366,
+                "is_public": 0,
+                "change": "Thumbnails are no longer generated locally when running a production copy."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3371,
+                "is_public": 0,
+                "change": "Added git worktree + isolated Docker stack workflow."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3358,
+                "is_public": 0,
+                "change": "Removed code related to the mapping environment that no longer exists."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3376,
+                "is_public": 0,
+                "change": "Demo dungeon routes are now preserved when reseeding dungeon data."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3386,
+                "is_public": 0,
+                "change": "Finished the project-backend-structure skill."
+            },
+            {
+                "release_changelog_id": 373,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3389,
+                "is_public": 0,
+                "change": "Added DungeonRoutePolicy feature tests."
+            }
+        ]
+    }
+}

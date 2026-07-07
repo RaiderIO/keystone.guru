@@ -63,8 +63,40 @@ For a substantive task/follow-up, make it resumable cold. Include:
 7. **Definition of done** — tests green (call out any *known pre-existing* failures to ignore),
    `composer run analyse` + `composer run fix` clean, manual verification steps.
 
-## After creating
+## Editing an existing issue's body from a file
+
+If the body is long (e.g. a plan you already wrote to a scratch file), don't reach for
+`gh api ... -f body=@path`. Use:
+
+```bash
+gh issue edit 3374 --repo RaiderIO/keystone.guru --body-file /path/to/body.md
+```
+
+`gh issue edit`/`gh issue create --body-file` read the file's actual contents — no `@` prefix
+needed there.
+
+### Gotcha: `gh api -f` vs `-F` (this bit us — issues #3374, #2460, #1431, #1453, #128 all
+shipped with a body that was the *literal string* `@/tmp/.../file.md` instead of that file's
+contents)
+
+If you do use `gh api` directly to PATCH an issue body:
+
+- `-f body=@/path/to/file` — lowercase `-f` is a **string** field. The `@`-prefixed value is
+  sent verbatim as the literal text `@/path/to/file`, it does **not** read the file. This is the
+  mistake that happened.
+- `-F body=@/path/to/file` — capital `-F` is a **typed** field; only this form dereferences
+  `@file` into the file's contents.
+
+Prefer `gh issue edit --body-file` over `gh api` for this reason — it has no `-f`/`-F` trap to
+get wrong.
+
+## After creating (or editing)
 
 - Relay the URL to the user.
 - New files in this repo should be staged (`git add`) per project rules — but the issue itself
   lives on GitHub, so there's nothing to commit unless you also wrote local files.
+- **Verify the body actually landed**: `gh issue view <n> --repo RaiderIO/keystone.guru --json body -q '.body[0:80]'`
+  and confirm it's prose, not a bare local path (`/tmp/...`, `@/...`) or anything else that would
+  only make sense on your own machine — the GitHub equivalent of telling someone "check out my
+  site at http://localhost:80". A scratch-file path in a body is *never* correct; catch it before
+  the user does.

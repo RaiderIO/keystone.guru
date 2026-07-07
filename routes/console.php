@@ -32,16 +32,8 @@ $commands[] = Schedule::command('dungeonroute:deleteexpired')->hourly();
 $commands[] = Schedule::command('dungeonroute:publishscheduled')->everyFiveMinutes();
 $commands[] = Schedule::command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
-if (in_array($appType, [
-    'mapping',
-    'local',
-])) {
-    $commands[] = Schedule::command('mapping:sync')->everyFiveMinutes();
-
-    // Ensure display IDs are set
-    $commands[] = Schedule::command('wowhead:refreshdisplayids')->hourly();
-} else {
-    // If thumbnails are needed locally, move this command
+// If thumbnails are needed locally, move this command
+if (!app()->environment('local')) {
     $commands[] = Schedule::command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
 }
 

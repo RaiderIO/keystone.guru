@@ -1,0 +1,47 @@
+{
+    "id": 369,
+    "release_changelog_id": 376,
+    "version": "v15.2.9",
+    "title": "Deployment pipeline improvements",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 1,
+    "created_at": "2026-07-07T20:03:42+00:00",
+    "updated_at": "2026-07-07T20:03:42+00:00",
+    "changelog": {
+        "id": 376,
+        "release_id": 369,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 376,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3320,
+                "is_public": 0,
+                "change": "Queue workers now run a dedicated image with Chrome for thumbnail generation; web-facing images no longer ship a browser."
+            },
+            {
+                "release_changelog_id": 376,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3320,
+                "is_public": 0,
+                "change": "Removed the legacy PHP-Deployer flow (deploy.php, php-deployer image and secrets)."
+            },
+            {
+                "release_changelog_id": 376,
+                "release_changelog_category_id": 1,
+                "ticket_id": 3415,
+                "is_public": 0,
+                "change": "Sped up the MR test pipeline: tests sharded by group, coverage dropped from PR runs, Lua build cached."
+            },
+            {
+                "release_changelog_id": 376,
+                "release_changelog_category_id": 5,
+                "ticket_id": 3429,
+                "is_public": 0,
+                "change": "The lean runtime image now includes procps: every ECS container health check runs pgrep, which was lost in the image slimming and made all services fail health checks."
+            }
+        ]
+    }
+}

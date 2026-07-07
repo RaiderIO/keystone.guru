@@ -19,7 +19,7 @@ class DamageLandedBuilder implements SuffixBuilderInterface
     {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_TBC_2_5_5, CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7, CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new DamageLandedV20($combatLogVersion),
-            default => new DamageLandedV22($combatLogVersion),
+            default                                                                                                                                                                                                                                            => new DamageLandedV22($combatLogVersion),
         };
     }
 }

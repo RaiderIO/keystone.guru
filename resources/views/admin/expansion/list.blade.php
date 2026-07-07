@@ -53,7 +53,7 @@
                         <i class="fas fa-times-circle text-danger"></i>
                     </td>
                 @endif
-                <td><img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname)) }}"
+                <td><img src="{{ $expansion->getIconUrl() }}"
                          style="width: 50px;"/></td>
                 <td>{{ $expansion->id }}</td>
                 <td>{{ __($expansion->name) }}</td>

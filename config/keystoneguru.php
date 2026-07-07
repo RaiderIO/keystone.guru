@@ -168,12 +168,6 @@ return [
     'zoom_max_default' => 5,
 
     /**
-     * The amount of hours it takes after changes have occurred, before they're automatically synced with the server.
-     * This prevents active mapping efforts from getting commits every 2 minutes or something
-     */
-    'mapping_commit_after_change_hours' => 1,
-
-    /**
      * Size of a party for a M+ dungeon. Used for a bunch of stuff, changing this value does not mean it's 100% fine though,
      * some layout will need to be re-made for a smaller or higher value.
      */
@@ -378,6 +372,10 @@ return [
         ],
     ],
 
+    'raiderio' => [
+        'api_key' => env('RAIDERIO_API_KEY'),
+    ],
+
     'patreon' => [
         'oauth' => [
             'client_id' => env('PATREON_CLIENT_ID'),
@@ -493,7 +491,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.1.18',
+        'version' => 'v6.1.20',
     ],
 
     'combat_log_route_regeneration' => [
