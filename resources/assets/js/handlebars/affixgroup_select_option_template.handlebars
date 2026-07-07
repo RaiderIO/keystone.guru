@@ -1,4 +1,5 @@
-<div class="row affix_row_container g-0">
+{{!-- flex-nowrap: bootstrap-select measures option height in a width: 0 container; without it the icons wrap and the menu reserves ~4x the height --}}
+<div class="row affix_row_container g-0 flex-nowrap">
     {{#affixes}}
         <div class="col affix_row">
             <div class="select_icon affix_icon_{{class}}" style="height: 24px;"></div>
