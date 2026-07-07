@@ -138,6 +138,9 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
         }
     }
 }
+
+// Drop empty optgroups (e.g. expansions without raids) - bootstrap-select 1.14 renders them as blank rows in the dropdown
+$dungeonsSelect = array_filter($dungeonsSelect, static fn($groupOptions) => count($groupOptions) > 0);
 ?>
 
 @if($showSiegeWarning && $siegeOfBoralus)
