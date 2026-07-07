@@ -40,8 +40,11 @@ into the image and read agnostically by `ksgCompiledAsset` (`app/Helpers/CustomH
   - `build-map-context` — `php-ci-setup`, then **overwrites the `version` file with the tag**,
     runs `make:mapcontext*`, uploads `storage/mapcontext` → `s3://<bucket>/compiled` (lands at
     `compiled/<tag>/mapcontext/...`).
-  - `build-push-images` — builds the app + cron images, pushes to ECR tagged `<tag>`. The
-    image's `version` file is written from `GIT_REF` in `docker-compose/app-aws/Dockerfile`.
+  - `build-push-images` — builds the app + worker + cron images, pushes to ECR tagged `<tag>`.
+    The app image (`docker-compose/app-aws`) goes to `ksg-php-fpm`/`ksg-reverb`/`ksg-swoole`; the
+    worker image (`docker-compose/app-worker` → `docker-compose/app-worker-aws`, the only one with
+    Puppeteer/Chrome) goes to `ksg-queue-worker`. The image's `version` file is written from
+    `GIT_REF` in the respective `*-aws/Dockerfile`.
   - `deploy-staging` — `needs` all three build jobs; dispatches `deploy-staging` to infra.
   - `deploy-production` — `needs: deploy-staging`; **gated by the `production` GitHub
     Environment** (required reviewers). Dispatches `deploy-production` to infra on approval.

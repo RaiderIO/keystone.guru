@@ -35,27 +35,51 @@ runs:
         sudo apt-get install -y default-mysql-client redis-tools lua5.3 liblua5.3-dev
       shell: bash
 
+    # Cache the compiled lua.so / bit.so so we skip the ~30-40s phpize/configure/make on every run
+    # (paid per shard once the test job is sharded). Bump the trailing "-v1" to bust the cache if the
+    # Wotuu/php-lua repo (built from HEAD, unpinned) changes and a rebuild is needed.
+    - name: Restore Lua extension build cache
+      id: cache-lua-ext
+      uses: actions/cache@v5
+      with:
+        path: ~/lua-ext-cache
+        key: lua-ext-php8.4-${{ hashFiles('storage/lua/LuaBitOp-1.0.3.zip') }}-v1
+
     - name: Build PHP Lua extension
       run: |
+        # Lua headers/libs are needed both to compile the extension and for the compiled .so to link
+        # at runtime, so prepare them unconditionally (cheap).
         sudo ln -sfn /usr/include/lua5.3 /usr/include/lua
         sudo cp /usr/lib/*-linux-gnu/liblua5.3.a /usr/lib/liblua.a 2>/dev/null || true
         sudo cp /usr/lib/*-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so 2>/dev/null || true
         sudo ln -f /usr/include/lua5.3/lua.h /usr/include/lauxlib.h || true
         sudo ln -f /usr/include/lua5.3/lua.h /usr/include/lua.h || true
         sudo ln -f /usr/include/lua5.3/lua.h /usr/include/luaconf.h || true
-        git clone https://github.com/Wotuu/php-lua.git /tmp/php-lua
-        cd /tmp/php-lua
-        phpize
-        ./configure
-        make -j$(nproc)
-        sudo make install
+
+        EXT_DIR="$(php -r 'echo ini_get("extension_dir");')"
+        if [ -f ~/lua-ext-cache/lua.so ] && [ -f ~/lua-ext-cache/bit.so ]; then
+          echo "==> Using cached Lua extension build"
+          sudo cp ~/lua-ext-cache/lua.so "${EXT_DIR}/lua.so"
+        else
+          echo "==> Building Lua extension from source"
+          git clone https://github.com/Wotuu/php-lua.git /tmp/php-lua
+          cd /tmp/php-lua
+          phpize
+          ./configure
+          make -j$(nproc)
+          sudo make install
+          unzip "${GITHUB_WORKSPACE}/storage/lua/LuaBitOp-1.0.3.zip" -d /tmp
+          cd /tmp/LuaBitOp-1.0.3
+          make -j$(nproc)
+          mkdir -p ~/lua-ext-cache
+          cp "${EXT_DIR}/lua.so" ~/lua-ext-cache/lua.so
+          cp /tmp/LuaBitOp-1.0.3/bit.so ~/lua-ext-cache/bit.so
+        fi
+
         echo "extension=lua.so" | sudo tee "$(php -r 'echo PHP_CONFIG_FILE_SCAN_DIR;')/99-lua.ini"
         php -m | grep -i lua
-        unzip "${GITHUB_WORKSPACE}/storage/lua/LuaBitOp-1.0.3.zip" -d /tmp
-        cd /tmp/LuaBitOp-1.0.3
-        make -j$(nproc)
         sudo mkdir -p /usr/lib/lua/5.3/
-        sudo cp bit.so /usr/lib/lua/5.3/
+        sudo cp ~/lua-ext-cache/bit.so /usr/lib/lua/5.3/
       shell: bash
 
     - name: Restore cli_weakauras_parser cache

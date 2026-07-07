@@ -19,17 +19,16 @@ use Illuminate\Support\Collection;
 $gameVersionsSelect = $allGameVersions
     ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 
-/** @var Collection<string, array{icon_url: string|null, name: array<string, string>|string}> $baseCharacteristicOptions */
-$baseCharacteristicOptions = collect(['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]]);
-
-$characteristicOptions = $baseCharacteristicOptions
-    ->merge($allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
-        (string)$c->id => [
+// Plain array union (+) instead of Collection::merge - merge() runs the items through
+// array_merge, which renumbers the integer characteristic ID keys from 0 and would make
+// the select submit positional indexes instead of the actual characteristic IDs.
+$characteristicOptions = ['' => ['icon_url' => null, 'name' => __('view_admin.spell.edit.no_characteristic')]]
+    + $allCharacteristics->mapWithKeys(static fn(Characteristic $c) => [
+        $c->id => [
             'icon_url' => ksgAssetImage(sprintf('spells/%s.jpg', $c->icon_name)),
             'name'     => __($c->name),
         ],
-    ]))
-    ->toArray();
+    ])->toArray();
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$spell ?? null],
