@@ -60,7 +60,6 @@ $renderDungeonRouteCollection = static function (Collection $collection, ?string
                         'horizontal_row' => 'common.dungeonroute.cardhorizontalrow',
                         'vertical' => 'common.dungeonroute.cardvertical',
                         'horizontal' => 'common.dungeonroute.cardhorizontal',
-                        'poster' => 'common.dungeonroute.cardposter',
                         default => throw new InvalidArgumentException("Invalid orientation: $orientation")
                     }
                 ?>
