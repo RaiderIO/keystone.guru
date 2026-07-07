@@ -424,13 +424,6 @@ class DungeonMap extends Signalable {
                 getState().setMapZoomLevel(self.leafletMap.getZoom());
             }
         });
-
-        // After zooming or moving the map, fix the seam. Yeah, very hacky but it works
-        this.leafletMap.on('moveend', function () {
-            if (typeof self.leafletMap !== 'undefined') {
-                self._fixMapTileSeam();
-            }
-        });
     }
 
     /**
