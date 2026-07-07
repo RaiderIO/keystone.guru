@@ -476,17 +476,6 @@ class DungeonMap extends Signalable {
     }
 
     /**
-     * Really really shitty hack that will fix the map seam that can shine through when zooming. I tried a lot of things
-     * to fix it but this is the only thing that sticks unfortunately. I don't see any downsides at this time so I'm keeping it
-     *
-     *
-     * @private
-     */
-    _fixMapTileSeam() {
-        $('.leaflet-tile-container img').css('width', `${c.map.settings.tileWidth + 1}px`).css('height', `${c.map.settings.tileHeight + 1}px`);
-    }
-
-    /**
      * Someone clicked on an enemy
      * @private
      */
@@ -846,7 +835,6 @@ class DungeonMap extends Signalable {
         }).addTo(this.leafletMap);
 
         this.leafletMap.setMaxZoom(floorMaxZoomLevel);
-        this._fixMapTileSeam();
 
         // if( typeof this.drawnLayers !== 'undefined' ) {
         //     this.leafletMap.removeLayer(this.drawnLayers);
