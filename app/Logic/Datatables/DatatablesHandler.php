@@ -53,6 +53,7 @@ abstract class DatatablesHandler
      */
     public function setBuilder(Builder $builder): DatatablesHandler
     {
+        /** @var Builder<Model> $builder */
         $this->builder = $builder;
 
         return $this;

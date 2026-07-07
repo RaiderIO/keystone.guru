@@ -362,7 +362,6 @@ class MDTDungeon
                 $eval = str_replace($search, $replace, $eval);
             }
 
-            /** @phpstan-ignore-next-line */
             $lua = new Lua();
             $lua->eval($eval);
         }

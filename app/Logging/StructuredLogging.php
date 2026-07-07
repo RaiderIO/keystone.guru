@@ -13,8 +13,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 {
     private static bool $ENABLED = true;
 
-    private static int $GROUPED_CONTEXT_COUNT = 0;
-
     /** @var array<int, string> Precalculated padding to ensure the log lines line up nicely with some padding at the start */
     private static array $START_PADDING = [
         Level::Debug->value     => '  ',
@@ -64,9 +62,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     /** @param array<string, mixed> ...$context */
     public function addContext(string $key, array ...$context): void
     {
-        if (!isset($this->groupedContexts[$key])) {
-            self::$GROUPED_CONTEXT_COUNT++;
-        }
         $this->groupedContexts[$key] = empty($context) ? [] : array_merge(...$context);
         $this->isContextCached       = false;
     }
@@ -74,8 +69,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     public function removeContext(string $key): void
     {
         if (isset($this->groupedContexts[$key])) {
-            self::$GROUPED_CONTEXT_COUNT--;
-
             unset($this->groupedContexts[$key]);
             $this->isContextCached = false;
         }
@@ -208,14 +201,17 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
         $levelName = $level->getName();
 
+        $groupedContextCount = count($this->groupedContexts);
+
         // Cache the following operation - it's pretty slow
-        if (!isset($this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT])) {
+        $cacheKey = sprintf('%d-%s', $groupedContextCount, $functionName);
+        if (!isset($this->cachedConvertedFunctionNames[$cacheKey])) {
             // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
-            $this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT] = trim(
-                sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0]),
+            $this->cachedConvertedFunctionNames[$cacheKey] = trim(
+                sprintf('%s %s', str_repeat('-', $groupedContextCount), array_reverse(explode('\\', $functionName))[0]),
             );
         }
-        $messageWithContextCounts = $this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT];
+        $messageWithContextCounts = $this->cachedConvertedFunctionNames[$cacheKey];
 
         foreach ($this->loggers as $logger) {
             if ($logger instanceof LogManager) {

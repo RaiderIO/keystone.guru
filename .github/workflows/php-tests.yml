@@ -1,12 +1,8 @@
 name: PHP Tests
 
 on:
-  push:
-    branches:
-      - development
   pull_request:
     branches:
-      - development
       - master
 
 permissions:
@@ -16,9 +12,39 @@ jobs:
   php-tests:
     runs-on: ubuntu-latest
 
+    # The suite is split into shards that run concurrently on separate runners, each with its own
+    # MySQL, so wall-clock time is the slowest shard instead of the sum:
+    #   - combatlog-route / correct-events : the two subgroups of the heavy APICombatLog suite
+    #     (together they equal the whole APICombatLog group).
+    #   - feature-controller / feature-other : the Feature suite, split by the Controller group. Since
+    #     "--group=Controller" and "--exclude-group=Controller" are exact complements, the two shards
+    #     are guaranteed to cover the whole Feature suite with no overlap and no dropped tests, while
+    #     staying roughly time-balanced (Controller tests are fewer but slower HTTP-stack tests).
+    #   - unit : the Unit suite.
+    # The five shards are disjoint and together equal the full run minus MapTiles
+    # (162 + 409 + 46 + 32 + 308 = 957). Using --testsuite (not a positional path) keeps the Unit
+    # suite's phpunit.xml <exclude> entries honoured and auto-covers newly added test files. Coverage
+    # is NOT computed here (it is instrumentation overhead) — see php-coverage.yml for the coverage run.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: combatlog-route
+            phpunit-args: "--group=CombatLogRoute"
+          - shard: correct-events
+            phpunit-args: "--group=CorrectEvents"
+          - shard: feature-controller
+            phpunit-args: "--testsuite \"Feature Tests\" --group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
+          - shard: feature-other
+            phpunit-args: "--testsuite \"Feature Tests\" --exclude-group=Controller --exclude-group=APICombatLog --exclude-group=MapTiles"
+          - shard: unit
+            phpunit-args: "--testsuite \"Unit Tests\" --exclude-group=MapTiles"
+
+    name: php-tests (${{ matrix.shard }})
+
     steps:
       - name: Checkout for local actions
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -34,21 +60,5 @@ jobs:
       - name: Seed users
         run: php artisan db:seed --class=LaratrustSeeder --database=migrate
 
-      - name: Run PHPUnit with coverage
-        run: |
-          set -o pipefail
-          ./vendor/bin/phpunit --exclude-group=MapTiles \
-            --coverage-text \
-            --coverage-clover=coverage.xml \
-            | tee phpunit-output.txt
-          echo "## Test Coverage" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          grep -A 5 "Summary:" phpunit-output.txt >> $GITHUB_STEP_SUMMARY || true
-          echo '```' >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v6
-        with:
-          name: coverage-report
-          path: coverage.xml
-          if-no-files-found: warn
+      - name: Run PHPUnit (${{ matrix.shard }})
+        run: ./vendor/bin/phpunit ${{ matrix.phpunit-args }}

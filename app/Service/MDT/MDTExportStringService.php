@@ -233,7 +233,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             }
 
             // Compute arrow direction from shaft: atan2(dy, dx) of the last segment
-            if ($firstMdtCoordinates !== null && $lastMdtCoordinates !== null) {
+            // ($lastMdtCoordinates is non-null whenever $firstMdtCoordinates is - both are assigned each iteration)
+            if ($firstMdtCoordinates !== null) {
                 $dx              = (float)$lastMdtCoordinates['x'] - (float)$firstMdtCoordinates['x'];
                 $dy              = (float)$lastMdtCoordinates['y'] - (float)$firstMdtCoordinates['y'];
                 $mdtLine['t'][1] = atan2($dy, $dx);
