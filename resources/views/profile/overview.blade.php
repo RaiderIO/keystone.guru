@@ -15,8 +15,6 @@ use Illuminate\Support\Collection;
 
 @section('content')
     <div class="px-4">
-        @include('common.general.messages')
-
         @if( $currentUserGameVersion->has_seasons )
             <div class="row">
                 <div class="col">
