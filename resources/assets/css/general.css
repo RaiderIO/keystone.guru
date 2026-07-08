@@ -61,7 +61,8 @@
     right: 10px;
     z-index: 100;
     font-size: 26px;
-    color: white;
+    /* Theme-dependent: white on the dark themes, near-black on lux (white was invisible on lux modals) */
+    color: var(--theme-text-contrast);
 }
 
 @media screen and (max-width: 480px) {

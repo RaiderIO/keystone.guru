@@ -4,6 +4,10 @@
   $link-decoration: none;
   $link-hover-decoration: underline;
 
+  // Keep the pre-BS5 look: this theme always rendered with the navy body background (via the old
+  // global $body-bg), giving slate inputs/modals instead of bootswatch vapor's purple
+  $body-bg: #2B3E50;
+
   @import "~bootswatch/dist/vapor/variables";
   @import "~bootstrap/scss/bootstrap";
   @import "dist/_bootswatch";
