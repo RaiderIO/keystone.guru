@@ -70,15 +70,14 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             </div>
         </div>
         @if($embedOptions['show']['affixes'])
-            <div class="row g-0 align-items-center" style="height: 36px;">
-                <div class="col-md-auto px-1 d-md-flex d-none">
-                            <?php
-                            $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                            ?>
-                        @if($mostRelevantAffixGroup !== null)
-                            @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
-                        @endif
-                </div>
+            <?php // Not a nested .row: in BS5 a .row that is itself a row child gets width: 100% and wraps the header ?>
+            <div class="col-md-auto px-1 d-md-flex d-none align-items-center" style="height: 36px;">
+                    <?php
+                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                    ?>
+                @if($mostRelevantAffixGroup !== null)
+                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
+                @endif
             </div>
         @endif
         <div class="col">
