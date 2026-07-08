@@ -30,26 +30,23 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
     <div class="row g-0 py-2 flex-nowrap overflow-hidden">
         @include('common.embed.header.compact.logo')
 
+        <?php // Not nested .rows: in BS5 a .row that is itself a row child gets width: 100% and breaks the header ?>
         @if($embedOptions['show']['enemyForces'])
-            <div class="row g-0 align-items-center" style="height: 36px;">
-                <div class="col-auto px-1">
-                        <?php
-                        // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
-                        ?>
-                    <div id="edit_route_enemy_forces_container"></div>
-                </div>
+            <div class="col-auto px-1 d-flex align-items-center" style="height: 36px;">
+                    <?php
+                    // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
+                    ?>
+                <div id="edit_route_enemy_forces_container"></div>
             </div>
         @endif
         @if($embedOptions['show']['affixes'])
-            <div class="row g-0 align-items-center" style="height: 36px;">
-                <div class="col-md-auto px-1 d-md-flex d-none">
-                        <?php
-                        $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                        ?>
-                    @if($mostRelevantAffixGroup !== null)
-                        @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
-                    @endif
-                </div>
+            <div class="col-md-auto px-1 d-md-flex d-none align-items-center" style="height: 36px;">
+                    <?php
+                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                    ?>
+                @if($mostRelevantAffixGroup !== null)
+                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
+                @endif
             </div>
         @endif
         <?php // Fills up any remaining space space ?>
