@@ -57,7 +57,7 @@
         "imports-loader": "^4.0.0",
         "intro.js": "github:Wotuu/intro.js",
         "ion-rangeslider": "^2.3.1",
-        "jarallax": "^2.0.3",
+        "jarallax": "^3.0.1",
         "jquery-bar-rating": "^1.2.2",
         "jquery-mousewheel": "^3.2.2",
         "jquery-touchswipe": "^1.6.19",
