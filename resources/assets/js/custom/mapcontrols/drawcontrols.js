@@ -407,7 +407,7 @@ class DrawControls extends MapControl {
                 let $button = $(button);
                 let $row = $($button.children()[0]);
                 $row.attr('data-bs-toggle', 'tooltip');
-                $row.attr('data-placement', 'right');
+                $row.attr('data-bs-placement', 'right');
                 $row.attr('title', $button.attr('title'));
             });
 
@@ -511,8 +511,8 @@ class DrawControls extends MapControl {
             let $button = $('<a>', {
                 href: '#',
                 class: 'd-inline-block w-100 h-100',
-                'data-toggle': 'tooltip',
-                'data-placement': 'right',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'right',
                 title: lang.get('js.finish_drawing'),
                 text: lang.get('js.finish')
             });
