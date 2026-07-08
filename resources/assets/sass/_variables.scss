@@ -1,6 +1,8 @@
 // Body
-// Pre-set (no !default) so it wins over the bootswatch theme variables imported per theme
-$body-bg: #2B3E50;
+// NOTE: $body-bg must NOT be pre-set globally here. Bootstrap 5 derives --bs-body-bg from it and
+// feeds that variable into cards, modals, dropdowns and list-groups, so a global value would leak
+// the same background into every theme (light themes included). Each theme sets its own $body-bg
+// in its theme scss (darkly) or falls back to its bootswatch default (lux, vapor).
 
 // Typography
 $font-family-sans-serif: Salesforce Sans, Arial, sans-serif;

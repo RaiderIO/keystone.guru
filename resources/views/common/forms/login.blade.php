@@ -43,7 +43,7 @@ $errors   ??= collect();
                 <label for="{{ $modalClass }}login_remember">
                     {{ __('view_common.forms.login.remember_me') }}
                 </label>
-                <div class="col col-xl-{{ $width }} {{ $modal ? 'col-md-offset-4' : '' }}">
+                <div class="col col-xl-{{ $width }}">
                     <input id="{{ $modalClass }}login_remember" type="checkbox"
                            name="remember" class="form-control left_checkbox" {{ old('remember') ? 'checked' : '' }}>
                 </div>
