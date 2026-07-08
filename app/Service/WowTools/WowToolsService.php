@@ -12,9 +12,7 @@ class WowToolsService implements WowToolsServiceInterface
 
     public function getDisplayId(int $npcId): ?int
     {
-        $this->log->getDisplayIdRequestStart($npcId);
-
-        try {
+        return $this->log->getDisplayIdRequest($npcId, function () use ($npcId): ?int {
             $result = null;
 
             $ch = curl_init();
@@ -38,10 +36,8 @@ class WowToolsService implements WowToolsServiceInterface
                     $this->log->getDisplayIdRequestResult($result);
                 }
             }
-        } finally {
-            $this->log->getDisplayIdRequestEnd();
-        }
 
-        return $result;
+            return $result;
+        });
     }
 }

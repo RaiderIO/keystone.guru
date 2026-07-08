@@ -11,7 +11,7 @@ use App\Models\Floor\Floor;
 $npcsByDifficulty     = $floor->dungeonSpeedrunRequiredNpcs->groupBy('difficulty');
 $difficultiesWithData = array_filter(
     Dungeon::DIFFICULTY_ALL,
-    static fn(int $difficulty): bool => $npcsByDifficulty->has($difficulty),
+    $npcsByDifficulty->has(...),
 );
 ?>
 

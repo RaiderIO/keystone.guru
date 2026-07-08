@@ -147,6 +147,13 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
+        // The heat layer may not exist yet when its addition was deferred until the map container
+        // gained a non-zero size. The data is retained in rawLatLngsByFloorId and re-applied once
+        // the layer is created (see _deferAddHeatLayer).
+        if (this.heatLayer === null) {
+            return;
+        }
+
         let result = [];
         if (this.rawLatLngsByFloorId.hasOwnProperty(floorId)) {
             result = this.rawLatLngsByFloorId[floorId];
@@ -170,6 +177,9 @@ class HeatPlugin extends MapPlugin {
         this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
 
         this.heatLayer.addTo(this.map.leafletMap);
+        // The map defers plugin loading until it has a non-zero size, so floor data may have already
+        // arrived (and been stored but not rendered while heatLayer was still null); (re)apply it now.
+        this._applyLatLngsForFloor(getState().getCurrentFloor().id);
         // let self = this;
         // Debug function that adds latLngs to your mouse location as you move around
         // this.map.leafletMap.on({
@@ -189,6 +199,10 @@ class HeatPlugin extends MapPlugin {
 
     setOptions(options) {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        if (this.heatLayer === null) {
+            return;
+        }
 
         this.heatLayer.setOptions(options);
     }
@@ -277,4 +291,10 @@ class HeatPlugin extends MapPlugin {
 
         this.setLatLngs([]);
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HeatPlugin;
 }

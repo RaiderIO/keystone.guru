@@ -191,7 +191,7 @@ $isActiveRoute = function (string $route) {
                         $compendiumHeaderText   = __('view_common.layout.header.compendium');
                         $compendiumDropdownId   = Str::slug($compendiumHeaderText);
                         foreach ($compendiumRoutes as $itemKey => $item) {
-                            $hasCompendiumSubActive = $hasCompendiumSubActive ?? $isActiveRoute($itemKey);
+                            $hasCompendiumSubActive ??= $isActiveRoute($itemKey);
                         }
                         ?>
                     <li class="nav-item dropdown">
@@ -219,7 +219,7 @@ $isActiveRoute = function (string $route) {
                 $dropdownId       = Str::slug($headerText);
                 // Determine if any of the sub-items are active
                 foreach ($expansionRoutes as $itemKey => $item) {
-                    $hasSubItemActive = $hasSubItemActive ?? $isActiveRoute($itemKey);
+                    $hasSubItemActive ??= $isActiveRoute($itemKey);
                 }
                 ?>
                 <li class="nav-item dropdown">

@@ -56,7 +56,7 @@ class Random extends Command
             0,
             new CombatLogRunContext(0, []),
         );
-        app()->call([$job, 'handle']);
+        app()->call($job->handle(...));
 //        $json = json_decode(file_get_contents(base_path('tmp/tmp.json')), true);
 //
 //        $spells = Spell::all()->keyBy('id');

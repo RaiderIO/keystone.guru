@@ -19,7 +19,7 @@ isn't, start it from the main repo: `docker compose up -d`.
 ## Create a worktree
 
 ```bash
-sh/worktree.sh create <issue>-<slug>            # branches off origin/development
+sh/worktree.sh create <issue>-<slug>            # branches off origin/master
 sh/worktree.sh create <issue>-<slug> <base-ref> # or off an explicit base
 ```
 
@@ -89,9 +89,15 @@ The worktree and its branch are yours — commit as you go, then push and open a
 # from inside the worktree
 git add -A && git commit -m "#<issue> <what changed>"
 sh/worktree.sh push                         # pushes the current branch via the scoped deploy key
-gh pr create --repo RaiderIO/keystone.guru --base development --head <issue>-<slug> \
-  --title "#<issue> <title>" --body "..."
+gh pr create --repo RaiderIO/keystone.guru --base master --head <issue>-<slug> \
+  --title "#<issue> <title>" \
+  --body "Closes #<issue>
+
+<summary of what changed and why>"
 ```
+
+MRs target `master` (the default branch), so a `Closes #<issue>` line in the body auto-links the
+issue in the Development panel and closes it on merge — no manual linking step needed.
 
 `sh/worktree.sh push` uses a passphraseless **write deploy key** scoped to this repo
 (`~/.ssh/keystone_worktree_ed25519`, override with `KSG_WORKTREE_DEPLOY_KEY`) so no password is

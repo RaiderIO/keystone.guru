@@ -53,6 +53,7 @@ use Tests\TestCases\PublicTestCase;
 #[Group('ViewComposers')]
 final class ViewComposerTest extends PublicTestCase
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

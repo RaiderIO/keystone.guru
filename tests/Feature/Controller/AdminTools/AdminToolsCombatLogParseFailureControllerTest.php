@@ -18,6 +18,7 @@ final class AdminToolsCombatLogParseFailureControllerTest extends PublicTestCase
     /** @var array<int> */
     private array $createdFailureIds = [];
 
+    #[\Override]
     protected function tearDown(): void
     {
         try {

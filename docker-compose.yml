@@ -73,9 +73,18 @@ services:
 
   horizon:
     build:
-      context: docker-compose/app
+      context: docker-compose/app-worker
       dockerfile: Dockerfile
-    image: keystone.guru
+      args:
+        BASE_IMAGE: keystone.guru
+      # The worker Dockerfile builds FROM the app image. `depends_on` does not order *builds*,
+      # so on a cold machine a parallel `docker compose build` would fail before the app image
+      # exists. This named context makes compose build the app service first and resolves
+      # `FROM keystone.guru` to its result. Note: building the app image requires
+      # docker-compose/app/.env (GIT_TOKEN=...) to exist, same as in CI.
+      additional_contexts:
+        keystone.guru: service:app
+    image: keystone.guru-worker
     container_name: keystone.guru-horizon
     depends_on:
       - db
@@ -229,7 +238,6 @@ services:
       - app
       - app-swoole
       - reverb
-#      - php-deployer
     ports:
       - "8008:80"
     volumes:
@@ -262,25 +270,6 @@ services:
       - REDIS_1_PORT=6380
     networks:
       - keystone.guru
-
-#  php-deployer:
-#    build:
-#      context: docker-compose/php-deployer
-#      dockerfile: Dockerfile
-#    image: keystone.guru-php-deployer
-#    container_name: keystone.guru-php-deployer
-#    depends_on:
-#      - db
-#      - db-combatlog
-#      - redis
-#    restart: no
-#    working_dir: /var/www/
-#    volumes:
-#      - ./:/var/www
-#    networks:
-#      - keystone.guru
-#    secrets:
-#      - deployer_ssh_key
 
   # https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/#sample-docker-composeyml
   opensearch-node1:
@@ -391,10 +380,6 @@ volumes:
   opensearch-data2:
   influxdb-data:
   grafana-data:
-
-#secrets:
-#  deployer_ssh_key:
-#    file: ~/.ssh/php-deployer
 
 networks:
   keystone.guru:
