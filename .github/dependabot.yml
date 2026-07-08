@@ -10,10 +10,12 @@ updates:
     ignore:
       # laravel-mix 6 (unmaintained) is incompatible with newer webpack 5.x:
       # >=5.107 removed webpack/lib/SizeFormatHelpers which mix requires, and
-      # mix's webpackbar@5 fails strict ProgressPlugin option validation.
-      # Keep webpack at ~5.99.9 until the build tooling is migrated off mix.
+      # mix's webpackbar@5 fails strict ProgressPlugin option validation on >=5.106.
+      # 5.104.1 is the highest version verified to build with mix (npm run production),
+      # and it clears the buildHttp allowedUris advisories. Keep webpack pinned here
+      # until the build tooling is migrated off mix (Vite migration, #3449).
       - dependency-name: "webpack"
-        versions: [">5.99"]
+        versions: [">5.104"]
   - package-ecosystem: composer
     directory: "/"
     schedule:
