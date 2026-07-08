@@ -99,17 +99,22 @@ $difficultiesWithData = array_filter(
                             <td>{{ $speedrunRequiredNpc->getDisplayText() }}</td>
                             <td>{{ $speedrunRequiredNpc->count }}</td>
                             <td>
-                                <a class="btn btn-danger"
-                                   href="{{
+                                <form method="POST"
+                                      action="{{
                                         route('admin.dungeonspeedrunrequirednpc.delete', [
                                             'dungeon' => $dungeon,
                                             'floor' => $floor,
                                             'dungeonspeedrunrequirednpc' => $speedrunRequiredNpc->id,
                                             'difficulty' => $difficulty,
                                         ])
-                                        }}">
-                                    <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.floor.edit.speedrun_required_npcs.npc_delete') }}
-                                </a>
+                                        }}"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.floor.edit.speedrun_required_npcs.npc_delete') }}
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

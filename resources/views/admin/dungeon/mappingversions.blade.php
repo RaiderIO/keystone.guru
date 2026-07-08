@@ -96,10 +96,15 @@ $gameVersionsSelect = $allGameVersions
             <td>{{ $mappingVersion->version }}</td>
             <td>{{ $mappingVersion->created_at->toDateTimeString() }}</td>
             <td>
-                <a class="btn btn-danger"
-                   href="{{ route('admin.mappingversion.delete', ['dungeon' => $dungeon->slug, 'mappingVersion' => $mappingVersion]) }}">
-                    <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.dungeon.edit.mapping_versions.delete') }}
-                </a>
+                <form method="POST"
+                      action="{{ route('admin.mappingversion.delete', ['dungeon' => $dungeon->slug, 'mappingVersion' => $mappingVersion]) }}"
+                      class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>&nbsp;{{ __('view_admin.dungeon.edit.mapping_versions.delete') }}
+                    </button>
+                </form>
             </td>
         </tr>
     @endforeach
