@@ -30,9 +30,14 @@ return [
     | to expire immediately when the browser is closed then you may
     | indicate that via the expire_on_close configuration option.
     |
+    | Kept deliberately long (7 days): with CSRF re-enabled, a session that
+    | idles out turns the next POST from an already-open tab into a 419, so
+    | short lifetimes surface as "page expired" errors in long-lived tabs
+    | such as the map editor (#1430).
+    |
     */
 
-    'lifetime' => (int)env('SESSION_LIFETIME', 120),
+    'lifetime' => (int)env('SESSION_LIFETIME', 10080),
 
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 
