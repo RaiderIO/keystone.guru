@@ -1,4 +1,5 @@
-FROM keystone.guru-app
+ARG BASE_IMAGE=keystone.guru-app
+FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
