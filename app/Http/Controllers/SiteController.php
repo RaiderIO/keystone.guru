@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Features\FrontPageRework;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
@@ -10,12 +9,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Release;
-use App\Models\Season;
 use App\Models\Team;
-use App\Models\User;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
-use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
@@ -29,11 +25,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\View\View;
-use Laravel\Pennant\Feature;
 use Teapot\StatusCode;
 use Throwable;
 
@@ -55,58 +49,28 @@ class SiteController extends Controller
      * @return View
      */
     public function index(
-        CoverageServiceInterface        $coverageService,
         SeasonServiceInterface          $seasonService,
         DungeonRouteRepositoryInterface $dungeonRouteRepository,
         DiscoverServiceInterface        $discoverService,
     ): View {
-        if (Feature::active(FrontPageRework::class)) {
-//            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
-//            $expansion                = $userOrDefaultGameVersion->expansion;
-//            // @TODO Remove this!
-//            if ($userOrDefaultGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
-//                /** @var Expansion $expansion */
-//                $expansion = Expansion::firstWhere('shortname', Expansion::EXPANSION_TWW);
-//            }
-//
-//            $season = $seasonService->getCurrentSeason($expansion);
-//            // @TODO Add caching
-//            $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes(null, $season);
-            // @TODO Add caching
-            $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
+        // @TODO Add caching
+        $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
 
-            $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
-            $season                   = $seasonService->getCurrentSeason($userOrDefaultGameVersion->expansion);
+        $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $season                   = $seasonService->getCurrentSeason($userOrDefaultGameVersion->expansion);
 
-            return view('home.layout', [
-                'currentSeason'                 => $season,
-                'weeklyRouteDungeons'           => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
-                'weeklyRoutes'                  => $weeklyRoutes,
-                'popularDungeonRoutesByDungeon' => $discoverService
-                    ->withSeason($season)
-                    ->withGameVersion($userOrDefaultGameVersion)
-                    ->excludeTeam(Team::getRaiderIOTeam())
-                    ->popularGroupedByDungeon()
-                    ->map(static fn(Collection $routes) => $routes->take(1))
-                    ->flatten(),
-            ]);
-        } elseif (Auth::check()) {
-            $season = null;
-            if (isset($_COOKIE['dungeonroute_coverage_season_id'])) {
-                $season = Season::find($_COOKIE['dungeonroute_coverage_season_id']);
-            }
-
-            $season ??= $seasonService->getCurrentSeason();
-
-            /** @var User $user */
-            $user = Auth::user();
-
-            return view('profile.overview', [
-                'dungeonRoutes' => $coverageService->getForUser($user, $season),
-            ]);
-        } else {
-            return view('home');
-        }
+        return view('home.layout', [
+            'currentSeason'                 => $season,
+            'weeklyRouteDungeons'           => Dungeon::whereIn('key', $weeklyRoutes->keys())->orderBy('id')->get(),
+            'weeklyRoutes'                  => $weeklyRoutes,
+            'popularDungeonRoutesByDungeon' => $discoverService
+                ->withSeason($season)
+                ->withGameVersion($userOrDefaultGameVersion)
+                ->excludeTeam(Team::getRaiderIOTeam())
+                ->popularGroupedByDungeon()
+                ->map(static fn(Collection $routes) => $routes->take(1))
+                ->flatten(),
+        ]);
     }
 
     /**
