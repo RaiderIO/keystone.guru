@@ -20,7 +20,7 @@
         "cross-env": "^7.0.3",
         "git-revision-webpack-plugin": "^5.0.0",
         "jquery": "^3.6.0",
-        "jsdom": "^25.0.1",
+        "jsdom": "^29.1.1",
         "laravel-echo": "^2.2.6",
         "laravel-localization-loader": "^1.0.5",
         "laravel-mix": "^6.0.49",
