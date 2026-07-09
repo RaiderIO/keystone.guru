@@ -23,7 +23,6 @@ use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\HeatmapSearchComposer;
-use App\Http\View\Composers\HomeComposer;
 use App\Http\View\Composers\MapComposer;
 use App\Http\View\Composers\MappingVersionComposer;
 use App\Http\View\Composers\OAuthRegisterFormComposer;
@@ -322,9 +321,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Register a dedicated composer class per view; each pulls only the data its view needs,
         // lazily resolved from the granular cached getters instead of one eager multi-MB blob.
         view()->composer('*', GlobalComposer::class);
-
-        // Home page
-        view()->composer('home', HomeComposer::class);
 
         // Main view
         view()->composer([

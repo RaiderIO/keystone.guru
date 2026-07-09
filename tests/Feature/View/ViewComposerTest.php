@@ -22,7 +22,6 @@ use App\Http\View\Composers\GameVersionsNavComposer;
 use App\Http\View\Composers\GlobalComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\HeatmapSearchComposer;
-use App\Http\View\Composers\HomeComposer;
 use App\Http\View\Composers\MapComposer;
 use App\Http\View\Composers\MappingVersionComposer;
 use App\Http\View\Composers\OAuthRegisterFormComposer;
@@ -64,17 +63,9 @@ final class ViewComposerTest extends PublicTestCase
     #[Test]
     public function globalComposer_givenView_setsRequestScopedKeys(): void
     {
-        $this->assertComposerSetsKeys(GlobalComposer::class, 'home', [
+        $this->assertComposerSetsKeys(GlobalComposer::class, 'home.layout', [
             'isMobile', 'isLocal', 'isMapping', 'isProduction', 'viewName',
             'theme', 'isUserAdmin', 'adFree', 'userOrDefaultRegion', 'currentUserGameVersion', 'numUserReports',
-        ]);
-    }
-
-    #[Test]
-    public function homeComposer_givenView_setsHomeKeys(): void
-    {
-        $this->assertComposerSetsKeys(HomeComposer::class, 'home', [
-            'userCount', 'demoRoutes', 'demoRouteDungeons', 'demoRouteMapping', 'currentSeason', 'defaultGameVersion',
         ]);
     }
 

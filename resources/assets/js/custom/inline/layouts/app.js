@@ -61,8 +61,6 @@ class LayoutsApp extends InlineCode {
                 }
 
                 $('html').removeClass(`${THEME_LUX} ${THEME_DARKLY} ${THEME_XALATATH}`).addClass(theme);
-                // Regenerate parallax effects (switches images around)
-                $('.mbr-parallax-background').jarallax('destroy').jarallax({speed: .6}).css('position', 'relative')
 
                 Cookies.set('theme', theme, cookieDefaultAttributes);
 
