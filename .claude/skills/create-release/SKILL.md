@@ -4,8 +4,8 @@ description: >
   Use when the user asks to "create a release", "cut a release", "make a new release",
   or generate a release changelog from commit history. Builds the
   database/seeders/releases/vX.X.X.json file from squash-merged commits since the last
-  release, seeds it locally, and creates the GitHub release issue. NOT for cutting the git
-  tag (that is make:githubrelease) and NOT the legacy PHP-Deployer flow.
+  release, seeds it locally, creates the GitHub release issue, and cuts the `v*` git tag. NOT
+  the legacy PHP-Deployer flow.
 ---
 
 # Create a release from commit history
@@ -212,13 +212,23 @@ branch-protection PR requirement; recent releases were already committed this wa
 
 **Ordering guardrail (must-hold):** the deploy re-seeds release notes from the JSON files at the
 tagged commit, so the `v*` tag must point at a commit that **already contains** this JSON. Always:
-commit the JSON to `master` → push → *then* cut the tag with
-`make:githubrelease vX.X.X --hash=<that commit sha>` (defaults to HEAD of `master`).
+commit the JSON to `master` → push → *then* cut the tag:
 
-Only the JSON belongs in this commit — if `composer run fix` reformatted unrelated files, discard
-them (`git checkout -- <other files>`) before committing.
+```
+git tag -a vX.X.X -m "vX.X.X"
+git push --tags
+```
+
+Only the JSON belongs in the release commit — if `composer run fix` reformatted unrelated files,
+discard them (`git checkout -- <other files>`) before committing.
+
+**Do NOT run `make:githubrelease`.** That artisan command creates a GitHub *Release* (not just the
+tag), which must only happen when rolling out to **production**. Cutting the GitHub Release is the
+infra project's job — from this repo, only cut the plain `v*` tag as shown above. The tag push is
+what triggers the `release-deploy` pipeline (staging first).
 
 Summarise to the user: the version, each included change with its category and ticket, the
 issue URL, and any commits without an issue number or any new category you added. Remind them
-the actual deploy is triggered later by `make:githubrelease vX.X.X` (the tag on `master`) —
-see the deployment-pipeline roadmap (issues #3327–#3329).
+that the tag push triggers the `release-deploy` pipeline (staging first), and that the GitHub
+*Release* itself is cut separately from the infra project once it's going to production — see
+the deployment-pipeline roadmap (issues #3327–#3329).
