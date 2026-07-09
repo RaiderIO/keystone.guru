@@ -113,8 +113,6 @@ window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
 window.ionRangeSlider = require('ion-rangeslider');
 
-require('@fortawesome/fontawesome-free');
-
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
