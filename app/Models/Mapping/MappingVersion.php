@@ -519,6 +519,7 @@ class MappingVersion extends Model
                 return;
             }
             // We must get the previous mapping version - that contains the mapping we want to clone
+            /** @var MappingVersion $previousMappingVersion */
             $previousMappingVersion = $existingMappingVersions[1];
             // Update the existing fields of the old mapping version to the new version
             $newMappingVersion->update([
