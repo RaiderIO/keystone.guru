@@ -58,6 +58,14 @@ services:
     build:
       context: docker-compose/cron
       dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: keystone.guru
+      # The cron Dockerfile builds FROM the app image. `depends_on` does not order *builds*,
+      # so on a cold machine a parallel `docker compose build` would fail before the app image
+      # exists. This named context makes compose build the app service first and resolves
+      # `FROM keystone.guru` to its result (mirrors the horizon/worker service above).
+      additional_contexts:
+        keystone.guru: service:app
     image: keystone.guru-cron
     container_name: keystone.guru-cron
     depends_on:
