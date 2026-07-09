@@ -63,22 +63,11 @@ $id ??= 'Affixes';
             }
         }
 
-        refreshSelectPickers();
-
         let $affixSelect = $(affixSelectSelector);
-        $affixSelect.on('shown.bs.select', function () {
-            // The span.text wrapper that bootstrap-select puts around our data-content is made
-            // display: block in custom.css so the affix rows lay out correctly from the first
-            // render; that also keeps the menu height measurement correct so no dead space remains.
+        if (typeof $affixSelect.attr('readonly') !== 'undefined') {
+            $affixSelect.find('option').attr('disabled', true);
+        }
 
-            // Fix the layout so there's no longer a huge gap at the bottom
-            $('.affixselect.bootstrap-select .dropdown-menu.show').css('min-height', 'unset');
-            $('.affixselect.bootstrap-select .inner.show').css('min-height', 'unset');
-
-            if (typeof $affixSelect.attr('readonly') !== 'undefined') {
-                $affixSelect.find('option').attr('disabled', true);
-            }
-        });
-
+        refreshSelectPickers();
     }
 </script>

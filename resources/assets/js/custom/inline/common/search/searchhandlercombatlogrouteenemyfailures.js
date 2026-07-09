@@ -87,7 +87,7 @@ class CommonMapsCombatlogrouteenemyfailures extends SearchInlineBase {
 
         getState().getDungeonMap().pluginHeat.toggle(true);
 
-        $(this.options.filterNpcIdSelector).on('changed.bs.select', () => this._search());
+        $(this.options.filterNpcIdSelector).on('change', () => this._search());
 
         $(this.options.clearButtonSelector).on('click', () => {
             $.ajax({type: 'DELETE', url: this.options.deleteUrl})

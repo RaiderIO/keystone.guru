@@ -4,8 +4,8 @@
 @import "theme/lux/lux";
 @import "theme/vapor/vapor";
 
-// Bootstrap Select
-@import "~bootstrap-select/dist/css/bootstrap-select.min.css";
+// Tom Select (Bootstrap 5 theme), drives the .selectpicker selects
+@import "~tom-select/dist/css/tom-select.bootstrap5.min.css";
 // Datatables
 @import '~datatables.net-dt/css/dataTables.dataTables.min.css';
 // Font-Awesome

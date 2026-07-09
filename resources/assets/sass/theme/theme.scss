@@ -22,13 +22,6 @@ body {
 
 /* Required to give these things a bump over the .darkly and .lux selectors */
 .theme {
-  /** BOOTSTRAP **/
-  .bootstrap-select .btn {
-    background-color: white;
-    border: 1px solid #ced4da;
-    color: #495057;
-  }
-
   .nav-item-divider {
     margin: 0 0.75em;
   }
@@ -52,42 +45,82 @@ body {
     }
   }
 
-  /* Weird offset because of theme */
-  .bootstrap-select.form-control {
-    padding: 0;
-  }
-
-  .bootstrap-select.form-control {
+  /** Tom Select (the .selectpicker selects) **/
+  /* The wrapper carries the select's form-control class; the visible box is .ts-control inside it */
+  .ts-wrapper.form-control {
     margin-bottom: 0;
     padding: 0;
     border: none;
     height: auto;
+    background: none;
+    box-shadow: none;
   }
 
-  .bootstrap-select > .dropdown-toggle {
+  .ts-control {
     position: relative;
-    width: 100%;
-    text-align: right;
-    white-space: nowrap;
-    display: -webkit-inline-box;
-    display: -webkit-inline-flex;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
+    background-color: var($--theme-dark);
+    color: var($--theme-text-contrast);
+    border: 1px solid var($--theme-darker);
   }
 
-  .bootstrap-select .dropdown-menu {
-    min-width: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+  .ts-control > input {
+    color: var($--theme-text-contrast);
+  }
+
+  /* Dropdown caret for single selects; currentColor keeps it readable in every theme */
+  .ts-wrapper.single .ts-control {
+    padding-right: 2rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      margin-top: -0.15em;
+      border: 0.3em solid transparent;
+      border-top-color: currentColor;
+      pointer-events: none;
+    }
+  }
+
+  /* Tags on multi selects */
+  .ts-wrapper.multi .ts-control > div {
+    background: var($--theme-darker);
+    color: var($--theme-text-contrast);
+
+    &.active {
+      background: rgba(128, 128, 128, 0.5);
+      color: var($--theme-text-contrast);
+    }
+  }
+
+  .ts-dropdown {
+    background: var($--theme-dark);
+    color: var($--theme-text-contrast);
+    border: 1px solid var($--theme-darker);
+  }
+
+  /* Live-search input inside the dropdown (dropdown_input plugin) */
+  .ts-dropdown .dropdown-input {
+    background: var($--theme-dark);
+    color: var($--theme-text-contrast);
+    border-color: var($--theme-darker);
+  }
+
+  /* Hovered/keyboard-highlighted and selected options; a neutral overlay works on all themes */
+  .ts-dropdown .active {
+    background: rgba(128, 128, 128, 0.3);
+    color: var($--theme-text-contrast);
+  }
+
+  .ts-dropdown .selected {
+    background: rgba(128, 128, 128, 0.45);
+    color: var($--theme-text-contrast);
+  }
+
+  .ts-dropdown .optgroup-header {
+    background: var($--theme-darker);
+    color: var($--theme-text-contrast);
   }
 
   .cursor-pointer {
@@ -441,10 +474,6 @@ body {
     //background-color: var($--theme-darker);
   }
 
-  #team_members_table .dropdown.bootstrap-select .btn {
-    border: 1px solid var($--theme-darker);
-  }
-
   /* On home page */
   .probootstrap-showcase-nav ul li.active {
     background-color: #8d9dad !important;
@@ -543,12 +572,7 @@ body {
     color: var($--theme-text-contrast);
   }
 
-  .dropdown.bootstrap-select {
-    background-color: var($--theme-dark);
-  }
-
-  #edit_route_freedraw_options_color,
-  .dropdown.bootstrap-select .btn {
+  #edit_route_freedraw_options_color {
     background-color: var($--theme-dark);
     color: var($--theme-text-contrast);
     border: 1px solid var($--theme-darker);

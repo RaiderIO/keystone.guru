@@ -96,7 +96,9 @@ $breadcrumbsParams ??= [];
                             <select id="selected_model_id" class="form-control selectpicker">
                                 @foreach($menuModels as $menuModel)
                                     @php($hasIcon = isset($menuModel->iconfile))
+                                    {{-- The explicit value matters: options without a value resolve to their (possibly empty) text, and empty-value options are treated as placeholders --}}
                                     <option
+                                        value="{{ $menuModel->getKey() }}"
                                         data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                         @if($hasIcon)
                                             data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
