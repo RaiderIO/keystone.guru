@@ -6,6 +6,8 @@
 
 require('./bootstrap');
 
+const {getCsrfToken} = require('./csrf');
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -18,9 +20,19 @@ require('./bootstrap');
 //     el: '#app'
 // });
 
-// Prepare ajax to always use the CSRF token
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+// Attach a fresh CSRF token to every same-origin ajax request. We use the global `ajaxSend`
+// event rather than `$.ajaxSetup` because the token is re-read from the cookie on every request
+// (staying valid after the session is rotated in another tab) and because `ajaxSetup`'s
+// `headers`/`beforeSend` are clobbered by the per-request `beforeSend` handlers several callers
+// already define. See resources/assets/js/csrf.js and issue #3452.
+$(document).ajaxSend(function (event, jqXHR, settings) {
+    // Never leak the CSRF token to a third-party host.
+    if (settings.crossDomain) {
+        return;
+    }
+
+    const token = getCsrfToken();
+    if (token !== null) {
+        jqXHR.setRequestHeader(token.header, token.value);
     }
 });
