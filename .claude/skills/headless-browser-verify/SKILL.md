@@ -5,16 +5,31 @@ description: Verify keystone.guru pages in a real headless Chrome - reproduce re
 
 # Headless browser verification (keystone.guru)
 
-Drive the site in a real Chrome running inside the `app` container, where the site is
-`http://nginx`; screenshots land in the bind-mounted checkout so they can be viewed with the Read
-tool. Proven useful for: bootstrap-select sizing bugs, JS crashes on specific pages, layout
-verification after CSS changes, catching the FA7 missing-icon blowup (MR #3481).
+Drive the site in a real headless Chrome — via the `chrome` compose service where the branch has
+it, or a locally-launched chrome-headless-shell otherwise. The driver script runs inside the `app`
+container, where the site is `http://nginx`; screenshots land in the bind-mounted checkout so they
+can be viewed with the Read tool. Proven useful for: bootstrap-select sizing bugs, JS crashes on
+specific pages, layout verification after CSS changes, catching the FA7 missing-icon blowup
+(MR #3481).
 
 ## Spin up (per stack, from the worktree/checkout root)
 
-There is **no `chrome` compose service on master** (verified 2026-07-09) — use the local-launch
-path: copy the chrome-headless-shell binary from the host puppeteer cache and install its runtime
-deps in the app container. browse.js picks the binary up automatically. Takes ~1 minute:
+Preferred: the `chrome` compose service (chromedp/headless-shell, defined in
+`docker-compose.worktree.yml` behind the `chrome` profile). It ships with the Bootstrap v4→v5
+migration (#3397 / MR #3419) and reaches master when that merges — check
+`grep chrome docker-compose.worktree.yml`; if the branch has it:
+
+```sh
+docker compose --profile chrome up -d chrome   # profile-gated: normal stack is unaffected
+mkdir -p .chrome-tmp && cp .claude/skills/headless-browser-verify/browse.js .chrome-tmp/
+```
+
+No published ports, so every worktree stack can run its own chrome simultaneously.
+
+Until #3397 merges, branches cut from master don't have the service — use the local-launch
+fallback instead: copy the chrome-headless-shell binary from the host puppeteer cache and install
+its runtime deps in the app container; browse.js picks the binary up automatically. Takes ~1
+minute:
 
 ```sh
 mkdir -p .chrome-tmp && cp .claude/skills/headless-browser-verify/browse.js .chrome-tmp/
@@ -26,9 +41,7 @@ docker compose exec -T -u root app sh -c 'apt-get update -qq && apt-get install 
 ```
 
 (Deps use Debian 13/trixie `t64` names; older releases use the non-`t64` names. The deps do not
-survive container recreation — re-run the apt-get after `worktree.sh create`.) If a
-`chrome` compose service exists on the branch (`docker compose --profile chrome up -d chrome`),
-browse.js prefers it and the deps install is unnecessary.
+survive container recreation — re-run the apt-get after `worktree.sh create`.)
 
 ## Running
 
