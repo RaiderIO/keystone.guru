@@ -46,30 +46,38 @@ body {
   }
 
   /** Tom Select (the .selectpicker selects) **/
-  /* The wrapper carries the select's form-control class; the visible box is .ts-control inside it */
+  /* The wrapper carries the select's form-control class and is the visible box: the vendor
+     bootstrap5 theme forces the inner .ts-control transparent/borderless there (!important) */
   .ts-wrapper.form-control {
     margin-bottom: 0;
-    padding: 0;
-    border: none;
     height: auto;
-    background: none;
+    background-color: var($--theme-dark);
+    color: var($--theme-text-contrast);
+    /* Neutral border: theme-darker matches the page background in darkly and the box would blend in */
+    border: 1px solid rgba(128, 128, 128, 0.5);
     box-shadow: none;
   }
 
+  .ts-wrapper.form-control.disabled .ts-control {
+    background: rgba(128, 128, 128, 0.2) !important;
+  }
+
+  /* Pickers without the form-control class (e.g. map control bars) show the .ts-control box itself */
   .ts-control {
     position: relative;
     background-color: var($--theme-dark);
     color: var($--theme-text-contrast);
-    border: 1px solid var($--theme-darker);
+    border: 1px solid rgba(128, 128, 128, 0.5);
   }
 
   .ts-control > input {
     color: var($--theme-text-contrast);
   }
 
-  /* Dropdown caret for single selects; currentColor keeps it readable in every theme */
+  /* Dropdown caret for single selects; currentColor keeps it readable in every theme
+     (background-image: none drops the vendor's dark svg caret on non-form-control wrappers) */
   .ts-wrapper.single .ts-control {
-    padding-right: 2rem;
+    background-image: none;
 
     &::after {
       content: '';
@@ -97,7 +105,12 @@ body {
   .ts-dropdown {
     background: var($--theme-dark);
     color: var($--theme-text-contrast);
-    border: 1px solid var($--theme-darker);
+    border: 1px solid rgba(128, 128, 128, 0.5);
+  }
+
+  /* Indent grouped options under their optgroup header, like bootstrap-select's .dropdown-item.opt did */
+  .ts-dropdown .optgroup .option {
+    padding-left: 2.25em;
   }
 
   /* Live-search input inside the dropdown (dropdown_input plugin) */
