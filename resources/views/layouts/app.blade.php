@@ -80,7 +80,6 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     <link href="{{ ksgCompiledAsset(sprintf('css/custom-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     {{--    <link href="{{ asset(sprintf('css/lib-%s.css', $version)) . $devCacheBuster }}" rel="stylesheet">--}}
     <link href="{{ ksgCompiledAsset(sprintf('css/theme-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link href="{{ ksgCompiledAsset(sprintf('css/home-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ ksgCompiledAsset(sprintf('css/custom-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ ksgCompiledAsset(sprintf('css/assets-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link rel="icon" href="{{ ksgAssetImage('icon/favicon.ico') }}">

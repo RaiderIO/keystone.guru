@@ -2,6 +2,7 @@
 
 @import 'variables';
 @import 'mixins';
+@import 'footer';
 
 :root.superhero {
   @include spread-map($theme-map-superhero);
@@ -613,76 +614,6 @@ body {
 
   .navbar-top-fixed-spacer {
     height: var($--theme-header-height);
-  }
-
-  /* HOME PAGE */
-  .home {
-    .mbr-overlay {
-      background-color: var($--theme-dark);
-    }
-
-    .mbr-overlay {
-      background-color: var($--theme-dark);
-    }
-
-    .demo-loader {
-      background-color: var($--theme-darker);
-    }
-
-    .cid-s48MCQYojq .mbr-text,
-    .cid-s48MCQYojq .mbr-section-btn {
-      color: unset;
-    }
-
-    .form-control {
-      background-color: var($--theme-dark);
-      color: var($--theme-text-contrast);
-    }
-
-    .cid-soU8PSECoL {
-      background-color: var($--theme-darker) !important;;
-    }
-
-    .cid-soU8QlAKKP {
-      background-color: var($--theme-darker) !important;
-    }
-
-    .cid-soU6QnGh9A {
-      background-color: var($--theme-darker) !important;
-    }
-
-    .cid-soU6QnGh9A .mbr-iconfont {
-      color: var($--theme-btn-accent) !important;
-    }
-
-    .cid-soU9jtw47v .mbr-text,
-    .cid-soU9jtw47v .card-title,
-    .cid-soU9jtw47v .card-box {
-      color: unset !important;
-    }
-
-    .cid-soU5dLgjOI {
-      background-color: var($--theme-darker) !important;
-    }
-
-    .cid-soU7JptK9v {
-      background-color: var($--theme-header) !important;
-    }
-
-    .gradient-top {
-      background: var($--theme-darker);
-      background: linear-gradient(0deg, var($--theme-darker) 0%, rgba(0, 0, 0, 0) 100%);
-    }
-
-    .gradient-top.footer {
-      background: var($--theme-darker);
-      background: linear-gradient(0deg, var($--theme-header) 0%, rgba(0, 0, 0, 0) 100%);
-    }
-
-    .gradient-bottom {
-      background: var($--theme-darker);
-      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, var($--theme-darker) 100%);
-    }
   }
 
   .dungeon_wallpaper_cover {
