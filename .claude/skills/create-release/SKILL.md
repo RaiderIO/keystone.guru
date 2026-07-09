@@ -194,12 +194,31 @@ docker compose exec -T app php artisan make:githubreleaseticket vX.X.X
 Creates/updates a `release`-labelled issue titled `Release vX.X.X - <title>`, body rendered
 from the seeded release. (Reads the release from the DB — hence after Step 6.)
 
-## Step 8 — Wrap up
+## Step 8 — Land the JSON on master
 
-Under the trunk model there is no release PR — feature work is already on `master`, so the
-release-notes JSON just needs to land on `master` (commit it, or open a small PR for it).
+Under the trunk model there is **no release PR and no feature branch** for the release notes.
+Commit **only** `database/seeders/releases/vX.X.X.json` directly to `master` and push:
+
+```
+git commit database/seeders/releases/vX.X.X.json -m "#<issue> Added release vX.X.X"
+git push origin master
+```
+
+Why direct-to-master (not a branch/PR): the CI workflows (`js-tests`, `php-tests`, `phpstan`)
+run **only on `pull_request` to master**, and `release-deploy` runs **only on a `v*` tag push**.
+So a plain push of the JSON to `master` triggers **zero pipelines** — a PR would only add CI runs
+for a data-only file, and the push does not deploy anything on its own. (`master` has no
+branch-protection PR requirement; recent releases were already committed this way.)
+
+**Ordering guardrail (must-hold):** the deploy re-seeds release notes from the JSON files at the
+tagged commit, so the `v*` tag must point at a commit that **already contains** this JSON. Always:
+commit the JSON to `master` → push → *then* cut the tag with
+`make:githubrelease vX.X.X --hash=<that commit sha>` (defaults to HEAD of `master`).
+
+Only the JSON belongs in this commit — if `composer run fix` reformatted unrelated files, discard
+them (`git checkout -- <other files>`) before committing.
 
 Summarise to the user: the version, each included change with its category and ticket, the
 issue URL, and any commits without an issue number or any new category you added. Remind them
 the actual deploy is triggered later by `make:githubrelease vX.X.X` (the tag on `master`) —
-see the deployment-pipeline roadmap (issues #3327–#3329). Leave the JSON staged but uncommitted.
+see the deployment-pipeline roadmap (issues #3327–#3329).
