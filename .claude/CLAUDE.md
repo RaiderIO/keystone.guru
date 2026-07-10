@@ -33,6 +33,12 @@ You can use `gh issue view <issue number> --repo RaiderIO/keystone.guru --json n
 to request info from Github. Any call to `gh issue view` MUST be accompanied by `--json` to prevent deprecation warnings
 and the command failing.
 
+`gh pr edit` always fails on this repo with a Projects-classic GraphQL deprecation error
+(`repository.pullRequest.projectCards`). Update PRs through the REST API instead:
+`gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<number> -F body=@<file>` — capital `-F`
+dereferences the `@file` into its contents; lowercase `-f` would send the literal string
+`@<file>` as the body.
+
 ## Command execution
 - Never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
 - Always run Laravel, test commands, and any other file system commands inside Docker.
