@@ -57,7 +57,8 @@ class DiscoverService extends BaseDiscoverService
             ->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with([
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'affixes',
                 'ratings',
                 'mappingVersion',
@@ -140,7 +141,8 @@ class DiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with([
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'affixes',
                 'ratings',
                 'mappingVersion',
