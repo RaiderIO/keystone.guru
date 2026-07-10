@@ -235,7 +235,6 @@ return [
             'api_documentation_internal_team' => 'API documentation (internal team)',
             'keystone_guru'                   => 'Keystone.guru',
             'changelog'                       => 'Changelog',
-            'changelog_new'                   => 'NEW',
             'credits'                         => 'Credits',
             'about'                           => 'About',
             'legacy'                          => 'Legacy',
@@ -275,7 +274,6 @@ return [
                 'register'                       => 'Register',
                 'telescope'                      => 'Telescope',
                 'tools'                          => 'Tools',
-                'view_releases'                  => 'View releases',
                 'view_expansions'                => 'View expansions',
                 'view_dungeons'                  => 'View dungeons',
                 'view_npcs'                      => 'View NPCs',
@@ -654,11 +652,6 @@ return [
         ],
         'select' => [
             'npc' => 'NPC',
-        ],
-    ],
-    'release' => [
-        'release' => [
-            'new' => 'NEW',
         ],
     ],
     'tag' => [

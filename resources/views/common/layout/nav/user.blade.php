@@ -34,8 +34,6 @@ $user = Auth::user();
                     <i class="fa fa-hammer"></i> {{__('view_common.layout.nav.user.tools')}}
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item"
-                   href="{{ route('admin.releases') }}">{{__('view_common.layout.nav.user.view_releases')}}</a>
 {{--                @if( $user->isAbleTo('read-expansions') )--}}
                     <a class="dropdown-item"
                        href="{{ route('admin.expansions') }}">{{__('view_common.layout.nav.user.view_expansions')}}</a>

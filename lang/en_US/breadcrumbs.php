@@ -13,16 +13,10 @@ return [
             'activity_day' => ':date',
             'class'        => 'By Class',
         ],
-        'affixes'   => 'Affixes',
-        'about'     => 'About',
-        'credits'   => 'Credits',
-        'changelog' => [
-            'list'    => 'Changelog',
-            'release' => [
-                'view' => 'Release :version',
-            ],
-        ],
-        'legal' => [
+        'affixes' => 'Affixes',
+        'about'   => 'About',
+        'credits' => 'Credits',
+        'legal'   => [
             'cookies' => 'Cookies',
             'privacy' => 'Privacy',
             'terms'   => 'Terms',
@@ -73,7 +67,6 @@ return [
             'tools' => [
                 'admin_tools'                                 => 'Admin tools',
                 'view_exported_dungeondata'                   => 'View exported dungeondata',
-                'view_exported_releases'                      => 'View exported releases',
                 'select_exception'                            => 'Select exception',
                 'mdt_diff'                                    => 'MDT diff',
                 'view_mdt_string_contents'                    => 'View MDT string contents',
@@ -100,10 +93,7 @@ return [
                 'wagogg_import_ingame_coordinates'            => 'Import ingame coordinates',
                 'artisancommands_backfill_kill_zone_enemy_id' => 'Backfill kill zone enemy IDs',
             ],
-            'releases'     => 'Releases',
-            'new_release'  => 'New release',
-            'edit_release' => 'Edit release',
-            'expansions'   => [
+            'expansions' => [
                 'expansions'     => 'Expansions',
                 'new_expansion'  => 'New expansion',
                 'edit_expansion' => 'Edit expansion',

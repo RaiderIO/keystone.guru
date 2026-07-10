@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Console\Commands\Hotfix;
-use App\Models\Release;
-use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Process;
@@ -28,21 +26,18 @@ class MakeHotfix extends Command
     /**
      * Execute the console command.
      */
-    public function handle(
-        ReleaseRepositoryInterface $releaseRepository,
-    ): int {
-        $version = $this->argument('version');
+    public function handle(): int
+    {
+        // Without an explicit version, fall back to the deployed release tag baked into the version file (#3320)
+        $version = $this->argument('version') ?? trim(file_get_contents(base_path('version')));
 
-        /** @var Release|null $release */
-        $release = $releaseRepository->findReleaseByVersion($version);
-
-        if ($release === null) {
-            $this->error('Release not found!');
+        if (!str_starts_with($version, 'v')) {
+            $this->error(sprintf('Invalid release version %s - expected a release tag such as v1.2.3!', $version));
 
             return self::FAILURE;
         }
 
-        $this->info("Creating hotfix for release: {$release->version}");
+        $this->info("Creating hotfix for release: {$version}");
 
         try {
             $file = $this->option('file');
@@ -66,9 +61,9 @@ class MakeHotfix extends Command
             }
 
             // Upload files to S3
-            $this->uploadFilesToS3($changedFiles, $release->version);
+            $this->uploadFilesToS3($changedFiles, $version);
 
-            $this->info("Hotfix created successfully for version {$release->version}!");
+            $this->info("Hotfix created successfully for version {$version}!");
 
             return self::SUCCESS;
         } catch (Exception $e) {

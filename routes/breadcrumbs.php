@@ -12,7 +12,6 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
-use App\Models\Release;
 use App\Models\Season;
 use App\Models\Spell\Spell;
 use App\Models\Team;
@@ -65,18 +64,6 @@ Breadcrumbs::for('legal.privacy', static function (Generator $trail) {
 Breadcrumbs::for('legal.terms', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.legal.terms'), route('legal.terms'));
-});
-
-/**
- * Releases
- */
-Breadcrumbs::for('misc.changelog', static function (Generator $trail) {
-    $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.changelog.list'), route('misc.changelog'));
-});
-Breadcrumbs::for('release.view', static function (Generator $trail, Release $release) {
-    $trail->parent('misc.changelog');
-    $trail->push(__('breadcrumbs.home.changelog.release.view', ['version' => $release->version]), route('release.view', ['release' => $release]));
 });
 
 /**
@@ -287,10 +274,6 @@ Breadcrumbs::for('admin.tools.datadump.viewexporteddungeondata', static function
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.view_exported_dungeondata'), route('admin.tools.datadump.exportdungeondata'));
 });
-Breadcrumbs::for('admin.tools.datadump.viewexportedrelease', static function (Generator $trail) {
-    $trail->parent('admin.tools.list');
-    $trail->push(__('breadcrumbs.home.admin.tools.view_exported_releases'), route('admin.tools.datadump.exportreleases'));
-});
 Breadcrumbs::for('admin.tools.exception.select', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.select_exception'), route('admin.tools.exception.select'));
@@ -390,20 +373,6 @@ Breadcrumbs::for('admin.tools.wagogg.importingamecoordinates', static function (
 Breadcrumbs::for('admin.tools.artisancommands.backfillkillzoneenemyid', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.artisancommands_backfill_kill_zone_enemy_id'), route('admin.tools.artisancommands.backfillkillzoneenemyid.view'));
-});
-
-// Releases
-Breadcrumbs::for('admin.release.list', static function (Generator $trail) {
-    $trail->parent('admin');
-    $trail->push(__('breadcrumbs.home.admin.releases'), route('admin.releases'));
-});
-Breadcrumbs::for('admin.release.edit', static function (Generator $trail, ?Release $release) {
-    $trail->parent('admin.release.list');
-    if ($release === null) {
-        $trail->push(__('breadcrumbs.home.admin.new_release'), route('admin.release.new'));
-    } else {
-        $trail->push(__('breadcrumbs.home.admin.edit_release'), route('admin.release.edit', $release));
-    }
 });
 
 // Expansions

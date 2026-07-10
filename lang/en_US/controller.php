@@ -27,7 +27,6 @@ return [
             'combatlog_criteria_reset'               => 'All parsing criteria counts for today have been reset.',
             'combatlog_criteria_thresholds_updated'  => 'Parsing criteria thresholds have been updated.',
             'caches_dropped_successfully'            => 'Caches dropped successfully',
-            'releases_exported'                      => 'Releases exported',
             'exception'                              => 'Exception thrown in admin panel',
             'feature_toggle_activated'               => 'Feature :feature is now activated',
             'feature_toggle_deactivated'             => 'Feature :feature is now deactivated',
@@ -128,16 +127,6 @@ return [
         ],
         'legal_agreed_required' => 'You have to agree to our legal terms to register.',
         'legal_agreed_accepted' => 'You have to agree to our legal terms to register.',
-    ],
-    'release' => [
-        'error' => [
-            'unable_to_save_release' => 'Unable to save release',
-        ],
-        'flash' => [
-            'release_updated'  => 'Release updated',
-            'release_created'  => 'Release created',
-            'github_exception' => 'An error occurred communicating with Github: :message',
-        ],
     ],
     'mappingversion' => [
         'created_successfully'      => 'Added new mapping version!',
