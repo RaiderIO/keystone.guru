@@ -10,7 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxi6 libxkbcommon0 libxrandr2 libxrender1 libxss1 libxtst6 \
  && rm -rf /var/lib/apt/lists/*
 
-# Download the Chrome binary into /root/.cache/puppeteer.
+# Download the Chrome binary into a UID-neutral cache dir (not /root/.cache: local horizon runs
+# as the host user (#3414), which cannot read /root). The ENV persists into runtime and into the
+# app-worker-aws child image, so both puppeteer.launch() and its npm install resolve this cache.
 # Local dev relies on this baked cache: the repo (incl. node_modules) is bind-mounted
-# but /root/.cache is not, so the image-baked binary is the only Chrome source locally.
-RUN npm i -g puppeteer@24
+# but this dir is not, so the image-baked binary is the only Chrome source locally.
+# a+rwX keeps it usable from any UID, root or not (it's a throwaway in-container cache).
+ENV PUPPETEER_CACHE_DIR=/opt/puppeteer-cache
+RUN npm i -g puppeteer@24 && chmod -R a+rwX /opt/puppeteer-cache

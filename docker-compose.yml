@@ -3,6 +3,9 @@ services:
     build:
       context: docker-compose/app
       dockerfile: Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
     image: keystone.guru
     container_name: keystone.guru-app
     depends_on:
@@ -11,10 +14,14 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    # Run as the host user (the `ksg` passwd entry baked into the image) so files written into
+    # the bind mount are host-owned instead of root-owned (#3414). php-fpm's master then runs
+    # unprivileged and ignores the pool user directive — workers inherit this UID too.
+    user: "${PUID:-1000}:${PGID:-1000}"
     volumes:
       - ./:/var/www
       - ../keystone.guru.assets:/var/keystone.guru.assets
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
       # Bind-mounted so the web memory cap applies without an image rebuild (also baked in via Dockerfile COPY)
       - ./docker-compose/app/usr/local/etc/php-fpm.d/zz.memory.conf:/usr/local/etc/php-fpm.d/zz.memory.conf:ro
     networks:
@@ -36,6 +43,9 @@ services:
     build:
       context: docker-compose/app
       dockerfile: Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
     image: keystone.guru-swoole
     container_name: keystone.guru-app-swoole
     depends_on:
@@ -45,10 +55,11 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    user: "${PUID:-1000}:${PGID:-1000}"
     command: php /var/www/artisan octane:start --host=0.0.0.0 --port=9501 --workers=1 --task-workers=1
     volumes:
       - ./:/var/www
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
     networks:
       - keystone.guru
     ports:
@@ -74,9 +85,11 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    # No `user:` here — the cron daemon needs root. The scheduler entry in
+    # docker-compose/cron/etc/cron.d/scheduler drops to the ksg user per job instead.
     volumes:
       - ./:/var/www
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
     networks:
       - keystone.guru
 
@@ -102,6 +115,7 @@ services:
       - redis
     restart: no
     working_dir: /var/www/
+    user: "${PUID:-1000}:${PGID:-1000}"
     entrypoint: /usr/local/bin/php artisan horizon
     volumes:
       - ./:/var/www
@@ -114,12 +128,16 @@ services:
     build:
       context: docker-compose/app
       dockerfile: Dockerfile
+      args:
+        PUID: ${PUID:-1000}
+        PGID: ${PGID:-1000}
     image: keystone.guru
     container_name: keystone.guru-reverb
     depends_on:
       - redis
     restart: no
     working_dir: /var/www/
+    user: "${PUID:-1000}:${PGID:-1000}"
     command: php /var/www/artisan reverb:start #--debug
     ports:
       - "6001:6001"
