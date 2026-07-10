@@ -44,7 +44,9 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
      */
     public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
     {
-        return DungeonRoute::where('author_id', '>', '0')
+        // ThumbnailService::queueThumbnailRefresh() reads dungeon and mappingVersion on every returned route
+        return DungeonRoute::with(['dungeon', 'mappingVersion'])
+            ->where('author_id', '>', '0')
             // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
             ->where(static function (EloquentBuilder $builder) {
                 $builder->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
@@ -97,9 +99,14 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
             ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
-                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
                 'author.iconfile',
                 'dungeon',
+                'affixes',
+                'mappingVersion',
+                'season.expansion',
+                'thumbnails',
+                'ratings',
                 'tags' => $tagsFilterFn,
             ])
             ->when($dungeon, fn(EloquentBuilder $query) => $query->where('dungeon_id', $dungeon->id))
@@ -246,8 +253,16 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         ?DungeonRoute            $excludeDungeonRoute = null,
     ): EloquentBuilder {
         $query = DungeonRoute::query()
-            // The search result cards render the author's avatar - User no longer eager loads iconfile globally
-            ->with(['author.iconfile'])
+            // Everything the rendered search result cards read - DungeonRoute no longer eager loads relations globally
+            ->with([
+                'author.iconfile',
+                'dungeon',
+                'affixes',
+                'mappingVersion',
+                'season.expansion',
+                'thumbnails',
+                'ratings',
+            ])
             ->when(
                 $filter->username !== null,
                 fn(EloquentBuilder $query) => $query->whereRelation('author', 'name', 'LIKE', '%' . $filter->username . '%'),

@@ -9,7 +9,6 @@ use App\Models\PublishedState;
 use App\Models\Season;
 use App\Service\Cache\Traits\RemembersToFile;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 class DiscoverService extends BaseDiscoverService
@@ -63,17 +62,8 @@ class DiscoverService extends BaseDiscoverService
                 'ratings',
                 'mappingVersion',
                 'thumbnails',
-                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without([
-                    'affixGroups',
-                    'dungeons',
-                ])->with('expansion'),
-            ])
-            ->without([
-                'faction',
-                'specializations',
-                'classes',
-                'races',
+                'dungeon',
+                'season.expansion',
             ])
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
@@ -147,17 +137,8 @@ class DiscoverService extends BaseDiscoverService
                 'ratings',
                 'mappingVersion',
                 'thumbnails',
-                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without([
-                    'affixGroups',
-                    'dungeons',
-                ])->with('expansion'),
-            ])
-            ->without([
-                'faction',
-                'specializations',
-                'classes',
-                'races',
+                'dungeon',
+                'season.expansion',
             ])
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')

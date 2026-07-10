@@ -63,6 +63,8 @@ $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
+// The inline map JS reads affixes (and the setup/has_thumbnail appends) off the serialized route
+$dungeonroute?->loadMissing(['affixes']);
 $liveSession         ??= null;
 $mapBackgroundColor  ??= null;
 $controlOptions      ??= [];
