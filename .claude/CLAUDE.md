@@ -33,6 +33,10 @@ You can use `gh issue view <issue number> --repo RaiderIO/keystone.guru --json n
 to request info from Github. Any call to `gh issue view` MUST be accompanied by `--json` to prevent deprecation warnings
 and the command failing.
 
+Prepend every message you post on GitHub (PR/issue comments, review replies, PR/issue bodies) with
+a `:robot:` emoji so it is clear the message is from Claude and not the account owner. This avoids
+the appearance of impersonating the user.
+
 `gh pr edit` always fails on this repo with a Projects-classic GraphQL deprecation error
 (`repository.pullRequest.projectCards`). Update PRs through the REST API instead:
 `gh api -X PATCH repos/RaiderIO/keystone.guru/pulls/<number> -F body=@<file>` — capital `-F`

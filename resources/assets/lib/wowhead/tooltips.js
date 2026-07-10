@@ -8720,7 +8720,7 @@ WH.Tooltips = WH.Tooltips || new function () {
                 WH.Tooltips.clearTouchTooltip()
             }.bind(null, e, "click")
         });
-        let n = WH.ce("i", {className: "fa fa-hand-o-up"});
+        let n = WH.ce("i", {className: "fa fa-hand-point-up"});
         WH.aef(i, n);
         WH.ae(z.elements.screenCaption, i);
         Ge(a.dataEnv, a.type, false, z.elements.screenInnerBox, a.status);
