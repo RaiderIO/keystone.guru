@@ -109,6 +109,53 @@ describe('refreshSelectPickers', () => {
     });
 });
 
+describe('initSelectPicker focus retention inside Leaflet popups', () => {
+    /**
+     * Leaflet popups call L.DomEvent.disableClickPropagation, which stops `mousedown` before it
+     * reaches document - defeating Tom Select's own document-level focus-retention handler. Reproduce
+     * that here by swallowing mousedown at the container, then initialize a picker inside it.
+     *
+     * @param {string} containerClass
+     * @returns {HTMLElement} the initialized `.ts-control`
+     */
+    function initInContainerThatSwallowsMousedown(containerClass) {
+        document.body.innerHTML = `<div class="${containerClass}">
+            <select class="form-control selectpicker">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+            </select>
+        </div>`;
+        const container = document.querySelector(`.${containerClass}`);
+        container.addEventListener('mousedown', (event) => event.stopPropagation());
+
+        refreshSelectPickers();
+
+        return container.querySelector('.ts-control');
+    }
+
+    test('initSelectPicker_givenSelectInLeafletPopup_retainsFocusOnControlMousedown', () => {
+        const control = initInContainerThatSwallowsMousedown('leaflet-popup');
+
+        const event = new MouseEvent('mousedown', {bubbles: true, cancelable: true});
+        control.dispatchEvent(event);
+
+        // The wrapper-level handler runs before the popup swallows the event, so the control keeps
+        // focus and the dropdown no longer collapses on a single click.
+        expect(event.defaultPrevented).toBe(true);
+    });
+
+    test('initSelectPicker_givenSelectOutsidePopup_doesNotAddPopupFocusHandler', () => {
+        // Same swallowed mousedown but no `.leaflet-popup` ancestor: the fix must not attach itself,
+        // so the control mousedown is left to Tom Select's (here suppressed) document handler.
+        const control = initInContainerThatSwallowsMousedown('not-a-popup');
+
+        const event = new MouseEvent('mousedown', {bubbles: true, cancelable: true});
+        control.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(false);
+    });
+});
+
 describe('getSelectPickerSettings', () => {
     test('getSelectPickerSettings_givenLiveSearch_enablesDropdownInputPlugin', () => {
         const select = createSelect('data-live-search="true"');

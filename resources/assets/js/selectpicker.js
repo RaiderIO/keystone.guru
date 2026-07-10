@@ -100,6 +100,24 @@ function initSelectPicker(select) {
         instance.wrapper.style.width = select.dataset.width;
     }
 
+    // Leaflet popups (the map's enemy/object edit popups) call L.DomEvent.disableClickPropagation on
+    // their content, which stops `mousedown` before it bubbles to document. Tom Select retains focus
+    // via a document-level mousedown handler that preventDefaults; suppressed, the control focuses on
+    // mousedown and the ensuing click toggles the just-opened dropdown shut - so a single click can't
+    // open it (you'd have to hold and drag to select). Re-assert that focus retention on the wrapper,
+    // which lives inside the popup and runs before Leaflet stops the event. Mirrors Tom Select's own
+    // doc_mousedown: keep the caret-positioning exception for an open search input.
+    if (select.closest('.leaflet-popup')) {
+        instance.wrapper.addEventListener('mousedown', (evt) => {
+            if (evt.target === instance.control_input && instance.isOpen) {
+                evt.stopPropagation();
+            } else {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }
+        });
+    }
+
     return instance;
 }
 
