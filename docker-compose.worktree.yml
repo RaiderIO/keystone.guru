@@ -18,9 +18,12 @@ services:
     image: keystone.guru
     restart: "no"
     working_dir: /var/www/
+    # Same host-UID setup as the main stack (#3414): the checkout is host-owned and the container
+    # writes as the same UID, so no chown juggling is needed in either direction.
+    user: "${PUID:-1000}:${PGID:-1000}"
     volumes:
       - ./:/var/www
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/home/ksg/.ssh
 
   nginx:
     image: nginx:alpine

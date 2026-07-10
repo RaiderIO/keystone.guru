@@ -61,9 +61,12 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp \
 ### ---- Runtime image ----
 FROM php:8.4-fpm
 
-# Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+# Host UID/GID for local dev, passed as build args from docker-compose.yml (see #3414).
+# The image itself keeps running as root (production images build FROM this one and need it);
+# these args only shape the `ksg` passwd entry so local compose services can switch to it
+# via `user: "${PUID}:${PGID}"` and stop littering the bind mount with root-owned files.
+ARG PUID=1000
+ARG PGID=1000
 
 # Runtime dependencies only (no -dev headers, no compilers).
 # - First line: CLI tooling used by the app / deploy scripts. procps provides pgrep, which
@@ -137,5 +140,14 @@ RUN cd /tmp \
  && envsubst < /root/.config/composer/auth.json > /root/.config/composer/auth.json.tmp \
  && mv /root/.config/composer/auth.json.tmp /root/.config/composer/auth.json \
  && rm /tmp/.env
+
+# Local-dev user matching the host UID/GID so writes into the bind mount stay owned by the host
+# user. Mirrors root's shell/composer setup (incl. the substituted auth.json above) into its home.
+# -o tolerates a PUID/PGID that already exists in the base image.
+RUN groupadd -o -g "${PGID}" ksg \
+ && useradd -o -m -u "${PUID}" -g "${PGID}" -s /bin/bash ksg \
+ && cp /root/.bashrc /home/ksg/.bashrc \
+ && cp -r /root/.config /home/ksg/.config \
+ && chown -R ksg:ksg /home/ksg
 
 #ENTRYPOINT ["/usr/local/bin/docker_init.sh"]
