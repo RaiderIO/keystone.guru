@@ -51,6 +51,11 @@ body {
   .ts-wrapper.form-control {
     margin-bottom: 0;
     height: auto;
+    /* Bootstrap's .form-control {display:block} otherwise overrides Tom Select's own
+       .ts-wrapper {display:flex}, so the width:100% .ts-control stops stretching to the wrapper's
+       min-height. Harmless for single selects (their control has text), but an empty multi select
+       collapses to padding height - only the top half stayed clickable. Restore the intended flex. */
+    display: flex;
     background-color: var($--theme-dark);
     color: var($--theme-text-contrast);
     /* Neutral border: theme-darker matches the page background in darkly and the box would blend in */
