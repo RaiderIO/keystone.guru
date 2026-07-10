@@ -134,9 +134,24 @@ body {
     max-height: 60vh;
   }
 
-  /* Indent grouped options under their optgroup header, like bootstrap-select's .dropdown-item.opt did */
-  .ts-dropdown .optgroup .option {
+  /* Every option reserves left space (matching the optgroup indent bootstrap-select used to nest
+     options under their header) so the selected-option checkmark below doesn't shift the text as
+     options are selected/deselected. */
+  .ts-dropdown .option {
+    position: relative;
     padding-left: 2.25em;
+  }
+
+  /* Checkmark before selected options - bootstrap-select parity. Selected options stay in the
+     dropdown via hideSelected:false (see selectpicker.js), so mark them with a check. A plain
+     Unicode check (not a Font Awesome glyph) keeps this independent of the FA major version. */
+  .ts-dropdown .option.selected::before {
+    content: '\2713';
+    font-weight: 700;
+    position: absolute;
+    left: 0.7em;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   /* Live-search input inside the dropdown (dropdown_input plugin) */
