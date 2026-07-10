@@ -13,6 +13,7 @@ use App\Models\Tags\Tag;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\HasTags;
+use BackedEnum;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -74,7 +75,10 @@ class User extends Authenticatable implements LaratrustUser
 {
     use GeneratesPublicKey;
     use HasIconFile;
-    use HasRolesAndPermissions;
+    use HasRolesAndPermissions {
+        hasRole as private traitHasRole;
+        hasPermission as private traitHasPermission;
+    }
     use Notifiable;
     use HasTags;
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -222,6 +226,28 @@ class User extends Authenticatable implements LaratrustUser
     public function isOAuth(): bool
     {
         return empty($this->password);
+    }
+
+    /**
+     * @param string|array<int, string|BackedEnum> $name
+     */
+    public function hasRole(string|array|BackedEnum $name, mixed $team = null, bool $requireAll = false): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('roles');
+
+        return $this->traitHasRole($name, $team, $requireAll);
+    }
+
+    /**
+     * @param string|array<int, string|BackedEnum> $permission
+     */
+    public function hasPermission(string|array|BackedEnum $permission, mixed $team = null, bool $requireAll = false): bool
+    {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('roles');
+
+        return $this->traitHasPermission($permission, $team, $requireAll);
     }
 
     /**
