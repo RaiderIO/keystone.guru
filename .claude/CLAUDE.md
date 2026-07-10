@@ -33,6 +33,10 @@ You can use `gh issue view <issue number> --repo RaiderIO/keystone.guru --json n
 to request info from Github. Any call to `gh issue view` MUST be accompanied by `--json` to prevent deprecation warnings
 and the command failing.
 
+Prepend every message you post on GitHub (PR/issue comments, review replies, PR/issue bodies) with
+a `:robot:` emoji so it is clear the message is from Claude and not the account owner. This avoids
+the appearance of impersonating the user.
+
 ## Command execution
 - Never run PHP, Artisan, PHPUnit, or Pest directly on the host machine.
 - Always run Laravel, test commands, and any other file system commands inside Docker.
