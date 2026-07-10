@@ -181,8 +181,6 @@ let scripts = [
     // Pre-compiled handlebars
     'resources/assets/js/handlebars.js',
 
-    // Home page only
-    'resources/assets/js/custom/home.js',
     // Doesn't depend on anything
     'resources/assets/js/custom/colorutil.js',
     'resources/assets/js/custom/util.js',
@@ -395,7 +393,6 @@ if (mix.inProduction()) {
 mix.js('resources/assets/js/app.js', `public/js/app-${version}.js`)
     .sass('resources/assets/sass/app.scss', `public/css/app-${version}.css`)
     .sass('resources/assets/sass/theme/theme.scss', `public/css/theme-${version}.css`)
-    .sass('resources/assets/sass/home.scss', `public/css/home-${version}.css`)
     .sass('resources/assets/sass/custom/custom.scss', `public/css/custom-compiled-${version}.css`)
     .sass('resources/assets/sass/custom/assets/assets.scss', `public/css/assets-compiled-${version}.css`)
     // Lib processing

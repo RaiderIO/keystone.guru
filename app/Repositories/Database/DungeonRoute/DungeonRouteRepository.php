@@ -97,7 +97,8 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
 
         return DungeonRoute::where('team_id', config('keystoneguru.raider_io.team_id'))
             ->with([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'dungeon',
                 'tags' => $tagsFilterFn,
             ])
@@ -245,7 +246,8 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         ?DungeonRoute            $excludeDungeonRoute = null,
     ): EloquentBuilder {
         $query = DungeonRoute::query()
-            ->with(['author'])
+            // The search result cards render the author's avatar - User no longer eager loads iconfile globally
+            ->with(['author.iconfile'])
             ->when(
                 $filter->username !== null,
                 fn(EloquentBuilder $query) => $query->whereRelation('author', 'name', 'LIKE', '%' . $filter->username . '%'),

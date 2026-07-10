@@ -83,15 +83,6 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    protected $with = [
-        'type',
-        'class',
-        'npcbolsteringwhitelists',
-        'npcHealths',
-        'characteristics',
-        'spells',
-    ];
-
     protected $fillable = [
         'id',
         'dungeon_id',

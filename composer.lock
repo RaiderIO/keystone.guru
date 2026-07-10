@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "397a6b59e857758c0802369e868f9037",
+    "content-hash": "0c67118633adb97597d52478cf66b657",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -2071,41 +2071,51 @@
         },
         {
             "name": "genealabs/laravel-model-caching",
-            "version": "12.0.3",
+            "version": "13.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mike-bronner/laravel-model-caching.git",
-                "reference": "ae605a862d0d3d23463edc46c67d58e0b4faec6c"
+                "reference": "d234967c6848e32059ddd2e44964f48651a12573"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/ae605a862d0d3d23463edc46c67d58e0b4faec6c",
-                "reference": "ae605a862d0d3d23463edc46c67d58e0b4faec6c",
+                "url": "https://api.github.com/repos/mike-bronner/laravel-model-caching/zipball/d234967c6848e32059ddd2e44964f48651a12573",
+                "reference": "d234967c6848e32059ddd2e44964f48651a12573",
                 "shasum": ""
             },
             "require": {
-                "illuminate/cache": "^10.0|^11.0|^12.0",
-                "illuminate/config": "^10.0|^11.0|^12.0",
-                "illuminate/console": "^10.0|^11.0|^12.0",
-                "illuminate/container": "^10.0|^11.0|^12.0",
-                "illuminate/database": "^10.0|^11.0|^12.0",
-                "illuminate/http": "^10.0|^11.0|^12.0",
-                "illuminate/support": "^10.0|^11.0|^12.0",
-                "mikebronner/laravel-pivot-events": "^10.0|^11.0|^12.0",
-                "php": ">=8.1"
+                "illuminate/cache": "^11.0|^12.0|^13.0",
+                "illuminate/config": "^11.0|^12.0|^13.0",
+                "illuminate/console": "^11.0|^12.0|^13.0",
+                "illuminate/container": "^11.0|^12.0|^13.0",
+                "illuminate/database": "^11.0|^12.0|^13.0",
+                "illuminate/http": "^11.0|^12.0|^13.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "mikebronner/laravel-pivot-events": "*",
+                "php": ">=8.2"
+            },
+            "replace": {
+                "mikebronner/laravel-model-caching": "self.version"
             },
             "require-dev": {
+                "aws/aws-sdk-php": "^3.322.9",
                 "doctrine/dbal": "^3.3|^4.2",
                 "fakerphp/faker": "^1.11",
-                "laravel/legacy-factories": "^1.3",
-                "laravel/nova": "^5.0",
-                "orchestra/testbench": "^9.0|^10.0",
-                "orchestra/testbench-browser-kit": "^9.0|^10.0",
-                "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^10.5|^11.5.3",
+                "larastan/larastan": "^2.0|^3.0",
+                "laravel/boost": "^2.0",
+                "laravel/pint": "^1.27",
+                "mikebronner/development-settings": "^0.1.15",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "pestphp/pest": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "phpunit/phpunit": "^10.5|^11.5|^12.5",
+                "predis/predis": "^2.0|^3.0",
                 "slevomat/coding-standard": "^7.0|^8.14",
-                "squizlabs/php_codesniffer": "^3.6",
+                "squizlabs/php_codesniffer": "^3.6|^4.0",
                 "symfony/thanks": "^1.2"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Required for DynamoDB cache store support (^3.322)"
             },
             "type": "library",
             "extra": {
@@ -2133,10 +2143,10 @@
             "description": "Automatic caching for Eloquent models.",
             "support": {
                 "issues": "https://github.com/mike-bronner/laravel-model-caching/issues",
-                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/12.0.3"
+                "source": "https://github.com/mike-bronner/laravel-model-caching/tree/13.1.6"
             },
             "abandoned": "mike-bronner/laravel-model-caching",
-            "time": "2026-02-17T23:07:25+00:00"
+            "time": "2026-07-07T23:40:51+00:00"
         },
         {
             "name": "graham-campbell/bounded-cache",

@@ -99,6 +99,10 @@ use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\Webhook\GithubWebhookController;
 use App\Http\Controllers\Webhook\WowheadWebhookController;
 use App\Http\Middleware\WowheadCors;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route as RoutingRoute;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 // Webhooks
 Route::prefix('webhook')->group(static function () {
@@ -811,6 +815,23 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 });
 
 Route::fallback(
-    // Render your 404 page, but now with web middleware (sessions) active
-    fn() => response()->view('errors.404', [], 500),
+    // Reaching the fallback means no route matched this request. The fallback itself is a GET/HEAD
+    // route, so it only ever fires for GET/HEAD requests; if the URI is served under other verbs the
+    // request is a 405 (advertising the allowed verbs), otherwise it is a genuine 404. Aborting - as
+    // opposed to rendering a view inline - keeps the response mapping in App\Exceptions\Handler, while
+    // the 'web' middleware keeps the session active so the rendered error page shows a logged-in nav.
+    static function (Request $request): void {
+        $otherVerbs = collect(Route::getRoutes()->getRoutes())
+            ->filter(static fn(RoutingRoute $route): bool => !$route->isFallback && $route->matches($request, false))
+            ->flatMap(static fn(RoutingRoute $route): array => $route->methods())
+            ->unique()
+            ->reject(static fn(string $method): bool => in_array($method, [Request::METHOD_GET, Request::METHOD_HEAD], true))
+            ->values();
+
+        if ($otherVerbs->isNotEmpty()) {
+            throw new MethodNotAllowedHttpException($otherVerbs->all());
+        }
+
+        abort(Response::HTTP_NOT_FOUND);
+    },
 )->middleware('web');

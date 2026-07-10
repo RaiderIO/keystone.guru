@@ -41,6 +41,30 @@ docker compose exec -T app sh -c 'cd /var/www && node .chrome-tmp/browse.js http
   sidebar markup).
 - `puppeteer` resolves from `/var/www/node_modules` (run with cwd `/var/www`).
 
+## Baseline comparison — always A/B against master for visual changes
+
+A screenshot judged in isolation only catches *missing* elements, not *changed* ones. "Renders, no
+console errors" can pass while an element is sized or positioned wrong; a same-page
+master-vs-branch comparison exposes that in one look. Screenshot comparison is also the cheapest
+reviewer handoff there is: Wotuu can eyeball a before/after pair instantly at zero cost, so **post
+both** to the PR, not just the branch shot.
+
+- The master baseline needs no chrome setup of its own: the main stack's nginx publishes a host
+  port (check `docker ps | grep nginx`, e.g. `8008`), reachable from inside the worktree's app
+  container via the Docker bridge gateway — run browse.js against `http://172.17.0.1:8008/<page>`
+  for master and `http://nginx/<page>` for the branch, same viewport.
+- Check the baseline is actually master: the page footer shows the built commit
+  (`v15.3.2 (05d7dc)`); if the main checkout's assets are stale, rebuild there first.
+- **Exercise dynamic UI, not just page load.** JS-inserted content (map sidebar, dropdown menus)
+  breaks differently from server-rendered HTML, and a regression can hit only the
+  dynamically-inserted elements. Use `--click` and screenshot the opened/expanded state on both
+  sides.
+- **A screenshot anomaly is unexplained until DOM-inspected.** Do not attribute odd content to
+  "dev environment artifact" until you have either inspected the element (`--eval` with
+  `getComputedStyle`/`outerHTML`) or confirmed the identical artifact on the master baseline.
+  Known signature: a question mark in a dashed circle is FontAwesome's missing-icon fallback (an
+  icon-name or FA-JS-runtime problem), never a site placeholder.
+
 ## Post the screenshot to a GitHub PR/issue
 
 To make the browser output visible to reviewers, embed the screenshot in the PR body. GitHub has no
@@ -78,17 +102,5 @@ browser stays warm for the next run.
   remove them from inside the container first
   (`docker compose exec -T -u root app rm -rf /var/www/.chrome-tmp`). Stop chrome with
   `docker compose --profile chrome stop chrome` if you want it gone.
-- `shm_size: 1gb` on the service is required - with the compose default 64MB /dev/shm, image-heavy
+- The `chrome` service needs `shm_size: 1gb` - with the compose default 64MB /dev/shm, image-heavy
   pages fail with `net::ERR_INSUFFICIENT_RESOURCES`.
-- The main checkout's docker-compose.yml has no chrome service (only docker-compose.worktree.yml);
-  for the main stack either add one locally or run a worktree.
-- The compose service arrived with the Bootstrap 5 migration branch (#3397 / MR #3419); on branches
-  that predate it, worktree.sh copies docker-compose.worktree.yml from the main repo checkout only
-  if the branch lacks the file entirely - otherwise use the launch fallback: download
-  chrome-headless-shell into `.chrome-tmp/` and apt-install its deps in the app container
-  (libnspr4 libnss3 libasound2t64 libatk-bridge2.0-0t64 libatk1.0-0t64 libatspi2.0-0t64 libcairo2
-  libcups2t64 libdbus-1-3 libexpat1 libgbm1 libglib2.0-0t64 libpango-1.0-0 libvulkan1
-  libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libxrandr2 fonts-liberation); browse.js falls
-  back to `/var/www/.chrome-tmp/chrome-headless-shell-linux64/chrome-headless-shell` automatically.
-  (On Debian 13 / trixie the `t64` package names above apply; older releases use the non-`t64`
-  names.)

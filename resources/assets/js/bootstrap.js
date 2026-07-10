@@ -113,12 +113,9 @@ window.jqueryVisible = require('jquery-visible');
 window.simplebar = require('simplebar');
 window.Draggable = require('@shopify/draggable');
 require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
-window.jarallax = require('jarallax/dist/jarallax.min');
 window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
 window.ionRangeSlider = require('ion-rangeslider');
-
-require('@fortawesome/fontawesome-free');
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'

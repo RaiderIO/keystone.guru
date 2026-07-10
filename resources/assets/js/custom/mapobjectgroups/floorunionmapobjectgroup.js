@@ -2,7 +2,7 @@ class FloorUnionMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, [MAP_OBJECT_GROUP_FLOOR_UNION], editable);
 
-        this.fa_class = 'fa-vector-square';
+        this.fa_class = 'fa-object-group';
     }
 
     /**

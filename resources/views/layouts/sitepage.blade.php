@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
  * @var string      $theme
  * @var Model       $menuModelEdit
  * @var string|null $messageBanner
+ * @var string|null $worktree
  */
 
 $user = Auth::user();

@@ -33,25 +33,20 @@ class MappingExportService implements MappingExportServiceInterface
      */
     public function serializeNpcs(): array
     {
-        // Save all NPCs which aren't directly tied to a dungeon. npcbolsteringwhitelists is eager loaded
-        // here (rather than lazily accessed) so this also works under preventLazyLoading on the HTTP path.
-        $npcs = Npc::without([
-            'characteristics',
-            'spells',
-            'enemyForces',
+        // Save all NPCs which aren't directly tied to a dungeon. The relations below are eager loaded
+        // (rather than lazily accessed) so they are serialized into the npcs.json output.
+        // Note: the order of these relations determines the key order in npcs.json - keep it stable.
+        $npcs = Npc::with([
+            'npcbolsteringwhitelists',
+            'npcHealths',
+            'npcEnemyForces',
+            'npcDungeons',
         ])
-            ->with([
-                'npcEnemyForces',
-                'npcDungeons',
-                'npcbolsteringwhitelists',
-            ])
             ->get()
             ->values();
 
         foreach ($npcs as $npc) {
             $npc->makeHidden([
-                'type',
-                'class',
                 'enemy_portrait_url',
             ]);
             $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
