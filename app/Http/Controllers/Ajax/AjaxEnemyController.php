@@ -81,6 +81,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $enemy->load([
                 'npc',
                 'npc.enemyForces',
+                // The admin map re-assigns the enemy's npc from this response - include what the visuals/tooltips read
+                'npc.type',
+                'npc.class',
+                'npc.npcbolsteringwhitelists',
+                'npc.npcHealths',
+                'npc.spells',
                 'floor',
             ])->makeHidden(['floor']);
             // Perform floor change and move enemy to the correct location on the new floor

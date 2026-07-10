@@ -247,7 +247,7 @@ MDT.mapPOIs[dungeonIndex] = {};
         $dungeonEnemies = [];
 
         /** @var Collection<int, Npc> $npcs */
-        $npcs = Npc::with('npcEnemyForces')
+        $npcs = Npc::with(['npcEnemyForces', 'type', 'characteristics', 'spells', 'npcHealths'])
             ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
             ->select('npcs.*')
             ->where('npc_dungeons.dungeon_id', $mappingVersion->dungeon_id)

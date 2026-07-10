@@ -55,7 +55,7 @@ class SpellCompendiumController extends Controller
         $spells = Spell::query()
             ->selectRaw('spells.*, spell_name_translations.translation as name,
                 GROUP_CONCAT(DISTINCT dungeon_translations.translation ORDER BY dungeon_translations.translation SEPARATOR ", ") AS dungeon_names')
-            ->with(['npcs' => static fn($query) => $query->without(['type', 'class', 'npcbolsteringwhitelists', 'npcHealths', 'characteristics', 'spells'])])
+            ->with(['npcs'])
             ->leftJoin('spell_dungeons', 'spell_dungeons.spell_id', '=', 'spells.id')
             ->leftJoin('dungeons', 'spell_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) {
