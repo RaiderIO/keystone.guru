@@ -168,7 +168,8 @@ use Illuminate\Support\Collection;
             var $speedrunDifficulties = $('#speedrun_difficulties');
 
             function updateSpeedrunDifficulties() {
-                $speedrunDifficulties.prop('disabled', !$speedrunEnabled.is(':checked')).selectpicker('refresh');
+                $speedrunDifficulties.prop('disabled', !$speedrunEnabled.is(':checked'));
+                refreshSelectPickers();
             }
 
             $speedrunEnabled.on('change', updateSpeedrunDifficulties);

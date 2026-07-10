@@ -182,17 +182,16 @@ if (Auth::check()) {
         </div>
     @endif
     <div class="col-lg ps-1 pe-1">
-        <div class="mb-2">
-            &nbsp;
-        </div>
+        {{-- Block spacer matching the bare label height (24px) above the neighbouring select
+             columns, so the button lines up with the select boxes. The former mb-2 added an extra
+             8px that pushed the button below them. --}}
+        <div>&nbsp;</div>
         <button id="{{ $filterButtonId }}" class="btn btn-info col-lg">
             <i class="fas fa-filter"></i> {{ __('view_common.dungeonroute.table.filter') }}
         </button>
     </div>
     <div class="col-lg ps-1 pe-1">
-        <div class="mb-2">
-            &nbsp;
-        </div>
+        <label>&nbsp;</label>
         <div class="mb-2 text-end">
             <button
                     class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} biglist table_list_view_toggle"

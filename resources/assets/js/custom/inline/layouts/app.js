@@ -21,8 +21,8 @@ class LayoutsApp extends InlineCode {
         // Enable tooltips for all elements
         refreshTooltips();
 
-        // Make sure selectpicker is enabled
-        $('.selectpicker').selectpicker();
+        // Make sure select pickers are initialized
+        refreshSelectPickers();
 
         if (this.options.guest) {
             this._newPassword('#register_password');
@@ -242,14 +242,7 @@ $.fn.if = function (condition, closure) {
     return this;
 }
 
-/**
- * Refreshes all select pickers on-screen
- **/
-function refreshSelectPickers() {
-    let $selectpicker = $('.selectpicker');
-    $selectpicker.selectpicker('refresh');
-    $selectpicker.selectpicker('render');
-}
+// refreshSelectPickers() is provided globally by resources/assets/js/selectpicker.js (via bootstrap.js)
 
 function _showNotification(opts) {
     new Noty($.extend({

@@ -11,8 +11,6 @@ window.offsetPolygon = require('offset-polygon').default;
 
 // Bootstrap 5 no longer registers jQuery plugins; expose the API globally because the
 // concatenated scripts in custom-*.js rely on globals (window.bootstrap.Modal etc.).
-// This assignment MUST happen before require('bootstrap-select') further down — that
-// plugin reads bootstrap.Dropdown at module scope for its version detection.
 window.bootstrap = require('bootstrap');
 
 /**
@@ -88,11 +86,10 @@ window.edgeBuffer = require('leaflet-edgebuffer');
 window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
-window.bootstrapselect = require('bootstrap-select');
+window.TomSelect = require('tom-select').default;
 
-// Fix bootstrap-select 1.14.0-beta3 duplicating all options on every .selectpicker('refresh')
-const {applyBootstrapSelectRefreshFix} = require('./bootstrapselectrefreshfix');
-applyBootstrapSelectRefreshFix($.fn.selectpicker.Constructor);
+// Tom Select drives the project's `.selectpicker` selects (#3420); inline scripts call this global
+window.refreshSelectPickers = require('./selectpicker').refreshSelectPickers;
 
 window.Handlebars = require('handlebars');
 window.barrating = require('jquery-bar-rating');
