@@ -69,6 +69,10 @@ function getSelectPickerSettings(select) {
 
     const settings = {
         plugins: plugins,
+        // Keep selected options in the dropdown (bootstrap-select parity) instead of Tom Select's
+        // default of removing them: it's the only way to deselect once the count summary collapses
+        // the removable tags, and initSelectPicker() makes clicking a selected option toggle it off.
+        hideSelected: select.multiple ? false : undefined,
         // The default (50) truncates large lists such as the NPC selects
         maxOptions: null,
         allowEmptyOption: select.querySelector('option[value=""]') !== null,
@@ -86,6 +90,68 @@ function getSelectPickerSettings(select) {
     }
 
     return settings;
+}
+
+/**
+ * Restores bootstrap-select's `data-selected-text-format="count > N"` behaviour for multi selects:
+ * once more than N options are selected, the individual tags are replaced by a single "N <label>"
+ * summary (from `data-count-selected-text`, with `{0}` as the count) so a large selection cannot
+ * bloat the control's height - the routes filter defaults its whole attributes list to selected.
+ * Below the threshold the normal tags are shown. The collapse is a class + data attribute the
+ * stylesheet renders via `::after`; the updater is stored on the instance so refreshSelectPicker()
+ * - which sets values silently, bypassing the `change` event - can re-run it.
+ *
+ * @param {TomSelect} instance
+ * @param {HTMLSelectElement} select
+ */
+function setupSelectedCountSummary(instance, select) {
+    const format = select.dataset.selectedTextFormat;
+    if (!select.multiple || !format) {
+        return;
+    }
+
+    const thresholdMatch = /count(?:\s*>\s*(\d+))?/.exec(format);
+    if (thresholdMatch === null) {
+        return;
+    }
+    const threshold = thresholdMatch[1] !== undefined ? parseInt(thresholdMatch[1], 10) : 0;
+    const countTemplate = select.dataset.countSelectedText ?? '{0}';
+
+    const update = () => {
+        const collapsed = instance.items.length > threshold;
+        instance.control.classList.toggle('ts-count-summary', collapsed);
+        if (collapsed) {
+            instance.control.dataset.countSummary = countTemplate.replace('{0}', instance.items.length);
+        } else {
+            delete instance.control.dataset.countSummary;
+        }
+    };
+
+    instance.selectpickerUpdateCountSummary = update;
+    instance.on('change', update);
+    update();
+}
+
+/**
+ * With `hideSelected: false`, a selected option stays in the dropdown but Tom Select only ever ADDS
+ * on click (onOptionSelect -> addItem), so it can never be unselected there. Make a click on an
+ * already-selected option toggle it OFF instead - the deselect path bootstrap-select had, and the
+ * only way to unselect once the count summary hides the removable tags. Runs in the capture phase so
+ * it pre-empts Tom Select's own bubble-phase click -> addItem for the deselect case only.
+ *
+ * @param {TomSelect} instance
+ */
+function setupToggleDeselect(instance) {
+    instance.dropdown_content.addEventListener('click', (evt) => {
+        const optionEl = evt.target.closest('[data-selectable]');
+        if (optionEl === null || !instance.items.includes(optionEl.dataset.value)) {
+            return;
+        }
+        instance.removeItem(optionEl.dataset.value);
+        instance.refreshOptions(instance.isOpen);
+        evt.preventDefault();
+        evt.stopImmediatePropagation();
+    }, true);
 }
 
 /**
@@ -117,6 +183,11 @@ function initSelectPicker(select) {
             }
         });
     }
+
+    if (select.multiple) {
+        setupToggleDeselect(instance);
+    }
+    setupSelectedCountSummary(instance, select);
 
     return instance;
 }
@@ -152,6 +223,9 @@ function refreshSelectPicker(select) {
             instance.enable();
         }
     }
+
+    // setValue() above is silent (no change event), so refresh the count summary explicitly.
+    instance.selectpickerUpdateCountSummary?.();
 }
 
 /**

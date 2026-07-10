@@ -156,6 +156,103 @@ describe('initSelectPicker focus retention inside Leaflet popups', () => {
     });
 });
 
+describe('multi select dropdown toggle deselect', () => {
+    function openMulti() {
+        const select = createSelect('multiple', `
+            <option value="1" selected>One</option>
+            <option value="2">Two</option>`);
+        refreshSelectPickers();
+        const instance = select.tomselect;
+        instance.open();
+        instance.refreshOptions(true);
+        return instance;
+    }
+
+    function optionFor(instance, value) {
+        return Array.from(instance.dropdown_content.querySelectorAll('[data-selectable]'))
+            .find((el) => el.dataset.value === value) ?? null;
+    }
+
+    function clickOption(instance, value) {
+        optionFor(instance, value).dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}));
+    }
+
+    test('refreshSelectPickers_givenMultiSelect_keepsSelectedOptionsInDropdown', () => {
+        // hideSelected:false so a selected option can still be deselected from the dropdown
+        const instance = openMulti();
+
+        expect(optionFor(instance, '1')).not.toBeNull();
+    });
+
+    test('refreshSelectPickers_givenClickOnSelectedOption_deselectsIt', () => {
+        const instance = openMulti();
+
+        clickOption(instance, '1');
+
+        expect(instance.items).not.toContain('1');
+    });
+
+    test('refreshSelectPickers_givenClickOnUnselectedOption_stillSelectsIt', () => {
+        const instance = openMulti();
+
+        clickOption(instance, '2');
+
+        expect(instance.items).toContain('2');
+    });
+});
+
+describe('selected count summary (data-selected-text-format)', () => {
+    const COUNT_ATTRS = 'multiple data-selected-text-format="count > 1" data-count-selected-text="{0} attributes"';
+
+    test('refreshSelectPickers_givenSelectionAboveThreshold_collapsesToCountSummary', () => {
+        const select = createSelect(COUNT_ATTRS, `
+            <option value="1" selected>One</option>
+            <option value="2" selected>Two</option>
+            <option value="3" selected>Three</option>`);
+
+        refreshSelectPickers();
+
+        const control = select.tomselect.control;
+        expect(control.classList.contains('ts-count-summary')).toBe(true);
+        expect(control.dataset.countSummary).toBe('3 attributes');
+    });
+
+    test('refreshSelectPickers_givenSelectionAtThreshold_keepsTags', () => {
+        const select = createSelect(COUNT_ATTRS, `
+            <option value="1" selected>One</option>
+            <option value="2">Two</option>`);
+
+        refreshSelectPickers();
+
+        const control = select.tomselect.control;
+        expect(control.classList.contains('ts-count-summary')).toBe(false);
+        expect(control.dataset.countSummary).toBeUndefined();
+    });
+
+    test('refreshSelectPickers_givenSelectionCrossingThreshold_updatesSummaryOnChange', () => {
+        const select = createSelect(COUNT_ATTRS, `
+            <option value="1" selected>One</option>
+            <option value="2">Two</option>`);
+        refreshSelectPickers();
+        const instance = select.tomselect;
+
+        instance.addItem('2');
+
+        expect(instance.control.classList.contains('ts-count-summary')).toBe(true);
+        expect(instance.control.dataset.countSummary).toBe('2 attributes');
+    });
+
+    test('refreshSelectPickers_givenSingleSelectWithFormat_doesNotCollapse', () => {
+        const select = createSelect('data-selected-text-format="count > 1"', `
+            <option value="1" selected>One</option>
+            <option value="2">Two</option>`);
+
+        refreshSelectPickers();
+
+        expect(select.tomselect.control.classList.contains('ts-count-summary')).toBe(false);
+    });
+});
+
 describe('getSelectPickerSettings', () => {
     test('getSelectPickerSettings_givenLiveSearch_enablesDropdownInputPlugin', () => {
         const select = createSelect('data-live-search="true"');

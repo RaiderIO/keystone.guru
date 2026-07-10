@@ -96,6 +96,21 @@ body {
     }
   }
 
+  /* bootstrap-select-style "N selected" summary: when a multi select declares data-selected-text-format
+     and enough options are selected, selectpicker.js collapses it (.ts-count-summary) and exposes the
+     count text. Hide the individual tags and render that text instead so a large default selection
+     (e.g. the routes filter's whole attributes list) can't bloat the box height. */
+  .ts-control.ts-count-summary > [data-ts-item] {
+    display: none;
+  }
+
+  .ts-control.ts-count-summary::after {
+    content: attr(data-count-summary);
+    align-self: center;
+    color: var($--theme-text-contrast);
+    padding: 0 0.25rem;
+  }
+
   /* Tags on multi selects */
   .ts-wrapper.multi .ts-control > div {
     background: var($--theme-darker);
