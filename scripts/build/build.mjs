@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import 'dotenv/config';
-import {spawnSync} from 'node:child_process';
+import {spawn, spawnSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import chokidar from 'chokidar';
 import {resolveVersion} from './version.mjs';
 import {precompileHandlebars} from './handlebars.mjs';
 import {buildLangBundles} from './lang.mjs';
@@ -17,6 +18,9 @@ import {copyStaticAssets} from './copy.mjs';
  * entries — those still go through laravel-mix, which this script spawns with the resolved version
  * passed via KSG_BUILD_VERSION so both halves agree on output filenames.
  *
+ * In --watch mode the node-built bundles are rebuilt on change too (chokidar), while the spawned
+ * `mix watch` keeps covering app.js/sass — so `npm run watch` behaves like it always has.
+ *
  * Usage: node scripts/build/build.mjs [--production] [--watch]
  */
 const rootDir    = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -28,21 +32,23 @@ console.log(`Building version ${version} (${production ? 'production' : 'develop
 
 runNodeSteps();
 
+const mixBin = path.join(rootDir, 'node_modules', '.bin', 'mix');
+const mixEnv = {...process.env, KSG_BUILD_VERSION: version};
+
 if (watch) {
-    // Full watch support for the node-built bundles arrives in stage 2 (#3492) when mix is
-    // removed. Until then `mix watch` covers app.js/sass; changes to custom/, lang/, css/ and
-    // handlebars templates require a manual re-run.
-    console.warn('Note: only app.js/sass are watched in stage 1; re-run this script for custom/lang/css changes.');
+    watchNodeSteps();
+
+    const mixProcess = spawn(mixBin, ['watch'], {cwd: rootDir, stdio: 'inherit', env: mixEnv});
+    mixProcess.on('close', code => process.exit(code ?? 1));
+} else {
+    const mixResult = spawnSync(mixBin, production ? ['--production'] : [], {
+        cwd: rootDir,
+        stdio: 'inherit',
+        env: mixEnv,
+    });
+
+    process.exit(mixResult.status ?? 1);
 }
-
-const mixArgs  = watch ? ['watch'] : (production ? ['--production'] : []);
-const mixResult = spawnSync(path.join(rootDir, 'node_modules', '.bin', 'mix'), mixArgs, {
-    cwd: rootDir,
-    stdio: 'inherit',
-    env: {...process.env, KSG_BUILD_VERSION: version},
-});
-
-process.exit(mixResult.status ?? 1);
 
 function runNodeSteps() {
     time('handlebars', () => precompileHandlebars(rootDir, production));
@@ -50,6 +56,65 @@ function runNodeSteps() {
     time('js concat', () => buildConcatBundles(rootDir, version, production));
     time('css concat', () => buildCssBundle(rootDir, version, production));
     time('copy', () => copyStaticAssets(rootDir));
+}
+
+function watchNodeSteps() {
+    // Same polling cadence as the webpack watchOptions above (see webpack.mix.js) — native fs
+    // events are unreliable in this WSL setup
+    const watchOptions = {ignoreInitial: true, usePolling: true, interval: 2000};
+
+    // Outputs land in public/ and resources/assets/js/handlebars.js, none of which are watched,
+    // so rebuilds cannot re-trigger themselves
+    const steps = [
+        {
+            name: 'handlebars + js concat',
+            paths: ['resources/assets/js/handlebars'],
+            run: () => {
+                precompileHandlebars(rootDir, production);
+                buildConcatBundles(rootDir, version, production);
+            },
+        },
+        {
+            name: 'js concat',
+            paths: ['resources/assets/js/custom', 'resources/assets/lib'],
+            run: () => buildConcatBundles(rootDir, version, production),
+        },
+        {
+            name: 'css concat',
+            paths: ['resources/assets/css'],
+            run: () => buildCssBundle(rootDir, version, production),
+        },
+        {
+            name: 'lang',
+            paths: ['lang'],
+            run: () => buildLangBundles(rootDir, version, production),
+        },
+        {
+            name: 'copy',
+            paths: ['resources/assets/webfonts', 'resources/assets/vendor'],
+            run: () => copyStaticAssets(rootDir),
+        },
+    ];
+
+    for (const step of steps) {
+        let debounce = null;
+
+        chokidar.watch(step.paths.map(p => path.join(rootDir, p)), watchOptions)
+            .on('all', (event, file) => {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    console.log(`${path.relative(rootDir, file)} changed (${event})`);
+                    try {
+                        time(step.name, step.run);
+                    } catch (e) {
+                        // Keep watching: a mid-save syntax error should not kill the watcher
+                        console.error(`  ${step.name} failed: ${e.message}`);
+                    }
+                }, 200);
+            });
+    }
+
+    console.log('Watching custom/, lib/, css/, lang/ and handlebars templates for changes...');
 }
 
 /**
