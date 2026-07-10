@@ -24,14 +24,8 @@ class AdminToolsThumbnailsController extends Controller
         $dungeonId   = (int)$request->get('dungeon_id');
         $onlyMissing = (int)$request->get('only_missing');
 
-        $builder = DungeonRoute::without([
-            'faction',
-            'specializations',
-            'classes',
-            'races',
-            'affixes',
-        ])
-            ->with('dungeon')
+        // ThumbnailService::queueThumbnailRefresh() reads dungeon and mappingVersion on every route
+        $builder = DungeonRoute::with(['dungeon', 'mappingVersion'])
             ->when($dungeonId !== -1, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->orderByDesc('created_at');
 

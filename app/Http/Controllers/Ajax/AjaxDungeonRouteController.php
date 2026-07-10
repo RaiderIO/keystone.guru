@@ -100,7 +100,6 @@ class AjaxDungeonRouteController extends Controller
         }
 
         $routes = DungeonRoute::with($withRelations)
-            ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
             ->selectRaw('dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required, MAX(mapping_versions.id) as dungeon_latest_mapping_version_id')
@@ -269,11 +268,8 @@ class AjaxDungeonRouteController extends Controller
             $season = Season::find($request->get('season'));
         }
 
+        // Everything the rendered route cards read - DungeonRoute no longer eager loads relations globally
         $query = DungeonRoute::with([
-            'faction',
-            'specializations',
-            'classes',
-            'races',
             // The route cards render the author's avatar - User no longer eager loads iconfile globally
             'author.iconfile',
             'affixes',
@@ -283,6 +279,7 @@ class AjaxDungeonRouteController extends Controller
             'dungeon',
             'dungeon.activeFloors',
             'mappingVersion',
+            'season.expansion',
         ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
