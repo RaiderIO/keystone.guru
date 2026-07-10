@@ -1,6 +1,8 @@
 
 // Rollbar Snippet
-let _rollbarConfig = _rollbarConfig || {};
+// `var`, not `let`: rollbar.blade.php already declares var _rollbarConfig in an inline script, and
+// a top-level `let` in the (since #3491 untranspiled) lib bundle would collide with that binding
+var _rollbarConfig = _rollbarConfig || {};
 !function (r) {
     var e = {};
 
