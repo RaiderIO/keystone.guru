@@ -183,13 +183,24 @@ class DungeonRouteTableTagsHandler {
 
             // Enter
             if (keyEvent.keyCode === 13 && $this.val() !== null && $this.val().length > 0) {
-                self._createTag($this.val(), publicKey, function () {
-                    $this.val('');
-                });
-                self._hideTagAutocomplete();
+                let $activeSuggestion = $('#new_tag_autocomplete .dropdown-item.active');
+                if ($activeSuggestion.length > 0) {
+                    // Adopt the highlighted suggestion; the next enter press creates it
+                    // (mirrors bootstrap-4-autocomplete, which refocused the input on select)
+                    $this.val($activeSuggestion.text());
+                    self._hideTagAutocomplete();
+                } else {
+                    self._createTag($this.val(), publicKey, function () {
+                        $this.val('');
+                    });
+                    self._hideTagAutocomplete();
+                }
             } else if (keyEvent.keyCode === 27) {
                 // Escape
                 self._hideTagAutocomplete();
+            } else if (keyEvent.keyCode === 38 || keyEvent.keyCode === 40) {
+                // Arrow up/down move the suggestion highlight, like bootstrap-4-autocomplete did
+                self._moveTagAutocompleteHighlight(keyEvent.keyCode === 40 ? 1 : -1);
             } else {
                 self._refreshTagAutocomplete();
             }
@@ -264,6 +275,35 @@ class DungeonRouteTableTagsHandler {
         }
 
         $menu.addClass('show');
+    }
+
+    /**
+     * Moves the keyboard highlight across the rendered suggestions (replaces the arrow-key
+     * support that bootstrap-4-autocomplete offered).
+     *
+     * @param direction {Number} 1 to move down, -1 to move up
+     * @private
+     */
+    _moveTagAutocompleteHighlight(direction) {
+        console.assert(this instanceof DungeonRouteTableTagsHandler, 'this is not a DungeonRouteTableTagsHandler', this);
+
+        let $items = $('#new_tag_autocomplete .dropdown-item');
+        if ($items.length === 0) {
+            return;
+        }
+
+        let currentIndex = $items.index($items.filter('.active'));
+        $items.removeClass('active');
+
+        let nextIndex;
+        if (currentIndex < 0) {
+            nextIndex = direction > 0 ? 0 : $items.length - 1;
+        } else {
+            // Wraps around on both ends
+            nextIndex = (currentIndex + direction + $items.length) % $items.length;
+        }
+
+        $items.eq(nextIndex).addClass('active');
     }
 
     /**

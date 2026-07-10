@@ -31,6 +31,37 @@ select.form-control {
     appearance: auto !important;
 }
 
+/* Bootstrap 5 styles .btn-check state through sibling selectors written as `.btn-check:checked + &`
+   inside .btn. Because this project compiles bootstrap inside a theme wrapper (.darkly { ... }),
+   that `&` expands to `.darkly .btn` and the compiled selector becomes
+   `.btn-check:checked + .darkly .btn` — which can never match, so checked/hover/focus styling on
+   btn-check groups (heatmap sidebar filters, theme switch, ...) silently never applies. Restate
+   the rules here unwrapped; the --bs-btn-* vars are defined per theme on the .btn itself, so one
+   set of rules serves all themes. Scoped under .theme (always on <html> next to the theme class)
+   to out-specify the theme-wrapped `.darkly .btn:hover` etc. Source order mirrors bootstrap's
+   _buttons.scss: hover first, checked last, so a checked button keeps its active styling on hover. */
+.theme .btn-check + .btn:hover {
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color);
+}
+
+.theme .btn-check:focus-visible + .btn {
+    outline: 0;
+    border-color: var(--bs-btn-hover-border-color);
+    box-shadow: var(--bs-btn-focus-box-shadow);
+}
+
+.theme .btn-check:checked + .btn {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    border-color: var(--bs-btn-active-border-color);
+}
+
+.theme .btn-check:checked:focus-visible + .btn {
+    box-shadow: var(--bs-btn-focus-box-shadow);
+}
+
 /* Bootstrap additions */
 .border-1 {
     border: 1px solid !important;

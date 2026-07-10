@@ -4,7 +4,11 @@
   $link-decoration: none;
   $link-hover-decoration: underline;
 
-  // Keystone.guru's darkly uses a navy background instead of bootswatch darkly's #222
+  // Bootstrap 4 compiled every theme with the global $body-bg: #2B3E50 from sass/_variables.scss
+  // (removed in this migration). The color is nearly invisible in darkly — the page background is
+  // forced to var(--theme-darker) elsewhere — but bootswatch derives a few component colors from
+  // $body-bg (e.g. the active nav-tab background in the map settings modal), so keep the same
+  // value to stay pixel-identical with the Bootstrap 4 output.
   $body-bg: #2B3E50;
 
   // Bootstrap 5 dropped the default navbar x-padding ($navbar-padding-x is now null); restore the
