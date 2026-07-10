@@ -152,14 +152,6 @@ class User extends Authenticatable implements LaratrustUser
         'initials',
     ];
 
-    protected $with = [
-        'iconfile',
-        'patreonUserLink',
-        'dungeon',
-        'gameVersion',
-        'roles',
-    ];
-
     public function getInitialsAttribute(): string
     {
         return initials($this->name);
@@ -237,6 +229,9 @@ class User extends Authenticatable implements LaratrustUser
      */
     public function hasPatreonBenefit(string $key): bool
     {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink');
+
         // True for all admins
         $result = $this->hasRole(Role::ROLE_ADMIN);
 
@@ -255,6 +250,9 @@ class User extends Authenticatable implements LaratrustUser
      */
     public function getPatreonBenefits(): Collection
     {
+        // Explicitly load the relation so this also works on users hydrated in a collection (preventLazyLoading)
+        $this->loadMissing('patreonUserLink');
+
         // Admins have all patreon benefits
         if ($this->hasRole(Role::ROLE_ADMIN)) {
             $result = collect(array_keys(PatreonBenefit::ALL));

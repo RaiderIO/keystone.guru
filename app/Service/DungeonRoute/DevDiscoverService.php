@@ -25,7 +25,8 @@ class DevDiscoverService extends BaseDiscoverService
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
             ->with([
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'affixes',
                 'ratings',
                 'mappingVersion',
@@ -69,7 +70,8 @@ class DevDiscoverService extends BaseDiscoverService
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
             ->with([
-                'author',
+                // The route cards render the author's avatar - User no longer eager loads iconfile globally
+                'author.iconfile',
                 'affixes',
                 'ratings',
                 'mappingVersion',

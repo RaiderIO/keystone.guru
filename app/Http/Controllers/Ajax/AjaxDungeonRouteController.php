@@ -274,7 +274,8 @@ class AjaxDungeonRouteController extends Controller
             'specializations',
             'classes',
             'races',
-            'author',
+            // The route cards render the author's avatar - User no longer eager loads iconfile globally
+            'author.iconfile',
             'affixes',
             'thumbnails',
             'ratings',
