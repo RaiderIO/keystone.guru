@@ -77,20 +77,20 @@ if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVers
     ];
 }
 
-$isActiveRoute = function (string $route) {
+$isActiveRoute = function (string $route, bool $strict = false) {
     // Check if the route that we're currently on is the same as the route in the nav
     // If so, show it as active
     $active    = null;
     $parsedUrl = (parse_url((string)$route));
     if (is_array($parsedUrl)) {
         $routePath = trim($parsedUrl['path'], '/');
-        if (str_starts_with(Request::path(), $routePath)) {
+        if ($strict ? Request::path() === $routePath : str_starts_with(Request::path(), $routePath)) {
             $active = 'active';
         }
     }
 
     return $active;
-}
+};
 ?>
 <div
     class="game_version_header navbar-first d-none d-lg-block fixed-top
@@ -181,17 +181,17 @@ $isActiveRoute = function (string $route) {
                 @if(Feature::active(NpcCompendium::class))
                         <?php
                         $compendiumRoutes       = [
-                            route('compendium.index') => sprintf('%s %s', '<i class="fas fa-book-open"></i>', __('view_common.layout.header.compendium_overview')),
-                            route('npc.compendium.index') => sprintf('%s %s', '<i class="fas fa-dragon"></i>', __('view_common.layout.header.npc_compendium')),
-                            route('spell.compendium.index') => sprintf('%s %s', '<i class="fas fa-magic"></i>', __('view_common.layout.header.spell_compendium')),
+                            route('compendium.index')          => sprintf('%s %s', '<i class="fas fa-book-open"></i>', __('view_common.layout.header.compendium_overview')),
+                            route('npc.compendium.index')      => sprintf('%s %s', '<i class="fas fa-dragon"></i>', __('view_common.layout.header.npc_compendium')),
+                            route('spell.compendium.index')    => sprintf('%s %s', '<i class="fas fa-magic"></i>', __('view_common.layout.header.spell_compendium')),
                             route('compendium.activity.index') => sprintf('%s %s', '<i class="fas fa-stream"></i>', __('view_common.layout.header.compendium_activity')),
-                            route('compendium.class.index') => sprintf('%s %s', '<i class="fas fa-hat-wizard"></i>', __('view_common.layout.header.class_compendium')),
+                            route('compendium.class.index')    => sprintf('%s %s', '<i class="fas fa-hat-wizard"></i>', __('view_common.layout.header.class_compendium')),
                         ];
                         $hasCompendiumSubActive = null;
                         $compendiumHeaderText   = __('view_common.layout.header.compendium');
                         $compendiumDropdownId   = Str::slug($compendiumHeaderText);
                         foreach ($compendiumRoutes as $itemKey => $item) {
-                            $hasCompendiumSubActive ??= $isActiveRoute($itemKey);
+                            $hasCompendiumSubActive ??= $isActiveRoute($itemKey, true);
                         }
                         ?>
                     <li class="nav-item dropdown">
@@ -204,7 +204,7 @@ $isActiveRoute = function (string $route) {
                         <div class="dropdown-menu text-center text-xl-left"
                              aria-labelledby="{{ $compendiumDropdownId }}">
                             @foreach($compendiumRoutes as $itemKey => $item)
-                                <a class="dropdown-item {{ $isActiveRoute($itemKey) }}"
+                                <a class="dropdown-item {{ $isActiveRoute($itemKey, true) }}"
                                    href="{{ $itemKey }}">{!! $item !!}</a>
                             @endforeach
                         </div>
