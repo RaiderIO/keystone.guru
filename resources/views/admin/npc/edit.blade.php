@@ -150,15 +150,13 @@ use App\Models\Spell\Spell;
         {{ html()->label(__('view_admin.npc.edit.spells'), 'spells[]') }}
         @php($selectedSpells = isset($npc) ? $npc->spells(false)->get()->pluck(['id'])->toArray() : [])
         <!--suppress HtmlFormInputWithoutLabel -->
-        <!--selectpicker-->
-        <select class="form-select" name="spells[]" multiple="multiple"
+        <select class="form-select selectpicker" name="spells[]" multiple="multiple"
                 data-live-search="true" data-selected-text-format="count > 1"
                 data-count-selected-text="{{ __('view_admin.npc.edit.spells_count') }}">
             @foreach($spells as $spell)
                 <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
                 data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{__($spell->name)}} ({{$spell->id}}) </span>"
-                >
-                </option>
+                >{{ __($spell->name) }} ({{ $spell->id }})</option>
             @endforeach
         </select>
     </div>
