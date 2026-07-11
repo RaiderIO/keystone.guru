@@ -80,9 +80,7 @@
                         {{ __('view_admin.tools.combatlog.parsefailures.segments_modal_title') }}
                         <span id="parsefailures_segments_run_id"></span>
                     </h5>
-                    <button type="button" class="dismiss-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p class="text-muted small">
