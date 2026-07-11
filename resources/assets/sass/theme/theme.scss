@@ -348,6 +348,15 @@ body {
     -webkit-user-select: none;
   }
 
+  /*
+   * Bootstrap 5's `.form-check-input` checkboxes default to 1em, which is tiny in our standalone
+   * (label-less) checkbox layouts. Restore the larger size the old `.left_checkbox` shim gave them.
+   */
+  .form-check-input[type="checkbox"] {
+    width: 40px;
+    height: calc(1.6em + 0.75rem + 2px);
+  }
+
   .modal-backdrop {
     z-index: 100010 !important;
   }
