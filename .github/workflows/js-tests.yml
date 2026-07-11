@@ -27,3 +27,30 @@ jobs:
 
       - name: Run Vitest
         run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          # The build never launches a browser
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+      - name: Build production assets
+        run: npm run production
+        env:
+          ASSETS_BASE_URL: https://assets.keystone.guru
+          # Only build the en_US lang bundle, like local builds; all 23 locales only matter for
+          # the release pipeline
+          APP_ENV: local
